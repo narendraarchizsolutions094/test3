@@ -1,0 +1,2543 @@
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+class Lead extends CI_Controller {
+    public function __construct() {
+        parent::__construct();
+        $this->load->library('user_agent');
+        $this->load->helper('date');
+        $this->load->model(
+                array('Leads_Model','common_model','enquiry_model', 'dashboard_model', 'Task_Model', 'User_model', 'location_model', 'Message_models','Institute_model','Datasource_model','Taskstatus_model','dash_model','Center_model','SubSource_model','Kyc_model','Education_model','SocialProfile_model','Closefemily_model','Doctor_model','form_model','warehouse_model')
+                );
+        if (empty($this->session->user_id)) {
+            redirect('login');
+        }
+    }
+
+public function select_app_by_ins() {
+        $course = $this->input->post('c_course');
+		$lvl = $this->input->post('c_lvl');
+		$length = $this->input->post('c_length');
+		$disc = $this->input->post('c_disc');
+        echo json_encode($this->Leads_Model->all_course($course,$lvl,$length,$disc));
+
+       // echo $diesc;
+    }
+
+    public function index() {
+        $aid = $this->session->userdata('user_id');
+        $data['title'] = display('lead_list');
+        $data['all_leadss'] = $this->Leads_Model->all_leadss();
+        $data['user_list'] = $this->User_model->read();
+        $data['all_user'] = $this->User_model->all_user();
+        $data['leadsource'] = $this->Leads_Model->get_leadsource_list();
+        $data['lead_score'] = $this->Leads_Model->get_leadscore_list();
+        $data['lead_stages'] = $this->Leads_Model->get_leadstage_list();
+        $data['enquirys'] = $this->enquiry_model->read();
+        $data['state_list'] = $this->location_model->state_list();
+        $data['all_enquery'] = $this->Leads_Model->all_leadss();
+        $data['all_drop'] = $this->Leads_Model->all_drop_lead();
+        $data['all_active'] = $this->Leads_Model->all_Active_lead();
+        $data['unassigned'] = $this->enquiry_model->unassigned();
+        $data['all_leads'] = $this->Leads_Model->all_lead_toClient();
+        $data['all_today_update'] = $this->Leads_Model->all_Updated_today();
+        $data['all_creaed_today'] = $this->Leads_Model->all_created_today();
+        $data['drops'] = $this->Leads_Model->get_drop_list();
+        //$data['checked_enquiry'] = $this->enquiry_model->checked_enquiry();
+       // $data['unchecked_enquiry'] = $this->enquiry_model->unchecked_enquiry();
+       // $data['scheduled'] = $this->enquiry_model->scheduled();
+       // $data['unscheduled'] = $this->enquiry_model->unscheduled();
+        $data['customer_types'] = $this->enquiry_model->customers_types();
+        $data['channel_p_type'] = $this->enquiry_model->channel_partner_type_list();
+        $data['content'] = $this->load->view('leads', $data, true);
+        $this->load->view('layout/main_wrapper', $data);
+    }
+
+
+
+    public function enquery_detals_by_status($id = '') {
+        if ($id > 0 and $id <= 20) {
+            $serach_key = '';
+        } else {
+            $serach_key = explode('_', $id);
+        }
+
+        $data['title'] = display('lead_list');
+        $data['all_user'] = $this->User_model->all_user();
+        $data['leadsource'] = $this->Leads_Model->get_leadsource_list();
+        $data['lead_score'] = $this->Leads_Model->get_leadscore_list();
+        $data['lead_stages'] = $this->Leads_Model->get_leadstage_list();        
+        if ($id == 1) {
+            $data['all_active'] = $this->Leads_Model->all_created_today();
+
+            /*echo "<pre>";
+            print_r($data['all_active']->result_array());*/
+
+        } elseif ($id == 2) {
+            $data['all_active'] = $this->Leads_Model->all_Updated_today();
+            
+
+        } elseif ($id == 3) {
+            $data['all_active'] = $this->Leads_Model->all_Active_lead();
+        
+
+        } elseif ($id == 4) {
+            $data['all_active'] = $this->Leads_Model->all_lead_toClient();
+        } elseif ($id == 5) {
+            $data['all_active'] = $this->Leads_Model->all_drop_lead();
+                
+       /*     echo "<pre>";
+            print_r($data['all_active']->result_array());
+            echo $this->db->last_query();
+            echo "</pre>";*/
+            
+        } elseif ($id == 6) {
+            $data['all_active'] = $this->Leads_Model->all_leadss();
+        } elseif ($id == 7) {
+          //  $data['all_active'] = $this->enquiry_model->checked_enquiry();
+        } elseif ($id == 8) {
+          //  $data['all_active'] = $this->enquiry_model->unchecked_enquiry();
+        } elseif ($id == 9) {
+           // $data['all_active'] = $this->enquiry_model->scheduled();
+        } elseif ($id == 10) {
+          //  $data['all_active'] = $this->enquiry_model->unscheduled();
+        } elseif (!empty($serach_key[1]) == 2) {
+            $data['all_active'] = $this->enquiry_model->search_data($serach_key[0]);
+        } else {
+            $data['all_active'] = $this->Leads_Model->all_Active_lead();
+        }
+        $data['state_list'] = $this->location_model->state_list();
+        $data['drops'] = $this->Leads_Model->get_drop_list();
+        $this->load->view('lead_list', $data);
+    }
+    
+    public function lead_details($enquiry_id = null) {
+        $data['title'] = display('Lead Details');
+        $compid = $this->session->userdata('companey_id');
+        //$enquiry_id = $this->uri->segment(3);
+        if (!empty($_POST)) {
+            $enquiry_id = $this->input->post('Enquiryid');
+            $name = $this->input->post('enquirername');
+            $email = $this->input->post('email');
+            $mobile = $this->input->post('mobileno');
+            $enquiry = $this->input->post('enquiry');
+            $name_prefix = $this->input->post('name_prefix');
+            $this->db->set('country_id', $this->input->post('country_id'));
+            $this->db->set('product_id', $this->input->post('product_id'));
+            $this->db->set('lead_stage', $this->input->post('lead_stage'));
+            $this->db->set('lead_comment', $this->input->post('lead_comment'));
+            $this->db->set('phone', $mobile);
+            $this->db->set('email', $email);
+            $this->db->set('name_prefix', $name_prefix);
+            $this->db->set('name', $name);
+            $this->db->set('enquiry', $enquiry);
+            $this->db->set('lastname', $this->input->post('lastname'));
+            $this->db->where('enquiry_id', $enquiry_id);
+            $this->db->update('enquiry');            
+            $data['details'] = $this->Leads_Model->get_leadListDetailsby_id($enquiry_id);
+            $lead_code = $data['details']->Enquery_id;
+			$stage_code = $data['details']->lead_stage;
+            $this->Leads_Model->add_comment_for_events('Update Leads', $lead_code,$stage_code);
+            redirect('lead/lead_details/' . $enquiry_id);
+        }        
+
+        
+        $data['details'] = $this->Leads_Model->get_leadListDetailsby_id($enquiry_id);   
+
+        //$data['state_city_list'] = $this->location_model->get_city_by_state_id($data['details']->enquiry_state_id);
+        //$data['state_city_list'] = $this->location_model->ecity_list();
+
+
+
+        $data['allleads'] = $this->Leads_Model->get_leadList();
+        if (!empty($data['details'])) {
+            $lead_code = $data['details']->Enquery_id;
+        }        
+        $data['check_status'] = $this->Leads_Model->get_leadListDetailsby_code($lead_code);       
+        $data['all_drop_lead'] = $this->Leads_Model->all_drop_lead();
+        $data['products'] = $this->dash_model->get_user_product_list(); 
+
+         $data['prod_list'] = $this->Doctor_model->product_list($compid); 
+        $data['amc_list'] = $this->Doctor_model->amc_list($compid,$enquiry_id); 
+        $data['bank_list'] = $this->dash_model->get_bank_list(); 
+
+        $data['allcountry_list'] = $this->Taskstatus_model->countrylist();
+        $data['allstate_list'] = $this->Taskstatus_model->statelist();
+        $data['allcity_list'] = $this->Taskstatus_model->citylist();
+        $data['personel_list'] = $this->Taskstatus_model->peronellist($enquiry_id);        
+        $data['kyc_doc_list'] = $this->Kyc_model->kyc_doc_list($lead_code);        
+        $data['education_list'] = $this->Education_model->education_list($lead_code);
+        $data['social_profile_list'] = $this->SocialProfile_model->social_profile_list($lead_code);        
+        $data['close_femily_list'] = $this->Closefemily_model->close_femily_list($lead_code);
+        $data['all_country_list'] = $this->location_model->country();
+        $data['all_contact_list'] = $this->location_model->contact($enquiry_id);                
+        $data['subsource_list'] = $this->Datasource_model->subsourcelist();
+        $data['drops'] = $this->Leads_Model->get_drop_list();
+        $data['name_prefix'] = $this->enquiry_model->name_prefix_list();
+        $data['leadsource'] = $this->Leads_Model->get_leadsource_list();
+        $data['enquiry'] = $this->enquiry_model->enquiry_by_id($enquiry_id);
+        $data['lead_stages'] = $this->Leads_Model->get_leadstage_list();
+        $data['lead_score'] = $this->Leads_Model->get_leadscore_list();
+        $enquiry_code = $data['enquiry']->Enquery_id;
+        $phone_id = '91'.$data['enquiry']->phone;        
+        $data['recent_tasks'] = $this->Task_Model->get_recent_taskbyID($enquiry_code);        
+        $data['comment_details'] = $this->Leads_Model->comment_byId($enquiry_code);        
+        $user_role    =   $this->session->user_role;
+        $data['country_list'] = $this->location_model->productcountry();
+
+        $data['institute_list'] = $this->Institute_model->institutelist_by_country($data['details']->enq_country);
+        
+        $data['institute_app_status'] = $this->Institute_model->get_institute_app_status();
+        
+
+        $data['datasource_list'] = $this->Datasource_model->datasourcelist();
+        $data['taskstatus_list'] = $this->Taskstatus_model->taskstatuslist();
+        $data['state_list'] = $this->location_model->estate_list();
+        $data['city_list'] = $this->location_model->ecity_list();
+        $data['product_contry'] = $this->location_model->productcountry();
+        $data['get_message'] = $this->Message_models->get_chat($phone_id);
+        $data['all_stage_lists'] = $this->Leads_Model->find_stage();
+        $data['all_estage_lists'] = $this->Leads_Model->find_estage($enquiry_id);
+        $data['all_description_lists']    =   $this->Leads_Model->find_description();
+        $data['institute_data'] = $this->enquiry_model->institute_data($data['details']->Enquery_id);
+        $data['dynamic_field']  = $this->enquiry_model->get_dyn_fld($enquiry_id);
+        $data['ins_list'] = $this->location_model->get_ins_list($data['details']->Enquery_id);
+		$data['aggrement_list'] = $this->location_model->get_agg_list($data['details']->Enquery_id);
+        $data['tab_list'] = $this->form_model->get_tabs_list($this->session->companey_id,$data['details']->product_id);
+        $this->load->helper('custom_form_helper');
+        $data['leadid']     = $data['details']->Enquery_id;
+        $data['compid']     =  $data['details']->comp_id;
+        $data['enquiry_id'] = $enquiry_id;
+		if ($this->session->companey_id=='67') { 
+		//$data['qualification_data'] = $this->enquiry_model->quali_data($data['details']->Enquery_id);
+		//$data['english_data'] = $this->enquiry_model->eng_data($data['details']->Enquery_id);
+		$data['discipline'] = $this->location_model->find_discipline();
+		$data['level'] = $this->location_model->find_level();
+		$data['length'] = $this->location_model->find_length();
+		}
+		$data['course_list'] = $this->Leads_Model->get_course_list();
+        $this->enquiry_model->make_enquiry_read($data['details']->Enquery_id);        
+        $data['content'] = $this->load->view('enquiry_details1', $data, true);
+        $this->enquiry_model->assign_notification_update($enquiry_code);
+        $this->load->view('layout/main_wrapper', $data);
+    }
+    
+    public function get_last_task_by_code(){
+        $enq_code    =   $this->input->post('enq_code');
+        $this->db->select('resp_id,task_time,DATE_FORMAT(STR_TO_DATE(task_date,"%d-%m-%Y"), "%Y-%m-%d") AS task_date,task_remark');
+        $this->db->where('query_id',$enq_code);        
+        $this->db->order_by('resp_id','DESC');
+        $this->db->limit(1);
+        echo json_encode($this->db->get('query_response')->row_array());
+        //echo $this->db->last_query();
+    }
+    
+    public function select_des_by_stage() {
+        $diesc = $this->input->post('lead_stage');
+        echo json_encode($this->Leads_Model->all_description($diesc));
+
+       // echo $diesc;
+    }
+
+    public function lead_detail() {
+        $leadid = $this->uri->segment(3);
+        $data['details'] = $this->Leads_Model->get_leadListDetailsby_code($leadid);
+        $lead_code = $data['details']->lid;
+        redirect('lead/lead_details/' . $lead_code);
+    }
+
+    public function add_comment() {
+        $CI = &get_instance();
+        if (!empty($_POST)) {
+            $ld_updt_by = $this->session->userdata('user_id');
+            $lead_id = $this->input->post('lid');
+            $conversation = trim($this->input->post('conversation'));
+            $coment_type = trim($this->input->post('coment_type'));
+            $adt = date("Y-m-d H:i:s");
+            $msg = $conversation;
+
+            $this->db->set('lead_id', $lead_id);
+            $this->db->set('created_date', $adt);
+            $this->db->set('coment_type ', $coment_type);
+            $this->db->set('comment_msg', $conversation);
+            $this->db->set('created_by', $ld_updt_by);
+            $this->db->insert('tbl_comment');
+
+            $this->db->set('update_date',$adt);
+            $this->db->where('Enquery_id',$lead_id);
+            $this->db->update('enquiry');
+
+            $this->session->set_flashdata('message', ' added successfully');
+            redirect($this->agent->referrer());
+            //	redirect('lead/lead_details/'.$lead_id);
+        } else {
+            redirect('lead');
+        }
+    }
+
+    public function enquiry_response_task() {
+		
+        if (!empty($_POST)) {
+            $ld_updt_by = $this->session->userdata('user_id');
+            $lead_id = $this->input->post('enq_code');
+            $task_type = $this->input->post('task_type');
+            $meeting_date = $this->input->post('meeting_date');
+            $contact_person = $this->input->post('contact_person');
+            $mobileno = $this->input->post('mobileno');
+            $email = $this->input->post('email');
+            $designation = $this->input->post('designation');
+            $conversation = trim($this->input->post('conversation'));
+            $subject = $this->input->post('subject');
+            $task_status = $this->input->post('task_status');
+            
+            $task_date = date("d-m-Y",strtotime($this->input->post('task_date')));
+            
+            $task_time = date("H:i:s",strtotime($this->input->post('task_time')));
+            
+            $task_remark = $this->input->post('task_remark');
+            
+            $cdate2 = str_replace('/', '-', $meeting_date);
+            
+            //$adt = date("d-m-Y h:i:s a");
+            
+            if (!empty($this->input->post('subject'))) {
+                $this->db->set('query_id', $this->input->post('subject'));
+            }
+            $this->db->set('query_id', $lead_id);
+            
+            $this->db->set('subject', $subject);
+
+            //$this->db->set('upd_date', $adt); //Created Date
+            //$this->db->set('nxt_date', $cdate2);
+
+            $this->db->set('contact_person', $contact_person);
+            $this->db->set('mobile', $mobileno);
+            $this->db->set('email', $email);
+            $this->db->set('designation', $designation);
+           // $this->db->set('org_name', $org_name);
+            $this->db->set('conversation', $conversation);
+            $this->db->set('task_type', $task_type);
+            $this->db->set('task_status', $task_status);
+            
+            $this->db->set('task_date', $task_date);
+            $this->db->set('task_time', $task_time);
+            $this->db->set('task_remark', $task_remark);
+            $this->db->set('notification_id', $this->input->post('notification_id'));
+            
+            $this->db->set('create_by', $this->session->user_id);
+            $this->db->insert('query_response');
+			
+			$this->Leads_Model->add_comment_for_events('Task Added ', $lead_id);
+			 
+            $this->session->set_flashdata('message', 'Task Added Successfully');
+            redirect($this->agent->referrer());
+        } else {
+            redirect('lead');
+        }
+    }
+
+    public function enquiry_response_updatetask() {
+        if (!empty($_POST)) {
+            $ld_updt_by = $this->session->userdata('user_id');
+            $lead_id = $this->input->post('enq_code');
+            $task_type = $this->input->post('task_type');
+            $meeting_date = $this->input->post('meeting_date');
+            $contact_person = $this->input->post('contact_person');
+            $mobileno = $this->input->post('mobileno');
+            $email = $this->input->post('email');
+            $designation = $this->input->post('designation');
+            $conversation = trim($this->input->post('conversation'));
+            $subject = $this->input->post('subject');
+            
+             $task_date = date("d-m-Y",strtotime($this->input->post('task_date')));
+            
+            $task_time = date("H:i:s",strtotime($this->input->post('task_time')));
+            
+            $task_remark = $this->input->post('task_remark');
+            
+            $task_status = $this->input->post('task_status');
+            //$cdate2 = str_replace('/', '-', $meeting_date);
+            $adt = date("d-m-Y h:i:s a");
+            
+            //$this->db->set('upd_date', $adt);
+            //$this->db->set('nxt_date', $cdate2);
+
+            $this->db->set('contact_person', $contact_person);
+            $this->db->set('mobile', $mobileno);
+            $this->db->set('task_status', $task_status);
+            
+            $this->db->set('task_date', $task_date);
+            $this->db->set('task_time', $task_time);
+            $this->db->set('task_remark', $task_remark);
+            
+            $this->db->set('subject', $subject);
+            $this->db->set('email', $email);
+            $this->db->set('designation', $designation);
+            $this->db->set('conversation', $conversation);
+            $this->db->set('task_type', $task_type);
+            $this->db->where('resp_id', $lead_id);
+            $this->db->set('create_by', $this->session->user_id);
+            $this->db->update('query_response');
+             $this->Leads_Model->add_comment_for_events('Task Updated Successfully', $lead_id);
+            $this->session->set_flashdata('message', 'Task Updated Successfully');
+            redirect($this->agent->referrer());
+        } else {
+            redirect('lead');
+        }
+    }
+
+    ///////////////// STAGE ////////////////////
+
+    public function stage() {
+        $data['nav1'] = 'nav2';
+        if (!empty($_POST)) {
+
+            $lead_stage_name = $this->input->post('stage_name');
+            $process = $this->input->post('process');
+
+            $data = array(
+                'lead_stage_name' => $lead_stage_name,
+                'process_id'   => $process,
+                'comp_id' => $this->session->userdata('companey_id')
+            );
+
+            $insert_id = $this->Leads_Model->lead_stageadd($data);
+
+            $this->session->set_flashdata('SUCCESSMSG', 'Lead Stage Add Successfully');
+            redirect('lead/stage');
+        }
+
+
+        $data['lead_stages'] = $this->Leads_Model->get_leadstage_list();
+        // echo $this->db->last_query();
+        // print_r($data['lead_stages']);exit();
+        // print_r($this->session->userdata('companey_id'));exit();
+        $data['products'] = $this->dash_model->get_user_product_list();
+        // print_r($data['products']);exit();
+        $data['title'] = 'Lead Stage';
+        $data['content'] = $this->load->view('lead_stage', $data, true);
+        $this->load->view('layout/main_wrapper', $data);
+    }
+
+    public function delete_stage($stage = null) {
+        if ($this->Leads_Model->delete_stage($stage)) {
+            #set success message
+            $this->session->set_flashdata('message', display('delete_successfully'));
+        } else {
+            #set exception message
+            $this->session->set_flashdata('exception', display('please_try_again'));
+        }
+        redirect('lead/stage');
+    }
+
+  public function update_stage() {
+
+        if (!empty($_POST)) {
+            $stage_name = $this->input->post('stage_name');
+            $stage_id = $this->input->post('stage_id');
+            $process = $this->input->post('process');
+
+            $this->db->set('lead_stage_name', $stage_name);
+            $this->db->set('process_id', $process);
+            $this->db->where('stg_id', $stage_id);
+            $this->db->update('lead_stage');
+            $this->session->set_flashdata('SUCCESSMSG', 'Update Successfully');
+            redirect('lead/stage');
+        }
+    }
+
+    
+    public function update_description() {
+
+       /*echo "<pre>";
+        print_r($_POST);*/
+       //exit();
+
+       $en_id=$this->uri->segment(3);
+       $action = $this->input->post('url');
+        if (!empty($_POST)) {
+
+            if($action==='enquiry'){
+             $coment_type=1;
+            }
+            if($action==='lead'){
+             $coment_type=2;
+            }
+            if($action==='client'){
+             $coment_type=3;
+            }
+            $lead_id = $this->input->post('unique_no');
+            $stage_id = $this->input->post('lead_stage');
+            $stage_date = date("d-m-Y",strtotime($this->input->post('c_date')));
+
+            //echo $stage_date;
+            
+            $stage_time = date("H:i:s",strtotime($this->input->post('c_time')));
+            
+            $stage_desc = $this->input->post('lead_description');
+            $stage_remark = $this->input->post('conversation');
+            $contact_person = $this->input->post('contact_person1');
+            $mobileno = $this->input->post('mobileno1');
+            $email = $this->input->post('email1');
+            $designation = $this->input->post('designation1');
+            $enq_code = $this->input->post('enq_code1');
+
+            
+
+            $this->db->set('lead_stage', $stage_id);
+            $this->db->set('lead_discription', $stage_desc);
+            $this->db->set('lead_discription_reamrk', $stage_remark);
+
+            $this->db->where('enquiry_id', $en_id);
+            $this->db->update('enquiry');
+            $this->session->set_flashdata('SUCCESSMSG', 'Update Successfully');
+            $this->Leads_Model->add_comment_for_events_stage('Stage Updated', $lead_id,$stage_id,$stage_desc,$stage_remark,$coment_type);
+
+            $notification_id = $this->input->post('dis_notification_id');
+            $dis_subject = $this->input->post('dis_subject');
+
+            if($stage_desc == 'updt'){                
+                $tid    =   $this->input->post('latest_task_id');
+                $this->db->set('task_date', $stage_date);
+                $this->db->set('task_time', $stage_time);
+                $this->db->set('subject', $dis_subject);                
+                $this->db->set('task_remark', $stage_remark);
+                $this->db->set('notification_id', $notification_id);
+                $this->db->where('resp_id',$tid);
+                $this->db->update('query_response');
+            }else{                
+                if (!empty($this->input->post('c_date'))) {
+                    $this->Leads_Model->add_comment_for_events_popup($stage_remark,$stage_date,$contact_person,$mobileno,$email,$designation,$stage_time,$enq_code,$notification_id,$dis_subject);                
+                }
+            } 
+			//print_r($coment_type);exit;
+if($coment_type == 1){			
+    redirect('enquiry/view/'.$en_id);
+}else if($coment_type == 2){
+	redirect('lead/lead_details/'.$en_id);
+}else if($coment_type == 3){
+	redirect('client/view/'.$en_id);
+}
+        }
+    }
+
+    public function delete_score($score = null) {
+        if ($this->Leads_Model->delete_score($score)) {
+            #set success message
+            $this->session->set_flashdata('message', display('delete_successfully'));
+        } else {
+            #set exception message
+            $this->session->set_flashdata('exception', display('please_try_again'));
+        }
+        redirect('lead/lead_score');
+    }
+
+    public function update_score() {
+        if (!empty($_POST)) {
+            $score_name = $this->input->post('score_name');
+            $score_rate = $this->input->post('score_rate');
+            $score_id = $this->input->post('score_id');
+
+            $this->db->set('score_name', $score_name);
+            $this->db->set('probability', $score_rate);
+            $this->db->where('sc_id', $score_id);
+            $this->db->update('lead_score');
+            $this->session->set_flashdata('SUCCESSMSG', 'Update Successfully');
+            redirect('lead/lead_score');
+        }
+    }
+
+    public function delete_source($source = null) {
+        if ($this->Leads_Model->delete_source($source)) {
+            #set success message
+            $this->session->set_flashdata('message', display('delete_successfully'));
+        } else {
+            #set exception message
+            $this->session->set_flashdata('exception', display('please_try_again'));
+        }
+        redirect('lead/lead_source');
+    }
+
+    public function update_source() {
+
+        if (!empty($_POST)) {
+            $source_id = $this->input->post('source_id');
+
+            $source_name = $this->input->post('source_name');
+
+            $this->db->set('lead_name', $source_name);
+            $this->db->where('lsid', $source_id);
+            $this->db->update('lead_source');
+            $this->session->set_flashdata('SUCCESSMSG', 'Update Successfully');
+            redirect('lead/lead_source');
+        }
+    }
+
+    public function delete_dropReason($drop = null) {
+        if ($this->Leads_Model->delete_dropReason($drop)) {
+            #set success message
+            $this->session->set_flashdata('message', display('delete_successfully'));
+        } else {
+            #set exception message
+            $this->session->set_flashdata('exception', display('please_try_again'));
+        }
+        redirect('lead/add_drop');
+    }
+
+    public function update_drop() {
+
+        if (!empty($_POST)) {
+            $drop_id = $this->input->post('drop_id');
+
+            $reason = $this->input->post('reason');
+
+            $this->db->set('drop_reason', $reason);
+            $this->db->where('d_id', $drop_id);
+            $this->db->update('tbl_drop');
+            $this->session->set_flashdata('SUCCESSMSG', 'Update Successfully');
+            redirect('lead/add_drop');
+        }
+    }
+
+    public function delete_ctype($ctype = null) {
+        if ($this->Leads_Model->delete_ctype($ctype)) {
+            #set success message
+            $this->session->set_flashdata('message', display('delete_successfully'));
+        } else {
+            #set exception message
+            $this->session->set_flashdata('exception', display('please_try_again'));
+        }
+        redirect('lead/customer_type');
+    }
+
+    public function update_cusType() {
+
+        if (!empty($_POST)) {
+            $cid = $this->input->post('cid');
+
+            $c_type = $this->input->post('c_type');
+            $c_typename = $this->input->post('c_typename');
+
+            $this->db->set('c_typename', $c_typename);
+            $this->db->set('c_type', $c_type);
+            $this->db->where('cid', $cid);
+            $this->db->update('customer_type');
+            $this->session->set_flashdata('SUCCESSMSG', 'Update Successfully');
+            redirect('lead/customer_type');
+        }
+    }
+
+    /////////////////////////////////////////////////
+
+
+
+    public function lead_source() {
+        $data['nav1'] = 'nav2';
+
+        if (!empty($_POST)) {
+
+            $lead_source_name = $this->input->post('source_name');
+
+            $data = array(
+                'lead_name' => $lead_source_name,
+				'comp_id' => $this->session->userdata('companey_id')
+            );
+
+            $insert_id = $this->Leads_Model->lead_sourceadd($data);
+
+            $this->session->set_flashdata('SUCCESSMSG', 'Lead Source Add Successfully');
+            redirect('lead/lead_source');
+        }
+
+        $data['lead_source'] = $this->Leads_Model->get_leadsource_list();
+        $data['content'] = $this->load->view('lead_source', $data, true);
+
+        $this->load->view('layout/main_wrapper', $data);
+    }
+
+    public function lead_score() {
+        $data['nav1'] = 'nav2';
+
+        if (!empty($_POST)) {
+
+            $score_name = $this->input->post('score_name');
+            $score_rate = $this->input->post('score_rate');
+
+            $data = array(
+                'score_name' => $score_name,
+				'comp_id' => $this->session->userdata('companey_id'),
+                'probability' => $score_rate
+            );
+
+            $insert_id = $this->Leads_Model->lead_scoreadd($data);
+
+            $this->session->set_flashdata('SUCCESSMSG', 'Lead Score Add Successfully');
+            redirect('lead/lead_score');
+        }
+
+        $data['lead_score'] = $this->Leads_Model->get_leadscore_list();
+		$data['title'] = 'Lead Probability';
+        $data['content'] = $this->load->view('lead_score', $data, true);
+        $this->load->view('layout/main_wrapper', $data);
+    }
+
+    public function customer_type() {
+
+        if (!empty($_POST)) {
+
+            $c_type = $this->input->post('c_type');
+            $c_typename = $this->input->post('c_typename');
+
+            $data = array(
+                'c_typename' => $c_typename,
+                'c_type' => $c_type
+            );
+
+            $insert_id = $this->Leads_Model->add_customerType($data);
+
+            $this->session->set_flashdata('SUCCESSMSG', 'Customer Type Add Successfully');
+            redirect('lead/customer_type');
+        }
+
+        $data['title'] = 'Customer Type';
+        $data['c_type'] = $this->Leads_Model->get_customerType_list();
+        $data['content'] = $this->load->view('customer_type', $data, true);
+
+        $this->load->view('layout/main_wrapper', $data);
+    }
+
+    /////////////////// Move To Client ////////////////////////////
+    public function move_to_lead() {
+
+        if (!empty($_POST)) {
+            $move_lead = $this->input->post('lead_status');
+            foreach ($move_lead as $key) {
+
+                $this->db->set('lead_stage', 'Account');
+                $this->db->where('lid', $key);
+                $this->db->update('allleads');
+
+                //////////////// Insert Lead Data Into Client Table ///////////////////////
+                $lead = $this->Leads_Model->get_lead_for_account($key);
+
+                $name = $lead->ld_name;
+                $email = $lead->ld_email;
+                $mobile = $lead->ld_mobile;
+                $address = $lead->address;
+
+                $data = array(
+                    'cl_name' => $name,
+                    'city_id' => $lead->city_id,
+                    'customer_code' => $lead->lead_code,
+                    'create_by' => $lead->adminid,
+                    'updated_by' => $this->session->user_id,
+                    'created_date' => date('Y-m-d H:i:s'),
+                    'ip_address' => $_SERVER['REMOTE_ADDR'],
+                    'cl_email' => $email,
+                    'cl_mobile' => $mobile,
+                    'address' => $address,
+                    'cl_status' => '1'
+                );
+                $insert_id = $this->Leads_Model->ClientMove($data);
+
+                //////////////////////////////////////////////////////////////////////////
+            }
+            //echo 'Transfer Lead Successfully';
+            redirect('lead');
+        } else {
+            echo "<script>alert('Something Went Wrong')</script>";
+            redirect('lead');
+        }
+    }
+
+    public function convert_to_lead() {        
+        $enquiry_id = $this->uri->segment('3');
+        $lead = $this->Leads_Model->get_leadListDetailsby_id($enquiry_id);
+               // print_r($lead->status);exit;
+        if ($lead->status >= 2) {
+           //$this->Leads_Model->ClientMove($data);
+            $this->db->set('status', 3);
+            $this->db->set('created_date', date('Y-m-d H:i:s'));
+            $this->db->set('update_date', '');
+            $this->db->where('enquiry_id', $enquiry_id);
+            $this->db->update('enquiry'); 
+            $data['enquiry'] = $this->Leads_Model->get_leadListDetailsby_id($enquiry_id);
+            $lead_code = $data['enquiry']->Enquery_id;
+            $this->Leads_Model->add_comment_for_events('Converted to client', $lead_code);
+
+            //$mail_access = $this->enquiry_model->access_mail_temp(); //access mail template..
+            //$signature = $this->enquiry_model->get_signature();
+
+       /*     $to = 'glahsnigam@gmail.com';
+            $from_email = 'info@archizcrm.com';            
+                $phone = '91' . $lead->phone;
+                $message = "Congratulations and Welcome on board as Authorized Channel Partner.";
+                //$this->Message_models->smssend($phone, $message);
+                //$this->Message_models->sendwhatsapp($phone, $message);
+                if(isset($mail_access)){
+                foreach ($mail_access as $rows) {
+                    if (trim($rows->response_type) == 2 && trim($rows->auto_mail_for) == 3) {
+                        $img = "<img src='" . base_url($signature->logo) . "' width='100px' height='100px' onerror='this.style.display=" . 'none' . "'>";
+                        if (strpos($rows->template_content, '@') == true) {
+                            $msg = str_replace('@name', $name1, str_replace('@org', $org, str_replace('@phone', $this->session->phone, str_replace('@desg', $this->session->designation, str_replace('@user', $this->session->fullname, $rows->template_content)))));
+                        } else {
+                            $msg = $rows->template_content;
+                        }
+                        $this->email->from($from_email, 'Osum');
+                        $this->email->to($to);
+                        $this->email->subject($rows->mail_subject);
+                        $this->email->message($msg);
+                        $this->email->set_mailtype('html');
+                        //$this->email->send();
+                    }
+                }
+        }*/
+            $this->session->set_flashdata('message', 'Lead Convert to Client Successfully');
+            redirect('led/index');
+        } else {
+            $this->session->set_flashdata('exception', 'Please Complete all Stages');
+            redirect('led/index');            
+        }
+    }
+
+    public function add_drop() {
+        $data['title'] = 'Drop Reasons';
+        $data['nav1'] = 'nav2';
+        #------------------------------# 
+        $leadid = $this->uri->segment(3);
+
+        //////////////////////////////////////////////////////
+        if (!empty($_POST)) {
+
+            $reason = $this->input->post('reason');
+
+            $data = array(
+                'drop_reason' => $reason,
+				'comp_id' => $this->session->userdata('companey_id')
+            );
+
+            $insert_id = $this->Leads_Model->add_dropType($data);
+
+            redirect('lead/add_drop');
+        }
+        //////////////////////////////////////////////////////
+
+
+        $data['drops'] = $this->Leads_Model->get_drop_list();
+
+        $data['content'] = $this->load->view('drop', $data, true);
+        $this->load->view('layout/main_wrapper', $data);
+    }
+
+    public function drop_lead() {
+        $data['title'] = 'Drop Reasons';
+        $leadid = $this->uri->segment(3);
+
+       // print_r($this->input->post('drop_status'));exit;
+        
+        if (!empty($_POST)) {
+            $reason = $this->input->post('reason');
+            $drop_status = $this->input->post('drop_status');
+
+            $this->db->set('drop_status', $drop_status);
+            $this->db->set('drop_reason', $reason);
+
+            $this->db->where('enquiry_id', $leadid);
+            
+            $this->db->update('enquiry');
+            
+            $this->Leads_Model->add_comment_for_events('Dropped Leads', $leadid);
+
+            redirect('led/index');
+        }
+        $data['drops'] = $this->Leads_Model->get_drop_list();
+        $data['content'] = $this->load->view('drop', $data, true);
+        $this->load->view('layout/main_wrapper', $data);
+    }
+
+    public function post_po() {
+        if (!empty($_POST)) {
+            $picture = $this->fileupload->do_upload(
+                    'assets/po_order/', 'img_file'
+            );
+            //if picture is not uploaded
+            if ($picture === false) {
+                $this->session->set_flashdata('exception', display('Fail Uploading Po order'));
+                redirect($this->agent->referrer());
+            } else {
+                $this->db->set('customer_id ', $this->input->post('lead_id_name'));
+                $this->db->set('po_document_img ', $picture);
+                $this->db->set('created_date ', date('Y-m-d h:s:i'));
+                $this->db->set('created_by', $this->session->user_id);
+                $this->db->insert('tbl_po');
+                $this->db->set('lead_stage', 9);
+                $this->db->where('lead_code', $this->input->post('lead_id_name'));
+                $this->db->update('allleads');
+                $this->session->set_flashdata('message', display('Uploaded Successfully'));
+                redirect('lead');
+
+                $data['enquiry'] = $this->Leads_Model->get_leadListDetailsby_id($this->input->post('lead_id_name'));
+                $lead_code = $data['enquiry']->lead_code;
+                $this->Leads_Model->add_comment_for_events('Converted to clients', $lead_code);
+            }
+        }
+    }
+
+    public function network_digram() {
+        if (!empty($_POST)) {
+            $picture = $this->fileupload->do_upload(
+                    'assets/network_img/', 'img_file'
+            );
+            //if picture is not uploaded
+            //  print_r($picture);exit();
+            if ($picture === false) {
+                $this->session->set_flashdata('message', display('Fail Uploading Layout Sheet  order'));
+                redirect($this->agent->referrer());
+            } else {
+                if (!empty($picture)) {
+                    $this->db->set('customer_id ', $this->input->post('lead_id_name'));
+                    $this->db->set('netoek_document_img ', $picture);
+                    $this->db->set('created_date ', date('Y-m-d h:s:i'));
+                    $this->db->set('created_by', $this->session->user_id);
+                    $this->db->insert('tbl_network');
+                    $this->db->set('lead_stage', 4);
+                    $this->db->where('lead_code', $this->input->post('lead_id_name'));
+                    $this->db->update('allleads');
+                    $this->session->set_flashdata('message', 'Uploaded Successfully');
+
+                    $data['enquiry'] = $this->Leads_Model->get_leadListDetailsby_id($this->input->post('lead_id_name'));
+
+                    $lead_code = base64_encode($this->input->post('lead_id_name'));
+
+                    $this->Leads_Model->add_comment_for_events('Layout Sheet Added', $lead_code);
+                    $this->session->set_flashdata('message', display('Layout Sheet Uploaded successfully'));
+                    redirect('lead');
+                } else {
+                    $this->session->set_flashdata('message', display('Fail Uploading Layout Sheet order'));
+                    redirect($this->agent->referrer());
+                }
+            }
+        }
+
+        redirect($this->agent->referrer());
+    }
+
+    public function invoice_add() {
+        if (!empty($_POST)) {
+            $picture = $this->fileupload->do_upload(
+                    'assets/inovice_details/', 'img_file'
+            );
+            //if picture is not uploaded
+            if ($picture === false) {
+                $this->session->set_flashdata('exception', display('Fail Uploading Po order'));
+                redirect($this->agent->referrer());
+            } else {
+                $this->db->set('customer_id ', $this->input->post('lead_id_name'));
+                $this->db->set('netoek_document_img ', $picture);
+                $this->db->set('created_date ', date('Y-m-d h:s:i'));
+                $this->db->set('created_by', $this->session->user_id);
+                $this->db->insert('tbl_network');
+                $this->db->set('lead_stage', 4);
+                $this->db->where('lid', $this->input->post('lead_id_name'));
+                $this->db->update('allleads');
+                $this->session->set_flashdata('message', display('Uploaded Successfully'));
+
+                $data['enquiry'] = $this->Leads_Model->get_leadListDetailsby_id($this->input->post('lead_id_name'));
+                $lead_code = $data['enquiry']->lead_code;
+                $this->Leads_Model->add_comment_for_events('Network Diagram Added', $lead_code);
+            }
+        }
+    }
+
+    public function active_lead($id) {
+
+
+        $this->db->set('drop_status', 0);
+
+        $this->db->where('enquiry_id', $id);
+
+        $this->db->update('enquiry');
+
+        $data['enquiry'] = $this->Leads_Model->get_leadListDetailsby_ledsonly($id);
+
+        $lead_code = $data['enquiry']->Enquery_id;
+
+        $this->Leads_Model->add_comment_for_events('Lead actived ', $lead_code);
+
+        $this->session->set_flashdata('message', "Activated Successfully");
+
+        redirect('lead/lead_details/' . $id);
+    }
+
+    /////////////////////////////////////////////////////
+
+    public function assign_lead() {
+        if (!empty($_POST)) {
+            $move_enquiry = $this->input->post('enquiry_id');
+            $assign_employee = $this->input->post('assign_employee');
+            $user = $this->User_model->read_by_id($assign_employee);
+            if (!empty($move_enquiry)) {
+                foreach ($move_enquiry as $key) {
+                    $this->db->set('aasign_to', $assign_employee);
+                    $this->db->set('assign_by', $this->session->user_id);
+                    $this->db->set('lead_updated_date', date('Y-m-d H:i:s'));
+                    $this->db->where('enquiry_id', $key);
+                    $this->db->update('enquiry');
+                    $data['details'] = $this->Leads_Model->get_leadListDetailsby_id($key);
+                    $lead_code = $data['details']->Enquery_id;
+                    $this->Leads_Model->add_comment_for_events('Assign Leads', $lead_code);
+                }
+                echo display('save_successfully');
+            } else {
+                echo display('please_try_again');
+            }
+        }
+    }
+
+    public function assign_presales() {
+        if (!empty($_POST)) {
+            $move_enquiry = $this->input->post('enquiry_id');
+            $assign_employee = $this->input->post('assign_presales');
+            if (!empty($move_enquiry)) {
+                foreach ($move_enquiry as $key) {
+                    //  $this->db->set('assign_to',$assign_employee);
+                    $this->db->set('assign_for_boq', $assign_employee);
+                    $this->db->set('update_date', date('Y-m-d H:i:s'));
+                    $this->db->where('lid', $key);
+                    $this->db->update('allleads');
+
+                    $data['enquiry'] = $this->Leads_Model->get_leadListDetailsby_ledsonly($key);
+                    $lead_code = $data['enquiry']->lead_code;
+                    $this->Leads_Model->add_comment_for_events('Leads Assigned To Pre-Salses', $lead_code);
+                }
+                echo '1';
+            } else {
+                echo display('please_try_again');
+            }
+        }
+    }
+
+    public function drop_leadss() {
+
+        if (!empty($_POST)) {
+
+            $reason = $this->input->post('reason_details');
+            $drop_status = $this->input->post('drop_status');
+            $move_enquiry = $this->input->post('enquiry_id');
+
+            if (!empty($move_enquiry)) {
+                foreach ($move_enquiry as $key) {
+                    
+                /*    $this->db->set('drop_status', $drop_status);
+
+                    $this->db->set('drop_reason', $reason);
+
+                    $this->db->set('update_date', date('Y-m-d H:i:s'));
+
+                    $this->db->set('ld_status', 0);
+
+                    $this->db->where('lid', $key);
+
+                    $this->db->update('allleads');
+
+                */
+
+
+                    $this->db->set('drop_status', $drop_status);
+                    $this->db->set('drop_reason', $reason);
+                    //$this->db->set('update_date', date('Y-m-d H:i:s'));
+                    $this->db->where('enquiry_id', $key);
+                    $this->db->update('enquiry');
+
+
+                    $data['enquiry'] = $this->Leads_Model->get_leadListDetailsby_ledsonly($key);
+                    
+                    /*echo "<pre>";
+                    print_r($_POST);
+                    exit();*/
+
+                    //$lead_code = $data['enquiry']->lead_code;
+                    
+                    $lead_code = $data['enquiry']->Enquery_id;
+
+                    $this->Leads_Model->add_comment_for_events('Dropped Leads', $lead_code);
+                }
+                echo '1';
+            } else {
+                echo display('please_try_again');
+            }
+        }
+    }
+
+    public function delete_recorde() {
+
+        if (!empty($_POST)) {
+
+
+            $move_enquiry = $this->input->post('enquiry_id');
+
+
+            if (!empty($move_enquiry)) {
+                foreach ($move_enquiry as $key) {
+                    $this->db->where('lid', $key);
+                    $this->db->where('lead_stage!=', 'Account');
+                    $this->db->delete('allleads');
+                }
+                $this->session->set_flashdata('message', "Enquiry Deleted Successfully");
+                redirect(base_url() . 'lead');
+            } else {
+                echo display('please_try_again');
+            }
+        }
+    }
+    
+    function productcountry() {
+        if (user_role('33') == true) {}
+        $data['title'] = 'Product List';
+        $data['country'] = $this->location_model->productcountry();
+        // echo "<pre>";
+        // print_r($data['country']);exit();
+        $data['content'] = $this->load->view('location/product_country_list', $data, true);
+        $this->load->view('layout/main_wrapper', $data);
+    }
+
+    public function addproductcountry() {
+        $data['title'] = 'Add Product';
+        if (empty($this->input->post('user_id'))) {
+          $this->form_validation->set_rules('country_name', display('country_name'), 'required|max_length[50]');
+        } else {
+          $this->form_validation->set_rules('country_name', display('country_name'), 'required|max_length[50]');
+        }     
+        $data['formdata'] = (object) $postData = [
+            'id' => $this->input->post('id', true),
+			'comp_id' => $this->session->userdata('companey_id'),
+            'country_name' => $this->input->post('country_name', true),
+            'price' => $this->input->post('price', true),
+            'status' => $this->input->post('status', true),
+            'created_by' => $this->session->userdata('user_id'),
+            'created_date' => date('Y-m-d'),
+            'updated_by' => $this->session->userdata('user_id'),
+            'updated_date' => date('Y-m-d'),
+        ];
+        if ($this->form_validation->run() === true) {
+            if (empty($this->input->post('id'))) {
+                if (user_role('30') == true) {}
+                if ($this->location_model->addproductcountry($postData)) {
+                    $this->session->set_flashdata('message', display('save_successfully'));
+                } else {
+                    $this->session->set_flashdata('exception', display('please_try_again'));
+                }
+                redirect('lead/productcountry');
+            } else {
+                if (user_role('31') == true) {                    
+                }
+                if ($this->location_model->updateProductCountry($postData)) {
+                    $this->session->set_flashdata('message', display('update_successfully'));
+                } else {
+                    $this->session->set_flashdata('exception', display('please_try_again'));
+                }
+                redirect('lead/productcountry');
+            }
+        } else {
+             $data['typeofpro_list'] = $this->warehouse_model->typeofproduct_list();
+            $data['brand_list'] = $this->warehouse_model->brand_list();
+            $data['content'] = $this->load->view('location/product_country_form', $data, true);
+            $this->load->view('layout/main_wrapper', $data);
+        }
+    }
+    
+    public function addproduct() {
+         $data['title'] = 'Add Product';
+        if (empty($this->input->post('user_id'))) {
+          $this->form_validation->set_rules('proname', display('name'), 'required|max_length[50]');
+        } else {
+          $this->form_validation->set_rules('proname', display('name'), 'required|max_length[50]');
+        }     
+        $data['formdata'] = (object) $postData = [
+            'id' => $this->input->post('id', true),
+            'comp_id' => $this->session->userdata('companey_id'),
+            'country_name' => $this->input->post('proname', true),
+            'skuid' => $this->input->post('skuid', true),
+            'typeofpro' => $this->input->post('top', true),
+            'brand' => $this->input->post('brand', true),
+            'price' => $this->input->post('price', true),
+            'status' => $this->input->post('status', true),
+            'created_by' => $this->session->userdata('user_id'),
+            'created_date' => date('Y-m-d'),
+            'updated_by' => $this->session->userdata('user_id'),
+            'updated_date' => date('Y-m-d'),
+        ];
+        if ($this->form_validation->run() === true) {
+            if (empty($this->input->post('id'))) {
+                if (user_role('30') == true) {}
+                if ($this->location_model->addproductcountry($postData)) {
+                    $this->session->set_flashdata('message', display('save_successfully'));
+                } else {
+                    $this->session->set_flashdata('exception', display('please_try_again'));
+                }
+                redirect('lead/productcountry');
+            } else {
+                if (user_role('31') == true) {                    
+                }
+                if ($this->location_model->updateProductCountry($postData)) {
+                    $this->session->set_flashdata('message', display('update_successfully'));
+                } else {
+                    $this->session->set_flashdata('exception', display('please_try_again'));
+                }
+                redirect('lead/productcountry');
+            }
+        } else {
+            $data['typeofpro_list'] = $this->warehouse_model->typeofproduct_list();
+            $data['brand_list'] = $this->warehouse_model->brand_list();
+            $data['content'] = $this->load->view('location/product_country_form', $data, true);
+            $this->load->view('layout/main_wrapper', $data);
+        }
+    }
+
+    public function editproductcountry($param_id = null) {
+        if (user_role('31') == true) {}
+        $data['title'] = 'Edit Product';
+        $data['formdata'] = $this->location_model->readProductCountry($param_id);
+        $data['content'] = $this->load->view('location/product_country_form', $data, true);
+        $this->load->view('layout/main_wrapper', $data);
+    }
+
+     public function editproductcountry1($param_id = null) {
+        if (user_role('31') == true) {}
+        $data['title'] = 'Edit Product';
+        $data['formdata'] = $this->location_model->readProductCountry($param_id);
+        $data['typeofpro_list'] = $this->warehouse_model->typeofproduct_list();
+        $data['brand_list'] = $this->warehouse_model->brand_list();
+        $data['content'] = $this->load->view('location/product_country_form', $data, true);
+        $this->load->view('layout/main_wrapper', $data);
+    }
+
+    
+    public function deleteproductcountry($paramId = null) {
+        if (user_role('32') == true) {}
+        if ($this->location_model->deleteproductcountry($paramId)) {
+            $this->session->set_flashdata('message', display('delete_successfully'));
+        } else {
+            $this->session->set_flashdata('exception', display('please_try_again'));
+        }
+        redirect('lead/productcountry');
+    }
+        
+
+    public function institutelist() {
+        if (user_role('30') == true) {}
+        $data['title'] = display('institute_list');
+        $data['institute_list'] = $this->Institute_model->institutelist();
+        /*echo $this->db->last_query();
+        print_r($data['institute_list']);*/
+        $data['content'] = $this->load->view('institute/institute_list', $data, true);
+        $this->load->view('layout/main_wrapper', $data);
+    }
+	
+	public function courselist() {
+        if (user_role('30') == true) {}
+        $data['title'] = display('course_list');
+        $data['course_list'] = $this->Institute_model->courselist();
+        /*echo $this->db->last_query();
+        print_r($data['institute_list']);*/
+		$data['courses'] = $this->Institute_model->findcourse();
+		$data['discipline'] = $this->location_model->find_discipline();
+		$data['level'] = $this->location_model->find_level();
+		$data['length'] = $this->location_model->find_length();
+        $data['content'] = $this->load->view('institute/course_list', $data, true);
+        $this->load->view('layout/main_wrapper', $data);
+    }
+	
+	public function crslist() {
+        if (user_role('30') == true) {}
+        $data['title'] = display('course_master');
+        $data['course_list'] = $this->Institute_model->crslist();
+        /*echo $this->db->last_query();
+        print_r($data['institute_list']);*/
+        $data['content'] = $this->load->view('institute/crs_list', $data, true);
+        $this->load->view('layout/main_wrapper', $data);
+    }
+	
+	public function vidlist() {
+        if (user_role('30') == true) {}
+        $data['title'] = display('vedio_list');
+        $data['vid_list'] = $this->Institute_model->vidlist();
+        /*echo $this->db->last_query();
+        print_r($data['institute_list']);*/
+        $data['content'] = $this->load->view('institute/vid_list', $data, true);
+        $this->load->view('layout/main_wrapper', $data);
+    }
+/**************************************** Discipline*****************************************/	
+	public function discipline() {
+        if (user_role('30') == true) {}
+        $data['title'] = display('program_discipline');
+        $data['discipline_list'] = $this->Institute_model->disciplinelist();
+        /*echo $this->db->last_query();
+        print_r($data['institute_list']);*/
+        $data['content'] = $this->load->view('institute/discipline_list', $data, true);
+        $this->load->view('layout/main_wrapper', $data);
+    }
+	
+	public function add_discipline() {
+        $data['title'] = display('add_discipline');
+        $data['discipline'] = '';       
+        $this->form_validation->set_rules('discipline_name', display('program_discipline'), 'required');
+
+        $data['discipline'] = (object) $postData = [
+            'id' => $this->input->post('discipline_id', true),
+			'comp_id' => $this->session->userdata('companey_id'),
+            'discipline' => $this->input->post('discipline_name', true),
+            'status' => $this->input->post('status', true),
+            'created_by' => $this->session->userdata('user_id'),
+            'create_date' => date('Y-m-d')
+        ];
+        
+        if ($this->form_validation->run() === true) {
+           // print_r($postData);exit;
+            if (empty($this->input->post('discipline_id'))) {
+                if (user_role('30') == true) {}
+                if ($this->Institute_model->insertRowdisci($postData)) {
+                    $this->session->set_flashdata('message', display('save_successfully'));
+                } else {
+                    $this->session->set_flashdata('exception', display('please_try_again'));
+                }                
+            } else {
+                if (user_role('31') == true) {}
+                if ($this->Institute_model->updateRowdisci($postData)) {
+                    $this->session->set_flashdata('message', display('update_successfully'));
+                } else {
+                    $this->session->set_flashdata('exception', display('please_try_again'));
+                }
+            }
+            redirect('lead/discipline');
+        } else {
+            $data['content'] = $this->load->view('institute/discipline_form', $data, true);
+            $this->load->view('layout/main_wrapper', $data);
+        }
+    }
+	
+	public function edit_discipline($id = null) {
+        if (user_role('31') == true) {}
+        $data['title'] = display('update_discipline');
+        $data['discipline'] = $this->Institute_model->readRowdisci($id);  
+        $data['content'] = $this->load->view('institute/discipline_form', $data, true);
+        $this->load->view('layout/main_wrapper', $data);
+    }
+	
+	public function delete_discipline($paramId = null) {
+        if (user_role('32') == true) {}
+        if ($this->Institute_model->deletediscipline($paramId)) {
+            $this->session->set_flashdata('message', display('delete_successfully'));
+        } else {
+            $this->session->set_flashdata('exception', display('please_try_again'));
+        }
+        redirect('lead/discipline');
+    }
+/**************************************** Discipline End*****************************************/
+
+/**************************************** Level *****************************************/	
+	public function level() {
+        if (user_role('30') == true) {}
+        $data['title'] = display('program_level');
+        $data['level_list'] = $this->Institute_model->levellist();
+        /*echo $this->db->last_query();
+        print_r($data['institute_list']);*/
+        $data['content'] = $this->load->view('institute/level_list', $data, true);
+        $this->load->view('layout/main_wrapper', $data);
+    }
+	
+	public function add_level() {
+        $data['title'] = display('add_level');
+        $data['level'] = '';       
+        $this->form_validation->set_rules('level_name', display('program_level'), 'required');
+
+        $data['level'] = (object) $postData = [
+            'id' => $this->input->post('level_id', true),
+			'comp_id' => $this->session->userdata('companey_id'),
+            'level' => $this->input->post('level_name', true),
+            'status' => $this->input->post('status', true),
+            'created_by' => $this->session->userdata('user_id'),
+            'create_date' => date('Y-m-d')
+        ];
+        
+        if ($this->form_validation->run() === true) {
+           // print_r($postData);exit;
+            if (empty($this->input->post('level_id'))) {
+                if (user_role('30') == true) {}
+                if ($this->Institute_model->insertRowlvl($postData)) {
+                    $this->session->set_flashdata('message', display('save_successfully'));
+                } else {
+                    $this->session->set_flashdata('exception', display('please_try_again'));
+                }                
+            } else {
+                if (user_role('31') == true) {}
+                if ($this->Institute_model->updateRowlvl($postData)) {
+                    $this->session->set_flashdata('message', display('update_successfully'));
+                } else {
+                    $this->session->set_flashdata('exception', display('please_try_again'));
+                }
+            }
+            redirect('lead/level');
+        } else {
+            $data['content'] = $this->load->view('institute/level_form', $data, true);
+            $this->load->view('layout/main_wrapper', $data);
+        }
+    }
+	
+	public function edit_level($id = null) {
+        if (user_role('31') == true) {}
+        $data['title'] = display('update_level');
+        $data['level'] = $this->Institute_model->readRowlvl($id);  
+        $data['content'] = $this->load->view('institute/level_form', $data, true);
+        $this->load->view('layout/main_wrapper', $data);
+    }
+	
+	public function delete_level($paramId = null) {
+        if (user_role('32') == true) {}
+        if ($this->Institute_model->deletelevel($paramId)) {
+            $this->session->set_flashdata('message', display('delete_successfully'));
+        } else {
+            $this->session->set_flashdata('exception', display('please_try_again'));
+        }
+        redirect('lead/level');
+    }
+/**************************************** Lavel End*****************************************/
+
+/**************************************** Length *****************************************/	
+	public function length() {
+        if (user_role('30') == true) {}
+        $data['title'] = display('program_length');
+        $data['length_list'] = $this->Institute_model->lengthlist();
+        /*echo $this->db->last_query();
+        print_r($data['institute_list']);*/
+		$data['level'] = $this->Institute_model->levellist();
+        $data['content'] = $this->load->view('institute/length_list', $data, true);
+        $this->load->view('layout/main_wrapper', $data);
+    }
+	
+	public function add_length() {
+        $data['title'] = display('add_length');
+        $data['level'] = '';       
+        $this->form_validation->set_rules('length_name', display('program_length'), 'required');
+
+        $data['length'] = (object) $postData = [
+            'id' => $this->input->post('length_id', true),
+			'comp_id' => $this->session->userdata('companey_id'),
+			'level_id' => $this->input->post('level_id', true),
+            'length' => $this->input->post('length_name', true),
+            'status' => $this->input->post('status', true),
+            'created_by' => $this->session->userdata('user_id'),
+            'created_date' => date('Y-m-d')
+        ];
+        
+        if ($this->form_validation->run() === true) {
+           // print_r($postData);exit;
+            if (empty($this->input->post('length_id'))) {
+                if (user_role('30') == true) {}
+                if ($this->Institute_model->insertRowlgh($postData)) {
+                    $this->session->set_flashdata('message', display('save_successfully'));
+                } else {
+                    $this->session->set_flashdata('exception', display('please_try_again'));
+                }                
+            } else {
+                if (user_role('31') == true) {}
+                if ($this->Institute_model->updateRowlgh($postData)) {
+                    $this->session->set_flashdata('message', display('update_successfully'));
+                } else {
+                    $this->session->set_flashdata('exception', display('please_try_again'));
+                }
+            }
+            redirect('lead/length');
+        } else {
+			$data['level'] = $this->Institute_model->levellist();
+            $data['content'] = $this->load->view('institute/length_form', $data, true);
+            $this->load->view('layout/main_wrapper', $data);
+        }
+    }
+	
+	public function edit_length($id = null) {
+        if (user_role('31') == true) {}
+        $data['title'] = display('update_length');
+        $data['length'] = $this->Institute_model->readRowlgh($id);
+        $data['level'] = $this->Institute_model->levellist();		
+        $data['content'] = $this->load->view('institute/length_form', $data, true);
+        $this->load->view('layout/main_wrapper', $data);
+    }
+	
+	public function delete_length($paramId = null) {
+        if (user_role('32') == true) {}
+        if ($this->Institute_model->deletelength($paramId)) {
+            $this->session->set_flashdata('message', display('delete_successfully'));
+        } else {
+            $this->session->set_flashdata('exception', display('please_try_again'));
+        }
+        redirect('lead/length');
+    }
+	
+	public function select_length_lvl() {
+        $diesc = $this->input->post('lead_stage');
+        echo json_encode($this->location_model->all_length($diesc));
+
+       // echo $diesc;
+    }
+/**************************************** Length End*****************************************/
+    
+    public function add_institute() {
+        $data['title'] = display('add_institute');
+        $data['institute'] = '';       
+        $this->form_validation->set_rules('institute_name', display('institute_name'), 'required');
+        $this->form_validation->set_rules('country_id', display('country_name'), 'required');
+        if(!empty($_FILES['profile_image']['name'])){			
+        //$this->load->library("aws");
+				
+				$_FILES['userfile']['name']= $_FILES['profile_image']['name'];
+				$_FILES['userfile']['type']= $_FILES['profile_image']['type'];
+				$_FILES['userfile']['tmp_name']= $_FILES['profile_image']['tmp_name'];
+				$_FILES['userfile']['error']= $_FILES['profile_image']['error'];
+				$_FILES['userfile']['size']= $_FILES['profile_image']['size'];    
+				
+				$image=$_FILES['userfile']['name'];
+				$path=  "uploads/".$image;
+        		$ret = move_uploaded_file($_FILES['userfile']['tmp_name'] ,$path);
+				//if($ret){
+				//    $this->aws->upload($path);
+				//}
+        }else{
+            $path=$this->input->post('profile_images', true);
+        }
+    if(!empty($_FILES['agreement_doc']['name'])){
+				$_FILES['userfile']['name']= $_FILES['agreement_doc']['name'];
+				$_FILES['userfile']['type']= $_FILES['agreement_doc']['type'];
+				$_FILES['userfile']['tmp_name']= $_FILES['agreement_doc']['tmp_name'];
+				$_FILES['userfile']['error']= $_FILES['agreement_doc']['error'];
+				$_FILES['userfile']['size']= $_FILES['agreement_doc']['size'];    
+				
+				$image1=$_FILES['userfile']['name'];
+				$path1=  "uploads/".$image1;
+        		$ret1 = move_uploaded_file($_FILES['userfile']['tmp_name'] ,$path1);
+				//if($ret1){
+				//    $this->aws->upload($path1);
+				//}
+
+		}else{
+		  $path1=$this->input->post('agreement_docs', true);  
+		}
+        $data['institute'] = (object) $postData = [
+            'institute_id' => $this->input->post('institute_id', true),
+			'comp_id' => $this->session->userdata('companey_id'),
+            'institute_name' => $this->input->post('institute_name', true),
+            'contact_name' => $this->input->post('contact_name', true),
+            'contact_number' => $this->input->post('contact_number', true),
+            'address' => $this->input->post('address', true),
+            'country_id' => $this->input->post('country_id', true),
+			'state_id' => $this->input->post('state_id', true),
+            'profile_image' => $path,
+            'agreement_comision' => $this->input->post('agreement_comision', true),
+            'agreement_doc' => $path1,
+            'from_date' => $this->input->post('from_date', true),
+            'to_date' => $this->input->post('to_date', true),
+            'status' => $this->input->post('status', true),
+            'created_by' => $this->session->userdata('user_id'),
+            'updated_by' => $this->session->userdata('user_id'),
+            'created_date' => date('Y-m-d'),
+            'updated_date' => date('Y-m-d')
+        ];
+        
+        if ($this->form_validation->run() === true) {
+           // print_r($postData);exit;
+            if (empty($this->input->post('institute_id'))) {
+                if (user_role('30') == true) {}
+                if ($this->Institute_model->insertRow($postData)) {
+                    $this->session->set_flashdata('message', display('save_successfully'));
+                } else {
+                    $this->session->set_flashdata('exception', display('please_try_again'));
+                }                
+            } else {
+                if (user_role('31') == true) {}
+                if ($this->Institute_model->updateRow($postData)) {
+                    $this->session->set_flashdata('message', display('update_successfully'));
+                } else {
+                    $this->session->set_flashdata('exception', display('please_try_again'));
+                }
+            }
+            redirect('lead/institutelist');
+        } else {
+            $data['country'] = $this->location_model->country();
+            $data['content'] = $this->load->view('institute/institute_form', $data, true);
+            $this->load->view('layout/main_wrapper', $data);
+        }
+    }
+   
+    public function edit_institute($institute_id = null) {
+        if (user_role('31') == true) {}
+        $data['title'] = display('update_institute');
+        $data['institute'] = $this->Institute_model->readRow($institute_id);  
+        $data['country'] = $this->location_model->country();
+        $data['content'] = $this->load->view('institute/institute_form', $data, true);
+        $this->load->view('layout/main_wrapper', $data);
+    }
+    
+    public function delete_institute($paramId = null) {
+        if (user_role('32') == true) {}
+        if ($this->Institute_model->deleteInstitute($paramId)) {
+            $this->session->set_flashdata('message', display('delete_successfully'));
+        } else {
+            $this->session->set_flashdata('exception', display('please_try_again'));
+        }
+        redirect('lead/institutelist');
+    }
+    
+/*    public function datasourcelist() {
+        if (user_role('20') == true) {}
+        $data['title'] = display('datasource_list');
+        $data['datasource_list'] = $this->Datasource_model->datasourcelist();
+        $data['content'] = $this->load->view('datasource/datasource_list', $data, true);
+        $this->load->view('layout/main_wrapper', $data);
+    }*/
+    
+     public function datasourcelist() {
+        if (user_role('30') == true) {}
+        $data['title'] = display('datasource_list');
+		$data['all_user'] = $this->User_model->all_user(); 
+		$data['products'] = $this->dash_model->get_user_product_list();
+        $data['datasource_list'] = $this->Datasource_model->datasourcelist2();
+         $data['datasource_list2'] = $this->Datasource_model->datasourcelist();
+        $data['content'] = $this->load->view('datasource/datasource_list', $data, true);
+        $this->load->view('layout/main_wrapper', $data);
+    }
+	
+		/********************************************create CSV file*********************************/
+public function createcsv($pd) {	
+header('Content-type: text/csv');
+header('Content-Disposition: attachment; filename="sample.csv"');
+ 
+// do not cache the file
+header('Pragma: no-cache');
+header('Expires: 0');
+ 
+// create a file pointer connected to the output stream
+$file = fopen('php://output', 'w');
+
+$input=array();
+$this->db->select('*');
+$this->db->from('tbl_input');
+$this->db->or_where('process_id',$pd);
+$this->db->or_where('company_id',$this->session->userdata('companey_id'));
+$this->db->order_by('input_id', 'asc');
+$q=$this->db->get()->result();
+if(!empty($q)){
+foreach($q as $value){
+$daynamic[] = $value->input_label;	
+}
+$static=array('Company name', 'Name prefixed', 'First Name', 'Last Name', 'Mobile No', 'other_number', 'Email Address', 'state', 'city', 'address','process', 'source', 'datasource', 'Remarks','Services');
+$allcoulmn=array_merge($static,$daynamic); 
+// send the column headers
+fputcsv($file, $allcoulmn); 
+}else{
+$static=array('Company name', 'Name prefixed', 'First Name', 'Last Name', 'Mobile No', 'other_number', 'Email Address', 'state', 'city', 'address','process', 'source', 'datasource', 'Remarks','Services');
+fputcsv($file, $static);	
+}
+exit();
+}
+	/************************************************end CSV create********************************/
+    
+    public function add_datasource() {
+        $data['title'] = display('add_datasource');     
+        $this->form_validation->set_rules('datasource_name', display('datasource_name'), 'required');
+        $data['datasource'] = (object) $postData = [
+            'datasource_id' => $this->input->post('datasource_id', true),
+            'datasource_name' => $this->input->post('datasource_name', true),
+            'status' => $this->input->post('status', true),
+            'created_by' => $this->session->userdata('user_id'),
+            'comp_id' => $this->session->userdata('companey_id'),
+            'updated_by' => $this->session->userdata('user_id'),
+            'created_date' => date('Y-m-d'),
+            'updated_date' => date('Y-m-d')
+        ];
+        
+        if ($this->form_validation->run() === true) {
+            if (empty($this->input->post('datasource_id'))) {
+                if (user_role('30') == true) {}
+                if ($this->Datasource_model->insertRow($postData)) {
+                    $this->session->set_flashdata('message', display('save_successfully'));
+                } else {
+                    $this->session->set_flashdata('exception', display('please_try_again'));
+                }                
+            } else {
+                if (user_role('31') == true) {}
+                if ($this->Datasource_model->updateRow($postData)) {
+                    $this->session->set_flashdata('message', display('update_successfully'));
+                } else {
+                    $this->session->set_flashdata('exception', display('please_try_again'));
+                }
+            }
+            redirect('lead/datasourcelist');
+        } else {
+            $data['country'] = $this->location_model->productcountry();
+            $data['content'] = $this->load->view('datasource/datasource_form', $data, true);
+            $this->load->view('layout/main_wrapper', $data);
+        }
+    }
+   
+    public function edit_datasource($datasource_id = null) {
+        if (user_role('31') == true) {}
+        $data['title'] = display('update_datasource');
+        $data['datasource'] = $this->Datasource_model->readRow($datasource_id);  
+        $data['country'] = $this->location_model->productcountry();
+        $data['content'] = $this->load->view('datasource/datasource_form', $data, true);
+        $this->load->view('layout/main_wrapper', $data);
+    }
+    
+    public function delete_datasource($paramId = null) {
+        if (user_role('32') == true) {}
+        if ($this->Datasource_model->deleteDatasource($paramId)) {
+            $this->session->set_flashdata('message', display('delete_successfully'));
+        } else {
+            $this->session->set_flashdata('exception', display('please_try_again'));
+        }
+        redirect('lead/datasourcelist');
+    }
+   
+    public function taskstatuslist() {
+        if (user_role('30') == true) {}
+        $data['title'] = display('taskstatus_list');
+        $data['taskstatus_list'] = $this->Taskstatus_model->taskstatuslist();
+        $data['content'] = $this->load->view('taskstatus/taskstatus_list', $data, true);
+        $this->load->view('layout/main_wrapper', $data);
+    }
+    
+    public function add_taskstatus() {
+        $data['title'] = display('add_taskstatus');     
+        $this->form_validation->set_rules('taskstatus_name', display('taskstatus_name'), 'required');
+        $data['formdata'] = (object) $postData = [
+            'taskstatus_id' => $this->input->post('taskstatus_id', true),
+            'taskstatus_name' => $this->input->post('taskstatus_name', true),
+            'status' => $this->input->post('status', true),
+            'created_by' => $this->session->userdata('user_id'),
+            'comp_id' => $this->session->userdata('companey_id'),
+            'updated_by' => $this->session->userdata('user_id'),
+            'created_date' => date('Y-m-d'),
+            'updated_date' => date('Y-m-d')
+        ];
+        
+        if ($this->form_validation->run() === true) {
+            if (empty($this->input->post('taskstatus_id'))) {
+                if (user_role('30') == true) {}
+                if ($this->Taskstatus_model->insertRow($postData)) {
+                    $this->session->set_flashdata('message', display('save_successfully'));
+                } else {
+                    $this->session->set_flashdata('exception', display('please_try_again'));
+                }                
+            } else {
+                if (user_role('31') == true) {}
+                if ($this->Taskstatus_model->updateRow($postData)) {
+                    $this->session->set_flashdata('message', display('update_successfully'));
+                } else {
+                    $this->session->set_flashdata('exception', display('please_try_again'));
+                }
+            }
+            redirect('lead/taskstatuslist');
+        } else {
+            $data['content'] = $this->load->view('taskstatus/taskstatus_form', $data, true);
+            $this->load->view('layout/main_wrapper', $data);
+        }
+    }
+   
+    public function edit_taskstatus($taskstatus_id = null) {
+        if (user_role('31') == true) {}
+        $data['title'] = display('update_taskstatus');
+        $data['formdata'] = $this->Taskstatus_model->readRow($taskstatus_id);
+        $data['content'] = $this->load->view('taskstatus/taskstatus_form', $data, true);
+        $this->load->view('layout/main_wrapper', $data);
+    }
+    
+    public function delete_taskstatus($paramId = null) {
+        if (user_role('32') == true) {}
+        if ($this->Taskstatus_model->deleteTaskstatus($paramId)) {
+            $this->session->set_flashdata('message', display('delete_successfully'));
+        } else {
+            $this->session->set_flashdata('exception', display('please_try_again'));
+        }
+        redirect('lead/taskstatuslist');
+    }    
+    
+    public function centerlist() {
+        if (user_role('30') == true) {}
+        $data['title'] = display('center_list');
+        $data['center_list'] = $this->Center_model->centerlist();
+        $data['content'] = $this->load->view('center/center_list', $data, true);
+        $this->load->view('layout/main_wrapper', $data);
+    }
+    
+    public function add_center() {
+        $data['title'] = display('add_center');
+        $data['center'] = '';       
+        $this->form_validation->set_rules('center_name', display('center_name'), 'required');
+        $this->form_validation->set_rules('country_id', display('country_name'), 'required');
+        $data['center'] = (object) $postData = [
+            'center_id' => $this->input->post('center_id', true),
+            'comp_id' => $this->session->companey_id,
+            'center_name' => $this->input->post('center_name', true),
+            'contact_name' => $this->input->post('contact_name', true),
+            'contact_number' => $this->input->post('contact_number', true),
+            'address' => $this->input->post('address', true),
+            'country_id' => $this->input->post('country_id', true),
+            'status' => $this->input->post('status', true),
+            'created_by' => $this->session->userdata('user_id'),
+            'updated_by' => $this->session->userdata('user_id'),
+            'created_date' => date('Y-m-d'),
+            'updated_date' => date('Y-m-d')
+        ];
+        
+        if ($this->form_validation->run() === true) {
+            if (empty($this->input->post('center_id'))) {
+                if (user_role('30') == true) {}
+                if ($this->Center_model->insertRow($postData)) {
+                    $this->session->set_flashdata('message', display('save_successfully'));
+                } else {
+                    $this->session->set_flashdata('exception', display('please_try_again'));
+                }                
+            } else {
+                if (user_role('31') == true) {}
+                if ($this->Center_model->updateRow($postData)) {
+                    $this->session->set_flashdata('message', display('update_successfully'));
+                } else {
+                    $this->session->set_flashdata('exception', display('please_try_again'));
+                }
+            }
+            redirect('lead/centerlist');
+        } else {
+            $data['country'] = $this->location_model->country();            
+            $data['content'] = $this->load->view('center/center_form', $data, true);
+            $this->load->view('layout/main_wrapper', $data);
+        }
+    }
+   
+    public function edit_center($center_id = null) {
+        if (user_role('31') == true) {}
+        $data['title'] = display('update_center');
+        $data['center'] = $this->Center_model->readRow($center_id);  
+        $data['country'] = $this->location_model->country();            
+        $data['content'] = $this->load->view('center/center_form', $data, true);
+        $this->load->view('layout/main_wrapper', $data);
+    }
+    
+    public function delete_center($paramId = null) {
+        if (user_role('32') == true) {}
+        if ($this->Center_model->deleteCenter($paramId)) {
+            $this->session->set_flashdata('message', display('delete_successfully'));
+        } else {
+            $this->session->set_flashdata('exception', display('please_try_again'));
+        }
+        redirect('lead/centerlist');
+    }
+    
+    public function subsourcelist() {
+        if (user_role('30') == true) {}
+        $data['title'] = display('subsource_list');
+        $data['subsource_list'] = $this->SubSource_model->subsourcelist();
+        $data['content'] = $this->load->view('subsource/subsource_list', $data, true);
+        $this->load->view('layout/main_wrapper', $data);
+    }
+
+    public function get_subsource_by_source(){
+
+        $id = $this->input->post('src_id');
+        $subid = $this->input->post('sub_src_id');
+
+        $res = $this->SubSource_model->get_subsource($id);
+
+     $opt = "<option>---Select Subsource---</option>";
+     foreach($res as $result)
+     {
+            if($subid == $result['subsource_id']){
+             
+             $opt .= "<option value='".$result['subsource_id']."' selected>".ucwords($result['subsource_name']) . "</option>";
+
+            }
+            else{
+            $opt .= "<option value='".$result['subsource_id']."'>".ucwords($result['subsource_name']) . "</option>";
+        }
+     }
+
+     echo $opt;
+    }
+    public function description() {
+        if (user_role('30') == true) {}
+        $data['title'] = display('Description_list');
+        $data['description_list'] = $this->SubSource_model->descriptionlist();
+        $data['content'] = $this->load->view('lead_description', $data, true);
+        $this->load->view('layout/main_wrapper', $data);
+    }
+    
+    public function add_subsource() {
+        $data['title'] = display('add_subsource');
+        $data['subsource'] = '';       
+        $this->form_validation->set_rules('subsource_name', display('subsource_name'), 'required');
+        $this->form_validation->set_rules('lead_source_id', display('lead_source'), 'required');
+        $data['subsource'] = (object) $postData = [
+            'subsource_id' => $this->input->post('subsource_id', true),
+			'comp_id' => $this->session->userdata('companey_id'),
+            'subsource_name' => $this->input->post('subsource_name', true),
+            'lead_source_id' => $this->input->post('lead_source_id', true),
+            'status' => $this->input->post('status', true),
+            'created_by' => $this->session->userdata('user_id'),
+            'updated_by' => $this->session->userdata('user_id'),
+            'created_date' => date('Y-m-d'),
+            'updated_date' => date('Y-m-d')
+        ];        
+        if ($this->form_validation->run() === true) {
+            if (empty($this->input->post('subsource_id'))) {
+                if(user_role('30') == true) {}
+                if($this->SubSource_model->insertRow($postData)) {
+                    $this->session->set_flashdata('message', display('save_successfully'));
+                } else {
+                    $this->session->set_flashdata('exception', display('please_try_again'));
+                }                
+            } else {
+                if(user_role('31') == true) {}
+                if($this->SubSource_model->updateRow($postData)) {
+                    $this->session->set_flashdata('message', display('update_successfully'));
+                } else {
+                    $this->session->set_flashdata('exception', display('please_try_again'));
+                }
+            }
+            redirect('lead/subsourcelist');
+        } else {
+            $data['lead_source_list'] = $this->SubSource_model->all_lead_source();
+            $data['content'] = $this->load->view('subsource/subsource_form', $data, true);
+            $this->load->view('layout/main_wrapper', $data);
+        }
+    }
+    
+    
+    public function add_description() {
+        $data['title'] = display('add_description');
+        $data['description'] = '';       
+        $this->form_validation->set_rules('description_name', display('description_name'), 'required');
+        $this->form_validation->set_rules('lead_stage_id', display('lead_stage_id'), 'required');
+        $data['description'] = (object) $postData = [
+            'id' => $this->input->post('description_id', true),
+			'comp_id' => $this->session->userdata('companey_id'),
+            'lead_stage_id' => $this->input->post('lead_stage_id', true),
+            'description' => $this->input->post('description_name', true),
+            'status' => $this->input->post('status', true),
+            'created_by' => $this->session->userdata('user_id'),
+            'updated_by' => $this->session->userdata('user_id'),
+            'created_date' => date('Y-m-d'),
+            'updated_date' => date('Y-m-d')
+        ]; 
+        //print_r($postData);exit;
+        if ($this->form_validation->run() === true) {
+            if (empty($this->input->post('description_id'))) {
+                if(user_role('30') == true) {}
+                if($this->SubSource_model->insertRowdeis($postData)) {
+                    $this->session->set_flashdata('message', display('save_successfully'));
+                } else {
+                    $this->session->set_flashdata('exception', display('please_try_again'));
+                }                
+            } else {
+                if(user_role('31') == true) {}
+                if($this->SubSource_model->updateRowdes($postData)) {
+                    $this->session->set_flashdata('message', display('update_successfully'));
+                } else {
+                    $this->session->set_flashdata('exception', display('please_try_again'));
+                }
+            }
+            redirect('lead/description');
+        } else {
+            $data['lead_description_list'] = $this->SubSource_model->all_stage_list();
+            $data['content'] = $this->load->view('description_form', $data, true);
+            $this->load->view('layout/main_wrapper', $data);
+        }
+    }
+
+    public function get_process_bystage(){
+
+        $id = $this->input->post('id');
+
+        $this->db->select('tbl_product.product_name');
+        $this->db->from('tbl_product');
+        $this->db->join('lead_stage','tbl_product.sb_id=lead_stage.process_id');
+
+        $this->db->where('lead_stage.stg_id',$id);
+        $this->db->where('lead_stage.comp_id',$this->session->companey_id);
+
+        $res = $this->db->get()->row();
+
+        // print_r($res);exit();
+
+        echo json_encode($res);
+
+    }
+   
+    public function edit_subsource($subsource_id = null) {
+        if (user_role('31') == true) {}
+        $data['title'] = display('update_subsource');
+        $data['subsource'] = $this->SubSource_model->readRow($subsource_id);  
+        $data['lead_source_list'] = $this->SubSource_model->all_lead_source();
+        $data['content'] = $this->load->view('subsource/subsource_form', $data, true);
+        $this->load->view('layout/main_wrapper', $data);
+    }
+    
+    public function edit_discription($description_id = null) {
+        if (user_role('31') == true) {}
+        $data['title'] = display('update_deiscription');
+        $data['description'] = $this->SubSource_model->readRowdes($description_id);  
+        $data['lead_description_list'] = $this->SubSource_model->all_stage_des();
+        $data['content'] = $this->load->view('description_form', $data, true);
+        $this->load->view('layout/main_wrapper', $data);
+    }
+    
+    public function delete_subsource($paramId = null) {
+        if (user_role('32') == true) {}
+        if ($this->SubSource_model->deleteSubsource($paramId)) {
+            $this->session->set_flashdata('message', display('delete_successfully'));
+        } else {
+            $this->session->set_flashdata('exception', display('please_try_again'));
+        }
+        redirect('lead/subsourcelist');
+    }
+    
+    public function delete_description($paramId = null) {
+        if (user_role('32') == true) {}
+        if ($this->SubSource_model->delete_description($paramId)) {
+            $this->session->set_flashdata('message', display('delete_successfully'));
+        } else {
+            $this->session->set_flashdata('exception', display('please_try_again'));
+        }
+        redirect('lead/description');
+    }
+    
+    public function addnewkyc(){
+        $postData = $this->input->post();
+        if(!empty($postData)){
+        $doc_file = $this->fileupload->do_upload(
+                'assets/kyc/', 'doc_file'
+        );
+        $unique_number = $this->input->post('unique_number', true);
+        $enquiry_id = $this->input->post('kyc_enquiry_id', true);
+        $postData = [
+            'unique_number' => $unique_number,
+            'doc_name' => $this->input->post('doc_name', true),
+            'doc_number' => $this->input->post('doc_number', true),
+            'doc_validity' => $this->input->post('doc_validity', true),
+            'doc_file' => $doc_file,
+            'created_by' => $this->session->userdata('user_id'),
+            'updated_by' => $this->session->userdata('user_id'),
+            'created_date' => date('Y-m-d'),
+            'updated_date' => date('Y-m-d')
+        ];        
+        if (user_role('20') == true) {}
+        if ($this->Kyc_model->insertRow($postData)) {
+            $this->session->set_flashdata('message', 'KYC document added successfully');
+        } else {
+            $this->session->set_flashdata('exception', display('please_try_again'));
+        }
+        redirect('lead/lead_details/' . $enquiry_id.'#kyctab');
+    }else{
+       $this->session->set_flashdata('exception', display('please_try_again')); 
+    }
+    redirect($this->agent->referrer());
+    }
+    
+    
+    public function addnewwork(){
+        $postData = $this->input->post();
+        if(!empty($postData)){
+        $unique_number = $this->input->post('work_unique_number', true);
+        $enquiry_id = $this->input->post('work_enquiry_id', true);
+        $postData = [
+            'unique_number' => $unique_number,
+            'company' => $this->input->post('company', true),
+            'designation' => $this->input->post('designation', true),
+            'start_date' => $this->input->post('start_date', true),
+            'end_date' => $this->input->post('end_date', true),
+            'current_ctc' => $this->input->post('current_ctc', true),
+            'created_by' => $this->session->userdata('user_id'),
+            'updated_by' => $this->session->userdata('user_id'),
+            'created_date' => date('Y-m-d'),
+            'updated_date' => date('Y-m-d')
+        ];        
+        if (user_role('20') == true) {}
+        if ($this->Workhistory_model->insertRow($postData)) {
+            $this->session->set_flashdata('message', 'Work history added successfully');
+        } else {
+            $this->session->set_flashdata('exception', display('please_try_again'));
+        }
+        redirect('lead/lead_details/' . $enquiry_id);
+    }else{
+       $this->session->set_flashdata('exception', display('please_try_again')); 
+    }
+    redirect($this->agent->referrer());
+    }   
+    
+    public function addnewedu(){
+        $postData = $this->input->post();
+        if(!empty($postData)){
+        $unique_number = $this->input->post('edu_unique_number', true);
+        $enquiry_id = $this->input->post('edu_enquiry_id', true);
+        $postData = [
+            'unique_number' => $unique_number,
+            'title' => $this->input->post('title', true),
+            'university' => $this->input->post('university', true),
+            'passing_year' => $this->input->post('passing_year', true),
+            'created_by' => $this->session->userdata('user_id'),
+            'updated_by' => $this->session->userdata('user_id'),
+            'created_date' => date('Y-m-d'),
+            'updated_date' => date('Y-m-d')
+        ];        
+        if (user_role('20') == true) {}
+        if ($this->Education_model->insertRow($postData)) {
+            $this->session->set_flashdata('message', 'Education added successfully');
+        } else {
+            $this->session->set_flashdata('exception', display('please_try_again'));
+        }
+        redirect($this->agent->referrer());
+    }else{
+       $this->session->set_flashdata('exception', display('please_try_again')); 
+    }
+    redirect($this->agent->referrer());
+    }
+    
+    public function addnewsprof(){
+        $postData = $this->input->post();
+        if(!empty($postData)){
+        $unique_number = $this->input->post('sprof_unique_number', true);
+        $enquiry_id = $this->input->post('sprof_enquiry_id', true);
+        $postData = [
+            'unique_number' => $unique_number,
+            'title' => $this->input->post('title', true),
+            'profile' => $this->input->post('profile', true),
+            'created_by' => $this->session->userdata('user_id'),
+            'updated_by' => $this->session->userdata('user_id'),
+            'created_date' => date('Y-m-d'),
+            'updated_date' => date('Y-m-d')
+        ];        
+        if (user_role('20') == true) {}
+        if ($this->SocialProfile_model->insertRow($postData)) {
+            $this->session->set_flashdata('message', 'Social profile added successfully');
+        } else {
+            $this->session->set_flashdata('exception', display('please_try_again'));
+        }
+        redirect($this->agent->referrer());
+    }else{
+       $this->session->set_flashdata('exception', display('please_try_again')); 
+    }
+    redirect($this->agent->referrer());
+    }
+    
+    public function addnewtravel(){
+        $postData = $this->input->post();
+        if(!empty($postData)){
+        $unique_number = $this->input->post('travel_unique_number', true);
+        $enquiry_id = $this->input->post('travel_enquiry_id', true);
+        $postData = [
+            'unique_number' => $unique_number,
+            'country_id' => $this->input->post('country_id', true),
+            'travel_date' => $this->input->post('travel_date', true),
+            'visa_type' => $this->input->post('visa_type', true),
+            'dfrom_date' => $this->input->post('dfrom_date', true),
+            'dto_date' => $this->input->post('dto_date', true),
+            'is_rejected' => $this->input->post('is_rejected', true),
+            'reject_reason' => $this->input->post('reject_reason', true),            
+            'created_by' => $this->session->userdata('user_id'),
+            'updated_by' => $this->session->userdata('user_id'),
+            'created_date' => date('Y-m-d'),
+            'updated_date' => date('Y-m-d'),
+            'status'=>1
+        ];        
+        if (user_role('20') == true) {}
+        if ($this->Travelhistory_model->insertRow($postData)) {
+            $this->session->set_flashdata('message', 'Travel history added successfully');
+        } else {
+            $this->session->set_flashdata('exception', display('please_try_again'));
+        }
+        redirect($this->agent->referrer());
+    }else{
+       $this->session->set_flashdata('exception', display('please_try_again')); 
+    }
+    redirect($this->agent->referrer());
+    }
+
+    public function addnewmember(){
+        $postData = $this->input->post();
+        if(!empty($postData)){
+        $unique_number = $this->input->post('mem_unique_number', true);
+        $enquiry_id = $this->input->post('mem_enquiry_id', true);
+        $postData = [
+            'unique_number' => $unique_number,
+            'name' => $this->input->post('name', true),
+            'contact_number' => $this->input->post('contact_number', true),
+            'contact_email' => $this->input->post('contact_email', true),
+            'country_id' => $this->input->post('country_id', true),
+            'relationship' => $this->input->post('relationship', true),
+            'visa_status' => $this->input->post('visa_status', true),
+            'they_help' => $this->input->post('they_help', true),           
+            'created_by' => $this->session->userdata('user_id'),
+            'updated_by' => $this->session->userdata('user_id'),
+            'created_date' => date('Y-m-d'),
+            'updated_date' => date('Y-m-d'),
+            'status'=>1
+        ];        
+        if (user_role('20') == true) {}
+        if ($this->Closefemily_model->insertRow($postData)) {
+            $this->session->set_flashdata('message', 'Member added successfully');
+        } else {
+            $this->session->set_flashdata('exception', display('please_try_again'));
+        }
+        redirect($this->agent->referrer());
+    }else{
+       $this->session->set_flashdata('exception', display('please_try_again')); 
+    }
+    redirect($this->agent->referrer());
+    }
+    
+   /*****************************************************************notification start********************************************************************/
+    function alertList() 
+                    {    
+                         $this->db->select('*'); 
+                         $this->db->where('create_by',$this->session->user_id);
+                         $this->db->where('status','0');
+                         $alertData= $this->db->get('query_response')->result();
+                         
+                         if(!empty($alertData)){
+$myalertdate = array();
+$myalertmsg = array();
+if(!empty($alertData)){
+    foreach($alertData as $alert){
+        $myalertdate[] = $alert->task_date;
+        $myalerttime = $alert->task_time;
+        $myalertmsg[] = $alert->task_remark;
+        $myalertperson = $alert->contact_person;
+        $myalertmobile = $alert->mobile;
+        $myalertid = $alert->resp_id;
+    }
+}
+$ttt=explode(' ',$myalerttime);
+ $t=$ttt[0];
+$date = date('d-m-Y H:i:s'); 
+$d=explode(' ',$date);
+$dd=$d[0];
+ $tt=$d[1];
+}
+      
+      if((!empty($alertData)) && in_array($dd,$myalertdate) && (strtotime($tt) == strtotime($t))){ 
+          $status= 1;
+          $popup='
+<h4 style="color:red;">'.$myalertperson.'</h4>
+<h5 style="color:red;">'.$myalertmobile.'</h5>
+                <p style="color:#000;">'.$alert->task_remark.'</p>
+                </div>
+            ';
+           $status_id='<span  onclick="hide('.$myalertid.')"  style="height:0px;width:0px;float:right;margin-top:-30px;"><i class="fa fa-times-circle-o" aria-hidden="true" style="height:20px;width:20px;color:red;margin-left:-5px;"></i>
+</span>';
+            echo json_encode(array('status1'=>$status,'status_data'=>$popup,'status_id'=>$status_id));
+      }else{echo 0;}
+                    }
+public function alertstatus() {
+        $this->db->set('status', 1);
+        $this->db->where('resp_id', $this->uri->segment(3));
+        $this->db->update('query_response');
+    }
+   /*****************************************************************notification end********************************************************************/
+
+   function lead_search() // route created for this function
+   {
+	   
+		$filter = (!empty($_GET["search"])) ? trim($_GET["search"]) : ""; 
+		
+		if(!empty($filter)){
+			
+			$qpart = " (enq.Enquery_id LIKE '%{$filter}%' OR enq.email LIKE '%{$filter}%' OR enq.phone LIKE '%{$filter}%' OR enq.name LIKE '%{$filter}%' OR enq.lastname LIKE '%{$filter}%' OR usr.s_display_name LiKE '%{$filter}%' OR usr.last_name LiKE '%{$filter}%' OR asgn.s_display_name LiKE '%{$filter}%' OR asgn.last_name LiKE '%{$filter}%') AND";
+		}else{
+			$qpart = "";
+		}
+		
+		$retuser   = $this->common_model-> get_categories($this->session->user_id);
+		$impuser   = implode("," , $retuser);
+		
+		$qry    = "SELECT  enq.*, concat(usr.s_display_name,' ' , usr.last_name) as username,  concat(asgn.s_display_name,' ' , asgn.last_name) as asignuser  FROM enquiry enq
+											LEFT JOIN tbl_admin usr ON usr.pk_i_admin_id = enq.created_by 
+											LEFT JOIN tbl_admin asgn ON asgn.pk_i_admin_id = enq.aasign_to 
+											WHERE $qpart  (enq.created_by  IN ($impuser) OR enq.aasign_to  IN ($impuser))";   
+		
+		$data["result"] = $this->db->query($qry)->result();
+		
+		$data["filter"]  = $filter;	
+		$data['title']   = "Lead Search";
+		$data['content'] = $this->load->view('lead_search', $data, true);
+		$this->load->view('layout/main_wrapper', $data);
+   }
+   function get_number_details()
+   {
+	$all_reporting_ids    =   $this->common_model->get_categories($this->session->user_id);
+   	$number = $this->input->post("number");
+	$company_id = $this->session->companey_id;
+   	$where='';
+	$this->db->select("enquiry.name_prefix,enquiry.enquiry_id,enquiry.company,enquiry.created_by,enquiry.drop_status,enquiry.status,enquiry.aasign_to,enquiry.name,enquiry.lastname,enquiry.email,enquiry.phone,enquiry.address,DATE_FORMAT(enquiry.created_date,'%d-%m-%Y') as created_date,enquiry.enquiry_source,lead_source.icon_url,lead_source.lsid,lead_source.score_count,lead_source.lead_name,tbl_datasource.datasource_name,tbl_product.product_name as product_name,tbl_admin.s_display_name as member_name,tbl_admin.last_name as lname,t2.s_display_name as assign_to_name,t2.last_name as assign_lname");
+   	$this->db->from("enquiry");
+   	$this->db->join('tbl_product','enquiry.product_id = tbl_product.sb_id','left');
+   	$this->db->join('lead_source','enquiry.enquiry_source = lead_source.lsid','left');
+   	$this->db->join('tbl_datasource','enquiry.datasource_id = tbl_datasource.datasource_id','left');
+   	$this->db->join('tbl_admin','enquiry.created_by=tbl_admin.pk_i_admin_id','left');
+   	$this->db->join('tbl_admin t2','enquiry.aasign_to=t2.pk_i_admin_id','left');
+   	$where.="enquiry.phone=".$number;
+	$where .= " AND  enquiry.created_by IN (".implode(',', $all_reporting_ids).")";
+   	$this->db->where($where);
+   	$result = $this->db->get()->result();
+   	// echo $this->db->last_query();exit;
+   	echo json_encode($result);
+   }
+
+   
+    //Switch box master....
+    public function product_list(){
+        $data['title'] = 'Process';
+        $data['nav1']='nav1';
+        $data['get_users']=$this->dash_model->area_list();
+        $data['product_list']=$this->dash_model->all_process_list();
+        
+        $data['content'] =$this->load->view('product-list', $data,true);
+            $this->load->view('layout/main_wrapper',$data);
+        
+    }
+   //Master setup for Customer type or channel partner..
+    public function load_customer_channel_mater() {
+        $data['page_title'] = 'Customer type';
+        $data['nav1'] = 'nav2';
+        $data['customer_types'] = $this->enquiry_model->customers_types();
+        $data['name_prefix'] = $this->enquiry_model->name_prefix_list();
+        $data['content'] = $this->load->view('master_enquiry_type', $data, true);
+        $this->load->view('layout/main_wrapper', $data);
+    }
+
+    public function select_state_by_city() {
+        $city=$this->input->post('city_id');
+        echo json_encode($this->Leads_Model->all_csc($city));
+    }
+
+    public function get_lead_stage(){
+
+     $id=$this->input->post('id');
+     
+     $res = $this->Leads_Model->get_leadstage_name($id);
+     $opt = "<option>---Select Stage---</option>";
+     foreach($res as $result)
+     {
+            $opt .= "<option value='".$result['stg_id']."'>".ucwords($result['lead_stage_name']) . "</option>";
+     }
+
+     echo $opt;
+     // exit();
+
+    }
+	
+	public function add_course() {
+        $data['title'] = display('add_course');
+        $data['institute'] = '';       
+        $this->form_validation->set_rules('course_name', display('Course_name'), 'required');
+        $this->form_validation->set_rules('institute_id', display('institute_name'), 'required');
+		if(!empty($_FILES['course_image']['name'])){			
+        //$this->load->library("aws");
+				
+				$_FILES['userfile']['name']= $_FILES['course_image']['name'];
+				$_FILES['userfile']['type']= $_FILES['course_image']['type'];
+				$_FILES['userfile']['tmp_name']= $_FILES['course_image']['tmp_name'];
+				$_FILES['userfile']['error']= $_FILES['course_image']['error'];
+				$_FILES['userfile']['size']= $_FILES['course_image']['size'];    
+				
+				$image=$_FILES['userfile']['name'];
+				$path=  "uploads/".$image;
+        		$ret = move_uploaded_file($_FILES['userfile']['tmp_name'] ,$path);
+				//if($ret){
+				//    $this->aws->upload($path);
+				//}
+        }else{
+            $path=$this->input->post('course_images', true);
+        }
+        $data['course'] = (object) $postData = [
+            'crs_id' => $this->input->post('crs_id', true),
+            'institute_id' => $this->input->post('institute_id', true),
+            'course_name' => $this->input->post('course_name', true),
+			'course_ielts' => $this->input->post('course_ielts', true),
+			'course_image' => $path,
+			'course_rating' => $this->input->post('course_rating', true),
+			'course_discription' => $this->input->post('course_discription', true),
+			'comp_id' => $this->session->userdata('companey_id'),
+			'discipline_id' => $this->input->post('discipline', true),
+			'level_id' => $this->input->post('level', true),
+			'length_id' => $this->input->post('length', true),
+            'created_by' => $this->session->userdata('user_id'),
+            'updated_by' => $this->session->userdata('user_id'),
+            'status' => $this->input->post('status', true),
+            'created_date' => date('Y-m-d'),
+            'updated_date' => date('Y-m-d')
+        ];
+        //print_r($postData);exit;
+        if ($this->form_validation->run() === true) {
+            if (empty($this->input->post('crs_id'))) {
+                if (user_role('30') == true) {}
+                if ($this->Institute_model->insertRowcrs($postData)) {
+                    $this->session->set_flashdata('message', display('save_successfully'));
+                } else {
+                    $this->session->set_flashdata('exception', display('please_try_again'));
+                }                
+            } else {
+                if (user_role('31') == true) {}
+                if ($this->Institute_model->updateRowcrs($postData)) {
+                    $this->session->set_flashdata('message', display('update_successfully'));
+                } else {
+                    $this->session->set_flashdata('exception', display('please_try_again'));
+                }
+            }
+            redirect('lead/courselist');
+        } else {
+			$data['courses'] = $this->Institute_model->findcourse();
+            $data['institute'] = $this->Institute_model->findinstitute();
+			$data['discipline'] = $this->location_model->find_discipline();
+			$data['level'] = $this->location_model->find_level();
+			$data['length'] = $this->location_model->find_length();
+            $data['content'] = $this->load->view('institute/course_form', $data, true);
+            $this->load->view('layout/main_wrapper', $data);
+        }
+    }
+	
+	public function add_crs() {
+        $data['title'] = display('add_course');
+        $data['institute'] = '';       
+        $this->form_validation->set_rules('course_name', display('Course_name'), 'required');
+
+        $data['crs'] = (object) $postData = [
+		    'id' => $this->input->post('crs_id', true),
+			'comp_id' => $this->session->userdata('companey_id'),
+            'course_name' => $this->input->post('course_name', true),
+            'created_by' => $this->session->userdata('user_id'),
+            'status' => $this->input->post('status', true),
+            'created_date' => date('Y-m-d'),
+            'updated_date' => date('Y-m-d')
+        ];
+        //print_r($postData);exit;
+        if ($this->form_validation->run() === true) {
+            if (empty($this->input->post('crs_id'))) {
+                if (user_role('30') == true) {}
+                if ($this->Institute_model->insertcrs($postData)) {
+                    $this->session->set_flashdata('message', display('save_successfully'));
+                } else {
+                    $this->session->set_flashdata('exception', display('please_try_again'));
+                }                
+            } else {
+                if (user_role('31') == true) {}
+                if ($this->Institute_model->updatecrs($postData)) {
+                    $this->session->set_flashdata('message', display('update_successfully'));
+                } else {
+                    $this->session->set_flashdata('exception', display('please_try_again'));
+                }
+            }
+            redirect('lead/crslist');
+        } else {
+            $data['content'] = $this->load->view('institute/crs_form', $data, true);
+            $this->load->view('layout/main_wrapper', $data);
+        }
+    }
+	
+	public function add_video() {
+        $data['title'] = display('add_course');
+        $data['institute'] = '';       
+        $this->form_validation->set_rules('title_name', 'Title Name', 'required');
+		$this->form_validation->set_rules('link_name', 'Link Name', 'required');
+		$this->form_validation->set_rules('discription_name', 'Description', 'required');
+
+        $data['vid'] = (object) $postData = [
+		    'id' => $this->input->post('vid_id', true),
+			'comp_id' => $this->session->userdata('companey_id'),
+            'title' => $this->input->post('title_name', true),
+			'link' => $this->input->post('link_name', true),
+			'des' => $this->input->post('discription_name', true),
+			'meta_key' => $this->input->post('key_name', true),
+            'created_by' => $this->session->userdata('user_id'),
+            'status' => $this->input->post('status', true),
+            'created_date' => date('Y-m-d')
+        ];
+        //print_r($postData);exit;
+        if ($this->form_validation->run() === true) {
+            if (empty($this->input->post('vid_id'))) {
+                if (user_role('30') == true) {}
+                if ($this->Institute_model->insertvid($postData)) {
+                    $this->session->set_flashdata('message', display('save_successfully'));
+                } else {
+                    $this->session->set_flashdata('exception', display('please_try_again'));
+                }                
+            } else {
+                if (user_role('31') == true) {}
+                if ($this->Institute_model->updatevid($postData)) {
+                    $this->session->set_flashdata('message', display('update_successfully'));
+                } else {
+                    $this->session->set_flashdata('exception', display('please_try_again'));
+                }
+            }
+            redirect('lead/vidlist');
+        } else {
+            $data['content'] = $this->load->view('institute/vid_form', $data, true);
+            $this->load->view('layout/main_wrapper', $data);
+        }
+    }
+	
+	public function edit_course($crs_id = null) {
+        if (user_role('31') == true) {}
+        $data['title'] = display('update_course');
+		$data['courses'] = $this->Institute_model->findcourse();
+		$data['discipline'] = $this->location_model->find_discipline();
+		$data['level'] = $this->location_model->find_level();
+		$data['length'] = $this->location_model->find_length();
+        $data['course'] = $this->Institute_model->readRowcrs($crs_id);  
+        $data['institute'] = $this->Institute_model->findinstitute();
+        $data['content'] = $this->load->view('institute/course_form', $data, true);
+        $this->load->view('layout/main_wrapper', $data);
+    }
+	
+	public function edit_crs($crs_id = null) {
+        if (user_role('31') == true) {}
+        $data['title'] = display('update_course');
+        $data['crs'] = $this->Institute_model->readcrs($crs_id);  
+        $data['content'] = $this->load->view('institute/crs_form', $data, true);
+        $this->load->view('layout/main_wrapper', $data);
+    }
+	
+	public function edit_vid($vid_id = null) {
+        if (user_role('31') == true) {}
+        $data['title'] = display('update_vedio');
+        $data['vid'] = $this->Institute_model->readvid($vid_id);  
+        $data['content'] = $this->load->view('institute/vid_form', $data, true);
+        $this->load->view('layout/main_wrapper', $data);
+    }
+	
+	public function delete_course($paramId = null) {
+        if (user_role('32') == true) {}
+        if ($this->Institute_model->deletecourse($paramId)) {
+            $this->session->set_flashdata('message', display('delete_successfully'));
+        } else {
+            $this->session->set_flashdata('exception', display('please_try_again'));
+        }
+        redirect('lead/courselist');
+    }
+	
+	public function delete_crs($paramId = null) {
+        if (user_role('32') == true) {}
+        if ($this->Institute_model->deletecrs($paramId)) {
+            $this->session->set_flashdata('message', display('delete_successfully'));
+        } else {
+            $this->session->set_flashdata('exception', display('please_try_again'));
+        }
+        redirect('lead/crslist');
+    }
+	
+	public function delete_vid($paramId = null) {
+        if (user_role('32') == true) {}
+        if ($this->Institute_model->deletevid($paramId)) {
+            $this->session->set_flashdata('message', display('delete_successfully'));
+        } else {
+            $this->session->set_flashdata('exception', display('please_try_again'));
+        }
+        redirect('lead/vidlist');
+    }
+}
