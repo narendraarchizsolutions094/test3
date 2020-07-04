@@ -2147,6 +2147,194 @@ $cpny_id=$this->session->companey_id;
         return $funnelchartAry;
     }
 
+    public function sourceDataChart($userid,$companyid)
+    {	
+    	$all_reporting_ids    =   $this->common_model->get_categories($userid);
+        $cpny_id=$companyid;
+    	$where = "( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
+    	$where .= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';
+        $where.=" AND enquiry.comp_id=$cpny_id";
+
+        $enqAyr = array(); 
+        $srclst_query = $this->db->query("SELECT lead_name FROM lead_source WHERE lead_source.comp_id = $cpny_id");
+        $srclst = $srclst_query->result_array();
+      
+    	$enquiry_src_qry = $this->db->query("SELECT lead_name,(SELECT COUNT(enquiry_id) FROM enquiry WHERE $where AND enquiry.enquiry_source =  lead_source.lsid AND enquiry.status = 1)counternow FROM lead_source WHERE lead_source.comp_id = $cpny_id");
+
+        $EnquirySrc = $enquiry_src_qry->result_array();
+
+        $lead_src_qry = $this->db->query("SELECT lead_name,(SELECT COUNT(enquiry_id) FROM enquiry WHERE $where AND enquiry.enquiry_source =  lead_source.lsid AND enquiry.status = 2)counternow FROM lead_source WHERE lead_source.comp_id = $cpny_id");
+
+        $leadSrc = $lead_src_qry->result_array();
+
+        $Client_src_qry = $this->db->query("SELECT lead_name,(SELECT COUNT(enquiry_id) FROM enquiry WHERE $where AND enquiry.enquiry_source =  lead_source.lsid AND enquiry.status = 3)counternow FROM lead_source WHERE lead_source.comp_id = $cpny_id");
+
+        $ClientSrc = $Client_src_qry->result_array();
+
+        $dataAry = array('EnquirySrc'=>$EnquirySrc,'leadSrc'=>$leadSrc,'ClientSrc'=>$ClientSrc,'srclst'=>$srclst);
+
+        return $dataAry;
+    }
+
+    public function enquiryLeadClientCount($userid,$companyid)
+    {	
+    	$all_reporting_ids    =   $this->common_model->get_categories($userid);
+        $cpny_id=$companyid;
+    	$where = "( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
+    	$where .= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';
+        $where.=" AND enquiry.comp_id=$cpny_id";
+
+        $enquiry = $lead = $client = $enq_ct = $lead_ct = $client_ct = $enq_ut = $lead_ut = $client_ut = $enq_drp = $lead_drp = $client_drp = $enq_active = $lead_active = $client_active = $enq_assign = $lead_assign = $client_assign = 0;
+
+        $query = $this->db->query("SELECT count(enquiry.enquiry_id)counter,enquiry.status FROM enquiry WHERE $where GROUP BY enquiry.status");
+        $result = $query->result();
+
+        foreach($result as $r)
+        {
+            if($r->status == 1)
+            {
+                $enquiry = (!empty($r->counter)) ? $r->counter : 0;
+            }
+            if($r->status == 2)
+            {
+                $lead = (!empty($r->counter)) ? $r->counter : 0;
+            }
+            if($r->status == 3)
+            {
+                $client = (!empty($r->counter)) ? $r->counter : 0;
+            }
+        }
+
+        $query2 = $this->db->query("SELECT count(enquiry_id)counter,enquiry.status FROM `enquiry` WHERE $where AND DATE(created_date) = CURRENT_DATE GROUP BY enquiry.status");
+
+        $result2 = $query2->result();
+
+        foreach($result2 as $r)
+        {
+            if($r->status == 1)
+            {
+                $enq_ct = (!empty($r->counter)) ? $r->counter : 0;
+            }
+            if($r->status == 2)
+            {
+                $lead_ct = (!empty($r->counter)) ? $r->counter : 0;
+            }
+            if($r->status == 3)
+            {
+                $client_ct = (!empty($r->counter)) ? $r->counter : 0;
+            }
+        }
+
+        $query3 = $this->db->query("SELECT count(enquiry_id)counter,enquiry.status FROM `enquiry` WHERE $where AND DATE(update_date) = CURRENT_DATE GROUP BY enquiry.status");
+
+        $result3 = $query2->result();
+
+        foreach($result3 as $r)
+        {
+            if($r->status == 1)
+            {
+                $enq_ut = (!empty($r->counter)) ? $r->counter : 0;
+            }
+            if($r->status == 2)
+            {
+                $lead_ut = (!empty($r->counter)) ? $r->counter : 0;
+            }
+            if($r->status == 3)
+            {
+                $client_ut = (!empty($r->counter)) ? $r->counter : 0;
+            }
+        }
+
+        $query4 = $this->db->query("SELECT count(enquiry_id) counter,enquiry.status FROM `enquiry` WHERE $where AND drop_status > 0 GROUP BY enquiry.status");
+        $result4 = $query4->result();
+        foreach($result4 as $r)
+        {
+            if($r->status == 1)
+            {
+                $enq_drp = (!empty($r->counter)) ? $r->counter : 0;
+            }
+            if($r->status == 2)
+            {
+                $lead_drp = (!empty($r->counter)) ? $r->counter : 0;
+            }
+            if($r->status == 3)
+            {
+                $client_drp = (!empty($r->counter)) ? $r->counter : 0;
+            }
+        }
+
+        $query5 = $this->db->query("SELECT count(enquiry_id) counter,enquiry.status FROM `enquiry` WHERE $where AND drop_status = 1 GROUP BY enquiry.status");
+
+        $result5 = $query5->result();
+        foreach($result5 as $r)
+        {
+            if($r->status == 1)
+            {
+                $enq_active = (!empty($r->counter)) ? $r->counter : 0;
+            }
+            if($r->status == 2)
+            {
+                $lead_active = (!empty($r->counter)) ? $r->counter : 0;
+            }
+            if($r->status == 3)
+            {
+                $client_active = (!empty($r->counter)) ? $r->counter : 0;
+            }
+        }
+
+        $query6 = $this->db->query("SELECT count(enquiry_id) counter,enquiry.status FROM `enquiry` WHERE $where AND aasign_to IS NULL GROUP BY enquiry.status");
+
+        $result6 = $query6->result();
+        foreach($result6 as $r)
+        {
+            if($r->status == 1)
+            {
+                $enq_assign = (!empty($r->counter)) ? $r->counter : 0;
+            }
+            if($r->status == 2)
+            {
+                $lead_assign = (!empty($r->counter)) ? $r->counter : 0;
+            }
+            if($r->status == 3)
+            {
+                $client_assign = (!empty($r->counter)) ? $r->counter : 0;
+            }
+        }
+
+        $dataAry = array('enquiry'=>$enquiry,'lead'=>$lead,'client'=>$client,'enq_ct'=>$enq_ct,'lead_ct'=>$lead_ct,'client_ct'=>$client_ct,'enq_ut'=>$enq_ut,'lead_ut'=>$lead_ut,'enq_drp'=>$enq_drp,'lead_drp'=>$lead_drp,'client_drp'=>$client_drp,'enq_active'=>$enq_active,'lead_active'=>$lead_active,'client_active'=>$client_active,'enq_assign'=>$enq_assign,'lead_assign'=>$lead_assign,'client_assign'=>$client_assign);
+
+        return $dataAry;
+    }
+
+    public function despositionDataChart($userid,$companyid)
+    {	
+    	$all_reporting_ids    =   $this->common_model->get_categories($userid);
+        $cpny_id=$companyid;
+    	$where = "( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
+    	$where .= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';
+        $where.=" AND enquiry.comp_id=$cpny_id";
+
+        $enqAyr = array(); 
+        $desplst_query = $this->db->query("SELECT lead_stage_name FROM lead_stage WHERE lead_stage.comp_id = $cpny_id");
+        $desplst = $desplst_query->result_array();
+      
+    	$despenqqry = $this->db->query("SELECT lead_stage_name,(SELECT COUNT(enquiry_id) FROM enquiry WHERE $where AND enquiry.lead_score =  lead_stage.stg_id AND enquiry.status = 1)counternow FROM lead_stage WHERE lead_stage.comp_id = $cpny_id");
+
+        $despenq = $despenqqry->result_array();
+
+        $despleadqry = $this->db->query("SELECT lead_stage_name,(SELECT COUNT(enquiry_id) FROM enquiry WHERE $where AND enquiry.lead_score =  lead_stage.stg_id AND enquiry.status = 2)counternow FROM lead_stage WHERE lead_stage.comp_id = $cpny_id");
+
+        $desplead = $despleadqry->result_array();
+
+        $despcliqry = $this->db->query("SELECT lead_stage_name,(SELECT COUNT(enquiry_id) FROM enquiry WHERE $where AND enquiry.lead_score =  lead_stage.stg_id AND enquiry.status = 3)counternow FROM lead_stage WHERE lead_stage.comp_id = $cpny_id");
+
+        $despcli = $despcliqry->result_array();
+
+        $dataAry = array('despenq'=>$despenq,'desplead'=>$desplead,'despcli'=>$despcli,'desplst'=>$desplst);
+
+        return $dataAry;
+    }
+
     public function monthWiseChart($userid,$companyid)
     {	
     	$all_reporting_ids    =   $this->common_model->get_categories($userid);
@@ -2330,6 +2518,9 @@ $cpny_id=$this->session->companey_id;
         return $dataAry;
     }
 
+    
+
+
     public function dropDataChart($userid,$companyid)
     {	
     	$all_reporting_ids    =   $this->common_model->get_categories($userid);
@@ -2340,28 +2531,19 @@ $cpny_id=$this->session->companey_id;
 
         $enqAyr = array(); 
         $droplst_query = $this->db->query("SELECT drop_reason FROM tbl_drop WHERE tbl_drop.comp_id = $cpny_id");
-        foreach ($droplst_query as $key => $value) 
-        {
-        	// foreach ($enquiry_dropWise as $e) 
-        	// {
-        	// 	if($e->drop_reason == $value)
-        	// 	{
-        	// 		array_push($enqAyr, $e->counter);
-        	// 	}
-        	// }
-        }
+        $droplst = $droplst_query->result_array();
+      
     	$enquiry_drop = $this->db->query("SELECT count(enquiry.enquiry_id)counter,tp.drop_reason FROM enquiry  right JOIN tbl_drop as tp ON tp.d_id = enquiry.drop_status WHERE $where AND enquiry.status = 1  AND tp.drop_reason IS NOT NULL GROUP BY tp.drop_reason");
         $enquiry_dropWise = $enquiry_drop->result_array();
-        print_r(array_values($enquiry_dropWise));die;
         
         $lead_drop = $this->db->query("SELECT count(enquiry.enquiry_id)counter,tp.drop_reason FROM enquiry  LEFT JOIN tbl_drop as tp ON tp.d_id = enquiry.drop_status WHERE $where AND enquiry.status = 2  AND tp.drop_reason IS NOT NULL GROUP BY tp.drop_reason");
-
         $lead_dropWise = $lead_drop->result_array();
 
         $client_drop = $this->db->query("SELECT count(enquiry.enquiry_id)counter,tp.drop_reason FROM enquiry  LEFT JOIN tbl_drop as tp ON tp.d_id = enquiry.drop_status WHERE $where AND enquiry.status = 3  AND tp.drop_reason IS NOT NULL GROUP BY tp.drop_reason");
-
         $client_dropWise = $client_drop->result_array();
-        $dataAry = array('enquiry_dropWise'=>$enquiry_dropWise,'lead_dropWise'=>$lead_dropWise,'client_dropWise'=>$client_dropWise);
+
+        $dataAry = array('enquiry_dropWise'=>$enquiry_dropWise,'lead_dropWise'=>$lead_dropWise,'client_dropWise'=>$client_dropWise,'droplst'=>$droplst);
+
         return $dataAry;
     }
 

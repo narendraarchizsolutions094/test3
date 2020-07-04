@@ -44,11 +44,9 @@ class Enquiry extends REST_Controller {
     }
     public function create_post()
     { 
-    	$upd =$this->input->post('update');
-		
+    	$upd =$this->input->post('update');		
 		if(!empty($this->input->post('email') && !empty($this->input->post('mobileno')))){
-		  	$comp_id	=	$this->input->post('company_id');
-		
+		  	$comp_id	=	$this->input->post('company_id');		
         	if (!$upd) {
         		$this->form_validation->set_rules('mobileno', display('mobileno'), 'max_length[20]|callback_phone_check|required', array('is_unique' => 'Duplicate   Entery for phone'));        		
         	}else{
@@ -106,7 +104,7 @@ class Enquiry extends REST_Controller {
             ];
             
             
-            if(!empty($upd)){																								
+            if(!empty($upd)){																	
             
             	$this->db->where('Enquery_id',$this->input->post('update'));
             	$insert_id = $this->db->update('enquiry',$postData);

@@ -39,7 +39,7 @@
                 <?php
 
                 if(!empty($products)){
-					if(user_access(270)){
+          if(user_access(270)){
                   foreach ($products as $product) { ?>                                                             
                     <li>
                       <label>
@@ -50,7 +50,7 @@
                     <?php                             
                   }
                 }else{
-				foreach ($products as $product) { ?>                                                             
+        foreach ($products as $product) { ?>                                                             
                     <li>
                       <label>
                         <input type="radio" name='product_filter[]' value="<?=$product->sb_id ?>" <?php if (in_array($product->sb_id, $this->session->process)) { echo "checked";                         
@@ -58,9 +58,9 @@
                       </label>
                     </li>                
                     <?php                             
-                  }	
-				}
-				}
+                  } 
+        }
+        }
                 ?>
               </ul>
             </div>
@@ -88,249 +88,13 @@
      ?>
  </br>
 
-	
+  
         <div id="content_tabs"></div>
         <div id="content_tabs1">
 
 
  <!-----------------------------------------------------------------------------html widget----------------------------------------->
- <?php 
-              
-$ttl_enq=array();$enq_ct=array();$enq_ut=array();$enq_active=array();$enq_drp=array();$enq_assign=array();
-$ttl_lead=array();$lead_ct=array();$lead_ut=array();$lead_active=array();$lead_drp=array();$lead_assign=array();
-$ttl_client=array();$client_ct=array();$client_ut=array();$client_active=array();$client_drp=array();$client_assign=array();
-//$hot=array();$warm=array();$cold=array();
 
-$ejan=array();$efeb=array();$emar=array();$eapr=array();$emay=array();$ejun=array();$ejuly=array();$eaug=array();$esep=array();$eoct=array();$enov=array();$edec=array();
-$ljan=array();$lfeb=array();$lmar=array();$lapr=array();$lmay=array();$ljun=array();$ljuly=array();$laug=array();$lsep=array();$loct=array();$lnov=array();$ldec=array();
-$cjan=array();$cfeb=array();$cmar=array();$capr=array();$cmay=array();$cjun=array();$cjuly=array();$caug=array();$csep=array();$coct=array();$cnov=array();$cdec=array();
-	
-foreach($all_enquiery as $all){
-/*********************************enquiry***************************/
-// if($all->status=='1'){
-// $ttl_enq[] = $all->Enquery_id;
-// }
-
-$enqdate = $all->created_date;
-$enqdt = explode(' ',$enqdate);
-$endt = $enqdt[0];
-$date = new DateTime('now', new DateTimeZone('Asia/Kolkata'));
-$currdt = $date->format('Y-m-d');
-if($endt==$currdt && $all->status=='1'){
-$enq_ct[] = $all->Enquery_id; 	
-}
-
-$udate = $all->update_date;
-$enqupdt = explode(' ',$udate);
-$enupdt = $enqupdt[0];
-if($currdt==$enupdt && $all->status=='1'){
-$enq_ut[] = $all->Enquery_id; 	
-}
-
-if($all->drop_status=='1' && $all->status=='1'){
-$enq_drp[] = $all->Enquery_id; 	
-}
-
-if($all->drop_status=='0' && $all->status=='1'){
-$enq_active[] = $all->Enquery_id; 	
-}
-
-if($all->aasign_to=='' && $all->status=='1'){
-$enq_assign[] = $all->Enquery_id; 	
-}
-/****************************************enq end*********************************/
-/****************************************Lead*********************************/
-// if($all->status=='2'){
-// $ttl_lead[] = $all->Enquery_id;
-// }
-
-$leaddate = $all->created_date;
-$leaddt = explode(' ',$leaddate);
-$leddt = $leaddt[0];
-$date = new DateTime('now', new DateTimeZone('Asia/Kolkata'));
-$currldt = $date->format('Y-m-d');
-if($leddt==$currldt && $all->status=='2'){
-$lead_ct[] = $all->Enquery_id; 	
-}
-
-$ledudate = $all->update_date;
-$leadupdt = explode(' ',$ledudate);
-$ledupdt = $leadupdt[0];
-if($currldt==$ledupdt && $all->status=='2'){
-$lead_ut[] = $all->Enquery_id; 	
-}
-
-if($all->drop_status=='1' && $all->status=='2'){
-$lead_drp[] = $all->Enquery_id; 	
-}
-
-if($all->drop_status=='0' && $all->status=='2'){
-$lead_active[] = $all->Enquery_id; 	
-}
-
-if($all->aasign_to=='' && $all->status=='2'){
-$lead_assign[] = $all->Enquery_id; 	
-}
-/**************************************lead end**********************************/
-/****************************************Client*********************************/
-// if($all->status=='3'){
-// $ttl_client[] = $all->Enquery_id;
-// }
-
-$clntdate = $all->created_date;
-$clientdt = explode(' ',$clntdate);
-$clndt = $clientdt[0];
-$date = new DateTime('now', new DateTimeZone('Asia/Kolkata'));
-$currcdt = $date->format('Y-m-d');
-if($clndt==$currcdt && $all->status=='3'){
-$client_ct[] = $all->Enquery_id; 	
-}
-
-$clnudate = $all->update_date;
-$clupdt = explode(' ',$clnudate);
-$clnupdt = $clupdt[0];
-if($currcdt==$clnupdt && $all->status=='3'){
-$client_ut[] = $all->Enquery_id; 	
-}
-
-if($all->drop_status=='1' && $all->status=='3'){
-$client_drp[] = $all->Enquery_id; 	
-}
-
-if($all->drop_status=='0' && $all->status=='3'){
-$client_active[] = $all->Enquery_id; 	
-}
-
-if($all->aasign_to=='' && $all->status=='3'){
-$client_assign[] = $all->Enquery_id; 	
-}
-/**************************************Client end**********************************/
-/**************************************Conversion Probebility**********************************/
-// if($all->lead_score=='1'){
-// $hot[] = $all->Enquery_id; 	
-// }
-// if($all->lead_score=='2'){
-// $warm[] = $all->Enquery_id; 	
-// }
-// if($all->lead_score=='3'){
-// $cold[] = $all->Enquery_id; 	
-// }
-/**************************************Conversion Probebility End**********************************/
-/****************************************graph monthwise*****************************************/
-
-    $lbl=$all->created_date;
-    $date=explode(' ',$lbl)[0];
-    $time=strtotime($date);
-    $month=date("m",$time);
-    if($month=='01' && $all->status=='1'){
-        $ejan[]=$all->enquiry_id; 
-    }else if($month=='01' && $all->status=='2'){
-        $ljan[]=$all->enquiry_id;
-    }else if($month=='01' && $all->status=='3'){
-        $cjan[]=$all->enquiry_id;
-    }
-    if($month=='02' && $all->status=='1'){
-        $efeb[]=$all->enquiry_id; 
-    }else if($month=='02' && $all->status=='2'){
-        $lfeb[]=$all->enquiry_id;
-    }else if($month=='02' && $all->status=='3'){
-        $cfeb[]=$all->enquiry_id;
-    }
-    if($month=='03' && $all->status=='1'){
-        $emar[]=$all->enquiry_id; 
-    }else if($month=='03' && $all->status=='2'){
-        $lmar[]=$all->enquiry_id;
-    }else if($month=='03' && $all->status=='3'){
-        $cmar[]=$all->enquiry_id;
-    }
-    if($month=='04' && $all->status=='1'){
-        $eapr[]=$all->enquiry_id; 
-    }else if($month=='04' && $all->status=='2'){
-        $lapr[]=$all->enquiry_id;
-    }else if($month=='04' && $all->status=='3'){
-        $capr[]=$all->enquiry_id;
-    }
-    if($month=='05' && $all->status=='1'){
-        $emay[]=$all->enquiry_id; 
-    }else if($month=='05' && $all->status=='2'){
-        $lmay[]=$all->enquiry_id;
-    }else if($month=='05' && $all->status=='3'){
-        $cmay[]=$all->enquiry_id;
-    }
-    if($month=='06' && $all->status=='1'){
-        $ejun[]=$all->enquiry_id; 
-    }else if($month=='06' && $all->status=='2'){
-        $ljun[]=$all->enquiry_id;
-    }else if($month=='06' && $all->status=='3'){
-        $cjun[]=$all->enquiry_id;
-    }
-    if($month=='07' && $all->status=='1'){
-        $ejuly[]=$all->enquiry_id; 
-    }else if($month=='07' && $all->status=='2'){
-        $ljuly[]=$all->enquiry_id;
-    }else if($month=='07' && $all->status=='3'){
-        $cjuly[]=$all->enquiry_id;
-    }
-    if($month=='08' && $all->status=='1'){
-        $eaug[]=$all->enquiry_id; 
-    }else if($month=='08' && $all->status=='2'){
-        $laug[]=$all->enquiry_id;
-    }else if($month=='08' && $all->status=='3'){
-        $caug[]=$all->enquiry_id;
-    }
-    if($month=='09' && $all->status=='1'){
-        $esep[]=$all->enquiry_id; 
-    }else if($month=='09' && $all->status=='2'){
-        $lsep[]=$all->enquiry_id;
-    }else if($month=='09' && $all->status=='3'){
-        $csep[]=$all->enquiry_id;
-    }
-    if($month=='10' && $all->status=='1'){
-        $eoct[]=$all->enquiry_id; 
-    }else if($month=='10' && $all->status=='2'){
-        $loct[]=$all->enquiry_id;
-    }else if($month=='10' && $all->status=='3'){
-        $coct[]=$all->enquiry_id;
-    }
-    if($month=='11' && $all->status=='1'){
-        $enov[]=$all->enquiry_id; 
-    }else if($month=='11' && $all->status=='2'){
-        $lnov[]=$all->enquiry_id;
-    }else if($month=='11' && $all->status=='3'){
-        $cnov[]=$all->enquiry_id;
-    }
-    if($month=='12' && $all->status=='1'){
-        $edec[]=$all->enquiry_id; 
-    }else if($month=='12' && $all->status=='2'){
-        $ldec[]=$all->enquiry_id;
-    }else if($month=='12' && $all->status=='3'){
-        $cdec[]=$all->enquiry_id;
-    }
-/*foreach($lbl as $key => $value){
-     $datlbl[]=explode(' ',$value)[0]; 
-     $uniquelbl=array_unique($datlbl);
-    }
-foreach($uniquelbl as $key => $val){
-    $time=strtotime($val);
-    $month[]=date("F",$time);
-}
-print_r($month);exit;*/
-
-    $eejan=count($ejan);$eefeb=count($efeb);$eemar=count($emar);$eeapr=count($eapr);$eemay=count($emay);$eejun=count($ejun);$eejuly=count($ejuly);$eeaug=count($eaug);$eesep=count($esep);$eeoct=count($eoct);$eenov=count($enov);$eedec=count($edec);
-    $lljan=count($ljan);$llfeb=count($lfeb);$llmar=count($lmar);$llapr=count($lapr);$llmay=count($lmay);$lljun=count($ljun);$lljuly=count($ljuly);$llaug=count($laug);$llsep=count($lsep);$lloct=count($loct);$llnov=count($lnov);$lldec=count($ldec);
-    $ccjan=count($cjan);$ccfeb=count($cfeb);$ccmar=count($cmar);$ccapr=count($capr);$ccmay=count($cmay);$ccjun=count($cjun);$ccjuly=count($cjuly);$ccaug=count($caug);$ccsep=count($csep);$ccoct=count($coct);$ccnov=count($cnov);$ccdec=count($cdec);
-    
-/*************************************************************graph monthwise end***********************************************/
-
-/*************************************************************Knob graph source wise***********************************************/
-$raw=array();$event=array();$whtsp_sent=array();$whtsp_rciv=array();$fb=array();$google=array();$linkdin=array();$qrcode=array();$paid=array();
-if($all->enquiry_source=='3' && $all->status=='1'){
-$raw[] = $all->Enquery_id; 	
-}
-/*************************************************************Knob graph source wise***********************************************/
-}
-
-?>
  <div class="row row-xs">
 
 <div class="col-md-4 col-sm-6 col-xs-12">
@@ -340,12 +104,12 @@ $raw[] = $all->Enquery_id;
               <div class="box box-widget widget-user-2">
             <div class="box-footer no-padding">
               <ul class="nav nav-stacked">
-                <li><a href="#"><?php echo display("all_enquiry"); ?> <span class="pull-right badge bg-blue"><?php if(!empty($ttl_enq)){ echo count($ttl_enq);}else{ echo '0';}; ?></span></a></li>
-                <li><a href="#"><?php echo display("created_today"); ?> <span class="pull-right badge bg-aqua"><?php if(!empty($enq_ct)){ echo count($enq_ct);}else{ echo '0';}; ?></span></a></li>
-                <li><a href="#"><?php echo display("updated_today"); ?> <span class="pull-right badge bg-green"><?php if(!empty($enq_ut)){ echo count($enq_ut);}else{ echo '0';}; ?></span></a></li>
-                <li><a href="#"><?php echo display("active"); ?> <span class="pull-right badge bg-red"><?php if(!empty($enq_active)){ echo count($enq_active);}else{ echo '0';}; ?></span></a></li>
-				<li><a href="#"><?php echo display("droped"); ?> <span class="pull-right badge bg-purple"><?php if(!empty($enq_drp)){ echo count($enq_drp);}else{ echo '0';}; ?></span></a></li>
-				<li><a href="#"><?php echo display("unassigned"); ?> <span class="pull-right badge bg-maroon"><?php if(!empty($enq_assign)){ echo count($enq_assign);}else{ echo '0';}; ?></span></a></li>
+                <li><a href="#"><?php echo display("all_enquiry"); ?> <span class="pull-right badge bg-blue"><?php if(!empty($counts['enquiry'])){ echo $counts['enquiry'];}else{ echo '0';}; ?></span></a></li>
+                <li><a href="#"><?php echo display("created_today"); ?> <span class="pull-right badge bg-aqua"><?php if(!empty($counts['enq_ct'])){ echo $counts['enq_ct'];}else{ echo '0';}; ?></span></a></li>
+                <li><a href="#"><?php echo display("updated_today"); ?> <span class="pull-right badge bg-green"><?php if(!empty($counts['enq_ut'])){ echo $counts['enq_ut'];}else{ echo '0';}; ?></span></a></li>
+                <li><a href="#"><?php echo display("active"); ?> <span class="pull-right badge bg-red"><?php if(!empty($counts['enq_active'])){ echo $counts['enq_active'];}else{ echo '0';}; ?></span></a></li>
+        <li><a href="#"><?php echo display("droped"); ?> <span class="pull-right badge bg-purple"><?php if(!empty($counts['enq_drp'])){ echo $counts['enq_drp'];}else{ echo '0';}; ?></span></a></li>
+        <li><a href="#"><?php echo display("unassigned"); ?> <span class="pull-right badge bg-maroon"><?php if(!empty($counts['enq_assign'])){ echo $counts['enq_assign'];}else{ echo '0';}; ?></span></a></li>
               </ul>
             </div>
           </div>
@@ -354,7 +118,7 @@ $raw[] = $all->Enquery_id;
           </div>
           <!-- /.info-box -->
         </div>
-		
+    
 <div class="col-md-4 col-sm-6 col-xs-12">
           <div class="info-box bg-green">
             <span class="info-box-icon"><i class="fa fa-line-chart" style="color:#fff;"></i></span>
@@ -362,12 +126,12 @@ $raw[] = $all->Enquery_id;
               <div class="box box-widget widget-user-2">
             <div class="box-footer no-padding">
               <ul class="nav nav-stacked">
-                <li><a href="#"><?php echo display("all_leads"); ?> <span class="pull-right badge bg-blue"><?php if(!empty($ttl_lead)){ echo count($ttl_lead);}else{ echo '0';}; ?></span></a></li>
-                <li><a href="#"><?php echo display("created_today"); ?> <span class="pull-right badge bg-aqua"><?php if(!empty($lead_ct)){ echo count($lead_ct);}else{ echo '0';}; ?></span></a></li>
-                <li><a href="#"><?php echo display("updated_today"); ?> <span class="pull-right badge bg-green"><?php if(!empty($lead_ut)){ echo count($lead_ut);}else{ echo '0';}; ?></span></a></li>
-                <li><a href="#"><?php echo display("active"); ?> <span class="pull-right badge bg-red"><?php if(!empty($lead_active)){ echo count($lead_active);}else{ echo '0';}; ?></span></a></li>
-				<li><a href="#"><?php echo display("droped"); ?> <span class="pull-right badge bg-purple"><?php if(!empty($lead_drp)){ echo count($lead_drp);}else{ echo '0';}; ?></span></a></li>
-				<li><a href="#"><?php echo display("unassigned"); ?> <span class="pull-right badge bg-maroon"><?php if(!empty($lead_assign)){ echo count($lead_assign);}else{ echo '0';}; ?></span></a></li>
+                <li><a href="#"><?php echo display("all_leads"); ?> <span class="pull-right badge bg-blue"><?php if(!empty($counts['lead'])){ echo $counts['lead'];}else{ echo '0';}; ?></span></a></li>
+                <li><a href="#"><?php echo display("created_today"); ?> <span class="pull-right badge bg-aqua"><?php if(!empty($counts['lead_ct'])){ echo $counts['lead_ct'];}else{ echo '0';}; ?></span></a></li>
+                <li><a href="#"><?php echo display("updated_today"); ?> <span class="pull-right badge bg-green"><?php if(!empty($counts['lead_ut'])){ echo $counts['lead_ut'];}else{ echo '0';}; ?></span></a></li>
+                <li><a href="#"><?php echo display("active"); ?> <span class="pull-right badge bg-red"><?php if(!empty($counts['lead_active'])){ echo $counts['lead_active'];}else{ echo '0';}; ?></span></a></li>
+        <li><a href="#"><?php echo display("droped"); ?> <span class="pull-right badge bg-purple"><?php if(!empty($counts['lead_drp'])){ echo $counts['lead_drp'];}else{ echo '0';}; ?></span></a></li>
+        <li><a href="#"><?php echo display("unassigned"); ?> <span class="pull-right badge bg-maroon"><?php if(!empty($counts['lead_assign'])){ echo $counts['lead_assign'];}else{ echo '0';}; ?></span></a></li>
               </ul>
             </div>
           </div>
@@ -385,12 +149,12 @@ $raw[] = $all->Enquery_id;
             <div class="box-footer no-padding">
 
               <ul class="nav nav-stacked">
-                <li><a href="#"><?php echo display("all_clients"); ?> <span class="pull-right badge bg-blue"><?php if(!empty($ttl_client)){ echo count($ttl_client);}else{ echo '0';}; ?></span></a></li>
-                <li><a href="#"><?php echo display("created_today"); ?> <span class="pull-right badge bg-aqua"><?php if(!empty($client_ct)){ echo count($client_ct);}else{ echo '0';}; ?></span></a></li>
-                <li><a href="#"><?php echo display("updated_today"); ?> <span class="pull-right badge bg-green"><?php if(!empty($client_ut)){ echo count($client_ut);}else{ echo '0';}; ?></span></a></li>
-                <li><a href="#"><?php echo display("active"); ?> <span class="pull-right badge bg-red"><?php if(!empty($client_active)){ echo count($client_active);}else{ echo '0';}; ?></span></a></li>
-				<li><a href="#"><?php echo display("droped"); ?> <span class="pull-right badge bg-purple"><?php if(!empty($client_drp)){ echo count($client_drp);}else{ echo '0';}; ?></span></a></li>
-				<li><a href="#"><?php echo display("unassigned"); ?> <span class="pull-right badge bg-maroon"><?php if(!empty($client_assign)){ echo count($client_assign);}else{ echo '0';}; ?></span></a></li>
+                <li><a href="#"><?php echo display("all_clients"); ?> <span class="pull-right badge bg-blue"><?php if(!empty($counts['client'])){ echo $counts['client'];}else{ echo '0';}; ?></span></a></li>
+                <li><a href="#"><?php echo display("created_today"); ?> <span class="pull-right badge bg-aqua"><?php if(!empty($counts['client_ct'])){ echo $counts['client_ct'];}else{ echo '0';}; ?></span></a></li>
+                <li><a href="#"><?php echo display("updated_today"); ?> <span class="pull-right badge bg-green"><?php if(!empty($counts['client_ut'])){ echo $counts['client_ut'];}else{ echo '0';}; ?></span></a></li>
+                <li><a href="#"><?php echo display("active"); ?> <span class="pull-right badge bg-red"><?php if(!empty($counts['client_active'])){ echo $counts['client_active'];}else{ echo '0';}; ?></span></a></li>
+        <li><a href="#"><?php echo display("droped"); ?> <span class="pull-right badge bg-purple"><?php if(!empty($counts['client_drp'])){ echo $counts['client_drp'];}else{ echo '0';}; ?></span></a></li>
+        <li><a href="#"><?php echo display("unassigned"); ?> <span class="pull-right badge bg-maroon"><?php if(!empty($counts['client_assign'])){ echo $counts['client_assign'];}else{ echo '0';}; ?></span></a></li>
               </ul>
             </div>
           </div>
@@ -412,7 +176,7 @@ $raw[] = $all->Enquery_id;
 
 
       </div>
-	  
+    
 <!------------------------------------------------------------------html widget End-------------------------------------------->
 
 <!------------------------------------------------------------------html FUNNEL START-------------------------------------------->
@@ -513,12 +277,12 @@ $raw[] = $all->Enquery_id;
             
               
             </div>
-<!-------------------------------------------------------------Process wise charts End------------------------------------------->			
+<!-------------------------------------------------------------Process wise charts End------------------------------------------->      
  <!------------------------------------------------------------------html FUNNEL START END-------------------------------------------->         
           <div class="col-lg-12 col-xl-12 mg-t-10">
             <hr style="border: 1px solid red !important">
           </div>
-		  
+      
 <!------------------------------------------------------------------HTML Map/Calender START-------------------------------------------->
 <div class="col-lg-12 col-xl-12 mg-t-10">
             <div class="card" style="height:95%;">
@@ -527,12 +291,12 @@ $raw[] = $all->Enquery_id;
 #calendar {
   height: 500px;
 }
-</style>			  
+</style>        
 <div id="calendar" class=""></div>
 
               </div> 
             </div> 
-			
+      
             <div class="col-lg-6 col-xl-6 mg-t-10">
             <div class="card" style="height:95%;">
             
@@ -556,7 +320,7 @@ $raw[] = $all->Enquery_id;
           <div class="col-lg-12 col-xl-12 mg-t-10">
             <hr style="border: 1px solid red !important">
           </div>
-		  
+      
 <!------------------------------------------------------------------Disposition/Source START-------------------------------------------->
 <div class="col-lg-6 col-xl-6 mg-t-10">
             <div class="card" style="height:95%;">
@@ -566,7 +330,7 @@ $raw[] = $all->Enquery_id;
 
               </div> 
             </div> 
-			
+      
             <div class="col-lg-6 col-xl-6 mg-t-10">
             <div class="card" style="height:95%;">
 <figure class="highcharts-figure">
@@ -580,36 +344,36 @@ $raw[] = $all->Enquery_id;
           <div class="col-lg-12 col-xl-12 mg-t-10">
             <hr style="border: 1px solid red !important">
           </div>
-		  
+      
 <!------------------------------------------------------------------Timeline START-------------------------------------------->
-<?php
+<!-- <?php
 $eldate=array();$lcdate=array();$cdate=array();$all=array();
 foreach($all_enquiery as $timeline){
-	foreach($cmtdata as $cmt){
-		if($timeline->Enquery_id==$cmt->lead_id){
-		if($cmt->comment_msg==display('enquery_create')){
-			$enqdate = $cmt->created_date;
-		}else if($cmt->comment_msg==display('move_to_lead')){
-			$leaddate = $cmt->created_date;
-		}else if($cmt->comment_msg==display('move_to_client')){
-			$clientdate = $cmt->created_date;
-		}
-		
-	if(!empty($leaddate)){
-			$leaddate=$leaddate;	
-			}else{
-				$leaddate='';
-			}
-	if(!empty($enqdate)){
-			$enqdate=$enqdate;	
-			}else{
-				$enqdate='';
-			}
-	if(!empty($clientdate)){
-			$clientdate=$clientdate;	
-			}else{
-				$clientdate='';
-			}
+  foreach($cmtdata as $cmt){
+    if($timeline->Enquery_id==$cmt->lead_id){
+    if($cmt->comment_msg==display('enquery_create')){
+      $enqdate = $cmt->created_date;
+    }else if($cmt->comment_msg==display('move_to_lead')){
+      $leaddate = $cmt->created_date;
+    }else if($cmt->comment_msg==display('move_to_client')){
+      $clientdate = $cmt->created_date;
+    }
+    
+  if(!empty($leaddate)){
+      $leaddate=$leaddate;  
+      }else{
+        $leaddate='';
+      }
+  if(!empty($enqdate)){
+      $enqdate=$enqdate;  
+      }else{
+        $enqdate='';
+      }
+  if(!empty($clientdate)){
+      $clientdate=$clientdate;  
+      }else{
+        $clientdate='';
+      }
  
 $start_date = strtotime($enqdate); 
 $end_date = strtotime($leaddate); 
@@ -622,17 +386,17 @@ $end_date1 = strtotime($clientdate);
 $days1=($end_date1 - $start_date1)/60/60/24;
 
 }
-	}
-	if(!empty($days)){
-		$days=$days;
-	}else{
-		$days=0;
-	}
-	if(!empty($days1)){
-		$days1=$days1;
-	}else{
-		$days1=0;
-	}
+  }
+  if(!empty($days)){
+    $days=$days;
+  }else{
+    $days=0;
+  }
+  if(!empty($days1)){
+    $days1=$days1;
+  }else{
+    $days1=0;
+  }
 $eldate[]= $days;
 $lcdate[]= $days1;
 $all[]=$timeline->Enquery_id;
@@ -655,57 +419,57 @@ $avg1=$dd/$alle;
 $avg2=$dd1/$alle;
 
 //print_r($eldate);exit;
-?>
+?> -->
 <div class="col-lg-6 col-xl-12 mg-t-10">
             <div class="card" style="height:95%;">
 
 <div class="container">
-    		<div class="row">
-				<div class="col-md-12">
-					<div class="page-header">
-					  <h1><?php echo display('average_follow_up_rate'); ?></h1>
-					</div>
-					<div style="display:inline-block;width:100%;overflow-y:auto;">
-					<ul class="timeline timeline-horizontal">
-						<li class="timeline-item">
-							<div class="timeline-badge primary" style="width:150px !important;border-radius: 30px;">
-							    <?php echo display("enquiry"); ?>
-							</div>
-						</li>
-						<li class="timeline-item" style="left:40px !important;">
-							<div class="timeline-badge success"><i class="glyphicon glyphicon-check"></i></div>
-							<div class="timeline-panel" style="width:100px !important;border-radius: 30px;">
-								<div class="timeline-heading">
-									<!--<h4 class="timeline-title">Average</h4>-->
-									<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>&nbsp;<?php echo round($avg1).' '.'Days'; ?></small></p>
-								</div>
-							</div>
-						</li>
-						<li class="timeline-item">
-							<div class="timeline-badge info" style="width:150px !important;border-radius: 30px;">
-							   <?php echo display("lead"); ?>
-							</div>
-							
-						</li>
-						<li class="timeline-item" style="left:40px !important;">
-							<div class="timeline-badge danger"><i class="glyphicon glyphicon-check"></i></div>
-							<div class="timeline-panel" style="width:100px !important;border-radius: 30px;">
-								<div class="timeline-heading">
-									<!--<h4 class="timeline-title">Average</h4>-->
-									<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i> &nbsp;<?php echo round($avg2).' '.'Days'; ?></small></p>
-								</div>
-							</div>
-						</li>
-						<li class="timeline-item">
-							<div class="timeline-badge warning" style="width:150px !important;border-radius: 30px;">
-							    <?php echo display("Client"); ?>
-							</div>
-						</li>
-					</ul>
-				</div>
-				</div>
-			</div>
-		</div>
+        <div class="row">
+        <div class="col-md-12">
+          <div class="page-header">
+            <h1><?php echo display('average_follow_up_rate'); ?></h1>
+          </div>
+          <div style="display:inline-block;width:100%;overflow-y:auto;">
+          <ul class="timeline timeline-horizontal">
+            <li class="timeline-item">
+              <div class="timeline-badge primary" style="width:150px !important;border-radius: 30px;">
+                  <?php echo display("enquiry"); ?>
+              </div>
+            </li>
+            <li class="timeline-item" style="left:40px !important;">
+              <div class="timeline-badge success"><i class="glyphicon glyphicon-check"></i></div>
+              <div class="timeline-panel" style="width:100px !important;border-radius: 30px;">
+                <div class="timeline-heading">
+                  <!--<h4 class="timeline-title">Average</h4>-->
+                  <p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>&nbsp;<?php echo round($avg1).' '.'Days'; ?></small></p>
+                </div>
+              </div>
+            </li>
+            <li class="timeline-item">
+              <div class="timeline-badge info" style="width:150px !important;border-radius: 30px;">
+                 <?php echo display("lead"); ?>
+              </div>
+              
+            </li>
+            <li class="timeline-item" style="left:40px !important;">
+              <div class="timeline-badge danger"><i class="glyphicon glyphicon-check"></i></div>
+              <div class="timeline-panel" style="width:100px !important;border-radius: 30px;">
+                <div class="timeline-heading">
+                  <!--<h4 class="timeline-title">Average</h4>-->
+                  <p><small class="text-muted"><i class="glyphicon glyphicon-time"></i> &nbsp;<?php echo round($avg2).' '.'Days'; ?></small></p>
+                </div>
+              </div>
+            </li>
+            <li class="timeline-item">
+              <div class="timeline-badge warning" style="width:150px !important;border-radius: 30px;">
+                  <?php echo display("Client"); ?>
+              </div>
+            </li>
+          </ul>
+        </div>
+        </div>
+      </div>
+    </div>
 
               </div> 
             </div>      
@@ -754,9 +518,9 @@ $avg2=$dd1/$alle;
 <script src="<?php echo base_url()?>custom_dashboard/assets/js/amcharts/countries2.js"></script>
 <script src="https://www.amcharts.com/lib/4/plugins/timeline.js"></script>
      <!--------------End here -------------------------------------------------------------->
-	 
-	 <!------------------------------high chart---------------------------------------------->
-	 <script src="https://code.highcharts.com/maps/highmaps.js"></script>
+   
+   <!------------------------------high chart---------------------------------------------->
+   <script src="https://code.highcharts.com/maps/highmaps.js"></script>
 <script src="https://code.highcharts.com/maps/modules/exporting.js"></script>
 <script src="https://code.highcharts.com/mapdata/countries/in/in-all.js"></script>
 
@@ -1199,114 +963,105 @@ $(document).ready(function(){
 </script>
 
 <!-- monthwise chart ends -->
-<?php 
-if(!empty($drop)){
-$drp=array();$enqdrp=array();$leaddrp=array();$clientdrp=array();$drenq=array();$drlead=array();$drclnt=array();
-foreach($drop as $adrp){ 
-$drp[] = $adrp->drop_reason;
-foreach($all_enquiery as $drall){
-if($adrp->d_id==$drall->drop_status && $drall->status=='1'){
-$enqdrp[] = $drall->Enquery_id;	
-}else if($adrp->d_id==$drall->drop_status && $drall->status=='2'){
-$leaddrp[] = $drall->Enquery_id;	
-}else if($adrp->d_id==$drall->drop_status && $drall->status=='3'){
-$clientdrp[] = $drall->Enquery_id;	
-}	
-}
-$drenq[]=count($enqdrp);
-$drlead[]=count($leaddrp);
-$drclnt[]=count($clientdrp);
-$enqdrp=array();$leaddrp=array();$clientdrp=array();
-}
-}
-if(!empty($drp)){
-	$drp=$drp;
-}else{
-	$drp='';
-}
-if(!empty($drenq)){
-	$drenq=$drenq;
-}else{
-	$drenq='';
-}
-if(!empty($drlead)){
-	$drlead=$drlead;
-}else{
-	$drlead='';
-}
-if(!empty($drclnt)){
-	$drclnt=$drclnt;
-}else{
-	$drclnt='';
-}
-$all_drp = json_encode($drp);
-$all_edrp = json_encode($drenq);
-$all_ldrp = json_encode($drlead);
-$all_cdrp = json_encode($drclnt);
-?>	
+
+<!-- drop wise chart start here -->
 <script>
-Highcharts.chart('container2', {
-  chart: {
-    type: 'column'
-  },
-  title: {
-    text: '<?php echo display("dropdata"); ?>'
-  },
-  xAxis: {
-    categories: <?php echo $all_drp; ?>
-  },
-  yAxis: {
-    min: 0,
-    title: {
-      text: 'Total drop data'
-    },
-    stackLabels: {
-      enabled: true,
-      style: {
-        fontWeight: 'bold',
-        color: ( // theme
-          Highcharts.defaultOptions.title.style &&
-          Highcharts.defaultOptions.title.style.color
-        ) || 'gray'
+  $(document).ready(function(){
+  $.ajax({
+    url : "<?=base_url('Dashboard/dropDataChart')?>",
+    type: "post",
+    dataType : "json",
+    processData: false,
+    contentType: false,
+    success : function(data)
+    { 
+      var data1 = [];
+      var data2 = [];
+      var data3 = [];
+      var data4 = [];
+      
+      if(data.status == 'success')
+      {
+        //response = JSON.parse(data);
+        console.log(data.enquiryChartData[0]);
+        for(var i = 0;i < data.enquiryChartData.length; i++)
+        {
+          data1.push(parseInt(data.enquiryChartData[i])); 
+          data2.push(parseInt(data.leadChartData[i]));
+          data3.push(parseInt(data.clientChartData[i]));
+          data4.push(data.droplst[i]['drop_reason']);
+        }
+        Highcharts.chart('container2', {
+        chart: {
+          type: 'column'
+        },
+        title: {
+          text: '<?php echo display("dropdata"); ?>'
+        },
+        xAxis: {
+          categories: data4,
+        },
+        yAxis: {
+          min: 0,
+          title: {
+            text: 'Total drop data'
+          },
+          stackLabels: {
+            enabled: true,
+            style: {
+              fontWeight: 'bold',
+              color: ( // theme
+                Highcharts.defaultOptions.title.style &&
+                Highcharts.defaultOptions.title.style.color
+              ) || 'gray'
+            }
+          }
+        },
+        legend: {
+          align: 'right',
+          x: -30,
+          verticalAlign: 'top',
+          y: 25,
+          floating: true,
+          backgroundColor:
+            Highcharts.defaultOptions.legend.backgroundColor || 'white',
+          borderColor: '#CCC',
+          borderWidth: 1,
+          shadow: false
+        },
+        tooltip: {
+          headerFormat: '<b>{point.x}</b><br/>',
+          pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
+        },
+        plotOptions: {
+          column: {
+            stacking: 'normal',
+            dataLabels: {
+              enabled: true
+            }
+          }
+        },
+        series: [{
+          name: '<?php echo display("enquiry"); ?>',
+          data: data1,
+        }, {
+          name: '<?php echo display("lead"); ?>',
+          data: data2,
+        }, {
+          name: '<?php echo display("Client"); ?>',
+          data: data3,
+        }]
+      });
       }
     }
-  },
-  legend: {
-    align: 'right',
-    x: -30,
-    verticalAlign: 'top',
-    y: 25,
-    floating: true,
-    backgroundColor:
-      Highcharts.defaultOptions.legend.backgroundColor || 'white',
-    borderColor: '#CCC',
-    borderWidth: 1,
-    shadow: false
-  },
-  tooltip: {
-    headerFormat: '<b>{point.x}</b><br/>',
-    pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
-  },
-  plotOptions: {
-    column: {
-      stacking: 'normal',
-      dataLabels: {
-        enabled: true
-      }
-    }
-  },
-  series: [{
-    name: '<?php echo display("enquiry"); ?>',
-    data: <?php echo $all_edrp; ?>
-  }, {
-    name: '<?php echo display("lead"); ?>',
-    data: <?php echo $all_ldrp; ?>
-  }, {
-    name: '<?php echo display("Client"); ?>',
-    data: <?php echo $all_cdrp; ?>
-  }]
+  })
 });
+
 </script>
+
+<!-- drop wise chart ends here -->
+
+
 <!-- conversion probability chart starts-->
 <script>
   $(document).ready(function(){
@@ -1449,27 +1204,7 @@ function updateHands() {
 </script>
 
 <!--------------------------------------------process wise data graph ------------------------------->
-<?php $proenq=array();$prolead=array();$processlead=array();$proclient=array();$processclient=array();$pro_name=array();
-// foreach($products as $pro){
-// $pro_name[] = $pro->product_name;
-// foreach($all_enquiery as $pall){
-// if($pro->sb_id==$pall->product_id && $pall->status=='1'){
-// $proenq[] = $pall->Enquery_id;	
-// }
-// if($pro->sb_id==$pall->product_id && $pall->status=='2'){
-// $prolead[] = $pall->Enquery_id;	
-// }
-// if($pro->sb_id==$pall->product_id && $pall->status=='3'){
-// $proclient[] = $pall->Enquery_id;	
-// }	
-// }
-// $processenq[] = count($proenq);
-// $processlead[] = count($prolead);
-// $processclient[] = count($proclient);
-// $proenq=array();$prolead=array();$proclient=array();
-// }
 
-?>
 
 
 <script>
@@ -1563,15 +1298,15 @@ var calendarEvents = {
   <?php $cnt=1; foreach($taskdata as $task){
 $t_date = $task->task_date;
 if(!empty($task->subject)){
-$ttl = $task->subject;	
+$ttl = $task->subject;  
 }else{
-$ttl = 'None';	
+$ttl = 'None';  
 }
 if(!empty($task->task_remark)){
-$remrk = $task->task_remark;	
+$remrk = $task->task_remark;  
 }else{
-$remrk = 'None';	
-}	
+$remrk = 'None';  
+} 
 $newDate = date("Y-m-d", strtotime($t_date));
 ?>
        {
@@ -1639,9 +1374,9 @@ var notapprovedEvents = {
     editable: true,
     nowIndicator: true,
     defaultView: 'listMonth',
-	eventLimit: 2,
+  eventLimit: 2,
     views: {
-		
+    
       agenda: {
         columnHeaderHtml: function(mom) {
           return '<span>' + mom.format('ddd') + '</span>' +
@@ -1739,223 +1474,177 @@ var notapprovedEvents = {
 
 // ....................................calander end
 </script>
-<?php 
-if(!empty($disposition)){
-$desp=array();$enqdesp=array();$leaddesp=array();$clientdesp=array();$denq=array();$dlead=array();$dclnt=array();
-foreach($disposition as $despo){ 
-$desp[] = $despo->lead_stage_name;
-foreach($all_enquiery as $dall){
-if($despo->stg_id==$dall->lead_stage && $dall->status=='1'){
-$enqdesp[] = $dall->Enquery_id;	
-}else if($despo->stg_id==$dall->lead_stage && $dall->status=='2'){
-$leaddesp[] = $dall->Enquery_id;	
-}else if($despo->stg_id==$dall->lead_stage && $dall->status=='3'){
-$clientdesp[] = $dall->Enquery_id;	
-}	
-}
-$denq[]=count($enqdesp);
-$dlead[]=count($leaddesp);
-$dclnt[]=count($clientdesp);
-$enqdesp=array();$leaddesp=array();$clientdesp=array();
-}
-}
-if(!empty($desp)){
-	$desp=$desp;
-}else{
-	$desp='';
-}
-if(!empty($denq)){
-	$denq=$denq;
-}else{
-	$denq='';
-}
-if(!empty($dlead)){
-	$dlead=$dlead;
-}else{
-	$dlead='';
-}
-if(!empty($dclnt)){
-	$dclnt=$dclnt;
-}else{
-	$dclnt='';
-}
-$all_pro = json_encode($desp);
-$all_eds = json_encode($denq);
-$all_ldes = json_encode($dlead);
-$all_cdes = json_encode($dclnt);
-?>
+
+<!-- desposition graph start here -->
 <script>
-Highcharts.chart('container', {
-  chart: {
-    type: 'column'
-  },
-  title: {
-    text: '<?php echo display("disposition_data"); ?>'
-  },
-  subtitle: {
-    //text: 'Source: WorldClimate.com'
-  },
-  xAxis: {
-    categories: <?php echo $all_pro; ?>,
-    crosshair: true
-  },
-  yAxis: {
-    min: 0,
-    title: {
-      text: 'Data (No.)'
+$(document).ready(function(){
+  $.ajax({
+    url : "<?=base_url('Dashboard/despositionDataChart')?>",
+    type: "post",
+    dataType : "json",
+    processData: false,
+    contentType: false,
+    success : function(data)
+    { 
+      var data1 = [];
+      var data2 = [];
+      var data3 = [];
+      var data4 = [];
+
+      if(data.status == 'success')
+      {
+        //response = JSON.parse(data);
+        console.log(data.enquiryChartData[0]);
+        for(var i = 0;i < data.enquiryChartData.length; i++)
+        {
+          data1.push(parseInt(data.enquiryChartData[i])); 
+          data2.push(parseInt(data.leadChartData[i]));
+          data3.push(parseInt(data.clientChartData[i]));
+          data4.push(data.desplst[i]['lead_stage_name']);
+        }
+        Highcharts.chart('container', {
+        chart: {
+          type: 'column'
+        },
+        title: {
+          text: '<?php echo display("disposition_data"); ?>'
+        },
+        subtitle: {
+          //text: 'Source: WorldClimate.com'
+        },
+        xAxis: {
+          categories: data4,
+          crosshair: true
+        },
+        yAxis: {
+          min: 0,
+          title: {
+            text: 'Data (No.)'
+          }
+        },
+        tooltip: {
+          headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+          pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+            '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
+          footerFormat: '</table>',
+          shared: true,
+          useHTML: true
+        },
+        plotOptions: {
+          column: {
+            pointPadding: 0.2,
+            borderWidth: 0
+          }
+        },
+        series: [{
+          name: '<?php echo display("enquiry"); ?>',
+          data: data1,
+
+        }, {
+          name: '<?php echo display("lead"); ?>',
+          data: data2,
+
+        },{
+          name: '<?php echo display("Client"); ?>',
+          data: data3,
+
+        }]
+      });
+      }
     }
-  },
-  tooltip: {
-    headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-    pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-      '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
-    footerFormat: '</table>',
-    shared: true,
-    useHTML: true
-  },
-  plotOptions: {
-    column: {
-      pointPadding: 0.2,
-      borderWidth: 0
-    }
-  },
-  series: [{
-    name: '<?php echo display("enquiry"); ?>',
-    data: <?php echo $all_eds; ?>
+  })
+})
 
-  }, {
-    name: '<?php echo display("lead"); ?>',
-    data: <?php echo $all_ldes; ?>
-
-  },{
-    name: '<?php echo display("Client"); ?>',
-    data: <?php echo $all_cdes; ?>
-
-  }]
-});
 </script>
-</script>
-<?php 
-if(!empty($source)){
-$src=array();$enqsrc=array();$leadsrc=array();$clientsrc=array();$senq=array();$slead=array();$sclnt=array();
-foreach($source as $asrc){ 
-$src[] = $asrc->lead_name;
-foreach($all_enquiery as $sall){
-if($asrc->lsid==$sall->enquiry_source && $sall->status=='1'){
-$enqsrc[] = $sall->Enquery_id;	
-}else if($asrc->lsid==$sall->enquiry_source && $sall->status=='2'){
-$leadsrc[] = $sall->Enquery_id;	
-}else if($asrc->lsid==$sall->enquiry_source && $sall->status=='3'){
-$clientsrc[] = $sall->Enquery_id;	
-}	
-}
-$senq[]=count($enqsrc);
-$slead[]=count($leadsrc);
-$sclnt[]=count($clientsrc);
-$enqsrc=array();$leadsrc=array();$clientsrc=array();
-}
-}
-if(!empty($src)){
-	$src=$src;
-}else{
-	$src='';
-}
-if(!empty($senq)){
-	$senq=$senq;
-}else{
-	$senq='';
-}
-if(!empty($slead)){
-	$slead=$slead;
-}else{
-	$slead='';
-}
-if(!empty($sclnt)){
-	$sclnt=$sclnt;
-}else{
-	$sclnt='';
-}
-$all_src = json_encode($src);
-$all_esr = json_encode($senq);
-$all_lsr = json_encode($slead);
-$all_csr = json_encode($sclnt);
-?>
+
+<!-- desposition graph ends here -->
+
+
+<!-- source graph start here -->
 <script>
-Highcharts.chart('container1', {
-  chart: {
-    type: 'column'
-  },
-  title: {
-    text: '<?php echo display("lead_source"); ?>'
-  },
-  subtitle: {
-    //text: 'Source: WorldClimate.com'
-  },
-  xAxis: {
-    categories: <?php echo $all_src; ?>,
-    crosshair: true
-  },
-  yAxis: {
-    min: 0,
-    title: {
-      text: 'Data (No.)'
+  $(document).ready(function(){
+  $.ajax({
+    url : "<?=base_url('Dashboard/sourceDataChart')?>",
+    type: "post",
+    dataType : "json",
+    processData: false,
+    contentType: false,
+    success : function(data)
+    { 
+      var data1 = [];
+      var data2 = [];
+      var data3 = [];
+      var data4 = [];
+      
+      if(data.status == 'success')
+      {
+        //response = JSON.parse(data);
+        console.log(data.enquiryChartData[0]);
+        for(var i = 0;i < data.enquiryChartData.length; i++)
+        {
+          data1.push(parseInt(data.enquiryChartData[i])); 
+          data2.push(parseInt(data.leadChartData[i]));
+          data3.push(parseInt(data.clientChartData[i]));
+          data4.push(data.srclst[i]['lead_name']);
+        }
+        Highcharts.chart('container1', {
+        chart: {
+          type: 'column'
+        },
+        title: {
+          text: '<?php echo display("lead_source"); ?>'
+        },
+        subtitle: {
+          //text: 'Source: WorldClimate.com'
+        },
+        xAxis: {
+          categories: data4,
+          crosshair: true
+        },
+        yAxis: {
+          min: 0,
+          title: {
+            text: 'Data (No.)'
+          }
+        },
+        tooltip: {
+          headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+          pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+            '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
+          footerFormat: '</table>',
+          shared: true,
+          useHTML: true
+        },
+        plotOptions: {
+          column: {
+            pointPadding: 0.2,
+            borderWidth: 0
+          }
+        },
+        series: [{
+          name: '<?php echo display("enquiry"); ?>',
+          data: data1,
+
+        }, {
+          name: '<?php echo display("lead"); ?>',
+          data: data2,
+
+        },{
+          name: '<?php echo display("Client"); ?>',
+          data: data3,
+
+        }]
+      });
+      }
     }
-  },
-  tooltip: {
-    headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-    pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-      '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
-    footerFormat: '</table>',
-    shared: true,
-    useHTML: true
-  },
-  plotOptions: {
-    column: {
-      pointPadding: 0.2,
-      borderWidth: 0
-    }
-  },
-  series: [{
-    name: '<?php echo display("enquiry"); ?>',
-    data: <?php echo $all_esr; ?>
+  })
+})
 
-  }, {
-    name: '<?php echo display("lead"); ?>',
-    data: <?php echo $all_lsr; ?>
-
-  },{
-    name: '<?php echo display("Client"); ?>',
-    data: <?php echo $all_csr; ?>
-
-  }]
-});
 </script>
+<!-- source graph ends here -->
 <!------------------------------------------timline JS---------------------------------------------------->
 <!---------------------------------------------india map------------------------------------------------->
 
-<?php
-$upe=array();$upl=array();$upc=array();$pbe=array();$pbl=array();$pbc=array();
-foreach($all_enquiery as $sall){
-
-
-    if($sall->state_id=='1' && $sall->status=='1'){
-        $upe[]=$sall->enquiry_id; 
-    }else if($sall->state_id=='1' && $sall->status=='2'){
-        $upl[]=$sall->enquiry_id;
-    }else if($sall->state_id=='1' && $sall->status=='3'){
-        $upc[]=$sall->enquiry_id;
-    }
-    if($sall->state_id=='2' && $sall->status=='1'){
-        $pbe[]=$sall->enquiry_id; 
-    }else if($sall->state_id=='2' && $sall->status=='2'){
-        $pbl[]=$sall->enquiry_id;
-    }else if($sall->state_id=='2' && $sall->status=='3'){
-        $pbc[]=$sall->enquiry_id;
-    }
-}
- $upalle=count($upe);$upalll=count($upl);$upallc=count($upc);
- $pballe=count($pbe);$pballl=count($pbl);$pballc=count($pbc);
-?>
 
 <script>
 // Prepare demo data
