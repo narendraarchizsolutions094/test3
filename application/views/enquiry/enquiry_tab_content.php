@@ -338,7 +338,8 @@
    }else if($form_type == 1){ ?>
           
           <hr>
-          <table class="table table-striped table-bordered">
+          <div style="overflow-y: scroll;">
+          <table class="table table-striped table-bordered table-responsive table-sm">
             <thead class="thead-dark">
                 <tr>
                   <?php
@@ -357,28 +358,30 @@
             <tbody>
               <?php
                 $sql  = "SELECT GROUP_CONCAT(concat(`extra_enquery`.`input`,'#',`extra_enquery`.`fvalue`,'#',`extra_enquery`.`created_date`) separator ',') as d FROM `extra_enquery` INNER JOIN (select * from tbl_input where form_id=$tid) as tbl_input ON `tbl_input`.`input_id`=`extra_enquery`.`input` where `extra_enquery`.`cmp_no`=$comp_id and `extra_enquery`.`enq_no`='$details->Enquery_id' GROUP BY `extra_enquery`.`comment_id` ORDER BY `extra_enquery`.`comment_id` DESC";
-                $res = $this->db->query($sql)->result_array();
-                
+                $res = $this->db->query($sql)->result_array();                
                 if (!empty($res)) {
                   foreach ($res as $key => $value) {
                     ?>
                     <tr>
                     <?php
-                    $arr  = explode(',', $value['d']);                                        
+                    $arr  = explode(',', $value['d']);                     
                     if (!empty($arr)) {
-                      foreach ($arr as $key1 => $value1) {                        
-                          $arr1 = explode('#', $value1); 
-                            if (!empty($arr1[1])) {
-                              $d  = $arr1[1];
-                              $d  = explode('/',$arr1[1]);                              
-                              $d = '<a href='.$arr1[1].'>'.end($d).'</a>';
-                            }else{
-                              $d = 'NA'; 
-                            }
-                          ?>                          
-                          <td><?=$d?></td>                                                                            
+                      foreach($dynamic_field as $ind => $fld){ 
+                        $d = 'NA';
+                        foreach ($arr as $key1 => $value1) {                        
+                          $arr1 = explode('#', $value1);                           
+                          if (!empty($arr1[1]) && $arr1[0]==$fld['input']) {
+                            $d  = $arr1[1];
+                            $d  = explode('/',$arr1[1]);                              
+                            $d = '<a href='.$arr1[1].'>'.end($d).'</a>';
+                            break;
+                          }                         
+                        } 
+                        ?>                        
+                        <td><?=$d?></td>                                                           
                         <?php
-                      } ?>
+                      } 
+                      ?>
                       <td><?=!empty($arr1[2])?$arr1[2]:'NA'?></td>                                                  
                       <?php
                     } ?>                    
@@ -389,6 +392,7 @@
               ?>              
             </tbody>
           </table>
+          </div>
          <?php echo form_open_multipart('client/update_enquiry_tab/'.$details->enquiry_id,'class="form-inner"') ?>           
          <input name="en_comments" type="hidden" value="<?=$details->Enquery_id?>" >    
          <input name="tid" type="hidden" value="<?=$tid?>" >    
