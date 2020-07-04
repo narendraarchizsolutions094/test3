@@ -206,7 +206,7 @@
    if(is_active_field(PREFERRED_COUNTRY_FIELD,$process_id)){
    ?>
    <div class="form-group col-sm-6 col-md-6">
-      <label>Preferred Country <i class="text-danger">*</i></label>
+      <label>Country <i class="text-danger">*</i></label>
       <?php
          $current_country  = $details->enq_country;             
          $current_country = explode(',',$current_country);                        
