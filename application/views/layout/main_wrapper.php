@@ -811,30 +811,35 @@ if($root=='https://student.spaceinternationals.com'){	 ?>
                           </a>
                         </li>
 <?php } ?>
-                        <li class="<?php echo (in_array($segment2,array('institutelist','add_institute','edit_institute')) ?"active":'') ?>">
+                        <li class="<?php echo (in_array($segment2,array('institutelist','add_institute','edit_institute')) ?"active":'') ?>" style="<?php if(in_array(240,$module) || in_array(241,$module) || in_array(242,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
                           <a href="<?php echo base_url() ?>lead/institutelist">
                            <?php echo display('institute_management');?>                             
                           </a>
                         </li>
 						
-						<li class="<?php echo (in_array($segment2,array('crslist','add_crs','edit_crs')) ?"active":'') ?>">
+						<li class="<?php echo (in_array($segment2,array('crslist','add_crs','edit_crs')) ?"active":'') ?>" style="<?php if(in_array(350,$module) || in_array(351,$module) || in_array(352,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
                           <a href="<?php echo base_url() ?>lead/crslist">
                            <?php echo display('course_master');?>                             
                           </a>
                         </li>
 						
-						<li class="<?php echo (in_array($segment2,array('courselist','add_course','edit_course')) ?"active":'') ?>">
+						<li class="<?php echo (in_array($segment2,array('courselist','add_course','edit_course')) ?"active":'') ?>" style="<?php if(in_array(350,$module) || in_array(351,$module) || in_array(352,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
                           <a href="<?php echo base_url() ?>lead/courselist">
                            <?php echo display('course_management');?>                             
                           </a>
                         </li>
 						
-						<li class="<?php echo (in_array($segment2,array('vidlist','add_video','edit_video')) ?"active":'') ?>">
+                        <?php
+                        if ($this->session->companey_id == 67) {
+                        ?>
+						            <li class="<?php echo (in_array($segment2,array('vidlist','add_video','edit_video')) ?"active":'') ?>">
                           <a href="<?php echo base_url() ?>lead/add_video">
                            <?php echo display('add_vid');?>                             
                           </a>
                         </li>
-
+                        <?php
+                        }
+                        ?>
                         <li class="<?php echo (in_array($segment2,array('datasourcelist','add_datasource','edit_datasource')) ?"active":'') ?>">
                           <a href="<?php echo base_url() ?>lead/datasourcelist">
                            <?php echo display('datasource_management');?>                             
@@ -847,7 +852,7 @@ if($root=='https://student.spaceinternationals.com'){	 ?>
                           </a>
                         </li>
 
-                        <li class="<?php echo (in_array($segment2,array('centerlist','add_center','edit_center')) ?"active":'') ?>">
+                        <li class="<?php echo (in_array($segment2,array('centerlist','add_center','edit_center')) ?"active":'') ?>" style="<?php if(in_array(430,$module) || in_array(431,$module) || in_array(432,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
                           <a href="<?php echo base_url() ?>lead/centerlist">
                            <?php echo display('center_management');?>                             
                           </a>
