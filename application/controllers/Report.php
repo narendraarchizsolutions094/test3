@@ -215,7 +215,7 @@ class Report extends CI_Controller {
                 if (in_array('City', $report_columns)){
                   $row[] = (!empty($repdetails->city_id)) ? get_city_name($repdetails->city_id):'NA';
                }
-               if (in_array('Company Name', $this->session->userdata('post_report_columns'))){
+               if (in_array('Company Name', $report_columns)){
                   $row[] = (!empty($repdetails->company)) ? $repdetails->company:'NA';
                }
                  if(!empty($dfields)){
