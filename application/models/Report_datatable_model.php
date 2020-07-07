@@ -102,9 +102,12 @@ class Report_datatable_model extends CI_Model {
                     $where .= " AND enquiry.drop_status>0 AND enquiry.status=1";
                 }
             }
+            $comp_id = $this->session->companey_id;            
             $this->db->join('lead_source','lead_source.lsid=enquiry.enquiry_source','left');
             $this->db->join('tbl_product','tbl_product.sb_id=enquiry.product_id','left');        
-            $this->db->join('tbl_subsource','tbl_subsource.subsource_id=enquiry.enquiry_subsource','left');        
+
+            $this->db->join("(select * from tbl_subsource where comp_id=$comp_id) as tbl_subsource",'tbl_subsource.subsource_id=enquiry.enquiry_subsource','left');        
+            
             $this->db->join('tbl_datasource','tbl_datasource.datasource_id=enquiry.datasource_id','left');
             $this->db->join('tbl_admin','tbl_admin.pk_i_admin_id=enquiry.created_by','left');
             $this->db->join('tbl_admin as admin2','admin2.pk_i_admin_id=enquiry.aasign_to','left');      

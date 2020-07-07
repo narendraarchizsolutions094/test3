@@ -229,8 +229,7 @@
     var report_name = 'Report_'+d.getDate()+"-"+(d.getMonth() + 1)+"-"+d.getFullYear()+" "+d.getHours()+"_"+d.getMinutes()+"_"+d.getSeconds();
     $('#example').DataTable({         
       "processing": true,
-      "scrollX": true,
-      "scrollY": 800,
+      "scrollX": true,      
       "serverSide": true,          
       "lengthMenu": [ [10,30, 50,100,500,1000, -1], [10,30, 50,100,500,1000, "All"] ],
       "ajax": {
