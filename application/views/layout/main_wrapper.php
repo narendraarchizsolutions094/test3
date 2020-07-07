@@ -1306,12 +1306,11 @@ master search end
     if(rem1){
       rem2 = Object.values(rem1);
       rem_keys = Object.keys(rem1);
-    }  
-    console.log(rem_keys);
+    }      
     i = 0; 
+    if (typeof rem2 !== 'undefined') {
       rem2.forEach(function (arrayItem) { 
-        notication_id = rem_keys[i];  
-        //console.log(notication_id+' i '+i);    
+        notication_id = rem_keys[i];              
         var d = arrayItem.rem_date;
         var t = arrayItem.rem_time;      
         if(t.length>5){
@@ -1328,11 +1327,10 @@ master search end
           c_hrs = '0'+c_hrs;
         }      
         c_time = c_hrs+':'+c_min;
-        //console.log(t+' '+c_time);      
+        
         if(t == c_time){
           count_bell_notification();
-          reminder_content = arrayItem.reminder_txt;
-         // console.log(notication_id);
+          reminder_content = arrayItem.reminder_txt;        
           if(notication_id){
             var url  = "<?=base_url().'notification/web/get_pop_reminder_content'?>";         
             $.ajax({
@@ -1401,24 +1399,19 @@ master search end
             });
 
           }else{
-                Swal.fire({
-                    title: 'Reminder',
-                    html: reminder_content,
-                    imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQSRlLiEna6GOulJgmf3QvBKsy8mp5vcrSl4tFusZEOoIb_8Kb7',
-                    imageWidth: 160,
-                    imageHeight: 150,
-                    imageAlt: 'Custom image',
-                  });
-          }       
-          
+            Swal.fire({
+                title: 'Reminder',
+                html: reminder_content,
+                imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQSRlLiEna6GOulJgmf3QvBKsy8mp5vcrSl4tFusZEOoIb_8Kb7',
+                imageWidth: 160,
+                imageHeight: 150,
+                imageAlt: 'Custom image',
+              });
+          }                 
         }        
         i++;
       });
-    
-
-    
-    
-
+    }
   }, 40000);
 
 function format24hours(time){
