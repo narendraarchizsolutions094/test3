@@ -13,6 +13,30 @@ class Lead extends CI_Controller {
         }
     }
 
+public function view_datasource_data($did){    
+    $data['title'] = 'Datasource raw data';        
+    $data['datasource_id'] = $did;            
+    $data['raw_data']    =   $this->db->select('enquiry2.*,tbl_product.product_name')->from('enquiry2')   
+                            ->join('tbl_product','tbl_product.sb_id=enquiry2.product_id','left')              
+                            ->where('enquiry2.comp_id',$this->session->companey_id)
+                            ->where('enquiry2.datasource_id',$did)                 
+                            ->where('enquiry2.status!=',3)                 
+                            ->get()->result_array();    
+    $data['content'] = $this->load->view('datasource/raw_data_list', $data, true);
+    $this->load->view('layout/main_wrapper', $data);   
+}
+public function delete_raw_data(){
+    $datasource_id    =   $this->input->post('datasource_id');
+    $enq_id    =   $this->input->post('enq_id');        
+    if ($datasource_id) {
+        $this->db->where_in('enquiry_id',$enq_id);
+        $this->db->where('datasource_id',$datasource_id);
+        $this->db->where('comp_id',$this->session->companey_id);
+        $this->db->delete('enquiry2');
+    }        
+    $this->session->set_flashdata('message', 'Records Deleted Successfully');
+    redirect('lead/datasourcelist');
+}
 public function select_app_by_ins() {
         $course = $this->input->post('c_course');
 		$lvl = $this->input->post('c_lvl');
