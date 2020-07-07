@@ -6,15 +6,15 @@ class Dashboard extends CI_Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->load->library('user_agent');
-        $this->load->library('upload');
+		$this->load->library('user_agent');
+		$this->load->library('upload');
         $this->load->model(array(
             'dashboard_model',
             'setting_model',
             'user_model',
-            'website/home_model',
-            'Institute_model',
-            'schedule_model',
+			'website/home_model',
+			'Institute_model',
+			'schedule_model',
             'report', 'location_model', 'report_model', 'User_model', 'Modules_model',
             'enquiry_model', 'Leads_Model', 'Client_Model','Message_models'
         ));
@@ -66,13 +66,13 @@ class Dashboard extends CI_Controller {
                         ->from("city")
                         ->where('id', $check_user->row()->city_id)
                         ->get();
-    if($check_user->row()->user_permissions==151){
-    $menu=1;
-    }else{
-        $menu=2;
-    }
+	if($check_user->row()->user_permissions==151){
+	$menu=1;
+	}else{
+		$menu=2;
+	}
                 $data = $this->session->set_userdata([
-                    'menu' => $menu,
+				    'menu' => $menu,
                     'isLogIn' => true,
                     'user_id' => $check_user->row()->pk_i_admin_id,
                     'companey_id' => $check_user->row()->companey_id,
@@ -97,8 +97,11 @@ class Dashboard extends CI_Controller {
                     'footer_text' => (!empty($setting->footer_text) ? $setting->footer_text : null),
                     'process' => $process,
                     'telephony_agent_id' => $check_user->row()->telephony_agent_id,
-                    'telephony_token'    => $check_user->row()->telephony_token,
+					'telephony_token'    => $check_user->row()->telephony_token,
+                    'expiry_date'       => strtotime($check_user->row()->valid_upto),
                 ]);
+               // print_r($_SESSION);die;
+                //if()
                 //$this->session->set_userdata('token', random_string('alnum', 16));
                 redirect('dashboard/home');
             } else {
@@ -114,17 +117,17 @@ class Dashboard extends CI_Controller {
    public function backupDatabase(){  
   if ($this->session->user_right == 1) {    
    $this->load->dbutil();
-    $prefs = array(
-        'format' => 'zip',
-        'filename' => 'crmdata.sql'
-    );
-    $backup = & $this->dbutil->backup($prefs);
-    $db_name = 'crm-on-' . date("Y-m-d-H-i-s") . '.zip';
-    $save = 'assets/database_backup/' . $db_name;
-    $this->load->helper('file');
-    write_file($save, $backup);
-    $this->load->helper('download');
-    force_download($db_name, $backup); 
+	$prefs = array(
+		'format' => 'zip',
+		'filename' => 'crmdata.sql'
+	);
+	$backup = & $this->dbutil->backup($prefs);
+	$db_name = 'crm-on-' . date("Y-m-d-H-i-s") . '.zip';
+	$save = 'assets/database_backup/' . $db_name;
+	$this->load->helper('file');
+	write_file($save, $backup);
+	$this->load->helper('download');
+	force_download($db_name, $backup); 
   }
 }
  public function backupfiles(){ 
@@ -137,7 +140,7 @@ $this->load->library('zip');
  }
 
     public function validate_login() {  
-    
+	
         $this->form_validation->set_rules('email', display('email'), 'required|max_length[50]|valid_email');
         $this->form_validation->set_rules('password', display('password'), 'required|max_length[32]|md5');        
         
@@ -212,17 +215,17 @@ $this->load->library('zip');
                        $process_html = '';
                        
                        if(!empty($process_arr)){
-                            
-                            if(user_access(270)){                               
-                                $process_html .= "<select class='form-control text-center' name='user_process[]' multiple id='process_elem'>";
-                            }else{
-                                $process_html .= "<select class='form-control text-center' name='user_process[]' id='process_elem'>";
-                            }
+							
+                            if(user_access(270)){								
+								$process_html .= "<select class='form-control text-center' name='user_process[]' multiple id='process_elem'>";
+							}else{
+								$process_html .= "<select class='form-control text-center' name='user_process[]' id='process_elem'>";
+							}
                             foreach ($process_arr as $value) {                                
                                 $process_html .= "<option value='".$value['sb_id']."'>".$value['product_name']."</option>";
                                 $process[$value['sb_id']] = $value['product_name'];
                             }
-                            $process_html .= "</select>";                                                       
+							$process_html .= "</select>";                                                       
 
                             $res = array('status'=>true,'message'=>'Successfully Logged In','process'=>$process_html);
 
@@ -230,13 +233,13 @@ $this->load->library('zip');
                             $res = array('status'=>false,'message'=>'You are not in any process. Please contact your admin!','process'=>$process_html);
                        }
                    }else{
-                       if($user_data->user_permissions==151){
-                           $menu=1;
-                        }else{
-                           $menu=2;
-                        }
+					   if($user_data->user_permissions==151){
+                    	   $menu=1;
+                    	}else{
+                    	   $menu=2;
+                    	}
                         $data = $this->session->set_userdata([
-                            'menu'                  => $menu,
+						    'menu'                  => $menu,
                             'isLogIn'               => true,
                             'user_id'               => $user_data->pk_i_admin_id,
                             'companey_id'           => $user_data->companey_id,
@@ -259,7 +262,8 @@ $this->load->library('zip');
                             'favicon'               => (!empty($setting->favicon) ? $setting->favicon : null),
                             'footer_text'           => (!empty($setting->footer_text) ? $setting->footer_text : null),                    
                             'telephony_agent_id'    => $user_data->telephony_agent_id,
-                            'telephony_token'    => $user_data->telephony_token
+							'telephony_token'       => $user_data->telephony_token,
+                            'expiry_date'           => strtotime($check_user->row()->valid_upto),
                         ]);
                         $res = array('status'=>true,'message'=>'Successfully Logged In');                       
                    }
@@ -304,14 +308,14 @@ public function login_in_process(){
                 }else{
                     $process_ids = array($this->input->post('process_ids'));
                 }
-                if($check_user->row()->user_permissions==151){
-    $menu=1;
-    }else{
-        $menu=2;
-    }
+				if($check_user->row()->user_permissions==151){
+	$menu=1;
+	}else{
+		$menu=2;
+	}
 
                     $data = $this->session->set_userdata([
-                        'menu'                  => $menu,
+					    'menu'                  => $menu,
                         'isLogIn'               => true,
                         'user_id'               => $check_user->row()->pk_i_admin_id,
                         'companey_id'           => $check_user->row()->companey_id,
@@ -333,8 +337,9 @@ public function login_in_process(){
                         'favicon'               => (!empty($setting->favicon) ? $setting->favicon : null),
                         'footer_text'           => (!empty($setting->footer_text) ? $setting->footer_text : null),                 
                         'telephony_agent_id'    => $check_user->row()->telephony_agent_id,
-                        'telephony_token'    => $check_user->row()->telephony_token,
-                        'process'    => $process_ids
+						'telephony_token'       => $check_user->row()->telephony_token,
+                        'process'               => $process_ids,
+                        'expiry_date'           => strtotime($check_user->row()->valid_upto),
                     ]);         
                     $res = array('status'=>true,'message'=>'Logged in');                                        
                }else{                    
@@ -371,8 +376,8 @@ public function login_in_process(){
         $data['content'] = $this->load->view('home', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }
-    
-    public function home() {
+	
+	public function home() {
         // print_r($_SESSION);die;
        
         if ($this->session->userdata('isLogIn') == false)
@@ -380,28 +385,39 @@ public function login_in_process(){
         $data = array();
         //if ($this->session->companey_id != 57) {
             $this->load->model('dash_model');
-            if($this->session->userdata('user_right')==151){
-            $data['ins_list'] = $this->location_model->stu_ins_list();
-            redirect('dashboard/search_programs');
+    		if($this->session->userdata('user_right')==151){
+    		$data['ins_list'] = $this->location_model->stu_ins_list();
+    		redirect('dashboard/search_programs');
             }else{
                 //$process = implode(',', $this->session->process);
-            // $data['disposition'] = $this->dash_model->disposition_list_graph();
-            // $data['source'] = $this->dash_model->source_list_graph();
-            // $data['drop'] = $this->dash_model->drop_list_graph();
-            //$data['all_enquiery'] = $this->enquiry_model->all_enqueries();
+    		// $data['disposition'] = $this->dash_model->disposition_list_graph();
+    		// $data['source'] = $this->dash_model->source_list_graph();
+    		// $data['drop'] = $this->dash_model->drop_list_graph();
+    		//$data['all_enquiery'] = $this->enquiry_model->all_enqueries();
             $data['counts'] = $this->enquiry_model->enquiryLeadClientCount($this->session->user_id,$this->session->companey_id);
+            $data['msg'] = '';
+            //print_r($_SESSION);die;
+                date_default_timezone_set('Asia/Kolkata');
+                $from = $this->session->expiry_date;
+                $today = time();
+                $difference = $today - $from;
+                $days = floor($difference / 86400);
+                if($days >=5)
+                {
+                    $data['msg'] = "Your Account will expire after $days days Please contact your site admin";
+                }
             //print_r($data['counts']);die;
            // $data['dashboard_data'] = $this->enquiry_model->all_enqueries_api($this->session->user_id,$this->session->companey_id,$process);
             //echo"<pre>";print_r($data['dashboard_data']);die;
             //$data['dashboard_data'] = array();
             $data['state']   = $this->enquiry_model->get_state();
              // print_r($data['state']);exit();
-            $data['products'] = $this->dash_model->product_list_graph();
-            $data['taskdata'] = $this->dash_model->task_list();
-            $data['cmtdata'] = $this->dash_model->all_comments();
-            }
+    		$data['products'] = $this->dash_model->product_list_graph();
+    		$data['taskdata'] = $this->dash_model->task_list();
+    		$data['cmtdata'] = $this->dash_model->all_comments();
+    		}
             $data['lead_score'] = $this->db->query('select * from lead_score limit 3')->result();
-            $data['content'] = $this->load->view('home', $data, true);              
+    		$data['content'] = $this->load->view('home', $data, true);	            
         //}
         $this->load->view('layout/main_wrapper', $data);
     }
@@ -1030,210 +1046,210 @@ public function login_in_process(){
         }
     }
 
-    
-    /*******************************************************8student panel****************************************/
-    public function select_state() {
+	
+	/*******************************************************8student panel****************************************/
+	public function select_state() {
         $state = $this->input->post('lead_stage');
         echo json_encode($this->location_model->all_state($state));
 
        // echo $diesc;
     }
-    
-    public function select_ins() {
+	
+	public function select_ins() {
             $ctnry = $this->input->post('l_con');
-            $sta = $this->input->post('l_sta');
-            $lvl = $this->input->post('l_lvl');
-            $lgth = $this->input->post('l_lgth');
-            $disc = $this->input->post('l_disc');
+	     	$sta = $this->input->post('l_sta');
+	    	$lvl = $this->input->post('l_lvl');
+	    	$lgth = $this->input->post('l_lgth');
+	    	$disc = $this->input->post('l_disc');
         echo json_encode($this->location_model->all_institute($ctnry,$sta,$lvl,$lgth,$disc));
-        
+		
     }
-    
-    public function select_crs() {
+	
+	public function select_crs() {
             $ctnry = $this->input->post('l_con');
-            $sta = $this->input->post('l_sta');
-            $lvl = $this->input->post('l_lvl');
-            $lgth = $this->input->post('l_lgth');
-            $disc = $this->input->post('l_disc');
-            $ins = $this->input->post('l_ins');
+	     	$sta = $this->input->post('l_sta');
+	    	$lvl = $this->input->post('l_lvl');
+	    	$lgth = $this->input->post('l_lgth');
+	    	$disc = $this->input->post('l_disc');
+			$ins = $this->input->post('l_ins');
         echo json_encode($this->location_model->all_course($ctnry,$sta,$lvl,$lgth,$disc,$ins));
 
        // echo $diesc;
     }
-    
-    public function search_programs() {
-        $data['title'] = display('search_programs');
+	
+	public function search_programs() {
+		$data['title'] = display('search_programs');
         $user_id = $this->session->userdata('user_id');
-        $comp_id = $this->session->userdata('companey_id');
-        
-        $this->db->select("*,tbl_crsmaster.course_name");
+		$comp_id = $this->session->userdata('companey_id');
+		
+		$this->db->select("*,tbl_crsmaster.course_name");
         $this->db->from('tbl_course');
-        $this->db->join('tbl_institute','tbl_institute.institute_id = tbl_course.institute_id');
-        $this->db->join('tbl_country','tbl_country.id_c=tbl_institute.country_id','left');
-        $this->db->join('tbl_crsmaster','tbl_crsmaster.id = tbl_course.course_name');
-        if($this->session->userdata('companey_id')!=67){
-        $this->db->join('tbl_schdl','tbl_schdl.ins_id=tbl_institute.institute_id','left');
-        $this->db->order_by('tbl_institute.institute_id','asc');
+		$this->db->join('tbl_institute','tbl_institute.institute_id = tbl_course.institute_id');
+		$this->db->join('tbl_country','tbl_country.id_c=tbl_institute.country_id','left');
+		$this->db->join('tbl_crsmaster','tbl_crsmaster.id = tbl_course.course_name');
+		if($this->session->userdata('companey_id')!=67){
+		$this->db->join('tbl_schdl','tbl_schdl.ins_id=tbl_institute.institute_id','left');
+		$this->db->order_by('tbl_institute.institute_id','asc');
         $q = $this->db->get()->result();
-        }else{
+		}else{
         $this->db->order_by('tbl_course.institute_id','asc');
-        $this->db->where('tbl_course.comp_id',$comp_id);
+		$this->db->where('tbl_course.comp_id',$comp_id);
         $q = $this->db->get()->result();
-        }
-        $data["courses"] = $q;
-        
-        if($this->session->userdata('companey_id')==67){
-        $data['discipline'] = $this->location_model->find_discipline();
-        $data['level'] = $this->location_model->find_level();
-        }
-        $data['vid_list'] = $this->Institute_model->videos();
-        $data['state_list'] = $this->location_model->all_states();
-        $data['county_list'] = $this->location_model->country();
-        $data['ins_list'] = $this->location_model->stu_ins_list();
-        $data['crs_list'] = $this->location_model->stu_crs_list();
-        $data['course'] = $this->Institute_model->all_crs_list();
+		}
+		$data["courses"] = $q;
+		
+		if($this->session->userdata('companey_id')==67){
+		$data['discipline'] = $this->location_model->find_discipline();
+		$data['level'] = $this->location_model->find_level();
+		}
+		$data['vid_list'] = $this->Institute_model->videos();
+		$data['state_list'] = $this->location_model->all_states();
+		$data['county_list'] = $this->location_model->country();
+		$data['ins_list'] = $this->location_model->stu_ins_list();
+		$data['crs_list'] = $this->location_model->stu_crs_list();
+		$data['course'] = $this->Institute_model->all_crs_list();
         $data['content'] = $this->load->view('student/search_programs', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }
-    
-    public function get_uni_data(){
-        
-        $limit  = 8;
-        $page = 1;
-        $offset = ($page - 1)* $limit;
-                
+	
+	public function get_uni_data(){
+		
+		$limit  = 8;
+		$page = 1;
+		$offset = ($page - 1)* $limit;
+				
          $layout = $this->session->userdata('layout');
-         $crs = $this->input->post('crs_id');
+		 $crs = $this->input->post('crs_id');
          $ins = $this->input->post('ins_id');
          $cntry = $this->input->post('cntry');
-         $dt = $this->input->post('date');
-         $discipline = $this->input->post('discipline');
-         $length = $this->input->post('length');
-         $level = $this->input->post('level');
-         $state = $this->input->post('state_id');
-         $ielts = $this->input->post('ielts');
+		 $dt = $this->input->post('date');
+		 $discipline = $this->input->post('discipline');
+		 $length = $this->input->post('length');
+		 $level = $this->input->post('level');
+		 $state = $this->input->post('state_id');
+		 $ielts = $this->input->post('ielts');
 
-    if($this->session->userdata('companey_id')!=67){
-        $this->db->select("*");
+	if($this->session->userdata('companey_id')!=67){
+		$this->db->select("*");
         $this->db->from('tbl_institute');
-        $this->db->join('tbl_course','tbl_course.institute_id=tbl_institute.institute_id');
-        $this->db->join('tbl_country','tbl_country.id_c=tbl_institute.country_id');
-        $this->db->join('tbl_schdl','tbl_schdl.ins_id=tbl_institute.institute_id','left');
-        if($ins!='' && $cntry=='' && $crs=='' && $dt==''){
-        $this->db->where('tbl_institute.institute_id', $ins);
-        }else if($dt!='' && $ins=='' && $cntry=='' && $crs==''){
-        $this->db->where('tbl_schdl.schdl_dt', $dt);
-        }else if($dt=='' && $ins=='' && $cntry!='' && $crs==''){
-        $this->db->where('tbl_institute.country_id', $cntry);
-        }else if($dt=='' && $ins=='' && $cntry=='' && $crs!=''){
-        $this->db->like('tbl_course.course_name', $crs);
-        }else{
-        $this->db->like('tbl_course.course_name', $crs);
-        $this->db->or_where('tbl_institute.institute_id', $ins);
-        $this->db->or_where('tbl_schdl.schdl_dt', $dt);
-        $this->db->or_where('tbl_institute.country_id', $cntry);
-        $this->db->or_where('tbl_course.institute_id', $ins);
-        }
+		$this->db->join('tbl_course','tbl_course.institute_id=tbl_institute.institute_id');
+		$this->db->join('tbl_country','tbl_country.id_c=tbl_institute.country_id');
+		$this->db->join('tbl_schdl','tbl_schdl.ins_id=tbl_institute.institute_id','left');
+		if($ins!='' && $cntry=='' && $crs=='' && $dt==''){
+		$this->db->where('tbl_institute.institute_id', $ins);
+		}else if($dt!='' && $ins=='' && $cntry=='' && $crs==''){
+		$this->db->where('tbl_schdl.schdl_dt', $dt);
+		}else if($dt=='' && $ins=='' && $cntry!='' && $crs==''){
+		$this->db->where('tbl_institute.country_id', $cntry);
+		}else if($dt=='' && $ins=='' && $cntry=='' && $crs!=''){
+		$this->db->like('tbl_course.course_name', $crs);
+		}else{
+		$this->db->like('tbl_course.course_name', $crs);
+		$this->db->or_where('tbl_institute.institute_id', $ins);
+		$this->db->or_where('tbl_schdl.schdl_dt', $dt);
+		$this->db->or_where('tbl_institute.country_id', $cntry);
+		$this->db->or_where('tbl_course.institute_id', $ins);
+		}
         $this->db->order_by('tbl_institute.institute_id','asc');
         $q = $this->db->get()->result();
-    }else{
-        
-        $this->db->select("*,tbl_crsmaster.course_name");
+	}else{
+		
+		$this->db->select("*,tbl_crsmaster.course_name");
         $this->db->from('tbl_course');
-        $this->db->join('tbl_institute','tbl_institute.institute_id = tbl_course.institute_id');
-        $this->db->join('tbl_crsmaster','tbl_crsmaster.id = tbl_course.course_name');
+		$this->db->join('tbl_institute','tbl_institute.institute_id = tbl_course.institute_id');
+		$this->db->join('tbl_crsmaster','tbl_crsmaster.id = tbl_course.course_name');
 
-        if($ins!=''){
-        $this->db->where('tbl_course.institute_id', $ins);
-        }
-        if($cntry!=''){
-        $this->db->where('tbl_institute.country_id', $cntry);
-        }
-        if($crs!=''){
-        $this->db->where('tbl_course.crs_id', $crs);
-        }
-        if($length!=''){
-        $this->db->where('tbl_course.length_id', $length);
-        }
-        if($level!=''){
-        $this->db->where('tbl_course.level_id', $level);
-        }
-        if($discipline!=''){
-        $this->db->where('tbl_course.discipline_id', $discipline);
-        }
-        if($state!=''){
-        $this->db->where('tbl_institute.state_id', $state);
-        }
-        if($ielts!=''){
-        $this->db->where('tbl_course.course_ielts', $ielts);
-        }
+		if($ins!=''){
+		$this->db->where('tbl_course.institute_id', $ins);
+		}
+		if($cntry!=''){
+		$this->db->where('tbl_institute.country_id', $cntry);
+		}
+		if($crs!=''){
+		$this->db->where('tbl_course.crs_id', $crs);
+		}
+		if($length!=''){
+		$this->db->where('tbl_course.length_id', $length);
+		}
+		if($level!=''){
+		$this->db->where('tbl_course.level_id', $level);
+		}
+		if($discipline!=''){
+		$this->db->where('tbl_course.discipline_id', $discipline);
+		}
+		if($state!=''){
+		$this->db->where('tbl_institute.state_id', $state);
+		}
+		if($ielts!=''){
+		$this->db->where('tbl_course.course_ielts', $ielts);
+		}
         $this->db->order_by('tbl_course.crs_id','asc');
         $q = $this->db->get()->result();
-        
-    }
-        $datafilter = array($dt,$cntry,$level,$length,$discipline,$ins,$crs,$state,$ielts);
-        
-            $data["courses"] = $q;
-            $data["filter"] = $datafilter;
-        /* echo "<pre>";
+		
+	}
+	    $datafilter = array($dt,$cntry,$level,$length,$discipline,$ins,$crs,$state,$ielts);
+		
+		    $data["courses"] = $q;
+		    $data["filter"] = $datafilter;
+		/* echo "<pre>";
         print_r($data["filter"]);exit;
-        echo "</pre>";*/    
-            $ttlpagearr  = count($q);
-            
-            $data["totpage"] = (!empty($ttlpagearr[0]->total)) ? $ttlpagearr[0]->total : 0;
-            $data["pageno"]  = (!empty($ttlpagearr[0]->total)) ? ceil($ttlpagearr[0]->total/$limit) : 0; 
-            $data["currpage"]=  1;
-            $grnrid = "";
-            $data['vid_list'] = $this->Institute_model->videos();
-            $data['state_list'] = $this->location_model->all_states();
-            $data['county_list'] = $this->location_model->country();
-            $data['ins_list'] = $this->location_model->stu_ins_list();
-            $data['crs_list'] = $this->location_model->stu_crs_list();
-            $data['course'] = $this->Institute_model->all_crs_list();
-            $data['discipline'] = $this->location_model->find_discipline();
-            $data['level'] = $this->location_model->find_level();
-            $data['length'] = $this->location_model->find_length();
-            $data['content'] = $this->load->view('student/search_programs', $data, true);
+        echo "</pre>";*/	
+			$ttlpagearr  = count($q);
+			
+			$data["totpage"] = (!empty($ttlpagearr[0]->total)) ? $ttlpagearr[0]->total : 0;
+			$data["pageno"]  = (!empty($ttlpagearr[0]->total)) ? ceil($ttlpagearr[0]->total/$limit) : 0; 
+			$data["currpage"]=  1;
+			$grnrid = "";
+			$data['vid_list'] = $this->Institute_model->videos();
+			$data['state_list'] = $this->location_model->all_states();
+			$data['county_list'] = $this->location_model->country();
+		    $data['ins_list'] = $this->location_model->stu_ins_list();
+		    $data['crs_list'] = $this->location_model->stu_crs_list();
+			$data['course'] = $this->Institute_model->all_crs_list();
+			$data['discipline'] = $this->location_model->find_discipline();
+		    $data['level'] = $this->location_model->find_level();
+		    $data['length'] = $this->location_model->find_length();
+			$data['content'] = $this->load->view('student/search_programs', $data, true);
             $this->load->view('layout/main_wrapper', $data);
 
-        }
-        
+	    }
+		
 public function user_profile() {
-        $data['title'] = display('user_profile');
+		$data['title'] = display('user_profile');
         $user_id = $this->session->userdata('user_id');
-        $stu_phone=$this->session->userdata('phone');
+		$stu_phone=$this->session->userdata('phone');
         $data['student_Details'] = $this->home_model->studentdetail($stu_phone);
         $studetails = $this->home_model->studentdetail($stu_phone);
         foreach($studetails as $st){
         $en_id=$st->Enquery_id;
         $comp_id=$st->comp_id;
         }
-        //print_r($data['student_Details']);exit;
-        if($this->session->userdata('companey_id')!=67){
+		//print_r($data['student_Details']);exit;
+		if($this->session->userdata('companey_id')!=67){
         $data['vid_list'] = $this->schedule_model->vid_list();  
         $data['faq_list'] = $this->schedule_model->faq_list(); 
         $data['country'] = $this->location_model->country();
-        $data['ins_list'] = $this->location_model->stu_ins_list();
+		$data['ins_list'] = $this->location_model->stu_ins_list();
         $data['schdl_list'] = $this->schedule_model->get_schedule_list();
-        }
-        $data['source_list'] = $this->home_model->sour_list();
-        $data['process_list'] = $this->home_model->pro_list();
-        $data['invoice_details'] = $this->home_model->invoicedetail($en_id);        
+		}
+		$data['source_list'] = $this->home_model->sour_list();
+		$data['process_list'] = $this->home_model->pro_list();
+        $data['invoice_details'] = $this->home_model->invoicedetail($en_id);		
         $data['state_list'] = $this->home_model->estate_list();
         $data['city_list'] = $this->home_model->ecity_list();
-        $data['agrrem_doc'] = $this->home_model->aggr_doc($en_id);
-        $data['country_list'] = $this->home_model->cntry_list();
-        //$data['all_input'] = $this->location_model->input_list();
-        //$data['all_dynamic'] = $this->location_model->dynamic_list($en_id);
-        $data['all_institute'] = $this->location_model->institute_data($en_id);
-        $data['discipline'] = $this->location_model->find_discipline();
-        $data['level'] = $this->location_model->find_level();
-        $data['length'] = $this->location_model->find_length();
-        $data['course_list'] = $this->Institute_model->courselist();
-        $data['institute_list'] = $this->Institute_model->institutelist();
-        $data['institute'] = $this->Institute_model->findinstitute();
-        $data['all_extra'] = $this->location_model->get_qualification_tab($en_id);
-        //echo "<pre>";
+		$data['agrrem_doc'] = $this->home_model->aggr_doc($en_id);
+		$data['country_list'] = $this->home_model->cntry_list();
+		//$data['all_input'] = $this->location_model->input_list();
+		//$data['all_dynamic'] = $this->location_model->dynamic_list($en_id);
+		$data['all_institute'] = $this->location_model->institute_data($en_id);
+		$data['discipline'] = $this->location_model->find_discipline();
+		$data['level'] = $this->location_model->find_level();
+		$data['length'] = $this->location_model->find_length();
+		$data['course_list'] = $this->Institute_model->courselist();
+		$data['institute_list'] = $this->Institute_model->institutelist();
+		$data['institute'] = $this->Institute_model->findinstitute();
+		$data['all_extra'] = $this->location_model->get_qualification_tab($en_id);
+		//echo "<pre>";
         // print_r($data['all_extra']);exit();echo "</pre>";
         $data['content'] = $this->load->view('student/profile_wrapper', $data, true);
         $this->load->view('layout/main_wrapper', $data);
@@ -1930,20 +1946,20 @@ $newdt = date('Y-m-d',strtotime($tempdate));
     }
 
 public function my_applications() {
-        $data['title'] = display('my_applications');
+		$data['title'] = display('my_applications');
         $user_id = $this->session->userdata('user_id');
-        $data['my_app'] = $this->location_model->get_wislist($user_id);
-        $data['my_history'] = $this->location_model->get_history($user_id);
+		$data['my_app'] = $this->location_model->get_wislist($user_id);
+		$data['my_history'] = $this->location_model->get_history($user_id);
         $data['content'] = $this->load->view('student/my_applications', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }
-public function menu_style() {  
-        if($this->session->menu==1){
+public function menu_style() {	
+		if($this->session->menu==1){
         $this->session->set_userdata('menu',2);
-        }else{
-         $this->session->set_userdata('menu',1);    
-        }
-        redirect($this->agent->referrer());
+		}else{
+		 $this->session->set_userdata('menu',1);	
+		}
+		redirect($this->agent->referrer());
     }
 public function set_layout_to_session() {
         $layout = $this->input->post('layout');
@@ -1953,18 +1969,18 @@ public function set_layout_to_session() {
 public function add_wishlist() {
     $crs=$this->uri->segment(3);
     $ins=$this->uri->segment(4);
-    $stu=$this->session->userdata('user_id');
-    $comp=$this->session->userdata('companey_id');
+	$stu=$this->session->userdata('user_id');
+	$comp=$this->session->userdata('companey_id');
     $data = array(
         'comp_id'=>$comp,
         'stu_id'=>$stu,
-        'uni_id'=>$ins,
+		'uni_id'=>$ins,
         'crs_id'=>$crs
     );
     $this->db->insert('tbl_wishlist',$data);
-    redirect('dashboard/search_programs');
+	redirect('dashboard/search_programs');
     }
-    /********************************************************student panel*******************************************/
+	/********************************************************student panel*******************************************/
 
 
 }

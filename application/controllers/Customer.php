@@ -86,6 +86,8 @@ class Customer extends CI_Controller {
         $this->form_validation->set_rules('date_of_birth', display('date_of_birth'), 'max_length[10]');
         $this->form_validation->set_rules('address', display('address'), 'required|max_length[255]');
         $this->form_validation->set_rules('status', display('status'), 'required');
+        $this->form_validation->set_rules('a_validupto', 'Valid Upto', 'required');
+        $this->form_validation->set_rules('a_accounttype', 'Account Type' , 'required');
         #-------------------------------#
         //picture upload
         $picture = $this->fileupload->do_upload(
@@ -136,6 +138,8 @@ class Customer extends CI_Controller {
                 'degree' => $this->input->post('degree', true),
                 'created_by' => $this->session->userdata('user_id'),
                 'create_date' => date('Y-m-d'),
+                'account_type'=> ($this->input->post("a_accounttype")) ? $this->input->post("a_accounttype") : "",
+                'valid_upto'=> ($this->input->post("a_validupto")) ? date('Y-m-d',strtotime($this->input->post("a_validupto"))) : "",
                 'status' => $this->input->post('status', true),
             ];
         } else { //update a user
@@ -162,6 +166,8 @@ class Customer extends CI_Controller {
                 'blood_group' => $this->input->post('blood_group', true),
                 'degree' => $this->input->post('degree', true),
                 'created_by' => $this->session->userdata('user_id'),
+                'account_type'=> ($this->input->post("a_accounttype")) ? $this->input->post("a_accounttype") : "",
+                'valid_upto'=> ($this->input->post("a_validupto")) ? date('Y-m-d',strtotime($this->input->post("a_validupto"))) : "",
                 'create_date' => date('Y-m-d'),
                 'status' => $this->input->post('status', true),
             ];

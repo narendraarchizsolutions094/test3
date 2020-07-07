@@ -24,14 +24,14 @@ class Ticket_Model extends CI_Model {
 			$ndate = (!empty($cdate[2])) ? $cdate[2]."-".$cdate[0]."-".$cdate[1] : date("Y-m-d"); 
 			
 			$arr = array(
-				"message"    => $this->input->post("remark", true),
+				"message"    => ($this->input->post("remark", true)) ? $this->input->post("remark", true) : '' ,
 				"category"   => $this->input->post("relatedto", true),
 				"other"      => ($_POST["relatedto"] == "Others") ? $this->input->post("otherrel", true ) : "",
-				"product"	 => $this->input->post("product", true),
-				"sourse"     => $this->input->post("source", true),
+				"product"	 => ($this->input->post("product", true)) ? $this->input->post("product", true) : "",
+				"sourse"     => ($this->input->post("source", true)) ? $this->input->post("source", true) : "",
 				"coml_date"	 => $ndate,
 				"last_update"=> date("Y-m-d h:i:s"),
-				"priority"	 =>  $this->input->post("priority", true), 
+				"priority"	 => ($this->input->post("priority", true)) ? $this->input->post("priority", true) : "", 
 			);
 			
 			if(!empty($_FILES["attachment"]["name"]))
@@ -52,15 +52,15 @@ class Ticket_Model extends CI_Model {
 				$this->db->update("tbl_ticket", $arr);
 				
 				$ret  = $this->db->affected_rows();
-				
+				return $ret;
 			}
 			else
 			{
 				
-				$arr["name"]   		=  $this->input->post("name", true);
-				$arr["email"]  		=  $this->input->post("email", true);
+				$arr["name"]   		=  ($this->input->post("name", true)) ? $this->input->post("name", true) : "";
+				$arr["email"]  		=  ($this->input->post("email", true)) ? $this->input->post("email", true) : "";
 				$arr["send_date"]  	= date("Y-m-d h:i:s");
-				$arr["client"]     	= $this->input->post("client", true);
+				$arr["client"]     	= ($this->input->post("client", true)) ? $this->input->post("client", true) : "";
 				$arr["company"]	 	= $companey_id ;
 				$arr["added_by"] 	= $user_id ;
 				$arr["ticketno"] 	= "";
@@ -81,24 +81,24 @@ class Ticket_Model extends CI_Model {
 				if(!empty($insid))
 				{
 					
-					$insarr = array("tck_id" => $insid,
-									"parent" => 0,
-									"subj"   => "",
-									"msg"    => $this->input->post("remark", true),
+					$insarr = array("tck_id" 	=> $insid,
+									"parent" 	=> 0,
+									"subj"   	=> "",
+									"msg"    	=> ($this->input->post("remark", true)) ? $this->input->post("remark", true) : '' ,
 									"attacment" => "",
-									"status"  => 0,
+									"status"  	=> 0,
 									"send_date" =>	date("Y-m-d h:i:s"),
-									"client"   => $this->input->post("client", true),
-									"added_by" => $user_id,
+									"client"   	=> ($this->input->post("client", true)) ? $this->input->post("client", true) : '',
+									"added_by" 	=> $user_id,
 									
 									);
 					$ret = $this->db->insert("tbl_ticket_conv", $insarr);
-					
+					return $ret;
 					
 				}
 				else
 				{
-					  $this->session->set_flashdata('message', 'Failed to add ticket');
+					 $this->session->set_flashdata('message', 'Failed to add ticket');
           
 				}	
 			}	

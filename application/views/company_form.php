@@ -208,6 +208,22 @@
                                     <textarea name="a_companyaddress" class="form-control"  placeholder="<?php echo display('Company_address') ?>" maxlength="140" rows="7" id="address2"><?php echo $doctor->a_companyaddress ?></textarea>
                                </div>
                             </div>
+                            <div class="form-group row">
+                                <label for="a_companyaddress" class="col-xs-3 col-form-label">Account Type </label>
+                                <div class="col-xs-9">
+                                	<select name="a_accounttype" class="form-control">
+                                		<option value="1">Live</option>
+                                		<option value="2">Trial</option>
+                                	</select>
+                               </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="a_companyaddress" class="col-xs-3 col-form-label">Valid Upto : </label>
+                                <div class="col-xs-9">
+                                    <input name="a_validupto" value="<?=date('Y-m-d', strtotime(date('Y-m-d'). ' + 7 days'));?>" class="form-control"  placeholder="Valid Upto"  id="validupto"/>
+                               </div>
+                            </div>
 							
 															<div class="form-group row">
                                 <label class="col-sm-3"><?php echo display('status') ?></label>
