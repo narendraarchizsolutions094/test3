@@ -40,6 +40,8 @@
                             <td class="center">
                                 <a href="<?php echo base_url("lead/edit_datasource/$datasource->datasource_id") ?>" class="btn btn-xs  btn-primary"><i class="fa fa-edit"></i></a> 
                                 <a href="<?php echo base_url("lead/delete_datasource/$datasource->datasource_id") ?>" onclick="return confirm('<?php echo display("are_you_sure") ?>')" class="btn btn-xs  btn-danger"><i class="fa fa-trash"></i></a> 
+                                <a href="<?php echo base_url("lead/view_datasource_data/$datasource->datasource_id") ?>" class="btn btn-xs  btn-info">View Data</a> 
+
                             </td>
                         </tr>
                         <?php $sl++; ?>

@@ -13,8 +13,7 @@ class Lead extends CI_Controller {
         }
     }
 
-public function view_datasource_data($did){
-    if (user_role('290') == true) {}
+public function view_datasource_data($did){    
     $data['title'] = 'Datasource raw data';        
     $data['datasource_id'] = $did;            
     $data['raw_data']    =   $this->db->select('enquiry2.*,tbl_product.product_name')->from('enquiry2')   
