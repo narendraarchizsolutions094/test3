@@ -2612,7 +2612,7 @@ $cpny_id=$this->session->companey_id;
         $result = $query->result();
         $enquiry = $lead = $client = 0;
         foreach($result as $r)
-        {
+        { 
             if($r->status == 1)
             {
                 $enquiry = (!empty($r->counter)) ? $r->counter : 0;
