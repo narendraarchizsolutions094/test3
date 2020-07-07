@@ -2610,7 +2610,7 @@ $cpny_id=$this->session->companey_id;
 
     	$query = $this->db->query("SELECT count(enquiry.enquiry_id)counter,enquiry.status FROM enquiry WHERE $where GROUP BY enquiry.status");
         $result = $query->result();
-
+        $enquiry = $lead = $client = 0;
         foreach($result as $r)
         {
             if($r->status == 1)
