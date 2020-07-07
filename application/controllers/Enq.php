@@ -21,7 +21,8 @@ class Enq extends CI_Controller {
     // 	print_r($this->session->process);
     // }
     public function index($all='') {
-        if (user_role('60') == true) {}  
+        if (user_role('60') == true) {} 
+        $this->load->model('Datasource_model'); 
         
         $data['sourse'] = $this->report_model->all_source();
 		$data['datasourse'] = $this->report_model->all_datasource();
@@ -35,7 +36,8 @@ class Enq extends CI_Controller {
 		}		
         
         $data['title'] = display('enquiry_list');
-		
+
+        $data['subsource_list'] = $this->Datasource_model->subsourcelist();		
 		$data['user_list'] = $this->User_model->companey_users();
 		$data['created_bylist'] = $this->User_model->user_list();
         $data['products'] = $this->dash_model->get_user_product_list();

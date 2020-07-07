@@ -34,8 +34,9 @@ class Enquiry_datatable_model extends CI_Model {
         $from_created           =   !empty($enquiry_filters_sess['from_created'])?$enquiry_filters_sess['from_created']:'';       
         $to_created             =   !empty($enquiry_filters_sess['to_created'])?$enquiry_filters_sess['to_created']:'';
         $source                 =   !empty($enquiry_filters_sess['source'])?$enquiry_filters_sess['source']:'';
+        $sub_source             =   !empty($enquiry_filters_sess['subsource'])?$enquiry_filters_sess['subsource']:'';
         $email                  =   !empty($enquiry_filters_sess['email'])?$enquiry_filters_sess['email']:'';
-        $employee               =   !empty($enquiry_filters_sess['employee'])?$enquiry_filters_sess['employee']:'';
+        $employee               =   !empty($enquiry_filters_sess['employee'])?$enquiry_filters_sess['employee']:''; 
         $datasource             =   !empty($enquiry_filters_sess['datasource'])?$enquiry_filters_sess['datasource']:'';
         $company                =   !empty($enquiry_filters_sess['company'])?$enquiry_filters_sess['company']:'';
         $enq_product            =   !empty($enquiry_filters_sess['enq_product'])?$enquiry_filters_sess['enq_product']:'';
@@ -131,6 +132,11 @@ class Enquiry_datatable_model extends CI_Model {
         if(!empty($source)){                       
             $where .= " AND enquiry.enquiry_source =  '".$source."'";                                    
         }
+        
+        if(!empty($sub_source)){                       
+            $where .= " AND enquiry.sub_source =  '".$sub_source."'";                                    
+        }
+
         if(!empty($employee)){          
             $where .= " AND CONCAT_WS(' ',enquiry.name_prefix,enquiry.name,enquiry.lastname) LIKE  '%$employee%' ";
         }

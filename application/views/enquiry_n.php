@@ -1,7 +1,3 @@
-<!-- <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment-with-locales.min.js"></script>
-
-<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/3.1.3/js/bootstrap-datetimepicker.min.js"></script> -->
-
 <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script> 
 <style>
@@ -167,6 +163,10 @@ input[name=lead_stages]{
                     <li>
                       <label>
                       <input type="checkbox" value="source" id="sourcecheckbox" name="filter_checkbox"> Source</label>
+                    </li>                
+                    <li>
+                      <label>
+                      <input type="checkbox" value="subsource" id="subsourcecheckbox" name="filter_checkbox">Sub Source</label>
                     </li>                
                    <li>
                       <label>
@@ -365,6 +365,19 @@ input[name=lead_stages]{
 
                           </select>
                         </div>
+
+                        <div class="form-group col-md-3" id="subsourcefilter">
+                          <label for="subsource"><?php echo display("subsource"); ?></label>
+                          <select class="form-control" name="subsource" id="subsource">
+                              <option value="" style="display:">---Select Sub Source---</option>
+                               <?php foreach ($subsource_list as $row) {?>                                
+                                 <option value="<?=$row->subsource_id?>" <?php if(!empty(set_value('subsource'))){if (in_array($row->lsid,set_value('subsource'))) {echo 'selected';}}?>><?=$row->subsource_name?></option>
+                              <?php }?>
+
+                          </select>
+                        </div>
+
+
                         <div class="form-group col-md-3" id="emailfilter">
                           <label for=""><?php echo display("email"); ?></label>
                           <input type="text" name="email" class="form-control">
@@ -1480,6 +1493,12 @@ if (!enq_filters.includes('source')) {
   $("input[value='source']").prop('checked', true);
 }
 
+if (!enq_filters.includes('subsource')) {
+  $('#subsourcefilter').hide();
+}else{
+  $("input[value='subsource']").prop('checked', true);
+}
+
 if (!enq_filters.includes('phone')) {
   $('#phonefilter').hide();
 }else{
@@ -1561,6 +1580,19 @@ $('#buttongroup').hide();
           $('#sourcefilter').hide();
           $("#buttongroup").hide();
         }
+
+
+        if($('#subsourcecheckbox').is(":checked")){
+          $('#subsourcefilter').show();
+          $("#buttongroup").show();
+        }
+        else{
+          $('#subsourcefilter').hide();
+          $("#buttongroup").hide();
+        }
+
+
+
         if($('#emailcheckbox').is(":checked")){
           $('#emailfilter').show();
         }

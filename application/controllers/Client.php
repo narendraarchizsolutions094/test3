@@ -49,23 +49,23 @@ class Client extends CI_Controller {
     }
 
     public function index() {
-        $this->session->unset_userdata('enquiry_filters_sess');
-        
+        $this->session->unset_userdata('enquiry_filters_sess');        
         if (user_role('80') == true) {}  
          if(!empty($this->session->enq_type)){
             $this->session->unset_userdata('enq_type',$this->session->enq_type);
         }       
+        $this->load->model('Datasource_model');         
         $data['title'] = display('client_list');
         $data['user_list'] = $this->User_model->companey_users();
-        $data['products'] = $this->dash_model->get_user_product_list();
-        
+        $data['products'] = $this->dash_model->get_user_product_list();        
         $data['drops']      = $this->enquiry_model->get_drop_list();        
         $data['lead_score'] = $this->enquiry_model->get_leadscore_list(); 
-         $data['created_bylist'] = $this->User_model->user_list();
-         $data['sourse'] = $this->report_model->all_source();
-         $data['datasourse'] = $this->report_model->all_datasource(); 
-	   $data['dfields']  = $this->enquiry_model-> getformfield();		 
+        $data['created_bylist'] = $this->User_model->user_list();
+        $data['sourse'] = $this->report_model->all_source();
+        $data['datasourse'] = $this->report_model->all_datasource(); 
+	    $data['dfields']  = $this->enquiry_model-> getformfield();		 
         $data['data_type'] = 3;
+        $data['subsource_list'] = $this->Datasource_model->subsourcelist();     
         $data['content'] = $this->load->view('enquiry_n', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }

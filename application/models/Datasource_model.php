@@ -61,6 +61,7 @@ class Datasource_model extends CI_Model {
     public function subsourcelist() {
         return $this->db->select("*")
                         ->from("tbl_subsource")
+                        ->where('tbl_subsource.comp_id',$this->session->companey_id)                        
                         ->get()
                         ->result();
     }

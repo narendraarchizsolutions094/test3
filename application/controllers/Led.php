@@ -18,29 +18,22 @@ class Led extends CI_Controller {
    	public function index() {
         $this->session->unset_userdata('enquiry_filters_sess');
         $process_id = $this->session->userdata('process');
-        // print_r($process_id);exit();
-        
         if (user_role('70') == true) {}  
          if(!empty($this->session->enq_type)){
 			$this->session->unset_userdata('enq_type',$this->session->enq_type);
 		}		
+        $this->load->model('Datasource_model'); 
         $data['title'] = display('lead_list');
 		$data['user_list'] = $this->User_model->companey_users();
-
-        $data['products'] = $this->dash_model->get_user_product_list();
-        
+        $data['products'] = $this->dash_model->get_user_product_list();        
         $data['sourse'] = $this->report_model->all_source();
 		$data['datasourse'] = $this->report_model->all_datasource();
         $data['drops'] 		= $this->enquiry_model->get_drop_list();		
 		$data['lead_score'] = $this->enquiry_model->get_leadscore_list();	
 		$data['created_bylist'] = $this->User_model->user_list();	
 		$data['data_type'] = 2;
-       // $data['lead_stages'] = $this->Leads_Model->get_leadstage_list_byprocess1($process_id);
-       // $data['leadstages_withoutpro'] = $this->Leads_Model->get_leadstage_withoutprocess();
 		$data['dfields']  = $this->enquiry_model-> getformfield();
-		
-        // print_r($data['lead_stages']);exit();
-        // echo $this->db->last_query();
+		$data['subsource_list'] = $this->Datasource_model->subsourcelist();		
         $data['content'] = $this->load->view('enquiry_n', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }
