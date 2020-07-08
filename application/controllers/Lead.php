@@ -417,7 +417,9 @@ public function select_app_by_ins() {
 
             $lead_stage_name = $this->input->post('stage_name');
             $process = $this->input->post('process');
-
+            if (!empty($process)) {
+                $process    =   implode(',', $process);
+            }
             $data = array(
                 'lead_stage_name' => $lead_stage_name,
                 'process_id'   => $process,
@@ -459,7 +461,9 @@ public function select_app_by_ins() {
             $stage_name = $this->input->post('stage_name');
             $stage_id = $this->input->post('stage_id');
             $process = $this->input->post('process');
-
+            if (!empty($process)) {
+                $process    =   implode(',', $process);
+            }
             $this->db->set('lead_stage_name', $stage_name);
             $this->db->set('process_id', $process);
             $this->db->where('stg_id', $stage_id);
