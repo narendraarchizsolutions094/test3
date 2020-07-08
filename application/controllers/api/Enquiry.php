@@ -1615,7 +1615,8 @@ class Enquiry extends REST_Controller {
     	$process_id = $this->input->post('process_id');
 		$companey_id = $this->input->post('company_id');
 		
-		$process = implode(',',$process_id);
+		//$process = implode(',',$process_id);
+		$process = $process_id;
     	
     	
 		define('FIRST_NAME',1);
