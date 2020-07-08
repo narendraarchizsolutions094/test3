@@ -35,13 +35,14 @@ class Client extends REST_Controller {
     public function active_clients_post(){   
        $user_id= $this->input->post('user_id');
        $process_id= $this->input->post('process_id');
+       $process = implode(",", $process_id);
 
             $res= array();
             if(!empty($user_id)){
                     $user_role1 = $this->User_model->read_by_id($user_id); 
                     if(!empty($user_role1)){
               $user_role=$user_role1->user_roles;
-             $data['active_enquiry'] = $this->enquiry_model->active_enqueries_api($user_id,3,$user_role,$process_id);
+             $data['active_enquiry'] = $this->enquiry_model->active_enqueries_api($user_id,3,$user_role,$process);
     
                if(!empty($data['active_enquiry']->result())){
                   $res= array();
