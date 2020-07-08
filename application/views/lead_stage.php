@@ -122,8 +122,7 @@
             $process_ids    =   explode(',', $stage->process_id);
         }
         ?>
-      <select  class="form-control process" name="process[]" multiple>
-        <option>Select</option>
+      <select  class="form-control process" name="process[]" multiple>        
          <?php foreach($products as $product){?>
          <option value="<?=$product->sb_id ?>" <?php if(!empty($process_ids) && in_array($product->sb_id, $process_ids)){?>selected <?php }?>><?=$product->product_name ?></option>
         <?php } ?>
