@@ -1634,7 +1634,7 @@ class Enquiry extends REST_Controller {
 		$comp_id 	=	$companey_id;
 		$this->db->select("*");
 		$this->db->from('enquiry_fileds_basic');
-		$where = " FIND_IN_SET($process_id,process_id) AND comp_id = {$comp_id} AND status=1";
+		$where = " FIND_IN_SET(process_id,$process_id) AND comp_id = {$comp_id} AND status=1";
 		$this->db->where($where);
 		$field_list	= $this->db->get()->result_array();
 
