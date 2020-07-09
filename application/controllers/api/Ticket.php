@@ -134,6 +134,7 @@ class Ticket extends REST_Controller {
 /// api for updating an existing ticket
   public function updateTicket_post()
   {      
+    //echo "string;";die;
     $company_id   = $this->input->post('company_id'); //mandatory to passs
     $user_id      = $this->input->post('user_id'); //mandatory to passs
     $ticketno     = $this->input->post('ticketno'); //mandatory to passs
@@ -149,7 +150,7 @@ class Ticket extends REST_Controller {
         $this->set_response([
         'status'      => TRUE,            
         'insertId'    => $inserted,
-        'msg'         => "ticket created successfully"
+        'msg'         => "ticket Updated successfully"
         ], REST_Controller::HTTP_OK);   
       }
       else

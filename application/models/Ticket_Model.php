@@ -46,7 +46,8 @@ class Ticket_Model extends CI_Model {
 			}
 			
 			if(isset($_POST["ticketno"]))
-			{
+			{	
+				//echo "string;";die;
 				
 				$this->db->where("ticketno", $this->input->post("ticketno", true));
 				$this->db->update("tbl_ticket", $arr);
@@ -57,8 +58,8 @@ class Ticket_Model extends CI_Model {
 			else
 			{
 				
-				$arr["name"]   		=  ($this->input->post("name", true)) ? $this->input->post("name", true) : "";
-				$arr["email"]  		=  ($this->input->post("email", true)) ? $this->input->post("email", true) : "";
+				$arr["name"]   		= ($this->input->post("name", true)) ? $this->input->post("name", true) : "";
+				$arr["email"]  		= ($this->input->post("email", true)) ? $this->input->post("email", true) : "";
 				$arr["send_date"]  	= date("Y-m-d h:i:s");
 				$arr["client"]     	= ($this->input->post("client", true)) ? $this->input->post("client", true) : "";
 				$arr["company"]	 	= $companey_id ;
