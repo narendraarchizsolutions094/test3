@@ -1808,5 +1808,42 @@ public function get_enq_list_post(){
 		echo "<pre>";
 		print_r($_POST);
 		echo "</pre>";
+		$curl = curl_init();
+		
+		$fname = $this->input->post('name');
+		$mobile = $this->input->post('mobile_no_1589146856501');
+		$city = $this->input->post('city_1589147378529');
+		$visa_type = $this->input->post('visa_type_1589147351535');
+		$country = $this->input->post('country_you_wish_to_apply_for_1589147152924');
+		$message = $this->input->post('message');
+
+		$city = $city.' '.$country;
+
+		if ($visa_type == 'study-visa') {
+			$process_id = 146;
+		}else if ($visa_type == 'tourist-visa') {
+			$process_id = 147;
+		}else if ($visa_type == 'spouse-visa') {
+			$process_id = 148;
+		}else if ($visa_type == 'schooling-visa') {
+			$process_id = 149;
+		}
+		
+		curl_setopt_array($curl, array(
+		  CURLOPT_URL => "https://thecrm360.com/new_crm/api/enquiry/create",
+		  CURLOPT_RETURNTRANSFER => true,
+		  CURLOPT_ENCODING => "",
+		  CURLOPT_MAXREDIRS => 10,
+		  CURLOPT_TIMEOUT => 0,
+		  CURLOPT_FOLLOWLOCATION => true,
+		  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+		  CURLOPT_CUSTOMREQUEST => "POST",
+		  CURLOPT_POSTFIELDS => array('fname' => $fname,'email' => $email,'mobileno' => $mobile,'company_id' => '67','enquiry' => $message,'process_id' => $process_id,'user_id' => '295','address'=>$city),
+		  CURLOPT_HTTPHEADER => array(
+		    "Cookie: ci_session=3ba7d4lq4alv2pgpq3sc8t2ojrh41s04"
+		  ),
+		));
+		$response = curl_exec($curl);
+		curl_close($curl);
 	}
 }
