@@ -3,9 +3,7 @@ use Restserver\Libraries\REST_Controller;
 defined('BASEPATH') OR exit('No direct script access allowed');
 require APPPATH . 'libraries/REST_Controller.php';
 require APPPATH . 'libraries/Format.php';
-
 class Enquiry extends REST_Controller {
-
     function __construct()
     {
         parent::__construct();
@@ -20,7 +18,6 @@ class Enquiry extends REST_Controller {
 		
 		$this->load->library('email'); 
    // $this->lang->load('notifications_lang', 'english');   
-
 		
            $this->load->helper('url');
            $this->methods['users_get']['limit'] = 500; 
@@ -58,12 +55,10 @@ class Enquiry extends REST_Controller {
 	        }else{
 	          $enquiry_date = date('d/m/Y');
 	        } 
-
            $city_id= $this->db->select("*")
 			->from("city")
 			->where('id',$this->input->post('city'))
 			->get();
-
 			
 		if ($this->form_validation->run() === true) {
              $name = $this->input->post('fname');
@@ -108,13 +103,11 @@ class Enquiry extends REST_Controller {
             
             	$this->db->where('Enquery_id',$this->input->post('update'));
             	$insert_id = $this->db->update('enquiry',$postData);
-
             	$this->db->select('enquiry.Enquery_id,enquiry.enquiry_id');
 			    $this->db->where('Enquery_id',$this->input->post('update'));
 			    $e_row	=	$this->db->get('enquiry')->row_array();
 			    $msg	=	'Enquiry successfully updated';
 			
-
             }else{
             	$postData['Enquery_id'] = $encode;
             	$this->enquiry_model->create($postData);
@@ -124,11 +117,7 @@ class Enquiry extends REST_Controller {
 			    $e_row	=	$this->db->get('enquiry')->row_array();
 			    $msg	=	'Enquiry successfully created';
             }
-
-
-
 			if ($insert_id) {
-
 			    foreach($this->input->post() as $ind => $val){         
 			    	if(is_int($ind)){			    	
 						$biarr = array( 
@@ -144,20 +133,16 @@ class Enquiry extends REST_Controller {
 						$this->db->where('parent',$e_row['enquiry_id']);
 						
 						if($this->db->get('extra_enquery')->num_rows()){					    
-
 						    $this->db->where('enq_no',$e_row['Enquery_id']);        
 						    $this->db->where('input',$ind);        
 						    $this->db->where('parent',$e_row['enquiry_id']);
 						    $this->db->set('fvalue',$val);
 						    $this->db->update('extra_enquery');
-
 						}else{
 						    $this->db->insert('extra_enquery',$biarr);
 						}
 					}
 				}
-
-
 				$this->set_response([
                 'status' => TRUE,
                 'message' => $msg
@@ -183,40 +168,27 @@ class Enquiry extends REST_Controller {
   public function send_message_post(){
     
     $Enquery_id = $this->input->post('enquery_code');
-
     $template_id = $this->input->post('template_id');
     
     $user_id = $this->input->post('user_id');
-
     $this->form_validation->set_rules('enquery_code','Inquiry Code','required');
     $this->form_validation->set_rules('template_id','Template ID','required');
     $this->form_validation->set_rules('user_id','User ID','required');
-
     if($this->form_validation->run() == true){
-
     
     $this->db->where('pk_i_admin_id',$user_id);
     $user_row  = $this->db->get('tbl_admin')->row_array();
-
     $this->db->where('temp_id',$template_id);
-
     $template_row = $this->db->get('api_templates')->row();
     $Templat_subject = $template_row->mail_subject;
     $message_name = $template_row->template_content;
-
       
-
           $enq = $this->enquiry_model->enquiry_by_code($Enquery_id);
           //echo $enq->email;
-
           if(!empty($enq->email)){
-
               $to = $enq->email;
-
               $name1 = $enq->name_prefix.' '.$enq->name.' '.$enq->lastname;
-
               $msg = str_replace('@name',$name1,str_replace('@org',$user_row['orgisation_name'],str_replace('@web',$user_row['website'],str_replace('@desg',$user_row['designation'],str_replace('@phone',$user_row['contact_phone'],str_replace('@desg',$user_row['designation'],str_replace('@user',$user_row['s_display_name'].' '.$user_row['last_name'],$message_name)))))));
-
                      
               if($this->Message_models->send_mail($to,$msg,$Templat_subject,'')){
                $msg= 'Email sent successfully';
@@ -224,19 +196,13 @@ class Enquiry extends REST_Controller {
                       'status' => true,
                       'message' =>$msg
                    ], REST_Controller::HTTP_OK);
-
              }else{
                $msg= 'Something went wrong!';
                $this->set_response([
                       'status' => false,
                       'message' =>$msg
                    ], REST_Controller::HTTP_OK);
-
              }
-
-
-
-
           }else{
                $msg= 'Email does not exist for this inquiry';
                $this->set_response([
@@ -254,22 +220,14 @@ class Enquiry extends REST_Controller {
              ], REST_Controller::HTTP_OK);
     }
   }
-
   public function get_mail_template_post(){
     
     $this->db->where('temp_for',3);
-
     $this->db->where('response_type',1);
-
     $res=$this->db->get('api_templates');
-
     $q=$res->result_array();
-
-
     $template = array();
-
     foreach($q  as $value){
-
       array_push($template,array('template_id'=>$value['temp_id'],'template_value' => $value['template_name'] ) );     
     
     }
@@ -284,7 +242,6 @@ class Enquiry extends REST_Controller {
           'template' => $template,
            ], REST_Controller::HTTP_OK);
     }
-
   }
 	public function addtimeline_post(){	
 		$this->form_validation->set_rules("phone", "Phone", "trim|required");
@@ -310,20 +267,16 @@ class Enquiry extends REST_Controller {
 			
 			//echo $this->db->last_query();
 			//print_r($resarr);
-
 			if(!empty($res)){
 			$ins = false;								
         	$this->load->model("leads_model");				
-
 			
           
 	          $Enquery_id  = $res->Enquery_id;
 	          $stage_id = '';
 	          $stage_desc = '';
 	          $stage_remark = json_encode($this->input->post());
-
 	          $user_id = '';
-
 				$ret = $this->leads_model->add_comment_for_events_stage_api("Voice Call",$Enquery_id,$stage_id,$stage_desc,$stage_remark,$user_id,5);					          
 					
 	        	if($ret){
@@ -339,26 +292,22 @@ class Enquiry extends REST_Controller {
 				$this->set_response(["status"     => False,
 				 "message"   => "Failed to add "], REST_Controller::HTTP_OK);
 		}
-
 	}else{
 		$this->set_response(["status"     => false,
 				 "message"   => "Mobile No not found"], REST_Controller::HTTP_OK);
 	}
-
 	}else{
 	$this->set_response(["status"     => False,
 				 "message"   => "Failed to add ".strip_tags(validation_errors())], REST_Controller::HTTP_OK);
 	}
 		
 	}
-
 	public function timeline_post(){
 		
 		$enquiry_id = $this->input->post('enqueryno', true); 
 		$this->load->model("Leads_Model");
 		
 		$cmntarr = $this->Leads_Model->comment_byId($enquiry_id);
-
 		$tmlinearr  = array();
 		
 		if(!empty($enquiry_id)) {
@@ -398,7 +347,6 @@ class Enquiry extends REST_Controller {
 			
 		}				 
 	}
-
 	public function addfieldans_post(){		// this is for paisa expo enquiry capturring		
 		$this->db->insert('test',array('res'=>json_encode($_POST)));
 		$comp_id = 29;		
@@ -410,7 +358,6 @@ class Enquiry extends REST_Controller {
 		      ->where('comp_id',$comp_id)
 		      ->where('TRIM(city)',trim($this->input->post('city')))
 		      ->get();
-
 		      	$product	=	$this->input->post('product');
 		      	if (!empty($product)) {
 		      		$product_row	=	$this->db->select("*")
@@ -422,7 +369,6 @@ class Enquiry extends REST_Controller {
 				$mob	=	$this->input->post('mobileno');
 				$marr	=	explode('_', $mob);				
 				//print_r($marr);
-
 				if (!empty($marr[1])) {
 					$this->db->where('phone',$marr[0]);					
 					$this->db->where('enquiry_subsource',$marr[1]);					
@@ -448,7 +394,6 @@ class Enquiry extends REST_Controller {
 				}else{
 					$encode = $this->get_enquery_code();
 				}
-
 				if (isset($_POST["gender"])) {
 					if ($this->input->post('gender')=='Male') {
 						$gender = 1;
@@ -507,13 +452,11 @@ class Enquiry extends REST_Controller {
 			
 				$insarr['Enquery_id'] = $encode;
 				$insarr['lead_stage'] = 172; 		//first form submitted;
-
 				$ret = $this->db->insert('enquiry', $insarr);	
 				$enqno = $this->db->insert_id();		
 				$comment = $this->lang->line("enquery_create");
                 $this->Leads_Model->add_comment_for_events_stage_api($comment, $encode,0,'','',191,0);
                 $this->Leads_Model->add_comment_for_events_stage_api('Stage Updated', $encode,172,'','',191,0);
-
 				$process_id	=	$this->input->post('process_id', true);				
 				if ($process_id == 95 || $process_id == 91) {
 					$meta_arr = array(
@@ -525,7 +468,6 @@ class Enquiry extends REST_Controller {
 					);
 					$this->db->insert('paisa_expo_enquiry_meta',$meta_arr);	
 				}			
-
 			}
             if ($this->input->post('bankname')) {
 	            $res = $this->enquiry_model->get_deal($encode);            
@@ -600,7 +542,6 @@ class Enquiry extends REST_Controller {
 			 "message"   => "Failed to add ".validation_errors()], REST_Controller::HTTP_OK);
 		}		
 	}
-
 	public function addfields_post(){
 		
 	//	$this->form_validation->set_rules("key","Key", "trim|required");
@@ -672,8 +613,6 @@ class Enquiry extends REST_Controller {
 			return true;
 		}
 	}
-
-
   public function update_post()
   {  
     $enquiry_id = $this->input->post('Enquiry_id'); 
@@ -682,9 +621,7 @@ class Enquiry extends REST_Controller {
     echo "<pre>";
     print_r($_POST);
     exit();
-
    */
-
     $this->form_validation->set_rules('Enquiry_id','Enquiry Id '  ,'required');
     $this->form_validation->set_rules('user_id','User Id '  ,'required');
   //  $this->form_validation->set_rules('enquiry_type','Inquiry type '  ,'required');
@@ -696,7 +633,6 @@ class Enquiry extends REST_Controller {
     if ($this->form_validation->run() == true) {
     if(!empty($_POST)){
     
-
 	  /*********hhhhhhhhhhhhhh*******/
 	        $name = $this->input->post('fname');
             $email = $this->input->post('email');
@@ -724,9 +660,7 @@ class Enquiry extends REST_Controller {
             $this->db->where('Enquery_id', $enquiry_id);
             $this->db->update('enquiry');			
             if($this->db->affected_rows()>0){
-
            // echo $this->db->last_query();
-
         /*  $ld_updt_by = $this->input->post('user_id');
           $enquiry_row = $this->enquiry_model->enquiry_by_code($enquiry_id);
           $created_by_user_id = $enquiry_row->created_by;
@@ -740,12 +674,8 @@ class Enquiry extends REST_Controller {
           
           $enq_of_name = $enquiry_row->name_prefix.''.$enquiry_row->name.' '.$enquiry_row->lastname;
           $notification_msg = sprintf($this->lang->line('enquiry_update_text'),trim($enq_of_name),trim($updated_by_name));
-
           $this->Message_models->sendwhatsapp($creator_phone,$notification_msg);
-
-
           $this->Leads_Model->add_comment_for_events_api($notification_msg,$enquiry_id,$ld_updt_by);
-
           /
           /*$adt = date("d-m-Y H:i:s");
           $this->db->set('lead_id',$en_comments);
@@ -753,7 +683,6 @@ class Enquiry extends REST_Controller {
           $this->db->set('comment_msg','Enquiry Updated');
           $this->db->set('created_by',$ld_updt_by);
           $this->db->insert('tbl_comment');*/
-
         //$this->Leads_Model->add_comment_for_events('Enquiry Updated',$en_comments);
         
         $this->set_response([
@@ -768,7 +697,6 @@ class Enquiry extends REST_Controller {
              ], REST_Controller::HTTP_OK);
       }
       
-
     }else{
       $error='Post data does not exit!';
          $this->set_response([
@@ -784,13 +712,6 @@ class Enquiry extends REST_Controller {
              ], REST_Controller::HTTP_OK);
   }
   }
-
-
-
-
-
-
-
 	 public function customer_type_post()
                           {
             if($this->input->post('customer_type')==1){
@@ -924,7 +845,6 @@ class Enquiry extends REST_Controller {
 		{
           	$user_id= $this->input->post('user_id');
 			$process_id= $this->input->post('process_id');
-
 			$process = implode(',',$process_id);
 			//echo $process;die;
 			//print_r($process_id);die;
@@ -977,7 +897,6 @@ class Enquiry extends REST_Controller {
 	
 	
 	 public function get_enquery_code() {
-
         $code = $this->genret_code();
         $code2 = 'ENQ' . $code;
         $response = $this->enquiry_model->check_existance($code2);
@@ -985,7 +904,6 @@ class Enquiry extends REST_Controller {
         if ($response) {
             
             $this->get_enquery_code();
-
         } else {
             
             return $code2;
@@ -994,11 +912,9 @@ class Enquiry extends REST_Controller {
         }
         //exit;
     }
-
     function genret_code() {
         $pass = "";
         $chars = array("0", "1", "2", "3", "4", "5", "6", "7", "8", "9");
-
         for ($i = 0; $i < 12; $i++) {
             $pass .= $chars[mt_rand(0, count($chars) - 1)];
         }
@@ -1020,7 +936,6 @@ class Enquiry extends REST_Controller {
 		define('CITY_FIELD',10);
 		define('ADDRESS_FIELD',11);  
 		$this->load->helper('common_helper');
-
 	    $enquiry_code= $this->input->post('enquiry_code');
 		$data['title'] = display('information');		
 		$data['drops'] = $this->Leads_Model->get_drop_list();
@@ -1121,7 +1036,6 @@ class Enquiry extends REST_Controller {
 										'status' => false
 									);
 			}
-
 			if (is_active_field_api(STATE_FIELD,$proc,$comp_id)) {				
 				$res['state']     = array(
 										'value' => $result->state,
@@ -1167,25 +1081,20 @@ class Enquiry extends REST_Controller {
 									'value' => $result->assign_to_name,
 									'status' => true
 								);
-
 			$res['requirement'] = array(
 									'value' => $result->enquiry,
 									'status' => true
 								);
-
 			$res['created_on'] = array(
 									'value' => $result->created_date,
 									'status' => true
 								);
 			
-
 			/*$res['created_by']        = $result->s_display_name.' '.$result->last_name;
 			$res['assign_to']         = $result->assign_to_name;
 			$res['created_on']        = $result->created_date;
-
 			$res['requirement']       = $result->enquiry;*/
 			
-
 		    /*array(
 		     	'enquery_id' 	=>  $result->enquiry_id,
 		     	'enquery_code'	=>	$result->Enquery_id,
@@ -1205,8 +1114,6 @@ class Enquiry extends REST_Controller {
 		     	'process'		=>	$result->product_name,
 		     	'product'		=>	$result->pcountry_name
 		    );*/
-
-
 			$dynval = $this->enquiry_model->get_dyn_fld_api($result->enquiry_id);	
 			if(!empty($dynval)){					
 				foreach($dynval as $dind => $dval){						
@@ -1261,7 +1168,6 @@ class Enquiry extends REST_Controller {
       $this->form_validation->set_rules('login_id','Login ID' ,'required');
       $this->form_validation->set_rules('assign_user_id','Assign ID' ,'required');
       $this->form_validation->set_rules('enquiry_code[]','Enquery Code' ,'required');
-
         if($this->form_validation->run() == true){
           
           $move_enquiry = $this->input->post('enquiry_code[]');
@@ -1271,12 +1177,8 @@ class Enquiry extends REST_Controller {
           $user =$this->User_model->read_by_id($assign_employee);
           
           $assigner_user_id  = $this->input->post('login_id');
-
           $assigner_user =$this->User_model->read_by_id($assigner_user_id);
-
-
           $assignee_phone = '91'.$user->s_phoneno;
-
           $assign_to_name = $user->s_display_name.' '.$user->last_name;
           $assign_by_name = $assigner_user->s_display_name.' '.$assigner_user->last_name;
           $assigner_phone = '91'.$assigner_user->s_phoneno;
@@ -1289,16 +1191,11 @@ class Enquiry extends REST_Controller {
               $data['enquiry'] = $this->enquiry_model->enquiry_by_code($key);
           
               $enquiry_code = $data['enquiry']->Enquery_id;
-
               //if(empty($this->Leads_Model->get_leadListDetailsby_code($enquiry_code))){
           
                 $this->enquiry_model->assign_enquery_api($key,$assign_employee,$enquiry_code,$assigner_user_id);
-
-
                // $customer_name = $data['enquiry']->name_prefix.''.$data['enquiry']->name.' '.$data['enquiry']->lastname.' ';
-
               //  $notification_msg = sprintf($this->lang->line('enquiry_assigned_to'),trim($customer_name),trim($assign_to_name),trim($assign_by_name));
-
                // $this->Message_models->sendwhatsapp($assignee_phone,$notification_msg);
               //  $this->Message_models->sendwhatsapp($assigner_phone,$notification_msg);
               //  $this->Leads_Model->add_comment_for_events_api($notification_msg,$enquiry_code,$assigner_user_id);
@@ -1330,9 +1227,6 @@ class Enquiry extends REST_Controller {
         }  
      
      }
-
-
-
       ////////////// Transfer Enquiry to Lead API ///////////////////////
   
       public function move_to_lead_post(){
@@ -1341,8 +1235,6 @@ class Enquiry extends REST_Controller {
         $this->form_validation->set_rules('comment','Comment','required');
         $this->form_validation->set_rules('enquiry_code[]','Enquery Code' ,'required');
         $this->form_validation->set_rules('user_id','User Id' ,'required');
-
-
         if($this->form_validation->run() == true){
             $move_enquiry=$this->input->post('enquiry_code[]');
             
@@ -1351,7 +1243,6 @@ class Enquiry extends REST_Controller {
             $lead_score=$this->input->post('conversion_probability');
             $lead_stage=$this->input->post('lead_stage');
             $comment=$this->input->post('comment');
-
 //            $assign_to=$this->session->user_id;
             
             if(empty($lead_score)){
@@ -1361,15 +1252,12 @@ class Enquiry extends REST_Controller {
              if(empty($lead_stage)){
                $lead_stage=''; 
             }
-
             if(empty($comment)){
                $comment=''; 
             }
             if(!empty($move_enquiry)){
-
               $assigner_user_id =  $this->input->post('user_id');
               $assigner_user = $this->User_model->read_by_id($this->input->post('user_id'));          
-
               $convertor_phone = '91'.$assigner_user->s_phoneno;
               
               foreach($move_enquiry as $key){
@@ -1401,8 +1289,6 @@ class Enquiry extends REST_Controller {
                 $this->db->where('Enquery_id',$key);
                 $this->db->update('enquiry');
                  /*
-
-
               $created_by_user_id =   $enq->created_by;
               
               
@@ -1411,13 +1297,11 @@ class Enquiry extends REST_Controller {
               $creator_phone = '91'.$phone_no;          
               
               $enq_of_name = $enq->name_prefix.''.$enq->name.' '.$enq->lastname;
-
               $notification_msg = sprintf($this->lang->line('enquiry_converted_to_lead'),trim($enq_of_name));
         
               $this->Message_models->sendwhatsapp($convertor_phone,$notification_msg);
               
               $this->Message_models->sendwhatsapp($creator_phone,$notification_msg);              
-
               $this->Leads_Model->add_comment_for_events_api($notification_msg,$enq->Enquery_id,$assigner_user_id);             
               
               $insert_id = $this->Leads_Model->LeadAdd($data);
@@ -1443,24 +1327,17 @@ class Enquiry extends REST_Controller {
         }
       }
       
-
       //////// Drop Enquiry API /////////
-
     public function drop_enquiries_post(){  
-
      // $this->form_validation->set_rules('reason','Reason','required');
       $this->form_validation->set_rules('drop_status','Drop Status','required');
       $this->form_validation->set_rules('enquiry_code[]','Enquiry Code','required');
       $this->form_validation->set_rules('user_id',':Login ID','required');
-
       if( $this->form_validation->run() == true){
-
         $reason = $this->input->post('reason');
         $drop_status = $this->input->post('drop_status');
         $move_enquiry=$this->input->post('enquiry_code[]');
         $login_id=$this->input->post('user_id');
-
-
         if(!empty($move_enquiry)){
           foreach($move_enquiry as $key){
               $this->db->set('drop_status',$drop_status);
@@ -1483,7 +1360,6 @@ class Enquiry extends REST_Controller {
               'message' => array(array('error'=>'No enquiry found to drop.'))  
                ], REST_Controller::HTTP_OK);
         }
-
       }else{
         $this->set_response([
           'status' => false,
@@ -1491,17 +1367,13 @@ class Enquiry extends REST_Controller {
            ], REST_Controller::HTTP_OK);          
       }
     }
-
-
     public function add_comment_post(){ 
       
       $this->form_validation->set_rules('user_id','User Id','required');
       $this->form_validation->set_rules('comment','Comment Message','required');
       $this->form_validation->set_rules('enquiry_code','Enquiry Code','required');  
       //$this->form_validation->set_rules('comment_type','Enquiry Code','required');  
-
       if($this->form_validation->run() == true){   
-
         $ld_updt_by = $this->input->post('user_id');
       
         $lead_id = $this->input->post('enquiry_code');
@@ -1538,10 +1410,6 @@ class Enquiry extends REST_Controller {
                     'message' =>$drops
                      ], REST_Controller::HTTP_OK);
     }
-
-
-
-
     public function get_enquiry_fields_post(){
     	//$process_id = $this->input->post('process_id');
     	$companey_id = $this->input->post('company_id');    	
@@ -1558,7 +1426,6 @@ class Enquiry extends REST_Controller {
 		define('CITY_FIELD',10);
 		define('ADDRESS_FIELD',11);  
 		
-
 		$comp_id 	=	$companey_id;
 		$process_list	=	$this->sync_model->get_process_list($comp_id);
 		$process_list = $process_list->result_array();
@@ -1578,7 +1445,6 @@ class Enquiry extends REST_Controller {
 		              	$field_ids[]	=	$field_list['field_id'];
 		           	}
 		       }
-
 				if(in_array(FIRST_NAME,$field_ids)){$arr['first_name'] = true;}else{$arr['first_name'] = false;}
 				if(in_array(LAST_NAME,$field_ids)){$arr['last_name'] = true;}else{$arr['last_name'] = false;}
 				if(in_array(GENDER,$field_ids)){$arr['gender'] = true;}else{$arr['gender'] = false;}
@@ -1590,25 +1456,18 @@ class Enquiry extends REST_Controller {
 				if(in_array(STATE_FIELD,$field_ids)){$arr['state'] = true;}else{$arr['state'] = false;}
 				if(in_array(CITY_FIELD,$field_ids)){$arr['city'] = true;}else{$arr['city'] = false;}
 				if(in_array(ADDRESS_FIELD,$field_ids)){$arr['address'] = true;}else{$arr['address'] = false;}
-
 				$extra	=	$this->get_enquiry_extra_fields($process_id,$companey_id);
 				/*
 				$arr1[] = $arr;
 				$extra1[] = $extra;*/
 				$res[] = array('process_id'=>$process_id,'fields'=>array('basic'=>$arr,'extra'=>$extra));
-
 			}
-
 		}
-
 		$this->set_response([
                     'status' => true,
                     'data'=>$res
                      ], REST_Controller::HTTP_OK);
-
     }
-
-
 	public function get_enquiry_fields_by_process_post()
 	{
 		// live app without local database single process field
@@ -1631,15 +1490,12 @@ class Enquiry extends REST_Controller {
 		define('CITY_FIELD',10);
 		define('ADDRESS_FIELD',11);  
 		
-
 		$comp_id 	=	$companey_id;
 		$this->db->select("*");
 		$this->db->from('enquiry_fileds_basic');
 		$where = " FIND_IN_SET('process_id', '$process_id') AND comp_id = {$comp_id} AND status=1";
 		$this->db->where($where);
 		$field_list	= $this->db->get()->result_array();
-
-
 		$arr = array();
 		$field_ids = array();
 		if(!empty($field_list))
@@ -1649,7 +1505,6 @@ class Enquiry extends REST_Controller {
               	$field_ids[]	=	$field_list['field_id'];
            	}
        	}
-
      
 		if(in_array(FIRST_NAME,$field_ids)){$arr['first_name'] = true;}else{$arr['first_name'] = false;}
 		if(in_array(LAST_NAME,$field_ids)){$arr['last_name'] = true;}else{$arr['last_name'] = false;}
@@ -1662,18 +1517,13 @@ class Enquiry extends REST_Controller {
 		if(in_array(STATE_FIELD,$field_ids)){$arr['state'] = true;}else{$arr['state'] = false;}
 		if(in_array(CITY_FIELD,$field_ids)){$arr['city'] = true;}else{$arr['city'] = false;}
 		if(in_array(ADDRESS_FIELD,$field_ids)){$arr['address'] = true;}else{$arr['address'] = false;}
-
 		$extra	=	$this->get_enquiry_extra_fields($process_id,$companey_id);
-
 		$this->set_response([
                     'status' => true,
                     'basic' =>$arr,
                     'extra' =>$extra
                      ], REST_Controller::HTTP_OK);
-
     }
-
-
     public function get_enquiry_extra_fields($process_id,$companey_id){    		    
 	    $where = " FIND_IN_SET('".$process_id."',process_id) AND company_id = {$companey_id} AND status=1";
 	    $this->db->select("*");
@@ -1682,16 +1532,6 @@ class Enquiry extends REST_Controller {
 	    $this->db->order_by('input_id asc');
 	    return $this->db->get()->result_array();   	
    	} 
-
-
-
-
-
-
-
-
-
-
 /* Syncing apis start */
 public function sync_enquiry_data_post(){		
 	$p = file_get_contents('php://input');			
@@ -1704,7 +1544,6 @@ public function sync_enquiry_data_post(){
 		$p = json_decode($p,true);
 		$basic	=	$p['basic'];	
 		$extra	=	$p['extra'];
-
 		if (!empty($basic)) {
 			foreach ($basic as $key => $value) {
 				$this->db->where('Enquery_id',$value['Enquery_id']);
@@ -1746,7 +1585,6 @@ public function sync_enquiry_data_post(){
 		}
 	}
 }
-
 	public function enquiry_data_list_post(){
 	    $res= array();
 	    $user_id= $this->input->post('user_id');
@@ -1777,9 +1615,6 @@ public function sync_enquiry_data_post(){
 		}
 	
 	}
-
-
-
 public function sync_lead_stage_post(){
 	$comp_id = $this->input->post('comp_id');
     $res= array();	
@@ -1799,8 +1634,6 @@ public function sync_lead_stage_post(){
 	         ], REST_Controller::HTTP_OK);
 	}
 }
-
-
 public function sync_lead_source_post(){
 	$comp_id = $this->input->post('comp_id');
     $res= array();	
@@ -1820,7 +1653,6 @@ public function sync_lead_source_post(){
 	         ], REST_Controller::HTTP_OK);
 	}
 }
-
 public function sync_product_post(){
 	$comp_id = $this->input->post('comp_id');
     $res= array();	
@@ -1838,8 +1670,6 @@ public function sync_product_post(){
 	         ], REST_Controller::HTTP_OK);
 	}
 }
-
-
 public function sync_country_post(){
 	$comp_id = $this->input->post('comp_id');
     $res= array();	
@@ -1857,8 +1687,6 @@ public function sync_country_post(){
 	         ], REST_Controller::HTTP_OK);
 	}
 }
-
-
 public function sync_state_post(){
 	$comp_id = $this->input->post('comp_id');
     $res= array();	
@@ -1876,7 +1704,6 @@ public function sync_state_post(){
 	         ], REST_Controller::HTTP_OK);
 	}
 }
-
 public function sync_city_post(){
 	$comp_id = $this->input->post('comp_id');
     $res= array();	
@@ -1894,8 +1721,6 @@ public function sync_city_post(){
 	         ], REST_Controller::HTTP_OK);
 	}
 }
-
-
 public function sync_task_post(){
 	$comp_id = $this->input->post('comp_id');
     $res= array();	
@@ -1913,16 +1738,13 @@ public function sync_task_post(){
 	         ], REST_Controller::HTTP_OK);
 	}
 }
-
 public function sync_comment_post(){
 	$comp_id = $this->input->post('comp_id');
     $res= array();	
 	if(!empty($comp_id)){		
-
 		$this->db->where('comp_id',$comp_id);
 		$result	=	$this->db->get('tbl_comment');		
 		$res = $result->result_array();					
-
 		$this->set_response([
 			'status' => TRUE,
 			'data' =>$res
@@ -1934,7 +1756,6 @@ public function sync_comment_post(){
 	         ], REST_Controller::HTTP_OK);
 	}
 }
-
 public function sync_tbl_input_post(){
 	$comp_id = $this->input->post('comp_id');
     $res= array();	
@@ -1953,58 +1774,39 @@ public function sync_tbl_input_post(){
 	         ], REST_Controller::HTTP_OK);
 	}
 }
-
 /* Syncing apis end */
-
-
-
 public function get_enq_list_post(){
+	$dfields = $this->sync_model->getformfield();               		
+	$dacolarr = array();
+	$compid = $this->input->post('comp_id');
+	 $fieldval =  $this->sync_model->getfieldvalue($enqnos,$compid);  
+	if(!empty($compid)){
+	    $arr_basic = $arr_dyn = array();
+		$res = $this->sync_model->get_enquiry_list($compid);
+	    foreach ($res as $key => $value) {
+	        $arr_basic = array('nameprefix'=>$value->name_prefix,'firstname'=>$value->name,'lastname'=>$value->lastname,'phone'=>$value->phone,'address'=>$value->address,'process'=>$value->product_name,'lead_stage'=>$value->lead_stage_name,'lead_description'=>$value->lead_discription,'reference_name'=>$value->reference_name,'created_date'=>$value->created_date,'created_by'=>$value->created_by_name,'assign_to'=>$value->assign_to_name,'datasource_name'=>$value->datasource_name,'country_name'=>$value->country_name,'bank_name'=>$value->bank_name);
+	           	$enqid = $value->enquiry_id;			
+				if(!empty($dacolarr) and !empty($dfields)){
+					foreach($dfields as $ind => $flds){					
+						if(in_array($flds->input_id, $dacolarr )){						
+							$arr_dyn = $fieldval[$enqid][$flds->input_id]->fvalue;	
+						}					
+					}				
+				}
+	    	
+	    }
+	    $this->set_response([
+				'status' => TRUE,
+				'basic' =>$arr_basic,
+				'dyn'   =>$arr_dyn,
+				], REST_Controller::HTTP_OK);	
+		}
+	}
 
-	    $dfields = $this->sync_model->getformfield();       
-        		
-		$dacolarr = array();
-
-$compid = $this->input->post('comp_id');
- $fieldval =  $this->sync_model->getfieldvalue($enqnos,$compid);  
-if(!empty($compid)){
-    $arr_basic = $arr_dyn = array();
-	$res = $this->sync_model->get_enquiry_list($compid);
-
-    foreach ($res as $key => $value) {
-
-        $arr_basic = array('nameprefix'=>$value->name_prefix,'firstname'=>$value->name,'lastname'=>$value->lastname,'phone'=>$value->phone,'address'=>$value->address,'process'=>$value->product_name,'lead_stage'=>$value->lead_stage_name,'lead_description'=>$value->lead_discription,'reference_name'=>$value->reference_name,'created_date'=>$value->created_date,'created_by'=>$value->created_by_name,'assign_to'=>$value->assign_to_name,'datasource_name'=>$value->datasource_name,'country_name'=>$value->country_name,'bank_name'=>$value->bank_name);
-
-           	$enqid = $value->enquiry_id;			
-			if(!empty($dacolarr) and !empty($dfields)){
-				foreach($dfields as $ind => $flds){					
-					if(in_array($flds->input_id, $dacolarr )){						
-						$arr_dyn = $fieldval[$enqid][$flds->input_id]->fvalue;	
-					}					
-				}				
-			}
-    	
-    }
-
-    $this->set_response([
-			'status' => TRUE,
-			'basic' =>$arr_basic,
-			'dyn'   =>$arr_dyn,
-			], REST_Controller::HTTP_OK);	
-
-}
-
-
-
-
-
-
-
-}
-
-
-
-
-
-
-
+	/*space international contact form data into crm*/
+	public function space_international_contact_form_post(){
+		echo "<pre>";
+		print_r($_POST);
+		echo "</pre>";
+	}
 }
