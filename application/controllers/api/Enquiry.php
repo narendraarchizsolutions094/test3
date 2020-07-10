@@ -1812,6 +1812,7 @@ public function get_enq_list_post(){
 		
 		$fname = $this->input->post('name');
 		$mobile = $this->input->post('mobile_no_1589146856501');
+		$email = $this->input->post('email');
 		$city = $this->input->post('city_1589147378529');
 		$visa_type = $this->input->post('visa_type_1589147351535');
 		$country = $this->input->post('country_you_wish_to_apply_for_1589147152924');
