@@ -1828,7 +1828,7 @@ public function get_enq_list_post(){
 		}else if ($visa_type == 'schooling-visa') {
 			$process_id = 149;
 		}
-		
+
 		curl_setopt_array($curl, array(
 		  CURLOPT_URL => "https://thecrm360.com/new_crm/api/enquiry/create",
 		  CURLOPT_RETURNTRANSFER => true,
@@ -1844,6 +1844,7 @@ public function get_enq_list_post(){
 		  ),
 		));
 		$response = curl_exec($curl);
+		echo $response;
 		curl_close($curl);
 	}
 }
