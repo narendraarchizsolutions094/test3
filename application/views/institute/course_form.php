@@ -42,6 +42,7 @@
 						<option value="6/53" <?php if(!empty($course->course_ielts)){ if($course->course_ielts=='6/53'){echo 'selected';}}?>>6/53</option>
 						<option value="5.5/50" <?php if(!empty($course->course_ielts)){ if($course->course_ielts=='5.5/50'){echo 'selected';}}?>>5.5/50</option>
 						<option value="5/48" <?php if(!empty($course->course_ielts)){ if($course->course_ielts=='5/48'){echo 'selected';}}?>>5/48</option>
+						<option value="Without IELTS" <?php if(!empty($course->course_ielts)){ if($course->course_ielts=='Without IELTS'){echo 'selected';}}?>>Without IELTS</option>
                     </select>
                   </div>
 				  

@@ -131,6 +131,7 @@ button.owl-prev span, button.owl-next span{
 						<option value="6/53" <?php if(!empty($filter)){ if($filter[8]=='6/53'){echo 'selected';}}?>>6/53</option>
 						<option value="5.5/50" <?php if(!empty($filter)){ if($filter[8]=='5.5/50'){echo 'selected';}}?>>5.5/50</option>
 						<option value="5/48" <?php if(!empty($filter)){ if($filter[8]=='5/48'){echo 'selected';}}?>>5/48</option>
+						<option value="Without IELTS" <?php if(!empty($filter)){ if($filter[8]=='Without IELTS'){echo 'selected';}}?>>Without IELTS</option>
                     </select>
                   </div>
 			      
