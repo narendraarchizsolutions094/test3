@@ -1804,7 +1804,7 @@ public function get_enq_list_post(){
 	}
 
 	/*space international contact form data into crm*/
-	public function space_international_contact_form(){
+	public function space_international_contact_form_post(){
 		echo "<pre>";
 		print_r($_POST);
 		echo "</pre>";
