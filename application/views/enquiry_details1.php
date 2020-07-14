@@ -968,28 +968,33 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                               <th>
                                 Institute Name
                               </th>
-							  <th>
+                              <?php if ($this->session->companey_id=='67') { ?>
+							                 <th>
                                 Course Name
                               </th>
-							  <th>
+							                 <th>
                                 Program Lavel
                               </th>
-							  <th>
+							                  <th>
                                 Program Length
                               </th>
-							  <th>
+							                 <th>
                                 Program Discipline
                               </th>
-							  <th>
+                              
+							                <th>
                                 Tuition Fee
                               </th>
-							  <th>
+							                 <th>
                                 Offer letter fee
                               </th>
+                                <?php
+                              }
+                              ?>
                               <th>
                                 Application URL
                               </th>
-							  <?php if ($this->session->companey_id!='67') { ?>
+							             <?php if ($this->session->companey_id!='67') { ?>
                               <th>
                                 Major
                               </th>
@@ -999,7 +1004,7 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                               <th>
                                 Password
                               </th>
-							  <?php } ?>
+							             <?php } ?>
                               <th>
                                 App status
                               </th>
@@ -1018,11 +1023,11 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                               <th>
                                 CV
                               </th>
-							  <?php if ($this->session->companey_id!='67') { ?>
+							             <?php if ($this->session->companey_id!='67') { ?>
                               <th>
                                 GRE/GMAT
                               </th>
-							  <?php } ?>
+							             <?php } ?>
                               <th>
                                 TOEFL/IELTS /PTE
                               </th>
@@ -1043,27 +1048,32 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                               foreach ($institute_data as $key => $value) { ?>
                                 <tr>
                                     <td><?=$value['institute_name']?></td>
-<td><?php foreach($course_list as $cl){if($cl->crs_id==$value['course_id']){echo $cl->course_name;}}?></td>
-<td><?php foreach($level as $lvl){if($lvl->id==$value['p_lvl']){echo $lvl->level;}}?></td>
-<td><?php foreach($length as $lg){if($lg->id==$value['p_length']){echo $lg->length;}}?></td>
-<td><?php foreach($discipline as $dc){if($dc->id==$value['p_disc']){echo $dc->discipline;}}?></td>
-<td><?=$value['t_fee']?></td>
-<td><?=$value['ol_fee']?></td>                                    
+                                  <?php if ($this->session->companey_id=='67') { ?>
+                                    <td><?php foreach($course_list as $cl){if($cl->crs_id==$value['course_id']){echo $cl->course_name;}}?></td>
+                                    <td><?php foreach($level as $lvl){if($lvl->id==$value['p_lvl']){echo $lvl->level;}}?></td>
+                                    <td><?php foreach($length as $lg){if($lg->id==$value['p_length']){echo $lg->length;}}?></td>
+                                    <td><?php foreach($discipline as $dc){if($dc->id==$value['p_disc']){echo $dc->discipline;}}?></td>                                  
+
+                                    <td><?=$value['t_fee']?></td>
+                                    <td><?=$value['ol_fee']?></td>                                    
+                                  <?php
+                                  }
+                                  ?>
                                     <td><?=$value['application_url']?></td>
-									<?php if ($this->session->companey_id!='67') { ?>
+									               <?php if ($this->session->companey_id!='67') { ?>
                                     <td><?=$value['major']?></td>
                                     <td><?=$value['user_name']?></td>
                                     <td><?=$value['password']?></td>
-									<?php } ?>
+									               <?php } ?>
                                     <td><?=$value['app_status_title']?></td>
                                     <td><?=$value['app_fee']?></td>
                                     <td><?=$value['transcript']?></td>
                                     <td><?=$value['lors']?></td>
                                     <td><?=$value['sop']?></td>
                                     <td><?=$value['cv']?></td>
-									<?php if ($this->session->companey_id!='67') { ?>
+									               <?php if ($this->session->companey_id!='67') { ?>
                                     <td><?=$value['gre_gmt']?></td>
-									<?php } ?>
+									               <?php } ?>
                                     <td><?=$value['toefl']?></td>
                                     <td><?=$value['remark']?></td>
                                     <td><?=$value['followup_comment']?></td>
