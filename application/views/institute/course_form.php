@@ -1,3 +1,4 @@
+<!-- <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script> -->
 <div class="row">
     <!--  form area -->
     <div class="col-sm-12">
@@ -88,7 +89,7 @@
 				  
 				  <div class="form-group col-sm-12">
                     <label for="course_discription"><?php echo display('course_discription')?> <i class="text-danger">*</i></label>
-                    <textarea name="course_discription" type="text" class="form-control" placeholder="<?php echo display('course_discription')?>" value="<?php echo $course->course_discription ?>" rows="10"><?php echo $course->course_discription ?></textarea>
+                    <textarea name="course_discription" class="form-control tinymce" rows="10"><?php echo $course->course_discription ?></textarea>
                   </div>
 				  
                   <div class="form-group col-sm-6">
