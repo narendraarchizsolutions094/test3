@@ -1768,9 +1768,7 @@ $('#something').click(function() {
       <script src="<?php echo base_url() ?>assets/js/semantic.min.js?v=1.0" type="text/javascript"></script>
       <!-- DataTables JavaScript -->
       <script src="<?php echo base_url("assets/datatables/js/dataTables.min.js?v=1.0") ?>"></script>
-      <!-- tinymce texteditor -->
-      <script src="<?php echo base_url() ?>assets/tinymce/tinymce.min.js?v=1.0" type="text/javascript"></script> 
-      <!-- Table Head Fixer -->
+      <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>      
       <script src="<?php echo base_url() ?>assets/js/tableHeadFixer.js?v=1.0" type="text/javascript"></script> 
       <!-- Admin Script -->
       <script src="<?php echo base_url('assets/js/frame.js?v=1.0?v=1.0') ?>" type="text/javascript"></script> 
