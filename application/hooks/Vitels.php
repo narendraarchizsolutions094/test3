@@ -7,6 +7,7 @@ class Vitels {
        $this->CI =& get_instance();
        $this->CI->load->library('rememberme');
        $this->CI->load->model('dashboard_model');
+       $this->CI->load->model('user_model');
     }
 
     // public function only_one_login_check(){
@@ -47,12 +48,18 @@ class Vitels {
     // }
 
 
-    public function varify_cookies(){ // remember login        
+    public function varify_cookies(){ // remember login
+        if ($this->CI->session->user_id && $this->CI->session->companey_id == 67 && $this->CI->session->user_right == 151) {
+            $res    =   $this->CI->user_model->get_user_meta($this->CI->session->user_id,array('payment_status'));            
+            if ($res['payment_status'] == 0) {
+                redirect('https://student.spaceinternationals.com/student/payment/payumoney');
+            }
+        }
+
         $cookie_user = $this->CI->rememberme->verifyCookie();                    
         if (!empty($cookie_user) && !$this->CI->session->user_id) {            
             $user_row    =   $this->CI->dashboard_model->find_user_by_email($cookie_user);                                
-            $this->CI->session->set_userdata('user_id',$user_row->pk_i_admin_id);                
-                echo $user_row->pk_i_admin_id;
+            $this->CI->session->set_userdata('user_id',$user_row->pk_i_admin_id);                                
             if (!empty($user_row->pk_i_admin_id)) {
                 $city_row = $this->CI->db->select("*")
                         ->from("city")
@@ -62,8 +69,6 @@ class Vitels {
                 if(!empty($city_row->row_array())){
                     $location_arr = $city_row->row_array();
                 }                    
-
-
                 if(user_access(230) || user_access(231) || user_access(232) || user_access(233) || user_access(234) || user_access(235) || user_access(236)){ 
                     $arr = explode(',', $user_row->process);
                     $this->CI->session->set_userdata('companey_id',$user_row->companey_id);                

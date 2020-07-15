@@ -125,8 +125,16 @@ if($root=='https://student.spaceinternationals.com'){	 ?>
                              <span class="pull-left"><input type="checkbox" name="remember_me" value="1"> Remember me </span> <span class="pull-right"><a href="javascript:" id="fpassword"><?php echo display("forget_password"); ?></a></span>
                             </div><br>
                             <div class="text-center">
-                                <button  type="submit" class="btn btn-success"><?= display('login') ?></button>                                
+                                <button  type="submit" class="btn btn-success"><?= display('login') ?></button>          
                             </div>
+                            <br>
+                            <br>
+                                <?php
+                                if($root=='https://student.spaceinternationals.com'){    ?> 
+                                    New to spaceinternationals ?<a href="javascript:void(0)" id="signup">Create an account</a>
+                                <?php
+                                }
+                                ?>
                             
                         </form>
                     </div> 
@@ -343,6 +351,16 @@ if($root=='https://student.spaceinternationals.com'){	 ?>
                     }
                 }); 
             });                 
+            $("#signup").on('click',function(){
+                $.ajax({                        
+                    url : '<?php echo base_url('auth/signup_content')?>',                
+                    type: 'POST',                
+                    data: $(this).serialize(),
+                    success:function(data){
+                        $("#LoginDiv").html(data);
+                    }         
+                });
+            });
         </script>        
     </body>
 </html>
