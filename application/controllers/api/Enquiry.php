@@ -1238,11 +1238,11 @@ class Enquiry extends REST_Controller {
         if($this->form_validation->run() == true){
             $move_enquiry=$this->input->post('enquiry_code[]');
             
-            $date = date('d-m-Y H:i:s');
+            $date 		= date('d-m-Y H:i:s');
                     
-            $lead_score=$this->input->post('conversion_probability');
-            $lead_stage=$this->input->post('lead_stage');
-            $comment=$this->input->post('comment');
+            $lead_score	= $this->input->post('conversion_probability');
+            $lead_stage = $this->input->post('lead_stage');
+            $comment 	= $this->input->post('comment');
 //            $assign_to=$this->session->user_id;
             
             if(empty($lead_score)){
@@ -1257,8 +1257,8 @@ class Enquiry extends REST_Controller {
             }
             if(!empty($move_enquiry)){
               $assigner_user_id =  $this->input->post('user_id');
-              $assigner_user = $this->User_model->read_by_id($this->input->post('user_id'));          
-              $convertor_phone = '91'.$assigner_user->s_phoneno;
+              $assigner_user 	= $this->User_model->read_by_id($this->input->post('user_id'));          
+              $convertor_phone 	= '91'.$assigner_user->s_phoneno;
               
               foreach($move_enquiry as $key){
                 
@@ -1267,22 +1267,22 @@ class Enquiry extends REST_Controller {
                // if(empty($this->Leads_Model->get_leadListDetailsby_code($enq->Enquery_id))){
               
                   $data = array(
-                          'adminid' =>$enq->created_by,
-                          'ld_name' => $enq->name,
-                          'ld_email' => $enq->email,
-                          'ld_mobile' => $enq->phone,
-                          'lead_code' => $enq->Enquery_id,
-                          'city_id' => $enq->city_id,
-                          'state_id' =>  $enq->state_id,
-                          'country_id'  => $enq->country_id,
-                          'region_id'  => $enq->region_id,
-                          'territory_id'  => $enq->territory_id,
-                          'ld_created' => $date,
-                          'ld_for' => $enq->enquiry,
-                          'lead_score' => $lead_score,
-                          'lead_stage' => 1,
-                          'comment' => $comment,
-                          'ld_status' => '1'
+                          'adminid' 		=> $enq->created_by,
+                          'ld_name' 		=> $enq->name,
+                          'ld_email' 		=> $enq->email,
+                          'ld_mobile' 		=> $enq->phone,
+                          'lead_code' 		=> $enq->Enquery_id,
+                          'city_id' 		=> $enq->city_id,
+                          'state_id' 		=> $enq->state_id,
+                          'country_id'  	=> $enq->country_id,
+                          'region_id'  		=> $enq->region_id,
+                          'territory_id'  	=> $enq->territory_id,
+                          'ld_created' 		=> $date,
+                          'ld_for' 			=> $enq->enquiry,
+                          'lead_score' 		=> $lead_score,
+                          'lead_stage' 		=> 1,
+                          'comment' 		=> $comment,
+                          'ld_status' 		=> '1'
                 );
                 
                 $this->db->set('status',2);
@@ -1493,7 +1493,7 @@ class Enquiry extends REST_Controller {
 		$comp_id 	=	$companey_id;
 		$this->db->select("*");
 		$this->db->from('enquiry_fileds_basic');
-		$where = " FIND_IN_SET('process_id', '$process_id') AND comp_id = {$comp_id} AND status=1";
+		$where = " FIND_IN_SET('$process_id',process_id) AND comp_id = {$comp_id} AND status=1";
 		$this->db->where($where);
 		$field_list	= $this->db->get()->result_array();
 		$arr = array();
@@ -1505,7 +1505,8 @@ class Enquiry extends REST_Controller {
               	$field_ids[]	=	$field_list['field_id'];
            	}
        	}
-     
+     	
+     	//print_r($field_list);die;
 		if(in_array(FIRST_NAME,$field_ids)){$arr['first_name'] = true;}else{$arr['first_name'] = false;}
 		if(in_array(LAST_NAME,$field_ids)){$arr['last_name'] = true;}else{$arr['last_name'] = false;}
 		if(in_array(GENDER,$field_ids)){$arr['gender'] = true;}else{$arr['gender'] = false;}
