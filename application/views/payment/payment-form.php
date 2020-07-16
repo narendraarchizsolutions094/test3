@@ -4,7 +4,7 @@ define('MERCHANT_KEY', 'A0ZvklkZ');
 define('SALT', 'xZXfbRGyAu');
 //define('PAYU_BASE_URL', 'https://test.payu.in');    //Testing url Use in development mode
 define('PAYU_BASE_URL', 'https://secure.payu.in');  //actual URL Use in production mode
-define('SUCCESS_URL', 'payment/payment_success');  //order sucess url replace with your complete url
+define('SUCCESS_URL', base_url().'payment/payment_success');  //order sucess url replace with your complete url
 define('FAIL_URL', base_url().'payment/payment_failed');    //add complete url 
 $txnid      = substr(hash('sha256', mt_rand() . microtime()), 0, 20);
 $email      = $this->session->email;
@@ -13,7 +13,7 @@ $name       = explode(' ',$this->session->fullname);
 $firstName  = !empty($name[0])?$name[0]:'';
 $lastName   = !empty($name[1])?$name[1]:'';
 $productinfo= 'msg';
-$totalCost  = '600';
+$totalCost  = '1';
 $hash       = '';
 
 $hash_string = MERCHANT_KEY."|".$txnid."|".$totalCost."|".$productinfo."|".$firstName."|".$email."|||||||||||".SALT;

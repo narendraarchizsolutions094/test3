@@ -1,33 +1,16 @@
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<?php
- 
-$status=$res["status"];
-$firstname=$res["firstname"];
-$amount=$res["amount"];
-$txnid=$res["txnid"];
-$posted_hash=$res["hash"];
-$key=$res["key"];
-$productinfo=$res["productinfo"];
-$email=$res["email"];
-$salt="fGxoywOg8S";
-If (isset($res["additionalCharges"])) {
-    $additionalCharges=$res["additionalCharges"];
-    $retHashSeq = $additionalCharges.'|'.$salt.'|'.$status.'|||||||||||'.$email.'|'.$firstname.'|'.$productinfo.'|'.$amount.'|'.$txnid.'|'.$key;        
- } else {      
-    $retHashSeq = $salt.'|'.$status.'|||||||||||'.$email.'|'.$firstname.'|'.$productinfo.'|'.$amount.'|'.$txnid.'|'.$key;
-}
-$hash = hash("sha512", $retHashSeq);  
-if ($hash != $posted_hash) {
-    echo "Invalid Transaction,Your Transaction Has been failed. Please try again";
-} else {
-    echo "<h3>Your order status is ". $status .".</h3>";
-    echo "<h4>Your transaction id for this transaction is ".$txnid.". You may try making the payment by clicking the link below.</h4>";
-} 
-?>
-<div class="row justify-content-md-center">	
-<div class="col-md-auto">	
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<div class="row justify-content-center">	
+<div class="col-md-3">	
+</div>
+<div class="col-md-6">	
 	<div class="card">
 	    <div class="card-body">    
 	      <!-- Modal content-->
@@ -40,14 +23,15 @@ if ($hash != $posted_hash) {
 	        <div class="modal-body">
 	          <p style="text-align:center;color:#d75a4a;font-size:24px;font-weight:500;">Sorry! your payment failed!</p>
 	          <p style="color:#555555;">Transaction ID:&nbsp;
-	          	<strong style="font-weight:500;font-size:16px;color: #222222;">152458258752515</strong><br>Payment amount:&nbsp;
-	          	<strong style="font-weight:500;font-size:16px;color: #222222;">Rs.35000</strong>
+	          	<strong style="font-weight:500;font-size:16px;color: #222222;"><?=$res['txnid']?></strong><br>Payment amount:&nbsp;
+	          	<strong style="font-weight:500;font-size:16px;color: #222222;">Rs.<?=$res['amount']?></strong>
 	          	<br>If your payment got detucted for above transaction, the same shall be credited back to your account in
 	          	<strong style="font-weight:500;font-size:15px;color: #222222;"> 5 working days</strong>
 	          </p>
 	        </div>
 	        <div class="modal-footer">
-	          <a class="btn btn-success" href="<?=base_url()?>">Go Home</a>
+	          <a class="btn btn-primary" href="<?=base_url()?>">Try Again</a>
+	          <a class="btn btn-success" href="http://student.spaceinternationals.com/">Go Home</a>
 	        </div>
 	      </div>      
 	    </div>

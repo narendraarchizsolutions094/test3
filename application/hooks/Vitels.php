@@ -56,7 +56,7 @@ class Vitels {
             $router_method = $this->CI->router->method;
             
             if ($res['payment_status'] == 0 && $router_class!='payment' && $router_method!='logout' && $router_method!='logout') {
-                redirect('payment/payumoney');
+                redirect('payment');
             }
         }
 
