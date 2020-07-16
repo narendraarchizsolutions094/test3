@@ -51,8 +51,12 @@ class Vitels {
     public function varify_cookies(){ // remember login
         if ($this->CI->session->user_id && $this->CI->session->companey_id == 67 && $this->CI->session->user_right == 151) {
             $res    =   $this->CI->user_model->get_user_meta($this->CI->session->user_id,array('payment_status'));            
-            if ($res['payment_status'] == 0) {
-                redirect('https://student.spaceinternationals.com/student/payment/payumoney');
+            
+            $router_class = $this->CI->router->class;                
+            $router_method = $this->CI->router->method;
+            
+            if ($res['payment_status'] == 0 && $router_class!='payment' && $router_method!='logout' && $router_method!='logout') {
+                redirect('payment/payumoney');
             }
         }
 
