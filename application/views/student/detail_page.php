@@ -30,7 +30,11 @@
 <div class="row">
 <div class="col-lg-8" style="height:600px;overflow-y: scroll;">
 <?php foreach ($ins_details as $key => $value) {  ?>
-<img class="img-height" src="<?php echo 'https://student.spaceinternationals.com/new_crm/'.$value->profile_image; ?>" alt="movie" style="width:100%;height:60%;">
+<?php if(!empty($value->profile_image)){ ?>
+							<img class="img-responsive" src="<?php echo 'https://student.spaceinternationals.com/new_crm/'.$value->profile_image; ?>" style="">
+					<?php }else{ ?>
+					       <img class="img-responsive" src="<?php echo base_url('assets/images/NoPicAvailable.png'); ?>" style="">
+					<?php } ?>
 <?php } ?>
 <div  id="universities">	
 <div class="blog__details__text">
