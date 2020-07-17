@@ -2,7 +2,7 @@
 
 defined('BASEPATH') OR exit('No direct script access allowed');
     
-    function tab_content($tid,$comp_id,$enquiry_id=0){		
+    function tab_content($tid,$comp_id,$enquiry_id=0,$tabname=''){		
     	
     	$ci =& get_instance();
         $data['tid'] = $tid;
@@ -27,7 +27,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         $data['state_list'] 	= $ci->location_model->estate_list();
         $data['city_list'] 			= $ci->location_model->ecity_list();
         $data['all_country_list'] 	= $ci->location_model->country();
-        $data['name_prefix'] 		= $ci->enquiry_model->name_prefix_list();       
+        $data['name_prefix'] 		= $ci->enquiry_model->name_prefix_list();
+        $data['tabname'] = $tabname;       
 
     	return $ci->load->view('enquiry/enquiry_tab_content',$data,true);    
     }

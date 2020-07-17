@@ -1000,6 +1000,18 @@ for (var i = 0; i < checkboxes.length; i++) {
 	});
 
 	$(document).ready(function() {
+       var buttonCommon = {
+        exportOptions: {
+            format: {
+                body: function ( data, row, column, node ) {
+                    // Strip $ from salary column to make it numeric
+                    return column === 5 ?
+                        data.replace( /[$,]/g, '' ) :
+                        data;
+                }
+            }
+        }
+    };
     	$('#enq_table').DataTable(
     		{         
 			    "processing": true,
@@ -1011,11 +1023,35 @@ for (var i = 0; i < checkboxes.length; i++) {
 			        "url": "<?=base_url().'Enq/enq_load_data'?>",
 			        "type": "POST",
               "data":{'data_type':"<?=$data_type?>"}
-			    },		
+			    },
+          dom: "<'row'<'col-sm-4'l><'col-sm-4 text-center'B><'col-sm-4'f>>tp", 
+        // "lengthMenu": [[30, 60, 90, -1], [30, 60, 90, "All"]], 
+        buttons: [  
+            {extend: 'copy', className: 'btn-sm'}, 
+            {extend: 'csv', title: 'ExampleFile', className: 'btn-sm'}, 
+            {extend: 'excel', title: 'ExampleFile', className: 'btn-sm', title: 'exportTitle'}, 
+            {extend: 'pdf', title: 'ExampleFile', className: 'btn-sm'}, 
+            {extend: 'print', className: 'btn-sm'} 
+        ] ,
+          		
 			    "columnDefs": [{ "orderable": false, "targets": 0 }],
 	            "order": [[ 1, "desc" ]]
 
 			});
+    //   $('#enq_table').DataTable({ 
+    //     //responsive: true, 
+    //     scrollX: true,
+    //     scrollY: 800,
+    //     dom: "<'row'<'col-sm-4'l><'col-sm-4 text-center'B><'col-sm-4'f>>tp", 
+    //     "lengthMenu": [[30, 60, 90, -1], [30, 60, 90, "All"]], 
+    //     buttons: [  
+    //         {extend: 'copy', className: 'btn-sm'}, 
+    //         {extend: 'csv', title: 'ExampleFile', className: 'btn-sm'}, 
+    //         {extend: 'excel', title: 'ExampleFile', className: 'btn-sm', title: 'exportTitle'}, 
+    //         {extend: 'pdf', title: 'ExampleFile', className: 'btn-sm'}, 
+    //         {extend: 'print', className: 'btn-sm'} 
+    //     ] 
+    // });
 
 
 

@@ -401,7 +401,9 @@ class Enquiry extends CI_Controller {
         }
     }
 
-    public function create(){
+    public function create()
+    {   
+        //print_r($_POST);die;
         $process = $this->session->userdata('process');                 
         $data['leadsource'] = $this->Leads_Model->get_leadsource_list();
         $data['lead_score'] = $this->Leads_Model->get_leadscore_list();
@@ -471,11 +473,24 @@ class Enquiry extends CI_Controller {
             ];
             $insert_id    =   $this->enquiry_model->create($postData);
             if ($insert_id) {                
-                $this->Leads_Model->add_comment_for_events($this->lang->line("enquery_create"), $encode);                              
-                $this->session->set_flashdata('message', 'Your Enquiry has been  Successfully created');
-                redirect(base_url() . 'enquiry/view/'.$insert_id);
+                $this->Leads_Model->add_comment_for_events($this->lang->line("enquery_create"), $encode);       
+                if($this->input->is_ajax_request())
+                {
+                    echo json_encode(array('status'=>'success'));
+                }
+                else
+                {
+                    $this->session->set_flashdata('message', 'Your Enquiry has been  Successfully created');
+                    redirect(base_url() . 'enquiry/view/'.$insert_id);
+                }
+                
             }
         } else {
+            if($this->input->is_ajax_request())
+            {
+                echo json_encode(array('status'=>'fail','error'=>validation_errors()));
+                exit();
+            }
             $this->load->model('Dash_model', 'dash_model');
             $data['name_prefix'] = $this->enquiry_model->name_prefix_list();
             $user_role    =   $this->session->user_role;
@@ -1097,7 +1112,7 @@ class Enquiry extends CI_Controller {
         $enquiry_code = $data['enquiry']->Enquery_id;
         $phone_id = '91'.$data['enquiry']->phone;        
         $data['recent_tasks'] = $this->Task_Model->get_recent_taskbyID($enquiry_code);        
-        $data['comment_details'] = $this->Leads_Model->comment_byId($enquiry_code);        
+               
         $user_role    =   $this->session->user_role;
         $data['country_list'] = $this->location_model->productcountry();
 
@@ -1134,9 +1149,152 @@ class Enquiry extends CI_Controller {
 		//$data['english_data'] = $this->enquiry_model->eng_data($data['details']->Enquery_id);
 		}
         $this->enquiry_model->make_enquiry_read($data['details']->Enquery_id);
+        //echo"<pre>";print_r($data);die;
         $data['content'] = $this->load->view('enquiry_details1', $data, true);
         $this->enquiry_model->assign_notification_update($enquiry_code);
         $this->load->view('layout/main_wrapper', $data);
+    }
+
+    function activityTimeline()
+    {
+        $enqid = $this->input->post('id');
+        $data['enquiry'] = $this->enquiry_model->enquiry_by_id($enqid);
+        $enquiry_code = $data['enquiry']->Enquery_id;
+        $comment_details = $this->Leads_Model->comment_byId($enquiry_code);
+
+        $html='<ul class="cbp_tmtimeline" style="margin-left:-30px;">';
+              foreach($comment_details as $comments)
+              { 
+              if($comments->comment_msg=='Stage Updated')
+              { 
+        $html.= '<li>
+                  <div class="cbp_tmicon cbp_tmicon-phone" style="background:#cb4335;"></div>
+                  <div class="cbp_tmlabel"  style="background:#95a5a6;">
+                    <span style="font-weight:900;font-size:15px;">'.echo ucfirst($comments->comment_msg).'</span></br>';
+                if($comments->comment_msg=='Stage Updated'){ 
+        $html.=  '<span style="font-weight:900;font-size:12px;">'.echo ucfirst($comments->lead_stage_name).'</span>
+                    </br>
+                    <span style="font-weight:900;font-size:10px;">'. echo ucfirst($comments->description).'</span>
+                    </br>
+                    <span style="font-weight:900;font-size:10px;">'.echo ucfirst($comments->remark).'</span>';
+                     } 
+          $html.= '<p>'.echo date("j-M-Y h:i:s a",strtotime($comments->ddate)).'<br>
+                    Updated By : <strong>'.echo ucfirst($comments->comment_created_by . ' ' .$comments->lastname)'</strong></p>
+                  </div>
+                </li>';
+
+                 }else if($comments->comment_msg=='Enquiry moved'){ 
+        $html.='    <li>
+                  <div class="cbp_tmicon cbp_tmicon-phone"  style="background:#148f77;"></div>
+                  <div class="cbp_tmlabel"  style="background:#95a5a6;">
+                    <span style="font-weight:900;font-size:15px;">'.echo ucfirst($comments->comment_msg).'</span></br>';
+                    if($comments->comment_msg=='Stage Updated'){ 
+        $html.='<span style="font-weight:900;font-size:12px;">'. echo ucfirst($comments->lead_stage_name).' </span>
+                    </br>
+                    <span style="font-weight:900;font-size:10px;">'. echo ucfirst($comments->description).' </span>
+                    </br>
+                    <span style="font-weight:900;font-size:10px;">'. echo ucfirst($comments->remark).' </span>';
+                     } 
+          $html.'<p>'. echo date("j-M-Y h:i:s a",strtotime($comments->ddate)).' <br>
+                      Updated By : <strong>'. echo ucfirst($comments->comment_created_by . ' ' .$comments->lastname).' </strong></p>
+                  </div>
+                </li>';
+                }else if($comments->comment_msg=='Move to leads'){ 
+          $html.='<li>
+                  <div class="cbp_tmicon cbp_tmicon-phone"  style="background:#2980b9;"></div>
+                  <div class="cbp_tmlabel"  style="background:#95a5a6;">
+                  <span style="font-weight:900;font-size:15px;">'. echo ucfirst($comments->comment_msg).' </span></br>';
+                     if($comments->comment_msg=='Stage Updated'){ 
+           $html.='<span style="font-weight:900;font-size:12px;">'.echo ucfirst($comments->lead_stage_name).' </span>
+                    </br>
+                    <span style="font-weight:900;font-size:10px;">'. echo ucfirst($comments->description).' </span>
+                    </br>
+                    <span style="font-weight:900;font-size:10px;">'. echo ucfirst($comments->remark).' </span>';
+                     } 
+             $html.='<p>'. echo date("j-M-Y h:i:s a",strtotime($comments->ddate)).' <br>
+                    Updated By : <strong>'. echo ucfirst($comments->comment_created_by . ' ' .$comments->lastname).' </strong></p>
+                  </div>
+                </li>';
+                 }else if($comments->comment_msg=='Enquiry Created'){ 
+             $html.='   <li>
+                  <div class="cbp_tmicon cbp_tmicon-phone"  style="background:#d68910;"></div>
+                  <div class="cbp_tmlabel"  style="background:#95a5a6;">
+                    <span style="font-weight:900;font-size:15px;">'. echo ucfirst($comments->comment_msg).' </span></br>';
+                     if($comments->comment_msg=='Stage Updated'){ 
+             $html.='<span style="font-weight:900;font-size:12px;">'. echo ucfirst($comments->lead_stage_name).' </span>
+                    </br>
+                    <span style="font-weight:900;font-size:10px;">'.echo ucfirst($comments->description).' </span>
+                    </br>
+                    <span style="font-weight:900;font-size:10px;">'. echo ucfirst($comments->remark).' </span>';
+                     } 
+              $html.='<p>'. echo date("j-M-Y h:i:s a",strtotime($comments->ddate)).' <br>
+                    Updated By : <strong>'. echo ucfirst($comments->comment_created_by . ' ' .$comments->lastname).' </strong></p>
+                  </div>
+                </li>';
+                 }else if($comments->comment_msg=='Enquiry dropped' || $comments->comment_msg=='Lead dropped' || $comments->comment_msg=='Client dropped'){ 
+            $html.='<li>
+                  <div class="cbp_tmicon cbp_tmicon-phone"  style="background:#d68910;"></div>
+                  <div class="cbp_tmlabel"  style="background:#95a5a6;">
+                    <span style="font-weight:900;font-size:15px;">'. echo ucfirst($comments->comment_msg).' </span></br>
+                    
+                    <span style="font-size:12px;">Reason:- </span><span style="font-size:11px;">'; 
+            if(!empty($comments->drop_status)) 
+                {
+           $html.= ''.echo get_drop_status_name($comments->drop_status).'</span>
+                    <br>';
+                }
+            $html.= '<span style="font-size:12px;">Remark:- </spna><span style="font-size:11px;">'; if(!empty($comments->drop_reason))
+                    {
+                        $html.=''.echo $comments->drop_reason.'</span>';
+                    } 
+
+
+                     if($comments->comment_msg=='Stage Updated'){ 
+             $html.='<span style="font-weight:900;font-size:12px;">'. echo ucfirst($comments->lead_stage_name).' </span>
+                    </br>
+                    <span style="font-weight:900;font-size:10px;">'.echo ucfirst($comments->description).' </span>
+                    </br>
+                    <span style="font-weight:900;font-size:10px;">'.echo ucfirst($comments->remark).' </span>';
+                     } 
+               $html.='<p>'. echo date("j-M-Y h:i:s a",strtotime($comments->ddate)).' <br>
+                    Updated By : <strong>'. echo ucfirst($comments->comment_created_by . ' ' .$comments->lastname).' </strong></p>
+                  </div>
+                </li>';
+                 }else{ 
+   $html.='  <li>
+                  <div class="cbp_tmicon cbp_tmicon-phone"  style=""></div>
+                  <div class="cbp_tmlabel"  style="background:#95a5a6;">
+                    <span style="font-weight:900;font-size:15px;">'. echo ucfirst($comments->comment_msg).' </span></br>';
+                     if($comments->comment_msg=='Stage Updated'){ 
+              $html.='<span style="font-weight:900;font-size:12px;">'. echo ucfirst($comments->lead_stage_name).' </span>
+                    </br>
+                    <span style="font-weight:900;font-size:10px;">'.echo ucfirst($comments->description).' </span>
+                    </br>
+                    <span style="font-weight:900;font-size:10px;">'.echo ucfirst($comments->description).' </span>';
+                     } 
+ $html.='<p>'. echo date("j-M-Y h:i:s a",strtotime($comments->ddate)).' <br>
+                      Updated By : <strong>'. echo ucfirst($comments->comment_created_by . ' ' .$comments->lastname).' </strong></p>
+                  </div>
+                </li>';
+                 
+                } 
+              }
+                            
+     $html.='</ul>';
+     echo $html; 
+    }
+
+    function deleteDocument($cmmnt_id,$enqcode,$tabname)
+    {
+        // echo "$cmmnt_id";die;
+        $this->db->where("comment_id",$cmmnt_id);
+        $this->db->delete('extra_enquery');
+        $tabname = base64_decode($tabname);
+        if($this->db->affected_rows() > 0)
+        {
+            $this->Leads_Model->add_comment_for_events("$tabname Deleted  From This Enquiry", $enqcode);
+        }
+        redirect($this->agent->referrer());
     }
 
 
