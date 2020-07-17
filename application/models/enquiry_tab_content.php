@@ -358,7 +358,6 @@
               <?php
                 $sql  = "SELECT GROUP_CONCAT(concat(`extra_enquery`.`input`,'#',`extra_enquery`.`fvalue`,'#',`extra_enquery`.`created_date`) separator ',') as d FROM `extra_enquery` INNER JOIN (select * from tbl_input where form_id=$tid) as tbl_input ON `tbl_input`.`input_id`=`extra_enquery`.`input` where `extra_enquery`.`cmp_no`=$comp_id and `extra_enquery`.`enq_no`='$details->Enquery_id' GROUP BY `extra_enquery`.`comment_id` ORDER BY `extra_enquery`.`comment_id` DESC";
                 $res = $this->db->query($sql)->result_array();
-                
                 if (!empty($res)) {
                   foreach ($res as $key => $value) {
                     ?>
@@ -379,7 +378,7 @@
                           <td><?=$d?></td>                                                                            
                         <?php
                       } ?>
-                      <td><?=!empty($arr1[2])?$arr1[2]:'NA'?></td>                                                  
+                      <td><?=!empty($arr1[2])?$arr1[2]:'NA'?></td>                                          
                       <?php
                     } ?>                    
                     </tr>

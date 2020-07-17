@@ -350,6 +350,7 @@
                     }
                     ?>
                     <th>Created At</th>
+                    <th>Action</th>
                     <?php
                   }
                   ?>
@@ -357,8 +358,10 @@
             </thead>
             <tbody>
               <?php
-                $sql  = "SELECT GROUP_CONCAT(concat(`extra_enquery`.`input`,'#',`extra_enquery`.`fvalue`,'#',`extra_enquery`.`created_date`) separator ',') as d FROM `extra_enquery` INNER JOIN (select * from tbl_input where form_id=$tid) as tbl_input ON `tbl_input`.`input_id`=`extra_enquery`.`input` where `extra_enquery`.`cmp_no`=$comp_id and `extra_enquery`.`enq_no`='$details->Enquery_id' GROUP BY `extra_enquery`.`comment_id` ORDER BY `extra_enquery`.`comment_id` DESC";
-                $res = $this->db->query($sql)->result_array();                
+                $sql  = "SELECT GROUP_CONCAT(concat(`extra_enquery`.`input`,'#',`extra_enquery`.`fvalue`,'#',`extra_enquery`.`created_date`,'#',`extra_enquery`.`comment_id`) separator ',') as d FROM `extra_enquery` INNER JOIN (select * from tbl_input where form_id=$tid) as tbl_input ON `tbl_input`.`input_id`=`extra_enquery`.`input` where `extra_enquery`.`cmp_no`=$comp_id and `extra_enquery`.`enq_no`='$details->Enquery_id' GROUP BY `extra_enquery`.`comment_id` ORDER BY `extra_enquery`.`comment_id` DESC";
+                $res = $this->db->query($sql)->result_array();    
+                //print_r($res);die;
+
                 if (!empty($res)) {
                   foreach ($res as $key => $value) {
                     ?>
@@ -382,7 +385,8 @@
                         <?php
                       } 
                       ?>
-                      <td><?=!empty($arr1[2])?$arr1[2]:'NA'?></td>                                                  
+                      <td><?=!empty($arr1[2])?$arr1[2]:'NA'?></td>
+                      <td><?=!empty($arr1[3])? "<a href='".base_url("enquiry/deleteDocument/$arr1[3]/$details->Enquery_id/".base64_encode($tabname)."")."' onclick='return alert(\'are you sure\')'><i class='fa fa-trash'></i></a> " :'NA'?></td>                                                  
                       <?php
                     } ?>                    
                     </tr>

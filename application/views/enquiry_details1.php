@@ -562,7 +562,7 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                 <i class="fa fa-thumbs-o-down"></i>
                 </a>
                 <?php }elseif ($enquiry->status==2) { ?>
-                  <a class="btn  btn-info" title="Mark as Client" href="<?=base_url().'lead/convert_to_lead/'.$enquiry->enquiry_id?>">
+                  <a class="btn  btn-info" title="Mark as Client" href="<?=base_url().'lead/convert_to_lead/'.$enquiry->enquiry_id?>" onclick="return confirm('Are you sure you want to Mark this lead as client ?')" >
                   <i class="fa fa-user"></i>
                   <a class="btn btn-danger"  type="button" title="Drop Lead" data-target="#dropEnquiry" data-toggle="modal">
                   <i class="fa fa-thumbs-o-down"></i>
@@ -676,6 +676,7 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
 
                 <?php 
               if(!empty($tab_list)){
+                //print_r($tab_list);die;
                 foreach ($tab_list as $key => $value) { 
                   if ($value['id'] != 1) { ?>
                     <li><a href="#<?=str_replace(' ', '_', $value['title'])?>" data-toggle="tab" style="padding: 10px 10px; font-size:12px;"><?=$value['title']?></a></li>
@@ -1935,7 +1936,7 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                   <div class="tab-pane" id="<?=str_replace(' ', '_', $value['title'])?>">
                   <?php
                   if ($value['id'] != 1) {
-                    echo tab_content($value['id'],$this->session->companey_id,$enquiry_id); 
+                    echo tab_content($value['id'],$this->session->companey_id,$enquiry_id,str_replace(' ', '_', $value['title'])); 
                   }
                   ?>
                   </div>
@@ -1950,119 +1951,9 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
             </div>
       </div>
       </div>
-      <div class="col-md-3 col-height">        
+      <div class="col-md-3 col-height activitytimelinediv">        
          <h3 class="text-center">Activity Timeline</h3><hr>
-          <ul class="cbp_tmtimeline" style="margin-left:-30px;">
-
-              <?php  
-              foreach($comment_details as $comments){ ?>
-              <?php if($comments->comment_msg=='Stage Updated'){ ?>
-                <li>
-                  <div class="cbp_tmicon cbp_tmicon-phone" style="background:#cb4335;"></div>
-                  <div class="cbp_tmlabel"  style="background:#95a5a6;">
-                    <span style="font-weight:900;font-size:15px;"><?php echo ucfirst($comments->comment_msg); ?></span></br>
-                    <?php if($comments->comment_msg=='Stage Updated'){ ?>
-                    <span style="font-weight:900;font-size:12px;"><?php echo ucfirst($comments->lead_stage_name); ?></span>
-                    </br>
-                    <span style="font-weight:900;font-size:10px;"><?php echo ucfirst($comments->description); ?></span>
-                    </br>
-                    <span style="font-weight:900;font-size:10px;"><?php echo ucfirst($comments->remark); ?></span>
-                    <?php } ?>
-                    <p><?php echo date("j-M-Y h:i:s a",strtotime($comments->ddate)); ?><br>
-                    Updated By : <strong><?php echo ucfirst($comments->comment_created_by . ' ' .$comments->lastname); ?></strong></p>
-                  </div>
-                </li>
-                <?php }else if($comments->comment_msg=='Enquiry moved'){ ?>
-                <li>
-                  <div class="cbp_tmicon cbp_tmicon-phone"  style="background:#148f77;"></div>
-                  <div class="cbp_tmlabel"  style="background:#95a5a6;">
-                    <span style="font-weight:900;font-size:15px;"><?php echo ucfirst($comments->comment_msg); ?></span></br>
-                    <?php if($comments->comment_msg=='Stage Updated'){ ?>
-                    <span style="font-weight:900;font-size:12px;"><?php echo ucfirst($comments->lead_stage_name); ?></span>
-                    </br>
-                    <span style="font-weight:900;font-size:10px;"><?php echo ucfirst($comments->description); ?></span>
-                    </br>
-                    <span style="font-weight:900;font-size:10px;"><?php echo ucfirst($comments->remark); ?></span>
-                    <?php } ?>
-                    <p><?php echo date("j-M-Y h:i:s a",strtotime($comments->ddate)); ?><br>
-                      Updated By : <strong><?php echo ucfirst($comments->comment_created_by . ' ' .$comments->lastname); ?></strong></p>
-                  </div>
-                </li>
-                <?php }else if($comments->comment_msg=='Move to leads'){ ?>
-                <li>
-                  <div class="cbp_tmicon cbp_tmicon-phone"  style="background:#2980b9;"></div>
-                  <div class="cbp_tmlabel"  style="background:#95a5a6;">
-                  <span style="font-weight:900;font-size:15px;"><?php echo ucfirst($comments->comment_msg); ?></span></br>
-                    <?php if($comments->comment_msg=='Stage Updated'){ ?>
-                    <span style="font-weight:900;font-size:12px;"><?php echo ucfirst($comments->lead_stage_name); ?></span>
-                    </br>
-                    <span style="font-weight:900;font-size:10px;"><?php echo ucfirst($comments->description); ?></span>
-                    </br>
-                    <span style="font-weight:900;font-size:10px;"><?php echo ucfirst($comments->remark); ?></span>
-                    <?php } ?>
-                    <p><?php echo date("j-M-Y h:i:s a",strtotime($comments->ddate)); ?><br>
-                    Updated By : <strong><?php echo ucfirst($comments->comment_created_by . ' ' .$comments->lastname); ?></strong></p>
-                  </div>
-                </li>
-                <?php }else if($comments->comment_msg=='Enquiry Created'){ ?>
-                <li>
-                  <div class="cbp_tmicon cbp_tmicon-phone"  style="background:#d68910;"></div>
-                  <div class="cbp_tmlabel"  style="background:#95a5a6;">
-                    <span style="font-weight:900;font-size:15px;"><?php echo ucfirst($comments->comment_msg); ?></span></br>
-                    <?php if($comments->comment_msg=='Stage Updated'){ ?>
-                    <span style="font-weight:900;font-size:12px;"><?php echo ucfirst($comments->lead_stage_name); ?></span>
-                    </br>
-                    <span style="font-weight:900;font-size:10px;"><?php echo ucfirst($comments->description); ?></span>
-                    </br>
-                    <span style="font-weight:900;font-size:10px;"><?php echo ucfirst($comments->remark); ?></span>
-                    <?php } ?>
-                    <p><?php echo date("j-M-Y h:i:s a",strtotime($comments->ddate)); ?><br>
-                    Updated By : <strong><?php echo ucfirst($comments->comment_created_by . ' ' .$comments->lastname); ?></strong></p>
-                  </div>
-                </li>
-                <?php }else if($comments->comment_msg=='Enquiry dropped' || $comments->comment_msg=='Lead dropped' || $comments->comment_msg=='Client dropped'){ ?>
-                <li>
-                  <div class="cbp_tmicon cbp_tmicon-phone"  style="background:#d68910;"></div>
-                  <div class="cbp_tmlabel"  style="background:#95a5a6;">
-                    <span style="font-weight:900;font-size:15px;"><?php echo ucfirst($comments->comment_msg); ?></span></br>
-                    
-                    <span style="font-size:12px;">Reason:- </span><span style="font-size:11px;"><?php if(!empty($comments->drop_status)) echo get_drop_status_name($comments->drop_status);?></span>
-                    <br>
-                    <spna style="font-size:12px;">Remark:- </spna><span style="font-size:11px;"><?php if(!empty($comments->drop_reason)) echo $comments->drop_reason;?></span>
-
-
-                    <?php if($comments->comment_msg=='Stage Updated'){ ?>
-                    <span style="font-weight:900;font-size:12px;"><?php echo ucfirst($comments->lead_stage_name); ?></span>
-                    </br>
-                    <span style="font-weight:900;font-size:10px;"><?php echo ucfirst($comments->description); ?></span>
-                    </br>
-                    <span style="font-weight:900;font-size:10px;"><?php echo ucfirst($comments->remark); ?></span>
-                    <?php } ?>
-                    <p><?php echo date("j-M-Y h:i:s a",strtotime($comments->ddate)); ?><br>
-                    Updated By : <strong><?php echo ucfirst($comments->comment_created_by . ' ' .$comments->lastname); ?></strong></p>
-                  </div>
-                </li>
-                <?php }else{ ?>
-                <li>
-                  <div class="cbp_tmicon cbp_tmicon-phone"  style=""></div>
-                  <div class="cbp_tmlabel"  style="background:#95a5a6;">
-                    <span style="font-weight:900;font-size:15px;"><?php echo ucfirst($comments->comment_msg); ?></span></br>
-                    <?php if($comments->comment_msg=='Stage Updated'){ ?>
-                    <span style="font-weight:900;font-size:12px;"><?php echo ucfirst($comments->lead_stage_name); ?></span>
-                    </br>
-                    <span style="font-weight:900;font-size:10px;"><?php echo ucfirst($comments->description); ?></span>
-                    </br>
-                    <span style="font-weight:900;font-size:10px;"><?php echo ucfirst($comments->description); ?></span>
-                    <?php } ?>
-                    <p><?php echo date("j-M-Y h:i:s a",strtotime($comments->ddate)); ?><br>
-                      Updated By : <strong><?php echo ucfirst($comments->comment_created_by . ' ' .$comments->lastname); ?></strong></p>
-                  </div>
-                </li>
-                <?php 
-                } 
-              }
-              ?>              
-            </ul>
+          
       </div>
       
       <style>
@@ -3225,6 +3116,23 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
       </div>
    </div>
 </div>
+
+<script type="text/javascript">
+  $(document).ready(function()
+  {
+    $.ajax({
+          url: "<?php echo base_url().'enquiry/activityTimeline'?>",
+          type: 'POST',          
+          data: {
+              'id':<?=$enquiry_id?>
+          },
+          success: function(content) {                       
+            $(".activitytimelinediv").html(content);
+           // $("#task_edit").modal('show');
+          }
+      });
+  })
+</script>
 
 <script>
     function get_modal_content(tid){            

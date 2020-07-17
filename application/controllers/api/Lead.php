@@ -266,9 +266,9 @@ class Lead extends REST_Controller {
       
           $this->db->set('territory_id',$city_id->row()->territory_id);
       
-          $this->db->set('other_no', $other_no);
+          //$this->db->set('other_phone', $other_no);
       
-          $this->db->set('other_email',$other_email);
+          //$this->db->set('other_email',$other_email);
       
           $this->db->set('phone',$mobile);
           
@@ -280,19 +280,19 @@ class Lead extends REST_Controller {
       
           $this->db->set('enquiry_source',$lead_source);
       
-          $this->db->set('referdby',$ref);
+          //$this->db->set('referdby',$ref);
           
           $this->db->set('enquiry',$enquiry);
         
-          $this->db->set('enquiry_cust_type',$enquiry_cust_type);
+          //$this->db->set('enquiry_cust_type',$enquiry_cust_type);
       
           $this->db->set('org_name',$org_name);
       
-          $this->db->set('channel_partnr_type',$partener);
+          //$this->db->set('channel_partnr_type',$partener);
       
-          $this->db->set('customer_type',$customer_types);
+          //$this->db->set('customer_type',$customer_types);
       
-          $this->db->set('op_size',$this->input->post('opportunity_size'));
+          //$this->db->set('op_size',$this->input->post('opportunity_size'));
       
           $this->db->set('lastname',$this->input->post('lastname'));
       

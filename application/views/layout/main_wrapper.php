@@ -752,6 +752,11 @@ if($root=='https://student.spaceinternationals.com'){	 ?>
 					 <?php  if($this->session->menu==1){ ?></br><p style="color:#fff;font-size:9px;margin-left:-12px;padding-top:10px;"><?php echo display('sales_setting'); ?></p> <?php } ?>
                      </a>
                      <ul class="treeview-menu <?php echo (($segment1 == "lead" && $segment2 != "index" && $segment2 != "lead_details") ?"menu-open":'') ?>">
+                        <li class="<?php echo (in_array($segment2,array('stage')) ?"active":'') ?>">
+                  <?php if($this->session->companey_id == 1) { ?>
+                          <a href="<?php echo base_url(); ?>leadscorerule"> <?php echo "lead score rule"; ?> </a>
+                        <?php }?>
+                        </li>
 
                         <li class="<?php echo (in_array($segment2,array('stage')) ?"active":'') ?>">
                           <a href="<?php echo base_url(); ?>lead/stage"> <?php echo display("lead_stage"); ?> </a>
