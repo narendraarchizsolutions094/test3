@@ -1170,16 +1170,16 @@ class Enquiry extends CI_Controller {
         $html.= '<li>
                   <div class="cbp_tmicon cbp_tmicon-phone" style="background:#cb4335;"></div>
                   <div class="cbp_tmlabel"  style="background:#95a5a6;">
-                    <span style="font-weight:900;font-size:15px;">'.echo ucfirst($comments->comment_msg).'</span></br>';
+                    <span style="font-weight:900;font-size:15px;">'.ucfirst($comments->comment_msg).'</span></br>';
                 if($comments->comment_msg=='Stage Updated'){ 
-        $html.=  '<span style="font-weight:900;font-size:12px;">'.echo ucfirst($comments->lead_stage_name).'</span>
+        $html.=  '<span style="font-weight:900;font-size:12px;">'.ucfirst($comments->lead_stage_name).'</span>
                     </br>
-                    <span style="font-weight:900;font-size:10px;">'. echo ucfirst($comments->description).'</span>
+                    <span style="font-weight:900;font-size:10px;">'. ucfirst($comments->description).'</span>
                     </br>
-                    <span style="font-weight:900;font-size:10px;">'.echo ucfirst($comments->remark).'</span>';
+                    <span style="font-weight:900;font-size:10px;">'.ucfirst($comments->remark).'</span>';
                      } 
-          $html.= '<p>'.echo date("j-M-Y h:i:s a",strtotime($comments->ddate)).'<br>
-                    Updated By : <strong>'.echo ucfirst($comments->comment_created_by . ' ' .$comments->lastname)'</strong></p>
+          $html.= '<p>'.date("j-M-Y h:i:s a",strtotime($comments->ddate)).'<br>
+                    Updated By : <strong>'.ucfirst($comments->comment_created_by . ' ' .$comments->lastname).'</strong></p>
                   </div>
                 </li>';
 
@@ -1187,93 +1187,93 @@ class Enquiry extends CI_Controller {
         $html.='    <li>
                   <div class="cbp_tmicon cbp_tmicon-phone"  style="background:#148f77;"></div>
                   <div class="cbp_tmlabel"  style="background:#95a5a6;">
-                    <span style="font-weight:900;font-size:15px;">'.echo ucfirst($comments->comment_msg).'</span></br>';
+                    <span style="font-weight:900;font-size:15px;">'.ucfirst($comments->comment_msg).'</span></br>';
                     if($comments->comment_msg=='Stage Updated'){ 
-        $html.='<span style="font-weight:900;font-size:12px;">'. echo ucfirst($comments->lead_stage_name).' </span>
+        $html.='<span style="font-weight:900;font-size:12px;">'. ucfirst($comments->lead_stage_name).' </span>
                     </br>
-                    <span style="font-weight:900;font-size:10px;">'. echo ucfirst($comments->description).' </span>
+                    <span style="font-weight:900;font-size:10px;">'. ucfirst($comments->description).' </span>
                     </br>
-                    <span style="font-weight:900;font-size:10px;">'. echo ucfirst($comments->remark).' </span>';
+                    <span style="font-weight:900;font-size:10px;">'. ucfirst($comments->remark).' </span>';
                      } 
-          $html.'<p>'. echo date("j-M-Y h:i:s a",strtotime($comments->ddate)).' <br>
-                      Updated By : <strong>'. echo ucfirst($comments->comment_created_by . ' ' .$comments->lastname).' </strong></p>
+          $html.'<p>'. date("j-M-Y h:i:s a",strtotime($comments->ddate)).' <br>
+                      Updated By : <strong>'. ucfirst($comments->comment_created_by . ' ' .$comments->lastname).' </strong></p>
                   </div>
                 </li>';
                 }else if($comments->comment_msg=='Move to leads'){ 
           $html.='<li>
                   <div class="cbp_tmicon cbp_tmicon-phone"  style="background:#2980b9;"></div>
                   <div class="cbp_tmlabel"  style="background:#95a5a6;">
-                  <span style="font-weight:900;font-size:15px;">'. echo ucfirst($comments->comment_msg).' </span></br>';
+                  <span style="font-weight:900;font-size:15px;">'. ucfirst($comments->comment_msg).' </span></br>';
                      if($comments->comment_msg=='Stage Updated'){ 
-           $html.='<span style="font-weight:900;font-size:12px;">'.echo ucfirst($comments->lead_stage_name).' </span>
+           $html.='<span style="font-weight:900;font-size:12px;">'.ucfirst($comments->lead_stage_name).' </span>
                     </br>
-                    <span style="font-weight:900;font-size:10px;">'. echo ucfirst($comments->description).' </span>
+                    <span style="font-weight:900;font-size:10px;">'. ucfirst($comments->description).' </span>
                     </br>
-                    <span style="font-weight:900;font-size:10px;">'. echo ucfirst($comments->remark).' </span>';
+                    <span style="font-weight:900;font-size:10px;">'. ucfirst($comments->remark).' </span>';
                      } 
-             $html.='<p>'. echo date("j-M-Y h:i:s a",strtotime($comments->ddate)).' <br>
-                    Updated By : <strong>'. echo ucfirst($comments->comment_created_by . ' ' .$comments->lastname).' </strong></p>
+             $html.='<p>'. date("j-M-Y h:i:s a",strtotime($comments->ddate)).' <br>
+                    Updated By : <strong>'. ucfirst($comments->comment_created_by . ' ' .$comments->lastname).' </strong></p>
                   </div>
                 </li>';
                  }else if($comments->comment_msg=='Enquiry Created'){ 
              $html.='   <li>
                   <div class="cbp_tmicon cbp_tmicon-phone"  style="background:#d68910;"></div>
                   <div class="cbp_tmlabel"  style="background:#95a5a6;">
-                    <span style="font-weight:900;font-size:15px;">'. echo ucfirst($comments->comment_msg).' </span></br>';
+                    <span style="font-weight:900;font-size:15px;">'. ucfirst($comments->comment_msg).' </span></br>';
                      if($comments->comment_msg=='Stage Updated'){ 
-             $html.='<span style="font-weight:900;font-size:12px;">'. echo ucfirst($comments->lead_stage_name).' </span>
+             $html.='<span style="font-weight:900;font-size:12px;">'. ucfirst($comments->lead_stage_name).' </span>
                     </br>
-                    <span style="font-weight:900;font-size:10px;">'.echo ucfirst($comments->description).' </span>
+                    <span style="font-weight:900;font-size:10px;">'.ucfirst($comments->description).' </span>
                     </br>
-                    <span style="font-weight:900;font-size:10px;">'. echo ucfirst($comments->remark).' </span>';
+                    <span style="font-weight:900;font-size:10px;">'. ucfirst($comments->remark).' </span>';
                      } 
-              $html.='<p>'. echo date("j-M-Y h:i:s a",strtotime($comments->ddate)).' <br>
-                    Updated By : <strong>'. echo ucfirst($comments->comment_created_by . ' ' .$comments->lastname).' </strong></p>
+              $html.='<p>'. date("j-M-Y h:i:s a",strtotime($comments->ddate)).' <br>
+                    Updated By : <strong>'. ucfirst($comments->comment_created_by . ' ' .$comments->lastname).' </strong></p>
                   </div>
                 </li>';
                  }else if($comments->comment_msg=='Enquiry dropped' || $comments->comment_msg=='Lead dropped' || $comments->comment_msg=='Client dropped'){ 
             $html.='<li>
                   <div class="cbp_tmicon cbp_tmicon-phone"  style="background:#d68910;"></div>
                   <div class="cbp_tmlabel"  style="background:#95a5a6;">
-                    <span style="font-weight:900;font-size:15px;">'. echo ucfirst($comments->comment_msg).' </span></br>
+                    <span style="font-weight:900;font-size:15px;">'. ucfirst($comments->comment_msg).' </span></br>
                     
                     <span style="font-size:12px;">Reason:- </span><span style="font-size:11px;">'; 
             if(!empty($comments->drop_status)) 
                 {
-           $html.= ''.echo get_drop_status_name($comments->drop_status).'</span>
+           $html.= ''.get_drop_status_name($comments->drop_status).'</span>
                     <br>';
                 }
             $html.= '<span style="font-size:12px;">Remark:- </spna><span style="font-size:11px;">'; if(!empty($comments->drop_reason))
                     {
-                        $html.=''.echo $comments->drop_reason.'</span>';
+                        $html.=''.$comments->drop_reason.'</span>';
                     } 
 
 
                      if($comments->comment_msg=='Stage Updated'){ 
-             $html.='<span style="font-weight:900;font-size:12px;">'. echo ucfirst($comments->lead_stage_name).' </span>
+             $html.='<span style="font-weight:900;font-size:12px;">'. ucfirst($comments->lead_stage_name).' </span>
                     </br>
-                    <span style="font-weight:900;font-size:10px;">'.echo ucfirst($comments->description).' </span>
+                    <span style="font-weight:900;font-size:10px;">'.ucfirst($comments->description).' </span>
                     </br>
-                    <span style="font-weight:900;font-size:10px;">'.echo ucfirst($comments->remark).' </span>';
+                    <span style="font-weight:900;font-size:10px;">'.ucfirst($comments->remark).' </span>';
                      } 
-               $html.='<p>'. echo date("j-M-Y h:i:s a",strtotime($comments->ddate)).' <br>
-                    Updated By : <strong>'. echo ucfirst($comments->comment_created_by . ' ' .$comments->lastname).' </strong></p>
+               $html.='<p>'. date("j-M-Y h:i:s a",strtotime($comments->ddate)).' <br>
+                    Updated By : <strong>'. ucfirst($comments->comment_created_by . ' ' .$comments->lastname).' </strong></p>
                   </div>
                 </li>';
                  }else{ 
    $html.='  <li>
                   <div class="cbp_tmicon cbp_tmicon-phone"  style=""></div>
                   <div class="cbp_tmlabel"  style="background:#95a5a6;">
-                    <span style="font-weight:900;font-size:15px;">'. echo ucfirst($comments->comment_msg).' </span></br>';
+                    <span style="font-weight:900;font-size:15px;">'. ucfirst($comments->comment_msg).' </span></br>';
                      if($comments->comment_msg=='Stage Updated'){ 
-              $html.='<span style="font-weight:900;font-size:12px;">'. echo ucfirst($comments->lead_stage_name).' </span>
+              $html.='<span style="font-weight:900;font-size:12px;">'. ucfirst($comments->lead_stage_name).' </span>
                     </br>
-                    <span style="font-weight:900;font-size:10px;">'.echo ucfirst($comments->description).' </span>
+                    <span style="font-weight:900;font-size:10px;">'.ucfirst($comments->description).' </span>
                     </br>
-                    <span style="font-weight:900;font-size:10px;">'.echo ucfirst($comments->description).' </span>';
+                    <span style="font-weight:900;font-size:10px;">'.ucfirst($comments->description).' </span>';
                      } 
- $html.='<p>'. echo date("j-M-Y h:i:s a",strtotime($comments->ddate)).' <br>
-                      Updated By : <strong>'. echo ucfirst($comments->comment_created_by . ' ' .$comments->lastname).' </strong></p>
+ $html.='<p>'. date("j-M-Y h:i:s a",strtotime($comments->ddate)).' <br>
+                      Updated By : <strong>'. ucfirst($comments->comment_created_by . ' ' .$comments->lastname).' </strong></p>
                   </div>
                 </li>';
                  
