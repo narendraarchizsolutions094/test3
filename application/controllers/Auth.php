@@ -2,7 +2,9 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 class Auth extends CI_Controller {
 	public function __construct(){
-		parent::__construct();				
+		parent::__construct();		
+		$this->lang->load("activitylogmsg","english");
+
 	}
 
 	public function signup_content(){
@@ -31,13 +33,42 @@ class Auth extends CI_Controller {
 						'companey_id' 	  =>	67,
 						'b_status' 	  	  =>	1,
 						'user_permissions'=>    151,
+						'user_roles'	  =>    151,
+						'user_type'	  	  =>    151,
 						'process'     	  =>	146,
 						's_password'	  =>    md5($password)
 					);
 		if ($this->form_validation->run()) {
 			$this->db->trans_start(); # Starting Transaction			
 			$this->load->model('user_model');
+			$this->load->model('enquiry_model');
 			$user_id	=	$this->user_model->create($postData);
+			$enq_code   = 	get_enquery_code();
+
+			$name 		= explode(' ', $name);
+			$fname   = $name[0];
+			$lname   = $name[1];
+
+			$enq_data 	= 	array(
+								'Enquery_id' => $enq_code,
+								'name'		 => $fname,
+								'lastname'	 => $lname,
+								'email'      => $email,
+								'phone'      => $mobile,
+								'comp_id'    => 67,
+								'status'     => 1,
+								'product_id' => 146,
+								'created_by' => 295								
+							);
+
+			$insert_id = $this->enquiry_model->create($enq_data);			
+			if ($insert_id) {
+				$this->load->model('Leads_Model');                                
+				$user_id = 295;                
+                $this->Leads_Model->add_comment_for_events_stage_api($this->lang->line("enquery_create"),$enq_code,'','','',$user_id,'');
+				$stage_id = 218; // payment done 			
+                $this->Leads_Model->add_comment_for_events_stage_api('Stage Updated',$enq_code,$stage_id,'','',$user_id,'');
+            }
 			$this->user_model->set_user_meta($user_id,array('payment_status'=>0));
 			$this->db->trans_complete(); # Completing transaction
 			if ($this->db->trans_status() === FALSE) {

@@ -2466,7 +2466,7 @@ public function alertstatus() {
                 }
             }
             redirect('lead/crslist');
-        } else {
+        } else {            
             $data['content'] = $this->load->view('institute/crs_form', $data, true);
             $this->load->view('layout/main_wrapper', $data);
         }
@@ -2509,6 +2509,7 @@ public function alertstatus() {
             }
             redirect('lead/vidlist');
         } else {
+            $data['title'] = display('add_vid');
             $data['content'] = $this->load->view('institute/vid_form', $data, true);
             $this->load->view('layout/main_wrapper', $data);
         }

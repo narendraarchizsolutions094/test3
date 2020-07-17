@@ -109,7 +109,8 @@ class Telephony extends CI_Controller {
 	
 	
 	
-	 public function click_to_dial($phone=''){
+    public function click_to_dial($phone='')
+    {
 		$url = "https://developers.myoperator.co/clickOcall";
         $data = array(
         'token'=>$this->session->telephony_token,

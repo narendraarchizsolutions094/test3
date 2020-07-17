@@ -31,7 +31,8 @@ class Webhook extends REST_Controller {
         header("Access-Control-Allow-Methods: GET, OPTIONS");
         header('Access-Control-Allow-Headers', 'Content-Type');*/
     }
-    public function call_post(){
+    public function call_post()
+    {
         $users='';
         $call_data = $_POST['myoperator'];
         $call_data_array = json_decode($call_data);
@@ -45,14 +46,14 @@ class Webhook extends REST_Controller {
 		
         $phone=$call_data_array->clid;
         $uid1=str_replace('.','_',$uid);
-      //  $this->db->set('json_data',$call_data_array);
+        //  $this->db->set('json_data',$call_data_array);
         $this->db->set('uid',$call_data_array->uid);
         $this->db->set('cll_state',$call_state);
         $this->db->set('phone_number',$phone);
         $this->db->insert('tbl_col_log');
         $insert_id = $this->db->insert_id();
-      //  if($call_state=3 || $call_state=5){
-		$NODE_PUT ="users/".$insert_id.".json";
+        //  if($call_state=3 || $call_state=5){
+		    $NODE_PUT ="users/".$insert_id.".json";
         $data = array(
         'user_phone'=>$phone,
         'uid'=>$uid,
@@ -66,8 +67,93 @@ class Webhook extends REST_Controller {
         curl_setopt( $curl, CURLOPT_RETURNTRANSFER, true );
         $response = curl_exec($curl);
         curl_close( $curl );
-		///
+		  ///
     }
+
+  public function click_to_dial_post()
+  {
+    $phone           = $this->input->post("phone_no");
+    $token           = $this->input->post("token");
+    $support_user_id = $this->input->post("support_user_id");
+    $url             = "https://developers.myoperator.co/clickOcall";
+    $data = array(
+      'token'=>$token,
+      'customer_number'=>$phone,
+      'customer_cc'=>91,
+      'support_user_id'=>$support_user_id
+    );
+    $curl = curl_init();
+    curl_setopt( $curl, CURLOPT_URL, $url);
+    curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+    curl_setopt($curl, CURLOPT_HTTPHEADER, array('application/x-www-form-urlencoded'));
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+    $response = curl_exec( $curl );
+    curl_close( $curl );
+    if($response)
+    {
+      $this->set_response([
+      'status' => true,
+      'message' => $response, 
+      ], REST_Controller::HTTP_OK);
+    }
+    else
+    {
+      $this->set_response([
+      'status' => false,
+      'message' => array('error'=>'not found!') 
+      ], REST_Controller::HTTP_OK);
+    }
+    
+    // print_r($response);
+  }
+
+  public function enquiryListByPhone_post()
+  {
+    $phone   = $this->input->post("phone_no");
+    $comp_id = $this->input->post("companey_id");
+
+    $enquiryLst = $this->db->select("enquiry_id,Enquery_id")->from("enquiry")->where("phone",$phone,'comp_id',$comp_id)->get()->result_array();
+    if(!empty($enquiryLst))
+    {
+      $this->set_response([
+      'status' => true,
+      'message' => $enquiryLst, 
+      ], REST_Controller::HTTP_OK);
+    }
+    else
+    {
+      $this->set_response([
+        'status' => false,
+        'message' => array('error'=>'not found!') 
+        ], REST_Controller::HTTP_OK);
+    }
+  }
+
+  public function updateEnquiryStatus_post()
+  {
+    $phone   = '91'.$this->input->post("phone_no");
+    $Enquery_id = $this->input->post("Enquery_id");
+    $uid = $this->input->post("user_id");
+    $this->db->set('status',1);
+    $this->db->set('enq_id',$Enquery_id);
+    $this->db->where('phone_number',$phone);
+    $this->db->where('uid',$uid);
+    $update = $this->db->update('tbl_col_log');
+    if($update)
+    {
+      $this->set_response([
+        'status' => true,
+        'message' => 'updated', 
+        ], REST_Controller::HTTP_OK);
+    }
+    else
+    {
+      $this->set_response([
+        'status' => false,
+        'message' => 'something went wrong', 
+        ], REST_Controller::HTTP_OK);
+    }
+  }
     
 	public function in_call_post(){
         $users='';
