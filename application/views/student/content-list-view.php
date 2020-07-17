@@ -16,7 +16,11 @@ a:hover, a:focus {
 					foreach($courses as $key =>  $movie){ ?>
 					<div class="row grid-show" style="border:2px solid #337ab7;border-radius: 20px 0px;">
 						<div class="col-md-3 text-center">
-							<img class="img-responsive" src="<?php echo base_url($movie->course_image);	?>" style="width:40%;height: 40%">
+					<?php if(!empty($movie->profile_image)){ ?>
+							<img class="img-responsive" src="<?php echo 'https://student.spaceinternationals.com/new_crm/'.$movie->profile_image; ?>" style="">
+					<?php }else{ ?>
+					       <img class="img-responsive" src="<?php echo base_url('assets/images/NoPicAvailable.png'); ?>" style="">
+					<?php } ?>
 						</div>
 						<div class="col-md-9">
 							<div class="row">
@@ -48,7 +52,7 @@ a:hover, a:focus {
 	                                    <h5 class="badge-success-lighten col-md-6" id="h" style="color:#000000;font-size:14px;font-family: monospace;">Availbility Time :<?php if(!empty($movie->stm)){ echo $movie->stm;}else{ echo 'No Schedule Time'; } ?></h5>
 	                                     <h5 class="badge-success-lighten col-md-6" id="h" style="color:#000000;font-size:14px;font-family: monospace;">Queue No. :<?= $i;?></h5>
 									<?php } ?>
-<div class="col-md-6" style="padding-top:5px;"><a href="#" class="btn btn-success"><span><i class="fa fa-info-circle" aria-hidden="true"></i></span></a>&nbsp;&nbsp;
+<div class="col-md-6" style="padding-top:5px;"><a href="<?php echo base_url('dashboard/course_details/'.$movie->institute_id.'/'.$movie->crs_id); ?>" class="btn btn-success"><span><i class="fa fa-info-circle" aria-hidden="true"></i></span></a>&nbsp;&nbsp;
 <a href="<?php echo 'add_wishlist/'.$movie->crs_id.'/'.$movie->institute_id;?>" class="btn btn-danger"><span><i class="fa fa-heart-o" aria-hidden="true"></i></span></a>&nbsp;&nbsp;
 <?php if ($this->session->companey_id!='67') { ?>
 <a href="#" class="btn btn-primary"><span><i class="fa fa-video-camera" aria-hidden="true"></i></span></a>&nbsp;&nbsp;

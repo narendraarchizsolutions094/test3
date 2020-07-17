@@ -1980,6 +1980,19 @@ public function add_wishlist() {
     $this->db->insert('tbl_wishlist',$data);
 	redirect('dashboard/search_programs');
     }
+	
+	public function course_details() {
+		$ins=$this->uri->segment(3);
+		$crs=$this->uri->segment(4);
+		$data['title'] = display('course_details');
+		$data['ins_details'] = $this->location_model->ins_details($ins);
+		$data['crs_details'] = $this->location_model->crs_details($crs);
+		  /* echo '<pre>';
+		print_r($data['ins_details']);
+		echo '</pre>';exit; */ 
+		$data['content'] = $this->load->view('student/detail_page', $data, true);
+        $this->load->view('layout/main_wrapper', $data);
+    }
 	/********************************************************student panel*******************************************/
 
 
