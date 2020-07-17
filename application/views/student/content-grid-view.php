@@ -44,7 +44,7 @@
 <?php } ?>
 									</div>
 								</a>
-<div style="padding-left:1%"><a href="#" class="btn btn-success"><span><i class="fa fa-info-circle" aria-hidden="true"></i></span></a>&nbsp;&nbsp;
+<div style="padding-left:1%"><a href="<?php echo base_url('dashboard/course_details/'.$movie->institute_id.'/'.$movie->crs_id); ?>" class="btn btn-success"><span><i class="fa fa-info-circle" aria-hidden="true"></i></span></a>&nbsp;&nbsp;
 <a href="<?php echo 'add_wishlist/'.$movie->crs_id.'/'.$movie->institute_id;?>" class="btn btn-danger"><span><i class="fa fa-heart-o" aria-hidden="true"></i></span></a>&nbsp;&nbsp;
 <a href="" class="btn btn-primary"><span><i class="fa fa-cart-plus" aria-hidden="true"></i></span> Apply</a>&nbsp;&nbsp;
 									</div><br>

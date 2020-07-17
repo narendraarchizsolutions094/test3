@@ -788,5 +788,27 @@ public function find_discipline() {
                         ->get()
                         ->result();
     }
+	
+	public function ins_details($inid) {
+
+        return $this->db->select("institute_id,profile_image,institute_name,ins_desc")
+                        ->from("tbl_institute")
+                        ->where('institute_id',$inid)
+                        ->get()
+                        ->result();
+    }
+	
+	public function crs_details($crs) {
+
+        return $this->db->select("tbl_course.course_ielts,tbl_levels.level,tbl_discipline.discipline,tbl_length.length,tbl_crsmaster.course_name")
+                        ->from("tbl_course")
+						->join('tbl_levels', 'tbl_levels.id = tbl_course.level_id','left')
+						->join('tbl_discipline', 'tbl_discipline.id = tbl_course.discipline_id','left')
+						->join('tbl_length', 'tbl_length.id = tbl_course.length_id','left')
+						->join('tbl_crsmaster', 'tbl_crsmaster.id = tbl_course.course_name','left')
+                        ->where('tbl_course.crs_id',$crs)
+                        ->get()
+                        ->result();
+    }
 
 }
