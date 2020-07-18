@@ -25,7 +25,7 @@
               <div id="process_basic_fields" class="row">
               </div>            
               <div class="row">
-                  <button class="btn btn-success" type="submit">Save</button>
+                  <button class="btn btn-primary" type="submit">Save</button>
                   <input  class="btn btn-success" type="button" id="saveandnew" value="Save And Create New"/>
               </div>
             </form>

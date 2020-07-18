@@ -1280,11 +1280,24 @@ class Enquiry extends CI_Controller {
     function deleteDocument($cmmnt_id,$enqcode,$tabname)
     {
         // echo "$cmmnt_id";die;
+
+        $dataAry = $this->db->select('fvalue')->from('extra_enquery')->where("comment_id",$cmmnt_id)->get()->result_array();
+
         $this->db->where("comment_id",$cmmnt_id);
         $this->db->delete('extra_enquery');
         $tabname = base64_decode($tabname);
         if($this->db->affected_rows() > 0)
-        {
+        {   
+            if ($tabname == "Documents")
+            {
+
+               foreach ($dataAry as $k)
+                {   //echo "ddd".$k['fvalue'];die;
+                    //echo"<pre>";print_r($k);die;
+                    unlink($k['fvalue']);
+                }
+            }
+            
             $this->Leads_Model->add_comment_for_events("$tabname Deleted  From This Enquiry", $enqcode);
         }
         redirect($this->agent->referrer());

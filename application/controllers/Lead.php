@@ -1267,22 +1267,47 @@ if($coment_type == 1){
 	
 	public function courselist() {
         if (user_role('30') == true) {}
-        $data['title'] = display('course_list');
-        $data['course_list'] = $this->Institute_model->courselist();
+        $data['title']          = display('course_list');
+        $this->load->library('pagination');
+        $config                 = array();
+        $config["base_url"]     = base_url() . "lead/courselist";
+        $config["total_rows"]   = $this->Institute_model->courselist('','','count');
+        $config["per_page"]     = 10;
+
+        $this->pagination->initialize($config);
+
+        $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+
+        $data["links"]          = $this->pagination->create_links();
+
+        $data['course_list']    = $this->Institute_model->courselist($config["per_page"], $page);
         /*echo $this->db->last_query();
         print_r($data['institute_list']);*/
-		$data['courses'] = $this->Institute_model->findcourse();
-		$data['discipline'] = $this->location_model->find_discipline();
-		$data['level'] = $this->location_model->find_level();
-		$data['length'] = $this->location_model->find_length();
-        $data['content'] = $this->load->view('institute/course_list', $data, true);
+		$data['courses']        = $this->Institute_model->findcourse();
+		$data['discipline']     = $this->location_model->find_discipline();
+		$data['level']          = $this->location_model->find_level();
+		$data['length']         = $this->location_model->find_length();
+        $data['content']        = $this->load->view('institute/course_list', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }
 	
 	public function crslist() {
         if (user_role('30') == true) {}
         $data['title'] = display('course_master');
-        $data['course_list'] = $this->Institute_model->crslist();
+        $this->load->library('pagination');
+        $config = array();
+        $config["base_url"] = base_url() . "lead/crslist";
+        $config["total_rows"] = $this->Institute_model->crslist('','','count');
+        $config["per_page"] = 10;
+
+        $this->pagination->initialize($config);
+
+        $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+
+        $data["links"] = $this->pagination->create_links();
+
+        $data['course_list'] = $this->Institute_model->crslist($config["per_page"], $page);
+        
         /*echo $this->db->last_query();
         print_r($data['institute_list']);*/
         $data['content'] = $this->load->view('institute/crs_list', $data, true);

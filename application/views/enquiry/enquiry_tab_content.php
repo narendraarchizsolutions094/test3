@@ -344,7 +344,9 @@
                 <tr>
                   <?php
                   if(!empty($dynamic_field)) {
-                    foreach($dynamic_field as $ind => $fld){ ?>
+                    $counter = 0;
+                    foreach($dynamic_field as $ind => $fld){ $counter++; ?>
+
                         <th><?=ucwords($fld["input_label"])?></th>
                     <?php
                     }
@@ -386,13 +388,16 @@
                       } 
                       ?>
                       <td><?=!empty($arr1[2])?$arr1[2]:'NA'?></td>
-                      <td><?=!empty($arr1[3])? "<a href='".base_url("enquiry/deleteDocument/$arr1[3]/$details->Enquery_id/".base64_encode($tabname)."")."' onclick='return alert(\'are you sure\')'><i class='fa fa-trash'></i></a> " :'NA'?></td>                                                  
+                      <td><?=!empty($arr1[3])? "<a class='btn btn-danger' href='".base_url("enquiry/deleteDocument/$arr1[3]/$details->Enquery_id/".base64_encode($tabname)."")."' onclick='return alert(\'are you sure\')'><i class='fa fa-trash'></i></a> " :'NA'?></td>                                                  
                       <?php
                     } ?>                    
                     </tr>
                     <?php
                   }
                 }
+                else { ?>
+                  <tr><td colspan="<?=($counter+2);?>" class="text-center">No Records Found</td></tr>
+                <?php } 
               ?>              
             </tbody>
           </table>
