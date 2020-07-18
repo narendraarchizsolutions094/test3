@@ -60,11 +60,13 @@ class Login extends REST_Controller {
                 }
 
                 $data=array(
-                    'isLogIn'   => true,
-                    'user_id' => $check_user->row()->pk_i_admin_id,
-                    'companey_id' =>$check_user->row()->companey_id,
-                    'email'     => $check_user->row()->s_user_email,
-                    'orgisation_name' =>$check_user->row()->orgisation_name,
+                    'isLogIn'           => true,
+                    'user_id'           => $check_user->row()->pk_i_admin_id,
+                    'companey_id'       => $check_user->row()->companey_id,
+                    'email'             => $check_user->row()->s_user_email,
+                    'orgisation_name'   => $check_user->row()->orgisation_name,
+                    'telephony_id'      => $check_user->row()->telephony_agent_id,
+                    'token'             => $check_user->row()->telephony_token,
                     
                 );
                    $this->set_response([

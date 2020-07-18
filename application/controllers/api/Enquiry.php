@@ -436,6 +436,7 @@ class Enquiry extends REST_Controller {
 							'created_by' 		=> (isset($_POST["user_id"])) ? $this->input->post("user_id", true) : "191",
 							'lead_stage'        => (isset($_POST["lead_stage"])) ? $this->input->post("lead_stage", true) : "",
 							'status' 			=> 1,
+							'aasign_to' 			=> (isset($_POST["assign_to"])) ? $this->input->post("assign_to", true) : "",
 							'partner_id' 		=> (isset($_POST["partner_id"])) ? $this->input->post("partner_id", true) : ""
 						];
 	

@@ -2656,6 +2656,40 @@ $cpny_id=$this->session->companey_id;
 		return $this->db->where('enquiry_code',$enqid)->where('user_id',$this->session->user_id)->update('tbl_enqstatus',array('status'=>1));
 
 	}
-	 
 
+	public function get_enquiry_all_data($enquiry_code,$comp_id=29){		
+		$this->db->select("enquiry.email,enquiry.phone as mobileno,enquiry.other_phone,CONCAT_WS(' ',enquiry.name_prefix,enquiry.name,enquiry.lastname) as name,enquiry.gender,enquiry.gender,enquiry.enquiry as remark,enquiry.org_name as company,lead_source.lead_name as lead_source,lead_stage.lead_stage_name,tbl_subsource.subsource_name,tbl_product_country.country_name as product_name,enquiry.product_id,enquiry.status,enquiry.drop_reason,enquiry.created_date,enquiry.update_date as last_updated_date,CONCAT(tbl_admin.s_display_name,' ',tbl_admin.last_name) as created_by_name,CONCAT(tbl_admin2.s_display_name,' ',tbl_admin2.last_name) as assign_to_name,CONCAT(tbl_admin2.s_display_name,' ',tbl_admin2.last_name) as assign_by_name,lead_description.description,enquiry.lead_discription_reamrk,enquiry.pin_code as pin-code,enquiry.partner_id as referred_by,city.city,state.state");
+
+		$this->db->join('lead_stage','lead_stage.stg_id=enquiry.lead_stage','left');
+		$this->db->join('lead_source','lead_source.lsid=enquiry.enquiry_source','left');
+		$this->db->join('tbl_subsource','tbl_subsource.subsource_id=enquiry.sub_source','left');		
+		$this->db->join('tbl_product_country','tbl_product_country.id=enquiry.enquiry_subsource','left');
+		$this->db->join('tbl_admin','tbl_admin.pk_i_admin_id=enquiry.created_by','left');		
+		$this->db->join('tbl_admin as tbl_admin2','tbl_admin2.pk_i_admin_id=enquiry.aasign_to','left');	
+		$this->db->join('tbl_admin as tbl_admin3','tbl_admin3.pk_i_admin_id=enquiry.assign_by','left');		  
+        $this->db->join('lead_description','lead_description.id = enquiry.lead_discription','left');   
+        $this->db->join('state','state.id = enquiry.state_id','left');   
+        $this->db->join('city','city.id = enquiry.city_id','left');   
+
+		$this->db->where('Enquery_id',$enquiry_code);
+		$enq_row	=	$this->db->get('enquiry')->row_array();
+
+		$process_id =	$enq_row['product_id'];
+		$this->db->select('input_name,extra_enquery.fvalue');
+		$this->db->where('tbl_input.company_id',$comp_id);
+		$this->db->where("FIND_IN_SET($process_id,tbl_input.process_id)>",0);
+		$this->db->where("tbl_input.status",1);
+		$this->db->join("(select * from extra_enquery where enq_no = '$enquiry_code') as extra_enquery",'extra_enquery.input=tbl_input.input_id','left');
+		$result	=	$this->db->get('tbl_input')->result_array();
+		$data = array();
+		if (!empty($result)) {
+			foreach ($result as $key => $value) {
+				$name	=	$value['input_name'];
+				$value	=	$value['fvalue'];
+				$data[$name] = $value;
+			}
+		}
+		$data = array_merge($enq_row,$data);
+		return $data;
+	}
 }

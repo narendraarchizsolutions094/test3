@@ -149,9 +149,12 @@ button.owl-prev span, button.owl-next span{
                     <label for="country_name"><?php echo display('program_length')?> </label>
                     <select class="form-control" name="length" id="length">
                         <option value="" selected>Select length</option>
-                        <?php foreach($length as $lg){ ?>                                   
-                        <option value="<?php echo $lg->id; ?>" <?php if(!empty($filter)){ if($lg->id==$filter[3]){echo 'selected';}}?>><?php echo $lg->length; ?></option>
-                    <?php } ?>
+                        <?php 
+                            if (!empty($length)) {
+                                foreach($length as $lg){ ?>                                   
+                                    <option value="<?php echo $lg->id; ?>" <?php if(!empty($filter)){ if($lg->id==$filter[3]){echo 'selected';}}?>><?php echo $lg->length; ?></option>
+                                <?php }
+                            } ?>
                     </select>
                   </div>
 				  

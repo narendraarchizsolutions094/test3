@@ -1082,21 +1082,29 @@ public function login_in_process(){
         $user_id = $this->session->userdata('user_id');
 		$comp_id = $this->session->userdata('companey_id');
 		
-		$this->db->select("*,tbl_crsmaster.course_name");
+		/*$this->db->select("*,tbl_crsmaster.course_name");
         $this->db->from('tbl_course');
 		$this->db->join('tbl_institute','tbl_institute.institute_id = tbl_course.institute_id');
 		$this->db->join('tbl_country','tbl_country.id_c=tbl_institute.country_id','left');
 		$this->db->join('tbl_crsmaster','tbl_crsmaster.id = tbl_course.course_name');
 		if($this->session->userdata('companey_id')!=67){
-		$this->db->join('tbl_schdl','tbl_schdl.ins_id=tbl_institute.institute_id','left');
-		$this->db->order_by('tbl_institute.institute_id','asc');
-        $q = $this->db->get()->result();
+    		$this->db->join('tbl_schdl','tbl_schdl.ins_id=tbl_institute.institute_id','left');
+    		$this->db->order_by('tbl_institute.institute_id','asc');
+            $q = $this->db->get()->result();
 		}else{
-        $this->db->order_by('tbl_course.institute_id','asc');
-		$this->db->where('tbl_course.comp_id',$comp_id);
-        $q = $this->db->get()->result();
-		}
+            $this->db->order_by('tbl_course.institute_id','asc');
+    		$this->db->where('tbl_course.comp_id',$comp_id);
+            $q = $this->db->get()->result();
+		}*/
+
+        $this->load->model('program_model');
+        $q  =   $this->program_model->get_data();
+        $data['count_filtered_data']  =   $this->program_model->count_filtered_data();
+        $data['all_data_count']  =   $this->program_model->count_all_data();
+        $data['courses'] = $q;
+        $data['i'] = 1;
 		$data["courses"] = $q;
+
 		
 		if($this->session->userdata('companey_id')==67){
 		$data['discipline'] = $this->location_model->find_discipline();
@@ -1113,11 +1121,6 @@ public function login_in_process(){
     }
 	
 	public function get_uni_data(){
-		
-		$limit  = 8;
-		$page = 1;
-		$offset = ($page - 1)* $limit;
-				
          $layout = $this->session->userdata('layout');
 		 $crs = $this->input->post('crs_id');
          $ins = $this->input->post('ins_id');
@@ -1129,90 +1132,33 @@ public function login_in_process(){
 		 $state = $this->input->post('state_id');
 		 $ielts = $this->input->post('ielts');
 
-	if($this->session->userdata('companey_id')!=67){
-		$this->db->select("*");
-        $this->db->from('tbl_institute');
-		$this->db->join('tbl_course','tbl_course.institute_id=tbl_institute.institute_id');
-		$this->db->join('tbl_country','tbl_country.id_c=tbl_institute.country_id');
-		$this->db->join('tbl_schdl','tbl_schdl.ins_id=tbl_institute.institute_id','left');
-		if($ins!='' && $cntry=='' && $crs=='' && $dt==''){
-		$this->db->where('tbl_institute.institute_id', $ins);
-		}else if($dt!='' && $ins=='' && $cntry=='' && $crs==''){
-		$this->db->where('tbl_schdl.schdl_dt', $dt);
-		}else if($dt=='' && $ins=='' && $cntry!='' && $crs==''){
-		$this->db->where('tbl_institute.country_id', $cntry);
-		}else if($dt=='' && $ins=='' && $cntry=='' && $crs!=''){
-		$this->db->like('tbl_course.course_name', $crs);
-		}else{
-		$this->db->like('tbl_course.course_name', $crs);
-		$this->db->or_where('tbl_institute.institute_id', $ins);
-		$this->db->or_where('tbl_schdl.schdl_dt', $dt);
-		$this->db->or_where('tbl_institute.country_id', $cntry);
-		$this->db->or_where('tbl_course.institute_id', $ins);
-		}
-        $this->db->order_by('tbl_institute.institute_id','asc');
-        $q = $this->db->get()->result();
-	}else{
-		
-		$this->db->select("*,tbl_crsmaster.course_name");
-        $this->db->from('tbl_course');
-		$this->db->join('tbl_institute','tbl_institute.institute_id = tbl_course.institute_id');
-		$this->db->join('tbl_crsmaster','tbl_crsmaster.id = tbl_course.course_name');
+        $this->load->model('program_model');
+        $q  =   $this->program_model->get_data();
+        $data['count_filtered_data']  =   $this->program_model->count_filtered_data();
+        $data['all_data_count']  =   $this->program_model->count_all_data();
+        $data['i'] = 0;
+	
+	    $datafilter = array($dt,$cntry,$level,$length,$discipline,$ins,$crs,$state,$ielts);		
+	    $data["courses"] = $q;
+	    $data["filter"] = $datafilter;
+		$ttlpagearr  = count($q);			
+		$data["totpage"] = (!empty($ttlpagearr[0]->total)) ? $ttlpagearr[0]->total : 0;
+		$data["pageno"]  = (!empty($ttlpagearr[0]->total)) ? ceil($ttlpagearr[0]->total/$limit) : 0; 
+		$data["currpage"]=  1;
+		$grnrid = "";
+		$data['vid_list'] = $this->Institute_model->videos();
+		$data['state_list'] = $this->location_model->all_states();
+		$data['county_list'] = $this->location_model->country();
+	    $data['ins_list'] = $this->location_model->stu_ins_list();
+	    $data['crs_list'] = $this->location_model->stu_crs_list();
+		$data['course'] = $this->Institute_model->all_crs_list();
+		$data['discipline'] = $this->location_model->find_discipline();
+	    $data['level'] = $this->location_model->find_level();
+	    $data['length'] = $this->location_model->find_length();
+		$data['content'] = $this->load->view('student/search_programs', $data, true);
+        $this->load->view('layout/main_wrapper', $data);
 
-		if($ins!=''){
-		$this->db->where('tbl_course.institute_id', $ins);
-		}
-		if($cntry!=''){
-		$this->db->where('tbl_institute.country_id', $cntry);
-		}
-		if($crs!=''){
-		$this->db->where('tbl_course.crs_id', $crs);
-		}
-		if($length!=''){
-		$this->db->where('tbl_course.length_id', $length);
-		}
-		if($level!=''){
-		$this->db->where('tbl_course.level_id', $level);
-		}
-		if($discipline!=''){
-		$this->db->where('tbl_course.discipline_id', $discipline);
-		}
-		if($state!=''){
-		$this->db->where('tbl_institute.state_id', $state);
-		}
-		if($ielts!=''){
-		$this->db->where('tbl_course.course_ielts', $ielts);
-		}
-        $this->db->order_by('tbl_course.crs_id','asc');
-        $q = $this->db->get()->result();
-		
-	}
-	    $datafilter = array($dt,$cntry,$level,$length,$discipline,$ins,$crs,$state,$ielts);
-		
-		    $data["courses"] = $q;
-		    $data["filter"] = $datafilter;
-		/* echo "<pre>";
-        print_r($data["filter"]);exit;
-        echo "</pre>";*/	
-			$ttlpagearr  = count($q);
-			
-			$data["totpage"] = (!empty($ttlpagearr[0]->total)) ? $ttlpagearr[0]->total : 0;
-			$data["pageno"]  = (!empty($ttlpagearr[0]->total)) ? ceil($ttlpagearr[0]->total/$limit) : 0; 
-			$data["currpage"]=  1;
-			$grnrid = "";
-			$data['vid_list'] = $this->Institute_model->videos();
-			$data['state_list'] = $this->location_model->all_states();
-			$data['county_list'] = $this->location_model->country();
-		    $data['ins_list'] = $this->location_model->stu_ins_list();
-		    $data['crs_list'] = $this->location_model->stu_crs_list();
-			$data['course'] = $this->Institute_model->all_crs_list();
-			$data['discipline'] = $this->location_model->find_discipline();
-		    $data['level'] = $this->location_model->find_level();
-		    $data['length'] = $this->location_model->find_length();
-			$data['content'] = $this->load->view('student/search_programs', $data, true);
-            $this->load->view('layout/main_wrapper', $data);
-
-	    }
+    }
 		
 public function user_profile() {
 		$data['title'] = display('user_profile');

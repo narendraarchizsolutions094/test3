@@ -1,7 +1,12 @@
 <?php  
 
-define('MERCHANT_KEY', 'A0ZvklkZ');
+/*define('MERCHANT_KEY', 'A0ZvklkZ');
 define('SALT', 'xZXfbRGyAu');
+*/
+
+define('MERCHANT_KEY', '16pUJhQ9');
+define('SALT', 'vYsS4mkpf1');
+
 //define('PAYU_BASE_URL', 'https://test.payu.in');    //Testing url Use in development mode
 define('PAYU_BASE_URL', 'https://secure.payu.in');  //actual URL Use in production mode
 define('SUCCESS_URL', base_url().'payment/payment_success');  //order sucess url replace with your complete url

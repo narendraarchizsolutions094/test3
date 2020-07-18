@@ -74,3 +74,30 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         }
         return $pass;
     }
+    function curl($options){    
+        $url     =  $options['url'];
+        $curl = curl_init();        
+        $curl_settings    =   array(
+                                  CURLOPT_URL => $url,
+                                  CURLOPT_RETURNTRANSFER => true,
+                                  CURLOPT_ENCODING => "",
+                                  CURLOPT_MAXREDIRS => 10,
+                                  CURLOPT_TIMEOUT => 0,
+                                  CURLOPT_FOLLOWLOCATION => true,
+                                  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                                  CURLOPT_CUSTOMREQUEST => $options['request_type']
+                                );
+        
+        if (!empty($options['header'])) {
+            $curl_settings[CURLOPT_HTTPHEADER] = $options['header'];
+        }
+        
+        if (!empty($options['data'])) {
+            $curl_settings[CURLOPT_POSTFIELDS] = $options['data'];
+        }
+
+        curl_setopt_array($curl, $curl_settings);
+        $response = curl_exec($curl);       
+        curl_close($curl);
+        return $response;
+    }

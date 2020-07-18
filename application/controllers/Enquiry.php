@@ -1,21 +1,14 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 class Enquiry extends CI_Controller {
-	
-	
     public function __construct() {
-		
-		
-		
         parent::__construct();
-       
-         $this->load->model(
+        $this->load->model(
                 array('Leads_Model','setting_model' ,'website/home_model','schedule_model','enquiry_model', 'dashboard_model', 'Task_Model', 'User_model', 'location_model','Message_models','Institute_model','Datasource_model','Taskstatus_model','dash_model','Center_model','SubSource_model','Kyc_model','Education_model','SocialProfile_model','Closefemily_model','form_model','Doctor_model')
                 );
         $this->load->library('email');
         $this->load->library('user_agent');
-		$this->lang->load("activitylogmsg","english");
-		
+		$this->lang->load("activitylogmsg","english");		
 		$apiarr = explode("/", $_SERVER['REQUEST_URI']);
 		
 		if(in_array("viewapi", $apiarr)){
