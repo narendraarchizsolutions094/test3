@@ -523,8 +523,8 @@ input[name=lead_stages]{
 		<div class="col-md-12" >		
 			      <table id="enq_table" class="table table-bordered table-hover" style="width:100%;">
         <thead>
-          <tr class="bg-info">
-              <th>
+          <tr class="bg-info table_header">
+              <th class="noExport">
                 <input type='checkbox' class="checked_all1" value="check all" >
               </th>
                   <th>S.N</th>
@@ -1000,18 +1000,7 @@ for (var i = 0; i < checkboxes.length; i++) {
 	});
 
 	$(document).ready(function() {
-       var buttonCommon = {
-        exportOptions: {
-            format: {
-                body: function ( data, row, column, node ) {
-                    // Strip $ from salary column to make it numeric
-                    return column === 5 ?
-                        data.replace( /[$,]/g, '' ) :
-                        data;
-                }
-            }
-        }
-    };
+       
     	$('#enq_table').DataTable(
     		{         
 			    "processing": true,
@@ -1027,11 +1016,21 @@ for (var i = 0; i < checkboxes.length; i++) {
           dom: "<'row'<'col-sm-4'l><'col-sm-4 text-center'B><'col-sm-4'f>>tp", 
         // "lengthMenu": [[30, 60, 90, -1], [30, 60, 90, "All"]], 
         buttons: [  
-            {extend: 'copy', className: 'btn-sm'}, 
-            {extend: 'csv', title: 'ExampleFile', className: 'btn-sm'}, 
-            {extend: 'excel', title: 'ExampleFile', className: 'btn-sm', title: 'exportTitle'}, 
-            {extend: 'pdf', title: 'ExampleFile', className: 'btn-sm'}, 
-            {extend: 'print', className: 'btn-sm'} 
+            {extend: 'copy', className: 'btn-sm',exportOptions: {
+                        columns: "thead th:not(.noExport)"
+                    }}, 
+            {extend: 'csv', title: 'list<?=date("Y-m-d H:i:s")?>', className: 'btn-sm',exportOptions: {
+                        columns: "thead th:not(.noExport)"
+                    }}, 
+            {extend: 'excel', title: 'list<?=date("Y-m-d H:i:s")?>', className: 'btn-sm', title: 'exportTitle',exportOptions: {
+                        columns: "thead th:not(.noExport)"
+                    }}, 
+            {extend: 'pdf', title: 'list<?=date("Y-m-d H:i:s")?>', className: 'btn-sm',exportOptions: {
+                        columns: "thead th:not(.noExport)"
+                    }}, 
+            {extend: 'print', className: 'btn-sm',exportOptions: {
+                        columns: "thead th:not(.noExport)"
+                    }} 
         ] ,
           		
 			    "columnDefs": [{ "orderable": false, "targets": 0 }],

@@ -377,48 +377,41 @@ public function login_in_process(){
         $this->load->view('layout/main_wrapper', $data);
     }
 	
-	public function home() {
-        // print_r($_SESSION);die;
+	public function home() 
+    {
        
         if ($this->session->userdata('isLogIn') == false)
-            redirect('login');
+        redirect('login');
+
         $data = array();
-        //if ($this->session->companey_id != 57) {
-            $this->load->model('dash_model');
-    		if($this->session->userdata('user_right')==151){
-    		$data['ins_list'] = $this->location_model->stu_ins_list();
-    		redirect('dashboard/search_programs');
-            }else{
-                //$process = implode(',', $this->session->process);
-    		// $data['disposition'] = $this->dash_model->disposition_list_graph();
-    		// $data['source'] = $this->dash_model->source_list_graph();
-    		// $data['drop'] = $this->dash_model->drop_list_graph();
-    		//$data['all_enquiery'] = $this->enquiry_model->all_enqueries();
+        $this->load->model('dash_model');
+        if($this->session->userdata('user_right')==151)
+        {
+            $data['ins_list'] = $this->location_model->stu_ins_list();
+            redirect('dashboard/search_programs');
+        }
+        else
+        {
             $data['counts'] = $this->enquiry_model->enquiryLeadClientCount($this->session->user_id,$this->session->companey_id);
             $data['msg'] = '';
             //print_r($_SESSION);die;
-                date_default_timezone_set('Asia/Kolkata');
-                $from = $this->session->expiry_date;
-                $today = time();
-                $difference = $today - $from;
-                $days = floor($difference / 86400);
-                if($days >=5)
-                {
-                    $data['msg'] = "Your Account will expire after $days days Please contact your site admin";
-                }
-            //print_r($data['counts']);die;
-           // $data['dashboard_data'] = $this->enquiry_model->all_enqueries_api($this->session->user_id,$this->session->companey_id,$process);
-            //echo"<pre>";print_r($data['dashboard_data']);die;
-            //$data['dashboard_data'] = array();
+            date_default_timezone_set('Asia/Kolkata');
+            $from = $this->session->expiry_date;
+            $today = time();
+            $difference = $today - $from;
+            $days = floor($difference / 86400);
+            //echo "string".$days;die;
+            if($days <= 5)
+            {
+            $data['msg'] = "Your Account will expire after $days days Please contact your site admin to extend validity";
+            }
             $data['state']   = $this->enquiry_model->get_state();
-             // print_r($data['state']);exit();
-    		$data['products'] = $this->dash_model->product_list_graph();
-    		$data['taskdata'] = $this->dash_model->task_list();
-    		$data['cmtdata'] = $this->dash_model->all_comments();
-    		}
-            $data['lead_score'] = $this->db->query('select * from lead_score limit 3')->result();
-    		$data['content'] = $this->load->view('home', $data, true);	            
-        //}
+            $data['products'] = $this->dash_model->product_list_graph();
+            $data['taskdata'] = $this->dash_model->task_list();
+            $data['cmtdata'] = $this->dash_model->all_comments();
+        }
+        $data['lead_score'] = $this->db->query('select * from lead_score limit 3')->result();
+        $data['content'] = $this->load->view('home', $data, true);	     
         $this->load->view('layout/main_wrapper', $data);
     }
 

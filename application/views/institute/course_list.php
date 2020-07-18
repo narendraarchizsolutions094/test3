@@ -72,7 +72,8 @@ a:hover, a:focus {
 
                 <?php if (!empty($course_list)) { 
 
-                    $sl = 1;foreach ($course_list as $course) {?>
+                    $sl =  ($this->uri->segment('3')) ? $this->uri->segment('3')+1 : 1  ;
+                    foreach ($course_list as $course) {?>
 
                         <tr class="<?php echo ($sl & 1)?"odd gradeX":"even gradeC" ?>">
 
@@ -115,7 +116,7 @@ a:hover, a:focus {
                 </tbody>
 
               </table>
-
+              <?=$links;?>
             </div>
 
             <!-- /.card-body -->
@@ -130,9 +131,9 @@ a:hover, a:focus {
 
       </div>
 <script>
-$(document).ready(function() {
-    $('#example').DataTable();
-} );
+// $(document).ready(function() {
+//     $('#example').DataTable();
+// } );
 </script>
 <script>
 $(document).ready(function() {

@@ -633,7 +633,7 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                   <input type="text" class="form-control" value="<?php if(!empty($details->email)){echo $details->email;} ?>" name="email1" placeholder="Email">
                </div>
 
-                     <div class="form-group col-sm-12" id="otherTypev">
+                     <div class="" id="otherTypev">
                                     <div class="form-group col-sm-12">
                                     <input type="date" name="c_date" id='disposition_c_date' class="form-control" placeholder=""  >
                                 </div>
@@ -661,17 +661,17 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
             <ul  class="nav nav-tabs" role="tablist">              
               <li class="active"><a  href="#basic" data-toggle="tab" style="padding: 10px 10px; font-size:12px;">Basic</a></li>   
              <?php if($this->session->userdata('companey_id')==292) {  if($enquiry->status==3) {?>
-              <li><a href="#followup" data-toggle="tab" style="padding: 10px 10px; font-size:12px;">AMC</a></li>
+              <li><a href="#followup" data-toggle="tab" style="padding: 10px 10px;">AMC</a></li>
 
                <?php } } if($enquiry->status==3) { 
 
                  if(in_array(300,$module) || in_array(301,$module) || in_array(302,$module) || in_array(303,$module)){ 
                 ?>
-                <li><a href="#order" data-toggle="tab" style="padding: 10px 10px; font-size:12px;">Order Details</a></li> 
+                <li><a href="#order" data-toggle="tab" style="padding: 10px 10px;">Order Details</a></li> 
                 <?php }
                  }?>     
                  <?php if($this->session->userdata('companey_id')==29){?>  
-                <li><a href="#amount" data-toggle="tab" style="padding: 10px 10px; font-size:12px;">Amount</a></li> 
+                <li><a href="#amount" data-toggle="tab" style="padding: 10px 10px;">Amount</a></li> 
                 <?php }?>      
 
                 <?php 
@@ -679,7 +679,7 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                 //print_r($tab_list);die;
                 foreach ($tab_list as $key => $value) { 
                   if ($value['id'] != 1) { ?>
-                    <li><a href="#<?=str_replace(' ', '_', $value['title'])?>" data-toggle="tab" style="padding: 10px 10px; font-size:12px;"><?=$value['title']?></a></li>
+                    <li><a href="#<?=str_replace(' ', '_', $value['title'])?>" data-toggle="tab" style="padding: 10px 10px;"><?=$value['title']?></a></li>
                 <?php
                   }
                 }
@@ -687,16 +687,16 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
               ?>
 			<?php
               if (user_access('240')===true) { ?>
-               <li><a href="#institute" data-toggle="tab" style="padding: 10px 10px; font-size:12px;">Institute</a></li>
+               <li><a href="#institute" data-toggle="tab" style="padding: 10px 10px;">Institute</a></li>
 			  <?php } ?>
 			<?php if ($this->session->companey_id=='67') { ?>
               <!--<li><a href="#qalification" data-toggle="tab" style="padding: 10px 10px; font-size:12px;">Qualifications</a></li>
               <li><a href="#english" data-toggle="tab" style="padding: 10px 10px; font-size:12px;">English Language</a></li>-->			  
-			  <li><a href="#payment" data-toggle="tab" style="padding: 10px 10px; font-size:12px;">Payment</a></li>
-              <li><a href="#aggrement" data-toggle="tab" style="padding: 10px 10px; font-size:12px;">Aggrement</a></li>
+			  <li><a href="#payment" data-toggle="tab" style="padding: 10px 10px;">Payment</a></li>
+              <li><a href="#aggrement" data-toggle="tab" style="padding: 10px 10px;">Aggrement</a></li>
 			<?php } ?>
-			<li><a href="#task" data-toggle="tab" style="padding: 10px 10px; font-size:12px;">Task</a></li>
-              <li><a  href="#related_enquiry" data-toggle="tab" style="padding: 10px 10px; font-size:12px;">Related Data</a></li>
+			<li><a href="#task" data-toggle="tab" style="padding: 10px 10px;">Task</a></li>
+              <li><a  href="#related_enquiry" data-toggle="tab" style="padding: 10px 10px;">Related Data</a></li>
 
             </ul>
             <div class="tab-content clearfix">

@@ -42,11 +42,12 @@
 
                 <?php if (!empty($course_list)) { 
 
-                    $sl = 1;foreach ($course_list as $course) {?>
+                    $sl =  ($this->uri->segment('3')) ? $this->uri->segment('3')+1 : 1  ; 
+                    foreach ($course_list as $course) {?>
 
                         <tr class="<?php echo ($sl & 1)?"odd gradeX":"even gradeC" ?>">
 
-                            <td><?php echo $sl; ?></td>
+                            <td><?=$sl; ?></td>
 
                             <td width=""><?php echo $course->course_name; ?></td>                              
 
@@ -70,7 +71,9 @@
 
                 </tbody>
 
+
               </table>
+              <?=$links;?>
 
             </div>
 
@@ -85,8 +88,8 @@
         <!-- /.col -->
 
       </div>
-<script>
+<!-- <script>
 $(document).ready(function() {
     $('#example').DataTable();
 } );
-</script>
+</script> -->
