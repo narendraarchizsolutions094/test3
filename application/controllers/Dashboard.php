@@ -549,6 +549,11 @@ public function login_in_process(){
        // echo "string";die;
         $chartData = $this->enquiry_model->despositionDataChart($this->session->user_id,$this->session->companey_id);
 
+        /*echo "<pre>";
+        print_r($chartData);
+        echo "</pre>";
+        exit(); */
+
         $desplst    = $chartData['desplst'];
         $enquiry    = $chartData['despenq'];
         $lead       = $chartData['desplead'];

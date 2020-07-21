@@ -2310,23 +2310,24 @@ $cpny_id=$this->session->companey_id;
     {	
     	$all_reporting_ids    =   $this->common_model->get_categories($userid);
         $cpny_id=$companyid;
+    	
     	$where = "( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
-    	$where .= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';
+    	$where .= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';        
         $where.=" AND enquiry.comp_id=$cpny_id";
 
         $enqAyr = array(); 
         $desplst_query = $this->db->query("SELECT lead_stage_name FROM lead_stage WHERE lead_stage.comp_id = $cpny_id");
         $desplst = $desplst_query->result_array();
       
-    	$despenqqry = $this->db->query("SELECT lead_stage_name,(SELECT COUNT(enquiry_id) FROM enquiry WHERE $where AND enquiry.lead_score =  lead_stage.stg_id AND enquiry.status = 1)counternow FROM lead_stage WHERE lead_stage.comp_id = $cpny_id");
+    	$despenqqry = $this->db->query("SELECT lead_stage_name,(SELECT COUNT(enquiry_id) FROM enquiry WHERE $where AND enquiry.lead_stage =  lead_stage.stg_id AND enquiry.status = 1)counternow FROM lead_stage WHERE lead_stage.comp_id = $cpny_id");
 
         $despenq = $despenqqry->result_array();
 
-        $despleadqry = $this->db->query("SELECT lead_stage_name,(SELECT COUNT(enquiry_id) FROM enquiry WHERE $where AND enquiry.lead_score =  lead_stage.stg_id AND enquiry.status = 2)counternow FROM lead_stage WHERE lead_stage.comp_id = $cpny_id");
+        $despleadqry = $this->db->query("SELECT lead_stage_name,(SELECT COUNT(enquiry_id) FROM enquiry WHERE $where AND enquiry.lead_stage =  lead_stage.stg_id AND enquiry.status = 2)counternow FROM lead_stage WHERE lead_stage.comp_id = $cpny_id");
 
         $desplead = $despleadqry->result_array();
 
-        $despcliqry = $this->db->query("SELECT lead_stage_name,(SELECT COUNT(enquiry_id) FROM enquiry WHERE $where AND enquiry.lead_score =  lead_stage.stg_id AND enquiry.status = 3)counternow FROM lead_stage WHERE lead_stage.comp_id = $cpny_id");
+        $despcliqry = $this->db->query("SELECT lead_stage_name,(SELECT COUNT(enquiry_id) FROM enquiry WHERE $where AND enquiry.lead_stage =  lead_stage.stg_id AND enquiry.status = 3)counternow FROM lead_stage WHERE lead_stage.comp_id = $cpny_id");
 
         $despcli = $despcliqry->result_array();
 
