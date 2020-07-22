@@ -340,6 +340,7 @@ public function login_in_process(){
 						'telephony_token'       => $check_user->row()->telephony_token,
                         'process'               => $process_ids,
                         'expiry_date'           => strtotime($check_user->row()->valid_upto),
+                        'account_type'          => $check_user->row()->account_type,
                     ]);         
                     $res = array('status'=>true,'message'=>'Logged in');                                        
                }else{                    
@@ -398,13 +399,33 @@ public function login_in_process(){
             date_default_timezone_set('Asia/Kolkata');
             $from = $this->session->expiry_date;
             $today = time();
-            $difference = $today - $from;
+            $difference = $from - $today;
             $days = floor($difference / 86400);
             //echo "string".$days;die;
-            if($days <= 5)
+            if($this->session->account_type == 1)
             {
-            $data['msg'] = "Your Account will expire after $days days Please contact your site admin to extend validity";
+                if($days <= 5 && $days > 0)
+                {
+                    $data['msg'] = "Your Account will expire after $days days Please contact your site admin to extend validity";
+                }
+                if($days <= 0)
+                {
+                    $data['msg'] = "Your Account hs been expired on ".date('d-M-Y',strtotime($this->session->expiry_date))." Please contact your site admin to extend validity";
+                }
             }
+            else
+            {   if($days <= 5 && $days > 0)
+                {
+                    $data['msg'] = "Your Account will expire after $days days Please contact your site admin to extend validity";
+                }
+                if($days <= 0)
+                {
+                    $array['heading'] = "Trial Account Expired";
+                    $array['message'] = "Your trial account validity has been ended please contact to site administrator";
+                    $this->load->view("errors/html/error_general",$array,true);
+                }
+            }
+            
             $data['state']   = $this->enquiry_model->get_state();
             $data['products'] = $this->dash_model->product_list_graph();
             $data['taskdata'] = $this->dash_model->task_list();

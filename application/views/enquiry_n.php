@@ -234,6 +234,9 @@ input[name=lead_stages]{
                 <a class="btn" data-toggle="modal" data-target="#dropEnquiry" style="color:#000;cursor:pointer;border-radius: 2px;border-bottom: 1px solid #fff;"><?php echo display('drop_enquiry'); ?></a>      
                 <a class="btn"  data-target="#sendsms" data-toggle="modal"  onclick="getTemplates('1','Send Whatssp');"  style="color:#000;cursor:pointer;border-radius: 2px;border-bottom: 1px solid #fff;"><?php echo display('send_whatsapp'); ?> </a>
                 <a class="btn " data-target="#sendsms" data-toggle="modal"  onclick="getTemplates('2','Send Sms');" style="color:#000;cursor:pointer;border-radius: 2px;border-bottom: 1px solid #fff;"><?php echo display('send_bulk_sms'); ?></a>
+                <?php if(user_access(220)) { if(!empty($this->session->telephony_token)){ ?>
+                <a class="btn "  onclick="autoDial()" style="color:#000;cursor:pointer;border-radius: 2px;border-bottom: 1px solid #fff;"><?php echo display('bulk_autodial'); ?></a>
+              <?php } } ?>
               <?php
               }else if ($data_type == 2) { ?>
                   <a class="btn" data-toggle="modal" data-target="#AssignSelected" style="color:#000;cursor:pointer;border-radius: 2px;border-bottom :1px solid #fff;"><?php echo display('assign_selected'); ?></a>
@@ -1265,6 +1268,39 @@ function save_enquery(){
 	}});
 }
 
+function autoDial(){
+  if($('.checkbox1:checked').size() > 1000){
+    alert('You can not dial more that 1000 enquiry at once');
+  }else{
+    data_type = "<?=$data_type?>";
+    data_type = parseInt(data_type);
+    if (data_type == 1) {
+      var p_url = '<?php echo base_url();?>enquiry/autoDial';
+      var re_url = '<?php echo base_url();?>enquiry';
+    }
+    // else if(data_type == 2){
+    //   var p_url = '<?php echo base_url();?>lead/assign_lead';
+    //   var re_url = '<?php echo base_url();?>led/index';
+    // }else if(data_type == 3){      
+    //   var p_url = '<?php echo base_url();?>client/assign_enquiry';
+    //   var re_url = '<?php echo base_url();?>client/index';
+    // }    
+
+  $.ajax({
+    type: 'POST',
+    url: p_url,
+    data: $('#enquery_assing_from').serialize(),
+    beforeSend: function(){
+                 $("#imgBack").html('uploading').show();
+    },
+    success:function(data){
+         //alert(data);
+         //document.getElementById('testdata').innerHTML =data;
+          //window.location.href=re_url;
+    }});
+  }
+}
+
 function assign_enquiry(){
   if($('.checkbox1:checked').size() > 1000){
     alert('You can not assign more that 1000 enquiry at once');
@@ -1296,6 +1332,8 @@ function assign_enquiry(){
 		}});
 	}
 }
+
+
 
 function moveto_lead(){
   if($('.checkbox1:checked').size() > 1000){

@@ -406,7 +406,7 @@ if($root=='https://student.spaceinternationals.com'){	 ?>
   /*bell notificaiton style start*/
   .notify-detail{
     width: 320px; 
-    max-height: 600px;
+    max-height: 300px;
     overflow-y: scroll;
     top:60px;
     border-width: 1px;
