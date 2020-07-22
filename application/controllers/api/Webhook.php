@@ -36,7 +36,7 @@ class Webhook extends REST_Controller {
         $users='';
         $call_data = $_POST['myoperator'];
         $call_data_array = json_decode($call_data);
-        $FIREBASE = "https://new-crm-f6355.firebaseio.com/";
+        $FIREBASE = "https://archizcrm.firebaseio.com/";
         $uid=str_replace('.','_',$call_data_array->uid);
         $call_state=$call_data_array->call_state;
         if(!empty($call_data_array->users)){
@@ -159,7 +159,7 @@ class Webhook extends REST_Controller {
         $users='';
         $call_data = $_POST['myoperator'];
         $call_data_array = json_decode($call_data);
-        $FIREBASE = "https://new-crm-f6355.firebaseio.com/";
+        $FIREBASE = "https://archizcrm.firebaseio.com/";
         $uid=str_replace('.','_',$call_data_array->uid);
         $call_state=$call_data_array->call_state;
         if(!empty($call_data_array->users)){
