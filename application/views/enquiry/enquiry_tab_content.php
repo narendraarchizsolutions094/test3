@@ -1,3 +1,6 @@
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+
 <?php
    if ($tid == 1) {      
   define('FIRST_NAME',1);
@@ -239,12 +242,13 @@
                <?php if($fld['input_type']==1){?>
                <label><?php echo(!empty($fld["input_label"])) ?  ucwords($fld["input_label"]) : ""; ?></label>
                <input type="text" name="enqueryfield[]"  value ="<?php echo  (!empty($fld["fvalue"])) ? $fld["fvalue"] : ""; ?>"  class="form-control">
-               <?php }if($fld['input_type']==2){?>
+               <?php }
+               if($fld['input_type']==2){?>
                <label><?php echo(!empty($fld["input_label"])) ?  ucwords($fld["input_label"]) : ""; ?></label>
                <?php $optarr = (!empty($fld['input_values'])) ? explode(",",$fld['input_values']) : array(); 
                ?>
                <select class="form-control"  name="enqueryfield[]" >
-                  <option>Select</option>
+                  <option value="">Select</option>
                   <?php  foreach($optarr as $key => $val){
                   ?>
                   <option value = "<?php echo $val; ?>" <?php echo (!empty($fld["fvalue"]) and trim($fld["fvalue"]) == trim($val)) ? "selected" : ""; ?>><?php echo $val; ?></option>
@@ -252,7 +256,22 @@
                      } 
                   ?>
                </select>
-               <?php }if($fld['input_type']==3){?>
+               <?php }
+               if($fld['input_type']==20){?>
+               <label><?php echo(!empty($fld["input_label"])) ?  ucwords($fld["input_label"]) : ""; ?></label>
+               <?php $optarr = (!empty($fld['input_values'])) ? explode(",",$fld['input_values']) : array(); 
+               ?>
+               <select class="form-control multiple-select"  name="enqueryfield[]" multiple>                  
+                  <?php  foreach($optarr as $key => $val){                  
+                    $fvalues  = explode(',', $fld['fvalue']);
+                    ?>
+                    <option value = "<?php echo $val; ?>" <?php echo (!empty($fld["fvalue"]) and in_array($val, $fvalues)) ? "selected" : ""; ?>><?php echo $val; ?></option>
+                  <?php
+                     } 
+                  ?>
+               </select>
+               <?php }
+               if($fld['input_type']==3){?>
                <label><?php echo(!empty($fld["input_label"])) ?  ucwords($fld["input_label"]) : ""; ?></label>
                <input type="radio"  name="enqueryfield[]"  id="<?=$fld['input_name']?>" class="form-control">                         
                <?php }if($fld['input_type']==4){?>
@@ -338,13 +357,16 @@
    }else if($form_type == 1){ ?>
           
           <hr>
+          <?php
+          if(!empty($dynamic_field)) {
+          ?>
           <div style="overflow-y: scroll;">
           <table class="table table-striped table-bordered table-responsive table-sm">
             <thead class="thead-dark">
                 <tr>
                   <?php
-                  if(!empty($dynamic_field)) {
                     $counter = 0;
+                  if(!empty($dynamic_field)) {
                     foreach($dynamic_field as $ind => $fld){ $counter++; ?>
 
                         <th><?=ucwords($fld["input_label"])?></th>
@@ -359,7 +381,7 @@
                 </tr>              
             </thead>
             <tbody>
-              <?php
+              <?php              
                 $sql  = "SELECT GROUP_CONCAT(concat(`extra_enquery`.`input`,'#',`extra_enquery`.`fvalue`,'#',`extra_enquery`.`created_date`,'#',`extra_enquery`.`comment_id`) separator ',') as d FROM `extra_enquery` INNER JOIN (select * from tbl_input where form_id=$tid) as tbl_input ON `tbl_input`.`input_id`=`extra_enquery`.`input` where `extra_enquery`.`cmp_no`=$comp_id and `extra_enquery`.`enq_no`='$details->Enquery_id' GROUP BY `extra_enquery`.`comment_id` ORDER BY `extra_enquery`.`comment_id` DESC";
                 $res = $this->db->query($sql)->result_array();    
                 //print_r($res);die;
@@ -398,10 +420,13 @@
                 else { ?>
                   <tr><td colspan="<?=($counter+2);?>" class="text-center">No Records Found</td></tr>
                 <?php } 
+              
               ?>              
             </tbody>
           </table>
           </div>
+          <?php
+        }?>
          <?php echo form_open_multipart('client/update_enquiry_tab/'.$details->enquiry_id,'class="form-inner"') ?>           
          <input name="en_comments" type="hidden" value="<?=$details->Enquery_id?>" >    
          <input name="tid" type="hidden" value="<?=$tid?>" >    
@@ -680,4 +705,9 @@
         }    
     });
   }
+</script>
+<script>
+  $(function() {
+    $('.multiple-select').select2();
+  })
 </script>

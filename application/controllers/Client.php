@@ -673,7 +673,12 @@ class Client extends CI_Controller {
 
               
             }
-
+            
+            /*echo "<pre>";
+            print_r($_POST);
+            echo "</pre>";
+            exit();*/
+            
 			if(!empty($enqarr)){                
                 if(isset($_POST['inputfieldno'])) {                    
                     $inputno   = $this->input->post("inputfieldno", true);
@@ -682,8 +687,7 @@ class Client extends CI_Controller {
                     
                     foreach($inputno as $ind => $val){                        
                         $biarr = array( 
-
-                                        $data ="enq_no"  => $en_comments,
+                                        "enq_no"  => $en_comments,
                                         "input"   => $val,
                                         "parent"  => $enquiry_id, 
                                         "fvalue"  => $enqinfo[$ind],
@@ -694,15 +698,13 @@ class Client extends CI_Controller {
                             $this->db->where('enq_no',$en_comments);        
                             $this->db->where('input',$val);        
                             $this->db->where('parent',$enquiry_id);
-                            if($this->db->get('extra_enquery')->num_rows()){
-                                
+                            if($this->db->get('extra_enquery')->num_rows()){                                
                                 $this->db->where('enq_no',$en_comments);        
                                 $this->db->where('input',$val);        
                                 $this->db->where('parent',$enquiry_id);
                                 $this->db->set('fvalue',$enqinfo[$ind]);
                                 $this->db->set('comment_id',$comment_id);
                                 $this->db->update('extra_enquery');
-
                             }else{
                                 $this->db->insert('extra_enquery',$biarr);
                             }
@@ -711,17 +713,40 @@ class Client extends CI_Controller {
 				 
 			}
             if ($this->session->companey_id==29 && $en_comments == 'ENQ188474867063') {
+                $prop    =   $this->enquiry_model->get_extra_enquiry_property($en_comments,'paisaexporef',29);
                 $data = $this->enquiry_model->get_enquiry_all_data($en_comments);
                 $product = $data['product_name'];
-                $formid  = '555';
-                $data = array('params'=>$data,'product'=>$product,'formId'=>$formid);
+                $paisaexpo_form_id = '';
+                if (empty($prop['fvalue'])) {                    
+                    $data = array('type'=>$product);                    
+                    $options = array(
+                                    'url'  => 'http://dev.paisaexpo.com/rest/all/V1/api/crm/create',
+                                    'data' => $data,
+                                    'request_type' => 'POST'
+                                );
+                    $res = curl($options);   
+                    if (!empty($res)) {
+                        $res = json_decode($res,true);
+                        print_r($res);
+                        var_dump($res);
+                        echo $res['form_id'];
+                        exit();
+                        if ($res['form_id']) {
+                            $paisaexpo_form_id =  $res['form_id'];                            
+                            $this->enquiry_model->set_extra_enquiry_property($en_comments,'paisaexporef',$paisaexpo_form_id,29);
+                        }
+                    }
+                }else{
+                    $paisaexpo_form_id    =   $prop['fvalue'];
+                }
+                $formid  = $paisaexpo_form_id;
+                $data = array('params'=>json_encode($data),'product'=>$product,'formId'=>$formid);
                 $options = array(
                                 'url'  => 'https://dev.paisaexpo.com/rest/all/V1/api/crm/update',
                                 'data' => $data,
                                 'request_type' => 'POST'
                             );
                 $res = curl($options);
-
                 echo "<pre>";
                 echo $res;
                 echo "</pre>";

@@ -2658,7 +2658,7 @@ $cpny_id=$this->session->companey_id;
 
 	}
 
-	public function get_enquiry_all_data($enquiry_code,$comp_id=29){		
+	public function get_enquiry_all_data($enquiry_code,$comp_id=29){	//29 company id is for paisa expo	
 		$this->db->select("enquiry.email,enquiry.phone as mobileno,enquiry.other_phone,CONCAT_WS(' ',enquiry.name_prefix,enquiry.name,enquiry.lastname) as name,enquiry.gender,enquiry.gender,enquiry.enquiry as remark,enquiry.org_name as company,lead_source.lead_name as lead_source,lead_stage.lead_stage_name,tbl_subsource.subsource_name,tbl_product_country.country_name as product_name,enquiry.product_id,enquiry.status,enquiry.drop_reason,enquiry.created_date,enquiry.update_date as last_updated_date,CONCAT(tbl_admin.s_display_name,' ',tbl_admin.last_name) as created_by_name,CONCAT(tbl_admin2.s_display_name,' ',tbl_admin2.last_name) as assign_to_name,CONCAT(tbl_admin2.s_display_name,' ',tbl_admin2.last_name) as assign_by_name,lead_description.description,enquiry.lead_discription_reamrk,enquiry.pin_code as pin-code,enquiry.partner_id as referred_by,city.city,state.state");
 
 		$this->db->join('lead_stage','lead_stage.stg_id=enquiry.lead_stage','left');
@@ -2692,5 +2692,39 @@ $cpny_id=$this->session->companey_id;
 		}
 		$data = array_merge($enq_row,$data);
 		return $data;
+	}
+
+	public function get_extra_enquiry_property($enquiry_code,$input_name,$comp_id){ // for non query type form only
+		$this->db->select('tbl_input.input_name,extra_enquery.fvalue,extra_enquery.id');
+		$this->db->where('tbl_input.input_name',$input_name);
+		$this->db->where('tbl_input.company_id',$comp_id);
+		$this->db->where('extra_enquery.enq_no',$enquiry_code);
+		$this->db->join('extra_enquery','extra_enquery.input=tbl_input.input_id','inner');
+		return $this->db->get('tbl_input')->row_array();
+	}
+
+	public function set_extra_enquiry_property($enquiry_code,$input_name,$input_value,$comp_id){ // for non query type form only
+		$prop	=	$this->get_extra_enquiry_property($enquiry_code,$input_name,$comp_id);
+		if (!empty($prop['id'])) {
+			$this->db->where('id',$prop['id']);
+			$this->db->set('fvalue',$input_value);
+			return $this->db->update('extra_enquery');
+		}else{
+			$this->db->select('enquiry_id');
+			$this->db->where('Enquery_id',$enquiry_code);
+			$enq_row	=	$this->db->get('enquiry')->row_array();			
+			$this->db->select('input_id');
+			$this->db->where('tbl_input.input_name',$input_name);
+			$this->db->where('tbl_input.company_id',$comp_id);
+			$input_row	=	$this->db->get('tbl_input')->row_array();
+			$ins_arr = array(
+							'parent' => $enq_row['enquiry_id'],
+							'input'	 => $input_row['input_id'],							
+							'cmp_no' => $comp_id,							
+							'enq_no' => $enquiry_code,
+							'fvalue' => $input_value,
+						);
+			$this->db->insert('extra_enquery',$ins_arr);
+		}
 	}
 }

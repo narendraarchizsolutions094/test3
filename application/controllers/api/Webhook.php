@@ -72,39 +72,25 @@ class Webhook extends REST_Controller {
 
   public function click_to_dial_post()
   {
-    $phone           = $this->input->post("phone_no");
+    $phone           = '+91'.$this->input->post("phone_no");
     $token           = $this->input->post("token");
     $support_user_id = $this->input->post("support_user_id");
-    $url             = "https://developers.myoperator.co/clickOcall";
-    $data = array(
-      'token'=>$token,
-      'customer_number'=>$phone,
-      'customer_cc'=>91,
-      'support_user_id'=>$support_user_id
-    );
     $curl = curl_init();
-    curl_setopt( $curl, CURLOPT_URL, $url);
-    curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
-    curl_setopt($curl, CURLOPT_HTTPHEADER, array('application/x-www-form-urlencoded'));
-    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-    $response = curl_exec( $curl );
-    curl_close( $curl );
-    if($response)
-    {
-      $this->set_response([
-      'status' => true,
-      'message' => $response, 
-      ], REST_Controller::HTTP_OK);
-    }
-    else
-    {
-      $this->set_response([
-      'status' => false,
-      'message' => array('error'=>'not found!') 
-      ], REST_Controller::HTTP_OK);
-    }
-    
-    // print_r($response);
+	curl_setopt_array($curl, array(  CURLOPT_URL => "https://obd-api.myoperator.co/obd-api-v1",
+	CURLOPT_RETURNTRANSFER => true,  CURLOPT_CUSTOMREQUEST => "POST", 
+	CURLOPT_POSTFIELDS =>'{  "company_id": "5f1545a391ac6734", 
+	"secret_token": "ff0bda40cbdb92a4f1eb7851817de3510a175345a16c59a9d98618a559019f73", 
+	"type": "1", 
+    "user_id": "'.$support_user_id.'",
+    "number": "'.$phone.'",   
+    "public_ivr_id":"5f16e49954ad3197", 
+    "reference_id": "",  
+    "region": "",
+    "caller_id": "",  
+    "group": ""   }', 
+    CURLOPT_HTTPHEADER => array(    "x-api-key:oomfKA3I2K6TCJYistHyb7sDf0l0F6c8AZro5DJh", 
+    "Content-Type: application/json"  ),));
+    echo $response = curl_exec($curl);
   }
 
   public function enquiryListByPhone_post()

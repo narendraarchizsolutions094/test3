@@ -449,8 +449,7 @@ class Enquiry extends REST_Controller {
 				//$this->db->update('enquiry',array('lead_stage'=>173));			
 				$this->db->update('enquiry',$insarr);			
                 $this->Leads_Model->add_comment_for_events_stage_api('Stage Updated', $encode,173,'','',191,0);
-			}else{
-			
+			}else{			
 				$insarr['Enquery_id'] = $encode;
 				$insarr['lead_stage'] = 172; 		//first form submitted;
 				$ret = $this->db->insert('enquiry', $insarr);	
