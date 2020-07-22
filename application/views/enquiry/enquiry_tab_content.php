@@ -261,7 +261,8 @@
                <label><?php echo(!empty($fld["input_label"])) ?  ucwords($fld["input_label"]) : ""; ?></label>
                <?php $optarr = (!empty($fld['input_values'])) ? explode(",",$fld['input_values']) : array(); 
                ?>
-               <select class="form-control multiple-select"  name="enqueryfield[]" multiple>                  
+               <input type="hidden"  name="enqueryfield[]"  id="multi-<?=$fld['input_name']?>"  value ="<?php echo  (!empty($fld["fvalue"])) ? $fld["fvalue"] : ""; ?>">
+               <select class="multiple-select" name='multi[]' multiple onchange="changeSelect(this)" id="<?=$fld['input_name']?>">
                   <?php  foreach($optarr as $key => $val){                  
                     $fvalues  = explode(',', $fld['fvalue']);
                     ?>
@@ -709,5 +710,10 @@
 <script>
   $(function() {
     $('.multiple-select').select2();
-  })
+  });
+  function changeSelect(e){        
+    var input_name = e.id;
+    var data = $("#"+input_name).val();    
+    $("#multi-"+input_name).val(data);
+  }
 </script>

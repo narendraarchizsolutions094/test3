@@ -5,12 +5,9 @@ class Report_datatable_model extends CI_Model {
         parent::__construct();
         $this->load->model('common_model');		
     }
-
     var $table = 'enquiry';
     public function _get_datatables_query(){
     	$all_reporting_ids    =    $this->common_model->get_categories($this->session->user_id);      
-        
-
         $from = $this->session->userdata('from1');
         $to= $this->session->userdata('to1');
         $employe = $this->session->userdata('employe1');
