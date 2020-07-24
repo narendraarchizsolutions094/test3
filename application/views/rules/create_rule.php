@@ -152,7 +152,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 							  resultData.msg,
 							  'success'
 							);
-							window.location = "<?=base_url().'leadrules'?>";
+							window.location = "<?=base_url().'leadrRules'?>";
 				      	}else{
 				      		Swal.fire({
 							  icon: 'error',
