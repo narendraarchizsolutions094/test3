@@ -46,6 +46,24 @@
 
                                         </div>
                                         <div class="form-group col-md-12">
+                                            <!-- <label>Tab Name</label>
+                                            <input class="form-control" name="tab_name" placeholder="Tab name" type="text" value="" required> -->
+                                            <input type="checkbox" name="isqueryform" class="form-control" value="1">Is Query Type Form
+
+                                        </div>
+
+                                        <div class="form-group col-md-12 rights" style="display: none;">
+                                            <label>Rights</label>
+                                            <input type="checkbox" name="edit" value="1">Edit
+                                            <input type="checkbox" name="delete" value="1">Delete
+                                            <!-- <select name="rights" class="rights form-control">
+                                                <option value="">Select</option>
+                                                <option value="1">Normal</option>
+                                                <option value="2">Query Type</option>
+                                            </select> -->
+
+                                        </div>
+                                        <div class="form-group col-md-12">
                                             <label>Company</label>                                            
                                             <select class="form-control" name="comp_ids[]" multiple>                                                
                                                 <?php foreach($company_list as $key=>$company){?>
@@ -164,6 +182,19 @@
                         </div>
                     </div>
                 </div>
+
+<script type="text/javascript">
+    $('input[type="checkbox"][name="isqueryform"]').change(function() {
+     if(this.checked) {
+         // do something when checked
+         $(".rights").css("display","block");
+     }
+     else
+     {
+        $(".rights").css("display","none");  
+     }
+ });
+</script>
 
 
 <script type="text/javascript">

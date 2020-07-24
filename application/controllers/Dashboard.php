@@ -815,7 +815,7 @@ public function login_in_process(){
         $this->form_validation->set_rules('cell', display('cell'), 'required|max_length[10]');
         $this->form_validation->set_rules('state_id', display('state_name'), 'required');
         $this->form_validation->set_rules('city_name', display('city_name'), 'required');
-        $this->form_validation->set_rules('user_role', display('user_role'), 'required');
+        //$this->form_validation->set_rules('user_role', display('user_role'), 'required');
         $this->form_validation->set_rules('user_type', display('user_type'), 'required');
         $this->form_validation->set_rules('modules', display('customer_services'));
         $this->form_validation->set_rules('status', display('status'), 'required');

@@ -405,8 +405,8 @@ if($root=='https://student.spaceinternationals.com'){	 ?>
 
   /*bell notificaiton style start*/
   .notify-detail{
-    width: 320px; 
-    max-height: 300px;
+    width: 400px; 
+    max-height: 500px;
     overflow-y: scroll;
     top:60px;
     border-width: 1px;
@@ -1130,6 +1130,8 @@ if($root=='https://student.spaceinternationals.com'){	 ?>
 					<?php  if($this->session->menu==1){ ?></br><p style="color:#fff;font-size:9px;margin-left:-12px;padding-top:10px;"><?php echo display('search_program') ?></p> <?php } ?>
 					</a>
                   </li>
+
+           
 				  
 				  
 		<?php if($this->session->userdata('user_right')==151){ ?>		  
@@ -1157,7 +1159,13 @@ if($root=='https://student.spaceinternationals.com'){	 ?>
           </a>
           </li>
 		<?php } ?>
-
+          <?php if(user_access(440) || user_access(441) || user_access(442) || user_access(443) ) { ?>
+           <li class="treeview <?php echo (($segment1 == "setting") ? "active" : null) ?>" style="display:block">
+                    <a href="<?php echo base_url("setting/enquiryDuplicacySetting") ?>"><i class="fa fa-gear" style="color:#fff;font-size:18px;background:#f4d03f;padding:7px;border-radius:4px;width:30px;"></i> &nbsp;<?php echo display("new_setting") ?>
+          
+          </a>
+                  </li>
+          <?php } ?>
 				  <li class="treeview <?php echo (($this->uri->segment(1) == "website") ? "active" : null) ?>" style="<?php if(in_array(290,$module) || in_array(291,$module) || in_array(292,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
                             <a href="#">
                                 <i class="pe-7s-global" style="color:#fff;font-size:18px;background:#04e9d1;padding:7px;border-radius:4px;width:30px;"></i> &nbsp;<?php echo display('website') ?>

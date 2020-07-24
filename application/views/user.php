@@ -10,12 +10,13 @@
 
             <div class="panel-heading no-print">
 
-                <div class="btn-group"> 
+                <?php if(user_access(130)){ ?>
+                    <div class="btn-group"> 
 
-                    <a class="btn btn-success" href="<?php echo base_url("user/create") ?>"> <i class="fa fa-plus"></i>  <?php echo display('add_user') ?> </a>  
+                        <a class="btn btn-success" href="<?php echo base_url("user/create") ?>"> <i class="fa fa-plus"></i>  <?php echo display('add_user') ?> </a>  
 
-                </div>
-
+                    </div>
+                <?php } ?>
             </div>
 
             <div class="panel-body">

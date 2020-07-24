@@ -1,5 +1,23 @@
 <script src="https://cdn.rawgit.com/harvesthq/chosen/gh-pages/chosen.jquery.min.js"></script>
 <link href="https://cdn.rawgit.com/harvesthq/chosen/gh-pages/chosen.min.css" rel="stylesheet"/>
+<style type="text/css">
+    
+.custom-form-control
+{
+    border-radius: 15px;
+    box-shadow: none;
+    border: 1px solid #e4e5e7;
+    display: block;
+    width: 100%;
+    height: 34px;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #555;
+    background-color: #fff;
+    background-image: none
+}
+</style>
 <?php 
     if(!empty($nav1)){}else{$nav1='';}
 ?>
@@ -36,6 +54,7 @@
                                 <?php }else{ ?>
                                 <div class="col-sm-4" align="center"> 
                                 <img alt="Picture" src="<?php echo (!empty($department->picture)?base_url($department->picture):base_url("assets/images/no-img.png")) ?>" id="picture" width="150" height="150">
+                                  
                                   <input class="form-control" name="file" type="file" id="file" value="<?= $department->picture ?>" onchange="document.getElementById('picture').src = window.URL.createObjectURL(this.files[0])">
                                     <input type="hidden" name="new_file" value="<?= $department->picture ?>" class="form-control" >
                             </div>                                
@@ -99,7 +118,7 @@
                                 
                                  <div class="form-group col-md-4">
                                     <label for="exampleFormControlTextarea1">Address</label>
-                                    <textarea class="form-control" id="address" rows="3" name="address"><?php echo $department->add_ress;?></textarea>
+                                    <textarea class="custom-form-control" id="address" rows="3" name="address"><?php echo $department->add_ress;?></textarea>
                                 </div>
                                 
                             </div>

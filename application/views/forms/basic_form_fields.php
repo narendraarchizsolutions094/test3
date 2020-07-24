@@ -1,4 +1,4 @@
-  <?php
+<?php
   define('FIRST_NAME',1);
   define('LAST_NAME',2);
   define('GENDER',3);

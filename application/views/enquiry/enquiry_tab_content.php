@@ -400,8 +400,16 @@
                           $arr1 = explode('#', $value1);                           
                           if (!empty($arr1[1]) && $arr1[0]==$fld['input']) {
                             $d  = $arr1[1];
-                            $d  = explode('/',$arr1[1]);                              
-                            $d = '<a href='.$arr1[1].'>'.end($d).'</a>';
+                            $d  = explode('/',$arr1[1]);
+                            if (filter_var($arr1[1], FILTER_VALIDATE_URL)) 
+                            {
+                              $d = '<a href='.$arr1[1].'>'.end($d).'</a>';
+                            }
+                            else
+                            {
+                              $d = end($d);
+                            }                              
+                            
                             break;
                           }                         
                         } 

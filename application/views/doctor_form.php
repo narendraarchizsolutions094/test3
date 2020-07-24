@@ -226,7 +226,7 @@
                                         <div class="form-group row">
                                             <label for="a_companyaddress" class="col-xs-3 col-form-label">Valid Upto : </label>
                                             <div class="col-xs-9">
-                                                <input name="a_validupto" value="<?=date('Y-m-d', strtotime($doctor->valid_upto));?>" class="form-control"  placeholder="Valid Upto"  id="validupto"/>
+                                                <input name="a_validupto" type="date" value="<?=date('Y-m-d', strtotime($doctor->valid_upto));?>" class="form-control"  placeholder="Valid Upto"  id="validupto"/>
                                            </div>
                                         </div>
 									  </div>

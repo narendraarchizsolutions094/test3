@@ -41,7 +41,7 @@
 
           }
         ?>
-        <li class="media"><a class="btn btn-primary" onclick="loadMoreNotification('<?=$limit?>','bell_all')">View More</a></li>
+        <li class="media"><a class="btn btn-sm btn-primary" onclick="loadMoreNotification('<?=$limit?>','bell_all')">View More</a></li>
         <hr>        
       </div>
       <div class="tab-pane" id="bell_read">
@@ -76,7 +76,7 @@
             }
           }
         ?>
-        <li class="media"><a class="btn btn-primary" onclick="loadMoreNotification('<?=$limit?>','bell_read')">View More</a></li>
+        <li class="media"><a class="btn btn-primary btn-sm" onclick="loadMoreNotification('<?=$limit?>','bell_read')">View More</a></li>
         <hr>      
       </div>
       <div class="tab-pane" id="bell_unread">
@@ -111,7 +111,7 @@
             }
           }
         ?>
-        <li class="media"><a class="btn btn-primary" onclick="loadMoreNotification('<?=$limit?>','bell_unread')">View More</a></li>
+        <li class="media"><a class="btn btn-primary btn-sm" onclick="loadMoreNotification('<?=$limit?>','bell_unread')">View More</a></li>
         <hr>
       </div>
       <div class="tab-pane" id="bell_today">
@@ -148,7 +148,7 @@
             }
           }
         ?>
-        <li class="media"><a class="btn btn-primary" onclick="loadMoreNotification('<?=$limit?>','bell_today')">View More</a></li>
+        <li class="media"><a class="btn btn-primary btn-sm" onclick="loadMoreNotification('<?=$limit?>','bell_today')">View More</a></li>
         <hr>
       </div>
     </div>

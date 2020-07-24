@@ -372,7 +372,8 @@ class Enquiry extends CI_Controller {
         }
     }
 
-    function phone_check($phone){
+    function phone_check($phone)
+    {
         $product_id    =   $this->input->post('product_id');                
         if($product_id){
             $query = $this->db->query("select phone from enquiry where product_id=$product_id AND phone=$phone");
@@ -394,6 +395,30 @@ class Enquiry extends CI_Controller {
         }
     }
 
+    function email_check($email)
+    {
+        $product_id    =   $this->input->post('product_id');                
+        if($product_id){
+            $query = $this->db->query("select email from enquiry where product_id=$product_id AND email=$email");
+            if ($query->num_rows()>0) {
+                $this->form_validation->set_message('email_check', 'The Email field can not be dublicate in current process');
+                return false;
+            }else{
+                return TRUE;
+            }
+        }else{
+            $comp_id = $this->session->companey_id;
+            $query = $this->db->query("select phone from enquiry where comp_id=$comp_id AND email=$email");                
+            if ($query->num_rows()>0) {
+                $this->form_validation->set_message('email_check', 'The Email field can not be dublicate');
+                return false;
+            }else{
+                return TRUE;
+            }
+        }
+    }
+
+
     public function create()
     {   
         //print_r($_POST);die;
@@ -401,7 +426,27 @@ class Enquiry extends CI_Controller {
         $data['leadsource'] = $this->Leads_Model->get_leadsource_list();
         $data['lead_score'] = $this->Leads_Model->get_leadscore_list();
         $data['title'] = display('new_enquiry');
-        $this->form_validation->set_rules('mobileno', display('mobileno'), 'max_length[20]|callback_phone_check|required', array('phone_check' => 'Duplicate Entry for phone'));        
+        // $ruledata   = $this->db->select("*")->from("tbl_new_settings")->where('comp_id',$this->session->companey_id)->get()->row();
+        // if($ruledata->duplicacy_status == 0)
+        // { 
+            
+        //     if($ruledata->field_for_identification == 'email')
+        //     {
+        //         $this->form_validation->set_rules('email', display('email'), 'xss_clean|required|is_unique[enquiry.email]', array('is_unique'=>'Email already exist'));
+        //     }
+        //     elseif ($ruledata->field_for_identification == 'phone')
+        //     {
+        //        $this->form_validation->set_rules('mobileno', display('mobileno'), 'max_length[20]|callback_phone_check|required', array('phone_check' => 'Duplicate Entry for phone'));
+        //     }
+        //     else
+        //     {
+        //         $this->form_validation->set_rules('email', display('email'), 'xss_clean|required|is_unique[enquiry.email]', array('is_unique'=>'Email already exist'));
+        //         $this->form_validation->set_rules('mobileno', display('mobileno'), 'max_length[20]|callback_phone_check|required', array('phone_check' => 'Duplicate Entry for phone'));
+        //     }
+        // }
+        $this->form_validation->set_rules('mobileno', display('mobileno'), 'max_length[20]|callback_phone_check|required', array('phone_check' => 'Duplicate Entry for phone'));
+        $this->form_validation->set_rules('email', display('email'), 'callback_email_check|required', array('email_check'=>'Email already exist'));
+
         $enquiry_date = $this->input->post('enquiry_date');
         if($enquiry_date !=''){
           $enquiry_date = date('d/m/Y');
