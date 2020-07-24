@@ -7,7 +7,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
       <div  class="panel panel-default thumbnail">
         <div class="panel-heading no-print">
             <div class="btn-group"> 
-               <a class="btn btn-primary" href="<?php echo base_url("leadrules/create_rule") ?>"> <i class="fa fa-list"></i> <?php echo display('create_rule') ?> </a>  
+               <a class="btn btn-primary" href="<?php echo base_url("leadRules/create_rule") ?>"> <i class="fa fa-list"></i> <?php echo display('create_rule') ?> </a>  
             </div>
         </div>
         <div class="panel-body">
@@ -33,7 +33,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                   <td><?=ucfirst($value['updated_by_name'])?></td>
                   <td><?=$value['created_date']?></td>
                   <td><?=!empty($value['updated_date'])?$value['updated_date']:'NA'?></td>
-                  <td><a href="<?=base_url().'leadrules/create_rule/'.$value['id']?>" class='btn btn-primary btn-sm'>View</a></td>
+                  <td><a href="<?=base_url().'leadRules/create_rule/'.$value['id']?>" class='btn btn-primary btn-sm'>View</a></td>
               </tr>
               <?php
               }  ?>
