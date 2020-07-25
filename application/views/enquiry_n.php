@@ -1294,6 +1294,11 @@ function autoDial(){
                  $("#imgBack").html('uploading').show();
     },
     success:function(data){
+	    Swal.fire(
+            'success',
+            'call scheduled successfully',
+            'success'
+          	);
          //alert(data);
          //document.getElementById('testdata').innerHTML =data;
           //window.location.href=re_url;
