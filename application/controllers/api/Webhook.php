@@ -46,7 +46,7 @@ class Webhook extends REST_Controller {
 		
         $phone=$call_data_array->clid;
         $uid1=str_replace('.','_',$uid);
-        //  $this->db->set('json_data',$call_data_array);
+        $this->db->set('json_data',$call_data);
         $this->db->set('uid',$call_data_array->uid);
         $this->db->set('cll_state',$call_state);
         $this->db->set('phone_number',$phone);
@@ -155,7 +155,7 @@ class Webhook extends REST_Controller {
 		
         $phone=$call_data_array->clid;
         $uid1=str_replace('.','_',$uid);
-      //  $this->db->set('json_data',$call_data_array);
+        $this->db->set('json_data',$call_data);
         $this->db->set('uid',$call_data_array->uid);
         $this->db->set('cll_state',$call_state);
         $this->db->set('phone_number',$phone);

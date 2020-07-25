@@ -22,7 +22,7 @@
 								<div class="col-md-12">
 							<h5 class="title" style="color: #000000"><?php echo $movie->institute_name; ?></h5>	
 						
-								<p class="course-descr more"><?php echo $movie->course_discription; ?></p>
+								<div class="course-descr more"><?php echo $movie->course_discription; ?></div>
 								
 										<p class="col-md-6" style="color:#F1CB0D;"><b>IELTS: &nbsp;<?php if(!empty($movie->course_ielts)){ echo ($movie->course_ielts);}else{ echo '0';} ?></b>  
 										</p>
@@ -34,9 +34,9 @@
 												</p>
 									</div>
 									<div class="row">
-<div class="col-md-6" style="padding-top:5px;"><a href="<?php echo base_url('dashboard/course_details/'.$movie->institute_id.'/'.$movie->crs_id); ?>" class="btn btn-success"><span><i class="fa fa-info-circle" aria-hidden="true"></i></span></a>&nbsp;&nbsp;
+<div class="col-md-6" style="padding-top:5px;"><a href="<?php echo base_url('home/course_details/'.$movie->insid.'/'.$movie->crs_id); ?>" class="btn btn-success"><span><i class="fa fa-info-circle" aria-hidden="true"></i></span></a>&nbsp;&nbsp;
 <a href="<?php $root=(isset($_SERVER["HTTPS"]) ? "https://" : "http://").$_SERVER["HTTP_HOST"]; echo $root.'/new_crm'; ?>" class="btn btn-danger"><span><i class="fa fa-heart-o" aria-hidden="true"></i></span></a>&nbsp;&nbsp;
-<a href="<?php $root=(isset($_SERVER["HTTPS"]) ? "https://" : "http://").$_SERVER["HTTP_HOST"]; echo $root.'/new_crm'; ?>" data-toggle="modal" data-target=".log-sign" class="btn btn-primary"><span><i class="fa fa-cart-plus" aria-hidden="true"></i></span> Apply</a>&nbsp;&nbsp;
+<a href="<?php $root=(isset($_SERVER["HTTPS"]) ? "https://" : "http://").$_SERVER["HTTP_HOST"]; echo $root.'/new_crm'; ?>" class="btn btn-primary"><span><i class="fa fa-cart-plus" ></i></span> Apply</a>&nbsp;&nbsp;
 </div>							
 							</div>
 								</div>
@@ -64,7 +64,7 @@
 <script>
 $(document).ready(function() {
     // Configure/customize these variables.
-    var showChar = 100;  // How many characters are shown by default
+    var showChar = 300;  // How many characters are shown by default
     var ellipsestext = "...";
     var moretext = "Show more >";
     var lesstext = "Show less";
@@ -74,11 +74,11 @@ $(document).ready(function() {
         var content = $(this).html();
  
         if(content.length > showChar) {
- 
+ 			
             var c = content.substr(0, showChar);
             var h = content.substr(showChar, content.length - showChar);
  
-            var html = c + '<span class="moreellipses">' + ellipsestext+ '&nbsp;</span><span class="morecontent"><span>' + h + '</span>&nbsp;&nbsp;<a href="" class="morelink">' + moretext + '</a></span>';
+            var html = c + '<span class="moreellipses">' + ellipsestext+ '&nbsp;</span><div class="morecontent"><span>' + h + '</span>&nbsp;&nbsp;<a href="" class="morelink">' + moretext + '</a></div>';
  
             $(this).html(html);
         }

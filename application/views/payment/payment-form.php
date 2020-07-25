@@ -2,10 +2,18 @@
 
 /*define('MERCHANT_KEY', 'A0ZvklkZ');
 define('SALT', 'xZXfbRGyAu');
+harshit
 */
 
-define('MERCHANT_KEY', '16pUJhQ9');
-define('SALT', 'vYsS4mkpf1');
+/*define('MERCHANT_KEY', '16pUJhQ9');
+define('SALT', 'vYsS4mkpf1');*/
+/*customer*/
+
+
+define('MERCHANT_KEY', 'GyGrb4rz');
+define('SALT', 'xEB2K9rvWb');
+/*kanhaiya*/
+
 
 //define('PAYU_BASE_URL', 'https://test.payu.in');    //Testing url Use in development mode
 define('PAYU_BASE_URL', 'https://secure.payu.in');  //actual URL Use in production mode

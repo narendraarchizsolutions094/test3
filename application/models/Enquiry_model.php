@@ -1185,7 +1185,22 @@ class Enquiry_model extends CI_Model {
     }
     
     /*********************************************find personel data ajax***************************************************/
-    public function all_states($states) {
+    public function getenq_by_phone($phone){
+		$all_reporting_ids    =   $this->common_model->get_categories($this->session->user_id);
+$cpny_id=$this->session->companey_id;
+        $where = "enquiry.is_delete=1";
+		//$where .= " AND ( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
+    	//$where .= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';
+        $where.=" AND enquiry.comp_id=$cpny_id";
+		$where.=" AND enquiry.phone=$phone";
+        return $this->db->select('*')
+                        ->from('enquiry')
+                        ->where($where)
+						->group_by('enquiry.enquiry_id')
+                        ->get()
+                        ->row();
+   }	   
+   public function all_states($states) {
 
         return $this->db->select('*')->from('state')->where('country_id',$states)->get()->result();
     }

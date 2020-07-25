@@ -176,7 +176,7 @@ if($root=='https://student.spaceinternationals.com'){	 ?>
 					if(res.status=='error'){
 					Swal.fire({            
 					// icon: 'info',
-					 html:'<strong>'+res.message+'</strong>',
+					 html:'<strong>'+res.details+'</strong>',
 					 showCancelButton: false,
 					 confirmButtonColor: '#3085d6',
 					 cancelButtonColor: '#d33',
@@ -186,7 +186,7 @@ if($root=='https://student.spaceinternationals.com'){	 ?>
                    }
                    });	
 					}else{
-						 var str = res.message; 
+						 var str = res.details; 
                          var matches = str.match(/(\d+)/); 
                      Swal.fire({            
                  html:'<strong>'+str+'</strong>',
