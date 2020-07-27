@@ -33,7 +33,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                   <td><?=ucfirst($value['updated_by_name'])?></td>
                   <td><?=$value['created_date']?></td>
                   <td><?=!empty($value['updated_date'])?$value['updated_date']:'NA'?></td>
-                  <td><a href="<?=base_url().'leadRules/create_rule/'.$value['id']?>" class='btn btn-primary btn-sm'>View</a></td>
+                  <td><a href="<?=base_url().'leadRules/create_rule/'.$value['id']?>" class='btn btn-primary btn-sm'>View</a>
+                  <?php
+                  if($value['status']==1){
+                  ?>
+                    <a href="<?=base_url().'leadRules/execute_rule/'.$value['id']?>" onclick="confirm('Are you sure, you want to execute this rule. Once executed you can not revert back.')" class='btn btn-success btn-sm'>Execute</a>
+                  <?php
+                  }
+                  ?>
+                  </td>
               </tr>
               <?php
               }  ?>

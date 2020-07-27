@@ -2,7 +2,8 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 class LeadRules extends CI_Controller {
     public function __construct() {
-        parent::__construct();        
+        parent::__construct(); 
+        $this->load->model('rule_model');
         if (empty($this->session->user_id)) {
             redirect('login');
         }
@@ -158,7 +159,6 @@ class LeadRules extends CI_Controller {
         $this->load->model('location_model');
         $this->load->model('user_model');
         if ($id) {
-            $this->load->model('rule_model');
             $data['rule_data']    =   $this->rule_model->get_rule($id);            
         }
 
@@ -200,9 +200,10 @@ class LeadRules extends CI_Controller {
         $data['user_list']   = $this->user_model->companey_users();
         $data['content'] = $this->load->view('rules/create_rule', $data, true);
         $this->load->view('layout/main_wrapper', $data);       
-    }	
-    public function execute_rule($id){
-        $data['rule_data']    =   $this->rule_model->get_rule($id);
-
+    }
+    public function execute_rule($id,$enquiry_code=0){
+        $res  =  $this->rule_model->execute_rule($id,$enquiry_code);
+        $this->session->set_flashdata('message', 'Rule Executed Successfully. '.$res.' data affected.');
+        redirect('leadrules');
     }
 }
