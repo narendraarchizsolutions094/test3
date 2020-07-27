@@ -399,7 +399,7 @@ class Enquiry extends CI_Controller {
     {
         $product_id    =   $this->input->post('product_id');                
         if($product_id){
-            $query = $this->db->query("select email from enquiry where product_id=$product_id AND email=$email");
+            $query = $this->db->query("select email from enquiry where product_id=$product_id AND email = '$email'");
             if ($query->num_rows()>0) {
                 $this->form_validation->set_message('email_check', 'The Email field can not be dublicate in current process');
                 return false;
@@ -408,7 +408,7 @@ class Enquiry extends CI_Controller {
             }
         }else{
             $comp_id = $this->session->companey_id;
-            $query = $this->db->query("select phone from enquiry where comp_id=$comp_id AND email=$email");                
+            $query = $this->db->query("select phone from enquiry where comp_id=$comp_id AND email = '$email' ");                
             if ($query->num_rows()>0) {
                 $this->form_validation->set_message('email_check', 'The Email field can not be dublicate');
                 return false;
@@ -445,7 +445,7 @@ class Enquiry extends CI_Controller {
         //     }
         // }
         $this->form_validation->set_rules('mobileno', display('mobileno'), 'max_length[20]|callback_phone_check|required', array('phone_check' => 'Duplicate Entry for phone'));
-        $this->form_validation->set_rules('email', display('email'), 'callback_email_check|required', array('email_check'=>'Email already exist'));
+        $this->form_validation->set_rules('email', display('email'), 'callback_email_check|required', array('email_check'=>'The Email you entered is already exist'));
 
         $enquiry_date = $this->input->post('enquiry_date');
         if($enquiry_date !=''){
