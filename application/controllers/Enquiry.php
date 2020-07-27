@@ -513,6 +513,8 @@ class Enquiry extends CI_Controller {
                 'status' => 1
             ];
             $insert_id    =   $this->enquiry_model->create($postData);
+            $this->load->model('rule_model');
+            $this->rule_model->execute_rules($encode);            
             if ($insert_id) {                
                 $this->Leads_Model->add_comment_for_events($this->lang->line("enquery_create"), $encode);       
                 if($this->input->is_ajax_request())
