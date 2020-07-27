@@ -148,6 +148,36 @@ if($root=='https://student.spaceinternationals.com'){	 ?>
           }  
 
         </script>
+		  <script>
+            
+            function  minimize_chats(){
+                $('#minimize_chat').css('display', 'none');
+                $('#maxmize_chat').css('display', 'block');
+            }
+            function  maxmize_chats(){
+                $('#minimize_chat').css('display', 'block');
+                $('#maxmize_chat').css('display', 'none');
+            }
+
+        </script>
+
+        <div style="position:fixed;z-index:200;float:right;right:0px;bottom:0px;display:block;" id="maxmize_chat">
+            <div> 
+              <span class="btn btn-success" style="bottom:0px;z-index:300;" onclick="maxmize_chats()"> 
+                <i class="fa fa-phone-square" style="font-size:30px;"></i>
+              </span>              
+            </div>
+        </div>
+        <div style="position:fixed;z-index:200;float:right;right:5px;bottom:0px;display:none;" id="minimize_chat">
+            <div> 
+                <span class="btn btn-primary btn-circle btn-xl" style="float:right;right:30px;bottom:0px;z-index:300;font-weight:bold" onclick="minimize_chats()" title='hide'>-</span>                
+            </div>
+          
+
+            <iframe width="320px" height="350px"  scrolling="no" frameborder="0" align="right" gesture="media" src="http://czadmin.c-zentrixcloud.com/App/cti_handler.php?e=<?=$this->session->telephony_agent_id?>">
+          </iframe>
+
+        </div>
 			<?php }else{?>
 			 <script>
         function send_parameters(phn){
@@ -214,40 +244,8 @@ if($root=='https://student.spaceinternationals.com'){	 ?>
 		}}
         </script>
 			
-			<?php } ?>
-        <script>
-            
-            function  minimize_chats(){
-                $('#minimize_chat').css('display', 'none');
-                $('#maxmize_chat').css('display', 'block');
-            }
-            function  maxmize_chats(){
-                $('#minimize_chat').css('display', 'block');
-                $('#maxmize_chat').css('display', 'none');
-            }
-
-        </script>
-
-        <div style="position:fixed;z-index:200;float:right;right:0px;bottom:0px;display:block;" id="maxmize_chat">
-            <div> 
-              <span class="btn btn-success" style="bottom:0px;z-index:300;" onclick="maxmize_chats()"> 
-                <i class="fa fa-phone-square" style="font-size:30px;"></i>
-              </span>              
-            </div>
-        </div>
-        <div style="position:fixed;z-index:200;float:right;right:5px;bottom:0px;display:none;" id="minimize_chat">
-            <div> 
-                <span class="btn btn-primary btn-circle btn-xl" style="float:right;right:30px;bottom:0px;z-index:300;font-weight:bold" onclick="minimize_chats()" title='hide'>-</span>                
-            </div>
-          
-
-            <iframe width="320px" height="350px"  scrolling="no" frameborder="0" align="right" gesture="media" src="http://czadmin.c-zentrixcloud.com/App/cti_handler.php?e=<?=$this->session->telephony_agent_id?>">
-          </iframe>
-
-        </div>
-      <?php
-      }
-      ?>     
+			<?php } 
+            } ?>     
       
 	  
       <style>
