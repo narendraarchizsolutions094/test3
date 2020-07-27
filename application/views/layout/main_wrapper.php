@@ -1252,7 +1252,7 @@ if($root=='https://student.spaceinternationals.com'){	 ?>
          </div>
       </div>
 	    <?php
-    if(($this->session->companey_id!='67')){
+    if(in_array(290,$module)) { 
 	  $this->load->view('chats/chats');
 	  
 	}?>	  
