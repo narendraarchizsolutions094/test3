@@ -204,6 +204,6 @@ class LeadRules extends CI_Controller {
     public function execute_rule($id,$enquiry_code=0){ // for single rule execution
         $res  =  $this->rule_model->execute_rule($id,$enquiry_code);
         $this->session->set_flashdata('message', 'Rule Executed Successfully. '.$res.' data affected.');
-        redirect('leadrules');
+        redirect('leadRules');
     }    
 }
