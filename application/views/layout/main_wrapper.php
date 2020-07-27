@@ -230,7 +230,6 @@ if($root=='https://student.spaceinternationals.com'){	 ?>
 
         <div style="position:fixed;z-index:200;float:right;right:0px;bottom:0px;display:block;" id="maxmize_chat">
             <div> 
-              <?php if(in_array(290, $module)){ ?>
               <span class="btn btn-success" style="bottom:0px;z-index:300;" onclick="maxmize_chats()"> 
               <?php
               }
