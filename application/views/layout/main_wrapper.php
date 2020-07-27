@@ -787,9 +787,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                      </a>
                      <ul class="treeview-menu <?php echo (($segment1 == "lead" && $segment2 != "index" && $segment2 != "lead_details") ?"menu-open":'') ?>">
                         <li class="<?php echo (in_array($segment2,array('stage')) ?"active":'') ?>">
-                        <?php if($this->session->companey_id == 1) { ?>
                           <a href="<?php echo base_url(); ?>leadRules"> <?php echo display('lead_rules'); ?> </a>
-                        <?php }?>
                         </li>
 
                         <li class="<?php echo (in_array($segment2,array('stage')) ?"active":'') ?>">
