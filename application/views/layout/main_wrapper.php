@@ -1285,6 +1285,32 @@ if($root=='https://student.spaceinternationals.com'){  ?>
             </form>
          </div>
       </div>
+
+<div id="callbreak" class="modal fade" role="dialog" >
+         <div class="modal-dialog">
+            <!-- Modal content-->
+            <?php echo form_open_multipart('telephony/mark_abilibality','class="form-inner"  ') ?> 
+            <div class="modal-content card">
+               <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  <h4 class="modal-title" id="modal-title"> Mark Status</h4>
+               </div>
+                <div class="form-group col-sm-12"> 
+                     <label for="callbreakstatus"> Mark Status</label>
+                     <select name="callbreakstatus" class="form-control">
+                       <option value="1"> Available</option>
+                       <option value="2"> Not Available</option>
+                     </select>
+                  </div>
+               
+               <div class="modal-footer">
+                <button class="btn btn-success" type="submit" ><?php echo display('save'); ?></button>
+                  <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo display('close'); ?></button>
+               </div>
+            </div>
+            </form>
+         </div>
+      </div>
       <?php
     if(($this->session->companey_id!='67')){
     $this->load->view('chats/chats');
