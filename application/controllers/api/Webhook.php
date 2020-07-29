@@ -92,7 +92,37 @@ class Webhook extends REST_Controller {
     "Content-Type: application/json"  ),));
     echo $response = curl_exec($curl);
   }
-
+	
+  public function mark_abilibality_post(){
+        
+        $atID   =   !empty($_POST['callbreakstatus'])?$_POST['callbreakstatus']:'';
+        
+        $user_id    =   $this->input->post('user_id');        
+        
+            $url = "https://developers.myoperator.co/user";
+            $data = array(
+            'token'=>$this->input->post('telephony_token'),
+            'receive_calls '=>$atID,
+            'uuid'=>$this->input->post('telephony_agent_id'),
+            );
+            $ch = curl_init($url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
+            curl_setopt($ch, CURLOPT_POSTFIELDS,http_build_query($data));   
+            $response = curl_exec($ch);
+            //$user_id    =   $this->session->user_id;
+            $this->db->set('availability',$atID);
+            $this->db->where('pk_i_admin_id',$user_id);
+            $this->db->update('tbl_admin');         
+        
+            //unset($this->session->availability);
+            
+            if($atID == 0){     
+            echo json_encode(array('id'=>0,'status'=>$atID));
+            }else{
+            echo json_encode(array('id'=>0,'status'=>$atID));           
+            }
+    }
   public function enquiryListByPhone_post()
   {
     $phone   = $this->input->post("phone_no");
