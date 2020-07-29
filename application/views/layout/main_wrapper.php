@@ -245,7 +245,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
         </script>
   
 
-      <?php } ?>
+      
         <script>
             
             function  minimize_chats(){
@@ -278,7 +278,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
 
         </div>
       
-
+      <?php } ?>
        <?php } 
              ?> 
 
