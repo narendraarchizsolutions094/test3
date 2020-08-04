@@ -148,7 +148,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
           }  
 
         </script>
-      <script>
+		  <script>
             
             function  minimize_chats(){
                 $('#minimize_chat').css('display', 'none');
@@ -178,7 +178,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
           </iframe>
 
         </div>
-      <?php }else{?>
+			<?php }else{?>
        <script>
         function send_parameters(phn){
       var x=phn.toString().length;
@@ -243,6 +243,9 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                });
     }}
         </script>
+			<?php } 
+            } ?>     
+
   
 
       
@@ -277,10 +280,9 @@ if($root=='https://student.spaceinternationals.com'){  ?>
           </iframe>
 
         </div>
+
       
-      <?php } ?>
-       <?php } 
-             ?> 
+      <?php //} ?>
 
       
     
@@ -1286,6 +1288,15 @@ if($root=='https://student.spaceinternationals.com'){  ?>
          </div>
       </div>
 
+	    <?php
+    if(in_array(290,$module)) { 
+	  $this->load->view('chats/chats');
+	  
+	}?>	  
+	 
+	  <script src="<?=base_url().'assets/js/sweetalert2@9.js'?>"></script>
+
+
 <div id="callbreak" class="modal fade" role="dialog" >
          <div class="modal-dialog">
             <!-- Modal content-->
@@ -1318,6 +1329,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
   }?>   
    
     <script src="<?=base_url().'assets/js/sweetalert2@9.js'?>"></script>
+
          <script>
     $(document).ready(function(){
 
