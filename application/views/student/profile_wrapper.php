@@ -324,7 +324,7 @@ height:auto;
     cursor: pointer;
     display: inline-block;
     font-size: 1rem;
-    font-weight: 500;
+    font-weight: 500; 
     line-height: 2.5rem;
     outline: none;
     padding: 0 1.5rem;
@@ -1573,14 +1573,17 @@ height:auto;
                                             <div class="col-md-4"><p>
 							<?php  
 				                $cntry_ids=explode(',',$pdetail->country_id);
-                                foreach($cntry_ids as $ids){
+                        $cname = '';
+                        if (!empty($cntry_ids)) {                        
+                              foreach($cntry_ids as $ids){
                                 foreach($country_list as $c_name){  
                                 if($c_name->id_c == $ids){
-                                $cname= $c_name->country_name;
-                                     }
+                                  $cname= $c_name->country_name;
+                                  }
                                 }
-				   echo $cname.''.',';
-				            } ?>
+				                      echo $cname.''.',';
+				                  }
+                        } ?>
 											
 											</p></div>
                                         </div>
