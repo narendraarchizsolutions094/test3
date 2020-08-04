@@ -957,7 +957,7 @@ class Enquiry extends REST_Controller {
 	        }
 		    $res = array();			
 			$proc  = $result->product_id;
-			$comp_id  = $result->comp_id;
+			$comp_id  = $result->enq_comp_id;
 			if (is_active_field_api(COMPANY,$proc,$comp_id)) {
 				$res['org_name']    = array(
 									'value' => $result->company,

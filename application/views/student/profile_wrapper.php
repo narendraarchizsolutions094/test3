@@ -332,12 +332,158 @@ height:auto;
     transition: background-color .2s ease;
     white-space: nowrap;
 }
+.step-bar {
+   margin: 0.5em;
+   padding: 0;
+   list-style: none;
+   display: flex;
+   flex-direction: column;
+}
+ @media (min-width: 480px) {
+   .step-bar {
+     flex-direction: row;
+     justify-content: space-between;
+  }
+}
+ .step {
+   display: flex;
+   flex: 0 1 100%;
+   justify-content: center;
+   border: 4px solid #009cd2;
+   background-color: #009cd2;
+   color: white;
+   border-radius: 2rem;
+   position: relative;
+}
+ @media (min-width: 480px) {
+   .step {
+     background-color: transparent;
+     color: currentColor;
+     border: none;
+     flex-direction: column;
+     align-items: center;
+     border-radius: 0;
+     flex-grow: 1;
+  }
+}
+ .step + .step {
+   margin-top: 2rem;
+}
+ @media (min-width: 480px) {
+   .step + .step {
+     margin-top: 0;
+  }
+}
+ .step + .step:before {
+   content: '';
+   position: absolute;
+   background-color: #009cd2;
+   height: calc(100% + 4px);
+   width: 4px;
+   top: calc(-100% - 4px);
+}
+ @media (min-width: 480px) {
+   .step + .step:before {
+     display: none;
+  }
+}
+ @media (min-width: 480px) {
+   .step + .step .step__bullet:before {
+     content: '';
+     position: absolute;
+     height: 4px;
+     width: calc(100% - 2rem - 4px);
+     top: 1rem;
+     right: calc(50% + 2rem / 2);
+     background-color: #009cd2;
+  }
+}
+ .step--current ~ .step {
+   border-color: #96a0a0;
+   background-color: white;
+   color: currentColor;
+}
+ @media (min-width: 480px) {
+   .step--current ~ .step {
+     background-color: transparent;
+  }
+}
+ .step--current ~ .step:before {
+   background-color: #96a0a0;
+}
+ @media (min-width: 480px) {
+   .step--current ~ .step .step__bullet {
+     border-color: #96a0a0;
+     background-color: white;
+     color: currentColor;
+  }
+}
+ .step--current ~ .step .step__bullet:before {
+   background-color: #96a0a0;
+}
+ .step__bullet {
+   height: 3rem;
+   width: 3rem;
+   line-height: 2.5rem;
+   text-align: center;
+   font-weight: 700;
+}
+ @media (min-width: 480px) {
+   .step__bullet {
+     border: 4px solid #009cd2;
+     background-color: #009cd2;
+     color: white;
+     border-radius: 50%;
+  }
+}
+ .step__title {
+   height: 2rem;
+   line-height: 2rem;
+   padding: 0 1rem;
+   text-align: center;
+}
+
 </style>
         <!-- Comment Form -->
 
         <section class="comment-form">
             <div class="container-fluid">
-
+              <br>
+              <br>
+                <div class="col-md-12">
+                  <?php
+                  if ($this->session->companey_id == 76) {
+                  ?>
+                  <ul class="step-bar">
+                    <?php
+                    $s  = $student_Details[0];
+                    if (!empty($s)) {
+                      foreach ($s as $key => $value) {
+                        # code...
+                      }
+                    }
+                    ?>
+                    <li class="step">
+                      <span class="step__bullet">1</span>
+                      <span class="step__title">Step Title</span>
+                    </li>
+                    <li class="step">
+                      <span class="step__bullet">2</span>
+                      <span class="step__title">Another Title</span>
+                    </li>
+                    <li class="step step--current">
+                      <span class="step__bullet">3</span>
+                      <span class="step__title">Current Step</span>
+                    </li>
+                    <li class="step">
+                      <span class="step__bullet">4</span>
+                      <span class="step__title">Final Step</span>
+                    </li>
+                  </ul>
+                  <?php
+                  }
+                  ?>
+                </div>
                 <div class="col-sm-12">
 
                
@@ -352,7 +498,13 @@ height:auto;
 				<div class="user-data">
 					<h2><?php echo $pdetail->name_prefix.''.$pdetail->name.' '.$pdetail->lastname; ?></h2>
 					<span class="post-label"><?php echo $pdetail->Enquery_id; ?></span>
+          <?php
+          if ($this->session->companey_id == 67) {          
+          ?>
 					<p>Applied at <strong>Space Internationals</strong><br>
+          <?php
+          }
+          ?>
 					<i class="fa fa-map-marker" aria-hidden="true"></i>  <?php echo $pdetail->address; ?>
 					</p>
 				</div>

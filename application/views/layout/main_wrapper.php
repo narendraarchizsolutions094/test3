@@ -249,7 +249,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
   
 
       
-        <script>
+     <!--    <script>
             
             function  minimize_chats(){
                 $('#minimize_chat').css('display', 'none');
@@ -260,9 +260,9 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                 $('#maxmize_chat').css('display', 'none');
             }
 
-        </script>
+        </script> -->
 
-        <div style="position:fixed;z-index:200;float:right;right:0px;bottom:0px;display:block;" id="maxmize_chat">
+  <!--       <div style="position:fixed;z-index:200;float:right;right:0px;bottom:0px;display:block;" id="maxmize_chat">
             <div> 
               <span class="btn btn-success" style="bottom:0px;z-index:300;" onclick="maxmize_chats()"> 
             
@@ -279,7 +279,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
             <iframe width="320px" height="350px"  scrolling="no" frameborder="0" align="right" gesture="media" src="http://czadmin.c-zentrixcloud.com/App/cti_handler.php?e=<?=$this->session->telephony_agent_id?>">
           </iframe>
 
-        </div>
+        </div> -->
 
       
       <?php //} ?>
@@ -1553,34 +1553,36 @@ function formatAMPM(date) {
     $("#bell_notifications_count").html(i);*/
   });
 
-  starCountRef1.on('value',function(res){
-      console.log(res.val());
+starCountRef1.on('value',function(res){
+     // console.log(res.val());
         var phone=Object.values(res.val());
           phone.forEach(function (arrayItem) { 
            var phone=arrayItem.user_phone;
            var uid=  arrayItem.uid;
-          // console.log(phone);
-                 $.ajax({
-       type: "POST",
-       url: "<?php echo base_url();?>telephony/get_in_status/"+btoa(uid),        
-       success: function(data){
-        //console.log(data);       
-        if(data==1){
-              
-               Swal.fire({            
+       var phone_s=arrayItem.users;
+           phone_s = phone_s.replace(/[^\d]/g, '');
+         console.log(phone_s); 
+       var user_pho="<?php echo '91'.$this->session->phone;?>"; 
+            if(phone_s == user_pho){
+         $.ajax({
+                type: "POST",
+                url: "<?php echo base_url();?>telephony/get_in_status/"+btoa(uid),        
+                success: function(data){ 
+                  if(data==1){    
+                 Swal.fire({            
                  icon: 'info',
-                 html:'<strong>Inbound call with this number.</strong><br>'+phone,
-                 showCancelButton: true,
+                 html:'<strong>Inbound call with this number.<a href="https://thecrm360.com/new_crm/telephony/forword_to/'+phone+'">'+phone+'</a></strong><br>',
+                 showCancelButton: false,
                  confirmButtonColor: '#3085d6',
                  cancelButtonColor: '#d33',             
-               }).then((result) => {
+                 }).then((result) => {
                  if (result.value) {                                 
-                 }
-               });         
-       }
- 
-    }
-  });
+                     }
+          }); 
+          }    
+        }
+           }); 
+         }
           });
       
   });

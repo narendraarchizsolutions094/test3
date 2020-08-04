@@ -1176,7 +1176,7 @@ public function login_in_process(){
 	    $data['length'] = $this->location_model->find_length();
 		$data['content'] = $this->load->view('student/search_programs', $data, true);
         $this->load->view('layout/main_wrapper', $data);
-
+ 
     }
 		
 public function user_profile() {
