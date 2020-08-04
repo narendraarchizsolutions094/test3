@@ -617,7 +617,9 @@ class Client extends CI_Controller {
             $this->db->where('enquiry_id', $enquiry_id);            
             $this->db->update('enquiry');  
 
-
+            $this->load->model('rule_model');
+            $this->rule_model->execute_rules($en_comments);
+            
             $type = $enqarr->status;                
 
             if($type == 1){                 

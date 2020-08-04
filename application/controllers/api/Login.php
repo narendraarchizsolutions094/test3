@@ -49,31 +49,34 @@ class Login extends REST_Controller {
             $check_user = $this->dashboard_model->check_user($postData); 
             
             $active = 1;
-            if($check_user->row()->user_permissions!=1 && ($check_user->row()->status == 0 || $check_user->row()->status == null) ){
+            if(!empty($check_user->row()))
+            {
+                if($check_user->row()->user_permissions!=1 && ($check_user->row()->status == 0 || $check_user->row()->status == null) ){
                 $active = 0;
-            }
-            if ($check_user->num_rows() === 1 && $active) {
-            
-                if($this->input->post('mobile_token')){
-                    $this->db->where('pk_i_admin_id',$check_user->row()->pk_i_admin_id);
-                    $this->db->update('tbl_admin',array('mobile_token'=>$this->input->post('mobile_token')));                    
                 }
+                if ($check_user->num_rows() === 1 && $active) {
+                
+                    if($this->input->post('mobile_token')){
+                        $this->db->where('pk_i_admin_id',$check_user->row()->pk_i_admin_id);
+                        $this->db->update('tbl_admin',array('mobile_token'=>$this->input->post('mobile_token')));                    
+                    }
 
-                $data=array(
-                    'isLogIn'           => true,
-                    'user_id'           => $check_user->row()->pk_i_admin_id,
-                    'companey_id'       => $check_user->row()->companey_id,
-                    'email'             => $check_user->row()->s_user_email,
-                    'orgisation_name'   => $check_user->row()->orgisation_name,
-                    'telephony_id'      => $check_user->row()->telephony_agent_id,
-                    'token'             => $check_user->row()->telephony_token,
-                    
-                );
-                   $this->set_response([
-                'status' => TRUE,
-                'message' =>$data,
-            ], REST_Controller::HTTP_OK);
+                    $data=array(
+                        'isLogIn'           => true,
+                        'user_id'           => $check_user->row()->pk_i_admin_id,
+                        'companey_id'       => $check_user->row()->companey_id,
+                        'email'             => $check_user->row()->s_user_email,
+                        'orgisation_name'   => $check_user->row()->orgisation_name,
+                        'telephony_id'      => $check_user->row()->telephony_agent_id,
+                        'token'             => $check_user->row()->telephony_token,
+                        
+                    );
+                       $this->set_response([
+                    'status' => TRUE,
+                    'message' =>$data,
+                ], REST_Controller::HTTP_OK);
 
+                }
             } else {
                 $array=array('error'=>'Invalid Username or Password');
                    $this->set_response([

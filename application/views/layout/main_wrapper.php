@@ -35,11 +35,11 @@
       <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
 
       <meta name="viewport" content="width=device-width, initial-scale=1">
-	  <?php $root=(isset($_SERVER["HTTPS"]) ? "https://" : "http://").$_SERVER["HTTP_HOST"];
-if($root=='https://student.spaceinternationals.com'){	 ?>	
+    <?php $root=(isset($_SERVER["HTTPS"]) ? "https://" : "http://").$_SERVER["HTTP_HOST"];
+if($root=='https://student.spaceinternationals.com'){  ?> 
     <title>Space Internationals</title>
 <?php }else{ ?>
-	<title>thecrm360 - <?php echo (!empty($title)?$title:null) ?></title>
+  <title>thecrm360 - <?php echo (!empty($title)?$title:null) ?></title>
 <?php } ?>
       <!--<link rel="shortcut icon" href="<?= base_url($this->session->userdata('favicon')) ?>">-->
       <link href="<?php echo base_url('assets/css/jquery-ui.min.css') ?>" rel="stylesheet" type="text/css"/>
@@ -53,11 +53,11 @@ if($root=='https://student.spaceinternationals.com'){	 ?>
         <?php 
       } 
       ?>
-	   <?php $root=(isset($_SERVER["HTTPS"]) ? "https://" : "http://").$_SERVER["HTTP_HOST"];
-if($root=='https://student.spaceinternationals.com'){	 ?>	
+     <?php $root=(isset($_SERVER["HTTPS"]) ? "https://" : "http://").$_SERVER["HTTP_HOST"];
+if($root=='https://student.spaceinternationals.com'){  ?> 
     <link rel="icon" href="https://spaceinternationals.com/wp-content/uploads/2018/02/cropped-SPACE-INTERNATIONALS-LOGO-02-1-32x32.jpg" sizes="32x32" />
 <?php }else{ ?>
-	<link rel="icon" href="https://archizsolutions.com/wp-content/uploads/2018/03/cropped-Archiz-logo-1-32x32.jpg" sizes="32x32" />
+  <link rel="icon" href="https://archizsolutions.com/wp-content/uploads/2018/03/cropped-Archiz-logo-1-32x32.jpg" sizes="32x32" />
 <?php } ?>
       
       <!-- Font Awesome 4.7.0 -->
@@ -95,7 +95,7 @@ if($root=='https://student.spaceinternationals.com'){	 ?>
 
       <?php //echo $this->session->telephony_token;
       if(in_array(220, $module)){
-      		if(empty($this->session->telephony_token)){  ?>      
+          if(empty($this->session->telephony_token)){  ?>      
       <script>
         function send_parameters(phn){          
           var agent_id = "<?=$this->session->telephony_agent_id?>";
@@ -117,7 +117,7 @@ if($root=='https://student.spaceinternationals.com'){	 ?>
               alert('Agent id does not found!');
             }
           }
-          function listener(event) { 			
+          function listener(event) {      
             var spiltData = event.data.split('|');
             if (spiltData[0] == 'Accept') {
                 
@@ -179,22 +179,22 @@ if($root=='https://student.spaceinternationals.com'){	 ?>
 
         </div>
 			<?php }else{?>
-			 <script>
+       <script>
         function send_parameters(phn){
-			var x=phn.toString().length;
-           if(x >= 10){			
+      var x=phn.toString().length;
+           if(x >= 10){     
             var url="<?=base_url().'telephony/click_to_dial/'?>" + phn; 
               $.ajax({
                   url:url,
                   type: 'POST',
                    beforeSend: function(){
                       Swal.fire({            
-					// icon: 'info',
-					 html:'<strong>Dailing <blink>..</blink></strong>',
-					 showCancelButton: false,
-					 confirmButtonColor: '#3085d6',
-					 cancelButtonColor: '#d33',
-					 confirmButtonText: 'ok'              
+          // icon: 'info',
+           html:'<strong>Dailing <blink>..</blink></strong>',
+           showCancelButton: false,
+           confirmButtonColor: '#3085d6',
+           cancelButtonColor: '#d33',
+           confirmButtonText: 'ok'              
                     }).then((result) => {
                     if (result.value) {                                 
                    }
@@ -202,21 +202,21 @@ if($root=='https://student.spaceinternationals.com'){	 ?>
                      },
                   success: function (data) {
                     var res = JSON.parse(data);
-				//	console.log(res);
-					if(res.status=='error'){
-					Swal.fire({            
-					// icon: 'info',
-					 html:'<strong>'+res.details+'</strong>',
-					 showCancelButton: false,
-					 confirmButtonColor: '#3085d6',
-					 cancelButtonColor: '#d33',
-					 confirmButtonText: 'ok'              
+        //  console.log(res);
+          if(res.status=='error'){
+          Swal.fire({            
+          // icon: 'info',
+           html:'<strong>'+res.details+'</strong>',
+           showCancelButton: false,
+           confirmButtonColor: '#3085d6',
+           cancelButtonColor: '#d33',
+           confirmButtonText: 'ok'              
                     }).then((result) => {
                     if (result.value) {                                 
                    }
-                   });	
-					}else{
-						 var str = res.details; 
+                   });  
+          }else{
+             var str = res.details; 
                          var matches = str.match(/(\d+)/); 
                      Swal.fire({            
                  html:'<strong>'+str+'</strong>',
@@ -226,11 +226,11 @@ if($root=='https://student.spaceinternationals.com'){	 ?>
                }).then((result) => {
                  if (result.value) {                                 
                  }});
-					}
+          }
                   }
               });
-		}else{
-			 Swal.fire({            
+    }else{
+       Swal.fire({            
                  icon: 'info',
                  html:'<strong>Invalid mobile Number</strong>',
                  showCancelButton: true,
@@ -241,13 +241,51 @@ if($root=='https://student.spaceinternationals.com'){	 ?>
                  if (result.value) {                                 
                  }
                });
-		}}
+    }}
         </script>
-			
 			<?php } 
             } ?>     
+
+  
+
       
-	  
+        <script>
+            
+            function  minimize_chats(){
+                $('#minimize_chat').css('display', 'none');
+                $('#maxmize_chat').css('display', 'block');
+            }
+            function  maxmize_chats(){
+                $('#minimize_chat').css('display', 'block');
+                $('#maxmize_chat').css('display', 'none');
+            }
+
+        </script>
+
+        <div style="position:fixed;z-index:200;float:right;right:0px;bottom:0px;display:block;" id="maxmize_chat">
+            <div> 
+              <span class="btn btn-success" style="bottom:0px;z-index:300;" onclick="maxmize_chats()"> 
+            
+                <i class="fa fa-phone-square" style="font-size:30px;"></i>
+              </span>              
+            </div>
+        </div>
+        <div style="position:fixed;z-index:200;float:right;right:5px;bottom:0px;display:none;" id="minimize_chat">
+            
+            <div> 
+                <span class="btn btn-primary btn-circle btn-xl" style="float:right;right:30px;bottom:0px;z-index:300;font-weight:bold" onclick="minimize_chats()" title='hide'>-</span>                
+            </div>
+            
+            <iframe width="320px" height="350px"  scrolling="no" frameborder="0" align="right" gesture="media" src="http://czadmin.c-zentrixcloud.com/App/cti_handler.php?e=<?=$this->session->telephony_agent_id?>">
+          </iframe>
+
+        </div>
+
+      
+      <?php //} ?>
+
+      
+    
       <style>
       .content {
        /*min-height: 900px;
@@ -357,13 +395,13 @@ if($root=='https://student.spaceinternationals.com'){	 ?>
     max-width: 350px;
   }
 
-  .dialog-card h5{	/* Dialog title */
+  .dialog-card h5{  /* Dialog title */
     color:  #383c3e;
     font-size: 24px;
     margin: 5px 0 30px;
   }
 
-  .dialog-card p{		/* Dialog text */
+  .dialog-card p{   /* Dialog text */
     color:  #595d60;
     font-weight: normal;
     line-height: 21px;
@@ -452,8 +490,8 @@ if($root=='https://student.spaceinternationals.com'){	 ?>
        
    } 
 </script>
-	<div id="my-confirm-dialogg" class="dialog-overlay" style="display:none;">
-	    <div class="dialog-card">
+  <div id="my-confirm-dialogg" class="dialog-overlay" style="display:none;">
+      <div class="dialog-card">
           <div class="dialog-question-sign"><i class="fa fa-check"></i></div>
           <div class="dialog-info">
             <div id="popupadd"></div>
@@ -545,19 +583,19 @@ input:checked + .slider:before {
             <a href="<?php echo base_url('dashboard/home') ?>" class="logo" >
                <!-- Logo -->
                <span class="logo-mini">
-			   <?php $root=(isset($_SERVER["HTTPS"]) ? "https://" : "http://").$_SERVER["HTTP_HOST"];
-if($root=='https://student.spaceinternationals.com'){	 ?>	
+         <?php $root=(isset($_SERVER["HTTPS"]) ? "https://" : "http://").$_SERVER["HTTP_HOST"];
+if($root=='https://student.spaceinternationals.com'){  ?> 
     <img src="<?php echo base_url("assets/images/lgo.png") ?>" alt="">
 <?php }else{ ?>
-	<img src="<?php echo base_url("assets/images/new_logo.png") ?>" alt="">
+  <img src="<?php echo base_url("assets/images/new_logo.png") ?>" alt="">
 <?php } ?>
                </span>
                <span class="logo-lg">
-			   <?php $root=(isset($_SERVER["HTTPS"]) ? "https://" : "http://").$_SERVER["HTTP_HOST"];
-if($root=='https://student.spaceinternationals.com'){	 ?>	
+         <?php $root=(isset($_SERVER["HTTPS"]) ? "https://" : "http://").$_SERVER["HTTP_HOST"];
+if($root=='https://student.spaceinternationals.com'){  ?> 
     <img src="<?php echo base_url("assets/images/lgo.png") ?>" alt="">
 <?php }else{ ?>
-	<img src="<?php echo base_url("assets/images/new_logo.png") ?>" alt="">
+  <img src="<?php echo base_url("assets/images/new_logo.png") ?>" alt="">
 <?php } ?>
                </span>
             </a>
@@ -575,77 +613,77 @@ if($root=='https://student.spaceinternationals.com'){	 ?>
                   <?php } ?>
                </div>
                <div class="navbar-custom-menu">
-                  <ul class="nav navbar-nav">		
-                  		<?php	if($this->session->userdata('companey_id')!=67){ ?>	
-        						<li  class="dropdown dropdown-user">
-        							<br />
-        							<?php echo form_open(base_url("master_lead_search"), array("class" => "form-inline", "method"=> "GET",'id'=>'master_search_form')); ?>
-        							  <div class="input-group">								
-        								<input type="text" class="form-control master-search" placeholder = "Search here" name="search" value = "<?php echo (!empty($_GET['search'])) ? $_GET['search'] : ""; ?>" style="width:77%;" >
-        								
+                  <ul class="nav navbar-nav">   
+                      <?php if($this->session->userdata('companey_id')!=67){ ?> 
+                    <li  class="dropdown dropdown-user">
+                      <br />
+                      <?php echo form_open(base_url("master_lead_search"), array("class" => "form-inline", "method"=> "GET",'id'=>'master_search_form')); ?>
+                        <div class="input-group">               
+                        <input type="text" class="form-control master-search" placeholder = "Search here" name="search" value = "<?php echo (!empty($_GET['search'])) ? $_GET['search'] : ""; ?>" style="width:77%;" >
+                        
                         <div class="input-group-prepend">
-        								  <button type="submit" class="input-group-text btn btn-default master-search-icon" style=""><i class="fa fa-search" aria-hidden="true"></i></button>&nbsp;
-        								</div>
+                          <button type="submit" class="input-group-text btn btn-default master-search-icon" style=""><i class="fa fa-search" aria-hidden="true"></i></button>&nbsp;
+                        </div>
 
-        							  </div>					
-        							<?php echo form_close(); ?>
-        						</li>		  
-				
-      					    <li class="dropdown dropdown-user">
+                        </div>          
+                      <?php echo form_close(); ?>
+                    </li>     
+        
+                    <li class="dropdown dropdown-user">
                        <button title="<?=display("mark_attendence")?>" class="btn btn-primary" style="margin-top: 20px; border-radius: 50%;" id="mark_attendance" ><i class="fa fa-clock-o"></i></button>
                     </li>
-					<?php } ?>
-					<li  class="dropdown dropdown-user">
-                  				  <?php
-						            if(user_access(230) || user_access(231) || user_access(232) || user_access(233) || user_access(234) || user_access(235) || user_access(236)){                          
-						            ?>
-						            <div class="btn-group dropdown-filter" style="margin-top: 20px;">
-						              &nbsp;<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						                <i class="fa fa-filter"></i> <span class="caret"></span>
-						              </button>
-						              <ul class="filter-dropdown-menu dropdown-menu">                
-						                <?php
-						                $user_process_list = $this->common_model->get_user_product_list();
+          <?php } ?>
+          <li  class="dropdown dropdown-user">
+                            <?php
+                        if(user_access(230) || user_access(231) || user_access(232) || user_access(233) || user_access(234) || user_access(235) || user_access(236)){                          
+                        ?>
+                        <div class="btn-group dropdown-filter" style="margin-top: 20px;">
+                          &nbsp;<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fa fa-filter"></i> <span class="caret"></span>
+                          </button>
+                          <ul class="filter-dropdown-menu dropdown-menu">                
+                            <?php
+                            $user_process_list = $this->common_model->get_user_product_list();
 
-								            if(!empty($user_process_list)){		
-								            	$this->load->helper('cookie');						          	
-								            	$process_filter	=	get_cookie('selected_process');
-								            	if (!empty($process_filter)) {
-								            		$process_filter = explode(',', $process_filter);
-								            	}else{
-								            		$process_filter = array();
-								            	}
-								            	//var_dump($process_filter);
-								          		if(user_access(270)){
-								                  foreach ($user_process_list as $product) { ?>                        
-								                    <li>
-								                      <label>
-								                        <input type="checkbox" name='product_filter[]' value="<?=$product->sb_id ?>" <?php if (empty($process_filter) || in_array($product->sb_id, $process_filter)) { echo "checked";                         
-								                        }?> >   <?=$product->product_name ?>
-								                      </label>
-								                    </li>                
-								                    <?php                             
-								                  }
-								                }else{
-										        foreach ($user_process_list as $product) { ?>                        
-								                    <li>
-								                      <label>
-								                        <input type="radio" name='product_filter[]' value="<?=$product->sb_id ?>" <?php if (empty($process_filter) || in_array($product->sb_id, $process_filter)) { echo "checked";                         
-								                        }?> >   <?=$product->product_name ?>
-								                      </label>
-								                    </li>                
-								                    <?php                             
-								                  } 
-								        		}
-								        	}
-						                ?>
-						              </ul>
-						            </div>
-						          
-						            <?php
-						            }
-						            ?>
-                  				</li>
+                            if(!empty($user_process_list)){   
+                              $this->load->helper('cookie');                        
+                              $process_filter = get_cookie('selected_process');
+                              if (!empty($process_filter)) {
+                                $process_filter = explode(',', $process_filter);
+                              }else{
+                                $process_filter = array();
+                              }
+                              //var_dump($process_filter);
+                              if(user_access(270)){
+                                  foreach ($user_process_list as $product) { ?>                        
+                                    <li>
+                                      <label>
+                                        <input type="checkbox" name='product_filter[]' value="<?=$product->sb_id ?>" <?php if (empty($process_filter) || in_array($product->sb_id, $process_filter)) { echo "checked";                         
+                                        }?> >   <?=$product->product_name ?>
+                                      </label>
+                                    </li>                
+                                    <?php                             
+                                  }
+                                }else{
+                            foreach ($user_process_list as $product) { ?>                        
+                                    <li>
+                                      <label>
+                                        <input type="radio" name='product_filter[]' value="<?=$product->sb_id ?>" <?php if (empty($process_filter) || in_array($product->sb_id, $process_filter)) { echo "checked";                         
+                                        }?> >   <?=$product->product_name ?>
+                                      </label>
+                                    </li>                
+                                    <?php                             
+                                  } 
+                            }
+                          }
+                            ?>
+                          </ul>
+                        </div>
+                      
+                        <?php
+                        }
+                        ?>
+                          </li>
                <li class="dropdown dropdown-user" style="height: 1px;" id="notification_dropdown">
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown" id="anch_notification_dropdown"><i class="fa fa-bell-o" style="background:#fff !important;border:none!important;color:green;"></i></a>
                   <span class="badge badge-notify" id="bell_notifications_count">0</span>
@@ -686,23 +724,23 @@ if($root=='https://student.spaceinternationals.com'){	 ?>
 <?php } ?>
                </div>
                <ul class="sidebar-menu">
-			   <?php if(($this->session->user_right!=151)){ ?>
+         <?php if(($this->session->user_right!=151)){ ?>
                   <li class="<?php echo (($segment1 == 'dashboard') ? "active" : null) ?>">
                      <a href="<?php echo base_url('dashboard') ?>">
                      <i class="fa fa-home" style="color:#fff;font-size:17px;background:#2ecc71;padding:7px;border-radius:4px;width:30px;"></i> &nbsp;<?php echo display('dashboard') ?>
-					 <?php  if($this->session->menu==1){ ?></br><p style="color:#fff;font-size:9px;margin-left:-12px;padding-top:10px;"><?php echo display('dashboard') ?></p> <?php } ?>
+           <?php  if($this->session->menu==1){ ?></br><p style="color:#fff;font-size:9px;margin-left:-12px;padding-top:10px;"><?php echo display('dashboard') ?></p> <?php } ?>
                      </a>
                   </li>
-			   <?php } ?>
+         <?php } ?>
                   <li class="" style="display: none;">
                     <a href="<?php echo base_url('master_lead_search'); ?>">
                       <!-- 
                         it calls route        
                         $route['master_lead_search'] = 'lead/lead_search'; 
                       -->
-                    	<i class="fa fa-search"></i> 
+                      <i class="fa fa-search"></i> 
                       <?php echo display("lead_master_search"); ?>
-					  <?php  if($this->session->menu==1){ ?></br><p style="color:#fff;font-size:9px;margin-left:-12px;padding-top:10px;"><?php echo display('lead_master_search') ?></p> <?php } ?>
+            <?php  if($this->session->menu==1){ ?></br><p style="color:#fff;font-size:9px;margin-left:-12px;padding-top:10px;"><?php echo display('lead_master_search') ?></p> <?php } ?>
                     </a>
                   </li>
                   <li class="treeview <?php echo (($segment1 == "location") ? "active" : null) ?>" style="<?php if(in_array(10,$module) || in_array(11,$module) || in_array(12,$module) || in_array(12,$module)){ echo 'display:block;'; }else{ 
@@ -712,7 +750,7 @@ if($root=='https://student.spaceinternationals.com'){	 ?>
                        <span class="pull-right-container">
                         <i class="fa fa-angle-left pull-right"></i>
                        </span>
-					   <?php  if($this->session->menu==1){ ?></br><p style="color:#fff;font-size:9px;margin-left:-12px;padding-top:10px;"><?php echo display('location_setting'); ?></p> <?php } ?>
+             <?php  if($this->session->menu==1){ ?></br><p style="color:#fff;font-size:9px;margin-left:-12px;padding-top:10px;"><?php echo display('location_setting'); ?></p> <?php } ?>
                      </a>
                      <ul class="treeview-menu <?php echo (($segment1 == "location") ?"menu-open":'') ?>">
                         <li class="<?php echo (in_array($segment2,array('create','country','edit')) ?"active":'') ?>">
@@ -747,13 +785,11 @@ if($root=='https://student.spaceinternationals.com'){	 ?>
                      <span class="pull-right-container">
                      <i class="fa fa-angle-left pull-right"></i>
                      </span>
-					 <?php  if($this->session->menu==1){ ?></br><p style="color:#fff;font-size:9px;margin-left:-12px;padding-top:10px;"><?php echo display('sales_setting'); ?></p> <?php } ?>
+           <?php  if($this->session->menu==1){ ?></br><p style="color:#fff;font-size:9px;margin-left:-12px;padding-top:10px;"><?php echo display('sales_setting'); ?></p> <?php } ?>
                      </a>
                      <ul class="treeview-menu <?php echo (($segment1 == "lead" && $segment2 != "index" && $segment2 != "lead_details") ?"menu-open":'') ?>">
                         <li class="<?php echo (in_array($segment2,array('stage')) ?"active":'') ?>">
-                        <?php if($this->session->companey_id == 1) { ?>
                           <a href="<?php echo base_url(); ?>leadRules"> <?php echo display('lead_rules'); ?> </a>
-                        <?php }?>
                         </li>
 
                         <li class="<?php echo (in_array($segment2,array('stage')) ?"active":'') ?>">
@@ -803,12 +839,12 @@ if($root=='https://student.spaceinternationals.com'){	 ?>
                            <?php echo display('program_discipline');?>                             
                           </a>
                         </li>
-						<li class="<?php echo (in_array($segment2,array('levellist','add_level','edit_level')) ?"active":'') ?>">
+            <li class="<?php echo (in_array($segment2,array('levellist','add_level','edit_level')) ?"active":'') ?>">
                           <a href="<?php echo base_url() ?>lead/level">
                            <?php echo display('program_level');?>                             
                           </a>
                         </li>
-						<li class="<?php echo (in_array($segment2,array('lengthlist','add_length','edit_length')) ?"active":'') ?>">
+            <li class="<?php echo (in_array($segment2,array('lengthlist','add_length','edit_length')) ?"active":'') ?>">
                           <a href="<?php echo base_url() ?>lead/length">
                            <?php echo display('program_length');?>                             
                           </a>
@@ -819,23 +855,23 @@ if($root=='https://student.spaceinternationals.com'){	 ?>
                            <?php echo display('institute_management');?>                             
                           </a>
                         </li>
-						
-						<li class="<?php echo (in_array($segment2,array('crslist','add_crs','edit_crs')) ?"active":'') ?>" style="<?php if(in_array(350,$module) || in_array(351,$module) || in_array(352,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
+            
+            <li class="<?php echo (in_array($segment2,array('crslist','add_crs','edit_crs')) ?"active":'') ?>" style="<?php if(in_array(350,$module) || in_array(351,$module) || in_array(352,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
                           <a href="<?php echo base_url() ?>lead/crslist">
                            <?php echo display('course_master');?>                             
                           </a>
                         </li>
-						
-						<li class="<?php echo (in_array($segment2,array('courselist','add_course','edit_course')) ?"active":'') ?>" style="<?php if(in_array(350,$module) || in_array(351,$module) || in_array(352,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
+            
+            <li class="<?php echo (in_array($segment2,array('courselist','add_course','edit_course')) ?"active":'') ?>" style="<?php if(in_array(350,$module) || in_array(351,$module) || in_array(352,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
                           <a href="<?php echo base_url() ?>lead/courselist">
                            <?php echo display('course_management');?>                             
                           </a>
                         </li>
-						
+            
                         <?php
                         if ($this->session->companey_id == 67) {
                         ?>
-						            <li class="<?php echo (in_array($segment2,array('vidlist','add_video','edit_video')) ?"active":'') ?>">
+                        <li class="<?php echo (in_array($segment2,array('vidlist','add_video','edit_video')) ?"active":'') ?>">
                           <a href="<?php echo base_url() ?>lead/add_video">
                            <?php echo display('add_vid');?>                             
                           </a>
@@ -870,7 +906,7 @@ if($root=='https://student.spaceinternationals.com'){	 ?>
                       <span class="pull-right-container">
                         <i class="fa fa-angle-left pull-right"></i>
                       </span>
-					  <?php  if($this->session->menu==1){ ?></br><p style="color:#fff;font-size:9px;margin-left:-12px;padding-top:10px;"><?php echo display('Inventory'); ?></p> <?php } ?>
+            <?php  if($this->session->menu==1){ ?></br><p style="color:#fff;font-size:9px;margin-left:-12px;padding-top:10px;"><?php echo display('Inventory'); ?></p> <?php } ?>
                      </a>
                      
                      <ul class="treeview-menu">
@@ -898,7 +934,7 @@ if($root=='https://student.spaceinternationals.com'){	 ?>
                        <span class="pull-right-container">
                         <i class="fa fa-angle-left pull-right"></i>
                        </span>
-					 <?php  if($this->session->menu==1){ ?></br><p style="color:#fff;font-size:9px;margin-left:-12px;padding-top:10px;"><?php echo display('User_mgment'); ?></p> <?php } ?>  
+           <?php  if($this->session->menu==1){ ?></br><p style="color:#fff;font-size:9px;margin-left:-12px;padding-top:10px;"><?php echo display('User_mgment'); ?></p> <?php } ?>  
                      </a>
                      <!-- <?=$segment1?> -->
                      <ul class="treeview-menu <?php echo in_array($segment1, array('user','customer')) ? "menu-open" : null ?>">
@@ -938,8 +974,8 @@ if($root=='https://student.spaceinternationals.com'){	 ?>
                     <li class="treeview <?php echo (($segment1 == "form") ? "active" : null) ?>">
                     <a href="<?php echo base_url("form/form/tabs") ?>">
                         <i class="fa fa-cogs" style="color:#fff;font-size:15px;background:#dc7633;padding:7px;border-radius:4px;width:30px;"></i> &nbsp;<?php echo 'TABS Settings' ?>
-					<?php  if($this->session->menu==1){ ?></br><p style="color:#fff;font-size:9px;margin-left:-12px;padding-top:10px;"><?php echo 'TABS Settings' ?></p> <?php } ?>	
-					</a>
+          <?php  if($this->session->menu==1){ ?></br><p style="color:#fff;font-size:9px;margin-left:-12px;padding-top:10px;"><?php echo 'TABS Settings' ?></p> <?php } ?> 
+          </a>
                     </li>
                   <?php
                   }
@@ -952,7 +988,7 @@ if($root=='https://student.spaceinternationals.com'){	 ?>
                       <span class="pull-right-container">
                         <i class="fa fa-angle-left pull-right"></i>
                       </span>
-					  <?php  if($this->session->menu==1){ ?></br><p style="color:#fff;font-size:9px;margin-left:-12px;padding-top:10px;"><?php echo display('api') ?></p> <?php } ?>
+            <?php  if($this->session->menu==1){ ?></br><p style="color:#fff;font-size:9px;margin-left:-12px;padding-top:10px;"><?php echo display('api') ?></p> <?php } ?>
                      </a>
                      
                      <ul class="treeview-menu">
@@ -985,23 +1021,23 @@ if($root=='https://student.spaceinternationals.com'){	 ?>
                     <a href="<?php echo base_url("enq/index") ?>">
                     <i class="fa fa-question-circle-o" style="color:#fff;font-size:20px;background:#008080;padding:7px;border-radius:4px;width:30px;"></i> &nbsp;<?php echo display('enquiry') ?>
                     <?php  if($this->session->menu==1){ ?></br><p style="color:#fff;font-size:9px;margin-left:-12px;padding-top:10px;"><?php echo display('enquiry') ?></p> <?php } ?>
-					</a>
-				  </li>
+          </a>
+          </li>
 
                   <li class="<?php echo ($segment1 == "led" || $segment2 == 'lead_details') ? "active" : null ?>" style="<?php if(in_array(70,$module) || in_array(71,$module) || in_array(72,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
 
                     <a href="<?php echo base_url("led/index") ?>">
                     <i class="fa fa-line-chart" style="color:#fff;font-size:15px;background:#FA8072;padding:7px;border-radius:4px;width:30px;"></i> &nbsp;<?php echo display('lead') ?>
-					<?php  if($this->session->menu==1){ ?></br><p style="color:#fff;font-size:9px;margin-left:-12px;padding-top:10px;"><?php echo display('lead') ?></p> <?php } ?>
-					</a>
+          <?php  if($this->session->menu==1){ ?></br><p style="color:#fff;font-size:9px;margin-left:-12px;padding-top:10px;"><?php echo display('lead') ?></p> <?php } ?>
+          </a>
                      
                   </li>
                   
                   <li class="<?php echo (($segment1 == "client") ? "active" : null) ?>" style="<?php if(in_array(80,$module) || in_array(81,$module) || in_array(82,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
                     <a href="<?php echo base_url("client/index") ?>">
                     <i class="fa fa-user-circle-o" style="color:#fff;font-size:20px;background:#3498db;padding:7px;border-radius:4px;width:30px;"></i> &nbsp;<?php echo display('client') ?>
-					<?php  if($this->session->menu==1){ ?></br><p style="color:#fff;font-size:9px;margin-left:-12px;padding-top:10px;"><?php echo display('client') ?></p> <?php } ?>
-					</a>
+          <?php  if($this->session->menu==1){ ?></br><p style="color:#fff;font-size:9px;margin-left:-12px;padding-top:10px;"><?php echo display('client') ?></p> <?php } ?>
+          </a>
 
                   </li>
 
@@ -1009,8 +1045,8 @@ if($root=='https://student.spaceinternationals.com'){	 ?>
                   <li class="<?php echo (($segment1 == "task") ? "active" : null) ?>" style="<?php if(in_array(90,$module) || in_array(91,$module) || in_array(92,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
                     <a href="<?php echo base_url("task/index") ?>">
                     <i class="fa fa-calendar" style="color:#fff;font-size:20px;background:#c715b1;padding:7px;border-radius:4px;width:30px;"></i> &nbsp;<?php echo display('task') ?>
-					<?php  if($this->session->menu==1){ ?></br><p style="color:#fff;font-size:9px;margin-left:-12px;padding-top:10px;"><?php echo display('task') ?></p> <?php } ?>
-					</a>
+          <?php  if($this->session->menu==1){ ?></br><p style="color:#fff;font-size:9px;margin-left:-12px;padding-top:10px;"><?php echo display('task') ?></p> <?php } ?>
+          </a>
                   </li>
 
 
@@ -1022,7 +1058,7 @@ if($root=='https://student.spaceinternationals.com'){	 ?>
                       <span class="pull-right-container">
                         <i class="fa fa-angle-left pull-right"></i>
                       </span>
-					  <?php  if($this->session->menu==1){ ?></br><p style="color:#fff;font-size:9px;margin-left:-12px;padding-top:10px;"><?php echo 'Forecasting'; ?></p> <?php } ?>
+            <?php  if($this->session->menu==1){ ?></br><p style="color:#fff;font-size:9px;margin-left:-12px;padding-top:10px;"><?php echo 'Forecasting'; ?></p> <?php } ?>
                      </a>
                      
                      <ul class="treeview-menu">                     
@@ -1049,25 +1085,25 @@ if($root=='https://student.spaceinternationals.com'){	 ?>
                   <li  class="treeview <?php echo (($segment1 == "report") ? "active" : null) ?>" style="<?php if(in_array(120,$module) || in_array(121,$module) || in_array(122,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
                      <a href="<?php echo base_url('report/index')?>">
                       <i class="fa fa-bar-chart" style="color:#fff;font-size:15px;background:#69f794;padding:7px;border-radius:4px;width:30px;"></i> &nbsp;<?php echo display('report'); ?> 
-					 <?php  if($this->session->menu==1){ ?></br><p style="color:#fff;font-size:9px;margin-left:-12px;padding-top:10px;"><?php echo display('report') ?></p> <?php } ?> 
-					 </a>
+           <?php  if($this->session->menu==1){ ?></br><p style="color:#fff;font-size:9px;margin-left:-12px;padding-top:10px;"><?php echo display('report') ?></p> <?php } ?> 
+           </a>
                   </li>
-				  
-				          <?php if(in_array(200,$module) || in_array(201,$module) || in_array(202,$module) || in_array(203,$module)) { ?>
-					         
+          
+                  <?php if(in_array(200,$module) || in_array(201,$module) || in_array(202,$module) || in_array(203,$module)) { ?>
+                   
                    <li class="treeview ">                     
                      <a href="#">
                       <i class="fa fa-cog" style="color:#fff;font-size:20px;background:#7e1afe;padding:7px;border-radius:4px;width:30px;"></i> &nbsp;<?php echo display('user_activity'); ?>
                       <span class="pull-right-container">
                         <i class="fa fa-angle-left pull-right"></i>
                       </span>
-					  <?php  if($this->session->menu==1){ ?></br><p style="color:#fff;font-size:9px;margin-left:-12px;padding-top:10px;"><?php echo display('user_activity') ?></p> <?php } ?>
+            <?php  if($this->session->menu==1){ ?></br><p style="color:#fff;font-size:9px;margin-left:-12px;padding-top:10px;"><?php echo display('user_activity') ?></p> <?php } ?>
                      </a>
 
                      <ul class="treeview-menu">
-						            <li class="<?php echo (($segment1 == "attendence" && in_array($segment2, array('logs'))) ? "active" : null) ?>">
+                        <li class="<?php echo (($segment1 == "attendence" && in_array($segment2, array('logs'))) ? "active" : null) ?>">
                           <a href="<?php echo base_url("attendance/logs") ?>"><?php echo display('attendence') ?></a>
-                        </li>						            
+                        </li>                       
                      </ul>
 
                   </li>
@@ -1077,7 +1113,7 @@ if($root=='https://student.spaceinternationals.com'){	 ?>
                   <li  class="treeview <?php echo (($this->uri->segment(1) == "knowledge_base") ? "active" : null) ?>" style="<?php if(in_array(170,$module) || in_array(171,$module) || in_array(172,$module) || in_array(173,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
                           <a href="<?=base_url().'leave'?>">
                               <i class="fa fa-quora" style="color:#fff;font-size:18px;background:#fe1a88;padding:7px;border-radius:4px;width:30px;"></i> &nbsp; Knowledge Base 
-							  <?php  if($this->session->menu==1){ ?></br><p style="color:#fff;font-size:9px;margin-left:-12px;padding-top:10px;"><?php echo 'Knowledge Base' ?></p> <?php } ?>
+                <?php  if($this->session->menu==1){ ?></br><p style="color:#fff;font-size:9px;margin-left:-12px;padding-top:10px;"><?php echo 'Knowledge Base' ?></p> <?php } ?>
                           </a>
                           <ul class="treeview-menu <?php echo (($this->uri->segment(1) == "knowledge_base") ? "active" : null) ?>">
                             <?php if(user_access('170')==true||user_access('171')==true||user_access('172')==true||user_access('173')==true){?>
@@ -1089,12 +1125,12 @@ if($root=='https://student.spaceinternationals.com'){	 ?>
                     </li>
 
                   <li class="treeview <?php echo (($segment1 == "invoice") ? "active" : null) ?>" style="<?php if(in_array(180,$module) || in_array(181,$module) || in_array(182,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
-                   	 <a href="<?php echo base_url("invoice/invoice/index") ?>">
+                     <a href="<?php echo base_url("invoice/invoice/index") ?>">
                        <i class="fa fa-paper-plane-o" style="color:#fff;font-size:15px;background:#c53636;padding:7px;border-radius:4px;width:30px;"></i> &nbsp;<?php echo display('invoice') ?>
-					 <?php  if($this->session->menu==1){ ?></br><p style="color:#fff;font-size:9px;margin-left:-12px;padding-top:10px;"><?php echo display('invoice') ?></p> <?php } ?>
-					 </a>
+           <?php  if($this->session->menu==1){ ?></br><p style="color:#fff;font-size:9px;margin-left:-12px;padding-top:10px;"><?php echo display('invoice') ?></p> <?php } ?>
+           </a>
 
-                   	 <ul class="treeview-menu <?php echo (($this->uri->segment(1) == "invoice") ? "active" : null) ?>">
+                     <ul class="treeview-menu <?php echo (($this->uri->segment(1) == "invoice") ? "active" : null) ?>">
                         <?php if(user_access('180')==true||user_access('181')==true||user_access('182')==true||user_access('183')==true){?>
                           <li class="<?php echo (($segment2 == "invoice" && $segment3 == "index") ? "active" : null) ?>"><a href="<?=base_url('invoice/invoice/index')?>">Invoice List</a></li>
                           <li class="<?php echo (($segment2 == "invoice" && $segment3 == "create") ? "active" : null) ?>"><a href="<?php echo base_url('invoice/invoice/create')?>">Create Invoice</a></li>
@@ -1107,48 +1143,48 @@ if($root=='https://student.spaceinternationals.com'){	 ?>
 
                   <li class="treeview <?php echo (($segment1 == "language") ? "active" : null) ?>" style="<?php if(in_array(190,$module) || in_array(191,$module) || in_array(192,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
                     <a href="<?php echo base_url("language/index") ?>"><i class="fa fa-language" style="color:#fff;font-size:18px;background:#FF00FF;padding:7px;border-radius:4px;width:30px;"></i> &nbsp;<?php echo display('language_setting') ?>
-					<?php  if($this->session->menu==1){ ?></br><p style="color:#fff;font-size:9px;margin-left:-12px;padding-top:10px;"><?php echo display('language_setting') ?></p> <?php } ?>
-					</a>
+          <?php  if($this->session->menu==1){ ?></br><p style="color:#fff;font-size:9px;margin-left:-12px;padding-top:10px;"><?php echo display('language_setting') ?></p> <?php } ?>
+          </a>
                   </li>
                 
-				<li class="treeview <?php echo (($segment1 == "schedule") ? "active" : null) ?>" style="<?php if(in_array(320,$module) || in_array(321,$module) || in_array(322,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
+        <li class="treeview <?php echo (($segment1 == "schedule") ? "active" : null) ?>" style="<?php if(in_array(320,$module) || in_array(321,$module) || in_array(322,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
                     <a href="<?php echo base_url("schedule/index") ?>"><i class="fa fa-language" style="color:#fff;font-size:18px;background:#FF00FF;padding:7px;border-radius:4px;width:30px;"></i> &nbsp;<?php echo display('schedule') ?>
-					<?php  if($this->session->menu==1){ ?></br><p style="color:#fff;font-size:9px;margin-left:-12px;padding-top:10px;"><?php echo display('schedule') ?></p> <?php } ?>
-					</a>
+          <?php  if($this->session->menu==1){ ?></br><p style="color:#fff;font-size:9px;margin-left:-12px;padding-top:10px;"><?php echo display('schedule') ?></p> <?php } ?>
+          </a>
                 </li>
-				
-				<li class="treeview <?php echo (($segment1 == "appointment") ? "active" : null) ?>" style="<?php if(in_array(330,$module) || in_array(331,$module) || in_array(332,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
+        
+        <li class="treeview <?php echo (($segment1 == "appointment") ? "active" : null) ?>" style="<?php if(in_array(330,$module) || in_array(331,$module) || in_array(332,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
                     <a href="<?php echo base_url("appointment/index") ?>"><i class="fa fa-language" style="color:#fff;font-size:18px;background:#FF00FF;padding:7px;border-radius:4px;width:30px;"></i> &nbsp;<?php echo display('appointment') ?>
-					<?php  if($this->session->menu==1){ ?></br><p style="color:#fff;font-size:9px;margin-left:-12px;padding-top:10px;"><?php echo display('appointment') ?></p> <?php } ?>
-					</a>
+          <?php  if($this->session->menu==1){ ?></br><p style="color:#fff;font-size:9px;margin-left:-12px;padding-top:10px;"><?php echo display('appointment') ?></p> <?php } ?>
+          </a>
                   </li>
-				  
-				  <li class="treeview <?php echo (($segment2 == "search_programs") ? "active" : null) ?>" style="<?php if(in_array(380,$module) || in_array(381,$module) || in_array(382,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
+          
+          <li class="treeview <?php echo (($segment2 == "search_programs") ? "active" : null) ?>" style="<?php if(in_array(380,$module) || in_array(381,$module) || in_array(382,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
                     <a href="<?php echo base_url("dashboard/search_programs") ?>"><i class="fa fa-search" style="color:#fff;font-size:18px;background:#f4d03f;padding:7px;border-radius:4px;width:30px;"></i> &nbsp;<?php echo display('search_program') ?>
-					<?php  if($this->session->menu==1){ ?></br><p style="color:#fff;font-size:9px;margin-left:-12px;padding-top:10px;"><?php echo display('search_program') ?></p> <?php } ?>
-					</a>
+          <?php  if($this->session->menu==1){ ?></br><p style="color:#fff;font-size:9px;margin-left:-12px;padding-top:10px;"><?php echo display('search_program') ?></p> <?php } ?>
+          </a>
                   </li>
 
            
-				  
-				  
-		<?php if($this->session->userdata('user_right')==151){ ?>		  
-				  <li class="treeview <?php echo (($segment2 == "meeting_room") ? "active" : null) ?>" style="<?php if(in_array(410,$module) || in_array(411,$module) || in_array(412,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
+          
+          
+    <?php if($this->session->userdata('user_right')==151){ ?>     
+          <li class="treeview <?php echo (($segment2 == "meeting_room") ? "active" : null) ?>" style="<?php if(in_array(410,$module) || in_array(411,$module) || in_array(412,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
                     <a href="<?php echo base_url("dashboard/meeting_room") ?>"><i class="fa fa-heart-o" style="color:#fff;font-size:18px;background:#04e9d1;padding:7px;border-radius:4px;width:30px;"></i> &nbsp;<?php echo display('meeting_room') ?>
-					<?php  if($this->session->menu==1){ ?></br><p style="color:#fff;font-size:9px;margin-left:-12px;padding-top:10px;"><?php echo display('meeting_room') ?></p> <?php } ?>
-					</a>
+          <?php  if($this->session->menu==1){ ?></br><p style="color:#fff;font-size:9px;margin-left:-12px;padding-top:10px;"><?php echo display('meeting_room') ?></p> <?php } ?>
+          </a>
                   </li>
-				  
-				  <li class="treeview <?php echo (($segment2 == "user_profile") ? "active" : null) ?>" style="<?php if(in_array(340,$module) || in_array(341,$module) || in_array(342,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
+          
+          <li class="treeview <?php echo (($segment2 == "user_profile") ? "active" : null) ?>" style="<?php if(in_array(340,$module) || in_array(341,$module) || in_array(342,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
                     <a href="<?php echo base_url("dashboard/user_profile") ?>"><i class="fa fa-user" style="color:#fff;font-size:18px;background:#e67e22;padding:7px;border-radius:4px;width:30px;"></i> &nbsp;<?php echo display('user_profile') ?>
-					<?php  if($this->session->menu==1){ ?></br><p style="color:#fff;font-size:9px;margin-left:-12px;padding-top:10px;"><?php echo display('user_profile') ?></p> <?php } ?>
-					</a>
+          <?php  if($this->session->menu==1){ ?></br><p style="color:#fff;font-size:9px;margin-left:-12px;padding-top:10px;"><?php echo display('user_profile') ?></p> <?php } ?>
+          </a>
                   </li>
-				  
-				  <li class="treeview <?php echo (($segment2 == "my_applications") ? "active" : null) ?>" style="<?php if(in_array(400,$module) || in_array(401,$module) || in_array(402,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
+          
+          <li class="treeview <?php echo (($segment2 == "my_applications") ? "active" : null) ?>" style="<?php if(in_array(400,$module) || in_array(401,$module) || in_array(402,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
                     <a href="<?php echo base_url("dashboard/my_applications") ?>"><i class="fa fa-heart-o" style="color:#fff;font-size:18px;background:#d35400;padding:7px;border-radius:4px;width:30px;"></i> &nbsp;<?php echo display('my_applications') ?>
-					<?php  if($this->session->menu==1){ ?></br><p style="color:#fff;font-size:9px;margin-left:-12px;padding-top:10px;"><?php echo display('my_applications') ?></p> <?php } ?>
-					</a>
+          <?php  if($this->session->menu==1){ ?></br><p style="color:#fff;font-size:9px;margin-left:-12px;padding-top:10px;"><?php echo display('my_applications') ?></p> <?php } ?>
+          </a>
           </li>
 
           <li class="treeview <?php echo (($segment2 == "my_applicants") ? "active" : null) ?>" style="<?php if(in_array(420,$module) || in_array(421,$module) || in_array(422,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
@@ -1156,7 +1192,7 @@ if($root=='https://student.spaceinternationals.com'){	 ?>
           <?php  if($this->session->menu==1){ ?></br><p style="color:#fff;font-size:9px;margin-left:-12px;padding-top:10px;"><?php echo display('my_applicants') ?></p> <?php } ?>
           </a>
           </li>
-		<?php } ?>
+    <?php } ?>
           <?php if(user_access(440) || user_access(441) || user_access(442) || user_access(443) ) { ?>
            <li class="treeview <?php echo (($segment1 == "setting") ? "active" : null) ?>" style="display:block">
                     <a href="<?php echo base_url("setting/enquiryDuplicacySetting") ?>"><i class="fa fa-gear" style="color:#fff;font-size:18px;background:#f4d03f;padding:7px;border-radius:4px;width:30px;"></i> &nbsp;<?php echo display("new_setting") ?>
@@ -1164,13 +1200,13 @@ if($root=='https://student.spaceinternationals.com'){	 ?>
           </a>
                   </li>
           <?php } ?>
-				  <li class="treeview <?php echo (($this->uri->segment(1) == "website") ? "active" : null) ?>" style="<?php if(in_array(290,$module) || in_array(291,$module) || in_array(292,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
+          <li class="treeview <?php echo (($this->uri->segment(1) == "website") ? "active" : null) ?>" style="<?php if(in_array(290,$module) || in_array(291,$module) || in_array(292,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
                             <a href="#">
                                 <i class="pe-7s-global" style="color:#fff;font-size:18px;background:#04e9d1;padding:7px;border-radius:4px;width:30px;"></i> &nbsp;<?php echo display('website') ?>
                                 <span class="pull-right-container">
                                     <i class="fa fa-angle-left pull-right"></i>
                                 </span>
-								<?php  if($this->session->menu==1){ ?></br><p style="color:#fff;font-size:9px;margin-left:-12px;padding-top:10px;"><?php echo display('website') ?></p> <?php } ?>
+                <?php  if($this->session->menu==1){ ?></br><p style="color:#fff;font-size:9px;margin-left:-12px;padding-top:10px;"><?php echo display('website') ?></p> <?php } ?>
                             </a>
                             <ul class="treeview-menu">
                                 <li><a href="<?php echo base_url('website/setting') ?>"><?php echo display('setting') ?></a></li>
@@ -1184,7 +1220,7 @@ if($root=='https://student.spaceinternationals.com'){	 ?>
                                 <li><a href="<?php echo base_url('website/comment') ?>"><?php echo display('comments') ?></a></li> 
                             </ul>
                   </li>
-				  
+          
 
                </ul>
             </div>
@@ -1251,6 +1287,7 @@ if($root=='https://student.spaceinternationals.com'){	 ?>
             </form>
          </div>
       </div>
+
 	    <?php
     if(in_array(290,$module)) { 
 	  $this->load->view('chats/chats');
@@ -1258,6 +1295,41 @@ if($root=='https://student.spaceinternationals.com'){	 ?>
 	}?>	  
 	 
 	  <script src="<?=base_url().'assets/js/sweetalert2@9.js'?>"></script>
+
+
+<div id="callbreak" class="modal fade" role="dialog" >
+         <div class="modal-dialog">
+            <!-- Modal content-->
+            <?php echo form_open_multipart('telephony/mark_abilibality','class="form-inner"  ') ?> 
+            <div class="modal-content card">
+               <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  <h4 class="modal-title" id="modal-title"> Mark Status</h4>
+               </div>
+                <div class="form-group col-sm-12"> 
+                     <label for="callbreakstatus"> Mark Status</label>
+                     <select name="callbreakstatus" class="form-control">
+                       <option value="1"> Available</option>
+                       <option value="2"> Not Available</option>
+                     </select>
+                  </div>
+               
+               <div class="modal-footer">
+                <button class="btn btn-success" type="submit" ><?php echo display('save'); ?></button>
+                  <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo display('close'); ?></button>
+               </div>
+            </div>
+            </form>
+         </div>
+      </div>
+      <?php
+    if(($this->session->companey_id!='67')){
+    $this->load->view('chats/chats');
+    
+  }?>   
+   
+    <script src="<?=base_url().'assets/js/sweetalert2@9.js'?>"></script>
+
          <script>
     $(document).ready(function(){
 
@@ -1492,7 +1564,7 @@ function formatAMPM(date) {
        type: "POST",
        url: "<?php echo base_url();?>telephony/get_in_status/"+btoa(uid),        
        success: function(data){
-        //console.log(data);		   
+        //console.log(data);       
         if(data==1){
               
                Swal.fire({            
@@ -1504,7 +1576,7 @@ function formatAMPM(date) {
                }).then((result) => {
                  if (result.value) {                                 
                  }
-               });	  	   
+               });         
        }
  
     }
@@ -1686,33 +1758,33 @@ $("#anch_notification_dropdown").on('click',function(){
              }
          }
           
-		$(document).ready(function(){
-			var url  = "<?=base_url().'attendance/check_attendance_status'?>";
-			$.ajax({
-				url: url,
-				type: 'POST', 
-				beforeSend: function() {
-					$("#mark_attendance").html('<i class="fa fa-spinner fa-spin"></i>');                
-				},                                   
-				success: function (data, status){
-				  if(data != 'null'){                                 
-					jdata = JSON.parse(data);
-  					$("#mark_attendance").removeClass('btn-primary');
+    $(document).ready(function(){
+      var url  = "<?=base_url().'attendance/check_attendance_status'?>";
+      $.ajax({
+        url: url,
+        type: 'POST', 
+        beforeSend: function() {
+          $("#mark_attendance").html('<i class="fa fa-spinner fa-spin"></i>');                
+        },                                   
+        success: function (data, status){
+          if(data != 'null'){                                 
+          jdata = JSON.parse(data);
+            $("#mark_attendance").removeClass('btn-primary');
             $("#mark_attendance").addClass('btn-danger');
-  					$("#mark_attendance").attr('title','Mark attendance');
-  					$("#mark_attendance").html('<i class="fa fa-clock-o fa-pulse"></i>');
-  					$("#mark_attendance").attr('data-id',jdata.id);                
-				  }else{
-					 $("#mark_attendance").html('<i class="fa fa-clock-o"></i>');                
-				  }
-				},
-				error: function (xhr, desc, err){
-				  alert("mark attendance error");
-				}
-			});      
-		});  
-		  
-		    $("#mark_attendance").on('click',function(){      
+            $("#mark_attendance").attr('title','Mark attendance');
+            $("#mark_attendance").html('<i class="fa fa-clock-o fa-pulse"></i>');
+            $("#mark_attendance").attr('data-id',jdata.id);                
+          }else{
+           $("#mark_attendance").html('<i class="fa fa-clock-o"></i>');                
+          }
+        },
+        error: function (xhr, desc, err){
+          alert("mark attendance error");
+        }
+      });      
+    });  
+      
+        $("#mark_attendance").on('click',function(){      
         var url  = "<?=base_url().'attendance/mark_attendance'?>";
         var atID  = $("#mark_attendance").attr('data-id');
         $.ajax({
@@ -1750,7 +1822,7 @@ $("#anch_notification_dropdown").on('click',function(){
 </script>
 <script>
 $('#something').click(function() {
-//alert('hi');	
+//alert('hi');  
     document.location = '<?php echo base_url('dashboard/menu_style'); ?>';
 } );
 </script>

@@ -445,7 +445,10 @@ class Enquiry extends CI_Controller {
         //     }
         // }
         $this->form_validation->set_rules('mobileno', display('mobileno'), 'max_length[20]|callback_phone_check|required', array('phone_check' => 'Duplicate Entry for phone'));
-        $this->form_validation->set_rules('email', display('email'), 'callback_email_check|required', array('email_check'=>'The Email you entered is already exist'));
+        if(!empty($this->input->post('email')))
+        {
+            $this->form_validation->set_rules('email', display('email'), 'callback_email_check|required', array('email_check'=>'The Email you entered is already exist'));
+        }
 
         $enquiry_date = $this->input->post('enquiry_date');
         if($enquiry_date !=''){
@@ -510,6 +513,8 @@ class Enquiry extends CI_Controller {
                 'status' => 1
             ];
             $insert_id    =   $this->enquiry_model->create($postData);
+            $this->load->model('rule_model');
+            $this->rule_model->execute_rules($encode);            
             if ($insert_id) {                
                 $this->Leads_Model->add_comment_for_events($this->lang->line("enquery_create"), $encode);       
                 if($this->input->is_ajax_request())
