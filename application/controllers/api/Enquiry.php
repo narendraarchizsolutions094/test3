@@ -1290,8 +1290,12 @@ class Enquiry extends REST_Controller {
                 $this->db->set('status',2);
                 $this->db->where('Enquery_id',$key);
                 $this->db->update('enquiry');
-              	$this->Leads_Model->add_comment_for_events_api('Enquiry Moved ',$enq->Enquery_id,$assigner_user_id);             
+              	
+              	$this->leads_model->add_comment_for_events_stage_api("Enquiry Moved",$enq->Enquery_id,'','','',$assigner_user_id)
+              	
+              	//$this->Leads_Model->('Enquiry Moved ',$enq->Enquery_id,'','','',$assigner_user_id);             
                  /*
+
               $created_by_user_id =   $enq->created_by;
               
               
@@ -1347,7 +1351,7 @@ class Enquiry extends REST_Controller {
               $this->db->set('update_date',date('Y-m-d H:i:s'));
               $this->db->where('Enquery_id',$key);
               $this->db->update('enquiry');
-              
+               
             $data['enquiry'] = $this->enquiry_model->enquiry_by_code($key);
             $enquiry_code = $data['enquiry']->Enquery_id;
             $this->Leads_Model->add_comment_for_events_api('Enquiry Dropped',$enquiry_code,$login_id);
