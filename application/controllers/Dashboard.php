@@ -1197,6 +1197,7 @@ public function user_profile() {
 		$data['ins_list'] = $this->location_model->stu_ins_list();
         $data['schdl_list'] = $this->schedule_model->get_schedule_list();
 		}
+        $data['lead_stage']    =   $this->Leads_Model->find_stage();
 		$data['source_list'] = $this->home_model->sour_list();
 		$data['process_list'] = $this->home_model->pro_list();
         $data['invoice_details'] = $this->home_model->invoicedetail($en_id);		

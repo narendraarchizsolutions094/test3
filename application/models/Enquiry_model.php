@@ -1345,7 +1345,7 @@ $cpny_id=$this->session->companey_id;
         //return $query->result();
     }
 	  public function enquiry_detail_for_api($enquiry_code) {
-        return $this->db->select("*,enquiry.created_date,enquiry.comp_id as enq_comp_id,enquiry.address,tbl_product_country.country_name as pcountry_name,tbl_product_country.id as country_id,tbl_product.product_name,tbl_center.center_name,lead_source.lead_name as enquiry_source_name,CONCAT(tbl_admin2.s_display_name,' ',tbl_admin2.last_name) as assign_to_name")
+        return $this->db->select("*,enquiry.created_date,enquiry.comp_id as enq_comp_id,enquiry.address,tbl_product_country.country_name as pcountry_name,tbl_product_country.id as country_id,tbl_product.product_name,tbl_center.center_name,lead_source.lead_name as enquiry_source_name,CONCAT(tbl_admin.s_display_name,' ',tbl_admin.last_name) as created_by_name,CONCAT(tbl_admin2.s_display_name,' ',tbl_admin2.last_name) as assign_to_name")
                         ->from($this->table)
                         ->join('tbl_product_country', 'tbl_product_country.id=enquiry.enquiry_subsource', 'left')
                         ->join('tbl_admin', 'tbl_admin.pk_i_admin_id=enquiry.created_by', 'left')

@@ -924,6 +924,7 @@ class Enquiry extends REST_Controller {
       
       
   	public function view_post(){      	
+
 		define('FIRST_NAME',1);
 		define('LAST_NAME',2);
 		define('GENDER',3);
@@ -1060,28 +1061,28 @@ class Enquiry extends REST_Controller {
 			}
 			if (is_active_field_api(PRODUCT_FIELD,$proc,$comp_id)) {				
 				$res['product']     = array(
-										'value' => $result->product_name,
+										'value' => $result->pcountry_name,
 										'status' => true
 										);
 			}else{
 				$res['product']   = array(
-										'value' => $result->product_name,
+										'value' => $result->pcountry_name,
 										'status' => false
 									);
 			}
-			$res['process'] = '';/*array(
-									'value' => $result->process_name,
+			$res['process'] = array(
+									'value' => $result->product_name,
 									'status' => true
-								);*/
+								);
 			$res['created_by'] = array(
-									'value' => $result->s_display_name.' '.$result->last_name,
+									'value' => $result->created_by_name,
 									'status' => true
 								);
 			$res['assign_to'] = array(
 									'value' => $result->assign_to_name,
 									'status' => true
 								);
-			$res['requirement'] = array(
+			$res['remark'] = array(
 									'value' => $result->enquiry,
 									'status' => true
 								);

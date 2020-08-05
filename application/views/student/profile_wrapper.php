@@ -453,34 +453,26 @@ height:auto;
                 <div class="col-md-12">
                   <?php
                   if ($this->session->companey_id == 76) {
-                  ?>
-                  <ul class="step-bar">
-                    <?php
-                    $s  = $student_Details[0];
+                    $s  = $lead_stage;
                     if (!empty($s)) {
-                      foreach ($s as $key => $value) {
-                        # code...
-                      }
-                    }
                     ?>
-                    <li class="step">
-                      <span class="step__bullet">1</span>
-                      <span class="step__title">Step Title</span>
-                    </li>
-                    <li class="step">
-                      <span class="step__bullet">2</span>
-                      <span class="step__title">Another Title</span>
-                    </li>
-                    <li class="step step--current">
-                      <span class="step__bullet">3</span>
-                      <span class="step__title">Current Step</span>
-                    </li>
-                    <li class="step">
-                      <span class="step__bullet">4</span>
-                      <span class="step__title">Final Step</span>
-                    </li>
-                  </ul>
-                  <?php
+                    <ul class="step-bar">
+                      <?php
+                        $i = 1;
+                        $stud_details = $student_Details[0];
+                        foreach ($s as $key => $value) {                      
+                        ?>
+                        <li class="step">
+                          <span class="step__bullet <?=($value->stg_id==$stud_details->lead_stage)?'step--current':''?>"><?=$i?></span>
+                          <span class="step__title"><?=$value->lead_stage_name?></span>
+                        </li>                        
+                        <?php
+                        $i++;
+                      }
+                      ?>
+                    </ul>
+                    <?php
+                    }
                   }
                   ?>
                 </div>
