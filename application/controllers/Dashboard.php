@@ -386,7 +386,7 @@ public function login_in_process(){
 
         $data = array();
         $this->load->model('dash_model');
-        if($this->session->userdata('user_right')==151)
+        if($this->session->userdata('user_right')==151 || $this->session->userdata('user_right')==180 || $this->session->userdata('user_right')==183)
         {
             $data['ins_list'] = $this->location_model->stu_ins_list();
             redirect('dashboard/search_programs');

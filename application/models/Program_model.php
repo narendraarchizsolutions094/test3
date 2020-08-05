@@ -23,7 +23,7 @@ class Program_model extends CI_Model {
         $this->db->join('tbl_country','tbl_country.id_c=tbl_institute.country_id','left');
         $this->db->join('tbl_crsmaster','tbl_crsmaster.id = tbl_course.course_name');
         $this->db->order_by('tbl_course.institute_id','asc');
-        $this->db->where('tbl_course.comp_id',67);
+        //$this->db->where('tbl_course.comp_id',67);
         
 
 		if($ins!=''){
@@ -50,6 +50,13 @@ class Program_model extends CI_Model {
 		if($ielts!=''){
 		$this->db->where('tbl_course.course_ielts', $ielts);
 		}
+        
+        $comp_id = $this->session->companey_id;
+        if ($comp_id) {
+            $this->db->where('tbl_course.comp_id',$comp_id);
+        }else{
+            $this->db->where('tbl_course.comp_id',67);
+        }
         $this->db->order_by('tbl_course.crs_id','asc');
         $id    =   $this->input->post('id');
         if (empty($id)) {
@@ -77,7 +84,12 @@ class Program_model extends CI_Model {
         $this->db->join('tbl_country','tbl_country.id_c=tbl_institute.country_id','left');
         $this->db->join('tbl_crsmaster','tbl_crsmaster.id = tbl_course.course_name');
         $this->db->order_by('tbl_course.institute_id','asc');
-        $this->db->where('tbl_course.comp_id',67);
+        $comp_id = $this->session->companey_id;
+        if ($comp_id) {
+            $this->db->where('tbl_course.comp_id',$comp_id);
+        }else{
+            $this->db->where('tbl_course.comp_id',67);
+        }
         return $this->db->count_all_results();
     }
 }

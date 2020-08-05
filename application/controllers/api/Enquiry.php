@@ -1290,6 +1290,7 @@ class Enquiry extends REST_Controller {
                 $this->db->set('status',2);
                 $this->db->where('Enquery_id',$key);
                 $this->db->update('enquiry');
+              	$this->Leads_Model->add_comment_for_events_api('Enquiry Moved ',$enq->Enquery_id,$assigner_user_id);             
                  /*
               $created_by_user_id =   $enq->created_by;
               
@@ -1304,7 +1305,6 @@ class Enquiry extends REST_Controller {
               $this->Message_models->sendwhatsapp($convertor_phone,$notification_msg);
               
               $this->Message_models->sendwhatsapp($creator_phone,$notification_msg);              
-              $this->Leads_Model->add_comment_for_events_api($notification_msg,$enq->Enquery_id,$assigner_user_id);             
               
               $insert_id = $this->Leads_Model->LeadAdd($data);
                 

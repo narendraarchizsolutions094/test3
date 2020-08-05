@@ -462,8 +462,8 @@ height:auto;
                         $stud_details = $student_Details[0];
                         foreach ($s as $key => $value) {                      
                         ?>
-                        <li class="step">
-                          <span class="step__bullet <?=($value->stg_id==$stud_details->lead_stage)?'step--current':''?>"><?=$i?></span>
+                        <li class="step <?=($value->stg_id==$stud_details->lead_stage)?'step--current':''?>">
+                          <span class="step__bullet"><?=$i?></span>
                           <span class="step__title"><?=$value->lead_stage_name?></span>
                         </li>                        
                         <?php
