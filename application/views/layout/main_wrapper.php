@@ -833,7 +833,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                           <a href="<?php echo base_url() ?>lead/productcountry">
                            <?php echo display('product'); ?></a>
                         </li>
-<?php if($this->session->userdata('companey_id')==67) { ?>
+<?php if($this->session->userdata('companey_id')==67 || $this->session->userdata('companey_id')==76) { ?>
                         <li class="<?php echo (in_array($segment2,array('disciplinelist','add_discipline','edit_discipline')) ?"active":'') ?>">
                           <a href="<?php echo base_url() ?>lead/discipline">
                            <?php echo display('program_discipline');?>                             
