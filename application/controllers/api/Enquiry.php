@@ -95,7 +95,7 @@ class Enquiry extends REST_Controller {
                 'region_id'  =>!empty($city_id->row())?$city_id->row()->region_id:'',
                 'territory_id'  =>!empty($city_id->row())?$city_id->row()->territory_id:'',
                 //'created_date' =>$enquiry_date, 
-                'status' => 1
+                //'status' => 1
             ];
             
             
@@ -110,6 +110,7 @@ class Enquiry extends REST_Controller {
 			
             }else{
             	$postData['Enquery_id'] = $encode;
+            	$postData['status'] = 1;
             	$this->enquiry_model->create($postData);
 			    $insert_id = $this->db->insert_id();
 			    $this->db->select('enquiry.Enquery_id,enquiry.enquiry_id');
