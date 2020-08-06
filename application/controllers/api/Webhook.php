@@ -132,7 +132,13 @@ class Webhook extends REST_Controller {
     $this->form_validation->set_rules('companey_id', 'Company id', 'required');
     
     if ($this->form_validation->run() == true){
-        $enquiryLst = $this->db->select("enquiry_id,Enquery_id")->from("enquiry")->where("phone",$phone,'comp_id',$comp_id)->get()->row_array();
+        
+        $this->db->select("enquiry_id,Enquery_id");        
+        $this->db->from("enquiry");
+        $this->db->where("phone",$phone);
+        $this->db->where('comp_id',$comp_id);
+        $enquiryLst = $this->db->get()->row_array();
+        
         if(!empty($enquiryLst))
         {
           $this->set_response([
