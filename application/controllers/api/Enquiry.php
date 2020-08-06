@@ -1291,7 +1291,7 @@ class Enquiry extends REST_Controller {
                 $this->db->where('Enquery_id',$key);
                 $this->db->update('enquiry');
               	
-              	$this->leads_model->add_comment_for_events_stage_api("Enquiry Moved",$enq->Enquery_id,'','','',$assigner_user_id);
+              	$this->Leads_Model->add_comment_for_events_stage_api("Enquiry Moved",$enq->Enquery_id,'','','',$assigner_user_id);
               	
               	//$this->Leads_Model->('Enquiry Moved ',$enq->Enquery_id,'','','',$assigner_user_id);             
                  /*
