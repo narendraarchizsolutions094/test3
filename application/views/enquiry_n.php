@@ -1284,10 +1284,10 @@ function autoDial(){
   }else{
     data_type = "<?=$data_type?>";
     data_type = parseInt(data_type);
-    if (data_type == 1) {
+    //if (data_type == 1) {
       var p_url = '<?php echo base_url();?>enquiry/autoDial';
-      var re_url = '<?php echo base_url();?>enquiry';
-    }
+      //var re_url = '<?php echo base_url();?>enquiry';
+    //}
     // else if(data_type == 2){
     //   var p_url = '<?php echo base_url();?>lead/assign_lead';
     //   var re_url = '<?php echo base_url();?>led/index';
