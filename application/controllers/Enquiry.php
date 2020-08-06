@@ -896,7 +896,7 @@ class Enquiry extends CI_Controller {
     {
         $allenquiry = $this->input->post('enquiry_id[]');
         $enq = implode(",", $allenquiry);
-        $res = $this->db->query("SELECT `aasign_to,phone` FROM `enquiry` WHERE enquiry_id IN ( $enq )");
+        $res = $this->db->query("SELECT aasign_to,phone FROM `enquiry` WHERE enquiry_id IN ( $enq )");
         $phoneArr = $res->result_array();
 
         // $phone           = $this->input->post("phone_no");
