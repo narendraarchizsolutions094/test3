@@ -508,7 +508,7 @@ height:auto;
 			<div class="tab-panel-main">
 				<ul class="tabs">
 					<li class="tab-link current" data-tab="Basic-detail">Basic Detail</li>
-				    <?php if($this->session->userdata('user_right')==151){ ?>
+				    <?php if($this->session->userdata('user_right')==151 || $this->session->userdata('user_right')==180 || $this->session->userdata('user_right')==181){ ?>
 					<li class="tab-link" data-tab="Edu-detail">Document</li>
 					<li class="tab-link" data-tab="Portfolio">Institute</li>
 					<li class="tab-link" data-tab="qualification">Qualification</li>
@@ -1738,7 +1738,9 @@ height:auto;
                 <?php } ?>
 				</div>
 				<div id="Edu-detail" class="tab-content">
-				<?php foreach($all_extra as $extrad){ ?>
+				<?php 
+        //print_r($all_extra);
+        foreach($all_extra as $extrad){ ?>
 				<?php if($extrad->fvalue!='' && $extrad->form_id==13 && $extrad->input_type==8){ ?>
 					<div class="col-md-3">
 					<a class="service-tile" aria-current="false" href="<?php echo $extrad->fvalue; ?>" target="_blank">

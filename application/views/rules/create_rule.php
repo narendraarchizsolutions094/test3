@@ -19,6 +19,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 					   			<option value="">Choose Rule</option>
 					   			<option value="1" <?=(!empty($rule_data['type']) && $rule_data['type']==1)?'selected':''?> >Lead Score</option>
 					   			<option value="2" <?=(!empty($rule_data['type']) && $rule_data['type']==2)?'selected':''?>>Lead Assignment</option>
+					   			<option value="3" <?=(!empty($rule_data['type']) && $rule_data['type']==3)?'selected':''?>>Mail Send</option>
+					   			<option value="4" <?=(!empty($rule_data['type']) && $rule_data['type']==4)?'selected':''?>>Auto Followup</option>
 					   		</select>
 					   	</div>
 					   	<div class="col-sm-3">
@@ -41,7 +43,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		        			<div class="col-md-4"></div>
 		        			<div class="col-md-4">		        				
 			        			<label>Lead Score<i style="color: red;">*</i></label>
-			        			<input type="text" name="action" class="form-control" value="<?=!empty($rule_data['rule_action'])?$rule_data['rule_action']:''?>">
+			        			<input type="text" name="action" class="form-control text-center" value="<?=!empty($rule_data['rule_action'])?$rule_data['rule_action']:''?>">
 		        			</div>
 		        		</div>
 		        		<div class="row text-center action-section" id="assignment_action" style="display: none;">   
@@ -49,7 +51,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		        			<div class="col-md-4"></div>
 		        			<div class="col-md-4">		        				
 			        			<label>Assign To<i style="color: red;">*</i></label>
-			        			<select class="form-control" name="action">			    
+			        			<select class="form-control text-center" name="action">			    
 			        				<?php
 			        				if (!empty($user_list)) {
 			        					foreach ($user_list as $key => $value) {
@@ -64,6 +66,23 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 			        			</select>
 		        			</div>
 		        		</div>
+		        		<div class="row text-center action-section" id="email_action" style="display: none;">   
+		        			<h3>Action</h3>
+		        			<div class="col-md-4"></div>
+		        			<div class="col-md-4">		        				
+			        			<label>Select Template<i style="color: red;">*</i></label>
+			        			<select class="form-control text-center" name="action" id="email_template">			    
+			        			</select>
+		        			</div>
+		        		</div>
+		        		<div class="row text-center action-section" id="auto_followup_section" style="display: none;">   
+		        			<h3>Action</h3>
+		        			<div class="col-md-4"></div>
+		        			<div class="col-md-4">		        				
+			        			<label>Auto Followup after<i style="color: red;">*</i></label>
+			        			<input class="form-control text-center" name="action" id="auto_followup" type="number" min="1" max="8760" value="<?=!empty($rule_data['rule_action'])?$rule_data['rule_action']:''?>">
+		        			</div>
+		        		</div>		        		
 					   <button class="btn btn-success" id="btn-set"><?=!empty($id)?'Update Rule':'Set Rules'?></button>		
 					   <button class="btn btn-warning" id="btn-reset">Reset</button>
 					</div>
@@ -111,6 +130,20 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		    input: 'select',
 		    values: <?=$city?>,
 		    operators: ['equal', 'not_equal','is_null', 'is_not_null']
+		  },{
+		    id: 'lead_stage',
+		    label: 'Disposition',
+		    type: 'integer',
+		    input: 'select',
+		    values: <?=$lead_stages?>,
+		    operators: ['equal', 'not_equal','is_null', 'is_not_null']
+		  },{
+		    id: 'product_id',
+		    label: 'Process',
+		    type: 'integer',
+		    input: 'select',
+		    values: <?=$rule_process?>,
+		    operators: ['equal', 'not_equal','is_null', 'is_not_null']
 		  }],
 		  rules: rules_basic
 		});
@@ -130,8 +163,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		  	var rule_status	=	$("input[name='rule_status']:checked").val();
 		  	if (rule_type==1) {
 		  		var action_value	=	$("input[name='action']").val();
-		  	}else{
+		  	}else if (rule_type==2){
 		  		var action_value	=	$("select[name='action']").val();
+		  	}else if (rule_type==3){
+		  		var action_value	=	$("#email_template").val();
+		  	}else if (rule_type==4){
+		  		var action_value	=	$("#auto_followup").val();
 		  	}
 		  	if (action_value && title) {
 		  		$.ajax({
@@ -182,7 +219,18 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 				$("#score_action").show(1000);
 			}else if (rule == 2) {				
 				$("#assignment_action").show(1000);
+			}else if (rule == 3) {				
+				$("#email_action").show(1000);
+			}else if (rule == 4) {				
+				$("#auto_followup_section").show(1000);
 			}
+
+		}
+		$("#email_template").load("<?=base_url().'message/get_templates/3'?>");
+	});
+	$(document).ajaxComplete(function() {
+		if ("<?=!empty($rule_data['type'])?>") {
+	  		$("#email_template").val(<?=!empty($rule_data['rule_action'])?$rule_data['rule_action']:''?>);
 		}
 	});
 </script>

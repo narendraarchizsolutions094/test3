@@ -50,4 +50,11 @@ class Rule_model extends CI_Model {
             }
         }
     }
+    public function get_rule_by_type($type){
+        $comp_id = $this->session->companey_id;
+        $this->db->where('type',$type);
+        $this->db->where('comp_id',$comp_id);
+        $this->db->where('status',1);
+        return $this->db->get('leadrules')->result_array();
+    }
 }

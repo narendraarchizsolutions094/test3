@@ -3648,7 +3648,7 @@ $("#add_institute_form").submit(function(e) {
     });
   }
    function find_description(f=0) { 
-
+        auto_followup();
            if(f==0){
             var l_stage = $("#lead_stage_change").val();
             $.ajax({
@@ -3678,6 +3678,42 @@ $("#add_institute_form").submit(function(e) {
            }
 
             }
+      
+  function auto_followup(){
+    var lead_stage = $("#lead_stage_change").val();
+    $.ajax({
+      type: 'POST',
+      url: '<?php echo base_url();?>leadRules/auto_followup_rule',            
+      success:function(data){
+        if (data) {
+          data = JSON.parse(data);
+          $.each(data,function(key,val){
+            str = val.rule_sql;
+            var res = str.replace(/=/g, "==");
+            var res = res.replace(/OR/g, "||");
+            var res = res.replace(/AND/g, "&&");
+            if (eval(res)) {
+              ac = val.rule_action;              
+              if (ac) {
+                $.ajax({
+                  type: 'POST',
+                  url: '<?php echo base_url();?>leadRules/data_time_add_hr/'+ac,            
+                  success:function(data){                    
+                    if(data){
+                      data = JSON.parse(data);
+                      console.log(data);
+                      $("#disposition_c_date").val(data[0]);
+                      $("#disposition_c_time").val(data[1]);
+                    }
+                  }
+                });
+              }
+            }
+          });
+        }
+      }
+    });
+  }
 
   function find_description1(f=0) { 
 

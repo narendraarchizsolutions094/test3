@@ -158,6 +158,8 @@ class LeadRules extends CI_Controller {
         $this->load->model('Leads_Model');
         $this->load->model('location_model');
         $this->load->model('user_model');
+        $this->load->model('dash_model');
+
         if ($id) {
             $data['rule_data']    =   $this->rule_model->get_rule($id);            
         }
@@ -166,7 +168,8 @@ class LeadRules extends CI_Controller {
         $country   =   $this->location_model->country();
         $state     =   $this->location_model->estate_list();
         $city      =   $this->location_model->ecity_list();
-
+        $lead_stages = $this->Leads_Model->get_leadstage_list();
+        $process_list = $this->dash_model->get_user_product_list();        
 
         $rule_source = array();
         if (!empty($source)) {            
@@ -193,11 +196,27 @@ class LeadRules extends CI_Controller {
             }
         }
 
+        $rule_lead_stage = array();
+        if (!empty($lead_stages)) {
+            foreach ($lead_stages as $key => $value) {
+                $rule_lead_stage[$value->stg_id]  = $value->lead_stage_name;
+            }
+        }
+        $rule_process = array();
+        if (!empty($process_list)) {
+            foreach ($process_list as $key => $value) {
+                $rule_process[$value->sb_id]  = $value->product_name;
+            }
+        }
+
         $data['lead_source'] = json_encode($rule_source);
         $data['country']     = json_encode($rule_country);
         $data['state']       = json_encode($rule_state);
         $data['city']        = json_encode($rule_city);
+        $data['lead_stages'] = json_encode($rule_lead_stage);
+        $data['rule_process']   = json_encode($rule_process);
         $data['user_list']   = $this->user_model->companey_users();
+
         $data['content'] = $this->load->view('rules/create_rule', $data, true);
         $this->load->view('layout/main_wrapper', $data);       
     }
@@ -206,4 +225,13 @@ class LeadRules extends CI_Controller {
         $this->session->set_flashdata('message', 'Rule Executed Successfully. '.$res.' data affected.');
         redirect('leadRules');
     }    
+    public function auto_followup_rule(){
+        $res    =   $this->rule_model->get_rule_by_type(4);
+        echo json_encode($res);        
+    }
+    public function data_time_add_hr($hr){
+        $new_time = date("Y-m-d H:i", strtotime("+$hr hours"));
+        $new_time    =   explode(' ', $new_time);
+        echo json_encode($new_time);
+    }
 }
