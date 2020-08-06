@@ -913,7 +913,8 @@ class Enquiry extends CI_Controller {
         {$assignto=$value['aasign_to'];
          if(!empty($assignto)){
             $this->db->select('telephony_agent_id');
-            $this->db->from('tbl_admin'); 
+            $this->db->from('tbl_admin');
+            $this->db->where('pk_i_admin_id',$assignto);  
             $user= $this->db->get()->row(); 
             $user_id=$user->telephony_agent_id;
             }else{
@@ -942,7 +943,8 @@ class Enquiry extends CI_Controller {
         // $this->db->from('enquiry');
         // $this->db->where('enquiry_id IN',"( ".$enq." )");
         // $arr = $this->db->get()->result_array();
-        print_r($response);
+     
+   print_r($response);
         }
     }
 
