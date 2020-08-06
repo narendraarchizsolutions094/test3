@@ -128,7 +128,7 @@ class Webhook extends REST_Controller {
     $phone   = $this->input->post("phone_no");
     $comp_id = $this->input->post("companey_id");
 
-    $enquiryLst = $this->db->select("enquiry_id,Enquery_id")->from("enquiry")->where("phone",$phone,'comp_id',$comp_id)->get()->result_array();
+    $enquiryLst = $this->db->select("enquiry_id,Enquery_id")->from("enquiry")->where("phone",$phone,'comp_id',$comp_id)->get()->row_array();
     if(!empty($enquiryLst))
     {
       $this->set_response([
