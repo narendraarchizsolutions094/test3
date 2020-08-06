@@ -128,21 +128,32 @@ class Webhook extends REST_Controller {
     $phone   = $this->input->post("phone_no");
     $comp_id = $this->input->post("companey_id");
 
-    $enquiryLst = $this->db->select("enquiry_id,Enquery_id")->from("enquiry")->where("phone",$phone,'comp_id',$comp_id)->get()->row_array();
-    if(!empty($enquiryLst))
-    {
-      $this->set_response([
-      'status' => true,
-      'message' => $enquiryLst, 
-      ], REST_Controller::HTTP_OK);
+    $this->form_validation->set_rules('phone_no', 'Phone No', 'required');
+    $this->form_validation->set_rules('companey_id', 'Company id', 'required');
+    
+    if ($this->form_validation->run() == true){
+        $enquiryLst = $this->db->select("enquiry_id,Enquery_id")->from("enquiry")->where("phone",$phone,'comp_id',$comp_id)->get()->row_array();
+        if(!empty($enquiryLst))
+        {
+          $this->set_response([
+          'status' => true,
+          'message' => $enquiryLst, 
+          ], REST_Controller::HTTP_OK);
+        }
+        else
+        {
+          $this->set_response([
+            'status' => false,
+            'message' => array('error'=>'not found!') 
+            ], REST_Controller::HTTP_OK);
+        }
+    }else{
+        $this->set_response([
+            'status' => false,
+            'message' => array('error'=>'fields required!') 
+            ], REST_Controller::HTTP_OK);
     }
-    else
-    {
-      $this->set_response([
-        'status' => false,
-        'message' => array('error'=>'not found!') 
-        ], REST_Controller::HTTP_OK);
-    }
+
   }
 
   public function updateEnquiryStatus_post()
