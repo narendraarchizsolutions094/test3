@@ -844,7 +844,7 @@ class Enquiry extends CI_Controller {
     }
 
 
-    public function autoDial()
+   /* public function autoDial()
     {
         $allenquiry = $this->input->post('enquiry_id[]');
         $enq = implode(",", $allenquiry);
@@ -872,6 +872,60 @@ class Enquiry extends CI_Controller {
           "secret_token": "ff0bda40cbdb92a4f1eb7851817de3510a175345a16c59a9d98618a559019f73", 
           "type": "1", 
             "user_id": "'.$this->session->telephony_agent_id.'",
+            "number": "+91'.$value['phone'].'",   
+            "public_ivr_id":"5f16e49954ad3197", 
+            "reference_id": "",  
+            "region": "",
+            "caller_id": "",  
+            "group": ""   }', 
+            CURLOPT_HTTPHEADER => array(    "x-api-key:oomfKA3I2K6TCJYistHyb7sDf0l0F6c8AZro5DJh", 
+            "Content-Type: application/json"  ),));
+            $response = curl_exec($curl);
+        
+        // print_r($response);
+      
+        // $this->db->select('phone');
+        // $this->db->from('enquiry');
+        // $this->db->where('enquiry_id IN',"( ".$enq." )");
+        // $arr = $this->db->get()->result_array();
+        print_r($response);
+        }
+    }*/
+
+    public function autoDial()
+    {
+        $allenquiry = $this->input->post('enquiry_id[]');
+        $enq = implode(",", $allenquiry);
+        $res = $this->db->query("SELECT `aasign_to,phone` FROM `enquiry` WHERE enquiry_id IN ( $enq )");
+        $phoneArr = $res->result_array();
+
+        // $phone           = $this->input->post("phone_no");
+        // $token           = $this->input->post("token");
+        // $support_user_id = $this->input->post("support_user_id");
+        //$url             = "https://developers.myoperator.co/clickOcall";
+        // $data = array(
+        //   'token'=>,
+        //   'customer_number'=>$phone,
+        //   'customer_cc'=>91,
+        //   'support_user_id'=>$this->session->telephony_agent_id,
+        // );
+        foreach ($phoneArr as $key => $value) 
+        {$assignto=$value['aasign_to'];
+         if(!empty($assignto)){
+            $this->db->select('telephony_agent_id');
+            $this->db->from('tbl_admin'); 
+            $user= $this->db->get()->row(); 
+            $user_id=$user->telephony_agent_id;
+            }else{
+            $user_id=$this->session->telephony_agent_id;
+            }
+        $curl = curl_init();
+          curl_setopt_array($curl, array(  CURLOPT_URL => "https://obd-api.myoperator.co/obd-api-v1",
+          CURLOPT_RETURNTRANSFER => true,  CURLOPT_CUSTOMREQUEST => "POST", 
+          CURLOPT_POSTFIELDS =>'{  "company_id": "5f1545a391ac6734", 
+          "secret_token": "ff0bda40cbdb92a4f1eb7851817de3510a175345a16c59a9d98618a559019f73", 
+          "type": "1", 
+            "user_id": "'.$user_id.'",
             "number": "+91'.$value['phone'].'",   
             "public_ivr_id":"5f16e49954ad3197", 
             "reference_id": "",  
