@@ -160,6 +160,7 @@ class Message extends CI_Controller {
 	            if($this->email->send()){
 						echo "Mail sent successfully";
 	            }else{
+	            	echo $this->email->print_debugger();
 						echo "Something went wrong";			                	
 	            }                 
     		}	        
