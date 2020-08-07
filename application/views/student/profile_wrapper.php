@@ -392,9 +392,9 @@ height:auto;
      content: '';
      position: absolute;
      height: 4px;
-     width: calc(100% - 2rem - 4px);
+     width: calc(100% - 2.5rem - 4px);
      top: 1rem;
-     right: calc(50% + 2rem / 2);
+     right: calc(50% + 2.5rem / 2);
      background-color: #009cd2;
   }
 }
@@ -460,6 +460,13 @@ height:auto;
                       <?php
                         $i = 1;
                         $stud_details = $student_Details[0];
+                        if ($stud_details->lead_stage == '') { ?>
+                          <li class="step step--current">
+                            <span class="step__bullet">0</span>
+                            <span class="step__title">Nothing</span>
+                          </li>
+                        <?php
+                        }
                         foreach ($s as $key => $value) {                      
                         ?>
                         <li class="step <?=($value->stg_id==$stud_details->lead_stage)?'step--current':''?>">
@@ -508,7 +515,7 @@ height:auto;
 			<div class="tab-panel-main">
 				<ul class="tabs">
 					<li class="tab-link current" data-tab="Basic-detail">Basic Detail</li>
-				    <?php if($this->session->userdata('user_right')==151 || $this->session->userdata('user_right')==180 || $this->session->userdata('user_right')==181){ ?>
+				    <?php if($this->session->userdata('user_right')==151 || $this->session->userdata('user_right')==180 || $this->session->userdata('user_right')==183){ ?>
 					<li class="tab-link" data-tab="Edu-detail">Document</li>
 					<li class="tab-link" data-tab="Portfolio">Institute</li>
 					<li class="tab-link" data-tab="qualification">Qualification</li>

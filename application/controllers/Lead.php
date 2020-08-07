@@ -784,7 +784,7 @@ if($coment_type == 1){
     public function convert_to_lead() {        
         $enquiry_id = $this->uri->segment('3');
         $lead = $this->Leads_Model->get_leadListDetailsby_id($enquiry_id);
-               // print_r($lead->status);exit;
+               // print_r($lead->status); exit;
         if ($lead->status >= 2) {
            //$this->Leads_Model->ClientMove($data);
             $this->db->set('status', 3);
@@ -795,7 +795,31 @@ if($coment_type == 1){
             $data['enquiry'] = $this->Leads_Model->get_leadListDetailsby_id($enquiry_id);
             $lead_code = $data['enquiry']->Enquery_id;
             $this->Leads_Model->add_comment_for_events('Converted to client', $lead_code);
-
+            $msg = 'Lead Convert to Client Successfully';
+            if ($this->session->companey_id == 76) {
+                $user_right = '';
+                if ($data['enquiry']->product_id == 168) {
+                    $user_right = 180; 
+                }else if ($data['enquiry']->product_id == 169) {
+                    $user_right = 183;
+                }
+                $postData = array(
+                        's_display_name'  =>    $data['enquiry']->name,
+                        'last_name'       =>    $data['enquiry']->lastname,  
+                        's_user_email'    =>    $data['enquiry']->email,
+                        's_phoneno'       =>    $data['enquiry']->phone,
+                        'companey_id'     =>    76,
+                        'b_status'        =>    1,
+                        'user_permissions'=>    $user_right,
+                        'user_roles'      =>    $user_right,
+                        'user_type'       =>    $user_right,                        
+                        's_password'      =>    md5(12345678)
+                    );
+                $user_id    =   $this->user_model->create($postData);
+                $message = 'Email - '.$data['enquiry']->email.'<br>Password - 12345678';                
+                $this->Message_models->send_email($data['enquiry']->email,'Login Details',$message);
+                $msg .=    " And user created successfully";
+            }
             //$mail_access = $this->enquiry_model->access_mail_temp(); //access mail template..
             //$signature = $this->enquiry_model->get_signature();
 
@@ -823,7 +847,7 @@ if($coment_type == 1){
                     }
                 }
         }*/
-            $this->session->set_flashdata('message', 'Lead Convert to Client Successfully');
+            $this->session->set_flashdata('message',$msg );
             redirect('led/index');
         } else {
             $this->session->set_flashdata('exception', 'Please Complete all Stages');

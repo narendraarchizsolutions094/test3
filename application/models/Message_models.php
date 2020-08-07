@@ -174,5 +174,32 @@ public function get_chat($number){
         return $response = curl_exec($curl);
         
        }
+
+       public function send_email($to,$subject,$message){
+          $this->db->where('comp_id',$this->session->companey_id);
+          $this->db->where('status',1);
+          $email_row  = $this->db->get('email_integration')->row_array();
+          $config['smtp_auth']    = true;
+          $config['protocol']     = $email_row['protocol'];
+          $config['smtp_host']    = $email_row['smtp_host'];
+          $config['smtp_port']    = $email_row['smtp_port'];
+          $config['smtp_timeout'] = '7';
+          $config['smtp_user']    = $email_row['smtp_user'];
+          $config['smtp_pass']    = $email_row['smtp_pass'];
+          $config['charset']      = 'utf-8';
+          $config['mailtype']     = 'html'; // or html
+          $config['newline']      = "\r\n";
+
+          $this->email->initialize($config);          
+          $this->email->from($email_row['smtp_user']);          
+          $this->email->to($to);
+          $this->email->subject($subject); 
+          $this->email->message($message);                           
+          if($this->email->send()){
+            return true;
+          }else{
+            return false;
+          }
+       }
 		
 }
