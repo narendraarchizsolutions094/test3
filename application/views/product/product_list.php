@@ -30,17 +30,17 @@
                <tbody>
                   <?php $i=1; foreach($product_list as $row){?>
                   <tr>
-                     <td><input type='checkbox' name='product_status[]' class="checkbox" value='<?php echo $row->product_id;?>'>&nbsp; </td>
+                     <td><input type='checkbox' name='product_status[]' class="checkbox" value='<?php echo $row->sb_id;?>'>&nbsp; </td>
                      <td><?=$i++ ?></td>
                      <td><?=$row->product_name ?></td>
                      <td><?php echo (($row->status==1)?display('active'):display('inactive')); ?></td>
                      <td class="center">
-                        <a  class="edit" data-toggle="modal" data-target="#product_list<?php echo $row->product_id;?>"><i class="ti-pencil"></i></a> 
+                        <a  class="edit" data-toggle="modal" data-target="#product_list<?php echo $row->sb_id;?>"><i class="ti-pencil"></i></a> 
                      </td>
                   </tr>
                   <?php } ?>
                   <?php  foreach($product_list as $rows){?>
-                  <div class="modal fade" id="product_list<?php echo $rows->product_id;?>"  role="dialog">
+                  <div class="modal fade" id="product_list<?php echo $rows->sb_id;?>"  role="dialog">
                      <div class="modal-dialog">
                         <!-- Modal content-->
                         <div class="modal-content">
@@ -53,7 +53,7 @@
                                  <div class="col-md-12">
                                     <div class="form-group col-md-12">
                                        <label>Product Name</label>
-                                       <input type="hidden" name="product_id" value="<?php echo $rows->product_id;?>" >
+                                       <input type="hidden" name="product_id" value="<?php echo $rows->sb_id;?>" >
                                        <input type="text" class="form-control" value="<?php echo $rows->product_name;?>" name="product_name" required>
                                     </div>
                                     <div class="form-group col-md-12">

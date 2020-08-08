@@ -679,13 +679,13 @@ if($root=='https://student.spaceinternationals.com'){	 ?>
                      <a href="#"><i class="fa fa-circle text-success"></i>
                      </a>
                   </div>
-<?php if ($this->session->companey_id!=67) { ?>
-                  <br>
-<label class="switch">
-  <input type="checkbox" checked>
-  <span class="slider round"></span>
-</label>
-<?php } ?>
+					<?php if ($this->session->companey_id!=67) { ?>
+									  <br>
+					<label class="switch">
+					  <input type="checkbox" checked>
+					  <span class="slider round"></span>
+					</label>
+					<?php } ?>
                </div>
                <ul class="sidebar-menu">
 			   <?php if(($this->session->user_right!=151)){ ?>
@@ -861,7 +861,7 @@ if($root=='https://student.spaceinternationals.com'){	 ?>
                      </ul>
                   </li>
                   
-                    <li class="treeview <?php echo (($segment1 == "inventory") ? "active" : null) ?>"  style="<?php if(in_array(280,$module) || in_array(281,$module) || in_array(282,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
+           <!--    <li class="treeview <?php echo (($segment1 == "inventory") ? "active" : null) ?>"  style="<?php if(in_array(280,$module) || in_array(281,$module) || in_array(282,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
                      <a href="#">
                       <i class="fa fa-cog" style="color:#fff;font-size:15px;background:#f1c40f;padding:7px;border-radius:4px;width:30px;"></i> <?php echo display('Inventory'); ?>
                       <span class="pull-right-container">
@@ -887,8 +887,45 @@ if($root=='https://student.spaceinternationals.com'){	 ?>
                         </li>
                      </ul>
 
+                  </li>  -->
+				 <li class="treeview">
+                     <a href="#">
+                      <i class="fa fa-cog" style="color:#fff;font-size:15px;background:#f1c40f;padding:7px;border-radius:4px;width:30px;"></i> Inventory
+                      <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                      </span>
+						
+                     </a>
+                     
+                     <ul class="treeview-menu">
+
+                         <li class="<?php echo (in_array($segment2,array('addwarehouse')) ?"active":'') ?>">
+                          <a href="<?php echo base_url() ?>warehouse/warehouse">Warehouse</a>
+                        </li>
+                         <li class="<?php echo (in_array($segment2,array('typeofproduct')) ?"active":'') ?>">
+                          <a href="<?php echo base_url() ?>warehouse/typeofproduct">Type of Product</a>
+                        </li>
+                         <li class="<?php echo (in_array($segment2,array('brand')) ?"active":'') ?>">
+                          <a href="<?php echo base_url() ?>warehouse/brand">Brand</a>
+                        </li>
+						<li class="<?php echo (($segment1 == "inventory") ? "active" : null) ?>">
+                          <a href="<?php echo base_url("warehouse/inventory") ?>">Inventory List</a>
+                        </li>
+						<li class="<?php echo (($segment1 == "product") ? "active" : null) ?>">
+                          <a href="<?php echo base_url("product/") ?>">Product</a>
+                        </li>	
+                        <li class="<?php echo (($segment1 == "order") ? "active" : null) ?>">
+                          <a href="<?php echo base_url("order/"); ?>">Order</a>
+                        </li>
+						 <li class="<?php echo (($segment1 == "scheme") ? "active" : null) ?>">
+                          <a href="<?php echo base_url("scheme/"); ?>">Scheme</a>
+                        </li>
+						 <li class="<?php echo (($segment1 == "payment") ? "active" : null) ?>">
+                          <a href="<?php echo base_url("payment/"); ?>">Payment</a>
+                        </li>
+                     </ul>
+
                   </li>
-             
                   <li class="treeview <?php echo in_array($segment1, array('user','customer')) ? "active" : null ?>" style="<?php if(in_array(130,$module) || in_array(131,$module) || in_array(132,$module) || in_array(133,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
                      <a href="#">
                        <i class="fa fa-user-plus" style="color:#fff;font-size:15px;background:#9b59b6;padding:7px;border-radius:4px;width:30px;"></i> &nbsp;<?php echo display('User_mgment') ?>

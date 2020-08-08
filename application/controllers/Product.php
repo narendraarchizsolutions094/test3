@@ -7,6 +7,232 @@ class Product extends CI_Controller {
             'Product_model',
         ));
     }
+	
+	public function index(){
+		
+		$data['title'] = 'Product List';
+		
+		$data['product_list'] = $this->Product_model->productdetlist();
+		
+		$data['content'] = $this->load->view('product/prod-det-list', $data, true);
+        $this->load->view('layout/main_wrapper', $data);
+		
+	}
+	
+	function addproduct(){
+		
+		if(isset($_POST['proname'])){
+			
+			$this-> saveProduct();
+		}
+		
+		$data['title'] = 'Add Product';
+		$data['category'] = $this->db->select("*")->where("comp_id", $this->session->companey_id)->get("tbl_category")->result();
+		$currdate = date("Y-m-d");
+		$data['scheme'] = $this->db->select("*")->where("comp_id", $this->session->companey_id)->where("from_date <= '$currdate' and to_date >= '$currdate'")->get("tbl_scheme")->result();
+		
+		$data['content']  = $this->load->view('product/add-product', $data, true);
+        $this->load->view('layout/main_wrapper', $data);
+		
+	}
+	function editproduct($prodno){
+		
+		if(isset($_POST['proname'])){
+			
+			$this-> saveProduct();
+		}
+		
+		
+		$data['title'] = 'Update Product';
+		$data['product'] = $this->Product_model->productdet($prodno);
+		$data['category'] = $this->db->select("*")->where("comp_id", $this->session->companey_id)->get("tbl_category")->result();
+		
+		
+		$data['subcategory'] = $this->db->select("*")->where("comp_id", $this->session->companey_id)->where("cat_id", $data["product"]->category)->get("tbl_subcategory")->result();
+		
+		
+		$data['content'] = $this->load->view('product/add-product', $data, true);
+        $this->load->view('layout/main_wrapper', $data);
+		
+	}
+	
+	public function addorder(){
+		
+		if(isset($_POST["proname"])){
+			
+			$this->saveorder();
+		}
+		
+		$data['title'] = 'Add Order';
+		
+		$data['products'] = $this->db->select("tbl_proddetails.*,tbl_product.*")
+									 ->where("comp_id", $this->session->companey_id)
+									 ->from("tbl_product")
+									 ->join("tbl_proddetails", "tbl_product.sb_id = tbl_proddetails.prodid")->get()->result();
+		
+		$data['content'] = $this->load->view('product/add-order', $data, true);
+        $this->load->view('layout/main_wrapper', $data);
+		
+	}
+	
+	public function orderlist(){
+		
+		$data['title'] = 'Order List';
+		$data['content'] = $this->load->view('order/order-list', $data, true);
+        $this->load->view('layout/main_wrapper', $data);
+		
+	}
+	
+	public function saveorder(){
+		
+		$price 	  = $this->input->post("rate", true);
+		$discount = $this->input->post("discount", true);
+		$otrprice = $this->input->post("othrprice", true);
+		$tax 	  = $this->input->post("tax", true);
+		$total    = $price + $otrprice + $tax - $discount;
+		
+		$ordno    = "ORD".strtotime("Y-m-d h:i:s");
+		
+	
+		
+		$insarr = array("ord_no"  		=> $ordno, 
+						"cus_id"  		=> $this->session->user_id,
+						"enq_no"  		=> "",
+						"warehouse" 	=> "",
+						"product"		=> $this->input->post("proname", true),
+						"scheme"    	=> "",
+						"quantity"		=> $this->input->post("quantity", true), 
+						"price"			=> $price,
+						"other_price"	=> $otrprice,
+						"total_price"	=> $total,
+						"offer"			=> $discount,
+						"details"		=> $this->input->post("details", true),
+						"disc_meth"		=> "",
+						"disc_price"	=> "",
+						"disc_type" 	=> "",
+						"tax"			=> $this->input->post("tax", true),
+						"addedby"		=> "",
+						"order_date"	=> date("Y-m-d h:i:s"),
+						"status"		=> 1,
+						"company"		=> $this->session->companey_id,
+						);
+		
+			$ret = $this->db->insert("tbl_order", $insarr);
+			
+			if ($ret) {
+				$this->session->set_flashdata('message', "Successfully saved");
+			} else {
+				$this->session->set_flashdata('exception', "Failed to saved");
+			}
+		
+	}
+
+	  public function do_upload()
+        {
+                $config['upload_path']          = './assets/images/';
+                $config['allowed_types']        = 'gif|jpg|png';
+             
+
+                $this->load->library('upload', $config);
+
+                if ( ! $this->upload->do_upload('mainimage'))
+                {
+                        return array('error' => $this->upload->display_errors());
+
+                }
+                else
+                {
+                       return array('upload_data' => $this->upload->data());
+
+                }
+        }
+
+	public function saveProduct(){
+		
+		
+		$this->form_validation->set_rules('proname', display('product_name'), 'required|max_length[50]');
+		$this->form_validation->set_rules('price', display('product_name'), 'required|max_length[50]');
+   
+		if($this->form_validation->run()){
+   
+		
+			$insarr = array("product_name"  => $this->input->post("proname", true),
+							 "main_fun"     => "",
+							 "status"       => $this->input->post("status", true)
+							 );
+			
+			if(isset($_POST["productid"])) {
+				
+				$prodid  = $this->input->post("productid", true);
+				
+				$this->db->where("sb_id", $prodid);
+				$this->db->update("tbl_product", $insarr);
+				
+			}else{
+				$insarr["comp_id"] 		=  $this->session->companey_id;
+				$insarr["added_by"]		=  $this->session->user_id;
+				$insarr["added_on"]		=  date("Y-m-d h:i:s");
+			
+				$this->db->insert("tbl_product", $insarr);	
+				$prodid  = $this->db->insert_id();	
+			}
+						 
+			$price = $this->input->post("price", true);
+			$othrprice = $this->input->post("othrprice", true);
+			$tax = $this->input->post("tax", true);
+			
+			$total = $price + $othrprice + $tax;
+			
+			if(!empty($prodid)) {
+				
+					$imgarr   = $this->do_upload(); 
+			
+	
+				$arr = array( "stock"    	=> 0,
+							 "stockid"  	=> 0,
+							 "last_update"  => date("Y-m-d h:i:s"),
+							// "image"		=> $imagename,
+							 "sub_image"    => "",
+							 "category"     => $this->input->post("cat", true),
+							 "subcatogory"  => $this->input->post("scat", true),
+							 "price"    	=> $price,
+							 "scheme"		=> $this->input->post("scheme", true),	
+							 "othr_price"   => $othrprice,
+							 "tax"     		=> $tax,
+							 "total_price"  => $total,
+							 "size"         => $this->input->post("size", true),
+							 "weight"       => $this->input->post("weight", true),
+							 "color"        => $this->input->post("color", true),
+							 "details"      => $this->input->post("details", true),
+							 "hsn"			=> $this->input->post("hsn_code", true),
+							 );
+				if(!empty($imgarr["upload_data"]["file_name"])){
+				
+					
+					$arr["image"] = $imgarr["upload_data"]["file_name"];
+				}			 
+					
+				if(isset($_POST["detailsid"])) {
+					
+					
+					$detid = $this->input->post("detailsid", true);
+					$this->db->where("id", $detid);
+					$this->db->update("tbl_proddetails", $arr);
+					$ret = true;
+				}else {		
+					$arr["prodid"]   	= $prodid;	
+					$ret = $this->db->insert("tbl_proddetails", $arr);	
+				}
+			}
+			if ($ret) {
+				$this->session->set_flashdata('message', "Successfully saved");
+				redirect(base_url("product"), "refresh");
+			} else {
+				$this->session->set_flashdata('exception', "Failed to saved");
+			}	
+		
+		}
+	}	
 
     function productlist() {
         if (user_role('60') == true) {
@@ -14,9 +240,419 @@ class Product extends CI_Controller {
         }
         $data['title'] = display('product_list');
         $data['product_list'] = $this->Product_model->productlist();
+		
         $data['content'] = $this->load->view('product/product_list', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }
+	
+	function stock() {
+        
+		if(isset($_FILES["csvupload"])){
+
+			$this->csvupload();
+        }
+        if(isset($_POST["downloadexel"])){
+           
+			$sdate = $this->input->post('startdate', true);
+			$sdate = (!empty($sdate)) ? date("Y-m-d" , strtotime(str_replace("/","-", $sdate))) : null;
+            $edate = $this->input->post('enddate', true);
+			$edate = (!empty($edate)) ? date("Y-m-d" , strtotime(str_replace("/","-",$edate))) : null;
+            
+			$this->downloadexel($sdate,$edate);
+			
+			echo "<script> window.location='".base_url('product/stock') ."';</script>";
+			
+		}
+
+		$data["title"] = "Stocks List";
+        $data["stocks"] = $this->Product_model->getStock();
+		$data["totalstock"] = $this->db->where("company", $this->session->userdata('companey_id'))->count_all_results("stock");
+		$data["todaycreate"] = $this->db->where("company", $this->session->userdata('companey_id'))->where("stock_date", date("Y-m-d"))->count_all_results("stock");
+		$data["todayupdate"] = $this->db->where("company", $this->session->userdata('companey_id'))->where("last_update", date("Y-m-d"))->count_all_results("stock");
+
+		
+		$data['content'] = $this->load->view('product/stock-list', $data, true);	
+		$this->load->view('layout/main_wrapper', $data);
+    }
+	
+	public function addstock(){
+		
+		 $this->savestock();
+       
+		
+		$this->load->model("warehouse_model");
+		$data['title'] = display('add_stock');
+        $data['products'] = $this->Product_model->productlist();
+		$data['brands'] = $this->warehouse_model->brand_list();
+		$data['warehouse']    = $this->warehouse_model->warehouse_list();
+        $data['content'] = $this->load->view('product/add-stock', $data, true);
+		$this->load->view('layout/main_wrapper', $data);
+	}
+	
+	public function updatestock($stkno = ""){
+        
+        $this->savestock();
+        
+        $data["products"] = $this->Product_model-> getProduct();
+        
+        $stkno = base64_decode(base64_decode(urldecode($stkno)));
+        $data["stock"] = $this->Product_model->  getStockById($stkno);
+        
+		$data["warehouse"]  = $this->Product_model-> getWarehouse();
+		
+		$data["supplier"]  = $this->Product_model->getSupplier();
+     	
+	    if(empty($data["stock"])) show_404();
+        
+        $data["title"] = "Update Stocks";
+		$data['content'] = $this->load->view('product/update-stocks', $data, true);	
+		$this->load->view('layout/main_wrapper', $data);
+	
+        
+    }
+	public function datearg($post){
+        
+        $date = $this->input->post($post, true);
+        
+        $ndate = str_replace("/", "-", $date);
+        $dtarr = explode("-", $ndate);
+        
+        $ndate = (!empty($dtarr["2"])) ? $dtarr["1"]."-".$dtarr["0"]."-".$dtarr["2"] : NULL;
+        
+        return $ndate;
+    }
+	public function  savestock(){
+        
+        if(isset($_POST["product"])) {
+            
+            $this->form_validation->set_rules("product", "Product", "trim|required");
+            $this->form_validation->set_rules("quantity", "Quantity", "trim|required");
+            $this->form_validation->set_rules("price", "Price", "trim|required");
+            
+            if($this->form_validation->run()){
+                
+				$prdno = $this->input->post("product", true);
+                
+				$oldstock =  0;
+				
+				$stockarr =  $this->db->select("stock")->where("prodid", $prdno)->get("tbl_proddetails")->row();
+				
+				if(!empty($stockarr)){
+					
+					$oldstock = $stockarr->stock;	
+					
+				}
+				
+                $arr = array("warehouse"  => $this->input->post("warehouse", true), 
+							 "product"    => $this->input->post("product", true),
+                             "supplier"   => $this->input->post("supplier", true),
+                             "stock_date" => $this->datearg("stockdate"),
+                             "expiry"     =>  NULL,
+                             "details"    => $this->input->post("details", true),
+                             "quantity"   => $this->input->post("quantity", true),
+                             "price" 	  => $this->input->post("price", true),
+                             "minalert"   => $this->input->post("alertmin", true),
+							 "old_stock"  => (!empty($oldstock)) ? $oldstock : "",
+						     );
+                
+			
+                if(isset($_POST["stockno"])){
+                    
+                    $stockno = $this->input->post("stockno", true);
+                    
+                    $this->db->where("id", $stockno);
+                    $this->db->update("stock", $arr);
+                    
+                    $ret = $this->db->affected_rows();
+                    
+                }else{
+                    
+                     $arr["added_by"]      = $this->session->user_id;
+                     $arr["company"]       =  $this->session->userdata('companey_id');
+                     $arr["last_update"]  = date("Y-m-d h:i:s");
+                     $arr["added_date"]   = date("Y-m-d h:i:s");
+                     
+                     $ret =  $this->db->insert("stock", $arr);
+					 
+					 $stockno = $this->db->insert_id();
+					 
+                    $ret = $this->db->affected_rows();
+					
+					
+                     if($ret){
+                         $newstock = $this->input->post("quantity", true);
+                         
+                         if($oldstock > 0){
+                            
+                             $newstock = $oldstock + $newstock;
+                             
+                         }
+                         
+                         $updarr = array("stock" => $newstock , "stockid" => $stockno);
+                         
+						 $totprd = $this->db->where("prodid", $prdno)->from("tbl_proddetails")->count_all_results();
+						 if($totprd > 0){
+								 $this->db->where("prodid", $prdno);
+							$this->db->update("tbl_proddetails", $updarr);
+                    
+							 
+						 }else{
+							 $updarr["prodid"] = $prdno;
+							$this->db->insert("tbl_proddetails",  $updarr); 
+						 }
+
+						 
+						
+					     $this->session->set_flashdata("message", "Successfully Saved stock");
+                         redirect(base_url("product/stock"), "refresh");
+                         
+                     }else{
+                         $this->session->set_flashdata("message", "Failed to Saved stock");
+                         
+                     }
+                }
+                
+                
+            }else{
+                $this->session->set_flashdata("error", validation_errors());
+            }
+        }
+        
+        
+    }
+	
+	
+    public function downloadexel($sdate,$edate)
+    {
+		
+		
+		$this->load->library("excel");
+        $stocks = $this->Product_model->getstockwithDate($sdate,$edate);
+        //print_r($stocks);die;
+		
+		$objPHPExcel = new PHPExcel();
+		$objPHPExcel->getProperties()
+					->setCreator("Cona")
+					->setLastModifiedBy($this->session->fname)
+					->setTitle("Stock Information")
+					->setSubject("Stock excel")
+					->setDescription("Stock")
+					->setKeywords("Stock");
+					
+	    /*	$objPHPExcel->getActiveSheet()
+            ->getStyle("A1:P1")
+            ->getFont()
+            ->setSize(18); */
+		
+		$objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(5);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(10);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(20);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('O')->setWidth(20);
+		
+		$objPHPExcel->getActiveSheet()->getStyle('A1:P1')->getFont()->setBold(true);
+		
+		$rowarr = array("Sr No", "Product", "Old Stock", "Quantity","Purchase price","Supplier","Stock Date");
+		
+		$objPHPExcel->setActiveSheetIndex(0);
+		
+		$ltr = 'A';
+		foreach($rowarr as $ind => $val){
+			
+			$objPHPExcel->getActiveSheet()->setCellValue($ltr."1", $val);
+			
+			$ltr++;
+		}
+		$pending   = $totprice = $totqty = 0;
+		$count     = 1;
+		
+		if(!empty($stocks)){
+			foreach($stocks as $ind => $ord) {
+			 	$ltr = 'A';
+				$count  =  $count + 1;
+				
+				$objPHPExcel->getActiveSheet()->SetCellValue( ($ltr++).$count, $count - 1)
+											  ->SetCellValue( ($ltr++).$count, $ord->product_name)
+											  ->SetCellValue( ($ltr++).$count, $ord->old_stock)
+											  ->SetCellValue( ($ltr++).$count, $ord->quantity)
+											  ->SetCellValue( ($ltr++).$count, $ord->price)
+											  ->SetCellValue( ($ltr++).$count, $ord->supplier)
+											  ->SetCellValue( ($ltr++).$count, date('d-M-Y',strtotime($ord->stock_date)));
+
+			
+			}
+		}
+            $objPHPExcel->getActiveSheet()->setTitle('Stock('.count($stocks).')');
+            $objPHPExcel->setActiveSheetIndex(0);
+            
+            $writer = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');  
+            
+            $fname = "stocks_".date("y_m_d").".xls";
+            
+            header('Content-Type: application/vnd.ms-excel');
+                header('Content-Disposition: attachment;filename="'.$fname.'"');
+            header('Cache-Control: max-age=0');
+            $writer->save('php://output');
+		
+		
+		
+	}
+
+	public function csvupload(){
+	    
+	    $this->load->library("CsvRead");
+	    
+	    
+	    $stkarr = $this->csvread->readFile(8);
+	    
+	    $insarr = $errors =  array();
+	 
+	    foreach($stkarr as $ind => $stk){
+	        
+	        $warehouse  =  $stk['0'];
+	        $product    =  $stk['1'];
+	        $quantity   =  $stk['3'];
+	        $supplier   =  $stk['5'];
+	       
+	        if(empty($stk[0]) or empty($stk[1]) or empty($stk[2]) or empty($stk[3])) {
+	            
+	             $errors[] = "Check madatory fiels";    
+	        }
+	        
+			$wrhouse = $this->db->select("id")->where(array("name" => $warehouse , "comp_id" => $this->session->userdata("companey_id")))->get("tbl_warehouse");
+	        
+	        if($wrhouse->num_rows() > 0){
+	            
+	            $whid = $wrhouse->row()->id;
+	        }else{
+	            $errors[] = "Warehouse  <b>".$warehouse."</b> not founds";
+				continue;
+	        }
+
+	        $prod = $this->db->select("id,stock")->where(array("pro_name" => $product , "comp_id" => $this->session->userdata("companey_id")))->where("pro_name", $product)->get("tbl_product");
+	        
+	        if($prod->num_rows() > 0){
+	            
+	            $prodid = $prod->row()->id;
+				$oldstk = $prod->row()->stock;
+
+	        }else{
+	            $errors[] = "Product <b>".$product."</b> not founds";
+				continue;
+	        }
+	        
+	        $splr = $this->db->select("id")->where(array("email" => $supplier ,"company" => $this->session->userdata("companey_id")))->get("users");
+	        
+	        if($splr->num_rows() > 0){
+	            
+	            $splrid = $splr->row()->id;
+	            
+	        }else{
+
+	            $errors[] = "Supplier <b>".$supplier."</b> not founds";
+				continue;
+	        }
+	       
+	       $insarr[] = array("warehouse"   =>  $whid, 
+							 "product"    =>  $prodid,
+							 "supplier"   =>   $splrid,
+							 "stock_date" =>   strtotime(str_replace("/", "-",  $stk[5])),
+						//	 "expiry"     =>   strtotime(str_replace("/", "-",  $stk[6])),
+							 "details"    =>   $stk[2],
+							 "quantity"   =>   $stk[3] 	 ,
+							 "price" 	  =>   $stk[4],
+							 "minalert"     => $stk[8],
+							 "old_stock"    => $oldstk,
+							 "added_by"     => $this->session->user_id,
+							 "company"      =>  $this->session->userdata("companey_id"),
+							 "last_update"  => date("Y-m-d h:i:s"),
+							 "added_date"   => date("Y-m-d h:i:s")
+						 );
+	        
+	        
+	    }
+	       $msg = "";
+	       if(count($errors) > 0){
+	           
+	          $msg = count($errors) ."is failed to add. ".implode("<br />", $errors);   
+	       }
+	       
+	    if(!empty($insarr)){
+	        
+	         $ret = $this->db->insert_batch("stock", $insarr);
+	      
+	       
+	        $this-> session->set_flashdata("message", "Successfully uploaded ".count($insarr)." stock. ".$msg);
+	        
+	       
+	    }else{
+	        
+	           $this-> session->set_flashdata("error", "Failed to uploaded user. ".$msg);
+	    }
+	    
+
+	    
+	}
+
+	public function stockupdate($stkno){
+		
+		  $this->savestock();
+        
+        $data["products"] = $this->Product_model-> getProduct();
+        
+        $stkno = base64_decode(base64_decode(urldecode($stkno)));
+        $data["stock"] = $this->Product_model->  getStockById($stkno);
+        $this->load->model("warehouse_model");
+		$data["warehouse"]  = $this->warehouse_model-> warehouse_list1();
+		
+		if(empty($data["stock"])) show_404();
+        
+        $data["title"] = "Update Stocks";
+        $data['content'] = $this->load->view('product/update-stock', $data, true);
+		$this->load->view('layout/main_wrapper', $data);
+		
+	}
+
+	public function loadstock(){
+		
+		
+			$stockarr =$this->Product_model->stock(1);
+			 $rows  = array();
+			if(!empty($stockarr)){
+			
+				foreach($stockarr as $ind => $stk){
+					
+					$cols = array();
+					$srno   = $ind + 1;
+					
+					$image  = (!empty($stk->main_img)) ? base_url($stk->main_img)  : base_url("assets/images/products/33.png"); 
+					$cols[] = '<label class="custom-control custom-checkbox"><input type="checkbox" class="custom-control-input" name="example-checkbox1" value="'.$stk->id.'"><span class="custom-control-label"> '.$srno.'</span></label>';
+					
+					$cols[] = ucwords($stk->product_name);
+					$cols[] = $stk->quantity."<br /> <span class = 'badge badge-primary'> Old Stock: ". $stk->old_stock." </span>";
+					
+					$cols[] = (!empty($stk->price)) ? $stk->price : " " ;
+					$cols[] = (!empty($stk->supplier)) ? $stk->supplier : " " ;
+					$cols[] = date("m/d/Y", strtotime($stk->stock_date));
+				   
+					
+					$cols[] =  '<a href="'.base_url("product/stockupdate/".urlencode(base64_encode(base64_encode($stk->id)))).'" class="btn btn-info">
+								<i class="fa fa-pencil" data-toggle="tooltip" title="" data-original-title="Edit"></i></a><a href="'.base64_encode(base64_encode($stk->id)).'"  class="btn btn-danger delete-stocks"><i class="fa fa-trash" data-toggle="tooltip" title="" data-original-title="Delete"></i></a>';
+					
+					$rows[] = $cols;											 
+				}
+				
+			}				
+			$total = $this->Product_model->stock(2);	
+			$output = array(
+					"draw" => @$_POST['draw'],
+					"recordsTotal" 		=> $total,
+					"recordsFiltered"   => $total,  
+					"data" => $rows,
+					);
+			die(json_encode($output));
+	
+	
+	}
 
     function get_region_byid() {
         $country_id = $this->input->post('country_id');
@@ -68,6 +704,8 @@ class Product extends CI_Controller {
     }
     
     public function add_product() {
+		
+		$this->load->model("location_model");
         $data['title'] = display('add_product');
         $data['product'] = '';       
         $this->form_validation->set_rules('product_name', display('product_name'), 'required|max_length[50]');

@@ -10,7 +10,7 @@ class Warehouse_model extends CI_Model {
 
 	public function warehouse_list(){
 
-        $company=$this->session->userdata('companey_id');
+        $company	=	$this->session->userdata('companey_id');
         return $this->db->select("tbl_warehouse.*,state.state as statename,city.city as cityname,tbl_country.country_name as cntryname")
                         ->from("tbl_warehouse")
                         ->join('state','state.id=tbl_warehouse.state','left')

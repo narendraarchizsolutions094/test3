@@ -40,6 +40,13 @@ class Location_model extends CI_Model {
                         ->get()
                         ->result();
     }
+	
+	public function block_list(){
+		
+		
+		return array();
+	}
+	
 
     public function all_city_state($state_id) {
 
