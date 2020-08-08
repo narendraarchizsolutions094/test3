@@ -664,7 +664,7 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
             </div>         
       </div>
 
-      <div class="col-md-6 card card-body col-height" style="background:#fff;border-top: unset;">
+      <div class="col-md-6 card card-body col-height details-column" style="background:#fff;border-top: unset;">
          <div id="exTab3" class="">
             <ul  class="nav nav-tabs" role="tablist">              
               <li class="active"><a  href="#basic" data-toggle="tab" style="padding: 10px 10px; font-size:12px;">Basic</a></li>   
@@ -4290,9 +4290,16 @@ $("a[href$='#related_enquiry']").on('click',function(){
 });
 $("#toggle_timeline").on('click',function(){
   $(".activitytimelinediv").toggleClass('hide-timeline');
-  if ($("#toggleClass").hasClass('hide-timeline')) {
+  if ($(".activitytimelinediv ").hasClass('hide-timeline')) {
     $("#toggle_timeline").removeClass('fa-angle-right');
     $("#toggle_timeline").addClass('fa-angle-left');
+    $(".details-column").removeClass('col-md-6');
+    $(".details-column").addClass('col-md-9');
+  }else{
+    $("#toggle_timeline").removeClass('fa-angle-left');
+    $("#toggle_timeline").addClass('fa-angle-right');
+    $(".details-column").removeClass('col-md-9');
+    $(".details-column").addClass('col-md-6');
   }
 });
 </script>
