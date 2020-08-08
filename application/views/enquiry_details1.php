@@ -21,6 +21,14 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
         
 <!-- Time line css start -->
 <style>
+  .hide-timeline{
+    display: none;
+  }
+  #toggle_timeline{
+    position: fixed;
+    top: 94px;
+    right: 0;
+  }
   <?php if($this->session->companey_id == 29) {        
     $c = 0;
     if ($enquiry->partner_id && $enquiry->status == 3) {
@@ -1955,7 +1963,7 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
          <h3 class="text-center">Activity Timeline</h3><hr>
           
       </div>
-      
+      <i class="fa fa-angle-right btn btn-secondary btn-sm" id="toggle_timeline"></i>      
       <style>
          #exTab3 .nav-tabs > li > a {
          border-radius: 4px 4px 0 0 ;
@@ -4279,5 +4287,12 @@ $("a[href$='#related_enquiry']").on('click',function(){
       $("#related_enquiry").html(data);
     }
   });
+});
+$("#toggle_timeline").on('click',function(){
+  $(".activitytimelinediv").toggleClass('hide-timeline');
+  if ($("#toggleClass").hasClass('hide-timeline')) {
+    $("#toggle_timeline").removeClass('fa-angle-right');
+    $("#toggle_timeline").addClass('fa-angle-left');
+  }
 });
 </script>
