@@ -163,13 +163,14 @@ class LeadRules extends CI_Controller {
         if ($id) {
             $data['rule_data']    =   $this->rule_model->get_rule($id);            
         }
-
+ 
         $source    =   $this->Leads_Model->get_leadsource_list();
         $country   =   $this->location_model->country();
         $state     =   $this->location_model->estate_list();
         $city      =   $this->location_model->ecity_list();
         $lead_stages = $this->Leads_Model->get_leadstage_list();
         $process_list = $this->dash_model->get_user_product_list();        
+        $all_description   =   $this->Leads_Model->find_description();
 
         $rule_source = array();
         if (!empty($source)) {            
@@ -202,6 +203,12 @@ class LeadRules extends CI_Controller {
                 $rule_lead_stage[$value->stg_id]  = $value->lead_stage_name;
             }
         }
+        $rule_lead_description = array();
+        if (!empty($all_description)) {
+            foreach ($all_description as $key => $value) {
+                $rule_lead_description[$value->id]  = $value->description;
+            }
+        }
         $rule_process = array();
         if (!empty($process_list)) {
             foreach ($process_list as $key => $value) {
@@ -214,6 +221,7 @@ class LeadRules extends CI_Controller {
         $data['state']       = json_encode($rule_state);
         $data['city']        = json_encode($rule_city);
         $data['lead_stages'] = json_encode($rule_lead_stage);
+        $data['lead_description'] = json_encode($rule_lead_description);
         $data['rule_process']   = json_encode($rule_process);
         $data['user_list']   = $this->user_model->companey_users();
 

@@ -138,6 +138,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		    values: <?=$lead_stages?>,
 		    operators: ['equal', 'not_equal','is_null', 'is_not_null']
 		  },{
+		    id: 'lead_discription',
+		    label: 'Sub Disposition',
+		    type: 'integer',
+		    input: 'select',
+		    values: <?=$lead_description?>,
+		    operators: ['equal', 'not_equal','is_null', 'is_not_null']
+		  },{
 		    id: 'product_id',
 		    label: 'Process',
 		    type: 'integer',
