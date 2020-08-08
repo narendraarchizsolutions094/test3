@@ -198,7 +198,7 @@ class Report extends CI_Controller {
                  $row[] = $status;
               }
                if (in_array('DOE', $report_columns)) {
-                $row[] = $repdetails->created_date;
+                $row[] = $repdetails->inq_created_date;
                }
                if (in_array('Process', $report_columns)) {
                $row[] =  (!empty($repdetails->product_name)) ?$repdetails->product_name:'NA'; 
@@ -217,6 +217,9 @@ class Report extends CI_Controller {
                }
                if (in_array('Company Name', $report_columns)){
                   $row[] = (!empty($repdetails->company)) ? $repdetails->company:'NA';
+               }
+               if (in_array('Product', $report_columns)){
+                  $row[] = (!empty($repdetails->enq_product_name)) ? $repdetails->enq_product_name:'NA';
                }
                  if(!empty($dfields)){
                     foreach($dfields as $ind => $dfld){ 
@@ -254,7 +257,7 @@ class Report extends CI_Controller {
             $this->db->delete('reports');
             echo 1;
         }
-        public function view_details(){
+        public function view_details(){ 
             if($this->input->post('from_exp')==''){
              $from ='';  
             }else{
@@ -312,17 +315,26 @@ class Report extends CI_Controller {
             }else{
                $state= $this->input->post('state');
             }
-            if($this->input->post('lead_source')==''){
-            $lead_source = '';
+            if($this->input->post('lead_source')==''){ // disposition
+              $lead_source = '';
             }else{
                $lead_source = $this->input->post('lead_source');
             }
             
-            if($this->input->post('lead_subsource')==''){
+            if($this->input->post('lead_subsource')==''){  
                 $lead_subsource = '';
             }else{
                $lead_subsource = $this->input->post('lead_subsource');
             }
+
+            if($this->input->post('sub_disposition')==''){  
+                $sub_disposition = '';
+            }else{
+               $sub_disposition = $this->input->post('sub_disposition');
+            }
+            
+            
+
             if($this->input->post('enq_product')==''){
                 $enq_product = '';
             }else{
@@ -348,22 +360,23 @@ class Report extends CI_Controller {
             }        
             $data_arr = array(
    
-            'from1' => $from,
-            'to1'   =>  $to,
-            'employe1' => $employe,
-            'phone1'   => $phone,
-            'country1' => $country,
-            'institute1' => $institute,
-            'center1'    => $center,
-            'source1'    => $source,
-            'subsource1' => $subsource,
-            'datasource1' => $datasource,
-            'state1'      => $state,
-            'lead_source1' => $lead_source,
-            'lead_subsource1' => $lead_subsource,
-            'enq_product1'    => $enq_product,
-            'drop_status1'    => $drop_status,
-            'all1'            => $all,
+            'from1'           =>  $from,
+            'to1'             =>  $to,
+            'employe1'        =>  $employe,
+            'phone1'          =>  $phone,
+            'country1'        =>  $country,
+            'institute1'      =>  $institute,
+            'center1'         =>  $center,
+            'source1'         =>  $source,
+            'subsource1'      =>  $subsource,
+            'datasource1'     =>  $datasource,
+            'state1'          =>  $state,
+            'lead_source1'    =>  $lead_source,
+            'lead_subsource1' =>  $lead_subsource,
+            'sub_disposition' =>  $sub_disposition,
+            'enq_product1'    =>  $enq_product,
+            'drop_status1'    =>  $drop_status,
+            'all1'            =>  $all,
             'post_report_columns'=>$post_report_columns,
             'productlst'=>$productlst
             );
@@ -371,8 +384,11 @@ class Report extends CI_Controller {
             
         $data['title'] = 'Report';
         $data['all_stage_lists'] = $this->Leads_Model->find_stage();
+        $data['all_sub_stage_lists'] = $this->Leads_Model->find_description();
         $data['sourse'] = $this->report_model->all_source();
         $data['subsourse'] = $this->report_model->all_subsource();
+        $data['datasourse'] = $this->report_model->all_datasource();
+        
         $data['datasourse'] = $this->report_model->all_datasource();
         
         $data['employee'] = $this->report_model->all_company_employee($this->session->userdata('companey_id'));
@@ -451,7 +467,7 @@ class Report extends CI_Controller {
                 $row[] = (!empty($repdetails->subsource_name)) ? $repdetails->subsource_name:'NA'; 
               }
               if (in_array('Lead Description', $this->session->userdata('post_report_columns'))){
-                $row[] = (!empty($repdetails->lead_discription)) ? $repdetails->lead_discription :"NA"; 
+                $row[] = (!empty($repdetails->description)) ? $repdetails->description :"NA"; 
               }
               if (in_array('Status', $this->session->userdata('post_report_columns'))) {
                  if ($repdetails->status == 1) {
@@ -464,7 +480,7 @@ class Report extends CI_Controller {
                  $row[] = $status;
               }
                if (in_array('DOE', $this->session->userdata('post_report_columns'))) {
-                $row[] = $repdetails->created_date;
+                $row[] = $repdetails->inq_created_date;
                }
                if (in_array('Process', $this->session->userdata('post_report_columns'))) {
                $row[] =  (!empty($repdetails->product_name)) ?$repdetails->product_name:'NA'; 
@@ -483,6 +499,9 @@ class Report extends CI_Controller {
                }
                if (in_array('Company Name', $this->session->userdata('post_report_columns'))){
                   $row[] = (!empty($repdetails->company)) ? $repdetails->company:'NA';
+               }
+               if (in_array('Product', $this->session->userdata('post_report_columns'))){
+                  $row[] = (!empty($repdetails->enq_product_name)) ? $repdetails->enq_product_name:'NA';
                }
                
                  if(!empty($dfields)){

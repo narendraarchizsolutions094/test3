@@ -48,12 +48,12 @@ if($root=='https://student.spaceinternationals.com'){	 ?>
         <!-- Content Wrapper -->
         <div class="login-wrapper"> 
             <div class="text-center">   
-<?php $root=(isset($_SERVER["HTTPS"]) ? "https://" : "http://").$_SERVER["HTTP_HOST"];
-if($root=='https://student.spaceinternationals.com'){	 ?>	
-            <img style="width: 26%;" src="<?php echo base_url('assets/images/lgo.png'); ?>" class="m-r-sm">
-<?php }else{ ?>
-	<img style="width: 26%;" src="https://pfcrm.xyz/pms/uploads/Archiz-logo_new.jpg" class="m-r-sm">
-<?php } ?>
+            <?php $root=(isset($_SERVER["HTTPS"]) ? "https://" : "http://").$_SERVER["HTTP_HOST"];
+            if($root=='https://student.spaceinternationals.com'){	 ?>	
+                        <img style="width: 26%;" src="<?php echo base_url('assets/images/lgo.png'); ?>" class="m-r-sm">
+            <?php }else{ ?>
+            	<img style="width: 26%;" src="https://pfcrm.xyz/pms/uploads/Archiz-logo_new.jpg" class="m-r-sm">
+            <?php } ?>
             </div>
             <div class="container-center" style="margin-top: auto;">
                 <div class="panel panel-bd" style="-webkit-box-shadow: 0px 0px 28px -9px rgba(0, 0, 0, 0.74) !important;">
@@ -63,8 +63,11 @@ if($root=='https://student.spaceinternationals.com'){	 ?>
                                 <i class="pe-7s-unlock"></i>
                             </div>
                             <div class="header-title">
+                                <?php
+                                if($root!='https://student.spaceinternationals.com'){    ?> 
                                 <h3><?php echo (!empty($title)?$title:null) ?></h3>
-                                <small><strong><?= display('please_login') ?></strong></small>
+                                <?php } ?>
+                                <small><strong id="login-title"><?= display('please_login') ?></strong></small>
                             </div>
                         </div>
                         <div class="">
@@ -125,8 +128,16 @@ if($root=='https://student.spaceinternationals.com'){	 ?>
                              <span class="pull-left"><input type="checkbox" name="remember_me" value="1"> Remember me </span> <span class="pull-right"><a href="javascript:" id="fpassword"><?php echo display("forget_password"); ?></a></span>
                             </div><br>
                             <div class="text-center">
-                                <button  type="submit" class="btn btn-success"><?= display('login') ?></button>                                
+                                <button  type="submit" class="btn btn-success"><?= display('login') ?></button>          
                             </div>
+                            <br>
+                            <br>
+                                <?php
+                                if($root=='https://student.spaceinternationals.com'){    ?> 
+                                    New to spaceinternationals ?<a href="javascript:void(0)" id="signup">Create an account</a>
+                                <?php
+                                }
+                                ?>
                             
                         </form>
                     </div> 
@@ -343,6 +354,17 @@ if($root=='https://student.spaceinternationals.com'){	 ?>
                     }
                 }); 
             });                 
+            $("#signup").on('click',function(){
+                $.ajax({                        
+                    url : '<?php echo base_url('auth/signup_content')?>',                
+                    type: 'POST',                
+                    data: $(this).serialize(),
+                    success:function(data){
+                        $("#login-title").html('Please signup');
+                        $("#LoginDiv").html(data);
+                    }         
+                });
+            });
         </script>        
     </body>
 </html>

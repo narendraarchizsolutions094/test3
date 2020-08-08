@@ -47,6 +47,38 @@ class Telephony extends CI_Controller {
         redirect($url,'refresh');
         
     }
+	
+	public function mark_abilibality(){
+        
+        $atID   =   !empty($_POST['callbreakstatus'])?$_POST['callbreakstatus']:'';
+        
+        $user_id    =   $this->session->user_id;        
+        
+            $url = "https://developers.myoperator.co/user";
+            $data = array(
+            'token'=>$this->session->telephony_token,
+            'receive_calls '=>$atID,
+            'uuid'=>$this->session->telephony_agent_id
+            );
+            $ch = curl_init($url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
+            curl_setopt($ch, CURLOPT_POSTFIELDS,http_build_query($data));   
+            $response = curl_exec($ch);
+            $user_id    =   $this->session->user_id;
+            $this->db->set('availability',$atID);
+            $this->db->where('pk_i_admin_id',$user_id);
+            $this->db->update('tbl_admin');         
+        
+            unset($this->session->availability);
+            $_SESSION['availability'] =  $atID;
+            redirect('enq/index'); 
+            // if($atID == 0){     
+        //     echo json_encode(array('id'=>0,'status'=>$atID));
+        // }else{
+        //     echo json_encode(array('id'=>0,'status'=>$atID));           
+        // }
+    }
 
    public function get_call_status($uid=''){
 		$newdata = array( 
@@ -109,22 +141,28 @@ class Telephony extends CI_Controller {
 	
 	
 	
-	 public function click_to_dial($phone=''){
-		$url = "https://developers.myoperator.co/clickOcall";
-        $data = array(
-        'token'=>$this->session->telephony_token,
-        'customer_number'=>$phone,
-        'customer_cc'=>91,
-		'support_user_id'=>$this->session->telephony_agent_id
-        );
-        $curl = curl_init();
-        curl_setopt( $curl, CURLOPT_URL, $url);
-        curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
-		curl_setopt($curl, CURLOPT_HTTPHEADER, array('application/x-www-form-urlencoded'));
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-        $response = curl_exec( $curl );
-        curl_close( $curl );
-        print_r($response);
+    public function click_to_dial($phone='')
+    {
+    $phone           = '+91'.$phone;
+    $token           = $this->input->post("token");
+    $support_user_id = $this->session->telephony_agent_id;
+    $curl = curl_init();
+	curl_setopt_array($curl, array(  CURLOPT_URL => "https://obd-api.myoperator.co/obd-api-v1",
+	CURLOPT_RETURNTRANSFER => true,  CURLOPT_CUSTOMREQUEST => "POST", 
+	CURLOPT_POSTFIELDS =>'{  "company_id": "5f1545a391ac6734", 
+	"secret_token": "ff0bda40cbdb92a4f1eb7851817de3510a175345a16c59a9d98618a559019f73", 
+	"type": "1", 
+    "user_id": "'.$support_user_id.'",
+    "number": "'.$phone.'",   
+    "public_ivr_id":"5f16e49954ad3197", 
+    "reference_id": "",  
+    "region": "",
+    "caller_id": "",  
+    "group": ""   }', 
+    CURLOPT_HTTPHEADER => array(    "x-api-key:oomfKA3I2K6TCJYistHyb7sDf0l0F6c8AZro5DJh", 
+    "Content-Type: application/json"  ),));
+    $response = curl_exec($curl);
+	print_r($response);
     }
 	
 	public function one_way_dial($phone='',$enq=''){

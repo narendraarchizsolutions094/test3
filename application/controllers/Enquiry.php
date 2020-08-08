@@ -1,21 +1,14 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 class Enquiry extends CI_Controller {
-	
-	
     public function __construct() {
-		
-		
-		
         parent::__construct();
-       
-         $this->load->model(
+        $this->load->model(
                 array('Leads_Model','setting_model' ,'website/home_model','schedule_model','enquiry_model', 'dashboard_model', 'Task_Model', 'User_model', 'location_model','Message_models','Institute_model','Datasource_model','Taskstatus_model','dash_model','Center_model','SubSource_model','Kyc_model','Education_model','SocialProfile_model','Closefemily_model','form_model','Doctor_model')
                 );
         $this->load->library('email');
         $this->load->library('user_agent');
-		$this->lang->load("activitylogmsg","english");
-		
+		$this->lang->load("activitylogmsg","english");		
 		$apiarr = explode("/", $_SERVER['REQUEST_URI']);
 		
 		if(in_array("viewapi", $apiarr)){
@@ -379,7 +372,8 @@ class Enquiry extends CI_Controller {
         }
     }
 
-    function phone_check($phone){
+    function phone_check($phone)
+    {
         $product_id    =   $this->input->post('product_id');                
         if($product_id){
             $query = $this->db->query("select phone from enquiry where product_id=$product_id AND phone=$phone");
@@ -401,12 +395,61 @@ class Enquiry extends CI_Controller {
         }
     }
 
-    public function create(){
+    function email_check($email)
+    {
+        $product_id    =   $this->input->post('product_id');                
+        if($product_id){
+            $query = $this->db->query("select email from enquiry where product_id=$product_id AND email = '$email'");
+            if ($query->num_rows()>0) {
+                $this->form_validation->set_message('email_check', 'The Email field can not be dublicate in current process');
+                return false;
+            }else{
+                return TRUE;
+            }
+        }else{
+            $comp_id = $this->session->companey_id;
+            $query = $this->db->query("select phone from enquiry where comp_id=$comp_id AND email = '$email' ");                
+            if ($query->num_rows()>0) {
+                $this->form_validation->set_message('email_check', 'The Email field can not be dublicate');
+                return false;
+            }else{
+                return TRUE;
+            }
+        }
+    }
+
+
+    public function create()
+    {   
+        //print_r($_POST);die;
         $process = $this->session->userdata('process');                 
         $data['leadsource'] = $this->Leads_Model->get_leadsource_list();
         $data['lead_score'] = $this->Leads_Model->get_leadscore_list();
         $data['title'] = display('new_enquiry');
-        $this->form_validation->set_rules('mobileno', display('mobileno'), 'max_length[20]|callback_phone_check|required', array('phone_check' => 'Duplicate Entry for phone'));        
+        // $ruledata   = $this->db->select("*")->from("tbl_new_settings")->where('comp_id',$this->session->companey_id)->get()->row();
+        // if($ruledata->duplicacy_status == 0)
+        // { 
+            
+        //     if($ruledata->field_for_identification == 'email')
+        //     {
+        //         $this->form_validation->set_rules('email', display('email'), 'xss_clean|required|is_unique[enquiry.email]', array('is_unique'=>'Email already exist'));
+        //     }
+        //     elseif ($ruledata->field_for_identification == 'phone')
+        //     {
+        //        $this->form_validation->set_rules('mobileno', display('mobileno'), 'max_length[20]|callback_phone_check|required', array('phone_check' => 'Duplicate Entry for phone'));
+        //     }
+        //     else
+        //     {
+        //         $this->form_validation->set_rules('email', display('email'), 'xss_clean|required|is_unique[enquiry.email]', array('is_unique'=>'Email already exist'));
+        //         $this->form_validation->set_rules('mobileno', display('mobileno'), 'max_length[20]|callback_phone_check|required', array('phone_check' => 'Duplicate Entry for phone'));
+        //     }
+        // }
+        $this->form_validation->set_rules('mobileno', display('mobileno'), 'max_length[20]|callback_phone_check|required', array('phone_check' => 'Duplicate Entry for phone'));
+        if(!empty($this->input->post('email')))
+        {
+            $this->form_validation->set_rules('email', display('email'), 'callback_email_check|required', array('email_check'=>'The Email you entered is already exist'));
+        }
+
         $enquiry_date = $this->input->post('enquiry_date');
         if($enquiry_date !=''){
           $enquiry_date = date('d/m/Y');
@@ -470,12 +513,27 @@ class Enquiry extends CI_Controller {
                 'status' => 1
             ];
             $insert_id    =   $this->enquiry_model->create($postData);
+            $this->load->model('rule_model');
+            $this->rule_model->execute_rules($encode);            
             if ($insert_id) {                
-                $this->Leads_Model->add_comment_for_events($this->lang->line("enquery_create"), $encode);                              
-                $this->session->set_flashdata('message', 'Your Enquiry has been  Successfully created');
-                redirect(base_url() . 'enquiry/view/'.$insert_id);
+                $this->Leads_Model->add_comment_for_events($this->lang->line("enquery_create"), $encode);       
+                if($this->input->is_ajax_request())
+                {
+                    echo json_encode(array('status'=>'success'));
+                }
+                else
+                {
+                    $this->session->set_flashdata('message', 'Your Enquiry has been  Successfully created');
+                    redirect(base_url() . 'enquiry/view/'.$insert_id);
+                }
+                
             }
         } else {
+            if($this->input->is_ajax_request())
+            {
+                echo json_encode(array('status'=>'fail','error'=>validation_errors()));
+                exit();
+            }
             $this->load->model('Dash_model', 'dash_model');
             $data['name_prefix'] = $this->enquiry_model->name_prefix_list();
             $user_role    =   $this->session->user_role;
@@ -783,6 +841,111 @@ class Enquiry extends CI_Controller {
         $data['state_list'] = $this->location_model->state_list();
         $data['content'] = $this->load->view('invoice_add', $data, true);
         $this->load->view('layout/main_wrapper', $data);
+    }
+
+
+   /* public function autoDial()
+    {
+        $allenquiry = $this->input->post('enquiry_id[]');
+        $enq = implode(",", $allenquiry);
+        $res = $this->db->query("SELECT `phone` FROM `enquiry` WHERE enquiry_id IN ( $enq )");
+        $phoneArr = $res->result_array();
+
+        // $phone           = $this->input->post("phone_no");
+        // $token           = $this->input->post("token");
+        // $support_user_id = $this->input->post("support_user_id");
+        //$url             = "https://developers.myoperator.co/clickOcall";
+        // $data = array(
+        //   'token'=>,
+        //   'customer_number'=>$phone,
+        //   'customer_cc'=>91,
+        //   'support_user_id'=>$this->session->telephony_agent_id,
+        // );
+        foreach ($phoneArr as $key => $value) 
+        {
+            
+        
+        $curl = curl_init();
+          curl_setopt_array($curl, array(  CURLOPT_URL => "https://obd-api.myoperator.co/obd-api-v1",
+          CURLOPT_RETURNTRANSFER => true,  CURLOPT_CUSTOMREQUEST => "POST", 
+          CURLOPT_POSTFIELDS =>'{  "company_id": "5f1545a391ac6734", 
+          "secret_token": "ff0bda40cbdb92a4f1eb7851817de3510a175345a16c59a9d98618a559019f73", 
+          "type": "1", 
+            "user_id": "'.$this->session->telephony_agent_id.'",
+            "number": "+91'.$value['phone'].'",   
+            "public_ivr_id":"5f16e49954ad3197", 
+            "reference_id": "",  
+            "region": "",
+            "caller_id": "",  
+            "group": ""   }', 
+            CURLOPT_HTTPHEADER => array(    "x-api-key:oomfKA3I2K6TCJYistHyb7sDf0l0F6c8AZro5DJh", 
+            "Content-Type: application/json"  ),));
+            $response = curl_exec($curl);
+        
+        // print_r($response);
+      
+        // $this->db->select('phone');
+        // $this->db->from('enquiry');
+        // $this->db->where('enquiry_id IN',"( ".$enq." )");
+        // $arr = $this->db->get()->result_array();
+        print_r($response);
+        }
+    }*/
+
+    public function autoDial()
+    {
+        $allenquiry = $this->input->post('enquiry_id[]');
+        $enq = implode(",", $allenquiry);
+        $res = $this->db->query("SELECT aasign_to,phone FROM `enquiry` WHERE enquiry_id IN ( $enq )");
+        $phoneArr = $res->result_array();
+
+        // $phone           = $this->input->post("phone_no");
+        // $token           = $this->input->post("token");
+        // $support_user_id = $this->input->post("support_user_id");
+        //$url             = "https://developers.myoperator.co/clickOcall";
+        // $data = array(
+        //   'token'=>,
+        //   'customer_number'=>$phone,
+        //   'customer_cc'=>91,
+        //   'support_user_id'=>$this->session->telephony_agent_id,
+        // );
+        foreach ($phoneArr as $key => $value) 
+        {$assignto=$value['aasign_to'];
+         if(!empty($assignto)){
+            $this->db->select('telephony_agent_id');
+            $this->db->from('tbl_admin');
+            $this->db->where('pk_i_admin_id',$assignto);  
+            $user= $this->db->get()->row(); 
+            $user_id=$user->telephony_agent_id;
+            }else{
+            $user_id=$this->session->telephony_agent_id;
+            }
+        $curl = curl_init();
+          curl_setopt_array($curl, array(  CURLOPT_URL => "https://obd-api.myoperator.co/obd-api-v1",
+          CURLOPT_RETURNTRANSFER => true,  CURLOPT_CUSTOMREQUEST => "POST", 
+          CURLOPT_POSTFIELDS =>'{  "company_id": "5f1545a391ac6734", 
+          "secret_token": "ff0bda40cbdb92a4f1eb7851817de3510a175345a16c59a9d98618a559019f73", 
+          "type": "1", 
+            "user_id": "'.$user_id.'",
+            "number": "+91'.$value['phone'].'",   
+            "public_ivr_id":"5f16e49954ad3197", 
+            "reference_id": "",  
+            "region": "",
+            "caller_id": "",  
+            "group": ""   }', 
+            CURLOPT_HTTPHEADER => array(    "x-api-key:oomfKA3I2K6TCJYistHyb7sDf0l0F6c8AZro5DJh", 
+            "Content-Type: application/json"  ),));
+            $response = curl_exec($curl);
+        
+        // print_r($response);
+      
+        // $this->db->select('phone');
+        // $this->db->from('enquiry');
+        // $this->db->where('enquiry_id IN',"( ".$enq." )");
+        // $arr = $this->db->get()->result_array();
+     
+   print_r($response);
+        }
     }
 
     public function assign_enquiry() {
@@ -1097,7 +1260,7 @@ class Enquiry extends CI_Controller {
         $enquiry_code = $data['enquiry']->Enquery_id;
         $phone_id = '91'.$data['enquiry']->phone;        
         $data['recent_tasks'] = $this->Task_Model->get_recent_taskbyID($enquiry_code);        
-        $data['comment_details'] = $this->Leads_Model->comment_byId($enquiry_code);        
+               
         $user_role    =   $this->session->user_role;
         $data['country_list'] = $this->location_model->productcountry();
 
@@ -1134,9 +1297,165 @@ class Enquiry extends CI_Controller {
 		//$data['english_data'] = $this->enquiry_model->eng_data($data['details']->Enquery_id);
 		}
         $this->enquiry_model->make_enquiry_read($data['details']->Enquery_id);
+        //echo"<pre>";print_r($data);die;
         $data['content'] = $this->load->view('enquiry_details1', $data, true);
         $this->enquiry_model->assign_notification_update($enquiry_code);
         $this->load->view('layout/main_wrapper', $data);
+    }
+
+    function activityTimeline()
+    {
+        $enqid = $this->input->post('id');
+        $data['enquiry'] = $this->enquiry_model->enquiry_by_id($enqid);
+        $enquiry_code = $data['enquiry']->Enquery_id;
+        $comment_details = $this->Leads_Model->comment_byId($enquiry_code);
+
+        $html='<ul class="cbp_tmtimeline" style="margin-left:-30px;">';
+              foreach($comment_details as $comments)
+              { 
+              if($comments->comment_msg=='Stage Updated')
+              { 
+        $html.= '<li>
+                  <div class="cbp_tmicon cbp_tmicon-phone" style="background:#cb4335;"></div>
+                  <div class="cbp_tmlabel"  style="background:#95a5a6;">
+                    <span style="font-weight:900;font-size:15px;">'.ucfirst($comments->comment_msg).'</span></br>';
+                if($comments->comment_msg=='Stage Updated'){ 
+        $html.=  '<span style="font-weight:900;font-size:12px;">'.ucfirst($comments->lead_stage_name).'</span>
+                    </br>
+                    <span style="font-weight:900;font-size:10px;">'. ucfirst($comments->description).'</span>
+                    </br>
+                    <span style="font-weight:900;font-size:10px;">'.ucfirst($comments->remark).'</span>';
+                     } 
+          $html.= '<p>'.date("j-M-Y h:i:s a",strtotime($comments->ddate)).'<br>
+                    Updated By : <strong>'.ucfirst($comments->comment_created_by . ' ' .$comments->lastname).'</strong></p>
+                  </div>
+                </li>';
+
+                 }else if($comments->comment_msg=='Enquiry moved'){ 
+        $html.='    <li>
+                  <div class="cbp_tmicon cbp_tmicon-phone"  style="background:#148f77;"></div>
+                  <div class="cbp_tmlabel"  style="background:#95a5a6;">
+                    <span style="font-weight:900;font-size:15px;">'.ucfirst($comments->comment_msg).'</span></br>';
+                    if($comments->comment_msg=='Stage Updated'){ 
+        $html.='<span style="font-weight:900;font-size:12px;">'. ucfirst($comments->lead_stage_name).' </span>
+                    </br>
+                    <span style="font-weight:900;font-size:10px;">'. ucfirst($comments->description).' </span>
+                    </br>
+                    <span style="font-weight:900;font-size:10px;">'. ucfirst($comments->remark).' </span>';
+                     } 
+          $html.'<p>'. date("j-M-Y h:i:s a",strtotime($comments->ddate)).' <br>
+                      Updated By : <strong>'. ucfirst($comments->comment_created_by . ' ' .$comments->lastname).' </strong></p>
+                  </div>
+                </li>';
+                }else if($comments->comment_msg=='Move to leads'){ 
+          $html.='<li>
+                  <div class="cbp_tmicon cbp_tmicon-phone"  style="background:#2980b9;"></div>
+                  <div class="cbp_tmlabel"  style="background:#95a5a6;">
+                  <span style="font-weight:900;font-size:15px;">'. ucfirst($comments->comment_msg).' </span></br>';
+                     if($comments->comment_msg=='Stage Updated'){ 
+           $html.='<span style="font-weight:900;font-size:12px;">'.ucfirst($comments->lead_stage_name).' </span>
+                    </br>
+                    <span style="font-weight:900;font-size:10px;">'. ucfirst($comments->description).' </span>
+                    </br>
+                    <span style="font-weight:900;font-size:10px;">'. ucfirst($comments->remark).' </span>';
+                     } 
+             $html.='<p>'. date("j-M-Y h:i:s a",strtotime($comments->ddate)).' <br>
+                    Updated By : <strong>'. ucfirst($comments->comment_created_by . ' ' .$comments->lastname).' </strong></p>
+                  </div>
+                </li>';
+                 }else if($comments->comment_msg=='Enquiry Created'){ 
+             $html.='   <li>
+                  <div class="cbp_tmicon cbp_tmicon-phone"  style="background:#d68910;"></div>
+                  <div class="cbp_tmlabel"  style="background:#95a5a6;">
+                    <span style="font-weight:900;font-size:15px;">'. ucfirst($comments->comment_msg).' </span></br>';
+                     if($comments->comment_msg=='Stage Updated'){ 
+             $html.='<span style="font-weight:900;font-size:12px;">'. ucfirst($comments->lead_stage_name).' </span>
+                    </br>
+                    <span style="font-weight:900;font-size:10px;">'.ucfirst($comments->description).' </span>
+                    </br>
+                    <span style="font-weight:900;font-size:10px;">'. ucfirst($comments->remark).' </span>';
+                     } 
+              $html.='<p>'. date("j-M-Y h:i:s a",strtotime($comments->ddate)).' <br>
+                    Updated By : <strong>'. ucfirst($comments->comment_created_by . ' ' .$comments->lastname).' </strong></p>
+                  </div>
+                </li>';
+                 }else if($comments->comment_msg=='Enquiry dropped' || $comments->comment_msg=='Lead dropped' || $comments->comment_msg=='Client dropped'){ 
+            $html.='<li>
+                  <div class="cbp_tmicon cbp_tmicon-phone"  style="background:#d68910;"></div>
+                  <div class="cbp_tmlabel"  style="background:#95a5a6;">
+                    <span style="font-weight:900;font-size:15px;">'. ucfirst($comments->comment_msg).' </span></br>
+                    
+                    <span style="font-size:12px;">Reason:- </span><span style="font-size:11px;">'; 
+            if(!empty($comments->drop_status)) 
+                {
+           $html.= ''.get_drop_status_name($comments->drop_status).'</span>
+                    <br>';
+                }
+            $html.= '<span style="font-size:12px;">Remark:- </spna><span style="font-size:11px;">'; if(!empty($comments->drop_reason))
+                    {
+                        $html.=''.$comments->drop_reason.'</span>';
+                    } 
+
+
+                     if($comments->comment_msg=='Stage Updated'){ 
+             $html.='<span style="font-weight:900;font-size:12px;">'. ucfirst($comments->lead_stage_name).' </span>
+                    </br>
+                    <span style="font-weight:900;font-size:10px;">'.ucfirst($comments->description).' </span>
+                    </br>
+                    <span style="font-weight:900;font-size:10px;">'.ucfirst($comments->remark).' </span>';
+                     } 
+               $html.='<p>'. date("j-M-Y h:i:s a",strtotime($comments->ddate)).' <br>
+                    Updated By : <strong>'. ucfirst($comments->comment_created_by . ' ' .$comments->lastname).' </strong></p>
+                  </div>
+                </li>';
+                 }else{ 
+   $html.='  <li>
+                  <div class="cbp_tmicon cbp_tmicon-phone"  style=""></div>
+                  <div class="cbp_tmlabel"  style="background:#95a5a6;">
+                    <span style="font-weight:900;font-size:15px;">'. ucfirst($comments->comment_msg).' </span></br>';
+                     if($comments->comment_msg=='Stage Updated'){ 
+              $html.='<span style="font-weight:900;font-size:12px;">'. ucfirst($comments->lead_stage_name).' </span>
+                    </br>
+                    <span style="font-weight:900;font-size:10px;">'.ucfirst($comments->description).' </span>
+                    </br>
+                    <span style="font-weight:900;font-size:10px;">'.ucfirst($comments->description).' </span>';
+                     } 
+ $html.='<p>'. date("j-M-Y h:i:s a",strtotime($comments->ddate)).' <br>
+                      Updated By : <strong>'. ucfirst($comments->comment_created_by . ' ' .$comments->lastname).' </strong></p>
+                  </div>
+                </li>';
+                 
+                } 
+              }
+                            
+     $html.='</ul>';
+     echo $html; 
+    }
+
+    function deleteDocument($cmmnt_id,$enqcode,$tabname)
+    {
+        // echo "$cmmnt_id";die;
+
+        $dataAry = $this->db->select('fvalue')->from('extra_enquery')->where("comment_id",$cmmnt_id)->get()->result_array();
+
+        $this->db->where("comment_id",$cmmnt_id);
+        $this->db->delete('extra_enquery');
+        $tabname = base64_decode($tabname);
+        if($this->db->affected_rows() > 0)
+        {   
+            if ($tabname == "Documents")
+            {
+
+               foreach ($dataAry as $k)
+                {   //echo "ddd".$k['fvalue'];die;
+                    //echo"<pre>";print_r($k);die;
+                    unlink($k['fvalue']);
+                }
+            }
+            
+            $this->Leads_Model->add_comment_for_events("$tabname Deleted  From This Enquiry", $enqcode);
+        }
+        redirect($this->agent->referrer());
     }
 
 

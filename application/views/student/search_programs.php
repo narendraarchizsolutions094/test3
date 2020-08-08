@@ -131,6 +131,7 @@ button.owl-prev span, button.owl-next span{
 						<option value="6/53" <?php if(!empty($filter)){ if($filter[8]=='6/53'){echo 'selected';}}?>>6/53</option>
 						<option value="5.5/50" <?php if(!empty($filter)){ if($filter[8]=='5.5/50'){echo 'selected';}}?>>5.5/50</option>
 						<option value="5/48" <?php if(!empty($filter)){ if($filter[8]=='5/48'){echo 'selected';}}?>>5/48</option>
+						<option value="Without IELTS" <?php if(!empty($filter)){ if($filter[8]=='Without IELTS'){echo 'selected';}}?>>Without IELTS</option>
                     </select>
                   </div>
 			      
@@ -148,9 +149,12 @@ button.owl-prev span, button.owl-next span{
                     <label for="country_name"><?php echo display('program_length')?> </label>
                     <select class="form-control" name="length" id="length">
                         <option value="" selected>Select length</option>
-                        <?php foreach($length as $lg){ ?>                                   
-                        <option value="<?php echo $lg->id; ?>" <?php if(!empty($filter)){ if($lg->id==$filter[3]){echo 'selected';}}?>><?php echo $lg->length; ?></option>
-                    <?php } ?>
+                        <?php 
+                            if (!empty($length)) {
+                                foreach($length as $lg){ ?>                                   
+                                    <option value="<?php echo $lg->id; ?>" <?php if(!empty($filter)){ if($lg->id==$filter[3]){echo 'selected';}}?>><?php echo $lg->length; ?></option>
+                                <?php }
+                            } ?>
                     </select>
                   </div>
 				  

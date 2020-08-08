@@ -1,8 +1,6 @@
-<?php 
-
-defined('BASEPATH') OR exit('No direct script access allowed');
-    
-    function is_active_field($id,$process=0){		
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');    
+    function is_active_field($id,$process=0){
     	$ci =& get_instance();
     	$comp_id	=	$ci->session->companey_id;
     	$where = "field_id=$id ";    	
@@ -21,9 +19,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	    		return false;
 	    	}
 	    }
-
     }
-
     function is_active_field_api($id,$process=0,$comp_id){       
         $ci =& get_instance();
         $comp_id    =   $comp_id;
@@ -43,17 +39,65 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 return false;
             }
         }
-
+    }
+    function get_stage_name($id) {
+        $ci = & get_instance();
+        $ci->load->database();
+        return $ci->db->get_where('lead_stage', array('stg_id'    => $id))->row_array() ['lead_stage_name'];
+    }
+    function get_drop_status_name($id) {
+        $ci = & get_instance();
+        $ci->load->database();
+        return $ci->db->get_where('tbl_drop', array('d_id'=> $id))->row_array() ['drop_reason'];
     }
 
-function get_stage_name($id) {
-    $ci = & get_instance();
-    $ci->load->database();
-    return $ci->db->get_where('lead_stage', array('stg_id'    => $id))->row_array() ['lead_stage_name'];
-}
+    function get_enquery_code($id_prefix='ENQ') {
+        $code = genret_code();
+        $code2 = $id_prefix.$code;
+        // Get a reference to the controller object
+        $CI = get_instance();
+        // You may need to load the model if it hasn't been pre-loaded
+        $CI->load->model('enquiry_model');
+        $response = $CI->enquiry_model->check_existance($code2);    
+        if ($response) {        
+            $this->get_enquery_code();
+        } else {        
+            return $code2;
+        }
+    }
+    
+    function genret_code() {
+        $pass  = "";
+        $chars = array("0","1","2","3","4","5","6","7","8","9");
+        for ($i=0;$i<12;$i++) {
+            $pass .= $chars[mt_rand(0, count($chars) - 1)];
+        }
+        return $pass;
+    }
+    function curl($options){    
+        $url     =  $options['url'];
+        $curl = curl_init();        
+        $curl_settings    =   array(
+                                  CURLOPT_URL => $url,
+                                  CURLOPT_RETURNTRANSFER => true,
+                                  CURLOPT_ENCODING => "",
+                                  CURLOPT_MAXREDIRS => 10,
+                                  CURLOPT_TIMEOUT => 0,
+                                  CURLOPT_FOLLOWLOCATION => true,
+                                  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                                  CURLOPT_CUSTOMREQUEST => $options['request_type']
+                                );
+        
+        if (!empty($options['header'])) {
+            $curl_settings[CURLOPT_HTTPHEADER] = $options['header'];
+        }
+        
+        if (!empty($options['data'])) {
+            $curl_settings[CURLOPT_POSTFIELDS] = $options['data'];
+        }
 
-function get_drop_status_name($id) {
-    $ci = & get_instance();
-    $ci->load->database();
-    return $ci->db->get_where('tbl_drop', array('d_id'    => $id))->row_array() ['drop_reason'];
-}
+        curl_setopt_array($curl, $curl_settings);
+        $response = curl_exec($curl);       
+        curl_close($curl);
+        return $response;
+    }

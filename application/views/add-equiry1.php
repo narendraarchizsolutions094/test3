@@ -1,6 +1,6 @@
 <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>   
-  
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
 
 <style>
    label{         
@@ -21,11 +21,12 @@
          <div class="row">          
             <?php              
             if (!$invalid_process) { ?>              
-            <form method="post" action="<?=base_url()?>enquiry/create">
+            <form method="post" action="<?=base_url()?>enquiry/create" id="enquiry_form">
               <div id="process_basic_fields" class="row">
               </div>            
               <div class="row">
-                  <button class="btn btn-success" type="submit">Save</button>
+                  <button class="btn btn-primary" type="submit">Save</button>
+                  <input  class="btn btn-success" type="button" id="saveandnew" value="Save And Create New"/>
               </div>
             </form>
             <?php
@@ -45,6 +46,39 @@
       </div>
    </div>
 </div>
+
+<script type="text/javascript">
+  
+  $('input#saveandnew').click( function() {
+    $.ajax({
+        url: "<?=base_url()?>enquiry/create",
+        type: 'post',
+        dataType: 'json',
+        data: $('form#enquiry_form').serialize(),
+        success: function(data) 
+        {
+          if(data.status == "success")
+          {
+            //swal("success","Your Enquiry has been  Successfully created","success");
+            Swal.fire({
+              icon: 'success',
+              title: 'Your Enquiry has been  Successfully created',
+              showConfirmButton: true,
+            });
+            $('#enquiry_form').trigger("reset");
+          }
+          else
+          {
+            Swal.fire({
+              icon: 'warning',
+              title: data.error,
+              showConfirmButton: true,
+            });
+          }
+        }
+    });
+});
+</script>
 
 <script type="text/javascript">
 function add_more_phone(add_more_phone) {

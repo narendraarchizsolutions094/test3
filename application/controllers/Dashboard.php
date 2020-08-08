@@ -340,6 +340,7 @@ public function login_in_process(){
 						'telephony_token'       => $check_user->row()->telephony_token,
                         'process'               => $process_ids,
                         'expiry_date'           => strtotime($check_user->row()->valid_upto),
+                        'account_type'          => $check_user->row()->account_type,
                     ]);         
                     $res = array('status'=>true,'message'=>'Logged in');                                        
                }else{                    
@@ -377,48 +378,61 @@ public function login_in_process(){
         $this->load->view('layout/main_wrapper', $data);
     }
 	
-	public function home() {
-        // print_r($_SESSION);die;
+	public function home() 
+    {
        
         if ($this->session->userdata('isLogIn') == false)
-            redirect('login');
+        redirect('login');
+
         $data = array();
-        //if ($this->session->companey_id != 57) {
-            $this->load->model('dash_model');
-    		if($this->session->userdata('user_right')==151){
-    		$data['ins_list'] = $this->location_model->stu_ins_list();
-    		redirect('dashboard/search_programs');
-            }else{
-                //$process = implode(',', $this->session->process);
-    		// $data['disposition'] = $this->dash_model->disposition_list_graph();
-    		// $data['source'] = $this->dash_model->source_list_graph();
-    		// $data['drop'] = $this->dash_model->drop_list_graph();
-    		//$data['all_enquiery'] = $this->enquiry_model->all_enqueries();
+        $this->load->model('dash_model');
+        if($this->session->userdata('user_right')==151 || $this->session->userdata('user_right')==180 || $this->session->userdata('user_right')==183)
+        {
+            $data['ins_list'] = $this->location_model->stu_ins_list();
+            redirect('dashboard/search_programs');
+        }
+        else
+        {
             $data['counts'] = $this->enquiry_model->enquiryLeadClientCount($this->session->user_id,$this->session->companey_id);
             $data['msg'] = '';
             //print_r($_SESSION);die;
-                date_default_timezone_set('Asia/Kolkata');
-                $from = $this->session->expiry_date;
-                $today = time();
-                $difference = $today - $from;
-                $days = floor($difference / 86400);
-                if($days >=5)
+            date_default_timezone_set('Asia/Kolkata');
+            $from = $this->session->expiry_date;
+            $today = time();
+            $difference = $from - $today;
+            $days = floor($difference / 86400);
+            //echo "string".$days;die;
+            if($this->session->account_type == 1)
+            {
+                if($days <= 5 && $days > 0)
                 {
-                    $data['msg'] = "Your Account will expire after $days days Please contact your site admin";
+                    $data['msg'] = "Your Account will expire after $days days Please contact your site admin to extend validity";
                 }
-            //print_r($data['counts']);die;
-           // $data['dashboard_data'] = $this->enquiry_model->all_enqueries_api($this->session->user_id,$this->session->companey_id,$process);
-            //echo"<pre>";print_r($data['dashboard_data']);die;
-            //$data['dashboard_data'] = array();
+                if($days <= 0)
+                {
+                    $data['msg'] = "Your Account hs been expired on ".date('d-M-Y',strtotime($this->session->expiry_date))." Please contact your site admin to extend validity";
+                }
+            }
+            else
+            {   if($days <= 5 && $days > 0)
+                {
+                    $data['msg'] = "Your Account will expire after $days days Please contact your site admin to extend validity";
+                }
+                if($days <= 0)
+                {
+                    $array['heading'] = "Trial Account Expired";
+                    $array['message'] = "Your trial account validity has been ended please contact to site administrator";
+                    $this->load->view("errors/html/error_general",$array,true);
+                }
+            }
+            
             $data['state']   = $this->enquiry_model->get_state();
-             // print_r($data['state']);exit();
-    		$data['products'] = $this->dash_model->product_list_graph();
-    		$data['taskdata'] = $this->dash_model->task_list();
-    		$data['cmtdata'] = $this->dash_model->all_comments();
-    		}
-            $data['lead_score'] = $this->db->query('select * from lead_score limit 3')->result();
-    		$data['content'] = $this->load->view('home', $data, true);	            
-        //}
+            $data['products'] = $this->dash_model->product_list_graph();
+            $data['taskdata'] = $this->dash_model->task_list();
+            $data['cmtdata'] = $this->dash_model->all_comments();
+        }
+        $data['lead_score'] = $this->db->query('select * from lead_score limit 3')->result();
+        $data['content'] = $this->load->view('home', $data, true);	     
         $this->load->view('layout/main_wrapper', $data);
     }
 
@@ -555,6 +569,11 @@ public function login_in_process(){
     {   
        // echo "string";die;
         $chartData = $this->enquiry_model->despositionDataChart($this->session->user_id,$this->session->companey_id);
+
+        /*echo "<pre>";
+        print_r($chartData);
+        echo "</pre>";
+        exit(); */
 
         $desplst    = $chartData['desplst'];
         $enquiry    = $chartData['despenq'];
@@ -796,7 +815,7 @@ public function login_in_process(){
         $this->form_validation->set_rules('cell', display('cell'), 'required|max_length[10]');
         $this->form_validation->set_rules('state_id', display('state_name'), 'required');
         $this->form_validation->set_rules('city_name', display('city_name'), 'required');
-        $this->form_validation->set_rules('user_role', display('user_role'), 'required');
+        //$this->form_validation->set_rules('user_role', display('user_role'), 'required');
         $this->form_validation->set_rules('user_type', display('user_type'), 'required');
         $this->form_validation->set_rules('modules', display('customer_services'));
         $this->form_validation->set_rules('status', display('status'), 'required');
@@ -1082,21 +1101,29 @@ public function login_in_process(){
         $user_id = $this->session->userdata('user_id');
 		$comp_id = $this->session->userdata('companey_id');
 		
-		$this->db->select("*,tbl_crsmaster.course_name");
+		/*$this->db->select("*,tbl_crsmaster.course_name");
         $this->db->from('tbl_course');
 		$this->db->join('tbl_institute','tbl_institute.institute_id = tbl_course.institute_id');
 		$this->db->join('tbl_country','tbl_country.id_c=tbl_institute.country_id','left');
 		$this->db->join('tbl_crsmaster','tbl_crsmaster.id = tbl_course.course_name');
 		if($this->session->userdata('companey_id')!=67){
-		$this->db->join('tbl_schdl','tbl_schdl.ins_id=tbl_institute.institute_id','left');
-		$this->db->order_by('tbl_institute.institute_id','asc');
-        $q = $this->db->get()->result();
+    		$this->db->join('tbl_schdl','tbl_schdl.ins_id=tbl_institute.institute_id','left');
+    		$this->db->order_by('tbl_institute.institute_id','asc');
+            $q = $this->db->get()->result();
 		}else{
-        $this->db->order_by('tbl_course.institute_id','asc');
-		$this->db->where('tbl_course.comp_id',$comp_id);
-        $q = $this->db->get()->result();
-		}
+            $this->db->order_by('tbl_course.institute_id','asc');
+    		$this->db->where('tbl_course.comp_id',$comp_id);
+            $q = $this->db->get()->result();
+		}*/
+
+        $this->load->model('program_model');
+        $q  =   $this->program_model->get_data();
+        $data['count_filtered_data']  =   $this->program_model->count_filtered_data();
+        $data['all_data_count']  =   $this->program_model->count_all_data();
+        $data['courses'] = $q;
+        $data['i'] = 1;
 		$data["courses"] = $q;
+
 		
 		if($this->session->userdata('companey_id')==67){
 		$data['discipline'] = $this->location_model->find_discipline();
@@ -1113,11 +1140,6 @@ public function login_in_process(){
     }
 	
 	public function get_uni_data(){
-		
-		$limit  = 8;
-		$page = 1;
-		$offset = ($page - 1)* $limit;
-				
          $layout = $this->session->userdata('layout');
 		 $crs = $this->input->post('crs_id');
          $ins = $this->input->post('ins_id');
@@ -1129,90 +1151,33 @@ public function login_in_process(){
 		 $state = $this->input->post('state_id');
 		 $ielts = $this->input->post('ielts');
 
-	if($this->session->userdata('companey_id')!=67){
-		$this->db->select("*");
-        $this->db->from('tbl_institute');
-		$this->db->join('tbl_course','tbl_course.institute_id=tbl_institute.institute_id');
-		$this->db->join('tbl_country','tbl_country.id_c=tbl_institute.country_id');
-		$this->db->join('tbl_schdl','tbl_schdl.ins_id=tbl_institute.institute_id','left');
-		if($ins!='' && $cntry=='' && $crs=='' && $dt==''){
-		$this->db->where('tbl_institute.institute_id', $ins);
-		}else if($dt!='' && $ins=='' && $cntry=='' && $crs==''){
-		$this->db->where('tbl_schdl.schdl_dt', $dt);
-		}else if($dt=='' && $ins=='' && $cntry!='' && $crs==''){
-		$this->db->where('tbl_institute.country_id', $cntry);
-		}else if($dt=='' && $ins=='' && $cntry=='' && $crs!=''){
-		$this->db->like('tbl_course.course_name', $crs);
-		}else{
-		$this->db->like('tbl_course.course_name', $crs);
-		$this->db->or_where('tbl_institute.institute_id', $ins);
-		$this->db->or_where('tbl_schdl.schdl_dt', $dt);
-		$this->db->or_where('tbl_institute.country_id', $cntry);
-		$this->db->or_where('tbl_course.institute_id', $ins);
-		}
-        $this->db->order_by('tbl_institute.institute_id','asc');
-        $q = $this->db->get()->result();
-	}else{
-		
-		$this->db->select("*,tbl_crsmaster.course_name");
-        $this->db->from('tbl_course');
-		$this->db->join('tbl_institute','tbl_institute.institute_id = tbl_course.institute_id');
-		$this->db->join('tbl_crsmaster','tbl_crsmaster.id = tbl_course.course_name');
-
-		if($ins!=''){
-		$this->db->where('tbl_course.institute_id', $ins);
-		}
-		if($cntry!=''){
-		$this->db->where('tbl_institute.country_id', $cntry);
-		}
-		if($crs!=''){
-		$this->db->where('tbl_course.crs_id', $crs);
-		}
-		if($length!=''){
-		$this->db->where('tbl_course.length_id', $length);
-		}
-		if($level!=''){
-		$this->db->where('tbl_course.level_id', $level);
-		}
-		if($discipline!=''){
-		$this->db->where('tbl_course.discipline_id', $discipline);
-		}
-		if($state!=''){
-		$this->db->where('tbl_institute.state_id', $state);
-		}
-		if($ielts!=''){
-		$this->db->where('tbl_course.course_ielts', $ielts);
-		}
-        $this->db->order_by('tbl_course.crs_id','asc');
-        $q = $this->db->get()->result();
-		
-	}
-	    $datafilter = array($dt,$cntry,$level,$length,$discipline,$ins,$crs,$state,$ielts);
-		
-		    $data["courses"] = $q;
-		    $data["filter"] = $datafilter;
-		/* echo "<pre>";
-        print_r($data["filter"]);exit;
-        echo "</pre>";*/	
-			$ttlpagearr  = count($q);
-			
-			$data["totpage"] = (!empty($ttlpagearr[0]->total)) ? $ttlpagearr[0]->total : 0;
-			$data["pageno"]  = (!empty($ttlpagearr[0]->total)) ? ceil($ttlpagearr[0]->total/$limit) : 0; 
-			$data["currpage"]=  1;
-			$grnrid = "";
-			$data['vid_list'] = $this->Institute_model->videos();
-			$data['state_list'] = $this->location_model->all_states();
-			$data['county_list'] = $this->location_model->country();
-		    $data['ins_list'] = $this->location_model->stu_ins_list();
-		    $data['crs_list'] = $this->location_model->stu_crs_list();
-			$data['course'] = $this->Institute_model->all_crs_list();
-			$data['discipline'] = $this->location_model->find_discipline();
-		    $data['level'] = $this->location_model->find_level();
-		    $data['length'] = $this->location_model->find_length();
-			$data['content'] = $this->load->view('student/search_programs', $data, true);
-            $this->load->view('layout/main_wrapper', $data);
-
-	    }
+        $this->load->model('program_model');
+        $q  =   $this->program_model->get_data();
+        $data['count_filtered_data']  =   $this->program_model->count_filtered_data();
+        $data['all_data_count']  =   $this->program_model->count_all_data();
+        $data['i'] = 0;
+	
+	    $datafilter = array($dt,$cntry,$level,$length,$discipline,$ins,$crs,$state,$ielts);		
+	    $data["courses"] = $q;
+	    $data["filter"] = $datafilter;
+		$ttlpagearr  = count($q);			
+		$data["totpage"] = (!empty($ttlpagearr[0]->total)) ? $ttlpagearr[0]->total : 0;
+		$data["pageno"]  = (!empty($ttlpagearr[0]->total)) ? ceil($ttlpagearr[0]->total/$limit) : 0; 
+		$data["currpage"]=  1;
+		$grnrid = "";
+		$data['vid_list'] = $this->Institute_model->videos();
+		$data['state_list'] = $this->location_model->all_states();
+		$data['county_list'] = $this->location_model->country();
+	    $data['ins_list'] = $this->location_model->stu_ins_list();
+	    $data['crs_list'] = $this->location_model->stu_crs_list();
+		$data['course'] = $this->Institute_model->all_crs_list();
+		$data['discipline'] = $this->location_model->find_discipline();
+	    $data['level'] = $this->location_model->find_level();
+	    $data['length'] = $this->location_model->find_length();
+		$data['content'] = $this->load->view('student/search_programs', $data, true);
+        $this->load->view('layout/main_wrapper', $data);
+ 
+    }
 		
 public function user_profile() {
 		$data['title'] = display('user_profile');
@@ -1232,6 +1197,7 @@ public function user_profile() {
 		$data['ins_list'] = $this->location_model->stu_ins_list();
         $data['schdl_list'] = $this->schedule_model->get_schedule_list();
 		}
+        $data['lead_stage']    =   $this->Leads_Model->find_stage();
 		$data['source_list'] = $this->home_model->sour_list();
 		$data['process_list'] = $this->home_model->pro_list();
         $data['invoice_details'] = $this->home_model->invoicedetail($en_id);		
@@ -1979,6 +1945,19 @@ public function add_wishlist() {
     );
     $this->db->insert('tbl_wishlist',$data);
 	redirect('dashboard/search_programs');
+    }
+	
+	public function course_details() {
+		$ins=$this->uri->segment(3);
+		$crs=$this->uri->segment(4);
+		$data['title'] = display('course_details');
+		$data['ins_details'] = $this->location_model->ins_details($ins);
+		$data['crs_details'] = $this->location_model->crs_details($crs);
+		  /* echo '<pre>';
+		print_r($data['ins_details']);
+		echo '</pre>';exit; */ 
+		$data['content'] = $this->load->view('student/detail_page', $data, true);
+        $this->load->view('layout/main_wrapper', $data);
     }
 	/********************************************************student panel*******************************************/
 

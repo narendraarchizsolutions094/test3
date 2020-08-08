@@ -21,6 +21,14 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
         
 <!-- Time line css start -->
 <style>
+  .hide-timeline{
+    display: none;
+  }
+  #toggle_timeline{
+    position: fixed;
+    top: 94px;
+    right: 0;
+  }
   <?php if($this->session->companey_id == 29) {        
     $c = 0;
     if ($enquiry->partner_id && $enquiry->status == 3) {
@@ -562,7 +570,7 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                 <i class="fa fa-thumbs-o-down"></i>
                 </a>
                 <?php }elseif ($enquiry->status==2) { ?>
-                  <a class="btn  btn-info" title="Mark as Client" href="<?=base_url().'lead/convert_to_lead/'.$enquiry->enquiry_id?>">
+                  <a class="btn  btn-info" title="Mark as Client" href="<?=base_url().'lead/convert_to_lead/'.$enquiry->enquiry_id?>" onclick="return confirm('Are you sure you want to Mark this lead as client ?')" >
                   <i class="fa fa-user"></i>
                   <a class="btn btn-danger"  type="button" title="Drop Lead" data-target="#dropEnquiry" data-toggle="modal">
                   <i class="fa fa-thumbs-o-down"></i>
@@ -633,7 +641,7 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                   <input type="text" class="form-control" value="<?php if(!empty($details->email)){echo $details->email;} ?>" name="email1" placeholder="Email">
                </div>
 
-                     <div class="form-group col-sm-12" id="otherTypev">
+                     <div class="" id="otherTypev">
                                     <div class="form-group col-sm-12">
                                     <input type="date" name="c_date" id='disposition_c_date' class="form-control" placeholder=""  >
                                 </div>
@@ -656,29 +664,30 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
             </div>         
       </div>
 
-      <div class="col-md-6 card card-body col-height" style="background:#fff;border-top: unset;">
+      <div class="col-md-6 card card-body col-height details-column" style="background:#fff;border-top: unset;">
          <div id="exTab3" class="">
             <ul  class="nav nav-tabs" role="tablist">              
               <li class="active"><a  href="#basic" data-toggle="tab" style="padding: 10px 10px; font-size:12px;">Basic</a></li>   
              <?php if($this->session->userdata('companey_id')==292) {  if($enquiry->status==3) {?>
-              <li><a href="#followup" data-toggle="tab" style="padding: 10px 10px; font-size:12px;">AMC</a></li>
+              <li><a href="#followup" data-toggle="tab" style="padding: 10px 10px;">AMC</a></li>
 
                <?php } } if($enquiry->status==3) { 
 
                  if(in_array(300,$module) || in_array(301,$module) || in_array(302,$module) || in_array(303,$module)){ 
                 ?>
-                <li><a href="#order" data-toggle="tab" style="padding: 10px 10px; font-size:12px;">Order Details</a></li> 
+                <li><a href="#order" data-toggle="tab" style="padding: 10px 10px;">Order Details</a></li> 
                 <?php }
                  }?>     
                  <?php if($this->session->userdata('companey_id')==29){?>  
-                <li><a href="#amount" data-toggle="tab" style="padding: 10px 10px; font-size:12px;">Amount</a></li> 
+                <li><a href="#amount" data-toggle="tab" style="padding: 10px 10px;">Amount</a></li> 
                 <?php }?>      
 
                 <?php 
               if(!empty($tab_list)){
+                //print_r($tab_list);die;
                 foreach ($tab_list as $key => $value) { 
                   if ($value['id'] != 1) { ?>
-                    <li><a href="#<?=str_replace(' ', '_', $value['title'])?>" data-toggle="tab" style="padding: 10px 10px; font-size:12px;"><?=$value['title']?></a></li>
+                    <li><a href="#<?=str_replace(' ', '_', $value['title'])?>" data-toggle="tab" style="padding: 10px 10px;"><?=$value['title']?></a></li>
                 <?php
                   }
                 }
@@ -686,16 +695,16 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
               ?>
 			<?php
               if (user_access('240')===true) { ?>
-               <li><a href="#institute" data-toggle="tab" style="padding: 10px 10px; font-size:12px;">Institute</a></li>
+               <li><a href="#institute" data-toggle="tab" style="padding: 10px 10px;">Institute</a></li>
 			  <?php } ?>
 			<?php if ($this->session->companey_id=='67') { ?>
               <!--<li><a href="#qalification" data-toggle="tab" style="padding: 10px 10px; font-size:12px;">Qualifications</a></li>
               <li><a href="#english" data-toggle="tab" style="padding: 10px 10px; font-size:12px;">English Language</a></li>-->			  
-			  <li><a href="#payment" data-toggle="tab" style="padding: 10px 10px; font-size:12px;">Payment</a></li>
-              <li><a href="#aggrement" data-toggle="tab" style="padding: 10px 10px; font-size:12px;">Aggrement</a></li>
+			  <li><a href="#payment" data-toggle="tab" style="padding: 10px 10px;">Payment</a></li>
+              <li><a href="#aggrement" data-toggle="tab" style="padding: 10px 10px;">Aggrement</a></li>
 			<?php } ?>
-			<li><a href="#task" data-toggle="tab" style="padding: 10px 10px; font-size:12px;">Task</a></li>
-              <li><a  href="#related_enquiry" data-toggle="tab" style="padding: 10px 10px; font-size:12px;">Related Data</a></li>
+			<li><a href="#task" data-toggle="tab" style="padding: 10px 10px;">Task</a></li>
+              <li><a  href="#related_enquiry" data-toggle="tab" style="padding: 10px 10px;">Related Data</a></li>
 
             </ul>
             <div class="tab-content clearfix">
@@ -968,28 +977,33 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                               <th>
                                 Institute Name
                               </th>
-							  <th>
+                              <?php if ($this->session->companey_id=='67') { ?>
+							                 <th>
                                 Course Name
                               </th>
-							  <th>
+							                 <th>
                                 Program Lavel
                               </th>
-							  <th>
+							                  <th>
                                 Program Length
                               </th>
-							  <th>
+							                 <th>
                                 Program Discipline
                               </th>
-							  <th>
+                              
+							                <th>
                                 Tuition Fee
                               </th>
-							  <th>
+							                 <th>
                                 Offer letter fee
                               </th>
+                                <?php
+                              }
+                              ?>
                               <th>
                                 Application URL
                               </th>
-							  <?php if ($this->session->companey_id!='67') { ?>
+							             <?php if ($this->session->companey_id!='67') { ?>
                               <th>
                                 Major
                               </th>
@@ -999,7 +1013,7 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                               <th>
                                 Password
                               </th>
-							  <?php } ?>
+							             <?php } ?>
                               <th>
                                 App status
                               </th>
@@ -1018,11 +1032,11 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                               <th>
                                 CV
                               </th>
-							  <?php if ($this->session->companey_id!='67') { ?>
+							             <?php if ($this->session->companey_id!='67') { ?>
                               <th>
                                 GRE/GMAT
                               </th>
-							  <?php } ?>
+							             <?php } ?>
                               <th>
                                 TOEFL/IELTS /PTE
                               </th>
@@ -1043,27 +1057,32 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                               foreach ($institute_data as $key => $value) { ?>
                                 <tr>
                                     <td><?=$value['institute_name']?></td>
-<td><?php foreach($course_list as $cl){if($cl->crs_id==$value['course_id']){echo $cl->course_name;}}?></td>
-<td><?php foreach($level as $lvl){if($lvl->id==$value['p_lvl']){echo $lvl->level;}}?></td>
-<td><?php foreach($length as $lg){if($lg->id==$value['p_length']){echo $lg->length;}}?></td>
-<td><?php foreach($discipline as $dc){if($dc->id==$value['p_disc']){echo $dc->discipline;}}?></td>
-<td><?=$value['t_fee']?></td>
-<td><?=$value['ol_fee']?></td>                                    
+                                  <?php if ($this->session->companey_id=='67') { ?>
+                                    <td><?php foreach($course_list as $cl){if($cl->crs_id==$value['course_id']){echo $cl->course_name;}}?></td>
+                                    <td><?php foreach($level as $lvl){if($lvl->id==$value['p_lvl']){echo $lvl->level;}}?></td>
+                                    <td><?php foreach($length as $lg){if($lg->id==$value['p_length']){echo $lg->length;}}?></td>
+                                    <td><?php foreach($discipline as $dc){if($dc->id==$value['p_disc']){echo $dc->discipline;}}?></td>                                  
+
+                                    <td><?=$value['t_fee']?></td>
+                                    <td><?=$value['ol_fee']?></td>                                    
+                                  <?php
+                                  }
+                                  ?>
                                     <td><?=$value['application_url']?></td>
-									<?php if ($this->session->companey_id!='67') { ?>
+									               <?php if ($this->session->companey_id!='67') { ?>
                                     <td><?=$value['major']?></td>
                                     <td><?=$value['user_name']?></td>
                                     <td><?=$value['password']?></td>
-									<?php } ?>
+									               <?php } ?>
                                     <td><?=$value['app_status_title']?></td>
                                     <td><?=$value['app_fee']?></td>
                                     <td><?=$value['transcript']?></td>
                                     <td><?=$value['lors']?></td>
                                     <td><?=$value['sop']?></td>
                                     <td><?=$value['cv']?></td>
-									<?php if ($this->session->companey_id!='67') { ?>
+									               <?php if ($this->session->companey_id!='67') { ?>
                                     <td><?=$value['gre_gmt']?></td>
-									<?php } ?>
+									               <?php } ?>
                                     <td><?=$value['toefl']?></td>
                                     <td><?=$value['remark']?></td>
                                     <td><?=$value['followup_comment']?></td>
@@ -1925,7 +1944,7 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                   <div class="tab-pane" id="<?=str_replace(' ', '_', $value['title'])?>">
                   <?php
                   if ($value['id'] != 1) {
-                    echo tab_content($value['id'],$this->session->companey_id,$enquiry_id); 
+                    echo tab_content($value['id'],$this->session->companey_id,$enquiry_id,str_replace(' ', '_', $value['title'])); 
                   }
                   ?>
                   </div>
@@ -1940,121 +1959,11 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
             </div>
       </div>
       </div>
-      <div class="col-md-3 col-height">        
+      <div class="col-md-3 col-height activitytimelinediv">        
          <h3 class="text-center">Activity Timeline</h3><hr>
-          <ul class="cbp_tmtimeline" style="margin-left:-30px;">
-
-              <?php  
-              foreach($comment_details as $comments){ ?>
-              <?php if($comments->comment_msg=='Stage Updated'){ ?>
-                <li>
-                  <div class="cbp_tmicon cbp_tmicon-phone" style="background:#cb4335;"></div>
-                  <div class="cbp_tmlabel"  style="background:#95a5a6;">
-                    <span style="font-weight:900;font-size:15px;"><?php echo ucfirst($comments->comment_msg); ?></span></br>
-                    <?php if($comments->comment_msg=='Stage Updated'){ ?>
-                    <span style="font-weight:900;font-size:12px;"><?php echo ucfirst($comments->lead_stage_name); ?></span>
-                    </br>
-                    <span style="font-weight:900;font-size:10px;"><?php echo ucfirst($comments->description); ?></span>
-                    </br>
-                    <span style="font-weight:900;font-size:10px;"><?php echo ucfirst($comments->remark); ?></span>
-                    <?php } ?>
-                    <p><?php echo date("j-M-Y h:i:s a",strtotime($comments->ddate)); ?><br>
-                    Updated By : <strong><?php echo ucfirst($comments->comment_created_by . ' ' .$comments->lastname); ?></strong></p>
-                  </div>
-                </li>
-                <?php }else if($comments->comment_msg=='Enquiry moved'){ ?>
-                <li>
-                  <div class="cbp_tmicon cbp_tmicon-phone"  style="background:#148f77;"></div>
-                  <div class="cbp_tmlabel"  style="background:#95a5a6;">
-                    <span style="font-weight:900;font-size:15px;"><?php echo ucfirst($comments->comment_msg); ?></span></br>
-                    <?php if($comments->comment_msg=='Stage Updated'){ ?>
-                    <span style="font-weight:900;font-size:12px;"><?php echo ucfirst($comments->lead_stage_name); ?></span>
-                    </br>
-                    <span style="font-weight:900;font-size:10px;"><?php echo ucfirst($comments->description); ?></span>
-                    </br>
-                    <span style="font-weight:900;font-size:10px;"><?php echo ucfirst($comments->remark); ?></span>
-                    <?php } ?>
-                    <p><?php echo date("j-M-Y h:i:s a",strtotime($comments->ddate)); ?><br>
-                      Updated By : <strong><?php echo ucfirst($comments->comment_created_by . ' ' .$comments->lastname); ?></strong></p>
-                  </div>
-                </li>
-                <?php }else if($comments->comment_msg=='Move to leads'){ ?>
-                <li>
-                  <div class="cbp_tmicon cbp_tmicon-phone"  style="background:#2980b9;"></div>
-                  <div class="cbp_tmlabel"  style="background:#95a5a6;">
-                  <span style="font-weight:900;font-size:15px;"><?php echo ucfirst($comments->comment_msg); ?></span></br>
-                    <?php if($comments->comment_msg=='Stage Updated'){ ?>
-                    <span style="font-weight:900;font-size:12px;"><?php echo ucfirst($comments->lead_stage_name); ?></span>
-                    </br>
-                    <span style="font-weight:900;font-size:10px;"><?php echo ucfirst($comments->description); ?></span>
-                    </br>
-                    <span style="font-weight:900;font-size:10px;"><?php echo ucfirst($comments->remark); ?></span>
-                    <?php } ?>
-                    <p><?php echo date("j-M-Y h:i:s a",strtotime($comments->ddate)); ?><br>
-                    Updated By : <strong><?php echo ucfirst($comments->comment_created_by . ' ' .$comments->lastname); ?></strong></p>
-                  </div>
-                </li>
-                <?php }else if($comments->comment_msg=='Enquiry Created'){ ?>
-                <li>
-                  <div class="cbp_tmicon cbp_tmicon-phone"  style="background:#d68910;"></div>
-                  <div class="cbp_tmlabel"  style="background:#95a5a6;">
-                    <span style="font-weight:900;font-size:15px;"><?php echo ucfirst($comments->comment_msg); ?></span></br>
-                    <?php if($comments->comment_msg=='Stage Updated'){ ?>
-                    <span style="font-weight:900;font-size:12px;"><?php echo ucfirst($comments->lead_stage_name); ?></span>
-                    </br>
-                    <span style="font-weight:900;font-size:10px;"><?php echo ucfirst($comments->description); ?></span>
-                    </br>
-                    <span style="font-weight:900;font-size:10px;"><?php echo ucfirst($comments->remark); ?></span>
-                    <?php } ?>
-                    <p><?php echo date("j-M-Y h:i:s a",strtotime($comments->ddate)); ?><br>
-                    Updated By : <strong><?php echo ucfirst($comments->comment_created_by . ' ' .$comments->lastname); ?></strong></p>
-                  </div>
-                </li>
-                <?php }else if($comments->comment_msg=='Enquiry dropped' || $comments->comment_msg=='Lead dropped' || $comments->comment_msg=='Client dropped'){ ?>
-                <li>
-                  <div class="cbp_tmicon cbp_tmicon-phone"  style="background:#d68910;"></div>
-                  <div class="cbp_tmlabel"  style="background:#95a5a6;">
-                    <span style="font-weight:900;font-size:15px;"><?php echo ucfirst($comments->comment_msg); ?></span></br>
-                    
-                    <span style="font-size:12px;">Reason:- </span><span style="font-size:11px;"><?php if(!empty($comments->drop_status)) echo get_drop_status_name($comments->drop_status);?></span>
-                    <br>
-                    <spna style="font-size:12px;">Remark:- </spna><span style="font-size:11px;"><?php if(!empty($comments->drop_reason)) echo $comments->drop_reason;?></span>
-
-
-                    <?php if($comments->comment_msg=='Stage Updated'){ ?>
-                    <span style="font-weight:900;font-size:12px;"><?php echo ucfirst($comments->lead_stage_name); ?></span>
-                    </br>
-                    <span style="font-weight:900;font-size:10px;"><?php echo ucfirst($comments->description); ?></span>
-                    </br>
-                    <span style="font-weight:900;font-size:10px;"><?php echo ucfirst($comments->remark); ?></span>
-                    <?php } ?>
-                    <p><?php echo date("j-M-Y h:i:s a",strtotime($comments->ddate)); ?><br>
-                    Updated By : <strong><?php echo ucfirst($comments->comment_created_by . ' ' .$comments->lastname); ?></strong></p>
-                  </div>
-                </li>
-                <?php }else{ ?>
-                <li>
-                  <div class="cbp_tmicon cbp_tmicon-phone"  style=""></div>
-                  <div class="cbp_tmlabel"  style="background:#95a5a6;">
-                    <span style="font-weight:900;font-size:15px;"><?php echo ucfirst($comments->comment_msg); ?></span></br>
-                    <?php if($comments->comment_msg=='Stage Updated'){ ?>
-                    <span style="font-weight:900;font-size:12px;"><?php echo ucfirst($comments->lead_stage_name); ?></span>
-                    </br>
-                    <span style="font-weight:900;font-size:10px;"><?php echo ucfirst($comments->description); ?></span>
-                    </br>
-                    <span style="font-weight:900;font-size:10px;"><?php echo ucfirst($comments->description); ?></span>
-                    <?php } ?>
-                    <p><?php echo date("j-M-Y h:i:s a",strtotime($comments->ddate)); ?><br>
-                      Updated By : <strong><?php echo ucfirst($comments->comment_created_by . ' ' .$comments->lastname); ?></strong></p>
-                  </div>
-                </li>
-                <?php 
-                } 
-              }
-              ?>              
-            </ul>
+          
       </div>
-      
+      <i class="fa fa-angle-right btn btn-secondary btn-sm" id="toggle_timeline"></i>      
       <style>
          #exTab3 .nav-tabs > li > a {
          border-radius: 4px 4px 0 0 ;
@@ -3216,6 +3125,23 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
    </div>
 </div>
 
+<script type="text/javascript">
+  $(document).ready(function()
+  {
+    $.ajax({
+          url: "<?php echo base_url().'enquiry/activityTimeline'?>",
+          type: 'POST',          
+          data: {
+              'id':<?=$enquiry_id?>
+          },
+          success: function(content) {                       
+            $(".activitytimelinediv").html(content);
+           // $("#task_edit").modal('show');
+          }
+      });
+  })
+</script>
+
 <script>
     function get_modal_content(tid){            
       $.ajax({
@@ -3730,7 +3656,7 @@ $("#add_institute_form").submit(function(e) {
     });
   }
    function find_description(f=0) { 
-
+        auto_followup();
            if(f==0){
             var l_stage = $("#lead_stage_change").val();
             $.ajax({
@@ -3760,6 +3686,42 @@ $("#add_institute_form").submit(function(e) {
            }
 
             }
+      
+  function auto_followup(){
+    var lead_stage = $("#lead_stage_change").val();
+    $.ajax({
+      type: 'POST',
+      url: '<?php echo base_url();?>leadRules/auto_followup_rule',            
+      success:function(data){
+        if (data) {
+          data = JSON.parse(data);
+          $.each(data,function(key,val){
+            str = val.rule_sql;
+            var res = str.replace(/=/g, "==");
+            var res = res.replace(/OR/g, "||");
+            var res = res.replace(/AND/g, "&&");
+            if (eval(res)) {
+              ac = val.rule_action;              
+              if (ac) {
+                $.ajax({
+                  type: 'POST',
+                  url: '<?php echo base_url();?>leadRules/data_time_add_hr/'+ac,            
+                  success:function(data){                    
+                    if(data){
+                      data = JSON.parse(data);
+                      console.log(data);
+                      $("#disposition_c_date").val(data[0]);
+                      $("#disposition_c_time").val(data[1]);
+                    }
+                  }
+                });
+              }
+            }
+          });
+        }
+      }
+    });
+  }
 
   function find_description1(f=0) { 
 
@@ -4325,5 +4287,19 @@ $("a[href$='#related_enquiry']").on('click',function(){
       $("#related_enquiry").html(data);
     }
   });
+});
+$("#toggle_timeline").on('click',function(){
+  $(".activitytimelinediv").toggleClass('hide-timeline');
+  if ($(".activitytimelinediv ").hasClass('hide-timeline')) {
+    $("#toggle_timeline").removeClass('fa-angle-right');
+    $("#toggle_timeline").addClass('fa-angle-left');
+    $(".details-column").removeClass('col-md-6');
+    $(".details-column").addClass('col-md-9');
+  }else{
+    $("#toggle_timeline").removeClass('fa-angle-left');
+    $("#toggle_timeline").addClass('fa-angle-right');
+    $(".details-column").removeClass('col-md-9');
+    $(".details-column").addClass('col-md-6');
+  }
 });
 </script>

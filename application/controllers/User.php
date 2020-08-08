@@ -150,9 +150,9 @@ class User extends CI_Controller {
     }
 
     public function create() {
-        if (user_role('130') == true) {
+        // if (user_role('131') == true || user_role('130') == true) {
            
-        } 
+        // } 
 	
         $data['page_title'] = display('add_user');
         $this->form_validation->set_rules('Name', display('disolay_name'), 'required');
@@ -472,7 +472,10 @@ class User extends CI_Controller {
         redirect('user');
     }
 
-    public function delete_userrole($user_role = null) {
+    public function delete_userrole($user_role = null) 
+    {
+        if (user_role('141') == true)
+        {}
         if ($this->User_model->delete_userrole($user_role)) {
             #set success message
             $this->session->set_flashdata('message', display('delete_successfully'));
@@ -481,6 +484,8 @@ class User extends CI_Controller {
             $this->session->set_flashdata('exception', display('please_try_again'));
         }
         redirect('user/user_type');
+        
+        
     }
 
     public function update_role() {
@@ -524,6 +529,8 @@ class User extends CI_Controller {
 
     //Open Edit user role form
     public function edit_user_role($role_id) {
+        if (user_role('142') == true)
+        {}
         $data['title'] = display('user_list');
         $data['user_role'] = $this->User_model->get_user_role($role_id);
         

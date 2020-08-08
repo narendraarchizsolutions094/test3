@@ -1185,7 +1185,22 @@ class Enquiry_model extends CI_Model {
     }
     
     /*********************************************find personel data ajax***************************************************/
-    public function all_states($states) {
+    public function getenq_by_phone($phone){
+		$all_reporting_ids    =   $this->common_model->get_categories($this->session->user_id);
+$cpny_id=$this->session->companey_id;
+        $where = "enquiry.is_delete=1";
+		//$where .= " AND ( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
+    	//$where .= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';
+        $where.=" AND enquiry.comp_id=$cpny_id";
+		$where.=" AND enquiry.phone=$phone";
+        return $this->db->select('*')
+                        ->from('enquiry')
+                        ->where($where)
+						->group_by('enquiry.enquiry_id')
+                        ->get()
+                        ->row();
+   }	   
+   public function all_states($states) {
 
         return $this->db->select('*')->from('state')->where('country_id',$states)->get()->result();
     }
@@ -1330,7 +1345,7 @@ class Enquiry_model extends CI_Model {
         //return $query->result();
     }
 	  public function enquiry_detail_for_api($enquiry_code) {
-        return $this->db->select("*,enquiry.created_date,enquiry.address,tbl_product_country.country_name as pcountry_name,tbl_product_country.id as country_id,tbl_product.product_name,tbl_center.center_name,lead_source.lead_name as enquiry_source_name,CONCAT(tbl_admin2.s_display_name,' ',tbl_admin2.last_name) as assign_to_name")
+        return $this->db->select("*,enquiry.created_date,enquiry.comp_id as enq_comp_id,enquiry.address,tbl_product_country.country_name as pcountry_name,tbl_product_country.id as country_id,tbl_product.product_name,tbl_center.center_name,lead_source.lead_name as enquiry_source_name,CONCAT(tbl_admin.s_display_name,' ',tbl_admin.last_name) as created_by_name,CONCAT(tbl_admin2.s_display_name,' ',tbl_admin2.last_name) as assign_to_name")
                         ->from($this->table)
                         ->join('tbl_product_country', 'tbl_product_country.id=enquiry.enquiry_subsource', 'left')
                         ->join('tbl_admin', 'tbl_admin.pk_i_admin_id=enquiry.created_by', 'left')
@@ -2310,23 +2325,24 @@ $cpny_id=$this->session->companey_id;
     {	
     	$all_reporting_ids    =   $this->common_model->get_categories($userid);
         $cpny_id=$companyid;
+    	
     	$where = "( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
-    	$where .= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';
+    	$where .= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';        
         $where.=" AND enquiry.comp_id=$cpny_id";
 
         $enqAyr = array(); 
         $desplst_query = $this->db->query("SELECT lead_stage_name FROM lead_stage WHERE lead_stage.comp_id = $cpny_id");
         $desplst = $desplst_query->result_array();
       
-    	$despenqqry = $this->db->query("SELECT lead_stage_name,(SELECT COUNT(enquiry_id) FROM enquiry WHERE $where AND enquiry.lead_score =  lead_stage.stg_id AND enquiry.status = 1)counternow FROM lead_stage WHERE lead_stage.comp_id = $cpny_id");
+    	$despenqqry = $this->db->query("SELECT lead_stage_name,(SELECT COUNT(enquiry_id) FROM enquiry WHERE $where AND enquiry.lead_stage =  lead_stage.stg_id AND enquiry.status = 1)counternow FROM lead_stage WHERE lead_stage.comp_id = $cpny_id");
 
         $despenq = $despenqqry->result_array();
 
-        $despleadqry = $this->db->query("SELECT lead_stage_name,(SELECT COUNT(enquiry_id) FROM enquiry WHERE $where AND enquiry.lead_score =  lead_stage.stg_id AND enquiry.status = 2)counternow FROM lead_stage WHERE lead_stage.comp_id = $cpny_id");
+        $despleadqry = $this->db->query("SELECT lead_stage_name,(SELECT COUNT(enquiry_id) FROM enquiry WHERE $where AND enquiry.lead_stage =  lead_stage.stg_id AND enquiry.status = 2)counternow FROM lead_stage WHERE lead_stage.comp_id = $cpny_id");
 
         $desplead = $despleadqry->result_array();
 
-        $despcliqry = $this->db->query("SELECT lead_stage_name,(SELECT COUNT(enquiry_id) FROM enquiry WHERE $where AND enquiry.lead_score =  lead_stage.stg_id AND enquiry.status = 3)counternow FROM lead_stage WHERE lead_stage.comp_id = $cpny_id");
+        $despcliqry = $this->db->query("SELECT lead_stage_name,(SELECT COUNT(enquiry_id) FROM enquiry WHERE $where AND enquiry.lead_stage =  lead_stage.stg_id AND enquiry.status = 3)counternow FROM lead_stage WHERE lead_stage.comp_id = $cpny_id");
 
         $despcli = $despcliqry->result_array();
 
@@ -2656,6 +2672,74 @@ $cpny_id=$this->session->companey_id;
 		return $this->db->where('enquiry_code',$enqid)->where('user_id',$this->session->user_id)->update('tbl_enqstatus',array('status'=>1));
 
 	}
-	 
 
+	public function get_enquiry_all_data($enquiry_code,$comp_id=29){	//29 company id is for paisa expo	
+		$this->db->select("enquiry.email,enquiry.phone as mobileno,enquiry.other_phone,CONCAT_WS(' ',enquiry.name_prefix,enquiry.name,enquiry.lastname) as name,enquiry.gender,enquiry.gender,enquiry.enquiry as remark,enquiry.org_name as company,lead_source.lead_name as lead_source,lead_stage.lead_stage_name,tbl_subsource.subsource_name,tbl_product_country.country_name as product_name,enquiry.product_id,enquiry.status,enquiry.drop_reason,enquiry.created_date,enquiry.update_date as last_updated_date,CONCAT(tbl_admin.s_display_name,' ',tbl_admin.last_name) as created_by_name,CONCAT(tbl_admin2.s_display_name,' ',tbl_admin2.last_name) as assign_to_name,CONCAT(tbl_admin2.s_display_name,' ',tbl_admin2.last_name) as assign_by_name,lead_description.description,enquiry.lead_discription_reamrk,enquiry.pin_code as pin-code,enquiry.partner_id as referred_by,city.city,state.state");
+
+		$this->db->join('lead_stage','lead_stage.stg_id=enquiry.lead_stage','left');
+		$this->db->join('lead_source','lead_source.lsid=enquiry.enquiry_source','left');
+		$this->db->join('tbl_subsource','tbl_subsource.subsource_id=enquiry.sub_source','left');		
+		$this->db->join('tbl_product_country','tbl_product_country.id=enquiry.enquiry_subsource','left');
+		$this->db->join('tbl_admin','tbl_admin.pk_i_admin_id=enquiry.created_by','left');		
+		$this->db->join('tbl_admin as tbl_admin2','tbl_admin2.pk_i_admin_id=enquiry.aasign_to','left');	
+		$this->db->join('tbl_admin as tbl_admin3','tbl_admin3.pk_i_admin_id=enquiry.assign_by','left');		  
+        $this->db->join('lead_description','lead_description.id = enquiry.lead_discription','left');   
+        $this->db->join('state','state.id = enquiry.state_id','left');   
+        $this->db->join('city','city.id = enquiry.city_id','left');   
+
+		$this->db->where('Enquery_id',$enquiry_code);
+		$enq_row	=	$this->db->get('enquiry')->row_array();
+
+		$process_id =	$enq_row['product_id'];
+		$this->db->select('input_name,extra_enquery.fvalue');
+		$this->db->where('tbl_input.company_id',$comp_id);
+		$this->db->where("FIND_IN_SET($process_id,tbl_input.process_id)>",0);
+		$this->db->where("tbl_input.status",1);
+		$this->db->join("(select * from extra_enquery where enq_no = '$enquiry_code') as extra_enquery",'extra_enquery.input=tbl_input.input_id','left');
+		$result	=	$this->db->get('tbl_input')->result_array();
+		$data = array();
+		if (!empty($result)) {
+			foreach ($result as $key => $value) {
+				$name	=	$value['input_name'];
+				$value	=	$value['fvalue'];
+				$data[$name] = $value;
+			}
+		}
+		$data = array_merge($enq_row,$data);
+		return $data;
+	}
+
+	public function get_extra_enquiry_property($enquiry_code,$input_name,$comp_id){ // for non query type form only
+		$this->db->select('tbl_input.input_name,extra_enquery.fvalue,extra_enquery.id');
+		$this->db->where('tbl_input.input_name',$input_name);
+		$this->db->where('tbl_input.company_id',$comp_id);
+		$this->db->where('extra_enquery.enq_no',$enquiry_code);
+		$this->db->join('extra_enquery','extra_enquery.input=tbl_input.input_id','inner');
+		return $this->db->get('tbl_input')->row_array();
+	}
+
+	public function set_extra_enquiry_property($enquiry_code,$input_name,$input_value,$comp_id){ // for non query type form only
+		$prop	=	$this->get_extra_enquiry_property($enquiry_code,$input_name,$comp_id);
+		if (!empty($prop['id'])) {
+			$this->db->where('id',$prop['id']);
+			$this->db->set('fvalue',$input_value);
+			return $this->db->update('extra_enquery');
+		}else{
+			$this->db->select('enquiry_id');
+			$this->db->where('Enquery_id',$enquiry_code);
+			$enq_row	=	$this->db->get('enquiry')->row_array();			
+			$this->db->select('input_id');
+			$this->db->where('tbl_input.input_name',$input_name);
+			$this->db->where('tbl_input.company_id',$comp_id);
+			$input_row	=	$this->db->get('tbl_input')->row_array();
+			$ins_arr = array(
+							'parent' => $enq_row['enquiry_id'],
+							'input'	 => $input_row['input_id'],							
+							'cmp_no' => $comp_id,							
+							'enq_no' => $enquiry_code,
+							'fvalue' => $input_value,
+						);
+			$this->db->insert('extra_enquery',$ins_arr);
+		}
+	}
 }

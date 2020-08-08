@@ -70,47 +70,42 @@
 ?>
 </div>
 <script>
-$(document).ready(function() {   
-        $('#example').DataTable(
-        {         
-          "processing": true,
-          "scrollX": true,          
-          "serverSide": true,          
-          "lengthMenu": [ [10,30, 50,100,500,1000, -1], [10,30, 50,100,500,1000, "All"] ],
-          "ajax": {
-              "url": "<?=base_url().'report/report_view_data'?>",
-              "type": "POST",
-          },    
-          "columnDefs": [{ "orderable": false, "targets": 0 }],
-              "order": [[ 1, "desc" ]],
-
+    $(document).ready(function(){
+      $('#example').DataTable({
+        "processing": true,
+        "scrollX": true,
+        "serverSide": true,
+        "lengthMenu": [[10,30, 50,100,500,1000, -1], [10,30, 50,100,500,1000, "All"]],
+        "ajax": {
+          "url":  "<?=base_url().'report/report_view_data'?>",
+          "type": "POST",
+        },    
+        "columnDefs": [{ "orderable": false, "targets": 0 }],
+            "order": [[ 1, "desc" ]],
         dom: 'lBfrtip',
         buttons: [
         {
-                extend: 'copyHtml5',
-                title: '<?php echo $name; ?>'
-            },
-      {
-                extend: 'csvHtml5',
-                charset: 'UTF-8',
-               
-               bom: true,
-
-            },
-            {
-                extend: 'excelHtml5',
-                title: '<?php echo $name; ?>'
-            },
-            {
-                extend: 'pdfHtml5',
-                title: '<?php echo $name; ?>'
-            },
-      {
-                extend: 'print',
-                title: '<?php echo $name; ?>'
-            }
-        ]
-
-      });
-} );
+          extend: 'copyHtml5',
+          title: '<?php echo $name; ?>'
+        },
+        {
+          extend: 'csvHtml5',
+          charset: 'UTF-8',         
+          bom: true,
+        },
+        {
+          extend: 'excelHtml5',
+          title: '<?php echo $name; ?>'
+        },
+        {
+          extend: 'pdfHtml5',
+          title: '<?php echo $name; ?>'
+        },
+        {
+          extend: 'print',
+          title: '<?php echo $name; ?>'
+        }
+      ]
+    });
+});
 </script>

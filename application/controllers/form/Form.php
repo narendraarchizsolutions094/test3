@@ -321,12 +321,23 @@ class Form extends CI_Controller {
         $this->load->view('layout/main_wrapper', $data);
 	}
 	public function create_tab(){
-		$tab_name	=	$this->input->post('tab_name');
-		$comp_ids = $this->input->post('comp_ids');
+		//print_r($_POST);die;
+		$tab_name		= $this->input->post('tab_name');
+		$comp_ids 		= $this->input->post('comp_ids');
+		$isqueryform 	= 0;
+		$edit 			= 0;
+		$delete 		= 0;
+		$isqueryform 	= $this->input->post('isqueryform');
+		if($isqueryform == 1)
+		{
+			$edit 	= $this->input->post('edit');
+			$delete = $this->input->post('delete');
+		}
+
 		if (!empty($comp_ids)) {
 			$comp_ids = implode(',', $comp_ids);
 		}
-		$data = array('title'=>$tab_name,'comp_id'=>$comp_ids);
+		$data = array('title'=>$tab_name,'comp_id'=>$comp_ids,'is_query_type'=>$isqueryform,'is_edit'=>$edit,'is_delete'=>$delete);
 		
 		if ($this->input->post('tab_id')) {
 			$this->db->where('id',$this->input->post('tab_id'));

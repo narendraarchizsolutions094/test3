@@ -107,7 +107,7 @@ border-bottom: 1px solid #c8ced3! important;}
 		
 		<div class="container">
 	<div class="row ">
-		<table id='employeeList' class="table table-striped table-bordered ">
+		<table id='' class="datatable1 table table-striped table-bordered ">
     
     <div class="col-md-2"  style="float:left;">
 <!--         <label class="col-md-2">Select</label> -->

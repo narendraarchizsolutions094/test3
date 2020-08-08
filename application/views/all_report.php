@@ -6,7 +6,10 @@
             <div class="panel panel-default">
                 <div class="panel-heading no-print">
                   <div class="btn-group"> 
-                      <a class="btn btn-primary" href="<?php echo base_url("report/index") ?>"> <i class="fa fa-list"></i>  <?php echo display('reports_list') ?> </a>  
+                      <a class="btn btn-primary" href="<?php echo base_url("report/index") ?>"> <i class="fa fa-list"></i>  <?php echo display('reports_list') ?> </a>
+                      <?php if(user_access(220)) { if(!empty($this->session->telephony_token)){  ?>
+                      <a class="btn btn-success" href="<?php echo base_url("call_report/index") ?>" style="margin-left: 5 px !important ;" > <i class="fa fa-list"></i>  <?php echo display('telephone_call_reports') ?> </a>
+                    <?php } }?>
                   </div>
               </div>
                 <div class="panel-body">
@@ -75,13 +78,23 @@
                               
                               
                               <?php 
-                              if (!empty($all_stage_lists)) {
-                                
-                              
+                            if (!empty($all_stage_lists)) {
                               foreach ($all_stage_lists as $stage) {?>
                               <option value="<?=$stage->stg_id?>" <?php if(!empty(set_value('lead_source'))){if (in_array($stage->stg_id,set_value('lead_source'))) {echo 'selected';}}?>><?=$stage->lead_stage_name;?></option>
-                              <?php }}?>
-                              
+                              <?php }
+                            }?>
+                          </select>
+                        </div>
+                        <div class="form-group col-md-3 lead_subsource_class">
+                          <label for="lead_source">Lead Description</label>
+                          <select data-placeholder="Begin typing a name to filter..." multiple class="form-control chosen-select" name="sub_disposition[]">
+                              <?php 
+                              if (!empty($all_sub_stage_lists)) {
+                                foreach ($all_sub_stage_lists as $stage) { ?>
+                                  <option value="<?=$stage->id?>" <?php if(!empty(set_value('sub_disposition'))){if (in_array($stage->id,set_value('sub_disposition'))) {echo 'selected';}}?>><?=$stage->description;?></option>
+                                <?php }
+                                }
+                              ?>
                           </select>
                         </div>
                       </div>
@@ -106,7 +119,8 @@
                                               'Updated Date',
                                               'Disposition',
                                               'State',
-                                              'City'
+                                              'City',
+                                              'Product'
                                             );
                            // $this->session->set_userdata($report_columns);             
                         ?>
@@ -132,7 +146,10 @@
 							  <option <?php if(!empty(set_value('report_columns'))){if (in_array('Disposition',set_value('report_columns'))) {echo 'selected';}}?>>Disposition</option>
                 <option <?php if(!empty(set_value('report_columns'))){if (in_array('State',set_value('report_columns'))) {echo 'selected';}}?>>State</option>
                 <option <?php if(!empty(set_value('report_columns'))){if (in_array('City',set_value('report_columns'))) {echo 'selected';}}?>>City</option>
+                
                 <option <?php if(!empty(set_value('report_columns'))){if (in_array('Company Name',set_value('report_columns'))) {echo 'selected';}}?>>Company Name</option>
+
+                <option <?php if(!empty(set_value('report_columns'))){if (in_array('Product',set_value('report_columns'))) {echo 'selected';}}?>>Product</option>
 								
                 <?php if(!empty($dfields)) { 
 								foreach($dfields as $dind => $df){									

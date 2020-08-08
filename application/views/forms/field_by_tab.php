@@ -158,7 +158,7 @@ if ($tab_details['primary_tab']) {
           </table>          
         </div>
         <div class="text-center">
-          <button class="btn btn-primary btn-primary"  type="button"  data-toggle="modal" data-target="#myModal" >Add Extra Input Field</button>               
+          <button class="btn btn-primary btn-primary"  type="button"  data-toggle="modal" data-target="#myModal" >Add New Field</button>               
         </div>
         <br>
 

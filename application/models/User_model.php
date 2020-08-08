@@ -4,7 +4,8 @@ class User_model extends CI_Model {
     private $table = 'tbl_admin';
 
     public function create($data = []) {
-        return $this->db->insert($this->table, $data);
+        $this->db->insert($this->table, $data);
+        return $this->db->insert_id();
     }
     
     public function companyList() {
@@ -297,6 +298,57 @@ $company=$this->session->userdata('companey_id');
                         ->result_array();
     }
 
-    
-
+    /**
+    * this method will get the user meta
+    * @parm first parameter is user id integer, and second parameter array is data which you want to get of a user
+    */
+    public function get_user_meta($uid,$meta_key){
+        if (!empty($meta_key) && !empty($uid)) {                        
+            $this->db->select('parameter,value');
+            $this->db->where('uid',$uid);        
+            $this->db->where_in('parameter',$meta_key);
+            $result    =   $this->db->get('user_meta')->result_array();
+            $data = array();
+            if (!empty($result)) {
+                foreach ($result as $key => $value) {
+                    $parm    =   $value['parameter'];
+                    $data[$parm]   = $value['value'];
+                }
+                return $data;   
+            }else{
+                return false;
+            }
+        }else{
+            return false;
+        }
+    }
+    /**
+    * this method will get the user meta
+    * @parm first parameter is user id integer, and second parameter array is data which you want to set of a user
+    */
+    public function set_user_meta($uid,$meta_key){
+        if (!empty($meta_key) && !empty($uid)) {
+            foreach ($meta_key as $key=>$value) {
+                $this->db->where('parameter',$key);
+                $this->db->where('uid',$uid);
+                $this->db->from('user_meta');
+                if($this->db->count_all_results()){
+                    $this->db->where('uid',$uid);
+                    $this->db->where('parameter',$key);
+                    $this->db->set('value',$value);
+                    $this->db->update('user_meta');
+                }else{
+                    $ins_arr = array(
+                                'uid'      => $uid,
+                                'parameter'=> $key,
+                                'value'    => $value,
+                                );
+                    $this->db->insert('user_meta',$ins_arr);
+                }
+            }
+        }else{
+            return false;
+        }
+    }
 }
+

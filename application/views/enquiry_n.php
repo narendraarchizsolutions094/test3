@@ -146,7 +146,16 @@ input[name=lead_stages]{
           <a class="dropdown-toggle btn btn-danger btn-circle btn-sm fa fa-plus" id="enq-create" href="<?php echo base_url()?>enquiry/create" title="<?php echo display('add_new_enquiry');?>"></a>         
         </div>
          <div class="col-md-4 col-sm-8 col-xs-8 pull-right" >  
-          <div style="float: right;">                    
+          <div style="float: right;">     
+		  <?php if(!empty($this->session->telephony_token)){ ?>
+              <div class="btn-group dropdown-filter">
+                      <?php if($this->session->availability == 1) { ?>
+                      <button class="btn btn-success" type="button" data-toggle="modal" data-target="#callbreak" >Available</button>
+                    <?php } elseif($this->session->availability == 2) { ?>
+                      <button class="btn btn-danger" type="button" data-toggle="modal" data-target="#callbreak" > Not Available</button>
+                    <?php } ?>
+              </div>  
+            <?php } ?> 
             <div class="btn-group dropdown-filter">
               <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Filter by <span class="caret"></span>
@@ -233,7 +242,7 @@ input[name=lead_stages]{
                 <a class="btn" data-toggle="modal" data-target="#genLead" style="color:#000;cursor:pointer;border-radius: 2px;border-bottom :1px solid #fff;"><?php echo display('move_to_lead'); ?> </a>
                 <a class="btn" data-toggle="modal" data-target="#dropEnquiry" style="color:#000;cursor:pointer;border-radius: 2px;border-bottom: 1px solid #fff;"><?php echo display('drop_enquiry'); ?></a>      
                 <a class="btn"  data-target="#sendsms" data-toggle="modal"  onclick="getTemplates('1','Send Whatssp');"  style="color:#000;cursor:pointer;border-radius: 2px;border-bottom: 1px solid #fff;"><?php echo display('send_whatsapp'); ?> </a>
-                <a class="btn " data-target="#sendsms" data-toggle="modal"  onclick="getTemplates('2','Send Sms');" style="color:#000;cursor:pointer;border-radius: 2px;border-bottom: 1px solid #fff;"><?php echo display('send_bulk_sms'); ?></a>
+                <a class="btn " data-target="#sendsms" data-toggle="modal"  onclick="getTemplates('2','Send Sms');" style="color:#000;cursor:pointer;border-radius: 2px;border-bottom: 1px solid #fff;"><?php echo display('send_bulk_sms'); ?></a>               
               <?php
               }else if ($data_type == 2) { ?>
                   <a class="btn" data-toggle="modal" data-target="#AssignSelected" style="color:#000;cursor:pointer;border-radius: 2px;border-bottom :1px solid #fff;"><?php echo display('assign_selected'); ?></a>
@@ -249,6 +258,10 @@ input[name=lead_stages]{
               <?php
               }
               ?>
+
+              <?php if(user_access(220)) { if(!empty($this->session->telephony_token)){ ?>
+                <a class="btn "  onclick="autoDial()" style="color:#000;cursor:pointer;border-radius: 2px;border-bottom: 1px solid #fff;"><?php echo display('bulk_autodial'); ?></a>
+              <?php } } ?>
               <a class="btn" data-toggle="modal" data-target="#table-col-conf" style="color:#000;cursor:pointer;border-radius: 2px;border-bottom: 1px solid #fff;"><?php echo display('table_config'); ?></a>                         
               <a class="btn" data-toggle="modal" data-target="#deleteselected" style="color:#000;cursor:pointer;border-radius: 2px;border-bottom: 1px solid #fff; display: none;"><?php echo 'Delete Data'; ?></a>                         
             </div>                                         
@@ -523,8 +536,8 @@ input[name=lead_stages]{
 		<div class="col-md-12" >		
 			      <table id="enq_table" class="table table-bordered table-hover" style="width:100%;">
         <thead>
-          <tr class="bg-info">
-              <th>
+          <tr class="bg-info table_header">
+              <th class="noExport">
                 <input type='checkbox' class="checked_all1" value="check all" >
               </th>
                   <th>S.N</th>
@@ -1000,6 +1013,7 @@ for (var i = 0; i < checkboxes.length; i++) {
 	});
 
 	$(document).ready(function() {
+       
     	$('#enq_table').DataTable(
     		{         
 			    "processing": true,
@@ -1011,11 +1025,45 @@ for (var i = 0; i < checkboxes.length; i++) {
 			        "url": "<?=base_url().'Enq/enq_load_data'?>",
 			        "type": "POST",
               "data":{'data_type':"<?=$data_type?>"}
-			    },		
+			    },
+          dom: "<'row'<'col-sm-4'l><'col-sm-4 text-center'B><'col-sm-4'f>>tp", 
+        // "lengthMenu": [[30, 60, 90, -1], [30, 60, 90, "All"]], 
+        buttons: [  
+            {extend: 'copy', className: 'btn-sm',exportOptions: {
+                        columns: "thead th:not(.noExport)"
+                    }}, 
+            {extend: 'csv', title: 'list<?=date("Y-m-d H:i:s")?>', className: 'btn-sm',exportOptions: {
+                        columns: "thead th:not(.noExport)"
+                    }}, 
+            {extend: 'excel', title: 'list<?=date("Y-m-d H:i:s")?>', className: 'btn-sm', title: 'exportTitle',exportOptions: {
+                        columns: "thead th:not(.noExport)"
+                    }}, 
+            {extend: 'pdf', title: 'list<?=date("Y-m-d H:i:s")?>', className: 'btn-sm',exportOptions: {
+                        columns: "thead th:not(.noExport)"
+                    }}, 
+            {extend: 'print', className: 'btn-sm',exportOptions: {
+                        columns: "thead th:not(.noExport)"
+                    }} 
+        ] ,
+          		
 			    "columnDefs": [{ "orderable": false, "targets": 0 }],
 	            "order": [[ 1, "desc" ]]
 
 			});
+    //   $('#enq_table').DataTable({ 
+    //     //responsive: true, 
+    //     scrollX: true,
+    //     scrollY: 800,
+    //     dom: "<'row'<'col-sm-4'l><'col-sm-4 text-center'B><'col-sm-4'f>>tp", 
+    //     "lengthMenu": [[30, 60, 90, -1], [30, 60, 90, "All"]], 
+    //     buttons: [  
+    //         {extend: 'copy', className: 'btn-sm'}, 
+    //         {extend: 'csv', title: 'ExampleFile', className: 'btn-sm'}, 
+    //         {extend: 'excel', title: 'ExampleFile', className: 'btn-sm', title: 'exportTitle'}, 
+    //         {extend: 'pdf', title: 'ExampleFile', className: 'btn-sm'}, 
+    //         {extend: 'print', className: 'btn-sm'} 
+    //     ] 
+    // });
 
 
 
@@ -1230,6 +1278,44 @@ function save_enquery(){
 	}});
 }
 
+function autoDial(){
+  if($('.checkbox1:checked').size() > 1000){
+    alert('You can not dial more that 1000 enquiry at once');
+  }else{
+    data_type = "<?=$data_type?>";
+    data_type = parseInt(data_type);
+    //if (data_type == 1) {
+      var p_url = '<?php echo base_url();?>enquiry/autoDial';
+      //var re_url = '<?php echo base_url();?>enquiry';
+    //}
+    // else if(data_type == 2){
+    //   var p_url = '<?php echo base_url();?>lead/assign_lead';
+    //   var re_url = '<?php echo base_url();?>led/index';
+    // }else if(data_type == 3){      
+    //   var p_url = '<?php echo base_url();?>client/assign_enquiry';
+    //   var re_url = '<?php echo base_url();?>client/index';
+    // }    
+
+  $.ajax({
+    type: 'POST',
+    url: p_url,
+    data: $('#enquery_assing_from').serialize(),
+    beforeSend: function(){
+                 $("#imgBack").html('uploading').show();
+    },
+    success:function(data){
+	    Swal.fire(
+            'success',
+            'call scheduled successfully',
+            'success'
+          	);
+         //alert(data);
+         //document.getElementById('testdata').innerHTML =data;
+          //window.location.href=re_url;
+    }});
+  }
+}
+
 function assign_enquiry(){
   if($('.checkbox1:checked').size() > 1000){
     alert('You can not assign more that 1000 enquiry at once');
@@ -1261,6 +1347,8 @@ function assign_enquiry(){
 		}});
 	}
 }
+
+
 
 function moveto_lead(){
   if($('.checkbox1:checked').size() > 1000){

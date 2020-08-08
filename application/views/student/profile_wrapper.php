@@ -324,7 +324,7 @@ height:auto;
     cursor: pointer;
     display: inline-block;
     font-size: 1rem;
-    font-weight: 500;
+    font-weight: 500; 
     line-height: 2.5rem;
     outline: none;
     padding: 0 1.5rem;
@@ -332,12 +332,157 @@ height:auto;
     transition: background-color .2s ease;
     white-space: nowrap;
 }
+.step-bar {
+   margin: 0.5em;
+   padding: 0;
+   list-style: none;
+   display: flex;
+   flex-direction: column;
+}
+ @media (min-width: 480px) {
+   .step-bar {
+     flex-direction: row;
+     justify-content: space-between;
+  }
+}
+ .step {
+   display: flex;
+   flex: 0 1 100%;
+   justify-content: center;
+   border: 4px solid #009cd2;
+   background-color: #009cd2;
+   color: white;
+   border-radius: 2rem;
+   position: relative;
+}
+ @media (min-width: 480px) {
+   .step {
+     background-color: transparent;
+     color: currentColor;
+     border: none;
+     flex-direction: column;
+     align-items: center;
+     border-radius: 0;
+     flex-grow: 1;
+  }
+}
+ .step + .step {
+   margin-top: 2rem;
+}
+ @media (min-width: 480px) {
+   .step + .step {
+     margin-top: 0;
+  }
+}
+ .step + .step:before {
+   content: '';
+   position: absolute;
+   background-color: #009cd2;
+   height: calc(100% + 4px);
+   width: 4px;
+   top: calc(-100% - 4px);
+}
+ @media (min-width: 480px) {
+   .step + .step:before {
+     display: none;
+  }
+}
+ @media (min-width: 480px) {
+   .step + .step .step__bullet:before {
+     content: '';
+     position: absolute;
+     height: 4px;
+     width: calc(100% - 2.5rem - 4px);
+     top: 1rem;
+     right: calc(50% + 2.5rem / 2);
+     background-color: #009cd2;
+  }
+}
+ .step--current ~ .step {
+   border-color: #96a0a0;
+   background-color: white;
+   color: currentColor;
+}
+ @media (min-width: 480px) {
+   .step--current ~ .step {
+     background-color: transparent;
+  }
+}
+ .step--current ~ .step:before {
+   background-color: #96a0a0;
+}
+ @media (min-width: 480px) {
+   .step--current ~ .step .step__bullet {
+     border-color: #96a0a0;
+     background-color: white;
+     color: currentColor;
+  }
+}
+ .step--current ~ .step .step__bullet:before {
+   background-color: #96a0a0;
+}
+ .step__bullet {
+   height: 3rem;
+   width: 3rem;
+   line-height: 2.5rem;
+   text-align: center;
+   font-weight: 700;
+}
+ @media (min-width: 480px) {
+   .step__bullet {
+     border: 4px solid #009cd2;
+     background-color: #009cd2;
+     color: white;
+     border-radius: 50%;
+  }
+}
+ .step__title {
+   height: 2rem;
+   line-height: 2rem;
+   padding: 0 1rem;
+   text-align: center;
+}
+
 </style>
         <!-- Comment Form -->
 
         <section class="comment-form">
             <div class="container-fluid">
-
+              <br>
+              <br>
+                <div class="col-md-12">
+                  <?php
+                  if ($this->session->companey_id == 76) {
+                    $s  = $lead_stage;
+                    if (!empty($s)) {
+                    ?>
+                    <ul class="step-bar">
+                      <?php
+                        $i = 1;
+                        $stud_details = $student_Details[0];
+                        if ($stud_details->lead_stage == '') { ?>
+                          <li class="step step--current">
+                            <span class="step__bullet">0</span>
+                            <span class="step__title">Nothing</span>
+                          </li>
+                        <?php
+                        }
+                        foreach ($s as $key => $value) {                      
+                        ?>
+                        <li class="step <?=($value->stg_id==$stud_details->lead_stage)?'step--current':''?>">
+                          <span class="step__bullet"><?=$i?></span>
+                          <span class="step__title"><?=$value->lead_stage_name?></span>
+                        </li>                        
+                        <?php
+                        $i++;
+                      }
+                      ?>
+                    </ul>
+                    <?php
+                    }
+                  }
+                  ?>
+                </div>
                 <div class="col-sm-12">
 
                
@@ -352,7 +497,13 @@ height:auto;
 				<div class="user-data">
 					<h2><?php echo $pdetail->name_prefix.''.$pdetail->name.' '.$pdetail->lastname; ?></h2>
 					<span class="post-label"><?php echo $pdetail->Enquery_id; ?></span>
+          <?php
+          if ($this->session->companey_id == 67) {          
+          ?>
 					<p>Applied at <strong>Space Internationals</strong><br>
+          <?php
+          }
+          ?>
 					<i class="fa fa-map-marker" aria-hidden="true"></i>  <?php echo $pdetail->address; ?>
 					</p>
 				</div>
@@ -364,7 +515,7 @@ height:auto;
 			<div class="tab-panel-main">
 				<ul class="tabs">
 					<li class="tab-link current" data-tab="Basic-detail">Basic Detail</li>
-				    <?php if($this->session->userdata('user_right')==151){ ?>
+				    <?php if($this->session->userdata('user_right')==151 || $this->session->userdata('user_right')==180 || $this->session->userdata('user_right')==183){ ?>
 					<li class="tab-link" data-tab="Edu-detail">Document</li>
 					<li class="tab-link" data-tab="Portfolio">Institute</li>
 					<li class="tab-link" data-tab="qualification">Qualification</li>
@@ -1573,14 +1724,17 @@ height:auto;
                                             <div class="col-md-4"><p>
 							<?php  
 				                $cntry_ids=explode(',',$pdetail->country_id);
-                                foreach($cntry_ids as $ids){
+                        $cname = '';
+                        if (!empty($cntry_ids)) {                        
+                              foreach($cntry_ids as $ids){
                                 foreach($country_list as $c_name){  
                                 if($c_name->id_c == $ids){
-                                $cname= $c_name->country_name;
-                                     }
+                                  $cname= $c_name->country_name;
+                                  }
                                 }
-				   echo $cname.''.',';
-				            } ?>
+				                      echo $cname.''.',';
+				                  }
+                        } ?>
 											
 											</p></div>
                                         </div>
@@ -1591,7 +1745,9 @@ height:auto;
                 <?php } ?>
 				</div>
 				<div id="Edu-detail" class="tab-content">
-				<?php foreach($all_extra as $extrad){ ?>
+				<?php 
+        //print_r($all_extra);
+        foreach($all_extra as $extrad){ ?>
 				<?php if($extrad->fvalue!='' && $extrad->form_id==13 && $extrad->input_type==8){ ?>
 					<div class="col-md-3">
 					<a class="service-tile" aria-current="false" href="<?php echo $extrad->fvalue; ?>" target="_blank">

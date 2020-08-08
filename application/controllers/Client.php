@@ -558,11 +558,7 @@ class Client extends CI_Controller {
         return $pass;
     }
     public function updateclient($enquiry_id = null) {  
-       /* echo "<pre>";
-	   print_r($_POST);
-        echo "</pre>";*/
-//exit();
-
+       
             $res = $this->enquiry_model->get_deal($enquiry_id);
             $name_prefix = $this->input->post('name_prefix');
             $firstname = $this->input->post('enquirername');
@@ -588,12 +584,7 @@ class Client extends CI_Controller {
                 $country_id = '';
             }
        
-			$enqarr = $this->db->select('*')->where('enquiry_id',$enquiry_id)->get('enquiry')->row();
-
-            //$this->db->set('country_id', $this->input->post('country_id'));
-            //$this->db->set('product_id', $this->input->post('product_id'));
-            //$this->db->set('institute_id', $this->input->post('institute_id'));
-            //$this->db->set('datasource_id', $this->input->post('datasource_id'));
+			$enqarr = $this->db->select('*')->where('enquiry_id',$enquiry_id)->get('enquiry')->row();           
 
             if(!empty($other_phone)){
                $other_phone =   implode(',', $other_phone);
@@ -626,7 +617,9 @@ class Client extends CI_Controller {
             $this->db->where('enquiry_id', $enquiry_id);            
             $this->db->update('enquiry');  
 
-
+            $this->load->model('rule_model');
+            $this->rule_model->execute_rules($en_comments);
+            
             $type = $enqarr->status;                
 
             if($type == 1){                 
@@ -635,65 +628,60 @@ class Client extends CI_Controller {
                 $comment_id  = $this->Leads_Model->add_comment_for_events($this->lang->line('lead_updated'), $en_comments);                   
             }else if($type == 3){
                 $comment_id = $this->Leads_Model->add_comment_for_events($this->lang->line('client_updated'), $en_comments);
-            }
-
-            /*var_dump($comment_id);
-            exit();*/
+            }          
 
             if($this->session->userdata('companey_id')==29){
+            
+                $bank = $this->input->post('bankname');
+                if(!empty($this->input->post('sub_source'))) 
+                {
+                    $subsrc = $this->input->post('sub_source');
+                }else{
+                    $subsrc='';
+                }
+                
 
+                 $res = $this->enquiry_model->get_deal($en_comments);
 
+                 if($res){
+                 
+                 $array_newdeal = array(
 
-            $bank = $this->input->post('bankname');
-            if(!empty($this->input->post('sub_source'))) 
-            {
-                $subsrc = $this->input->post('sub_source');
-            }else{
-                $subsrc='';
+                    'bank'=> $bank,
+                    'product' => $subsrc,
+                    'updated_by' => $this->session->user_id
+
+                );          
+
+                $this->db->where('enq_id',$en_comments);
+                $this->db->update('tbl_newdeal',$array_newdeal);
+
+                 }
+                 else{
+
+                     $array_newdeal = array(
+                    'comp_id' => $this->session->companey_id,
+                    'enq_id'  => $en_comments,
+                    'bank'=> $bank,
+                    'product' => $subsrc,
+                    'created_by' => $this->session->user_id
+
+                );     
+
+                    $this->db->insert('tbl_newdeal',$array_newdeal);
+                 }
+                 
+                
+
+              
             }
             
-
-             $res = $this->enquiry_model->get_deal($en_comments);
-
-             if($res){
-             
-             $array_newdeal = array(
-
-                'bank'=> $bank,
-                'product' => $subsrc,
-                'updated_by' => $this->session->user_id
-
-            );          
-
-            $this->db->where('enq_id',$en_comments);
-            $this->db->update('tbl_newdeal',$array_newdeal);
-
-             }
-             else{
-
-                 $array_newdeal = array(
-                'comp_id' => $this->session->companey_id,
-                'enq_id'  => $en_comments,
-                'bank'=> $bank,
-                'product' => $subsrc,
-                'created_by' => $this->session->user_id
-
-            );     
-
-                $this->db->insert('tbl_newdeal',$array_newdeal);
-             }
-             
+            /*echo "<pre>";
+            print_r($_POST);
+            echo "</pre>";
+            exit();*/
             
-
-          
-      }
-
-			if(!empty($enqarr)){		
-
-                /*echo "<pre>";
-                print_r($_POST);
-                echo "</pre>";*/
-                
+			if(!empty($enqarr)){                
                 if(isset($_POST['inputfieldno'])) {                    
                     $inputno   = $this->input->post("inputfieldno", true);
                     $enqinfo   = $this->input->post("enqueryfield", true);
@@ -701,7 +689,6 @@ class Client extends CI_Controller {
                     
                     foreach($inputno as $ind => $val){                        
                         $biarr = array( 
-
                                         "enq_no"  => $en_comments,
                                         "input"   => $val,
                                         "parent"  => $enquiry_id, 
@@ -713,26 +700,61 @@ class Client extends CI_Controller {
                             $this->db->where('enq_no',$en_comments);        
                             $this->db->where('input',$val);        
                             $this->db->where('parent',$enquiry_id);
-                            if($this->db->get('extra_enquery')->num_rows()){
-                                
+                            if($this->db->get('extra_enquery')->num_rows()){                                
                                 $this->db->where('enq_no',$en_comments);        
                                 $this->db->where('input',$val);        
                                 $this->db->where('parent',$enquiry_id);
                                 $this->db->set('fvalue',$enqinfo[$ind]);
                                 $this->db->set('comment_id',$comment_id);
                                 $this->db->update('extra_enquery');
-
                             }else{
                                 $this->db->insert('extra_enquery',$biarr);
                             }
-                            
-                    }
-                    //if(!empty($biarr)){
-                        //$this->db->insert_batch('extra_enquery', $biarr); 
-                    //}
+                    }                    
                 }
 				 
 			}
+            if ($this->session->companey_id==29 && $en_comments == 'ENQ188474867063') {
+                $prop    =   $this->enquiry_model->get_extra_enquiry_property($en_comments,'paisaexporef',29);
+                $data = $this->enquiry_model->get_enquiry_all_data($en_comments);
+                $product = $data['product_name'];
+                $paisaexpo_form_id = '';
+                if (empty($prop['fvalue'])) {                    
+                    $data = array('type'=>$product);                    
+                    $options = array(
+                                    'url'  => 'http://dev.paisaexpo.com/rest/all/V1/api/crm/create',
+                                    'data' => $data,
+                                    'request_type' => 'POST'
+                                );
+                    $res = curl($options);   
+                    if (!empty($res)) {
+                        $res = json_decode($res,true);
+                        print_r($res);
+                        var_dump($res);
+                        echo $res['form_id'];
+                        exit();
+                        if ($res['form_id']) {
+                            $paisaexpo_form_id =  $res['form_id'];                            
+                            $this->enquiry_model->set_extra_enquiry_property($en_comments,'paisaexporef',$paisaexpo_form_id,29);
+                        }
+                    }
+                }else{
+                    $paisaexpo_form_id    =   $prop['fvalue'];
+                }
+                $formid  = $paisaexpo_form_id;
+                $data = array('params'=>json_encode($data),'product'=>$product,'formId'=>$formid);
+                $options = array(
+                                'url'  => 'https://dev.paisaexpo.com/rest/all/V1/api/crm/update',
+                                'data' => $data,
+                                'request_type' => 'POST'
+                            );
+                $res = curl($options);
+                echo "<pre>";
+                echo $res;
+                echo "</pre>";
+                exit();
+                
+            }
             $this->session->set_flashdata('message', 'Save successfully');
             redirect($this->agent->referrer()); //updateclient
     }
