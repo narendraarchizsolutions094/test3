@@ -26,9 +26,11 @@ a:hover, a:focus {
 
                 <div class="btn-group"> 
 
-                    <a class="btn btn-success" href="<?php echo base_url("lead/add_course") ?>"> <i class="fa fa-plus"></i>  <?php echo display('add_course') ?> </a>  
+                    <a class="btn btn-success btn-sm" href="<?php echo base_url("lead/add_course") ?>"> <i class="fa fa-plus"></i>  <?php echo display('add_course') ?> </a>  
+                    
 
                 </div>
+                    <a class="btn btn-primary btn-sm" data-toggle="modal" data-target="#course_upload" href="javascript:void(0)"> <i class="fa fa-upload"></i><?php echo display('upload_course') ?></a>  
 
             </div>
 
@@ -130,6 +132,33 @@ a:hover, a:focus {
         <!-- /.col -->
 
       </div>
+
+<!-- Course Upload  -->
+<div class="modal fade" id="course_upload" tabindex="-1" role="dialog" aria-labelledby="course_upload_label" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="course_upload_label">Import Course</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+        <form action="<?=base_url().'lead/upload_course'?>" enctype="multipart/form-data">
+          <div class="modal-body">
+                <a href="<?=base_url().'docs/course_sample.csv'?>" class='pull-right'>Download Sample</a>
+
+                <label>Select File</label>
+                <input type="file" name="course_file" class="form-control">            
+          </div>
+          <div class="modal-footer" style="text-align: center;">                
+            <button type="submit" class="btn btn-secondary">Go</button>
+          </div>
+        </form>
+    </div>
+  </div>
+</div>
+
+
 <script>
 // $(document).ready(function() {
 //     $('#example').DataTable();

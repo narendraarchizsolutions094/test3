@@ -1289,7 +1289,7 @@ if($coment_type == 1){
         $this->load->view('layout/main_wrapper', $data);
     }
 	
-	public function courselist() {
+	public function courselist() { 
         if (user_role('30') == true) {}
         $data['title']          = display('course_list');
         $this->load->library('pagination');
@@ -1313,6 +1313,22 @@ if($coment_type == 1){
 		$data['length']         = $this->location_model->find_length();
         $data['content']        = $this->load->view('institute/course_list', $data, true);
         $this->load->view('layout/main_wrapper', $data);
+    }
+    
+    public function upload_course(){
+        echo "<pre>";    
+        print_r($_FILES);
+        echo "</pre>";   
+
+        $filename=$_FILES["course_file"]["tmp_name"];        
+        if($_FILES["file"]["size"] > 0){
+            $file = fopen($filename, "r");
+            while (($courseData = fgetcsv($file, 10000, ",")) !== FALSE){
+                print_r($courseData);
+             }
+            fclose($file);            
+        }
+             
     }
 	
 	public function crslist() {
