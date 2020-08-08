@@ -961,7 +961,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                           <a href="<?php echo base_url("scheme/"); ?>">Scheme</a>
                         </li>
 						 <li class="<?php echo (($segment1 == "payment") ? "active" : null) ?>">
-                          <a href="<?php echo base_url("payment/"); ?>">Payment</a>
+                          <a href="<?php echo base_url("payment/paylist"); ?>">Payment</a>
                         </li>
                      </ul>
 
