@@ -1316,19 +1316,105 @@ if($coment_type == 1){
     }
     
     public function upload_course(){
-        echo "<pre>";    
+        /*echo "<pre>";    
         print_r($_FILES);
-        echo "</pre>";   
-
+        echo "</pre>";   */
+        $comp_id = $this->session->companey_id;
+        $user_id = $this->session->user_id;
         $filename=$_FILES["course_file"]["tmp_name"];        
-        if($_FILES["file"]["size"] > 0){
+        $i = 0;
+        $c = 0;
+        if($_FILES["course_file"]["size"] > 0){
             $file = fopen($filename, "r");
             while (($courseData = fgetcsv($file, 10000, ",")) !== FALSE){
-                print_r($courseData);
+                if ($i) {                    
+                    $course_name    = $courseData[0];                    
+                    $rating         = $courseData[1];                                        
+                    $course_ielet   = $courseData[2];
+                    $discipline     = $courseData[3];
+                    $level          = $courseData[4];
+                    $length         = $courseData[5];
+                    $institute      = $courseData[6];
+                    $description    = $courseData[7];
+                    $status         = $courseData[8];
+                    
+                    /*echo "<pre>";
+                    print_r($courseData);
+                    echo "</pre>";*/
+
+                    $this->db->select('id');                    
+                    $this->db->where('course_name',$course_name);
+                    $this->db->where('comp_id',$comp_id);
+                    $course_row    =   $this->db->get('tbl_crsmaster')->row_array();
+                    if (!empty($course_row)) {
+                        $course_id = $course_row['id'];
+                    }else{
+                        $this->db->insert('tbl_crsmaster',array('course_name'=>$course_name,'status'=>1,'comp_id'=>$comp_id,'created_by'=>$user_id));
+                        $course_id = $this->db->insert_id();
+                    }
+                    $this->db->select('id');                    
+                    $this->db->where('discipline',$discipline);
+                    $this->db->where('comp_id',$comp_id);
+                    $discipline_row    =   $this->db->get('tbl_discipline')->row_array();
+                    if (!empty($discipline_row)) {
+                        $discipline_id = $discipline_row['id'];
+                    }else{
+                        $this->db->insert('tbl_discipline',array('comp_id'=>$comp_id,'discipline'=>$discipline,'status'=>1,'created_by'=>$user_id));
+                        $discipline_id   =  $this->db->insert_id();
+                    }
+                    $this->db->select('id');                    
+                    $this->db->where('level',$level);
+                    $this->db->where('comp_id',$comp_id);
+                    $level_row    =   $this->db->get('tbl_levels')->row_array();
+                    if (!empty($level_row)) {
+                        $level_id = $level_row['id'];
+                    }else{
+                        $this->db->insert('tbl_levels',array('comp_id'=>$comp_id,'level'=>$level,'status'=>1,'created_by'=>$user_id));
+                        $level_id   =  $this->db->insert_id();
+                    }
+                    $this->db->select('id');                    
+                    $this->db->where('length',$length);
+                    $this->db->where('comp_id',$comp_id);
+                    $length_row    =   $this->db->get('tbl_length')->row_array();
+                    if (!empty($length_row)) {
+                        $length_id = $length_row['id'];
+                    }else{
+                        $this->db->insert('tbl_length',array('comp_id'=>$comp_id,'length'=>$length,'status'=>1,'created_by'=>$user_id));
+                        $length_id   =  $this->db->insert_id();
+                    }
+                    $this->db->select('institute_id');                    
+                    $this->db->where('institute_name',$institute);
+                    $this->db->where('comp_id',$comp_id);
+                    $institute_row    =   $this->db->get('tbl_institute')->row_array();
+                    if (!empty($institute_row)) {
+                        $institute_id = $institute_row['institute_id'];
+                    }else{
+                        $this->db->insert('tbl_institute',array('comp_id'=>$comp_id,'institute_name'=>$institute,'status'=>1,'created_by'=>$user_id));
+                        $institute_id   =  $this->db->get()->insert_id();
+                    }
+                    $crs_data = array(
+                                    'comp_id'       => $comp_id,
+                                    'institute_id'  => $institute_id,
+                                    'length_id'     => $length_id,
+                                    'level_id'      => $level_id,
+                                    'discipline_id' => $discipline_id,
+                                    'course_name'   => $course_id,
+                                    'course_ielts'  => $course_ielet,
+                                    'created_by'    => $user_id,
+                                    'status'        => $status,
+                                    'course_rating' => $rating,
+                                    'course_discription'    => $description
+                                );
+                    if ($this->db->insert('tbl_course',$crs_data)) {
+                        $c++;
+                    }
+                }
+                $i++;
              }
             fclose($file);            
         }
-             
+        $this->session->set_flashdata('message',$c.' Data inserted successfully.');
+        redirect('lead/courselist');             
     }
 	
 	public function crslist() {

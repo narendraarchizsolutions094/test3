@@ -30,7 +30,7 @@ a:hover, a:focus {
                     
 
                 </div>
-                    <a class="btn btn-primary btn-sm" data-toggle="modal" data-target="#course_upload" href="javascript:void(0)"> <i class="fa fa-upload"></i><?php echo display('upload_course') ?></a>  
+                    <a class="btn btn-primary btn-sm" data-toggle="modal" data-target="#course_upload" href="javascript:void(0)"> <i class="fa fa-upload"></i> <?php echo display('upload_course') ?></a>  
 
             </div>
 
@@ -143,7 +143,7 @@ a:hover, a:focus {
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-        <form action="<?=base_url().'lead/upload_course'?>" enctype="multipart/form-data">
+        <form action="<?=base_url().'lead/upload_course'?>" enctype="multipart/form-data" method='post'>
           <div class="modal-body">
                 <a href="<?=base_url().'docs/course_sample.csv'?>" class='pull-right'>Download Sample</a>
 
