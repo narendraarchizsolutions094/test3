@@ -927,7 +927,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                      </ul>
 
                   </li>  -->
-				  <?php ($this->session->companey_id == 1) { ?>
+				  <?php if($this->session->companey_id == 1) { ?>
 				 <li class="treeview">
                      <a href="#">
                       <i class="fa fa-cog" style="color:#fff;font-size:15px;background:#f1c40f;padding:7px;border-radius:4px;width:30px;"></i> Inventory
