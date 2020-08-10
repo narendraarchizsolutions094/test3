@@ -724,7 +724,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
 					<?php } ?>
                </div>
                <ul class="sidebar-menu">
-         <?php if(($this->session->user_right!=151 && $this->session->user_right!=180 && $this->session->user_right!=183)){ ?>
+         <?php if(($this->session->user_right!=151 && $this->session->user_right!=180 && $this->session->user_right!=186)){ ?>
                   <li class="<?php echo (($segment1 == 'dashboard') ? "active" : null) ?>">
                      <a href="<?php echo base_url('dashboard') ?>">
                      <i class="fa fa-home" style="color:#fff;font-size:17px;background:#2ecc71;padding:7px;border-radius:4px;width:30px;"></i> &nbsp;<?php echo display('dashboard') ?>
@@ -1207,7 +1207,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
            
           
           
-    <?php if($this->session->userdata('user_right')==151 || $this->session->userdata('user_right')==180 || $this->session->userdata('user_right')==183){ ?>     
+    <?php if($this->session->userdata('user_right')==151 || $this->session->userdata('user_right')==180 || $this->session->userdata('user_right')==186){ ?>     
           <li class="treeview <?php echo (($segment2 == "meeting_room") ? "active" : null) ?>" style="<?php if(in_array(410,$module) || in_array(411,$module) || in_array(412,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
                     <a href="<?php echo base_url("dashboard/meeting_room") ?>"><i class="fa fa-heart-o" style="color:#fff;font-size:18px;background:#04e9d1;padding:7px;border-radius:4px;width:30px;"></i> &nbsp;<?php echo display('meeting_room') ?>
           <?php  if($this->session->menu==1){ ?></br><p style="color:#fff;font-size:9px;margin-left:-12px;padding-top:10px;"><?php echo display('meeting_room') ?></p> <?php } ?>
