@@ -801,7 +801,7 @@ if($coment_type == 1){
                 if ($data['enquiry']->product_id == 168) {
                     $user_right = 180; 
                 }else if ($data['enquiry']->product_id == 169) {
-                    $user_right = 183;
+                    $user_right = 186;
                 }
                 $postData = array(
                         's_display_name'  =>    $data['enquiry']->name,
