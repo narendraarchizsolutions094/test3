@@ -515,7 +515,7 @@ height:auto;
 			<div class="tab-panel-main">
 				<ul class="tabs">
 					<li class="tab-link current" data-tab="Basic-detail">Basic Detail</li>
-				    <?php if($this->session->userdata('user_right')==151 || $this->session->userdata('user_right')==180 || $this->session->userdata('user_right')==183){ ?>
+				    <?php if($this->session->userdata('user_right')==151 || $this->session->userdata('user_right')==180 || $this->session->userdata('user_right')==186){ ?>
 					<li class="tab-link" data-tab="Edu-detail">Document</li>
 					<li class="tab-link" data-tab="Portfolio">Institute</li>
 					<li class="tab-link" data-tab="qualification">Qualification</li>

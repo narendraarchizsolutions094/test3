@@ -1191,11 +1191,11 @@ public function user_profile() {
         }
 		//print_r($data['student_Details']);exit;
 		if($this->session->userdata('companey_id')!=67){
-        $data['vid_list'] = $this->schedule_model->vid_list();  
-        $data['faq_list'] = $this->schedule_model->faq_list(); 
-        $data['country'] = $this->location_model->country();
-		$data['ins_list'] = $this->location_model->stu_ins_list();
-        $data['schdl_list'] = $this->schedule_model->get_schedule_list();
+            $data['vid_list'] = $this->schedule_model->vid_list();  
+            $data['faq_list'] = $this->schedule_model->faq_list(); 
+            $data['country'] = $this->location_model->country();
+    		$data['ins_list'] = $this->location_model->stu_ins_list();
+            $data['schdl_list'] = $this->schedule_model->get_schedule_list();
 		}
         $data['lead_stage']    =   $this->Leads_Model->find_stage();
 		$data['source_list'] = $this->home_model->sour_list();
@@ -1215,6 +1215,7 @@ public function user_profile() {
 		$data['institute_list'] = $this->Institute_model->institutelist();
 		$data['institute'] = $this->Institute_model->findinstitute();
 		$data['all_extra'] = $this->location_model->get_qualification_tab($en_id);
+        //exit();
 		//echo "<pre>";
         // print_r($data['all_extra']);exit();echo "</pre>";
         $data['content'] = $this->load->view('student/profile_wrapper', $data, true);
