@@ -203,6 +203,11 @@ class Client extends CI_Controller {
 		$data['qualification_data'] = $this->enquiry_model->quali_data($data['details']->Enquery_id);
 		$data['english_data'] = $this->enquiry_model->eng_data($data['details']->Enquery_id);
 		}
+        if ($this->session->companey_id=='67') { 
+            $data['discipline'] = $this->location_model->find_discipline();
+            $data['level'] = $this->location_model->find_level();
+            $data['length'] = $this->location_model->find_length();
+        }
 		$data['course_list'] = $this->Leads_Model->get_course_list();
         $data['content'] = $this->load->view('enquiry_details1', $data, true);
         $this->enquiry_model->assign_notification_update($enquiry_code);

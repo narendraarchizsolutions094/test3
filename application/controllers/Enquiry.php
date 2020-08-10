@@ -1264,7 +1264,7 @@ class Enquiry extends CI_Controller {
         $user_role    =   $this->session->user_role;
         $data['country_list'] = $this->location_model->productcountry();
 
-        $data['institute_list'] = $this->Institute_model->institutelist_by_country($data['details']->enq_country);
+        $data['institute_list'] = $this->Institute_model->institutelist_by_country($data['details']->enq_country); 
         $data['course_list'] = $this->Leads_Model->get_course_list();
         $data['institute_app_status'] = $this->Institute_model->get_institute_app_status();
 
@@ -1293,9 +1293,10 @@ class Enquiry extends CI_Controller {
         $data['compid']     =  $data['details']->comp_id;
         $data['all_description_lists']    =   $this->Leads_Model->find_description();
 		if ($this->session->companey_id=='67') { 
-		//$data['qualification_data'] = $this->enquiry_model->quali_data($data['details']->Enquery_id);
-		//$data['english_data'] = $this->enquiry_model->eng_data($data['details']->Enquery_id);
-		}
+            $data['discipline'] = $this->location_model->find_discipline();
+            $data['level'] = $this->location_model->find_level();
+            $data['length'] = $this->location_model->find_length();
+        }
         $this->enquiry_model->make_enquiry_read($data['details']->Enquery_id);
         //echo"<pre>";print_r($data);die;
         $data['content'] = $this->load->view('enquiry_details1', $data, true);

@@ -731,7 +731,7 @@ public function find_discipline() {
 
         return $this->db->select("*")
                         ->from("tbl_levels")
-                        ->where('comp_id',$this->session->userdata('companey_id'))
+                        ->where('comp_id',$this->session->companey_id)
                         ->get()
                         ->result();
     }
@@ -740,7 +740,7 @@ public function find_discipline() {
 
         return $this->db->select("*")
                         ->from("tbl_length")
-                        ->where('comp_id',$this->session->userdata('companey_id'))
+                        ->where('comp_id',$this->session->companey_id)
                         ->get()
                         ->result();
     }

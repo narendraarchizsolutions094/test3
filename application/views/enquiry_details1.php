@@ -994,21 +994,18 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
 							                <th>
                                 Tuition Fee
                               </th>
+							             <?php } if ($this->session->companey_id!='67') { ?>
 							                 <th>
                                 Offer letter fee
                               </th>
-                                <?php
-                              }
-                              ?>
-                              <th>
                                 Application URL
                               </th>
-							             <?php if ($this->session->companey_id!='67') { ?>
+                              <th>
                               <th>
                                 Major
                               </th>
                               <th>
-                                Username
+                                Username                                
                               </th>
                               <th>
                                 Password
@@ -1020,6 +1017,7 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                               <th>
                                 App Fee
                               </th>
+                           <?php if ($this->session->companey_id!='67') { ?>                              
                               <th>
                                 Transcripts
                               </th>
@@ -1030,16 +1028,15 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                                 SOP
                               </th>
                               <th>
-                                CV
-                              </th>
-							             <?php if ($this->session->companey_id!='67') { ?>
+                                CV                           
+                              </th>							             
                               <th>
                                 GRE/GMAT
                               </th>
-							             <?php } ?>
                               <th>
                                 TOEFL/IELTS /PTE
                               </th>
+							             <?php } ?>
                               <th>
                                 Remarks
                               </th>
@@ -1064,26 +1061,26 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                                     <td><?php foreach($discipline as $dc){if($dc->id==$value['p_disc']){echo $dc->discipline;}}?></td>                                  
 
                                     <td><?=$value['t_fee']?></td>
-                                    <td><?=$value['ol_fee']?></td>                                    
                                   <?php
                                   }
                                   ?>
-                                    <td><?=$value['application_url']?></td>
 									               <?php if ($this->session->companey_id!='67') { ?>
+                                    <td><?=$value['ol_fee']?></td>                                    
+                                    <td><?=$value['application_url']?></td>
                                     <td><?=$value['major']?></td>
                                     <td><?=$value['user_name']?></td>
                                     <td><?=$value['password']?></td>
 									               <?php } ?>
                                     <td><?=$value['app_status_title']?></td>
                                     <td><?=$value['app_fee']?></td>
+									               <?php if ($this->session->companey_id!='67') { ?>
                                     <td><?=$value['transcript']?></td>
                                     <td><?=$value['lors']?></td>
                                     <td><?=$value['sop']?></td>
                                     <td><?=$value['cv']?></td>
-									               <?php if ($this->session->companey_id!='67') { ?>
                                     <td><?=$value['gre_gmt']?></td>
-									               <?php } ?>
                                     <td><?=$value['toefl']?></td>
+									               <?php } ?>
                                     <td><?=$value['remark']?></td>
                                     <td><?=$value['followup_comment']?></td>
                                     <td>
@@ -1164,16 +1161,16 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                           <label>Tuition fee</label>
                           <input class="form-control" name="t_fee" type="text" placeholder="Tuition fee" >  
 </div>
-<div class="form-group col-sm-4"> 
+<!-- <div class="form-group col-sm-4"> 
                           <label>Offer letter fee</label>
                           <input class="form-control" name="ol_fee" type="text" placeholder="O.letter fee" >  
-</div>
+</div> -->
 <?php } ?>					   
+<?php if ($this->session->companey_id!='67') { ?>
                        <div class="form-group col-sm-4"> 
                           <label>Application URL </label>
                           <input class="form-control" name="application_url" type="text" placeholder="Application Url" >  
                        </div>
-<?php if ($this->session->companey_id!='67') { ?>
                        <div class="form-group col-sm-4"> 
                           <label>Major </label>
                           <input class="form-control" name="major" type="text" placeholder="Major" >  
@@ -1210,6 +1207,7 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                           <input class="form-control" name="app_fee" type="text" placeholder="App Fee" >  
                        </div>
                       
+                      <?php if ($this->session->companey_id!='67') { ?>
                       
                        <div class="form-group col-sm-4"> 
                           <label>Transcript </label>
@@ -1231,17 +1229,17 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                           <label>CV </label>
                           <input class="form-control" name="cv" type="text" placeholder="cv" >  
                        </div>
-<?php if ($this->session->companey_id!='67') { ?>
+
                        <div class="form-group col-sm-4"> 
                           <label>GRE/GMAT </label>
                           <input class="form-control" name="gre_gmt" type="text" placeholder="GRE/GMAT" >  
                        </div>
-<?php } ?>
                       
                        <div class="form-group col-sm-4"> 
                           <label>TOEFL/IELTS/PTS </label>
                           <input class="form-control" name="tofel_ielts_pts" type="text" placeholder="TOEFL/IELTS/PTS" >  
                        </div>
+<?php } ?>
 
                                                               
                        <div class="form-group col-sm-4"> 
@@ -4236,22 +4234,15 @@ function find_app_crs() {
             url: '<?php echo base_url();?>lead/select_app_by_ins',
             data: {c_course:c_stage,c_lvl:l_stage,c_length:lg_stage,c_disc:d_stage},
             
-            success:function(data){
-               // alert(data);
+            success:function(data){                
                 var html='';
-                var obj = JSON.parse(data);
-                
+                var obj = JSON.parse(data);                
                 html +='<option value="" style="display:none">---Select---</option>';
-                for(var i=0; i <(obj.length); i++){
-                    
-                    html +='<option value="'+(obj[i].crs_id)+'">'+(obj[i].course_name)+'</option>';
-                }
-                
-                $("#app_course").html(html);
-                
-            }
-            
-            
+                for(var i=0; i <(obj.length); i++){                    
+                    html +='<option value="'+(obj[i].crs_id)+'">'+(obj[i].course_name_str)+'</option>';
+                }                
+                $("#app_course").html(html);                
+            }            
             });
 
     }
