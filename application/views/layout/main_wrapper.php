@@ -927,8 +927,8 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                      </ul>
 
                   </li>  -->
-				  <?php if($this->session->companey_id == 1) { ?>
-				 <li class="treeview">
+				  
+				 <li class="treeview" style="<?php if(in_array(430,$module) || in_array(431,$module) || in_array(432,$module) || in_array(433,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
                      <a href="#">
                       <i class="fa fa-cog" style="color:#fff;font-size:15px;background:#f1c40f;padding:7px;border-radius:4px;width:30px;"></i> Inventory
                       <span class="pull-right-container">
@@ -966,7 +966,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                      </ul>
 
                   </li>
-				  <?php } ?>
+				
                   <li class="treeview <?php echo in_array($segment1, array('user','customer')) ? "active" : null ?>" style="<?php if(in_array(130,$module) || in_array(131,$module) || in_array(132,$module) || in_array(133,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
                      <a href="#">
                        <i class="fa fa-user-plus" style="color:#fff;font-size:15px;background:#9b59b6;padding:7px;border-radius:4px;width:30px;"></i> &nbsp;<?php echo display('User_mgment') ?>

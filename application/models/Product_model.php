@@ -26,10 +26,10 @@ class Product_model extends CI_Model {
 
     public function productlist() {
         return $this->db->select("*")
-                        ->from($this->table)						->where("comp_id", $this->session->userdata('companey_id'))
+                        ->from("tbl_product_country")						->where("comp_id", $this->session->userdata('companey_id'))
                         ->get()
                         ->result();
-    }		public function productdetlist() {        return $this->db->select("tbl_product.*,tbl_proddetails.*")					->from("tbl_product")					->join("tbl_proddetails", "tbl_proddetails.prodid = tbl_product.sb_id", "LEFT")					->where("tbl_product.comp_id", $this->session->userdata('companey_id'))					->where("tbl_proddetails.id IS NOT NULL")					->order_by("tbl_product.sb_id DESC")					->get()					->result();    }	public function productdet($prodno) {        return $this->db->select("tbl_product.*,tbl_proddetails.*")					->from("tbl_product")					->join("tbl_proddetails", "tbl_proddetails.prodid = tbl_product.sb_id", "LEFT")					->where("tbl_product.comp_id", $this->session->userdata('companey_id'))					->where("tbl_product.sb_id", $prodno)					->where("tbl_proddetails.id IS NOT NULL")					->order_by("tbl_product.sb_id DESC")					->get()					->row();    }
+    }		public function productdetlist() {        return $this->db->select("tbl_proddetails.*,tbl_product_country.*,tbl_product_country.id as sb_id")					->from("tbl_product_country")					->join("tbl_proddetails", "tbl_proddetails.prodid = tbl_product_country.id", "LEFT")					->where("tbl_product_country.comp_id", $this->session->userdata('companey_id'))					->where("tbl_proddetails.id IS NOT NULL")					->order_by("tbl_product_country.id DESC")					->get()					->result();    }	public function productdet($prodno) {        return $this->db->select("tbl_product_country.*,tbl_proddetails.*,tbl_product_country.id as sb_id")					->from("tbl_product_country")					->join("tbl_proddetails", "tbl_proddetails.prodid = tbl_product_country.id", "LEFT")					->where("tbl_product_country.comp_id", $this->session->userdata('companey_id'))					->where("tbl_product_country.id", $prodno)					->where("tbl_proddetails.id IS NOT NULL")					->order_by("tbl_product_country.id DESC")					->get()					->row();    }
     
     public function all_block($city_id) {
         return $this->db->select('*')->from('tbl_school')->where('city_id', $city_id)->get()->result();

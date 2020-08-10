@@ -87,14 +87,13 @@
                                   ->join('tbl_user_role','tbl_user_role.use_id=tbl_admin.user_permissions')
                                   ->get('tbl_admin')
                                   ->row();
-
+					
                       if (!empty($current_per->user_permissions)) {
                         $curr_per = explode(',',$current_per->user_permissions);
                       }else{
                         $curr_per = array();
                       }
-
-
+				
                    // $n=1;
                     //for($i=0; $i < count($modules); $i++){  
                     foreach ($modules as $key => $value) {                                            

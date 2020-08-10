@@ -268,6 +268,7 @@ public function inventory(){
         $data['warehouse_list'] = $this->warehouse_model->warehouse_list();
         $data['brand_list'] = $this->warehouse_model->brand_list();
          $data['country'] = $this->warehouse_model->productcountry();
+		
         $data['content'] = $this->load->view('warehouse/inventory', $data, true);
         $this->load->view('layout/main_wrapper', $data);
 
