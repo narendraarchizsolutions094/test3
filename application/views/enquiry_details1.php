@@ -4301,5 +4301,51 @@ $("#toggle_timeline").on('click',function(){
     $(".details-column").removeClass('col-md-9');
     $(".details-column").addClass('col-md-6');
   }
+
 });
+  $("input[name='submit_and_next']").on('click',function(){
+    $(this).next().val('save_and_new');
+  });
+
+  $("input[name='submit_only']").on('click',function(){
+    $(this).next().next().val('save_only');
+  });
+  
+  /*ajax form submit*/
+  $('.tabbed_form').on('submit',function(e) {    
+    e.preventDefault(); // avoid to execute the actual submit of the form.
+    var form = $(this);
+    var url = form.attr('action');
+    $.ajax({
+       type: "POST",
+       url: url,
+       data: form.serialize(), // serializes the form's elements.
+       success: function(data)
+       {
+           res = JSON.parse(data);
+           if (res.status) {
+              Swal.fire(
+                'Good job!',
+                res.msg,
+                'success'
+              );
+              var btn = form.find("input[name='go_new_tab']").val();              
+              if (btn == 'save_and_new') {                
+                var next = jQuery('.nav-tabs > .active').next('li');
+                if(next.length){
+                  next.find('a').trigger('click');
+                }else{
+                  jQuery('#myTabs a:first').tab('show');
+                }
+              }
+           }else{
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: 'Something went wrong!'
+            })
+           }           
+       }
+     });
+  });
 </script>
