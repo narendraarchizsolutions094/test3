@@ -13,7 +13,7 @@ class Product extends CI_Controller {
 		$data['title'] = 'Product List';
 		
 		$data['product_list'] = $this->Product_model->productdetlist();
-		
+	
 		$data['content'] = $this->load->view('product/prod-det-list', $data, true);
         $this->load->view('layout/main_wrapper', $data);
 		
@@ -29,7 +29,10 @@ class Product extends CI_Controller {
 		$data['title'] = 'Add Product';
 		$data['category'] = $this->db->select("*")->where("comp_id", $this->session->companey_id)->get("tbl_category")->result();
 		$currdate = date("Y-m-d");
+		
 		$data['scheme'] = $this->db->select("*")->where("comp_id", $this->session->companey_id)->where("from_date <= '$currdate' and to_date >= '$currdate'")->get("tbl_scheme")->result();
+		
+		$data['process'] = $this->db->select("*")->where("comp_id", $this->session->companey_id)->get("tbl_product")->result();
 		
 		$data['content']  = $this->load->view('product/add-product', $data, true);
         $this->load->view('layout/main_wrapper', $data);
@@ -45,11 +48,15 @@ class Product extends CI_Controller {
 		
 		$data['title'] = 'Update Product';
 		$data['product'] = $this->Product_model->productdet($prodno);
+		
 		$data['category'] = $this->db->select("*")->where("comp_id", $this->session->companey_id)->get("tbl_category")->result();
-		
-		
+	
 		$data['subcategory'] = $this->db->select("*")->where("comp_id", $this->session->companey_id)->where("cat_id", $data["product"]->category)->get("tbl_subcategory")->result();
 		
+		$currdate = date("Y-m-d");
+		$data['scheme'] = $this->db->select("*")->where("comp_id", $this->session->companey_id)->where("from_date <= '$currdate' and to_date >= '$currdate'")->get("tbl_scheme")->result();
+		
+		$data['process'] = $this->db->select("*")->where("comp_id", $this->session->companey_id)->get("tbl_product")->result();
 		
 		$data['content'] = $this->load->view('product/add-product', $data, true);
         $this->load->view('layout/main_wrapper', $data);
@@ -155,10 +162,12 @@ class Product extends CI_Controller {
    
 		if($this->form_validation->run()){
    
-		
-			$insarr = array("product_name"  => $this->input->post("proname", true),
-							 "main_fun"     => "",
-							 "status"       => $this->input->post("status", true)
+			$insarr = array("country_name"  => $this->input->post("proname", true),
+							 "price"     	=> $this->input->post("price", true),
+							 "hsn_sac"	    => $this->input->post("hsn_code", true),
+							 "status"       => $this->input->post("tax", true),
+							 "gst"			=> $this->input->post("status", true),
+							 "updated_date" => date("Y-m-d h:i:s"),
 							 );
 			
 			if(isset($_POST["productid"])) {
@@ -166,14 +175,14 @@ class Product extends CI_Controller {
 				$prodid  = $this->input->post("productid", true);
 				
 				$this->db->where("sb_id", $prodid);
-				$this->db->update("tbl_product", $insarr);
+				$this->db->update("tbl_product_country", $insarr);
 				
 			}else{
 				$insarr["comp_id"] 		=  $this->session->companey_id;
-				$insarr["added_by"]		=  $this->session->user_id;
-				$insarr["added_on"]		=  date("Y-m-d h:i:s");
+				$insarr["updated_by"]		=  $this->session->user_id;
+				$insarr["created_date"]		=  date("Y-m-d h:i:s");
 			
-				$this->db->insert("tbl_product", $insarr);	
+				$this->db->insert("tbl_product_country", $insarr);	
 				$prodid  = $this->db->insert_id();	
 			}
 						 
@@ -193,6 +202,7 @@ class Product extends CI_Controller {
 							 "last_update"  => date("Y-m-d h:i:s"),
 							// "image"		=> $imagename,
 							 "sub_image"    => "",
+							 "process"		=> $this->input->post("process"),
 							 "category"     => $this->input->post("cat", true),
 							 "subcatogory"  => $this->input->post("scat", true),
 							 "price"    	=> $price,
@@ -770,7 +780,7 @@ class Product extends CI_Controller {
         $data['state_list'] = $this->location_model->state_list();
         $data['country'] = $this->location_model->country();
         $data['region_list'] = $this->location_model->region_list();
-        $data['block_list'] = $this->location_model->block_list();
+     //   $data['block_list'] = $this->location_model->block_list();
         $data['partial'] = 'product/product_form';
         $this->load->view('layout/main_wrapper', $data);
     } 

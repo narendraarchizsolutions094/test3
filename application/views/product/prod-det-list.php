@@ -64,11 +64,11 @@
 
                   <tr>
 
-                     <td><input type='checkbox' name='product_status[]' class="checkbox" value='<?php echo $row->sb_id;?>'>&nbsp; </td>
+                     <td><input type='checkbox' name='product_status[]' class="checkbox" value='<?php echo $row->id;?>'>&nbsp; </td>
 
                      <td><?=$i++ ?></td>
 					<td><img src = ""></td>
-                     <td><?= $row->product_name ?></td>
+                     <td><?= $row->country_name; ?></td>
 
                      <td> <i class = "fa fa-rupee"></i> <?php echo $row->price; ?></td>
 
@@ -78,7 +78,7 @@
 		
                      <td class="center">
 
-                        <a  class="edit" href = "<?php echo base_url("product/editproduct/".$row->sb_id); ?>"><i class="ti-pencil"></i></a> 
+                        <a  class="edit" href = "<?php echo base_url("product/editproduct/".$row->id); ?>"><i class="ti-pencil"></i></a> 
 
                      </td>
 

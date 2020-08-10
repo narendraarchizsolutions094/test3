@@ -53,8 +53,8 @@
                                  <div class="col-md-12">
                                     <div class="form-group col-md-12">
                                        <label>Product Name</label>
-                                       <input type="hidden" name="product_id" value="<?php echo $rows->sb_id;?>" >
-                                       <input type="text" class="form-control" value="<?php echo $rows->product_name;?>" name="product_name" required>
+                                       <input type="hidden" name="product_id" value="<?php echo $rows->id;?>" >
+                                       <input type="text" class="form-control" value="<?php echo $rows->country_name;?>" name="product_name" required>
                                     </div>
                                     <div class="form-group col-md-12">
                                        <button class="btn btn-success" type="submit">update</button>

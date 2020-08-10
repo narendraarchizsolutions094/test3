@@ -1150,6 +1150,7 @@ if($coment_type == 1){
         if (user_role('33') == true) {}
         $data['title'] = 'Product List';
         $data['country'] = $this->location_model->productcountry();
+		
         // echo "<pre>";
         // print_r($data['country']);exit();
         $data['content'] = $this->load->view('location/product_country_list', $data, true);

@@ -536,7 +536,7 @@ class User extends CI_Controller {
         
         $this->db->select('id,title');        
         $data['modules']    =   $this->db->get('all_modules')->result_array();
-
+		
         $data['content'] = $this->load->view('edit_user_role', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }

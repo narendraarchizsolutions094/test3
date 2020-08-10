@@ -47,7 +47,7 @@
 							<div class="col-md-6">
 								<div class="form-group">
 									<label>Product Name</label>
-									<input type="text" class="form-control" id="proname" name="proname" value="<?php echo ($isedit == true) ? $product->product_name : set_value("proname"); ?>">
+									<input type="text" class="form-control" id="proname" name="proname" value="<?php echo ($isedit == true) ? $product->country_name : set_value("proname"); ?>">
 								</div>
 								<div class="form-group">
 									<label>HSN Code</label>
@@ -154,13 +154,13 @@
 								<div class="col-md-6">
 										<div class="form-group">
 											<label>Price</label>
-											<input type="text" class="form-control" id="price" placeholder="Enter price" name="price" value="<?php echo ($isedit == true) ? $product->price : set_value("price"); ?>">
+											<input type="number" class="form-control" id="price" placeholder="Enter price" name="price" value="<?php echo ($isedit == true) ? $product->price : set_value("price"); ?>">
 										</div>
 								</div>
 								<div class="col-md-6">
 										<div class="form-group">
 											<label>Other Price</label>
-											<input type="text" class="form-control" id="price" placeholder="Enter price" name="othrprice" value="<?php echo ($isedit == true) ? $product->othr_price : set_value("othr_price"); ?>">
+											<input type="number" class="form-control" id="price" placeholder="Enter price" name="othrprice" value="<?php echo ($isedit == true) ? $product->othr_price : set_value("othr_price"); ?>">
 										</div>
 								</div>
 								<div class="col-md-6">
@@ -185,14 +185,42 @@
 									<div class = "form-group">
 										<label>Scheme</label>
 										<select class = "form-control" name = "scheme">
-										<?php if(!empty($scheme)) {
+										<?php 
+										if($isedit == true) {
+											$schm = set_value("scheme"); 
+										}else{
+											$schm = $product->scheme;
+										}
+										
+										if(!empty($scheme)) {
 												foreach($scheme as $ind => $scm) {
 												
 												$qtytxt = "";
 												if($scm->qty > 0){
 													$qtytxt = "QTY ";	
 												}
-												?><option value = "<?php echo $scm->id ?>"><?php echo "QTY ".$scm->coupan." - ".$scm->discount; ?></option><?php		
+												?><option value = "<?php echo $scm->id ?>" <?php echo ($schm == $scm->id) ? "selected" : ""; ?>><?php echo "QTY ".$scm->coupan." - ".$scm->discount; ?></option><?php		
+												}	
+											} ?>
+										
+										</select>
+									</div>
+								</div>
+								<div class = "col-md-6">
+									<div class = "form-group">
+										<label>Process Id</label>
+										<select class = "form-control" name = "process">
+										<?php if(!empty($process)) {
+													if($isedit == true) {
+													$prcs = set_value("process"); 
+												}else{
+													//$prcs = $product->process;
+													$prcs =  "";
+												}
+												foreach($process as $ind => $prc) { 
+												
+											
+												?><option value = "<?php echo $prc->sb_id ?>" <?php echo ($prcs == $prc->sb_id) ? "selected" : ""; ?>><?php echo $prc->product_name; ?></option><?php		
 												}	
 											} ?>
 										

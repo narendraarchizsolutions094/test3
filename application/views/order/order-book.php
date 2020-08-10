@@ -87,7 +87,7 @@
 															<div class = "row">
 																	<div class = "col-md-3 text-center">
 																	<?php $image = (!empty($ord->image)) ? base_url("assets/images/".$ord->image)  : base_url("assets/images/profile/33.png");  ?>
-																			<p class="font-w600 mb-1"><img class="avatar avatar-xxl brround" src="<?php  echo $image; ?>"> </p>
+																			<p class="font-w600 mb-1"><img class="avatar avatar-xxl brround" src="<?php  echo $image; ?>" style = "width:30px;height:30px;"> </p>
 																		<h5><label>Order : </label> <?php echo $ord->quantity; ?> Pics</h5>
 																		<?php  if($this->session->mrole == 1) { ?>
 																		<h4>Stock : <?php echo $ord->stock; ?></h4>
