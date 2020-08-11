@@ -34,10 +34,19 @@
 												</p>
 									</div>
 									<div class="row">
-<div class="col-md-6" style="padding-top:5px;"><a href="<?php echo base_url('home/course_details/'.$movie->insid.'/'.$movie->crs_id); ?>" class="btn btn-success"><span><i class="fa fa-info-circle" aria-hidden="true"></i></span></a>&nbsp;&nbsp;
-<a href="<?php $root=(isset($_SERVER["HTTPS"]) ? "https://" : "http://").$_SERVER["HTTP_HOST"]; echo $root.'/new_crm'; ?>" class="btn btn-danger"><span><i class="fa fa-heart-o" aria-hidden="true"></i></span></a>&nbsp;&nbsp;
-<a href="<?php $root=(isset($_SERVER["HTTPS"]) ? "https://" : "http://").$_SERVER["HTTP_HOST"]; echo $root.'/new_crm'; ?>" class="btn btn-primary"><span><i class="fa fa-cart-plus" ></i></span> Apply</a>&nbsp;&nbsp;
-</div>							
+										<div class="col-md-6" style="padding-top:5px;"><a href="<?php echo base_url('home/course_details/'.$movie->insid.'/'.$movie->crs_id); ?>" class="btn btn-success"><span><i class="fa fa-info-circle" aria-hidden="true"></i></span></a>&nbsp;&nbsp;
+										<a href="<?php $root=(isset($_SERVER["HTTPS"]) ? "https://" : "http://").$_SERVER["HTTP_HOST"]; echo $root.'/new_crm'; ?>" class="btn btn-danger"><span><i class="fa fa-heart-o" aria-hidden="true"></i></span></a>&nbsp;&nbsp;
+										<?php
+										if (user_access(60)) { ?>
+											<a href="javascript:void(0)" class="btn btn-primary" data-toggle="modal" data-target="#apply_now" onclick="set_apply_with(<?=$movie->crs_id?>)"><span>
+										<?php	
+										}else{ ?>
+											<a href="<?php $root=(isset($_SERVER["HTTPS"]) ? "https://" : "http://").$_SERVER["HTTP_HOST"]; echo $root.'/new_crm'; ?>" class="btn btn-primary"><span>											
+										<?php
+										}
+										?>
+											<i class="fa fa-cart-plus" ></i></span> Apply</a>&nbsp;&nbsp;
+										</div>							
 							</div>
 								</div>
 						</div>
@@ -61,6 +70,49 @@
 						</div>
 					</div>	
 			<?php	} ?>
+
+			
+	<!-- Modal -->
+	<div class="modal fade" id="apply_now" tabindex="-1" role="dialog" aria-labelledby="apply_nowLabel" aria-hidden="true">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title" id="apply_nowLabel">Basic Details</h5>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button>
+	      </div>
+	      <div class="modal-body">
+	        <form action="<?=base_url()?>enquiry/create" method="post">
+	        	<div class="row">
+	        		<div class="col-md-6">	        			
+			        	<label>First Name</label>
+			        	<input type="text" name="enquirername" class="form-control">
+	        		</div>	        	
+	        		<div class="col-md-6">	        			
+			        	<label>Last Name</label>
+			        	<input type="text" name="lastname" class="form-control">
+	        		</div>	
+	        	</div>
+	        	<div class="row">
+	        		<div class="col-md-6">	        			
+			        	<label>Mobile</label>
+			        	<input type="text" name="mobileno" class="form-control">
+			        </div>
+	        		<div class="col-md-6">	        			
+			        	<label>Email</label>
+			        	<input type="email" name="email" class="form-control">
+			        </div>
+			        <div class="col-md-12 text-center">				        
+				        <br>	
+				        <input type="hidden" name="apply_with">		        
+	        			<input type="submit" name="submit" value="Submit" class="btn btn-primary">			        	
+			        </div>
+	        </form>
+	      </div>	      
+	    </div>
+	  </div>
+	</div>
 <script>
 $(document).ready(function() {
     // Configure/customize these variables.
@@ -116,4 +168,7 @@ $(document).ready(function() {
             }
         });
     });
+	function set_apply_with(id){
+		$("input[name='apply_with']").val(id);
+	}
 	</script>

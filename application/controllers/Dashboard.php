@@ -1126,8 +1126,8 @@ public function login_in_process(){
 
 		
 		if($this->session->userdata('companey_id')==67){
-		$data['discipline'] = $this->location_model->find_discipline();
-		$data['level'] = $this->location_model->find_level();
+		  $data['discipline'] = $this->location_model->find_discipline();
+		  $data['level'] = $this->location_model->find_level();
 		}
 		$data['vid_list'] = $this->Institute_model->videos();
 		$data['state_list'] = $this->location_model->all_states();

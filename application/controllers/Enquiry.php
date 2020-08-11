@@ -513,6 +513,37 @@ class Enquiry extends CI_Controller {
                 'status' => 1
             ];
             $insert_id    =   $this->enquiry_model->create($postData);
+            if ($this->input->post('apply_with')) {
+                $course_apply = $this->Institute_model->readRowcrs($this->input->post('apply_with'));  
+                $institute_data = array(                                
+                        'institute_id'      => $course_apply->institute_id,
+                        'course_id'         => $course_apply->crs_id,
+                        'p_lvl'             => $course_apply->level_id, 
+                        'p_disc'            => $course_apply->discipline_id,
+                        'p_length'          => $course_apply->length_id,
+                        't_fee'             => $course_apply->tuition_fees,
+                        'ol_fee'            => '',
+                        'enquery_code'      => $encode,
+                        'application_url'   => '',
+                        'major'             => '',
+                        'user_name'         => '',
+                        'password'          => '',
+                        'app_status'        => 1,
+                        'app_fee'           => '',
+                        'transcript'        => '',
+                        'lors'              => '',
+                        'sop'               => '',
+                        'cv'                => '',
+                        'gre_gmt'           => '',
+                        'toefl'             => '',
+                        'remark'            => '',
+                        'followup_comment'  => '',
+                        'ref_no'            => '',
+                        'courier_status'    => '',
+                        'created_by'        => $this->session->user_id                                
+                    );
+                $ins    =   $this->db->insert('institute_data',$institute_data);                
+            }
             $this->load->model('rule_model');
             $this->rule_model->execute_rules($encode);            
             if ($insert_id) {                
@@ -570,6 +601,8 @@ class Enquiry extends CI_Controller {
         }
 
     }
+
+   
 
      public function create2(){
 
