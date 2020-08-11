@@ -928,7 +928,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
 
                   </li>  -->
 				  
-				 <li class="treeview" style="<?php if(in_array(430,$module) || in_array(431,$module) || in_array(432,$module) || in_array(433,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
+				 <li class="treeview" style="<?php if(in_array(440,$module) || in_array(441,$module) || in_array(442,$module) || in_array(443,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
                      <a href="#">
                       <i class="fa fa-cog" style="color:#fff;font-size:15px;background:#f1c40f;padding:7px;border-radius:4px;width:30px;"></i> Inventory
                       <span class="pull-right-container">
