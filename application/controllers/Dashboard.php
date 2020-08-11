@@ -849,7 +849,7 @@ public function login_in_process(){
                     $img, 293, 350
             );
         }
-        $this->upload->display_errors();
+        echo $this->upload->display_errors();
 
         if ($this->session->user_id == 9) {
             $org = $this->input->post('org_name');
