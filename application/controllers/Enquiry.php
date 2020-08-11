@@ -602,6 +602,13 @@ class Enquiry extends CI_Controller {
 
     }
 
+    public function apply_to_course(){
+        $crs_id          =   $this->input->post('id');
+        $enquiry_code    =   $this->input->post('enquiry_code');
+        if ($crs_id && $enquiry_code) {
+            
+        }
+    }
    
 
      public function create2(){
@@ -2835,10 +2842,10 @@ function upload_enquiry() {
          $stu_phone=$this->session->userdata('phone');
         $data['student_Details'] = $this->home_model->studentdetail($stu_phone);
         $studetails = $this->home_model->studentdetail($stu_phone);
-        foreach($studetails as $st){
-        $en_id=$st->Enquery_id;
-        $comp_id=$st->comp_id;
-        }
+        
+        $en_id=$studetails['Enquery_id'];
+        $comp_id=$studetails['comp_id'];
+        
         //print_r($data['student_Details']);exit;
         $data['invoice_details'] = $this->home_model->invoicedetail($en_id);
         $data['agrrem_doc'] = $this->home_model->aggr_doc($en_id);

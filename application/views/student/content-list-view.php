@@ -6,7 +6,11 @@
     display: block;
 }
 </style>
-					<?php $i=1;
+					<?php 
+					echo "<pre>";
+					print_r($_SESSION);
+					echo "</pre>";
+					$i=1;
 					foreach($courses as $key =>  $movie){ ?>
 					<div class="row grid-show" style="border:2px solid #2e6da4;border-radius: 20px 0px;">
 						<div class="col-md-3 text-center">
@@ -41,7 +45,7 @@
 											<a href="javascript:void(0)" class="btn btn-primary" data-toggle="modal" data-target="#apply_now" onclick="set_apply_with(<?=$movie->crs_id?>)"><span>
 										<?php	
 										}else{ ?>
-											<a href="<?php $root=(isset($_SERVER["HTTPS"]) ? "https://" : "http://").$_SERVER["HTTP_HOST"]; echo $root.'/new_crm'; ?>" class="btn btn-primary"><span>											
+											<a href="javascript:void(0)" onclick="apply_with(<?=$movie->crs_id?>)" class="btn btn-primary"><span>											
 										<?php
 										}
 										?>
@@ -153,22 +157,40 @@ $(document).ready(function() {
 </script>
 
 <script type="text/javascript">
-		$("#load-more").on('click',function(){
-        var lastID = $('.load-more').attr('lastID');        
-        $.ajax({
-            type:'POST',
-            url:"<?=base_url().'programs/load_programs'?>",
-            data:{'id':lastID},
-            beforeSend:function(){
-                $('.load-more').show();
-            },
-            success:function(html){
-                $('.load-more').remove();
-                $('#courses-area').append(html);
-            }
-        });
+	$("#load-more").on('click',function(){
+	    var lastID = $('.load-more').attr('lastID');        
+	    $.ajax({
+	        type:'POST',
+	        url:"<?=base_url().'programs/load_programs'?>",
+	        data:{'id':lastID},
+	        beforeSend:function(){
+	            $('.load-more').show();
+	        },
+	        success:function(html){
+	            $('.load-more').remove();
+	            $('#courses-area').append(html);
+	        } 
+	    });
     });
+	
 	function set_apply_with(id){
 		$("input[name='apply_with']").val(id);
+	}
+	
+	function apply_with(id){
+		var enquiry_code = <?=$student_Details['Enquery_id']?>;
+		if (confirm('Are you sure ?')) {
+			$.ajax({
+		        type:'POST',
+		        url:"<?=base_url().'enquiry/apply_to_course'?>",
+		        data:{
+	        		'id':id,
+	        		'enquiry_code':enquiry_code
+		    	},
+		        success:function(html){
+		            
+		        }
+	    	});	
+		}
 	}
 	</script>

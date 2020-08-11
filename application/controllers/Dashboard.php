@@ -76,7 +76,7 @@ class Dashboard extends CI_Controller {
                     'isLogIn' => true,
                     'user_id' => $check_user->row()->pk_i_admin_id,
                     'companey_id' => $check_user->row()->companey_id,
-                    'email' => $check_user->row()->email,
+                    'email' => $check_user->row()->s_user_email,
                     'designation' => $check_user->row()->designation,
                     'phone' => $check_user->row()->s_phoneno,
                     'fullname' => $check_user->row()->s_display_name . '&nbsp;' . $check_user->row()->last_name,
@@ -244,7 +244,7 @@ $this->load->library('zip');
                             'user_id'               => $user_data->pk_i_admin_id,
                             'companey_id'           => $user_data->companey_id,
                             //'process'               => $check_user->row()->process,
-                            'email'                 => $user_data->email,
+                            'email'                 => $user_data->s_user_email,
                             'designation'           => $user_data->designation,
                             'phone'                 => $user_data->s_phoneno,
                             'fullname'              => $user_data->s_display_name . '&nbsp;' . $user_data->last_name,
@@ -319,7 +319,7 @@ public function login_in_process(){
                         'isLogIn'               => true,
                         'user_id'               => $check_user->row()->pk_i_admin_id,
                         'companey_id'           => $check_user->row()->companey_id,
-                        'email'                 => $check_user->row()->email,
+                        'email'                 => $check_user->row()->s_user_email,
                         'designation'           => $check_user->row()->designation,
                         'phone'                 => $check_user->row()->s_phoneno,
                         'fullname'              => $check_user->row()->s_display_name . '&nbsp;' . $check_user->row()->last_name,
@@ -1099,7 +1099,8 @@ public function login_in_process(){
 	public function search_programs() {
 		$data['title'] = display('search_programs');
         $user_id = $this->session->userdata('user_id');
-		$comp_id = $this->session->userdata('companey_id');
+        $comp_id = $this->session->userdata('companey_id');
+		$stu_phone = $this->session->userdata('phone');
 		
 		/*$this->db->select("*,tbl_crsmaster.course_name");
         $this->db->from('tbl_course');
@@ -1135,6 +1136,7 @@ public function login_in_process(){
 		$data['ins_list'] = $this->location_model->stu_ins_list();
 		$data['crs_list'] = $this->location_model->stu_crs_list();
 		$data['course'] = $this->Institute_model->all_crs_list();
+        $data['student_Details'] = $this->home_model->studentdetail($stu_phone);
         $data['content'] = $this->load->view('student/search_programs', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }
@@ -1185,11 +1187,10 @@ public function user_profile() {
 		$stu_phone=$this->session->userdata('phone');
         $data['student_Details'] = $this->home_model->studentdetail($stu_phone);
         $studetails = $this->home_model->studentdetail($stu_phone);
-        foreach($studetails as $st){
-        $en_id=$st->Enquery_id;
-        $comp_id=$st->comp_id;
-        }
-		//print_r($data['student_Details']);exit;
+        
+        $en_id=$studetails['Enquery_id'];
+        $comp_id=$studetails['comp_id'];
+        
 		if($this->session->userdata('companey_id')!=67){
             $data['vid_list'] = $this->schedule_model->vid_list();  
             $data['faq_list'] = $this->schedule_model->faq_list(); 
@@ -1205,8 +1206,6 @@ public function user_profile() {
         $data['city_list'] = $this->home_model->ecity_list();
 		$data['agrrem_doc'] = $this->home_model->aggr_doc($en_id);
 		$data['country_list'] = $this->home_model->cntry_list();
-		//$data['all_input'] = $this->location_model->input_list();
-		//$data['all_dynamic'] = $this->location_model->dynamic_list($en_id);
 		$data['all_institute'] = $this->location_model->institute_data($en_id);
 		$data['discipline'] = $this->location_model->find_discipline();
 		$data['level'] = $this->location_model->find_level();
@@ -1214,10 +1213,7 @@ public function user_profile() {
 		$data['course_list'] = $this->Institute_model->courselist();
 		$data['institute_list'] = $this->Institute_model->institutelist();
 		$data['institute'] = $this->Institute_model->findinstitute();
-		$data['all_extra'] = $this->location_model->get_qualification_tab($en_id);
-        //exit();
-		//echo "<pre>";
-        // print_r($data['all_extra']);exit();echo "</pre>";
+		$data['all_extra'] = $this->location_model->get_qualification_tab($en_id);        
         $data['content'] = $this->load->view('student/profile_wrapper', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }
