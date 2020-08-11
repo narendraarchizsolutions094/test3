@@ -7,9 +7,7 @@
 }
 </style>
 					<?php 
-					echo "<pre>";
-					print_r($_SESSION);
-					echo "</pre>";
+				
 					$i=1;
 					foreach($courses as $key =>  $movie){ ?>
 					<div class="row grid-show" style="border:2px solid #2e6da4;border-radius: 20px 0px;">
