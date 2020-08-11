@@ -849,6 +849,7 @@ public function login_in_process(){
                     $img, 293, 350
             );
         }
+        $this->upload->display_errors();
 
         if ($this->session->user_id == 9) {
             $org = $this->input->post('org_name');
@@ -903,7 +904,7 @@ public function login_in_process(){
                     'picture' => $postData['picture'],
                 ]);
             }
-            redirect('dashboard/form/');
+            //redirect('dashboard/form/');
         } else {
             $data['state_list'] = $this->location_model->state_list();
             $data['city_list'] = $this->location_model->city_list();
