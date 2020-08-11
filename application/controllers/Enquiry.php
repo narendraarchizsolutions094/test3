@@ -606,33 +606,54 @@ class Enquiry extends CI_Controller {
         $crs_id          =   $this->input->post('id');
         $enquiry_code    =   $this->input->post('enquiry_code');
         if ($crs_id && $enquiry_code) {
-            
+            $course_apply = $this->Institute_model->readRowcrs($crs_id);  
+            $institute_data = array(                                
+                    'institute_id'      => $course_apply->institute_id,
+                    'course_id'         => $course_apply->crs_id,
+                    'p_lvl'             => $course_apply->level_id, 
+                    'p_disc'            => $course_apply->discipline_id,
+                    'p_length'          => $course_apply->length_id,
+                    't_fee'             => $course_apply->tuition_fees,
+                    'ol_fee'            => '',
+                    'enquery_code'      => $enquiry_code,
+                    'application_url'   => '',
+                    'major'             => '',
+                    'user_name'         => '',
+                    'password'          => '',
+                    'app_status'        => 1,
+                    'app_fee'           => '',
+                    'transcript'        => '',
+                    'lors'              => '',
+                    'sop'               => '',
+                    'cv'                => '',
+                    'gre_gmt'           => '',
+                    'toefl'             => '',
+                    'remark'            => '',
+                    'followup_comment'  => '',
+                    'ref_no'            => '',
+                    'courier_status'    => '',
+                    'created_by'        => $this->session->user_id                                
+                );
+            $ins    =   $this->db->insert('institute_data',$institute_data);                
         }
     }
-   
-
-     public function create2(){
-
+    public function create2(){
         $process = $this->session->userdata('process');
-        // print_r($process);
-         $data['leadsource'] = $this->Leads_Model->get_leadsource_list();
+        $data['leadsource'] = $this->Leads_Model->get_leadsource_list();
         $data['lead_score'] = $this->Leads_Model->get_leadscore_list();
         $data['title'] = display('new_enquiry');
         $this->form_validation->set_rules('mobileno', display('mobileno'), 'max_length[20]|required', array('is_unique' => 'Duplicate   entry for phone'));
-        
         $enquiry_date = $this->input->post('enquiry_date');
         if($enquiry_date !=''){
           $enquiry_date = date('d/m/Y');
         }else{
           $enquiry_date = date('d/m/Y');
         } 
-       $city_id= $this->db->select("*")
+        $city_id= $this->db->select("*")
             ->from("city")
             ->where('id',$this->input->post('city_id'))
             ->get();
         $other_phone = $this->input->post('other_no[]');
-
-
         if ($this->form_validation->run() === true) {
            $name = $this->input->post('enquirername');
             $name_w_prefix = $name;
@@ -672,70 +693,51 @@ class Enquiry extends CI_Controller {
                 'country_id'  =>$city_id->row()->country_id,
                 'region_id'  =>$city_id->row()->region_id,
                 'territory_id'  =>$city_id->row()->territory_id,
-                //'created_date' =>$enquiry_date, 
                 'status' => 1
             ];
-
-
             if ($this->enquiry_model->create($postData)) {
-  
-            $coment_type = 1;
-            $lead_id = $this->input->post('unique_no');
-            $stage_id = $this->input->post('lead_stage');
-            $stage_date = date("d-m-Y",strtotime($this->input->post('c_date')));
-
-            //echo $stage_date;
-            
-            $stage_time = date("H:i:s",strtotime($this->input->post('c_time')));
-            
-            $stage_desc = $this->input->post('lead_description');
-            $stage_remark = $this->input->post('conversation');
-            $contact_person = $this->input->post('contact_person1');
-            $mobileno = $this->input->post('mobileno1');
-            $email = $this->input->post('email1');
-            $designation = $this->input->post('designation1');
-                      
-
-            $this->db->set('lead_stage', $stage_id);
-            $this->db->set('lead_discription', $stage_desc);
-            $this->db->set('lead_discription_reamrk', $stage_remark);
-
-            $this->db->where('enquiry_id', $insert_id);
-            $this->db->update('enquiry');
-            $this->session->set_flashdata('SUCCESSMSG', 'Update Successfully');
-            $this->Leads_Model->add_comment_for_events_stage('Stage Updated', $encode,$stage_id,$stage_desc,$stage_remark,$coment_type);
-            if($stage_desc == 'updt'){                
-                $tid    =   $this->input->post('latest_task_id');
-                $this->db->set('task_date', $stage_date);
-                $this->db->set('task_time', $stage_time);
-                $this->db->set('task_remark', $stage_remark);
-                $this->db->where('resp_id',$tid);
-                $this->db->update('query_response');
-            }else{                
-                if (!empty($this->input->post('c_date'))) {
-                    $this->Leads_Model->add_comment_for_events_popup($stage_remark,$stage_date,$contact_person,$mobileno,$email,$designation,$stage_time,$encode);                
+                $coment_type = 1;
+                $lead_id = $this->input->post('unique_no');
+                $stage_id = $this->input->post('lead_stage');
+                $stage_date = date("d-m-Y",strtotime($this->input->post('c_date')));                
+                $stage_time = date("H:i:s",strtotime($this->input->post('c_time')));
+                $stage_desc = $this->input->post('lead_description');
+                $stage_remark = $this->input->post('conversation');
+                $contact_person = $this->input->post('contact_person1');
+                $mobileno = $this->input->post('mobileno1');
+                $email = $this->input->post('email1');
+                $designation = $this->input->post('designation1');
+                $this->db->set('lead_stage', $stage_id);
+                $this->db->set('lead_discription', $stage_desc);
+                $this->db->set('lead_discription_reamrk', $stage_remark);
+                $this->db->where('enquiry_id', $insert_id);
+                $this->db->update('enquiry');
+                $this->session->set_flashdata('SUCCESSMSG', 'Update Successfully');
+                $this->Leads_Model->add_comment_for_events_stage('Stage Updated', $encode,$stage_id,$stage_desc,$stage_remark,$coment_type);
+                if($stage_desc == 'updt'){                
+                    $tid    =   $this->input->post('latest_task_id');
+                    $this->db->set('task_date', $stage_date);
+                    $this->db->set('task_time', $stage_time);
+                    $this->db->set('task_remark', $stage_remark);
+                    $this->db->where('resp_id',$tid);
+                    $this->db->update('query_response');
+                }else{                
+                    if (!empty($this->input->post('c_date'))) {
+                        $this->Leads_Model->add_comment_for_events_popup($stage_remark,$stage_date,$contact_person,$mobileno,$email,$designation,$stage_time,$encode);                
+                    }
                 }
-            } 
-
                 $this->Leads_Model->add_comment_for_events($this->lang->line("enquery_create"), $encode);               
-              
                 $this->session->set_flashdata('message', 'Your Enquiry has been  Successfully created');
                 redirect(base_url() . 'enquiry');
-            
           }
         } else {
             $this->load->model('Dash_model', 'dash_model');
-          
             $user_role    =   $this->session->user_role;
-            
             $data['company_list'] = $this->location_model->get_company_list($process);
             $data['products'] = $this->dash_model->get_user_product_list();
             $data['stagelist_withoutpro'] = $this->Leads_Model->get_leadstage_withoutprocess();
-            // $data['all_estage_lists'] = $this->Leads_Model->find_estage1(); 
             $data['taskstatus_list'] = $this->Taskstatus_model->taskstatuslist();
-            // print_r($data['company_list']);exit();
             $data['content'] = $this->load->view('add-enqform', $data, true);
-
             $this->load->view('layout/main_wrapper', $data);
         }
 

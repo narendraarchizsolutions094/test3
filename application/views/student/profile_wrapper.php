@@ -613,15 +613,21 @@ height:auto;
 <th style="font-size: 10px;">Program Lavel</th>
 <th style="font-size: 10px;">Program Length</th>
 <th style="font-size: 10px;">Tution Fee</th>
-<th style="font-size: 10px;">Offer Letter fee</th>
-<th style="font-size: 10px;">Application URL</th>
-<th style="font-size: 10px;">App status</th>
-<th style="font-size: 10px;">App Fee</th>
-<th style="font-size: 10px;">Transcripts</th>
-<th style="font-size: 10px;">LORs</th>
-<th style="font-size: 10px;">SOP</th>
-<th style="font-size: 10px;">CV</th>
-<th style="font-size: 10px;">TOEFL/IELTS /PTE</th>
+<?php 
+if ($this->session->companey_id !=67) { ?>
+  <th style="font-size: 10px;">Offer Letter fee</th>
+  <th style="font-size: 10px;">Application URL</th>
+  <th style="font-size: 10px;">App status</th>
+  <th style="font-size: 10px;">App Fee</th>
+  <th style="font-size: 10px;">Transcripts</th>
+  <th style="font-size: 10px;">LORs</th>
+  <th style="font-size: 10px;">SOP</th>
+  <th style="font-size: 10px;">CV</th>
+  <th style="font-size: 10px;">TOEFL/IELTS /PTE</th>
+<?php
+}
+?>
+
 <th style="font-size: 10px;">F Comments </th>
 </tr>
 </thead>
@@ -630,11 +636,13 @@ height:auto;
 <tr>
 <td class=""><?php echo $i; ?></td>
 <td><?php foreach($institute_list as $ins){if($ins->institute_id==$ins_data->institute_id){echo $ins->institute_name;}}?></td>
-<td><?php foreach($course_list as $cl){if($cl->crs_id==$ins_data->course_id){echo $cl->course_name;}}?></td>
+<td><?php echo $ins_data->course_name_str;?></td>
 <td><?php foreach($discipline as $dc){if($dc->id==$ins_data->p_disc){echo $dc->discipline;}}?></td>
 <td><?php foreach($level as $lvl){if($lvl->id==$ins_data->p_lvl){echo $lvl->level;}}?></td>
 <td><?php foreach($length as $lg){if($lg->id==$ins_data->p_length){echo $lg->length;}}?></td>
 <td class=""><?php echo $ins_data->t_fee; ?></td>
+<?php 
+if ($this->session->companey_id !=67) { ?>
 <td class=""><?php echo $ins_data->ol_fee; ?></td>
 <td class=""><?php echo $ins_data->application_url; ?></td>
 <td class=""><?php echo $ins_data->app_status; ?></td>
@@ -644,6 +652,9 @@ height:auto;
 <td class=""><?php echo $ins_data->sop; ?></td>
 <td class=""><?php echo $ins_data->cv; ?></td>
 <td class=""><?php echo $ins_data->toefl; ?></td>
+<?php
+}
+?>
 <td class=""><?php echo $ins_data->followup_comment; ?></td>
 </tr>
 <?php $i++; } ?>

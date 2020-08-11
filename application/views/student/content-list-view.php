@@ -176,7 +176,7 @@ $(document).ready(function() {
 	}
 	
 	function apply_with(id){
-		var enquiry_code = <?=$student_Details['Enquery_id']?>;
+		var enquiry_code = "<?=$student_Details['Enquery_id']?>";
 		if (confirm('Are you sure ?')) {
 			$.ajax({
 		        type:'POST',
