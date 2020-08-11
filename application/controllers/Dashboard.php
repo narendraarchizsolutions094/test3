@@ -1184,6 +1184,7 @@ public function user_profile() {
         $user_id = $this->session->userdata('user_id');
 		$stu_phone=$this->session->userdata('phone');
         $data['student_Details'] = $this->home_model->studentdetail($stu_phone);
+       // print_r($data['student_Details']);die;
         $studetails = $this->home_model->studentdetail($stu_phone);
         foreach($studetails as $st){
         $en_id=$st->Enquery_id;
@@ -1215,6 +1216,7 @@ public function user_profile() {
 		$data['institute_list'] = $this->Institute_model->institutelist();
 		$data['institute'] = $this->Institute_model->findinstitute();
 		$data['all_extra'] = $this->location_model->get_qualification_tab($en_id);
+        $data['all_description_lists']    =   $this->Leads_Model->find_description();
         //exit();
 		//echo "<pre>";
         // print_r($data['all_extra']);exit();echo "</pre>";

@@ -28,7 +28,7 @@ class Ticket extends CI_Controller {
 		
 		$data['title'] = "All Ticket";
 		$data["tickets"] = $this->Ticket_Model->getall();
-		
+		//print_r($data["tickets"]);die;
 		$data['content'] = $this->load->view('ticket/list-ticket', $data, true);
 		$this->load->view('layout/main_wrapper', $data);
 		

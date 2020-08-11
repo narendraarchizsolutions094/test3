@@ -453,25 +453,25 @@ height:auto;
                 <div class="col-md-12">
                   <?php
                   if ($this->session->companey_id == 76) {
-                    $s  = $lead_stage;
+                    $s  = $all_description_lists;
                     if (!empty($s)) {
                     ?>
                     <ul class="step-bar">
                       <?php
                         $i = 1;
                         $stud_details = $student_Details[0];
-                        if ($stud_details->lead_stage == '') { ?>
-                          <li class="step step--current">
+                         ?>
+                          <li class="step <?php if ($stud_details->lead_discription == '') {echo 'step--current'; } ?>">
                             <span class="step__bullet">0</span>
                             <span class="step__title">Nothing</span>
                           </li>
                         <?php
-                        }
+                        
                         foreach ($s as $key => $value) {                      
                         ?>
-                        <li class="step <?=($value->stg_id==$stud_details->lead_stage)?'step--current':''?>">
+                        <li class="step <?=($value->id==$stud_details->lead_discription)?'step--current':''?>">
                           <span class="step__bullet"><?=$i?></span>
-                          <span class="step__title"><?=$value->lead_stage_name?></span>
+                          <span class="step__title"><?=$value->description?></span>
                         </li>                        
                         <?php
                         $i++;
