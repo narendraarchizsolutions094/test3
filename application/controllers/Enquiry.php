@@ -605,6 +605,7 @@ class Enquiry extends CI_Controller {
     public function apply_to_course(){
         $crs_id          =   $this->input->post('id');
         $enquiry_code    =   $this->input->post('enquiry_code');
+        $status = 0;
         if ($crs_id && $enquiry_code) {
             $course_apply = $this->Institute_model->readRowcrs($crs_id);  
             $institute_data = array(                                
@@ -634,8 +635,12 @@ class Enquiry extends CI_Controller {
                     'courier_status'    => '',
                     'created_by'        => $this->session->user_id                                
                 );
-            $ins    =   $this->db->insert('institute_data',$institute_data);                
+            $ins    =   $this->db->insert('institute_data',$institute_data);    
+            if ($ins) {
+                $status = 1;
+            }            
         }
+        echo $status;
     }
     public function create2(){
         $process = $this->session->userdata('process');
@@ -2917,6 +2922,8 @@ function upload_enquiry() {
 		$data['level'] = $this->location_model->find_level();
 		$data['length'] = $this->location_model->find_length();
         $data['enquiry_id'] = $enquiry_id;
+        $data['all_description_lists']    =   $this->Leads_Model->find_description();
+        
         $data['compid']     =  $data['details']->comp_id;
         $data['content'] = $this->load->view('enq_proedit', $data, true);
         $this->enquiry_model->assign_notification_update($enquiry_code);

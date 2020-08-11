@@ -103,8 +103,10 @@
                           <label>Stage Name <i class="text-danger"></i></label>
                         <select class="form-control" id="lead_stage_change_pay" name="lead_stage_pay" onchange="find_descriptionss()">
                               <option>---Select Stage---</option>
-                              <?php foreach($all_estage_lists as $single){                 
-							  $id=$single->lead_stage;                              
+                              <?php 
+                              $id = '';
+                              foreach($all_estage_lists as $single){                 
+							                   $id=$single->lead_stage;                              
                               }
                               ?>
                               <?php foreach ($all_stage_lists as $stage) {  ?>

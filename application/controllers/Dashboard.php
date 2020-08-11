@@ -816,7 +816,7 @@ public function login_in_process(){
         $this->form_validation->set_rules('state_id', display('state_name'), 'required');
         $this->form_validation->set_rules('city_name', display('city_name'), 'required');
         //$this->form_validation->set_rules('user_role', display('user_role'), 'required');
-        $this->form_validation->set_rules('user_type', display('user_type'), 'required');
+        //$this->form_validation->set_rules('user_type', display('user_type'), 'required');
         $this->form_validation->set_rules('modules', display('customer_services'));
         $this->form_validation->set_rules('status', display('status'), 'required');
         if (empty($this->input->post('dprt_id'))) {
@@ -859,8 +859,8 @@ public function login_in_process(){
         }
         $data['department'] = (object) $postData = [
             'pk_i_admin_id' => $this->input->post('dprt_id', true),
-            'user_roles' => $this->input->post('user_role', true),
-            'user_type' => $this->input->post('user_type', true),
+            //'user_roles' => $this->input->post('user_role', true),
+            //'user_type' => $this->input->post('user_type', true),
             'employee_id' => $this->input->post('employee_id', true),
             's_user_email' => $this->input->post('email', true),
             's_phoneno' => $this->input->post('cell', true),
@@ -873,7 +873,7 @@ public function login_in_process(){
             'city_id' => $this->input->post('city_name', true),
             //'companey_id' => 1,
             'orgisation_name' => $org,
-            'user_permissions' => $permission,
+            //'user_permissions' => $permission,
             'last_name' => $this->input->post('last_name', true),
             'b_status' => $this->input->post('status', true),
             'date_of_birth' => $this->input->post('dob', true),
@@ -890,7 +890,7 @@ public function login_in_process(){
             'territory_name' => $this->input->post('territory', true),
             'add_ress' => $this->input->post('address', true),
             'picture' => (!empty($img) ? $img : $this->input->post('new_file')),
-            'report_to' => $this->input->post('report_to', true)
+            //'report_to' => $this->input->post('report_to', true)
         ];
         if ($this->form_validation->run() === true) {
             if ($this->user_model->update($postData)) {
@@ -1190,7 +1190,7 @@ public function user_profile() {
         
         $en_id=$studetails['Enquery_id'];
         $comp_id=$studetails['comp_id'];
-        
+
 		if($this->session->userdata('companey_id')!=67){
             $data['vid_list'] = $this->schedule_model->vid_list();  
             $data['faq_list'] = $this->schedule_model->faq_list(); 

@@ -185,8 +185,20 @@ $(document).ready(function() {
 	        		'id':id,
 	        		'enquiry_code':enquiry_code
 		    	},
-		        success:function(html){
-		            
+		        success:function(data){
+		            if (data) {
+		            	Swal.fire(
+						  'Good job!',
+						  'Successfully Applied!',
+						  'success'
+						)
+		            }else{
+		            	Swal.fire({
+						  icon: 'error',
+						  title: 'Oops...',
+						  text: 'Something went wrong!'					
+						})
+		            }
 		        }
 	    	});	
 		}
