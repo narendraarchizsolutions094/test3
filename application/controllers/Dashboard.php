@@ -840,17 +840,25 @@ public function login_in_process(){
 
             $permission = '';
         }
-        $img = $this->fileupload->do_upload(
-                'assets/images/user/', 'file'
+        $config = array(
+        'upload_path' => 'assets/images/user/',
+        'allowed_types' => "gif|jpg|png|jpeg",        
+        'max_size' => "2048000",
+        'encrypt_name' => true
+        );
+        $this->upload->initialize($config);
+        $img = $this->upload->do_upload('file'
         );
         // if picture is uploaded then resize the picture
-        if ($img !== false && $img != null) {
+        /*if ($img !== false && $img != null) {
             $this->fileupload->do_resize(
                     $img, 293, 350
             );
-        }
-        echo $this->upload->display_errors();
-
+        }*/
+        //echo $this->upload->display_errors();
+        $imageDetailArray = $this->upload->data();
+        $img =  $imageDetailArray['file_name'];
+        //print_r($imageDetailArray);
         if ($this->session->user_id == 9) {
             $org = $this->input->post('org_name');
             $designation = '';
@@ -904,7 +912,7 @@ public function login_in_process(){
                     'picture' => $postData['picture'],
                 ]);
             }
-            //redirect('dashboard/form/');
+            redirect('dashboard/form/');
         } else {
             $data['state_list'] = $this->location_model->state_list();
             $data['city_list'] = $this->location_model->city_list();
