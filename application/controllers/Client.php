@@ -203,6 +203,11 @@ class Client extends CI_Controller {
 		$data['qualification_data'] = $this->enquiry_model->quali_data($data['details']->Enquery_id);
 		$data['english_data'] = $this->enquiry_model->eng_data($data['details']->Enquery_id);
 		}
+        if ($this->session->companey_id=='67') { 
+            $data['discipline'] = $this->location_model->find_discipline();
+            $data['level'] = $this->location_model->find_level();
+            $data['length'] = $this->location_model->find_length();
+        }
 		$data['course_list'] = $this->Leads_Model->get_course_list();
         $data['content'] = $this->load->view('enquiry_details1', $data, true);
         $this->enquiry_model->assign_notification_update($enquiry_code);
@@ -755,21 +760,19 @@ class Client extends CI_Controller {
                 exit();
                 
             }
-            $this->session->set_flashdata('message', 'Save successfully');
-            redirect($this->agent->referrer()); //updateclient
+             if (!$this->input->is_ajax_request()) {           
+                $this->session->set_flashdata('message', 'Save successfully');
+                redirect($this->agent->referrer()); //updateclient
+            }else{
+                echo json_encode(array('msg'=>'Saved Successfully','status'=>1));
+            }
+            
     }
 
 
-    public function update_enquiry_tab($enquiry_id){
+    public function update_enquiry_tab($enquiry_id){        
 		if($this->session->companey_id=='67'){
-
-      /*  echo "<pre>";
-        print_r($_POST);       
-        echo "</pre>";
-        exit();*/
-
 		}
-
         $tid    =   $this->input->post('tid');
         $form_type    =   $this->input->post('form_type');
         $enqarr = $this->db->select('*')->where('enquiry_id',$enquiry_id)->get('enquiry')->row();
@@ -790,7 +793,7 @@ class Client extends CI_Controller {
                 $enqinfo   = $this->input->post("enqueryfield", true);
                 $inputtype = $this->input->post("inputtype", true);                
                 $file_count = 0;                
-                $file = $_FILES['enqueryfiles'];                
+                $file = !empty($_FILES['enqueryfiles'])?$_FILES['enqueryfiles']:'';                
                 foreach($inputno as $ind => $val){
 	
 
@@ -857,8 +860,12 @@ class Client extends CI_Controller {
             }            
              
         }
-        $this->session->set_flashdata('message', 'Save successfully');
-        redirect($this->agent->referrer()); //updateclient
+        if (!$this->input->is_ajax_request()) {           
+            $this->session->set_flashdata('message', 'Save successfully');
+            redirect($this->agent->referrer()); //updateclient
+        }else{
+            echo json_encode(array('msg'=>'Saved Successfully','status'=>1));
+        }
 
     }
 

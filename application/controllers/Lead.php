@@ -1336,8 +1336,9 @@ if($coment_type == 1){
                     $level          = $courseData[4];
                     $length         = $courseData[5];
                     $institute      = $courseData[6];
-                    $description    = $courseData[7];
-                    $status         = $courseData[8];
+                    $tuition_fees   = $courseData[7];
+                    $description    = $courseData[8];
+                    $status         = $courseData[9];
                     
                     /*echo "<pre>";
                     print_r($courseData);
@@ -1401,6 +1402,7 @@ if($coment_type == 1){
                                     'discipline_id' => $discipline_id,
                                     'course_name'   => $course_id,
                                     'course_ielts'  => $course_ielet,
+                                    'tuition_fees'  => $tuition_fees,
                                     'created_by'    => $user_id,
                                     'status'        => $status,
                                     'course_rating' => $rating,
@@ -2546,7 +2548,8 @@ public function alertstatus() {
 			'course_ielts' => $this->input->post('course_ielts', true),
 			'course_image' => $path,
 			'course_rating' => $this->input->post('course_rating', true),
-			'course_discription' => $this->input->post('course_discription', true),
+            'course_discription' => $this->input->post('course_discription', true),
+			'tuition_fees' => $this->input->post('tuition_fees', true),
 			'comp_id' => $this->session->userdata('companey_id'),
 			'discipline_id' => $this->input->post('discipline', true),
 			'level_id' => $this->input->post('level', true),
@@ -2559,7 +2562,7 @@ public function alertstatus() {
         ];
         //print_r($postData);exit;
         if ($this->form_validation->run() === true) {
-            if (empty($this->input->post('crs_id'))) {
+            if (empty($this->input->post('crs_id'))) { 
                 if (user_role('30') == true) {}
                 if ($this->Institute_model->insertRowcrs($postData)) {
                     $this->session->set_flashdata('message', display('save_successfully'));

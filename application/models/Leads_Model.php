@@ -16,12 +16,13 @@ class Leads_Model extends CI_Model {
     }
 public function all_course($course,$lvl,$length,$disc) {
 
-        $this->db->select("*");
+        $this->db->select("tbl_course.*,tbl_crsmaster.course_name as course_name_str");
         $this->db->from('tbl_course');
 		$this->db->where('tbl_course.institute_id',$course);
 		$this->db->where('tbl_course.length_id', $length);
 		$this->db->where('tbl_course.level_id', $lvl);
-		$this->db->where('tbl_course.discipline_id', $disc);
+        $this->db->where('tbl_course.discipline_id', $disc);
+		$this->db->join('tbl_crsmaster','tbl_crsmaster.id=tbl_course.course_name');
 		$this->db->where('tbl_course.comp_id', $this->session->userdata('companey_id'));
         $query = $this->db->get();
         return $query->result();

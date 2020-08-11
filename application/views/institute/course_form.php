@@ -86,6 +86,10 @@
                     <?php } ?>
                     </select>
                   </div>
+                  <div class="form-group col-sm-6">
+                    <label for="country_name"><?php echo display('tuition_fees')?> </label>
+                    <input type="text" class="form-control" name="tuition_fees" id="tuition_fees" value="<?=$course->tuition_fees?>">                        
+                  </div>
 				  
 				  <div class="form-group col-sm-12">
                     <label for="course_discription"><?php echo display('course_discription')?> <i class="text-danger">*</i></label>

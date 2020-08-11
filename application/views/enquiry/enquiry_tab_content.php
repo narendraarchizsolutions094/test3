@@ -20,7 +20,7 @@
   define('SUB_SOURCE',15);
   ?>
 <hr>
-<?php echo form_open_multipart('client/updateclient/'.$details->enquiry_id,'class="form-inner"') ?>  
+<?php echo form_open_multipart('client/updateclient/'.$details->enquiry_id,'class="form-inner tabbed_form"') ?>  
 <input type="hidden" name="form" value="client">  
 <input name="en_comments" type="hidden" value="<?=$details->Enquery_id?>" >    
 <div class="row">
@@ -350,8 +350,10 @@
   ?>
 </div>
 <div class="row"   id="save_button">
-   <div class="col-md-12 text-center">                                                
-      <button class="btn btn-primary" type="submit" >Save</button>            
+   <div class="col-md-12 text-center">                                                      
+      <input type="submit" name="submit_only" class="btn btn-primary" value="Save" >
+      <input type="submit" name="submit_and_next" class="btn btn-primary" value="Save And Next">
+      <input type="hidden" name="go_new_tab">           
    </div>
 </div>
    <?php echo form_close(); 
@@ -565,7 +567,7 @@
 
    }else{ ?>
          <hr>
-         <?php echo form_open_multipart('client/update_enquiry_tab/'.$details->enquiry_id,'class="form-inner"') ?>           
+         <?php echo form_open_multipart('client/update_enquiry_tab/'.$details->enquiry_id,'class="form-inner tabbed_form"') ?>           
          <input name="en_comments" type="hidden" value="<?=$details->Enquery_id?>" >    
          <div class="row">
          <?php
@@ -681,9 +683,11 @@
       <?php  }
          } ?>
          </div>
-         <div class="row"   id="save_button">
-            <div class="col-md-12 text-center">                                                
-               <button class="btn btn-primary" type="submit" >Save</button>            
+         <div class="row" id="save_button">
+            <div class="col-md-12 text-center">                                                               
+               <input type="submit" name="submit_only" class="btn btn-primary" value="Save" >
+               <input type="submit" name="submit_and_next" class="btn btn-primary" value="Save And Next">
+               <input type="hidden" name="go_new_tab">
             </div>
          </div>
    <?php
@@ -723,5 +727,5 @@
     var input_name = e.id;
     var data = $("#"+input_name).val();    
     $("#multi-"+input_name).val(data);
-  }
+  }  
 </script>
