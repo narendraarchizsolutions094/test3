@@ -656,8 +656,9 @@ public function stu_crs_list()
 
 public function get_wislist($user_id)
     {
-        $this->db->select("*");
+        $this->db->select("*,tbl_wishlist.id as wid,tbl_crsmaster.course_name as course_name_str");
         $this->db->from('tbl_wishlist');
+        $this->db->join('tbl_crsmaster', 'tbl_crsmaster.id = tbl_wishlist.crs_id');
 		$this->db->join('tbl_course', 'tbl_course.crs_id = tbl_wishlist.crs_id');
 		$this->db->join('tbl_institute', 'tbl_institute.institute_id = tbl_wishlist.uni_id');
 		$this->db->where('tbl_wishlist.comp_id', $this->session->userdata('companey_id'));

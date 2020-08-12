@@ -1921,13 +1921,21 @@ $newdt = date('Y-m-d',strtotime($tempdate));
     }
 
 public function my_applications() {
-		$data['title'] = display('my_applications');
-        $user_id = $this->session->userdata('user_id');
-		$data['my_app'] = $this->location_model->get_wislist($user_id);
-		$data['my_history'] = $this->location_model->get_history($user_id);
-        $data['content'] = $this->load->view('student/my_applications', $data, true);
-        $this->load->view('layout/main_wrapper', $data);
-    }
+	$data['title'] = display('my_applications');
+    $user_id = $this->session->userdata('user_id');
+	$data['my_app'] = $this->location_model->get_wislist($user_id);
+	$data['my_history'] = $this->location_model->get_history($user_id);
+    $data['content'] = $this->load->view('student/my_applications', $data, true);
+    $this->load->view('layout/main_wrapper', $data);
+}
+public function remove_from_wish_list($id){
+    $this->db->where('id',$id);
+    $this->db->where('comp_id',$this->session->companey_id);
+    $this->db->delete('tbl_wishlist');
+    $this->session->set_flashdata('message','Successfully Removed from wishlist');
+    redirect('dashboard/my_applications');
+}
+
 public function menu_style() {	
 		if($this->session->menu==1){
         $this->session->set_userdata('menu',2);
@@ -1941,19 +1949,20 @@ public function set_layout_to_session() {
         $this->session->set_userdata('layout', $layout);
     }
 
-public function add_wishlist() {
-    $crs=$this->uri->segment(3);
-    $ins=$this->uri->segment(4);
-	$stu=$this->session->userdata('user_id');
-	$comp=$this->session->userdata('companey_id');
-    $data = array(
-        'comp_id'=>$comp,
-        'stu_id'=>$stu,
-		'uni_id'=>$ins,
-        'crs_id'=>$crs
-    );
-    $this->db->insert('tbl_wishlist',$data);
-	redirect('dashboard/search_programs');
+    public function add_wishlist() {
+        $crs=$this->uri->segment(3);
+        $ins=$this->uri->segment(4);
+    	$stu=$this->session->userdata('user_id');
+    	$comp=$this->session->userdata('companey_id');
+        $data = array(
+            'comp_id'=>$comp,
+            'stu_id'=>$stu,
+    		'uni_id'=>$ins,
+            'crs_id'=>$crs
+        );
+        $this->db->insert('tbl_wishlist',$data);
+        $this->session->set_flashdata('message','Successfully added to wish list');
+    	redirect('dashboard/search_programs');
     }
 	
 	public function course_details() {

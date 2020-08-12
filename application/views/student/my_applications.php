@@ -288,7 +288,7 @@ td:nth-child(3) {
 <h5><?php echo $wish->institute_name; ?></h5>
 </td>
 <td class="shoping__cart__price">
-<?php echo $wish->course_name; ?>
+<?php echo $wish->course_name_str; ?>
 </td>
 <td class="shoping__cart__quantity">
 <?php $num=$wish->course_rating;  ?>
@@ -300,7 +300,7 @@ td:nth-child(3) {
 <?php echo $wish->created_date; ?>
 </td>
 <td class="shoping__cart__item__close">
-<span class="icon_close"></span>
+ <a class="btn btn-sm btn-danger" href="<?=base_url().'dashboard/remove_from_wish_list/'.$wish->wid?>" onclick="return confirm('Are you sure ?')" >X</a>
 </td>
 </tr>
 <?php } ?>
