@@ -1001,14 +1001,16 @@ public function all_description($diesc) {
         return $this->db->get();
     }
 
-    public function add_comment_for_events($conversation, $lead_id,$stage_code=0) {
+    public function add_comment_for_events($conversation, $lead_id,$stage_code=0,$user_id=0) {
         
          if(!empty($this->session->userdata('userno'))){
             $ld_updt_by = $this->session->userdata('userno');
          }else{
             $ld_updt_by = $this->session->user_id;
         }
-
+        if (empty($ld_updt_by)) {
+            $ld_updt_by = $user_id;
+        }
         $adt = date("Y-m-d H:i:s");        
         $this->db->set('lead_id', $lead_id);        
         $this->db->set('created_date', $adt);

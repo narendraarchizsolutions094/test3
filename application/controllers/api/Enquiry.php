@@ -107,6 +107,8 @@ class Enquiry extends REST_Controller {
 			    $this->db->where('Enquery_id',$this->input->post('update'));
 			    $e_row	=	$this->db->get('enquiry')->row_array();
 			    $msg	=	'Enquiry successfully updated';
+
+			    $this->Leads_Model->add_comment_for_events($this->lang->line("information_updated"), $this->input->post('update'),'',$this->input->post('user_id'));
 			
             }else{
             	$postData['Enquery_id'] = $encode;
@@ -117,6 +119,9 @@ class Enquiry extends REST_Controller {
 			    $this->db->where('enquiry_id',$insert_id);
 			    $e_row	=	$this->db->get('enquiry')->row_array();
 			    $msg	=	'Enquiry successfully created';
+			    
+			    $this->Leads_Model->add_comment_for_events($this->lang->line("enquery_create"), $encode,'',$this->input->post('user_id'));
+
             }
 			if ($insert_id) {
 			    foreach($this->input->post() as $ind => $val){         
@@ -1851,4 +1856,57 @@ public function get_enq_list_post(){
 		$response = curl_exec($curl);		
 		curl_close($curl);
 	}
+
+	/*CAREERex contact form data */
+	public function career_ex_contact_form_post(){
+		
+		$course 	= $this->input->post('course');	
+		$this->load->model('product_model');				
+		$product_row	=	$this->product_model->get_product_id_by_name(trim($course));
+		$product_id = '';
+		if (!empty($product_row['id'])) {
+			$product_id = $product_row['id'];
+		}
+		$full_name 	= $this->input->post('full_name');	
+		$join_date 	= $this->input->post('join_date');	
+		$email 		= $this->input->post('email');	
+		$mobile 	= $this->input->post('mobile');	
+		$address 	= $this->input->post('address'); 	
+
+		$name	=	explode(' ', $full_name);
+		$fname	=	!empty($name[0])?$name[0]:'';
+		$last_name	= !empty($name[1])?$name[1]:'';
+		$this->form_validation->set_rules('email','Email','required');
+		$this->form_validation->set_rules('mobile','Mobile','required');
+		
+		if ($this->form_validation->run() == true) {	
+			$curl = curl_init();
+			curl_setopt_array($curl, array(
+			  	CURLOPT_URL => "https://thecrm360.com/new_crm/api/enquiry/create",
+			  	CURLOPT_RETURNTRANSFER => true,
+			  	CURLOPT_ENCODING => "",
+			  	CURLOPT_MAXREDIRS => 10,
+			  	CURLOPT_TIMEOUT => 0,
+			  	CURLOPT_FOLLOWLOCATION => true,
+			  	CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+			  	CURLOPT_CUSTOMREQUEST => "POST",
+			  	CURLOPT_POSTFIELDS => array('fname' => $fname,'lastname' => $last_name,'email' => $email,'mobileno' => $mobile,'company_id' => '81','process_id' => 175,'product_id' => $product_id,'user_id' => '511','address'=>$address),
+			  	CURLOPT_HTTPHEADER => array(
+			    	"Cookie: ci_session=3ba7d4lq4alv2pgpq3sc8t2ojrh41s04"
+			  	),
+			));
+			$response = curl_exec($curl);		
+			curl_close($curl);	
+			$msg = 'Successfully Saved';
+			$status = true;
+		}else{
+			$str = strip_tags(validation_errors());
+			$msg = str_replace("\n","",$str);
+			$status = false;
+		}
+		$this->set_response([
+				'status' => $status,
+				'message' =>$msg
+				], REST_Controller::HTTP_OK);	
+	}	
 }
