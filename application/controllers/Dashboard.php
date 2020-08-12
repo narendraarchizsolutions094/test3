@@ -840,8 +840,9 @@ public function login_in_process(){
 
             $permission = '';
         }
+        $path = 'assets/images/user/';
         $config = array(
-        'upload_path' => 'assets/images/user/',
+        'upload_path' => $path,
         'allowed_types' => "gif|jpg|png|jpeg",        
         'max_size' => "2048000",
         'encrypt_name' => true
@@ -857,7 +858,7 @@ public function login_in_process(){
         }*/
         //echo $this->upload->display_errors();
         $imageDetailArray = $this->upload->data();
-        $img =  $imageDetailArray['file_name'];
+        $img =  $path.$imageDetailArray['file_name'];
         //print_r($imageDetailArray);
         if ($this->session->user_id == 9) {
             $org = $this->input->post('org_name');

@@ -460,21 +460,23 @@ height:auto;
                       <?php
                         $i = 1;
                         $stud_details = $student_Details;
-                        if ($stud_details->lead_stage == '') { ?>
+                        if (empty($stud_details->lead_stage)) { ?>
                           <li class="step step--current">
                             <span class="step__bullet">0</span>
                             <span class="step__title">Nothing</span>
                           </li>
                         <?php
                         }
+                        if (!empty($s)) {                          
                         foreach ($s as $key => $value) {                      
                         ?>
-                        <li class="step <?=($value->stg_id==$stud_details->lead_stage)?'step--current':''?>">
+                        <li class="step <?=(!empty($stud_details->lead_stage) && $value->stg_id==$stud_details->lead_stage)?'step--current':''?>">
                           <span class="step__bullet"><?=$i?></span>
                           <span class="step__title"><?=$value->lead_stage_name?></span>
                         </li>                        
                         <?php
                         $i++;
+                        }
                       }
                       ?>
                     </ul>
