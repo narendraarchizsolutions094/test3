@@ -248,9 +248,10 @@ class Enquiry_model extends CI_Model {
 	 }
     
 	 public function institute_data($enq_code){
-	 	$this->db->select('institute_data.*,tbl_institute.institute_name,institute_app_status.title as app_status_title');
+	 	$this->db->select('institute_data.*,tbl_institute.institute_name,institute_app_status.title as app_status_title,tbl_crsmaster.course_name as course_name_str');
 	 	$this->db->where('institute_data.enquery_code',$enq_code);
 	 	$this->db->join('tbl_institute','institute_data.institute_id=tbl_institute.institute_id');
+	 	$this->db->join('tbl_crsmaster','tbl_crsmaster.id=institute_data.course_id');
 	 	$this->db->join('institute_app_status','institute_data.app_status=institute_app_status.id');
 	 	return $this->db->get('institute_data')->result_array();
 	 }

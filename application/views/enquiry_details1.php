@@ -1055,7 +1055,7 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                                 <tr>
                                     <td><?=$value['institute_name']?></td>
                                   <?php if ($this->session->companey_id=='67') { ?>
-                                    <td><?php foreach($course_list as $cl){if($cl->crs_id==$value['course_id']){echo $cl->course_name;}}?></td>
+                                    <td><?php echo $value['course_name_str'];?></td>
                                     <td><?php foreach($level as $lvl){if($lvl->id==$value['p_lvl']){echo $lvl->level;}}?></td>
                                     <td><?php foreach($length as $lg){if($lg->id==$value['p_length']){echo $lg->length;}}?></td>
                                     <td><?php foreach($discipline as $dc){if($dc->id==$value['p_disc']){echo $dc->discipline;}}?></td>                                  

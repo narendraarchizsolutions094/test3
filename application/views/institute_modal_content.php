@@ -24,7 +24,7 @@
                           <select name="p_disc" id="p_disc1" class="form-control" onchange="">
 						      <option value="">Select</option>
                              <?php foreach($discipline as $dc){ ?>                                   
-                        <option value="<?php echo $dc->id; ?>"><?php echo $dc->discipline; ?></option>
+                        <option value="<?php echo $dc->id; ?>" <?php if($dc->id==$institute_data['p_disc']){ echo 'selected';}?>><?php echo $dc->discipline; ?></option>
                     <?php } ?>
                     </select>							  
                           </select>                          
@@ -32,10 +32,10 @@
 <div class="form-group col-sm-4">                         
                           <label>Program Lavel </label>                          
                           <select name="p_lvl" id="p_lvl1" class="form-control" onchange="find_level1()">
-						      <option value="">Select</option>
+						              <option value="">Select</option>
                              <?php foreach($level as $lc){ ?>                                   
-                        <option value="<?php echo $lc->id; ?>"><?php echo $lc->level; ?></option>
-                    <?php } ?>							  
+                            <option value="<?php echo $lc->id; ?>" <?php if($lc->id==$institute_data['p_lvl']){ echo 'selected';}?> ><?php echo $lc->level; ?></option>
+                          <?php } ?>							  
                           </select>                          
 </div>
 <div class="form-group col-sm-4">                         
@@ -56,17 +56,19 @@
                           <label>Tuition fee</label>
                           <input class="form-control" name="t_fee" value="<?=$institute_data['t_fee']?>" type="text" placeholder="Tuition fee" >  
 </div>
+<?php } 
+?>
+
+<?php if ($this->session->companey_id!='67') { ?>
+
 <div class="form-group col-sm-4"> 
                           <label>Offer letter fee</label>
                           <input class="form-control" name="ol_fee" type="text" value="<?=$institute_data['ol_fee']?>" placeholder="O.letter fee" >  
 </div>
-<?php } ?>
-
      <div class="form-group col-sm-4"> 
         <label>Application URL </label>
         <input class="form-control" name="application_url" type="text" placeholder="Application Url" value="<?=$institute_data['application_url']?>">  
      </div>
-<?php if ($this->session->companey_id!='67') { ?>
      <div class="form-group col-sm-4"> 
         <label>Major </label>
         <input class="form-control" name="major" type="text" placeholder="Major" value="<?=$institute_data['major']?>">  
@@ -107,6 +109,7 @@
         <input class="form-control" name="app_fee" type="text" placeholder="App Fee" value="<?=$institute_data['app_fee']?>">  
      </div>
     
+<?php if ($this->session->companey_id!='67') { ?>
     
      <div class="form-group col-sm-4"> 
         <label>Transcript </label>
@@ -129,18 +132,17 @@
         <label>CV </label>
         <input class="form-control" name="cv" type="text" placeholder="cv" value="<?=$institute_data['cv']?>">  
      </div>
-<?php if ($this->session->companey_id!='67') { ?>
      <div class="form-group col-sm-4"> 
         <label>GRE/GMAT </label>
         <input class="form-control" name="gre_gmt" type="text" placeholder="GRE/GMAT" value="<?=$institute_data['gre_gmt']?>">  
      </div>
-<?php } ?>
     </div>
     <div class="row">
      <div class="form-group col-sm-4"> 
         <label>TOEFL/IELTS/PTS </label>
         <input class="form-control" name="tofel_ielts_pts" type="text" placeholder="TOEFL/IELTS/PTS" value="<?=$institute_data['toefl']?>">  
      </div>
+<?php } ?>
 
                                             
      <div class="form-group col-sm-4"> 
@@ -199,40 +201,37 @@
        });
   });
   </script>
-<script>
+<script>    
+$(document).ajaxStop(function() {
+  find_app_crs1();
+});
 function find_app_crs1() { 
-            var c_stage = $("#institute_id1").val();
+      var c_stage = $("#institute_id1").val();
 			var l_stage = $("#p_lvl1").val();
 			var lg_stage = $("#p_length1").val();
-			var d_stage = $("#p_disc1").val();
-			//alert(c_stage);
+			var d_stage = $("#p_disc1").val();			
             $.ajax({
             type: 'POST',
             url: '<?php echo base_url();?>lead/select_app_by_ins',
             data: {c_course:c_stage,c_lvl:l_stage,c_length:lg_stage,c_disc:d_stage},
-            
-            success:function(data){
-               // alert(data);
+            success:function(data){               
                 var html='';
-                var obj = JSON.parse(data);
-                
+                var obj = JSON.parse(data);                
+                var crs  = "<?=$institute_data['course_id']?>";                
                 html +='<option value="" style="display:none">---Select---</option>';
-                for(var i=0; i <(obj.length); i++){
-                    
-                    html +='<option value="'+(obj[i].crs_id)+'">'+(obj[i].course_name)+'</option>';
-                }
-                
-                $("#app_course1").html(html);
-                
-            }
-            
-            
+                for(var i=0; i <(obj.length); i++){                    
+                    sel  = (crs==obj[i].crs_id)?"selected":"";
+                    html +='<option '+sel+' value="'+(obj[i].crs_id)+'">'+(obj[i].course_name_str)+'</option>';
+                }                
+                $("#app_course1").html(html);                
+            }            
             });
 
     }
 
 </script>
 <script>
+  find_level1();
 function find_level1() { 
 
             var l_stage = $("#p_lvl1").val();
@@ -245,11 +244,13 @@ function find_level1() {
                // alert(data);
                 var html='';
                 var obj = JSON.parse(data);
+
+                var length  = "<?=$institute_data['p_length']?>";
                 
                 html +='<option value="" style="display:none">---Select length---</option>';
                 for(var i=0; i <(obj.length); i++){
-                    
-                    html +='<option value="'+(obj[i].id)+'">'+(obj[i].length)+'</option>';
+                    sel  = (length==obj[i].id)?"selected":"";
+                    html +='<option '+sel+' value="'+(obj[i].id)+'">'+(obj[i].length)+'</option>';
                 }
                 
                 $("#p_length1").html(html);
@@ -259,5 +260,5 @@ function find_level1() {
             
             });
 
-            }	
+            }	  
 </script>

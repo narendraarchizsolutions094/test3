@@ -76,7 +76,7 @@ class Dashboard extends CI_Controller {
                     'isLogIn' => true,
                     'user_id' => $check_user->row()->pk_i_admin_id,
                     'companey_id' => $check_user->row()->companey_id,
-                    'email' => $check_user->row()->email,
+                    'email' => $check_user->row()->s_user_email,
                     'designation' => $check_user->row()->designation,
                     'phone' => $check_user->row()->s_phoneno,
                     'fullname' => $check_user->row()->s_display_name . '&nbsp;' . $check_user->row()->last_name,
@@ -244,7 +244,7 @@ $this->load->library('zip');
                             'user_id'               => $user_data->pk_i_admin_id,
                             'companey_id'           => $user_data->companey_id,
                             //'process'               => $check_user->row()->process,
-                            'email'                 => $user_data->email,
+                            'email'                 => $user_data->s_user_email,
                             'designation'           => $user_data->designation,
                             'phone'                 => $user_data->s_phoneno,
                             'fullname'              => $user_data->s_display_name . '&nbsp;' . $user_data->last_name,
@@ -319,7 +319,7 @@ public function login_in_process(){
                         'isLogIn'               => true,
                         'user_id'               => $check_user->row()->pk_i_admin_id,
                         'companey_id'           => $check_user->row()->companey_id,
-                        'email'                 => $check_user->row()->email,
+                        'email'                 => $check_user->row()->s_user_email,
                         'designation'           => $check_user->row()->designation,
                         'phone'                 => $check_user->row()->s_phoneno,
                         'fullname'              => $check_user->row()->s_display_name . '&nbsp;' . $check_user->row()->last_name,
@@ -816,7 +816,7 @@ public function login_in_process(){
         $this->form_validation->set_rules('state_id', display('state_name'), 'required');
         $this->form_validation->set_rules('city_name', display('city_name'), 'required');
         //$this->form_validation->set_rules('user_role', display('user_role'), 'required');
-        $this->form_validation->set_rules('user_type', display('user_type'), 'required');
+        //$this->form_validation->set_rules('user_type', display('user_type'), 'required');
         $this->form_validation->set_rules('modules', display('customer_services'));
         $this->form_validation->set_rules('status', display('status'), 'required');
         if (empty($this->input->post('dprt_id'))) {
@@ -840,16 +840,25 @@ public function login_in_process(){
 
             $permission = '';
         }
-        $img = $this->fileupload->do_upload(
-                'assets/images/user/', 'file'
+        $config = array(
+        'upload_path' => 'assets/images/user/',
+        'allowed_types' => "gif|jpg|png|jpeg",        
+        'max_size' => "2048000",
+        'encrypt_name' => true
+        );
+        $this->upload->initialize($config);
+        $img = $this->upload->do_upload('file'
         );
         // if picture is uploaded then resize the picture
-        if ($img !== false && $img != null) {
+        /*if ($img !== false && $img != null) {
             $this->fileupload->do_resize(
                     $img, 293, 350
             );
-        }
-
+        }*/
+        //echo $this->upload->display_errors();
+        $imageDetailArray = $this->upload->data();
+        $img =  $imageDetailArray['file_name'];
+        //print_r($imageDetailArray);
         if ($this->session->user_id == 9) {
             $org = $this->input->post('org_name');
             $designation = '';
@@ -859,8 +868,8 @@ public function login_in_process(){
         }
         $data['department'] = (object) $postData = [
             'pk_i_admin_id' => $this->input->post('dprt_id', true),
-            'user_roles' => $this->input->post('user_role', true),
-            'user_type' => $this->input->post('user_type', true),
+            //'user_roles' => $this->input->post('user_role', true),
+            //'user_type' => $this->input->post('user_type', true),
             'employee_id' => $this->input->post('employee_id', true),
             's_user_email' => $this->input->post('email', true),
             's_phoneno' => $this->input->post('cell', true),
@@ -873,7 +882,7 @@ public function login_in_process(){
             'city_id' => $this->input->post('city_name', true),
             //'companey_id' => 1,
             'orgisation_name' => $org,
-            'user_permissions' => $permission,
+            //'user_permissions' => $permission,
             'last_name' => $this->input->post('last_name', true),
             'b_status' => $this->input->post('status', true),
             'date_of_birth' => $this->input->post('dob', true),
@@ -890,7 +899,7 @@ public function login_in_process(){
             'territory_name' => $this->input->post('territory', true),
             'add_ress' => $this->input->post('address', true),
             'picture' => (!empty($img) ? $img : $this->input->post('new_file')),
-            'report_to' => $this->input->post('report_to', true)
+            //'report_to' => $this->input->post('report_to', true)
         ];
         if ($this->form_validation->run() === true) {
             if ($this->user_model->update($postData)) {
@@ -1099,7 +1108,8 @@ public function login_in_process(){
 	public function search_programs() {
 		$data['title'] = display('search_programs');
         $user_id = $this->session->userdata('user_id');
-		$comp_id = $this->session->userdata('companey_id');
+        $comp_id = $this->session->userdata('companey_id');
+		$stu_phone = $this->session->userdata('phone');
 		
 		/*$this->db->select("*,tbl_crsmaster.course_name");
         $this->db->from('tbl_course');
@@ -1126,8 +1136,8 @@ public function login_in_process(){
 
 		
 		if($this->session->userdata('companey_id')==67){
-		$data['discipline'] = $this->location_model->find_discipline();
-		$data['level'] = $this->location_model->find_level();
+		  $data['discipline'] = $this->location_model->find_discipline();
+		  $data['level'] = $this->location_model->find_level();
 		}
 		$data['vid_list'] = $this->Institute_model->videos();
 		$data['state_list'] = $this->location_model->all_states();
@@ -1135,6 +1145,7 @@ public function login_in_process(){
 		$data['ins_list'] = $this->location_model->stu_ins_list();
 		$data['crs_list'] = $this->location_model->stu_crs_list();
 		$data['course'] = $this->Institute_model->all_crs_list();
+        $data['student_Details'] = $this->home_model->studentdetail($stu_phone);
         $data['content'] = $this->load->view('student/search_programs', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }
@@ -1186,11 +1197,10 @@ public function user_profile() {
         $data['student_Details'] = $this->home_model->studentdetail($stu_phone);
        // print_r($data['student_Details']);die;
         $studetails = $this->home_model->studentdetail($stu_phone);
-        foreach($studetails as $st){
-        $en_id=$st->Enquery_id;
-        $comp_id=$st->comp_id;
-        }
-		//print_r($data['student_Details']);exit;
+        
+        $en_id=$studetails['Enquery_id'];
+        $comp_id=$studetails['comp_id'];
+
 		if($this->session->userdata('companey_id')!=67){
             $data['vid_list'] = $this->schedule_model->vid_list();  
             $data['faq_list'] = $this->schedule_model->faq_list(); 
@@ -1206,20 +1216,15 @@ public function user_profile() {
         $data['city_list'] = $this->home_model->ecity_list();
 		$data['agrrem_doc'] = $this->home_model->aggr_doc($en_id);
 		$data['country_list'] = $this->home_model->cntry_list();
-		//$data['all_input'] = $this->location_model->input_list();
-		//$data['all_dynamic'] = $this->location_model->dynamic_list($en_id);
 		$data['all_institute'] = $this->location_model->institute_data($en_id);
 		$data['discipline'] = $this->location_model->find_discipline();
 		$data['level'] = $this->location_model->find_level();
 		$data['length'] = $this->location_model->find_length();
 		$data['course_list'] = $this->Institute_model->courselist();
 		$data['institute_list'] = $this->Institute_model->institutelist();
-		$data['institute'] = $this->Institute_model->findinstitute();
-		$data['all_extra'] = $this->location_model->get_qualification_tab($en_id);
+		$data['institute'] = $this->Institute_model->findinstitute();		
         $data['all_description_lists']    =   $this->Leads_Model->find_description();
-        //exit();
-		//echo "<pre>";
-        // print_r($data['all_extra']);exit();echo "</pre>";
+		$data['all_extra'] = $this->location_model->get_qualification_tab($en_id);        
         $data['content'] = $this->load->view('student/profile_wrapper', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }

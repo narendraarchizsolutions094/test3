@@ -698,9 +698,10 @@ public function get_history($user_id)
 	
 	public function institute_data($enq_id) {
 
-        return $this->db->select("*")
+        return $this->db->select("*,tbl_crsmaster.course_name as course_name_str")
                         ->from("institute_data")
-						->where('enquery_code',$enq_id)
+                        ->where('enquery_code',$enq_id)
+						->join('tbl_crsmaster','tbl_crsmaster.id=institute_data.course_id','left')
                         ->get()
                         ->result();
     }
