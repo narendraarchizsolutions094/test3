@@ -459,24 +459,22 @@ height:auto;
                     <ul class="step-bar">
                       <?php
                         $i = 1;
-                        $stud_details = $student_Details;
-                        if (empty($stud_details->lead_stage)) { ?>
-                          <li class="step step--current">
+                        $stud_details = $student_Details[0];
+                         ?>
+                          <li class="step <?php if ($stud_details->lead_discription == '') {echo 'step--current'; } ?>">
                             <span class="step__bullet">0</span>
                             <span class="step__title">Nothing</span>
                           </li>
                         <?php
-                        }
-                        if (!empty($s)) {                          
+                        
                         foreach ($s as $key => $value) {                      
                         ?>
-                        <li class="step <?=(!empty($stud_details->lead_stage) && $value->stg_id==$stud_details->lead_stage)?'step--current':''?>">
+                        <li class="step <?=($value->id==$stud_details->lead_discription)?'step--current':''?>">
                           <span class="step__bullet"><?=$i?></span>
                           <span class="step__title"><?=$value->description?></span>
                         </li>                        
                         <?php
                         $i++;
-                        }
                       }
                       ?>
                     </ul>
