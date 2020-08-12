@@ -187,8 +187,8 @@ class Product extends CI_Controller {
 			}
 						 
 			$price = $this->input->post("price", true);
-			$othrprice = $this->input->post("othrprice", true);
-			$tax = $this->input->post("tax", true);
+			$othrprice = (!empty($_POST["othrprice"])) ? $this->input->post("othrprice", true) : 0;
+			$tax =  (!empty($_POST["tax"])) ? $this->input->post("tax", true) : 0;
 			
 			$total = $price + $othrprice + $tax;
 			

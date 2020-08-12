@@ -216,7 +216,7 @@ class Payment extends CI_Controller {
 		
 		$data["orders"]   = $this->order_model->getOrdersProduct($data["pay"]->ord_no);
 		$data["payments"] = $this->payment_model->getpayment($data["ord"]->cus_id);
-		$data["masters"]  = $this->payment_model->getmaster();	
+	//	$data["masters"]  = $this->payment_model->getmaster();	
 		$data["title"] = "Update Payment";
 		$this->load->template("payment/update-payment", $data);
 	}

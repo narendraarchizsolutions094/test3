@@ -5,31 +5,7 @@
 </style>
 <link rel="stylesheet" href="<?php echo base_url(); ?>assets/plugins/multipleselect/multiple-select.css">
 				<!--Header submenu -->
-	  <div class="row">
-		<div class="col-md-12" style="background-color: #fff;border-bottom: 1px solid #C8CED3;">
-					  <div class="col-md-6"> 
-			<ol class="breadcrumb"><!-- breadcrumb -->
-								<li class="breadcrumb-item"><a href="#">Scheme</a></li>
-								<li class="breadcrumb-item active" aria-current="page">Add Scheme</li>
-							</ol>
-		  </div>
-		  <div class="col-md-6">
-			 <div style="float:right">
-				  <div class="btn-group" role="group" aria-label="Button group">
-				   <a class="btn" onclick="window.location.reload();" title="Refresh">
-				   <i class="fa fa-refresh icon_color"></i>
-				   </a>  
-				</div>
-				<!-- For invenotry company -->
-				<div class="btn-group" role="group" aria-label="Button group">
-				   <a class="btn" href="<?php echo base_url("scheme"); ?>" title="Back">
-				   <i class="fa fa-arrow-left icon_color"></i>
-				   </a>                                                    
-				</div>
-			 </div>
-		  </div>
 
-			</div>
 			<div class="row">
     <!--  form area -->
 			<div class="col-sm-12">
@@ -104,7 +80,7 @@
 													<label class="custom-control custom-radio">
 														<input type="radio" class="custom-control-input" name="calctype" value="1">
 														<span class="custom-control-label"> Add in Total </span>
-													</label> 
+													</label> &nbsp;&nbsp;
 													<label class="custom-control custom-radio">
 														<input type="radio" class="custom-control-input" name="calctype" value="2">
 														<span class="custom-control-label"> Highest Apply</span>
@@ -234,17 +210,18 @@
 											 </div>	
 											</div>
                                             <div class="col-md-2 add-quantity-area" style = "display:none;">
-                                            	<div class="form-group" style="margin-top: 31px;">
+                                            	<div class="form-group" style="margin-top: 23px;">
                                             
 												 <a name="add" id="add" class="btn btn-success">Add More</a>
 												</div>
 												</div>
 														<div class = "col-6">
-												<br />
-													<label class="custom-control custom-checkbox">
+											
+												<h4 class = "text-info"  style="margin-top: 31px;">	<label class="custom-control custom-checkbox">
 														<input type="checkbox" class="custom-control-input slide-chng-div" name="applyonqty" value="qty" data-target=".add-quantity-area">
-														<span class="custom-control-label"><h4 class = "text-info">Apply On Quantity</h4></span>
+														<span class="custom-control-label">Apply On Quantity</span>
 													</label>
+												</div>	
 												</div>
 											</div>
 											</div>											 
@@ -432,7 +409,7 @@
 			</div>
 		</div>
 	</div>
-</div>	
+
 		<!-- End Page -->
 <script src="<?php echo base_url(); ?>assets/plugins/date-picker/jquery-ui.js"></script>
 <script src="<?php echo base_url(); ?>assets/plugins/multipleselect/multiple-select.js"></script>
@@ -462,7 +439,7 @@
 		  if(i< max_fields){
 			i++;
 		
-			$('#addrow').append('<div class="row" id="row'+i+'"><div class="col-md-2"><div class="form-group"><label>From (QTY)</label><input type="text" class="form-control" id="fromqty" name="fromqty[]"></div></div><div class="col-md-2"><div class="form-group"><label>To(QTY)</label><input type="text" class="form-control" id="toqty" name="toqty[]"></div></div><div class="col-md-2"><div class="form-group"><label>Discount(%)</label><input type="text" class="form-control" id="discount" name="discount[]"></div></div><div class="form-group col-md-2" style="margin-top: 31px;"><button name="remove" id="'+i+'" class="btn btn-danger btn_remove">X</button></div></div>');
+			$('#addrow').append('<div class="row" id="row'+i+'"><div class="col-md-2"><div class="form-group"><label>From (QTY)</label><input type="text" class="form-control" id="fromqty" name="fromqty[]"></div></div><div class="col-md-2"><div class="form-group"><label>To(QTY)</label><input type="text" class="form-control" id="toqty" name="toqty[]"></div></div><div class="col-md-2"><div class="form-group"><label>Discount(%)</label><input type="text" class="form-control" id="discount" name="discount[]"></div></div><div class="form-group col-md-2" style="margin-top: 22px;"><button name="remove" id="'+i+'" class="btn btn-danger btn_remove">X</button></div></div>');
 
 			} 
 		

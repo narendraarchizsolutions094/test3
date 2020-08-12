@@ -1,29 +1,4 @@
-	  <div class="row">
-		<div class="col-md-12" style="background-color: #fff;border-bottom: 1px solid #C8CED3;">
-		  <div class="col-md-6"> 
-			<p style="margin-top: 6px;">
-			<ol class="breadcrumb"><!-- breadcrumb -->
-								<li class="breadcrumb-item"><a href="#">Scheme</a></li>
-								<li class="breadcrumb-item active" aria-current="page">Scheme List</li>
-							</ol>     </p>
-			<!-- Enquiry / Update Enquiry -->
-		  </div>
-		  <div class="col-md-6">
-			 <div style="float:right">
-				  <div class="btn-group" role="group" aria-label="Button group">
-				   <a class="btn" onclick="window.location.reload();" title="Refresh">
-				   <i class="fa fa-refresh icon_color"></i>
-				   </a>  
-				</div>
-				<!-- For invenotry company -->
-				<div class="btn-group" role="group" aria-label="Button group">
-				   <a class="btn" href="<?php echo base_url("scheme/add"); ?>" title="Back">
-				   <i class="fa fa-plus icon_color"></i>
-				   </a>                                                    
-				</div>
-			 </div>
-		  </div>
-	   </div>
+
 <div class="row">
     <!--  form area -->
     <div class="col-sm-12">
@@ -117,6 +92,6 @@
 				<!-- End app-content-->
 			</div>
 		</div>
-	</div>	
+
 		<!-- End Page -->
 		
