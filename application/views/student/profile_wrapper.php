@@ -16,7 +16,7 @@
 <style>
 
 .profile-main{
-  width: 100%;
+  width: 100%; 
   margin: 0 auto;
   border: 1px solid #aed5e2;
   padding-bottom: 10px;
