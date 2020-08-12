@@ -57,13 +57,19 @@ class Program_model extends CI_Model {
         }else{
             $this->db->where('tbl_course.comp_id',67);
         }
+        if (!empty($_GET['keyword'])) {            
+            $this->db->like('tbl_crsmaster.course_name', $_GET['keyword']);           
+            $this->db->or_like('tbl_institute.institute_name', $_GET['keyword']);           
+        }
+        
+
         $this->db->order_by('tbl_course.crs_id','asc');
         $id    =   $this->input->post('id');
         if (empty($id)) {
         	$id = 0;
         }else{
         	$id = $id-1;
-        }
+        } 
         $this->db->limit(12,$id);        
 
     }

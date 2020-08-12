@@ -190,7 +190,7 @@ button.owl-prev span, button.owl-next span{
 <div class="hero__search">
 <div class="hero__search__form">
 <form action="#">
-<input type="text" placeholder="Search Now">
+<input type="text" placeholder="Search Now" name="keyword" value="<?=!empty($_GET['keyword'])?$_GET['keyword']:''?>">
 <button type="submit" class="site-btn">SEARCH</button>
 </form>
 </div>
