@@ -1599,39 +1599,41 @@ function formatAMPM(date) {
   });
 
 starCountRef1.on('value',function(res){
-     // console.log(res.val());
-        var phone=Object.values(res.val());
-          phone.forEach(function (arrayItem) { 
-           var phone=arrayItem.user_phone;
-           var uid=  arrayItem.uid;
-       var phone_s=arrayItem.users;
-           phone_s = phone_s.replace(/[^\d]/g, '');
-           if(phone.length >= 11){var phone_n = phone.substr(2,12);}else{var phone_n = phone;}
-         console.log(phone_s);   
-       var user_pho="<?php echo '91'.$this->session->phone;?>"; 
-            if(phone_s == user_pho){
-         $.ajax({
-                type: "POST",
-                url: "<?php echo base_url();?>telephony/get_in_status/"+btoa(uid),        
-                success: function(data){ 
-                  if(data==1){ 
-                 Swal.fire({            
-                 icon: 'info',
-                 html:'<strong>Inbound call with this number.<a href="https://thecrm360.com/new_crm/telephony/forword_to/'+phone_n+'">'+phone_n+'</a></strong><br><a class="btn btn-info" href="https://thecrm360.com/new_crm/telephony/forword_to/'+phone_n+'">Go</a>',
-                 showCancelButton: false,
-                 showConfirmButton: false,
-                 confirmButtonColor: '#3085d6',
-                 cancelButtonColor: '#d33',             
-                 }).then((result) => {
-                 if (result.value) {                                 
-                     }
-          }); 
-          }    
+        console.log(res.val());
+        var myVar  = res.val();
+        if (typeof myVar !== 'undefined') {
+          var phone=Object.values(res.val());
+            phone.forEach(function (arrayItem) { 
+             var phone=arrayItem.user_phone;
+             var uid=  arrayItem.uid;
+          var phone_s=arrayItem.users;
+             phone_s = phone_s.replace(/[^\d]/g, '');
+             if(phone.length >= 11){var phone_n = phone.substr(2,12);}else{var phone_n = phone;}
+           console.log(phone_s);   
+          var user_pho="<?php echo '91'.$this->session->phone;?>"; 
+              if(phone_s == user_pho){
+           $.ajax({
+                  type: "POST",
+                  url: "<?php echo base_url();?>telephony/get_in_status/"+btoa(uid),        
+                  success: function(data){ 
+                    if(data==1){ 
+                   Swal.fire({            
+                   icon: 'info',
+                   html:'<strong>Inbound call with this number.<a href="https://thecrm360.com/new_crm/telephony/forword_to/'+phone_n+'">'+phone_n+'</a></strong><br><a class="btn btn-info" href="https://thecrm360.com/new_crm/telephony/forword_to/'+phone_n+'">Go</a>',
+                   showCancelButton: false,
+                   showConfirmButton: false,
+                   confirmButtonColor: '#3085d6',
+                   cancelButtonColor: '#d33',             
+                   }).then((result) => {
+                   if (result.value) {                                 
+                       }
+            }); 
+            }    
+          }
+             }); 
+           }
+            });          
         }
-           }); 
-         }
-          });
-      
   });
       
   });
