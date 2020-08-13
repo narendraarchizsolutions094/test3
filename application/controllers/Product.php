@@ -19,6 +19,8 @@ class Product extends CI_Controller {
 		
 	}
 	
+	
+	
 	function addproduct(){
 		
 		if(isset($_POST['proname'])){
@@ -136,7 +138,7 @@ class Product extends CI_Controller {
 
 	  public function do_upload()
         {
-                $config['upload_path']          = './assets/images/';
+                $config['upload_path']          = './assets/images/products/';
                 $config['allowed_types']        = 'gif|jpg|png';
              
 
@@ -599,9 +601,97 @@ class Product extends CI_Controller {
 	           $this-> session->set_flashdata("error", "Failed to uploaded user. ".$msg);
 	    }
 	    
-
+	
 	    
 	}
+
+
+	public function category($categ = ""){
+		
+		
+		if(isset($_POST["categid"])){
+			
+			$this->savesubcateg();
+			redirect(base_url("product/category/".$categ), "refresh");
+			
+		}else if(isset($_POST["category"])){
+			
+			$this->savecateg();
+			redirect(base_url("product/category.html"), "refresh");
+		}
+		
+		if(empty($categ)) {
+			$data["title"] 	  = "Add Category";
+			$data['category'] = $this->db->select("*")->where("comp_id", $this->session->companey_id)->get("tbl_category")->result();
+			$data["categid"]     = false;
+		}else{
+			$data["title"] = "Add Subcategory";
+			$data['category'] = $this->db->select("id,subcat_name as name,status")
+										 ->where("cat_id", $categ)->where("comp_id", $this->session->companey_id)->get("tbl_subcategory")->result();
+			$data["categid"]     = $categ;
+		}
+		
+        $data['content'] = $this->load->view('product/categ-list', $data, true);
+		$this->load->view('layout/main_wrapper', $data);
+		
+	}
+	
+	public function savecateg(){
+		
+		$this->form_validation->set_rules("category","Category", "trim|required");
+		
+		if($this->form_validation->run()) {
+			$arr = array("comp_id" 		=> $this->session->companey_id,
+						 "type"	   		=> 1,
+						 "name"	   		=> $this->input->post("category", true),
+						 "description"  => "",
+						 "status"		=> 1,
+						 "created_date"	=> date("Y-m-d h:i:s"),
+						 "updated_date" => date("Y-m-d h:i:s")
+						 );
+			
+			$ret = $this->db->insert("tbl_category", $arr);
+			
+			if($ret){
+				
+				  $this-> session->set_flashdata("message", "Successfully saved category");
+			}else{
+				$this-> session->set_flashdata("error", "Failed to saved category");
+				
+			}
+		}else{
+			$this-> session->set_flashdata("error", validation_errors());
+		}	
+		
+	}
+	public function savesubcateg(){
+		
+		$this->form_validation->set_rules("category","Category", "trim|required");
+		
+		if($this->form_validation->run()) {
+			$arr = array("comp_id" 		=> $this->session->companey_id,
+						 "subcat_name"	   		=> $this->input->post("category", true),
+						 "cat_id"       =>  $this->input->post("categid", true),
+						 "status"		=> 1,
+						 "created_date"	=> date("Y-m-d h:i:s"),
+						 "created_by" => $this->session->user_id
+						 );
+			
+			$ret = $this->db->insert("tbl_subcategory", $arr);
+			
+			if($ret){
+				
+				  $this-> session->set_flashdata("message", "Successfully saved subcategory");
+			}else{
+				$this-> session->set_flashdata("error", "Failed to saved category");
+				
+			}
+		}else{
+			$this-> session->set_flashdata("error", validation_errors());
+		}
+	}
+
+
 
 	public function stockupdate($stkno){
 		

@@ -466,7 +466,41 @@ if($root=='https://student.spaceinternationals.com'){  ?>
   .master-search.expanded {
     opacity: 1;
   }
+.dropdown-large {
+  position: static !important;
+}
+.dropdown-menu-large {
+  margin-left: 16px;
+  margin-right: 16px;
+  padding: 20px 0px;
+  left: -131px;
+  min-width:250px;
+}
 
+@media (max-width: 768px) {
+  .dropdown-menu-large {
+    margin-left: 0 ;
+    margin-right: 0 ;
+  }
+  .dropdown-menu-large > li {
+    margin-bottom: 30px;
+  }
+  .dropdown-menu-large > li:last-child {
+    margin-bottom: 0;
+  }
+  .dropdown-menu-large .dropdown-header {
+    padding: 3px 15px !important;
+  }
+}
+ .dropdown-menu-large .cart-items{
+	padding: 0px 14px;
+	border-bottom: 1px solid #f7f7f7;
+}
+.checkout-btn{
+	    color: #fff !important;
+    line-height: 31px;
+    margin: 0px 15px;
+}
 /* search icon style end */
 
 </style>
@@ -614,72 +648,48 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                </div>
                <div class="navbar-custom-menu">
                   <ul class="nav navbar-nav">   
-                      
-                    <li  class="dropdown dropdown-user">
-                      <br />
-                      <?php echo form_open(base_url("master_lead_search"), array("class" => "form-inline", "method"=> "GET",'id'=>'master_search_form')); ?>
-                        <div class="input-group">               
-                        <input type="text" class="form-control master-search" placeholder = "Search here" name="search" value = "<?php echo (!empty($_GET['search'])) ? $_GET['search'] : ""; ?>" style="width:77%;" >
-                        
-                        <div class="input-group-prepend">
-                          <button type="submit" class="input-group-text btn btn-default master-search-icon" style=""><i class="fa fa-search" aria-hidden="true"></i></button>&nbsp;
-                        </div>
+					   <li  class="dropdown  dropdown-user" style="height: 1px;">
+                      <?php
+					$cartarr = array();	
+					  if(!empty($this->cart->contents())) {
+										
+								$cartarr = $this->cart->contents();
 
-                        </div>          
-                      <?php echo form_close(); ?>
-                    </li>     
-        
-                    <li class="dropdown dropdown-user">
-                       <button title="<?=display("mark_attendence")?>" class="btn btn-primary" style="margin-top: 20px; border-radius: 50%;" id="mark_attendance" ><i class="fa fa-clock-o"></i></button>
-                    </li>
-   
-          <li  class="dropdown dropdown-user">
-                      
-                        <div class="btn-group dropdown-filter" style="margin-top: 20px;">
-                          &nbsp;<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fa fa-filter"></i> <span class="caret"></span>
-                          </button>
-                          <ul class="filter-dropdown-menu dropdown-menu">                
-                            <?php
-                            $user_process_list = $this->common_model->get_user_product_list();
+							}
+										?>
+								  <a href = "#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+									<i class="fa fa-shopping-cart" aria-hidden="true"></i> <span class="caret"></span>
+								  </a>
+								  <span class="badge badge-notify"  id = "nav-cart-count"><?php echo count($cartarr); ?></span>
+								 
+								  
+								  <ul class="filter-dropdown-menu dropdown-menu dropdown-menu-large" id = "cart-nav-menu">
+								<?php 
+								
+								
+								if(!empty($this->cart->contents())) {
+										
+										$cartarr = $this->cart->contents();
+										foreach($cartarr as $ind => $cart) {
+										
+											?><li id = "cart-li-<?php echo $cart['id']; ?>" > 
+										
+											<div class = "cart-items"><h4><a href = ""> <?php echo $cart['name'] ?></a></h4>
+													<p><a href = ""> Price : <i class = "fa fa-price"></i> <?php echo  $cart['price']." X ".$cart['qty']; ?> = <i class = "fa fa-rupee"></i> <?php echo $cart['price']*$cart['qty']  ?> </a> 
+														
+													</p>
+													<hr />
+													</div>
+											</li><?php
+										} ?>
+											<li><a class = "btn btn-danger checkout-btn" href = "<?php echo base_url("buy/checkout") ?>">Check Out</a></li>
+							<?php	} ?>	
+										
+								  </ul>
+								
+					 </li>
+                     
 
-                            if(!empty($user_process_list)){   
-                              $this->load->helper('cookie');                        
-                              $process_filter = get_cookie('selected_process');
-                              if (!empty($process_filter)) {
-                                $process_filter = explode(',', $process_filter);
-                              }else{
-                                $process_filter = array();
-                              }
-                              //var_dump($process_filter);
-                              if(user_access(270)){
-                                  foreach ($user_process_list as $product) { ?>                        
-                                    <li>
-                                      <label>
-                                        <input type="checkbox" name='product_filter[]' value="<?=$product->sb_id ?>" <?php if (empty($process_filter) || in_array($product->sb_id, $process_filter)) { echo "checked";                         
-                                        }?> >   <?=$product->product_name ?>
-                                      </label>
-                                    </li>                
-                                    <?php                             
-                                  }
-                                }else{
-                            foreach ($user_process_list as $product) { ?>                        
-                                    <li>
-                                      <label>
-                                        <input type="radio" name='product_filter[]' value="<?=$product->sb_id ?>" <?php if (empty($process_filter) || in_array($product->sb_id, $process_filter)) { echo "checked";                         
-                                        }?> >   <?=$product->product_name ?>
-                                      </label>
-                                    </li>                
-                                    <?php                             
-                                  } 
-                            }
-                          }
-                            ?>
-                          </ul>
-                        </div>
-                      
-                      
-                          </li>
                <li class="dropdown dropdown-user" style="height: 1px;" id="notification_dropdown">
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown" id="anch_notification_dropdown"><i class="fa fa-bell-o" style="background:#fff !important;border:none!important;color:green;"></i></a>
                   <span class="badge badge-notify" id="bell_notifications_count">0</span>
