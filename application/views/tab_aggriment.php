@@ -21,7 +21,7 @@
       <td><?php echo $val->agg_email;  ?></td>
       <td><?php echo $val->agg_adrs; ?></td>
       <td>
- <a href="#modal7<?= $i?>" class="btn btn-success" data-toggle="modal" data-animation="effect-scale"><i class="fa fa-eye" aria-hidden="true"></i></a>
+ <!-- <a href="#modal7<?= $i?>" class="btn btn-success" data-toggle="modal" data-animation="effect-scale"><i class="fa fa-eye" aria-hidden="true"></i></a> -->
 <?php if(!empty($val->file)){ ?>
 <a href="<?php	 echo base_url($val->file); ?>"  target="_blank" class="btn btn-warning" ><i class="fa fa-download" aria-hidden="true"></i></a>
 <?php } ?>
