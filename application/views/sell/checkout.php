@@ -81,7 +81,7 @@
 
             <div class="btn-group"> 
 
-               <a class="btn btn-success" href = "<?php echo base_url("buy"); ?>"> Total : <?php echo $totalprod; ?></a> 
+               <a class="btn btn-success" href = "<?php echo base_url("buy"); ?>" ><i class="fa fa-plus"></i> Buy </a> 
 
             </div>
 
@@ -103,140 +103,80 @@
 
             </div>
 			<div class = "row">
-			
-				<?php
-				if(!empty($product_list)) {
-					
 				
-					foreach($product_list as $i => $prd){ 
-					
-					$prd->stock = 5;
-						if(empty($prd->image)){
-							$prd->image = "default.png";
-						}
-					?>
-						<div class = "col-md-3 ">
-					
-							<div class = "card hover" style = "position:relative;display:block;">
-								<div class = "box20">
-									<img src = "<?php  echo base_url("assets/images/products/".$prd->image); ?>" class = "img-responsive">
-												<div class = "card-body card-content-member">
-							<h4><?php echo  $prd->country_name;  ?></h4>
-							<p> <i class = "fa fa-rupee"></i><strike><?php
-								$currdate = date("Y-m-d");
-								if($prd->from_date <= $currdate and $currdate <=  $prd->to_date){
-									if($prd->calc_mth == 1){
-										
-										echo $disc = $prd->price + $prd->price *$prd->discount/100;
-									}else{
-										echo $disc = $prd->price + $prd->discount;
-										
-									}	
-										
-								}		
-								?></strike> <b><i class = "fa fa-rupee"></i><?php echo $prd->price ?></b>
-								</p>
-									<div>
-									<?php if($prd->stock  == 0){
-										?>Out Of Stock<?php
-									}else{
-										
-										
-									} ?>
-									</div>
-								</div>
-								<div class = "box-content text-left" style = "text-align:left;">
+		<!--		<div class = "col-md-3">
+					<div class="box20">
+                        <img src="http://bestjquery.com/tutorial/hover-effect/demo99/images/img-1.jpg" alt="">
+                        <div class="box-content">
+                            <h3 class="title">willimson</h3>
+                            <span class="post">web designer</span>
+                        </div>
+                        <ul class="icon">
+                            <li><a href="#"><i class="fa fa-plus"></i></a></li>
+                            <li><a href="#"><i class="fa fa-link"></i></a></li>
+                        </ul>
+                    </div>
+				</div> -->
+				
+				<div class = "col-md-12">
+				<?php echo form_open(); ?>
+					<table class = "table">
+						<thead>
+							<tr>
+								<th>Product</th>
+								<th>Price</th>
+							<!--	<th>Discount</th> -->
+								<th>Quantity</th>
+								<th>Total</th>
+								<th></th>
 								
-									<h1><?php echo  $prd->country_name; ?></h1>
-									<?php if(!empty($disc)){
+							</tr>	
+						</thead>
+						<tbody>
+					<?php 	if(!empty($carts)){
+								$total = 0;
+									foreach($carts as $ind => $crt){
 										
-										?><strike><i class = "fa fa-rupee"></i><?php echo $disc; ?></strike><?php
-									} ?>
-									<p><i class = "fa fa-rupee"></i> <?php echo $prd->total_price ?></p>
-								</div>
-									 <ul class="icon">
-									<li>
-										<?php if($prd->stock  == 0){
+										$total = $total + $crt['subtotal'];	
+										?>
+										<tr>
+											<td>
+											<?php echo $crt['name']; ?>
+											</td>
+											<td><?php echo $crt['price']; ?></td>
+										<!--	<td><?php echo $crt['discount']; ?></td> -->
+											<td><a href = "javascript:void(0)" class = "minus-quantity btn btn-xs btn-info" data-prodid = "<?php echo $crt['id']; ?>"> - </a>
+											<input type = "number" class = "prod-quantity form-control" value = "<?php echo $crt['qty']; ?>" style = "width: 50px;display: inline-block;" data-prodid = "<?php echo $crt['id']; ?>">
+											<a href = "javascript:void(0)" class = "plus-quantity btn btn-xs btn-info add-to-cart" data-prodid = "<?php echo $crt['id']; ?>"> + </a></td>
+											<td class = "subtotal"><?php echo $crt['subtotal']; ?></td>
+											<td><a href = "javascript:void(0)" class = "btn btn-xs btn-danger remove-cart" data-prodid="<?php echo $crt['id']; ?>"> <i class = "fa fa-trash"></i></a></td>
 											
-											echo "Out of stock";
-										}else { ?>
-									<?php if(!empty($incart[$prd->id])) { ?>
-									<a href = "javascript:void(0)" class = "minus-quantity" data-prodid = "<?php echo $prd->sb_id; ?>"><span> - </span></a>
-									<?php } ?>
-									
-									<a href = "javascript:void(0)" data-prodid = "<?php echo $prd->sb_id; ?>" class = "add-to-cart">
-
-									<?php
-									$plus = "shopping-cart";	
-									if(!empty($incart[$prd->id])) {  ?>
-									
-											<span class="cart-quantity"><?php echo $incart[$prd->sb_id]; ?></span> 
-										<?php 
-										$plus = "cart-plus";
-										} ?>	
-									<i class="fa fa-<?php echo $plus; ?>" aria-hidden="true"></i> 
+										</tr>
 										
-											</a>
-										<?php } ?>	
-											<input type = "hidden" class = "tot-price" value = "<?php echo $disc - $prd->total_price; ?>">
-							
-											</li>
-									<li>	
-										<a href = "<?php echo base_url("buy/view/".$prd->sb_id); ?>"> <i class="fa fa-eye" aria-hidden="true"></i> </a></li>
-									</ul>
-								
-								</div>
-								 
-							</div>
-						</div>
-				<?php }
-				}else{
-					?><div class  = "col-md-12">
-						<h1>Sorry There is no product available</h1>	
-					</div>
-					<?php
-					
-					
-				}
-				?>		
+										<?php	
+									}
+								} ?>
+								<?php if(!empty($total)) { ?>
+								<tr>
+									<td colspan = "3" class = "text-right"><b>Total</b></td>
+									<td class ="total-price" style = "border-top:2px solid #ccc;"><?php echo $total; ?></td>
+									<td></td>
+								</tr>
+								<tr>
+									<td colspan = "4" class = "text-right"><button type = "submit" class = "btn btn-info">Order</button></td>
+									<td><a class = "btn btn-success" href = "<?php echo base_url("payment"); ?>">Payment</a></td>
+								</tr>
+								<?php } ?>
+						</tbody>
+					</table>
+				<?php form_close(); ?>
+				</div>
+				
+				
 			</div>
-			<div class "row">
-				<div class = "col-md-12 text-center">
-				<nav aria-label="Page navigation example">
-			<?php if(!empty($limit) and !empty($totalprod)) {
-					$tpage  =  ceil($totalprod/$limit);
-					if($tpage > 1) { 
-					?> <ul class="pagination">
-					<?php 
-						if(isset($_GET['page'])){
-							
-							$page = $_GET['page'];
-						}else{
-							
-							$page = 1;
-						} 
-						if($page > 1) { ?>
-					 <li class="page-item"><a class="page-link" href="<?php echo $page - 1; ?>">Previous</a></li>
-					<?php
-						}
-					
-					for($i = 1; $i <= $tpage; $i++) { 
-					
-						?>
-						<li class="page-item <?php echo ($page == $i) ? "active" : "";  ?>" ><a class="page-link" href="<?php echo base_url("buy?page=".$i); ?>"><?php echo $i; ?></a></li>		
-			<?php	}
-				if($page < $tpage) {
-			?>
-			<li class="page-item"><a class="page-link" href="<?php echo base_url("buy?page=".($page + 1)); ?>">Next</a></li>
-			<?php }
-			}	
-			?>	
- 
-   </ul>
-			<?php } ?>	
-</nav>
-				</div>	
-			</div>
+     
+
+
          </div>
 
       </div>
@@ -275,7 +215,7 @@
 
                      <label>Product Name</label>
 
-                     <input type="text" class="form-control" name="product_name" required>
+                     <input type="text" class="form-control" name="product_name" >
 
                   </div>
 
@@ -388,6 +328,13 @@
 </script>
 
 <script>
+	$(document).on("keyup", ".prod-quantity", function(){
+		
+		if($(this).val() > 0) {
+			cartchange($(this), $(this).val());
+		}
+	});
+
 	$(document).on("click", ".minus-quantity", function(){
 		
 		 cartchange($(this), -1);
@@ -406,33 +353,27 @@
 					
 					if(jresp.status == 1){
 						
-						//<span class="minus-quantity"> - </span>
-						
-				
-						
-						currobj.append('<span class="cart-quantity">1</span>');
-						currobj.closest("li").prepend('<a href = "javascript:void(0)" class = "minus-quantity" data-prodid = "'+jresp.prodid+'"><span> - </span></a>');
+						currobj.closest("td").find(".form-control.prod-quantity").val(jresp.qty);
+						currobj.closest("tr").find("td.subtotal").text(jresp.price);
 						var tprice = parseInt(jresp.price) * parseInt(jresp.qty);
 						var htmcnt = '<li id = "cart-li-'+jresp.prodid+'"><div class="cart-items"><h4><a href="">'+jresp.product+' </a></h4>'+
 										'<p><a href=""> Price : <i class="fa fa-rupee"></i> '+jresp.price+' X '+jresp.qty+' = <i class="fa fa-rupee"></i> '+tprice+' </a>'+ 
-										'</p></div><hr /></li>';
+										'</p></div></li>';
 											$("#cart-nav-menu").prepend(htmcnt);
 											$("#nav-cart-count").text(jresp.total);					
 					}else if(jresp.status == 2){
 						
 						if(parseInt(jresp.qty)  > 0){
-							
-							crtobj.find("i.fa").addClass("fa-cart-plus").removeClass("fa-cart");
-									crtobj.find(".cart-quantity").text(parseInt(crtobj.find(".cart-quantity").text()) + qty);
-					
+						currobj.closest("td").find(".form-control.prod-quantity").val(jresp.qty);
+						currobj.closest("tr").find("td.subtotal").text(jresp.price);
 						var tprice = parseInt(jresp.price) * parseInt(jresp.qty);
 						$("#cart-li-"+jresp.prodid).html('<div class="cart-items"><h4><a href="">'+jresp.product+' </a></h4>'+
 										'<p><a href=""> Price : <i class="fa fa-rupee"></i> '+jresp.price+' X '+jresp.qty+' = <i class="fa fa-rupee"></i> '+tprice+' </a>'+ 
 										'</p></div>');
+										
 						}else{
 						
-							crtobj.find("i.fa").addClass("fa-shopping-cart").removeClass("fa-cart-plus");
-							crtobj.find(".cart-quantity").remove();
+							currobj.closest("tr").remove();
 							$("#cart-li-"+jresp.prodid).remove();
 							$("#nav-cart-count").text(jresp.total);
 							currobj.remove();
@@ -440,6 +381,8 @@
 						
 					
 					}
+						
+							$(".total-price").text(jresp.subtotal);
 					
 				}
 			});	
@@ -449,37 +392,55 @@
 	$(document).on("click", ".add-to-cart", function(){
 		
 		var currobj = $(this);
-	
+		var oldqty  = currobj.closest("td").find(".form-control.prod-quantity").val();
+		oldqty      = parseInt(oldqty);
+		
 		$.ajax({
 			url  	: "<?php echo base_url('buy/addtocart'); ?>",
 			type 	: "post",
-			data 	: {product:$(this).data("prodid"),qty:"1",disc:$(this).closest("li").find(".tot-price").val()},
+			data 	: {product:$(this).data("prodid"),qty:"1"},
 			success	: function(resp){
 				var jresp = JSON.parse(resp);
 				
 				if(jresp.status == 1){
 					
+					currobj.closest("td").find(".form-control.prod-quantity").val(jresp.qty);
+					currobj.closest("tr").find("td.subtotal").text(jresp.price);
 					//<span class="minus-quantity"> - </span>
-					currobj.find("i.fa").addClass("fa-cart-plus").removeClass("fa-cart");
-					currobj.append('<span class="cart-quantity">1</span>');
-					currobj.closest("li").prepend('<a href = "javascript:void(0)" class = "minus-quantity" data-prodid = "'+jresp.prodid+'"><span> - </span></a>');
+				
 					var tprice = parseInt(jresp.price) * parseInt(jresp.qty);
 					var htmcnt = '<li id = "cart-li-'+jresp.prodid+'"><div class="cart-items"><h4><a href="">'+jresp.product+' </a></h4>'+
 									'<p><a href=""> Price : <i class="fa fa-rupee"></i> '+jresp.price+' X '+jresp.qty+' = <i class="fa fa-rupee"></i> '+tprice+' </a>'+ 
-									'</p></div><hr /></li>';
+									'</p></div></li>';
 										$("#cart-nav-menu").prepend(htmcnt);
 										$("#nav-cart-count").text(jresp.total);					
 				}else if(jresp.status == 2){
-					currobj.find(".cart-quantity").text(parseInt(currobj.find(".cart-quantity").text()) + 1);
 				
 					var tprice = parseInt(jresp.price) * parseInt(jresp.qty);
+					currobj.closest("td").find(".form-control.prod-quantity").val(jresp.qty);
+					currobj.closest("tr").find("td.subtotal").text(jresp.price);
+					
 					$("#cart-li-"+jresp.prodid).html('<div class="cart-items"><h4><a href="">'+jresp.product+' </a></h4>'+
 									'<p><a href=""> Price : <i class="fa fa-rupee"></i> '+jresp.price+' X '+jresp.qty+' = <i class="fa fa-rupee"></i> '+tprice+' </a>'+ 
 									'</p></div>');
+					
 				}
-				
+				var tprice = 0;
+				console.log($("td.subtotal"));
+				$("td.subtotal").each(function(){
+					
+					var tprice = tprice + parseInt($(this).text());	
+					
+				});	
+				$(".total-price").text(jresp.subtotal);
 			}
 		});	
 		
+	});
+</script>
+<script>
+	$(document).on("click",".remove-cart", function(){
+		
+		cartchange($(this), 0);
 	});
 </script>

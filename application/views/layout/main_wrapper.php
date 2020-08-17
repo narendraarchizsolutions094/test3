@@ -953,7 +953,10 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                         </li>
 						<li class="<?php echo (($segment1 == "product") ? "active" : null) ?>">
                           <a href="<?php echo base_url("product/") ?>">Product</a>
-                        </li>	
+                        </li>
+						<li class="<?php echo (($segment1 == "category") ? "active" : null) ?>">
+                          <a href="<?php echo base_url("product/category"); ?>">Category</a>
+                        </li>						
                         <li class="<?php echo (($segment1 == "order") ? "active" : null) ?>">
                           <a href="<?php echo base_url("order/"); ?>">Order</a>
                         </li>

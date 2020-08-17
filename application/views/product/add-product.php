@@ -63,7 +63,7 @@
 										<label>Main Image</label>
 									<input type="file" name="mainimage" class="dropify" data-default-file="">
 										<?php if($isedit == true ) { ?>
-										<img src = "<?php echo base_url("assets/images/".$product->image); ?>">		
+										<img src = "<?php echo base_url("assets/images/products/".$product->image); ?>" class = "img-responsive">		
 										<?php } ?>
 									</div>
 									</div>
@@ -90,7 +90,7 @@
 									}			
 										?>
 									
-									<select class="form-control" id="cat" name="cat" onchange="getSubcategory(this.value)">
+									<select class="form-control load-subcateg" id="cat" name="cat">
 										<option value="">Select</option>
 									<?php if(!empty($category)) { 
 											foreach($category as $ind => $categ) {
@@ -264,3 +264,10 @@
 		</div>
 	</div>
 </div>	
+<script>
+	$(document).on("change", ".load-subcateg", function(){
+		
+		$("#scat").load("<?php echo base_url('buy/loadsubcateg/') ?>"+$(this).val());
+		
+	});
+</script>

@@ -500,6 +500,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
 	    color: #fff !important;
     line-height: 31px;
     margin: 0px 15px;
+	width:85%;
 }
 /* search icon style end */
 
@@ -662,8 +663,8 @@ if($root=='https://student.spaceinternationals.com'){  ?>
 								  </a>
 								  <span class="badge badge-notify"  id = "nav-cart-count"><?php echo count($cartarr); ?></span>
 								 
-								  
-								  <ul class="filter-dropdown-menu dropdown-menu dropdown-menu-large" id = "cart-nav-menu">
+							<div class="dropdown-menu dropdown-menu-large">	  
+								  <ul class ="filter-dropdown-menu"  id = "cart-nav-menu" style = "padding:0px;list-style:none;">
 								<?php 
 								
 								
@@ -682,11 +683,14 @@ if($root=='https://student.spaceinternationals.com'){  ?>
 													</div>
 											</li><?php
 										} ?>
-											<li><a class = "btn btn-danger checkout-btn" href = "<?php echo base_url("buy/checkout") ?>">Check Out</a></li>
+											
 							<?php	} ?>	
 										
 								  </ul>
-								
+								  <ul style = "padding:0px;list-style:none;">
+								  <li><a class = "btn btn-danger checkout-btn" href = "<?php echo base_url("buy/checkout") ?>">Check Out</a></li>
+								  </ul>
+							</div>	
 					 </li>
                      
 
@@ -721,82 +725,68 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                      <a href="#"><i class="fa fa-circle text-success"></i>
                      </a>
                   </div>
-					<?php if ($this->session->companey_id!=67) { ?>
-									  <br>
-					<label class="switch">
-					  <input type="checkbox" checked>
-					  <span class="slider round"></span>
-					</label>
-					<?php } ?>
+			
                </div>
                <ul class="sidebar-menu">
        
                   <li class="<?php echo (($segment1 == 'dashboard') ? "active" : null) ?>">
-                     <a href="<?php echo base_url('dashboard') ?>">
-                     <i class="fa fa-home" style="color:#fff;font-size:17px;background:#2ecc71;padding:7px;border-radius:4px;width:30px;"></i> &nbsp;<?php echo display('dashboard') ?>
+                     <a href="<?php echo base_url('buy') ?>">
+                    All Category
           
                      </a>
                   </li>
-       
-                  <li class="" style="display: none;">
-                    <a href="<?php echo base_url('master_lead_search'); ?>">
-                 
-                      <i class="fa fa-search"></i> 
-                      <?php echo display("lead_master_search"); ?>
-            <?php  if($this->session->menu==1){ ?></br><p style="color:#fff;font-size:9px;margin-left:-12px;padding-top:10px;"><?php echo display('lead_master_search') ?></p> <?php } ?>
-                    </a>
-                  </li>
+			
+        
      
-				 <li class="treeview">
-                     <a href="#">
-                      <i class="fa fa-cog" style="color:#fff;font-size:15px;background:#f1c40f;padding:7px;border-radius:4px;width:30px;"></i> Category
-                      <span class="pull-right-container">
-                        <i class="fa fa-angle-left pull-right"></i>
-                      </span>
-						
-                     </a>
-                     
-                     <ul class="treeview-menu">
-
-                         <li class="<?php echo (in_array($segment2,array('addwarehouse')) ?"active":'') ?>">
-                          <a href="<?php echo base_url() ?>warehouse/warehouse">Subcategory 1</a>
-                        </li>
-                         <li class="<?php echo (in_array($segment2,array('typeofproduct')) ?"active":'') ?>">
-                          <a href="<?php echo base_url() ?>warehouse/typeofproduct">Subcategory 1</a>
-                        </li>
-                         <li class="<?php echo (in_array($segment2,array('brand')) ?"active":'') ?>">
-                          <a href="<?php echo base_url() ?>warehouse/brand">Subcategory 1</a>
-                        </li>
-						<li class="<?php echo (($segment1 == "inventory") ? "active" : null) ?>">
-                          <a href="<?php echo base_url("warehouse/inventory") ?>">Subcategory 1</a>
-                        </li>
-						<li class="<?php echo (($segment1 == "product") ? "active" : null) ?>">
-                          <a href="<?php echo base_url("product/") ?>">Subcategory 1</a>
-                        </li>	
-                        <li class="<?php echo (($segment1 == "order") ? "active" : null) ?>">
-                          <a href="<?php echo base_url("order/"); ?>">Subcategory 1</a>
-                        </li>
-						 <li class="<?php echo (($segment1 == "scheme") ? "active" : null) ?>">
-                          <a href="<?php echo base_url("scheme/"); ?>">Subcategory 1</a>
-                        </li>
-						 <li class="<?php echo (($segment1 == "payment") ? "active" : null) ?>">
-                          <a href="<?php echo base_url("payment/paylist"); ?>">Subcategory 1</a>
-                        </li>
-                     </ul>
-
-                  </li>
+			
 			 <?php if(!empty($category)) {
-						foreach($category as $ind => $ctg) { ?>
-						
-							<li class="<?php echo (($segment1 == 'dashboard') ? "active" : null) ?>">
-							 <a href="<?php echo base_url('dashboard') ?>">
-							 <i class="fa fa-home" style="color:#fff;font-size:17px;background:#2ecc71;padding:7px;border-radius:4px;width:30px;"></i> &nbsp;<?php echo $ctg->name; ?>
-				  
-							 </a>
+				
+				 		foreach($category as $ind => $ctg) {
+							
+							if(count($ctg) > 1){
+								$treemenu  =  true;
+							}else{
+								$treemenu  =  false;
+							}
+						if(empty($ctg[0]->categid)) continue;			
+						?>
+							<li class="<?php echo (($segment1 == $ctg[0]->category) ? "active" : null) ?> <?php echo ($treemenu == true) ? "treeview" : ""; ?>">
+								
+										<?php if(($treemenu == false) and !empty($ctg[0]->category) ) { ?>
+											
+										 <a href="<?php echo base_url('buy?c'.$ctg[0]->categid); ?>">
+										 <i class="fa fa-home"></i>  <?php echo $ctg[0]->category; ?>
+							  
+										 </a>
+											
+										<?php }else{ ?>
+												 <a href="#">
+										 <i class="fa fa-home" style="color:#fff;font-size:17px;background:#2ecc71;padding:7px;border-radius:4px;width:30px;"></i> &nbsp;<?php echo $ctg[0]->category; ?>   <span class="pull-right-container">
+									<i class="fa fa-angle-left pull-right"></i>
+								  </span>
+							  
+										 </a>
+											
+										<?php } ?>
+									<?php 
+										if(count($ctg) > 1){
+									?>    <ul class="treeview-menu"><?php	
+											foreach($ctg as $cind => $sbctg) {
+											
+											?><li><a href = "<?php echo base_url("buy?sc=".$sbctg->id); ?>"><?php echo $sbctg->subcat_name; ?></a></li><?php
+											}
+											?></ul><?php
+										}
+											?>
+									
+									
 						  </li>
 						
 			<?php		}
 				 } ?>
+				 
+				 
+				 
                   <li class="treeview ">
                     <a href="<?php echo base_url("enq/index") ?>">
                     <i class="fa fa-question-circle-o" style="color:#fff;font-size:20px;background:#008080;padding:7px;border-radius:4px;width:30px;"></i> &nbsp;Category

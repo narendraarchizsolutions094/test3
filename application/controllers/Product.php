@@ -176,7 +176,7 @@ class Product extends CI_Controller {
 				
 				$prodid  = $this->input->post("productid", true);
 				
-				$this->db->where("sb_id", $prodid);
+				$this->db->where("id", $prodid);
 				$this->db->update("tbl_product_country", $insarr);
 				
 			}else{
@@ -199,8 +199,7 @@ class Product extends CI_Controller {
 					$imgarr   = $this->do_upload(); 
 			
 	
-				$arr = array( "stock"    	=> 0,
-							 "stockid"  	=> 0,
+				$arr = array(
 							 "last_update"  => date("Y-m-d h:i:s"),
 							// "image"		=> $imagename,
 							 "sub_image"    => "",
@@ -226,12 +225,13 @@ class Product extends CI_Controller {
 					
 				if(isset($_POST["detailsid"])) {
 					
-					
 					$detid = $this->input->post("detailsid", true);
 					$this->db->where("id", $detid);
 					$this->db->update("tbl_proddetails", $arr);
 					$ret = true;
 				}else {		
+					$arrp["stock"]    	= 0;
+					$arrp["stockid"]  	= 0;
 					$arr["prodid"]   	= $prodid;	
 					$ret = $this->db->insert("tbl_proddetails", $arr);	
 				}
