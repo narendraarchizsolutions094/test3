@@ -97,6 +97,7 @@ class Dashboard extends CI_Controller {
                 'telephony_agent_id'=> $user_data->telephony_agent_id,
                 'telephony_token'=> $user_data->telephony_token,
                 'expiry_date'    => strtotime($user_data->valid_upto),
+                'availability'    => $user_data->availability,
                 'ameyo'          => array(
                                     'sessionId' =>$sessionId,
                                     'campaignId' =>$campaignId,
@@ -189,6 +190,7 @@ class Dashboard extends CI_Controller {
                     'process' => $process,
                     'telephony_agent_id' => $check_user->row()->telephony_agent_id,
 					'telephony_token'    => $check_user->row()->telephony_token,
+                    'availability'    => $check_user->row()->availability,
                     'expiry_date'       => strtotime($check_user->row()->valid_upto),
                 ]);
                // print_r($_SESSION);die;
@@ -354,7 +356,8 @@ $this->load->library('zip');
                             'footer_text'           => (!empty($setting->footer_text) ? $setting->footer_text : null),                    
                             'telephony_agent_id'    => $user_data->telephony_agent_id,
 							'telephony_token'       => $user_data->telephony_token,
-                            'expiry_date'           => strtotime($check_user->row()->valid_upto),
+                            'expiry_date'           => strtotime($user_data->valid_upto),
+                            'availability'    => $user_data->availability,
                         ]);
                         $res = array('status'=>true,'message'=>'Successfully Logged In');                       
                    }
@@ -432,6 +435,8 @@ public function login_in_process(){
                         'process'               => $process_ids,
                         'expiry_date'           => strtotime($check_user->row()->valid_upto),
                         'account_type'          => $check_user->row()->account_type,
+                        'availability'    => $check_user->row()->availability,
+
                     ]);         
                     $res = array('status'=>true,'message'=>'Logged in');                                        
                }else{                    

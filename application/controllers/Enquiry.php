@@ -964,8 +964,14 @@ class Enquiry extends CI_Controller {
             $this->db->where('pk_i_admin_id',$assignto);  
             $user= $this->db->get()->row(); 
             $user_id=$user->telephony_agent_id;
+             $public_ivr_id=$user->public_ivr_id;
             }else{
             $user_id=$this->session->telephony_agent_id;
+             $this->db->where('telephony_agent_id',$user_id);
+              $res=$this->db->get('tbl_admin')->row();
+              if(!empty($res)){
+               $public_ivr_id= $res->public_ivr_id;
+              }
             }
         $curl = curl_init();
           curl_setopt_array($curl, array(  CURLOPT_URL => "https://obd-api.myoperator.co/obd-api-v1",
@@ -975,7 +981,7 @@ class Enquiry extends CI_Controller {
           "type": "1", 
             "user_id": "'.$user_id.'",
             "number": "+91'.$value['phone'].'",   
-            "public_ivr_id":"5f16e49954ad3197", 
+            "public_ivr_id":"'.$public_ivr_id.'", 
             "reference_id": "",  
             "region": "",
             "caller_id": "",  
