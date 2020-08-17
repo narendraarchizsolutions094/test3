@@ -94,6 +94,24 @@ if($root=='https://student.spaceinternationals.com'){  ?>
       
 
       <?php //echo $this->session->telephony_token;
+      if (!empty($this->session->ameyo['sessionId'])) { ?>
+        <script type="text/javascript">            
+          function send_parameters(phn){  
+            var ameyo_sessionId = "<?=$this->session->ameyo['sessionId']?>";
+            var campaignId = "<?=$this->session->ameyo['campaignId']?>";
+            var url =  'https://emergems.ameyo.net:8443/ameyowebaccess/command?command=manual-dial&data={"campaignId":'+campaignId+',"sessionId":'+ameyo_sessionId+',"phone":'+phn+'}';             
+              $.ajax({ 
+                url:"<?=base_url().'telephony/ameyo_api'?>",
+                type: 'POST',
+                data: {ameyo_url:url},
+                success: function (data) {
+                  console.info(data);
+                }
+              });
+          }
+        </script>
+        <?php
+      }else{
       if(in_array(220, $module)){
           if(empty($this->session->telephony_token)){  ?>      
       <script>
@@ -244,6 +262,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
     }}
         </script>
 			<?php } 
+            }
             } ?>     
 
   

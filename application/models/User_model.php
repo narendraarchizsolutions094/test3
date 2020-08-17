@@ -350,5 +350,8 @@ $company=$this->session->userdata('companey_id');
             return false;
         }
     }
+    public function get_user_by_email($email){
+        return $this->db->where('s_user_email',$email)->get('tbl_admin')->row();
+    }
 }
 

@@ -21,7 +21,98 @@ class Dashboard extends CI_Controller {
 
     }
 
-    public function index() {        
+    public function index() { 
+
+        $sessionId      =   $this->input->get('sessionId');
+        $campaignId     =   $this->input->get('campaignId');
+        $crtObjectId    =   $this->input->get('crtObjectId');
+        $userCrtObjectId=   $this->input->get('userCrtObjectId');
+        $userId         =   $this->input->get('userId');
+        $customerId     =   $this->input->get('customerId');
+        $phone          =   $this->input->get('phone');
+
+        if ($sessionId && $campaignId && $crtObjectId && $userCrtObjectId && $userId && $customerId && $phone) {
+            
+            $user_data    =   $this->user_model->get_user_by_email($userId);
+            if (!empty($user_data)) {
+
+                $this->session->set_userdata('user_id',$user_data->pk_i_admin_id);     
+
+                if(user_access(230) || user_access(231) || user_access(232) || user_access(233) || user_access(234) || user_access(235) || user_access(236)){ 
+
+                    $arr = explode(',', $user_data->process);
+                    $this->session->set_userdata('companey_id',$user_data->companey_id);                
+                    $process_filter =   get_cookie('selected_process');
+                    
+                    if (!empty($process_filter)) {
+                        $process_filter = explode(',', $process_filter);                                
+                        $process_filter = array_intersect($process_filter, $arr);
+                        if(empty($process_filter)){
+                            $this->session->set_userdata('process',$arr);
+                        }else{
+                            $this->session->set_userdata('process',$process_filter);
+                        }
+                    }else{
+                        $process_filter = array();
+                
+                        $this->session->set_userdata('process',$arr);
+                    }
+                    $c = implode(',', $this->session->process);
+                    set_cookie('selected_process',$c,'31536000'); 
+                 
+                } 
+
+
+                $city_row = $this->db->select("*")
+                        ->from("city")
+                        ->where('id', $user_data->city_id)
+                        ->get();  
+
+                $location_arr = array();
+                if(!empty($city_row->row_array())){
+                    $location_arr = $city_row->row_array();
+                }                      
+                
+                $data = $this->session->set_userdata([
+                'isLogIn'        => true,
+                'user_id'        => $user_data->pk_i_admin_id,
+                'companey_id'    => $user_data->companey_id,
+                'email'          => $user_data->s_user_email,
+                'designation'    => $user_data->designation,
+                'phone'          => $user_data->s_phoneno,
+                'fullname'       => $user_data->s_display_name.' '.$user_data->last_name,
+                'country_id'     => !empty($location_arr)?$location_arr['country_id']:'',
+                'region_id'      => !empty($location_arr)?$location_arr['region_id']:'',
+                'territory_id'   => !empty($location_arr)?$location_arr['territory_id']:'',
+                'state_id'       => !empty($location_arr)?$location_arr['state_id']:'',
+                'city_id'        => $user_data->city_id,                   
+                'user_right'     => $user_data->user_permissions,
+                'picture'        => $user_data->picture,
+                'modules'        => $user_data->modules,
+                'title'          => (!empty($setting->title) ? $setting->title : null),
+                'address'        => (!empty($setting->description) ? $setting->description : null),
+                'logo'           => (!empty($setting->logo) ? $setting->logo : null),
+                'favicon'        => (!empty($setting->favicon) ? $setting->favicon : null),
+                'footer_text'    => (!empty($setting->footer_text) ? $setting->footer_text : null),                    
+                'telephony_agent_id'=> $user_data->telephony_agent_id,
+                'telephony_token'=> $user_data->telephony_token,
+                'expiry_date'    => strtotime($user_data->valid_upto),
+                'ameyo'          => array(
+                                    'sessionId' =>$sessionId,
+                                    'campaignId' =>$campaignId,
+                                    'crtObjectId'=>$crtObjectId,
+                                    'userCrtObjectId'=>$userCrtObjectId,
+                                    'userId'=>$userId,
+                                    'customerId'=>$customerId,
+                                    'phone'=>$phone
+                                )   
+            ]);
+            }else{
+                redirect();
+            }
+        }
+
+
         if ($this->session->userdata('isLogIn'))
             $this->redirectTo($this->session->userdata('user_role'));
         $this->form_validation->set_rules('email', display('email'), 'required|max_length[50]|valid_email');

@@ -353,4 +353,28 @@ class Telephony extends CI_Controller {
 		print_r($response);
 	}
 
+    public function ameyo_api(){
+        $ameyo_url    =   $this->input->post('ameyo_url');
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+          CURLOPT_URL => $ameyo_url,
+          CURLOPT_RETURNTRANSFER => true,
+          CURLOPT_ENCODING => "",
+          CURLOPT_MAXREDIRS => 10,
+          CURLOPT_TIMEOUT => 0,
+          CURLOPT_FOLLOWLOCATION => true,
+          CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+          CURLOPT_CUSTOMREQUEST => "GET",
+          CURLOPT_HTTPHEADER => array(
+            "Cookie: JSESSIONID=451E64BF7E8FFC80ACA818B68F8BE2DF; __METADATA__=772eb950-8910-456b-b35d-eee95f57dc1d"
+          ),
+        ));
+
+        $response = curl_exec($curl);
+
+        curl_close($curl);
+        echo $response;
+
+    }
+
 }
