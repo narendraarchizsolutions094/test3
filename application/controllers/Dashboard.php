@@ -31,8 +31,7 @@ class Dashboard extends CI_Controller {
         $customerId     =   $this->input->get('customerId');
         $phone          =   $this->input->get('phone');
 
-        if ($sessionId && $campaignId && $crtObjectId && $userCrtObjectId && $userId && $customerId && $phone) {
-            
+        if ($sessionId && $campaignId && $userCrtObjectId && $userId) {            
             $user_data    =   $this->user_model->get_user_by_email($userId);
             if (!empty($user_data)) {
 

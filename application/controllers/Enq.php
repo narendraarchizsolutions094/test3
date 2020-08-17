@@ -260,9 +260,9 @@ class Enq extends CI_Controller {
 			}
 			if ($showall == true or in_array(5, $acolarr)) { 
 				if(user_access(220)){
-					$row[] = "<a href='javascript:void(0)' onclick='send_parameters(".$each->phone.")'>".$each->phone."</a>";            	
+					$row[] = "<a class='mask-num' href='javascript:void(0)' onclick='send_parameters(".$each->phone.")'>".$each->phone."</a>";            	
 				}else{
-					$row[] = (!empty($each->phone)) ? $each->phone : "NA";
+					$row[] = (!empty($each->phone)) ? '<a class="mask-num" href="javascript:void(0)">'.$each->phone.'</a>' : "NA";
 				}
 			}
 			if ($showall == true or in_array(6, $acolarr)) { 
