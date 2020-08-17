@@ -26,7 +26,7 @@ class Dashboard extends CI_Controller {
         $sessionId      =   $this->input->get('sessionId');
         $campaignId     =   $this->input->get('campaignId');
         $crtObjectId    =   $this->input->get('crtObjectId');
-        $userCrtObjectId=   $this->input->get('userCrtObjectId');
+        $userCrtObjectId=   $this->input->get('userCrtObjectIds');
         $userId         =   $this->input->get('userId');
         $customerId     =   $this->input->get('customerId');
         $phone          =   $this->input->get('phone');
