@@ -33,7 +33,7 @@ class Dashboard extends CI_Controller {
 
         if ($sessionId && $campaignId && $userCrtObjectId && $userId) {            
             $user_data    =   $this->user_model->get_user_by_email($userId);
-            if (!empty($user_data)) {
+            if (!empty($user_data) && $user_data->companey_id == 79) {
 
                 $this->session->set_userdata('user_id',$user_data->pk_i_admin_id);     
 
