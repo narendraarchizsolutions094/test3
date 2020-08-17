@@ -58,15 +58,15 @@ input[name=top_filter] {
 				<div class="panel-heading no-print" style ="background-color: #fff;padding:7px;border-bottom: 1px solid #C8CED3;">
 							<div class="row">
 					<div class="col-md-12">
-						<h4> Tickets <small><?php echo count($tickets); ?></small> 
-												<div style="float:right">
-            <div class="btn-group" role="group" aria-label="Button group">
+						<!-- <h4> Tickets <small><?php echo count($tickets); ?></small> --> 
+												<div >
+            <!-- <div class="btn-group" role="group" aria-label="Button group">
                <a class="btn" onclick="window.location.reload();" title="Refresh">
                <i class="fa fa-refresh icon_color"></i>
                </a>  
-            </div>
+            </div> -->
             <div class="btn-group" role="group" aria-label="Button group">
-               <a class="dropdown-toggle" href="<?php echo base_url("ticket/add"); ?>" title="Add New Ticket"> <i class="fa fa-plus" style="background:#fff !important;border:none!important;color:green;"></i></a>&nbsp;&nbsp;&nbsp;
+               <a class="dropdown-toggle btn btn-success" href="<?php echo base_url("ticket/add"); ?>" title="Add New Ticket"> <i class="fa fa-plus" ></i>Add Ticket</a>&nbsp;&nbsp;&nbsp;
             </div>
          </div></h4>
 					</div>
@@ -179,7 +179,7 @@ input[name=top_filter] {
 										<td><?php echo $tck->clientname; ?></td>
 										<td><?php echo $tck->email ; ?></td>
 										<td><?php echo $tck->phone	; ?></td>
-										<td><?php echo $tck->country_name ; ?></td>
+										<td><?=$tck->country_name ; ?></td>
 										
 										<td><?php echo ucwords($tck->category) ; ?></td>
 										<td><?php 

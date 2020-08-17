@@ -259,7 +259,8 @@ class Ticket_Model extends CI_Model {
 		}
 		
 		
-		public function getproduct(){
+		public function getproduct()
+		{
 			
 			return $this->db->select("*")->where(array("comp_id" => $this->session->companey_id, "status" => 1))->get("tbl_product_country")->result();
 	

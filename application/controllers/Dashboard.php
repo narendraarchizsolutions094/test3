@@ -840,8 +840,9 @@ public function login_in_process(){
 
             $permission = '';
         }
+        $path = 'assets/images/user/';
         $config = array(
-        'upload_path' => 'assets/images/user/',
+        'upload_path' => $path,
         'allowed_types' => "gif|jpg|png|jpeg",        
         'max_size' => "2048000",
         'encrypt_name' => true
@@ -857,7 +858,7 @@ public function login_in_process(){
         }*/
         //echo $this->upload->display_errors();
         $imageDetailArray = $this->upload->data();
-        $img =  $imageDetailArray['file_name'];
+        $img =  $path.$imageDetailArray['file_name'];
         //print_r($imageDetailArray);
         if ($this->session->user_id == 9) {
             $org = $this->input->post('org_name');
@@ -1195,6 +1196,7 @@ public function user_profile() {
         $user_id = $this->session->userdata('user_id');
 		$stu_phone=$this->session->userdata('phone');
         $data['student_Details'] = $this->home_model->studentdetail($stu_phone);
+       // print_r($data['student_Details']);die;
         $studetails = $this->home_model->studentdetail($stu_phone);
         
         $en_id=$studetails['Enquery_id'];
@@ -1221,7 +1223,8 @@ public function user_profile() {
 		$data['length'] = $this->location_model->find_length();
 		$data['course_list'] = $this->Institute_model->courselist();
 		$data['institute_list'] = $this->Institute_model->institutelist();
-		$data['institute'] = $this->Institute_model->findinstitute();
+		$data['institute'] = $this->Institute_model->findinstitute();		
+        $data['all_description_lists']    =   $this->Leads_Model->find_description();
 		$data['all_extra'] = $this->location_model->get_qualification_tab($en_id);        
         $data['content'] = $this->load->view('student/profile_wrapper', $data, true);
         $this->load->view('layout/main_wrapper', $data);
@@ -1918,13 +1921,21 @@ $newdt = date('Y-m-d',strtotime($tempdate));
     }
 
 public function my_applications() {
-		$data['title'] = display('my_applications');
-        $user_id = $this->session->userdata('user_id');
-		$data['my_app'] = $this->location_model->get_wislist($user_id);
-		$data['my_history'] = $this->location_model->get_history($user_id);
-        $data['content'] = $this->load->view('student/my_applications', $data, true);
-        $this->load->view('layout/main_wrapper', $data);
-    }
+	$data['title'] = display('my_applications');
+    $user_id = $this->session->userdata('user_id');
+	$data['my_app'] = $this->location_model->get_wislist($user_id);
+	$data['my_history'] = $this->location_model->get_history($user_id);
+    $data['content'] = $this->load->view('student/my_applications', $data, true);
+    $this->load->view('layout/main_wrapper', $data);
+}
+public function remove_from_wish_list($id){
+    $this->db->where('id',$id);
+    $this->db->where('comp_id',$this->session->companey_id);
+    $this->db->delete('tbl_wishlist');
+    $this->session->set_flashdata('message','Successfully Removed from wishlist');
+    redirect('dashboard/my_applications');
+}
+
 public function menu_style() {	
 		if($this->session->menu==1){
         $this->session->set_userdata('menu',2);
@@ -1938,19 +1949,20 @@ public function set_layout_to_session() {
         $this->session->set_userdata('layout', $layout);
     }
 
-public function add_wishlist() {
-    $crs=$this->uri->segment(3);
-    $ins=$this->uri->segment(4);
-	$stu=$this->session->userdata('user_id');
-	$comp=$this->session->userdata('companey_id');
-    $data = array(
-        'comp_id'=>$comp,
-        'stu_id'=>$stu,
-		'uni_id'=>$ins,
-        'crs_id'=>$crs
-    );
-    $this->db->insert('tbl_wishlist',$data);
-	redirect('dashboard/search_programs');
+    public function add_wishlist() {
+        $crs=$this->uri->segment(3);
+        $ins=$this->uri->segment(4);
+    	$stu=$this->session->userdata('user_id');
+    	$comp=$this->session->userdata('companey_id');
+        $data = array(
+            'comp_id'=>$comp,
+            'stu_id'=>$stu,
+    		'uni_id'=>$ins,
+            'crs_id'=>$crs
+        );
+        $this->db->insert('tbl_wishlist',$data);
+        $this->session->set_flashdata('message','Successfully added to wish list');
+    	redirect('dashboard/search_programs');
     }
 	
 	public function course_details() {

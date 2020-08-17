@@ -1160,9 +1160,9 @@ if($coment_type == 1){
     public function addproductcountry() {
         $data['title'] = 'Add Product';
         if (empty($this->input->post('user_id'))) {
-          $this->form_validation->set_rules('country_name', display('country_name'), 'required|max_length[50]');
+          $this->form_validation->set_rules('country_name', display('country_name'), 'required|max_length[200]');
         } else {
-          $this->form_validation->set_rules('country_name', display('country_name'), 'required|max_length[50]');
+          $this->form_validation->set_rules('country_name', display('country_name'), 'required|max_length[200]');
         }     
         $data['formdata'] = (object) $postData = [
             'id' => $this->input->post('id', true),

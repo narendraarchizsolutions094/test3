@@ -11,20 +11,22 @@
 				<div class="panel-heading no-print" style ="background-color: #fff;padding:7px;border-bottom: 1px solid #C8CED3;">
 							<div class="row">
 					<div class="col-md-12">
-						<h4>Add Ticket 				<div style="float:right">
-            <div class="btn-group" role="group" aria-label="Button group">
-               <a class="btn" onclick="window.location.reload();" title="Refresh">
-               <i class="fa fa-refresh icon_color"></i>
-               </a>  
-            </div>
-         
-            
-            <div class="btn-group" role="group" aria-label="Button group">
-               <a class="btn" href="<?php echo base_url("ticket"); ?>" title="Refresh">
-               <i class="fa fa-arrow-left icon_color"></i>
-               </a>                                                    
-            </div>
-         </div></h4>
+						<a href="<?=base_url('ticket/index')?>" class="btn btn-success"> <i class="fa fa-list"></i> Ticket List 				
+							<!-- <div style="float:right">
+								<div class="btn-group" role="group" aria-label="Button group">
+									<a class="btn" onclick="window.location.reload();" title="Refresh">
+										<i class="fa fa-refresh icon_color"></i>
+									</a>  
+								</div>
+
+
+								<div class="btn-group" role="group" aria-label="Button group">
+									<a class="btn" href="<?php echo base_url("ticket"); ?>" title="Refresh">
+										<i class="fa fa-arrow-left icon_color"></i>
+									</a>                                                    
+								</div>
+							</div> -->
+						</a>
 					</div>
 				</div>
 				</div>

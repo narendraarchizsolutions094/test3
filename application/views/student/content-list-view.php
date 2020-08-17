@@ -36,8 +36,8 @@
 												</p>
 									</div>
 									<div class="row">
-										<div class="col-md-6" style="padding-top:5px;"><a href="<?php echo base_url('home/course_details/'.$movie->insid.'/'.$movie->crs_id); ?>" class="btn btn-success"><span><i class="fa fa-info-circle" aria-hidden="true"></i></span></a>&nbsp;&nbsp;
-										<a href="<?php $root=(isset($_SERVER["HTTPS"]) ? "https://" : "http://").$_SERVER["HTTP_HOST"]; echo $root.'/new_crm'; ?>" class="btn btn-danger"><span><i class="fa fa-heart-o" aria-hidden="true"></i></span></a>&nbsp;&nbsp;
+										<div class="col-md-6" style="padding-top:5px;"><a href="<?php echo base_url('dashboard/course_details/'.$movie->insid.'/'.$movie->crs_id); ?>" class="btn btn-success"><span><i class="fa fa-info-circle" aria-hidden="true"></i></span></a>&nbsp;&nbsp;
+										<a href="<?php echo 'add_wishlist/'.$movie->crs_id.'/'.$movie->institute_id;?>" class="btn btn-danger"><span><i class="fa fa-heart-o" aria-hidden="true"></i></span></a>&nbsp;&nbsp;
 										<?php
 										if (user_access(60)) { ?>
 											<a href="javascript:void(0)" class="btn btn-primary" data-toggle="modal" data-target="#apply_now" onclick="set_apply_with(<?=$movie->crs_id?>)"><span>

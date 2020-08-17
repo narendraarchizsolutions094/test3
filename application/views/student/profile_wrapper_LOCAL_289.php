@@ -301,7 +301,7 @@ height:auto;
 }
 </style>
 <style>
-  .service-tile {
+	.service-tile {
     margin-bottom: 2rem;
     display: flex;
     flex-direction: column;
@@ -453,7 +453,7 @@ height:auto;
                 <div class="col-md-12">
                   <?php
                   if ($this->session->companey_id == 76) {
-                    $s  = $all_description_lists;
+                    $s  = $lead_stage;
                     if (!empty($s)) {
                     ?>
                     <ul class="step-bar">
@@ -470,9 +470,9 @@ height:auto;
                         if (!empty($s)) {                          
                         foreach ($s as $key => $value) {                      
                         ?>
-                        <li class="step <?=(!empty($stud_details->lead_description) && $value->id==$stud_details->lead_description)?'step--current':''?>">
+                        <li class="step <?=(!empty($stud_details->lead_stage) && $value->stg_id==$stud_details->lead_stage)?'step--current':''?>">
                           <span class="step__bullet"><?=$i?></span>
-                          <span class="step__title"><?=$value->description?></span>
+                          <span class="step__title"><?=$value->lead_stage_name?></span>
                         </li>                        
                         <?php
                         $i++;
@@ -489,53 +489,53 @@ height:auto;
 
                
 
-  <div class="profile-main" style="background: aliceblue;">
-    <div class="profile-header">
-    <?php //foreach($student_Details as $pdetail){ ?>
-      <div class="user-detail">
-        <div class="user-image">
-          <img src="http://nicesnippets.com/demo/up-profile.jpg">
-        </div>
-        <div class="user-data">
-          <h2><?php echo $student_Details['name_prefix'].''.$student_Details['name'].' '.$student_Details['lastname']; ?></h2>
-          <span class="post-label"><?php echo $student_Details['Enquery_id']; ?></span>
+	<div class="profile-main" style="background: aliceblue;">
+		<div class="profile-header">
+		<?php //foreach($student_Details as $pdetail){ ?>
+			<div class="user-detail">
+				<div class="user-image">
+					<img src="http://nicesnippets.com/demo/up-profile.jpg">
+				</div>
+				<div class="user-data">
+					<h2><?php echo $student_Details['name_prefix'].''.$student_Details['name'].' '.$student_Details['lastname']; ?></h2>
+					<span class="post-label"><?php echo $student_Details['Enquery_id']; ?></span>
           <?php
           if ($this->session->companey_id == 67) {          
           ?>
-          <p>Applied at <strong>Space Internationals</strong><br>
+					<p>Applied at <strong>Space Internationals</strong><br>
           <?php
           }
           ?>
-          <i class="fa fa-map-marker" aria-hidden="true"></i>  <?php echo $student_Details['address']; ?>
-          </p>
-        </div>
-        <div style="padding-top:5%;">
-        <a href="<?= base_url('enquiry/viewpro/'.$student_Details['enquiry_id']);?>" class="btn btn-warning"><i class="fa fa-pencil-square-o" style="color:#fff;"></i> Edit</a>
-      </div>
-      </div>
-    <?php //} ?>
-      <div class="tab-panel-main">
-        <ul class="tabs">
-          <li class="tab-link current" data-tab="Basic-detail">Basic Detail</li>
-            <?php if($this->session->userdata('user_right')==151 || $this->session->userdata('user_right')==180 || $this->session->userdata('user_right')==186){ ?>
-          <li class="tab-link" data-tab="Edu-detail">Document</li>
-          <li class="tab-link" data-tab="Portfolio">Institute</li>
-          <li class="tab-link" data-tab="qualification">Qualification</li>
-          <li class="tab-link" data-tab="english">English Language</li>
-          <li class="tab-link" data-tab="payment">Payment</li>
-          <li class="tab-link" data-tab="agreement">Agreement</li>
-          <?php } ?>
-          <?php if($this->session->userdata('user_right')==110){ ?>
-          <li class="tab-link" data-tab="pramotional">Promotional Videos</li>
-          <li class="tab-link" data-tab="faq">University FAQ</li>
-          <li class="tab-link" data-tab="institute">Create Institute</li>
-          <li class="tab-link" data-tab="course">Create Course</li>
-          <li class="tab-link" data-tab="schedule">Create Schedule</li>
-          <?php } ?>
-        </ul>
-        
-        <div id="Basic-detail" class="tab-content current">
-      
+					<i class="fa fa-map-marker" aria-hidden="true"></i>  <?php echo $student_Details['address']; ?>
+					</p>
+				</div>
+				<div style="padding-top:5%;">
+				<a href="<?= base_url('enquiry/viewpro/'.$student_Details['enquiry_id']);?>" class="btn btn-warning"><i class="fa fa-pencil-square-o" style="color:#fff;"></i> Edit</a>
+			</div>
+			</div>
+		<?php //} ?>
+			<div class="tab-panel-main">
+				<ul class="tabs">
+					<li class="tab-link current" data-tab="Basic-detail">Basic Detail</li>
+				    <?php if($this->session->userdata('user_right')==151 || $this->session->userdata('user_right')==180 || $this->session->userdata('user_right')==186){ ?>
+					<li class="tab-link" data-tab="Edu-detail">Document</li>
+					<li class="tab-link" data-tab="Portfolio">Institute</li>
+					<li class="tab-link" data-tab="qualification">Qualification</li>
+					<li class="tab-link" data-tab="english">English Language</li>
+					<li class="tab-link" data-tab="payment">Payment</li>
+					<li class="tab-link" data-tab="agreement">Agreement</li>
+					<?php } ?>
+					<?php if($this->session->userdata('user_right')==110){ ?>
+					<li class="tab-link" data-tab="pramotional">Promotional Videos</li>
+					<li class="tab-link" data-tab="faq">University FAQ</li>
+					<li class="tab-link" data-tab="institute">Create Institute</li>
+					<li class="tab-link" data-tab="course">Create Course</li>
+					<li class="tab-link" data-tab="schedule">Create Schedule</li>
+					<?php } ?>
+				</ul>
+				
+				<div id="Basic-detail" class="tab-content current">
+			
                                         <div class="col-sm-12">
                                             <div class="col-md-8"><label>Email ID</label></div>
                                             <div class="col-md-4"><p><?php echo $student_Details['email']; ?></p></div>
@@ -552,23 +552,23 @@ height:auto;
                                             <div class="col-md-8"><label>City</label></div>
                                             <div class="col-md-4"><p><?php foreach($city_list as $ct){if($ct->id==$student_Details['city_id']){ echo $ct->city;}} ?></p></div>
                                         </div>
-                    <div class="col-sm-12">
+										<div class="col-sm-12">
                                             <div class="col-md-8"><label>Process</label></div>
                                             <div class="col-md-4"><p><?php foreach($process_list as $pl){if($pl->sb_id==$student_Details['product_id']){ echo $pl->product_name;}} ?></p></div>
                                         </div>
-                    <div class="col-sm-12">
+										<div class="col-sm-12">
                                             <div class="col-md-8"><label>Gender</label></div>
                                             <div class="col-md-4"><p><?php if($student_Details['gender']=='1'){ echo 'Male';}else if($student_Details['gender']=='2'){echo 'Female';}else{ echo 'Other';} ?></p></div>
                                         </div>
-                    <div class="col-sm-12">
+										<div class="col-sm-12">
                                             <div class="col-md-8"><label>Enquiry Source</label></div>
                                             <div class="col-md-4"><p><?php foreach($source_list as $sl){if($sl->lsid==$student_Details['enquiry_source']){ echo $sl->lead_name;}} ?></p></div>
                                         </div>
-                    <div class="col-sm-12">
+										<div class="col-sm-12">
                                             <div class="col-md-8"><label>Preferd Country</label></div>
                                             <div class="col-md-4"><p>
-              <?php  
-                        $cntry_ids=explode(',',$student_Details['country_id']);
+							<?php  
+				                $cntry_ids=explode(',',$student_Details['country_id']);
                         $cname = '';
                         if (!empty($cntry_ids)) {                        
                               foreach($cntry_ids as $ids){
@@ -577,33 +577,33 @@ height:auto;
                                   $cname= $c_name->country_name;
                                   }
                                 }
-                              echo $cname.''.',';
-                          }
+				                      echo $cname.''.',';
+				                  }
                         } ?>
-                      
-                      </p></div>
+											
+											</p></div>
                                         </div>
-                    <div class="col-sm-12">
+										<div class="col-sm-12">
                                             <div class="col-md-8"><label>Remark</label></div>
                                             <div class="col-md-4"><p><?php echo $student_Details['lead_comment']; ?></p></div>
                                         </div>
                 
-        </div>
-        <div id="Edu-detail" class="tab-content">
-        <?php 
+				</div>
+				<div id="Edu-detail" class="tab-content">
+				<?php 
         //print_r($all_extra);
         foreach($all_extra as $extrad){ ?>
-        <?php if($extrad->fvalue!='' && $extrad->form_id==13 && $extrad->input_type==8){ ?>
-          <div class="col-md-3">
-          <a class="service-tile" aria-current="false" href="<?php echo $extrad->fvalue; ?>" target="_blank">
-          <div class="fa fa-file" style="color:orange;font-size:45px;"><i class="service-icon -react"></i></div><div class="service-tile__content">
-          <div><h3><span><?php echo $extrad->input_label; ?></span></h3></div><span class="a-btn -orange">View Doc</span></div></a>
-          </div>
-        <?php } ?>
-        <?php } ?>
-        </div>
-        <div id="Portfolio" class="tab-content" style="overflow-x:scroll;width:100%;">
-          <div class="row" style="padding-top:4%;">
+				<?php if($extrad->fvalue!='' && $extrad->form_id==13 && $extrad->input_type==8){ ?>
+					<div class="col-md-3">
+					<a class="service-tile" aria-current="false" href="<?php echo $extrad->fvalue; ?>" target="_blank">
+					<div class="fa fa-file" style="color:orange;font-size:45px;"><i class="service-icon -react"></i></div><div class="service-tile__content">
+					<div><h3><span><?php echo $extrad->input_label; ?></span></h3></div><span class="a-btn -orange">View Doc</span></div></a>
+					</div>
+				<?php } ?>
+				<?php } ?>
+				</div>
+				<div id="Portfolio" class="tab-content" style="overflow-x:scroll;width:100%;">
+					<div class="row" style="padding-top:4%;">
 <div class="col-lg-12">
 <table id="example" class="table table-striped table-bordered" style="width:100%">
 <thead>
@@ -664,29 +664,29 @@ if ($this->session->companey_id !=67) { ?>
 </table>
 </div>
 </div>
-        </div>
-        <div id="qualification" class="tab-content">
-          <?php foreach($all_extra as $extra){ ?>
-          <?php if($extra->form_id==2 && $extra->fvalue!=''){ ?>
-          <div class="col-md-12">
+				</div>
+				<div id="qualification" class="tab-content">
+					<?php foreach($all_extra as $extra){ ?>
+					<?php if($extra->form_id==2 && $extra->fvalue!=''){ ?>
+					<div class="col-md-12">
                         <div class="col-md-10"><label><?php echo $extra->rep_label; ?></label></div>
                         <div class="col-md-2"><p><?php echo $extra->fvalue; ?></p></div>
-          </div>
-          <div class="col-md-12"><hr></div>
-          <?php } ?>
-        <?php } ?>
-        </div>
-        <div id="english" class="tab-content">
-          <?php foreach($all_extra as $extra1){ ?>
-          <?php if($extra1->form_id==43 && $extra1->fvalue!='' && $extra1->input_label!='' && $extra1->rep_label!=''){ ?>
-          <div class="col-md-12">
+					</div>
+					<div class="col-md-12"><hr></div>
+					<?php } ?>
+				<?php } ?>
+				</div>
+				<div id="english" class="tab-content">
+					<?php foreach($all_extra as $extra1){ ?>
+					<?php if($extra1->form_id==43 && $extra1->fvalue!='' && $extra1->input_label!='' && $extra1->rep_label!=''){ ?>
+					<div class="col-md-12">
                         <div class="col-md-10"><label><?php echo $extra1->rep_label; ?></label></div>
                         <div class="col-md-2"><p><?php echo $extra1->fvalue; ?></p></div>
-          </div>
-          <div class="col-md-12"><hr></div>
+					</div>
+					<div class="col-md-12"><hr></div>
                  <?php } ?>
-        <?php } ?>
-        </div>
+				<?php } ?>
+				</div>
 <div id="payment" class="tab-content" style="overflow-x:scroll;width:100%;">
 
 <div class="row" style="padding-top:4%;">
@@ -728,7 +728,7 @@ if ($this->session->companey_id !=67) { ?>
 </table>
 </div>
 </div>
-        </div>
+				</div>
 <div id="agreement" class="tab-content"  style="overflow-x:scroll;width:100%;">
 <div class="row" style="padding-top:4%;">
 <div class="col-lg-12">
@@ -739,9 +739,9 @@ if ($this->session->companey_id !=67) { ?>
       <th style="font-size: 10px;">Name</th>
       <th style="font-size: 10px;">Mobile</th>
       <th style="font-size: 10px;">Email Id</th>
-    <th style="font-size: 10px;">Address</th>
-    <th style="font-size: 10px;">Document</th> 
-    <th style="font-size: 10px;">Date</th>
+	  <th style="font-size: 10px;">Address</th>
+	  <th style="font-size: 10px;">Document</th> 
+	  <th style="font-size: 10px;">Date</th>
 </tr>
 </thead>
 <tbody>
@@ -752,11 +752,11 @@ if ($this->session->companey_id !=67) { ?>
       <td><?php echo $i; ?></td>
       <td><?php echo $agrmt->agg_name; ?></td>
       <td><?php echo $agrmt->agg_phone; ?></td>
-    <td><?php echo $agrmt->agg_email; ?></td>
-    <td><?php echo $agrmt->agg_adrs; ?></td>
-    <td><a target="_blank" href="<?php echo base_url($agrmt->file); ?>"><i class="fa fa-file-image-o" aria-hidden="true" style="font-size:20px;margin-top:-30px;color:#10A3FF;"></i></a></td>
+	  <td><?php echo $agrmt->agg_email; ?></td>
+	  <td><?php echo $agrmt->agg_adrs; ?></td>
+	  <td><a target="_blank" href="<?php echo base_url($agrmt->file); ?>"><i class="fa fa-file-image-o" aria-hidden="true" style="font-size:20px;margin-top:-30px;color:#10A3FF;"></i></a></td>
       <td><?php echo $agrmt->created_date; ?></td>
-                  </tr>
+									</tr>
                                 <?php $sl++; ?>
                             <?php } ?> 
                         <?php } ?> 
@@ -765,23 +765,23 @@ if ($this->session->companey_id !=67) { ?>
 </table>
 </div>
 </div>
-        </div>
-      </div>
-    </div>
-    <div style="clear: both;"></div>
-  </div>
+				</div>
+			</div>
+		</div>
+		<div style="clear: both;"></div>
+	</div>
 <script type="text/javascript">
-  $(document).ready(function(){
-    $('ul.tabs li').click(function(){
-      var tab_id = $(this).attr('data-tab');
+	$(document).ready(function(){
+		$('ul.tabs li').click(function(){
+			var tab_id = $(this).attr('data-tab');
 
-      $('ul.tabs li').removeClass('current');
-      $('.tab-content').removeClass('current');
+			$('ul.tabs li').removeClass('current');
+			$('.tab-content').removeClass('current');
 
-      $(this).addClass('current');
-      $("#"+tab_id).addClass('current');
-    });
-  });
+			$(this).addClass('current');
+			$("#"+tab_id).addClass('current');
+		});
+	});
 </script>
                 </div>
 
@@ -863,9 +863,9 @@ $(document).ready(function () {
       $('#dtBasicExample2').DataTable();
         $('#dtBasicExample3').DataTable();
           $('#dtBasicExample4').DataTable();
-      $('#example').DataTable();
-      $('#example1').DataTable();
-      $('#example2').DataTable();
+		  $('#example').DataTable();
+		  $('#example1').DataTable();
+		  $('#example2').DataTable();
   $('.dataTables_length').addClass('bs-select');
 });
 </script>
