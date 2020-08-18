@@ -343,7 +343,11 @@ class Product_model extends CI_Model {
 				//$this->db->order_by("")
 			} 
 	  }
-	
+	public function get_product_id_by_name($name){
+    	$this->db->select('id');
+    	$this->db->where('country_name',$name);
+    	return $this->db->get('tbl_product_country')->row_array();
+    }	
 
 }
 
