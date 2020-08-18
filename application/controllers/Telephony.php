@@ -55,19 +55,35 @@ class Telephony extends CI_Controller {
         $atID   =   !empty($_POST['callbreakstatus'])?$_POST['callbreakstatus']:'';
         
         $user_id    =   $this->session->user_id;        
-        
-            $url = "https://developers.myoperator.co/user";
-            $data = array(
-            'token'=>$this->session->telephony_token,
-            'receive_calls '=>$atID,
-            'uuid'=>$this->session->telephony_agent_id
-            );
-            $ch = curl_init($url);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
-            curl_setopt($ch, CURLOPT_POSTFIELDS,http_build_query($data));   
-            $response = curl_exec($ch);
-            print_r($response);
+
+            $curl = curl_init();
+
+            curl_setopt_array($curl, array(
+              CURLOPT_URL => "https://developers.myoperator.co/user",
+              CURLOPT_RETURNTRANSFER => true,
+              CURLOPT_ENCODING => "",
+              CURLOPT_MAXREDIRS => 10,
+              CURLOPT_TIMEOUT => 30,
+              CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+              CURLOPT_CUSTOMREQUEST => "PUT",
+              CURLOPT_POSTFIELDS => "token=0811613982df3ad6b0ccaef5847364e9&receive_calls=".$atID."&uuid=".$this->session->telephony_agent_id,
+              CURLOPT_HTTPHEADER => array(
+                "cache-control: no-cache",
+                "content-type: application/x-www-form-urlencoded",
+                "postman-token: 3d348a84-e8b7-0c9c-c602-d7b6dd625bca"
+              ),
+            ));
+
+            $response = curl_exec($curl);
+            $err = curl_error($curl);
+
+            curl_close($curl);
+
+            if ($err) {
+              echo "cURL Error #:" . $err;
+            } else {
+              echo $response;
+            }
             $user_id    =   $this->session->user_id;
             $this->db->set('availability',$atID);
             $this->db->where('pk_i_admin_id',$user_id);
