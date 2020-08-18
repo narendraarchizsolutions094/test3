@@ -519,7 +519,7 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
             <br><?php if($enquiry->gender == 1) { echo 'Male<br>'; }else if($enquiry->gender == 2){ echo 'Female<br>'; }else if($enquiry->gender == 3){ echo 'Other<br>';} 
             $p = $enquiry->phone;
             if (user_access(450)) {
-              $p = 'XXXXXXXXXX';
+              $p = '##########';
             }
             ?>
             

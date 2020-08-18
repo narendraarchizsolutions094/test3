@@ -261,7 +261,7 @@ class Enq extends CI_Controller {
 			if ($showall == true or in_array(5, $acolarr)) { 
 				$p = $each->phone;
 				if (user_access(450)) {
-					$p = 'XXXXXXXXXX';
+					$p = '##########';
 				}
 				if(user_access(220)){
 					$row[] = "<a href='javascript:void(0)' onclick='send_parameters(".$each->phone.")'>".$p."</a>";            	

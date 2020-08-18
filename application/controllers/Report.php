@@ -157,7 +157,11 @@ class Report extends CI_Controller {
               $row[] = $repdetails->name_prefix . " " . $repdetails->name . " " . $repdetails->lastname;
               }
               if (in_array('Phone', $report_columns)) {
-                  $row[] = $repdetails->phone;
+                  if (user_access(450)) {
+                    $row[] = '##########';                    
+                  }else{
+                    $row[] = $repdetails->phone;
+                  }
               }
               if (in_array('Email', $report_columns)){
                 $row[] = $repdetails->email;
@@ -439,7 +443,11 @@ class Report extends CI_Controller {
               $row[] = $repdetails->name_prefix . " " . $repdetails->name . " " . $repdetails->lastname;
               }
               if (in_array('Phone', $this->session->userdata('post_report_columns'))) {
-                  $row[] = $repdetails->phone;
+                  if (user_access(450)) {
+                    $row[] = '##########';                    
+                  }else{
+                    $row[] = $repdetails->phone;
+                  }
               }
               if (in_array('Email',$this->session->userdata('post_report_columns'))){
                 $row[] = $repdetails->email;
