@@ -1367,7 +1367,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
 <div id="callbreak" class="modal fade" role="dialog" >
          <div class="modal-dialog">
             <!-- Modal content-->
-            <form action="<?php echo base_url(); ?>telephony/mark_abilibality" >
+            <form action="<?php echo base_url(); ?>telephony/mark_abilibality"  method='post'>
             <div class="modal-content card">
                <div class="modal-header">
                   <button type="button" class="close" data-dismiss="modal">&times;</button>
