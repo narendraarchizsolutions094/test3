@@ -1,3 +1,13 @@
+<?php
+if (user_access(450)) { ?>
+  <style type="text/css">
+    .mask-number{
+      -webkit-text-security: disc;
+    }
+  </style>  
+<?php
+}
+?>
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
 
@@ -55,7 +65,7 @@
       ?>
    <div class="form-group col-sm-6 col-md-6"> 
       <label><?php echo display('mobile') ?></label>
-      <input class="form-control" name="mobileno" type="text" maxlength='10' value="<?php echo $details->phone ?>" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" >
+      <input class="form-control mask-number" name="mobileno" type="text" maxlength='10' value="<?php echo $details->phone ?>" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" >
       <i class="fa fa-plus" onclick="add_more_phone('add_more_phone')" style="float:right;margin-top:-25px;margin-right:10px;color:red"></i>
    </div>
    <?php }?>
@@ -69,7 +79,7 @@
            foreach ($other_phones as $k=>$p) { ?>
       <div class="form-group col-sm-6 col-md-6">
          <label>Other No </label>
-         <input class="form-control"  name="other_no[]" type="text" placeholder="Other Number" value="<?=$p?>" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
+         <input class="form-control mask-number"  name="other_no[]" type="text" placeholder="Other Number" value="<?=$p?>" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
       </div>
       <?php
          }

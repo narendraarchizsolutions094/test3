@@ -516,9 +516,14 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
          </div>
 
          <h5 style="text-align:center"><br><?=ucwords($enquiry->name_prefix." ".$enquiry->name." ".$enquiry->lastname); ?>
-            <br><?php if($enquiry->gender == 1) { echo 'Male<br>'; }else if($enquiry->gender == 2){ echo 'Female<br>'; }else if($enquiry->gender == 3){ echo 'Other<br>';} ?>
+            <br><?php if($enquiry->gender == 1) { echo 'Male<br>'; }else if($enquiry->gender == 2){ echo 'Female<br>'; }else if($enquiry->gender == 3){ echo 'Other<br>';} 
+            $p = $enquiry->phone;
+            if (user_access(450)) {
+              $p = 'XXXXXXXXXX';
+            }
+            ?>
             
-            <a href='javascript:void(0)' onclick='send_parameters(".<?php echo $enquiry->phone ?>.")'><?php echo $enquiry->phone ?></a>
+            <a href='javascript:void(0)' onclick='send_parameters(".<?php echo $enquiry->phone ?>.")'><?php echo $p ?></a>
             <br><?php if(!empty($enquiry->email)) { echo $enquiry->email; } ?>            
             <br><?php if(!empty($enquiry->reference_name)) {               
               $this->db->where('TRIM(partner_id)',trim($enquiry->reference_name));

@@ -259,10 +259,14 @@ class Enq extends CI_Controller {
 				$row[] = (!empty($each->email)) ? $each->email : "NA";			
 			}
 			if ($showall == true or in_array(5, $acolarr)) { 
+				$p = $each->phone;
+				if (user_access(450)) {
+					$p = 'XXXXXXXXXX';
+				}
 				if(user_access(220)){
-					$row[] = "<a class='mask-num' href='javascript:void(0)' onclick='send_parameters(".$each->phone.")'>".$each->phone."</a>";            	
+					$row[] = "<a href='javascript:void(0)' onclick='send_parameters(".$each->phone.")'>".$p."</a>";            	
 				}else{
-					$row[] = (!empty($each->phone)) ? '<a class="mask-num" href="javascript:void(0)">'.$each->phone.'</a>' : "NA";
+					$row[] = (!empty($each->phone)) ? '<a  href="javascript:void(0)">'.$p.'</a>' : "NA";
 				}
 			}
 			if ($showall == true or in_array(6, $acolarr)) { 

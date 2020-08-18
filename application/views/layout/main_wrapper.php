@@ -1891,13 +1891,7 @@ $("#anch_notification_dropdown").on('click',function(){
             }
         });
 
-    });
-        $(document).ready(function(){          
-          console.log('texxt');
-          $('.mask-num').each(function() {
-            console.log($(this).text());
-          });
-        });
+    });        
 </script>
 <script>
 $('#something').click(function() {
