@@ -76,7 +76,18 @@
 											<td><a href="<?php echo base_url($url); ?>"><?php echo $rslt->name_prefix." ".$rslt->name." ".$rslt->lastname; ?></a></td>
 											<td><?php echo $type;  ?></td>
 										
-											<td><a href="<?php echo base_url($url); ?>"><?php echo $rslt->phone; ?></a></th>
+											<td>
+                                                <a href="<?php echo base_url($url); ?>">
+                                                    <?php 
+                                                    if (user_access(450)) {
+                                                        echo '##########'; 
+                                                    }else{
+                                                        echo $rslt->phone; 
+                                                    }
+                                                    ?>
+                                                        
+                                                    </a>
+                                            </th>
 											<td><a href="<?php echo base_url($url); ?>"><?php echo $rslt->email; ?></a></td>
 											<td><a href="<?php echo base_url($url); ?>"><?php echo $rslt->address; ?></a></td>
 											<td><?php echo $rslt->username; ?></td>
