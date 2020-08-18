@@ -2,7 +2,7 @@
 if (user_access(450)) { ?>
   <style type="text/css">
     .mask-number{
-      -webkit-text-security: disc;
+      -webkit-text-security: square;
     }
   </style>  
 <?php
