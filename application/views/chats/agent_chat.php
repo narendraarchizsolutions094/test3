@@ -408,7 +408,8 @@
             </ul>
         </div>
         <div class="right" style="min-height: 575px;">
-            <!-- <div class="top"><span>To: <span class="name">Dog Woofson</span></span></div> -->
+            <div class="top"><span>To: <span class="name"></span></span>
+            </div>
             <!-- 
             <div class="chat" data-chat="person1">
                 <div class="conversation-start">
@@ -497,6 +498,7 @@ function setAciveChat(f) {
     	db.collection("users").where("comp_id", "==", comp_id).where("type", "==", 'enquiry')
 	    .get()
 	    .then(function(querySnapshot) {
+	    	var i = 0;
 	        querySnapshot.forEach(function(doc) {	        	
 	            
 	        	doc = doc.data();
@@ -507,9 +509,7 @@ function setAciveChat(f) {
 	        	html = '<li class="person" data-chat="'+doc.uid+'"><img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/382994/thomas.jpg" alt=""/><span class="name">'+name+'</span><span class="time">'+date+'</span><span class="preview" ></span></li>';
 	            $(".people").append(html);
 	            
-	            $conversation = '<div class="top"><span>To: <span class="name">'+name+'</span></span></div><div class="chat" data-chat="'+doc.uid+'"></div>';
-	            
-	            $(".right").prepend($conversation);
+	            $(".name").html(name);
 
 	            db.collection("messages").orderBy('time','desc').get()
 			    .then(function(msgSnapshot) {
@@ -523,10 +523,11 @@ function setAciveChat(f) {
 			        	$("div[data-chat="+doc.uid+"]").append(msg);
 			        });
 			    });
-
-			    document.querySelector('.chat[data-chat='+doc.uid+']').classList.add('active-chat');
-				document.querySelector('.person[data-chat='+doc.uid+']').classList.add('active');
-
+			    if (i == 0) {			    	
+				    document.querySelector('.chat[data-chat='+doc.uid+']').classList.add('active-chat');
+					document.querySelector('.person[data-chat='+doc.uid+']').classList.add('active');
+			    }
+				i++;
 	        });
 	    })
 	    .catch(function(error) {
