@@ -111,6 +111,8 @@
       });
     }
   });
+  
+  
 
   var INDEX = 0; 
   $("#chat-submit").click(function(e) {
@@ -201,6 +203,15 @@
   })
   
 </script>
+<?php
+if (!empty($this->session->mobile)) {
+  ?>
+  <script type="text/javascript">
+    generate_message('Hi '+"<?=$this->session->fullname?>", 'user');
+  </script>
+  <?php
+}
+?>
 <script>    
     var firebaseConfig = {
       apiKey: 'AIzaSyB8uP-mYOUCKGvjv_MQ1a-lsrlboYdmFg4',
