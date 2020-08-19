@@ -116,9 +116,9 @@
     }
     generate_message(msg, 'self');
     send_message(msg);
-    setTimeout(function() {      
+    /*setTimeout(function() {      
       generate_message(msg, 'user');  
-    }, 1000)
+    }, 1000)*/
     
   })
   

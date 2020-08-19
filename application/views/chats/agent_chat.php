@@ -161,7 +161,7 @@
 .container-agent .right .chat {
   position: relative;
   display: none;
-  overflow: hidden;
+  overflow: auto;
   padding: 0 35px 92px;
   border-width: 1px 1px 1px 0;
   border-style: solid;
@@ -176,7 +176,7 @@
 .container-agent .right .chat.active-chat {
   display: block;
   display: -webkit-box;
-  display: flex;
+  display: block;
 }
 .container-agent .right .chat.active-chat .bubble {
   -webkit-transition-timing-function: cubic-bezier(0.4, -0.04, 1, 1);
@@ -407,29 +407,13 @@
             <ul class="people" style="list-style-type: none;padding-left: 0px;">       
             </ul>
         </div>
-        <div class="right" style="min-height: 575px;">
+        <div class="right" style="min-height: 575px; max-height: 575px;">
             <div class="top"><span>To: <span class="name"></span></span>
-            </div>
-            <!-- 
-            <div class="chat" data-chat="person1">
-                <div class="conversation-start">
-                    <span>Today, 6:48 AM</span>
-                </div>
-                <div class="bubble you">
-                    Hello,
-                </div>
-                <div class="bubble you">
-                    it's me.
-                </div>
-                <div class="bubble you">
-                    I was wondering...
-                </div>
-            </div>
-             -->
+            </div>           
             <div class="write">
-                <a href="javascript:;" class="write-link attach"></a>
-                <input type="text" />
-                <a href="javascript:;" class="write-link smiley"></a>
+                <!-- <a href="javascript:;" class="write-link attach"></a> -->
+                <input type="text" id="chat-input"/>
+                <!-- <a href="javascript:;" class="write-link smiley"></a> -->
                 <a href="javascript:;" class="write-link send"></a>
             </div>
         </div>
@@ -437,34 +421,36 @@
 </div>
 <script type="text/javascript">
 
-let friends = {
-  list: document.querySelector('ul.people'),
-  all: document.querySelectorAll('.left .person'),
-  name: '' },
+function after_load(){	
+	let friends = {
+	  list: document.querySelector('ul.people'),
+	  all: document.querySelectorAll('.left .person'),
+	  name: '' },
 
-chat = {
-  container: document.querySelector('.container-agent .right'),
-  current: null,
-  person: null,
-  name: document.querySelector('.container-agent .right .top .name') };
+	chat = {
+	  container: document.querySelector('.container-agent .right'),
+	  current: null,
+	  person: null,
+	  name: document.querySelector('.container-agent .right .top .name') };
 
+	friends.all.forEach(f => {
+	  f.addEventListener('mousedown', () => {
+	    f.classList.contains('active') || setAciveChat(f);
+	  });
+	});
 
-friends.all.forEach(f => {
-  f.addEventListener('mousedown', () => {
-    f.classList.contains('active') || setAciveChat(f);
-  });
-});
-
-function setAciveChat(f) {
-  friends.list.querySelector('.active').classList.remove('active');
-  f.classList.add('active');
-  chat.current = chat.container.querySelector('.active-chat');
-  chat.person = f.getAttribute('data-chat');
-  chat.current.classList.remove('active-chat');
-  chat.container.querySelector('[data-chat="' + chat.person + '"]').classList.add('active-chat');
-  friends.name = f.querySelector('.name').innerText;
-  chat.name.innerHTML = friends.name;
+	function setAciveChat(f) {
+	  friends.list.querySelector('.active').classList.remove('active');
+	  f.classList.add('active');
+	  chat.current = chat.container.querySelector('.active-chat');
+	  chat.person = f.getAttribute('data-chat');
+	  chat.current.classList.remove('active-chat');
+	  chat.container.querySelector('[data-chat="' + chat.person + '"]').classList.add('active-chat');
+	  friends.name = f.querySelector('.name').innerText;
+	  chat.name.innerHTML = friends.name;
+	}
 }
+
 
 </script>
 
@@ -502,23 +488,24 @@ function setAciveChat(f) {
 	        querySnapshot.forEach(function(doc) {	        	
 	            
 	        	doc = doc.data();
+
 	        	var date = doc.time.slice(-11);
 	        	var name	=	doc.name.toLowerCase().replace(/\b[a-z]/g, function(letter) {
 					    return letter.toUpperCase();
 					});
 	        	html = '<li class="person" data-chat="'+doc.uid+'"><img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/382994/thomas.jpg" alt=""/><span class="name">'+name+'</span><span class="time">'+date+'</span><span class="preview" ></span></li>';
 	            $(".people").append(html);
-	            
-	            $(".name").html(name);
-
+	            //console.log(name);
+	            $(".right .top .name").html(name);
+	            $(".right>.top").after('<div class="chat" data-chat="'+doc.uid+'"></div>');
 	            db.collection("messages").orderBy('time','desc').get()
 			    .then(function(msgSnapshot) {
 			        msgSnapshot.forEach(function(msg) {	            
 			        	msg_data	=	msg.data();
 			        	if (msg_data.sender_id == doc.uid) {
-			        		msg = '<div class="bubble you">'+msg_data.message+'</div>';
+			        		msg = '<div class="bubble you">'+msg_data.message+'<br><small style="font-size:8px;float:right;">'+doc.time+'</small></div>';
 			        	}else if (msg_data.receiver_id == doc.uid) {
-			        		msg = '<div class="bubble me">'+msg_data.message+'</div>';
+			        		msg = '<div class="bubble me">'+msg_data.message+'<br><small style="font-size:8px;float:right;">'+doc.time+'</small></div>';
 			        	}			        	
 			        	$("div[data-chat="+doc.uid+"]").append(msg);
 			        });
@@ -529,6 +516,7 @@ function setAciveChat(f) {
 			    }
 				i++;
 	        });
+	        after_load();
 	    })
 	    .catch(function(error) {
 	        console.log("Error getting documents: ", error);
@@ -536,6 +524,72 @@ function setAciveChat(f) {
     }
 
     get_user_list();
+
+    $(".send").on('click',function(){
+    	var msg = $("#chat-input").val(); 
+	    if(msg.trim() == ''){
+	      return false;
+	    }
+	    a = document.querySelector('.active-chat');
+	    uid = a.getAttribute('data-chat');
+	    generate_message(msg, 'me',uid);
+	    send_message(msg);	   
+    });
+
+    function send_message(msg){
+		a = document.querySelector('.active-chat');
+	    uid = a.getAttribute('data-chat');
+		var agent_id = "<?=$this->session->user_id?>";      
+		datetime = "<?=date('Y-m-d h:i:sa')?>";       
+
+		db.collection("messages").add({
+		  id:uid+'_'+agent_id,
+		  time: datetime,
+		  message: msg,
+		  sender_id: "<?=$this->session->user_id?>",
+		  receiver_id: uid
+		})
+		.then(function(docRef) {		  
+		})
+		.catch(function(error) {
+		  console.error("Error adding document: ", error);
+		});
+    }      
+
+    function generate_message(msg, type,uid) {
+		datetime = "<?=date('Y-m-d h:i:sa')?>";           	
+	    var str = '<div class="bubble '+type+'">'+msg+'<br><small style="font-size:8px;float:right;">'+datetime+'</small></div>';	    
+	    $("div[data-chat="+uid+"]").append(str);	    
+	    if(type == 'me'){
+	     $("#chat-input").val(''); 
+	    }
+	    $("div[data-chat="+uid+"]").stop().animate({ scrollTop: $("div[data-chat="+uid+"]")[0].scrollHeight}, 1000);  	    
+  	}  
+
+
+  	/*const doc = db.collection('users');
+	const observer = doc.onSnapshot(docSnapshot => {	  
+	  get_user_list();
+	});*/
+
+	comp_id = "<?=$this->session->companey_id?>"
+	const msg = db.collection('messages').where('comp_id','==',comp_id);
+	const msg_observer = msg.onSnapshot(docSnapshot => {	  
+	   	docSnapshot.docChanges().forEach(change => {
+	      if (change.type === 'added') {
+	      	msg_data	=	change.doc.data();	        
+			uid = msg_data.receiver_id;
+
+			if (isNaN(msg_data.sender_id)) {
+				uid = msg_data.sender_id;
+        		msg = '<div class="bubble you">'+msg_data.message+'<br><small style="font-size:8px;float:right;">'+doc.time+'</small></div>';
+        	}else if (!isNaN(msg_data.sender_id)) {
+        		msg = '<div class="bubble me">'+msg_data.message+'<br><small style="font-size:8px;float:right;">'+doc.time+'</small></div>';
+        	}			        	
+        	$("div[data-chat="+uid+"]").append(msg);
+	      }
+	    });
+	});
 </script>
 
 
