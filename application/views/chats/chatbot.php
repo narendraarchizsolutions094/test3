@@ -254,7 +254,24 @@ if (!empty($this->session->mobile)) {
       .catch(function(error) {
           console.error("Error adding document: ", error);
       });
-    }      
+    } 
+    comp_id = "<?=$this->session->companey_id?>"
+    user_id = "<?=$this->session->user_id?>"
+    const msg = db.collection('messages').where('comp_id','==',comp_id);
+    const msg_observer = msg.onSnapshot(docSnapshot => {    
+        docSnapshot.docChanges().forEach(change => {                  
+          if (change.type === 'added') {
+            msg1_data = change.doc.data();          
+            uid = msg1_data.receiver_id;      
+            if (isNaN(msg1_data.sender_id) && msg1_data.sender_id != user_id) {
+              uid = msg1_data.sender_id;
+              generate_message(msg1_data.message, 'self');
+            }else if (!isNaN(msg1_data.sender_id)) {
+              generate_message(msg1_data.message, 'user');              
+            }                           
+          }
+        });
+    });     
 </script>
 
 </body>
