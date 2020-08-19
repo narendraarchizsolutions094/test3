@@ -576,12 +576,10 @@ function after_load(){
 	comp_id = "<?=$this->session->companey_id?>"
 	const msg = db.collection('messages').where('comp_id','==',comp_id);
 	const msg_observer = msg.onSnapshot(docSnapshot => {	  
-	   	docSnapshot.docChanges().forEach(change => {
-	   		alert('test');
+	   	docSnapshot.docChanges().forEach(change => {	   		
 	      if (change.type === 'added') {
 	      	msg_data	=	change.doc.data();	        
-			uid = msg_data.receiver_id;
-			alert(msg_data.message);
+			uid = msg_data.receiver_id;			
 			if (isNaN(msg_data.sender_id)) {
 				uid = msg_data.sender_id;
         		msg = '<div class="bubble you">'+msg_data.message+'<br><small style="font-size:8px;float:right;">'+doc.time+'</small></div>';
