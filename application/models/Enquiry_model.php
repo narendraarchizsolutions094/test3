@@ -2743,4 +2743,9 @@ $cpny_id=$this->session->companey_id;
 			$this->db->insert('extra_enquery',$ins_arr);
 		}
 	}
+
+	public function is_enquiry_exist($where){
+		$this->db->where($where);
+		return $this->db->get('enquiry')->row_array();
+	}
 }

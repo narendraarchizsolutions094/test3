@@ -2,22 +2,22 @@
 <html>
 <head>
   <title></title>
-  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/css/bootstrap.min.css">
-  
   <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/4.0.2/bootstrap-material-design.css">
 
-<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 
-<link rel="stylesheet" type="text/css" href="<?=base_url().'assets/css/'?>chat.css">  
+  <link rel="stylesheet" type="text/css" href="<?=base_url().'assets/css/'?>chat.css">  
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="<?=base_url().'assets/js/'?>chat.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 
+  <!-- firebase -->
+  <script src="https://www.gstatic.com/firebasejs/7.18.0/firebase-app.js"></script>  
+  <script src="https://www.gstatic.com/firebasejs/7.18.0/firebase-analytics.js"></script>  
+  <script src="https://www.gstatic.com/firebasejs/7.18.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.18.0/firebase-firestore.js"></script>
 
 </head>
-<body>
+<body style="background-color: unset;">
 <div id="center-text">   
 </div> 
 <div id="body"> 
@@ -36,17 +36,209 @@
       <div class="chat-box-overlay">   
       </div>
       <div class="chat-logs">
-       
+        <div class="card">
+          <div class="text-center" style="padding: 8px;">Please tell your identity</div><br>          
+          <div class="card-body" style="padding: 8px;">             
+            <form action="<?=base_url().'chat/submit_identity/'.$comp_id.'/'.$created_by?>" id='chat_identity_form' method='post'>
+              <div class="form-group row">
+                <label for="name" class="col-sm-2 col-form-label col-form-label-sm">Name</label>
+                <div class="col-sm-10">
+                  <input type="text" class="form-control" id="name" placeholder="Full Name">
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="mobile" class="col-sm-2 col-form-label col-form-label-sm">Mobile</label>
+                <div class="col-sm-10">
+                  <input type="text" class="form-control " id="mobile" placeholder="Mobile No.">
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="email" class="col-sm-2 col-form-label col-form-label-sm">Email</label>
+                <div class="col-sm-10">
+                  <input type="text" class="form-control " id="email" placeholder="Email Id">
+                </div>
+              </div>
+              <div class="text-center">
+                <button class="btn btn-primary" id="submit-form" type="submit">Send</button>
+              </div>
+            </form>          
+          </div>
+        </div>
       </div><!--chat-log -->
     </div>
     <div class="chat-input">      
       <form>
+        <input type="hidden" id="agent_id" value="154">
         <input type="text" id="chat-input" placeholder="Send a message..."/>
       <button type="submit" class="chat-submit" id="chat-submit"><i class="material-icons">send</i></button>
-      </form>      
+      </form> 
     </div>
-  </div>
+  </div>      
 </div>
+<script type="text/javascript">
+  $("#chat_identity_form").on('submit',function(e){
+    e.preventDefault();    
+    var name  = $("#name").val();
+    var mobile= $("#mobile").val();
+    var email = $("#email").val();
+    var url  = $(this).attr('action');
+    if (name && email && mobile) {
+      $.ajax({
+         type: "POST",
+         url: url,
+         data: {
+          name:name,
+          mobile:mobile,
+          email:email
+         },
+         beforeSend: function() {                   
+         },
+         success: function(data){
+            if (data) {
+              add_user();  
+              $("#submit-form").html('Thank You');
+              $("#submit-form").prop('disabled', true);              
+              generate_message('We have accepted your details.We will reach you soon.', 'user');
+            }else{
+              alert('Something went wrong!');
+            }
+         }
+      });
+    }
+  });
+
+  var INDEX = 0; 
+  $("#chat-submit").click(function(e) {
+    e.preventDefault();
+    var msg = $("#chat-input").val(); 
+    if(msg.trim() == ''){
+      return false;
+    }
+    generate_message(msg, 'self');
+    send_message(msg);
+    setTimeout(function() {      
+      generate_message(msg, 'user');  
+    }, 1000)
+    
+  })
+  
+  function generate_message(msg, type) {
+    INDEX++;
+    var str="";
+    str += "<div id='cm-msg-"+INDEX+"' class=\"chat-msg "+type+"\">";
+    str += "          <span class=\"msg-avatar\">";
+    str += "            <img src='https://github.com/ortichon.png'>";
+    str += "          <\/span>";
+    str += "          <div class=\"cm-msg-text\">";
+    str += msg;
+    str += "          <\/div>";
+    str += "        <\/div>";
+    $(".chat-logs").append(str);
+    $("#cm-msg-"+INDEX).hide().fadeIn(300);
+    if(type == 'self'){
+     $("#chat-input").val(''); 
+    }    
+    $(".chat-logs").stop().animate({ scrollTop: $(".chat-logs")[0].scrollHeight}, 1000);    
+  }  
+  
+  function generate_button_message(msg, buttons){    
+    /* Buttons should be object array 
+      [
+        {
+          name: 'Existing User',
+          value: 'existing'
+        },
+        {
+          name: 'New User',
+          value: 'new'
+        }
+      ]
+    */
+    INDEX++;
+    var btn_obj = buttons.map(function(button) {
+       return  "              <li class=\"button\"><a href=\"javascript:;\" class=\"btn btn-primary chat-btn\" chat-value=\""+button.value+"\">"+button.name+"<\/a><\/li>";
+    }).join('');
+    var str="";
+    str += "<div id='cm-msg-"+INDEX+"' class=\"chat-msg user\">";
+    str += "          <span class=\"msg-avatar\">";
+    str += "            <img src='https://github.com/ortichon.png'>";
+    str += "          <\/span>";
+    str += "          <div class=\"cm-msg-text\">";
+    str += msg;
+    str += "          <\/div>";
+    str += "          <div class=\"cm-msg-button\">";
+    str += "            <ul>";   
+    str += btn_obj;
+    str += "            <\/ul>";
+    str += "          <\/div>";
+    str += "        <\/div>";
+    $(".chat-logs").append(str);
+    $("#cm-msg-"+INDEX).hide().fadeIn(300);   
+    $(".chat-logs").stop().animate({ scrollTop: $(".chat-logs")[0].scrollHeight}, 1000);
+    $("#chat-input").attr("disabled", true);
+  }
+  
+  $(document).delegate(".chat-btn", "click", function() {
+    var value = $(this).attr("chat-value");
+    var name = $(this).html();
+    $("#chat-input").attr("disabled", false);
+    generate_message(name, 'self');
+  })
+  
+  $("#chat-circle").click(function() {    
+    $("#chat-circle").toggle('scale');
+    $(".chat-box").toggle('scale');
+  })
+  
+  $(".chat-box-toggle").click(function() {
+    $("#chat-circle").toggle('scale');
+    $(".chat-box").toggle('scale');
+  })
+  
+</script>
+<script>    
+    var firebaseConfig = {
+      apiKey: 'AIzaSyB8uP-mYOUCKGvjv_MQ1a-lsrlboYdmFg4',
+    authDomain: 'chat-6512f.firebaseapp.com',
+    projectId: 'chat-6512f'
+    };    
+    firebase.initializeApp(firebaseConfig);
+    var db = firebase.firestore();
+    function add_user(){ 
+      datetime = "<?=date('Y-m-d h:i:sa')?>";                     
+      db.collection("users").doc("<?=$this->session->user_id?>").set({
+          name:"<?=$this->session->fullname?>",
+          comp_id:"<?=$this->session->companey_id?>",
+          uid:"<?=$this->session->user_id?>",
+          type:"enquiry",
+          time:datetime
+      },{merge: true})
+      .then(function(docRef) {
+        
+      })
+      .catch(function(error) {
+          console.error("Error adding document: ", error);
+      });
+    }
+    function send_message(msg){
+      var agent_id = $("#agent_id").val();      
+      datetime = "<?=date('Y-m-d h:i:sa')?>";       
+
+      db.collection("messages").add({
+          id:"<?=$this->session->user_id?>_"+agent_id,
+          time: datetime,
+          message: msg,
+          sender_id: "<?=$this->session->user_id?>",
+          receiver_id: agent_id
+      })
+      .then(function(docRef) {
+          console.log("Document written with ID: ", docRef.id);
+      })
+      .catch(function(error) {
+          console.error("Error adding document: ", error);
+      });
+    }      
+</script>
 
 </body>
 </html>
