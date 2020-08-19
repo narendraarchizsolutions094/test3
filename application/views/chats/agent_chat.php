@@ -582,11 +582,11 @@ function after_load(){
 			uid = msg1_data.receiver_id;			
 			if (isNaN(msg1_data.sender_id)) {
 				uid = msg1_data.sender_id;
-        		msg = '<div class="bubble you">'+msg1_data.message+'<br><small style="font-size:8px;float:right;">'+msg1_data.time+'</small></div>';
+        		html_msg = '<div class="bubble you">'+msg1_data.message+'<br><small style="font-size:8px;float:right;">'+msg1_data.time+'</small></div>';
         	}else if (!isNaN(msg1_data.sender_id)) {
-        		msg = '<div class="bubble me">'+msg1_data.message+'<br><small style="font-size:8px;float:right;">'+msg1_data.time+'</small></div>';
+        		html_msg = '<div class="bubble me">'+msg1_data.message+'<br><small style="font-size:8px;float:right;">'+msg1_data.time+'</small></div>';
         	}			        	
-        	$("div[data-chat="+uid+"]").append(msg);
+        	$("div[data-chat="+uid+"]").append(html_msg);
 	      }
 	    });
 	});
