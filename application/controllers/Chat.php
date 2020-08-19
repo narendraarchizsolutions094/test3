@@ -77,6 +77,6 @@ class Chat extends CI_Controller {
 			}
 
 		}
-		echo $res;
+		echo $this->session->user_id;
 	}
 }

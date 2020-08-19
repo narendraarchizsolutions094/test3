@@ -547,7 +547,8 @@ function after_load(){
 		  time: datetime,
 		  message: msg,
 		  sender_id: "<?=$this->session->user_id?>",
-		  receiver_id: uid
+		  receiver_id: uid,
+		  comp_id:"<?=$this->session->companey_id?>"
 		})
 		.then(function(docRef) {		  
 		})
@@ -576,10 +577,11 @@ function after_load(){
 	const msg = db.collection('messages').where('comp_id','==',comp_id);
 	const msg_observer = msg.onSnapshot(docSnapshot => {	  
 	   	docSnapshot.docChanges().forEach(change => {
+	   		alert('test');
 	      if (change.type === 'added') {
 	      	msg_data	=	change.doc.data();	        
 			uid = msg_data.receiver_id;
-
+			alert(msg_data.message);
 			if (isNaN(msg_data.sender_id)) {
 				uid = msg_data.sender_id;
         		msg = '<div class="bubble you">'+msg_data.message+'<br><small style="font-size:8px;float:right;">'+doc.time+'</small></div>';

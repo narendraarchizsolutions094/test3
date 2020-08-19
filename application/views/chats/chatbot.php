@@ -229,7 +229,8 @@
           time: datetime,
           message: msg,
           sender_id: "<?=$this->session->user_id?>",
-          receiver_id: agent_id
+          receiver_id: agent_id,
+          comp_id:"<?=$this->session->companey_id?>",          
       })
       .then(function(docRef) {
           console.log("Document written with ID: ", docRef.id);
