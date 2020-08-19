@@ -578,13 +578,13 @@ function after_load(){
 	const msg_observer = msg.onSnapshot(docSnapshot => {	  
 	   	docSnapshot.docChanges().forEach(change => {	   		
 	      if (change.type === 'added') {
-	      	msg_data	=	change.doc.data();	        
-			uid = msg_data.receiver_id;			
-			if (isNaN(msg_data.sender_id)) {
-				uid = msg_data.sender_id;
-        		msg = '<div class="bubble you">'+msg_data.message+'<br><small style="font-size:8px;float:right;">'+msg_data.time+'</small></div>';
-        	}else if (!isNaN(msg_data.sender_id)) {
-        		msg = '<div class="bubble me">'+msg_data.message+'<br><small style="font-size:8px;float:right;">'+msg_data.time+'</small></div>';
+	      	msg1_data	=	change.doc.data();	        
+			uid = msg1_data.receiver_id;			
+			if (isNaN(msg1_data.sender_id)) {
+				uid = msg1_data.sender_id;
+        		msg = '<div class="bubble you">'+msg1_data.message+'<br><small style="font-size:8px;float:right;">'+msg1_data.time+'</small></div>';
+        	}else if (!isNaN(msg1_data.sender_id)) {
+        		msg = '<div class="bubble me">'+msg1_data.message+'<br><small style="font-size:8px;float:right;">'+msg1_data.time+'</small></div>';
         	}			        	
         	$("div[data-chat="+uid+"]").append(msg);
 	      }
