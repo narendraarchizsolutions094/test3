@@ -574,6 +574,7 @@ function after_load(){
 	});*/
 
 	comp_id = "<?=$this->session->companey_id?>"
+	user_id = "<?=$this->session->user_id?>"
 	const msg = db.collection('messages').where('comp_id','==',comp_id);
 	const msg_observer = msg.onSnapshot(docSnapshot => {	  
 	   	docSnapshot.docChanges().forEach(change => {	   		
@@ -583,7 +584,7 @@ function after_load(){
 			if (isNaN(msg1_data.sender_id)) {
 				uid = msg1_data.sender_id;
         		html_msg = '<div class="bubble you">'+msg1_data.message+'<br><small style="font-size:8px;float:right;">'+msg1_data.time+'</small></div>';
-        	}else if (!isNaN(msg1_data.sender_id)) {
+        	}else if (!isNaN(msg1_data.sender_id) && msg1_data.sender_id != user_id) {
         		html_msg = '<div class="bubble me">'+msg1_data.message+'<br><small style="font-size:8px;float:right;">'+msg1_data.time+'</small></div>';
         	}			        	
         	$("div[data-chat="+uid+"]").append(html_msg);
