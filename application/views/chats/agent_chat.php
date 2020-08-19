@@ -568,12 +568,23 @@ function after_load(){
   	}  
 
 
-  	/*const doc = db.collection('users');
-	const observer = doc.onSnapshot(docSnapshot => {	  
-	  get_user_list();
-	});*/
-
 	comp_id = "<?=$this->session->companey_id?>"
+
+  	const doc = db.collection('users').where('comp_id','==',comp_id).where('type','==','enquiry');
+	const observer = doc.onSnapshot(docSnapshot => {	  
+	  	docSnapshot.docChanges().forEach(change => {	   		
+	   	  	html_msg = '';
+	      	msg1_data	=	change.doc.data();	        
+
+	      	if (change.type === 'added') {
+	    		html = '<li class="person" data-chat="'+msg1_data.uid+'"><img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/382994/thomas.jpg" alt=""/><span class="name">'+msg1_data.name+'</span><span class="time">'+msg1_data.time+'</span><span class="preview" ></span></li>';
+	            $(".people").append(html);
+	            $(".right>.top").after('<div class="chat" data-chat="'+msg1_data.uid+'"></div>');
+	            
+	    	}
+		});
+	});
+
 	user_id = "<?=$this->session->user_id?>"
 	const msg = db.collection('messages').where('comp_id','==',comp_id);
 	const msg_observer = msg.onSnapshot(docSnapshot => {	  
