@@ -38,7 +38,11 @@ class Chat extends CI_Controller {
 			$res  = $row['Enquery_id'];
 			$this->session->set_userdata('user_id',$res);
 			$this->session->set_userdata('fullname',$row['name'].' '.$row['lastname']);
+			
+			$this->session->set_userdata('mobile',$row['phone']);
+			$this->session->set_userdata('email',$row['email']);
 			$this->session->set_userdata('companey_id',$row['comp_id']);
+			
 		}else{
 
 			$name	=	explode(' ', $name);
@@ -73,6 +77,8 @@ class Chat extends CI_Controller {
 				$res  = $row['Enquery_id'];
 				$this->session->set_userdata('user_id',$res);
 				$this->session->set_userdata('fullname',$row['name'].' '.$row['lastname']);
+				$this->session->set_userdata('mobile',$row['phone']);
+				$this->session->set_userdata('email',$row['email']);
 				$this->session->set_userdata('companey_id',$row['comp_id']);
 			}
 

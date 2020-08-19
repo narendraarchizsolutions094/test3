@@ -43,23 +43,28 @@
               <div class="form-group row">
                 <label for="name" class="col-sm-2 col-form-label col-form-label-sm">Name</label>
                 <div class="col-sm-10">
-                  <input type="text" class="form-control" id="name" placeholder="Full Name">
+                  <input type="text" class="form-control" id="name" placeholder="Full Name" value="<?=!empty($this->session->fullname)?$this->session->fullname:''?>">
                 </div>
               </div>
               <div class="form-group row">
                 <label for="mobile" class="col-sm-2 col-form-label col-form-label-sm">Mobile</label>
                 <div class="col-sm-10">
-                  <input type="text" class="form-control " id="mobile" placeholder="Mobile No.">
+                  <input type="text" class="form-control " id="mobile" placeholder="Mobile No." value="<?=!empty($this->session->mobile)?$this->session->mobile:''?>">
                 </div>
               </div>
               <div class="form-group row">
                 <label for="email" class="col-sm-2 col-form-label col-form-label-sm">Email</label>
                 <div class="col-sm-10">
-                  <input type="text" class="form-control " id="email" placeholder="Email Id">
+                  <input type="text" class="form-control " id="email" placeholder="Email Id" value="<?=!empty($this->session->email)?$this->session->email:''?>">
                 </div>
               </div>
               <div class="text-center">
-                <button class="btn btn-primary" id="submit-form" type="submit">Send</button>
+                <?php
+                if (empty($this->session->mobile)) { ?>
+                  <button class="btn btn-primary" id="submit-form" type="submit">Send</button>
+                  <?php
+                }
+                ?>
               </div>
             </form>          
           </div>
