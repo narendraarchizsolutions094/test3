@@ -121,7 +121,7 @@
     if(msg.trim() == ''){
       return false;
     }
-    generate_message(msg, 'self');
+    //generate_message(msg, 'self');
     send_message(msg);
     /*setTimeout(function() {      
       generate_message(msg, 'user');  
@@ -207,7 +207,7 @@
 if (!empty($this->session->mobile)) {
   ?>
   <script type="text/javascript">
-    generate_message('Hi '+"<?=$this->session->fullname?>", 'user');
+    //generate_message('Hi '+"<?=$this->session->fullname?>", 'user');
   </script>
   <?php
 }
@@ -263,7 +263,7 @@ if (!empty($this->session->mobile)) {
           if (change.type === 'added') {
             msg1_data = change.doc.data();          
             uid = msg1_data.receiver_id;      
-            if (isNaN(msg1_data.sender_id) && msg1_data.sender_id != user_id) {
+            if (isNaN(msg1_data.sender_id)) {
               uid = msg1_data.sender_id;
               generate_message(msg1_data.message, 'self');
             }else if (!isNaN(msg1_data.sender_id)) {
