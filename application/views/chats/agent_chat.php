@@ -578,6 +578,7 @@ function after_load(){
 	const msg = db.collection('messages').where('comp_id','==',comp_id);
 	const msg_observer = msg.onSnapshot(docSnapshot => {	  
 	   	docSnapshot.docChanges().forEach(change => {	   		
+	   	  html_msg = '';
 	      if (change.type === 'added') {
 	      	msg1_data	=	change.doc.data();	        
 			uid = msg1_data.receiver_id;			
