@@ -100,7 +100,7 @@
          },
          success: function(data){
             if (data) {
-              add_user();  
+              add_user(data);  
               $("#submit-form").html('Thank You');
               $("#submit-form").prop('disabled', true);              
               generate_message('We have accepted your details.We will reach you soon.', 'user');
@@ -220,9 +220,11 @@ if (!empty($this->session->mobile)) {
     };    
     firebase.initializeApp(firebaseConfig);
     var db = firebase.firestore();
-    function add_user(){ 
+    function add_user(data){ 
       datetime = "<?=date('Y-m-d h:i:sa')?>";                     
-      db.collection("users").doc("<?=$this->session->user_id?>").set({
+      user = "<?=$this->session->user_id?>";
+      //user = data;
+      db.collection("users").doc(user).set({
           name:"<?=$this->session->fullname?>",
           comp_id:"<?=$this->session->companey_id?>",
           uid:"<?=$this->session->user_id?>",
@@ -263,10 +265,10 @@ if (!empty($this->session->mobile)) {
           if (change.type === 'added') {
             msg1_data = change.doc.data();          
             uid = msg1_data.receiver_id;      
-            if (isNaN(msg1_data.sender_id)) {
+            if (isNaN(msg1_data.sender_id) && msg1_data.sender_id == "<?=$this->session->user_id?>") {
               uid = msg1_data.sender_id;
               generate_message(msg1_data.message, 'self');
-            }else if (!isNaN(msg1_data.sender_id)) {
+            }else if (!isNaN(msg1_data.sender_id) && msg1_data.receiver_id == "<?=$this->session->user_id?>") {
               generate_message(msg1_data.message, 'user');              
             }                           
           }
