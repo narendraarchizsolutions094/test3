@@ -74,6 +74,11 @@
     <div class="chat-input">      
       <form>
         <input type="hidden" id="agent_id" value="154">
+        <input type="hidden" id="companey_id" >
+        <input type="hidden" id="fullname" >
+        <input type="hidden" id="mobile" >
+        <input type="hidden" id="email" >
+        <input type="hidden" id="user_id" >
         <input type="text" id="chat-input" placeholder="Send a message..."/>
       <button type="submit" class="chat-submit" id="chat-submit"><i class="material-icons">send</i></button>
       </form> 
@@ -227,6 +232,11 @@ if (!empty($this->session->mobile)) {
       user = data.user_id;
       fullname = data.fullname;
       companey_id = data.companey_id;
+      $("#companey_id").val(companey_id);
+      $("#fullname").val(fullname);
+      $("#user_id").val(user);
+      $("#mobile").val(data.mobile);
+      $("#email").val(data.email);
       db.collection("users").doc(user).set({
           name:fullname,
           comp_id:companey_id,
@@ -235,7 +245,7 @@ if (!empty($this->session->mobile)) {
           time:datetime
       },{merge: true})
       .then(function(docRef) {
-        
+        location.reload();
       })
       .catch(function(error) {
           console.error("Error adding document: ", error);
@@ -244,33 +254,25 @@ if (!empty($this->session->mobile)) {
     function send_message(msg){
       var agent_id = $("#agent_id").val();      
       datetime = "<?=date('Y-m-d h:i:sa')?>";       
-      url = "<?=base_url().'chat/get_current_chat_session'?>"
-      $.ajax({
-         type: "POST",
-         url: url,
-         success: function(data){         
-            data = JSON.parse(data);
-            db.collection("messages").add({
-                id:data.user_id+"_"+agent_id,
-                time: datetime,
-                message: msg,
-                sender_id: data.user_id,
-                receiver_id: agent_id,
-                comp_id:data.companey_id,          
-            })
-            .then(function(docRef) {                
-                $("#chat-input").val('');                 
-            })
-            .catch(function(error) {
-                console.error("Error adding document: ", error);
-            });
-         }
-       });
+      db.collection("messages").add({
+          id:data.user_id+"_"+agent_id,
+          time: datetime,
+          message: msg,
+          sender_id: $("#user_id").val(),
+          receiver_id: agent_id,
+          comp_id:data.$("#companey_id").val(),          
+      })
+      .then(function(docRef) {                
+          $("#chat-input").val('');                 
+      })
+      .catch(function(error) {
+          console.error("Error adding document: ", error);
+      });
     } 
     comp_id = "<?=$this->session->companey_id?>"
     user_id = "<?=$this->session->user_id?>"
     const msg = db.collection('messages').where('comp_id','==',comp_id);
-    const msg_observer = msg.onSnapshot(docSnapshot => {    
+    const msg_observer = msg.onSnapshot(docSnapshot => {          
         docSnapshot.docChanges().forEach(change => {                  
           if (change.type === 'added') {
             msg1_data = change.doc.data();          
