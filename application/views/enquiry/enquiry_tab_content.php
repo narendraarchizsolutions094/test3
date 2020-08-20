@@ -257,7 +257,7 @@ if (user_access(450)) { ?>
                <label><?php echo(!empty($fld["input_label"])) ?  ucwords($fld["input_label"]) : ""; ?></label>
                <?php $optarr = (!empty($fld['input_values'])) ? explode(",",$fld['input_values']) : array(); 
                ?>
-               <select class="form-control"  name="enqueryfield[]" >
+               <select class="form-control"  name="enqueryfield[]" id="<?=$fld['input_name']?>">
                   <option value="">Select</option>
                   <?php  foreach($optarr as $key => $val){
                   ?>
