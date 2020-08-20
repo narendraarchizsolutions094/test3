@@ -100,6 +100,7 @@
          },
          success: function(data){
             if (data) {
+              data = JSON.parse(data);
               add_user(data);  
               $("#submit-form").html('Thank You');
               $("#submit-form").prop('disabled', true);              
@@ -223,10 +224,12 @@ if (!empty($this->session->mobile)) {
     function add_user(data){ 
       datetime = "<?=date('Y-m-d h:i:sa')?>";                     
       //user = "<?=$this->session->user_id?>";
-      user = data;
+      user = data.user_id;
+      fullname = data.fullname;
+      companey_id = data.companey_id;
       db.collection("users").doc(user).set({
-          name:"<?=$this->session->fullname?>",
-          comp_id:"<?=$this->session->companey_id?>",
+          name:fullname,
+          comp_id:companey_id,
           uid:user,
           type:"enquiry",
           time:datetime

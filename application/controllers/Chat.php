@@ -42,7 +42,7 @@ class Chat extends CI_Controller {
 			$this->session->set_userdata('mobile',$row['phone']);
 			$this->session->set_userdata('email',$row['email']);
 			$this->session->set_userdata('companey_id',$row['comp_id']);
-			
+
 		}else{
 
 			$name	=	explode(' ', $name);
@@ -83,6 +83,6 @@ class Chat extends CI_Controller {
 			}
 
 		}
-		echo $this->session->user_id;
+		echo json_encode(array('user_id'=>$this->session->user_id,'fullname'=>$this->session->fullname,'mobile'=>$this->session->mobile,'email'=>$this->session->email,'companey_id'=>$this->session->companey_id));
 	}
 }
