@@ -258,8 +258,8 @@ if (!empty($this->session->mobile)) {
                 receiver_id: agent_id,
                 comp_id:data.companey_id,          
             })
-            .then(function(docRef) {
-                console.log("Document written with ID: ", docRef.id);
+            .then(function(docRef) {                
+                $("#chat-input").val('');                 
             })
             .catch(function(error) {
                 console.error("Error adding document: ", error);
