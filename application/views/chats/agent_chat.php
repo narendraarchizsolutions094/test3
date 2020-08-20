@@ -401,8 +401,8 @@
     <div class="container-agent">
         <div class="left">
             <div class="top">
-                <input type="text" placeholder="Search" />
-                <a href="javascript:;" class="fa fa-search btn btn-circle btn-default btn-sm search"></a>
+                <!-- <input type="text" placeholder="Search" />
+                <a href="javascript:;" class="fa fa-search btn btn-circle btn-default btn-sm search"></a> -->
             </div>
             <ul class="people" style="list-style-type: none;padding-left: 0px;">       
             </ul>
