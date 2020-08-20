@@ -4355,6 +4355,7 @@ $("#toggle_timeline").on('click',function(){
     subcourse();
     function subcourse(){    
         var options = '';
+        subcourse  = $("#vertex-sub-course").val();
         course = $("#vertex-course").val();
         if(course == 'SCIENCE & DEVELOPMENT'){
             options = `<option>WEB DEVELOPMENT 
@@ -4438,7 +4439,7 @@ $("#toggle_timeline").on('click',function(){
             
         }
         $("#vertex-sub-course").html(options);
-        
+        $("#vertex-sub-course").val(subcourse);        
     }
 </script>
 <?php
