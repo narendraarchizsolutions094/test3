@@ -1286,6 +1286,21 @@ if($root=='https://student.spaceinternationals.com'){  ?>
 
                                 <li><a href="<?php echo base_url('website/comment') ?>"><?php echo display('comments') ?></a></li> 
                             </ul>
+
+                          <?php
+                          if ($this->session->companey_id == 79) {
+                          ?>
+                            <li class="<?php echo (($segment1 == 'chat') ? "active" : null) ?>">
+                              <a href="<?php echo 'Chat' ?>">
+                              <i class="fa fa-comment" style="color:#fff;font-size:17px;background:#2ecc71;padding:7px;border-radius:4px;width:30px;"></i> &nbsp;<?php echo 'Chat' ?>
+                              <?php  if($this->session->menu==1){ ?></br><p style="color:#fff;font-size:9px;margin-left:-12px;padding-top:10px;"><?php echo 'Chat' ?></p> <?php } ?>
+                             </a>
+                          </li>
+                          <?php
+                        }
+                        ?>
+
+
                   </li>
           
 
