@@ -192,7 +192,7 @@ if($root=='https://student.spaceinternationals.com'){	 ?>
     </div>
   </div>
 </div>
-<iframe src="<?=base_url().'chat/index/1'?>" title="Chat" style="width: 50%;height: 100%;overflow: hidden;border: none; position: fixed;bottom: 0;right: 0;"></iframe>
+<iframe src="<?=base_url().'chat/index/1'?>" title="Chat" style="width: 42%;height: 72%;overflow: hidden;border: none; position: fixed;bottom: 0;right: 0;"></iframe>
 
 
         <!-- /.content-wrapper -->
