@@ -182,3 +182,100 @@ function find_description(f=0) {
    }
  }  
 </script>
+<?php
+  if ($this->session->companey_id == 79) {
+?>
+<script>
+    $('#vertex-course').on('change',function(){
+      subcourse();
+    });    
+    function subcourse(){    
+        var options = '';
+        course = $("#vertex-course").val();
+        if(course == 'SCIENCE & DEVELOPMENT'){
+            options = `<option>WEB DEVELOPMENT 
+                        <option>DATA SCIENCE</option> 
+                        <option>MOBILE APPS</option> 
+                        <option>CODINGS</option> 
+                        <option>GAMING</option> 
+                        <option>DATABASES</option>
+                        <option>SOFTWARE TESTING</option> 
+                        <option>ECOMMERCE</option> 
+                        <option>TOOLS FOR WEBSITE</option> 
+                        <option>ALGORITHMS</option> 
+                        <option>SOFTWARE DEVELOPMENT</option> 
+                        <option>SECURITY AND NETWORKS</option>`;
+        }else if(course == 'DESIGN'){
+            options = `<option>WEB DESIGN</option> 
+                        <option>GRAPHIC DESIGN</option> 
+                        <option>GAME DESIGN</option> 
+                        <option>3D AND ANIMATION</option>
+                        <option>FASHION DESIGNING</option> 
+                        <option>ARCHITECHTURE</option> 
+                        <option>INTERIOR DESIGN</option>`;
+            
+        }else if(course == 'BUSINESS'){
+            options = `<option>FINANCE</option> 
+                        <option>MANAGEMENT</option> 
+                        <option>SALES</option>
+                        <option>HUMAN RESOUCE</option> 
+                        <option>COMMUNICATION</option> 
+                        <option>PROJECT MANAGEMENT</option> 
+                        <option>DIGITAL MARKETING</option> 
+                        <option>MARKETING</option> 
+                        <option>MEDIA</option> 
+                        <option>ENTREPRENUERSHIP</option> 
+                        <option>BUSINESS STARTERGY</option>  
+                        <option>OPERATIONS</option> 
+                        <option>DATA AND ANALYTICS</option> 
+                        <option>BUSINESS LAW</option>
+                        <option>REAL ESTATE</option> 
+                        <option>DATA MANAGEMENT</option>`;
+        }else if(course == 'LIFESTYLE'){
+            options = `<option>ARTS</option> 
+                        <option>PHOTOGRAPHY</option>
+                        <option>GAMING</option> 
+                        <option>MUSIC</option> 
+                        <option>COOKING</option>`;
+        }else if(course == 'ACADEMICS'){
+            options = `<option>ENGINEERING</option> 
+                        <option>HUMANITIES</option> 
+                        <option>SOCIAL STUDIES</option> 
+                        <option>SCIENCE</option> 
+                        <option>MATHEMATICS</option> 
+                        <option>LANGUAGES</option>`;
+        }else if(course == 'PROFESSIONAL'){
+            options = `<option>LEADERSHIP</option> 
+                        <option>STRESS MANAGEMENT</option> 
+                        <option>MOTIVATION</option> 
+                        <option>CAREER DEVELOPMENT</option> 
+                        <option>SOFT SKILLS</option>`;
+
+        }else if(course == 'TECHNOLOGY & DATA'){
+            options = `<option>CLOUD COMPUTING</option> 
+                        <option>NETWORKING</option> 
+                        <option>DATA ANALYTICS</option>
+                        <option>PROBABILITY AND STATISTICS</option>
+                        <option>MACHINES LEARNING</option>`; 
+
+        }else if(course == 'LANGUAGES'){
+            options = `<option>ENGLISH</option> 
+                        <option>FRENCH</option> 
+                        <option>SPANISH</option> 
+                        <option>JAPANESE</option>
+                        <option>GERMAN</option>
+                        <option>CHINESE</option>`;
+
+        }else if(course == 'Fitness'){
+            options = `<option>Yoga</option>
+                        <option>Zumba</option>
+                        <option>Diet</option>`;
+        }else if(course == 'Other'){
+            
+        }
+        $("#vertex-sub-course").html(options);
+    }
+</script>
+<?php
+}
+?>
