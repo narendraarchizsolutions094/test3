@@ -213,6 +213,8 @@
 if (!empty($this->session->mobile)) {
   ?>
   <script type="text/javascript">
+    $("#chat-circle").toggle('scale');
+    $(".chat-box").toggle('scale');
     //generate_message('Hi '+"<?=$this->session->fullname?>", 'user');
   </script>
   <?php
