@@ -139,7 +139,7 @@
     str += "          <\/span>";
     str += "          <div class=\"cm-msg-text\">";
     str += msg;
-    str += "          <\/div>";
+    str += "          <\/div><small>"+time+"</small>";
     str += "        <\/div>";
     $(".chat-logs").append(str);
     $("#cm-msg-"+INDEX).hide().fadeIn(300);
