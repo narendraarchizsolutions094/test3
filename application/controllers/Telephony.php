@@ -376,7 +376,7 @@ class Telephony extends CI_Controller {
         print_r($response);
     }
 
-    public function ameyo_api(){
+    /*public function ameyo_api(){
         $ameyo_url    =   $this->input->post('ameyo_url');
         $curl = curl_init();
         curl_setopt_array($curl, array(
@@ -390,6 +390,39 @@ class Telephony extends CI_Controller {
           CURLOPT_CUSTOMREQUEST => "GET",
           CURLOPT_HTTPHEADER => array(
             "Cookie: JSESSIONID=451E64BF7E8FFC80ACA818B68F8BE2DF; __METADATA__=772eb950-8910-456b-b35d-eee95f57dc1d"
+          ),
+        ));
+
+        $response = curl_exec($curl);
+
+        curl_close($curl);
+        echo $response;
+
+    }*/
+
+    public function ameyo_api(){
+        $curl = curl_init();
+        
+        $user_id = $this->session->email;        
+        $campaign_id = $this->input->post('campaignId');
+        $phone = $this->input->post('phone');
+        
+        curl_setopt_array($curl, array(
+          CURLOPT_URL => "https://app.ameyoemerge.in:8887/ameyowebaccess/command/?command=clickToDialWithToken",
+          CURLOPT_RETURNTRANSFER => true,
+          CURLOPT_ENCODING => "",
+          CURLOPT_MAXREDIRS => 10,
+          CURLOPT_TIMEOUT => 0,
+          CURLOPT_FOLLOWLOCATION => true,
+          CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+          CURLOPT_CUSTOMREQUEST => "POST",
+          CURLOPT_POSTFIELDS => "data=%7B%22userId%22%3A%22".$user_id."%22%2C%22campaignId%22%3A%22".$campaign_id."%22%2C%22phone%22%3A%22".$phone."%22%2C%22shouldAddCustomer%22%3Afalse%7D",
+          CURLOPT_HTTPHEADER => array(
+            "hash-key: e1b672e444bc90e3ef6b7ea9d7c9eb7d",
+            "policy-name: token-based-authorization-policy",
+            "requesting-host: religare-clickToDialWithToken",
+            "Content-Type: application/x-www-form-urlencoded",
+            "Cookie: JSESSIONID=CD6B2C8814410AC04966D61D885E4B61; __METADATA__=a16e9790-cd73-42b8-863e-77764c6b33e1"
           ),
         ));
 

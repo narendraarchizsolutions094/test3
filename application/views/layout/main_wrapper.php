@@ -97,13 +97,14 @@ if($root=='https://student.spaceinternationals.com'){  ?>
       if (!empty($this->session->ameyo['sessionId'])) { ?>
         <script type="text/javascript">            
           function send_parameters(phn){  
-            var ameyo_sessionId = "<?=$this->session->ameyo['sessionId']?>";
             var campaignId = "<?=$this->session->ameyo['campaignId']?>";
-            var url =  'https://emergems.ameyo.net:8443/ameyowebaccess/command?command=manual-dial&data={"campaignId":'+campaignId+',"sessionId":'+ameyo_sessionId+',"phone":'+phn+'}';             
               $.ajax({ 
                 url:"<?=base_url().'telephony/ameyo_api'?>",
                 type: 'POST',
-                data: {ameyo_url:url},
+                data: {
+                  'phone':phn,
+                  'campaignId':campaignId,
+                },
                 success: function (data) {
                   console.info(data);
                 }
