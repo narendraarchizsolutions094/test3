@@ -254,7 +254,8 @@ if (!empty($this->session->mobile)) {
           message: msg,
           sender_id: "<?=$this->session->user_id?>",
           receiver_id: agent_id,
-          comp_id:"<?=$this->session->companey_id?>",          
+          comp_id:"<?=$this->session->companey_id?>",
+          created_at:firebase.firestore.FieldValue.serverTimestamp()          
       })
       .then(function(docRef) {                
           $("#chat-input").val('');                 
@@ -265,7 +266,7 @@ if (!empty($this->session->mobile)) {
     } 
     comp_id = "<?=$this->session->companey_id?>"
     user_id = "<?=$this->session->user_id?>"
-    const msg = db.collection('messages').where('comp_id','==',comp_id);
+    const msg = db.collection('messages').orderBy('created_at','desc').where('comp_id','==',comp_id);
     const msg_observer = msg.onSnapshot(docSnapshot => {          
         docSnapshot.docChanges().forEach(change => {                  
           if (change.type === 'added') {

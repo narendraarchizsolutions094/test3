@@ -549,7 +549,8 @@ function after_load(){
 		  message: msg,
 		  sender_id: "<?=$this->session->user_id?>",
 		  receiver_id: uid,
-		  comp_id:"<?=$this->session->companey_id?>"
+		  comp_id:"<?=$this->session->companey_id?>",
+		  created_at:firebase.firestore.FieldValue.serverTimestamp()
 		})
 		.then(function(docRef) {		  
 		})
@@ -588,7 +589,7 @@ function after_load(){
 	            uid = msg1_data.uid;
 
 			        	
-	            db.collection("messages").orderBy('time','desc').get()
+	            db.collection("messages").orderBy('created_at','desc').get()
 			    .then(function(msgSnapshot) {			    	
 			        msgSnapshot.forEach(function(msg) {	            
 			        	msg_data	=	msg.data();
