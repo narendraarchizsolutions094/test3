@@ -217,9 +217,9 @@ if (!empty($this->session->mobile)) {
 ?>
 <script>    
     var firebaseConfig = {
-      apiKey: 'AIzaSyB8uP-mYOUCKGvjv_MQ1a-lsrlboYdmFg4',
-    authDomain: 'chat-6512f.firebaseapp.com',
-    projectId: 'chat-6512f'
+      apiKey: 'AIzaSyARZpwl0KKW6AUZvRxopOJH1ZBG6ms6j8o',
+      authDomain: 'new-crm-f6355.firebaseapp.com',
+      projectId: 'new-crm-f6355'
     };    
     firebase.initializeApp(firebaseConfig);
     var db = firebase.firestore();
