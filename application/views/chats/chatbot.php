@@ -74,11 +74,6 @@
     <div class="chat-input">      
       <form>
         <input type="hidden" id="agent_id" value="154">
-        <input type="hidden" id="companey_id" >
-        <input type="hidden" id="fullname" >
-        <input type="hidden" id="mobile" >
-        <input type="hidden" id="email" >
-        <input type="hidden" id="user_id" >
         <input type="text" id="chat-input" placeholder="Send a message..."/>
       <button type="submit" class="chat-submit" id="chat-submit"><i class="material-icons">send</i></button>
       </form> 
@@ -233,12 +228,9 @@ if (!empty($this->session->mobile)) {
       //user = "<?=$this->session->user_id?>";
       user = data.user_id;
       fullname = data.fullname;
-      companey_id = data.companey_id;
-      $("#companey_id").val(companey_id);
-      $("#fullname").val(fullname);
-      $("#user_id").val(user);
-      $("#mobile").val(data.mobile);
-      $("#email").val(data.email);
+      companey_id = data.companey_id;   
+
+
       db.collection("users").doc(user).set({
           name:fullname,
           comp_id:companey_id,
@@ -257,12 +249,12 @@ if (!empty($this->session->mobile)) {
       var agent_id = $("#agent_id").val();      
       datetime = "<?=date('Y-m-d h:i:sa')?>";       
       db.collection("messages").add({
-          id:data.user_id+"_"+agent_id,
+          id:"<?=$this->session->user_id?>"+"_"+agent_id,
           time: datetime,
           message: msg,
-          sender_id: $("#user_id").val(),
+          sender_id: "<?=$this->session->user_id?>",
           receiver_id: agent_id,
-          comp_id:data.$("#companey_id").val(),          
+          comp_id:"<?=$this->session->companey_id?>",          
       })
       .then(function(docRef) {                
           $("#chat-input").val('');                 
