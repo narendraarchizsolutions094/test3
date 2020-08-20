@@ -498,6 +498,7 @@ function after_load(){
 	            //console.log(name);
 	            $(".right .top .name").html(name);
 	            $(".right>.top").after('<div class="chat" data-chat="'+doc.uid+'"></div>');
+
 	            db.collection("messages").orderBy('time','desc').get()
 			    .then(function(msgSnapshot) {
 			        msgSnapshot.forEach(function(msg) {	            
@@ -523,7 +524,7 @@ function after_load(){
 	    });
     }
 
-    get_user_list();
+    //get_user_list();
 
     $(".send").on('click',function(){
     	var msg = $("#chat-input").val(); 
@@ -571,17 +572,38 @@ function after_load(){
 	comp_id = "<?=$this->session->companey_id?>"
 
   	const doc = db.collection('users').where('comp_id','==',comp_id).where('type','==','enquiry');
-	const observer = doc.onSnapshot(docSnapshot => {	  
+	const observer = doc.onSnapshot(docSnapshot => {
+		var i = 0;	  
 	  	docSnapshot.docChanges().forEach(change => {	   		
 	   	  	html_msg = '';
 	      	msg1_data	=	change.doc.data();	        
-
+	      	var name	=	msg1_data.name.toLowerCase().replace(/\b[a-z]/g, function(letter) {
+					    return letter.toUpperCase();
+					});
 	      	if (change.type === 'added') {
-	    		html = '<li class="person" data-chat="'+msg1_data.uid+'"><img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/382994/thomas.jpg" alt=""/><span class="name">'+msg1_data.name+'</span><span class="time">'+msg1_data.time+'</span><span class="preview" ></span></li>';
+	    		html = '<li class="person" data-chat="'+msg1_data.uid+'"><img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/382994/thomas.jpg" alt=""/><span class="name">'+name+'</span><span class="time">'+msg1_data.time+'</span><span class="preview" ></span></li>';
 	            $(".people").append(html);
 	            $(".right>.top").after('<div class="chat" data-chat="'+msg1_data.uid+'"></div>');
 	            
+	            db.collection("messages").orderBy('time','desc').get()
+			    .then(function(msgSnapshot) {
+			        msgSnapshot.forEach(function(msg) {	            
+			        	msg_data	=	msg.data();
+			        	if (msg_data.sender_id == msg1_data.uid) {
+			        		msg = '<div class="bubble you">'+msg_data.message+'<br><small style="font-size:8px;float:right;">'+msg_data.time+'</small></div>';
+			        	}else if (msg_data.receiver_id == msg1_data.uid) {
+			        		msg = '<div class="bubble me">'+msg_data.message+'<br><small style="font-size:8px;float:right;">'+msg_data.time+'</small></div>';
+			        	}			        	
+			        	$("div[data-chat="+msg1_data.uid+"]").append(msg);
+			        });
+			    });
 	    	}
+	    	if (i == 0) {	
+	            $(".right .top .name").html(name);
+			    document.querySelector('.chat[data-chat='+msg1_data.uid+']').classList.add('active-chat');
+				document.querySelector('.person[data-chat='+msg1_data.uid+']').classList.add('active');
+		    }
+			i++;
 		});
 	});
 
