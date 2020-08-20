@@ -104,7 +104,7 @@
               add_user(data);  
               $("#submit-form").html('Thank You');
               $("#submit-form").prop('disabled', true);              
-              generate_message('We have accepted your details.We will reach you soon.', 'user');
+              generate_message('We have accepted your details.We will reach you soon.', 'user',"<?=date('Y-m-d h:i:sa')?>");
             }else{
               alert('Something went wrong!');
             }
@@ -130,7 +130,7 @@
     
   })
   
-  function generate_message(msg, type) {
+  function generate_message(msg, type,time) {
     INDEX++;
     var str="";
     str += "<div id='cm-msg-"+INDEX+"' class=\"chat-msg "+type+"\">";
@@ -274,9 +274,9 @@ if (!empty($this->session->mobile)) {
             uid = msg1_data.receiver_id;      
             if (isNaN(msg1_data.sender_id) && msg1_data.sender_id == "<?=$this->session->user_id?>") {
               uid = msg1_data.sender_id;
-              generate_message(msg1_data.message, 'self');
+              generate_message(msg1_data.message, 'self',msg1_data.time);
             }else if (!isNaN(msg1_data.sender_id) && msg1_data.receiver_id == "<?=$this->session->user_id?>") {
-              generate_message(msg1_data.message, 'user');              
+              generate_message(msg1_data.message, 'user',msg1_data.time);              
             }                           
           }
         });
