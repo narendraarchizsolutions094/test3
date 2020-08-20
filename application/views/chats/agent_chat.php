@@ -533,8 +533,14 @@ function after_load(){
 	    }
 	    a = document.querySelector('.active-chat');
 	    uid = a.getAttribute('data-chat');
-	    generate_message(msg, 'me',uid);
+	   // generate_message(msg, 'me',uid);
+	   $("#chat-input").val('');
 	    send_message(msg);	   
+	    a = document.querySelector('.active-chat');
+	    uid = a.getAttribute('data-chat');
+		
+	    $("div[data-chat="+uid+"]").stop().animate({ scrollTop: $("div[data-chat="+uid+"]")[0].scrollHeight}, 1000);  	    
+
     });
 
     function send_message(msg){
@@ -589,7 +595,7 @@ function after_load(){
 	            uid = msg1_data.uid;
 
 			        	
-	            db.collection("messages").orderBy('created_at','desc').get()
+	     /*       db.collection("messages").orderBy('created_at','desc').where('comp_id','==',comp_id).get()
 			    .then(function(msgSnapshot) {			    	
 			        msgSnapshot.forEach(function(msg) {	            
 			        	msg_data	=	msg.data();
@@ -602,15 +608,17 @@ function after_load(){
 			        	}			        	
 			        });
 			        uid = '';
-			    });
+			    });*/
 	    	}
-	    	if (i == 0) {	
+	    	a = document.querySelector('.active-chat');	    	
+	    	if (i == 0 && !a) {	
 	            $(".right .top .name").html(name);
 			    document.querySelector('.chat[data-chat='+msg1_data.uid+']').classList.add('active-chat');
 				document.querySelector('.person[data-chat='+msg1_data.uid+']').classList.add('active');
 		    }
 			i++;
 		});
+	    after_load();
 	});
 
 	user_id = "<?=$this->session->user_id?>"
@@ -624,7 +632,7 @@ function after_load(){
 			if (isNaN(msg1_data.sender_id)) {
 				uid = msg1_data.sender_id;
         		html_msg = '<div class="bubble you">'+msg1_data.message+'<br><small style="font-size:8px;float:right;">'+msg1_data.time+'</small></div>';
-        	}else if (!isNaN(msg1_data.sender_id) && msg1_data.sender_id != user_id) {
+        	}else if (!isNaN(msg1_data.sender_id)) {
         		html_msg = '<div class="bubble me">'+msg1_data.message+'<br><small style="font-size:8px;float:right;">'+msg1_data.time+'</small></div>';
         	}			        	
         	$("div[data-chat="+uid+"]").append(html_msg);
