@@ -222,8 +222,8 @@ if (!empty($this->session->mobile)) {
     var db = firebase.firestore();
     function add_user(data){ 
       datetime = "<?=date('Y-m-d h:i:sa')?>";                     
-      user = "<?=$this->session->user_id?>";
-      //user = data;
+      //user = "<?=$this->session->user_id?>";
+      user = data;
       db.collection("users").doc(user).set({
           name:"<?=$this->session->fullname?>",
           comp_id:"<?=$this->session->companey_id?>",
