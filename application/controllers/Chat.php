@@ -85,4 +85,7 @@ class Chat extends CI_Controller {
 		}
 		echo json_encode(array('user_id'=>$this->session->user_id,'fullname'=>$this->session->fullname,'mobile'=>$this->session->mobile,'email'=>$this->session->email,'companey_id'=>$this->session->companey_id));
 	}
+	public function get_current_chat_session(){
+		echo json_encode(array('user_id'=>$this->session->user_id,'fullname'=>$this->session->fullname,'mobile'=>$this->session->mobile,'email'=>$this->session->email,'companey_id'=>$this->session->companey_id));	
+	}
 }

@@ -244,21 +244,28 @@ if (!empty($this->session->mobile)) {
     function send_message(msg){
       var agent_id = $("#agent_id").val();      
       datetime = "<?=date('Y-m-d h:i:sa')?>";       
-
-      db.collection("messages").add({
-          id:"<?=$this->session->user_id?>_"+agent_id,
-          time: datetime,
-          message: msg,
-          sender_id: "<?=$this->session->user_id?>",
-          receiver_id: agent_id,
-          comp_id:"<?=$this->session->companey_id?>",          
-      })
-      .then(function(docRef) {
-          console.log("Document written with ID: ", docRef.id);
-      })
-      .catch(function(error) {
-          console.error("Error adding document: ", error);
-      });
+      url = "<?=base_url().'chat/get_current_chat_session'?>"
+      $.ajax({
+         type: "POST",
+         url: url,
+         success: function(data){         
+            data = JSON.parse(data);
+            db.collection("messages").add({
+                id:data.user_id+"_"+agent_id,
+                time: datetime,
+                message: msg,
+                sender_id: data.user_id,
+                receiver_id: agent_id,
+                comp_id:data.companey_id,          
+            })
+            .then(function(docRef) {
+                console.log("Document written with ID: ", docRef.id);
+            })
+            .catch(function(error) {
+                console.error("Error adding document: ", error);
+            });
+         }
+       });
     } 
     comp_id = "<?=$this->session->companey_id?>"
     user_id = "<?=$this->session->user_id?>"

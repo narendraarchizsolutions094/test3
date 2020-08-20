@@ -584,18 +584,23 @@ function after_load(){
 	    		html = '<li class="person" data-chat="'+msg1_data.uid+'"><img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/382994/thomas.jpg" alt=""/><span class="name">'+name+'</span><span class="time">'+msg1_data.time+'</span><span class="preview" ></span></li>';
 	            $(".people").append(html);
 	            $(".right>.top").after('<div class="chat" data-chat="'+msg1_data.uid+'"></div>');
-	            
+
+	            uid = msg1_data.uid;
+
+			        	
 	            db.collection("messages").orderBy('time','desc').get()
-			    .then(function(msgSnapshot) {
+			    .then(function(msgSnapshot) {			    	
 			        msgSnapshot.forEach(function(msg) {	            
 			        	msg_data	=	msg.data();
-			        	if (msg_data.sender_id == msg1_data.uid) {
+			        	if (msg_data.sender_id == uid) {
 			        		msg = '<div class="bubble you">'+msg_data.message+'<br><small style="font-size:8px;float:right;">'+msg_data.time+'</small></div>';
-			        	}else if (msg_data.receiver_id == msg1_data.uid) {
+			        		$("div[data-chat="+uid+"]").append(msg);
+			        	}else if (msg_data.receiver_id == uid) {
 			        		msg = '<div class="bubble me">'+msg_data.message+'<br><small style="font-size:8px;float:right;">'+msg_data.time+'</small></div>';
+			        		$("div[data-chat="+uid+"]").append(msg);
 			        	}			        	
-			        	$("div[data-chat="+msg1_data.uid+"]").append(msg);
 			        });
+			        uid = '';
 			    });
 	    	}
 	    	if (i == 0) {	
