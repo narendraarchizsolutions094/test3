@@ -227,7 +227,7 @@ if (!empty($this->session->mobile)) {
       db.collection("users").doc(user).set({
           name:"<?=$this->session->fullname?>",
           comp_id:"<?=$this->session->companey_id?>",
-          uid:"<?=$this->session->user_id?>",
+          uid:user,
           type:"enquiry",
           time:datetime
       },{merge: true})
