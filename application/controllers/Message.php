@@ -3,7 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Message extends CI_Controller {
 
-	private	$host 	  =  '{imappro.zoho.com:993/imap}';
+	private	$host 	  =  '{imappro.zoho.com:993/imap/ssl}INBOX';
 	private	$user	  = 'kanhaiya@archizsolutions.com';
 	private $password = "Archiz321";	
 	
