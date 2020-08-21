@@ -1363,7 +1363,7 @@ class Enquiry extends CI_Controller {
         $data['enquiry'] = $this->enquiry_model->enquiry_by_id($enqid);
         $enquiry_code = $data['enquiry']->Enquery_id;
         $email_imap    =   get_sys_parameter('email_in_timeline','IMAP');
-        if (!empty($data['enquiry']->email) && $email) {
+        if (!empty($data['enquiry']->email) && $email_imap) {
             $this->enquiry_model->getuseremail($data['enquiry']->email,$enquiry_code);
         }
 
