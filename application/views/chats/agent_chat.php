@@ -644,7 +644,7 @@ function after_load(){
             $("#"+uid+"_unread").show();
             if($("#"+uid+"_unread").html()){
               c  = $("#"+uid+"_unread").html();
-              $("#"+uid+"_unread").html(c+parseInt(1));              
+              $("#"+uid+"_unread").html(1+parseInt(c));              
             }else{
               $("#"+uid+"_unread").html(1);              
             }
