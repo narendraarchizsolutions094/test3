@@ -3,11 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Message extends CI_Controller {
 
-	private	$host 	  =  '{imappro.zoho.com:993/imap/ssl}INBOX';
-	private	$user	  = 'kanhaiya@archizsolutions.com';
-	private $password = "Archiz321";	
-	
-    public function __construct()
+	public function __construct()
 	{
 		parent::__construct();
 		
@@ -187,65 +183,7 @@ class Message extends CI_Controller {
 				}
 			}
     	}
-	}
-	
-		public function getuseremail(){
-		
-			$inbox  = imap_open($this->host,$this->user ,$this->password)  or die('Cannot connect to Gmail: ' . imap_last_error());
-		
-		/*	$usrid  = $this->input->post("userno", true);
-			//$usrid  = 49;
-			$email  = $this->db->select("em")->where("id", $usrid)->get("tbl_usr")->row()->em;
-			
-			$msgarr = $this->db->select("msgid")->where("usrid", $usrid)->order_by("id DESC")->get("tbl_mail")->row();
-			
-			$lastmsg = (!empty($msgarr->msgid)) ? $msgarr->msgid : ""; 
-			*/
-			$emails = imap_search($inbox,'FROM '.$email);
-			imap_close($inbox);
-			$mailarr = array();
-			if($emails) {
-
-				$output = '';
-
-				rsort($emails);
-
-
-				foreach($emails as $ind => $email_number) {
-					
-					$header   = imap_headerinfo($inbox, $email_number);
-					$overview = imap_fetch_overview($inbox,$email_number,0);
-					$message  = imap_fetchbody($inbox, $email_number, 1);
-					
-					if(!empty($lastmsg) and $lastmsg == $header->Msgno){
-						
-						break;
-					} 
-					
-					$insarr[] = array("usrid" => $this->session->user_id,
-									  "msgid" => $header->Msgno,
-									  "sbj"   => (!empty($header->subject)) ? $header->subject : "",
-									  "msg"   => $message,
-									  "dt"    => date("Y-m-d h:i:s", strtotime($header->date)),
-									  "rply"  => ""
-									  ); 
-				
-				}
-			}	
-		
-		
-		if(!empty($insarr)){
-			
-			$this->db->insert_batch("tbl_mail", $insarr);
-			
-		}
-	
-		$data['mails'] = $this->db->select("*")->where("usrid", $usrid)->order_by("id DESC")->limit(20)->get("tbl_mail")->result();
-		
-		$this->load->view("patient/pages/mail-list", $data);
 	}	
-	
-	
 public function chat_start(){
    	$message=$this->input->post('message');
    	$phone= '91'.$this->input->post('phone');

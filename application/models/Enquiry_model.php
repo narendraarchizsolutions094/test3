@@ -2748,4 +2748,67 @@ $cpny_id=$this->session->companey_id;
 		$this->db->where($where);
 		return $this->db->get('enquiry')->row_array();
 	}
+
+	public function getuseremail($from,$enquiry_code){
+		$domain = get_sys_parameter('imap_host','IMAP');
+		$port = get_sys_parameter('imap_port','IMAP');
+		$mode = get_sys_parameter('imap_mode','IMAP');
+		$user = get_sys_parameter('user','IMAP');
+		$password = get_sys_parameter('password','IMAP');
+		$host 	  =  "{".$domain.":".$port."/imap/".$mode."}INBOX";
+		$user	  = $user;
+		$password = $password;	
+		$inbox  = imap_open($host,$user ,$password)  or die('Cannot connect: ' . imap_last_error());
+		$comp_id = $this->session->companey_id;		
+		$this->db->select('created_date,drop_reason as msg_id');
+		$this->db->where('lead_id',$enquiry_code);
+		$this->db->where('comp_id',$comp_id);
+		$this->db->where('coment_type',6);
+		$this->db->order_by('comm_id','desc');
+		$this->db->limit(1);
+		$last_mail	=	$this->db->get('tbl_comment')->row_array();		
+		$since = '';
+		if (!empty($last_mail)) {
+			$since = 'SINCE '.date("d-M-Y", strtotime($last_mail['created_date'])).' ';
+		}		
+		$emails = imap_search($inbox,$since.'FROM '.$from);
+		$mailarr = array();
+
+		if($emails) {
+			$output = '';
+			foreach($emails as $ind => $email_number) {					
+				$header   = imap_headerinfo($inbox, $email_number);
+				$overview = imap_fetch_overview($inbox,$email_number,0);
+				$message  = imap_fetchbody($inbox, $email_number, 1);
+				if (!empty($last_mail['msg_id']) && $last_mail['msg_id'] < $header->Msgno) {
+					
+					$insarr[] = array(
+								"comp_id" => $this->session->companey_id,
+								"lead_id" => $enquiry_code,
+								"remark" => $message,
+								"comment_msg"   => (!empty($header->subject)) ? $header->subject : "",
+								"created_date"   => date("Y-m-d H:i:s", strtotime($header->date)),
+								"coment_type"=>6,
+								"drop_reason"=>$header->Msgno
+								); 
+				}else if (empty($last_mail['msg_id'])) {
+					$insarr[] = array(
+								"comp_id" => $this->session->companey_id,
+								"lead_id" => $enquiry_code,
+								"remark" => $message,
+								"comment_msg"   => (!empty($header->subject)) ? $header->subject : "",
+								"created_date"   => date("Y-m-d H:i:s", strtotime($header->date)),
+								"coment_type"=>6,
+								"drop_reason"=>$header->Msgno
+								); 
+				}
+			}
+		}	
+
+
+	if(!empty($insarr)){					
+		$this->db->insert_batch("tbl_comment", $insarr);
+	}
+	imap_close($inbox);
+	}
 }
