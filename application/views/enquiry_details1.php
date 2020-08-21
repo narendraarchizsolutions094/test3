@@ -4351,8 +4351,7 @@ $("#toggle_timeline").on('click',function(){
 <script>
     $('#vertex-course').on('change',function(){
       subcourse();
-    });
-    subcourse();
+    });    
     function subcourse(){    
         var options = '';
         subcourse  = $("#vertex-sub-course").val();
@@ -4438,9 +4437,11 @@ $("#toggle_timeline").on('click',function(){
         }else if(course == 'Other'){
             
         }
+        console.log(course);
         $("#vertex-sub-course").html(options);
         $("#vertex-sub-course").val(subcourse);        
     }
+    subcourse();
 </script>
 <?php
 }
