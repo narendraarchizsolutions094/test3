@@ -110,7 +110,11 @@
   padding: 0 0 5px 5px;
   color: var(--grey);
   background-color: var(--white);
-}
+  float: right;
+  right: 0;
+  margin-top: 33px;
+  text-transform: capitalize;
+  }
 .container-agent .left .people .person .preview {
 	visibility: hidden;
   font-size: 14px;
@@ -493,9 +497,8 @@ function after_load(){
 	        	var name	=	doc.name.toLowerCase().replace(/\b[a-z]/g, function(letter) {
 					    return letter.toUpperCase();
 					});
-	        	html = '<li class="person" data-chat="'+doc.uid+'"><img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/382994/thomas.jpg" alt=""/><span class="name">'+name+'</span><span class="time">'+date+'</span><span class="preview" ></span></li>';
+	        	html = '<li class="person" data-chat="'+doc.uid+'"><img src="https://avatars0.githubusercontent.com/u/10263615?v=4" alt=""/><span class="name">'+name+'</span><span class="time">'+date+'</span><span class="preview" ></span></li>';
 	            $(".people").append(html);
-	            //console.log(name);
 	            $(".right .top .name").html(name);
 	            $(".right>.top").after('<div class="chat" data-chat="'+doc.uid+'"></div>');
 
@@ -588,7 +591,7 @@ function after_load(){
 					    return letter.toUpperCase();
 					});
 	      	if (change.type === 'added') {
-	    		html = '<li class="person" data-chat="'+msg1_data.uid+'"><img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/382994/thomas.jpg" alt=""/><span class="name">'+name+'</span><span class="time">'+msg1_data.time+'</span><span class="preview" ></span></li>';
+	    		html = '<li class="person" data-chat="'+msg1_data.uid+'"><img src="https://avatars0.githubusercontent.com/u/10263615?v=4" alt=""/><span class="name">'+name+'</span><span class="time">'+msg1_data.time+'</span><span class="preview" ></span></li>';
 	            $(".people").append(html);
 	            $(".right>.top").after('<div class="chat" data-chat="'+msg1_data.uid+'"></div>');
 
