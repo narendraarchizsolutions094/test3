@@ -644,12 +644,12 @@ function after_load(){
             $("#"+uid+"_unread").show();
             if($("#"+uid+"_unread").html()){
               c  = $("#"+uid+"_unread").html();
-              $("#"+uid+"_unread").html(c+1);              
+              $("#"+uid+"_unread").html(c+parseInt(1));              
             }else{
               $("#"+uid+"_unread").html(1);              
             }
             $("#"+uid+"_unread").removeClass('btn-default');
-            $("#"+uid+"_unread").removeClass('btn-danger');
+            $("#"+uid+"_unread").addClass('btn-danger');
           }else{
             $("#"+uid+"_unread").hide();
           }			        	
