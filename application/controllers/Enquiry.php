@@ -1478,11 +1478,19 @@ class Enquiry extends CI_Controller {
                     <span style="font-weight:900;font-size:10px;">'.ucfirst($comments->description).' </span>
                     </br>
                     <span style="font-weight:900;font-size:10px;">'.ucfirst($comments->description).' </span>';
-                     } 
+                     }
+                     if ($comments->coment_type == 6) {
+                          $html.='<p>'. date("j-M-Y h:i:s a",strtotime($comments->ddate)).' <br>
+                      <small>Email from user</small>
+                      </p>
+                  </div>
+                </li>';
+                      }else{                        
  $html.='<p>'. date("j-M-Y h:i:s a",strtotime($comments->ddate)).' <br>
                       Updated By : <strong>'. ucfirst($comments->comment_created_by . ' ' .$comments->lastname).' </strong></p>
                   </div>
                 </li>';
+                      } 
                  
                 } 
               }
