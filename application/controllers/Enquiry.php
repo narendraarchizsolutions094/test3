@@ -2107,8 +2107,9 @@ function upload_enquiry() {
                     }
                     */
 
-                    $phone=preg_match('/^[0-9]{10}+$/', $phone_no);                    
-					$phone=preg_replace('/[^0-9]/i', '',$phone_no);
+                    //$phone=preg_match('/^[0-9]{10}+$/', $phone_no);                    
+                    //$phone=preg_replace('/[^0-9]/i', '',$phone_no);
+                    $phone = $phone_no;
                     $this->db->where('phone',$phone);
                     $this->db->where('comp_id',$this->session->companey_id);
                     if(!empty($product_name)){
