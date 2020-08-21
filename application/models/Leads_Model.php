@@ -987,7 +987,7 @@ public function all_description($diesc) {
         $this->db->where('lead_id', $lead_code);
         $this->db->join('lead_description','lead_description.id=tbl_comment.stage_description','left');
         $this->db->join('lead_stage','lead_stage.stg_id=tbl_comment.stage_id','left');
-        $this->db->join('tbl_admin','tbl_admin.pk_i_admin_id=tbl_comment.created_by');
+        $this->db->join('tbl_admin','tbl_admin.pk_i_admin_id=tbl_comment.created_by','left');
         $this->db->order_by("comm_id", "desc");
         return $this->db->get()->result();
     }
