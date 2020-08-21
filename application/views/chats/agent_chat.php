@@ -452,6 +452,12 @@ function after_load(){
 	  chat.container.querySelector('[data-chat="' + chat.person + '"]').classList.add('active-chat');
 	  friends.name = f.querySelector('.person .name').innerText;
 	  chat.name.innerHTML = friends.name;
+
+    db.collection("users").doc("frank").update({
+    "age": 13,
+    "favorites.color": "Red"
+
+});
 	}
 }
 
@@ -482,7 +488,21 @@ function after_load(){
 		    console.error("Error adding document: ", error);
 		});
     }
-    add_user();    
+    add_user();  
+
+    function mark_read(uid){
+      const msg = db.collection('messages').where('sender_id','==',uid).get()
+      .then(function(msgSnapshot) {           
+            msgSnapshot.forEach(function(msg) {             
+              msg_data  = msg.data();
+              console.log(msg_data);
+              /*db.collection("messages").doc("frank").update({
+                  "age": 13,
+                  "favorites.color": "Red"
+              });*/
+            });
+          });
+    }  
     function get_user_list(){
     	var comp_id = "<?=$this->session->companey_id?>";
     	db.collection("users").where("comp_id", "==", comp_id).where("type", "==", 'enquiry')
