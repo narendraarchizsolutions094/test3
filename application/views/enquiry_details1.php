@@ -4354,7 +4354,7 @@ $("#toggle_timeline").on('click',function(){
     });    
     function subcourse(){    
         var options = '';
-        subcourse  = $("#vertex-sub-course").val();
+        vertexsubcourse  = $("#vertex-sub-course").val();
         course = $("#vertex-course").val();
         if(course == 'SCIENCE & DEVELOPMENT'){
             options = `<option>WEB DEVELOPMENT 
@@ -4439,7 +4439,7 @@ $("#toggle_timeline").on('click',function(){
         }
         console.log(course);
         $("#vertex-sub-course").html(options);
-        $("#vertex-sub-course").val(subcourse);        
+        $("#vertex-sub-course").val(vertexsubcourse);        
     }
     subcourse();
 </script>
