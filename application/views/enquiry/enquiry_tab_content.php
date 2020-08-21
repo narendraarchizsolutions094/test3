@@ -15,7 +15,7 @@ if (user_access(450)) { ?>
    if ($tid == 1) {      
   define('FIRST_NAME',1);
   define('LAST_NAME',2);
-  define('GENDER',3);
+  define('GENDER',3); 
   define('MOBILE',4);
   define('EMAIL',5);
   define('COMPANY',6);
