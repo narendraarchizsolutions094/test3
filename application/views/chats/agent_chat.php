@@ -641,12 +641,17 @@ function after_load(){
         	}
         	$("div[data-chat="+uid+"]").append(html_msg);
           if (msg1_data.unread) {
+            $("#"+uid+"_unread").show();
             if($("#"+uid+"_unread").html()){
               c  = $("#"+uid+"_unread").html();
               $("#"+uid+"_unread").html(c+1);              
             }else{
               $("#"+uid+"_unread").html(1);              
             }
+            $("#"+uid+"_unread").removeClass('btn-default');
+            $("#"+uid+"_unread").removeClass('btn-danger');
+          }else{
+            $("#"+uid+"_unread").hide();
           }			        	
 	      }
 	    });
