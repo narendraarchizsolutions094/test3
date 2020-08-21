@@ -559,8 +559,8 @@ function after_load(){
 		  sender_id: "<?=$this->session->user_id?>",
 		  receiver_id: uid,
 		  comp_id:"<?=$this->session->companey_id?>",
-      created_at:firebase.database.ServerValue.TIMESTAMP,
-      unread:1          
+      unread:1,          
+      created_at:firebase.firestore.FieldValue.serverTimestamp()
 		})
 		.then(function(docRef) {		  
 		})
