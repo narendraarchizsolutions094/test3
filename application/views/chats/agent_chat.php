@@ -559,7 +559,8 @@ function after_load(){
 		  sender_id: "<?=$this->session->user_id?>",
 		  receiver_id: uid,
 		  comp_id:"<?=$this->session->companey_id?>",
-          created_at:firebase.database.ServerValue.TIMESTAMP          
+      created_at:firebase.database.ServerValue.TIMESTAMP,
+      unread:1          
 		})
 		.then(function(docRef) {		  
 		})
@@ -591,7 +592,7 @@ function after_load(){
 					    return letter.toUpperCase();
 					});
 	      	if (change.type === 'added') {
-	    		html = '<li class="person" data-chat="'+msg1_data.uid+'"><img src="https://avatars0.githubusercontent.com/u/10263615?v=4" alt=""/><span class="name">'+name+'['+msg1_data.mobile+']</span><span class="time">'+msg1_data.time+'</span><span class="preview" ></span></li>';
+	    		html = '<li class="person" data-chat="'+msg1_data.uid+'"><img src="https://avatars0.githubusercontent.com/u/10263615?v=4" alt=""/><span class="name">'+name+' ['+msg1_data.uid+']<a id="'+msg1_data.uid+'_unread" class="btn btn-sm btn-circle btn-default"></a></span><span class="time">'+msg1_data.time+'</span><span class="preview" ></span></li>';
 	            $(".people").append(html);
 	            $(".right>.top").after('<div class="chat" data-chat="'+msg1_data.uid+'"></div>');
 
@@ -637,8 +638,16 @@ function after_load(){
         		html_msg = '<div class="bubble you">'+msg1_data.message+'<br><small style="font-size:8px;float:right;">'+msg1_data.time+'</small></div>';
         	}else if (!isNaN(msg1_data.sender_id)) {
         		html_msg = '<div class="bubble me">'+msg1_data.message+'<br><small style="font-size:8px;float:right;">'+msg1_data.time+'</small></div>';
-        	}			        	
+        	}
         	$("div[data-chat="+uid+"]").append(html_msg);
+          if (msg1_data.unread) {
+            if($("#"+uid+"_unread").html()){
+              c  = $("#"+uid+"_unread").html();
+              $("#"+uid+"_unread").html(c+1);              
+            }else{
+              $("#"+uid+"_unread").html(1);              
+            }
+          }			        	
 	      }
 	    });
 	});

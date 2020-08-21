@@ -255,7 +255,8 @@ if (!empty($this->session->mobile)) {
           sender_id: "<?=$this->session->user_id?>",
           receiver_id: agent_id,
           comp_id:"<?=$this->session->companey_id?>",
-          created_at:firebase.firestore.FieldValue.serverTimestamp()          
+          created_at:firebase.firestore.FieldValue.serverTimestamp(),
+          unread:1          
       })
       .then(function(docRef) {                
           $("#chat-input").val('');                 
