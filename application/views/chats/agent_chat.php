@@ -591,7 +591,7 @@ function after_load(){
 					    return letter.toUpperCase();
 					});
 	      	if (change.type === 'added') {
-	    		html = '<li class="person" data-chat="'+msg1_data.uid+'"><img src="https://avatars0.githubusercontent.com/u/10263615?v=4" alt=""/><span class="name">'+name+'</span><span class="time">'+msg1_data.time+'</span><span class="preview" ></span></li>';
+	    		html = '<li class="person" data-chat="'+msg1_data.uid+'"><img src="https://avatars0.githubusercontent.com/u/10263615?v=4" alt=""/><span class="name">'+name+'['+msg1_data.mobile+']</span><span class="time">'+msg1_data.time+'</span><span class="preview" ></span></li>';
 	            $(".people").append(html);
 	            $(".right>.top").after('<div class="chat" data-chat="'+msg1_data.uid+'"></div>');
 
