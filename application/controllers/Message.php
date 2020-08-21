@@ -3,9 +3,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Message extends CI_Controller {
 
-	private	$host 	  =  '{imap.googlemail.com:993/imap/ssl}INBOX';
-	private	$user	  = 'no-reply@saarthakmind.com';
-	private $password = "";	
+	private	$host 	  =  '{imap.zoho.com:993/imap/ssl}INBOX';
+	private	$user	  = 'kanhaiya@archizsolutions.com';
+	private $password = "Archiz321";	
 	
     public function __construct()
 	{
