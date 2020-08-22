@@ -690,7 +690,25 @@ function after_load(){
           type:"POST",
           success: function(data){
             res = JSON.parse(data);
-            chat_msg = $(".active-chat").html();
+            chat_msg = `<style>
+                      .you{
+                        float: left;
+                        color: var(--white);
+                        background-color: var(--blue);
+                        align-self: flex-start;
+                        -webkit-animation-name: slideFromLeft;
+                        animation-name: slideFromLeft;
+                      }
+                      .me{
+                        float: right;
+                        color: var(--dark);
+                        background-color: #eceff1;
+                        align-self: flex-end;
+                        -webkit-animation-name: slideFromRight;
+                        animation-name: slideFromRight;
+                      }
+                    </style>`;
+            chat_msg += $(".active-chat").html();
             if (res.email) {
               $.ajax({
                 url: "<?=base_url().'message/send_sms'?>",
