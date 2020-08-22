@@ -251,12 +251,12 @@ if (!empty($this->session->mobile)) {
       db.collection("messages").add({
           id:"<?=$this->session->user_id?>"+"_"+agent_id,
           time: datetime,
-          message: msg, 
+          message: msg,
           sender_id: "<?=$this->session->user_id?>",
           receiver_id: agent_id,
           comp_id:"<?=$this->session->companey_id?>",
           unread:1,          
-          created_at:firebase.database.ServerValue.TIMESTAMP,
+          created_at:firebase.firestore.FieldValue.serverTimestamp()
       })
       .then(function(docRef) {                
           $("#chat-input").val('');                 
