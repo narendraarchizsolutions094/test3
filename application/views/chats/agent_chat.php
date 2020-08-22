@@ -82,7 +82,7 @@
   padding: 12px 10% 16px;
   cursor: pointer;
   background-color: var(--white);
-  border-bottom: 1px solid; 
+  /*border-bottom: 1px solid; */
   border-top: 1px solid; 
 }
 
@@ -412,7 +412,10 @@
             </ul>
         </div>
         <div class="right" style="min-height: 575px; max-height: 575px;">
-            <div class="top"><span>To: <span class="name"></span></span>
+            <div class="top">
+              <span>To: <span class="name"></span>
+              </span>
+              <a href="javascript:void(0)" id="send_trans" class="btn btn-sm btn-primary pull-right" style="margin-top: -6px;">Send Chat Transcript</a>
             </div>           
             <div class="write">
                 <!-- <a href="javascript:;" class="write-link attach"></a> -->
@@ -452,12 +455,12 @@ function after_load(){
 	  chat.container.querySelector('[data-chat="' + chat.person + '"]').classList.add('active-chat');
 	  friends.name = f.querySelector('.person .name').innerText;
 	  chat.name.innerHTML = friends.name;
-
+/*
     db.collection("users").doc("frank").update({
     "age": 13,
     "favorites.color": "Red"
 
-});
+    });*/
 	}
 }
 
@@ -496,6 +499,7 @@ function after_load(){
             msgSnapshot.forEach(function(msg) {             
               msg_data  = msg.data();
               console.log(msg_data);
+              console.log(msg);
               /*db.collection("messages").doc("frank").update({
                   "age": 13,
                   "favorites.color": "Red"
@@ -568,7 +572,7 @@ function after_load(){
 
     function send_message(msg){
 		a = document.querySelector('.active-chat');
-	    uid = a.getAttribute('data-chat');
+	 uid = a.getAttribute('data-chat');
 		var agent_id = "<?=$this->session->user_id?>";      
 		datetime = "<?=date('Y-m-d h:i:sa')?>";       
 
@@ -612,11 +616,12 @@ function after_load(){
 					    return letter.toUpperCase();
 					});
 	      	if (change.type === 'added') {
-	    		html = '<li class="person" data-chat="'+msg1_data.uid+'"><img src="https://avatars0.githubusercontent.com/u/10263615?v=4" alt=""/><span class="name">'+name+' ['+msg1_data.uid+']<a id="'+msg1_data.uid+'_unread" class="btn btn-sm btn-circle btn-default" style="position: absolute;left: 0;margin-left: 56px;margin-top: -33px;width: 6%;"></a></span><span class="time">'+msg1_data.time+'</span><span class="preview" ></span></li>';
+	    		html = '<li class="person" data-chat="'+msg1_data.uid+'"><img src="https://avatars0.githubusercontent.com/u/10263615?v=4" alt=""/><span class="name">'+name+' ['+msg1_data.uid+']<a id="'+msg1_data.uid+'_unread" class="btn btn-sm btn-circle btn-default" style="position: absolute;left: 0;margin-left: 58px;margin-top: -16px;width: 6%;"></a></span><span class="time">'+msg1_data.time+'</span><span class="preview" ></span></li>';
 	            $(".people").append(html);
 	            $(".right>.top").after('<div class="chat" data-chat="'+msg1_data.uid+'"></div>');
 
 	            uid = msg1_data.uid;
+              $("#"+uid+"_unread").hide();
 
 			        	
 	     /*       db.collection("messages").orderBy('created_at','desc').where('comp_id','==',comp_id).get()
@@ -676,6 +681,35 @@ function after_load(){
 	      }
 	    });
 	});
+  $("#send_trans").on('click',function(){
+    if (confirm('Are you sure?')) {
+        a = document.querySelector('.active-chat');
+        uid = a.getAttribute('data-chat');
+        $.ajax({
+          url: "<?=base_url().'enquiry/get_enquiry_by_code/'?>"+uid,
+          type:"POST",
+          success: function(data){
+            res = JSON.parse(data);
+            if (res.email) {
+              $.ajax({
+                url: "<?=base_url().'message/send_sms'?>",
+                type:"POST",
+                data:{
+                  mesge_type:3,
+                  message_name:'msg',
+                  email_subject:'Chat Transcript',
+                  mail:res.email
+                },
+                success: function(data){
+                  alert(data);
+                }
+              });
+            }
+          }
+        });
+    }
+  });
+
 </script>
 
 

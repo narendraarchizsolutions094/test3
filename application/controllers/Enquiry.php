@@ -3110,4 +3110,12 @@ function upload_enquiry() {
              }
                 
         }*/
+        public function get_enquiry_by_code($enquiry_code){
+            $data    =   $this->enquiry_model->enquiry_by_code($enquiry_code);
+            if (!empty($data)) {
+                echo json_encode($data);
+            }else{
+                echo 0;
+            }
+        }
 }
