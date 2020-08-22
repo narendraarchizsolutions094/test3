@@ -690,13 +690,14 @@ function after_load(){
           type:"POST",
           success: function(data){
             res = JSON.parse(data);
+            msg = $(".active-chat").html();
             if (res.email) {
               $.ajax({
                 url: "<?=base_url().'message/send_sms'?>",
                 type:"POST",
                 data:{
                   mesge_type:3,
-                  message_name:'msg',
+                  message_name:msg,
                   email_subject:'Chat Transcript',
                   mail:res.email
                 },
