@@ -426,6 +426,7 @@
         </div>
     </div>
 </div>
+<p id="trans_msg" style="display: none;"></p>
 <script type="text/javascript">
 
 function after_load(){	
@@ -624,7 +625,8 @@ function after_load(){
               $("#"+uid+"_unread").hide();
 
 			        	
-	     /*       db.collection("messages").orderBy('created_at','desc').where('comp_id','==',comp_id).get()
+	     /*
+          db.collection("messages").orderBy('created_at','desc').where('comp_id','==',comp_id).get()
 			    .then(function(msgSnapshot) {			    	
 			        msgSnapshot.forEach(function(msg) {	            
 			        	msg_data	=	msg.data();
@@ -637,7 +639,8 @@ function after_load(){
 			        	}			        	
 			        });
 			        uid = '';
-			    });*/
+			    });
+          */
 	    	}
 	    	a = document.querySelector('.active-chat');	    	
 	    	if (i == 0 && !a) {	
@@ -651,7 +654,7 @@ function after_load(){
 	});
 
 	user_id = "<?=$this->session->user_id?>"
-	const msg = db.collection('messages').where('comp_id','==',comp_id);
+	const msg = db.collection('messages').orderBy('created_at','desc').where('comp_id','==',comp_id);
 	const msg_observer = msg.onSnapshot(docSnapshot => {	  
 	   	docSnapshot.docChanges().forEach(change => {	   		
 	   	  html_msg = '';
@@ -689,26 +692,8 @@ function after_load(){
           url: "<?=base_url().'enquiry/get_enquiry_by_code/'?>"+uid,
           type:"POST",
           success: function(data){
-            res = JSON.parse(data);
-            chat_msg = `<style>
-                      .you{
-                        float: left;
-                        color: var(--white);
-                        background-color: var(--blue);
-                        align-self: flex-start;
-                        -webkit-animation-name: slideFromLeft;
-                        animation-name: slideFromLeft;
-                      }
-                      .me{
-                        float: right;
-                        color: var(--dark);
-                        background-color: #eceff1;
-                        align-self: flex-end;
-                        -webkit-animation-name: slideFromRight;
-                        animation-name: slideFromRight;
-                      }
-                    </style>`;
-            chat_msg += $(".active-chat").html();
+            res = JSON.parse(data);            
+            chat_msg = $("#trans_msg").html();
             if (res.email) {
               $.ajax({
                 url: "<?=base_url().'message/send_sms'?>",
@@ -728,6 +713,22 @@ function after_load(){
         });
     }
   });
+
+  function get_msg(uid){
+    db.collection("messages").orderBy('created_at','desc').where('comp_id','==',comp_id).get()
+          .then(function(msgSnapshot) {           
+            tmsg = ''
+              msgSnapshot.forEach(function(msg) {             
+                trans_msg_data  = msg.data();
+                if (trans_msg_data.sender_id == uid) {
+                  tmsg += 'you - '+trans_msg_data.message+' '+trans_msg_data.time+'<br>';
+                }else if (trans_msg_data.receiver_id == uid) {
+                  tmsg += 'Agent - '+trans_msg_data.message+' '+trans_msg_data.time+'<br>';
+                }               
+              });
+              $('#trans_msg').html(tmsg);
+          });
+  }
 
 </script>
 
