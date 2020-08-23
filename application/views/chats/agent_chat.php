@@ -688,6 +688,7 @@ function after_load(){
     if (confirm('Are you sure?')) {
         a = document.querySelector('.active-chat');
         uid = a.getAttribute('data-chat');
+        get_msg(uid);
         $.ajax({
           url: "<?=base_url().'enquiry/get_enquiry_by_code/'?>"+uid,
           type:"POST",
