@@ -1,14 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title></title>
+  
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+  
+
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+
+  <!-- firebase -->
   <script src="https://www.gstatic.com/firebasejs/7.18.0/firebase-app.js"></script>  
   <script src="https://www.gstatic.com/firebasejs/7.18.0/firebase-analytics.js"></script>  
   <script src="https://www.gstatic.com/firebasejs/7.18.0/firebase-auth.js"></script>
   <script src="https://www.gstatic.com/firebasejs/7.18.0/firebase-firestore.js"></script>
 
-
+</head>
+<body style="background-color: unset;">
 <style type="text/css">
 	*, *:before, *:after {
   box-sizing: border-box;
 }
-
 :root {
   --white: #fff;
   --black: #000;
@@ -19,9 +36,6 @@
   --wrapper-agent: 1000px;
   --blue: #00b0ff;
 }
-
-
-
 .wrapper-agent {
   position: relative;
   left: 50%;
@@ -35,8 +49,8 @@
   position: relative;
   top: 50%;
   left: 50%;
-  width: 80%;
-  height: 75%;
+  /*width: 80%;
+  height: 75%;*/
   background-color: var(--white);
   -webkit-transform: translate(-50%, -50%);
           transform: translate(-50%, -50%);
@@ -400,7 +414,7 @@
 }
 
 </style>
-<br>
+
 <div class="wrappe-agent">
     <div class="container-agent">
         <div class="left">
@@ -415,13 +429,13 @@
             <div class="top">
               <span>To: <span class="name"></span>
               </span>
-              <a href="javascript:void(0)" id="send_trans" class="btn btn-sm btn-primary pull-right" style="margin-top: -6px;">Send Chat Transcript</a>
+              <a href="javascript:void(0)" id="send_trans" class="btn btn-sm btn-primary float-right" style="margin-top: -6px;">Send Chat Transcript</a>
             </div>           
             <div class="write">
                 <!-- <a href="javascript:;" class="write-link attach"></a> -->
                 <input type="text" id="chat-input"/>
                 <!-- <a href="javascript:;" class="write-link smiley"></a> -->
-                <a href="javascript:;" class="write-link send"><i class="fa fa-paper-plane"></i></a>
+                <a href="javascript:;" class="write-link send btn btn-primary btn-sm float-right" style="margin-top: 5px;"><i class="fa fa-paper-plane"></i></a>
             </div>
         </div>
     </div>
@@ -456,14 +470,7 @@ function after_load(){
 	  chat.container.querySelector('[data-chat="' + chat.person + '"]').classList.add('active-chat');
 	  friends.name = f.querySelector('.person .name').innerText;
 	  chat.name.innerHTML = friends.name;
-
     mark_read(chat.person);
-/*
-    db.collection("users").doc("frank").update({
-    "age": 13,
-    "favorites.color": "Red"
-
-    });*/
 	}
 }
 
@@ -502,9 +509,7 @@ function after_load(){
             msgSnapshot.forEach(function(msg) {             
 
               msg_data  = msg.data();
-              console.log(msg_data);
-              console.log(msg.id);
-
+             
               db.collection("messages").doc(msg_data.unq_id).update({
                   "unread": 0
               });
@@ -607,9 +612,9 @@ function after_load(){
         		  receiver_id: uid,
         		  comp_id:"<?=$this->session->companey_id?>",
               unread:0,          
-              created_at:firebase.database.ServerValue.TIMESTAMP,
-              unq_id:unq_id
-        		})
+              unq_id:unq_id,
+              created_at:firebase.firestore.FieldValue.serverTimestamp()
+            })
         		.then(function(docRef) {		  
         		})
         		.catch(function(error) {
@@ -682,6 +687,7 @@ function after_load(){
 	const msg = db.collection('messages').orderBy('created_at','asc').where('comp_id','==',comp_id);
 	const msg_observer = msg.onSnapshot(docSnapshot => {	  
 	   	docSnapshot.docChanges().forEach(change => {	   		
+        console.info(change.doc.data());
 	   	  html_msg = '';
 	      if (change.type === 'added') {
 	      	msg1_data	=	change.doc.data();	        
@@ -757,6 +763,7 @@ function after_load(){
   }
 
 </script>
-
+</body>
+</html>
 
  

@@ -15,10 +15,14 @@ class Chat extends CI_Controller {
 			echo "Something went wrong with chat!";
 		}
 	}
-	public function agent_chat(){		
+	public function agent_chat(){				
+		$data = array();
+		$this->load->view('chats/agent_chat',$data);	
+	}
+	public function chat_admin(){
 		$data['title'] = 'Chat';
-		$data['content'] = $this->load->view('chats/agent_chat',$data,true);	
-        $this->load->view('layout/main_wrapper', $data);
+		$data['content'] = $this->load->view('chats/chat_admin',$data,true);	
+        $this->load->view('layout/main_wrapper', $data);		
 	}
 	public function submit_identity($comp_id,$created_by,$process_id=2){
 		

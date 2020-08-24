@@ -277,8 +277,9 @@ if (!empty($this->session->mobile)) {
     const msg = db.collection('messages').orderBy('created_at').where('comp_id','==',comp_id);
     const msg_observer = msg.onSnapshot(docSnapshot => {          
         docSnapshot.docChanges().forEach(change => {                  
+            console.log(docSnapshot.docChanges());
           if (change.type === 'added') {
-            msg1_data = change.doc.data();          
+            msg1_data = change.doc.data(); 
             uid = msg1_data.receiver_id;      
             if (isNaN(msg1_data.sender_id) && msg1_data.sender_id == "<?=$this->session->user_id?>") {
               uid = msg1_data.sender_id;
