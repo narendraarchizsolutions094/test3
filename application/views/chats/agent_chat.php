@@ -456,6 +456,8 @@ function after_load(){
 	  chat.container.querySelector('[data-chat="' + chat.person + '"]').classList.add('active-chat');
 	  friends.name = f.querySelector('.person .name').innerText;
 	  chat.name.innerHTML = friends.name;
+
+
 /*
     db.collection("users").doc("frank").update({
     "age": 13,
@@ -498,13 +500,15 @@ function after_load(){
       const msg = db.collection('messages').where('sender_id','==',uid).get()
       .then(function(msgSnapshot) {           
             msgSnapshot.forEach(function(msg) {             
+
               msg_data  = msg.data();
               console.log(msg_data);
-              console.log(msg);
-              /*db.collection("messages").doc("frank").update({
-                  "age": 13,
-                  "favorites.color": "Red"
-              });*/
+              console.log(msg.id);
+
+              db.collection("messages").doc(msg_data.unq_id).update({
+                  "unread": 0
+              });
+
             });
           });
     }  
@@ -573,11 +577,14 @@ function after_load(){
 
     function send_message(msg){
 		a = document.querySelector('.active-chat');
-	 uid = a.getAttribute('data-chat');
+	  uid = a.getAttribute('data-chat');
 		var agent_id = "<?=$this->session->user_id?>";      
-		datetime = "<?=date('Y-m-d h:i:sa')?>";       
-
-		db.collection("messages").add({
+    datetime = "<?=date('Y-m-d h:i:sa')?>";       
+		
+    timstmp = "<?=strtotime(date('Y-m-d h:i:sa'))?>";       
+    unq_id = uid+'_'+timstmp;
+		
+    db.collection("messages").doc(unq_id).set({
 		  id:uid+'_'+agent_id,
 		  time: datetime,
 		  message: msg,
@@ -586,6 +593,7 @@ function after_load(){
 		  comp_id:"<?=$this->session->companey_id?>",
       unread:1,          
       created_at:firebase.database.ServerValue.TIMESTAMP,
+      unq_id:unq_id
 		})
 		.then(function(docRef) {		  
 		})

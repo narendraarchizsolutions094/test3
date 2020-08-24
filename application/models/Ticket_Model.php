@@ -84,7 +84,7 @@ class Ticket_Model extends CI_Model {
 					
 					$insarr = array("tck_id" 	=> $insid,
 									"parent" 	=> 0,
-									"subj"   	=> "",
+									"subj"   	=> "Ticked Created",
 									"msg"    	=> ($this->input->post("remark", true)) ? $this->input->post("remark", true) : '' ,
 									"attacment" => "",
 									"status"  	=> 0,

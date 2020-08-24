@@ -247,7 +247,9 @@ if (!empty($this->session->mobile)) {
     }
     function send_message(msg){
       var agent_id = $("#agent_id").val();      
-      datetime = "<?=date('Y-m-d h:i:sa')?>";       
+      datetime = "<?=date('Y-m-d h:i:sa')?>"; 
+      timstmp = "<?=strtotime(date('Y-m-d h:i:sa'))?>";       
+      unq_id = "<?=$this->session->user_id?>"+'_'+timstmp;      
       db.collection("messages").add({
           id:"<?=$this->session->user_id?>"+"_"+agent_id,
           time: datetime,
@@ -256,7 +258,8 @@ if (!empty($this->session->mobile)) {
           receiver_id: agent_id,
           comp_id:"<?=$this->session->companey_id?>",
           unread:1,          
-          created_at:firebase.firestore.FieldValue.serverTimestamp()
+          created_at:firebase.firestore.FieldValue.serverTimestamp(),
+          unq_id:unq_id
       })
       .then(function(docRef) {                
           $("#chat-input").val('');                 

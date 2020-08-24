@@ -1215,8 +1215,8 @@ if($root=='https://student.spaceinternationals.com'){  ?>
           </a>
                 </li>
 
-          <li class="treeview <?php echo (($segment1 == "schedule") ? "active" : null) ?>" style="<?php if(in_array(310,$module) || in_array(311,$module) || in_array(312,$module) || in_array(313,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
-                    <a href="<?php echo base_url("ticket/index") ?>"><i class="fa fa-language" style="color:#fff;font-size:18px;background:#FF00FF;padding:7px;border-radius:4px;width:30px;"></i> &nbsp;<?php echo display('ticketing') ?>
+          <li class="treeview <?php echo (($segment1 == "ticket") ? "active" : null) ?>" style="<?php if(in_array(310,$module) || in_array(311,$module) || in_array(312,$module) || in_array(313,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
+                    <a href="<?php echo base_url("ticket/index") ?>"><i class="fa fa-tasks" style="color:#fff;font-size:18px;background:#FF00FF;padding:7px;border-radius:4px;width:30px;"></i> &nbsp;<?php echo display('ticketing') ?>
           <?php  if($this->session->menu==1){ ?></br><p style="color:#fff;font-size:9px;margin-left:-12px;padding-top:10px;"><?php echo display('ticketing') ?></p> <?php } ?>
           </a>
                 </li>

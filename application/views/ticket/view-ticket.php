@@ -1,9 +1,4 @@
-
-<link href="<?= base_url('assets/datatables/css/dataTables.min.css') ?>" rel="stylesheet" type="text/css"/> 
-        <script src="<?php echo base_url('assets/js/jquery.min.js') ?>" type="text/javascript"></script>
-		<style>
 <style>
-
   /* select2 css start*/
   .select2-container--default .select2-selection--single .select2-selection__arrow b:before {
     content: "";
@@ -261,24 +256,6 @@
 							<div class="row">
 					<div class="col-md-12">
 						<h4> Ticket :<small><?php echo $ticket->ticketno; ?></small> 
-						
-						<div style="float:right">
-            <div class="btn-group" role="group" aria-label="Button group">
-               <a class="btn" onclick="window.location.reload();" title="Refresh">
-               <i class="fa fa-refresh icon_color"></i>
-               </a>  
-            </div>
-            <div class="btn-group" role="group" aria-label="Button group">
-               <a class="dropdown-toggle" href="<?php echo base_url("ticket/add"); ?>" title="Add New Ticket"> <i class="fa fa-plus" style="background:#fff !important;border:none!important;color:green;"></i></a>&nbsp;&nbsp;&nbsp;
-            </div>
-            
-            <div class="btn-group" role="group" aria-label="Button group">
-               <a class="btn" href="<?php echo base_url("ticket"); ?>" title="Refresh">
-               <i class="fa fa-arrow-left icon_color"></i>
-               </a>                                                    
-            </div>
-         </div>
-						
 						</h4>
 					</div>
 				</div>
@@ -286,130 +263,89 @@
 				<div class="panel-body" style = "padding-top:0px;">
 					<div class="col-md-3 col-height" style = "text-align:center;background:#fff;">
 					<div class="row">
-						<?php echo form_open(base_url("ticket/view/".$ticket->ticketno)); ?>
-						   <?php
-            $string =  $ticket->clientname;            
-            function initials($str) {     
-                $ret = '';
-                foreach (explode(' ', $str) as $word)
-                $ret .= strtoupper(substr($word,0,1));
-                return $ret; 
-            }       
-            ?>
-         <div class="avatar" style="margin-top:5%;margin-left:-15%;">
-            <p data-lettersbig="<?php echo initials($string);?>"> </p>
-         </div>
-					<h5 style="text-align:center"><br><br><?php echo $ticket->clientname; ?>  
-						<br><?php echo $ticket->gender; ?>            <br>
-							<a href="javascript:void(0)" onclick="send_parameters(&quot;.<?php echo $ticket->phone; ?>.&quot;)"><?php echo $ticket->phone; ?></a>
-							<br><?php echo $ticket->email; ?>          
-						 </h5>
+						<?php echo form_open(base_url("ticket/view/".$ticket->ticketno)); ?><br>
 						 <h4 class="col-md-12">Reply To Client</h4>
-							<div class="col-md-12">
+							<div class="">
 									<div class="form-group">
-									  
 										<input  type ="text" name = "name" value ="<?php echo $ticket->clientname; ?> " class="form-control" placeholder="Name">
 									</div>
 								</div>
-								<div class="col-md-12">
+								<div class="">
 									<div class="form-group">
-                   
 										<input  type ="text" name = "email" value ="<?php echo $ticket->email; ?> " class="form-control"  placeholder="Email">
 									</div>
 								</div>
-								<div class="col-md-12">
-
+								<div class="">
 									<div class="form-group">
-                     
 										<input  type ="text" name = "subjects" class="form-control"  placeholder="Subject">
 									</div>
 								</div>
-								<div class="col-md-12">
+								<div class="">
 									<div class="form-group">
-                    
 										<textarea name="reply" class="form-control"  placeholder="Reply"></textarea>
 									</div>
 								</div>
-								
-								<div class = "col-md-12 text-center">
+								<div class="text-center">
 									<input type ="hidden" name = "ticketno" value = "<?php echo $ticket->id; ?>">
 									<input type ="hidden" name = "client" value = "<?php echo $ticket->client; ?>">
 									<button type ="submit" class="btn btn-success">Send</button>
 								</div>
 						<?php echo form_close(); ?>
-						
 						</div>
 					</div>
-				<div class="col-md-6 card card-body col-height" style ="    border: 1px solid #c8ced3;
-    padding: 15px;
-    border-top: none;">
-		
-				
-			
+				<div class="col-md-6 card card-body col-height" style="border: 1px solid #c8ced3;padding: 15px;border-top: none;">
 			<div class="row col-height">
-				<div class="col-md-4">
+				<div class="col-md-6">
 					<div class="form-group">
 						<label>Name</label> 
-						<span class="form-control"><?php echo $ticket->clientname; ?></span>
+						<input type="text" class="form-control" value="<?php echo $ticket->clientname;?>" disabled>
 					</div>
 				</div>
-				<div class="col-md-4">
+				<div class="col-md-6">
 					<div class="form-group">
 						<label>Email</label>
-						<span class="form-control"><?php echo $ticket->email; ?></span>
+						<input type="email" class="form-control" value="<?php echo $ticket->email; ?>" disabled>
 					</div>
 				</div>
-				<div class="col-md-4">
+				<div class="col-md-6">
 					<div class="form-group">
 						<label>Phone</label>
-						<span class="form-control"><?php echo $ticket->clientname; ?></span>
+						<input type="text" class="form-control" value="<?php echo $ticket->clientname;?>" disabled>
 					</div>
 				</div>
-		
-				<div class="col-md-4">
+				<div class="col-md-6">
 					<div class="form-group">
 						<label>Product</label>
-						<span class="form-control"><?php echo $ticket->country_name; ?></span>
+						<input type="text" class="form-control" value="<?php echo $ticket->country_name; ?>" disabled>
 					</div>
 				</div>
-				<div class="col-md-4">
+				<div class="col-md-6">
 					<div class="form-group">
 						<label>Related To</label>
-						<span class="form-control"><?php echo ucwords($ticket->category); ?></span>
+						<input type="text" class="form-control" value="<?php echo ucwords($ticket->category); ?>" disabled>
 					</div>
 				</div>
-				<div class="col-md-4">
+				<div class="col-md-6">
 					<div class="form-group">
 						<label>Priority</label>
 					<?php
-						if($ticket->	priority == 1){
-							
+						if($ticket->priority == 1){
 							?><span class="badge badge-info">Low</span><?php
-						}else if($ticket->	priority == 2){
-							
+						}else if($ticket->priority == 2){
 							?><span class="badge badge-warning">Medium</span><?php
-						}else if($ticket->	priority == 3){
-							
+						}else if($ticket->priority == 3){
 							?><span class="badge badge-danger">High</span><?php
 						}
 						?>
-						
 					</div>
 				</div>
 				<div class="col-md-12">
 					<label>Remark</label>
-					<div style = "    padding: 10px;
-    border: 1px solid #e5e1e1;
-    margin-right: 25px;
-    border-radius: 10px;font-size:16px;margin-bottom:10px;"><?php echo $ticket->	message; ?></div>
-				
+					<div style = "padding: 10px;border: 1px solid #e5e1e1;margin-right:25px;border-radius: 10px;font-size:16px;margin-bottom:10px;"><?php echo $ticket->	message; ?></div>
 				</div>
-				<div class = "col-md-12">
-										<div class="row">
-					<div class="col-md-12" style  ="background: #f7f7f7;
-    border: 1px solid #ccc;
-    padding: 15px;
-    border-radius: 10px;margin-bottom:25px;">
+				<div class="col-md-12">
+						<div class="row">
+					<div class="col-md-12" style ="background: #f7f7f7;border: 1px solid #ccc;padding: 15px;border-radius: 10px;margin-bottom:25px;">
 					<?php echo form_open(base_url("ticket/view/".$ticket->ticketno)); ?>
 						<div class="row">
 						<div class = "col-md-12">
@@ -425,12 +361,9 @@
 										<option value = ""></option>
 									<?php if(!empty($problem)) {
 											foreach($problem as $ind => $prblm){
-												
 												?><option value = "<?php echo $prblm->title; ?>" <?php echo ($ticket->	issue == $prblm->title) ? "selected" : "" ?>><?php echo $prblm->title; ?></option><?php
 											}	
-											
 										} ?>
-							
 									</select>
 								</div>
 							</div>
@@ -445,10 +378,9 @@
 									</select>
 								</div>
 							</div>
-							
 							<div class="col-md-3">
 								<div class="form-group">
-									<label>Update Status </label>
+									<label>Status </label>
 									<select class="form-control" name = "status">
 										<option value = ""></option>
 										<option value = "0" <?php echo ($ticket->status == 0) ? "selected" : "" ?>>Unread</option>
@@ -467,30 +399,21 @@
 						</div>
 						<?php echo form_close(); ?>
 					</div>
-					
-						</div>	
-		
-
+				</div>	
 				</div>
 				</div>
-				
 			</div>
 				<div class="col-md-3 col-height" >
 					  <h3 class="text-center">Activity Timeline</h3><hr>
           <ul class="cbp_tmtimeline" style="margin-left:-30px;">
-
               <?php
 			if(!empty($conversion)){		
               foreach($conversion as $cnv){ ?>
-            
                 <li>
                   <div class="cbp_tmicon cbp_tmicon-phone" style="background:#cb4335;"></div>
                   <div class="cbp_tmlabel"  style="background:#95a5a6;">
                     <span style="font-weight:900;font-size:15px;"><?php echo $cnv->subj; ?></span></br>
-                   
-                    <span style="font-weight:900;font-size:12px;"><?php echo $cnv->msg; ?></span>
-                   
-                   
+                    <span style="font-weight:900;font-size:12px;"><?php echo $cnv->msg; ?></span>                   
                     <p><?php echo date("j-M-Y h:i:s a",strtotime($cnv->send_date)); ?><br>
                    </p>
                   </div>
@@ -499,14 +422,7 @@
               }
               ?>              
             </ul>
-				
 				</div>
 			</div>
 			</div>
-        </div>            
-          
-<!-- jquery-ui js -->
-<script src="<?php echo base_url('assets/js/jquery-ui.min.js') ?>" type="text/javascript"></script>      
-<!-- DataTables JavaScript -->
-<script src="<?php echo base_url("assets/datatables/js/dataTables.min.js") ?>"></script>  
-<script src="<?php echo base_url() ?>assets/js/custom.js" type="text/javascript"></script>
+    </div>            
