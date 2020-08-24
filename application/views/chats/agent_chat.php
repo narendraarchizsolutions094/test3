@@ -404,7 +404,7 @@
 <div class="wrappe-agent">
     <div class="container-agent">
         <div class="left">
-            <div class="top">
+            <div class="top" style="display: none;">
                 <!-- <input type="text" placeholder="Search" />
                 <a href="javascript:;" class="fa fa-search btn btn-circle btn-default btn-sm search"></a> -->
             </div>
@@ -600,7 +600,7 @@ function after_load(){
 		  sender_id: "<?=$this->session->user_id?>",
 		  receiver_id: uid,
 		  comp_id:"<?=$this->session->companey_id?>",
-      unread:1,          
+      unread:0,          
       created_at:firebase.database.ServerValue.TIMESTAMP,
       unq_id:unq_id
 		})
@@ -739,9 +739,9 @@ function after_load(){
               msgSnapshot.forEach(function(msg) {             
                 trans_msg_data  = msg.data();
                 if (trans_msg_data.sender_id == uid) {
-                  tmsg += 'you - '+trans_msg_data.message+' '+trans_msg_data.time+'<br>';
+                  tmsg += '<b>You - </b>'+trans_msg_data.message+' <small>'+trans_msg_data.time+'</small><br>';
                 }else if (trans_msg_data.receiver_id == uid) {
-                  tmsg += 'Agent - '+trans_msg_data.message+' '+trans_msg_data.time+'<br>';
+                  tmsg += '<b>Agent - </b>'+trans_msg_data.message+' <small>'+trans_msg_data.time+'</small><br>';
                 }               
               });
               $('#trans_msg').html(tmsg);
