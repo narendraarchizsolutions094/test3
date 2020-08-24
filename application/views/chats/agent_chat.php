@@ -584,31 +584,39 @@ function after_load(){
       return result;
     }
 
-    function send_message(msg){
-		a = document.querySelector('.active-chat');
-	  uid = a.getAttribute('data-chat');
-		var agent_id = "<?=$this->session->user_id?>";      
-    datetime = "<?=date('Y-m-d h:i:sa')?>";       
-		
-    timstmp = "<?=strtotime(date('Y-m-d h:i:sa'))?>";           
-    unq_id = uid+'_'+timstmp+'_'+makeid(5);
-		
-    db.collection("messages").doc(unq_id).set({
-		  id:uid+'_'+agent_id,
-		  time: datetime,
-		  message: msg,
-		  sender_id: "<?=$this->session->user_id?>",
-		  receiver_id: uid,
-		  comp_id:"<?=$this->session->companey_id?>",
-      unread:0,          
-      created_at:firebase.database.ServerValue.TIMESTAMP,
-      unq_id:unq_id
-		})
-		.then(function(docRef) {		  
-		})
-		.catch(function(error) {
-		  console.error("Error adding document: ", error);
-		});
+  function send_message(msg){
+
+    
+    $.ajax({
+          url: "<?=base_url().'chat/get_current_date_time'?>",
+          type:"POST",
+          success: function(data){            
+        		
+            a = document.querySelector('.active-chat');
+        	  uid = a.getAttribute('data-chat');
+        		var agent_id = "<?=$this->session->user_id?>";          
+
+            datetime = data;       		
+            timstmp = new Date().getTime();                       
+            unq_id = uid+'_'+timstmp+'_'+makeid(5);		
+            db.collection("messages").doc(unq_id).set({
+        		  id:uid+'_'+agent_id,
+        		  time: datetime,
+        		  message: msg,
+        		  sender_id: "<?=$this->session->user_id?>",
+        		  receiver_id: uid,
+        		  comp_id:"<?=$this->session->companey_id?>",
+              unread:0,          
+              created_at:firebase.database.ServerValue.TIMESTAMP,
+              unq_id:unq_id
+        		})
+        		.then(function(docRef) {		  
+        		})
+        		.catch(function(error) {
+        		  console.error("Error adding document: ", error);
+        		});
+          }
+        });
     }      
 
     function generate_message(msg, type,uid) {

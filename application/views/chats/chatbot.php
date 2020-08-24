@@ -244,26 +244,32 @@ if (!empty($this->session->mobile)) {
       return result;
     }
     function send_message(msg){
-      var agent_id = $("#agent_id").val();      
-      datetime = "<?=date('Y-m-d h:i:sa')?>"; 
-      timstmp = "<?=strtotime(date('Y-m-d h:i:sa'))?>";       
-      unq_id = "<?=$this->session->user_id?>"+'_'+timstmp+'_'+makeid(5);      
-      db.collection("messages").doc(unq_id).set({
-          id:"<?=$this->session->user_id?>"+"_"+agent_id,
-          time: datetime,
-          message: msg,
-          sender_id: "<?=$this->session->user_id?>",
-          receiver_id: agent_id,
-          comp_id:"<?=$this->session->companey_id?>",
-          unread:1,          
-          created_at:firebase.firestore.FieldValue.serverTimestamp(),
-          unq_id:unq_id
-      })
-      .then(function(docRef) {                
-          $("#chat-input").val('');                 
-      })
-      .catch(function(error) {
-          console.error("Error adding document: ", error);
+          $.ajax({
+          url: "<?=base_url().'chat/get_current_date_time'?>",
+          type:"POST",
+          success: function(data){            
+            var agent_id = $("#agent_id").val();      
+            datetime = data; 
+            timstmp = new Date().getTime();                       
+            unq_id = "<?=$this->session->user_id?>"+'_'+timstmp+'_'+makeid(5);     
+            db.collection("messages").doc(unq_id).set({
+                id:"<?=$this->session->user_id?>"+"_"+agent_id,
+                time: datetime,
+                message: msg,
+                sender_id: "<?=$this->session->user_id?>",
+                receiver_id: agent_id,
+                comp_id:"<?=$this->session->companey_id?>",
+                unread:1,          
+                created_at:firebase.firestore.FieldValue.serverTimestamp(),
+                unq_id:unq_id
+            })
+            .then(function(docRef) {                
+                $("#chat-input").val('');                 
+            })
+            .catch(function(error) {
+                console.error("Error adding document: ", error);
+            });
+          }
       });
     } 
     comp_id = "<?=$this->session->companey_id?>"
