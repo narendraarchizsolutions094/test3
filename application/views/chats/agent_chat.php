@@ -457,7 +457,7 @@ function after_load(){
 	  friends.name = f.querySelector('.person .name').innerText;
 	  chat.name.innerHTML = friends.name;
 
-
+    mark_read(chat.person);
 /*
     db.collection("users").doc("frank").update({
     "age": 13,
@@ -508,7 +508,8 @@ function after_load(){
               db.collection("messages").doc(msg_data.unq_id).update({
                   "unread": 0
               });
-
+              $("#"+uid+"_unread").html('');
+              $("#"+uid+"_unread").hide();
             });
           });
     }  
@@ -569,11 +570,19 @@ function after_load(){
 	   $("#chat-input").val('');
 	    send_message(msg);	   
 	    a = document.querySelector('.active-chat');
-	    uid = a.getAttribute('data-chat');
-		
+	    uid = a.getAttribute('data-chat');		
 	    $("div[data-chat="+uid+"]").stop().animate({ scrollTop: $("div[data-chat="+uid+"]")[0].scrollHeight}, 1000);  	    
-
     });
+
+    function makeid(length) {
+      var result           = '';
+      var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+      var charactersLength = characters.length;
+      for ( var i = 0; i < length; i++ ) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+      }
+      return result;
+    }
 
     function send_message(msg){
 		a = document.querySelector('.active-chat');
@@ -581,10 +590,10 @@ function after_load(){
 		var agent_id = "<?=$this->session->user_id?>";      
     datetime = "<?=date('Y-m-d h:i:sa')?>";       
 		
-    timstmp = "<?=strtotime(date('Y-m-d h:i:sa'))?>";       
-    unq_id = uid+'_'+timstmp;
+    timstmp = "<?=strtotime(date('Y-m-d h:i:sa'))?>";           
+    unq_id = uid+'_'+timstmp+'_'+makeid(5);
 		
-    db.collection("messages").doc(unq_id).set({
+    db.collection("messages").doc(unq_id).add({
 		  id:uid+'_'+agent_id,
 		  time: datetime,
 		  message: msg,

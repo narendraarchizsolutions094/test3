@@ -245,11 +245,20 @@ if (!empty($this->session->mobile)) {
           console.error("Error adding document: ", error);
       });
     }
+    function makeid(length) {
+      var result           = '';
+      var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+      var charactersLength = characters.length;
+      for ( var i = 0; i < length; i++ ) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+      }
+      return result;
+    }
     function send_message(msg){
       var agent_id = $("#agent_id").val();      
       datetime = "<?=date('Y-m-d h:i:sa')?>"; 
       timstmp = "<?=strtotime(date('Y-m-d h:i:sa'))?>";       
-      unq_id = "<?=$this->session->user_id?>"+'_'+timstmp;      
+      unq_id = "<?=$this->session->user_id?>"+'_'+timstmp+'_'+makeid(5);      
       db.collection("messages").doc(unq_id).set({
           id:"<?=$this->session->user_id?>"+"_"+agent_id,
           time: datetime,
