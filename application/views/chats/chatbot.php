@@ -250,7 +250,7 @@ if (!empty($this->session->mobile)) {
       datetime = "<?=date('Y-m-d h:i:sa')?>"; 
       timstmp = "<?=strtotime(date('Y-m-d h:i:sa'))?>";       
       unq_id = "<?=$this->session->user_id?>"+'_'+timstmp;      
-      db.collection("messages").add({
+      db.collection("messages").doc(unq_id).set({
           id:"<?=$this->session->user_id?>"+"_"+agent_id,
           time: datetime,
           message: msg,
