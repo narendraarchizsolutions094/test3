@@ -593,7 +593,7 @@ function after_load(){
     timstmp = "<?=strtotime(date('Y-m-d h:i:sa'))?>";           
     unq_id = uid+'_'+timstmp+'_'+makeid(5);
 		
-    db.collection("messages").doc(unq_id).add({
+    db.collection("messages").doc(unq_id).set({
 		  id:uid+'_'+agent_id,
 		  time: datetime,
 		  message: msg,
