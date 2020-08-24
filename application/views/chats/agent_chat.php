@@ -250,7 +250,7 @@
   font-family: 'Source Sans Pro', sans-serif;
   font-weight: 400;
 }
-.container-agent .right .write .write-link.attach:before {
+/*.container-agent .right .write .write-link.attach:before {
   display: inline-block;
   float: left;
   width: 20px;
@@ -259,7 +259,7 @@
   background-image: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/382994/attachment.png");
   background-repeat: no-repeat;
   background-position: center;
-}
+}*/
 .container-agent .right .write .write-link.smiley:before {
   display: inline-block;
   float: left;
@@ -270,7 +270,7 @@
   background-repeat: no-repeat;
   background-position: center;
 }
-.container-agent .right .write .write-link.send:before {
+/*.container-agent .right .write .write-link.send:before {
   display: inline-block;
   float: left;
   width: 20px;
@@ -280,7 +280,7 @@
   background-image: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/382994/send.png");
   background-repeat: no-repeat;
   background-position: center;
-}
+}*/
 .container-agent .right .bubble {
   font-size: 16px;
   position: relative;
@@ -421,7 +421,7 @@
                 <!-- <a href="javascript:;" class="write-link attach"></a> -->
                 <input type="text" id="chat-input"/>
                 <!-- <a href="javascript:;" class="write-link smiley"></a> -->
-                <a href="javascript:;" class="write-link send"></a>
+                <a href="javascript:;" class="write-link send"><i class="fa fa-paper-plane"></i></a>
             </div>
         </div>
     </div>
@@ -671,7 +671,7 @@ function after_load(){
 	});
 
 	user_id = "<?=$this->session->user_id?>"
-	const msg = db.collection('messages').orderBy('created_at','desc').where('comp_id','==',comp_id);
+	const msg = db.collection('messages').orderBy('created_at','asc').where('comp_id','==',comp_id);
 	const msg_observer = msg.onSnapshot(docSnapshot => {	  
 	   	docSnapshot.docChanges().forEach(change => {	   		
 	   	  html_msg = '';
