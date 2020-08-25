@@ -796,13 +796,18 @@ if($coment_type == 1){
             $lead_code = $data['enquiry']->Enquery_id;
             $this->Leads_Model->add_comment_for_events('Converted to client', $lead_code);
             $msg = 'Lead Convert to Client Successfully';
-            if ($this->session->companey_id == 76) {
+            if ($this->session->companey_id == 76 || ($this->session->companey_id == 57 && $data['enquiry']->product_id == 122) ) {
                 $user_right = '';
                 if ($data['enquiry']->product_id == 168) {
                     $user_right = 180; 
                 }else if ($data['enquiry']->product_id == 169) {
                     $user_right = 186;
+                } 
+
+                if($this->session->companey_id == 57){
+                    $user_right = 200;
                 }
+                
                 $postData = array(
                         's_display_name'  =>    $data['enquiry']->name,
                         'last_name'       =>    $data['enquiry']->lastname,  

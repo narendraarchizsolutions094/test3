@@ -956,7 +956,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
 				  
 				 <li class="treeview" style="<?php if(in_array(440,$module) || in_array(441,$module) || in_array(442,$module) || in_array(443,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
                      <a href="#">
-                      <i class="fa fa-cog" style="color:#fff;font-size:15px;background:#f1c40f;padding:7px;border-radius:4px;width:30px;"></i> Inventory
+                      <i class="fa fa-cart-plus" style="color:#fff;font-size:15px;background:#f1c40f;padding:7px;border-radius:4px;width:30px;"></i> Inventory
                       <span class="pull-right-container">
                         <i class="fa fa-angle-left pull-right"></i>
                       </span>
@@ -1268,11 +1268,11 @@ if($root=='https://student.spaceinternationals.com'){  ?>
           </li>
     <?php } ?>
           <?php if(user_access(440) || user_access(441) || user_access(442) || user_access(443) ) { ?>
-           <li class="treeview <?php echo (($segment1 == "setting") ? "active" : null) ?>" style="display:block">
+      <!--      <li class="treeview <?php echo (($segment1 == "setting") ? "active" : null) ?>" style="display:block">
                     <a href="<?php echo base_url("setting/enquiryDuplicacySetting") ?>"><i class="fa fa-gear" style="color:#fff;font-size:18px;background:#f4d03f;padding:7px;border-radius:4px;width:30px;"></i> &nbsp;<?php echo display("new_setting") ?>
           
           </a>
-                  </li>
+                  </li> -->
           <?php } ?>
           <li class="treeview <?php echo (($this->uri->segment(1) == "website") ? "active" : null) ?>" style="<?php if(in_array(290,$module) || in_array(291,$module) || in_array(292,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
                             <a href="#">
