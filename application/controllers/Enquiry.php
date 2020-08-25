@@ -76,7 +76,7 @@ class Enquiry extends CI_Controller {
 
 
     }
-       public function get_update_enquery_comission_content(){
+    public function get_update_enquery_comission_content(){
         $id            =   $this->input->post('id');
         $Enquiry_id    =   $this->input->post('Enquiry_id');
         $this->db->where('id',$id);
