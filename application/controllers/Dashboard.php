@@ -479,7 +479,7 @@ public function login_in_process(){
         if ($this->session->userdata('isLogIn') == false)
         redirect('login');
 
-        if ($this->session->userdata('user_type') == 201) // lalantop user
+        if ($this->session->userdata('user_right') == 201) // lalantop user
         redirect('buy');        
 
         $data = array();
