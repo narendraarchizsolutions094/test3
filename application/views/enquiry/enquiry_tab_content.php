@@ -378,8 +378,9 @@ if (user_access(450)) { ?>
             $uuid = base64_encode($this->session->user_id);
             $f_url = base_url().'public/survery/'.$form_id.'/'.$ucomp_id.'/'.$uenquiry_code.'/'.$uuid;
             ?>
-            <a onclick='share_form("<?=$f_url?>","<?=$details->email?>")' href='javascript:void(0)' class="btn btn-primary btn-sm">Share to user</a><br>
-            
+            <a onclick='share_form("<?=$f_url?>","<?=$details->email?>")' href='javascript:void(0)' class="btn btn-primary btn-sm">Share to user</a>
+            <br>
+            <br>            
           <?php
           }
           if(!empty($dynamic_field)) {
@@ -749,8 +750,21 @@ if (user_access(450)) { ?>
     var data = $("#"+input_name).val();    
     $("#multi-"+input_name).val(data);
   }
-  function share_form(f_url,email){
-    alert(f_url);
-    alert(email);
+  function share_form(f_url,email){    
+    if (email) {
+      $.ajax({
+        url: "<?=base_url().'message/send_sms'?>",
+        type:"POST",
+        data:{
+          mesge_type:3,
+          message_name:f_url,
+          email_subject:'Survey Form',
+          mail:email
+        },
+        success: function(data){
+          alert(data);
+        }
+      });
+    }
   }  
 </script>
