@@ -378,8 +378,8 @@ if (user_access(450)) { ?>
             $uuid = base64_encode($this->session->user_id);
             $f_url = base_url().'public/survery/'.$form_id.'/'.$ucomp_id.'/'.$uenquiry_code.'/'.$uuid;
             ?>
-            <a onclick='share_form("<?=$f_url?>","<?=$details->email?>")' href='javascript:void(0)' class="btn btn-primary btn-sm pull-right">Share to user</a>
-            ?>
+            <a onclick='share_form("<?=$f_url?>","<?=$details->email?>")' href='javascript:void(0)' class="btn btn-primary btn-sm">Share to user</a><br>
+            
           <?php
           }
           if(!empty($dynamic_field)) {
