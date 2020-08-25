@@ -786,13 +786,13 @@ if($root=='https://student.spaceinternationals.com'){  ?>
 				 } ?>
 				 
 				 
-				 
+				 <!-- 
                   <li class="treeview ">
                     <a href="<?php echo base_url("enq/index") ?>">
                     <i class="fa fa-question-circle-o" style="color:#fff;font-size:20px;background:#008080;padding:7px;border-radius:4px;width:30px;"></i> &nbsp;Category
                     <?php  if($this->session->menu==1){ ?></br><p style="color:#fff;font-size:9px;margin-left:-12px;padding-top:10px;"><?php echo display('enquiry') ?></p> <?php } ?>
           </a>
-          </li>
+          </li> -->
 
 
                </ul>
