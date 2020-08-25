@@ -750,7 +750,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
 					<?php } ?>
                </div>
                <ul class="sidebar-menu">
-         <?php if(($this->session->user_right!=151 && $this->session->user_right!=180 && $this->session->user_right!=186)){ ?>
+         <?php if(($this->session->user_right!=151 && $this->session->user_right!=180 && $this->session->user_right!=186 && $this->session->user_right!=200)){ ?>
                   <li class="<?php echo (($segment1 == 'dashboard') ? "active" : null) ?>">
                      <a href="<?php echo base_url('dashboard') ?>">
                      <i class="fa fa-home" style="color:#fff;font-size:17px;background:#2ecc71;padding:7px;border-radius:4px;width:30px;"></i> &nbsp;<?php echo display('dashboard') ?>
