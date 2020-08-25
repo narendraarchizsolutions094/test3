@@ -479,6 +479,9 @@ public function login_in_process(){
         if ($this->session->userdata('isLogIn') == false)
         redirect('login');
 
+        if ($this->session->userdata('user_type') == 201) // lalantop user
+        redirect('buy');        
+
         $data = array();
         $this->load->model('dash_model');
         if($this->session->userdata('user_right')==151 || $this->session->userdata('user_right')==180 || $this->session->userdata('user_right')==183)
