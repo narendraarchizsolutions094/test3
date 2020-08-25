@@ -114,7 +114,8 @@ if($root=='https://student.spaceinternationals.com'){  ?>
         <?php
       }else{
       if(in_array(220, $module)){
-          if(empty($this->session->telephony_token)){  ?>      
+          if(empty($this->session->telephony_token)){  
+            if(!empty($this->session->telephony_agent_id)){?>      
       <script>
         function send_parameters(phn){          
           var agent_id = "<?=$this->session->telephony_agent_id?>";
@@ -197,7 +198,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
           </iframe>
 
         </div>
-			<?php }else{?>
+			<?php } }else{?>
        <script>
         function send_parameters(phn){
       var x=phn.toString().length;
