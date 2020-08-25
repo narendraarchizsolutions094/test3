@@ -66,7 +66,7 @@ class Telephony extends CI_Controller {
               CURLOPT_TIMEOUT => 30,
               CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
               CURLOPT_CUSTOMREQUEST => "PUT",
-              CURLOPT_POSTFIELDS => "token=0811613982df3ad6b0ccaef5847364e9&receive_calls=".$atID."&uuid=".$this->session->telephony_agent_id,
+              CURLOPT_POSTFIELDS => "token=".$this->session->telephony_token."&receive_calls=".$atID."&uuid=".$this->session->telephony_agent_id,
               CURLOPT_HTTPHEADER => array(
                 "cache-control: no-cache",
                 "content-type: application/x-www-form-urlencoded",
@@ -168,6 +168,7 @@ class Telephony extends CI_Controller {
     $this->db->where('telephony_agent_id',$support_user_id);
     $res=$this->db->get('tbl_admin')->row();
     if(!empty($res)){
+    if(!empty($res->public_ivr_id)){    
     $curl = curl_init();
     curl_setopt_array($curl, array(  CURLOPT_URL => "https://obd-api.myoperator.co/obd-api-v1",
     CURLOPT_RETURNTRANSFER => true,  CURLOPT_CUSTOMREQUEST => "POST", 
@@ -185,6 +186,23 @@ class Telephony extends CI_Controller {
     "Content-Type: application/json"  ),));
     $response = curl_exec($curl);
     print_r($response);
+     }else{
+     $url = "https://developers.myoperator.co/clickOcall";
+        $data = array(
+        'token'=>$this->session->telephony_token,
+        'customer_number'=>$phone,
+        'customer_cc'=>91,
+        'support_user_id'=>$this->session->telephony_agent_id
+        );
+        $curl = curl_init();
+        curl_setopt( $curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+        curl_setopt($curl, CURLOPT_HTTPHEADER, array('application/x-www-form-urlencoded'));
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        $response = curl_exec( $curl );
+        curl_close( $curl );
+        print_r($response);
+        }
     }
     }
     

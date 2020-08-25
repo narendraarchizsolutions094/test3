@@ -235,8 +235,13 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                    }
                    });  
           }else{
+            if(typeof res.details !='undefined'){ 
+              var str = res.details;
+            }else{
+                var str = res.message;
+            }
              var str = res.details; 
-                         var matches = str.match(/(\d+)/); 
+              var matches = str.match(/(\d+)/); 
                      Swal.fire({            
                  html:'<strong>'+str+'</strong>',
                  showCancelButton: false,
