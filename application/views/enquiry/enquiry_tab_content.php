@@ -373,10 +373,10 @@ if (user_access(450)) { ?>
           <?php
           if ($tid == 48 || $tid==49) { 
             $form_id = base64_encode($tid);
-            $comp_id = base64_encode($this->session->companey_id);
-            $enquiry_code = base64_encode($details->Enquery_id);
-            $uid = base64_encode($this->session->user_id);
-            $f_url = base_url().'public/survery/'.$form_id.'/'.$comp_id.'/'.$enquiry_code.'/'.$uid;
+            $ucomp_id = base64_encode($this->session->companey_id);
+            $uenquiry_code = base64_encode($details->Enquery_id);
+            $uuid = base64_encode($this->session->user_id);
+            $f_url = base_url().'public/survery/'.$form_id.'/'.$ucomp_id.'/'.$uenquiry_code.'/'.$uuid;
             ?>
             <a onclick='share_form("<?=$f_url?>","<?=$details->email?>")' href='javascript:void(0)' class="btn btn-primary btn-sm pull-right">Share to user</a>
             ?>
