@@ -751,7 +751,7 @@ if (user_access(450)) { ?>
     $("#multi-"+input_name).val(data);
   }
   function share_form(f_url,email){    
-    if (email) {
+    if (confirm('Are you sure ?')) {
       $.ajax({
         url: "<?=base_url().'message/send_sms'?>",
         type:"POST",
