@@ -371,6 +371,17 @@ if (user_access(450)) { ?>
           
           <hr>
           <?php
+          if ($tid == 48 || $tid==49) { 
+            $form_id = base64_encode($tid);
+            $comp_id = base64_encode($this->session->companey_id);
+            $enquiry_code = base64_encode($details->Enquery_id);
+            $uid = base64_encode($this->session->user_id);
+            $f_url = base_url().'public/survery/'.$form_id.'/'.$comp_id.'/'.$enquiry_code.'/'.$uid;
+            ?>
+            <a onclick='share_form("<?=$f_url?>","<?=$details->email?>")' href='javascript:void(0)' class="btn btn-primary btn-sm pull-right">Share to user</a>
+            ?>
+          <?php
+          }
           if(!empty($dynamic_field)) {
           ?>
           <div style="overflow-y: scroll;">
@@ -737,5 +748,9 @@ if (user_access(450)) { ?>
     var input_name = e.id;
     var data = $("#"+input_name).val();    
     $("#multi-"+input_name).val(data);
+  }
+  function share_form(f_url,email){
+    alert(f_url);
+    alert(email);
   }  
 </script>
