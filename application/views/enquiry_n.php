@@ -1,3 +1,7 @@
+<script src="<?=base_url()?>/assets/summernote/summernote-bs4.min.js"></script>
+<link href="<?=base_url()?>/assets/summernote/summernote-bs4.css" rel="stylesheet" />
+
+
 <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script> 
 <style>
@@ -679,7 +683,7 @@ input[name=lead_stages]{
                 </div>
                 <div class="form-group col-sm-12"> 
                 <label><?php echo display('message') ?></label>
-                <textarea class="form-control" name="message_name"  rows="10" id="template_message"></textarea>  
+                <textarea class="form-control summernote" name="message_name"  rows="10" id="template_message"></textarea>  
                 </div>
       </div>
       
@@ -1866,4 +1870,13 @@ function moveto_client(){
   }});
   }
 }
+
+  jQuery(document).ready(function(){
+    $('.summernote').summernote({
+        height: 200,                 // set editor height
+        minHeight: null,             // set minimum height of editor
+        maxHeight: null,             // set maximum height of editor
+        focus: false                 // set focus to editable area after initializing summernote
+    });
+  });
 </script>
