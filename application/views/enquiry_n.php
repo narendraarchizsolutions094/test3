@@ -258,6 +258,8 @@ input[name=lead_stages]{
               <?php
               }
               ?>
+              
+              <a class="btn " data-target="#sendsms" data-toggle="modal"  onclick="getTemplates('3','Send Email');" style="color:#000;cursor:pointer;border-radius: 2px;border-bottom: 1px solid #fff;"><?php echo display('send_bulk_email'); ?></a>               
 
               <?php if(user_access(220)) { if(!empty($this->session->telephony_token)){ ?>
                 <a class="btn "  onclick="autoDial()" style="color:#000;cursor:pointer;border-radius: 2px;border-bottom: 1px solid #fff;"><?php echo display('bulk_autodial'); ?></a>
