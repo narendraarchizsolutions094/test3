@@ -662,8 +662,8 @@ input[name=lead_stages]{
 </div>
 
 
-<div id="sendsms" class="modal fade" role="dialog">
-  <div class="modal-dialog">
+<div id="sendsms" class="modal fade " role="dialog">
+  <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -678,6 +678,10 @@ input[name=lead_stages]{
                 </select>
                 </div>
                 <div class="form-group col-sm-12"> 
+                  
+                  <label><?php echo display('subject') ?></label>
+                  <input type="text" name="email_subject" class="form-control" id="email_subject">
+
                 <label><?php echo display('message') ?></label>
                 <textarea class="form-control" name="message_name"  rows="10" id="template_message"></textarea>  
                 </div>
@@ -1184,6 +1188,13 @@ $('.checked_all1').on('change', function() {
 
 <script>
 	function getTemplates(SMS,type){
+     if(type != 'Send Email'){
+      $("#email_subject").hide();
+      $("#email_subject").prev().hide();
+    }else{
+      $("#email_subject").show();
+      $("#email_subject").prev().show();
+    }
 	$.ajax({
 	type: 'POST',
 	url: '<?php echo base_url();?>message/get_templates/'+SMS,
