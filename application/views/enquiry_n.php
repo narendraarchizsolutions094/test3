@@ -1204,7 +1204,7 @@ $('.checked_all1').on('change', function() {
 	    $('#modal-titlesms').html(type);
 	    $('#mesge_type').val(SMS);
 	    $('#templates').html(data);
-      $("#email_subject").val(data.mail_subject);
+      //$("#email_subject").val(data.mail_subject);
 
 	})
 	.fail(function() {
@@ -1252,6 +1252,7 @@ function  send_sms(){
                 var obj = JSON.parse(data);
                  $('#templates option[value='+tmpl_id+']').attr("selected", "selected");
                 $("#template_message").html(obj.template_content);
+                $("#email_subject").val(obj.mail_subject);
             }
             
         });
