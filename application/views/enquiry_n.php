@@ -1252,7 +1252,6 @@ function  send_sms(){
                 var obj = JSON.parse(data);
                  $('#templates option[value='+tmpl_id+']').attr("selected", "selected");
                 $("#template_message").html(obj.template_content);
-                $("#email_subject").val(obj.mail_subject);
             }
             
         });
@@ -1260,7 +1259,7 @@ function  send_sms(){
   }   
 </script>
  <script>
-    function getMessage(){
+    /*function getMessage(){
        id=document.getElementById('templates').value;
 		$.ajax({
 		type: 'POST',
@@ -1273,7 +1272,7 @@ function  send_sms(){
 		alert( "fail!" );
 
 		});
-	}
+	}*/
 
 function save_enquery(){
 	   
