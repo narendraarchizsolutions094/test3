@@ -1204,6 +1204,8 @@ $('.checked_all1').on('change', function() {
 	    $('#modal-titlesms').html(type);
 	    $('#mesge_type').val(SMS);
 	    $('#templates').html(data);
+      $("#email_subject").val(data.mail_subject);
+
 	})
 	.fail(function() {
 	    alert( "fail!" );
