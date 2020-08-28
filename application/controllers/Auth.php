@@ -7,8 +7,9 @@ class Auth extends CI_Controller {
 
 	}
 
-	public function signup_content(){
-		$this->load->view('signup');		
+	public function signup_content(){		
+		$data['c']	=	$this->input->post('c');
+		$this->load->view('signup',$data);		
 	}
 	public function signup(){
         $this->form_validation->set_rules('name', display('email'), 'required');
@@ -25,17 +26,33 @@ class Auth extends CI_Controller {
         $mobile	=	$this->input->post('mobile');
         $email	=	$this->input->post('email');
         $password =	$this->input->post('password');
-
+        if (base64_decode($this->input->post('c')) == 57) { // lalantop
+        	$user_comp_id = 57;
+        	$user_permissions = 201;        	
+        	$user_roles = 201;
+        	$user_type = 201;
+        	$user_process = '';
+        	$enq_process = 124;
+        	$enq_created_by = 273;
+        }else{ // space international
+        	$user_comp_id = 67;
+        	$user_permissions = 151;
+        	$user_roles = 151;
+        	$user_type = 151;
+        	$user_process = 146;
+        	$enq_process = 146;
+        	$enq_created_by = 295;
+        }
 		$postData = array(
 						's_display_name'  =>	$name,
 						's_user_email'    =>	$email,
 						's_phoneno'       =>	$mobile,
-						'companey_id' 	  =>	67,
+						'companey_id' 	  =>	$user_comp_id,
 						'b_status' 	  	  =>	1,
-						'user_permissions'=>    151,
-						'user_roles'	  =>    151,
-						'user_type'	  	  =>    151,
-						'process'     	  =>	146,
+						'user_permissions'=>    $user_permissions,
+						'user_roles'	  =>    $user_roles,
+						'user_type'	  	  =>    $user_type,
+						'process'     	  =>	$user_process,
 						's_password'	  =>    md5($password)
 					);
 		if ($this->form_validation->run()) {
@@ -46,8 +63,8 @@ class Auth extends CI_Controller {
 			$enq_code   = 	get_enquery_code();
 
 			$name 		= explode(' ', $name);
-			$fname   = $name[0];
-			$lname   = $name[1];
+			$fname   = !empty($name[0])?$name[0]:'';
+			$lname   = !empty($name[1])?$name[1]:'';
 
 			$enq_data 	= 	array(
 								'Enquery_id' => $enq_code,
@@ -55,19 +72,20 @@ class Auth extends CI_Controller {
 								'lastname'	 => $lname,
 								'email'      => $email,
 								'phone'      => $mobile,
-								'comp_id'    => 67,
+								'comp_id'    => $user_comp_id,
 								'status'     => 1,
-								'product_id' => 146,
-								'created_by' => 295								
+								'product_id' => $enq_process,
+								'created_by' => $enq_created_by								
 							);
 
 			$insert_id = $this->enquiry_model->create($enq_data);			
 			if ($insert_id) {
-				$this->load->model('Leads_Model');                                
-				$user_id = 295;                
-                $this->Leads_Model->add_comment_for_events_stage_api($this->lang->line("enquery_create"),$enq_code,'','','',$user_id,'');
-				$stage_id = 218; // payment done 			
-                $this->Leads_Model->add_comment_for_events_stage_api('Stage Updated',$enq_code,$stage_id,'','',$user_id,'');
+				$this->load->model('Leads_Model');                                				                
+                $this->Leads_Model->add_comment_for_events_stage_api($this->lang->line("enquery_create"),$enq_code,'','','',$enq_created_by,'');
+                if ($user_comp_id == 67) {
+					$stage_id = 218; // payment done 			
+	                $this->Leads_Model->add_comment_for_events_stage_api('Stage Updated',$enq_code,$stage_id,'','',$enq_created_by,'');                	
+                }
             }
 			$this->user_model->set_user_meta($user_id,array('payment_status'=>0));
 			$this->db->trans_complete(); # Completing transaction

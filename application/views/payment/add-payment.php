@@ -101,10 +101,19 @@
 															<td><?php echo (!empty($pay->advance_pay)) ? "<i class = 'fa fa-rupee'></i> ".$pay->advance_pay : " - "; ?></td>
 															<td><i class = 'fa fa-rupee'></i> <?php echo  $pay->pay; ?></td>
 															<td><?php echo (!empty($pay->balance)) ? "<i class = 'fa fa-rupee'></i> ".$pay->	balance : " - "; ?></td>
-															<td><?php 
-									
-																	echo $pay->	pay_mode;	
-																	 ?></td>
+															<td>
+																<?php 
+																if($pay->pay_mode == 1){
+																	echo "Online";
+																}else if ($pay->pay_mode == 2) {
+																	echo "Cash";
+																}else if ($pay->pay_mode == 3) {
+																	echo "Check/DD";
+																}else{
+																	echo "N/A";
+																}	
+																?>
+															</td>
 															<td><?php echo $pay->transaction_no ; ?></td>
 															<td><?php echo date("d, m Y", strtotime($pay->pay_date)); ?></td>
 															<td><?php echo date("d, m Y", strtotime($pay->	next_pay)); ?></td>
@@ -123,26 +132,25 @@
 																		Close
 																		<b class="fa fa-angle-up" aria-hidden="true"></b>
 																	</li>
-																	<?php if($this->session->mrole == 1 and $pay->	approve == 0) { ?>
-																			<li><a href="<?php echo urlencode(base64_encode(base64_encode($pay->id))); ?>" class="approve-pay">
-															<i class="fa fa-thumbs-up" aria-hidden="true"></i> Confirm</a></li>
+																	<?php if($this->session->mrole == 1 and $pay->approve == 0) { ?>
+																			<li>
+																				<a href="<?php echo urlencode(base64_encode(base64_encode($pay->id))); ?>" class="approve-pay">
+																				<i class="fa fa-thumbs-up" aria-hidden="true"></i> Confirm</a>
+																			</li>
 																	
 																	<?php } ?>	
 																	
 																	<li><a href="<?php echo base_url("payment/update/".urlencode(base64_encode(base64_encode($pay->id)))); ?>">
-															<i class="fe fe-edit" data-toggle="tooltip" title="" data-original-title="Edit"></i> Edit</a></li>
+																	<i class="fe fe-edit" data-toggle="tooltip" title="" data-original-title="Edit"></i> Edit</a></li>
 																	<li><a href="<?php echo base64_encode(base64_encode($pay->id)); ?>" class="delete-stocks">
-															<i class="fe fe-trash" data-toggle="tooltip" title="" data-original-title="Delete"></i> Delete</a></li>
-																		
+																	<i class="fa fa-trash" data-toggle="tooltip" title="" data-original-title="Delete"></i> Delete</a></li>
 																</ul>
 															</div>
 															<?php }else{
 																
 																?><!--<a href="<?php echo base64_encode(base64_encode($pay->id)); ?>" class="delete-payment btn btn-pill btn-xs btn-outline-warning">
 															<i class="fe fe-trash" data-toggle="tooltip" title="" data-original-title="Delete"></i> Delete</a> --><?php
-															} ?>
-														
-																	
+															} ?>																	
 															</td>
 														
 														</tr>
@@ -283,7 +291,7 @@
 													
 															<tr class = "text-center">
 																<td>
-																<?php $image = (!empty($pord->image)) ? base_url("assts/images/".$pord->image)  : base_url("assets/images/profile/33.png");  ?>
+																<?php $image = (!empty($pord->image)) ? base_url("assets/images/products/".$pord->image)  : base_url("assets/images/profile/33.png");  ?>
 																<p class="font-w600 mb-1"><img class="avatar brround" src="<?php  echo  $image; ?>"> </p>
 																
 																</td>

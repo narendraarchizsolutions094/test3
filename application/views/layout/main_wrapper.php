@@ -956,7 +956,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
 				  
 				 <li class="treeview" style="<?php if(in_array(440,$module) || in_array(441,$module) || in_array(442,$module) || in_array(443,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
                      <a href="#">
-                      <i class="fa fa-cart-plus" style="color:#fff;font-size:15px;background:#f1c40f;padding:7px;border-radius:4px;width:30px;"></i> Inventory
+                      <i class="fa fa-cart-plus" style="color:#fff;font-size:15px;background:#f1c40f;padding:7px;border-radius:4px;width:30px;"></i> E-commerce
                       <span class="pull-right-container">
                         <i class="fa fa-angle-left pull-right"></i>
                       </span>
@@ -974,28 +974,54 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                          <li class="<?php echo (in_array($segment2,array('brand')) ?"active":'') ?>">
                           <a href="<?php echo base_url() ?>warehouse/brand">Brand</a>
                         </li>
-						<li class="<?php echo (($segment1 == "inventory") ? "active" : null) ?>">
-                          <a href="<?php echo base_url("warehouse/inventory") ?>">Inventory List</a>
-                        </li>
-						<li class="<?php echo (($segment1 == "product") ? "active" : null) ?>">
-                          <a href="<?php echo base_url("product/") ?>">Product</a>
-                        </li>
-						<li class="<?php echo (($segment1 == "category") ? "active" : null) ?>">
+				
+				          		<li class="<?php echo (($segment1 == "category") ? "active" : null) ?>">
                           <a href="<?php echo base_url("product/category"); ?>">Category</a>
                         </li>						
-                        <li class="<?php echo (($segment1 == "order") ? "active" : null) ?>">
-                          <a href="<?php echo base_url("order/"); ?>">Order</a>
-                        </li>
-						 <li class="<?php echo (($segment1 == "scheme") ? "active" : null) ?>">
+        		            <li class="<?php echo (($segment1 == "scheme") ? "active" : null) ?>">
                           <a href="<?php echo base_url("scheme/"); ?>">Scheme</a>
                         </li>
-						 <li class="<?php echo (($segment1 == "payment") ? "active" : null) ?>">
+						            <li class="<?php echo (($segment1 == "payment") ? "active" : null) ?>">
                           <a href="<?php echo base_url("payment/paylist"); ?>">Payment</a>
                         </li>
                      </ul>
 
                   </li>
-				
+				          <?php
+                  if (user_access('470')) { ?>
+                    <li class="treeview <?php echo (($segment1 == "product") ? "active" : null) ?>">
+                      <a href="<?php echo base_url("product/") ?>">
+                      <i class="fa fa-list-alt" style="color:#fff;font-size:20px;background:#008080;padding:7px;border-radius:4px;width:30px;"></i> &nbsp;<?php echo 'Product'; ?>                     
+                    </a>
+                    </li>
+                  <?php
+                  }
+                  if (user_access('300')) { ?>
+                  ?>
+                  <li class="<?php echo (($segment1 == "inventory") ? "active" : null) ?>">
+                    <a href="<?php echo base_url("warehouse/inventory") ?>">
+                      <i class="fa fa-object-group" style="color:#fff;font-size:20px;background:#008080;padding:7px;border-radius:4px;width:30px;"></i> &nbsp;<?php echo 'Inventory List'; ?>   
+                    </a>
+                  </li>
+                  <?php
+                  }
+                  if (user_access('460')) { ?>
+                  <li class="<?php echo (($segment1 == "order") ? "active" : null) ?>">
+                    <a href="<?php echo base_url("order/"); ?>">
+                      <i class="fa fa-list" style="color:#fff;font-size:20px;background:#008080;padding:7px;border-radius:4px;width:30px;"></i> &nbsp;<?php echo 'Order'; ?>                        
+                    </a>
+                  </li>
+                  <?php
+                  }
+                  if (user_access('480')) { ?>
+                  <li class="<?php echo (($segment1 == "buy") ? "active" : null) ?>">
+                    <a href="<?php echo base_url("buy/"); ?>">
+                      <i class="fa fa-shopping-bag" style="color:#fff;font-size:20px;background:#008080;padding:7px;border-radius:4px;width:30px;"></i> &nbsp;<?php echo 'Buy'; ?>
+                    </a>
+                  </li>
+                  <?php
+                  }
+                  ?>
                   <li class="treeview <?php echo in_array($segment1, array('user','customer')) ? "active" : null ?>" style="<?php if(in_array(130,$module) || in_array(131,$module) || in_array(132,$module) || in_array(133,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
                      <a href="#">
                        <i class="fa fa-user-plus" style="color:#fff;font-size:15px;background:#9b59b6;padding:7px;border-radius:4px;width:30px;"></i> &nbsp;<?php echo display('User_mgment') ?>

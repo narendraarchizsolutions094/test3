@@ -52,42 +52,25 @@ class Payment extends CI_Controller {
 		$data['content'] = $this->load->view('payment/payment-form', $data);
 		$this->load->view('layout/main_wrapper', $data);
 	  }
+	
 	public function paylist()
 	{
-		
 		if(isset($_POST["downloadexel"])){
-            //echo "hii";die;
-            //print_r($_POST);die;
-
             $sdate = $this->common_model->cleandate('startdate');
             $edate = $this->common_model->cleandate('enddate');
-			
-			$this->downloadexel($sdate,$edate);
-			
-			echo "<script> window.location='".base_url('payment') ."';</script>";
-			
+			$this->downloadexel($sdate,$edate);			
+			echo "<script> window.location='".base_url('payment')."';</script>";
 		}
-		
 		$this->load->model("payment_model");
-		$data["payments"] = $this->payment_model->payments(1);
-		
-		
-		//$data["masters"]  = $this->payment_model->getmaster();
+		$data["payments"] = $this->payment_model->payments(1);		
 		$data['product'] = $this->payment_model->getProduct();
 		if(isset($_POST['type']))
 		{
 			//$this->load->template("datatable/payment", $data);
 		}
-		
-		//echo json_encode(array('data',$data));
-		//echo "hii";die;
-		
 		$data['content'] = $this->load->view('payment/payment-list', $data, true);
         $this->load->view('layout/main_wrapper', $data);
-		
 	}
-	
-
 
 	public function downloadexel($sdate,$edate)
     {

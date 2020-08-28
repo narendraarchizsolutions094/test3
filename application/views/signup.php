@@ -1,7 +1,7 @@
 <?php 
 echo form_open('auth/signup','id="signupForm" novalidate'); 
 ?>
-
+<input type="hidden" name="c" value="<?=$c?>">
 <div class="form-group">
     <label class="control-label" for="name"><?= display('full_name') ?></label>
     <input type="text" placeholder="<?=display('name')?>" name="name" class="form-control"> 

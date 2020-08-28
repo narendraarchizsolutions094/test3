@@ -133,14 +133,18 @@ if($root=='https://student.spaceinternationals.com'){	 ?>
                             <br>
                             <br>
                                 <?php
-                                if($root=='https://student.spaceinternationals.com'){    ?> 
-                                    New to spaceinternationals ?<a href="javascript:void(0)" id="signup">Create an account</a>
+                                $c = !empty($_GET['c'])?$_GET['c']:'';
+
+                                if($root=='https://student.spaceinternationals.com' || $c == base64_encode(57)){    ?>
+                                <div class="text-center">                                    
+                                    New User ? <a href="javascript:void(0)" id="signup">Create an account</a>
+                                </div> 
                                 <?php
                                 }
                                 ?>
                             
                         </form>
-                    </div> 
+                    </div>  
                     
                     <!-----------------------Forget Password -------------------------------->
                     <div class="panel-body" id="ForgetPasswordDiv" style="display:none">
@@ -357,7 +361,7 @@ if($root=='https://student.spaceinternationals.com'){	 ?>
                 $.ajax({                        
                     url : '<?php echo base_url('auth/signup_content')?>',                
                     type: 'POST',                
-                    data: $(this).serialize(),
+                    data: {c:"<?=!empty($_GET['c'])?$_GET['c']:''?>"},
                     success:function(data){
                         $("#login-title").html('Please signup');
                         $("#LoginDiv").html(data);

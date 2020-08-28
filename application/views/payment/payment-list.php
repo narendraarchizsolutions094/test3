@@ -1,15 +1,11 @@
-<link rel = "stylesheet" href = "<?php echo base_url("assets/plugins/sweet-alert/sweetalert.css"); ?>">
-
 <div class="row">
     <!--  form area -->
     <div class="col-sm-12">
         <div  class="panel panel-default thumbnail"> 
             <div class="panel-heading no-print">
                 <div class="btn-group"> 
-                    <a class="btn btn-primary" href="<?php echo base_url("payment/paylist") ?>"> <i class="fa fa-list"></i> Payment List </a>  
-                </div>
-					<a href = "javascript:void(0)" class = "btn btn-warning btn-pill slide-chng-div pull-right" data-target = "#filter-area"><i class  = "fa fa-search"></i></a>
-											<a href = "javascript:void(0)" class = "btn btn-info btn-pill slide-chng-div pull-right" data-target = "#filter-area"><i class  = "fa fa-download"></i></a>
+                    <a class="btn btn-primary" onclick="window.history.back()"> <i class="fa fa-arrow-left"></i> Back </a>  
+                </div>					
             </div>
             <div class="panel-body panel-form">
 
@@ -50,7 +46,7 @@
 															<i class="fa fa-calendar tx-16 lh-0 op-6"></i>
 														</div>
 													</div>
-													<input class="form-control fc-datepicker" name="startdate" id = "start-date" placeholder="DD/MM/YYYY" value="" type="text" autocomplete = "off">
+													<input class="form-control" name="startdate" id = "start-date" placeholder="DD/MM/YYYY" value="" type="date" autocomplete = "off">
 												</div>
 										</div>
 										<div class = "form-group col-3">
@@ -60,7 +56,7 @@
 														<div class="input-group-text">
 															<i class="fa fa-calendar tx-16 lh-0 op-6"></i>
 														</div>
-													</div><input class="form-control fc-datepicker" name="enddate" id = "end-date" placeholder="DD/MM/YYYY" value="" type="text" autocomplete = "off">
+													</div><input class="form-control" name="enddate" id = "end-date" placeholder="DD/MM/YYYY" value="" type="text" autocomplete = "off">
 												</div>
 										</div>
 										<div class = "form-group col-3">
@@ -102,7 +98,7 @@
 								<div class="card-body">
 								
                                 	<div class="table-responsive">
-										<table class="table table-striped data-table table-bordered text-nowrap w-100 dataTable no-footer" id = "add-datatable">
+										<table class="table table-striped datatable1 table-bordered">
 											<thead>
 												<tr>
 													<th class="wd-15p">S.No.</th>
@@ -117,7 +113,7 @@
 													<th class="wd-15p">Transaction No</th>
 													<th class="wd-15p">Status</th>
 													<th class="wd-15p">Payment Date</th>
-													<th class="wd-15p">Action</th>
+													<!-- <th class="wd-15p">Action</th> -->
 													
 												</tr>
 											</thead>
@@ -145,14 +141,14 @@
 													<td><?= $pay->transaction_no; ?></td>
 													<td><?= $pay->status; ?></td>
 													<td><?= $pay->pay_date;  ?></td>
-													<td>
+													<!--td>
 														<a href="<?php echo base_url("payment/update/".urlencode(base64_encode(base64_encode($pay->id)))); ?>" class="btn btn-info">
 														<i class="fa fa-pencil" data-toggle="tooltip" title="" data-original-title="Edit"></i></a>
 
 														<a href="<?php echo urlencode(base64_encode(base64_encode($pay->id))); ?>"  class="btn btn-danger delete-content">
 														<i class="fa fa-trash" data-toggle="tooltip" title="" data-original-title="Delete"></i></a>
 
-													</td>
+													</td-->
 												</tr>
 												<?php  $sl++; }
 
@@ -175,11 +171,11 @@
 			</div>
 		</div>
 
-		<script src="<?php echo base_url(); ?>assets/plugins/date-picker/jquery-ui.js"></script>
+		
 	<?php echo form_open(base_url("ajax/deletesingle/payment"), array("id" => "hide-ajx-form")); ?>
 			<input type = "hidden" name = "contentno" id = "contentno-no">
 		<?php echo form_close(); ?>
-		<script src = "<?php echo base_url("assets/plugins/sweet-alert/sweetalert.min.js"); ?>"></script>
+		
 				
 		<?php
 			
@@ -258,19 +254,9 @@
 				});
 				
 			});
-		</script>		
+		</script>				
 		<script>
-			$(document).ready(function(){
-		        
-				$(".fc-datepicker").datepicker();
-					$('.add-multi-select').multipleSelect({
-						filter: true
-					})
-				
-			});
-		</script>
-		<script>
-			$(document).on("click", ".addit-filter-ord", function(){
+			/*$(document).on("click", ".addit-filter-ord", function(){
 				
 
 				  $('#add-datatable').DataTable().destroy();		
@@ -284,5 +270,5 @@
 						});
 			
 		});
-	
+	*/
 		</script>

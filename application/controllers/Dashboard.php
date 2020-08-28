@@ -481,6 +481,9 @@ public function login_in_process(){
 
         if ($this->session->userdata('user_right') == 201) // lalantop user
         redirect('buy');        
+        
+        if ($this->session->userdata('user_right') == 200) // lalantop user
+        redirect('product');        
 
         $data = array();
         $this->load->model('dash_model');

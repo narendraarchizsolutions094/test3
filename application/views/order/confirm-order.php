@@ -1,34 +1,8 @@
-	<style>
-		.datepicker{
-			min-width:200px;
-		}
-	</style>	
-		  <div class="row">
-		<div class="col-md-12" style="background-color: #fff;border-bottom: 1px solid #C8CED3;">
-		  <div class="col-md-6"> 
-			<p style="margin-top: 6px;">
-				<ol class="breadcrumb"><!-- breadcrumb -->
-								<li class="breadcrumb-item"><a href="#">Order</a></li>
-								<li class="breadcrumb-item active" aria-current="page">Update Status</li>
-							</ol>     </p>
-			<!-- Enquiry / Update Enquiry -->
-		  </div>
-		  <div class="col-md-6">
-			 <div style="float:right">
-				  <div class="btn-group" role="group" aria-label="Button group">
-				   <a class="btn" onclick="window.location.reload();" title="Refresh">
-				   <i class="fa fa-refresh icon_color"></i>
-				   </a>  
-				</div>
-				<!-- For invenotry company -->
-				<div class="btn-group" role="group" aria-label="Button group">
-				   <a class="btn" href="<?php echo base_url("order"); ?>" title="Back">
-				   <i class="fa fa-arrow-left icon_color"></i>
-				   </a>                                                    
-				</div>
-			 </div>
-		  </div>
-	   </div>
+<style>
+	.datepicker{
+		min-width:200px;
+	}
+</style>	
 <div class="row">
     <!--  form area -->
     <div class="col-sm-12">
@@ -109,23 +83,23 @@
 													?>
 													<div class="table-responsive">
 														<table class="table card-table table-vcenter text-nowrap table-nowrap">
-															<thead class="bg-blue text-white">
+															<thead>
 																<tr>
-																	<th class="text-white">Srno</th>
-																	<th class="text-white" colspan = "2" class = "text-center">Product</th>
-																	<th class="text-white">Stock</th>
-																	<th class="text-white">Price</th>
-																	<th class="text-white">GST</th>
+																	<th>Srno</th>
+																	<th>Product</th>
+																	<th>Stock</th>
+																	<th>Price</th>
+																	<th>GST</th>
 																	
-																	<th class="text-white">Total Price</th>
-																	<th class="text-white">Scheme</th>
-																	<th class="text-white">Discount</th>
+																	<th>Total Price</th>
+																	<th>Scheme</th>
+																	<th>Discount</th>
 																	
-																	<th class="text-white">Order</th>
-																	<th class="text-white">Booking</th>
-																	<th class="text-white">Confirm</th>
-																	<th class="text-white">Remain</th>
-																	<th class="text-white">Total Price</th>
+																	<th>Order</th>
+																	<th>Booking</th>
+																	<th>Confirm</th>
+																	<th>Remain</th>
+																	<th>Total Price</th>
 																</tr>
 															</thead>
 															<tbody>
@@ -137,8 +111,6 @@
 																		?>
 																		<tr>
 																			<th scope="row"><?php echo $ind+1; ?></th>
-																			<td>	<?php $image = (!empty($ord->main_img)) ? base_url("assets/images/"). $ord->main_img  : base_url("assets/images/profile/33.png");  ?>
-																			<p class="font-w600 mb-1"><img class="avatar brround" src="<?php  echo $image; ?>"> </p></td>
 																			<td><?php echo $ord->product_name; ?></td>
 																			<td><?php echo $ord->stock; ?></td>
 																			<td><i class ="fa fa-rupee"></i> <?php echo $ord->price; ?></td>
@@ -267,11 +239,11 @@
 																					<div class="form-group">
 																						<label>Delivery By</label>
 																						<select class="form-control" name="deliverby">
-																							<option value="User 1">User 1</option>
+																							<!-- <option value="User 1">User 1</option>
 																							<option value="User 2">User 2</option>
 																							<option value="User 3">User 3</option>
 																							<option value="User 4">User 4</option>
-																							<option value="User 5">User 5</option>
+																							<option value="User 5">User 5</option> -->
 																						</select>
 																					</div>
 																				</div>
@@ -287,11 +259,6 @@
 																						</select>
 																					</div>
 																				</div>
-																					
-																			
-																				
-																			
-														
 													</div>
 													</div>
 												</div>	
@@ -311,7 +278,7 @@
 									</div>
 								</div>
 							</div>
-						</div>	<!-- end row -->
+						
 						
 					<?php echo form_close(); ?>	
 				</div>
@@ -329,13 +296,8 @@
 		</script>
 		<script>
 			$(document).on("click", ".delete-content", function(e){
-				
 				e.preventDefault();
-				
 				$("#content-no").val($(this).attr("href"));
-				
-			
-					
 					swal({
 					  title: "Are you sure?",
 					  text: "Once deleted, you will not be able to recover this imaginary file!",
@@ -351,48 +313,36 @@
 		</script>
 		<script>
 			$(document).on("click", "button.confirm", function(e){
-				
 				e.preventDefault();
 				$.ajax({
 					url     : $("#hide-ajx-form").attr("action"),
 					type    : "post",
 					data    : $("#hide-ajx-form").serialize(),
 					success : function(resp){
-						
 						var jresp = JSON.parse(resp);
-						
 						if(jresp.status == "success"){
-							
 							location.reload();
 						}
-						
 					}
 				});
 			});
 		</script>
 		<script>
 			$(document).on("keyup", ".product-conf", function(){
-				
 				var prntobj = $(this).closest("tr");
 				var val 	= $(this).val();
 				var tprice  = parseInt(prntobj.find(".product-price").val());
 				var tqty    = parseInt(prntobj.find(".product-qty").val());
 				var tdisc   = parseInt(prntobj.find(".tot-discount").val());
-				
 				var remain  = tqty - val;
-				
 				var cnfqty  = parseInt(prntobj.find(".conf-qty").val());
 				remain      = remain - cnfqty;
 				var fprice  = tprice * (val);
-				
 				if(remain >= 0 ){
 					prntobj.find(".product-remain").val(remain);
 				}else{
 					prntobj.find(".product-remain").val("0");
 				}
 				prntobj.find(".total-price").val(fprice - tdisc);
-				
-				
 			});
 		</script>
-		

@@ -4312,10 +4312,16 @@ $("#toggle_timeline").on('click',function(){
     e.preventDefault(); // avoid to execute the actual submit of the form.
     var form = $(this);
     var url = form.attr('action');
+    var formData = new FormData($(this)[0]);
+
     $.ajax({
        type: "POST",
        url: url,
-       data: form.serialize(), // serializes the form's elements.
+       data: formData, // serializes the form's elements.
+       async: false,
+       cache: false,
+       contentType: false,
+       processData: false,
        success: function(data)
        {
            res = JSON.parse(data);

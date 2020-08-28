@@ -374,7 +374,7 @@ public function add_inventory(){
         ];
         if ($this->form_validation->run() === true) {
             if (empty($this->input->post('id'))) {
-                if (user_role('30') == true) {}
+               
                 if ($this->warehouse_model->addinventory($postData)) {
                     $this->session->set_flashdata('message', display('save_successfully'));
                 } else {
@@ -382,8 +382,7 @@ public function add_inventory(){
                 }
                 redirect('warehouse/inventory');
             } else {
-                if (user_role('31') == true) {                    
-                }
+               
                 if ($this->warehouse_model->updateinventory($postData)) {
                     $this->session->set_flashdata('message', display('update_successfully'));
                 } else {

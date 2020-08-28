@@ -2,6 +2,9 @@
     <div class="col-sm-12">
         <div  class="panel panel-default thumbnail">
              <div class="panel-heading no-print">
+                 <?php
+                 if (user_access(300)) { ?>
+                   
                 <div class="btn-group"> 
                     <a class="btn btn-success" href="#" data-toggle="modal" data-target="#uploadbulk"> <i class="fa fa-plus"></i> Upload CSV </a>  
                 </div>
@@ -9,6 +12,9 @@
                   
                      <a class="btn btn-success" href="#" data-toggle="modal" data-target="#addinventory"> <i class="fa fa-plus"></i> Add Inventory </a>  
                 </div>
+                 <?php
+                 }
+                 ?>
             </div>
             <div class="panel-body">
 

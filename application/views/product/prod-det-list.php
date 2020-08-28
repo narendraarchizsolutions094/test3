@@ -7,13 +7,15 @@
       <div  class="panel panel-default thumbnail">
 
          <div class="panel-heading no-print">
-
+          <?php if (user_access(470)) { ?>            
             <div class="btn-group"> 
 
                <a class="btn btn-success" href = "<?php echo base_url("product/addproduct"); ?>" ><i class="fa fa-plus"></i> <?php echo display('Add_More') ?></a> 
 
             </div>
-
+            <?php
+          }
+          ?>
          </div>
 
          <div class="panel-body">
@@ -45,7 +47,7 @@
                      </th>
 
                      <th class="sorting wid-10" style="border-left:none;">S.N </th>
-					 <th></th>
+					 
                      <th class="sorting wid-10" tabindex="0" rowspan="1" colspan="1">Product Name</th>
 					 <th>Price</th>
                      <th>Stock</th>
@@ -67,7 +69,7 @@
                      <td><input type='checkbox' name='product_status[]' class="checkbox" value='<?php echo $row->id;?>'>&nbsp; </td>
 
                      <td><?=$i++ ?></td>
-					<td><img src = ""></td>
+					
                      <td><?= $row->country_name; ?></td>
 
                      <td> <i class = "fa fa-rupee"></i> <?php echo $row->price; ?></td>
@@ -78,7 +80,11 @@
 		
                      <td class="center">
 
+                      <?php if (user_access(471)) { ?>            
                         <a  class="edit" href = "<?php echo base_url("product/editproduct/".$row->id); ?>"><i class="ti-pencil"></i></a> 
+                      <?php
+                      }
+                      ?>
 
                      </td>
 
@@ -89,15 +95,15 @@
                </tbody>
 
             </table>
-
-            <button class="btn btn-danger" type="button" onclick="delete_product()">
-
-            <i class="ti-trash"></i>
-
-            Delete
-
-            </button>
-
+            <?php
+            if (user_access(472)) { ?>            
+              <button class="btn btn-danger" type="button" onclick="delete_product()">
+              <i class="ti-trash"></i>
+                Delete
+              </button>
+            <?php
+            }
+            ?>
             </form>
 
          </div>

@@ -1,26 +1,5 @@
 	  <div class="row">
-		<div class="col-md-12" style="background-color: #fff;border-bottom: 1px solid #C8CED3;">
-		  <div class="col-md-6"> 
-			<p style="margin-top: 6px;">
-			Invoice     </p>
-			<!-- Enquiry / Update Enquiry -->
-		  </div>
-		  <div class="col-md-6">
-			 <div style="float:right">
-				  <div class="btn-group" role="group" aria-label="Button group">
-				   <a class="btn" onclick="window.location.reload();" title="Refresh">
-				   <i class="fa fa-refresh icon_color"></i>
-				   </a>  
-				</div>
-				<!-- For invenotry company -->
-				<div class="btn-group" role="group" aria-label="Button group">
-				   <a class="btn" href="<?php echo base_url("order"); ?>" title="Back">
-				   <i class="fa fa-arrow-left icon_color"></i>
-				   </a>                                                    
-				</div>
-			 </div>
-		  </div>
-	   </div>
+		
 <div class="row">
     <!--  form area -->
     <div class="col-sm-12">
@@ -32,7 +11,6 @@
             </div>
 			<div class="panel-body panel-form">
                 <div class="row">
-
 							<div class="col-md-12">
 								<div class="card">
 									<div class="card-body">
@@ -195,4 +173,3 @@
 				</div>
 			</div>
 		</div>
-</div>		

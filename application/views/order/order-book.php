@@ -1,29 +1,4 @@
-					  <div class="row">
-		<div class="col-md-12" style="background-color: #fff;border-bottom: 1px solid #C8CED3;">
-		  <div class="col-md-6"> 
-			<p style="margin-top: 6px;">
-				<ol class="breadcrumb"><!-- breadcrumb -->
-								<li class="breadcrumb-item"><a href="#">Order</a></li>
-								<li class="breadcrumb-item active" aria-current="page">View</li>
-							</ol>     </p>
-			<!-- Enquiry / Update Enquiry -->
-		  </div>
-		  <div class="col-md-6">
-			 <div style="float:right">
-				  <div class="btn-group" role="group" aria-label="Button group">
-				   <a class="btn" onclick="window.location.reload();" title="Refresh">
-				   <i class="fa fa-refresh icon_color"></i>
-				   </a>  
-				</div>
-				<!-- For invenotry company -->
-				<div class="btn-group" role="group" aria-label="Button group">
-				   <a class="btn" href="<?php echo base_url("order"); ?>" title="Back">
-				   <i class="fa fa-arrow-left icon_color"></i>
-				   </a>                                                    
-				</div>
-			 </div>
-		  </div>
-	   </div>
+		
 <div class="row">
     <!--  form area -->
     <div class="col-sm-12">
@@ -38,8 +13,8 @@
 		
 		<div class="row">
 							<div class="col-md-12">
-								<div class="card">
-									<div class="card-body">
+								<div class="panel panel-default">
+									<div class="panel-body">
 										<div class="d-flex">
 									<!--		<a class="header-brand" href="index.html">
 											<?php $image = (!empty($ord->image)) ? base_url("assets/images/profile/".$ord->image)  : base_url("assets/images/profile/33.png");  ?>
@@ -75,19 +50,19 @@
 														$totprice = $totprice + $ord->total_price;
 													?>
 													
-													<div class="card">
-														<div class="card-header">
+													<div class="panel panel-default">
+														<div class="panel-heading">
 															<h4 class="card-title"><?php echo $ord->product_name; ?></h4>
 															<div class="card-options">
 																<a href="#" class="card-options-collapse" data-toggle="card-collapse"><i class="fe fe-chevron-up "></i></a>
 															<!--	<a href="#" class="card-options-remove" data-toggle="card-remove"><i class="fe fe-x "></i></a> -->
 															</div>
 														</div>
-														<div class="card-body">
+														<div class="panel-body">
 															<div class = "row">
 																	<div class = "col-md-3 text-center">
-																	<?php $image = (!empty($ord->image)) ? base_url("assets/images/".$ord->image)  : base_url("assets/images/profile/33.png");  ?>
-																			<p class="font-w600 mb-1"><img class="avatar avatar-xxl brround" src="<?php  echo $image; ?>" style = "width:30px;height:30px;"> </p>
+																	<?php $image = (!empty($ord->image)) ? base_url("assets/images/products/".$ord->image)  : base_url("assets/images/profile/33.png");  ?>
+																			<p class="font-w600 mb-1"><img class="avatar avatar-xxl brround" src="<?php  echo $image; ?>" style = "width:80px;height:80px;"> </p>
 																		<h5><label>Order : </label> <?php echo $ord->quantity; ?> Pics</h5>
 																		<?php  if($this->session->mrole == 1) { ?>
 																		<h4>Stock : <?php echo $ord->stock; ?></h4>
@@ -95,12 +70,12 @@
 																		<h6><label>Scheme : </label> <?php echo $ord->scheme; ?> </h6>
 																<label>Price : </label> <i class ="fa fa-rupee"></i> <?php echo $ord->price; ?>
 																<?php if(!empty($ord->offer)){
-																?><label>Discount : </label> <?php echo $ord->offer; ?><?php	
+																?><br><label>Discount : </label> <?php echo $ord->offer; ?><?php	
 																} ?>
 																<?php if(!empty($ord->tax)){ ?>
 																<label>TAX : </label> <?php echo (!empty($ord->tax)) ? $ord->tax."%" : "0%"; ?>
 																<?php } ?>
-																<label>Total : </label> <i class ="fa fa-rupee"></i> <?php echo $ord->quantity*$ord->price + $ord->other_price; ?>
+																<br><label>Total : </label> <i class ="fa fa-rupee"></i> <?php echo $ord->quantity*$ord->price + $ord->other_price; ?>
 																	</div>
 																	<div class = "col-md-9">
 																	<?php echo form_open(); ?>
@@ -163,9 +138,9 @@
 																		
 																		<div class = "col-12">
 																			
-																				<div class = "card">
+																				<div class = "panel panel-default">
 										
-																					<div class="card-body">
+																					<div class="panel-body">
 																							<div class = "col-md-12 text-center">
 																								
 																										<div class = "form-group pt-2">
@@ -198,10 +173,10 @@
 										<?php   	}
 												} ?>			
 											</div>
-											<div class = "card">
+											<div class = "panel panel-default">
 												<div class="table-responsive">
 														<table class="table card-table table-vcenter text-nowrap table-nowrap">
-															<thead class="bg-blue text-white">
+															<thead class="bg-blue ">
 																<tr>
 																	<td>Delivery Date</td>
 																	<td>Pending Delivery Date</td>
@@ -253,9 +228,9 @@
 												
 												if($showbtn == true or $confrmodr == true){ ?>
 													
-													<div class = "card">
+													<div class = "panel panel-default">
 										
-															<div class="card-body">
+															<div class="panel-body">
 																<div class = "col-md-12 text-center">
 																
 																	<h4><?php if($showbtn == true) { ?>	Balance :  <i class = "fa fa-rupee"></i> <?php echo $totprice; ?> <a class = "btn btn-info btn-pill" href = "<?php echo base_url("payment/add/".$ord->ord_no); ?>"> Add Payment </a> 
@@ -277,7 +252,7 @@
 					</div>
 				</div>
 			</div>
-		</div>	
+		
 
 
 						<!-- end row -->

@@ -82,7 +82,7 @@
 
             <div class="btn-group"> 
 
-               <a class="btn btn-success" href = "<?php echo base_url("buy"); ?>" ><i class="fa fa-plus"></i> Buy </a> 
+               <a class="btn btn-success" href = "<?php echo base_url("buy"); ?>" ><i class="fa fa-list"></i> Products </a> 
 
             </div>
 
@@ -114,11 +114,15 @@
 						
 						?><a href = "<?php echo base_url("buy/checkout"); ?>" class = "btn btn-success pull-right">Cart <span class = "badge badge-info cart-quantity"><?php echo $incart[$product->sb_id];  ?></span></a><?php
 					}else{
-						?><a href = "<?php echo base_url("buy/checkout"); ?>" class = "btn btn-danger pull-right"><i class = "fa fa-shopping-cart"></i>Add in cart</a><?php
+						?>
+						<!-- <a href = "<?php echo base_url("buy/checkout"); ?>" class = "btn btn-danger pull-right"><i class = "fa fa-shopping-cart"></i>Add in cart</a> -->
+						<?php
 					} ?>
 					
-					<a href = "<?php echo base_url("buy/checkout"); ?>" class = "btn btn-danger pull-right">Checkout</a></h2>
-					<hr />
+<!-- 					<a href = "<?php echo base_url("buy/checkout"); ?>" class = "btn btn-danger pull-right">Checkout</a>
+ -->
+</h2>
+ 					<hr />
 					<p>Price : <i class = "fa fa-rupee"></i> <?php echo $product->price; ?></p>
 					<p><?php echo $product->details; ?></p>
 					</div>
@@ -141,10 +145,8 @@
 						
 					</div>
 				</div>
-				<div class = "col-md-3">
+				<div class = "col-md-3 card">
 					<img src = "<?php echo base_url("assets/images/products/".$product->image) ?>" class = "img-responsive">
-					
-					
 				</div>
 			</div>
      

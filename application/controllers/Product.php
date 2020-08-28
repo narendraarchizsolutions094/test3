@@ -25,7 +25,7 @@ class Product extends CI_Controller {
 		
 		if(isset($_POST['proname'])){
 			
-			$this-> saveProduct();
+			$this->saveProduct();
 		}
 		
 		$data['title'] = 'Add Product';
