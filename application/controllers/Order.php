@@ -65,6 +65,7 @@ class Order extends CI_Controller {
 									 ->where("comp_id", $this->session->companey_id)
 									 ->from("tbl_product")
 									 ->join("tbl_proddetails", "tbl_product.sb_id = tbl_proddetails.prodid")->get()->result();
+
 		$currdate = date("Y-m-d");
 		$data['scheme'] = $this->db->select("*")->where("comp_id", $this->session->companey_id)->where("from_date <= '$currdate' and to_date >= '$currdate'")->get("tbl_scheme")->result();
 		

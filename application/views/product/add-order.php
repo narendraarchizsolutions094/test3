@@ -27,7 +27,7 @@
         <div  class="panel panel-default thumbnail"> 
             <div class="panel-heading no-print">
                 <div class="btn-group"> 
-                    <a class="btn btn-primary" href="<?php echo base_url("order/addorder") ?>"> <i class="fa fa-list"></i> Add Order </a>  
+                    <a class="btn btn-primary" href="<?php echo base_url("/order") ?>"> <i class="fa fa-list"></i> Add Order </a>  
                 </div>
             </div>
             <div class="panel-body panel-form">
@@ -116,7 +116,7 @@
 										<div class="form-group">
 											<label>Rate</label>
 											<input type="text" class="form-control" id="rate" placeholder="Enter Product Rate" name="rate" value="">
-										</div>
+					 					</div>
 								</div>
 								<div class="col-md-6">
 										<div class="form-group">

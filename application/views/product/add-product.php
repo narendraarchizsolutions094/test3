@@ -84,8 +84,9 @@
 										<option value="">Select</option>
 								 <?php if(!empty($subcategory)) { 
 											foreach($subcategory as $ind => $sbcateg) {
-												
-												?><option value = "<?php echo $sbcateg->id ?>"><?php echo $sbcateg->subcat_name; ?></option><?php		
+												?><option value = "<?php echo $sbcateg->id; ?>" <?php echo ($categ == $sbcateg->id) ? "selected" : ""; ?>><?php echo $sbcateg->subcat_name; ?></option>
+
+												<?php
 											}	
 										}
 										?>

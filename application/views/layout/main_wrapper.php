@@ -26,6 +26,8 @@
            $segment3 = $this->uri->segment(3);
    ?>
 
+  
+
 <!DOCTYPE html>
 <html lang="en">
    <head>
