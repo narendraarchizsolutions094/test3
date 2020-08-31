@@ -148,7 +148,7 @@ if (!function_exists('display')) {
                 );
             $ci->db->insert('sys_parameters',$inser_arr);
         }
-    }
+    } 
 
     function get_sys_parameter($sys_para,$type){
         $ci =& get_instance();

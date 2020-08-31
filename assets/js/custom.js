@@ -196,3 +196,13 @@ $("input[name='product_filter[]']").on('change',function(){
     });
 });
 
+
+/* crm setting */
+
+$(document).ready(function()
+{
+    $("[rel='tooltip']").tooltip();
+});
+
+/* end crm setting */
+
