@@ -13,20 +13,20 @@
                 <div class="btn-group"> 
                     <a class="btn btn-success" >Call Reports</a>  
                 </div>
-				<div style="float: right;">                    
+        <div style="float: right;">                    
 
             <div class="btn-group dropdown-filter">
                <a href="<?php echo base_url(); ?>enq/index" class="btn btn-default">
                 Back
-              </a> 	
+              </a>  
             </div>
           </div>       
 
             </div>
 
             <div class="panel-body">
-			             <form method="get" class="lead-form" id="filter_and_save_form" action="">
-						  
+                   <form method="get" class="lead-form" id="filter_and_save_form" action="">
+              
                       <div class="col-md-12">
                         <div class="form-group col-md-3">
                           <label for="inputEmail4"><?php echo display("from_date"); ?></label>
@@ -37,41 +37,36 @@
                           <input type="date" class="form-control" id="to-date" value="<?php  if(!empty($_GET['to_exp'])){echo $_GET['to_exp'];} ?>" name="to_exp" style="padding-top:0px;">
                         </div>
                        
-			            <div class="form-group col-md-6">
+                  <div class="form-group col-md-6">
                           <label for="enq_product">Criteria</label>
                           <select data-placeholder="Begin typing a name to filter..." multiple class="form-control" name="filter[]"   id = "selected-col">
                              <?php $criteria=json_decode($source)->filters;
-							 // print_r($criteria);
-							 foreach($criteria as $c){?>
+               // print_r($criteria);
+               foreach($criteria as $c){?>
                               <option value="<?php echo $c->id; ?>" ><?php echo $c->name; ?></option>
-							 <?php } ?>
+               <?php } ?>
                           </select>                          
                         </div>
-						     <div class="form-group col-md-3">
-							 <label for="enq_product">Search</label>
+                 <div class="form-group col-md-3">
+               <label for="enq_product">Search</label>
                             <input type="text" name="employee" value="<?php  if(!empty($_GET['employee'])){echo $_GET['employee'];} ?>" class="form-control" placeholder="search">
                           </div>
-						      <div class="form-group col-md-3">
-							   <label for="enq_product">Location</label>
-						     <select name='telephony_access_token_id' class="form-control" >
-                						<option value='' style="display:none;">---Select User Type---</option>
-                						
-                                        <option value='0811613982df3ad6b0ccaef5847364e9' <?php if($token_number=='0811613982df3ad6b0ccaef5847364e9'){echo "selected";}?>>Galio</option>
+                                        <input name="telephony_access_token_id" value="<?php echo $this->session->telephony_token; ?>" type="hidden">
                                         
-                                     </select>
-                               
-					  </div>
-						<div class="form-group col-md-3">
-						<br>
-                        <input type="submit" value="Search"    class="btn btn-success">                             
+                                    
+   
+            <div class="form-group col-md-3">
+            <br>
+                        <input type="submit" value="Search"    class="btn btn-success"> 
+                        <a href="<?php echo base_url()."call_report";?>" value="Reset"    class="btn btn-success">Reset</a>                             
                         </div><br>
-					
+          
                       
                     </div><span class="btn btn-info">Total Record's (
-			    <?php  if(!empty(json_decode($logs_details)->data->total)){print_r(json_decode($logs_details)->data->total);} ?>) Found 
-                </span>	&nbsp;		
+          <?php  if(!empty(json_decode($logs_details)->data->total)){print_r(json_decode($logs_details)->data->total);} ?>) Found 
+                </span> &nbsp;    
                 <a class="btn btn-success" onclick="ExportToExcel();" href="#">Export To Excel</a>
-				<div style="overflow:scroll">
+        <div style="overflow:scroll">
                 <table class="table table-striped table-bordered"  id="table2excel">
                  
                     <thead>
@@ -80,15 +75,15 @@
                             <th>S.N</th>
                             <th>Name</th>
                             <th>Email</th>
-							<th>Phone Number</th>
+              <th>Phone Number</th>
                             <th>Call by</th>
-							<th>Agent Email</th>
-							<th>Status</th>
-							<th>Start Time</th>
-			                <th>End Time</th>
-							<th>Duration</th>
+              <th>Agent Email</th>
+              <th>Status</th>
+              <th>Start Time</th>
+                      <th>End Time</th>
+              <th>Duration</th>
                             <th class="noExl">Recording</th>
-							<th class="noExl">Details</th>
+              <th class="noExl">Details</th>
 
                         </tr>
 
@@ -97,29 +92,29 @@
                     <tbody>
                     
                     <?php $i=1;if(!empty(json_decode($logs_details)->data->total)){
-					foreach(json_decode($logs_details)->data->hits as $v){
-						$enq=$this->enquiry_model->getenq_by_phone(str_replace('+91','',$v->_source->caller_number));
-						//print_r($enq);
-						?>
-						<tr>
-						<td><?=$i++?></td>	
-						<td><?php if(!empty($enq)){echo $enq->name_prefix.'&nbsp;'.$enq->name.'&nbsp;'.$enq->lastname;} ?></td>	
-					    <td><?php if(!empty($enq)){echo $enq->email;} ?></td>
-						<td><?php if(!empty($v->_source->caller_number)){print_r($v->_source->caller_number);} ?></td>
-						<td><?php foreach($v->_source->log_details as $recive){if(!empty($recive->received_by[0]->name)){print_r($recive->received_by[0]->name);}} ?></td>
-						<td style="white-space:pre;word-break: break-all; "><?php foreach($v->_source->log_details as $recive){if(!empty($recive->received_by[0]->name)){print_r($recive->received_by[0]->email);}} ?></td>
-						<td><?php foreach($v->_source->log_details as $recive){if(!empty($recive->action)){print_r($recive->action);}} ?></td>
-						<td><?php  echo date("d:m:Y H:i:s",$v->_source->start_time); ?></td>
-						<td><?php  echo date("d-m-Y H:i:s", $v->_source->end_time); ?></td>
-						<td><?php  print_r($v->_source->duration); ?></td>
-						<td class="noExl"><a href="#" onclick="get_video('<?php echo urldecode($v->_source->filename); ?>','<?php echo $token_number;?>');">Play</a></td>
-						<td class="noExl"><?php if(!empty($enq)){?><a class="btn btn-info" onclick="window.location.href='<?php echo base_url();?>enquiry/view/<?php echo $enq->enquiry_id; ?>'" >View</a><?php } ?></td>
-						</tr>
-					<?php }}?>
+          foreach(json_decode($logs_details)->data->hits as $v){
+            $enq=$this->enquiry_model->getenq_by_phone(str_replace('+91','',$v->_source->caller_number));
+            //print_r($enq);
+            ?>
+            <tr>
+            <td><?=$i++?></td>  
+            <td><?php if(!empty($enq)){echo $enq->name_prefix.'&nbsp;'.$enq->name.'&nbsp;'.$enq->lastname;} ?></td> 
+              <td><?php if(!empty($enq)){echo $enq->email;} ?></td>
+            <td><?php if(!empty($v->_source->caller_number)){print_r($v->_source->caller_number);} ?></td>
+            <td><?php foreach($v->_source->log_details as $recive){if(!empty($recive->received_by[0]->name)){print_r($recive->received_by[0]->name);}} ?></td>
+            <td style="white-space:pre;word-break: break-all; "><?php foreach($v->_source->log_details as $recive){if(!empty($recive->received_by[0]->name)){print_r($recive->received_by[0]->email);}} ?></td>
+            <td><?php foreach($v->_source->log_details as $recive){if(!empty($recive->action)){print_r($recive->action);}} ?></td>
+            <td><?php  echo date("d:m:Y H:i:s",$v->_source->start_time); ?></td>
+            <td><?php  echo date("d-m-Y H:i:s", $v->_source->end_time); ?></td>
+            <td><?php  print_r($v->_source->duration); ?></td>
+            <td class="noExl"><a href="#" onclick="get_video('<?php echo urldecode($v->_source->filename); ?>','<?php echo $token_number;?>');">Play</a></td>
+            <td class="noExl"><?php if(!empty($enq)){?><a class="btn btn-info" onclick="window.location.href='<?php echo base_url();?>enquiry/view/<?php echo $enq->enquiry_id; ?>'" >View</a><?php } ?></td>
+            </tr>
+          <?php }}?>
                     </tbody>
 
                 </table>
-				</div>	<?php 
+        </div>  <?php 
  if(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on')   
          $url = "https://";   
     else  
@@ -128,7 +123,7 @@
     $url.= $_SERVER['HTTP_HOST'];   
     
     // Append the requested resource location to the URL   
-    $url.= $_SERVER['REQUEST_URI'];    					
+    $url.= $_SERVER['REQUEST_URI'];             
 if(isset($_GET['pageno'])) {
     $pageno = $_GET['pageno'];
 } else {
@@ -188,31 +183,31 @@ function get_video(id,id2){
                   type: 'POST',
                    beforeSend: function(){
                       Swal.fire({            
-					// icon: 'info',
-					 html:'<strong>Loading..</strong>',
-					 showCancelButton: false,
-					 confirmButtonColor: '#3085d6',
-					 cancelButtonColor: '#d33',
-					 confirmButtonText: 'ok'              
+          // icon: 'info',
+           html:'<strong>Loading..</strong>',
+           showCancelButton: false,
+           confirmButtonColor: '#3085d6',
+           cancelButtonColor: '#d33',
+           confirmButtonText: 'ok'              
                     }).then((result) => {
                     if (result.value) {                                 
                    }
                    });
                    },
                   success: function (data) {
-					if(data!=1){
-					Swal.fire({            
-					// icon: 'info',
-					 html:' <audio width="320" height="240" controls> <source src="'+data+'" type="audio/mp3"></audio>',
-					 showCancelButton: false,
-					 confirmButtonColor: '#3085d6',
-					 cancelButtonColor: '#d33',
-					// confirmButtonText: 'ok'              
+          if(data!=1){
+          Swal.fire({            
+          // icon: 'info',
+           html:' <audio width="320" height="240" controls> <source src="'+data+'" type="audio/mp3"></audio>',
+           showCancelButton: false,
+           confirmButtonColor: '#3085d6',
+           cancelButtonColor: '#d33',
+          // confirmButtonText: 'ok'              
                     }).then((result) => {
                     if (result.value) {                                 
                    }
-                   });	
-					}else{ 
+                   });  
+          }else{ 
                      Swal.fire({            
                  html:'<strong> Recording not found </strong>',
                  showCancelButton: false,
@@ -221,10 +216,10 @@ function get_video(id,id2){
                }).then((result) => {
                  if (result.value) {                                 
                  }});
-					}
+          }
                   }
 
-              });	
+              }); 
 
 }
 </script>
