@@ -34,7 +34,7 @@
 
             </div>
 
-            <table class="datatable table table-striped table-bordered mobile-optimised" cellspacing="0" width="100%">
+            <table class="datatable1 table table-striped table-bordered mobile-optimised" cellspacing="0" width="100%">
 
                <thead>
 

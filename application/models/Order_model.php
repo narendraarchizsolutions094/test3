@@ -27,7 +27,9 @@ class Order_model extends CI_Model {
 	}
 	
 	public function orders($act = "1",$sdate='',$edate=''){
-		
+		$this->load->model('common_model');
+		$retuser   = $this->common_model->get_categories($this->session->user_id);
+
 		if($act == 1){
 			
 			$this->db->select("ord.*,concat(usr.s_display_name, ' ', usr.last_name) as customer,usr.region,prd.country_name as product_name");
@@ -67,6 +69,8 @@ class Order_model extends CI_Model {
 			
 		}
 		
+		$this->db->where_in("ord.addedby",$retuser);
+
 		
 		if($act == 1) {
 			

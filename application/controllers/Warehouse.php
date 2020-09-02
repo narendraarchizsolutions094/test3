@@ -262,12 +262,12 @@ public function editbrand($id){
 }
 
 public function inventory(){
-
+    $this->load->model('Product_model');
         $data['title'] = 'Inventory List';
         $data['inventory_list'] = $this->warehouse_model->inventory_list();
         $data['warehouse_list'] = $this->warehouse_model->warehouse_list();
         $data['brand_list'] = $this->warehouse_model->brand_list();
-         $data['country'] = $this->warehouse_model->productcountry();
+        $data['country'] = $this->Product_model->productdetlist();
 		
         $data['content'] = $this->load->view('warehouse/inventory', $data, true);
         $this->load->view('layout/main_wrapper', $data);

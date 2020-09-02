@@ -28,7 +28,7 @@
                             <th>Product Name</th>
                             <th>Warehouse</th>
                             <th>Quantity</th>
-                            <th>Brand</th>
+                            <!-- <th>Brand</th> -->
                    <!--     <th><?php echo display('action') ?></th> -->
                         </tr>
                     </thead>
@@ -44,7 +44,7 @@
                                     <td data-th='Product Name'><?php echo ucwords($inventorylist->proname); ?></td>        
                                     <td data-th='Warehouse'><?php echo ucwords($inventorylist->wrname); ?></td>     
                                     <td data-th='Quantity'><?php echo $inventorylist->qty; ?></td>
-                                    <td data-th='Brand'><?php echo ucwords($inventorylist->brandname); ?></td>                        
+                                    <!-- <td data-th='Brand'><?php echo ucwords($inventorylist->brandname); ?></td> -->                        
                                     <!-- <td class="center">
                                         <a href="<?php echo base_url("lead/editproductcountry1/$inventorylist->id") ?>" class="btn btn-xs  btn-primary"><i class="fa fa-edit"></i></a> 
                                         <a href="<?php echo base_url("lead/deleteproductcountry/$inventorylist->id") ?>" onclick="return confirm('<?php echo display("are_you_sure") ?>')" class="btn btn-xs  btn-danger"><i class="fa fa-trash"></i></a> 
@@ -134,7 +134,7 @@
                 </div>           
       </div>
       <div class="row">
-               <div class="form-group col-sm-6"> 
+               <!-- <div class="form-group col-sm-6"> 
                 <label>Brand</label>
                 <select name="brand" class="form-control" required="" id="brand"> 
                   <option value="">Select</option>
@@ -142,7 +142,7 @@
                     <option value="<?= $brandlist->id?>"><?= ucwords($brandlist->name); ?></option>
                   <?php }}?>
                 </select>
-                </div>  
+                </div>   -->
                 <div class="form-group col-sm-6"> 
                 <label>Quantity</label>
                 <input type="number" name="qty" class="form-control" required=""> 

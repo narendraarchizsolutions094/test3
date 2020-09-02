@@ -825,7 +825,19 @@ if($coment_type == 1){
                     );
                 $user_id    =   $this->user_model->create($postData);
                 $message = 'Email - '.$data['enquiry']->email.'<br>Password - 12345678';                
-                $this->Message_models->send_email($data['enquiry']->email,'Login Details',$message);
+                $subject = 'Login Details';
+
+                if ($this->session->companey_id == 57) {
+                    $this->db->where('temp_id',125);
+                    $this->db->where('comp_id',57);
+                    $temp_row    =   $this->db->get('api_templates')->row_array();
+                    if (!empty($temp_row)) {
+                        $subject = $temp_row['mail_subject'];   
+                        $message = str_replace("@{email}",$data['enquiry']->email,$temp_row['template_content']);   
+                        $message = str_replace("@{password}",'12345678',$temp_row['template_content']);   
+                    }
+                }
+                $this->Message_models->send_email($data['enquiry']->email,$subject,$message);
                 $msg .=    " And user created successfully";
             }
             //$mail_access = $this->enquiry_model->access_mail_temp(); //access mail template..
