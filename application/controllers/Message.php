@@ -62,8 +62,8 @@ class Message extends CI_Controller {
 	        $curl_fields = array(
 	        	'mail_datas'=>array(
 	        		'message'=>array(
-	        			'html_content'=>'',
-	        			'subject'=>'',
+	        			'html_content'=>$message,
+	        			'subject'=>$email_subject,
 	        			'from_mail'=>'support@corefactors.in',
 	        			'from_name'=>'CareerEx',
 	        			'reply_to'=>''
