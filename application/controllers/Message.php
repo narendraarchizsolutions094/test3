@@ -66,7 +66,7 @@ class Message extends CI_Controller {
 	        			'subject'=>$email_subject,
 	        			'from_mail'=>'support@corefactors.in',
 	        			'from_name'=>'CareerEx',
-	        			'reply_to'=>'noreply@corefactors.in'
+	        			'reply_to'=>'support@corefactors.in'
 	        		)
 	        	)
 	        );
@@ -80,9 +80,9 @@ class Message extends CI_Controller {
 		        $to[]= array('email'=>$to_email,'name'=>'');	                
 			}
 			$curl_fields['mail_datas']['message']['to_recipients'] = $to;
-			$curl_fields = json_encode($curl_fields);
-			echo $curl_fields;
-			exit();
+			$curl_fields = addslashes(json_encode($curl_fields));
+			/*echo $curl_fields;
+			exit();*/
 			if ($to) {
 				$curl = curl_init();
 
