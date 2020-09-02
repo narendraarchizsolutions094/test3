@@ -1231,7 +1231,7 @@ function  send_sms(){
     })
     .done(function(data){
         
-        alert(data);
+      alert(data);
       location.reload();
     })
     .fail(function() {

@@ -66,7 +66,7 @@ class Message extends CI_Controller {
 	        			'subject'=>$email_subject,
 	        			'from_mail'=>'support@corefactors.in',
 	        			'from_name'=>'CareerEx',
-	        			'reply_to'=>'support@corefactors.in'
+	        			'reply_to'=>'no-reply@corefactors.in'
 	        		)
 	        	)
 	        );
@@ -102,8 +102,10 @@ class Message extends CI_Controller {
 				$response = curl_exec($curl);
 
 				curl_close($curl);
-				echo $response;
-
+				$res	=	json_decode($response,true);
+				if (!empty($res['response'])) {
+					echo $res['response'];	
+				}
 			}
 		}
 	}
