@@ -834,7 +834,7 @@ if($coment_type == 1){
                     if (!empty($temp_row)) {
                         $subject = $temp_row['mail_subject'];   
                         $message = str_replace("@{email}",$data['enquiry']->email,$temp_row['template_content']);   
-                        $message = str_replace("@{password}",'12345678',$temp_row['template_content']);   
+                        $message = str_replace("@{password}",'12345678',$message);   
                     }
                 }
                 $this->Message_models->send_email($data['enquiry']->email,$subject,$message);
