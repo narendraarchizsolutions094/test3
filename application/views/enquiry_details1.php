@@ -3303,10 +3303,16 @@ $("#add_institute_form").submit(function(e) {
    alert( "fail!" );   
    });
    } 
-   function  send_sms(){       
+   function  send_sms(){   
+     var sms_type = $("#mesge_type").val();
+      if ("<?=$this->session->companey_id?>" == 81 && sms_type!=1) {
+        url =  '<?php echo base_url();?>message/send_sms_career_ex';
+      }else{
+       url =  '<?php echo base_url();?>message/send_sms';
+      }    
        $.ajax({            
            type: 'POST',
-           url: '<?php echo base_url();?>message/send_sms',
+           url: url,
            data: $('#whatsaap').serialize()
            })
            .done(function(data){               
