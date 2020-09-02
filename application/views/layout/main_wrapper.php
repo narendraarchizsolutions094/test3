@@ -26,6 +26,8 @@
            $segment3 = $this->uri->segment(3);
    ?>
 
+  
+
 <!DOCTYPE html>
 <html lang="en">
    <head>
@@ -1944,7 +1946,7 @@ $("#anch_notification_dropdown").on('click',function(){
 <script>
 $('#something').click(function() {
 //alert('hi');  
-    document.location = '<?php echo base_url('dashboard/menu_style'); ?>';
+    //document.location = '<?php //echo base_url('dashboard/menu_style'); ?>';
 } );
 </script>
   <!-- Insert these scripts at the bottom of the HTML, but before you use any Firebase services -->
