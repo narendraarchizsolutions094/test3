@@ -74,10 +74,10 @@ class Message extends CI_Controller {
 	        if(!empty($move_enquiry)){
 	      	    foreach($move_enquiry as $key){
 	      	        $enq = $this->enquiry_model->enquiry_by_id($key);
-			        $to[]= array('email'=>$enq->email,'name'=>$enq->name.' '.$enq->lastname);	                
+			        $to[]= array('email_id'=>$enq->email,'name'=>$enq->name.' '.$enq->lastname);	                
 	  			}
 	    	}else{					
-		        $to[]= array('email'=>$to_email,'name'=>'');	                
+		        $to[]= array('email_id'=>$to_email,'name'=>'');	                
 			}
 			$curl_fields['mail_datas']['message']['to_recipients'] = $to;
 			$curl_fields = json_encode($curl_fields);
@@ -104,7 +104,7 @@ class Message extends CI_Controller {
 				$response = curl_exec($curl);
 
 				curl_close($curl);
-				echo $response;
+				/*echo $response;*/
 				$res	=	json_decode($response,true);
 				if (!empty($res['response']) && $res['response_type'] == 'success') {
 					echo "Email Sent Successfully.";	
