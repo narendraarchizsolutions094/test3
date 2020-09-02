@@ -1,33 +1,11 @@
-	  <div class="row">
-		<div class="col-md-12" style="background-color: #fff;border-bottom: 1px solid #C8CED3;">
-		  <div class="col-md-6"> 
-			<p style="margin-top: 6px;">
-			Add Order     </p>
-			<!-- Enquiry / Update Enquiry -->
-		  </div>
-		  <div class="col-md-6">
-			 <div style="float:right">
-				  <div class="btn-group" role="group" aria-label="Button group">
-				   <a class="btn" onclick="window.location.reload();" title="Refresh">
-				   <i class="fa fa-refresh icon_color"></i>
-				   </a>  
-				</div>
-				<!-- For invenotry company -->
-				<div class="btn-group" role="group" aria-label="Button group">
-				   <a class="btn" href="<?php echo base_url("order/"); ?>" title="Back">
-				   <i class="fa fa-arrow-left icon_color"></i>
-				   </a>                                                    
-				</div>
-			 </div>
-		  </div>
-	   </div>
+	  
 <div class="row">
     <!--  form area -->
     <div class="col-sm-12">
         <div  class="panel panel-default thumbnail"> 
             <div class="panel-heading no-print">
                 <div class="btn-group"> 
-                    <a class="btn btn-primary" href="<?php echo base_url("/order") ?>"> <i class="fa fa-list"></i> Add Order </a>  
+                    <a class="btn btn-primary" href="<?php echo base_url("/order") ?>"> <i class="fa fa-list"></i> All Order </a>  
                 </div>
             </div>
             <div class="panel-body panel-form">
@@ -62,11 +40,11 @@
 										<label>Product</label>
 										<select class="form-control update-rate" id="proname" name="proname">
 									<?php if(!empty($products)) { 
-												?><option value =""></option><?php
-											
+												?>
+											<option value ="">Select</option><?php											
 											foreach($products as $ind => $prd) {
 												if(!empty($prd->total_price)) {
-											?><option value = "<?php echo $prd->sb_id; ?>" data-price = "<?php echo $prd->price; ?>" data-othrprice = "<?php echo $prd->othr_price;  ?>" data-tax = "<?php echo $prd->tax; ?>"><?php echo $prd->product_name; ?></option><?php
+											?><option value = "<?php echo $prd->prodid; ?>" data-price = "<?php echo $prd->price; ?>" data-othrprice = "<?php echo $prd->othr_price;  ?>" data-tax = "<?php echo $prd->tax; ?>"><?php echo $prd->product_name; ?></option><?php
 
 												}	
 											}
@@ -82,7 +60,7 @@
 								<div class="col-md-6">
 									<div class="form-group">
 										<label>Quantity</label>
-										<input type = "text" class = "form-control price-calc-qty" name = "quantity">
+										<input type = "number" min="1" class = "form-control price-calc-qty" name = "quantity">
 								
 									</div>
 								</div>
@@ -144,13 +122,13 @@
 								</div>
 								<div class="col-md-6 text-center">
 									<label>Status</label>
-									<label class="custom-control custom-radio d-inline">
-									<input type="radio" class="custom-control-input" name="status" value="1" checked="">
-									<span class="custom-control-label">Active</span>
+									<label>
+									<input type="radio" class="" name="status" value="1" checked="">
+									Active
 									</label>
-									<label class="custom-control custom-radio d-inline">
-									<input type="radio" class="custom-control-input" name="status" value="0">
-									<span class="custom-control-label">Inactive</span>
+									<label>
+									<input type="radio" class="" name="status" value="0">
+									<span>Inactive</span>
 									</label>
 
 								</div>
@@ -176,7 +154,6 @@
 			</div>
 		</div>
 	</div>
-</div>	
 <script>
 	$(document).on("keyup", ".tot-cnf-qty", function(){
 		

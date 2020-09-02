@@ -27,6 +27,7 @@ class Form extends CI_Controller {
 		$data['comp_id'] = $comp_id;
  		$this->db->select('*,input_types.title as input_type_title'); 		
  		$this->db->where('tbl_input.form_id',$tid);  			
+ 		$this->db->where('tbl_input.page_id',0);  			
  		$this->db->where('tbl_input.company_id',$comp_id);  			
  		$this->db->order_by('tbl_input.fld_order','ASC');  			
  		$this->db->join('input_types','input_types.id=tbl_input.input_type');  			
@@ -114,6 +115,7 @@ class Form extends CI_Controller {
 			$input_readonly = $this->input->post('readonly');
 			$input_disabled = $this->input->post('disabled');
 			$form_id = $this->input->post('form_id');
+			$page_id	=	$this->input->post('page_id');
 
 
 			$process_list = $this->input->post('process_list');		
@@ -135,7 +137,8 @@ class Form extends CI_Controller {
 							'page_id' => '0',
 							'form_id' => $form_id,
 							'company_id' => $comp_id,
-							'process_id' => $process_list1
+							'process_id' => $process_list1,
+							'page_id' => $page_id,							
 						);
 			if($this->input->post('fld_id')){
 				$upd_arr = array(		
@@ -387,5 +390,49 @@ class Form extends CI_Controller {
 			$this->db->update('enquiry_fileds_basic');
 		}
 
+	}
+	public function product_form(){		
+		$data['title'] = 'Product Fields';
+		$data['comp_id'] = $this->session->companey_id; 		
+ 		$this->db->select('*,input_types.title as input_type_title'); 		
+ 		$this->db->where('tbl_input.page_id',1);  			
+ 		$this->db->where('tbl_input.company_id',$data['comp_id']);  			
+ 		$this->db->order_by('tbl_input.fld_order','ASC');  			
+ 		$this->db->join('input_types','input_types.id=tbl_input.input_type');  			
+ 		$data['form_fields']	=	$this->db->get('tbl_input')->result_array(); 
+ 		$data['form_process_row']	=	array();		         		
+ 		$data['category'] = $this->db->get_where('tbl_category',array('comp_id'=>$data['comp_id']))->result();
+ 		$data['input_types'] = $this->form_model->get_input_types();
+
+ 		$data['tab_details'] = array(); 		
+ 		$data['content']	=	$this->load->view('forms/product_form',$data,true);		
+ 		$this->load->view('layout/main_wrapper',$data);
+	}
+	public function get_product_field_content($cat,$pid=0){
+		$cat_id	=	$cat;		
+		$data['company_list'] = $this->form_model->get_field_by_process($cat,1);		
+		/*
+		echo "<pre>";
+		print_r($data['company_list']);
+		echo "</pre>";
+		*/
+		$res = array();
+		if (!empty($pid)) {
+			$comp_id = $this->session->companey_id;
+			$this->db->from('product_fields');
+			$this->db->where('product_id',$pid);
+			$this->db->where('parent',$pid);
+			$this->db->where('cmp_no',$comp_id);
+			$form_data = $this->db->get()->result_array();
+			if (!empty($form_data)) {
+				foreach ($form_data as $key => $value) {
+					$fid = $value['input'];
+					$res[$fid] = $value['fvalue'];
+				}
+			}
+			$data['res'] = $res;			
+			//print_r($data['res']);
+		}
+		echo $this->load->view('forms/custom_field_by_process',$data,true);		
 	}
 }

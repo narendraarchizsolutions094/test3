@@ -18,7 +18,7 @@
             </div>
             <div class="panel-body">
 
-                 <table class="table table-striped table-bordered" cellspacing="0" width="100%">
+                 <table class="table table-striped table-bordered mobile-optimised" cellspacing="0" width="100%">
                     <thead>
                         <tr>
                             <th><?php echo display('serial') ?></th>
@@ -37,14 +37,14 @@
                             <?php $sl = 1; ?>
                             <?php foreach ($inventory_list as $inventorylist) { ?>
                                 <tr class="<?php echo ($sl & 1)?"odd gradeX":"even gradeC" ?>">
-                                    <td><?php echo $sl; ?></td>
-                                    <td><?php echo ucwords($inventorylist->skuid); ?></td> 
-                                    <td><?php echo $inventorylist->batchno; ?></td> 
-                                    <td><?php echo $inventorylist->serialno; ?></td> 
-                                    <td><?php echo ucwords($inventorylist->proname); ?></td>        
-                                    <td><?php echo ucwords($inventorylist->wrname); ?></td>     
-                                    <td><?php echo $inventorylist->qty; ?></td>
-                                    <td><?php echo ucwords($inventorylist->brandname); ?></td>                        
+                                    <td data-th="<?=display('serial')?>"><?php echo $sl; ?></td>
+                                    <td data-th='SKU ID'><?php echo ucwords($inventorylist->skuid); ?></td> 
+                                    <td data-th='Batch No.'><?php echo $inventorylist->batchno; ?></td> 
+                                    <td data-th='Serial No.'><?php echo $inventorylist->serialno; ?></td> 
+                                    <td data-th='Product Name'><?php echo ucwords($inventorylist->proname); ?></td>        
+                                    <td data-th='Warehouse'><?php echo ucwords($inventorylist->wrname); ?></td>     
+                                    <td data-th='Quantity'><?php echo $inventorylist->qty; ?></td>
+                                    <td data-th='Brand'><?php echo ucwords($inventorylist->brandname); ?></td>                        
                                     <!-- <td class="center">
                                         <a href="<?php echo base_url("lead/editproductcountry1/$inventorylist->id") ?>" class="btn btn-xs  btn-primary"><i class="fa fa-edit"></i></a> 
                                         <a href="<?php echo base_url("lead/deleteproductcountry/$inventorylist->id") ?>" onclick="return confirm('<?php echo display("are_you_sure") ?>')" class="btn btn-xs  btn-danger"><i class="fa fa-trash"></i></a> 

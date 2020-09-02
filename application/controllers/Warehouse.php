@@ -402,8 +402,8 @@ public function select_skuid(){
 
     $id = $this->input->post('id');
     $this->db->select('*');
-    $this->db->from('tbl_product_country');
-    $this->db->where('id',$id);
+    $this->db->from('tbl_proddetails');
+    $this->db->where('prodid',$id);
     $res = $this->db->get()->result();
 
     echo json_encode($res);

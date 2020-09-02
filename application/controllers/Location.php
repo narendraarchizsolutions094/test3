@@ -100,7 +100,7 @@ class location extends CI_Controller {
         $data['country'] = $this->location_model->city_list();
         $data['content'] = $this->load->view('location/city_list', $data, true);
         $this->load->view('layout/main_wrapper', $data);
-    } 
+    }
     public function create() {
         $data['title'] = display('add_country');
         if (empty($this->input->post('user_id'))) {

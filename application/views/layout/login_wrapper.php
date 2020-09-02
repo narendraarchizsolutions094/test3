@@ -12,12 +12,16 @@ $settings = $this->db->select("site_align")
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-        <title><?= display('login') ?> - <?php echo (!empty($title)?$title:null) ?></title>
 <?php $root=(isset($_SERVER["HTTPS"]) ? "https://" : "http://").$_SERVER["HTTP_HOST"];
 if($root=='https://student.spaceinternationals.com'){	 ?>	
     <link rel="icon" href="https://spaceinternationals.com/wp-content/uploads/2018/02/cropped-SPACE-INTERNATIONALS-LOGO-02-1-32x32.jpg" sizes="32x32" />
-<?php }else{ ?>
+<?php }else if(!empty($_GET['c']) && base64_decode($_GET['c']) == 57){ ?>
+    <link rel="icon" href="<?=base_url().'assets/images/Lalantop_logo.jpg'?>" sizes="32x32" />
+    <title><?= display('login') ?> - <?php echo 'Lalantop' ?></title>
+<?php
+}else{ ?>
 	<link rel="icon" href="https://archizsolutions.com/wp-content/uploads/2018/03/cropped-Archiz-logo-1-32x32.jpg" sizes="32x32" />
+        <title><?= display('login') ?> - <?php echo (!empty($title)?$title:null) ?></title>
 <?php } ?>
         <!-- Favicon and touch icons -->
       
@@ -51,7 +55,9 @@ if($root=='https://student.spaceinternationals.com'){	 ?>
             <?php $root=(isset($_SERVER["HTTPS"]) ? "https://" : "http://").$_SERVER["HTTP_HOST"];
             if($root=='https://student.spaceinternationals.com'){	 ?>	
                         <img style="width: 26%;" src="<?php echo base_url('assets/images/lgo.png'); ?>" class="m-r-sm">
-            <?php }else{ ?>
+            <?php }else if (!empty($_GET['c']) && base64_decode($_GET['c']) == 57){ ?>
+                <img style="width: 26%;" src="<?=base_url().'assets/images/Lalantop_logo.jpg'?>" class="m-r-sm">
+            <?php } else{ ?>
             	<img style="width: 26%;" src="https://pfcrm.xyz/pms/uploads/Archiz-logo_new.jpg" class="m-r-sm">
             <?php } ?>
             </div>
@@ -64,9 +70,16 @@ if($root=='https://student.spaceinternationals.com'){	 ?>
                             </div>
                             <div class="header-title">
                                 <?php
-                                if($root!='https://student.spaceinternationals.com'){    ?> 
-                                <h3><?php echo (!empty($title)?$title:null) ?></h3>
-                                <?php } ?>
+                                if($root=='https://student.spaceinternationals.com'){    ?> 
+                                <!-- <h3><?php echo (!empty($title)?$title:null) ?></h3> -->
+                                <?php }else if (!empty($_GET['c']) && base64_decode($_GET['c']) == 57) { ?>
+                                    <h3>Lalantop.com</h3>
+                                    <?php
+                                }else{
+                                    ?>
+                                 <h3><?php echo (!empty($title)?$title:null) ?></h3>
+                                    <?php
+                                } ?>
                                 <small><strong id="login-title"><?= display('please_login') ?></strong></small>
                             </div>
                         </div>

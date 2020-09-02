@@ -31,7 +31,7 @@ class Dashboard extends CI_Controller {
         $customerId     =   $this->input->get('customerId');
         $phone          =   $this->input->get('phone');
 
-        if ($sessionId && $campaignId && $userCrtObjectId && $userId) {            
+        if ($sessionId && $campaignId && $userCrtObjectId && $userId && 0) {            
             $user_data    =   $this->user_model->get_user_by_email($userId);
             if (!empty($user_data) && $user_data->companey_id == 79) {
 
@@ -1030,8 +1030,10 @@ public function login_in_process(){
         }
     }
     public function logout() {        
+        $comp_id = base64_encode($this->session->companey_id);
+
         $this->rememberme->deleteCookie();
-        redirect('login');
+        redirect('login/?c='.$comp_id);
     }
     //Select country..
     public function selected_country() {

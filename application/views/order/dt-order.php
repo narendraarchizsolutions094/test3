@@ -53,9 +53,7 @@
 					
 					if(!empty($ord->total_price)){
 						
-						$cols[] = '<span class = "badge badge-info">Discount : '.$ord->offer.'</span><br />
-							<span class = "badge badge-success">
-										Total : '.$ord->price.'</span>';
+						$cols[] = 'Discount : '.$ord->offer.' Total : '.$ord->price;
 						
 						
 						
@@ -93,19 +91,19 @@
 								
 							
 									
-								if($py->	pay_mode == 1){
+								if($py->pay_mode == 1){
 									$paymode = "Online";	
-								}else if($py->	pay_mode == 2){
-									$paymode = "Cash"	;
-								}else if($py->	pay_mode == 3){
+								}else if($py->pay_mode == 2){
+									$paymode = "Cash";
+								}else if($py->pay_mode == 3){
 									
 									$paymode = "DD/Check";
 									
-								}else if($py->	pay_mode == 4){
+								}else if($py->pay_mode == 4){
 									
 									$paymode =  "Account Transfer";	
 								}else{
-									$paymode =  $py->	pay_mode;
+									$paymode =  $py->pay_mode;
 								} 
 								if($py->status == 1){
 									
@@ -136,7 +134,7 @@
 					
 						$cols[]  =	(!empty($balance)) ? $balance : " ";
 					
-					$cols[] = (!empty($ord->conf_delv) and $ord->conf_delv != "0000-00-00") ?  date("d, M Y", strtotime($ord->conf_delv)).'<br /><span class = "badge badge-info">Next :'.$ord->pend_delv.'</span>'	 :  " - ";
+					$cols[] = (!empty($ord->conf_delv) and $ord->conf_delv != "0000-00-00") ?  date("d, M Y", strtotime($ord->conf_delv)).' Next :'.$ord->pend_delv.''	 :  " - ";
 					$cols[] = (!empty($ord->order_date )) ?  date("d, M Y", strtotime($ord->order_date))  : " - ";
 					
 					if($ord->status  == 1 ){
@@ -154,22 +152,10 @@
 					} 
 					
 				
-						$view  = '<li><a href="'.base_url("order/view/".$ord->ord_no).'"><i class="fa fa-eye" data-toggle="tooltip" title="" data-original-title="Edit"></i>  View</a></li><li><a href="'.base_url("order/booking/".$ord->ord_no).'"><i class="fa fa-gavel" data-toggle="tooltip" title="" data-original-title="Edit"></i>  Confirm</a></li><li><a href="'.base_url("order/invoice/".$ord->ord_no).'"><i class="fa fa-eye" data-toggle="tooltip" title="" data-original-title="Edit"></i>  Invoice</a></li>';
+						$view  = '<a class="btn btn-xs btn-info" href="'.base_url("order/booking/".$ord->ord_no).'"><i class="fa fa-gavel" data-toggle="tooltip" title="" data-original-title="Edit"></i>  Confirm</a><a class="btn btn-xs btn-default" href="'.base_url("order/invoice/".$ord->ord_no).'"><i class="fa fa-eye" data-toggle="tooltip" title="" data-original-title="Edit"></i>  Invoice</a>';
 					
 					
-					$cols[] =  '<div class="btn-group mt-2 mb-2">
-									<button type="button" class="btn btn-outline-info btn-pill dropdown-toggle" data-toggle="dropdown">
-										<i class="fa fa-pencil" data-toggle="tooltip" title="" data-original-title="Edit"></i> <i class = "fa fa-eye"></i><span class="caret"></span>
-									</button>
-									<ul class="dropdown-menu" role="menu">
-										<li class="dropdown-plus-title">
-											Close
-											<b class="fa fa-angle-up" aria-hidden="true"></b>
-										</li>'.$view.
-										'<li><a href="'.urlencode(base64_encode(base64_encode($ord->id))).'"> <i class="fa fa-trash" data-toggle="tooltip" title="" data-original-title="Delete"></i> Delete</a></li>
-										<li><a href="'.base_url("order/update/".$ord->ord_no).'"><i class="fa fa-pencil" data-toggle="tooltip" title="" data-original-title="Edit"></i>  Edit</a></li><li><a href="'.base_url("payment/add/".$ord->ord_no).'"><i class="fa fa-cc" data-toggle="tooltip" title="" data-original-title="Edit"></i>  Payment</a></li>
-									</ul>
-								</div>';
+					$cols[] =  $view.'<a href="'.base_url("payment/add/".$ord->ord_no).'" class="btn btn-xs btn-primary"><i class="fa fa-cc" data-toggle="tooltip" title="" data-original-title="Edit"></i>  Payment</a>';
 
 					$rows[] = $cols;
 				}
@@ -184,7 +170,7 @@
 						"data" => $rows,
 						);
 			die(json_encode($output));
-	function buttonwrap($arr, $total, $col, $title){
+	/*function buttonwrap($arr, $total, $col, $title){
 		
 		$list = "";
 		
@@ -201,5 +187,5 @@
 			return "";
 		}
 											
-		
 	}
+		*/

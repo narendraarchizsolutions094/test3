@@ -803,22 +803,25 @@ if($coment_type == 1){
                 }else if ($data['enquiry']->product_id == 169) {
                     $user_right = 186;
                 } 
-
+                $report_to = '';
                 if($this->session->companey_id == 57){
                     $user_right = 200;
+                    $report_to=273;
                 }
+                $ucid    =   $this->session->companey_id;
                 
                 $postData = array(
                         's_display_name'  =>    $data['enquiry']->name,
                         'last_name'       =>    $data['enquiry']->lastname,  
                         's_user_email'    =>    $data['enquiry']->email,
                         's_phoneno'       =>    $data['enquiry']->phone,
-                        'companey_id'     =>    76,
+                        'companey_id'     =>    $ucid,
                         'b_status'        =>    1,
                         'user_permissions'=>    $user_right,
                         'user_roles'      =>    $user_right,
                         'user_type'       =>    $user_right,                        
-                        's_password'      =>    md5(12345678)
+                        's_password'      =>    md5(12345678),
+                        'report_to'       =>    $report_to
                     );
                 $user_id    =   $this->user_model->create($postData);
                 $message = 'Email - '.$data['enquiry']->email.'<br>Password - 12345678';                

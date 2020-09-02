@@ -8,7 +8,7 @@
                         
                         <label> <?= ucwords($companylist['input_label'])?> <i class="text-danger"></i> </label>
                        
-                             <input type="text" name="enqueryfield[]" id="<?= $companylist['input_name']?>" placeholder="<?= $companylist['input_place']; ?>"  <?php if($companylist['label_required']==1){echo "required";}?> class="form-control">
+                             <input type="text" name="enqueryfield[]" id="<?= $companylist['input_name']?>" placeholder="<?= $companylist['input_place']; ?>"  <?php if($companylist['label_required']==1){echo "required";}?> class="form-control" value="<?=!empty($res[$companylist['input_id']])?$res[$companylist['input_id']]:''?>">
                           
                      
                   <?php }if($companylist['input_type']==2){?>
@@ -19,7 +19,7 @@
 						<?php $optarr = (!empty($companylist['input_values'])) ? explode(",",$companylist['input_values']) : array(); 
 						foreach($optarr as $key => $val){
 							
-							?><option value = "<?php echo $val ?>"><?php echo $val ?></option><?php
+							?><option value = "<?php echo $val ?>" <?=(!empty($res[$companylist['input_id']]) && $res[$companylist['input_id']]==$val)?'selected':''?>><?php echo $val ?></option><?php
 						}	
 						
 						?>

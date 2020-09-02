@@ -69,7 +69,8 @@ class Login extends REST_Controller {
                         'orgisation_name'   => $check_user->row()->orgisation_name,
                         'telephony_id'      => $check_user->row()->telephony_agent_id,
                         'token'             => $check_user->row()->telephony_token,
-                        'phone_no'          => $check_user->row()->s_phoneno
+                        'phone_no'          => $check_user->row()->s_phoneno,
+                        'availability'      => $check_user->row()->availability
                     );
                        $this->set_response([
                     'status' => TRUE,

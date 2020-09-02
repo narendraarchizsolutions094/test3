@@ -226,16 +226,15 @@ class Enquiry extends REST_Controller {
              ], REST_Controller::HTTP_OK);
     }
   }
-  public function get_mail_template_post(){
-    
+  public function get_mail_template_post(){    
     $this->db->where('temp_for',3);
     $this->db->where('response_type',1);
+    $this->db->where('comp_id',$this->input->post('company_id'));
     $res=$this->db->get('api_templates');
     $q=$res->result_array();
     $template = array();
     foreach($q  as $value){
       array_push($template,array('template_id'=>$value['temp_id'],'template_value' => $value['template_name'] ) );     
-    
     }
     if(empty($template)){
       $this->set_response([
@@ -249,6 +248,7 @@ class Enquiry extends REST_Controller {
            ], REST_Controller::HTTP_OK);
     }
   }
+
 	public function addtimeline_post(){	
 		$this->form_validation->set_rules("phone", "Phone", "trim|required");
 		$this->form_validation->set_rules("campaign", "Campaign", "trim|required");	

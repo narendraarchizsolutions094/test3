@@ -16,32 +16,19 @@ class User_model extends CI_Model {
         return $this->db->get()->result();
     }
 
-    public function read() {        
+    public function read($user_right='') {        
         $this->load->model('common_model');
-        $all_reporting_ids    =   $this->common_model->get_categories($this->session->user_id);              
-        $user_id = $this->session->user_id;
-        $user_role = $this->session->user_role;
-        $region_id = $this->session->region_id;
-        $assign_country = $this->session->country_id;
-        $assign_region = $this->session->region_id;
-        $assign_territory = $this->session->territory_id;
-        $assign_state = $this->session->state_id;
-        $assign_city = $this->session->city_id;
+        $all_reporting_ids    =   $this->common_model->get_categories($this->session->user_id);                      
         $this->db->select("*");
         $this->db->from($this->table);
         //$this->db->join('user', 'user.user_id = tbl_admin.companey_id');
         $this->db->join('tbl_user_role', 'tbl_user_role.use_id=tbl_admin.user_permissions', 'left');
-		
-        //$this->db->where('tbl_admin.companey_id',$this->session->companey_id); 
-        // $this->db->where('tbl_admin.user_roles!=', 9);
         $where = "  tbl_admin.pk_i_admin_id IN (".implode(',', $all_reporting_ids).')';                
         $where .= "  AND tbl_admin.b_status=1";                                
+        if (!empty($user_right)) {
+            $where .= "  AND tbl_user_role.user_role='".$user_right."'";                                            
+        }
         $this->db->where($where);
-
-        /*if ($user_id >=3) {
-          //$this->db->where('tbl_admin.companey_id',$this->session->companey_id);  
-        }*/
-
         return $this->db->get()->result();
     }
 
@@ -57,7 +44,6 @@ class User_model extends CI_Model {
     }
 	
 	public function user_read() {
-
         $user_id = $this->session->user_id;
         $user_role = $this->session->user_role;
         $region_id = $this->session->region_id;

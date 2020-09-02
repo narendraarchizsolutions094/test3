@@ -172,8 +172,8 @@ class Telephony extends CI_Controller {
     $curl = curl_init();
     curl_setopt_array($curl, array(  CURLOPT_URL => "https://obd-api.myoperator.co/obd-api-v1",
     CURLOPT_RETURNTRANSFER => true,  CURLOPT_CUSTOMREQUEST => "POST", 
-    CURLOPT_POSTFIELDS =>'{  "company_id": "5f1545a391ac6734", 
-    "secret_token": "ff0bda40cbdb92a4f1eb7851817de3510a175345a16c59a9d98618a559019f73", 
+    CURLOPT_POSTFIELDS =>'{  "company_id": "'.$res->telephony_compid.'",
+    "secret_token": "'.$res->telephony_comp_token.'", 
     "type": "1", 
     "user_id": "'.$support_user_id.'",
     "number": "'.$phone.'",   

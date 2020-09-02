@@ -24,13 +24,18 @@ class Warehouse_model extends CI_Model {
 
 	public function inventory_list(){
 
+		$this->load->model('common_model');
+		$retuser   = $this->common_model->get_categories($this->session->user_id);
+
         $company=$this->session->userdata('companey_id');
         return $this->db->select("tbl_inventory.*,tbl_product_country.country_name as proname,tbl_brand.name as brandname,tbl_warehouse.name as wrname")
                         ->from("tbl_inventory")
                         ->join('tbl_product_country','tbl_product_country.id=tbl_inventory.product_name','left')
+                        //->join('tbl_proddetails','tbl_proddetails.prodid=tbl_inventory.product_name','left')
                         ->join('tbl_brand','tbl_brand.id=tbl_inventory.brand','left')
                         ->join('tbl_warehouse','tbl_warehouse.id=tbl_inventory.warehouse','left')
 						->where('tbl_inventory.comp_id', $company)
+						->where_in("tbl_inventory.created_by",$retuser)
                         ->get()
                         ->result();
 

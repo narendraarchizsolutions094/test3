@@ -24,10 +24,13 @@ class Taskstatus_model extends CI_Model {
                         ->row();
     }
 
-    public function taskstatuslist() {
+    public function taskstatuslist($comp_id=0) {
+        if($this->session->companey_id){
+            $comp_id    =   $this->session->companey_id;
+        }
         return $this->db->select("*")
                         ->from("tbl_taskstatus")
-                        ->where('tbl_taskstatus.comp_id',$this->session->companey_id)
+                        ->where('tbl_taskstatus.comp_id',$comp_id)
                         ->get()
                         ->result();
     }

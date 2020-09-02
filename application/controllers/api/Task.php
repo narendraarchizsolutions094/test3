@@ -359,7 +359,25 @@ public function create_post(){
                  ], REST_Controller::HTTP_OK);
     }
 	 public function task_status_post(){
-      $arr  = array(array('name'=>'Pending','id'=>0),array('name'=>'Completed','id'=>1));
+      
+      /*$arr  = array(
+        array(
+          'name'=>'Pending',
+          'id'=>0),
+        array(
+          'name'=>'Completed',
+          'id'=>1
+        )
+      );*/
+
+      $this->load->model('Taskstatus_model');
+      $rarr = $this->Taskstatus_model->taskstatuslist($this->input->post('company_id'));                 
+      $arr = array();
+      if (!empty($rarr)) {
+        foreach ($rarr as $key => $value) {
+          $arr[] = array('id'=>$value->taskstatus_id,'name'=>$value->taskstatus_name);          
+        }
+      }
       $this->set_response([
                 'status' => TRUE,
                 'related_to' => $arr,

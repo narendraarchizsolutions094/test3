@@ -61,10 +61,10 @@ class Order extends CI_Controller {
 		$this->load->model("warehouse_model");
 		$data['warehouse']    = $this->warehouse_model->warehouse_list();
         
-		$data['products'] = $this->db->select("tbl_proddetails.*,tbl_product.*")
+		$data['products'] = $this->db->select("tbl_proddetails.*,tbl_product_country.country_name as product_name")
 									 ->where("comp_id", $this->session->companey_id)
-									 ->from("tbl_product")
-									 ->join("tbl_proddetails", "tbl_product.sb_id = tbl_proddetails.prodid")->get()->result();
+									 ->from("tbl_product_country")
+									 ->join("tbl_proddetails", "tbl_product_country.id = tbl_proddetails.prodid")->get()->result();
 
 		$currdate = date("Y-m-d");
 		$data['scheme'] = $this->db->select("*")->where("comp_id", $this->session->companey_id)->where("from_date <= '$currdate' and to_date >= '$currdate'")->get("tbl_scheme")->result();
@@ -205,6 +205,7 @@ class Order extends CI_Controller {
 		//$this->load->model("datatable_model");
 		
 		$ordarr  	  = $this->order_model->orders(1);
+		//echo $this->db->last_query();
 		//$data["pay"]  = $this->payment_model->getpayments();
 		
 		//$data["dlv"] = $this->order_model-> getAllDilevery();
@@ -615,7 +616,8 @@ class Order extends CI_Controller {
 		$data["payment"]   = $this->db->select("*")->where("ord_id", $ordno)->get("payment")->result();
 		$data["delivery"]  = $this->order_model->getDilevery($ordno);
 		
-		$this->load->template("order/update-order", $data);
+		$data['content']	=	$this->load->view("order/update-order", $data,true);
+		$this->load->view('layout/main_wrapper',$data);
 	}
 	
 	public function updateorders(){

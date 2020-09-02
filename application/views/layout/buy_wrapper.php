@@ -497,9 +497,9 @@ if($root=='https://student.spaceinternationals.com'){  ?>
 	border-bottom: 1px solid #f7f7f7;
 }
 .checkout-btn{
-	    color: #fff !important;
-    line-height: 31px;
-    margin: 0px 15px;
+	background-color: red !important;
+  line-height: 31px;
+  margin: 0px 15px;
 	width:85%;
 }
 /* search icon style end */
@@ -639,7 +639,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                <span class="sr-only">Toggle navigation</span>
                <span class="pe-7s-keypad"></span>
                </a>                    
-               <div class="navbar-custom-menu" style="float:left;margin-top:10px;margin-left:20px;">
+               <div class="navbar-custom-menu" id='title' style="float:left;margin-top:10px;margin-left:20px;">
                   <?php 
                   if(!empty($title)){ ?>                            
                     <h1 style="font-size: 26px;"><?php echo $title; ?></h1>
@@ -664,7 +664,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
 								  <span class="badge badge-notify"  id = "nav-cart-count"><?php echo count($cartarr); ?></span>
 								 
 							<div class="dropdown-menu dropdown-menu-large">	  
-								  <ul class ="filter-dropdown-menu"  id = "cart-nav-menu" style = "padding:0px;list-style:none;">
+								  <ul class ="cart-dropdown-menu"  id = "cart-nav-menu" style = "padding:0px;list-style:none;">
 								<?php 
 								
 								
@@ -862,7 +862,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
       </div>
 
 	    <?php
-    if(in_array(290,$module)) { 
+    if(user_access(290)) { 
 	  $this->load->view('chats/chats');
 	  
 	}?>	  
@@ -1400,7 +1400,7 @@ $("#anch_notification_dropdown").on('click',function(){
 <script>
 $('#something').click(function() {
 //alert('hi');  
-    document.location = '<?php echo base_url('dashboard/menu_style'); ?>';
+    //document.location = '<?php echo base_url('dashboard/menu_style'); ?>';
 } );
 </script>
   <!-- Insert these scripts at the bottom of the HTML, but before you use any Firebase services -->

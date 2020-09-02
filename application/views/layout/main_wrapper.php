@@ -628,11 +628,11 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                </span>
             </a>
             <nav class="navbar navbar-static-top" >
-               <a href="#" class="sidebar-toggle" id="something" data-toggle="offcanvas" role="button">
+               <a href="javascript:void(0)" class="sidebar-toggle" id="something" data-toggle="offcanvas" role="button">
                <span class="sr-only">Toggle navigation</span>
                <span class="pe-7s-keypad"></span>
                </a>                    
-               <div class="navbar-custom-menu" style="float:left;margin-top:10px;margin-left:20px;">
+               <div class="navbar-custom-menu" id="title" style="float:left;margin-top:10px;margin-left:20px;">
                   <?php 
                   if(!empty($title)){ ?>                            
                     <h1 style="font-size: 26px;"><?php echo $title; ?></h1>
@@ -640,10 +640,10 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                     <h1 style="font-size: 26px;"><?php echo str_replace('_', ' ', ucfirst($segment1)) ?></h1>
                   <?php } ?>
                </div>
-               <div class="navbar-custom-menu">
+               <div class="navbar-custom-menu" id="mob">
                   <ul class="nav navbar-nav">   
                       <?php if($this->session->userdata('companey_id')!=67){ ?> 
-                    <li  class="dropdown dropdown-user">
+                    <li  class="dropdown dropdown-user master-search-nav">
                       <br />
                       <?php echo form_open(base_url("master_lead_search"), array("class" => "form-inline", "method"=> "GET",'id'=>'master_search_form')); ?>
                         <div class="input-group">               
@@ -657,10 +657,14 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                       <?php echo form_close(); ?>
                     </li>     
         
-                    <li class="dropdown dropdown-user">
-                       <button title="<?=display("mark_attendence")?>" class="btn btn-primary" style="margin-top: 20px; border-radius: 50%;" id="mark_attendance" ><i class="fa fa-clock-o"></i></button>
-                    </li>
-          <?php } ?>
+          <?php } 
+          if (user_access(200)) { ?>
+              <li class="dropdown dropdown-user">
+                 <button title="<?=display("mark_attendence")?>" class="btn btn-primary" style="margin-top: 20px; border-radius: 50%;" id="mark_attendance" ><i class="fa fa-clock-o"></i> </button>&nbsp;
+              </li>
+            <?php
+          }
+          ?>
           <li  class="dropdown dropdown-user">
                             <?php
                         if(user_access(230) || user_access(231) || user_access(232) || user_access(233) || user_access(234) || user_access(235) || user_access(236)){                          
@@ -861,7 +865,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                           <a href="<?php echo base_url() ?>lead/productcountry">
                            <?php echo display('product'); ?></a>
                         </li>
-<?php if($this->session->userdata('companey_id')==67 || $this->session->userdata('companey_id')==76) { ?>
+<?php if($this->session->userdata('companey_id')==67 || $this->session->userdata('companey_id')==76 || $this->session->userdata('companey_id')==84) { ?>
                         <li class="<?php echo (in_array($segment2,array('disciplinelist','add_discipline','edit_discipline')) ?"active":'') ?>">
                           <a href="<?php echo base_url() ?>lead/discipline">
                            <?php echo display('program_discipline');?>                             
@@ -973,9 +977,9 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                          <li class="<?php echo (in_array($segment2,array('typeofproduct')) ?"active":'') ?>">
                           <a href="<?php echo base_url() ?>warehouse/typeofproduct">Type of Product</a>
                         </li>
-                         <li class="<?php echo (in_array($segment2,array('brand')) ?"active":'') ?>">
+                        <!-- <li class="<?php echo (in_array($segment2,array('brand')) ?"active":'') ?>">
                           <a href="<?php echo base_url() ?>warehouse/brand">Brand</a>
-                        </li>
+                        </li> -->
 				
 				          		<li class="<?php echo (($segment1 == "category") ? "active" : null) ?>">
                           <a href="<?php echo base_url("product/category"); ?>">Category</a>
@@ -1406,7 +1410,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
       </div>
 
 	    <?php
-    if(in_array(290,$module)) { 
+    if(in_array(290,$module)) {             
 	  $this->load->view('chats/chats');
 	  
 	}?>	  
@@ -1441,7 +1445,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
       </div>
       <?php
     if(($this->session->companey_id!='67')){
-    $this->load->view('chats/chats');
+    //$this->load->view('chats/chats');
     
   }?>   
    

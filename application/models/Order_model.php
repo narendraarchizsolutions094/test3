@@ -26,7 +26,7 @@ class Order_model extends CI_Model {
 					 ->row();
 	}
 	
-		public function orders($act = "1",$sdate='',$edate=''){
+	public function orders($act = "1",$sdate='',$edate=''){
 		
 		if($act == 1){
 			
@@ -74,7 +74,7 @@ class Order_model extends CI_Model {
 			$this->db->join('tbl_product_country prd','prd.id=ord.product','left');
 			$this->db->join('tbl_admin usr','usr.pk_i_admin_id=ord.cus_id','left');
 		
-			$ordcol = array("ord.id", "ord.id","prd.pro_name");
+			$ordcol = array("ord.id","prd.country_name");
 			
 			$this->order_by($ordcol);
 			$this->limit();
@@ -113,7 +113,7 @@ class Order_model extends CI_Model {
 				 $this->db->limit($_POST['length'], $_POST['start']);
 		
 		 }else{
-			 $this->db->limit(30, 0);
+			 $this->db->limit(10, 0);
 		
 		 }	
 	 } 

@@ -53,6 +53,8 @@
 					<?php echo form_close(); ?>
 				</div>
 			</div>
+      <form id='product_cat_form'>
+            <input type = "hidden" name = "categid" value = "<?php echo $categid; ?>">
             <table class="datatable table table-striped table-bordered" cellspacing="0" width="100%">
 
                <thead>
@@ -83,7 +85,7 @@
 
                   <tr>
 
-                     <td><input type='checkbox' name='product_status[]' class="checkbox" value='<?php echo $ctg->id;?>'>&nbsp; </td>
+                     <td><input type='checkbox' name='cat[]' class="checkbox" value='<?php echo $ctg->id;?>'>&nbsp; </td>
 
                      <td><?=$i++ ?></td>
 
@@ -219,52 +221,22 @@
 
      var x=  confirm('Are you sure delete this Records ? ');
 
-    if(x==true){   
-
+  if(x==true){   
    $.ajax({
-
    type: 'POST',
-
-   url: '<?php echo base_url();?>deactive_product',
-
-   data: $('#login').serialize()
-
+   url: '<?php echo base_url();?>product/delete_product_category',
+   data: $('#product_cat_form').serialize()
    })
-
-   .done(function(data){
-
-   if(data==1){	
-
-       alert( "Delete successfully" );
-
-       window.location.href = '<?php echo base_url()?>dash/product_list';
-
-       
-
-   }else{
-
-   alert( "Delete Unsuccessful" );
-
-   window.location.href = '<?php echo base_url()?>dash/product_list';
-
-   }
-
+   .done(function(data){   
+      alert( "Delete successfully" );
+      window.location.href = '<?php echo base_url()?>product/category';
    })
-
    .fail(function() {
-
-   alert( "fail!" );
-
-   
-
+    alert( "fail!" );
    });
-
    }else{
-
-        location.reload(); 
-
+      location.reload(); 
    }}
-
 </script>
 
 <script>

@@ -145,53 +145,45 @@ input[name=lead_stages]{
          
       </div>
 </div>
-
+	<br>
       <div class="row">
         <div class="col-md-12">
           <div class="card">
 				<div class = "row">
 					<div class = "col-md-12">
 				<div class="table-responsive">
-										<table  class="table table-bordered table-hover" id = "add-datatable" style="width:100%;">
+										<table  class="table table-bordered table-hover mobile-optimised" id = "add-datatable" style="width:100%;">
 							<thead>
 												<tr>
-													<th class="wd-15p">S.No.</th>
-													<th class="wd-15p"> Order No </th>
-												
-													<th class="wd-15p">Product</th>
-													<th class="wd-15p">Quantity</th>
-													<th class="wd-15p">Price</th>
-													
-													<th class="wd-15p">Payment</th>
-													<th class="wd-15p">Pay</th>
-													<th class="wd-15p">Balance</th>
-													<th class="wd-15p">Delivery Date</th>
-													<th class="wd-15p"> Date</th>
-													
-													<th class="wd-15p">Status</th>
-													<th class="wd-15p">Action</th>
-													
+													<th>S.No.</th>
+													<th> Order No </th>												
+													<th>Product</th>
+													<th>Quantity</th>
+													<th>Price</th>													
+													<th>Payment</th>
+													<th>Pay</th>
+													<th>Balance</th>
+													<th>Delivery Date</th>
+													<th> Date</th>													
+													<th>Status</th>
+													<th>Action</th>													
 												</tr>
 											</thead>
-
 											<tbody>
-												<?php if(!empty($orders)){
-
+												<?php if(!empty($orders) && 0){
 												   $sl=1;
                                                   foreach($orders as $ind =>  $ord){
 												?>
 												<tr>
-
 													<td><?= $ind + 1; ?></td>
-													<td><?php echo $ord->ord_no; ?></td>
-											
-													<td><?= ucwords($ord->product_name)  ?></td>
-													<td>
-															<?= $ord->quantity; ?>
+													<td data-th='Order No'><?php echo $ord->ord_no; ?></td>
+													<td data-th='Product'><?= ucwords($ord->product_name)  ?></td>
+													<td data-th='Quantity'>
+														<?= $ord->quantity; ?>
 													</td>
-													<td><?= $ord->price; ?>
+													<td data-th='Price'><?= $ord->price; ?>
 													</td>
-													<td>
+													<td data-th='Payment'>
 													<span class = "badge badge-info">
 														Mode : <?php 
 												/*	if($ord->pay_mode == 1){
@@ -213,11 +205,11 @@ input[name=lead_stages]{
 															} */ ?>
 														</span>
 													</td>
-													<td><?php // $ord->balance; ?></td>
-													<td><?php echo $ord->customer;  ?></td>
-													<td><?php // date("d,M Y", strtotime($ord->delivery_date)); ?></td>
-													<td><?php // date("d, M Y", strtotime($ord->order_date)); ?></td>
-													<td>
+													<td data-th='Pay'><?php // $ord->balance; ?></td>
+													<td data-th='Balance'><?php echo $ord->customer;  ?></td>
+													<td data-th='Delivery Date'><?php // date("d,M Y", strtotime($ord->delivery_date)); ?></td>
+													<td data-th='Date'><?php // date("d, M Y", strtotime($ord->order_date)); ?></td>
+													<td data-th='Status'>
 													<?php if($ord->status  == 1 ){
 															echo "Request";
 													}else if($ord->status  == 2 ){
@@ -230,18 +222,14 @@ input[name=lead_stages]{
 															echo "Reject";
 													} ?>
 													</td>
-													<td>
-												
+													<td data-th='Action'>												
 														<a href="<?php echo base_url("order/update/".urlencode(base64_encode(base64_encode(@$ord->ord_no)))); ?>" class="btn btn-info">
 														<i class="fe fe-edit" data-toggle="tooltip" title="" data-original-title="Edit"></i></a>
-
 														<a href="<?php echo urlencode(base64_encode(base64_encode($ord->id))); ?>"  class="btn btn-danger delete-stocks">
 														<i class="fe fe-trash" data-toggle="tooltip" title="" data-original-title="Delete"></i></a>
-
 													</td>
 												</tr>
 												<?php  $sl++; }
-
 											}?>
 											</tbody>
 										</table>
@@ -254,20 +242,34 @@ input[name=lead_stages]{
 	</div>	
 	<script>
 	$(document).ready(function(){
-			$("#add-datatable").dataTable({"serverSide":"true","lengthMenu":[10,10,100,500,1000,-1,50,100,500,1000,"All"],"ajax":{"url":"<?php echo base_url('order/loadorders'); ?>","type":"post"},"columnDefs":{"orderable":"false","target":0},"order":[1,"desc"]});
+			$("#add-datatable").dataTable({
+				"serverSide":"true",
+				"lengthMenu":[10,20,50,100,500,1000,"All"],
+				"ajax":{
+					"url":"<?php echo base_url('order/loadorders'); ?>",
+					"type":"post"
+				},
+				"columnDefs":{
+					"orderable":"false",
+					"target":0
+				},
+				"order":[1,"desc"],
+				createdRow: function( row, data, dataIndex ) {
+			        $(row).find('td:eq(0)').attr('data-th', 'S.No.');
+			        $(row).find('td:eq(1)').attr('data-th', 'Order No');
+			        $(row).find('td:eq(2)').attr('data-th', 'Product');
+			        $(row).find('td:eq(3)').attr('data-th', 'Quantity');
+			        $(row).find('td:eq(4)').attr('data-th', 'Price');
+			        $(row).find('td:eq(5)').attr('data-th', 'Payment');
+			        $(row).find('td:eq(6)').attr('data-th', 'Pay');
+			        $(row).find('td:eq(7)').attr('data-th', 'Balance');
+			        $(row).find('td:eq(8)').attr('data-th', 'Delivery Date');
+			        $(row).find('td:eq(9)').attr('data-th', 'Date');
+			        $(row).find('td:eq(10)').attr('data-th', 'Status');
+			        $(row).find('td:eq(11)').attr('data-th', 'Action');
+			    }
+			});
 			
-		});
-	</script>
-	<script>
-		$(document).on("click", ".enq_form_filters",function(){
-				
-			var val = $(this).val();
-			
-			$(".border_bottom").removeClass("border_bottom_active");
-			$(this).closest(".border_bottom").addClass("border_bottom_active");
-			$('#add-datatable').dataTable().fnDestroy();
-			 $("#add-datatable").dataTable({"serverSide":"true","lengthMenu":[10,10,100,500,1000,-1,50,100,500,1000,"All"],"ajax":{"url":"<?php echo base_url('order/loadorders'); ?>?action="+val,"type":"post"},"columnDefs":{"orderable":"false","target":0},"order":[1,"desc"]});
-			 
 		});
 	</script>
 	<script>

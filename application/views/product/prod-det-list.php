@@ -34,7 +34,7 @@
 
             </div>
 
-            <table class="datatable table table-striped table-bordered" cellspacing="0" width="100%">
+            <table class="datatable table table-striped table-bordered mobile-optimised" cellspacing="0" width="100%">
 
                <thead>
 
@@ -52,7 +52,7 @@
 					 <th>Price</th>
                      <th>Stock</th>
                      <th>Added Date</th>
-                     <th class="sorting wid-10" tabindex="0" rowspan="1" colspan="1">Status</th>
+                     <!-- <th class="sorting wid-10" tabindex="0" rowspan="1" colspan="1">Status</th> -->
 
                      <th class="sorting wid-10" tabindex="0" rowspan="1" colspan="1">Actions</th>
 
@@ -62,38 +62,38 @@
 
                <tbody>
 
-                  <?php $i=1; foreach($product_list as $i => $row){ ?>
+                  <?php $c=1; foreach($product_list as $i => $row){ ?>
 
                   <tr>
 
-                     <td><input type='checkbox' name='product_status[]' class="checkbox" value='<?php echo $row->id;?>'>&nbsp; </td>
-
-                     <td><?=$i++ ?></td>
-					
-                     <td><?= $row->country_name; ?></td>
-
-                     <td> <i class = "fa fa-rupee"></i> <?php echo $row->price; ?></td>
-
-					<td>Stock</td>
-					<td>Added Date</td>
-					<td>Status</td>
-		
-                     <td class="center">
-
+                     <td><input type='checkbox' name='product_status[]' class="checkbox" value='<?php echo $row->id;?>'>
+                     </td>
+                     <td data-th='S.N'><?=$c++?></td>
+                     <td data-th='Product Name'><?= $row->country_name; ?></td>
+                     <td data-th='Price'> <i class = "fa fa-rupee"></i> <?php echo $row->price; ?></td>
+            				 <td data-th='Stock'>Stock</td>
+            				 <td data-th='Added Date'><?=$row->created_date?></td>
+            				 <!-- <td data-th='Status'> -->
+                      <?php
+                      /*if (!empty($row->status)) {
+                        if ($row->status == 1) {
+                          echo "Active";
+                        }else if ($row->status == 2){
+                          echo "Inactive";
+                        }
+                      }*/
+                      ?>
+                    <!--  </td> -->
+                     <td class="center" data-th='Actions'>
                       <?php if (user_access(471)) { ?>            
-                        <a  class="edit" href = "<?php echo base_url("product/editproduct/".$row->id); ?>"><i class="ti-pencil"></i></a> 
+                        <a  class="edit btn btn-xs btn-primary" href = "<?php echo base_url("product/editproduct/".$row->id); ?>"><i class="ti-pencil"></i></a> 
                       <?php
                       }
                       ?>
-
                      </td>
-
                   </tr>
-
                   <?php } ?>
-
                </tbody>
-
             </table>
             <?php
             if (user_access(472)) { ?>            

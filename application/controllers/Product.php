@@ -21,50 +21,41 @@ class Product extends CI_Controller {
 	
 	
 	
-	function addproduct(){
-		
-		if(isset($_POST['proname'])){
-			
+	function addproduct(){		
+		if(isset($_POST['proname'])){			
 			$this->saveProduct();
-		}
-		
+		}		
 		$data['title'] = 'Add Product';
 		$data['category'] = $this->db->select("*")->where("comp_id", $this->session->companey_id)->get("tbl_category")->result();
-		$currdate = date("Y-m-d");
-		
-		$data['scheme'] = $this->db->select("*")->where("comp_id", $this->session->companey_id)->where("from_date <= '$currdate' and to_date >= '$currdate'")->get("tbl_scheme")->result();
-		
-		$data['process'] = $this->db->select("*")->where("comp_id", $this->session->companey_id)->get("tbl_product")->result();
-		
+		$currdate = date("Y-m-d");		
+		$data['scheme'] = $this->db->select("*")->where("comp_id", $this->session->companey_id)->where("from_date <= '$currdate' and to_date >= '$currdate'")->get("tbl_scheme")->result();		
+		$data['process'] = array();//$this->db->select("*")->where("comp_id", $this->session->companey_id)->get("tbl_product")->result();
+		$this->load->model('User_model');
+		$this->load->model('warehouse_model');
+		$data['seller_list'] = $this->User_model->read('Seller');
+        $data['brand_list'] = $this->warehouse_model->brand_list();		
 		$data['content']  = $this->load->view('product/add-product', $data, true);
-        $this->load->view('layout/main_wrapper', $data);
-		
+        $this->load->view('layout/main_wrapper', $data);		
 	}
-	function editproduct($prodno){
-		
-		if(isset($_POST['proname'])){
-			
+	function editproduct($prodno){		
+		if(isset($_POST['proname'])){			
 			$this-> saveProduct();
 		}
-		
-		
 		$data['title'] = 'Update Product';
-		$data['product'] = $this->Product_model->productdet($prodno);
-		
-		$data['category'] = $this->db->select("*")->where("comp_id", $this->session->companey_id)->get("tbl_category")->result();
-	
-		$data['subcategory'] = $this->db->select("*")->where("comp_id", $this->session->companey_id)->where("cat_id", $data["product"]->category)->get("tbl_subcategory")->result();
-		
+		$data['product'] = $this->Product_model->productdet($prodno);		
+		$data['category'] = $this->db->select("*")->where("comp_id", $this->session->companey_id)->get("tbl_category")->result();	
+		$data['subcategory'] = $this->db->select("*")->where("comp_id", $this->session->companey_id)->where("cat_id", $data["product"]->category)->get("tbl_subcategory")->result();		
 		$currdate = date("Y-m-d");
-		$data['scheme'] = $this->db->select("*")->where("comp_id", $this->session->companey_id)->where("from_date <= '$currdate' and to_date >= '$currdate'")->get("tbl_scheme")->result();
-		
-		$data['process'] = $this->db->select("*")->where("comp_id", $this->session->companey_id)->get("tbl_product")->result();
-		
+		$data['scheme'] = $this->db->select("*")->where("comp_id", $this->session->companey_id)->where("from_date <= '$currdate' and to_date >= '$currdate'")->get("tbl_scheme")->result();		
+		$data['process'] = array();//$this->db->select("*")->where("comp_id", $this->session->companey_id)->get("tbl_product")->result();
+		$this->load->model('User_model');
+		$this->load->model('warehouse_model');
+		$data['seller_list'] = $this->User_model->read('Seller');
+        $data['brand_list'] = $this->warehouse_model->brand_list();
+        $data['pid'] = $prodno;
 		$data['content'] = $this->load->view('product/add-product', $data, true);
-        $this->load->view('layout/main_wrapper', $data);
-		
-	}
-	
+        $this->load->view('layout/main_wrapper', $data);		
+	}	
 	public function addorder(){
 		
 		if(isset($_POST["proname"])){
@@ -139,7 +130,7 @@ class Product extends CI_Controller {
 	  public function do_upload()
         {
                 $config['upload_path']          = './assets/images/products/';
-                $config['allowed_types']        = 'gif|jpg|png';
+                $config['allowed_types']        = 'gif|jpg|png|jpeg';
              
 
                 $this->load->library('upload', $config);
@@ -157,10 +148,15 @@ class Product extends CI_Controller {
         }
 
 	public function saveProduct(){
-		
+		/*echo "<pre>";
+		print_r($_POST);
+		echo "</pre>";
+		die();*/
 		
 		$this->form_validation->set_rules('proname', display('product_name'), 'required|max_length[50]');
-		$this->form_validation->set_rules('price', display('product_name'), 'required|max_length[50]');
+		$this->form_validation->set_rules('price', 'Price', 'required|max_length[50]');
+		$this->form_validation->set_rules('seller', 'Seller', 'required');
+		$this->form_validation->set_rules('brand', 'Brand', 'required');
    
 		if($this->form_validation->run()){
    
@@ -169,9 +165,21 @@ class Product extends CI_Controller {
 							 "hsn_sac"	    => $this->input->post("hsn_code", true),
 							 "status"       => $this->input->post("tax", true),
 							 "gst"			=> $this->input->post("status", true),
+							 "created_by"   => $this->session->user_id,
 							 "updated_date" => date("Y-m-d h:i:s"),
 							 );
-			
+			$seller_id = $this->input->post('seller');
+			$brand = $this->input->post('brand');
+			//$brand_row	=	$this->db->get_where('tbl_brand',array('id'=>$brand))->row_array();
+			$this->load->model('User_model');
+			$this->load->model('location_model');
+			$seller_row = $this->User_model->read_by_id($seller_id);
+			$seller_city = '';
+			if (!empty($seller_row->city_id)) {
+				$seller_city_row = $this->location_model->read_by_city($seller_row->city_id);
+				$seller_city = $seller_city_row->city;
+			}
+			$skuid = 'LT-'.substr($brand, 0,3).'/'.substr($seller_city, 0,3).'/'.substr($seller_row->s_display_name, 0,3);			
 			if(isset($_POST["productid"])) {
 				
 				$prodid  = $this->input->post("productid", true);
@@ -188,17 +196,38 @@ class Product extends CI_Controller {
 				$prodid  = $this->db->insert_id();	
 			}
 						 
+			if(isset($_POST['inputfieldno'])) {
+				$inputno   = $this->input->post("inputfieldno", true);
+				$enqinfo   = $this->input->post("enqueryfield", true);
+				$inputtype = $this->input->post("inputtype", true);				
+					foreach($inputno as $ind => $val){						
+						$biarr = array( 
+										"product_id"  => $prodid,
+										"input"   	  => $val,
+										"parent"  	  => $prodid, 
+										"fvalue"  	  => (!empty($enqinfo[$ind])) ? $enqinfo[$ind] : "",
+										"cmp_no"  	  => $this->session->companey_id,
+									);
+						$this->db->where('product_id',$prodid);        
+	                    $this->db->where('input',$val);        
+	                    $this->db->where('parent',$prodid);
+	                    if($this->db->get('product_fields')->num_rows()){                                
+	                        $this->db->where('product_id',$prodid);        
+	                        $this->db->where('input',$val);        
+	                        $this->db->where('parent',$prodid);
+	                        $this->db->set('fvalue',$enqinfo[$ind]);	                        
+	                        $this->db->update('product_fields');
+	                    }else{
+	                        $this->db->insert('product_fields',$biarr);
+	                    } 	
+					}									
+			}
 			$price = $this->input->post("price", true);
 			$othrprice = (!empty($_POST["othrprice"])) ? $this->input->post("othrprice", true) : 0;
-			$tax =  (!empty($_POST["tax"])) ? $this->input->post("tax", true) : 0;
-			
-			$total = $price + $othrprice + $tax;
-			
-			if(!empty($prodid)) {
-				
-					$imgarr   = $this->do_upload(); 
-			
-	
+			$tax =  (!empty($_POST["tax"])) ? $this->input->post("tax", true) : 0;			
+			$total = $price + $othrprice + $tax;			
+			if(!empty($prodid)) {				
+				$imgarr   = $this->do_upload(); 
 				$arr = array(
 							 "last_update"  => date("Y-m-d h:i:s"),
 							// "image"		=> $imagename,
@@ -216,15 +245,14 @@ class Product extends CI_Controller {
 							 "color"        => $this->input->post("color", true),
 							 "details"      => $this->input->post("details", true),
 							 "hsn"			=> $this->input->post("hsn_code", true),
+							 "seller_id"    => $seller_id,
+							 "skuid"    => $skuid,
+							 "brand"    => $brand
 							 );
 				if(!empty($imgarr["upload_data"]["file_name"])){
-				
-					
 					$arr["image"] = $imgarr["upload_data"]["file_name"];
-				}			 
-					
-				if(isset($_POST["detailsid"])) {
-					
+				}			 					
+				if(isset($_POST["detailsid"])) {					
 					$detid = $this->input->post("detailsid", true);
 					$this->db->where("id", $detid);
 					$this->db->update("tbl_proddetails", $arr);
@@ -238,60 +266,42 @@ class Product extends CI_Controller {
 			}
 			if ($ret) {
 				$this->session->set_flashdata('message', "Successfully saved");
-				redirect(base_url("product"), "refresh");
+				//redirect(base_url("product"), "refresh");
 			} else {
 				$this->session->set_flashdata('exception', "Failed to saved");
-			}	
-		
+			}			
 		}
 	}	
-
     function productlist() {
-        if (user_role('60') == true) {
-      
+        if (user_role('60') == true) {      
         }
         $data['title'] = display('product_list');
-        $data['product_list'] = $this->Product_model->productlist();
-		
+        $data['product_list'] = $this->Product_model->productlist();		
         $data['content'] = $this->load->view('product/product_list', $data, true);
         $this->load->view('layout/main_wrapper', $data);
-    }
-	
-	function stock() {
-        
+    }	
+	function stock() {        
 		if(isset($_FILES["csvupload"])){
-
 			$this->csvupload();
         }
-        if(isset($_POST["downloadexel"])){
-           
+        if(isset($_POST["downloadexel"])){           
 			$sdate = $this->input->post('startdate', true);
 			$sdate = (!empty($sdate)) ? date("Y-m-d" , strtotime(str_replace("/","-", $sdate))) : null;
             $edate = $this->input->post('enddate', true);
-			$edate = (!empty($edate)) ? date("Y-m-d" , strtotime(str_replace("/","-",$edate))) : null;
-            
-			$this->downloadexel($sdate,$edate);
-			
-			echo "<script> window.location='".base_url('product/stock') ."';</script>";
-			
+			$edate = (!empty($edate)) ? date("Y-m-d" , strtotime(str_replace("/","-",$edate))) : null;            
+			$this->downloadexel($sdate,$edate);			
+			echo "<script> window.location='".base_url('product/stock') ."';</script>";			
 		}
-
 		$data["title"] = "Stocks List";
         $data["stocks"] = $this->Product_model->getStock();
 		$data["totalstock"] = $this->db->where("company", $this->session->userdata('companey_id'))->count_all_results("stock");
 		$data["todaycreate"] = $this->db->where("company", $this->session->userdata('companey_id'))->where("stock_date", date("Y-m-d"))->count_all_results("stock");
-		$data["todayupdate"] = $this->db->where("company", $this->session->userdata('companey_id'))->where("last_update", date("Y-m-d"))->count_all_results("stock");
-
-		
+		$data["todayupdate"] = $this->db->where("company", $this->session->userdata('companey_id'))->where("last_update", date("Y-m-d"))->count_all_results("stock");		
 		$data['content'] = $this->load->view('product/stock-list', $data, true);	
 		$this->load->view('layout/main_wrapper', $data);
-    }
-	
-	public function addstock(){
-		
+    }	
+	public function addstock(){		
 		 $this->savestock();
-       
-		
 		$this->load->model("warehouse_model");
 		$data['title'] = display('add_stock');
         $data['products'] = $this->Product_model->productlist();
@@ -299,62 +309,38 @@ class Product extends CI_Controller {
 		$data['warehouse']    = $this->warehouse_model->warehouse_list();
         $data['content'] = $this->load->view('product/add-stock', $data, true);
 		$this->load->view('layout/main_wrapper', $data);
-	}
-	
-	public function updatestock($stkno = ""){
-        
-        $this->savestock();
-        
-        $data["products"] = $this->Product_model-> getProduct();
-        
+	}	
+	public function updatestock($stkno = ""){        
+        $this->savestock();        
+        $data["products"] = $this->Product_model-> getProduct();        
         $stkno = base64_decode(base64_decode(urldecode($stkno)));
-        $data["stock"] = $this->Product_model->  getStockById($stkno);
-        
-		$data["warehouse"]  = $this->Product_model-> getWarehouse();
-		
-		$data["supplier"]  = $this->Product_model->getSupplier();
-     	
-	    if(empty($data["stock"])) show_404();
-        
+        $data["stock"] = $this->Product_model->  getStockById($stkno);        
+		$data["warehouse"]  = $this->Product_model-> getWarehouse();		
+		$data["supplier"]  = $this->Product_model->getSupplier();     	
+	    if(empty($data["stock"])) show_404();        
         $data["title"] = "Update Stocks";
 		$data['content'] = $this->load->view('product/update-stocks', $data, true);	
 		$this->load->view('layout/main_wrapper', $data);
-	
-        
     }
-	public function datearg($post){
-        
-        $date = $this->input->post($post, true);
-        
+	public function datearg($post){        
+        $date = $this->input->post($post, true);        
         $ndate = str_replace("/", "-", $date);
-        $dtarr = explode("-", $ndate);
-        
-        $ndate = (!empty($dtarr["2"])) ? $dtarr["1"]."-".$dtarr["0"]."-".$dtarr["2"] : NULL;
-        
+        $dtarr = explode("-", $ndate);        
+        $ndate = (!empty($dtarr["2"])) ? $dtarr["1"]."-".$dtarr["0"]."-".$dtarr["2"] : NULL;        
         return $ndate;
     }
-	public function  savestock(){
-        
-        if(isset($_POST["product"])) {
-            
+	public function  savestock(){        
+        if(isset($_POST["product"])) {            
             $this->form_validation->set_rules("product", "Product", "trim|required");
             $this->form_validation->set_rules("quantity", "Quantity", "trim|required");
-            $this->form_validation->set_rules("price", "Price", "trim|required");
-            
-            if($this->form_validation->run()){
-                
-				$prdno = $this->input->post("product", true);
-                
-				$oldstock =  0;
-				
-				$stockarr =  $this->db->select("stock")->where("prodid", $prdno)->get("tbl_proddetails")->row();
-				
-				if(!empty($stockarr)){
-					
-					$oldstock = $stockarr->stock;	
-					
-				}
-				
+            $this->form_validation->set_rules("price", "Price", "trim|required");            
+            if($this->form_validation->run()){                
+				$prdno = $this->input->post("product", true);                
+				$oldstock =  0;				
+				$stockarr =  $this->db->select("stock")->where("prodid", $prdno)->get("tbl_proddetails")->row();			
+				if(!empty($stockarr)){					
+					$oldstock = $stockarr->stock;						
+				}				
                 $arr = array("warehouse"  => $this->input->post("warehouse", true), 
 							 "product"    => $this->input->post("product", true),
                              "supplier"   => $this->input->post("supplier", true),
@@ -366,82 +352,48 @@ class Product extends CI_Controller {
                              "minalert"   => $this->input->post("alertmin", true),
 							 "old_stock"  => (!empty($oldstock)) ? $oldstock : "",
 						     );
-                
-			
-                if(isset($_POST["stockno"])){
-                    
-                    $stockno = $this->input->post("stockno", true);
-                    
+                if(isset($_POST["stockno"])){                    
+                    $stockno = $this->input->post("stockno", true);                    
                     $this->db->where("id", $stockno);
-                    $this->db->update("stock", $arr);
-                    
-                    $ret = $this->db->affected_rows();
-                    
-                }else{
-                    
+                    $this->db->update("stock", $arr);                    
+                    $ret = $this->db->affected_rows();                    
+                }else{                    
                      $arr["added_by"]      = $this->session->user_id;
                      $arr["company"]       =  $this->session->userdata('companey_id');
                      $arr["last_update"]  = date("Y-m-d h:i:s");
-                     $arr["added_date"]   = date("Y-m-d h:i:s");
-                     
-                     $ret =  $this->db->insert("stock", $arr);
-					 
-					 $stockno = $this->db->insert_id();
-					 
-                    $ret = $this->db->affected_rows();
-					
-					
+                     $arr["added_date"]   = date("Y-m-d h:i:s");                     
+                     $ret =  $this->db->insert("stock", $arr);					 
+					 $stockno = $this->db->insert_id();					 
+                    $ret = $this->db->affected_rows();									
                      if($ret){
-                         $newstock = $this->input->post("quantity", true);
-                         
-                         if($oldstock > 0){
-                            
-                             $newstock = $oldstock + $newstock;
-                             
-                         }
-                         
-                         $updarr = array("stock" => $newstock , "stockid" => $stockno);
-                         
+                         $newstock = $this->input->post("quantity", true);                         
+                         if($oldstock > 0){                            
+                             $newstock = $oldstock + $newstock;                             
+                         }                         
+                         $updarr = array("stock" => $newstock , "stockid" => $stockno);                         
 						 $totprd = $this->db->where("prodid", $prdno)->from("tbl_proddetails")->count_all_results();
 						 if($totprd > 0){
-								 $this->db->where("prodid", $prdno);
+							$this->db->where("prodid", $prdno);
 							$this->db->update("tbl_proddetails", $updarr);
-                    
-							 
 						 }else{
-							 $updarr["prodid"] = $prdno;
+							$updarr["prodid"] = $prdno;
 							$this->db->insert("tbl_proddetails",  $updarr); 
 						 }
-
-						 
-						
 					     $this->session->set_flashdata("message", "Successfully Saved stock");
-                         redirect(base_url("product/stock"), "refresh");
-                         
+                         redirect(base_url("product/stock"), "refresh");                         
                      }else{
-                         $this->session->set_flashdata("message", "Failed to Saved stock");
-                         
+                         $this->session->set_flashdata("message", "Failed to Saved stock");                         
                      }
                 }
-                
-                
             }else{
                 $this->session->set_flashdata("error", validation_errors());
             }
         }
-        
-        
     }
-	
-	
-    public function downloadexel($sdate,$edate)
-    {
-		
-		
+    public function downloadexel($sdate,$edate){
 		$this->load->library("excel");
         $stocks = $this->Product_model->getstockwithDate($sdate,$edate);
-        //print_r($stocks);die;
-		
+        //print_r($stocks);die;		
 		$objPHPExcel = new PHPExcel();
 		$objPHPExcel->getProperties()
 					->setCreator("Cona")
@@ -879,5 +831,19 @@ class Product extends CI_Controller {
         $data['title'] = display('contact_master');
         $data['partial'] = 'product/subject_from';
         $this->load->view('layout/main_wrapper', $data);
+    }
+    public function delete_product_category(){
+    	
+    	$cat = $this->input->post('cat');
+    	if (!empty($cat)) {
+    		foreach ($cat as $key => $value) {
+    			$this->db->where('id',$value);
+    			if (!empty($this->input->post('categid'))) {
+    				$this->db->delete('tbl_subcategory');    					
+    			}else{
+    				$this->db->delete('tbl_category');
+    			}
+    		}
+    	}
     }
 }
