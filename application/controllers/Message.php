@@ -81,6 +81,8 @@ class Message extends CI_Controller {
 			}
 			$curl_fields['mail_datas']['message']['to_recipients'] = $to;
 			$curl_fields = json_encode($curl_fields);
+			echo $curl_fields;
+			exit();
 			if ($to) {
 				$curl = curl_init();
 
