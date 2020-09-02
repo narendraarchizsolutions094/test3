@@ -102,6 +102,7 @@ class Message extends CI_Controller {
 				$response = curl_exec($curl);
 
 				curl_close($curl);
+				echo $response;
 				$res	=	json_decode($response,true);
 				if (!empty($res['response']) && $res['response_type'] == 'success') {
 					echo "Email Sent Successfully.";	
