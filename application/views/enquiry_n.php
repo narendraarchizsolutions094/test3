@@ -1232,7 +1232,7 @@ function  send_sms(){
     .done(function(data){
         
         alert(data);
-      //location.reload();
+      location.reload();
     })
     .fail(function() {
     alert( "fail!" );

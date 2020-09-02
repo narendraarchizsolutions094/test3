@@ -66,7 +66,7 @@ class Message extends CI_Controller {
 	        			'subject'=>$email_subject,
 	        			'from_mail'=>'support@corefactors.in',
 	        			'from_name'=>'CareerEx',
-	        			'reply_to'=>''
+	        			'reply_to'=>'support@corefactors.in'
 	        		)
 	        	)
 	        );
