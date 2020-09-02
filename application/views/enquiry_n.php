@@ -1218,15 +1218,21 @@ function  send_sms(){
   if($('.checkbox1:checked').size() > 1000){
     alert('You can not send more that 1000 sms at once');
   }else{
+    var sms_type = $("#mesge_type").val();
+    if ("<?=$this->session->companey_id?>" == 81 && sms_type!=1) {
+      url =  '<?php echo base_url();?>message/send_sms_career_ex';
+    }else{
+     url =  '<?php echo base_url();?>message/send_sms';
+    }
      $.ajax({
     type: 'POST',
-    url: '<?php echo base_url();?>message/send_sms',
+    url: url,
     data: $('#enquery_assing_from').serialize()
     })
     .done(function(data){
         
         alert(data);
-      location.reload();
+      //location.reload();
     })
     .fail(function() {
     alert( "fail!" );

@@ -46,6 +46,67 @@ class Message extends CI_Controller {
 	   
 	}
 	
+	public function send_sms_career_ex(){
+		if ($this->input->post('mesge_type')== 3) {
+			$temp_id = $this->input->post('templates');
+	    	$rows	=	$this->db->select('*')
+	                    ->from('api_templates')
+	                    ->join('mail_template_attachments', 'mail_template_attachments.templt_id=api_templates.temp_id', 'left')                    
+	                    ->where('temp_id',$temp_id)                        
+	                    ->get()
+	                    ->row();
+	        $message = $this->input->post('message_name');
+	        $email_subject = $this->input->post('email_subject');
+	        $to_email = $this->input->post('mail');
+	        $move_enquiry = $this->input->post('enquiry_id'); 
+	        $curl_fields = array(
+	        	'mail_datas'=>array(
+	        		'message'=>array(
+	        			'html_content'=>'',
+	        			'subject'=>'',
+	        			'from_mail'=>'support@corefactors.in',
+	        			'from_name'=>'CareerEx',
+	        			'reply_to'=>''
+	        		)
+	        	)
+	        );
+	        $to = array();
+	        if(!empty($move_enquiry)){
+	      	    foreach($move_enquiry as $key){
+	      	        $enq = $this->enquiry_model->enquiry_by_id($key);
+			        $to[]= array('email'=>$enq->email,'name'=>$enq->name.' '.$enq->lastname);	                
+	  			}
+	    	}else{					
+		        $to[]= array('email'=>$to_email,'name'=>'');	                
+			}
+			$curl_fields['mail_datas']['message']['to_recipients'] = $to;
+			$curl_fields = json_encode($curl_fields);
+			if ($to) {
+				$curl = curl_init();
+
+				curl_setopt_array($curl, array(
+				  CURLOPT_URL => "https://teleduce.in/send-email-json-otom/8c999fa1-e303-423d-a804-eb0e6210604d/1007/",
+				  CURLOPT_RETURNTRANSFER => true,
+				  CURLOPT_ENCODING => "",
+				  CURLOPT_MAXREDIRS => 10,
+				  CURLOPT_TIMEOUT => 0,
+				  CURLOPT_FOLLOWLOCATION => true,
+				  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+				  CURLOPT_CUSTOMREQUEST => "POST",
+				  CURLOPT_POSTFIELDS =>$curl_fields,
+				  CURLOPT_HTTPHEADER => array(
+				    "Content-Type: application/json"
+				  ),
+				));
+
+				$response = curl_exec($curl);
+
+				curl_close($curl);
+				echo $response;
+
+			}
+		}
+	}
 
    
 	public function send_sms(){
