@@ -43,6 +43,15 @@ class Indiamart extends CI_Controller {
 
 						$encode = $this->get_enquery_code();
 
+						if ($comp_id == 53) {
+							$enquiry_source = 91;
+							$created_by = 262;
+							$product_id = 107;
+						}else if ($comp_id == 85) {
+							$enquiry_source = 225;
+							$created_by = 537;
+							$product_id = 186;
+						}
 						$enq_arr[] = array(
                             'Enquery_id' => $encode,							
 							'comp_id'=>$comp_id,
@@ -53,9 +62,9 @@ class Indiamart extends CI_Controller {
 							'company'=>$company,
 							'address'=>$address,
 							'enquiry'=>$remark,
-							'enquiry_source'=>91,
-							'created_by'=>262,
-							'product_id'=>107	
+							'enquiry_source'=>$enquiry_source,
+							'created_by'=>$created_by,
+							'product_id'=>$product_id	
 						);
 					}
 										
