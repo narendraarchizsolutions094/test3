@@ -39,7 +39,7 @@ class Enq extends CI_Controller {
 
         $data['subsource_list'] = $this->Datasource_model->subsourcelist();		
 		$data['user_list'] = $this->User_model->companey_users();
-		$data['created_bylist'] = $this->User_model->user_list();
+		$data['created_bylist'] = $this->User_model->read();
         $data['products'] = $this->dash_model->get_user_product_list();
         $data['drops'] = $this->enquiry_model->get_drop_list();		
 	    $data['all_stage_lists'] = $this->Leads_Model->find_stage();
