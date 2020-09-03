@@ -6023,7 +6023,7 @@ a:hover{
 }
 
 .header-title {
-    color: #fff;
+   /* color: #fff;*/
 }
 .title-thin {
     font-weight: 300;
@@ -6119,4 +6119,4 @@ a:hover{
   0% { transform: none; transform: none; }
   100% { transform: translate(-32px, 0); transform: translate(-32px, 0); }
 }
->>>>>>> f4574c938138751e4b0c80d179ca12f00bbce648
+
