@@ -110,6 +110,39 @@ class Message extends CI_Controller {
 					echo "Email Sent Successfully.";	
 				}
 			}
+		}else if ($this->input->post('mesge_type')== 2) {
+			$message = $this->input->post('message_name');
+	        $move_enquiry = $this->input->post('enquiry_id');
+	        $phone = '';
+			if(!empty($this->input->post('mobile'))){	              	
+				$phone= $this->input->post('mobile');
+			}else{
+				if(!empty($move_enquiry)){
+				  $i = 0;
+				  foreach($move_enquiry as $key){
+				    $enq = $this->enquiry_model->enquiry_by_id($key);
+				    if ($i==0) {
+				    	$phone .= $enq->phone;
+				    }else{
+				    	$phone .= ','.$enq->phone;
+				    }
+				    $i++;
+				  }
+				}
+			}
+			$curl = curl_init();
+			curl_setopt_array($curl, array(
+			  CURLOPT_URL => "https://teleduce.corefactors.in/sendsms/?key=8c999fa1-e303-423d-a804-eb0e6210604d&text=$message&route=0&from=CORFCT&to=$phone",
+			  CURLOPT_RETURNTRANSFER => true,
+			  CURLOPT_ENCODING => "",
+			  CURLOPT_MAXREDIRS => 10,
+			  CURLOPT_TIMEOUT => 0,
+			  CURLOPT_FOLLOWLOCATION => true,
+			  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+			  CURLOPT_CUSTOMREQUEST => "GET",
+			));
+			$response = curl_exec($curl);
+			echo "SMS Sent Successfully.";
 		}
 	}
 
