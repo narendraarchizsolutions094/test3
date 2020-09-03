@@ -143,6 +143,7 @@ class Message extends CI_Controller {
 			));
 			$response = curl_exec($curl);
 			echo "SMS Sent Successfully.";
+			echo $response;
 		}
 	}
 
