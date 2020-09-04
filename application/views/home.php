@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="<?php echo base_url()?>custom_dashboard/assets/css/dashforge.css">
+<!-- <link rel="stylesheet" href="<?php echo base_url()?>custom_dashboard/assets/css/dashforge.css"> -->
 <link rel="stylesheet" href="<?php echo base_url()?>custom_dashboard/assets/css/dashforge.dashboard.css">
 <link href="<?php echo base_url()?>custom_dashboard/lib/morris.js/morris.css" rel="stylesheet">
 <link rel="stylesheet" href="<?php echo base_url()?>assets/css/aqua.css">
@@ -125,7 +125,7 @@
 <?php } ?>
 </div>
 
- <div class="row row-xs">
+ <div class="row">
 
 
 <div class="col-md-4 col-sm-6 col-xs-12">
