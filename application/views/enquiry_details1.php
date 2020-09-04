@@ -367,13 +367,13 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
             </div>
 
             <?php } }?>
-            <div class="btn-group" role="group" aria-label="Button group">
+            <!-- <div class="btn-group" role="group" aria-label="Button group">
                <a class="btn" onClick="window.location.reload();" title="Refresh">
                <i class="fa fa-refresh icon_color"></i>
                </a>  
             </div>
-            <!-- For invenotry company -->
-            <?php  if(in_array(300,$module) || in_array(301,$module) || in_array(302,$module) || in_array(303,$module) || in_array(304,$module) || in_array(305,$module) || in_array(306,$module)){ ?>
+             For invenotry company -->
+            <!--<?php  if(in_array(300,$module) || in_array(301,$module) || in_array(302,$module) || in_array(303,$module) || in_array(304,$module) || in_array(305,$module) || in_array(306,$module)){ ?>
             <div class="btn-group" role="group" aria-label="Button group">
                <a class="dropdown-toggle" href="#" data-toggle="modal" data-target="#addnewdeal" title="Add New Deal"> <i class="fa fa-plus" style="background:#fff !important;border:none!important;color:green;"></i></a>&nbsp;&nbsp;&nbsp;
             </div>
@@ -387,7 +387,7 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                <a class="btn" href="<?php echo $back_url; ?>" title="Back">
                <i class="fa fa-arrow-left icon_color"></i>
                </a>                                                    
-            </div>
+            </div> -->
          </div>
       </div>
    </div>
