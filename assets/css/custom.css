@@ -6136,7 +6136,7 @@ a:hover{
     width: 100%;
     clear: both;
     background: rgba(255,255,255,.15);
-    border: none;
+    border-top: none!important;
     padding: 2px 5px !important;
     box-sizing: border-box;
     font-size: 1rem;
