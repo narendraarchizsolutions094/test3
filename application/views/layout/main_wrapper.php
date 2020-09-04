@@ -1002,8 +1002,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                     </li>
                   <?php
                   }
-                  if (user_access('300')) { ?>
-                  ?>
+                  if (user_access('300')) { ?>                  
                   <li class="<?php echo (($segment1 == "inventory") ? "active" : null) ?>">
                     <a href="<?php echo base_url("warehouse/inventory") ?>">
                       <i class="fa fa-object-group" style="color:#fff;font-size:20px;background:#008080;padding:7px;border-radius:4px;width:30px;"></i> &nbsp;<?php echo 'Inventory List'; ?>   
