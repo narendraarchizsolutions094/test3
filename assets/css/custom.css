@@ -6122,6 +6122,12 @@ a:hover{
 
 
 @media screen and (max-width: 780px) {
+    div.dt-buttons{
+        float: unset!important;
+    }
+    div.dataTables_wrapper div.dataTables_filter{
+        text-align: unset!important;
+    }
   table.mobile-optimised {
     word-wrap: break-word;
     font-size: 1rem;
