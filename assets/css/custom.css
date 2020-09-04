@@ -6120,3 +6120,62 @@ a:hover{
   100% { transform: translate(-32px, 0); transform: translate(-32px, 0); }
 }
 
+
+@media screen and (max-width: 540px) {
+  table.mobile-optimised {
+    word-wrap: break-word;
+    font-size: 1rem;
+    border: none;
+  }
+  table.mobile-optimised thead {
+    display: none;
+  }
+  table.mobile-optimised td {
+    display: block;
+    float: left; /* ie9 and under hack */
+    width: 100%;
+    clear: both;
+    background: rgba(255,255,255,.15);
+    border: none;
+    padding: 2px 5px !important;
+    box-sizing: border-box;
+    font-size: 1rem;
+  }
+  table.mobile-optimised tbody,
+  table.mobile-optimised tr {
+    display: block;
+  }
+  .mobile-optimised td:before {
+    content: attr(data-th);
+    display: block;
+    font-weight: bold;
+    margin-right: 25px;
+    /*background: #800080;
+    color: #fff;*/
+    /*padding: 5px;*/
+    float: left;
+  }
+  .mobile-optimised tbody tr {
+    border-bottom: 1px solid #000;
+    overflow: hidden;
+    margin-bottom:7px;    
+    -moz-box-shadow:    inset 0 0 4px #000000;
+    -webkit-box-shadow: inset 0 0 4px #000000;
+    box-shadow:         inset 0 0 4px #000000;
+  }  
+  div.dataTables_wrapper div.dataTables_filter input {
+    margin-top:5px;
+  }
+
+  .checkbox{
+    float: right;
+  }
+  .mobile-optimised .numbers {
+    text-align: left;
+  }  
+  .panel-body{
+    padding: unset;
+  }
+}
+
+
