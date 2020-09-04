@@ -233,7 +233,7 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
 
   .cbp_tmtimeline > li .cbp_tmicon {
     position: relative;
-    float: right;
+    /*float: right;*/
     left: auto;
     margin: -55px 5px 0 10px;
   } 
