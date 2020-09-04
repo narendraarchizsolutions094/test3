@@ -1054,37 +1054,13 @@ for (var i = 0; i < checkboxes.length; i++) {
           		
 			    "columnDefs": [{ "orderable": false, "targets": 0 }],
 	            "order": [[ 1, "desc" ]],
-          createdRow: function( row, data, dataIndex ) {
-            
-            /*var t = $(".dataTables_sizing");*/
-            //console.log(dataIndex);
-            //h = 'th:eq(0)>.dataTables_sizing';
-            
+          createdRow: function( row, data, dataIndex ) {            
             var th = $("table>th");            
             l = $("table").find('th').length;
             for(j=1;j<=l;j++){
               h = $("table").find('th:eq('+j+')').html();
               $(row).find('td:eq('+j+')').attr('data-th',h);
-            }            
-            //$(row).find('td:eq('+i+')').attr('data-th', 'S.No.');
-
-            //$(row).find('td:eq(1)').attr('data-th',th);
-            /*$("#enq_table").find('.dataTables_sizing').each(function(ind){
-              var th = $(this).html();
-              console.log(th);
-              $(row).find('td:eq('+ind+')').attr('data-th', th);
-            });*/
-            /*$(row).find('td:eq(1)').attr('data-th', 'Order No');
-            $(row).find('td:eq(2)').attr('data-th', 'Product');
-            $(row).find('td:eq(3)').attr('data-th', 'Quantity');
-            $(row).find('td:eq(4)').attr('data-th', 'Price');
-            $(row).find('td:eq(5)').attr('data-th', 'Payment');
-            $(row).find('td:eq(6)').attr('data-th', 'Pay');
-            $(row).find('td:eq(7)').attr('data-th', 'Balance');
-            $(row).find('td:eq(8)').attr('data-th', 'Delivery Date');
-            $(row).find('td:eq(9)').attr('data-th', 'Date');
-            $(row).find('td:eq(10)').attr('data-th', 'Status');
-            $(row).find('td:eq(11)').attr('data-th', 'Action');*/
+            }                       
         }
 			});
     //   $('#enq_table').DataTable({ 

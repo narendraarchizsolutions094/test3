@@ -113,7 +113,7 @@
          
    </div>
 <div class="col-md-12"  style="background-color:#fff;" id="task_div1">
-  <table class="table table-striped table-bordered" id="content_tabss">
+  <table class="table table-striped table-bordered mobile-optimised" id="content_tabss" style="width: 100%!important;">
      <thead>
         <tr>
            <th>Date</th>
@@ -192,7 +192,14 @@
               //"filter_user_id": $("#user_id_fortask").val()
             }
         },
-        
+        "createdRow": function( row, data, dataIndex ) {            
+            var th = $("table>th");            
+            l = $(".mobile-optimised").find('th').length;
+            for(j=0;j<l;j++){
+              h = $(".mobile-optimised").find('th:eq('+j+')').html();
+              $(row).find('td:eq('+j+')').attr('data-th',h);
+            }                       
+        }        
     } );
     } );
 

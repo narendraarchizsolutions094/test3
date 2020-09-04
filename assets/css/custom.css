@@ -6126,7 +6126,7 @@ a:hover{
         float: unset!important;
     }
     div.dataTables_wrapper div.dataTables_filter{
-        text-align: unset!important;
+        text-align: center!important;
     }
   table.mobile-optimised {
     word-wrap: break-word;
