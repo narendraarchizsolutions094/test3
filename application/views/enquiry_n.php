@@ -1032,7 +1032,7 @@ for (var i = 0; i < checkboxes.length; i++) {
 			        "type": "POST",
               "data":{'data_type':"<?=$data_type?>"}
 			    },
-          dom: "<'row'<'col-sm-12 col-xs-12 col-md-4'l><'col-sm-12 col-xs-12 col-md-4 text-center'B><'col-sm-12 col-xs-12 col-md-4'f>>tp", 
+          dom: "<'row text-center'<'col-sm-12 col-xs-12 col-md-4'l><'col-sm-12 col-xs-12 col-md-4 text-center'B><'col-sm-12 col-xs-12 col-md-4'f>>tp", 
         // "lengthMenu": [[30, 60, 90, -1], [30, 60, 90, "All"]], 
         buttons: [  
             {extend: 'copy', className: 'btn-xs btn',exportOptions: {
