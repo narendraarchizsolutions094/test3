@@ -1032,19 +1032,19 @@ for (var i = 0; i < checkboxes.length; i++) {
 			        "type": "POST",
               "data":{'data_type':"<?=$data_type?>"}
 			    },
-          dom: "<'row'<'col-sm-4'l><'col-sm-4 text-center'B><'col-sm-4'f>>tp", 
+          dom: "<'row'<'col-sm-12 col-xs-12 col-md-4'l><'col-sm-12 col-xs-12 col-md-4 text-center'B><'col-sm-12 col-xs-12 col-md-4'f>>tp", 
         // "lengthMenu": [[30, 60, 90, -1], [30, 60, 90, "All"]], 
         buttons: [  
-            {extend: 'copy', className: 'btn-sm',exportOptions: {
+            {extend: 'copy', className: 'btn-xs btn',exportOptions: {
                         columns: "thead th:not(.noExport)"
                     }}, 
-            {extend: 'csv', title: 'list<?=date("Y-m-d H:i:s")?>', className: 'btn-sm',exportOptions: {
+            {extend: 'csv', title: 'list<?=date("Y-m-d H:i:s")?>', className: 'btn-xs btn',exportOptions: {
                         columns: "thead th:not(.noExport)"
                     }}, 
-            {extend: 'excel', title: 'list<?=date("Y-m-d H:i:s")?>', className: 'btn-sm', title: 'exportTitle',exportOptions: {
+            {extend: 'excel', title: 'list<?=date("Y-m-d H:i:s")?>', className: 'btn-xs btn', title: 'exportTitle',exportOptions: {
                         columns: "thead th:not(.noExport)"
                     }}, 
-            {extend: 'pdf', title: 'list<?=date("Y-m-d H:i:s")?>', className: 'btn-sm',exportOptions: {
+            {extend: 'pdf', title: 'list<?=date("Y-m-d H:i:s")?>', className: 'btn-xs btn',exportOptions: {
                         columns: "thead th:not(.noExport)"
                     }}, 
             {extend: 'print', className: 'btn-sm',exportOptions: {
