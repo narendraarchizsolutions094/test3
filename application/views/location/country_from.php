@@ -17,15 +17,15 @@
                             <?php echo form_hidden('user_id',$doctor->id_c) ?>
 
                             <div class="form-group row">
-                                <label for="country_name" class="col-xs-3 col-form-label"><?php echo display('country_name')?> <i class="text-danger">*</i></label>
-                                <div class="col-xs-9">
+                                <label for="country_name" class="col-xs-12 col-md-3 col-form-label"><?php echo display('country_name')?> <i class="text-danger">*</i></label>
+                                <div class="col-xs-12 col-md-9">
                                     <input name="country_name" type="text" class="form-control" id="firstname" placeholder="<?php echo display('country_name')?>" value="<?php echo $doctor->country_name ?>" >
                                 </div>
                             </div>
                               
                                <div class="form-group row">
-                                <label class="col-sm-3"><?php echo display('status') ?></label>
-                                <div class="col-xs-9">
+                                <label class="col-md-3 col-xs-12"><?php echo display('status') ?></label>
+                                <div class="col-xs-12 col-md-9">
                                     <div class="form-check">
                                         <label class="radio-inline">
                                         <input type="radio" name="status" value="1" <?php echo  set_radio('status', '1', TRUE); ?> ><?php echo display('active') ?>

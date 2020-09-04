@@ -17,8 +17,8 @@
                             <?php echo form_hidden('user_id',$doctor->id) ?>
                             
                             <div class="form-group row">
-                                <label  class="col-xs-3 col-form-label"><?php echo display('country_name')?> <i class="text-danger">*</i></label>
-                                <div class="col-xs-9">
+                                <label  class="col-md-3 col-xs-12 col-form-label"><?php echo display('country_name')?> <i class="text-danger">*</i></label>
+                                <div class="col-md-9 col-xs-12">
                                     <select class="form-control" name="country_id" onchange="find_region()" id="country_id">
                                          <option value="" selected>Select Country</option>
                                    <?php foreach($country as $c){ ?>
@@ -29,8 +29,8 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label  class="col-xs-3 col-form-label"><?php echo display('region_name')?> <i class="text-danger">*</i></label>
-                                <div class="col-xs-9">
+                                <label  class="col-md-3 col-xs-12 col-form-label"><?php echo display('region_name')?> <i class="text-danger">*</i></label>
+                                <div class="col-md-9 col-xs-12">
                                     <select class="form-control" name="region_id" id="region_id" onchange="find_state()">
                                     <?php foreach($region_list as $rl){ ?>
                                    
@@ -41,8 +41,8 @@
                             </div>
                             
                             <div class="form-group row">
-                                <label  class="col-xs-3 col-form-label"><?php echo display('state_name')?> <i class="text-danger">*</i></label>
-                                <div class="col-xs-9">
+                                <label  class="col-md-3 col-xs-12 col-form-label"><?php echo display('state_name')?> <i class="text-danger">*</i></label>
+                                <div class="col-md-9 col-xs-12">
                                     
                                     <select class="form-control" name="state_id" id="state_id">
                                         
@@ -58,8 +58,8 @@
                               
                               
                              <div class="form-group row">
-                                <label  class="col-xs-3 col-form-label"><?php echo display('territory_name')?> <i class="text-danger">*</i></label>
-                                <div class="col-xs-9">
+                                <label  class="col-md-3 col-xs-12 col-form-label"><?php echo display('territory_name')?> <i class="text-danger">*</i></label>
+                                <div class="col-md-9 col-xs-12">
                                     <select class="form-control" name="territory_id" id="territory_id">
                                      <?php foreach($territory_list as $tl){ ?>
                                    
@@ -70,15 +70,15 @@
                             </div>
                             
                              <div class="form-group row">
-                                <label for="city_name" class="col-xs-3 col-form-label"><?php echo display('city_name')?> <i class="text-danger">*</i></label>
-                                <div class="col-xs-9">
+                                <label for="city_name" class="col-md-3 col-xs-12 col-form-label"><?php echo display('city_name')?> <i class="text-danger">*</i></label>
+                                <div class="col-md-9 col-xs-12">
                                     <input name="city_name" type="text" class="form-control" id="firstname" placeholder="<?php echo display('city_name')?>" value="<?php echo $doctor->city ?>" >
                                 </div>
                             </div>
                              
                                <div class="form-group row">
-                                <label class="col-sm-3"><?php echo display('status') ?></label>
-                                <div class="col-xs-9">
+                                <label class="col-md-3 col-xs-12"><?php echo display('status') ?></label>
+                                <div class="col-md-9 col-xs-12">
                                     <div class="form-check">
                                         <label class="radio-inline">
                                         <input type="radio" name="status" value="1" <?php echo  set_radio('status', '1', TRUE); ?> ><?php echo display('active') ?>

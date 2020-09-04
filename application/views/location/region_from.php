@@ -13,14 +13,10 @@
                 <div class="row">
                     <div class="col-md-9 col-sm-12">
                         <?php echo form_open_multipart('location/add_region','class="form-inner"') ?> 
-
                             <?php echo form_hidden('user_id',$doctor->region_id) ?>
-                            
-                             
-                            
                             <div class="form-group row">
-                                <label  class="col-xs-3 col-form-label"><?php echo display('country_name')?> <i class="text-danger">*</i></label>
-                                <div class="col-xs-9">
+                                <label  class="col-md-3 col-xs-12 col-form-label"><?php echo display('country_name')?> <i class="text-danger">*</i></label>
+                                <div class="col-md-9 col-xs-12">
                                     <select class="form-control" name="country_id">
                                    <?php foreach($country as $c){ ?>
                                    <option value="<?php echo $c->id_c; ?>" <?php if($doctor->country_id==$c->id_c){echo 'selected';}?>><?php echo $c->country_name; ?></option>
@@ -29,16 +25,16 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="region_name" class="col-xs-3 col-form-label"><?php echo display('region_name')?> <i class="text-danger">*</i></label>
-                                <div class="col-xs-9">
+                                <label for="region_name" class="col-md-3 col-xs-12 col-form-label"><?php echo display('region_name')?> <i class="text-danger">*</i></label>
+                                <div class="col-md-9 col-xs-12">
                                     <input name="region_name" type="text" class="form-control" id="firstname" placeholder="<?php echo display('region_name')?>" value="<?php echo $doctor->region_name ?>" >
                                 </div>
                             </div>
                             
                               
                                <div class="form-group row">
-                                <label class="col-sm-3"><?php echo display('status') ?></label>
-                                <div class="col-xs-9">
+                                <label class="col-md-3 col-xs-12"><?php echo display('status') ?></label>
+                                <div class="col-md-9 col-xs-12">
                                     <div class="form-check">
                                         <label class="radio-inline">
                                         <input type="radio" name="status" value="1" <?php echo  set_radio('status', '1', TRUE); ?> ><?php echo display('active') ?>

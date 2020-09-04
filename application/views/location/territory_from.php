@@ -17,8 +17,8 @@
                             <?php echo form_hidden('user_id',$doctor->territory_id) ?>
                             
                             <div class="form-group row">
-                                <label  class="col-xs-3 col-form-label"><?php echo display('country_name')?> <i class="text-danger">*</i></label>
-                                <div class="col-xs-9">
+                                <label  class="col-md-3 col-xs-12 col-form-label"><?php echo display('country_name')?> <i class="text-danger">*</i></label>
+                                <div class="col-md-9 col-xs-12">
                                     <select class="form-control" name="country_id" onchange="find_region()" id="country_id">
                                          <option value="" selected>Select Country</option>
                                    <?php foreach($country as $c){ ?>
@@ -28,8 +28,8 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label  class="col-xs-3 col-form-label"><?php echo display('region_name')?> <i class="text-danger">*</i></label>
-                                <div class="col-xs-9">
+                                <label  class="col-md-3 col-xs-12 col-form-label"><?php echo display('region_name')?> <i class="text-danger">*</i></label>
+                                <div class="col-md-9 col-xs-12">
                                     <select class="form-control" name="region_id" id="region_id">
                                   <?php foreach($region_list as $rl){ ?>
                                    
@@ -41,9 +41,9 @@
                             
                             <div class="form-group row">
                                 
-                                <label  class="col-xs-3 col-form-label"><?php echo display('state_name')?> <i class="text-danger">*</i></label>
+                                <label  class="col-md-3 col-xs-12 col-form-label"><?php echo display('state_name')?> <i class="text-danger">*</i></label>
                                 
-                                <div class="col-xs-9">
+                                <div class="col-md-9 col-xs-12">
                                     
                                     <select class="form-control" name="state_id" id="state_id">
                                         <option value="" style="display:none">---Select---</option>
@@ -62,8 +62,8 @@
                             
                             
                              <div class="form-group row">
-                                <label for="territory_name" class="col-xs-3 col-form-label"><?php echo display('territory_name')?> <i class="text-danger">*</i></label>
-                                <div class="col-xs-9">
+                                <label for="territory_name" class="col-md-3 col-xs-12 col-form-label"><?php echo display('territory_name')?> <i class="text-danger">*</i></label>
+                                <div class="col-md-9 col-xs-12">
                                     <input name="territory_name" type="text" class="form-control" id="firstname" placeholder="<?php echo display('territory_name')?>" value="<?php echo $doctor->territory_name ?>" >
                                 </div>
                             </div>
@@ -72,8 +72,8 @@
                             
                               
                                <div class="form-group row">
-                                <label class="col-sm-3"><?php echo display('status') ?></label>
-                                <div class="col-xs-9">
+                                <label class="col-md-3 col-xs-12"><?php echo display('status') ?></label>
+                                <div class="col-md-9 col-xs-12">
                                     <div class="form-check">
                                         <label class="radio-inline">
                                         <input type="radio" name="status" value="1" <?php echo  set_radio('status', '1', TRUE); ?> ><?php echo display('active') ?>

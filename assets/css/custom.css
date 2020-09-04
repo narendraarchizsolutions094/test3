@@ -6174,7 +6174,7 @@ a:hover{
     text-align: left;
   }  
   .panel-body{
-    padding: unset;
+    padding: 4px;
   }
 }
 

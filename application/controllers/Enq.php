@@ -15,7 +15,7 @@ class Enq extends CI_Controller {
             redirect('login');
         }
 		
-    }
+    } 
 
     // public function test(){
     // 	print_r($this->session->process);
@@ -281,7 +281,7 @@ class Enq extends CI_Controller {
 				}else{
 					$option = '<option value="0">Select Disposition</option>';
 				}
-					$row[] = '<select class="form-control change_dispositions" style="height: 11px;width: 97%;font-size: smaller;padding: 4px;" data-id='.$each->enquiry_id.'>'.$option.'</select>';
+					$row[] = '<select class="form-control change_dispositions" style="height: 11px;width: 60%;font-size: smaller;padding: 4px;" data-id='.$each->enquiry_id.'>'.$option.'</select>';
 			}
 			if ($this->session->companey_id == 29) {
 				//$row[] = (!empty($each->reference_name)) ? $each->reference_name : "NA";
