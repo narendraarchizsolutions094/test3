@@ -203,7 +203,7 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
 
   .cbp_tmtimeline > li .cbp_tmtime {
     width: 100%;
-    position: relative;
+    /*position: relative;*/
     padding: 0 0 20px 0;
   }
 
@@ -235,7 +235,7 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
     position: relative;
     float: right;
     left: auto;
-    margin: -55px 5px 0 0px;
+    margin: -55px 5px 0 10px;
   } 
 }    
 </style>
