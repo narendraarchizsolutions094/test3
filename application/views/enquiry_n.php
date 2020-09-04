@@ -1047,7 +1047,7 @@ for (var i = 0; i < checkboxes.length; i++) {
             {extend: 'pdf', title: 'list<?=date("Y-m-d H:i:s")?>', className: 'btn-xs btn',exportOptions: {
                         columns: "thead th:not(.noExport)"
                     }}, 
-            {extend: 'print', className: 'btn-sm',exportOptions: {
+            {extend: 'print', className: 'btn-xs btn',exportOptions: {
                         columns: "thead th:not(.noExport)"
                     }} 
         ] ,
