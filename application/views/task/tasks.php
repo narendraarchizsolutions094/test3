@@ -1,7 +1,7 @@
 <script src="http://demo.phpgang.com/lazy-loading-images-jquery/jquery.devrama.lazyload.min-0.9.3.js"></script> 
 
- <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" ></script>
- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
+<!--  <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" ></script>
+ <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css"> -->
 
 <link href="<?php echo base_url();?>assets/css/fullcalendar.min.css" rel="stylesheet">
 <link href="<?php echo base_url();?>assets/css/fullcalendar.print.min.css" media="print">
@@ -177,10 +177,12 @@
       });
     
     }
+  $(document).ready(function() {
+
     var table  = $('#content_tabss').DataTable( {         
         "processing": true,
-        /*"scrollX": true,
-        "scrollY": 800,*/
+        "scrollX": true,
+        "scrollY": 800,
         "serverSide": true,
         "lengthMenu": [ [30, 50, -1], [30, 50, "All"] ],
         "ajax": {
@@ -191,6 +193,7 @@
             }
         },
         
+    } );
     } );
 
    function changes_menu(id){ 
