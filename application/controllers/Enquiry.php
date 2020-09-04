@@ -1369,7 +1369,7 @@ class Enquiry extends CI_Controller {
 
         $comment_details = $this->Leads_Model->comment_byId($enquiry_code);
 
-        $html='<ul class="cbp_tmtimeline" style="margin-left:-30px;">';
+        $html='<br><br><ul class="cbp_tmtimeline" >';
               foreach($comment_details as $comments)
               { 
               if($comments->comment_msg=='Stage Updated')

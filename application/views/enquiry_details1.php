@@ -501,7 +501,7 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
 <!-- END -->
 
    <div  class="row" id="ThreadEnq">
-      <div class="col-md-3 col-height" style="text-align:center;background:#fff;">
+      <div class="col-md-3 col-xs-12 col-sm-12 col-height" style="text-align:center;background:#fff;">
          <?php
             $string =  $enquiry->name." ".$enquiry->lastname;            
             function initials($str) {     
@@ -669,7 +669,7 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
             </div>         
       </div>
 
-      <div class="col-md-6 card card-body col-height details-column" style="background:#fff;border-top: unset;">
+      <div class="col-md-6 col-xs-12 col-sm-12 card card-body col-height details-column" style="background:#fff;border-top: unset;">
          <div id="exTab3" class="">
             <ul  class="nav nav-tabs" role="tablist">              
               <li class="active"><a  href="#basic" data-toggle="tab" style="padding: 10px 10px; font-size:12px;">Basic</a></li>   
@@ -1962,7 +1962,7 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
             </div>
       </div>
       </div>
-      <div class="col-md-3 col-height activitytimelinediv">        
+      <div class="col-md-3 col-xs-12 col-sm-12 col-height activitytimelinediv">        
          <h3 class="text-center">Activity Timeline</h3><hr>
           
       </div>
