@@ -1909,7 +1909,34 @@ $("#anch_notification_dropdown").on('click',function(){
         }
       });      
     });  
-      
+    
+    setInterval(function() {
+      record_geolocation();
+    }, 60*1000);
+
+    function showPosition(position) {
+      var url     = "<?=base_url().'attendance/record_geolocation'?>";
+      var user_id = "<?=$this->session->user_id?>";
+      var lat     = position.coords.latitude;
+      var long    = position.coords.longitude;
+      $.ajax({
+        url: url,
+        type: 'POST',
+        data:{
+          'user_id':user_id,
+          'lat':lat,
+          'long':long
+        }
+      });
+    }
+
+    function record_geolocation(){            
+      if(navigator.geolocation){
+        navigator.geolocation.getCurrentPosition(showPosition);
+      }else{
+        console.info("Geolocation is not supported by this browser.");
+      }
+    } 
         $("#mark_attendance").on('click',function(){      
         var url  = "<?=base_url().'attendance/mark_attendance'?>";
         var atID  = $("#mark_attendance").attr('data-id');
@@ -1937,14 +1964,16 @@ $("#anch_notification_dropdown").on('click',function(){
                   $("#mark_attendance").html('<i class="fa fa-clock-o fa-pulse"></i>');
                   $("#mark_attendance").attr('data-id',data.id);                                  
                 }
+                window.location.reload();
               }
             },
             error: function (xhr, desc, err){
               alert("mark attendance error");
             }
         });
+    });
 
-    });        
+         
 </script>
 <script>
 $('#something').click(function() {
