@@ -134,7 +134,11 @@ input[name=lead_stages]{
 .filter-dropdown-menu li{
   padding-left: 6px;
 }
-
+@media screen and (max-width: 900px) {
+  #active_class{
+    display: none;
+  }
+}
 </style>
 
 

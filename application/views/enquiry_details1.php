@@ -332,11 +332,34 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
     color: #555 !important;
     background-color: #fff;
 }
+#timeline{
+    display: none;
+}
+#disposition{
+  display: none;
+}
+@media screen and (max-width: 900px) {
+  #timeline{
+    display: inline-block;
+  }
+  #disposition{
+    display: inline-block;
+  }
+  .mobile-hide{
+    display: none;
+  }
+  .col-height{
+    min-height:unset!important;
+  }
+  .activitytimelinediv{
+    display: none;
+  }
+}
 
 </style>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/3.1.3/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
 <div class="row">
-   <div class="col-md-12" style="background-color: #fff;border-bottom: 1px solid #C8CED3;">
+   <div class="col-md-12 mobile-center" style="background-color: #fff;border-bottom: 1px solid #C8CED3;">
       <div class="col-md-6" > 
         <p style="margin-top: 6px;">
         <?php
@@ -511,9 +534,9 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                 return $ret; 
             }       
             ?>
-         <div class="avatar" style="margin-top:5%;margin-left:-15%;">
+         <!-- <div class="avatar" style="margin-top:5%;margin-left:-15%;">
             <p data-lettersbig="<?php echo initials($string);?>"> </p>
-         </div>
+         </div> -->
 
          <h5 style="text-align:center"><br><?=ucwords($enquiry->name_prefix." ".$enquiry->name." ".$enquiry->lastname); ?>
             <br><?php if($enquiry->gender == 1) { echo 'Male<br>'; }else if($enquiry->gender == 2){ echo 'Female<br>'; }else if($enquiry->gender == 3){ echo 'Other<br>';} 
@@ -557,32 +580,32 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
             </a>
             <?php 
             } else { ?>                
-                <a class="btn btn-primary "  data-toggle="modal" type="button" title="Send SMS" data-target="#sendsms<?php echo $enquiry->enquiry_id ?>" data-toggle="modal"  onclick="getTemplates('2','Send SMS')">
+                <a class="btn btn-primary btn-sm"  data-toggle="modal" type="button" title="Send SMS" data-target="#sendsms<?php echo $enquiry->enquiry_id ?>" data-toggle="modal"  onclick="getTemplates('2','Send SMS')">
                 <i class="fa fa-paper-plane-o"></i>
                 </a>
-                <a class="btn btn-info"  data-toggle="modal" type="button" title="Send Email" data-target="#sendsms<?php echo $enquiry->enquiry_id ?>" data-toggle="modal"  onclick="getTemplates('3','Send Email')">
+                <a class="btn btn-info btn-sm"  data-toggle="modal" type="button" title="Send Email" data-target="#sendsms<?php echo $enquiry->enquiry_id ?>" data-toggle="modal"  onclick="getTemplates('3','Send Email')">
                 <i class="fa fa-envelope"></i>
                 </a>
-                <a class="btn btn-primary"  data-toggle="modal" type="button" title="Send Whatsapp" data-target="#sendsms<?php echo $enquiry->enquiry_id ?>" data-toggle="modal"  onclick="getTemplates('1','Send Whatsapp')">
+                <a class="btn btn-primary btn-sm"  data-toggle="modal" type="button" title="Send Whatsapp" data-target="#sendsms<?php echo $enquiry->enquiry_id ?>" data-toggle="modal"  onclick="getTemplates('1','Send Whatsapp')">
                 <i class="fa fa-whatsapp"></i>
                 </a>
                 <?php if($enquiry->status==1){ ?>
                 
-                <a class="btn  btn-info"  type="button" title="Mark as Lead"  data-target="#genLead" data-toggle="modal">
+                <a class="btn  btn-info btn-sm"  type="button" title="Mark as Lead"  data-target="#genLead" data-toggle="modal">
                 <i class="fa fa-thumbs-o-up"></i>
                 </a>
-                <a class="btn btn-danger"  type="button" title="Drop Enquiry" data-target="#dropEnquiry" data-toggle="modal">
+                <a class="btn btn-danger btn-sm"  type="button" title="Drop Enquiry" data-target="#dropEnquiry" data-toggle="modal">
                 <i class="fa fa-thumbs-o-down"></i>
                 </a>
                 <?php }elseif ($enquiry->status==2) { ?>
-                  <a class="btn  btn-info" title="Mark as Client" href="<?=base_url().'lead/convert_to_lead/'.$enquiry->enquiry_id?>" onclick="return confirm('Are you sure you want to Mark this lead as client ?')" >
+                  <a class="btn  btn-info btn-sm" title="Mark as Client" href="<?=base_url().'lead/convert_to_lead/'.$enquiry->enquiry_id?>" onclick="return confirm('Are you sure you want to Mark this lead as client ?')" >
                   <i class="fa fa-user"></i>
-                  <a class="btn btn-danger"  type="button" title="Drop Lead" data-target="#dropEnquiry" data-toggle="modal">
+                  <a class="btn btn-danger btn-sm"  type="button" title="Drop Lead" data-target="#dropEnquiry" data-toggle="modal">
                   <i class="fa fa-thumbs-o-down"></i>
                 </a>
                   <?php
                 }elseif ($enquiry->status==3) { ?>
-                  <a class="btn btn-danger"  type="button" title="Drop Client" data-target="#dropEnquiry" data-toggle="modal">
+                  <a class="btn btn-danger btn-sm"  type="button" title="Drop Client" data-target="#dropEnquiry" data-toggle="modal">
                     <i class="fa fa-thumbs-o-down"></i>
                   </a>
                   <?php
@@ -591,82 +614,89 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
 
             }
             ?>
+            <a class="btn btn-sm  btn-info" title="disposition" id="disposition" href="#" data-toggle="modal" data-target="#dispo_modal" onclick="show_disposition();">
+            <i class="fa fa-bars"></i>
+            </a>
+            <a class="btn btn-sm btn-info" title="Timeline" id="timeline" href="#" onclick="show_timeline();" data-toggle="modal" data-target="#timeline_modal">
+                  <i class="fa fa-hourglass-end"></i>
+            </a>
          </div>
+           <table style="width: 100%;margin-top: 5%;" id="dataTable" class="table table-responsive-sm table-hover table-outline mb-0 mobile-hide" >
+              <tbody>
+                 <tr>
+                    <td><button class="btn btn-basic" type="button" style="width: 100%;">Disposition</button></td>
+                 </tr>
+              </tbody>
+           </table>
+         <div id="disposition-section" class="mobile-hide">
+              <div class="row" >
+                 <?php echo form_open_multipart('lead/update_description/'.$details->enquiry_id,array('id'=>'disposition_save_form','class'=>'form-inner')) ?>
+                 <input type="hidden" name="dis_subject">
+                 <input type="hidden" name="unique_no" value="<?php echo $details->Enquery_id; ?>" >
+  			         <input type="hidden" name="url" value="<?php echo $this->uri->segment(1); ?>" >
+                 <input type="hidden" name="latest_task_id">
+                  <div class="form-group col-sm-12">
+                             <!--<label class="col-form-label">Lead Stage</label>-->
+                             <select class="form-control" id="lead_stage_change" name="lead_stage" onchange="find_description()">
+                                <option>---Select Stage---</option>
+                                <?php foreach($all_estage_lists as $single){                               
+                                  $id=$single->lead_stage;                                                            
+                                ?>                              
+                                <option value="<?= $single->stg_id?>" <?php if ($single->stg_id == $details->lead_stage) {echo 'selected';}?>><?php echo $single->lead_stage_name; ?></option>
+                                <?php } ?>
+                             </select>
+                      </div>
 
-         <table style="width: 100%;margin-top: 5%;" id="dataTable" class="table table-responsive-sm table-hover table-outline mb-0" >
-            <tbody>
-               <tr>
-                  <td><button class="btn btn-basic" type="button" style="width: 100%;">Disposition</button></td>
-               </tr>
-            </tbody>
-         </table>
-            <div class="row" >
-               <?php echo form_open_multipart('lead/update_description/'.$details->enquiry_id,array('id'=>'disposition_save_form','class'=>'form-inner')) ?>
-               <input type="hidden" name="dis_subject">
-               <input type="hidden" name="unique_no" value="<?php echo $details->Enquery_id; ?>" >
-			         <input type="hidden" name="url" value="<?php echo $this->uri->segment(1); ?>" >
-               <input type="hidden" name="latest_task_id">
-                <div class="form-group col-sm-12">
-                           <!--<label class="col-form-label">Lead Stage</label>-->
-                           <select class="form-control" id="lead_stage_change" name="lead_stage" onchange="find_description()">
-                              <option>---Select Stage---</option>
-                              <?php foreach($all_estage_lists as $single){                               
-                                $id=$single->lead_stage;                                                            
-                              ?>                              
-                              <option value="<?= $single->stg_id?>" <?php if ($single->stg_id == $details->lead_stage) {echo 'selected';}?>><?php echo $single->lead_stage_name; ?></option>
-                              <?php } ?>
-                           </select>
+                      <div class="form-group col-sm-12">                           
+                             <select class="form-control" id="lead_description" name="lead_description" onchange="showDiv(this)">
+                                 <option>---Select Description---</option>
+                                <?php foreach($all_description_lists as $discription){ ?>                                   
+                                     <option value="<?php echo $discription->id; ?>"><?php echo $discription->description; ?></option>
+                                     <?php } ?>
+                             </select>
+                          </div>
+
+
+                      <input type="hidden" name="enq_code1"  value="<?php echo  $details->Enquery_id; ?>" >
+                      <div class="form-group col-sm-6" style="display:none;">
+                    <label>Contact Person Name</label>
+                    <input type="text" class="form-control" value="<?php if(!empty($details->name)){echo $details->name;} ?>" name="contact_person1"  placeholder="Contact Person Name">
+                 </div>
+                 <div class="form-group col-sm-6" style="display:none;">
+                    <label>Contact Person Designation</label>
+                    <input type="text" class="form-control" name="designation1" value="<?= isset($details->designation)?$details->designation:''?>" placeholder="Contact Person Designation">
+                 </div>
+                 <div class="form-group col-sm-6" style="display:none;">
+                    <label>Contact Person Mobile No</label>
+                    <input type="text" class="form-control" value="<?php if(!empty($details->phone)){echo $details->phone;} ?>" name="mobileno1" placeholder="Mobile No">
+                 </div>
+                 <div class="form-group col-sm-6" style="display:none;">
+                    <label>Contact Person Email</label>
+                    <input type="text" class="form-control" value="<?php if(!empty($details->email)){echo $details->email;} ?>" name="email1" placeholder="Email">
+                 </div>
+
+                       <div class="" id="otherTypev">
+                                      <div class="form-group col-sm-12">
+                                      <input type="date" name="c_date" id='disposition_c_date' class="form-control" placeholder=""  >
+                                  </div>
+                                  <div class="form-group col-sm-12">
+                                      <input type="time" name="c_time" id='disposition_c_time' class="form-control" placeholder=""  >
+                                      <input type="hidden" name="dis_notification_id" >
+                                  </div>
+                                  </div>
+                     
+                          <div class="form-group col-sm-12">
+                                      <!--<label>Remaks</label>-->
+                                      <textarea class="form-control" name="conversation"></textarea>
+                                  </div>
+                 <div class="sgnbtnmn form-group col-md-12">
+                    <div class="sgnbtn">
+                       <input id="disposition_save_btn" type="submit" value="Submit" class="btn btn-primary"  name="Submit">
                     </div>
-
-                    <div class="form-group col-sm-12">                           
-                           <select class="form-control" id="lead_description" name="lead_description" onchange="showDiv(this)">
-                               <option>---Select Description---</option>
-                              <?php foreach($all_description_lists as $discription){ ?>                                   
-                                   <option value="<?php echo $discription->id; ?>"><?php echo $discription->description; ?></option>
-                                   <?php } ?>
-                           </select>
-                        </div>
-
-
-                    <input type="hidden" name="enq_code1"  value="<?php echo  $details->Enquery_id; ?>" >
-                    <div class="form-group col-sm-6" style="display:none;">
-                  <label>Contact Person Name</label>
-                  <input type="text" class="form-control" value="<?php if(!empty($details->name)){echo $details->name;} ?>" name="contact_person1"  placeholder="Contact Person Name">
-               </div>
-               <div class="form-group col-sm-6" style="display:none;">
-                  <label>Contact Person Designation</label>
-                  <input type="text" class="form-control" name="designation1" value="<?= isset($details->designation)?$details->designation:''?>" placeholder="Contact Person Designation">
-               </div>
-               <div class="form-group col-sm-6" style="display:none;">
-                  <label>Contact Person Mobile No</label>
-                  <input type="text" class="form-control" value="<?php if(!empty($details->phone)){echo $details->phone;} ?>" name="mobileno1" placeholder="Mobile No">
-               </div>
-               <div class="form-group col-sm-6" style="display:none;">
-                  <label>Contact Person Email</label>
-                  <input type="text" class="form-control" value="<?php if(!empty($details->email)){echo $details->email;} ?>" name="email1" placeholder="Email">
-               </div>
-
-                     <div class="" id="otherTypev">
-                                    <div class="form-group col-sm-12">
-                                    <input type="date" name="c_date" id='disposition_c_date' class="form-control" placeholder=""  >
-                                </div>
-                                <div class="form-group col-sm-12">
-                                    <input type="time" name="c_time" id='disposition_c_time' class="form-control" placeholder=""  >
-                                    <input type="hidden" name="dis_notification_id" >
-                                </div>
-                                </div>
-                   
-                        <div class="form-group col-sm-12">
-                                    <!--<label>Remaks</label>-->
-                                    <textarea class="form-control" name="conversation"></textarea>
-                                </div>
-               <div class="sgnbtnmn form-group col-md-12">
-                  <div class="sgnbtn">
-                     <input id="disposition_save_btn" type="submit" value="Submit" class="btn btn-primary"  name="Submit">
-                  </div>
-               </div>
-               <?php echo form_close()?>
-            </div>         
+                 </div>
+                 <?php echo form_close()?>
+              </div>         
+            </div>
       </div>
 
       <div class="col-md-6 col-xs-12 col-sm-12 card card-body col-height details-column" style="background:#fff;border-top: unset;">
@@ -3116,6 +3146,34 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
    </div>
 </div>
 
+
+<div id="dispo_modal" class="modal fade" role="dialog">
+   <div class="modal-dialog">
+      <div class="modal-content">
+         <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Disposition</h4>
+         </div>
+         <div class="modal-body">
+            
+         </div>
+      </div>
+   </div>
+</div>
+
+<div id="timeline_modal" class="modal fade" role="dialog">
+   <div class="modal-dialog">
+      <div class="modal-content">
+         <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Activity Timeline</h4>
+         </div>
+         <div class="modal-body">
+            
+         </div>
+      </div>
+   </div>
+</div>
 <script type="text/javascript">
   $(document).ready(function()
   {
@@ -4344,6 +4402,14 @@ $("#toggle_timeline").on('click',function(){
        }
      });
   });
+   function show_disposition(){
+    h  = $("#disposition-section").html();
+    $("#dispo_modal .modal-body").html(h);
+  }
+  function show_timeline(){
+    h  = $(".activitytimelinediv").html();    
+    $("#timeline_modal .modal-body").html(h);    
+  }
 </script>
 <?php
   if ($this->session->companey_id == 79) {
@@ -4441,7 +4507,7 @@ $("#toggle_timeline").on('click',function(){
         $("#vertex-sub-course").html(options);
         $("#vertex-sub-course").val(vertexsubcourse);        
     }
-    subcourse();
+    subcourse();   
 </script>
 <?php
 }

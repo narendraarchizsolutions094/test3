@@ -6122,6 +6122,9 @@ a:hover{
 
 
 @media screen and (max-width: 900px) {
+    .mobile-center{
+        text-align: center;
+    }
     div.dt-buttons{
         float: unset!important;
     }
