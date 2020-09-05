@@ -18,7 +18,7 @@ class Map_model extends CI_Model {
         if(!empty($filter_date)){
             $where .=  " AND DATE(map_location_feed.created_date)='".$filter_date."'";   		  
         }else{
-            $where .=  " AND map_location_feed.created_date=CURDATE()";             
+            $where .=  " AND DATE(map_location_feed.created_date)=CURDATE()";             
         }
         $this->db->where($where);
         $this->db->order_by('map_location_feed.id','DESC');
