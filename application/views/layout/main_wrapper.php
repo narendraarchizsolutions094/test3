@@ -1910,12 +1910,12 @@ $("#anch_notification_dropdown").on('click',function(){
       });      
     });  
     if (("<?=$this->session->companey_id?>" == "57")) {      
-      m=$("#mark_attendance").hasClass('btn-danger');
-      if (m) {          
         setInterval(function() {
-          record_geolocation();
+          m=$("#mark_attendance").hasClass('btn-danger');
+          if (m) {          
+            record_geolocation();
+          }
         }, 60*1000);
-      }
     }
 
     function showPosition(position) {
