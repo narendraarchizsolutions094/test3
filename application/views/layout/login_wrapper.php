@@ -15,7 +15,7 @@ $settings = $this->db->select("site_align")
 <?php $root=(isset($_SERVER["HTTPS"]) ? "https://" : "http://").$_SERVER["HTTP_HOST"];
 if($root=='https://student.spaceinternationals.com'){	 ?>	
     <link rel="icon" href="https://spaceinternationals.com/wp-content/uploads/2018/02/cropped-SPACE-INTERNATIONALS-LOGO-02-1-32x32.jpg" sizes="32x32" />
-<?php }else if(!empty($_GET['c']) && base64_decode($_GET['c']) == 57){ ?>
+<?php }else if(!empty($_GET['c']) && base64_decode($_GET['c']) == 57 && (!empty($_GET['type']) && $_GET['type'] != 'admin')){ ?>
     <link rel="icon" href="<?=base_url().'assets/images/Lalantop_logo.jpg'?>" sizes="32x32" />
     <title><?= display('login') ?> - <?php echo 'Lalantop' ?></title>
 <?php
@@ -55,7 +55,7 @@ if($root=='https://student.spaceinternationals.com'){	 ?>
             <?php $root=(isset($_SERVER["HTTPS"]) ? "https://" : "http://").$_SERVER["HTTP_HOST"];
             if($root=='https://student.spaceinternationals.com'){	 ?>	
                         <img style="width: 26%;" src="<?php echo base_url('assets/images/lgo.png'); ?>" class="m-r-sm">
-            <?php }else if (!empty($_GET['c']) && base64_decode($_GET['c']) == 57){ ?>
+            <?php }else if (!empty($_GET['c']) && base64_decode($_GET['c']) == 57 && (!empty($_GET['type']) && $_GET['type'] != 'admin')){ ?>
                 <img style="width: 26%;" src="<?=base_url().'assets/images/Lalantop_logo.jpg'?>" class="m-r-sm">
             <?php } else{ ?>
             	<img style="width: 26%;" src="https://pfcrm.xyz/pms/uploads/Archiz-logo_new.jpg" class="m-r-sm">
