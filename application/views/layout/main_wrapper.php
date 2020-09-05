@@ -1915,7 +1915,7 @@ $("#anch_notification_dropdown").on('click',function(){
           if (m) {          
             record_geolocation();
           }
-        }, 60*1000);
+        }, 300*1000);
     }
 
     function showPosition(position) {
