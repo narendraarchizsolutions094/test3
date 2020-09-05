@@ -1909,10 +1909,11 @@ $("#anch_notification_dropdown").on('click',function(){
         }
       });      
     });  
-    
-    setInterval(function() {
-      record_geolocation();
-    }, 60*1000);
+    if ("<?=$this->session->companey_id?>" == 57) {      
+      setInterval(function() {
+        record_geolocation();
+      }, 60*1000);
+    }
 
     function showPosition(position) {
       var url     = "<?=base_url().'attendance/record_geolocation'?>";
