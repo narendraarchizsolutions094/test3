@@ -160,7 +160,16 @@ class Enq extends CI_Controller {
             $row[] = $each->datasource_name;
 			}
 			
-			
+			if ($showall == true or in_array(18, $acolarr)) { 
+            $row[] = $each->score;
+			}
+			if ($showall == true or in_array(19, $acolarr)) { 
+            $row[] = $each->enquiry;
+			}
+			if ($showall == true or in_array(17, $acolarr)) { 
+            $row[] = $each->EnquiryId;
+			}
+
        
 			$enqid = $each->enquiry_id;
 			
@@ -351,10 +360,20 @@ class Enq extends CI_Controller {
             	$row[] = (!empty($each->country_name)) ? ucwords($each->country_name) : "NA";
 			}	
 			if ($this->session->companey_id == 29) {		
-			if ($showall == true or in_array(15, $acolarr)) { 
-            $row[] = (!empty($each->bank_name)) ? ucwords($each->bank_name) : "NA";
+				if ($showall == true or in_array(15, $acolarr)) { 
+	            $row[] = (!empty($each->bank_name)) ? ucwords($each->bank_name) : "NA";
+				}
 			}
-		  }
+			if ($showall == true or in_array(17, $acolarr)) { 
+				$row[] = (!empty($each->Enquery_id)) ? $each->Enquery_id : "NA";			
+			}
+			 if ($showall == true or in_array(18, $acolarr)) { 
+				$row[] = (!empty($each->score)) ? $each->score : "NA";			
+			}
+			 if ($showall == true or in_array(19, $acolarr)) { 
+				$row[] = (!empty($each->enquiry)) ? $each->enquiry : "NA";			
+			}
+
            	$enqid = $each->enquiry_id;			
 			if(!empty($dacolarr) and !empty($dfields)){
 				foreach($dfields as $ind => $flds){					

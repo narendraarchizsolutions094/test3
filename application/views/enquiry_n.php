@@ -594,6 +594,19 @@ input[name=lead_stages]{
              <?php if ($showall == true or in_array(14, $acolarr)) {  ?>
                   <th >Product</th>
             <?php } ?>
+
+            <?php if ($showall == true or in_array(17, $acolarr)) {  ?>
+                  <th>EnquiryId</th>
+             <?php } ?> 
+
+             <?php if ($showall == true or in_array(18, $acolarr)) {  ?>
+                  <th>Score</th>
+             <?php } ?> 
+
+               <?php if ($showall == true or in_array(19, $acolarr)) {  ?>
+                  <th>Remark</th>
+             <?php } ?> 
+              
             <?php if($this->session->userdata('companey_id')==29) { ?>
             <?php if ($showall == true or in_array(15, $acolarr)) {  ?>
                   <th >Bank</th>
@@ -898,6 +911,18 @@ input[name=lead_stages]{
           
                <label class=""><input type="checkbox" class="choose-col"  value = "14"  <?php echo ($showall == true or in_array(14, $acolarr)) ? "checked" : ""; ?>> Product</label>  &nbsp; 
            </div>
+
+          <div class = "col-md-4">  
+            <label class=""><input type="checkbox" class="choose-col"  value = "18"  <?php echo ($showall == true or in_array(18, $acolarr)) ? "checked" : ""; ?>>  Score</label>  &nbsp;
+          </div>
+
+          <div class = "col-md-4">  
+            <label class=""><input type="checkbox" class="choose-col"  value = "19"  <?php echo ($showall == true or in_array(19, $acolarr)) ? "checked" : ""; ?>>  Remark</label>  &nbsp;
+          </div>
+          <div class = "col-md-4">  
+            <label class=""><input type="checkbox" class="choose-col"  value = "17"  <?php echo ($showall == true or in_array(17, $acolarr)) ? "checked" : ""; ?>>EnquiryId</label>  &nbsp;
+          </div>
+
            <?php if($this->session->userdata('companey_id')==29){?>
             <div class = "col-md-4">  
           
