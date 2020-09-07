@@ -1305,7 +1305,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
           </a>
                   </li> -->
           <?php } ?>
-          <li class="treeview <?php echo (($this->uri->segment(1) == "website") ? "active" : null) ?>" style="<?php if(in_array(290,$module) || in_array(291,$module) || in_array(292,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
+          <li class="treeview <?php echo (($this->uri->segment(1) == "website") ? "active" : null) ?>" style="<?php if(in_array(490,$module) || in_array(491,$module) || in_array(492,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
                             <a href="#">
                                 <i class="pe-7s-global" style="color:#fff;font-size:18px;background:#04e9d1;padding:7px;border-radius:4px;width:30px;"></i> &nbsp;<?php echo display('website') ?>
                                 <span class="pull-right-container">
