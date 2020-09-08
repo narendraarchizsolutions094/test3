@@ -25,7 +25,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 					   	</div>
 					   	<div class="col-sm-3">
 					   		<label>Rule Title <i style="color: red;">*</i></label>
-					   		<input type="text" name="title" id="title" class="form-control" required value="<?=!empty($rule_data['title'])?$rule_data['title']:''?>">
+					   		<input type="text" name="title" id="ruletitle" class="form-control" required value="<?=!empty($rule_data['title'])?$rule_data['title']:''?>">
 					   	</div>
 					   	<div class="col-sm-3">
 					   		<label>Rule Status <i style="color: red;">*</i></label><br>
@@ -110,6 +110,20 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		    values: <?=$lead_source?>,
 		    operators: ['equal', 'not_equal','is_null', 'is_not_null']
 		  },{
+		    id: 'sub_source',
+		    label: 'Lead Sub Source',
+		    type: 'integer',
+		    input: 'select',
+		    values: <?=$sub_source?>,
+		    operators: ['equal', 'not_equal','is_null', 'is_not_null']
+		  },{
+		    id: 'enquiry_subsource',
+		    label: 'Product',
+		    type: 'integer',
+		    input: 'select',
+		    values: <?=$products?>,
+		    operators: ['equal', 'not_equal','is_null', 'is_not_null']
+		  },{
 		    id: 'country_id',
 		    label: 'Country',
 		    type: 'integer',
@@ -166,7 +180,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		  if (!$.isEmptyObject(result)) {
 		  	var rules = result;
 		  	var rule_type	=	$("#rule").val();
-		  	var title		=	$("#title").val();
+		  	var title		=	$("#ruletitle").val();
 		  	var rule_status	=	$("input[name='rule_status']:checked").val();
 		  	if (rule_type==1) {
 		  		var action_value	=	$("input[name='action']").val();
