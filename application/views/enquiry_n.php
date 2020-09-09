@@ -563,7 +563,7 @@ input[name=lead_stages]{
             <th>Email </th>
                    <?php } ?>
               <?php if ($showall == true or in_array(5, $acolarr)) {  ?>
-            <th>Phone <?=user_access(220)?' <small>(Click to dial)</small>':''?></th>
+            <th>Phone <?=user_access(220)?' (Click to dial)':''?></th>
                    <?php } ?>
               <?php if ($showall == true or in_array(6, $acolarr)) {  ?>
             <th>Address</th>

@@ -231,7 +231,7 @@ class Enq extends CI_Controller {
 			$acolarr  = explode(",", trim($_COOKIE["allowcols"], ","));			
 		}else{			
 			$showall = true;
-		} 	
+		} 	 
 		if(isset($_COOKIE["dallowcols"])) {
 			$dshowall = false;
 			$dacolarr  = explode(",", trim($_COOKIE["dallowcols"], ","));		
@@ -273,7 +273,7 @@ class Enq extends CI_Controller {
 					$p = '##########';
 				}
 				if(user_access(220)){
-					$row[] = "<a href='javascript:void(0)' onclick='send_parameters(".$each->phone.")'>".$p."</a>";            	
+					$row[] = "<a href='javascript:void(0)' onclick='send_parameters(".$each->phone.")'>".$p." <button class='fa fa-phone btn btn-xs btn-success'></button></a>";            	
 				}else{
 					$row[] = (!empty($each->phone)) ? '<a  href="javascript:void(0)">'.$p.'</a>' : "NA";
 				}
