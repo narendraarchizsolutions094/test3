@@ -555,4 +555,108 @@ class User extends CI_Controller {
         $this->session->set_flashdata('SUCCESSMSG', 'Update Successfully');
         redirect('user/edit_user_role/' . $id);
     }
+
+
+
+    public function upload_users(){
+        ini_set('max_execution_time', '-1');
+        $filename = "enquiry_" . date('d-m-Y_H_i_s');
+        $config = array(
+            'upload_path' =>$_SERVER["DOCUMENT_ROOT"]."/assets/enquiry", 
+            'allowed_types' => "application/vnd.ms-excel|csv|xlsx",
+            /*'remove_spaces' => TRUE,*/
+            'file_name' => $filename
+        );       
+        $this->load->library('upload', $config);
+        $this->upload->initialize($config);
+        if ($this->upload->do_upload('user')) {
+
+            $upload = $this->upload->data();
+            $json['success'] = 1;
+            $filePath = $config['upload_path'] . '/' . $upload['file_name'];
+            $file = $filePath;
+            $handle = fopen($file, "r");
+            $c = 0;
+            $count = 0;
+            $record = 0;
+            $failed_record = 0;
+            $i=0;
+            $u=0;
+            $dat_array=array();            
+            while (($filesop = fgetcsv($handle, 2000, ",")) !== false) {
+                if ($c) {                                        
+                    $right = 166;                                        
+                    $post_data    =   array(       
+                            'user_permissions'      => $right, 
+                            'user_type'             => $right, 
+                            's_password'            => md5('12345678'),
+                            's_display_name'        => $filesop[2],
+                            'last_name'             => '',
+                            'designation'           => '',                                                
+                            'companey_id'           => 57,
+                            's_user_email'          => $filesop[7], 
+                            's_phoneno'             => $filesop[6],
+                            'process'               => "122",
+                            'report_to'             => $filesop[3]   
+                          );                
+
+            $this->db->where('s_user_email',$post_data['s_user_email']);
+            $this->db->or_where('s_phoneno',$post_data['s_phoneno']);
+            $r    =   $this->db->get('tbl_admin')->row_array();
+            echo "<pre>";
+            print_r($r['s_user_email']);
+            echo "</pre>";
+                if (empty($r) && $post_data['s_phoneno']) {                    
+                    $this->db->insert('tbl_admin',$post_data);
+                    $i++;
+                }else{
+                    /*$this->db->where('s_user_email',$post_data['s_user_email']);
+                    $this->db->set('user_permissions',$post_data['user_permissions']);
+                    $this->db->set('user_type',$post_data['user_type']);
+                    $this->db->update('tbl_admin');*/
+                    //$u++;
+                }
+            }  
+            if ($filesop[7]) {                
+                $c++;
+            }
+            }
+        }
+echo $this->upload->display_errors();
+        echo $i.'<br>';
+        echo $c.'<br>';
+        echo $u;
+        unlink($filePath);        
+
+        echo "<pre>";
+        print_r($post_data);
+        echo "</pre>";
+        exit();        
+        
+        /*$post_data    =   array(       
+            'user_permissions'      => $post_data['user_permissions'],                                                  
+            's_password'            => $post_data['password'],
+            's_display_name'        => $post_data['firstname'],
+            'last_name'             => $post_data['lastname'],
+            'date_of_birth'         => $post_data['date_of_birth'],
+            'joining_date'          => $post_data['create_date'],            
+            'designation'           => $post_data['designation'],
+            'employee_band'         => $post_data['blood_group'],
+            'orgisation_name'       => $post_data['a_companyname'],            
+            'companey_id'           => $post_data['companey_id'],
+            's_user_email'          => $post_data['email'],           
+            's_phoneno'             => $post_data['mobile'],
+            'process'               => NULL
+          );*/
+
+        //$this->db->insert('tbl_admin',$post_data);
+    
+    }
+
+    public function bulk_upload_user(){
+        $data['title']  = 'test';
+        $data['content'] = $this->load->view('upload_bulk_user', $data, true);
+        $this->load->view('layout/main_wrapper', $data);
+
+    }
 }
