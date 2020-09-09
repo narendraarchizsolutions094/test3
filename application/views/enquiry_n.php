@@ -104,7 +104,7 @@
     white-space: nowrap;
 }
 input[name=top_filter]{
-	visibility: hidden;
+  visibility: hidden;
 }
 
 input[name=lead_stages]{
@@ -151,7 +151,7 @@ input[name=lead_stages]{
         </div>
          <div class="col-md-4 col-sm-8 col-xs-8 pull-right" >  
           <div style="float: right;">     
-		  <?php if(!empty($this->session->telephony_token)){ ?>
+      <?php if(!empty($this->session->telephony_token)){ ?>
               <div class="btn-group dropdown-filter">
                       <?php if($this->session->availability == 1) { ?>
                       <button class="btn btn-success" type="button" data-toggle="modal" data-target="#callbreak" >Available</button>
@@ -164,7 +164,7 @@ input[name=lead_stages]{
               <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Filter by <span class="caret"></span>
               </button>              
-              <ul class="filter-dropdown-menu dropdown-menu">		
+              <ul class="filter-dropdown-menu dropdown-menu">   
                     <li>
                       <label>
                       <input type="checkbox" value="date" id="datecheckbox" name="filter_checkbox"> Date </label>
@@ -314,46 +314,46 @@ input[name=lead_stages]{
 </div>
 
 <div class="row"  id="active_class">                   
-          	<div class="col-xs-12 col-sm-12  col-md-2 col-lg-2 col-half-offset" style="">
-		        <div  class="col-12 border_bottom" >
-		            <p style="margin-top: 2vh;font-weight:bold;">
-		            	<input id='created_today_radio' value="created_today" type="radio" name="top_filter" class="enq_form_filters"><i class="fa fa-edit" ></i><label for="created_today_radio">&nbsp;&nbsp;<?php echo display('created_today'); ?></label>
-		            	<span  style="float:right;" class="badge badge-pill badge-primary " id="today_created"><i class="fa fa-spinner fa-spin"></i></span>
-		            </p>
-		        </div>
+            <div class="col-xs-12 col-sm-12  col-md-2 col-lg-2 col-half-offset" style="">
+            <div  class="col-12 border_bottom" >
+                <p style="margin-top: 2vh;font-weight:bold;">
+                  <input id='created_today_radio' value="created_today" type="radio" name="top_filter" class="enq_form_filters"><i class="fa fa-edit" ></i><label for="created_today_radio">&nbsp;&nbsp;<?php echo display('created_today'); ?></label>
+                  <span  style="float:right;" class="badge badge-pill badge-primary " id="today_created"><i class="fa fa-spinner fa-spin"></i></span>
+                </p>
+            </div>
             </div>
             <div class="col-xs-12 col-sm-12  col-md-2 col-lg-2 col-half-offset">
-	            <div class="col-12 border_bottom">
-	                <p style="margin-top: 2vh;font-weight:bold;" >
-	                	<input type="radio" name="top_filter" value="updated_today" class="enq_form_filters" id="updated_today_radio"><i class="fa fa-pencil"></i><label for="updated_today_radio">&nbsp;&nbsp;<?php echo display('updated_today'); ?></label><span style="float:right;background:#ffc107" class="badge badge-pill badge-warning badge badge-dark " id="today_updated"><i class="fa fa-spinner fa-spin"></i></span>
-	                </p>
-	            </div>
+              <div class="col-12 border_bottom">
+                  <p style="margin-top: 2vh;font-weight:bold;" >
+                    <input type="radio" name="top_filter" value="updated_today" class="enq_form_filters" id="updated_today_radio"><i class="fa fa-pencil"></i><label for="updated_today_radio">&nbsp;&nbsp;<?php echo display('updated_today'); ?></label><span style="float:right;background:#ffc107" class="badge badge-pill badge-warning badge badge-dark " id="today_updated"><i class="fa fa-spinner fa-spin"></i></span>
+                  </p>
+              </div>
             </div>
             
             <div class="col-xs-12 col-sm-12  col-md-2 col-lg-2 col-half-offset">
-	        	<div  class="col-12 border_bottom border_bottom_active" >
-	                <p style="margin-top: 2vh;font-weight:bold;"  title="<?php echo display('active'); ?>"> 
-	                	<input type="radio" name="top_filter" value="active" checked="checked" class="enq_form_filters" id="active_radio"><i class="fa fa-file" ></i><label for="active_radio">&nbsp;&nbsp;<?php echo display('active'); ?></label><span style="float:right;" class="badge badge-pill badge-primary " id="active_all"><i class="fa fa-spinner fa-spin"></i></span>
-	                </p>
-	            </div>
+            <div  class="col-12 border_bottom border_bottom_active" >
+                  <p style="margin-top: 2vh;font-weight:bold;"  title="<?php echo display('active'); ?>"> 
+                    <input type="radio" name="top_filter" value="active" checked="checked" class="enq_form_filters" id="active_radio"><i class="fa fa-file" ></i><label for="active_radio">&nbsp;&nbsp;<?php echo display('active'); ?></label><span style="float:right;" class="badge badge-pill badge-primary " id="active_all"><i class="fa fa-spinner fa-spin"></i></span>
+                  </p>
+              </div>
             </div>
                   
             <div class="col-xs-12 col-sm-12  col-md-2 col-lg-2 col-half-offset">
-	            <div  class="col-12 border_bottom" >
-	                <p style="margin-top: 2vh;font-weight:bold;"   title="<?php echo display('droped'); ?>">
-	                		<input type="radio" name="top_filter" value="droped" class="enq_form_filters" id="droped_radio">
-	                		<i class="fa fa-thumbs-down" ></i><label for="droped_radio">&nbsp;&nbsp;<?php echo display('droped'); ?></label><span style="float:right;background:#E5343D" class="badge badge-danger" id="active_drop"><i class="fa fa-spinner fa-spin"></i></span>	                	
-	                </p>
-	            </div>
+              <div  class="col-12 border_bottom" >
+                  <p style="margin-top: 2vh;font-weight:bold;"   title="<?php echo display('droped'); ?>">
+                      <input type="radio" name="top_filter" value="droped" class="enq_form_filters" id="droped_radio">
+                      <i class="fa fa-thumbs-down" ></i><label for="droped_radio">&nbsp;&nbsp;<?php echo display('droped'); ?></label><span style="float:right;background:#E5343D" class="badge badge-danger" id="active_drop"><i class="fa fa-spinner fa-spin"></i></span>                   
+                  </p>
+              </div>
             </div>
             <div class="col-xs-12 col-sm-12  col-md-2 col-lg-2 col-half-offset">
-	            <div class="col-12 border_bottom" >
+              <div class="col-12 border_bottom" >
 
-	                <p style="margin-top: 2vh;font-weight:bold;"  title="<?php echo display('total'); ?>">
-	                	<input type="radio" name="top_filter" value="all" class="enq_form_filters" id="total_active_radio">
-	                	<i class="fa fa-list"></i><label for="total_active_radio">&nbsp;&nbsp;<?php echo display('total'); ?></label><span style="float:right;background:#000" class="badge badge-pill badge-dark " id="total_active"><i class="fa fa-spinner fa-spin"></i></span>
-	                </p>
-	            </div>
+                  <p style="margin-top: 2vh;font-weight:bold;"  title="<?php echo display('total'); ?>">
+                    <input type="radio" name="top_filter" value="all" class="enq_form_filters" id="total_active_radio">
+                    <i class="fa fa-list"></i><label for="total_active_radio">&nbsp;&nbsp;<?php echo display('total'); ?></label><span style="float:right;background:#000" class="badge badge-pill badge-dark " id="total_active"><i class="fa fa-spinner fa-spin"></i></span>
+                  </p>
+              </div>
           </div>   
     </div>
 </div>
@@ -522,25 +522,25 @@ input[name=lead_stages]{
 
 <form class="form-inner" method="post" id="enquery_assing_from" >  
 <div class="card-body">
-			<?php 
+      <?php 
         $acolarr = array();
         $dacolarr = array();
         if(isset($_COOKIE["allowcols"])) {
-					$showall = false;
-					$acolarr  = explode(",", trim($_COOKIE["allowcols"], ","));				
-				}else{					
-					$showall = true;
-				} 				
-				if(isset($_COOKIE["dallowcols"])) {
-					$dshowall = false;
-					$dacolarr  = explode(",", trim($_COOKIE["dallowcols"], ","));				
-				}else{
-					$dshowall = false;
-				}				
-			?>
-	<div class="row">
-		<div class="col-md-12" >		
-			      <table id="enq_table" class="table table-bordered table-hover mobile-optimised" style="width:100%;">
+          $showall = false;
+          $acolarr  = explode(",", trim($_COOKIE["allowcols"], ","));       
+        }else{          
+          $showall = true;
+        }         
+        if(isset($_COOKIE["dallowcols"])) {
+          $dshowall = false;
+          $dacolarr  = explode(",", trim($_COOKIE["dallowcols"], ","));       
+        }else{
+          $dshowall = false;
+        }       
+      ?>
+  <div class="row">
+    <div class="col-md-12" >    
+            <table id="enq_table" class="table table-bordered table-hover mobile-optimised" style="width:100%;">
         <thead>
           <tr class="bg-info table_header">
               <th class="noExport">
@@ -563,7 +563,7 @@ input[name=lead_stages]{
             <th>Email </th>
                    <?php } ?>
               <?php if ($showall == true or in_array(5, $acolarr)) {  ?>
-            <th>Phone <?=user_access(220)?' <small>(Click to dial)</small>':''?></th>
+            <th>Phone <?=user_access(220)?' (Click to dial)':''?></th>
                    <?php } ?>
               <?php if ($showall == true or in_array(6, $acolarr)) {  ?>
             <th>Address</th>
@@ -624,8 +624,8 @@ input[name=lead_stages]{
         <tbody>             
         </tbody>
       </table>
-		</div>
-	</div>
+    </div>
+  </div>
 </div>
 
 
@@ -768,7 +768,7 @@ input[name=lead_stages]{
     
         
           
-	  </div>
+    </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
       </div>
@@ -825,7 +825,7 @@ input[name=lead_stages]{
 
         
           
-	  </div>
+    </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
       </div>
@@ -1024,43 +1024,43 @@ for (var i = 0; i < checkboxes.length; i++) {
 
 <script type="text/javascript">
 
-	$(document).on("click", ".set-col-table", function(e){
-		
-		e.preventDefault();
-		if($(".choose-col:checked").length == 0 && $(".dchoose-col:checked").length == 0 ){
-			
-			return false;
-		}
-		var chkval = "";
-		$(".choose-col:checked").each(function(){
-			
-			chkval += $(this).val()+",";
-		});
-		var dchkval = "";
-		$(".dchoose-col:checked").each(function(){
-			
-			dchkval += $(this).val()+",";
-		});
-		
-		document.cookie = "allowcols="+chkval+"; expires=Thu, 18 Dec 2053 12:00:00 UTC; path=/";
-		document.cookie = "dallowcols="+dchkval+"; expires=Thu, 18 Dec 2053 12:00:00 UTC; path=/";
-		location.reload();		
-	});
+  $(document).on("click", ".set-col-table", function(e){
+    
+    e.preventDefault();
+    if($(".choose-col:checked").length == 0 && $(".dchoose-col:checked").length == 0 ){
+      
+      return false;
+    }
+    var chkval = "";
+    $(".choose-col:checked").each(function(){
+      
+      chkval += $(this).val()+",";
+    });
+    var dchkval = "";
+    $(".dchoose-col:checked").each(function(){
+      
+      dchkval += $(this).val()+",";
+    });
+    
+    document.cookie = "allowcols="+chkval+"; expires=Thu, 18 Dec 2053 12:00:00 UTC; path=/";
+    document.cookie = "dallowcols="+dchkval+"; expires=Thu, 18 Dec 2053 12:00:00 UTC; path=/";
+    location.reload();    
+  });
 
-	$(document).ready(function() {
+  $(document).ready(function() {
        
-    	$('#enq_table').DataTable(
-    		{         
-			    "processing": true,
+      $('#enq_table').DataTable(
+        {         
+          "processing": true,
           "scrollX": true,
           "scrollY": 520,
-			    "serverSide": true,			     
-			    "lengthMenu": [ [10,30, 50,100,500,1000, -1], [10,30, 50,100,500,1000, "All"] ],
-			    "ajax": {
-			        "url": "<?=base_url().'Enq/enq_load_data'?>",
-			        "type": "POST",
+          "serverSide": true,          
+          "lengthMenu": [ [10,30, 50,100,500,1000, -1], [10,30, 50,100,500,1000, "All"] ],
+          "ajax": {
+              "url": "<?=base_url().'Enq/enq_load_data'?>",
+              "type": "POST",
               "data":{'data_type':"<?=$data_type?>"}
-			    },
+          },
         <?php if(user_access(500)) { ?>
           dom: "<'row text-center'<'col-sm-12 col-xs-12 col-md-4'l><'col-sm-12 col-xs-12 col-md-4 text-center'B><'col-sm-12 col-xs-12 col-md-4'f>>tp", 
         // "lengthMenu": [[30, 60, 90, -1], [30, 60, 90, "All"]], 
@@ -1084,8 +1084,8 @@ for (var i = 0; i < checkboxes.length; i++) {
         <?php
         }
         ?>
-			    "columnDefs": [{ "orderable": false, "targets": 0 }],
-	            "order": [[ 1, "desc" ]],
+          "columnDefs": [{ "orderable": false, "targets": 0 }],
+              "order": [[ 1, "desc" ]],
           createdRow: function( row, data, dataIndex ) {            
             var th = $("table>th");            
             l = $("table").find('th').length;
@@ -1094,7 +1094,7 @@ for (var i = 0; i < checkboxes.length; i++) {
               $(row).find('td:eq('+j+')').attr('data-th',h);
             }                       
         }
-			});
+      });
     //   $('#enq_table').DataTable({ 
     //     //responsive: true, 
     //     scrollX: true,
@@ -1112,24 +1112,24 @@ for (var i = 0; i < checkboxes.length; i++) {
 
 
 
-    	$.ajax({
-			url: "<?=base_url().'enq/stages_of_enq/'.$data_type?>",
-			type: 'get',
-			dataType: 'json',
-			success: function(responseData){
-			$('#today_created').html(responseData.all_creaed_today_num);
-			$('#active_all').html(responseData.all_active_num);
-			$('#today_updated').html(responseData.all_today_update_num);
-			$('#active_drop').html(responseData.all_drop_num);
+      $.ajax({
+      url: "<?=base_url().'enq/stages_of_enq/'.$data_type?>",
+      type: 'get',
+      dataType: 'json',
+      success: function(responseData){
+      $('#today_created').html(responseData.all_creaed_today_num);
+      $('#active_all').html(responseData.all_active_num);
+      $('#today_updated').html(responseData.all_today_update_num);
+      $('#active_drop').html(responseData.all_drop_num);
       $('#total_active').html(responseData.all_enquery_num);
       
       all_lead_stage_c  = $("input[name='top_filter']:checked").next().next().next().html();
 
 //      console.log(all_lead_stage_c);
-			
+      
       $('#lead_stage_-1').text(all_lead_stage_c);     
-			}
-		});
+      }
+    });
 
 
       
@@ -1196,22 +1196,22 @@ for (var i = 0; i < checkboxes.length; i++) {
       }
 
 
-    	$('#enq_filter').change(function() {
+      $('#enq_filter').change(function() {
         update_top_filter_counter(); 
-    		var form_data = $("#enq_filter").serialize();				
-    		$.ajax({
-				url: '<?=base_url()?>enq/enquiry_set_filters_session',
-				type: 'post',
-				data: form_data,
-				success: function(responseData){
-					$('#enq_table').DataTable().ajax.reload();
-          stage_counter();   		
-				}
-			});
-    	});
-    	
+        var form_data = $("#enq_filter").serialize();       
+        $.ajax({
+        url: '<?=base_url()?>enq/enquiry_set_filters_session',
+        type: 'post',
+        data: form_data,
+        success: function(responseData){
+          $('#enq_table').DataTable().ajax.reload();
+          stage_counter();      
+        }
+      });
+      });
+      
 
-	} );
+  } );
 </script>
 
 <script>
@@ -1226,7 +1226,7 @@ $('.checked_all1').on('change', function() {
 </script>
 
 <script>
-	function getTemplates(SMS,type){
+  function getTemplates(SMS,type){
      if(type != 'Send Email'){
       $("#email_subject").hide();
       $("#email_subject").prev().hide();
@@ -1234,23 +1234,23 @@ $('.checked_all1').on('change', function() {
       $("#email_subject").show();
       $("#email_subject").prev().show();
     }
-	$.ajax({
-	type: 'POST',
-	url: '<?php echo base_url();?>message/get_templates/'+SMS,
-	})
-	.done(function(data){
-	    
-	    $('#modal-titlesms').html(type);
-	    $('#mesge_type').val(SMS);
-	    $('#templates').html(data);
+  $.ajax({
+  type: 'POST',
+  url: '<?php echo base_url();?>message/get_templates/'+SMS,
+  })
+  .done(function(data){
+      
+      $('#modal-titlesms').html(type);
+      $('#mesge_type').val(SMS);
+      $('#templates').html(data);
       //$("#email_subject").val(data.mail_subject);
 
-	})
-	.fail(function() {
-	    alert( "fail!" );
+  })
+  .fail(function() {
+      alert( "fail!" );
 
-	});
-	}
+  });
+  }
 
 
 function  send_sms(){
@@ -1281,7 +1281,7 @@ function  send_sms(){
 }
 </script>
 <script>
-	function getMessage(){
+  function getMessage(){
         
         var tmpl_id = document.getElementById('templates').value;
         
@@ -1307,36 +1307,36 @@ function  send_sms(){
  <script>
     /*function getMessage(){
        id=document.getElementById('templates').value;
-		$.ajax({
-		type: 'POST',
-		url: '<?php echo base_url();?>message/getMessage/'+id,
-		})
-		.done(function(data){
-		    $("#template_message").html(data);
-		})
-		.fail(function() {
-		alert( "fail!" );
+    $.ajax({
+    type: 'POST',
+    url: '<?php echo base_url();?>message/getMessage/'+id,
+    })
+    .done(function(data){
+        $("#template_message").html(data);
+    })
+    .fail(function() {
+    alert( "fail!" );
 
-		});
-	}*/
+    });
+  }*/
 
 function save_enquery(){
-	   
-	$.ajax({
-	type: 'POST',
-	url: '<?php echo base_url();?>enquiry/create',
-	cache: false,
-	data: $('#enquery_from').serialize(),
-	dataType: 'json',
-	success:function(data){
-	if(data.status === true )	
-		  document.location.href = data.redirect;
-	else  
-	     document.getElementById('success').style.display='none';
-		 document.getElementById('error').style.display='inline';
-		 $('#error').html(data.error);
-	       
-	}});
+     
+  $.ajax({
+  type: 'POST',
+  url: '<?php echo base_url();?>enquiry/create',
+  cache: false,
+  data: $('#enquery_from').serialize(),
+  dataType: 'json',
+  success:function(data){
+  if(data.status === true ) 
+      document.location.href = data.redirect;
+  else  
+       document.getElementById('success').style.display='none';
+     document.getElementById('error').style.display='inline';
+     $('#error').html(data.error);
+         
+  }});
 }
 
 function autoDial(){
@@ -1365,11 +1365,11 @@ function autoDial(){
                  $("#imgBack").html('uploading').show();
     },
     success:function(data){
-	    Swal.fire(
+      Swal.fire(
             'success',
             'call scheduled successfully',
             'success'
-          	);
+            );
          //alert(data);
          //document.getElementById('testdata').innerHTML =data;
           //window.location.href=re_url;
@@ -1394,19 +1394,19 @@ function assign_enquiry(){
       var re_url = '<?php echo base_url();?>client/index';
     }    
 
-	$.ajax({
-		type: 'POST',
-		url: p_url,
-		data: $('#enquery_assing_from').serialize(),
-		beforeSend: function(){
-		             $("#imgBack").html('uploading').show();
-		},
-		success:function(data){
-		     alert(data);
-		     //document.getElementById('testdata').innerHTML =data;
-		      window.location.href=re_url;
-		}});
-	}
+  $.ajax({
+    type: 'POST',
+    url: p_url,
+    data: $('#enquery_assing_from').serialize(),
+    beforeSend: function(){
+                 $("#imgBack").html('uploading').show();
+    },
+    success:function(data){
+         alert(data);
+         //document.getElementById('testdata').innerHTML =data;
+          window.location.href=re_url;
+    }});
+  }
 }
 
 
@@ -1415,19 +1415,19 @@ function moveto_lead(){
   if($('.checkbox1:checked').size() > 1000){
     alert('You can not move more that 1000 enquiry at once');
   }else{
-	$.ajax({
-	type: 'POST',
-	url: '<?php echo base_url();?>enquiry/move_to_lead',
-	data: $('#enquery_assing_from').serialize(),
-	success:function(data){
-	    if(data=='1'){
-	         alert('Successfully Moved in Leads'); 
-	      window.location.href='<?php echo base_url();?>enquiry'
-	    }else{
-	     alert(data);
-	    }
-	}});
-	}
+  $.ajax({
+  type: 'POST',
+  url: '<?php echo base_url();?>enquiry/move_to_lead',
+  data: $('#enquery_assing_from').serialize(),
+  success:function(data){
+      if(data=='1'){
+           alert('Successfully Moved in Leads'); 
+        window.location.href='<?php echo base_url();?>enquiry'
+      }else{
+       alert(data);
+      }
+  }});
+  }
 }
 
 function drop_enquiry(){
@@ -1478,46 +1478,46 @@ function delete_recorde() {
 /*
  $(function () {
    var bindDatePicker = function() {
-		$(".date").datetimepicker({
+    $(".date").datetimepicker({
         format:'DD-MM-YYYY hh:mm:ss a',
-			icons: {
-				time: "fa fa-clock-o",
-				date: "fa fa-calendar",
-				up: "fa fa-arrow-up",
-				down: "fa fa-arrow-down"
-			}
-		}).find('input:first').on("blur",function () {
-			// check if the date is correct. We can accept dd-mm-yyyy and yyyy-mm-dd.
-			// update the format if it's yyyy-mm-dd
-			var date = parseDate($(this).val());
+      icons: {
+        time: "fa fa-clock-o",
+        date: "fa fa-calendar",
+        up: "fa fa-arrow-up",
+        down: "fa fa-arrow-down"
+      }
+    }).find('input:first').on("blur",function () {
+      // check if the date is correct. We can accept dd-mm-yyyy and yyyy-mm-dd.
+      // update the format if it's yyyy-mm-dd
+      var date = parseDate($(this).val());
 
-			if (! isValidDate(date)) {
-				//create date based on momentjs (we have that)
-				date = moment().format('YYYY-MM-DD');
-			}
+      if (! isValidDate(date)) {
+        //create date based on momentjs (we have that)
+        date = moment().format('YYYY-MM-DD');
+      }
 
-			$(this).val(date);
-		});
-	}
+      $(this).val(date);
+    });
+  }
    
    var isValidDate = function(value, format) {
-		format = format || false;
-		// lets parse the date to the best of our knowledge
-		if (format) {
-			value = parseDate(value);
-		}
+    format = format || false;
+    // lets parse the date to the best of our knowledge
+    if (format) {
+      value = parseDate(value);
+    }
 
-		var timestamp = Date.parse(value);
+    var timestamp = Date.parse(value);
 
-		return isNaN(timestamp) == false;
+    return isNaN(timestamp) == false;
    }
    
    var parseDate = function(value) {
-		var m = value.match(/^(\d{1,2})(\/|-)?(\d{1,2})(\/|-)?(\d{4})$/);
-		if (m)
-			value = m[5] + '-' + ("00" + m[3]).slice(-2) + '-' + ("00" + m[1]).slice(-2);
+    var m = value.match(/^(\d{1,2})(\/|-)?(\d{1,2})(\/|-)?(\d{4})$/);
+    if (m)
+      value = m[5] + '-' + ("00" + m[3]).slice(-2) + '-' + ("00" + m[1]).slice(-2);
 
-		return value;
+    return value;
    }
    
    bindDatePicker();
@@ -1525,46 +1525,46 @@ function delete_recorde() {
   
   $(function () {
    var bindDatePicker = function() {
-		$(".date2").datetimepicker({
+    $(".date2").datetimepicker({
         format:'DD-MM-YYYY',
-			icons: {
-				time: "fa fa-clock-o",
-				date: "fa fa-calendar",
-				up: "fa fa-arrow-up",
-				down: "fa fa-arrow-down"
-			}
-		}).find('input:first').on("blur",function () {
-			// check if the date is correct. We can accept dd-mm-yyyy and yyyy-mm-dd.
-			// update the format if it's yyyy-mm-dd
-			var date = parseDate($(this).val());
+      icons: {
+        time: "fa fa-clock-o",
+        date: "fa fa-calendar",
+        up: "fa fa-arrow-up",
+        down: "fa fa-arrow-down"
+      }
+    }).find('input:first').on("blur",function () {
+      // check if the date is correct. We can accept dd-mm-yyyy and yyyy-mm-dd.
+      // update the format if it's yyyy-mm-dd
+      var date = parseDate($(this).val());
 
-			if (! isValidDate(date)) {
-				//create date based on momentjs (we have that)
-				date = moment().format('YYYY-MM-DD');
-			}
+      if (! isValidDate(date)) {
+        //create date based on momentjs (we have that)
+        date = moment().format('YYYY-MM-DD');
+      }
 
-			$(this).val(date);
-		});
-	}
+      $(this).val(date);
+    });
+  }
    
    var isValidDate = function(value, format) {
-		format = format || false;
-		// lets parse the date to the best of our knowledge
-		if (format) {
-			value = parseDate(value);
-		}
+    format = format || false;
+    // lets parse the date to the best of our knowledge
+    if (format) {
+      value = parseDate(value);
+    }
 
-		var timestamp = Date.parse(value);
+    var timestamp = Date.parse(value);
 
-		return isNaN(timestamp) == false;
+    return isNaN(timestamp) == false;
    }
    
    var parseDate = function(value) {
-		var m = value.match(/^(\d{1,2})(\/|-)?(\d{1,2})(\/|-)?(\d{4})$/);
-		if (m)
-			value = m[5] + '-' + ("00" + m[3]).slice(-2) + '-' + ("00" + m[1]).slice(-2);
+    var m = value.match(/^(\d{1,2})(\/|-)?(\d{1,2})(\/|-)?(\d{4})$/);
+    if (m)
+      value = m[5] + '-' + ("00" + m[3]).slice(-2) + '-' + ("00" + m[1]).slice(-2);
 
-		return value;
+    return value;
    }
    
    bindDatePicker();
