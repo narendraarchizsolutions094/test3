@@ -732,7 +732,7 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
               if (user_access('240')===true) { ?>
                <li><a href="#institute" data-toggle="tab" style="padding: 10px 10px;">Institute</a></li>
 			  <?php } ?>
-			<?php if ($this->session->companey_id=='67') { ?>
+			<?php if ($this->session->companey_id=='67' || $this->session->companey_id=='83') { ?>
               <!--<li><a href="#qalification" data-toggle="tab" style="padding: 10px 10px; font-size:12px;">Qualifications</a></li>
               <li><a href="#english" data-toggle="tab" style="padding: 10px 10px; font-size:12px;">English Language</a></li>-->			  
 			  <li><a href="#payment" data-toggle="tab" style="padding: 10px 10px;">Payment</a></li>

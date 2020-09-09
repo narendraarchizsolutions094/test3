@@ -283,9 +283,11 @@ class Ticket_Model extends CI_Model {
 		}
 		public function getallclient(){
 			
-			
+			if(($this->session->userdata('user_right')==212)){
+			return $this->db->select("*")->where(array("status" => 3, "phone" => $this->session->phone))->get("enquiry")->result();
+			}else{
 			return $this->db->select("*")->where(array("status" => 3, "comp_id" => $this->session->companey_id))->get("enquiry")->result();
-			
+			}
 		}
 	
 

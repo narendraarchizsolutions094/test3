@@ -313,6 +313,7 @@
 						<input type="text" class="form-control" value="<?php echo $ticket->clientname;?>" disabled>
 					</div>
 				</div>
+				<?php if($this->session->companey_id!=83){ ?>
 				<div class="col-md-6">
 					<div class="form-group">
 						<label>Product</label>
@@ -325,6 +326,7 @@
 						<input type="text" class="form-control" value="<?php echo ucwords($ticket->category); ?>" disabled>
 					</div>
 				</div>
+				<?php } ?>
 				<div class="col-md-6">
 					<div class="form-group">
 						<label>Priority</label>

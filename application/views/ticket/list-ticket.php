@@ -24,8 +24,10 @@
 											<th>Client</th>
 											<th>Email </th>
 											<th>Phone </th>
+											<?php if($this->session->companey_id!=83){ ?>
 											<th>Product</th>
 											<th>Related To</th>
+											<?php } ?>
 											<th>Priority</th>
 											<th>Date</th>
 											<th>Action</th>
@@ -41,9 +43,11 @@
 														<td><?php echo $tck->clientname; ?></td>
 														<td><?php echo $tck->email ; ?></td>
 														<td><?php echo $tck->phone	; ?></td>
+														<?php if($this->session->companey_id!=83){ ?>
 														<td><?=$tck->country_name ; ?></td>
 														
 														<td><?php echo ucwords($tck->category) ; ?></td>
+												        <?php } ?>
 														<td><?php 
 															if($tck->priority == 1){
 															?><span class="badge badge-info">Low</span><?php	

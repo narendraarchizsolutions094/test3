@@ -61,7 +61,7 @@
 						<input type = "text" class="form-control add-date-picker" name = "complaindate" value= "<?php echo date("m/d/Y", strtotime($ticket->coml_date)) ?>">
 					</div>
 				</div>
-		
+		<?php if($this->session->companey_id!=83){ ?>
 				<div class="col-md-6">
 					<div class="form-group">
 						<label>Product</label>
@@ -93,6 +93,7 @@
 						</select>
 					</div>
 				</div>
+		<?php } ?>
 				<div class = "col-md-6" id = "waranty-start">
 					
 				</div>
@@ -111,6 +112,7 @@
 						</select>
 					</div>
 				</div>
+				<?php if($this->session->companey_id!=83){ ?>
 				<div class="col-md-6">
 					<div class="form-group">
 						<label>Source</label>
@@ -125,6 +127,7 @@
 						</select>
 					</div>
 				</div>
+				<?php } ?>
 				<div class="col-md-6">
 					<div class="form-group">
 						<label>Attachment</label>

@@ -19,10 +19,10 @@
   width: 100%;
   margin: 0 auto;
   border: 1px solid #aed5e2;
-  padding-bottom: 10px;
+  padding-bottom: 0px;
 }
 .profile-header{
-  height: 200px;
+  height: 125px;
   width: 100%;
   background-color: #EBF6FA;
   border-bottom: 2px solid #E2F3FB;
@@ -36,8 +36,8 @@
 .user-image{
   float: left;
   position: relative;
-  width: 17%;
-  height: 135px;
+  width: 50px;
+  height: 50px;
 }
 .user-image img{
   width: 100%;
@@ -129,7 +129,7 @@ ul.tabs{
   list-style: none;
   display: flex;
   position: absolute;
-  top: 207px;
+  top: 125px;
   /*right: 400px;*/
 }
 ul.tabs li{
@@ -494,7 +494,8 @@ height:auto;
     <?php //foreach($student_Details as $pdetail){ ?>
       <div class="user-detail">
         <div class="user-image">
-          <img src="http://nicesnippets.com/demo/up-profile.jpg">
+          <?php $picture = $this->session->picture; ?>
+		  <img src="<?php if(!empty($picture)){ echo base_url().$picture;}else{echo base_url()."assets/images/no-img.png";} ?>" class="img-circle" onerror="this.style.display='none'">
         </div>
         <div class="user-data">
           <h2><?php echo $student_Details['name_prefix'].''.$student_Details['name'].' '.$student_Details['lastname']; ?></h2>
@@ -531,6 +532,13 @@ height:auto;
           <li class="tab-link" data-tab="institute">Create Institute</li>
           <li class="tab-link" data-tab="course">Create Course</li>
           <li class="tab-link" data-tab="schedule">Create Schedule</li>
+          <?php } ?>
+		  <?php if($this->session->userdata('user_right')==212){ ?>
+		  <li class="tab-link" data-tab="Edu-detail">Document</li>
+		  <li class="tab-link" data-tab="payment">Payment</li>
+          <li class="tab-link" data-tab="agreement">Agreement</li>
+		  <li class="tab-link" data-tab="login-tab">Login Trail</li>
+          <li class="tab-link" data-tab="faq">FAQ</li>
           <?php } ?>
         </ul>
         
@@ -597,7 +605,7 @@ height:auto;
           <div class="col-md-3">
           <a class="service-tile" aria-current="false" href="<?php echo $extrad->fvalue; ?>" target="_blank">
           <div class="fa fa-file" style="color:orange;font-size:45px;"><i class="service-icon -react"></i></div><div class="service-tile__content">
-          <div><h3><span><?php echo $extrad->input_label; ?></span></h3></div><span class="a-btn -orange">View Doc</span></div></a>
+          <div><h3 style="font-size: 15px;"><span><?php echo $extrad->input_label; ?></span></h3></div><span class="a-btn -orange">View Doc</span></div></a>
           </div>
         <?php } ?>
         <?php } ?>
@@ -719,6 +727,40 @@ if ($this->session->companey_id !=67) { ?>
                     <?php }else{ ?>
                 <div class="col-md-3"><span class="btn btn-danger">Unpaid </span></div>
       <?php } ?>
+</td>
+</tr>
+<?php $i++; ?>
+<?php } ?> 
+<?php } ?> 
+</tbody>
+</table>
+</div>
+</div>
+        </div>
+<div id="login-tab" class="tab-content" style="overflow-x:scroll;width:100%;">
+
+<div class="row" style="padding-top:4%;">
+<div class="col-lg-12">
+<table id="examplelog" class="table table-striped table-bordered" style="width:100%">
+<thead>
+<tr>
+<th class="" style="font-size: 10px;">S.N</th>
+<th style="font-size: 10px;">Date</th>
+<th style="font-size: 10px;">Duration</th>
+</tr>
+</thead>
+<tbody>
+<?php if(!empty($login_details)){ ?>
+<?php $i=1; foreach($login_details as $log){ ?>
+<tr>
+<td class="">
+<?php echo $i; ?>
+</td>
+<td class="">
+<?php echo $log->ins_dt; ?>
+</td>
+<td class="">
+<?php echo $log->ins_dt; ?>
 </td>
 </tr>
 <?php $i++; ?>
@@ -860,6 +902,7 @@ $(document).ready(function(){
 $(document).ready(function () {
   $('#dtBasicExample').DataTable();
     $('#dtBasicExample1').DataTable();
+	$('#examplelog').DataTable();
       $('#dtBasicExample2').DataTable();
         $('#dtBasicExample3').DataTable();
           $('#dtBasicExample4').DataTable();

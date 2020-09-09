@@ -49,9 +49,10 @@
 				<div class="col-md-6">
 					<div class="form-group">
 						<label>Complain Date</label>
-						<input type="date" class="form-control" name = "complaindate">
+						<input type="text" class="form-control" name = "complaindate" value="<?php echo date('d-m-Y') ?>">
 					</div>
 				</div>
+				<?php if($this->session->companey_id!=83){ ?>
 				<div class="col-md-6">
 					<div class="form-group">
 						<label>Product</label>
@@ -76,6 +77,7 @@
 						</select>
 					</div>
 				</div>
+				<?php } ?>
 				<div class = "col-md-6" id = "waranty-start">
 				</div>
 				<div class = "col-md-6" id = "waranty-end">
@@ -90,6 +92,7 @@
 						</select>
 					</div>
 				</div>
+				<?php if($this->session->companey_id!=83){ ?>
 				<div class="col-md-6">
 					<div class="form-group">
 						<label>Source</label>
@@ -102,6 +105,7 @@
 						</select>
 					</div>
 				</div>
+				<?php } ?>
 				<div class="col-md-6">
 					<div class="form-group">
 						<label>Attachment</label>
