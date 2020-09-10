@@ -17,8 +17,8 @@ class Rule_model extends CI_Model {
     }
 
 	public function execute_rule($id,$enquiry_code=0){
-		$this->load->model('rule_model');
-		$rule_data    =   $this->rule_model->get_rule($id);        
+		//$this->load->model('rule_model');
+		$rule_data    =   $this->get_rule($id);        
         $affected = 0;
         if (!empty($rule_data)) {
             if (!empty($rule_data['rule_sql']) && $rule_data['status'] == 1) {
@@ -57,10 +57,10 @@ class Rule_model extends CI_Model {
                                     ->row_array();
                         
                         if (!empty($row)) {
-                            $this->load->model('Message_model');
+                            $this->load->model('Message_models');
                             $subject = $row['mail_subject'];
                             $message = $row['template_content'];
-                            $this->Message_model->send_email($enq_row['email'],$subject,$message);
+                            $this->Message_models->send_email($enq_row['email'],$subject,$message);
                         }
 
                     }
