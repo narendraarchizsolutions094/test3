@@ -623,7 +623,7 @@ class Client extends CI_Controller {
             $this->db->update('enquiry');  
 
             $this->load->model('rule_model');
-            $this->rule_model->execute_rules($en_comments);
+            $this->rule_model->execute_rules($en_comments,array(1,2));
             
             $type = $enqarr->status;                
 

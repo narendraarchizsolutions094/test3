@@ -541,6 +541,8 @@ public function select_app_by_ins() {
                     $this->Leads_Model->add_comment_for_events_popup($stage_remark,$stage_date,$contact_person,$mobileno,$email,$designation,$stage_time,$enq_code,$notification_id,$dis_subject);                
                 }
             } 
+            $this->load->model('rule_model');
+            $this->rule_model->execute_rules($enq_code,array(1,2,3));
 			//print_r($coment_type);exit;
 if($coment_type == 1){			
     redirect('enquiry/view/'.$en_id);
@@ -796,6 +798,10 @@ if($coment_type == 1){
             $lead_code = $data['enquiry']->Enquery_id;
             $this->Leads_Model->add_comment_for_events('Converted to client', $lead_code);
             $msg = 'Lead Convert to Client Successfully';
+
+            $this->load->model('rule_model');
+            $this->rule_model->execute_rules($lead_code,array(1,2,3));  
+
             if ($this->session->companey_id == 76 || ($this->session->companey_id == 57 && $data['enquiry']->product_id == 122) ) {
                 $user_right = '';
                 if ($data['enquiry']->product_id == 168) {

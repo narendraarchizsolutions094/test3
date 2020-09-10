@@ -240,6 +240,7 @@ exit();*/
                 $rule_process[$value->sb_id]  = $value->product_name;
             }
         }
+        $data['rule_enquiry_status'] = json_encode(array(1=>'Enquiry',2=>'Lead',3=>'Client'));
 
         $data['lead_source'] = json_encode($rule_source);
         $data['country']     = json_encode($rule_country);
