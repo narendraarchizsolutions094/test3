@@ -706,6 +706,7 @@ if ($this->session->companey_id !=67) { ?>
 <th style="font-size: 10px;">Amount</th>
 <th style="font-size: 10px;">Date</th>
 <th style="font-size: 10px;">Status</th>
+<th style="font-size: 10px;">Action</th>
 </tr>
 </thead>
 <tbody>
@@ -727,6 +728,11 @@ if ($this->session->companey_id !=67) { ?>
                     <?php }else{ ?>
                 <div class="col-md-3"><span class="btn btn-danger">Unpaid </span></div>
       <?php } ?>
+</td>
+<td class="">
+<?php if($ins->pay_status=='0'){ ?>
+<a class="btn btn-info" href="<?=base_url().'payment/pay_method/razorpay/'.base64_encode ($ins->ins_amt).'/'.$ins->id ?>">Pay Now</a>
+<?php } ?>
 </td>
 </tr>
 <?php $i++; ?>

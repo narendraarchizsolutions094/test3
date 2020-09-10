@@ -47,11 +47,36 @@ class Payment extends CI_Controller {
 		}
 			$this->load->view('payment/order-fail',$data);    
 	  }  
-	  public function payumoney() {
+	  public function pay_method($keyword) {
+		  if($keyword=='payumoney'){
 		$data['title'] = 'Payment';
 		$data['content'] = $this->load->view('payment/payment-form', $data);
 		$this->load->view('layout/main_wrapper', $data);
+		  }else if($keyword=='razorpay'){
+		$data['title'] = 'Razor Pay';
+		$data['content'] = $this->load->view('razorpay/index', $data, true);
+		$this->load->view('layout/main_wrapper', $data);	  
+		  }
 	  }
+	  
+	 public function razorpay_success($id) {
+		$this->db->set('pay_status', '1');//if 2 columns
+        $this->db->where('id', $id);
+        $this->db->update('tbl_payment');
+		$data['title'] = 'Razor Pay Success';
+		$data['content'] = $this->load->view('razorpay/success', $data, true);
+		$this->load->view('layout/main_wrapper', $data);	  
+	  }
+    
+	public function razorpay_failed($id) {
+		$this->db->set('pay_status', '0');//if 2 columns
+        $this->db->where('id', $id);
+        $this->db->update('tbl_payment');
+		$data['title'] = 'Razor Pay Success';
+		$data['content'] = $this->load->view('razorpay/failed', $data, true);
+		$this->load->view('layout/main_wrapper', $data);	  
+	  }
+	  
 	
 	public function paylist()
 	{

@@ -28,7 +28,7 @@
 	        </div>
 	        <div class="modal-footer">	          
 	          <strong style="font-weight:500;font-size:15px;color: #222222;float: left;">Note: Refundable at the time of Submission of Visa Application </strong>
-	          <a class="btn btn-success" href="<?=base_url().'payment/payumoney'?>">Pay</a>
+	          <a class="btn btn-success" href="<?=base_url().'payment/pay_method/payumoney'?>">Pay</a>
 	          <a class="btn btn-primary" href="https://student.spaceinternationals.com/student/">Go Home</a>
 	        </div>
 	      </div>      
