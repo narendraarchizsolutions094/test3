@@ -53,7 +53,8 @@ class Ticket extends CI_Controller {
 		}
 		
 		$data['title'] = "View ";
-		$data["problem"] = $this->Ticket_Model->getissues();
+		//$data["problem"] = $this->Ticket_Model->getissues();
+		$data['problem'] = $this->Ticket_Model->get_sub_list();
 		$data['content'] = $this->load->view('ticket/view-ticket', $data, true);
 		$this->load->view('layout/main_wrapper', $data);
 		
@@ -86,7 +87,8 @@ class Ticket extends CI_Controller {
 		$data["conversion"] = $this->Ticket_Model->getconv($data["ticket"]->id);
 		$data["clients"] = $this->Ticket_Model->getallclient();
 		$data["product"] = $this->Ticket_Model->getproduct();
-		$data["problem"] = $this->Ticket_Model->getissues();
+		//$data["problem"] = $this->Ticket_Model->getissues();
+		$data['problem'] = $this->Ticket_Model->get_sub_list();
 		$data["source"] = $this->Ticket_Model->getSource($this->session->companey_id);//getting ticket source list
 		$data['content'] = $this->load->view('ticket/edit-ticket', $data, true);
 		$this->load->view('layout/main_wrapper', $data);
@@ -277,7 +279,8 @@ class Ticket extends CI_Controller {
 		$data['title'] = "Add Ticket";
 		$data["clients"] = $this->Ticket_Model->getallclient();
 		$data["product"] = $this->Ticket_Model->getproduct();
-		$data["problem"] = $this->Ticket_Model->getissues();
+		//$data["problem"] = $this->Ticket_Model->getissues();
+		$data['problem'] = $this->Ticket_Model->get_sub_list();
 		$data["source"] = $this->Ticket_Model->getSource($this->session->companey_id);//getting ticket source list
 		$data['content'] = $this->load->view('ticket/add-ticket', $data, true);
 		$this->load->view('layout/main_wrapper', $data);
@@ -382,6 +385,58 @@ class Ticket extends CI_Controller {
 		}
 		
 	}
+public function add_subject() {
+        $data['title'] = 'Ticket Subject';
+        $data['nav1'] = 'nav2';
+        #------------------------------# 
+        $leadid = $this->uri->segment(3);
 
+        //////////////////////////////////////////////////////
+        if (!empty($_POST)) {
+
+            $reason = $this->input->post('subject');
+
+            $data = array(
+                'subject_title' => $reason,
+				'comp_id' => $this->session->userdata('companey_id')
+            );
+
+            $insert_id = $this->Ticket_Model->add_tsub($data);
+
+            redirect('ticket/add_subject');
+        }
+        //////////////////////////////////////////////////////
+
+
+        $data['subject'] = $this->Ticket_Model->get_sub_list();
+
+        $data['content'] = $this->load->view('ticket_subject', $data, true);
+        $this->load->view('layout/main_wrapper', $data);
+    }
+	
+	public function update_subject() {
+
+        if (!empty($_POST)) {
+            $drop_id = $this->input->post('drop_id');
+
+            $reason = $this->input->post('subject');
+
+            $this->db->set('subject_title', $reason);
+            $this->db->where('id', $drop_id);
+            $this->db->update('tbl_ticket_subject');
+            $this->session->set_flashdata('SUCCESSMSG', 'Update Successfully');
+            redirect('Ticket/add_subject');
+        }
+    }
+	public function delete_subject($drop = null) {
+        if ($this->Ticket_Model->delete_subject($drop)) {
+            #set success message
+            $this->session->set_flashdata('message', display('delete_successfully'));
+        } else {
+            #set exception message
+            $this->session->set_flashdata('exception', display('please_try_again'));
+        }
+        redirect('Ticket/add_subject');
+    }
 }
 

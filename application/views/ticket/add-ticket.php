@@ -65,19 +65,20 @@
 						</select>
 					</div>
 				</div>
+				<?php } ?>
 				<div class="col-md-6">
 					<div class="form-group">
 						<label>Problem</label>
 						<select class="form-control add-select2" name = "relatedto">
+						<option value = "">Select Subject</option>
 					<?php  if(!empty($problem)) {
 								foreach($problem as $ind => $prblm){
-									?><option value = "<?php echo $prblm->title ?>"><?php echo ucfirst($prblm->title) ?> </option><?php
+									?><option value = "<?php echo $prblm->subject_title ?>"><?php echo ucfirst($prblm->subject_title) ?> </option><?php
 								}	
 							} ?>
 						</select>
 					</div>
 				</div>
-				<?php } ?>
 				<div class = "col-md-6" id = "waranty-start">
 				</div>
 				<div class = "col-md-6" id = "waranty-end">

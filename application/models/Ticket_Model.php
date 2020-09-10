@@ -289,6 +289,23 @@ class Ticket_Model extends CI_Model {
 			return $this->db->select("*")->where(array("status" => 3, "comp_id" => $this->session->companey_id))->get("enquiry")->result();
 			}
 		}
+	public function add_tsub($data) {
+        $this->db->insert('tbl_ticket_subject', $data);
+    }
 	
-
+	public function get_sub_list() {
+		$this->db->where('comp_id', $this->session->userdata('companey_id'));
+        $query = $this->db->get('tbl_ticket_subject');
+        return $query->result();
+    }
+	
+	public function delete_subject($drop = null) {
+        $this->db->where('id', $drop)->delete('tbl_ticket_subject');
+        if ($this->db->affected_rows()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
 }

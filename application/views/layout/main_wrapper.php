@@ -1251,13 +1251,36 @@ if($root=='https://student.spaceinternationals.com'){  ?>
           <?php  if($this->session->menu==1){ ?></br><p style="color:#fff;font-size:9px;margin-left:-12px;padding-top:10px;"><?php echo display('schedule') ?></p> <?php } ?>
           </a>
                 </li>
-
+<?php if($this->session->userdata('user_right')==212){ ?>
           <li class="treeview <?php echo (($segment1 == "ticket") ? "active" : null) ?>" style="<?php if(in_array(310,$module) || in_array(311,$module) || in_array(312,$module) || in_array(313,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
                     <a href="<?php echo base_url("ticket/index") ?>"><i class="fa fa-tasks" style="color:#fff;font-size:18px;background:#FF00FF;padding:7px;border-radius:4px;width:30px;"></i> &nbsp;<?php echo display('ticketing') ?>
           <?php  if($this->session->menu==1){ ?></br><p style="color:#fff;font-size:9px;margin-left:-12px;padding-top:10px;"><?php echo display('ticketing') ?></p> <?php } ?>
           </a>
                 </li>
-        
+<?php }else{ ?>				
+		<li class="treeview <?php echo (($segment1 == "ticket" || $segment1 == "smsapi") ? "active" : null) ?>"  style="<?php if(in_array(310,$module) || in_array(311,$module) || in_array(312,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
+                     <a href="#">
+                      <i class="fa fa-tasks" style="color:#fff;font-size:20px;background:#8164f9;padding:7px;border-radius:4px;width:30px;"></i> &nbsp;<?php echo display('ticketing') ?>
+                      <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                      </span>
+            <?php  if($this->session->menu==1){ ?></br><p style="color:#fff;font-size:9px;margin-left:-12px;padding-top:10px;"><?php echo display('ticketing') ?></p> <?php } ?>
+                     </a>
+                     
+                     <ul class="treeview-menu">
+                         
+						 <li class="<?php echo (($segment1 == "ticket" && $segment2 == "add_subject") ? "active" : null) ?>">
+                          <a href="<?php echo base_url("ticket/add_subject") ?>"><?php echo display('subject') ?></a>
+                        </li>
+						
+                        <li class="<?php echo (($segment1 == "ticket" && $segment2 == "index") ? "active" : null) ?>">
+                          <a href="<?php echo base_url("ticket/index") ?>"><?php echo display('ticketing') ?></a>
+                        </li>
+						
+                     </ul>
+
+        </li>
+<?php } ?>        
         <li class="treeview <?php echo (($segment1 == "appointment") ? "active" : null) ?>" style="<?php if(in_array(330,$module) || in_array(331,$module) || in_array(332,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
                     <a href="<?php echo base_url("appointment/index") ?>"><i class="fa fa-language" style="color:#fff;font-size:18px;background:#FF00FF;padding:7px;border-radius:4px;width:30px;"></i> &nbsp;<?php echo display('appointment') ?>
           <?php  if($this->session->menu==1){ ?></br><p style="color:#fff;font-size:9px;margin-left:-12px;padding-top:10px;"><?php echo display('appointment') ?></p> <?php } ?>

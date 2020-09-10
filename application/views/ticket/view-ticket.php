@@ -320,13 +320,14 @@
 						<input type="text" class="form-control" value="<?php echo $ticket->country_name; ?>" disabled>
 					</div>
 				</div>
+				<?php } ?>
 				<div class="col-md-6">
 					<div class="form-group">
 						<label>Related To</label>
 						<input type="text" class="form-control" value="<?php echo ucwords($ticket->category); ?>" disabled>
 					</div>
 				</div>
-				<?php } ?>
+				
 				<div class="col-md-6">
 					<div class="form-group">
 						<label>Priority</label>
@@ -363,7 +364,7 @@
 										<option value = ""></option>
 									<?php if(!empty($problem)) {
 											foreach($problem as $ind => $prblm){
-												?><option value = "<?php echo $prblm->title; ?>" <?php echo ($ticket->	issue == $prblm->title) ? "selected" : "" ?>><?php echo $prblm->title; ?></option><?php
+												?><option value = "<?php echo $prblm->subject_title; ?>" <?php echo ($ticket->	issue == $prblm->subject_title) ? "selected" : "" ?>><?php echo $prblm->subject_title; ?></option><?php
 											}	
 										} ?>
 									</select>
