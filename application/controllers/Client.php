@@ -1293,6 +1293,11 @@ exit();*/
         echo json_encode($this->location_model->get_same($smae_id));
     }
 	
+	public function find_same_data() {
+        $smae_id = $this->input->post('cdata');
+        echo json_encode($this->location_model->get_same_data($smae_id));
+    }
+	
 	public function upload_aggrement_team() {
     $enquiry_id = $this->input->post('ide');
     $this->db->from('enquiry');

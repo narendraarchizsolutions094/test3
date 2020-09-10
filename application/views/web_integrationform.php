@@ -68,7 +68,7 @@
                             <div class="form-group row">
                                 <label for="description" class="col-xs-5 col-form-label">Mobile  <i class="text-danger">*</i></label>
                                 <div class="col-xs-7">
-                                 <input type="text" class="form-control br_25  m-0 icon_left_input" name="e_mobile" value="" placeholder="Mobile" required>
+                                 <input type="text" class="form-control br_25  m-0 icon_left_input" onchange="checkAlreadyExist(this.value)" name="e_mobile" value="" placeholder="Mobile" required>
                              </div>
                             </div>
                             <div class="form-group row">
@@ -130,7 +130,28 @@
       </div>  
   </div>
 </div>  
-</div>  
+</div> 
+
+<script>
+function checkAlreadyExist(phone) {
+	//alert(phone);
+     $.ajax({
+            type: 'POST',
+            url: '<?php echo base_url();?>client/find_same_data',
+            data: {cdata:phone},
+         success:function(data){
+            res = JSON.parse(data);
+              if(res){              
+                $("input[name='e_name']").val(res.name_prefix + res.name  +' '+ res.lastname);
+                $("input[name='e_mobile']").val(res.phone);                
+                $("input[name='e_email']").val(res.email);
+                $("input[name='e_requirements']").val(res.enquiry);              
+              }
+         }               
+     });      
+}
+</script>
+ 
 <script>
         $("#fstate").change(function(){        
         var state_id = $(this).val();        

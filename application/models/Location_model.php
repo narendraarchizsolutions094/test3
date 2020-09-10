@@ -635,6 +635,16 @@ public function get_ins_list($process_id=0){
                         ->row();
     }
  /*****************************aggriment list end ************************************/
+ 
+ public function get_same_data($smae_id)
+    {
+        return $this->db->select('*')
+                        ->from('enquiry')
+                        ->where('phone',$smae_id)
+                        ->get()
+                        ->row();
+    }
+ 
  /***************************************************student dash*******************************************/
 public function stu_ins_list()
     {
