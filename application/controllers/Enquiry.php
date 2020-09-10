@@ -138,6 +138,10 @@ class Enquiry extends CI_Controller {
                     $this->db->set('status', 3);
                     $this->db->where('enquiry_id', $key);
                     $this->db->update('enquiry');
+                    
+                    $this->load->model('rule_model');
+                    $this->rule_model->execute_rules($enq->Enquery_id,array(1,2,3));  
+
                     $this->Leads_Model->add_comment_for_events(display("move_to_client"), $enq->Enquery_id);
                     $insert_id = $this->Leads_Model->LeadAdd($data);
                 }
@@ -545,7 +549,7 @@ class Enquiry extends CI_Controller {
                 $ins    =   $this->db->insert('institute_data',$institute_data);                
             }
             $this->load->model('rule_model');
-            $this->rule_model->execute_rules($encode);            
+            $this->rule_model->execute_rules($encode,array(1,2,3));            
             if ($insert_id) {                
                 $this->Leads_Model->add_comment_for_events($this->lang->line("enquery_create"), $encode);       
                 if($this->input->is_ajax_request())
@@ -1815,6 +1819,10 @@ Array
 					$this->db->set('status', 2);
 					$this->db->where('enquiry_id', $key);
 					$this->db->update('enquiry');
+
+                    $this->load->model('rule_model');
+                    $this->rule_model->execute_rules($enq->Enquery_id,array(1,2,3));      
+
 					$this->Leads_Model->add_comment_for_events($this->lang->line("move_to_lead"), $enq->Enquery_id);
 					$insert_id = $this->Leads_Model->LeadAdd($data);
 				}
@@ -1888,6 +1896,10 @@ Array
             $this->db->set('update_date', date('Y-m-d H:i:s'));
             $this->db->where('enquiry_id', $move_enquiry);
             $this->db->update('enquiry');
+            
+            $this->load->model('rule_model');
+            $this->rule_model->execute_rules($enquiry->row()->Enquery_id,array(1,2,3));            
+
             $this->Leads_Model->add_comment_for_events('Enquiry Moved ', $enquiry->row()->Enquery_id);
             $this->session->set_flashdata('message', 'Enquiry Convert to Lead Successfully');
             redirect('enquiry');

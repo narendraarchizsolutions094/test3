@@ -4,12 +4,15 @@ class Rule_model extends CI_Model {
 	public function get_rule($id){
 		$this->db->where('id',$id);
 		$this->db->where('comp_id',$this->session->companey_id);
-		return $this->db->get('leadrules')->row_array();
+		return $this->db->get('leadrules')->row_array(); 
 	}
 
-    public function get_rules(){        
+    public function get_rules($type=array()){        
         $this->db->where('comp_id',$this->session->companey_id);
         $this->db->where('status',1);
+        if (!empty($type)) {
+            $this->db->where_in('type',$type);
+        }
         return $this->db->get('leadrules')->result_array();
     }
 
@@ -37,13 +40,37 @@ class Rule_model extends CI_Model {
                     $this->db->set('aasign_to',$rule_data['rule_action']);
                     $this->db->update('enquiry');
                     $affected = $this->db->affected_rows();                    
+                }else if ($rule_data['type'] == 3) {
+                    $this->db->where('('.$rule_data['rule_sql'].')');
+                    if ($enquiry_code) {
+                        $this->db->where('Enquery_id',$enquiry_code);                
+                    }
+                    $this->db->where('comp_id',$this->session->companey_id);                                    
+                    $enq_row = $this->db->get('enquiry')->row_array();                    
+                    if (!empty($enq_row['email']) && !empty($rule_data['rule_action'])) {
+                        
+                        $row   =   $this->db->select('*')
+                                    ->from('api_templates')
+                                    ->join('mail_template_attachments', 'mail_template_attachments.templt_id=api_templates.temp_id', 'left')                    
+                                    ->where('temp_id',$rule_data['rule_action'])                        
+                                    ->get()
+                                    ->row_array();
+                        
+                        if (!empty($row)) {
+                            $this->load->model('Message_model');
+                            $subject = $row['mail_subject'];
+                            $message = $row['template_content'];
+                            $this->Message_model->send_email($enq_row['email'],$subject,$message);
+                        }
+
+                    }
                 }
             }
         }
         return $affected;
 	}
-    public function execute_rules($enquiry_code){ // for multiple rule execution
-        $results    =   $this->get_rules();
+    public function execute_rules($enquiry_code,$type){ // for multiple rule execution
+        $results    =   $this->get_rules($type);
         if (!empty($results)) {
             foreach ($results as $key => $value) {
                 $this->execute_rule($value['id'],$enquiry_code);                

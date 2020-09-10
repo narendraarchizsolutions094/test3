@@ -165,6 +165,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		    input: 'select',
 		    values: <?=$rule_process?>,
 		    operators: ['equal', 'not_equal','is_null', 'is_not_null']
+		  },{
+		    id: 'status',
+		    label: 'Enquiry Stage',
+		    type: 'integer',
+		    input: 'select',
+		    values: <?=$rule_enquiry_status?>,
+		    operators: ['equal', 'not_equal','is_null', 'is_not_null']
 		  }],
 		  rules: rules_basic
 		});
