@@ -508,11 +508,11 @@ class Enquiry extends CI_Controller {
                 'center_id' => $this->input->post('center_id'),
                 'ip_address' => $this->input->ip_address(),
                 'created_by' => $this->session->user_id,
-                'city_id' => $city_id->row()->id,
-                'state_id' => $city_id->row()->state_id,
-                'country_id'  =>$city_id->row()->country_id,
-                'region_id'  =>$city_id->row()->region_id,
-                'territory_id'  =>$city_id->row()->territory_id,
+                'city_id' => !empty($city_id->row()->id)?$city_id->row()->id:'',
+                'state_id' => !empty($city_id->row()->state_id)?$city_id->row()->state_id:'',
+                'country_id'  =>!empty($city_id->row()->country_id)?$city_id->row()->country_id:'',
+                'region_id'  =>!empty($city_id->row()->region_id)?$city_id->row()->region_id:'',
+                'territory_id'  =>!empty($city_id->row()->territory_id)?$city_id->row()->territory_id:'',
                 //'created_date' =>$enquiry_date, 
                 'status' => 1
             ];
