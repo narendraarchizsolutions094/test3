@@ -57,10 +57,10 @@ class Rule_model extends CI_Model {
                                     ->row_array();
                         
                         if (!empty($row)) {
-                            $this->load->model('Message_model');
+                            $this->load->model('Message_models');
                             $subject = $row['mail_subject'];
                             $message = $row['template_content'];
-                            $this->Message_model->send_email($enq_row['email'],$subject,$message);
+                            $this->Message_models->send_email($enq_row['email'],$subject,$message);
                         }
 
                     }
