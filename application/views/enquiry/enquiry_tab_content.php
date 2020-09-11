@@ -229,7 +229,7 @@ if (user_access(450)) { ?>
          <option value="<?=$product->id_c?>" <?php if(in_array($product->id_c,$current_country)) echo "selected = selected"; ?>><?=$product->country_name ?></option>
          <?php } ?>
       </select>
-   </div>
+   </div> 
    <?php  
   } 
   if($this->session->userdata('companey_id')==29){ ?>
@@ -290,7 +290,7 @@ if (user_access(450)) { ?>
                <input type="checkbox"  name="enqueryfield[]"  id="<?=$fld['input_name']?>" class="form-control">			   
                <?php }if($fld['input_type']==5){?>
                <label><?php echo(!empty($fld["input_label"])) ?  ucwords($fld["input_label"]) : ""; ?></label>
-               <textarea   name="enqueryfield[]"   class="form-control" placeholder="<?= $fld['input_place']; ?>" ><?php echo  (!empty($fld["fvalue"])) ? $fld["fvalue"] : ""; ?></textarea>
+               <textarea   name="enqueryfield[]"  <?= $fld['fld_attributes']; ?> class="form-control" placeholder="<?= $fld['input_place']; ?>" ><?php echo  (!empty($fld["fvalue"])) ? $fld["fvalue"] : ""; ?></textarea>
                <?php }?>
                <?php if($fld['input_type']==6){?>
                <label><?php echo(!empty($fld["input_label"])) ?  ucwords($fld["input_label"]) : ""; ?></label>
@@ -510,7 +510,7 @@ if (user_access(450)) { ?>
                <input type="checkbox"  name="enqueryfield[<?=$fld_id?>]"  id="<?= $fld['input_name']?>" class="form-control">                         
                <?php }if($fld['input_type']==5){?>
                <label><?php echo(!empty($fld["input_label"])) ?  ucwords($fld["input_label"]) : ""; ?></label>
-               <textarea   name="enqueryfield[<?=$fld_id?>]"   class="form-control" placeholder="<?= $fld['input_place']; ?>" ></textarea>
+               <textarea   name="enqueryfield[<?=$fld_id?>]" <?= $fld['fld_attributes']; ?>  class="form-control" placeholder="<?= $fld['input_place']; ?>" ></textarea>
                <?php }?>
                <?php if($fld['input_type']==6){?>
                <label><?php echo(!empty($fld["input_label"])) ?  ucwords($fld["input_label"]) : ""; ?></label>
@@ -637,7 +637,7 @@ if (user_access(450)) { ?>
                <input type="checkbox"  name="enqueryfield[<?=$fld_id?>]"  id="<?= $fld['input_name']?>" class="form-control">                         
                <?php }if($fld['input_type']==5){?>
                <label><?php echo(!empty($fld["input_label"])) ?  ucwords($fld["input_label"]) : ""; ?></label>
-               <textarea   name="enqueryfield[<?=$fld_id?>]"   class="form-control" placeholder="<?= $fld['input_place']; ?>" ><?php echo  (!empty($fld["fvalue"])) ? $fld["fvalue"] : ""; ?></textarea>
+               <textarea   name="enqueryfield[<?=$fld_id?>]"  <?= $fld['fld_attributes']; ?>  class="form-control" placeholder="<?= $fld['input_place']; ?>" ><?php echo  (!empty($fld["fvalue"])) ? $fld["fvalue"] : ""; ?></textarea>
                <?php }?>
                <?php if($fld['input_type']==6){?>
                <label><?php echo(!empty($fld["input_label"])) ?  ucwords($fld["input_label"]) : ""; ?></label>
