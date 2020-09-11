@@ -1,6 +1,5 @@
        	<div class="row">
-			<div class="col-md-12">
-				<div class="panel panel-default pt-2"> 
+			<div class="col-md-12"> 
 					<div class="panel-heading no-print" style ="background-color: #fff;padding:7px;border-bottom: 1px solid #C8CED3;">
 						<div class="row">
 							<div class="col-md-10">
@@ -30,7 +29,7 @@
 							<div class="row">
 								<div class="col-md-1"></div>
 								<div class="col-md-12">
-									<table class="datatable1 table table-striped table-bordered">
+									<table class="datatable1 table table-striped table-bordered" style="width:100%;">
 										<thead>
 										<th class="noExport">
                 <input type='checkbox' class="checked_all1" value="check all" >
@@ -44,6 +43,7 @@
 											<th>Product</th>
 											<?php } ?>
 											<th>Related To</th>
+											<th>Assign To</th>
 											<th>Priority</th>
 											<th>Date</th>
 											<th>Action</th>
@@ -64,6 +64,7 @@
 														<td><?=$tck->country_name ; ?></td>
 														<?php } ?>
 														<td><?php echo ucwords($tck->category) ; ?></td>
+														<td><?php echo $tck->s_display_name.' '.$tck->last_name ; ?></td>
 														<td><?php 
 															if($tck->priority == 1){
 															?><span class="badge badge-info">Low</span><?php	
@@ -93,7 +94,6 @@
 								<!--<?php echo form_close(); ?>-->
 						</div>
 					</div>
-				</div>
 				</div>
 			</div>
 		</div>

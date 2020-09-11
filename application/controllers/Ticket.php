@@ -16,7 +16,7 @@ class Ticket extends CI_Controller {
 
 		$this->load->model(array(
 
-			'Ticket_Model','Client_Model','User_model'
+			'Ticket_Model','Client_Model','User_model','Leads_Model'
 
 		));	
 
@@ -108,7 +108,8 @@ $this->db->update('tbl_ticket');
 		$data["product"] = $this->Ticket_Model->getproduct();
 		//$data["problem"] = $this->Ticket_Model->getissues();
 		$data['problem'] = $this->Ticket_Model->get_sub_list();
-		$data["source"] = $this->Ticket_Model->getSource($this->session->companey_id);//getting ticket source list
+		$data['source'] = $this->Leads_Model->get_leadsource_list();
+		//$data["source"] = $this->Ticket_Model->getSource($this->session->companey_id);//getting ticket source list
 		$data['content'] = $this->load->view('ticket/edit-ticket', $data, true);
 		$this->load->view('layout/main_wrapper', $data);
 		
@@ -296,11 +297,12 @@ $this->db->update('tbl_ticket');
 		}
 		
 		$data['title'] = "Add Ticket";
+		$data['source'] = $this->Leads_Model->get_leadsource_list();
 		$data["clients"] = $this->Ticket_Model->getallclient();
 		$data["product"] = $this->Ticket_Model->getproduct();
 		//$data["problem"] = $this->Ticket_Model->getissues();
 		$data['problem'] = $this->Ticket_Model->get_sub_list();
-		$data["source"] = $this->Ticket_Model->getSource($this->session->companey_id);//getting ticket source list
+		//$data["source"] = $this->Ticket_Model->getSource($this->session->companey_id);//getting ticket source list
 		$data['content'] = $this->load->view('ticket/add-ticket', $data, true);
 		$this->load->view('layout/main_wrapper', $data);
 		

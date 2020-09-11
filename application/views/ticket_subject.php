@@ -34,64 +34,7 @@
 
            <button class="btn btn-sm btn-success" style="float: left" type="button" data-toggle="modal" data-target="#createnewReason"><i class="fa fa-plus"></i> Add New Subject</button>
 
-        
-
-        
-
-        <div class="btn-group col-md-1" role="group" aria-label="Button group" style="float: right">
-
-            <button class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-
-              <i class="fa fa-check-circle"></i>&nbsp;
-
-              
-
-            </button>  
-
-            <div class="dropdown-menu" style="max-height: 400px; overflow: auto; position: absolute; will-change: transform; top: 26px; left: 0px; margin-left: -110px; transform: translate3d(0px, -7px, 0px);" x-placement="top-start">
-
-               <ul style="list-style-type:none;">
-
-                   <li><label><input type="checkbox" onclick="hide_td('th0','tt0')" id="tt0" checked> S.No.</label></li>
-
-                    <li><label><input type="checkbox" onclick="hide_td('th1','tt1')" id="tt1" checked> Name</label></li>
-
-                    <li><label><input type="checkbox" onclick="hide_td('th2','tt2')" id="tt2" checked> Mobile</label></li>
-
-                    <li><label><input type="checkbox" onclick="hide_td('th3','tt3')" id="tt3" checked> Email</label></li>
-
-                    <li><label><input type="checkbox" onclick="hide_td('th4','tt4')" id="tt4" checked> Address</label></li>
-
-                    <li><label><input type="checkbox" onclick="hide_td('th5','tt5')" id="tt5" checked> Status</label></li>
-
-                    
-
-
-
-                   
-
-               </ul>
-
-                
-
-            </div>   
-
-            <br>
-
-            
-
-            
-
-          </div>
-
-        
-
-        
-
-        
-
-        
-
+       
         </div>
 
         <br>
@@ -424,7 +367,7 @@ input[type=number]::-webkit-outer-spin-button {
 
                 <div class="form-group col-sm-12"> 
 
-                  <label>subject*</label>
+                  <label>Subject<span style="color:red;">*</span></label>
 
                   <input class="form-control" name="subject" type="text" required="">  
 

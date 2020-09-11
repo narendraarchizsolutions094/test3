@@ -208,13 +208,14 @@ $all_reporting_ids    =   $this->common_model->get_categories($this->session->us
 $where = '';
 $where .= "( tck.added_by IN (".implode(',', $all_reporting_ids).')';
 $where .= " OR tck.assign_to IN (".implode(',', $all_reporting_ids).'))';
-			return $this->db->select("tck.*,enq.phone,enq.gender,prd.country_name, concat(enq.name_prefix,' ' , enq.name,' ', enq.lastname) as clientname , COUNT(cnv.id) as tconv, cnv.msg")
+			return $this->db->select("tck.*,enq.phone,enq.gender,prd.country_name, concat(enq.name_prefix,' ' , enq.name,' ', enq.lastname) as clientname , COUNT(cnv.id) as tconv, cnv.msg, tbl_admin.s_display_name,tbl_admin.last_name")
 				 ->where($where)
-				 ->where("tck.company", $this->session->companey_id )
+				 ->where("tck.company", $this->session->companey_id)
 				
 				 ->from("tbl_ticket tck")
 				 ->join("tbl_ticket_conv cnv", "cnv.tck_id = tck.id", "LEFT")
 				 ->join("enquiry enq", "enq.enquiry_id = tck.client", "LEFT")
+				 ->join("tbl_admin", "tbl_admin.pk_i_admin_id = tck.assign_to", "LEFT")
 				 ->join("tbl_product_country prd", "prd.id = tck.product", "LEFT")
 				 ->order_by("tck.id DESC")
 				 ->group_by("tck.id")
@@ -288,7 +289,7 @@ $where .= " OR tck.assign_to IN (".implode(',', $all_reporting_ids).'))';
 		public function getallclient(){
 			
 			if(($this->session->userdata('user_right')==212)){
-			return $this->db->select("*")->where(array("status" => 3, "phone" => $this->session->phone))->get("enquiry")->result();
+			return $this->db->select("*")->where(array("status" => 1, "phone" => $this->session->phone))->get("enquiry")->result();
 			}else{
 			return $this->db->select("*")->where(array("status" => 3, "comp_id" => $this->session->companey_id))->get("enquiry")->result();
 			}

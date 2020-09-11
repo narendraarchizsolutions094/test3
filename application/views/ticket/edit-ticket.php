@@ -10,14 +10,7 @@
 						<h4>Edit Ticket <small><?php echo $ticket->ticketno; ?></small> 
 						
 						<div style="float:right">
-            <div class="btn-group" role="group" aria-label="Button group">
-               <a class="btn" onclick="window.location.reload();" title="Refresh">
-               <i class="fa fa-refresh icon_color"></i>
-               </a>  
-            </div>
-         <div class="btn-group" role="group" aria-label="Button group">
-               <a class="dropdown-toggle" href="https://thecrm360.com/new_crm/ticket/add" title="Add New Ticket"> <i class="fa fa-plus" style="background:#fff !important;border:none!important;color:green;"></i></a>&nbsp;&nbsp;&nbsp;
-            </div>
+            
             
             <div class="btn-group" role="group" aria-label="Button group">
                <a class="btn" href="<?php echo base_url("ticket"); ?>" title="Refresh">
@@ -86,7 +79,7 @@
 					<?php  if(!empty($problem)) {
 								foreach($problem as $ind => $prblm){
 									
-									?><option value = "<?php echo $prblm->subject_title; ?>" <?php echo ($prblm->subject_title == $ticket->issue) ? "selected" : ""; ?>><?php echo $prblm->subject_title ?> </option><?php
+									?><option value = "<?php echo $prblm->subject_title; ?>" <?php echo ($prblm->subject_title == $ticket->category) ? "selected" : ""; ?>><?php echo $prblm->subject_title ?> </option><?php
 								}	
 								
 							} ?>
@@ -112,7 +105,6 @@
 						</select>
 					</div>
 				</div>
-				<?php if($this->session->companey_id!=83){ ?>
 				<div class="col-md-6">
 					<div class="form-group">
 						<label>Source</label>
@@ -120,14 +112,13 @@
 							<?php  if(!empty($source)) {
 								foreach($source as $ind => $prblm){
 									
-									?><option value = "<?php echo $prblm->s_id ?>" <?php echo ($ticket->sourse == $prblm->s_id) ? "selected" : ""; ?> ><?php echo $prblm->source_name ?> </option><?php
+									?><option value = "<?php echo $prblm->lsid ?>" <?php echo ($ticket->sourse == $prblm->lsid) ? "selected" : ""; ?> ><?php echo $prblm->lead_name ?> </option><?php
 								}	
 								
 							} ?>
 						</select>
 					</div>
 				</div>
-				<?php } ?>
 				<div class="col-md-6">
 					<div class="form-group">
 						<label>Attachment</label>

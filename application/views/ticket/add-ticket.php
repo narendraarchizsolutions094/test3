@@ -93,20 +93,18 @@
 						</select>
 					</div>
 				</div>
-				<?php if($this->session->companey_id!=83){ ?>
 				<div class="col-md-6">
 					<div class="form-group">
 						<label>Source</label>
 						<select class="form-control add-select2" name = "source">
 							<?php  if(!empty($source)) {
 								foreach($source as $ind => $prblm){
-									?><option value = "<?php echo $prblm->s_id ?>"><?php echo $prblm->source_name ?> </option><?php
+									?><option value = "<?php echo $prblm->lsid ?>"><?php echo $prblm->lead_name ?> </option><?php
 								}	
 							} ?>
 						</select>
 					</div>
 				</div>
-				<?php } ?>
 				<div class="col-md-6">
 					<div class="form-group">
 						<label>Attachment</label>
