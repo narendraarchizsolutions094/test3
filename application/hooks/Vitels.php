@@ -62,7 +62,8 @@ class Vitels {
 
         $cookie_user = $this->CI->rememberme->verifyCookie();                    
         if (!empty($cookie_user) && !$this->CI->session->user_id) {            
-            $user_row    =   $this->CI->dashboard_model->find_user_by_email($cookie_user);                                
+            $user_row    =   $this->CI->dashboard_model->find_user_by_email($cookie_user);
+            if (!empty($user_row)) {                
             $this->CI->session->set_userdata('user_id',$user_row->pk_i_admin_id);                                
             if (!empty($user_row->pk_i_admin_id)) {
                 $city_row = $this->CI->db->select("*")
@@ -116,6 +117,7 @@ class Vitels {
                         'telephony_agent_id'    => $user_row->telephony_agent_id,
                         'telephony_token'       => $user_row->telephony_token
                     ]);
+            }
             }
         }
     }
