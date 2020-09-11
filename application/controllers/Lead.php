@@ -842,13 +842,18 @@ if($coment_type == 1){
                         $message = str_replace("@{email}",$data['enquiry']->email,$temp_row['template_content']);   
                         $message = str_replace("@{password}",'12345678',$message);   
                     }
+                 
+                    $this->Message_models->send_email($data['enquiry']->email,$subject,$message);
+
+                    $this->db->where('temp_id',124);
+                    $this->db->where('comp_id',57);
+                    $temp_row    =   $this->db->get('api_templates')->row_array();
+                    if (!empty($temp_row)) {                        
+                        $message = str_replace("@{email}",$data['enquiry']->email,$temp_row['template_content']);   
+                        $message = str_replace("@{password}",'12345678',$message);   
+                    }
+                    $this->Message_models->smssend($data['enquiry']->phone,$message);
                 }
-                $this->Message_models->send_email($data['enquiry']->email,$subject,$message);
-                
-                if ($this->session->companey_id == 57) {
-                    $this->Message_models->smssend($data['enquiry']->phone,$data['enquiry']->email.' Password - 12345678');
-                }
-                
                 $msg .=    " And user created successfully";
             }
             //$mail_access = $this->enquiry_model->access_mail_temp(); //access mail template..
