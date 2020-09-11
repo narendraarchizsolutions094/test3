@@ -95,6 +95,7 @@ $dataFlesh = array(
     'order_id' => $_POST['merchant_order_id'],
     'razorpay_payment_id' => $_POST['razorpay_payment_id'],
 );
+
 $paymentInfo = $dataFlesh;
 $order_info = array('order_status_id' => $_POST['merchant_order_id']);
 $amount = $_POST['merchant_total'];
@@ -107,7 +108,7 @@ $data = array(
 $success = false;
 $error = '';
 try {
-    $ch = get_curl_handle($razorpay_payment_id, $data);
+    $ch = $this->get_curl_handle($razorpay_payment_id, $data);
     //execute post
     $result = curl_exec($ch);
     $data = json_decode($result);
@@ -139,24 +140,47 @@ try {
 }
 if ($success === true) {
     if (!$order_info['order_status_id']) {
-        $json['redirectURL'] = $_POST['merchant_surl_id'];
+       $json['redirectURL'] = $_POST['merchant_surl_id'];
     } else {
         $json['redirectURL'] = $_POST['merchant_surl_id'];
     }
+$data = array(
+        'uid'=>$this->session->user_id,
+        'method'=>'Rozar Pay',
+		'ins_id'=>$_POST['merchant_insid'],
+        'status'=>'Success',
+		'txnid'=>$_POST['razorpay_payment_id'],
+        'amount'=>$_POST['merchant_amount'],
+		'response'=>$result
+    );
+
+$this->db->insert('payment_history',$data);
 } else {
+	$data = array(
+        'uid'=>$this->session->user_id,
+        'method'=>'Rozar Pay',
+		'ins_id'=>$_POST['merchant_insid'],
+        'status'=>'Success',
+		'txnid'=>$_POST['razorpay_payment_id'],
+        'amount'=>$_POST['merchant_amount'],
+		'response'=>$result
+    );
+
+    $this->db->insert('payment_history',$data);
     $json['redirectURL'] = $_POST['merchant_furl_id'];
 }
-$json['msg'] = '';
+  $json['msg'] = '';
 } else {
-$json['msg'] = 'An error occured. Contact site administrator, please!';
-}	  
+ $json['msg'] = 'An error occured. Contact site administrator, please!';
+}
+echo json_encode($json);	  
 	  }
 	  
 	  
 function get_curl_handle($payment_id, $data) {
     $url = 'https://api.razorpay.com/v1/payments/' . $payment_id . '/capture';
-    $key_id = rzp_live_vGbrA7OABnyJne;
-    $key_secret = AlgmDoiif0nK9PK0m70wgdLZ;
+    $key_id = 'rzp_live_vGbrA7OABnyJne';
+    $key_secret = 'AlgmDoiif0nK9PK0m70wgdLZ';
     $params = http_build_query($data);
     //cURL Request
     $ch = curl_init();

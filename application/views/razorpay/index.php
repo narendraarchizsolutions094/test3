@@ -6,7 +6,8 @@ require_once "constants.php";
 <input type="hidden" name="language" value="EN"> 
 <input type="hidden" name="currency" id="currency" value="INR"> 
 <input type="hidden" name="surl" id="surl" value="<?php echo base_url('payment/razorpay_success/'.$this->uri->segment(5)); ?>"> 
-<input type="hidden" name="furl" id="furl" value="<?php echo base_url('payment/razorpay_failed/'.$this->uri->segment(5)); ?>"> 
+<input type="hidden" name="furl" id="furl" value="<?php echo base_url('payment/razorpay_failed/'.$this->uri->segment(5)); ?>">
+<input type="hidden" class="form-control" id="insid" name="insid" placeholder="insid" value="<?php echo $this->uri->segment(5); ?>" readonly="readonly"> 
 </br>
 <section class="showcase">
     <div class="row align-items-center">
@@ -68,6 +69,7 @@ require_once "constants.php";
     var card_holder_name_id = jQuery('form#razorpay-frm-payment').find('input#billing-name').val();
     var merchant_total = total;
     var merchant_amount = jQuery('form#razorpay-frm-payment').find('input#amount').val();
+	var merchant_insid = jQuery('form#razorpay-frm-payment').find('input#insid').val();
     var currency_code_id = jQuery('form#razorpay-frm-payment').find('input#currency').val();
     var key_id = "<?php echo RAZOR_KEY_ID; ?>";
     var store_name = 'God Speed';
@@ -111,9 +113,10 @@ require_once "constants.php";
             jQuery.ajax({
                 url:'<?php echo base_url();?>payment/razorpay_payment_final',
                 type: 'post',
-                data: {razorpay_payment_id: transaction.razorpay_payment_id, merchant_order_id: merchant_order_id, merchant_surl_id: merchant_surl_id, merchant_furl_id: merchant_furl_id, card_holder_name_id: card_holder_name_id, merchant_total: merchant_total, merchant_amount: merchant_amount, currency_code_id: currency_code_id}, 
+                data: {razorpay_payment_id: transaction.razorpay_payment_id, merchant_order_id: merchant_order_id, merchant_surl_id: merchant_surl_id, merchant_furl_id: merchant_furl_id, card_holder_name_id: card_holder_name_id, merchant_total: merchant_total, merchant_amount: merchant_amount, currency_code_id: currency_code_id,merchant_insid: merchant_insid}, 
                 dataType: 'json',
                 success: function (res) {
+					alert(res);
                     if(res.msg){
                         alert(res.msg);
                         return false;

@@ -83,7 +83,7 @@ $this->db->update('tbl_ticket');
 	
 	public function edit($tckt = ""){
 		
-		if(isset($_POST["product"]))
+		if(isset($_POST["ticketno"]))
 		{
 			
 			$res = $this->Ticket_Model->save($this->session->companey_id,$this->session->user_id);

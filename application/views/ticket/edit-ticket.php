@@ -27,7 +27,7 @@
 				<div class="col-md-8 panel-default panel-body" style ="border:1px solid #f7f7f7">
 		
 				
-				<?php echo form_open(); ?>
+				<?php echo form_open_multipart(base_url("ticket/edit/".$ticket->ticketno)); ?>
 			<div class="row ">
 				<div class="col-md-6">
 					<div class="form-group">
@@ -35,6 +35,8 @@
 						<span class="form-control"><?php echo $ticket->clientname; ?></span>
 					</div>
 				</div>
+				
+						<input type = "hidden" class="form-control" value = "<?php echo $ticket->ticketno; ?>" name = "ticketno">
 				
 				<div class="col-md-6">
 					<div class="form-group">
@@ -119,11 +121,17 @@
 						</select>
 					</div>
 				</div>
-				<div class="col-md-6">
+				<div class="col-md-5">
 					<div class="form-group">
 						<label>Attachment</label>
 						<input type = "file" name = "attachment" class="form-control">
 					</div>
+				</div>
+				<div class="col-md-1">
+					<div class="form-group">
+						<label>File</label>
+				 <a href="<?php echo base_url('assets/images/'.$ticket->attachment); ?>"><i class="fa fa-file" aria-hidden="true"></i></a> 
+				 </div>
 				</div>
 				<div class="col-md-12">
 					<div class="form-group">

@@ -70,7 +70,7 @@
 															?><span class="badge badge-info">Low</span><?php	
 															}else if($tck->priority == 2){
 															?><span class="badge badge-warning">Medium</span><?php		
-															}else if($tck->priority == 2){
+															}else if($tck->priority == 3){
 																?><span class="badge badge-danger">High</span><?php	
 															}
 														
