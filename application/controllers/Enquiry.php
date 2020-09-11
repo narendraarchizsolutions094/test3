@@ -144,6 +144,63 @@ class Enquiry extends CI_Controller {
 
                     $this->Leads_Model->add_comment_for_events(display("move_to_client"), $enq->Enquery_id);
                     $insert_id = $this->Leads_Model->LeadAdd($data);
+
+
+                    if ($this->session->companey_id == 76 || ($this->session->companey_id == 57 && $enq->product_id == 122) ) {
+                        $user_right = '';
+                        if ($enq->product_id == 168) {
+                            $user_right = 180; 
+                        }else if ($enq->product_id == 169) {
+                            $user_right = 186;
+                        } 
+                        $report_to = '';
+                        if($this->session->companey_id == 57){
+                            $user_right = 200;
+                            $report_to=$this->session->companey_id;
+                        }
+                        $ucid    =   $this->session->companey_id;
+                        
+                        $postData = array(
+                                's_display_name'  =>    $enq->name,
+                                'last_name'       =>    $enq->lastname,  
+                                's_user_email'    =>    $enq->email,
+                                's_phoneno'       =>    $enq->phone,
+                                'companey_id'     =>    $ucid,
+                                'b_status'        =>    1,
+                                'user_permissions'=>    $user_right,
+                                'user_roles'      =>    $user_right,
+                                'user_type'       =>    $user_right,                        
+                                's_password'      =>    md5(12345678),
+                                'report_to'       =>    $report_to
+                            );
+                        $user_id    =   $this->user_model->create($postData);
+                        $message = 'Email - '.$enq->email.'<br>Password - 12345678';                
+                        $subject = 'Login Details';
+
+                        if ($this->session->companey_id == 57) {
+                            $this->db->where('temp_id',125);
+                            $this->db->where('comp_id',57);
+                            $temp_row    =   $this->db->get('api_templates')->row_array();
+                            if (!empty($temp_row)) {
+                                $subject = $temp_row['mail_subject'];   
+                                $message = str_replace("@{email}",$enq->email,$temp_row['template_content']);   
+                                $message = str_replace("@{password}",'12345678',$message);   
+                            }
+                         
+                            $this->Message_models->send_email($enq->email,$subject,$message);
+
+                            $this->db->where('temp_id',124);
+                            $this->db->where('comp_id',57);
+                            $temp_row    =   $this->db->get('api_templates')->row_array();
+                            if (!empty($temp_row)) {                        
+                                $message = str_replace("@{email}",$enq->email,$temp_row['template_content']);   
+                                $message = str_replace("@{password}",'12345678',$message);   
+                            }
+                            $this->Message_models->smssend($enq->phone,$message);
+                        }
+                        $msg .=    " And user created successfully";
+                    }
+
                 }
                  echo '1';
             }else{
