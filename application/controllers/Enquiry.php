@@ -198,7 +198,7 @@ class Enquiry extends CI_Controller {
                             }
                             $this->Message_models->smssend($enq->phone,$message);
                         }
-                        $msg .=    " And user created successfully";
+                       // $msg .=    " And user created successfully";
                     }
 
                 }
