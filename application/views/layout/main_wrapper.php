@@ -125,7 +125,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
             //var url="https://agent.c-zentrixcloud.com/apps/appsHandler.php?transaction_id=CTI_DIAL&agent_id="+agent_id+"&phone_num="+phn+"&ip=https://agent.c-zentrixcloud.com&resFormat=3";
             
 
-            var url="https://czagent.c-zentrixcloud.com/apps/appsHandler.php?transaction_id=CTI_DIAL&agent_id="+agent_id+"&phone_num="+phn+"&ip=https://agent.c-zentrixcloud.com&resFormat=3";
+            var url="https://czagent.c-zentrixcloud.com/apps/appsHandler.php?transaction_id=CTI_DIAL&agent_id="+agent_id+"&phone_num="+phn+"&ip=&resFormat=3";
 
 
               $.ajax({
