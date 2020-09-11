@@ -204,8 +204,12 @@ class Ticket_Model extends CI_Model {
 			
 		}
 		public function getall(){
-
+$all_reporting_ids    =   $this->common_model->get_categories($this->session->user_id);
+$where = '';
+$where .= "( tck.added_by IN (".implode(',', $all_reporting_ids).')';
+$where .= " OR tck.assign_to IN (".implode(',', $all_reporting_ids).'))';
 			return $this->db->select("tck.*,enq.phone,enq.gender,prd.country_name, concat(enq.name_prefix,' ' , enq.name,' ', enq.lastname) as clientname , COUNT(cnv.id) as tconv, cnv.msg")
+				 ->where($where)
 				 ->where("tck.company", $this->session->companey_id )
 				
 				 ->from("tbl_ticket tck")

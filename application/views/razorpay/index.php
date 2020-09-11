@@ -2,7 +2,7 @@
 require_once "constants.php";
 ?>
 <form name="razorpay_frm_payment" class="razorpay-frm-payment" id="razorpay-frm-payment" method="post">
-<input type="hidden" name="merchant_order_id" id="merchant_order_id" value="12345"> 
+<input type="hidden" name="merchant_order_id" id="merchant_order_id" value="<?php echo mt_rand(10000,99999); ?>"> 
 <input type="hidden" name="language" value="EN"> 
 <input type="hidden" name="currency" id="currency" value="INR"> 
 <input type="hidden" name="surl" id="surl" value="<?php echo base_url('payment/razorpay_success/'.$this->uri->segment(5)); ?>"> 
@@ -109,7 +109,7 @@ require_once "constants.php";
         },
         handler: function (transaction) {
             jQuery.ajax({
-                url:'callback.php',
+                url:'<?php echo base_url();?>payment/razorpay_payment_final',
                 type: 'post',
                 data: {razorpay_payment_id: transaction.razorpay_payment_id, merchant_order_id: merchant_order_id, merchant_surl_id: merchant_surl_id, merchant_furl_id: merchant_furl_id, card_holder_name_id: card_holder_name_id, merchant_total: merchant_total, merchant_amount: merchant_amount, currency_code_id: currency_code_id}, 
                 dataType: 'json',

@@ -3,8 +3,8 @@ require_once "constants.php";
 // initialized cURL Request
 function get_curl_handle($payment_id, $data) {
     $url = 'https://api.razorpay.com/v1/payments/' . $payment_id . '/capture';
-    $key_id = RAZOR_KEY_ID;
-    $key_secret = RAZOR_KEY_SECRET;
+    $key_id = rzp_test_cxHTt7cgC7eMoi;
+    $key_secret = gjsHkS6tqhyvwZZ5S8n8yvKE;
     $params = http_build_query($data);
     //cURL Request
     $ch = curl_init();

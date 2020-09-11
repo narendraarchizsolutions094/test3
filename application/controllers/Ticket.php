@@ -16,7 +16,7 @@ class Ticket extends CI_Controller {
 
 		$this->load->model(array(
 
-			'Ticket_Model','Client_Model'
+			'Ticket_Model','Client_Model','User_model'
 
 		));	
 
@@ -29,6 +29,7 @@ class Ticket extends CI_Controller {
 		$data['title'] = "All Ticket";
 		$data["tickets"] = $this->Ticket_Model->getall();
 		//print_r($data["tickets"]);die;
+		$data['user_list'] = $this->User_model->companey_users();
 		$data['content'] = $this->load->view('ticket/list-ticket', $data, true);
 		$this->load->view('layout/main_wrapper', $data);
 		
@@ -60,7 +61,25 @@ class Ticket extends CI_Controller {
 		
 	}
 	
-	
+public function assign_tickets() {
+
+        if (!empty($_POST)) {
+            $move_enquiry = $this->input->post('enquiry_id[]');
+           // echo json_encode($move_enquiry);
+            $assign_employee = $this->input->post('epid');
+            $notification_data=array();$assign_data=array();
+            if (!empty($move_enquiry)) {
+                foreach ($move_enquiry as $key) {
+$this->db->set('assign_to', $assign_employee);
+$this->db->where('id', $key);
+$this->db->update('tbl_ticket');    
+                }
+                echo display('save_successfully');
+            } else {
+                echo display('please_try_again');
+            }
+        }
+    }	
 	
 	public function edit($tckt = ""){
 		
