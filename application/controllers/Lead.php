@@ -844,6 +844,11 @@ if($coment_type == 1){
                     }
                 }
                 $this->Message_models->send_email($data['enquiry']->email,$subject,$message);
+                
+                if ($this->session->companey_id == 57) {
+                    $this->Message_models->smssend($data['enquiry']->phone,$data['enquiry']->email.' Password - 12345678');
+                }
+                
                 $msg .=    " And user created successfully";
             }
             //$mail_access = $this->enquiry_model->access_mail_temp(); //access mail template..
