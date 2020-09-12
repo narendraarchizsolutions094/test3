@@ -233,7 +233,7 @@ $this->load->library('zip');
 
     public function validate_login() {  
 	
-        $this->form_validation->set_rules('email', display('email'), 'required|max_length[50]|valid_email|trim');
+        $this->form_validation->set_rules('email', display('email'), 'required|max_length[50]|trim');
         $this->form_validation->set_rules('password', display('password'), 'required|max_length[32]|md5');        
         
         $data['user'] = (object) $postData = [

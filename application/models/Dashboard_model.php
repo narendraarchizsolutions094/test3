@@ -21,6 +21,7 @@ class Dashboard_model extends CI_Model {
 			->join('user','user.user_id = tbl_admin.companey_id','left')
 
 			->where('tbl_admin.s_user_email',$data['email'])
+			->or_where('tbl_admin.s_phoneno',$data['email'])
 
 			->where('tbl_admin.s_password',$data['password'])
 
