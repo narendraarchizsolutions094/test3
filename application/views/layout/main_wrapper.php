@@ -132,7 +132,17 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                   url:url,
                   type: 'GET',
                   success: function (data) {
-
+                        Swal.fire({            
+          // icon: 'info',
+           html:'<strong>Dailing <blink>..</blink></strong>',
+           showCancelButton: false,
+           confirmButtonColor: '#3085d6',
+           cancelButtonColor: '#d33',
+           confirmButtonText: 'ok'              
+                    }).then((result) => {
+                    if (result.value) {                                 
+                   }
+                   });
                   }
               });
             }else{
