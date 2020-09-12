@@ -585,8 +585,8 @@ class User extends CI_Controller {
             $dat_array=array();            
             while (($filesop = fgetcsv($handle, 2000, ",")) !== false) {
                 if ($c) {                                        
-                    $right = 166;                                        
-                    $post_data    =   array(       
+                   // $right = 166;                                        
+                   /* $post_data    =   array(       
                             'user_permissions'      => $right, 
                             'user_type'             => $right, 
                             's_password'            => md5('12345678'),
@@ -599,15 +599,22 @@ class User extends CI_Controller {
                             'process'               => "122",
                             'report_to'             => $filesop[3]   
                           );                
-
-            $this->db->where('s_user_email',$post_data['s_user_email']);
-            $this->db->or_where('s_phoneno',$post_data['s_phoneno']);
+*/
+            $post_data = array('s_phoneno'=>$filesop['2']);
+            //$this->db->where('s_user_email',$post_data['s_user_email']);
+            $this->db->where('s_phoneno',$post_data['s_phoneno']); 
             $r    =   $this->db->get('tbl_admin')->row_array();
-            echo "<pre>";
+            
+            /*echo "<pre>";
             print_r($r['s_user_email']);
-            echo "</pre>";
+            echo "</pre>";*/
+            
                 if (empty($r) && $post_data['s_phoneno']) {                    
-                    $this->db->insert('tbl_admin',$post_data);
+                    //$this->db->insert('tbl_admin',$post_data);
+                    $this->db->set('status',2);
+                    $this->db->where('phone',$post_data['s_phoneno']);
+                    $this->db->where('status',3);
+                    $this->db->update('enquiry');
                     $i++;
                 }else{
                     /*$this->db->where('s_user_email',$post_data['s_user_email']);
@@ -620,7 +627,7 @@ class User extends CI_Controller {
             if ($filesop[7]) {                
                 $c++;
             }
-            }
+            } 
         }
 echo $this->upload->display_errors();
         echo $i.'<br>';

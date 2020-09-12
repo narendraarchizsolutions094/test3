@@ -177,7 +177,7 @@ class Enquiry extends CI_Controller {
                         $message = 'Email - '.$enq->email.'<br>Password - 12345678';                
                         $subject = 'Login Details';
 
-                        if ($this->session->companey_id == 57) {
+                        if ($this->session->companey_id == 57 && $user_id) {
                             $this->db->where('temp_id',125);
                             $this->db->where('comp_id',57);
                             $temp_row    =   $this->db->get('api_templates')->row_array();
