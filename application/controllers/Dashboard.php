@@ -491,6 +491,8 @@ public function login_in_process(){
         {
             $data['ins_list'] = $this->location_model->stu_ins_list();
             redirect('dashboard/search_programs');
+        }else if ($this->session->userdata('user_right')==214) {
+            redirect('dashboard/user_profile');
         }
         else
         {
