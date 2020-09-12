@@ -31,7 +31,7 @@
 			<div class="row ">
 				<div class="col-md-6">
 					<div class="form-group">
-						<label>Client</label>
+						<label>Problem For</label>
 						<span class="form-control"><?php echo $ticket->clientname; ?></span>
 					</div>
 				</div>
@@ -130,7 +130,7 @@
 				<div class="col-md-1">
 					<div class="form-group">
 						<label>File</label>
-				 <a href="<?php echo base_url('assets/images/'.$ticket->attachment); ?>"><i class="fa fa-file" aria-hidden="true"></i></a> 
+				 <a href="<?php echo base_url('assets/images/'.$ticket->attachment); ?>" target="_blank"><?php echo $ticket->attachment ?></a> 
 				 </div>
 				</div>
 				<div class="col-md-12">

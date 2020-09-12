@@ -22,9 +22,9 @@
 			<div class="row ">
 				<div class="col-md-6">
 					<div class="form-group">
-						<label>Client</label>
+						<label>Problem For</label>
 						<select class="form-control add-select2 choose-client" name = "client">
-							<option value = "" style ="display:none;">---Select Client---</option>
+							<option value = "" style ="display:none;">---Select---</option>
 							<?php if(!empty($clients)){
 								foreach($clients as $ind => $clt){
 									?><option value ="<?php echo $clt->enquiry_id ?>"><?php echo $clt->name." ".$clt->lastname; ?> </option><?php
@@ -49,7 +49,7 @@
 				<div class="col-md-6">
 					<div class="form-group">
 						<label>Complain Date</label>
-						<input type="text" class="form-control" name = "complaindate" value="<?php echo date('d-m-Y') ?>">
+						<input type="text" class="form-control add-date-picker" name = "complaindate" value="<?php echo date('m/d/Y') ?>">
 					</div>
 				</div>
 				<?php if($this->session->companey_id!=83){ ?>
@@ -66,6 +66,7 @@
 					</div>
 				</div>
 				<?php } ?>
+				<?php if($this->session->companey_id!=83 && $this->session->user_right!=214){ ?>
 				<div class="col-md-6">
 					<div class="form-group">
 						<label>Problem</label>
@@ -79,6 +80,7 @@
 						</select>
 					</div>
 				</div>
+				<?php } ?>
 				<div class = "col-md-6" id = "waranty-start">
 				</div>
 				<div class = "col-md-6" id = "waranty-end">
@@ -93,6 +95,7 @@
 						</select>
 					</div>
 				</div>
+				<?php if($this->session->companey_id!=83 && $this->session->user_right!=214){ ?>
 				<div class="col-md-6">
 					<div class="form-group">
 						<label>Source</label>
@@ -105,6 +108,7 @@
 						</select>
 					</div>
 				</div>
+				<?php } ?>
 				<div class="col-md-6">
 					<div class="form-group">
 						<label>Attachment</label>
@@ -166,5 +170,14 @@
 				}
 		})
 		$("#oldticket").load("<?php echo base_url('ticket/loadoldticket') ?>/"+$(this).val())
+	});
+</script>
+<script>
+	$(document).ready(function(){
+		
+		$(".add-date-picker").datepicker({
+			 format: 'yyyy/mm/dd',
+			 startDate: '-7d'
+		});	
 	});
 </script>

@@ -533,7 +533,7 @@ height:auto;
           <li class="tab-link" data-tab="course">Create Course</li>
           <li class="tab-link" data-tab="schedule">Create Schedule</li>
           <?php } ?>
-		  <?php if($this->session->userdata('user_right')==212){ ?>
+		  <?php if($this->session->userdata('user_right')==214){ ?>
 		  <li class="tab-link" data-tab="Edu-detail">Document</li>
 		  <li class="tab-link" data-tab="payment">Payment</li>
           <li class="tab-link" data-tab="agreement">Agreement</li>
