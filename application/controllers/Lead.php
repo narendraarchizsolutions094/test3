@@ -1481,6 +1481,29 @@ if($coment_type == 1){
         $this->load->view('layout/main_wrapper', $data);
     }
 	
+	public function sub_course() {
+        if (user_role('30') == true) {}
+        $data['title'] = display('sub_course');
+        $this->load->library('pagination');
+        $config = array();
+        $config["base_url"] = base_url() . "lead/sub_course";
+        $config["total_rows"] = $this->Institute_model->sub_course('','','count');
+        $config["per_page"] = 10;
+
+        $this->pagination->initialize($config);
+
+        $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+
+        $data["links"] = $this->pagination->create_links();
+
+        $data['course_list'] = $this->Institute_model->sub_course($config["per_page"], $page);
+        $data['cource'] = $this->Institute_model->crsmstrlist();
+        /*echo $this->db->last_query();
+        print_r($data['institute_list']);*/
+        $data['content'] = $this->load->view('institute/sub_crs_list', $data, true);
+        $this->load->view('layout/main_wrapper', $data);
+    }
+	
 	public function vidlist() {
         if (user_role('30') == true) {}
         $data['title'] = display('vedio_list');
@@ -2671,6 +2694,45 @@ public function alertstatus() {
         }
     }
 	
+	public function add_sub_crs() {
+        $data['title'] = display('add_sub_crs');
+        $data['institute'] = '';       
+        $this->form_validation->set_rules('sub_course', display('Sub Course'), 'required');
+
+        $data['subcrs'] = (object) $postData = [
+		    'id' => $this->input->post('sub_crs_id', true),
+			'comp_id' => $this->session->userdata('companey_id'),
+			'sub_course' => $this->input->post('sub_course', true),
+            'course_name' => $this->input->post('course_name', true),
+            'created_by' => $this->session->userdata('user_id'),
+            'status' => $this->input->post('status', true),
+            'created_date' => date('Y-m-d')
+        ];
+        //print_r($postData);exit;
+        if ($this->form_validation->run() === true) {
+            if (empty($this->input->post('sub_crs_id'))) {
+                if (user_role('30') == true) {}
+                if ($this->Institute_model->insertsubcrs($postData)) {
+                    $this->session->set_flashdata('message', display('save_successfully'));
+                } else {
+                    $this->session->set_flashdata('exception', display('please_try_again'));
+                }                
+            } else {
+                if (user_role('31') == true) {}
+                if ($this->Institute_model->updatesubcrs($postData)) {
+                    $this->session->set_flashdata('message', display('update_successfully'));
+                } else {
+                    $this->session->set_flashdata('exception', display('please_try_again'));
+                }
+            }
+            redirect('lead/sub_course');
+        } else {
+            $data['cource'] = $this->Institute_model->crsmstrlist();            
+            $data['content'] = $this->load->view('institute/sub_crs_form', $data, true);
+            $this->load->view('layout/main_wrapper', $data);
+        }
+    }
+	
 	public function add_video() {
         $data['title'] = display('add_course');
         $data['institute'] = '';       
@@ -2735,6 +2797,15 @@ public function alertstatus() {
         $this->load->view('layout/main_wrapper', $data);
     }
 	
+	public function edit_sub_crs($crs_id = null) {
+        if (user_role('31') == true) {}
+        $data['title'] = display('update_Sub_course');
+        $data['subcrs'] = $this->Institute_model->readsubcrs($crs_id);
+        $data['cource'] = $this->Institute_model->crsmstrlist();		
+        $data['content'] = $this->load->view('institute/sub_crs_form', $data, true);
+        $this->load->view('layout/main_wrapper', $data);
+    }
+	
 	public function edit_vid($vid_id = null) {
         if (user_role('31') == true) {}
         $data['title'] = display('update_vedio');
@@ -2761,6 +2832,16 @@ public function alertstatus() {
             $this->session->set_flashdata('exception', display('please_try_again'));
         }
         redirect('lead/crslist');
+    }
+	
+	public function delete_sub_crs($paramId = null) {
+        if (user_role('32') == true) {}
+        if ($this->Institute_model->deletesubcrs($paramId)) {
+            $this->session->set_flashdata('message', display('delete_successfully'));
+        } else {
+            $this->session->set_flashdata('exception', display('please_try_again'));
+        }
+        redirect('lead/sub_course');
     }
 	
 	public function delete_vid($paramId = null) {

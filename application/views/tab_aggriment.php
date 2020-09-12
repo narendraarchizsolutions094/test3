@@ -9,7 +9,8 @@
       <th class="th-sm">Mobile</th>
       <th class="th-sm">Email</th>
       <th class="th-sm">Address</th>
-      <th class="th-sm">Action</th>
+      <th class="th-sm">Before sign</th>
+	  <th class="th-sm">After sign</th>
     </tr>
   </thead>
   <tbody>
@@ -23,7 +24,13 @@
       <td>
  <!-- <a href="#modal7<?= $i?>" class="btn btn-success" data-toggle="modal" data-animation="effect-scale"><i class="fa fa-eye" aria-hidden="true"></i></a> -->
 <?php if(!empty($val->file)){ ?>
-<a href="<?php	 echo base_url($val->file); ?>"  target="_blank" class="btn btn-warning" ><i class="fa fa-download" aria-hidden="true"></i></a>
+<a href="<?php	 echo base_url($val->file); ?>"  target="_blank"><i class="fa fa-file" aria-hidden="true" style="font-size:20px;margin-top:-30px;color:#10A3FF;"></i></a>
+<?php } ?>
+      </td>
+	  <td>
+ <!-- <a href="#modal7<?= $i?>" class="btn btn-success" data-toggle="modal" data-animation="effect-scale"><i class="fa fa-eye" aria-hidden="true"></i></a> -->
+<?php if(!empty($val->sign_file)){ ?>
+<a href="<?php	 echo base_url($val->sign_file); ?>"  target="_blank"><i class="fa fa-file" aria-hidden="true" style="font-size:20px;margin-top:-30px;color:#10A3FF;"></i></a>
 <?php } ?>
       </td>
     </tr>

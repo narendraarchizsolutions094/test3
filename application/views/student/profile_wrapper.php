@@ -788,7 +788,9 @@ if ($this->session->companey_id !=67) { ?>
       <th style="font-size: 10px;">Mobile</th>
       <th style="font-size: 10px;">Email Id</th>
     <th style="font-size: 10px;">Address</th>
-    <th style="font-size: 10px;">Document</th> 
+    <th style="font-size: 10px;">Before Sign</th>
+	<th style="font-size: 10px;">Upload Sing Document</th>
+   <th style="font-size: 10px;">After Sign</th>	
     <th style="font-size: 10px;">Date</th>
 </tr>
 </thead>
@@ -803,6 +805,24 @@ if ($this->session->companey_id !=67) { ?>
     <td><?php echo $agrmt->agg_email; ?></td>
     <td><?php echo $agrmt->agg_adrs; ?></td>
     <td><a target="_blank" href="<?php echo base_url($agrmt->file); ?>"><i class="fa fa-file-image-o" aria-hidden="true" style="font-size:20px;margin-top:-30px;color:#10A3FF;"></i></a></td>
+	<td>
+	<form method="post" action="<?php echo base_url(); ?>client/upload_aggrement_student" enctype="multipart/form-data">
+              <input type="hidden" name="ide" value="<?php echo $agrmt->id; ?>" class="form-control" placeholder="" required>
+            <div class="form-group col-md-6">
+                <input type="file" name="file" class="" placeholder="" required>
+            </div>
+            <div class="form-group col-md-3">
+            <div class="sgnbtn">
+                <input id="signupbtn" type="submit" value="Submit" class=""  name="Submit">
+            </div>   
+            </div>
+    </form>
+    </td>
+	<td>
+	<?php if(!empty($agrmt->sign_file)){ ?>
+	<a target="_blank" href="<?php echo base_url($agrmt->sign_file); ?>"><i class="fa fa-file-image-o" aria-hidden="true" style="font-size:20px;margin-top:-30px;color:#10A3FF;"></i></a>
+	<?php } ?>
+	</td>
       <td><?php echo $agrmt->created_date; ?></td>
                   </tr>
                                 <?php $sl++; ?>
@@ -813,6 +833,7 @@ if ($this->session->companey_id !=67) { ?>
 </table>
 </div>
 </div>
+
         </div>
       </div>
     </div>
@@ -838,6 +859,7 @@ if ($this->session->companey_id !=67) { ?>
             </div>
 
         </section>
+		
 <script>
     // $(document).ready(function(){
 

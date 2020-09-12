@@ -1343,4 +1343,42 @@ if(!empty($_FILES['file']['name'])){
 redirect($this->agent->referrer());
 }
 /*******************************************************************************end add aggriment***************************************************/
+	public function upload_aggrement_student() {
+    $enquiry_id = $this->input->post('ide');
+    $this->db->from('tbl_aggriment');
+                    $this->db->where('id',$enquiry_id);
+                    $q= $this->db->get()->row();
+    $enq_id =$q->enq_id;
+	$noti_id =$q->created_by;
+    
+        	
+if(!empty($_FILES['file']['name'])){
+				$this->load->library("aws");
+				$_FILES['userfile']['name']= $_FILES['file']['name'];
+				$_FILES['userfile']['type']= $_FILES['file']['type'];
+				$_FILES['userfile']['tmp_name']= $_FILES['file']['tmp_name'];
+				$_FILES['userfile']['error']= $_FILES['file']['error'];
+				$_FILES['userfile']['size']= $_FILES['file']['size'];    
+				
+				$image=$_FILES['userfile']['name'];
+				$path=  "uploads/agrmnt/".$image;
+        		$ret = move_uploaded_file($_FILES['userfile']['tmp_name'] ,$path);
+			if($ret){										$this->aws->upload("",$path);									}
+
+            $this->db->set('sign_file',$path);
+			$this->db->set('updated_by',$this->session->user_id);
+            $this->db->where('id', $enquiry_id);
+            $this->db->update('tbl_aggriment');	
+			}
+			$assign_data_noti[]=array('create_by'=> $noti_id,
+                        'subject'=>'Agrrement Uploded By Student',
+                        'query_id'=>$enq_id,
+                        'task_date'=>date('d-m-Y'),
+                        'task_time'=>date('H:i:s')
+                        );
+           $this->db->insert_batch('query_response',$assign_data_noti);
+           $this->load->library('user_agent');
+redirect($this->agent->referrer());
+}
+/*******************************************************************************end add aggriment***************************************************/
 }

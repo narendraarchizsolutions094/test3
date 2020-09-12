@@ -652,7 +652,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                </div>
                <div class="navbar-custom-menu" id="mob">
                   <ul class="nav navbar-nav">   
-                      <?php if($this->session->userdata('companey_id')!=67){ ?> 
+                      <?php if($this->session->userdata('companey_id')!=67 && $this->session->userdata('user_right')!=214){ ?> 
                     <li  class="dropdown dropdown-user master-search-nav">
                       <br />
                       <?php echo form_open(base_url("master_lead_search"), array("class" => "form-inline", "method"=> "GET",'id'=>'master_search_form')); ?>
@@ -903,6 +903,11 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                            <?php echo display('course_master');?>                             
                           </a>
                         </li>
+			<li class="<?php echo (in_array($segment2,array('sub_course','add_sub_course','edit_sub_course')) ?"active":'') ?>" style="<?php if(in_array(350,$module) || in_array(351,$module) || in_array(352,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
+                          <a href="<?php echo base_url() ?>lead/sub_course">
+                           <?php echo display('sub_course');?>                             
+                          </a>
+                        </li>			
             
             <li class="<?php echo (in_array($segment2,array('courselist','add_course','edit_course')) ?"active":'') ?>" style="<?php if(in_array(350,$module) || in_array(351,$module) || in_array(352,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
                           <a href="<?php echo base_url() ?>lead/courselist">
