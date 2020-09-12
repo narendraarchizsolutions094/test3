@@ -70,14 +70,15 @@
                                     <label for="exampleFormControlTextarea1">Amount</label>
                                      <input type="number" maxlength="10" class="form-control br_25  m-0 icon_left_input" value="<?php  if(!empty($data->amount)){ echo $data->amount;}?>" placeholder="Amount" name="amount">
                                 </div>
-                                   <div class="form-group col-md-4">
+
+                                <!-- <div class="form-group col-md-4">
                                     <label for="exampleFormControlTextarea1">Key Id</label>
                                      <input type="text" maxlength="10" class="form-control br_25  m-0 icon_left_input" value="<?php if(!empty($data->keyid)){echo $data->keyid;}?>" placeholder="Key Id" name="keyid">
                                 </div>
                                  <div class="form-group col-md-4">
                                     <label for="exampleFormControlTextarea1">Key Seprate</label>
                                      <input type="text" maxlength="10" class="form-control br_25  m-0 icon_left_input" value="<?php if(!empty($data->keyseprate)){echo $data->keyseprate;}?>" placeholder="Key Seprate" name="keyseprate">
-                                </div>
+                                </div> -->
                                 
                             
                                
@@ -108,10 +109,11 @@
       
  
        <p>
-          
-       <label for="exampleFormControlTextarea1">Do You Want To Create a Portal For Enquiry  &nbsp;&nbsp;&nbsp;</label>
-   <input type="button" value="Yes"  id="button" name = "btnPassport" />
-<input type="button" value="No" id="button1" name = "btnPassport" /></p>
+       <div class="panel panel-default">
+       <div class="panel-body">   
+       <label for="exampleFormControlTextarea1">Do You Want To Create a Portal For Enquiry ?  &nbsp;&nbsp;&nbsp;</label>
+   <input type="button" value="Yes"  id="button" name = "btnPassport" class="btn btn-default" />
+<input type="button" value="No" id="button1" name = "btnPassport" class="btn btn-default" /></p>
 <br>
 <?php echo form_open_multipart('Crm_setting/stage','class="form-inner" id="payment_setting"') ?> 
 <?php
@@ -145,7 +147,7 @@
   {
   ?>
     <label class="radio-inline">
-      <input type="radio" name="portal" value="stage" checked>Stage
+      <input type="radio" name="portal" value="stage" checked>Lead
     </label>
   <?php
   }
@@ -153,7 +155,7 @@
   {
     ?>
     <label class="radio-inline">
-      <input type="radio" name="portal" value="stage">Stage
+      <input type="radio" name="portal" value="stage">Lead
     </label>
     <?php
   }
@@ -163,7 +165,7 @@
   {
   ?>
     <label class="radio-inline">
-      <input type="radio" name="portal" value="client_stage" checked>Client Stage
+      <input type="radio" name="portal" value="client_stage" checked>Client 
     </label>
   <?php
   }
@@ -171,21 +173,26 @@
   {
     ?>
     <label class="radio-inline">
-      <input type="radio" name="portal" value="client_stage">Client Stage
+      <input type="radio" name="portal" value="client_stage">Client 
     </label></p>
     <?php
   }
   ?>
   
-    <div class="ui buttons">
-                     <button type="reset" class="ui button">Reset</button>
-                     <div class="or"></div>
-                    <button class="ui positive button">Save</button>
-                    </div>
+    <div class="col-md-12 text-center">
+      <div class="ui buttons">
+        <button type="reset" class="ui button">Reset</button>
+        <div class="or"></div>
+        <button class="ui positive button">Save</button>
+      </div>
+    </div>
 
 </div>
 </form>
-<br><br>
+</div>
+</div>
+  <div class="panel panel-default">
+       <div class="panel-body"> 
   <?php echo form_open_multipart('Crm_setting/processrights','class="form-inner" id="payment_setting"') ?> 
 <div class="row">
     <h2>Default User rights for Portal</h2>
@@ -243,10 +250,12 @@
         <button class="ui positive button">Save</button>
         </div>
       </div>
-    </div>  <br><br><br>
+    </div>  <br>
 </form>
-
-
+</div>
+</div>
+<div class="panel panel-default">
+       <div class="panel-body"> 
   <?php echo form_open_multipart('Crm_setting/enquiry_setting','class="form-inner" id="payment_setting"') ?> 
    <?php
          $enquiry_setting =  get_sys_parameter('enquiry','ENQUIRY_SETTING');
@@ -285,7 +294,10 @@
       </div>
     </div> 
     </form>
-    <br><br>
+  </div>
+</div>
+    <div class="panel panel-default">
+       <div class="panel-body"> 
  <h2>Do You Want To Present Data Duplicates  &nbsp;&nbsp;&nbsp;</h2>
   <?php
      $duplicates =  get_sys_parameter('dublicate','DUBLICATES');
@@ -387,6 +399,8 @@
     </div>
   
   </form>
+</div>
+</div>
 </div></p>
 <br><br> 
       </div>
