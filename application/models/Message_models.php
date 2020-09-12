@@ -61,7 +61,9 @@ curl_setopt_array($curl, array(
                                   'mobile_no'     => $phone,
                                   'created_by'    =>  $this->session->user_id,
                                   'msg'           => $message,
-                                  'response'      => $response
+                                  'response'      => $response,
+                                  'comp_id'       => $this->session->companey_id,
+                                  'url'           => $url
                               );
           $this->db->insert('sms_send_log',$insert_array);
       
