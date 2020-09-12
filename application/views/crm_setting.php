@@ -111,7 +111,7 @@
        <p>
        <div class="panel panel-default">
        <div class="panel-body">   
-       <label for="exampleFormControlTextarea1">Do You Want To Create a Portal For Enquiry ?  &nbsp;&nbsp;&nbsp;</label>
+       <h2>Do You Want To Create a Portal For Enquiry ?  &nbsp;&nbsp;&nbsp;</h2>
    <input type="button" value="Yes"  id="button" name = "btnPassport" class="btn btn-default" />
 <input type="button" value="No" id="button1" name = "btnPassport" class="btn btn-default" /></p>
 <br>
