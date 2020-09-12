@@ -11,14 +11,14 @@ class Task_datatable_model extends CI_Model {
     var $column_order = array('query_response.task_date','','query_response.task_remark','tbl_admin.s_display_name','','query_response.mobile'); //set column field database for datatable orderable
 
     //var $column_search = array('query_response.query_id','query_response.upd_date', 'query_response.task_remark','admin.user_name','query_response.mobile'); //set column field database for datatable searchable 
-    var $column_search = array('query_response.task_date','query_response.task_remark','tbl_admin.s_display_name','query_response.mobile'); //set column field database for datatable searchable 
+    var $column_search = array('query_response.task_date','query_response.task_remark','tbl_admin.s_display_name','query_response.mobile,CONCAT(enquiry.name_prefix' ',enquiry.name,'',enquiry.lastname),enquiry.name'); //set column field database for datatable searchable 
 
     var $order = array('query_response.resp_id' => 'desc'); // default order 
  
     public function __construct()
     {
         parent::__construct();
-        $this->load->model('common_model');		
+        $this->load->model('common_model');		 
     }
  
     private function _get_datatables_query()
@@ -30,7 +30,7 @@ class Task_datatable_model extends CI_Model {
         $user_id = $this->session->user_id;      
 
         $where = '';
-        $this->db->select("query_response.resp_id,query_response.query_id,query_response.upd_date,query_response.task_date,query_response.task_time,query_response.task_remark,query_response.subject,query_response.task_status,query_response.mobile,tbl_admin.s_display_name as user_name,");
+        $this->db->select("query_response.resp_id,query_response.query_id,query_response.upd_date,query_response.task_date,query_response.task_time,query_response.task_remark,query_response.subject,query_response.task_status,query_response.mobile,tbl_admin.s_display_name as user_name");
        
             
       
