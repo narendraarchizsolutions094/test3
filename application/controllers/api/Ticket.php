@@ -62,12 +62,14 @@ class Ticket extends REST_Controller {
   // api for ticket list Company Wise 
   public function getTicketList_post()
   {      
-    $company_id  = $this->input->post('company_id');
+    $company_id   = $this->input->post('company_id');
+    $user_id      = $this->input->post('user_id');
     $this->form_validation->set_rules('company_id','Company','trim|required');
+    $this->form_validation->set_rules('user_id','User ID','trim|required');
     if($this->form_validation->run() == true)
     {
       $this->load->model('Ticket_Model');
-      $getList  = $this->Ticket_Model->getTicketListByCompnyID($company_id);
+      $getList  = $this->Ticket_Model->getTicketListByCompnyID($company_id,$user_id);
       if(!empty($getList))
       {
         $this->set_response([
