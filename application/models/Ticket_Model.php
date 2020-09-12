@@ -294,8 +294,11 @@ $where .= " OR tck.assign_to IN (".implode(',', $all_reporting_ids).'))';
 			return $this->db->select("*")->where(array("status" => 3, "comp_id" => $this->session->companey_id))->get("enquiry")->result();
 			}
 		}
-	public function add_tsub($data) {
-        $this->db->insert('tbl_ticket_subject', $data);
+	public function add_tsub($data) 
+	{
+        $insert = $this->db->insert('tbl_ticket_subject', $data);
+        return $insert;
+
     }
 	
 	public function get_sub_list() {

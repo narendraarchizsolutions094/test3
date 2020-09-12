@@ -170,5 +170,48 @@ class Ticket extends REST_Controller {
     } 
   }
 
+//api to create ticket subject
+  public function addSubject_post()
+  {      
+    //echo "string;";die;
+    $company_id   = $this->input->post('company_id'); //mandatory to passs
+    $user_id      = $this->input->post('user_id'); //mandatory to passs
+    $subject      = $this->input->post('subject'); //mandatory to passs
+    $this->form_validation->set_rules('company_id','Company','trim|required');
+    //$this->form_validation->set_rules('user_id','User','trim|required');
+    $this->form_validation->set_rules('subject','Subject','trim|required');
+    if($this->form_validation->run() == true)
+    {
+      $this->load->model('Ticket_Model');
+      $data = array(
+          'subject_title' => $subject,
+          'comp_id'       => $company_id
+      );
+      $inserted  = $this->Ticket_Model->add_tsub($data);
+      if(!empty($inserted))
+      {
+        $this->set_response([
+        'status'      => TRUE,            
+        'insertId'    => $inserted,
+        'msg'         => "Subject Added successfully"
+        ], REST_Controller::HTTP_OK);   
+      }
+      else
+      {
+        $this->set_response([
+        'status'  => false,           
+        'msg'     => "Subject not inserted something went wrong"
+        ], REST_Controller::HTTP_OK); 
+      }
+    }
+    else
+    {
+      $this->set_response([
+        'status'  => false,
+        'msg'     => "Please Fill All Mandatory Fields"
+      ],REST_Controller::HTTP_OK);
+    } 
+  }
+
 
 }
