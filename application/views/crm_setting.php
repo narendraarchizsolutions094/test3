@@ -60,23 +60,23 @@
                                 </div>
                                  <div class="form-group col-md-4">
                                     <label for="exampleFormControlTextarea1">Api Key</label>
-                                   <input type="text" class="form-control br_25  m-0 icon_left_input"  placeholder="Api Key" name="api_key" value="<?php echo $data->api_key;?>">
+                                   <input type="text" class="form-control br_25  m-0 icon_left_input"  placeholder="Api Key" name="api_key" value="<?php if(!empty($data->api_key)){ echo $data->api_key; }?>">
                                 </div>
                                  <div class="form-group col-md-4">
                                     <label for="exampleFormControlTextarea1">Secret key</label>
-                                     <input type="text" maxlength="10" class="form-control br_25  m-0 icon_left_input" value="<?php echo $data->secretkey;?>" placeholder="Secret key" name="secretkey">
+                                     <input type="text" maxlength="10" class="form-control br_25  m-0 icon_left_input" value="<?php if(!empty($data->secretkey)){ echo $data->secretkey;}?>" placeholder="Secret key" name="secretkey">
                                 </div>
                                  <div class="form-group col-md-4">
                                     <label for="exampleFormControlTextarea1">Amount</label>
-                                     <input type="number" maxlength="10" class="form-control br_25  m-0 icon_left_input" value="<?php echo $data->amount;?>" placeholder="Amount" name="amount">
+                                     <input type="number" maxlength="10" class="form-control br_25  m-0 icon_left_input" value="<?php  if(!empty($data->amount)){ echo $data->amount;}?>" placeholder="Amount" name="amount">
                                 </div>
                                    <div class="form-group col-md-4">
                                     <label for="exampleFormControlTextarea1">Key Id</label>
-                                     <input type="text" maxlength="10" class="form-control br_25  m-0 icon_left_input" value="<?php echo $data->keyid;?>" placeholder="Key Id" name="keyid">
+                                     <input type="text" maxlength="10" class="form-control br_25  m-0 icon_left_input" value="<?php if(!empty($data->keyid)){echo $data->keyid;}?>" placeholder="Key Id" name="keyid">
                                 </div>
                                  <div class="form-group col-md-4">
                                     <label for="exampleFormControlTextarea1">Key Seprate</label>
-                                     <input type="text" maxlength="10" class="form-control br_25  m-0 icon_left_input" value="<?php echo $data->keyseprate;?>" placeholder="Key Seprate" name="keyseprate">
+                                     <input type="text" maxlength="10" class="form-control br_25  m-0 icon_left_input" value="<?php if(!empty($data->keyseprate)){echo $data->keyseprate;}?>" placeholder="Key Seprate" name="keyseprate">
                                 </div>
                                 
                             
@@ -260,15 +260,15 @@
         
        <div class="form-group col-md-3">
             <label for="exampleFormControlTextarea1">Prefix</label>
-           <input type="text" class="form-control br_25  m-0 icon_left_input" value="<?php echo $enquiry_setting->prefix;?>" placeholder="Prefix" name="prefix" >
+           <input type="text" class="form-control br_25  m-0 icon_left_input" value="<?php if(!empty($enquiry_setting->prefix)){echo $enquiry_setting->prefix;}?>" placeholder="Prefix" name="prefix" >
         </div>
         <div class="form-group col-md-3">
             <label for="exampleFormControlTextarea1">Postfix</label>
-           <input type="text" class="form-control br_25  m-0 icon_left_input" value="<?php echo $enquiry_setting->postfix;?>" placeholder="Postfix" name="postfix" >
+           <input type="text" class="form-control br_25  m-0 icon_left_input" value="<?php if(!empty($enquiry_setting->postfix)){echo $enquiry_setting->postfix;}?>" placeholder="Postfix" name="postfix" >
         </div>
         <div class="form-group col-md-3">
             <label for="exampleFormControlTextarea1">Digit</label>
-           <input type="number" class="form-control br_25  m-0 icon_left_input" value="<?php echo $enquiry_setting->digit;?>" placeholder="Digit" name="digit" >
+           <input type="number" class="form-control br_25  m-0 icon_left_input" value="<?php if(!empty($enquiry_setting->digit)){echo $enquiry_setting->digit;}?>" placeholder="Digit" name="digit" >
         </div>
 
 
@@ -294,6 +294,7 @@
       ?>
  <?php echo form_open_multipart('Crm_setting/duplicates','class="form-inner" id="payment_setting"') ?>   <div class="custom-control custom-checkbox">
  <?php
+ if(!empty($duplicate)){
  if($duplicate->email == 'email'  || $duplicate->email =='null')
  {
  ?>
@@ -376,7 +377,7 @@
       <input type="radio" name="optradio" value="process">Process
     </label>
     <?php
-    }?>
+    } }?>
      <br><br>       
       <div class="ui buttons">
        <button type="reset" class="ui button">Reset</button>
