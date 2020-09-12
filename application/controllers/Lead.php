@@ -805,7 +805,7 @@ if($coment_type == 1){
             if ($this->session->companey_id == 76 || ($this->session->companey_id == 57 && $data['enquiry']->product_id == 122) ) {
                 $user_right = '';
                 if ($data['enquiry']->product_id == 168) {
-                    $user_right = 180; 
+                    $user_right = 180;  
                 }else if ($data['enquiry']->product_id == 169) {
                     $user_right = 186;
                 } 
@@ -833,7 +833,7 @@ if($coment_type == 1){
                 $message = 'Email - '.$data['enquiry']->email.'<br>Password - 12345678';                
                 $subject = 'Login Details';
 
-                if ($this->session->companey_id == 57) {
+                if ($this->session->companey_id == 57 && $user_id) {
                     $this->db->where('temp_id',125);
                     $this->db->where('comp_id',57);
                     $temp_row    =   $this->db->get('api_templates')->row_array();
@@ -853,8 +853,10 @@ if($coment_type == 1){
                         $message = str_replace("@{password}",'12345678',$message);   
                     }
                     $this->Message_models->smssend($data['enquiry']->phone,$message);
+                    $msg .=    " And user created successfully";
+                }else{
+                    $msg .=    " And user already exist";                    
                 }
-                $msg .=    " And user created successfully";
             }
             //$mail_access = $this->enquiry_model->access_mail_temp(); //access mail template..
             //$signature = $this->enquiry_model->get_signature();

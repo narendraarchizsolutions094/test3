@@ -76,7 +76,7 @@
 														
 														?></td>
 														<td><?php echo date("d, M, Y", strtotime($tck->	send_date)); ?></td>
-														<td style ="min-width:125px;"><a class="btn  btn-success btn-sm" href="<?php echo base_url("ticket/view/".$tck->ticketno) ?>"><i class="fa fa-eye" aria-hidden="true"></i>
+														<td style ="min-width:125px;"><?php if($this->session->user_right!=214){ ?><a class="btn  btn-success btn-sm" href="<?php echo base_url("ticket/view/".$tck->ticketno) ?>"><i class="fa fa-eye" aria-hidden="true"></i></a><?php } ?>
 														<a class="btn  btn-default btn-sm" href="<?php echo base_url("ticket/edit/".$tck->ticketno) ?>"><i class="fa fa-pencil-square-o" aria-hidden="true"> </i> </a>
 														
 														<a class="btn  btn-danger delete-ticket btn-sm"  data-ticket = "<?php echo $tck->id; ?>" href="<?php echo base_url("ticket/tdelete") ?>"><i class="fa fa-trash-o"></i></a>

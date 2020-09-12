@@ -310,7 +310,7 @@
 				<div class="col-md-6">
 					<div class="form-group">
 						<label>Phone</label>
-						<input type="text" class="form-control" value="<?php echo $ticket->clientname;?>" disabled>
+						<input type="text" class="form-control" value="<?php echo $ticket->phone;?>" disabled>
 					</div>
 				</div>
 				<?php if($this->session->companey_id!=83){ ?>
@@ -359,7 +359,7 @@
 						</div>
 						<div class="col-md-4">
 								<div class="form-group">
-									<label>Issue </label>
+									<label>Problem </label>
 									<select class="form-control" name = "issue">
 										<option value = ""></option>
 									<?php if(!empty($problem)) {

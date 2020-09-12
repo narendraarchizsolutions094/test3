@@ -1,11 +1,18 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 class User_model extends CI_Model {
-    private $table = 'tbl_admin';
+    private $table = 'tbl_admin'; 
 
-    public function create($data = []) {
-        $this->db->insert($this->table, $data);
-        return $this->db->insert_id();
+    public function create($data = []) {         
+        $insert_id = 0;
+        $this->db->where('s_user_email',$data['s_user_email']);
+        $this->db->or_where('s_phoneno',$data['s_phoneno']);
+        $user_row    =   $this->db->get('tbl_admin')->row_array();
+        if (empty($user_row)) {            
+            $this->db->insert($this->table, $data);
+            $insert_id = $this->db->insert_id();
+        }
+        return $insert_id;
     }
     
     public function companyList() {
