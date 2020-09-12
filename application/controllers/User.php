@@ -614,6 +614,7 @@ class User extends CI_Controller {
                     $this->db->set('status',2);
                     $this->db->where('phone',$post_data['s_phoneno']);
                     $this->db->where('status',3);
+                    $this->db->where('comp_id',57);
                     $this->db->update('enquiry');
                     $i++;
                 }else{
