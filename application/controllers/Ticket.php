@@ -16,7 +16,7 @@ class Ticket extends CI_Controller {
 
 		$this->load->model(array(
 
-			'Ticket_Model','Client_Model','User_model','Leads_Model'
+			'Ticket_Model','Client_Model','User_model','Leads_Model','Message_models'
 
 		));	
 
@@ -37,7 +37,10 @@ class Ticket extends CI_Controller {
 	public function view($tckt = ""){
 		
 		if(isset($_POST["reply"])){
-			
+			            $subject = $this->input->post("subjects", true);
+						$message = $this->input->post("reply", true);
+						$to = $this->input->post("email", true);
+					$this->Message_models->send_email($to,$subject,$message);
 			$this->Ticket_Model->saveconv();
 			redirect(base_url("ticket/view/".$tckt), "refresh");
 		}

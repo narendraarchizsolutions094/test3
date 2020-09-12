@@ -140,6 +140,7 @@ class Ticket_Model extends CI_Model {
 							"added_by" => $this->session->user_id,
 							
 							);
+						
 			$ret = $this->db->insert("tbl_ticket_conv", $insarr);
 			
 			if($ret){
@@ -288,8 +289,8 @@ $where .= " OR tck.assign_to IN (".implode(',', $all_reporting_ids).'))';
 		}
 		public function getallclient(){
 			
-			if(($this->session->userdata('user_right')==212)){
-			return $this->db->select("*")->where(array("status" => 1, "phone" => $this->session->phone))->get("enquiry")->result();
+			if(($this->session->userdata('user_right')==214)){
+			return $this->db->select("*")->where(array("status" => 3, "phone" => $this->session->phone))->get("enquiry")->result();
 			}else{
 			return $this->db->select("*")->where(array("status" => 3, "comp_id" => $this->session->companey_id))->get("enquiry")->result();
 			}

@@ -95,6 +95,7 @@
 				<div class = "col-md-6" id = "waranty-end">
 					
 				</div>
+				<?php if($this->session->user_right!=214){ ?>
 				<div class="col-md-6">
 					<div class="form-group">
 						<label>Priority</label>
@@ -107,6 +108,7 @@
 						</select>
 					</div>
 				</div>
+				
 				<div class="col-md-6">
 					<div class="form-group">
 						<label>Source</label>
@@ -121,6 +123,7 @@
 						</select>
 					</div>
 				</div>
+				<?php } ?>
 				<div class="col-md-5">
 					<div class="form-group">
 						<label>Attachment</label>

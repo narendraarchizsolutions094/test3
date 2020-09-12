@@ -22,8 +22,8 @@
 			<div class="row ">
 				<div class="col-md-6">
 					<div class="form-group">
-						<label>Problem For</label>
-						<select class="form-control add-select2 choose-client" name = "client">
+						<label>Problem For <i class="text-danger">*</i></label>
+						<select class="form-control add-select2 choose-client" name = "client" required>
 							<option value = "" style ="display:none;">---Select---</option>
 							<?php if(!empty($clients)){
 								foreach($clients as $ind => $clt){
@@ -35,14 +35,14 @@
 				</div>
 				<div class="col-md-6">
 					<div class="form-group">
-						<label>Name</label>
-						<input type = "text" class="form-control" name = "name">
+						<label>Name <i class="text-danger">*</i></label>
+						<input type = "text" class="form-control" name = "name" required>
 					</div>
 				</div>
 				<div class="col-md-6">
 					<div class="form-group">
-						<label>Email</label>
-						<input type = "text" class="form-control" name = "email">
+						<label>Email <i class="text-danger">*</i></label>
+						<input type = "text" class="form-control" name = "email" required>
 					</div>
 				</div>
 	
@@ -66,7 +66,7 @@
 					</div>
 				</div>
 				<?php } ?>
-				<?php if($this->session->companey_id!=83 && $this->session->user_right!=214){ ?>
+
 				<div class="col-md-6">
 					<div class="form-group">
 						<label>Problem</label>
@@ -80,11 +80,12 @@
 						</select>
 					</div>
 				</div>
-				<?php } ?>
+
 				<div class = "col-md-6" id = "waranty-start">
 				</div>
 				<div class = "col-md-6" id = "waranty-end">
 				</div>
+				<?php if($this->session->user_right!=214){ ?>
 				<div class="col-md-6">
 					<div class="form-group">
 						<label>Priority</label>
@@ -95,7 +96,7 @@
 						</select>
 					</div>
 				</div>
-				<?php if($this->session->companey_id!=83 && $this->session->user_right!=214){ ?>
+
 				<div class="col-md-6">
 					<div class="form-group">
 						<label>Source</label>
