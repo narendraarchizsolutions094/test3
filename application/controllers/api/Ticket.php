@@ -213,5 +213,71 @@ class Ticket extends REST_Controller {
     } 
   }
 
+//subject list api
+  public function subjectList_post()
+  {      
+    $company_id  = $this->input->post('company_id');
+    $this->form_validation->set_rules('company_id','Company','trim|required');
+    if($this->form_validation->run() == true)
+    {
+      $this->load->model('Ticket_Model');
+      $getList  = $this->Ticket_Model->get_sub_list($company_id);
+      if(!empty($getList))
+      {
+        $this->set_response([
+        'status'      => TRUE,            
+        'ticketList'  => $getList
+        ], REST_Controller::HTTP_OK);   
+      }
+      else
+      {
+        $this->set_response([
+        'status'  => false,           
+        'msg'     => "No ticket list found for company id you had provided"
+        ], REST_Controller::HTTP_OK); 
+      }
+    }
+    else
+    {
+      $this->set_response([
+        'status'  => false,
+        'msg'     => "Please provide a company id"
+      ],REST_Controller::HTTP_OK);
+    } 
+  }
+
+//delete subject api
+  public function deleteSubject_post()
+  {      
+    $subjectid  = $this->input->post('subjectid');
+    $this->form_validation->set_rules('subjectid','Subject ID','trim|required');
+    if($this->form_validation->run() == true)
+    {
+      $this->load->model('Ticket_Model');
+      $deletestatus  = $this->Ticket_Model->delete_subject($subjectid);
+      if(!empty($getList))
+      {
+        $this->set_response([
+        'status'      => TRUE,            
+        'ticketList'  => $deletestatus
+        ], REST_Controller::HTTP_OK);   
+      }
+      else
+      {
+        $this->set_response([
+        'status'  => false,           
+        'msg'     => "Subject not deleted"
+        ], REST_Controller::HTTP_OK); 
+      }
+    }
+    else
+    {
+      $this->set_response([
+        'status'  => false,
+        'msg'     => "Please provide a valid id"
+      ],REST_Controller::HTTP_OK);
+    } 
+  }
+
 
 }

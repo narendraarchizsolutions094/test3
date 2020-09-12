@@ -851,7 +851,14 @@ class Enquiry extends REST_Controller {
 		{
           	$user_id= $this->input->post('user_id');
 			$process_id= $this->input->post('process_id');
-			$process = implode(',',$process_id);
+			if (strpos(',',$process_id) !== false) 
+ 			{
+				$process = implode(',',$process_id);
+			}
+			else
+			{
+				$process = $process_id;
+			}
 			//echo $process;die;
 			//print_r($process_id);die;
             $res= array();

@@ -302,8 +302,16 @@ $where .= " OR tck.assign_to IN (".implode(',', $all_reporting_ids).'))';
 
     }
 	
-	public function get_sub_list() {
-		$this->db->where('comp_id', $this->session->userdata('companey_id'));
+	public function get_sub_list($compid='') {
+		if($compid!='')
+		{
+			$this->db->where('comp_id', $compid);
+		}
+		else
+		{
+			$this->db->where('comp_id', $this->session->userdata('companey_id'));
+		}
+		
         $query = $this->db->get('tbl_ticket_subject');
         return $query->result();
     }
