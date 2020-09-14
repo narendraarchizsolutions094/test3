@@ -49,7 +49,7 @@
 						</div>
 						<div>							
 						<?php if($isedit == true ) { 
-							if(!empty($product->image)){
+							if(!empty($product->sub_image)){
 								$sub_images	=	json_decode($product->sub_image);
 								foreach ($sub_images as $key => $value) { ?>
 									<div class="col-md-3 col-sm-4 col-xs-6">
