@@ -110,18 +110,15 @@
 					<h2><?php echo $product->country_name; ?>
 					<?php
 						
-					if(!empty($incart[$product->sb_id])) { 
-						
-						?><a href = "<?php echo base_url("buy/checkout"); ?>" class = "btn btn-success pull-right">Cart <span class = "badge badge-info cart-quantity"><?php echo $incart[$product->sb_id];  ?></span></a><?php
+					if(!empty($incart[$product->sb_id])) { 						
+						?>
+						<a href = "<?php echo base_url("buy/checkout"); ?>" class = "btn btn-success btn-xs pull-right">Added in cart </a><?php
 					}else{
 						?>
-						<!-- <a href = "<?php echo base_url("buy/checkout"); ?>" class = "btn btn-danger pull-right"><i class = "fa fa-shopping-cart"></i>Add in cart</a> -->
+						 <a href = "<?php echo base_url("buy/checkout"); ?>" class = "btn btn-xs btn-danger pull-right"><i class = "fa fa-shopping-cart"></i> Add to cart</a> 
 						<?php
 					} ?>
-					
-<!-- 					<a href = "<?php echo base_url("buy/checkout"); ?>" class = "btn btn-danger pull-right">Checkout</a>
- -->
-</h2>
+					</h2>
  					<hr />
 					<p>Price : <i class = "fa fa-rupee"></i> <?php echo $product->price; ?></p>
 					<p><?php echo $product->details; ?></p>

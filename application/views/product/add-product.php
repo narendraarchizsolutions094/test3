@@ -31,13 +31,37 @@
 								<div class="col-md-8">
 								<div class="form-group">
 									<label>Main Image</label>
-								<input type="file" name="mainimage" class="dropify" data-default-file="">
+								<input type="file" name="mainimage" class="dropify" data-default-file="" accept="image/*">
 									<?php if($isedit == true ) { ?>
-									<img src = "<?php echo base_url("assets/images/products/".$product->image); ?>" class = "img-responsive">		
+									<img src = "<?php echo base_url("assets/images/products/".$product->image); ?>" class = "img-responsive" style="height:250px;max-width:250px;">		
 									<?php } ?>
 								</div>
 								</div>
 							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-12">							
+							<div class="form-group">
+								<label>Sub Images</label>
+								<input type="file" class="form-control" id="sub-images" name="sub_images[]" multiple accept="image/*">
+							</div>							
+						</div>
+						<div>							
+						<?php if($isedit == true ) { 
+							if(!empty($product->image)){
+								$sub_images	=	json_decode($product->sub_image);
+								foreach ($sub_images as $key => $value) { ?>
+									<div class="col-md-3 col-sm-4 col-xs-6">
+										<img src = "<?php echo base_url("assets/images/products/".$value); ?>" class = "img-responsive" style="height:200px;max-width:200px;">												
+									</div>											
+								<?php
+								}
+							?>
+							<?php 
+							}
+						} 
+						?>
 						</div>
 					</div>
 					<div class="row">

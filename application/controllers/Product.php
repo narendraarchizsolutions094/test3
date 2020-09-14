@@ -251,7 +251,11 @@ class Product extends CI_Controller {
 							 );
 				if(!empty($imgarr["upload_data"]["file_name"])){
 					$arr["image"] = $imgarr["upload_data"]["file_name"];
-				}			 					
+				}			 	
+				$sub_images	=	$this->upload_files('./assets/images/products/','image',$_FILES['sub_images']);
+				if (!empty($sub_images)) {
+					$arr['sub_image'] = json_encode($sub_images);
+				}
 				if(isset($_POST["detailsid"])) {					
 					$detid = $this->input->post("detailsid", true);
 					$this->db->where("id", $detid);
@@ -272,6 +276,40 @@ class Product extends CI_Controller {
 			}			
 		}
 	}	
+
+	public function upload_files($path, $title, $files){
+		/*print_r($files);
+		exit();*/
+        $config = array(
+            'upload_path'   => $path,
+            'allowed_types' => 'jpg|jpeg|gif|png',
+            'remove_spaces' => TRUE,
+            'encrypt_name'  => TRUE                      
+        );
+        $this->load->library('upload', $config);
+        $images = array();
+        
+        foreach ($files['name'] as $key => $image) {
+
+            $_FILES['images[]']['name']= $files['name'][$key];
+            $_FILES['images[]']['type']= $files['type'][$key];
+            $_FILES['images[]']['tmp_name']= $files['tmp_name'][$key];
+            $_FILES['images[]']['error']= $files['error'][$key];
+            $_FILES['images[]']['size']= $files['size'][$key];
+            $fileName = $title .'_'. $image;
+            $config['file_name'] = $fileName;
+            $this->upload->initialize($config);
+            if ($this->upload->do_upload('images[]')) {
+                $data	=	$this->upload->data();
+            	$images[] = $data['file_name'];
+            } else {
+                return false;
+            }            
+        
+        }         
+        return $images;
+    }
+
     function productlist() {
         if (user_role('60') == true) {      
         }
