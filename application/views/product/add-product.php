@@ -162,24 +162,24 @@
 							<div class="col-md-4">
 									<div class="form-group">
 										<label>Price</label>
-										<input type="number" class="form-control" id="price" placeholder="Enter price" name="price" value="<?php echo ($isedit == true) ? $product->price : set_value("price"); ?>">
+										<input type="text" class="form-control" id="price" placeholder="Enter price" name="price" value="<?php echo ($isedit == true) ? $product->price : set_value("price"); ?>">
 									</div>
 							</div>
 							<div class="col-md-4">
 									<div class="form-group">
-										<label>Other Price</label>
-										<input type="number" class="form-control" id="price" placeholder="Enter price" name="othrprice" value="<?php echo ($isedit == true) ? $product->othr_price : set_value("othr_price"); ?>">
+										<label>MRP</label>
+										<input type="text" class="form-control" id="price" placeholder="Enter price" name="othrprice" value="<?php echo ($isedit == true) ? $product->othr_price : set_value("othr_price"); ?>">
 									</div>
 							</div>
 							<div class="col-md-4">
 									<div class="form-group">
 										<label>Tax</label>
-										<input type="number" class="form-control" id="tax" placeholder="Enter tax" name="tax" value="<?php echo ($isedit == true) ? $product->tax : set_value("tax"); ?>">
+										<input type="text" class="form-control" id="tax" placeholder="Enter tax" name="tax" value="<?php echo ($isedit == true) ? $product->tax : set_value("tax"); ?>">
 									</div>
 									
 									
 							</div>
-							<div class="col-md-4">
+							<div class="col-md-4" id="color">
 									<div class="form-group">
 										<label>Color</label>
 										<select class="form-control" id="color" name="color">
@@ -265,7 +265,19 @@
 </div>
 	
 <script>
+	
+	if($("#cat").val() == 19){
+		$("#color").hide();
+	}else{
+		$("#color").show();
+	}
+
 	$(document).on("change", ".load-subcateg", function(){
+		if ($(this).val() == 19) {
+			$("#color").hide();
+		}else{
+			$("#color").show();
+		}
 		$("#scat").load("<?php echo base_url('buy/loadsubcateg/') ?>"+$(this).val());		
 		get_product_field($(this).val());
 	});
