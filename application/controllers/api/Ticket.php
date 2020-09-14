@@ -73,8 +73,9 @@ class Ticket extends REST_Controller {
       if(!empty($getList))
       {
         $this->set_response([
-        'status'      => TRUE,            
-        'ticketList'  => $getList
+        'status'      => TRUE,
+        'count'       => count($getList),            
+        'ticketList'  => $getList,
         ], REST_Controller::HTTP_OK);   
       }
       else
