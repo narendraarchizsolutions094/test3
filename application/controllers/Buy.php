@@ -16,7 +16,7 @@ class Buy extends CI_Controller {
 		$data['limit'] = 8;
 		$data['product_list'] = $this->Product_model->productdetlist(1);
 		$data["totalprod"]        = $this->Product_model->productdetlist(2);
-		$data['category'] = $this->sell_model->subCategory();
+		//$data['category'] = $this->sell_model->subCategory();
 		$carts = $this->cart->contents();
 		
 		$prodcart = array();
@@ -34,8 +34,14 @@ class Buy extends CI_Controller {
         $this->load->view('layout/buy_wrapper', $data);
 		
 	}
-	
+
 	public function checkout(){
+		$data = array();
+		$data['content']	=	$this->load->view('sell/checkout_form',$data,true);
+        $this->load->view('layout/buy_wrapper', $data);	
+	}
+	
+	public function __checkout(){
 		
 		if(isset($_POST)){
 			$this->placeorder();

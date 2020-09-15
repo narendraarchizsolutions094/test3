@@ -24,6 +24,10 @@
            $segment1 = $this->uri->segment(1);
            $segment2 = $this->uri->segment(2);
            $segment3 = $this->uri->segment(3);
+  
+  $this->load->model('sell_model');
+  $category = $this->sell_model->subCategory();
+   
    ?>
 
 <!DOCTYPE html>
