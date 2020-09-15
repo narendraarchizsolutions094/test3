@@ -85,7 +85,7 @@ class Product_model extends CI_Model {
 					}
 					if(isset($_GET['c'])){
 						
-						$this->db->where("tbl_proddetails.catogory", $_GET['sc']);
+						$this->db->where("tbl_proddetails.category", $_GET['c']);
 					}
 					
 					if(isset($_GET['page'])){

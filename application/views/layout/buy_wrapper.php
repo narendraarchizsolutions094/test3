@@ -729,39 +729,32 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                </div>
                <ul class="sidebar-menu">
        
-                  <li class="<?php echo (($segment1 == 'dashboard') ? "active" : null) ?>">
+                  <li class="<?php echo (($segment1 == 'buy' && empty($_GET)) ? "active" : null) ?>">
                      <a href="<?php echo base_url('buy') ?>">
-                    All Category
-          
+                    All Category          
                      </a>
                   </li>
 			
         
      
 			
-			 <?php if(!empty($category)) {
-				
-				 		foreach($category as $ind => $ctg) {
-							
-							if(count($ctg) > 1){
+			 <?php       
+        if(!empty($category)) {				
+				 		foreach($category as $ind => $ctg) {							
+							if(!empty($ctg['sub'])){
 								$treemenu  =  true;
 							}else{
 								$treemenu  =  false;
-							}
-						if(empty($ctg[0]->categid)) continue;			
+							}						
 						?>
-							<li class="<?php echo (($segment1 == $ctg[0]->category) ? "active" : null) ?> <?php echo ($treemenu == true) ? "treeview" : ""; ?>">
-								
-										<?php if(($treemenu == false) and !empty($ctg[0]->category) ) { ?>
-											
-										 <a href="<?php echo base_url('buy?c'.$ctg[0]->categid); ?>">
-										 <i class="fa fa-home"></i>  <?php echo $ctg[0]->category; ?>
-							  
-										 </a>
-											
+							<li class="<?php echo ((!empty($_GET['c']) && $_GET['c'] == $ind) ? "active" : null) ?> <?php echo ($treemenu == true) ? "treeview" : ""; ?>">								
+										<?php if(($treemenu == false)) { ?>											
+										 <a href="<?php echo base_url('buy?c='.$ind); ?>">
+										 <i class="fa fa-list-alt"></i>  <?php echo $ctg['title']; ?>							  
+										 </a>											
 										<?php }else{ ?>
-												 <a href="#">
-										 <i class="fa fa-home" style="color:#fff;font-size:17px;background:#2ecc71;padding:7px;border-radius:4px;width:30px;"></i> &nbsp;<?php echo $ctg[0]->category; ?>   <span class="pull-right-container">
+												 <a href="#" onclick='window.location = "<?php echo base_url('buy?c='.$ind); ?>"'>
+										 <i class="fa fa-list-alt" style="color:#fff;font-size:17px;background:#2ecc71;padding:7px;border-radius:4px;width:30px;"></i> &nbsp;<?php echo $ctg['title']; ?>   <span class="pull-right-container">
 									<i class="fa fa-angle-left pull-right"></i>
 								  </span>
 							  
@@ -769,11 +762,10 @@ if($root=='https://student.spaceinternationals.com'){  ?>
 											
 										<?php } ?>
 									<?php 
-										if(count($ctg) > 1){
-									?>    <ul class="treeview-menu"><?php	
-											foreach($ctg as $cind => $sbctg) {
-											
-											?><li><a href = "<?php echo base_url("buy?sc=".$sbctg->id); ?>"><?php echo $sbctg->subcat_name; ?></a></li><?php
+										if(!empty($ctg['sub'])){
+									?> <ul class="treeview-menu <?php echo (!empty($_GET['c']) && $_GET['c']==$ind)?'active':'' ?>"><?php	
+											foreach($ctg['sub'] as $cind => $sbctg) {											
+											?><li class="<?php echo ((!empty($_GET['sc']) && $_GET['sc'] == $sbctg['id']) ? "active" : null) ?>" onclick="if($(this).hasClass('active')){$(this).parent().parent().addClass('active')}"><a href = "<?php echo base_url("buy?sc=".$sbctg['id']); ?>"><?php echo $sbctg['subcat_name']; ?></a></li><?php
 											}
 											?></ul><?php
 										}
@@ -1396,6 +1388,10 @@ $("#anch_notification_dropdown").on('click',function(){
         });
 
     });
+
+        if($(".treeview-menu li").hasClass('active')){
+          $(".treeview-menu li.active").parent().prev().parent().addClass('active');
+        }
 </script>
 <script>
 $('#something').click(function() {

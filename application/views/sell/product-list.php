@@ -72,10 +72,9 @@
 	</style>
    <div class="col-sm-12">
       <div  class="panel panel-default thumbnail">
-         <div class="panel-heading no-print">
-            <div class="btn-group"> 
-               <a class="btn btn-success" href = "<?php echo base_url("buy"); ?>"> Total : <?php echo $totalprod; ?></a> 
-            </div>
+         <div class="panel-heading no-print pull-right" style="margin-right: 30px; margin-bottom: 3px;">
+            <a class="btn-xs btn btn-success" href = "<?php echo base_url("buy"); ?>"> Items : <?php echo $totalprod; ?></a> 
+            <!-- <a href="#" class="btn-xs btn btn-default"><i class="fa fa-filter"></i>Filters</a>             -->
          </div>
          <div class="panel-body">
             <div class="row m-t-20"><?php if($this->session->error!=''){ ?>
@@ -173,8 +172,9 @@
 						</div>
 				<?php }
 				}else{
-					?><div class  = "col-md-12">
-						<h1>Sorry There is no product available</h1>	
+					?>
+					<div class  = "col-md-12 text-center">
+						<h1 class="alert alert-info">Sorry! There is no product available</h1>	
 					</div>
 					<?php
 					
