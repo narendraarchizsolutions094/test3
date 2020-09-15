@@ -178,7 +178,7 @@ button:hover{
 </div>
 <div class="col-md-4">
   <div class="Yorder">
-    <table>
+    <table style="width: 100%;">
       <tr>
         <th colspan="2">Your order</th>
       </tr>
