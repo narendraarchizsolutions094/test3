@@ -93,197 +93,6 @@ if($root=='https://student.spaceinternationals.com'){  ?>
       <script src="<?php echo base_url('assets/js/jquery.min.js?v=1.0') ?>" type="text/javascript"></script>
       
 
-      <?php //echo $this->session->telephony_token;
-      if(in_array(220, $module)){
-          if(empty($this->session->telephony_token)){  ?>      
-      <script>
-        function send_parameters(phn){          
-          var agent_id = "<?=$this->session->telephony_agent_id?>";
-          if(agent_id){          
-            //var url="https://agent.c-zentrixcloud.com/apps/appsHandler.php?transaction_id=CTI_DIAL&agent_id="+agent_id+"&phone_num="+phn+"&ip=https://agent.c-zentrixcloud.com&resFormat=3";
-            
-
-            var url="https://czagent.c-zentrixcloud.com/apps/appsHandler.php?transaction_id=CTI_DIAL&agent_id="+agent_id+"&phone_num="+phn+"&ip=https://agent.c-zentrixcloud.com&resFormat=3";
-
-
-              $.ajax({
-                  url:url,
-                  type: 'GET',
-                  success: function (data) {
-
-                  }
-              });
-            }else{
-              alert('Agent id does not found!');
-            }
-          }
-          function listener(event) {      
-            var spiltData = event.data.split('|');
-            if (spiltData[0] == 'Accept') {
-                
-
-                //alert(event.data);
-
-              if (localStorage.getItem('boolean') == 'false') {
-                location.href = "<?=base_url().'telephony/forword_to/'?>" + spiltData[1];
-                localStorage.setItem('boolean', 'true');
-                url1 = "<?=base_url().'telephony/save_log'?>";                
-                $.ajax({
-                    url:url1,
-                    type: 'POST',
-                    data:{
-                      log:event.data
-                    }              
-                });
-                
-              }
-            }else if (spiltData[0] == 'Disconnect') {              
-              localStorage.setItem('boolean', 'false');
-            } 
-          }
-          if (window.parent.parent.addEventListener) {
-            addEventListener("message", listener, false);
-          }else{
-            attachEvent("onmessage", listener);
-          }  
-
-        </script>
-		  <script>
-            
-            function  minimize_chats(){
-                $('#minimize_chat').css('display', 'none');
-                $('#maxmize_chat').css('display', 'block');
-            }
-            function  maxmize_chats(){
-                $('#minimize_chat').css('display', 'block');
-                $('#maxmize_chat').css('display', 'none');
-            }
-
-        </script>
-
-        <div style="position:fixed;z-index:200;float:right;right:0px;bottom:0px;display:block;" id="maxmize_chat">
-            <div> 
-              <span class="btn btn-success" style="bottom:0px;z-index:300;" onclick="maxmize_chats()"> 
-                <i class="fa fa-phone-square" style="font-size:30px;"></i>
-              </span>              
-            </div>
-        </div>
-        <div style="position:fixed;z-index:200;float:right;right:5px;bottom:0px;display:none;" id="minimize_chat">
-            <div> 
-                <span class="btn btn-primary btn-circle btn-xl" style="float:right;right:30px;bottom:0px;z-index:300;font-weight:bold" onclick="minimize_chats()" title='hide'>-</span>                
-            </div>
-          
-
-            <iframe width="320px" height="350px"  scrolling="no" frameborder="0" align="right" gesture="media" src="http://czadmin.c-zentrixcloud.com/App/cti_handler.php?e=<?=$this->session->telephony_agent_id?>">
-          </iframe>
-
-        </div>
-			<?php }else{?>
-       <script>
-        function send_parameters(phn){
-      var x=phn.toString().length;
-           if(x >= 10){     
-            var url="<?=base_url().'telephony/click_to_dial/'?>" + phn; 
-              $.ajax({
-                  url:url,
-                  type: 'POST',
-                   beforeSend: function(){
-                      Swal.fire({            
-          // icon: 'info',
-           html:'<strong>Dailing <blink>..</blink></strong>',
-           showCancelButton: false,
-           confirmButtonColor: '#3085d6',
-           cancelButtonColor: '#d33',
-           confirmButtonText: 'ok'              
-                    }).then((result) => {
-                    if (result.value) {                                 
-                   }
-                   });
-                     },
-                  success: function (data) {
-                    var res = JSON.parse(data);
-        //  console.log(res);
-          if(res.status=='error'){
-          Swal.fire({            
-          // icon: 'info',
-           html:'<strong>'+res.details+'</strong>',
-           showCancelButton: false,
-           confirmButtonColor: '#3085d6',
-           cancelButtonColor: '#d33',
-           confirmButtonText: 'ok'              
-                    }).then((result) => {
-                    if (result.value) {                                 
-                   }
-                   });  
-          }else{
-             var str = res.details; 
-                         var matches = str.match(/(\d+)/); 
-                     Swal.fire({            
-                 html:'<strong>'+str+'</strong>',
-                 showCancelButton: false,
-                 confirmButtonColor: '#3085d6',
-                 cancelButtonColor: '#d33',             
-               }).then((result) => {
-                 if (result.value) {                                 
-                 }});
-          }
-                  }
-              });
-    }else{
-       Swal.fire({            
-                 icon: 'info',
-                 html:'<strong>Invalid mobile Number</strong>',
-                 showCancelButton: true,
-                 confirmButtonColor: '#3085d6',
-                 cancelButtonColor: '#d33',
-                 confirmButtonText: 'ok'              
-               }).then((result) => {
-                 if (result.value) {                                 
-                 }
-               });
-    }}
-        </script>
-			<?php } 
-            } ?>     
-
-  
-
-      
-     <!--    <script>
-            
-            function  minimize_chats(){
-                $('#minimize_chat').css('display', 'none');
-                $('#maxmize_chat').css('display', 'block');
-            }
-            function  maxmize_chats(){
-                $('#minimize_chat').css('display', 'block');
-                $('#maxmize_chat').css('display', 'none');
-            }
-
-        </script> -->
-
-  <!--       <div style="position:fixed;z-index:200;float:right;right:0px;bottom:0px;display:block;" id="maxmize_chat">
-            <div> 
-              <span class="btn btn-success" style="bottom:0px;z-index:300;" onclick="maxmize_chats()"> 
-            
-                <i class="fa fa-phone-square" style="font-size:30px;"></i>
-              </span>              
-            </div>
-        </div>
-        <div style="position:fixed;z-index:200;float:right;right:5px;bottom:0px;display:none;" id="minimize_chat">
-            
-            <div> 
-                <span class="btn btn-primary btn-circle btn-xl" style="float:right;right:30px;bottom:0px;z-index:300;font-weight:bold" onclick="minimize_chats()" title='hide'>-</span>                
-            </div>
-            
-            <iframe width="320px" height="350px"  scrolling="no" frameborder="0" align="right" gesture="media" src="http://czadmin.c-zentrixcloud.com/App/cti_handler.php?e=<?=$this->session->telephony_agent_id?>">
-          </iframe>
-
-        </div> -->
-
-      
-      <?php //} ?>
-
       
     
       <style>
@@ -853,12 +662,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
          </div>
       </div>
 
-	    <?php
-    if(user_access(290)) { 
-	  $this->load->view('chats/chats');
-	  
-	}?>	  
-	 
+	
 	  <script src="<?=base_url().'assets/js/sweetalert2@9.js'?>"></script>
 
 
@@ -887,39 +691,10 @@ if($root=='https://student.spaceinternationals.com'){  ?>
             </form>
          </div>
       </div>
-      <?php
-    if(($this->session->companey_id!='67')){
-    $this->load->view('chats/chats');
-    
-  }?>   
-   
-    <script src="<?=base_url().'assets/js/sweetalert2@9.js'?>"></script>
-
+     
          <script>
     $(document).ready(function(){
 
-/*
-master search start
-*/
-if($(".master-search").val() != ''){
-    $('.master-search').addClass('expanded');
-}
-  $('.master-search-icon').click(function (e) {
-    if($(".master-search").hasClass('expanded')){
-      if($(".master-search").val() != ''){
-        $("#master_search_form").submit();
-      }else{
-        e.preventDefault();        
-      }
-    }else{
-      e.preventDefault();
-    }
-    $('.master-search').toggleClass('expanded');
-    //$('.master-search-icon').toggleClass('fa-times');
-  });
-/*
-master search end
-*/
 
 
 
