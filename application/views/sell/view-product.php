@@ -246,11 +246,13 @@
 						}
 						
 						if (!empty($dynamic_field)) {
-							foreach ($dynamic_field as $key => $value) { ?>
-								<div class = "col-md-12">
-									<label class="col-md-3"><b><?=$value['title']?> :</b></label><p class="col-md-9"><?php echo $value['value']; ?></p>
-								</div>
-							<?php
+							foreach ($dynamic_field as $key => $value) { 
+								if(!empty($value['value'])){?>
+									<div class = "col-md-12">
+										<label class="col-md-3"><b><?=$value['title']?> :</b></label><p class="col-md-9"><?php echo $value['value']; ?></p>
+									</div>
+								<?php
+								}
 							}
 						}
 						?>						
