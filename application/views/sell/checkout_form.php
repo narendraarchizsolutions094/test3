@@ -85,37 +85,20 @@ button:hover{
   background: #428a7d;
 }
 </style>
+<form action="<?=base_url().'payment/make_payment_mojo'?>" method="post">
 <div class="">
   <div class="title">
       <h2>Product Order Form</h2>
   </div>
 <div class="row">
 <div class="col-md-8 panel panel-default">
-  <form action="" method="">
     <div class="row">
         <div class="col-md-12">
             <div class="form-group">        
-                <label>First Name <i class="required">*</i></label>
+                <label>Full Name <i class="required">*</i></label>
                 <input type="text" name="fname" class="form-control">
             </div>        
-        </div>
-        <div class="col-md-12">
-            <div class="form-group">        
-
-          <label>Last Name <i class="required">*</i></label>
-          <input type="text" name="lname"  class="form-control">
-        </div>
-        </div>
-        
-        
-        <div class="col-md-12">
-            <div class="form-group">        
-
-          <label>Company Name (Optional)</label>
-          <input type="text" name="cn"  class="form-control">
-        </div>
-        </div>
-        
+        </div>        
         <div class="col-md-12">
             <div class="form-group">        
 
@@ -132,10 +115,7 @@ button:hover{
           <input type="text" name="houseadd" placeholder="House number and street name" required class="form-control">
         </div>          
         
-        <div class="col-md-12">
-          <span>&nbsp;</span>
-          <input type="text" name="apartment" placeholder="Apartment, suite, unit etc. (optional)" class="form-control">
-        </div>        
+          
 
         <div class="col-md-12">
             <div class="form-group">        
@@ -161,20 +141,18 @@ button:hover{
         <div class="col-md-12">
             <div class="form-group">        
 
-          <label>Phone <i class="required">*</i></label>
-          <input type="tel" name="city" class="form-control"> 
+          <label>Mobile no. <i class="required">*</i></label>
+          <input type="tel" name="phone" class="form-control"> 
         </div>
         </div>        
         <div class="col-md-12">
-            <div class="form-group">        
-
-          <label>Email Address <i class="required">*</i></label>
-          <input type="email" name="city" class="form-control"> 
-        <br>
+            <div class="form-group">    
+              <label>Email Address <i class="required">*</i></label>
+              <input type="email" name="email" class="form-control"> 
+              <br>
+            </div>
         </div>
-        </div>
-    </div>
-  </form>
+    </div>    
 </div>
 <div class="col-md-4">
   <div class="Yorder">
@@ -182,13 +160,22 @@ button:hover{
       <tr>
         <th colspan="2">Your order</th>
       </tr>
-      <tr>
-        <td>Product Name x 2(Qty)</td>
-        <td>$88.00</td>
-      </tr>
+      <?php
+      $cartarr = $this->cart->contents();
+      if (!empty($cartarr)) {
+        foreach($cartarr as $ind => $cart) {
+          ?>
+          <tr>
+            <td><?=$cart['name']?> x <?=$cart['qty']?>(Qty)</td>
+            <td>₹ <?=$cart['price']*$cart['qty']?></td>
+          </tr>
+          <?php
+        }
+      }
+      ?>
       <tr>
         <td>Subtotal</td>
-        <td>$88.00</td>
+        <td>₹ <?=$this->cart->total()?></td>
       </tr>
       <tr>
         <td>Shipping</td>
@@ -203,8 +190,9 @@ button:hover{
       <img src="https://www.logolynx.com/images/logolynx/c3/c36093ca9fb6c250f74d319550acac4d.jpeg" alt="" width="50">
       </span>
     </div>
-    <button type="button">Place Order</button>
+    <button type="submit">Place Order</button>
   </div><!-- Yorder -->
  </div>
  </div>
 </div>
+  </form>

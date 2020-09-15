@@ -9,7 +9,11 @@ class Buy extends CI_Controller {
 		$this->load->model("sell_model");
 		$this->load->library('cart');
     }
-	
+	public function thankyou(){
+		echo "<pre>";
+		print_r($_POST);
+		echo "</pre>";
+	}
 	public function index(){
 		
 		$data['title'] = 'Product List';
@@ -37,7 +41,21 @@ class Buy extends CI_Controller {
 
 	public function checkout(){
 		$data = array();
-		$data['content']	=	$this->load->view('sell/checkout_form',$data,true);
+		$prodcart = array();
+		$carts = $this->cart->contents();
+		if(!empty($carts)){
+			foreach($carts as $ind =>$crd) {
+				
+				$prodid = $crd['id'];
+				$prodcart[$prodid]	= $crd['qty'];
+			}
+			
+		}
+		if (empty($prodcart)) {
+			$data['content'] = '<br><div class="alert alert-danger text-center"><h2>Your Cart in empty.</h2></div>';
+		}else{
+			$data['content']	=	$this->load->view('sell/checkout_form',$data,true);
+		}
         $this->load->view('layout/buy_wrapper', $data);	
 	}
 	
