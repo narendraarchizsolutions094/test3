@@ -130,36 +130,26 @@ class Buy extends CI_Controller {
 			$_SESSION['orderno'] = $ordno;
 		}else{
 			$this->session->set_flashdata('exception', "Failed to  saved");
-		}
-		
-		
-		
-	}
+		}		
+	}	
 	
-	
-	
-	public function view($prodno){
-		
-			
-	
+	public function view($prodno){	
 		$data['product'] = $this->Product_model->productdet($prodno) ;
 		$data['category'] = $this->sell_model->subCategory();
-		$carts = $this->cart->contents();
-		
+		$carts = $this->cart->contents();		
 		$prodcart = array();
 		if(!empty($carts)){
-			foreach($carts as $ind =>$crd) {
-				
+			foreach($carts as $ind =>$crd) {				
 				$prodid = $crd['id'];
 				$prodcart[$prodid]	= $crd['qty'];
-			}
-			
+			}			
 		}
+		$this->load->model('enquiry_model');
+        $data['dynamic_field']  = $this->Product_model->get_product_dynamic_fields_data($prodno);        
 		$data['title'] = 'Product List';
 		$data['incart']  = $prodcart;
 		$data['content'] = $this->load->view('sell/view-product', $data, true);
-        $this->load->view('layout/buy_wrapper', $data);
-		
+        $this->load->view('layout/buy_wrapper', $data);		
 	}
 	
 	public function loadsubcateg($categ = ""){

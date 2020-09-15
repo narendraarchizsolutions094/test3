@@ -1,3 +1,73 @@
+<link rel="stylesheet" type="text/css" href="https://k1ngzed.com/dist/swiper/swiper.min.css">
+<link rel="stylesheet" type="text/css" href="https://k1ngzed.com/dist/EasyZoom/easyzoom.css">
+<script type="text/javascript" src="https://k1ngzed.com/dist/swiper/swiper.min.js"></script>
+<script type="text/javascript" src="https://k1ngzed.com/dist/EasyZoom/easyzoom.js"></script>
+<style type="text/css">
+/*product Carousel start*/
+.product__carousel {
+  display: block;
+  max-width: 700px;
+  margin: 1em auto 3em;
+}
+.product__carousel a {
+  display: block;
+  margin-bottom: 15px;
+}
+
+.product__carousel .gallery-top {
+	border: 1px solid #ebebeb;
+	border-radius: 3px;
+	margin-bottom: 5px;
+}
+.product__carousel .gallery-top .swiper-slide {
+	position: relative;
+	overflow: hidden;
+}
+.product__carousel .gallery-top .swiper-slide a {
+	position: relative;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+	height: 100%;
+}
+.product__carousel .gallery-top .swiper-slide a img {
+	width: 100%;
+	height: 100%;
+	object-fit: contain;
+}
+.product__carousel .gallery-top .swiper-slide .easyzoom-flyout img {
+	min-width: 100%;
+	min-height: 100%;
+}
+.product__carousel .swiper-button-next.swiper-button-white,
+.product__carousel .swiper-button-prev.swiper-button-white {
+	color: #ff3720;
+}
+.product__carousel .gallery-thumbs .swiper-slide {
+	position: relative;
+	transition: border .15s linear;
+	border: 1px solid #ebebeb;
+	border-radius: 3px;
+	cursor: pointer;
+	overflow: hidden;
+  height: calc(100% - 2px);
+}
+.product__carousel .gallery-thumbs .swiper-slide.swiper-slide-thumb-active {
+	border-color: #000;
+}
+.product__carousel .gallery-thumbs .swiper-slide img {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%,-50%);
+	max-width: 100%;
+}
+
+/*product Carousel end*/
+</style>
+
+
 <div class="row">
 
    <!--  table area -->
@@ -104,51 +174,213 @@
 
             </div>
 			<div class = "row">
-				<div class = "col-md-9">
+				<div class = "col-md-7">
 					<div class = "row">
 						<div class = "col-md-12">
-					<h2><?php echo $product->country_name; ?>
-					<?php
-						
-					if(!empty($incart[$product->sb_id])) { 						
-						?>
-						<a href = "<?php echo base_url("buy/checkout"); ?>" class = "btn btn-success btn-xs pull-right">Added in cart </a><?php
-					}else{
-						?>
-						 <a href = "javascript:void(0)" data-prodid="<?=$product->sb_id?>" class = "btn btn-xs btn-danger pull-right add-to-cart"><i class = "fa fa-shopping-cart"></i> Add to cart</a> 
-						<?php
-					} ?>
-					</h2>
- 					<hr />
-					<p>Price : <i class = "fa fa-rupee"></i> <?php echo $product->price; ?></p>
-					<p><?php echo $product->details; ?></p>
+					<p style="font-size: 32px;"><?php echo $product->country_name; ?>					
+					</p> 					
+					<h1><i class = "fa fa-rupee"></i> <?php echo $product->price; ?></h1>					
 					</div>
 					</div>
 					<div class = "row">
-					
-					
 						<?php
 						if(!empty($product->color)) { 
-							?><div class = "col-md-6"><b>Color :</b><?php echo  $product->color; ?></div><?php
+							?><div class = "col-md-12">
+								<label class="col-md-3"><b>Color :</b></label><p class="col-md-9"><?php echo  $product->color; ?></p></div><?php
 						}
 						if(!empty($product->size)) { 
-							?><div class = "col-md-6"><b>Size :</b><?php echo $product->size; ?></div><?php
+							?><div class = "col-md-12"><b>Size :</b><?php echo $product->size; ?></div><?php
 						}
 						if(!empty($product->weight)) { 
-							?><div class = "col-md-6"><b>Size :</b><?php echo $product->weight; ?></div><?php
+							?><div class = "col-md-12">
+								<label class="col-md-3"><b>Weight :</b></label><p class="col-md-9"><?php echo $product->weight; ?></p></div><?php
+						}
+						if(!empty($product->hsn)) { 
+							?><div class = "col-md-12">
+								<label class="col-md-3"><b>HSN Code :</b></label><p class="col-md-9"><?php echo $product->hsn; ?></p></div><?php
 						}
 
-						?>
+						if(!empty($product->brand)) { 
+							?><div class = "col-md-12">
+								<label class="col-md-3"><b>Brand :</b></label><p class="col-md-9"><?php echo $product->brand; ?></p></div><?php
+						}
+						if(!empty($product->seller_name)) { 
+							?>
+							<div class = "col-md-12">
+								<label class="col-md-3"><b>Seller :</b></label><p class="col-md-9"><?php echo $product->seller_name; ?></p></div><?php
+						}
+
+						if(!empty($product->category)) { 
+							?><div class = "col-md-12">
+								<label class="col-md-3"><b>Category :</b></label><p class="col-md-9"><?php echo $product->category_name; ?></p></div><?php
+						}
+
+						if(!empty($product->subcatogory)) { 
+							?><div class = "col-md-12">
+								<label class="col-md-3"><b>Subcategory :</b></label><p class="col-md-9"><?php echo $product->subcat_name; ?></p></div><?php
+						}
+
+
+						if(!empty($product->othr_price)) { 
+							?><div class = "col-md-12">
+								<label class="col-md-3"><b>MRP :</b></label><p class="col-md-9"><?php echo $product->othr_price; ?></p></div><?php
+						}
+
+						if(!empty($product->tax)) { 
+							?><div class = "col-md-12">
+								<label class="col-md-3"><b>Tax :</b></label><p class="col-md-9"><?php echo $product->tax; ?></p></div><?php
+						}
+
+						if(!empty($product->scheme) && 0) { 
+							?><div class = "col-md-12">
+								<label class="col-md-3"><b>Scheme :</b></label><p class="col-md-9"><?php echo $product->scheme; ?></p></div><?php
+						}
+
+
+						if(!empty($product->details)) { 
+							?>
+							<div class = "col-md-12">
+								<label class="col-md-3"><b>Description :</b></label><p class="col-md-9"><?php echo $product->details; ?></p>
+							</div>
+							<?php
+						}
 						
+						if (!empty($dynamic_field)) {
+							foreach ($dynamic_field as $key => $value) { ?>
+								<div class = "col-md-12">
+									<label class="col-md-3"><b><?=$value['title']?> :</b></label><p class="col-md-9"><?php echo $value['value']; ?></p>
+								</div>
+							<?php
+							}
+						}
+						?>						
+
+
+					<div class="col-md-12">
+					<br>	
+						<?php						
+						if(!empty($incart[$product->sb_id])) { 						
+							?>
+							<a href = "<?php echo base_url("buy/checkout"); ?>" class = "btn btn-success">Added in cart </a><?php
+						}else{
+							?>
+							 <a href = "javascript:void(0)" data-prodid="<?=$product->sb_id?>" class = "btn btn-danger add-to-cart"><i class = "fa fa-shopping-cart"></i> Add to cart</a> 
+							<?php
+						} 
+						?>
+					</div>
 					</div>
 				</div>
-				<div class = "col-md-3 card">
-					<img src = "<?php echo base_url("assets/images/products/".$product->image) ?>" class = "img-responsive">
+				<div class = "col-md-5">				
+					<div class="product__carousel">  
+				  <!-- Swiper and EasyZoom plugins start -->
+					  <div class="swiper-container gallery-top">
+					    <div class="swiper-wrapper">
+						<?php
+     					if(!empty($product->sub_image) || !empty($product->image)){
+						if (!empty($product->sub_image)) {
+							$sub_images	=	json_decode($product->sub_image,true);						
+						}else{
+							$sub_images = array();
+						}
+						array_unshift($sub_images, $product->image);
+						foreach ($sub_images as $key => $value) { ?>				      
+					      <div class="swiper-slide easyzoom easyzoom--overlay">
+					        <a href="<?php echo base_url("assets/images/products/".$value); ?>">
+					          <img src="<?php echo base_url("assets/images/products/".$value); ?>" alt=""/>
+					        </a>
+					      </div>				      
+					    <?php }
+					    }
+					    ?>
+					    </div>
+					    <!-- Add Arrows -->
+					    <div class="swiper-button-next swiper-button-white"></div>
+					    <div class="swiper-button-prev swiper-button-white"></div>
+					  </div>
+					  
+					  <div class="swiper-container gallery-thumbs">
+					    <div class="swiper-wrapper">
+					    <?php
+     					if(!empty($product->sub_image)|| !empty($product->image)){
+						
+						if (!empty($product->sub_image)) {
+							$sub_images	=	json_decode($product->sub_image,true);						
+						}else{
+							$sub_images = array();
+						}
+						array_unshift($sub_images, $product->image);
+						foreach ($sub_images as $key => $value) { ?>				      
+					      <div class="swiper-slide">
+					        <img src="<?php echo base_url("assets/images/products/".$value); ?>" alt="">
+					      </div>				      
+					    <?php }
+						}
+					    ?>
+					    </div>
+					  </div>
+					  <!-- Swiper and EasyZoom plugins end -->
+					</div>
 				</div>
 			</div>
-     
+			<?php
+     		if(!empty($product->sub_image)){
+     			/*?>
+     		<div class="row">     				
+     			<div class="product__carousel">  
+				  <!-- Swiper and EasyZoom plugins start -->
+				  <div class="swiper-container gallery-top">
+				    <div class="swiper-wrapper">
+					<?php
+					$sub_images	=	json_decode($product->sub_image);
+					foreach ($sub_images as $key => $value) { ?>				      
+				      <div class="swiper-slide easyzoom easyzoom--overlay">
+				        <a href="<?php echo base_url("assets/images/products/".$value); ?>">
+				          <img src="<?php echo base_url("assets/images/products/".$value); ?>" alt=""/>
+				        </a>
+				      </div>				      
+				    <?php }
+				    ?>
+				    </div>
+				    <!-- Add Arrows -->
+				    <div class="swiper-button-next swiper-button-white"></div>
+				    <div class="swiper-button-prev swiper-button-white"></div>
+				  </div>
+				  
+				  <div class="swiper-container gallery-thumbs">
+				    <div class="swiper-wrapper">
+				    <?php
+					$sub_images	=	json_decode($product->sub_image);
+					foreach ($sub_images as $key => $value) { ?>				      
+				      <div class="swiper-slide">
+				        <img src="<?php echo base_url("assets/images/products/".$value); ?>" alt="">
+				      </div>				      
+				    <?php }
+				    ?>
+				    </div>
+				  </div>
+				  <!-- Swiper and EasyZoom plugins end -->
+				</div>
 
 
+
+
+
+
+
+     			<?php
+				/*$sub_images	=	json_decode($product->sub_image);
+				foreach ($sub_images as $key => $value) { ?>
+					<div class="col-md-3 col-sm-4 col-xs-6">
+						<img src = "<?php echo base_url("assets/images/products/".$value); ?>" class = "img-responsive" style="height:200px;max-width:200px;">												
+					</div>											
+				<?php*/
+				//}
+			?>
+			<?php 
+			}
+			?>
+     		</div>
          </div>
 
       </div>
@@ -410,10 +642,47 @@
 		});	
 		
 	});
+	    // product Gallery and Zoom
+
+    // activation carousel plugin
+    var galleryThumbs = new Swiper('.gallery-thumbs', {
+        spaceBetween: 5,
+        freeMode: true,
+        watchSlidesVisibility: true,
+        watchSlidesProgress: true,
+        breakpoints: {
+            0: {
+                slidesPerView: 3,
+            },
+            992: {
+                slidesPerView: 4,
+            },
+        }
+    });
+    var galleryTop = new Swiper('.gallery-top', {
+        spaceBetween: 10,
+        navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+        },
+        thumbs: {
+            swiper: galleryThumbs
+        },
+    });
+    // change carousel item height
+    // gallery-top
+    let productCarouselTopWidth = $('.gallery-top').outerWidth();
+    $('.gallery-top').css('height', productCarouselTopWidth);
+
+    // gallery-thumbs
+    let productCarouselThumbsItemWith = $('.gallery-thumbs .swiper-slide').outerWidth();
+    $('.gallery-thumbs').css('height', productCarouselThumbsItemWith);
+
+    // activation zoom plugin
+    var $easyzoom = $('.easyzoom').easyZoom();
 </script>
 <script>
-	$(document).on("click",".remove-cart", function(){
-		
+	$(document).on("click",".remove-cart", function(){		
 		cartchange($(this), 0);
 	});
 </script>
