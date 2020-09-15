@@ -115,7 +115,7 @@
 						<a href = "<?php echo base_url("buy/checkout"); ?>" class = "btn btn-success btn-xs pull-right">Added in cart </a><?php
 					}else{
 						?>
-						 <a href = "<?php echo base_url("buy/checkout"); ?>" class = "btn btn-xs btn-danger pull-right"><i class = "fa fa-shopping-cart"></i> Add to cart</a> 
+						 <a href = "javascript:void(0)" data-prodid="<?=$product->sb_id?>" class = "btn btn-xs btn-danger pull-right add-to-cart"><i class = "fa fa-shopping-cart"></i> Add to cart</a> 
 						<?php
 					} ?>
 					</h2>
@@ -405,6 +405,7 @@
 					
 				});	
 				$(".total-price").text(jresp.subtotal);
+				location.reload();
 			}
 		});	
 		
