@@ -23,29 +23,7 @@
 											</div>
 										</div>
 										<hr>
-									<!--	<div class="row">
-											<div class="col-lg-6 ">
-												<p class="h3">Form:</p>
-												<address>
-													Cona Industries<br/>
-													Maharastra, Mumbai<br/>
-													Region, Postal Code<br/>
-													yourdomain@example.com
-												</address>
-											</div>
-											<div class="col-lg-6 text-right">
-												<p class="h3">Order To:</p>
-												<address>
-													<?php // echo $ord->customer; ?><br>
-													<?php// echo $ord->address; ?><br>
-													<?php // echo $ord->state.", ".$ord->city; ?><br>
-													<br>
-													<?php// echo $ord->email; ?>
-													<br>
-													<?php  //echo $ord->phone; ?>													
-													</address>
-											</div>
-										</div> -->
+								
 										<div class="table-responsive push">
 											<table class="table table-bordered table-hover mb-0">
 												<tbody>
@@ -75,19 +53,21 @@
 														
 														<td class="text-center" style="width: 1%">
 														<?php
+																$cnt = ""; 
+																$totconfrm = 0;
+
 															$pending = $ord->quantity;
 															$isanyconf = false;
 															if(!empty($delivery[$ord->product])){
 																
 																$delvarr = $delivery[$ord->product];
-																$totconfrm = 0;
 																$isanyconf = true;
 																?>
 														
 																
 																<?php
 																
-																$cnt = ""; 
+																
 																foreach($delvarr as $ind => $dlv){
 																	
 																	$totconfrm = $totconfrm + $dlv->delv_qty;
