@@ -275,7 +275,7 @@ class Enq extends CI_Controller {
 				if(user_access(220)){
 					$row[] = "<a href='javascript:void(0)' onclick='send_parameters(".$each->phone.")'>".$p." <button class='fa fa-phone btn btn-xs btn-success'></button></a>";            	
 				}else{
-					$row[] = (!empty($each->phone)) ? '<a  href="javascript:void(0)">'.$p.'</a>' : "NA";
+					$row[] = (!empty($each->phone)) ? '<a  href="tel:'.$p.'">'.$p.'</a>' : "NA";
 				}
 			}
 			if ($showall == true or in_array(6, $acolarr)) { 
