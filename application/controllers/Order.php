@@ -108,7 +108,7 @@ class Order extends CI_Controller {
 						"disc_price"	=> "",
 						"disc_type" 	=> "",
 						"tax"			=> $this->input->post("tax", true),
-						"addedby"		=> "",
+						"addedby"		=> $this->session->user_id,
 						"order_date"	=> date("Y-m-d h:i:s"),
 						"status"		=> 1,
 						"company"		=> $this->session->companey_id,
