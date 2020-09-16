@@ -103,7 +103,13 @@
 														<td class="text-right"><?php echo $oprice = $ord->other_price; ?></td>
 														<td class="text-right"><?php echo  (!empty($ord->gst)) ? $ord->gst."%" : ""; ?></td>
 														<td class="text-right"><?php echo $ord->offer; ?></td>
-														<td class="text-right"><i class ="fa fa-rupee"></i><?php echo $ptotal = ($qty * $price) + $ord->other_price - $ord->offer; ?></td>
+														<td class="text-right"><i class ="fa fa-rupee"></i>
+
+															<?php 
+
+															//echo 'qty'.$qty.'price'.$price.'other_price'.$ord->other_price.'offer'.$ord->offer;
+															echo $ptotal = ($qty * (float)$price) + (float)$ord->other_price - (float)$ord->offer; ?>
+														</td>
 														
 													</tr>		
 														

@@ -509,6 +509,7 @@ class Order extends CI_Controller {
 	
 	public function pdfinvoice($ordno){
 		
+        ob_end_clean();
 		$this->load->model("payment_model");
 		$data['orders'] = $this->order_model->getOrders($ordno);
 		
@@ -521,10 +522,11 @@ class Order extends CI_Controller {
 	
 		$data["title"] 	  = $data['ord']->ord_no;
 		$html = $this->load->view("order/invoice", $data, true);
-	
+		/*echo $html;
+		exit();*/
 	//	$html = $this->load->view("patient/pages/report/pdf-report", $data, true);
 		
-		$html = $this->load->view("order/pdf-invoice", $data, true );
+		//$html = $this->load->view("order/pdf-invoice", $data, true );
         // Load pdf library
         $this->load->library('pdf');
         
@@ -540,7 +542,6 @@ class Order extends CI_Controller {
         
         // Render the HTML as PDF
         $this->dompdf->render();
-        ob_end_clean();
         $this->dompdf->stream($ordno."pdf", array("Attachment"=>0));
 		
 		
