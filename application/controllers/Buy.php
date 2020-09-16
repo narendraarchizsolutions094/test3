@@ -48,10 +48,11 @@ class Buy extends CI_Controller {
 			}
 			
 		}
-		
+		$this->load->model('sell_model');
+  		$data['category'] = $this->sell_model->subCategory();
 		$data['incart']  = $prodcart;
 		$data['content'] = $this->load->view('sell/product-list', $data, true);
-        $this->load->view('layout/buy_wrapper', $data);
+        $this->load->view('layout/main_wrapper', $data);
 		
 	}
 
@@ -77,7 +78,7 @@ class Buy extends CI_Controller {
 		}else{
 			$data['content']	=	$this->load->view('sell/checkout_form',$data,true);
 		}
-        $this->load->view('layout/buy_wrapper', $data);	
+        $this->load->view('layout/main_wrapper', $data);	
 	}
 	
 	public function __checkout(){
@@ -124,7 +125,7 @@ class Buy extends CI_Controller {
         	
 		}
 		
-		$this->load->view('layout/buy_wrapper', $data);
+		$this->load->view('layout/main_wrapper', $data);
 		
 	}
 	
@@ -195,7 +196,7 @@ class Buy extends CI_Controller {
 		$data['title'] = 'Product List';
 		$data['incart']  = $prodcart;
 		$data['content'] = $this->load->view('sell/view-product', $data, true);
-        $this->load->view('layout/buy_wrapper', $data);		
+        $this->load->view('layout/main_wrapper', $data);		
 	}
 	
 	public function loadsubcateg($categ = ""){

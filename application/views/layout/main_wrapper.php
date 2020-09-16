@@ -504,7 +504,42 @@ if($root=='https://student.spaceinternationals.com'){  ?>
   .master-search.expanded {
     opacity: 1;
   }
+.dropdown-large {
+  position: static !important;
+}
+.dropdown-menu-large {
+  margin-left: 16px;
+  margin-right: 16px;
+  padding: 20px 0px;
+  left: -131px;
+  min-width:250px;
+}
 
+@media (max-width: 768px) {
+  .dropdown-menu-large {
+    margin-left: 0 ;
+    margin-right: 0 ;
+  }
+  .dropdown-menu-large > li {
+    margin-bottom: 30px;
+  }
+  .dropdown-menu-large > li:last-child {
+    margin-bottom: 0;
+  }
+  .dropdown-menu-large .dropdown-header {
+    padding: 3px 15px !important;
+  }
+}
+ .dropdown-menu-large .cart-items{
+  padding: 0px 14px;
+  border-bottom: 1px solid #f7f7f7;
+}
+.checkout-btn{
+  background-color: red !important;
+  line-height: 31px;
+  margin: 0px 15px;
+  width:85%;
+}
 /* search icon style end */
 
 </style>
@@ -726,6 +761,55 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                         }
                         ?>
                           </li>
+
+                          <?php
+                  if (user_access('480')) { ?>
+
+                          ?>
+                          <li  class="dropdown  dropdown-user" style="height: 1px;">
+                    <?php                    
+                      $cartarr = array();           
+                      if(!empty($this->cart->contents())) {                    
+                        $cartarr = $this->cart->contents();
+                      }
+                    ?>
+                  <a href = "#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <i class="fa fa-shopping-cart" aria-hidden="true"></i> <span class="caret"></span>
+                  </a>
+                  <span class="badge badge-notify"  id = "nav-cart-count"><?php echo count($cartarr); ?></span>
+                 
+              <div class="dropdown-menu dropdown-menu-large">   
+                  <ul class ="cart-dropdown-menu"  id = "cart-nav-menu" style = "padding:0px;list-style:none;">
+                <?php 
+                
+                
+                if(!empty($this->cart->contents())) {
+                    
+                    $cartarr = $this->cart->contents();
+                    foreach($cartarr as $ind => $cart) {
+                    
+                      ?><li id = "cart-li-<?php echo $cart['id']; ?>" > 
+                    
+                      <div class = "cart-items"><h4><a href = ""> <?php echo $cart['name'] ?></a></h4>
+                          <p><a href = ""> Price : <i class = "fa fa-price"></i> <?php echo  $cart['price']." X ".$cart['qty']; ?> = <i class = "fa fa-rupee"></i> <?php echo $cart['price']*$cart['qty']  ?> </a> 
+                            
+                          </p>
+                          <hr />
+                          </div>
+                      </li><?php
+                    } ?>
+                      
+              <?php } ?>  
+                    
+                  </ul>
+                  <ul style = "padding:0px;list-style:none;">
+                  <li><a class = "btn btn-danger checkout-btn" href = "<?php echo base_url("buy/checkout") ?>">Check Out</a></li>
+                  </ul>
+              </div>  
+           </li>
+           <?php
+             }
+           ?>
                <li class="dropdown dropdown-user" style="height: 1px;" id="notification_dropdown">
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown" id="anch_notification_dropdown"><i class="fa fa-bell-o" style="background:#fff !important;border:none!important;color:green;"></i></a>
                   <span class="badge badge-notify" id="bell_notifications_count">0</span>
@@ -766,7 +850,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
 					<?php } ?>
                </div>
                <ul class="sidebar-menu">
-         <?php if(($this->session->user_right!=151 && $this->session->user_right!=180 && $this->session->user_right!=186 && $this->session->user_right!=200 && $this->session->userdata('user_right')!=214)){ ?>
+         <?php if(($this->session->user_right!=151 && $this->session->user_right!=180 && $this->session->user_right!=186 && $this->session->user_right!=200 && $this->session->userdata('user_right')!=214 && $this->session->userdata('user_right')!=201)){ ?>
                   <li class="<?php echo (($segment1 == 'dashboard') ? "active" : null) ?>">
                      <a href="<?php echo base_url('dashboard') ?>">
                      <i class="fa fa-home" style="color:#fff;font-size:17px;background:#2ecc71;padding:7px;border-radius:4px;width:30px;"></i> &nbsp;<?php echo display('dashboard') ?>
@@ -1042,6 +1126,52 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                   <?php
                   }
                   ?>
+                 <?php                        
+                  if(!empty($category)) {       ?>
+                  <li class="<?php //echo (($segment1 == 'buy' && empty($_GET)) ? "active" : null) ?>">
+                     <a href="javascript:void(0)">
+                    Filter by category 
+                     </a>
+                  </li> 
+                  <?php
+                      foreach($category as $ind => $ctg) {              
+                        if(!empty($ctg['sub'])){
+                          $treemenu  =  true;
+                        }else{
+                          $treemenu  =  false;
+                        }           
+                      ?>
+                        <li class="<?php echo ((!empty($_GET['c']) && $_GET['c'] == $ind) ? "active" : null) ?> <?php echo ($treemenu == true) ? "treeview" : ""; ?>">                
+                              <?php if(($treemenu == false)) { ?>                     
+                               <a href="<?php echo base_url('buy?c='.$ind); ?>">
+                               <i class="fa fa-list-alt"></i>  <?php echo $ctg['title']; ?>               
+                               </a>                     
+                              <?php }else{ ?>
+                                   <a href="#" onclick='window.location = "<?php echo base_url('buy?c='.$ind); ?>"'>
+                               <i class="fa fa-list-alt" style="color:#fff;font-size:17px;background:#2ecc71;padding:7px;border-radius:4px;width:30px;"></i> &nbsp;<?php echo $ctg['title']; ?>   <span class="pull-right-container">
+                            <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                          
+                               </a>
+                                
+                              <?php } ?>
+                            <?php 
+                              if(!empty($ctg['sub'])){
+                            ?> <ul class="treeview-menu <?php echo (!empty($_GET['c']) && $_GET['c']==$ind)?'active':'' ?>"><?php 
+                                foreach($ctg['sub'] as $cind => $sbctg) {                     
+                                ?><li class="<?php echo ((!empty($_GET['sc']) && $_GET['sc'] == $sbctg['id']) ? "active" : null) ?>" onclick="if($(this).hasClass('active')){$(this).parent().parent().addClass('active')}"><a href = "<?php echo base_url("buy?sc=".$sbctg['id']); ?>"><?php echo $sbctg['subcat_name']; ?></a></li><?php
+                                }
+                                ?></ul><?php
+                              }
+                                ?>
+                            
+                            
+                        </li>
+                      
+                <?php   }
+                   } ?>
+         
+         
                   <li class="treeview <?php echo in_array($segment1, array('user','customer')) ? "active" : null ?>" style="<?php if(in_array(130,$module) || in_array(131,$module) || in_array(132,$module) || in_array(133,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
                      <a href="#">
                        <i class="fa fa-user-plus" style="color:#fff;font-size:15px;background:#9b59b6;padding:7px;border-radius:4px;width:30px;"></i> &nbsp;<?php echo display('User_mgment') ?>
@@ -2014,7 +2144,9 @@ $("#anch_notification_dropdown").on('click',function(){
             }
         });
     });
-
+ if($(".treeview-menu li").hasClass('active')){
+    $(".treeview-menu li.active").parent().prev().parent().addClass('active');
+  }
          
 </script>
 <script>

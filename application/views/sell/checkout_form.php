@@ -8,13 +8,13 @@
   border-radius: 0 0 5px 5px;
   padding: 25px;
 }
-form{
+/*form{
   flex: 4;
-}
+}*/
 .Yorder{
   flex: 2;
 }
-.title{
+.checkout-title{
   background: -webkit-gradient(linear, left top, right bottom, color-stop(0, #5195A8), color-stop(100, #70EAFF));
   background: -moz-linear-gradient(top left, #5195A8 0%, #70EAFF 100%);
   background: -ms-linear-gradient(top left, #5195A8 0%, #70EAFF 100%);
@@ -69,7 +69,7 @@ p{
   padding: 15px 0; 
 }
 
-button{
+.checkout-form-button{
   width: 100%;
   margin-top: 10px;
   padding: 10px;
@@ -80,14 +80,14 @@ button{
   font-size: 15px;
   font-weight: bold;
 }
-button:hover{
+.checkout-form-button:hover{
   cursor: pointer;
   background: #428a7d;
 }
 </style>
 <form action="<?=base_url().'payment/make_payment_mojo'?>" method="post">
 <div class="">
-  <div class="title">
+  <div class="checkout-title">
       <h2>Product Order Form</h2>
   </div>
 <div class="row">
@@ -192,7 +192,7 @@ button:hover{
       <img src="https://www.logolynx.com/images/logolynx/c3/c36093ca9fb6c250f74d319550acac4d.jpeg" alt="" width="50">
       </span>
     </div>
-    <button type="submit">Place Order</button>
+    <button type="submit" class="checkout-form-button">Place Order</button>
   </div><!-- Yorder -->
  </div>
  </div>
