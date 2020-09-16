@@ -69,6 +69,7 @@ class Payment extends CI_Controller {
 				$longu = $myArray[0]["payment_request"]["longurl"];				
 				header('Location:' .$longu);
 			}else{
+				echo $response;
 				echo "Something went wrong!";
 			}			
 		}else{
