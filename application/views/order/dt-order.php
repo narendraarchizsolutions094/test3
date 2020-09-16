@@ -14,7 +14,11 @@
 					$image  = (!empty($ord->main_img)) ? base_url($ord->main_img)  : base_url("assets/images/profile/33.png"); 
 					
 					$cols[] = $srno;
-					$cols[] = "<a href = '".base_url('order/view/'.$ord->ord_no)."'>".$ord->ord_no."</a>";
+					if (user_access(461)) {
+						$cols[] = "<a href = '".base_url('order/view/'.$ord->ord_no)."'>".$ord->ord_no."</a>";
+					}else{
+						$cols[] = $ord->ord_no;
+					}
 				
 					//buttonwrap($arr, $total, $col)
 					$cols[] = (!empty($ord->product_name)) ? ucwords($ord->product_name)  : " ";
@@ -151,12 +155,17 @@
 						$cols[] = $ord->status; 
 					} 
 					
-				
-						$view  = '<a class="btn btn-xs btn-info" href="'.base_url("order/booking/".$ord->ord_no).'"><i class="fa fa-gavel" data-toggle="tooltip" title="" data-original-title="Edit"></i>  Confirm</a><a class="btn btn-xs btn-default" href="'.base_url("order/invoice/".$ord->ord_no).'"><i class="fa fa-eye" data-toggle="tooltip" title="" data-original-title="Edit"></i>  Invoice</a>';
-					
-					
-					$cols[] =  $view.'<a href="'.base_url("payment/add/".$ord->ord_no).'" class="btn btn-xs btn-primary"><i class="fa fa-cc" data-toggle="tooltip" title="" data-original-title="Edit"></i>  Payment</a>';
+						$payment_act = $conf_act = $invoice_act = '';
 
+						if (user_access(461)) {
+							$conf_act  = '<a class="btn btn-xs btn-info" href="'.base_url("order/booking/".$ord->ord_no).'"><i class="fa fa-gavel" data-toggle="tooltip" title="" data-original-title="Edit"></i>  Confirm</a>';
+							$payment_act = '<a href="'.base_url("payment/add/".$ord->ord_no).'" class="btn btn-xs btn-primary"><i class="fa fa-cc" data-toggle="tooltip" title="" data-original-title="Edit"></i>  Payment</a>';
+						}
+
+						$invoice_act	=	'<a class="btn btn-xs btn-default" href="'.base_url("order/invoice/".$ord->ord_no).'"><i class="fa fa-eye" data-toggle="tooltip" title="" data-original-title="Edit"></i>  Invoice</a>';					
+
+
+					$cols[] =  $conf_act.$invoice_act.$payment_act;
 					$rows[] = $cols;
 				}
 				

@@ -138,8 +138,12 @@ input[name=lead_stages]{
 	
 	<div class="row" style="background-color: #fff;padding:7px;border-bottom: 1px solid #C8CED3;">  
         <div class="col-md-4 col-sm-4 col-xs-4"> 
-          <a class="pull-left fa fa-arrow-left btn btn-circle btn-default btn-sm" onclick="history.back(-1)" title="Back"></a>        
+          <a class="pull-left fa fa-arrow-left btn btn-circle btn-default btn-sm" onclick="history.back(-1)" title="Back"></a>   <?php
+          if (user_access(460)) { ?>
           <a class="dropdown-toggle btn btn-danger btn-circle btn-sm fa fa-plus" id="enq-create" href="<?php echo base_url("order/addorder"); ?>" title="Add Stock"></a>         
+          <?php	
+          }
+          ?>
         </div>
          <div class="col-md-4 col-sm-8 col-xs-8 pull-right">  
          
