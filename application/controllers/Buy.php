@@ -20,10 +20,10 @@ class Buy extends CI_Controller {
 					'response'   => json_encode($_GET)
 				  ); 
 		if($res['payment_status'] != 'Failed'){
-			//$this->placeorder();		
-			$ins_arr['ins_id']	= $_SESSION['orderno'];
+			$this->placeorder();		
+			$ins_arr['ins_id']	= $ordno = $_SESSION['orderno'];
 			$this->db->insert('payment_history',$ins_arr);			
-			//redirect(base_url("order/invoice/".$ordno), "refresh");			
+			redirect(base_url("order/invoice/".$ordno), "refresh");			
 		}else{
 			$this->db->insert('payment_history',$ins_arr);
 			redirect('buy/checkout');
