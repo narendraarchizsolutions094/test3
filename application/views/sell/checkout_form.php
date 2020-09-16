@@ -91,15 +91,16 @@ button:hover{
       <h2>Product Order Form</h2>
   </div>
 <div class="row">
-<div class="col-md-8 panel panel-default">
-    <div class="row">
+  <br>
+<div class="col-md-8">
+    <div class="row Yorder">
         <div class="col-md-12">
             <div class="form-group">        
                 <label>Full Name <i class="required">*</i></label>
-                <input type="text" name="fname" class="form-control">
+                <input type="text" name="fname" class="form-control" required value="<?=$user_row->s_display_name.' '.$user_row->last_name?>">
             </div>        
         </div>        
-        <div class="col-md-12">
+      <!--   <div class="col-md-12">
             <div class="form-group">        
 
           <label>Country <i class="required">*</i></label>
@@ -108,16 +109,18 @@ button:hover{
             <option value="SGS">South Georgia and the South Sandwich Islands</option>       
           </select>
         </div>
-        </div>        
+        </div>  -->       
         
         <div class="col-md-12">
-          <label>Street Address <i class="required">*</i></label>
-          <input type="text" name="houseadd" placeholder="House number and street name" required class="form-control">
+           <div class="form-group">        
+            <label>Address <i class="required">*</i></label>
+            <input type="text" name="address" placeholder="House number and street name" required class="form-control" value="<?=$user_row->add_ress?>">
+          </div>          
         </div>          
         
           
 
-        <div class="col-md-12">
+       <!--  <div class="col-md-12">
             <div class="form-group">        
 
           <label>Town / City <i class="required">*</i></label>
@@ -130,25 +133,24 @@ button:hover{
           <label>State / County <i class="required">*</i></label>
           <input type="text" name="city" class="form-control"> 
         </div>
-        </div>        
+        </div>       -->  
         <div class="col-md-12">
-            <div class="form-group">        
-
+          <div class="form-group">        
           <label>Postcode / ZIP <i class="required">*</i></label>
-          <input type="text" name="city" class="form-control"> 
+          <input type="text" name="pincode" class="form-control" required value="<?=$postal_code['postal_code']?>"> 
         </div>
         </div>        
         <div class="col-md-12">
             <div class="form-group">        
 
           <label>Mobile no. <i class="required">*</i></label>
-          <input type="tel" name="phone" class="form-control"> 
+          <input type="tel" name="phone" class="form-control" required value="<?=$user_row->s_phoneno?>"> 
         </div>
         </div>        
         <div class="col-md-12">
             <div class="form-group">    
               <label>Email Address <i class="required">*</i></label>
-              <input type="email" name="email" class="form-control"> 
+              <input type="email" name="email" class="form-control" required value="<?=$user_row->s_user_email?>"> 
               <br>
             </div>
         </div>
@@ -182,11 +184,11 @@ button:hover{
         <td>Free shipping</td>
       </tr>
     </table><br>    
-    <div>
+   <!--  <div>
       <input type="radio" name="dbt" value="cd"> Cash on Delivery
-    </div>
+    </div> -->
     <div>
-      <input type="radio" name="dbt" value="cd"> Online <span>
+      <input type="radio" name="dbt" value="cd" checked> Online <span>
       <img src="https://www.logolynx.com/images/logolynx/c3/c36093ca9fb6c250f74d319550acac4d.jpeg" alt="" width="50">
       </span>
     </div>

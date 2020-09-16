@@ -16,12 +16,26 @@ class Payment extends CI_Controller {
 		$this->form_validation->set_rules('fname','Name','trim|required');
 		$this->form_validation->set_rules('email','Email','trim|required|valid_email');
 		$this->form_validation->set_rules('phone','Mobile No','trim|required|numeric|min_length[10]|max_length[10]');		
+		$this->form_validation->set_rules('pincode','Pincode','trim|required|numeric');		
+		$this->form_validation->set_rules('address','Address','trim|required');		
 		/*$this->form_validation->set_rules('amount','Amount','trim|required|numeric');*/
 		
 		if ($this->form_validation->run() == true) {
 			$name	=	$this->input->post('fname');
 			$email	=	$this->input->post('email');
 			$phone	=	$this->input->post('phone');
+			$address=	$this->input->post('address');
+
+			$this->user_model->set_user_meta($this->session->user_id,array('postal_code'=>$this->input->post('pincode')));
+
+			$comp_id	=	$this->session->companey_id;
+			$user_id	=	$this->session->user_id;
+
+			$this->db->where('companey_id',$comp_id);
+			$this->db->where('pk_i_admin_id',$user_id);
+			$this->db->set('add_ress',$address);
+			$this->db->update('tbl_admin');
+			
 			$this->load->library('cart');
 			$amount	=	$this->cart->total();			
 
@@ -58,9 +72,9 @@ class Payment extends CI_Controller {
 				echo "Something went wrong!";
 			}			
 		}else{
-
+			$this->session->set_flashdata('message', validation_errors());
+			redirect('buy/checkout');
 		}
-
 	}
 	public function index(){
 		$data = array();

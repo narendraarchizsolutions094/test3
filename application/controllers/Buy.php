@@ -10,10 +10,26 @@ class Buy extends CI_Controller {
 		$this->load->library('cart');
     }
 	public function thankyou(){
-		echo "<pre>";
-		print_r($_POST);
-		echo "</pre>";
+		$res = $_GET;
+		$ins_arr = array(
+					'uid'   => $this->session->user_id,
+					'status'=> $res['payment_status'],
+					'txnid' => $res['payment_id'],					
+					'comp_id' => $this->session->companey_id,					
+					'method' => 'instamojo',					
+					'response'   => json_encode($_GET)
+				  ); 
+		if($res['payment_status'] != 'Failed'){
+			$this->placeorder();		
+			$ins_arr['ins_id']	= $_SESSION['orderno'];
+			$this->db->insert('payment_history',$ins_arr);			
+			redirect(base_url("order/invoice/".$ordno), "refresh");			
+		}else{
+			$this->db->insert('payment_history',$ins_arr);
+			redirect('buy/checkout');
+		}
 	}
+
 	public function index(){
 		
 		$data['title'] = 'Product List';
@@ -39,7 +55,7 @@ class Buy extends CI_Controller {
 		
 	}
 
-	public function checkout(){
+	public function checkout(){		
 		$data = array();
 		$prodcart = array();
 		$carts = $this->cart->contents();
@@ -50,7 +66,12 @@ class Buy extends CI_Controller {
 				$prodcart[$prodid]	= $crd['qty'];
 			}
 			
-		}
+		} 
+		$this->load->model('user_model');
+		$uid = $this->session->user_id;
+		$data['uid'] = $uid;
+		$data['user_row']	=	$this->user_model->read_by_id($uid);
+		$data['postal_code'] = $this->user_model->get_user_meta($uid,array('postal_code'));
 		if (empty($prodcart)) {
 			$data['content'] = '<br><div class="alert alert-danger text-center"><h2>Your Cart in empty.</h2></div>';
 		}else{
@@ -116,7 +137,8 @@ class Buy extends CI_Controller {
 		if(!empty($carts)){
 			foreach($carts as $ind => $crt){
 				
-				$arr[] = array("ord_no"  		=> $ordno,
+				$arr[] = array(
+							  "ord_no"  		=> $ordno,
 							 "cus_id"  		=> $this->session->user_id,
 							 "enq_no"  		=> "",
 							 "warehouse"    => "",
