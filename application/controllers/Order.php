@@ -540,8 +540,8 @@ class Order extends CI_Controller {
         
         // Render the HTML as PDF
         $this->dompdf->render();
-        
-        $this->dompdf->stream($data["report"]->fname."_report.pdf", array("Attachment"=>0));
+        ob_end_clean();
+        $this->dompdf->stream($ordno."pdf", array("Attachment"=>0));
 		
 		
 	}
