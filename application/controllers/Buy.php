@@ -175,7 +175,7 @@ class Buy extends CI_Controller {
 			$_SESSION['page'] = "invoice";
 			$_SESSION['orderno'] = $ordno;
 		}else{
-			$this->session->set_flashdata('exception', "Failed to  saved");
+			$this->session->set_flashdata('exception', "Failed to create order");
 		}		
 	}	
 	
