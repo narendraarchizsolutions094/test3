@@ -1109,7 +1109,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                   </li>
                   <?php
                   }
-                  if (user_access('460')) { ?>
+                  if (in_array(460,$module) || in_array(461,$module) || in_array(462,$module) ||  in_array(463,$module)) { ?>
                   <li class="<?php echo (($segment1 == "order") ? "active" : null) ?>">
                     <a href="<?php echo base_url("order/"); ?>">
                       <i class="fa fa-list" style="color:#fff;font-size:20px;background:#008080;padding:7px;border-radius:4px;width:30px;"></i> &nbsp;<?php echo 'Order'; ?>                        
