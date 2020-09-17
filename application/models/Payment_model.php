@@ -296,4 +296,7 @@ class Payment_model extends CI_Model {
 		$this->db->insert('payment_history',$data);
 		return $this->db->insert_id();
 	}
+	public function save_payment($data){
+		$this->db->insert('payment',$data);
+	}
 }	

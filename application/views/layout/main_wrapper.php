@@ -1127,14 +1127,14 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                   }
                   ?>
                  <?php                        
-                  if(!empty($category)) {       ?>
+                  if(!empty($prod_category)) {       ?>
                   <li class="<?php //echo (($segment1 == 'buy' && empty($_GET)) ? "active" : null) ?>">
                      <a href="javascript:void(0)">
                     Filter by category 
                      </a>
                   </li> 
                   <?php
-                      foreach($category as $ind => $ctg) {              
+                      foreach($prod_category as $ind => $ctg) {              
                         if(!empty($ctg['sub'])){
                           $treemenu  =  true;
                         }else{

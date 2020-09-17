@@ -18,6 +18,7 @@ class Payment extends CI_Controller {
 		$this->form_validation->set_rules('phone','Mobile No','trim|required|numeric|min_length[10]|max_length[10]');		
 		$this->form_validation->set_rules('pincode','Pincode','trim|required|numeric');		
 		$this->form_validation->set_rules('address','Address','trim|required');		
+		$this->form_validation->set_rules('dbt','Mode of Payment','trim|required');		
 		/*$this->form_validation->set_rules('amount','Amount','trim|required|numeric');*/
 		
 		if ($this->form_validation->run() == true) {
@@ -25,6 +26,8 @@ class Payment extends CI_Controller {
 			$email	=	$this->input->post('email');
 			$phone	=	$this->input->post('phone');
 			$address=	$this->input->post('address');
+
+			$this->session->set_userdata('payment_mode',$this->input->post('dbt'));
 
 			$this->user_model->set_user_meta($this->session->user_id,array('postal_code'=>$this->input->post('pincode')));
 
@@ -39,39 +42,49 @@ class Payment extends CI_Controller {
 			$this->load->library('cart');
 			$amount	=	$this->cart->total();			
 
-			$ch = curl_init();
-			curl_setopt($ch, CURLOPT_URL, 'https://www.instamojo.com/api/1.1/payment-requests/');
-			curl_setopt($ch, CURLOPT_HEADER, FALSE);
-			curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-			curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
-			curl_setopt($ch, CURLOPT_HTTPHEADER,
-			            array("X-Api-Key:ca7a223092cfaf2317db5fc00fc83502",
-			                  "X-Auth-Token:b6224670c580b470d7951eaf697e2e9f"));
-			$payload = Array(
-			    'purpose' => 'Product Purchage',
-			    'amount' => $amount,
-			    'phone' => $phone,
-			    'buyer_name' => $name,
-			    'redirect_url' => base_url().'buy/thankyou',
-			    'send_email' => true,
-			    'webhook' => 'http://www.example.com/webhook/',
-			    'send_sms' => true,
-			    'email' => $email,
-			    'allow_repeated_payments' => false
-			);
-			curl_setopt($ch, CURLOPT_POST, true);
-			curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($payload));
-			$response = curl_exec($ch);
-			curl_close($ch); 
-			$decodedText = html_entity_decode($response);
-			$myArray = array(json_decode($response, true));
-			if (!empty($myArray[0]["payment_request"]["longurl"])) {
-				$longu = $myArray[0]["payment_request"]["longurl"];				
-				header('Location:' .$longu);
+			if ($this->input->post('dbt') == 2) {
+				$ch = curl_init();
+				curl_setopt($ch, CURLOPT_URL, 'https://test.instamojo.com/api/1.1/payment-requests/');
+				curl_setopt($ch, CURLOPT_HEADER, FALSE);
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+				curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
+				curl_setopt($ch, CURLOPT_HTTPHEADER,
+				            array("X-Api-Key:test_5603801f39914d976259aa00c95",
+				                  "X-Auth-Token:test_9e3ee171a7cd5845c5bb6ee030c"));
+				$payload = Array(
+				    'purpose' => 'Product Purchage',
+				    'amount' => $amount,
+				    'phone' => $phone,
+				    'buyer_name' => $name,
+				    'redirect_url' => base_url().'buy/thankyou',
+				    'send_email' => true,
+				    'webhook' => 'http://www.example.com/webhook/',
+				    'send_sms' => true,
+				    'email' => $email,
+				    'allow_repeated_payments' => false
+				);
+				curl_setopt($ch, CURLOPT_POST, true);
+				curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($payload));
+				$response = curl_exec($ch);
+				curl_close($ch); 
+				echo $response.'test';
+				$decodedText = html_entity_decode($response);
+				$myArray = array(json_decode($response, true));
+				if (!empty($myArray[0]["payment_request"]["longurl"])) {
+					$longu = $myArray[0]["payment_request"]["longurl"];				
+					header('Location:' .$longu);
+				}else{
+					//echo $response;
+					echo "Something went wrong!";
+				}	
 			}else{
-				//echo $response;
-				echo "Something went wrong!";
-			}			
+				$this->load->model('order_model');
+				$ord_no	=	$this->order_model->placeorder();
+				if($ord_no){
+					$this->session->set_flashdata('message','Your order is successfully placed');
+					redirect(base_url("order/invoice/".$ord_no), "refresh");			
+				}
+			}		
 		}else{
 			$this->session->set_flashdata('message', validation_errors());
 			redirect('buy/checkout');
@@ -415,12 +428,13 @@ class Payment extends CI_Controller {
 	public function savepayment(){
 		
 		
-		$arr = array("pay" 			 => $this->input->post("payment", true),
+		$arr = array(
+					"pay" 			 => $this->input->post("payment", true),
 					"balance" 		 => $this->input->post("balance", true),
 					"pay_mode" 		 => $this->input->post("paymode", true),
 					"transaction_no" => $this->input->post("transactiono", true),
 					"status" 		=> $this->input->post("status", true),
-					"pay_date" 		=> $this->cleandate("paydate"),
+					"pay_date" 		=> $this->cleandate("paydate"), 
 					"next_pay"		=> $this->cleandate("nextpay"),
 					"remark" 		=> $this->input->post("remarks", true),
 				//	"advance_pay"	 => (!empty($_POST["advbalance"])) ? $this->input->post("advbalance", true) : 0,
@@ -437,7 +451,7 @@ class Payment extends CI_Controller {
 			$arr["prev_balance"] = (!empty($_POST["prevbalance"])) ? $this->input->post("prevbalance", true) : 0;
 				
 			$arr["ord_id"] 		 = $this->input->post("orderid", true);
-			$arr["tot_pay"]		 = $this->input->post("orderid", true);
+			$arr["tot_pay"]		 = $this->input->post("totalpay", true);
 			$arr["company"]      = $this->session->companey_id;		
 			$arr["cust_id"] 	 = $this->input->post("customer", true);
 			$arr["added_by"]	 = $this->session->user_id;

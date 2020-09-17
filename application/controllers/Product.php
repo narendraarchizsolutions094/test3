@@ -41,20 +41,26 @@ class Product extends CI_Controller {
 		if(isset($_POST['proname'])){			
 			$this-> saveProduct();
 		}
+
 		$data['title'] = 'Update Product';
 		$data['product'] = $this->Product_model->productdet($prodno);		
 		$data['category'] = $this->db->select("*")->where("comp_id", $this->session->companey_id)->get("tbl_category")->result();	
 		$data['subcategory'] = $this->db->select("*")->where("comp_id", $this->session->companey_id)->where("cat_id", $data["product"]->category)->get("tbl_subcategory")->result();		
 		$currdate = date("Y-m-d");
-		$data['scheme'] = $this->db->select("*")->where("comp_id", $this->session->companey_id)->where("from_date <= '$currdate' and to_date >= '$currdate'")->get("tbl_scheme")->result();		
+		$data['scheme'] = $this->db->select("*")->where("comp_id", $this->session->companey_id)->where("from_date <= '$currdate' and to_date >= '$currdate'")->get("tbl_scheme")->result();	
+			//print_r($data['scheme']);
 		$data['process'] = array();//$this->db->select("*")->where("comp_id", $this->session->companey_id)->get("tbl_product")->result();
 		$this->load->model('User_model');
 		$this->load->model('warehouse_model');
 		$data['seller_list'] = $this->User_model->read('Seller');
         $data['brand_list'] = $this->warehouse_model->brand_list();
         $data['pid'] = $prodno;
+
+
 		$data['content'] = $this->load->view('product/add-product', $data, true);
+		//echo $data['content'];
         $this->load->view('layout/main_wrapper', $data);		
+        
 	}	
 	public function addorder(){
 		

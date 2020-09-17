@@ -183,12 +183,13 @@ p{
         <td>Shipping</td>
         <td>Free shipping</td>
       </tr>
-    </table><br>    
-   <!--  <div>
-      <input type="radio" name="dbt" value="cd"> Cash on Delivery
-    </div> -->
+    </table>
+    <br>
+     <div>
+      <input type="radio" name="dbt" value="1"> Cash on Delivery
+    </div> 
     <div>
-      <input type="radio" name="dbt" value="cd" checked> Online <span>
+      <input type="radio" name="dbt" value="2" checked> Online <span>
       <img src="https://www.logolynx.com/images/logolynx/c3/c36093ca9fb6c250f74d319550acac4d.jpeg" alt="" width="50">
       </span>
     </div>

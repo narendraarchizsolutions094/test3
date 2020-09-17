@@ -223,10 +223,10 @@
 									}
 									if(!empty($scheme)) {
 											foreach($scheme as $ind => $scm) {
-											$qtytxt = "";
+											/*$qtytxt = "";
 											if($scm->qty > 0){
 												$qtytxt = "QTY ";	
-											}
+											}*/
 											?><option value = "<?php echo $scm->id ?>" <?php echo ($schm == $scm->id) ? "selected" : ""; ?>><?php echo "QTY ".$scm->coupan." - ".$scm->discount; ?></option><?php		
 											}	
 										} ?>

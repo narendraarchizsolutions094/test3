@@ -361,6 +361,51 @@ class Order_model extends CI_Model {
 						->result();	
 		
 	}
+
+	public function placeorder(){		
+		$ordno = "ORD".strtotime(date("Y-m-d h:i:s"));		
+		$carts = $this->cart->contents();
+		$ret   = false; 
+		if(!empty($carts)){
+			foreach($carts as $ind => $crt){				
+				$arr[] = array(
+							 "ord_no"  		=> $ordno,
+							 "cus_id"  		=> $this->session->user_id,
+							 "enq_no"  		=> "",
+							 "payment_mode" => $this->session->payment_mode,
+							 "warehouse"    => "",
+							 "product"		=> $crt['id'],
+							 "conf_delv"    => 0,
+							 "pend_delv"	=> $crt['qty'],
+							 "delvr_date"	=> NULL,
+							 "next_date"    => NULL,
+							 "scheme"		=> 0,
+							 "quantity"		=> $crt['qty'],
+							 "price"		=> $crt['price'],		
+							 "offer"        => $crt['discount'],
+							 "tax"        	=> 0,
+							 "details"      => "",
+							 "disc_meth"    => "",
+							 "disc_price"   => $crt['discount'],
+							 "disc_type"    => "",
+							 "other_price"  => 0,
+							 "total_price"  => $crt['price'],
+							 "addedby"      => $this->session->user_id,
+							 "order_date"   => date("Y-m-d h:i:s"),
+							 "status"       => 1,
+							 "company"      => $this->session->companey_id,
+							 "ip"			=> ""
+							 );		
+			}
+			$ret = $this->db->insert_batch("tbl_order", $arr);
+		}
+		if($ret){
+			$this->cart->destroy();			
+			return $ordno;
+		}else{
+			return false;
+		}	
+	}
 	
 	
 }

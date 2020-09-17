@@ -20,9 +20,35 @@ class Buy extends CI_Controller {
 					'response'   => json_encode($_GET)
 				  ); 
 		if($res['payment_status'] != 'Failed'){
+			$amt	=	$this->cart->total();
 			$this->placeorder();		
+			
 			$ins_arr['ins_id']	= $ordno = $_SESSION['orderno'];
 			$this->db->insert('payment_history',$ins_arr);			
+			
+			$arr = array(
+					"pay" 			 => $amt,
+					"balance" 		 => 0,
+					"pay_mode" 		 => 1, // Online
+					"transaction_no" => $res['payment_id'],
+					"status" 		 => 1,
+					"pay_date" 		 => date('Y-m-d'), 
+					"next_pay"		 => '',
+					"remark" 		 => '',
+					);	
+
+			$arr["prev_balance"] = 0;							
+			$arr["ord_id"] 		 = $ordno;
+			$arr["tot_pay"]		 = $amt;
+			$arr["company"]      = $this->session->companey_id;		
+			$arr["cust_id"] 	 = $this->session->user_id;
+			$arr["added_by"]	 = $this->session->user_id;
+			$arr["created_date"] = date("Y-m-d h:i:s");
+			$arr["approve"] = 1;
+
+			$this->load->model('payment_model');
+			$this->payment_model->save_payment($arr);
+
 			redirect(base_url("order/invoice/".$ordno), "refresh");			
 		}else{
 			$this->db->insert('payment_history',$ins_arr);
@@ -49,7 +75,7 @@ class Buy extends CI_Controller {
 			
 		}
 		$this->load->model('sell_model');
-  		$data['category'] = $this->sell_model->subCategory();
+  		$data['prod_category'] = $this->sell_model->subCategory();
 		$data['incart']  = $prodcart;
 		$data['content'] = $this->load->view('sell/product-list', $data, true);
         $this->load->view('layout/main_wrapper', $data);
@@ -129,19 +155,17 @@ class Buy extends CI_Controller {
 		
 	}
 	
-	public function placeorder(){
-		
-		$ordno = "ORD".strtotime(date("Y-m-d h:i:s"));
-		
+	public function placeorder(){		
+		$ordno = "ORD".strtotime(date("Y-m-d h:i:s"));		
 		$carts = $this->cart->contents();
 		$ret   = false; 
 		if(!empty($carts)){
-			foreach($carts as $ind => $crt){
-				
+			foreach($carts as $ind => $crt){				
 				$arr[] = array(
-							  "ord_no"  		=> $ordno,
+							 "ord_no"  		=> $ordno,
 							 "cus_id"  		=> $this->session->user_id,
 							 "enq_no"  		=> "",
+							 "payment_mode" => $this->session->payment_mode,
 							 "warehouse"    => "",
 							 "product"		=> $crt['id'],
 							 "conf_delv"    => 0,
@@ -166,9 +190,7 @@ class Buy extends CI_Controller {
 							 "ip"			=> ""
 							 );		
 			}
-			
 			$ret = $this->db->insert_batch("tbl_order", $arr);
-			
 		}
 		if($ret){
 			$this->cart->destroy();
