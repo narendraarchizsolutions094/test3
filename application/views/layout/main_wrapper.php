@@ -688,7 +688,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                <div class="navbar-custom-menu" id="mob">
                   <ul class="nav navbar-nav">   
                       <?php if($this->session->userdata('companey_id')!=67 && $this->session->userdata('user_right')!=214){ ?> 
-                    <li  class="dropdown dropdown-user master-search-nav" style="position: absolute;z-index: 74;right: 185px;">
+                    <li  class="dropdown dropdown-user master-search-nav" style="position: absolute;z-index: 74;right: 200px;">
                       <br />
                       <?php echo form_open(base_url("master_lead_search"), array("class" => "form-inline", "method"=> "GET",'id'=>'master_search_form')); ?>
                         <div class="input-group">               
