@@ -54,6 +54,10 @@ tr>td:nth-child(2){
   text-align: right;
   color: #52ad9c;
 }
+tr>td:nth-child(3){
+  text-align: right;
+  color: #52ad9c;
+}
 td{
   border-bottom: 1px solid #dadada;
   padding: 12px 25px 12px 0;
@@ -167,16 +171,36 @@ p{
   <div class="Yorder">
     <table style="width: 100%;">
       <tr>
-        <th colspan="2">Your order</th>
+        <th>Your order</th>
+        <th>Price (GST)</th>        
+        <th>Total</th>
       </tr>
       <?php
       $cartarr = $this->cart->contents();
       if (!empty($cartarr)) {
+        $total = 0;
         foreach($cartarr as $ind => $cart) {
+          $gst  = !empty($cart['gst'])?$cart['gst']:'0';
           ?>
           <tr>
             <td><?=$cart['name']?> x <?=$cart['qty']?>(Qty)</td>
-            <td>₹ <?=$cart['price']*$cart['qty']?></td>
+            <td>₹ <?=$cart['price']*$cart['qty'].'('.$gst.'%)'?></td>
+            
+              <?php
+              $gst_price = 0;
+              if (!empty($cart['gst'])) {
+                $gst_price  = ($cart['gst']/100)*($cart['price']*$cart['qty']);                
+              }
+              ?>
+            
+            <td>
+              ₹ 
+              <?php 
+                $p_total = ($cart['price']*$cart['qty'])+$gst_price;
+                echo $p_total;
+                $total +=$p_total;
+              ?>              
+            </td>
           </tr>
           <?php
         }
@@ -184,12 +208,10 @@ p{
       ?>
       <tr>
         <td>Subtotal</td>
-        <td>₹ <?=$this->cart->total()?></td>
+        <td></td>
+        <td>₹ <?=$total?></td>
       </tr>
-      <tr>
-        <td>Shipping</td>
-        <td>Free shipping</td>
-      </tr>
+      
     </table>
     <br>
     <label class="part_payment"><input type="checkbox" name="part_payment" value="1"> Part Payment</label>

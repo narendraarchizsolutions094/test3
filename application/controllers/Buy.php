@@ -275,7 +275,8 @@ class Buy extends CI_Controller {
 							'qty'       => 1,
 							'price'     => $product->price,
 							'name'		=> $product->country_name,
-							'discount'  => (isset($_POST['disc'])) ? $this->input->post("disc", true) : 0 
+							'discount'  => (isset($_POST['disc'])) ? $this->input->post("disc", true) : 0,
+							'gst'		=> $product->gst
 							);
 			$newcart = array();	
 			$tqty = $qty  = 1;
