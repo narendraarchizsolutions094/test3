@@ -270,10 +270,15 @@ class Buy extends CI_Controller {
 					$newprdarr[$prd->id] = $prd;	
 				}
 			}
-		
+			
+			$gst_price = 0;
+			if ($product->gst>0) {
+				$gst_price = $product->price*($product->gst/100);				
+			}
+
 			$data = array('id'      => $prodno,
 							'qty'       => 1,
-							'price'     => $product->price,
+							'price'     => $product->price+$gst_price,
 							'name'		=> $product->country_name,
 							'discount'  => (isset($_POST['disc'])) ? $this->input->post("disc", true) : 0,
 							'gst'		=> $product->gst
@@ -298,7 +303,11 @@ class Buy extends CI_Controller {
 								
 							}	
 							$data['discount'] = $disc;
-							$data['price'] = $product->price - $disc;		
+			
+							if (!empty($product->gst)) {
+								$gst_price =	$product->price*($product->gst/100);		
+							}
+							$data['price'] = $product->price - $disc+$gst_price;		
 						}
 						
 						$qty 		=   $crt['qty'];
@@ -335,12 +344,10 @@ class Buy extends CI_Controller {
 					$this->cart->insert($data);
 				}
 				$cardcontent = $this->cart->contents();
-				$prdarr = array("status" => $status,"prodid" => $prodno, "product" => $product->country_name, "price" => $product->total_price * ($qty + $pqty) , "qty" => $qty + $pqty,"total" => count($cardcontent));
+				$prdarr = array("status" => $status,"prodid" => $prodno, "product" => $product->country_name, "price" => $data['price'] * ($qty + $pqty) , "qty" => $qty + $pqty,"total" => count($cardcontent));
 				
 			}else{
-				
-		
-				$prdarr = array("status" => 1,"prodid" => $prodno, "product" => $product->country_name, "price" => $product->total_price * ($qty + $pqty), "qty" => $data['qty'],"total" => count($cardcontent) + 1);
+				$prdarr = array("status" => 1,"prodid" => $prodno, "product" => $product->country_name, "price" => $data['price'] * ($qty + $pqty), "qty" => $data['qty'],"total" => count($cardcontent) + 1);
 				$this->cart->insert($data);	
 			}				
 			$alltotal = 0;
