@@ -344,10 +344,22 @@ class Buy extends CI_Controller {
 					$this->cart->insert($data);
 				}
 				$cardcontent = $this->cart->contents();
-				$prdarr = array("status" => $status,"prodid" => $prodno, "product" => $product->country_name, "price" => $data['price'] * ($qty + $pqty) , "qty" => $qty + $pqty,"total" => count($cardcontent));
+
+				$gst_price = 0;
+				if ($product->gst>0) {
+					$gst_price = $product->price*($product->gst/100);				
+				}
+				
+				$prdarr = array("status" => $status,"prodid" => $prodno, "product" => $product->country_name, "price" => $gst_price * ($qty + $pqty) , "qty" => $qty + $pqty,"total" => count($cardcontent));
 				
 			}else{
-				$prdarr = array("status" => 1,"prodid" => $prodno, "product" => $product->country_name, "price" => $data['price'] * ($qty + $pqty), "qty" => $data['qty'],"total" => count($cardcontent) + 1);
+
+				$gst_price = 0;
+				if ($product->gst>0) {
+					$gst_price = $product->price*($product->gst/100);				
+				}
+
+				$prdarr = array("status" => 1,"prodid" => $prodno, "product" => $product->country_name, "price" => $gst_price * ($qty + $pqty), "qty" => $data['qty'],"total" => count($cardcontent) + 1);
 				$this->cart->insert($data);	
 			}				
 			$alltotal = 0;
