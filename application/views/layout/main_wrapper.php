@@ -495,14 +495,15 @@ if($root=='https://student.spaceinternationals.com'){  ?>
 
 /* search icon style start */
   .master-search{
-    opacity: 0;
+    /*opacity: 0;*/
+    display: none!important;
     -webkit-transition: all .5s ease;
     -moz-transition: all .5s ease;
     transition: all .5s ease;
     width:0px;
   }
   .master-search.expanded {
-    opacity: 1;
+    display: block!important;
   }
 .dropdown-large {
   position: static !important;
