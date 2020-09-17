@@ -172,44 +172,25 @@ p{
     <table style="width: 100%;">
       <tr>
         <th>Your order</th>
-        <th>Price (GST)</th>        
-        <th>Total</th>
+        <th>Price with GST</th>                
       </tr>
       <?php
       $cartarr = $this->cart->contents();
-      if (!empty($cartarr)) {
-        $total = 0;
+      if (!empty($cartarr)) {        
         foreach($cartarr as $ind => $cart) {
           $gst  = !empty($cart['gst'])?$cart['gst']:'0';
           ?>
           <tr>
             <td><?=$cart['name']?> x <?=$cart['qty']?>(Qty)</td>
             <td>₹ <?=$cart['price']*$cart['qty'].'('.$gst.'%)'?></td>
-            
-              <?php
-              $gst_price = 0;
-              if (!empty($cart['gst'])) {
-                $gst_price  = ($cart['gst']/100)*($cart['price']*$cart['qty']);                
-              }
-              ?>
-            
-            <td>
-              ₹ 
-              <?php 
-                $p_total = ($cart['price']*$cart['qty'])+$gst_price;
-                echo $p_total;
-                $total +=$p_total;
-              ?>              
-            </td>
           </tr>
           <?php
         }
       }
       ?>
       <tr>
-        <td>Subtotal</td>
-        <td></td>
-        <td>₹ <?=$total?></td>
+        <td>Subtotal</td>        
+        <td>₹ <?=$this->cart->total()?></td>
       </tr>
       
     </table>
