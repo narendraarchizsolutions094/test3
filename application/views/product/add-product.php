@@ -197,7 +197,7 @@
 							</div>
 							<div class="col-md-4">
 									<div class="form-group">
-										<label>Tax</label>
+										<label>GST</label>
 										<input type="text" class="form-control" id="tax" placeholder="Enter tax" name="tax" value="<?php echo ($isedit == true) ? $product->tax : set_value("tax"); ?>">
 									</div>
 									

@@ -13,6 +13,7 @@ class Payment extends CI_Controller {
 		}
 	}
 	public function make_payment_mojo(){
+		$this->session->unset_userdata('part_payment_amount');
 		$this->form_validation->set_rules('fname','Name','trim|required');
 		$this->form_validation->set_rules('email','Email','trim|required|valid_email');
 		$this->form_validation->set_rules('phone','Mobile No','trim|required|numeric|min_length[10]|max_length[10]');		
@@ -29,7 +30,11 @@ class Payment extends CI_Controller {
 
 			$this->session->set_userdata('payment_mode',$this->input->post('dbt'));
 
-			$this->user_model->set_user_meta($this->session->user_id,array('postal_code'=>$this->input->post('pincode')));
+			$this->user_model->set_user_meta($this->session->user_id,array(
+				'postal_code'=>$this->input->post('pincode'),
+				'gstin' => $this->input->post('gstin')
+				)
+			);
 
 			$comp_id	=	$this->session->companey_id;
 			$user_id	=	$this->session->user_id;
@@ -39,8 +44,13 @@ class Payment extends CI_Controller {
 			$this->db->set('add_ress',$address);
 			$this->db->update('tbl_admin');
 			
-			$this->load->library('cart');
-			$amount	=	$this->cart->total();			
+			if ($this->input->post('part_payment') == 1) {
+				$amount = $this->input->post('part_payment_amount');				
+				$this->session->set_userdata('part_payment_amount',$amount);
+			}else{
+				$this->load->library('cart');
+				$amount	=	$this->cart->total();							
+			}
 
 			if ($this->input->post('dbt') == 2) {
 				$ch = curl_init();
@@ -67,7 +77,7 @@ class Payment extends CI_Controller {
 				curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($payload));
 				$response = curl_exec($ch);
 				curl_close($ch); 
-				echo $response.'test';
+				//echo $response.'test';
 				$decodedText = html_entity_decode($response);
 				$myArray = array(json_decode($response, true));
 				if (!empty($myArray[0]["payment_request"]["longurl"])) {

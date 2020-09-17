@@ -66,7 +66,7 @@ p{
   padding-left: 25px;
 }
 .Yorder>div{
-  padding: 15px 0; 
+  padding: 11px 0; 
 }
 
 .checkout-form-button{
@@ -137,7 +137,7 @@ p{
         <div class="col-md-12">
           <div class="form-group">        
           <label>Postcode / ZIP <i class="required">*</i></label>
-          <input type="text" name="pincode" class="form-control" required value="<?=$postal_code['postal_code']?>"> 
+          <input type="text" name="pincode" class="form-control" required value="<?=!empty($user_meta['postal_code'])?$user_meta['postal_code']:''?>"> 
         </div>
         </div>        
         <div class="col-md-12">
@@ -151,6 +151,13 @@ p{
             <div class="form-group">    
               <label>Email Address <i class="required">*</i></label>
               <input type="email" name="email" class="form-control" required value="<?=$user_row->s_user_email?>"> 
+              
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">    
+              <label>GSTIN No (optional)</label>
+              <input type="text" name="gstin" class="form-control" value="<?=!empty($user_meta['gstin'])?$user_meta['gstin']:''?>"> 
               <br>
             </div>
         </div>
@@ -185,6 +192,12 @@ p{
       </tr>
     </table>
     <br>
+    <label class="part_payment"><input type="checkbox" name="part_payment" value="1"> Part Payment</label>
+    <div class="part_payment_amount">
+      <label>Amount : ₹</label>
+      <input type="number" name="part_payment_amount" style="width: 30%;" min="10" max="<?=$this->cart->total()?>">
+    </div>
+    <br>
      <div>
       <input type="radio" name="dbt" value="1"> Cash on Delivery
     </div> 
@@ -193,9 +206,33 @@ p{
       <img src="https://www.logolynx.com/images/logolynx/c3/c36093ca9fb6c250f74d319550acac4d.jpeg" alt="" width="50">
       </span>
     </div>
+
     <button type="submit" class="checkout-form-button">Place Order</button>
   </div><!-- Yorder -->
  </div>
  </div>
 </div>
   </form>
+<script type="text/javascript">
+  $(".part_payment_amount").hide();
+  $("input[name='part_payment']").on('change',function(){
+    if($("input[name='part_payment']:checked").val() == 1){
+      $(".part_payment_amount").show();
+    }else{
+      $(".part_payment_amount").hide();
+    }
+  });
+  $("input[name='dbt']").on('change',function(){
+    if($(this).val() == 1){
+      $(".part_payment_amount").hide();
+      $(".part_payment").hide();
+      $("input[name='part_payment_amount']").val('');
+      $("input[name='part_payment']").attr('checked',false);
+    }else{
+      $(".part_payment").show();      
+      if($("input[name='part_payment']:checked").val() == 1){
+        $(".part_payment_amount").show();
+      }
+    }
+  });
+</script>

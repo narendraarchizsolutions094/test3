@@ -25,10 +25,10 @@ class Buy extends CI_Controller {
 			
 			$ins_arr['ins_id']	= $ordno = $_SESSION['orderno'];
 			$this->db->insert('payment_history',$ins_arr);			
-			
+			$pay = !empty($this->session->part_payment_amount)?$this->session->part_payment_amount:$amt;
 			$arr = array(
-					"pay" 			 => $amt,
-					"balance" 		 => 0,
+					"pay" 			 => $pay,
+					"balance" 		 => $amt-$pay,
 					"pay_mode" 		 => 1, // Online
 					"transaction_no" => $res['payment_id'],
 					"status" 		 => 1,
@@ -98,7 +98,7 @@ class Buy extends CI_Controller {
 		$uid = $this->session->user_id;
 		$data['uid'] = $uid;
 		$data['user_row']	=	$this->user_model->read_by_id($uid);
-		$data['postal_code'] = $this->user_model->get_user_meta($uid,array('postal_code'));
+		$data['user_meta'] = $this->user_model->get_user_meta($uid,array('postal_code','gstin'));
 		if (empty($prodcart)) {
 			$data['content'] = '<br><div class="alert alert-danger text-center"><h2>Your Cart in empty.</h2></div>';
 		}else{
