@@ -60,7 +60,7 @@ class Buy extends CI_Controller {
 		
 		$data['title'] = 'Product List';
 		$data['limit'] = 8;
-		$data['product_list'] = $this->Product_model->productdetlist(1);
+		$data['product_list'] = $this->Product_model->productdetlist(1,1);
 		$data["totalprod"]        = $this->Product_model->productdetlist(2);
 		//$data['category'] = $this->sell_model->subCategory();
 		$carts = $this->cart->contents();

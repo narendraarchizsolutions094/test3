@@ -62,7 +62,7 @@ class Product_model extends CI_Model {
 
     }
 	
-	public function productdetlist($act = "1") {
+	public function productdetlist($act = "1",$status=0) {
 		$limit   = 8;
 		$offset  = 0;
 		$this->load->model('common_model');
@@ -83,6 +83,9 @@ class Product_model extends CI_Model {
 					if(isset($_GET['c'])){
 						
 						$this->db->where("tbl_proddetails.category", $_GET['c']);
+					}
+					if ($status) {
+						$this->db->where("tbl_product_country.status", 1);											
 					}
 					
 					if(isset($_GET['page'])){
