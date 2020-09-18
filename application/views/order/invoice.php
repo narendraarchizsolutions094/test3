@@ -100,7 +100,7 @@
 																$p = $qty * (float)$price;
 																echo $ptotal = $p+($p*($ord->tax/100)  - (float)$ord->offer); 	
 															}else{
-																echo $ptotal = ($price*$qty)+(($qty * (float)$price)  - (float)$ord->offer); 
+																echo $ptotal = (($qty * (float)$price)  - (float)$ord->offer); 
 															}
 															?>
 														</td>
