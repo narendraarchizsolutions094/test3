@@ -97,7 +97,8 @@
 														<td class="text-right"><i class ="fa fa-rupee"></i>
 															<?php 
 															if ($ord->tax) {
-																echo $ptotal = (($qty * (float)$price)*($ord->tax/100))  - (float)$ord->offer; 	
+																$p = $qty * (float)$price;
+																echo $ptotal = $p*($ord->tax/100)  - (float)$ord->offer; 	
 															}else{
 																echo $ptotal = ($qty * (float)$price)  - (float)$ord->offer; 
 															}
