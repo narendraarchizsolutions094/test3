@@ -161,7 +161,7 @@
 										if ($disc) {
 											$t_price = $disc-$prd->price;
 										}else{
-											$t_price = $prd->price;
+											$t_price = 0;
 										}
 										?>	
 											<input type = "hidden" class = "tot-price" value = "<?php echo $t_price; ?>">
