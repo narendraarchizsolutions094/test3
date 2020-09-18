@@ -72,7 +72,7 @@ class Product_model extends CI_Model {
 					$this->db->join("tbl_proddetails", "tbl_proddetails.prodid = tbl_product_country.id", "LEFT");
 					$this->db->join("tbl_scheme", "tbl_scheme.id=tbl_proddetails.scheme", "LEFT");
 					$this->db->where("tbl_product_country.comp_id", $this->session->userdata('companey_id'));
-					if ($this->session->user_right != 201 && $status == 0) {
+					if ($status == 0) {
 						$this->db->where_in("tbl_proddetails.seller_id",$retuser);
 					}
 					
