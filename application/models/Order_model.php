@@ -34,7 +34,7 @@ class Order_model extends CI_Model {
 		}		
 		$this->db->where("ord.company", $this->session->companey_id);
 		$this->db->from("tbl_order ord");
-		if(!empty($sdate) && !empty($edate))
+		if(!empty($sdate) && !empty($edate)) 
 		{
 			$this->db->where("order_date BETWEEN '$sdate' AND '$edate' ", NULL, FALSE );
 		}		
@@ -360,13 +360,13 @@ class Order_model extends CI_Model {
 							 "quantity"		=> $crt['qty'],
 							 "price"		=> $crt['price'],		
 							 "offer"        => $crt['discount'],
-							 "tax"        	=> 0,
+							 "tax"        	=> $crt['gst'],
 							 "details"      => "",
 							 "disc_meth"    => "",
 							 "disc_price"   => $crt['discount'],
 							 "disc_type"    => "",
 							 "other_price"  => 0,
-							 "total_price"  => $crt['price'],
+							 "total_price"  => $crt['price']*$crt['qty'],
 							 "addedby"      => $this->session->user_id,
 							 "order_date"   => date("Y-m-d h:i:s"),
 							 "status"       => 1,
