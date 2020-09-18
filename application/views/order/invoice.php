@@ -35,7 +35,7 @@
 													<th class="text-center" style="width: 1%">Confirm Order</th>
 													<th class="text-center" style="width: 1%">Pending Order</th>
 													<th class="text-right">Unit Price</th>
-													<th class="text-right">Others</th>
+													<!-- <th class="text-right">Others</th> -->
 													<th class="text-right">GST</th>
 													<th class="text-right">Discount</th>
 													<th class="text-right">Sub Total</th>
@@ -47,10 +47,8 @@
 														
 													<tr>
 														<td class="text-center"><?php echo $ind + 1; ?></td>
-													
 														<td><?php echo $ord->product_name; ?></td>
 														<td class="text-center"><?php echo $qty = $ord->quantity; ?></td>
-														
 														<td class="text-center" style="width: 1%">
 														<?php
 																$cnt = ""; 
@@ -59,21 +57,14 @@
 															$pending = $ord->quantity;
 															$isanyconf = false;
 															if(!empty($delivery[$ord->product])){
-																
 																$delvarr = $delivery[$ord->product];
 																$isanyconf = true;
-																?>
-														
-																
-																<?php
-																
-																
-																foreach($delvarr as $ind => $dlv){
-																	
+															?>																
+															<?php
+															foreach($delvarr as $ind => $dlv){
 																	$totconfrm = $totconfrm + $dlv->delv_qty;
 																	$cnt .= "<li><a href = '#'>".$dlv->delivery_date." : <span class = 'badge badge-warning'>".$dlv->delv_qty."</span></a></li>";
-																}
-															
+																}															
 															$pending = $ord->quantity - $totconfrm;
 															?>
 																		<div class="btn-group">
@@ -100,17 +91,13 @@
 														</td>
 														<td class="text-center" style="width: 1%"><?php echo $pending; ?></td>
 														<td class="text-right"><i class ="fa fa-rupee"></i> <i ><?php echo $price = $ord->price; ?></td>
-														<td class="text-right"><?php echo $oprice = $ord->other_price; ?></td>
+														<!-- <td class="text-right"><?php echo $oprice = $ord->other_price; ?></td> -->
 														<td class="text-right"><?php echo  (!empty($ord->gst)) ? $ord->gst."%" : ""; ?></td>
 														<td class="text-right"><?php echo $ord->offer; ?></td>
 														<td class="text-right"><i class ="fa fa-rupee"></i>
-
 															<?php 
-
-															//echo 'qty'.$qty.'price'.$price.'other_price'.$ord->other_price.'offer'.$ord->offer;
-															echo $ptotal = ($qty * (float)$price) + (float)$ord->other_price - (float)$ord->offer; ?>
+															echo $ptotal = ($qty * (float)$price)  - (float)$ord->offer; ?>
 														</td>
-														
 													</tr>		
 														
 											<?php	 $total = $total  + $ptotal;
@@ -119,7 +106,7 @@
 												} ?>
 								
 												<tr>
-													<td colspan="9" class="font-weight-bold text-uppercase text-right">Total</td>
+													<td colspan="8" class="font-weight-bold text-uppercase text-right">Total</td>
 													<td class="font-weight-bold text-right h4"> <i class ="fa fa-rupee"></i>  <?php echo $total; ?></td>
 												</tr>
 											</tbody></table>

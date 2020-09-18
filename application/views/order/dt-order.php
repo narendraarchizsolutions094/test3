@@ -1,70 +1,37 @@
 <?php   $rows = array();
-		if(!empty($neword)){
-			
+		if(!empty($neword)){			
 				$srno = 0; 
-			
 				foreach($neword as $ordno => $allord){
-					
-					$ord    = $allord[0]; 
-					
-					
+					$ord    = $allord[0]; 					
 					$cols   = array();
 					$srno   = ++$srno;
-					$total  = count($allord);
-					$image  = (!empty($ord->main_img)) ? base_url($ord->main_img)  : base_url("assets/images/profile/33.png"); 
-					
+					$total  = count($allord);								
 					$cols[] = $srno;
 					if (user_access(461)) {
 						$cols[] = "<a href = '".base_url('order/view/'.$ord->ord_no)."'>".$ord->ord_no."</a>";
 					}else{
 						$cols[] = $ord->ord_no;
-					}
-				
-					//buttonwrap($arr, $total, $col)
-					$cols[] = (!empty($ord->product_name)) ? ucwords($ord->product_name)  : " ";
-					//$cols[] = (!empty($ord->quantity)) ? $ord->	quantity : " ";
-					
+					}									
+					$cols[] = (!empty($ord->product_name)) ? ucwords($ord->product_name)  : " ";					
 					$qtyarr = $prdarr = $payarr = $dlvarr =  array();
 					$totconfrm = 0;	
-					$pending   = $totprice = $totqty = 0;
-				/*	foreach($allord as $ind => $oprd){
-						
-						if(!empty($dlv[$oprd->id])){
-							
-							foreach($dlv[$oprd->id] as $ind => $dl){
-								
-								$totconfrm = $totconfrm + $dl->delv_qty;
-							}
-							$pending = $ord->quantity - $totconfrm;	
-						}else{
-							$pending  = $pending + $oprd->quantity;
-						}
-						$totprice = $totprice + $oprd->price;
-						$totqty   = $totqty   +  $oprd->quantity;
-					} */
+					$pending   = $totprice = $totqty = $disc = 0;				
 					$totprice = $ord->price;
 					$totqty   =  $ord->quantity;
-					//$pending = $totqty - $totconfrm;
 					if(!empty($ord->quantity)){
-					
-						
 						$cols[]= $totqty;	
-				
-						
 					}else{
-						$cols[]=  " ";
+						$cols[]=  "";
 					}
-					
-					if(!empty($ord->total_price)){
-						
-						$cols[] = 'Discount : '.$ord->offer.' Total : '.$ord->price;
-						
-						
-						
+					if(!empty($ord->price)){	
+						if ($ord->offer) {
+							$disc =	'Discount '.$ord->offer;				
+						}					
+						$cols[] = $disc.' Total : '.$ord->price;						
 					}else{
 						$cols[] = " "; 	
 					}
-					/*	if($ord->pay_mode == 1){
+						/*if($ord->pay_mode == 1){
 							$mode = "Online";	
 						}else if($ord->pay_mode == 2){
 							$mode =  "Account Transfer";	
@@ -89,45 +56,32 @@
 						$paymode  =  " - ";
 						$payprice = $balance =  0;
 						$balance  = $totprice;
-						if(!empty($pay[$ord->id])){
-							
+						if(!empty($pay[$ord->id])){							
 							foreach($pay[$ord->id] as $ind => $py){
-								
-							
-									
 								if($py->pay_mode == 1){
 									$paymode = "Online";	
 								}else if($py->pay_mode == 2){
 									$paymode = "Cash";
 								}else if($py->pay_mode == 3){
-									
 									$paymode = "DD/Check";
-									
 								}else if($py->pay_mode == 4){
-									
 									$paymode =  "Account Transfer";	
 								}else{
 									$paymode =  $py->pay_mode;
 								} 
 								if($py->status == 1){
-									
 									$paysts = "Complete";
-									
 								}else if($py->status == 2){
-									
 									$paysts = "waiting";
 								}else{
 									$paysts =  $py->status;
 								}
-								
 								$payprice  = $payprice  + $py->pay;
 							}
-							
 							$balance = $totprice - $payprice;
 						}else{
 							$paymode = false;
 						}
-						
 						if(!empty($paymode)) {
 						$cols[]  =	'<span class = "badge badge-info">Mode : '.$paymode.'</span><br /><span class = "badge badge-warning">
 										Status : '.$paysts.'</span>';

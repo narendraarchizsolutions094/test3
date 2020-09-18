@@ -5,7 +5,7 @@ class Order extends CI_Controller {
     public function __construct() {
 		
 		 parent::__construct();
-		
+		 
 		$this->load->model("order_model");
 	}
 	
@@ -200,29 +200,22 @@ class Order extends CI_Controller {
 	}
 	
 	public function loadorders(){
-		
-		
-		//$this->load->model("datatable_model");
-		
+		//$this->load->model("datatable_model");		
 		$ordarr  	  = $this->order_model->orders(1);
-		//echo $this->db->last_query();
-		//$data["pay"]  = $this->payment_model->getpayments();
-		
-		//$data["dlv"] = $this->order_model-> getAllDilevery();
 
+		/*echo $this->db->last_query();
+		exit();*/
+		//$data["pay"]  = $this->payment_model->getpayments();		
+		//$data["dlv"] = $this->order_model-> getAllDilevery();
 		$neword = array();
 		if(!empty($ordarr)){
-			foreach($ordarr as $ind => $ord){
-				
+			foreach($ordarr as $ind => $ord){				 
 				$neword[$ord->ord_no][] = $ord;
 			}
 		}
 		$data["neword"] = $neword;
-		//$data["permission"] = $this->getpermission();
-		
+		//$data["permission"] = $this->getpermission();		
 		$this->load->view("order/dt-order", $data);	
-		
-		
 	}
 	
 	

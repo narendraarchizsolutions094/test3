@@ -174,67 +174,7 @@ input[name=lead_stages]{
 												</tr>
 											</thead>
 											<tbody>
-												<?php if(!empty($orders) && 0){
-												   $sl=1;
-                                                  foreach($orders as $ind =>  $ord){
-												?>
-												<tr>
-													<td><?= $ind + 1; ?></td>
-													<td data-th='Order No'><?php echo $ord->ord_no; ?></td>
-													<td data-th='Product'><?= ucwords($ord->product_name)  ?></td>
-													<td data-th='Quantity'>
-														<?= $ord->quantity; ?>
-													</td>
-													<td data-th='Price'><?= $ord->price; ?>
-													</td>
-													<td data-th='Payment'>
-													<span class = "badge badge-info">
-														Mode : <?php 
-												/*	if($ord->pay_mode == 1){
-														echo "Online";	
-													}else if($ord->pay_mode == 2){
-														echo "Account Transfer";	
-													}else if($ord->pay_mode == 3){
-														echo "By Check";	
-													}else if($ord->pay_mode == 4){
-														echo "By Cash";	
-													} */ ?>
-													</span><br />
-														<span class = "badge badge-warning">
-															Status : <?php  
-														/*	if($ord->pay_status == 1){
-																echo "Pending";
-															}else{
-																echo "Complete";
-															} */ ?>
-														</span>
-													</td>
-													<td data-th='Pay'><?php // $ord->balance; ?></td>
-													<td data-th='Balance'><?php echo $ord->customer;  ?></td>
-													<td data-th='Delivery Date'><?php // date("d,M Y", strtotime($ord->delivery_date)); ?></td>
-													<td data-th='Date'><?php // date("d, M Y", strtotime($ord->order_date)); ?></td>
-													<td data-th='Status'>
-													<?php if($ord->status  == 1 ){
-															echo "Request";
-													}else if($ord->status  == 2 ){
-															echo "Waiting";
-													}else if($ord->status  == 3 ){
-															echo "Half Confirm";
-													}else if($ord->status  == 4 ){
-															echo "Full Confirm";
-													}else if($ord->status  == 5 ){
-															echo "Reject";
-													} ?>
-													</td>
-													<td data-th='Action'>												
-														<a href="<?php echo base_url("order/update/".urlencode(base64_encode(base64_encode(@$ord->ord_no)))); ?>" class="btn btn-info">
-														<i class="fe fe-edit" data-toggle="tooltip" title="" data-original-title="Edit"></i></a>
-														<a href="<?php echo urlencode(base64_encode(base64_encode($ord->id))); ?>"  class="btn btn-danger delete-stocks">
-														<i class="fe fe-trash" data-toggle="tooltip" title="" data-original-title="Delete"></i></a>
-													</td>
-												</tr>
-												<?php  $sl++; }
-											}?>
+											
 											</tbody>
 										</table>
 									</div>

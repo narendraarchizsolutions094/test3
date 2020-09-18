@@ -29,63 +29,40 @@ class Order_model extends CI_Model {
 	public function orders($act = "1",$sdate='',$edate=''){
 		$this->load->model('common_model');
 		$retuser   = $this->common_model->get_categories($this->session->user_id);
-
-		if($act == 1){
-			
+		if($act == 1){			
 			$this->db->select("ord.*,concat(usr.s_display_name, ' ', usr.last_name) as customer,usr.region,prd.country_name as product_name");
-		}
-		
+		}		
 		$this->db->where("ord.company", $this->session->companey_id);
-	
-		
 		$this->db->from("tbl_order ord");
 		if(!empty($sdate) && !empty($edate))
 		{
 			$this->db->where("order_date BETWEEN '$sdate' AND '$edate' ", NULL, FALSE );
-		}
-		
-		if(isset($_GET["s"])){
-			
-			$status = $this->input->get("s");
-			
-			if($status == "unseen"){
-				
+		}		
+		if(isset($_GET["s"])){			
+			$status = $this->input->get("s");			
+			if($status == "unseen"){				
 				$this->db->where("ord.confirm_order",0);
 				$this->db->where("ord.status", 1);
-			}
-			
+			}			
 		}
-		if(isset($_GET["d"])){
-			
-			$tday = $this->input->get("d");
-			
-			if($tday == "dtoday"){
-				
+		if(isset($_GET["d"])){			
+			$tday = $this->input->get("d");			
+			if($tday == "dtoday"){				
 				$this->db->where("ord.conf_delv", date("Y-m-d"));
-			}else if($tday == "tpending"){
-				
+			}else if($tday == "tpending"){				
 				$this->db->where("ord.pend_delv", date("Y-m-d"));
-			}
-			
-		}
-		
-		$this->db->where_in("ord.addedby",$retuser);
-
-		
-		if($act == 1) {
-			
+			}			
+		}		
+		$this->db->where_in("ord.addedby",$retuser);		
+		if($act == 1) {			
 		//	$this->db->join('order_prdct ordprd','ord.id=ordprd.ord_id','left');
 			$this->db->join('tbl_product_country prd','prd.id=ord.product','left');
-			$this->db->join('tbl_admin usr','usr.pk_i_admin_id=ord.cus_id','left');
-		
-			$ordcol = array("ord.id","prd.country_name");
-			
+			$this->db->join('tbl_admin usr','usr.pk_i_admin_id=ord.cus_id','left');		
+			$ordcol = array("ord.id","prd.country_name");			
 			$this->order_by($ordcol);
-			$this->limit();
-			
+			$this->limit();			
 			return $this->db->get()->result();	
-		}else{
-			
+		}else{			
 			return $this->db->count_all_results();
 		}
 	}
