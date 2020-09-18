@@ -177,9 +177,9 @@
 				<div class = "col-md-7">
 					<div class = "row">
 						<div class = "col-md-12">
-					<p style="font-size: 32px;"><?php echo $product->country_name; ?>					
+					<p style="font-size: 32px;"><?php echo !empty($product->country_name)?$product->country_name:''; ?>					
 					</p> 					
-					<h1><i class = "fa fa-rupee"></i> <?php echo $product->price; ?></h1>					
+					<h1><i class = "fa fa-rupee"></i> <?php echo !empty($product->price)?$product->price:''; ?></h1>					
 					</div>
 					</div>
 					<div class = "row">
