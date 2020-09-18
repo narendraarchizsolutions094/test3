@@ -14,9 +14,12 @@
 							<div class="col-md-12">
 								<div class="card">
 									<div class="card-body">
-										<div class="d-flex">
-										
-											<div class="text-right ml-auto">
+										<div class="row">
+											<div class="col-md-6 col-sm-12 col-xs-12">
+												<img style="width: 26%;" src="https://thecrm360.com/new_crm/assets/images/Lalantop_logo.jpg" class="m-r-sm">
+											</div>
+
+											<div class="text-right ml-auto col-md-6">
 												<h2 class="mb-1"> <?php echo $ord->ord_no; ?></h2>
 												<p class="mb-1"><span class="font-weight-semibold">Order Date :</span> <?php echo date("d, F Y", strtotime($ord->order_date)); ?> </p>
 											
