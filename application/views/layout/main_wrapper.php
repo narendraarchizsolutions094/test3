@@ -351,7 +351,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
       };
       div{
         font-family: 'Montserrat';
-      };
+      };      
   </style>
       
 </head>
@@ -542,7 +542,10 @@ if($root=='https://student.spaceinternationals.com'){  ?>
   width:85%;
 }
 /* search icon style end */
-
+.cart-qty{
+  width: 40px;
+  text-align: center;
+}
 </style>
 
 
@@ -780,7 +783,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                   </a>
                   <span class="badge badge-notify"  id = "nav-cart-count"><?php echo count($cartarr); ?></span>
                  
-              <div class="dropdown-menu dropdown-menu-large" style="width: 380px;">   
+              <div class="dropdown-menu dropdown-menu-large" style="width: 280px;">   
                   <ul class ="cart-dropdown-menu"  id = "cart-nav-menu" style = "padding:0px;list-style:none;max-height: 400px;
     overflow-y: auto;">
                 <?php 
@@ -794,8 +797,9 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                       ?><li id = "cart-li-<?php echo $cart['id']; ?>" > 
                     
                       <div class = "cart-items"><h4><a href = ""> <?php echo $cart['name'] ?></a></h4>
-                          <p><a href = ""> Price : <i class = "fa fa-price"></i> <?php echo  $cart['price']." X ".$cart['qty']; ?> = <i class = "fa fa-rupee"></i> <?php echo $cart['price']*$cart['qty']  ?> </a> 
-                            
+                          <p>
+                            <a href = "javascript:void(0)"> Price : <i class = "fa fa-price"></i> <?php echo  $cart['price']." X <input type='number' class='cart-qty' value=".$cart['qty']." min='1'>";?> = <i class = "fa fa-rupee"></i> <?php echo $cart['price']*$cart['qty']  ?> </a> 
+                            <a href="" class="fa fa-trash btn btn-danger btn-sm pull-right"></a>
                           </p>
                           <hr />
                           </div>
