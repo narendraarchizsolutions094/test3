@@ -169,8 +169,8 @@ class Product extends CI_Controller {
 			$insarr = array("country_name"  => $this->input->post("proname", true),
 							 "price"     	=> $this->input->post("price", true),
 							 "hsn_sac"	    => $this->input->post("hsn_code", true),
-							 "status"       => $this->input->post("tax", true),
-							 "gst"			=> $this->input->post("status", true),
+							 "status"       => $this->input->post("status", true),
+							 "gst"			=> $this->input->post("tax", true),
 							 "created_by"   => $this->session->user_id,
 							 "updated_date" => date("Y-m-d h:i:s"),
 							 );

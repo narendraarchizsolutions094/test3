@@ -260,17 +260,17 @@
 							</div-->
 
 
-						<!-- 	<div class="col-md-6 text-center">
+						 	<div class="col-md-6">
 								<label>Status</label>
-								<label>
+
 								<input type="radio" name="status" value="1" checked="" <?=($isedit==1)?(($product->status==1)?'checked':''):'' ?>>
 								<span>Active</span>
-								</label>
-								<label>
-								<input type="radio" name="status" value="0" <?=($isedit==1)?(($product->status==0)?'checked':''):'' ?>>
+
+								
+								<input type="radio" name="status" value="2" <?=($isedit==1)?(($product->status==0)?'checked':''):'' ?>>
 								<span>Inactive</span>
-								</label>
-							</div> -->
+								
+							</div> 
 							<div class = "col-md-12 text-center">
 								<?php if($isedit == true) { ?>
 								<input type = "hidden" name = "productid" value = "<?php echo $product->sb_id; ?>">

@@ -52,7 +52,7 @@
 					 <th>Price</th>
                      <th>Stock</th>
                      <th>Added Date</th>
-                     <!-- <th class="sorting wid-10" tabindex="0" rowspan="1" colspan="1">Status</th> -->
+                     <th class="sorting wid-10" tabindex="0" rowspan="1" colspan="1">Status</th> 
 
                      <th class="sorting wid-10" tabindex="0" rowspan="1" colspan="1">Actions</th>
 
@@ -73,17 +73,17 @@
                      <td data-th='Price'> <i class = "fa fa-rupee"></i> <?php echo $row->price; ?></td>
             				 <td data-th='Stock'>Stock</td>
             				 <td data-th='Added Date'><?=$row->created_date?></td>
-            				 <!-- <td data-th='Status'> -->
+            				 <td data-th='Status'> 
                       <?php
-                      /*if (!empty($row->status)) {
+                      if (!empty($row->status)) {
                         if ($row->status == 1) {
                           echo "Active";
                         }else if ($row->status == 2){
                           echo "Inactive";
                         }
-                      }*/
+                      }
                       ?>
-                    <!--  </td> -->
+                     </td>
                      <td class="center" data-th='Actions'>
                       <?php if (user_access(471)) { ?>            
                         <a  class="edit btn btn-xs btn-primary" href = "<?php echo base_url("product/editproduct/".$row->id); ?>"><i class="ti-pencil"></i></a> 
