@@ -155,8 +155,7 @@
 										<?php 
 										$plus = "cart-plus";
 										} ?>	
-									<i class="fa fa-<?php echo $plus; ?>" aria-hidden="true"></i> 
-										
+										<i class="fa fa-<?php echo $plus; ?>" aria-hidden="true"></i> 
 											</a>
 										<?php } 																				
 										?>	
