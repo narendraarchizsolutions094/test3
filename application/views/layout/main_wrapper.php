@@ -781,7 +781,8 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                   <span class="badge badge-notify"  id = "nav-cart-count"><?php echo count($cartarr); ?></span>
                  
               <div class="dropdown-menu dropdown-menu-large">   
-                  <ul class ="cart-dropdown-menu"  id = "cart-nav-menu" style = "padding:0px;list-style:none;">
+                  <ul class ="cart-dropdown-menu"  id = "cart-nav-menu" style = "padding:0px;list-style:none;max-height: 400px;
+    overflow: scroll;">
                 <?php 
                 
                 
