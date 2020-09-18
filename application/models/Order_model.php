@@ -168,7 +168,7 @@ class Order_model extends CI_Model {
 	
 	public function getOrders($ordno){
 		
-	 	$this->db->select("ord.*,prd.id as prdid,prd.country_name as product_name, prddet.image,prddet.stock");
+	 	$this->db->select("ord.*,prd.id as prdid,prd.country_name as product_name,prddet.price as unit_price, prddet.image,prddet.stock");
 				$this->db->where("ord.company", $this->session->companey_id);
 				$this->db->where("ord.ord_no", $ordno);
 				

@@ -90,7 +90,7 @@
 														
 														</td>
 														<td class="text-center" style="width: 1%"><?php echo $pending; ?></td>
-														<td class="text-right"><i class ="fa fa-rupee"></i> <i ><?php echo $price = $ord->price; ?></td>
+														<td class="text-right"><i class ="fa fa-rupee"></i> <i ><?php echo $price = $ord->unit_price; ?></td>
 														<!-- <td class="text-right"><?php echo $oprice = $ord->other_price; ?></td> -->
 														<td class="text-right"><?php echo  (!empty($ord->tax)) ? $ord->tax."%" : ""; ?></td>
 														<td class="text-right"><?php echo $ord->offer; ?></td>
