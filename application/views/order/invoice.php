@@ -98,9 +98,9 @@
 															<?php 
 															if ($ord->tax) {
 																$p = $qty * (float)$price;
-																echo $ptotal = $p*($ord->tax/100)  - (float)$ord->offer; 	
+																$ptotal = $p+($p*($ord->tax/100)  - (float)$ord->offer); 	
 															}else{
-																echo $ptotal = ($qty * (float)$price)  - (float)$ord->offer; 
+																$ptotal = ($price*$qty)+(($qty * (float)$price)  - (float)$ord->offer); 
 															}
 															?>
 														</td>
