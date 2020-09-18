@@ -158,8 +158,9 @@
 									<i class="fa fa-<?php echo $plus; ?>" aria-hidden="true"></i> 
 										
 											</a>
-										<?php } ?>	
-											<input type = "hidden" class = "tot-price" value = "<?php echo $disc - $prd->total_price; ?>">
+										<?php } 										
+										?>	
+											<input type = "hidden" class = "tot-price" value = "<?php echo $prd->price-$disc; ?>">
 							
 											</li>
 									<li>	
@@ -353,19 +354,19 @@
 		
 	}
 	
-	$(document).on("click", ".add-to-cart", function(){
-		
-		var currobj = $(this);
-	
+	$(document).on("click", ".add-to-cart", function(){		
+		var currobj = $(this);	
 		$.ajax({
 			url  	: "<?php echo base_url('buy/addtocart'); ?>",
 			type 	: "post",
-			data 	: {product:$(this).data("prodid"),qty:"1",disc:$(this).closest("li").find(".tot-price").val()},
+			data 	: {
+				product:$(this).data("prodid"),
+				qty:"1",
+				disc:$(this).closest("li").find(".tot-price").val()
+			},
 			success	: function(resp){
-				var jresp = JSON.parse(resp);
-				
-				if(jresp.status == 1){
-					
+				var jresp = JSON.parse(resp);				
+				if(jresp.status == 1){					
 					//<span class="minus-quantity"> - </span>
 					currobj.find("i.fa").addClass("fa-cart-plus").removeClass("fa-cart");
 					currobj.append('<span class="cart-quantity">1</span>');
