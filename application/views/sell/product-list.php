@@ -158,8 +158,13 @@
 										<i class="fa fa-<?php echo $plus; ?>" aria-hidden="true"></i> 
 											</a>
 										<?php } 																				
+										if ($disc) {
+											$t_price = $disc-$prd->price;
+										}else{
+											$t_price = $prd->price;
+										}
 										?>	
-											<input type = "hidden" class = "tot-price" value = "<?php echo $disc-$prd->price; ?>">
+											<input type = "hidden" class = "tot-price" value = "<?php echo $t_price; ?>">
 							
 											</li>
 									<li>	
