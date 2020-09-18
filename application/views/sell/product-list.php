@@ -158,9 +158,9 @@
 									<i class="fa fa-<?php echo $plus; ?>" aria-hidden="true"></i> 
 										
 											</a>
-										<?php } 										
+										<?php } 																				
 										?>	
-											<input type = "hidden" class = "tot-price" value = "<?php echo $prd->price-$disc; ?>">
+											<input type = "hidden" class = "tot-price" value = "<?php echo $disc-$prd->price; ?>">
 							
 											</li>
 									<li>	
