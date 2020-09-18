@@ -798,7 +798,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                     
                       <div class = "cart-items"><h4><a href = ""> <?php echo $cart['name'] ?></a></h4>
                           <p>
-                            <a href = "javascript:void(0)"> Price : <i class = "fa fa-price"></i> <?php echo  $cart['price']." X <input type='number' class='cart-qty' value=".$cart['qty']." min='1' data-prodid=".$card['id']." ";?> = <i class = "fa fa-rupee"></i> <?php echo $cart['price']*$cart['qty']  ?> </a> 
+                            <a href = "javascript:void(0)"> Price : <i class = "fa fa-price"></i> <?php echo  $cart['price']." X <input type='number' class='cart-qty' value=".$cart['qty']." min='1' data-prodid=".$cart['id']." ";?> = <i class = "fa fa-rupee"></i> <?php echo $cart['price']*$cart['qty']  ?> </a> 
                             <a href="" class="fa fa-trash btn btn-danger btn-sm pull-right"></a>
                           </p>
                           <hr />
