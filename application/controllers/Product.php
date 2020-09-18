@@ -13,7 +13,7 @@ class Product extends CI_Controller {
 		$data['title'] = 'Product List';
 		
 		$data['product_list'] = $this->Product_model->productdetlist();
-	
+		//echo $this->db->last_query();
 		$data['content'] = $this->load->view('product/prod-det-list', $data, true);
         $this->load->view('layout/main_wrapper', $data);
 		

@@ -98,7 +98,9 @@ class Product_model extends CI_Model {
 					if($act == 2 ) {
 						return $this->db->count_all_results();
 					}else{
-						 $this->db->limit($limit, $offset);
+						if ($status == 1) {
+							$this->db->limit($limit, $offset);							
+						}
 						return		$this->db->get()->result();
 					}
 				
