@@ -150,14 +150,16 @@ class Task extends CI_Controller {
             
 
             $taskStatus = 'Pending';             
+            
             $taskstatus_list = $this->Taskstatus_model->taskstatuslist(); 
+            /*
             foreach($taskstatus_list as $val){
                 if($each->task_status == $val->taskstatus_id){
                     $taskStatus = $val->taskstatus_name;
                     break;
                 }
-            }
-            $row[] =  "<a class='btn btnStatus ".$taskStatus."'>".$taskStatus." </a>";
+            }*/
+            $row[] =  "<a class='btn'>".!empty($each->task_status)?$each->task_status:$taskStatus." </a>";
             ?>
             <?php
                 $actions = '<a data-toggle="modal" type="button" title="Add Target" data-target="#task_edit" onclick="get_modal_content('.$each->resp_id.')" ><i class="fa fa-edit btn btn-primary btn-sm"></i></a>';

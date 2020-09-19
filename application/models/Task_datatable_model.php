@@ -11,7 +11,7 @@ class Task_datatable_model extends CI_Model {
     var $column_order = array('query_response.task_date','','query_response.task_remark','tbl_admin.s_display_name','','query_response.mobile'); //set column field database for datatable orderable
 
     //var $column_search = array('query_response.query_id','query_response.upd_date', 'query_response.task_remark','admin.user_name','query_response.mobile'); //set column field database for datatable searchable 
-    var $column_search = array('query_response.task_date','query_response.task_remark','tbl_admin.s_display_name','query_response.mobile',"CONCAT(enquiry.name_prefix,' ',enquiry.name,' ',enquiry.lastname)",'enquiry.name'); //set column field database for datatable searchable 
+    var $column_search = array('query_response.task_date','query_response.task_remark','tbl_admin.s_display_name','query_response.mobile',"CONCAT(enquiry.name_prefix,' ',enquiry.name,' ',enquiry.lastname)",'enquiry.name','tbl_taskstatus.taskstatus_name'); //set column field database for datatable searchable 
 
     var $order = array('query_response.resp_id' => 'desc'); // default order 
  
@@ -26,16 +26,17 @@ class Task_datatable_model extends CI_Model {
         // $all_reporting_ids    =   $this->common_model->get_categories($this->session->user_id);
         $this->db->from($this->table);
 		
-        $user_role = $this->session->user_role;
+        $user_role = $this->session->user_role; 
         $user_id = $this->session->user_id;      
 
         $where = '';
-        $this->db->select("query_response.resp_id,query_response.query_id,query_response.upd_date,query_response.task_date,query_response.task_time,query_response.task_remark,query_response.subject,query_response.task_status,query_response.mobile,tbl_admin.s_display_name as user_name");
+        $this->db->select("query_response.resp_id,query_response.query_id,query_response.upd_date,query_response.task_date,query_response.task_time,query_response.task_remark,query_response.subject,query_response.task_status,query_response.mobile,tbl_admin.s_display_name as user_name,tbl_taskstatus.taskstatus_name as task_status");
        
             
       
         $this->db->join('tbl_admin', 'tbl_admin.pk_i_admin_id=query_response.create_by', 'left');
         $this->db->join('enquiry', 'enquiry.Enquery_id=query_response.query_id', 'left');
+        $this->db->join('tbl_taskstatus', 'tbl_taskstatus.taskstatus_id=query_response.task_status', 'left');
 
         // if($user_role==3 || $user_role==2){
         // }else{
