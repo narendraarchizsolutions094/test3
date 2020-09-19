@@ -386,8 +386,8 @@
 				
 					var tprice = parseInt(jresp.price) * parseInt(jresp.qty);
 					$("#cart-li-"+jresp.prodid).html('<div class="cart-items"><h4><a href="">'+jresp.product+' </a></h4>'+
-									'<p><a href=""> Price : <i class="fa fa-rupee"></i> '+jresp.price+' X '+jresp.qty+' = <i class="fa fa-rupee"></i> '+tprice+' </a>'+ 
-									'</p></div>');
+									'<p><a href=""> Price : <i class="fa fa-rupee"></i> '+jresp.price+' X '+'<input type="number" value="'+jresp.qty+'" min=1 class="cart-qty" data-prodid='+jresp.prodid+'>'+' = <i class="fa fa-rupee"></i> '+tprice+' </a>'+ 
+									'<a href="javascript:void(0)" onclick="remove_cart_item('+jresp.prodid+')" class="fa fa-trash btn btn-danger btn-sm pull-right remove-item-cart"></a></p></div>');
 				}
 				
 			}
