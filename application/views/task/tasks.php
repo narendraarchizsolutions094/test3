@@ -194,7 +194,7 @@
             "url": "<?=base_url().'task/task_load'?>",
             "type": "POST",
             "data": {
-              //"filter_user_id": $("#user_id_fortask").val()
+              "filter_user_id": $("#user_id_fortask").val()
             }
         },
         "createdRow": function( row, data, dataIndex ) {            
