@@ -208,7 +208,7 @@
     } );
 
     $("#user_id_fortask").on('change',function(){
-      id = $(this).val
+      id = $(this).val();
       var events = {
         url: "<?php echo base_url().'task/get_calandar_feed'?>",
         type: 'POST',
