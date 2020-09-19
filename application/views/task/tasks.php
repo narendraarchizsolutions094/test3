@@ -182,7 +182,7 @@
       });
     
     }
-  $(document).ready(function() {
+  
 
     var table  = $('#content_tabss').DataTable( {         
         "processing": true,
@@ -225,7 +225,7 @@
       $('#calendar').fullCalendar('rerenderEvents');      
       table.ajax.reload();
    }
-    } );
+    
 
 </script>
 
