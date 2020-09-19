@@ -197,6 +197,10 @@
               "filter_user_id": $("#user_id_fortask").val()
             }
         },
+        "columnDefs": [ {
+        "targets": -1,
+        "orderable": false
+        } ],
         "createdRow": function( row, data, dataIndex ) {            
             var th = $("table>th");            
             l = $(".mobile-optimised").find('th').length;
