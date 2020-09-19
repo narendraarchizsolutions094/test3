@@ -134,6 +134,9 @@
 <br>
 </div> 
 </div>
+<br>
+<br>
+<br>
 
 
 <div id="task_edit" class="modal fade in" role="dialog">
@@ -249,7 +252,7 @@
                 start: start.format(),
                 end: end.format()
             },
-            success: function(doc) {
+            success: function(doc) { 
                 var events = doc;                
                 callback(events);
             }
