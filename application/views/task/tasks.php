@@ -206,7 +206,6 @@
             }                       
         }        
     } );
-    } );
 
    function changes_menu(id){ 
       var events = {
@@ -226,6 +225,7 @@
       $('#calendar').fullCalendar('rerenderEvents');      
       table.ajax.reload();
    }
+    } );
 
 </script>
 
