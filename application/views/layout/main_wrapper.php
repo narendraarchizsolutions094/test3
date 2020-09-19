@@ -799,7 +799,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                       <div class = "cart-items"><h4><a href = ""> <?php echo $cart['name'] ?></a></h4>
                           <p>
                             <a href = "javascript:void(0)"> Price : <i class = "fa fa-price"></i> <?php echo  $cart['price']." X <input type='number' class='cart-qty' value=".$cart['qty']." min='1' data-prodid=".$cart['id']." ";?> = <i class = "fa fa-rupee"></i> <?php echo $cart['price']*$cart['qty']  ?> </a> 
-                            <a href="" class="fa fa-trash btn btn-danger btn-sm pull-right"></a>
+                            <a href="javascript:void(0)" class="remove-item-cart" onclick="remove_cart_item(<?=$cart['id']?>)" class="fa fa-trash btn btn-danger btn-sm pull-right"></a>
                           </p>
                           <hr />
                           </div>
@@ -1626,7 +1626,42 @@ if($root=='https://student.spaceinternationals.com'){  ?>
     <script src="<?=base_url().'assets/js/sweetalert2@9.js'?>"></script>
 
          <script>
-    $(document).ready(function(){
+  $(document).ready(function(){
+
+    $(".cart-qty").on('change',function(){
+      $.ajax({
+          url   : "<?php echo base_url('buy/addtocart'); ?>",
+          type  : "post",
+          data  : {
+            product:$(this).data("prodid"),
+            qty :$(this).val()
+          },
+          success : function(resp){
+            var jresp = JSON.parse(resp);
+            
+            if(jresp.status == 1){
+            }
+          }
+        });
+    });
+
+    function remove_cart_item(pid){
+      $.ajax({
+          url   : "<?php echo base_url('buy/addtocart'); ?>",
+          type  : "post",
+          data  : {
+            product:$(this).data("prodid"),
+            qty :0
+          },
+          success : function(resp){
+            var jresp = JSON.parse(resp);            
+            if(jresp.status == 1){
+              $("#cart-li-"+$pid).remove();
+            }
+          }
+        });
+    }
+    
 
 /*
 master search start
