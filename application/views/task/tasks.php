@@ -208,7 +208,8 @@
     } );
 
     $("#user_id_fortask").on('change',function(){
-      id = $(this).val();
+      id = $(this).val
+      var events = {
         url: "<?php echo base_url().'task/get_calandar_feed'?>",
         type: 'POST',
         data: {
@@ -223,11 +224,11 @@
       $("#calendar").fullCalendar('addEventSource', events);
       //Updating new events
       $('#calendar').fullCalendar('rerenderEvents');      
-      table.ajax.reload();    
-
+      table.ajax.reload();
     });
    
-      
+   
+    } );
 
 </script>
 
