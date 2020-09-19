@@ -210,7 +210,7 @@ class Task extends CI_Controller {
         $taskstatus_list = $this->Taskstatus_model->taskstatuslist(); 
 
         $details .= '
-                    <table class="datatable table table-striped table-bordered dataTable"  cellspacing="0" width="100%">
+                    <table class="datatable1 table table-striped table-bordered"  cellspacing="0" width="100%">
                        <thead>
                           <tr>
                            <th>Date</th>
@@ -278,7 +278,7 @@ class Task extends CI_Controller {
 
         }
 
-        $details .= '</tbody></table>';
+        $details .= '</tbody></table><script> $(".datatable1").DataTable(); </script>';
         echo $details;
     }
     

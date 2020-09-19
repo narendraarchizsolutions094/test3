@@ -53,18 +53,16 @@ public function __construct()
     }
 
     public function search_taskby_id($date) {
-        
         $user_id = $this->session->user_id;
+        if($this->session->filter_user_id){                                
+            $user_id = $this->session->filter_user_id;
+        }        
+        $all_reporting_ids    =    $this->common_model->get_categories($user_id);               
+
         $user_role = $this->session->user_role;
         $this->db->select(" *,tbl_admin.s_display_name as user_name ");
-        $this->db->from('query_response');
-       
-        if($this->session->filter_user_id){                                
-            $this->db->where('query_response.create_by',$this->session->filter_user_id);
-        }else{
-            $this->db->where('query_response.create_by',$user_id);
-        }
-
+        $this->db->from('query_response');       
+        $this->db->where_in('query_response.create_by',$all_reporting_ids);
         $this->db->join('enquiry', 'enquiry.Enquery_id=query_response.query_id', 'left');
         $this->db->join('tbl_admin', 'tbl_admin.pk_i_admin_id=query_response.create_by', 'left');
         $this->db->where('query_response.task_date',$date);
