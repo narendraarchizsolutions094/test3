@@ -209,7 +209,7 @@ class Task extends CI_Controller {
      
         $taskstatus_list = $this->Taskstatus_model->taskstatuslist(); 
 
-        $details .= '<style>#DataTables_Table_0_paginate{text-align:center!important;}
+        $details .= '<style>.dataTables_paginate .paging_simple_numbers{text-align:center!important;}
             </style>
                     <table class="datatable1 table table-striped table-bordered"  cellspacing="0" width="100%">
                        <thead>
