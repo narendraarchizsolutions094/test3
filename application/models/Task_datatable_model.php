@@ -17,7 +17,6 @@ class Task_datatable_model extends CI_Model {
     'tbl_admin.s_display_name',
     'query_response.mobile',
     'tbl_taskstatus.taskstatus_name',
-    ''
     ); //set column field database for datatable orderable
 
     //var $column_search = array('query_response.query_id','query_response.upd_date', 'query_response.task_remark','admin.user_name','query_response.mobile'); //set column field database for datatable searchable 
