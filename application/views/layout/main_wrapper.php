@@ -1631,7 +1631,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
           url   : "<?php echo base_url('buy/addtocart'); ?>",
           type  : "post",
           data  : {
-            product:$(this).data("prodid"),
+            product:pid,
             qty :0
           },
           success : function(resp){
