@@ -184,7 +184,7 @@
 
     var table  = $('#content_tabss').DataTable( {         
         "processing": true,
-        "scrollX": true,
+        /*"scrollX": true,*/
         "scrollY": 800,
         "serverSide": true,
         "lengthMenu": [ [30, 50, -1], [30, 50, "All"] ],
