@@ -546,6 +546,11 @@ if($root=='https://student.spaceinternationals.com'){  ?>
   width: 40px;
   text-align: center;
 }
+.cart-items{
+  margin: 12px 1px;
+  border-bottom: 1px solid red;
+  padding-bottom: 11px;
+}
 </style>
 
 
@@ -798,7 +803,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                     
                       <div class = "cart-items"><h4><a href = ""> <?php echo $cart['name'] ?></a></h4>
                           <p>
-                            <a href = "javascript:void(0)"> Price : <i class = "fa fa-price"></i> <?php echo  $cart['price']." X <input type='number' class='cart-qty' value=".$cart['qty']." min='1' data-prodid=".$cart['id']." ";?> = <i class = "fa fa-rupee"></i> <?php echo $cart['price']*$cart['qty']  ?> </a> 
+                            <a href = "javascript:void(0)"> Price : <i class = "fa fa-price"></i> <?php echo  $cart['price']." X <input type='number' class='cart-qty' value=".$cart['qty']." min='1' data-prodid=".$cart['id']." >";?> = <i class = "fa fa-rupee"></i><span class="item-price"> <?php echo $cart['price']*$cart['qty']  ?></span> </a> 
                             <a href="javascript:void(0)" onclick="remove_cart_item(<?=$cart['id']?>)" class="fa fa-trash btn btn-danger btn-sm pull-right remove-item-cart"></a>
                           </p>
                           <hr />
@@ -1636,8 +1641,10 @@ if($root=='https://student.spaceinternationals.com'){  ?>
           },
           success : function(resp){
             var jresp = JSON.parse(resp);            
-            if(jresp.status == 1){
-              $("#cart-li-"+$pid).remove();
+            if(jresp.status == 2){
+              $("#cart-li-"+pid).remove();
+              c  = $("#nav-cart-count").html();
+              $("#nav-cart-count").html(c-1);
             }
           }
         });
@@ -1655,7 +1662,8 @@ if($root=='https://student.spaceinternationals.com'){  ?>
           success : function(resp){
             var jresp = JSON.parse(resp);
             
-            if(jresp.status == 1){
+            if(jresp.status == 2){
+              $(this).next().next().html(jresp.qty*jresp.price);
             }
           }
         });
