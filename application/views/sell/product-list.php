@@ -378,7 +378,7 @@
 					var tprice = parseInt(jresp.price) * parseInt(jresp.qty);
 					var htmcnt = '<li id = "cart-li-'+jresp.prodid+'"><div class="cart-items"><h4><a href="">'+jresp.product+' </a></h4>'+
 									'<p><a href=""> Price : <i class="fa fa-rupee"></i> '+jresp.price+' X '+'<input type="number" value="'+jresp.qty+'" min=1 class="cart-qty" data-prodid='+jresp.prodid+'>'+' = <i class="fa fa-rupee"></i> '+tprice+' </a>'+ 
-									'</p></div><hr /></li>';
+									'<a href="javascript:void(0)" onclick="remove_cart_item('+jresp.prodid+')" class="fa fa-trash btn btn-danger btn-sm pull-right remove-item-cart"></a></p></div><hr /></li>';
 										$("#cart-nav-menu").prepend(htmcnt);
 										$("#nav-cart-count").text(jresp.total);					
 				}else if(jresp.status == 2){
