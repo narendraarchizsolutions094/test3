@@ -1664,7 +1664,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
             
             if(jresp.status == 2){
               console.log(jresp.price);
-              $(this).next().next().html(jresp.price);
+              $(this).closest('item-price').html(jresp.price);
             }
           }
         });
