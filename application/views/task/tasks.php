@@ -48,7 +48,7 @@
    <br>
    <div class="col-md-4"></div>   
      <div class="col-md-4">
-        <select class="form-control" name="org_name" id="user_id_fortask" onchange="changes_menu(this.value)">
+        <select class="form-control" name="org_name" id="user_id_fortask" >
            <option value="" style="display:none;">--Select---</option>
            <?php foreach($user_list as $user){?>
            <option value="<?=$user->pk_i_admin_id ?>" <?php if($this->session->user_id==$user->pk_i_admin_id){echo 'selected';} ?>><?=$user->s_display_name ?>&nbsp;<?=$user->last_name; ?></option>
@@ -182,7 +182,7 @@
       });
     
     }
-  
+  $(document).ready(function() {
 
     var table  = $('#content_tabss').DataTable( {         
         "processing": true,
@@ -207,8 +207,8 @@
         }        
     } );
 
-   function changes_menu(id){ 
-      var events = {
+    $("#user_id_fortask").on('change',function(){
+      id = $(this).val();
         url: "<?php echo base_url().'task/get_calandar_feed'?>",
         type: 'POST',
         data: {
@@ -223,9 +223,11 @@
       $("#calendar").fullCalendar('addEventSource', events);
       //Updating new events
       $('#calendar').fullCalendar('rerenderEvents');      
-      table.ajax.reload();
-   }
-    
+      table.ajax.reload();    
+
+    });
+   
+      
 
 </script>
 
