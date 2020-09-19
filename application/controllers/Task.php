@@ -159,9 +159,8 @@ class Task extends CI_Controller {
                     break;
                 }
             }*/
-            $row[] =  "<a class='btn'>".!empty($each->task_status)?$each->task_status:$taskStatus." </a>";
-            ?>
-            <?php
+            $row[] =  $each->task_status?$each->task_status:$taskStatus;
+            
                 $actions = '<a data-toggle="modal" type="button" title="Add Target" data-target="#task_edit" onclick="get_modal_content('.$each->resp_id.')" ><i class="fa fa-edit btn btn-primary btn-sm"></i></a>';
 
                 if(user_access(92)){ 
