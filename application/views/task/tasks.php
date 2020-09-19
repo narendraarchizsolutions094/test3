@@ -34,7 +34,9 @@
     background-color: #db2828 !important;
     border-color: #db2828 !important;
   }
-
+  .content_tabss_paginate{
+    text-align: center!important;
+  }
 </style>
 <br>
 <div class="col-md-12 text-center">     
