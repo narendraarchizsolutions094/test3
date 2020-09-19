@@ -44,10 +44,10 @@ class Task_datatable_model extends CI_Model {
                 $filter_user_id = $this->session->filter_user_id;
                 if($this->session->filter_user_id){                    
                     //$where = " query_response.create_by=".$this->session->filter_user_id;
-                    $where = " enquiry.created_by=$filter_user_id OR enquiry.aasign_to=$filter_user_id";
+                    $where = "( enquiry.created_by=$filter_user_id OR enquiry.aasign_to=$filter_user_id)";
 
                 }else{
-                    $where .= " enquiry.created_by=$user_id OR enquiry.aasign_to=$user_id";
+                    $where .= " (enquiry.created_by=$user_id OR enquiry.aasign_to=$user_id)";
 		          //$where = "  query_response.create_by IN (".implode(',', $all_reporting_ids).')';                
                 }
 
@@ -96,7 +96,8 @@ class Task_datatable_model extends CI_Model {
         $this->db->limit($_POST['length'], $_POST['start']);
         $query = $this->db->get();
 
-
+        /*echo $this->db->last_query();
+        exit();*/
         return $query->result();
 
         /*echo "<pre>";
