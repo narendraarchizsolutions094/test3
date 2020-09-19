@@ -248,6 +248,7 @@ class Task extends CI_Controller {
             $taskStatus = !empty($task->task_status)?$task->task_status:$task_status;
             $this->db->where('Enquery_id',$task->query_id);
             $enquiry_row   =    $this->db->get('enquiry')->row_array();
+            $name = '';
             if (!empty($enquiry_row)) {
                 if ($enquiry_row['status'] == 1) {
                     $url = base_url().'enquiry/view/'.$enquiry_row['enquiry_id'];
@@ -256,16 +257,21 @@ class Task extends CI_Controller {
                 }else if ($enquiry_row['status'] == 3) {
                     $url = base_url().'client/view/'.$enquiry_row['enquiry_id'].'/'.$enquiry_row['Enquery_id'];
                 }
+                $name = $enquiry_row['name_prefix'].' '.$enquiry_row['name'].' '.$enquiry_row['lastname'];
             }else{
+              
                   $url = 'javascript:void(0)';
-              }
+              }            
+            if(empty($name) || !isset($name) || $name=='  '){
+                $name = 'NA';
+            }
               $details .= '
             <tr>
                 <td>' . $task->task_date . '</td>
                 <td>' . $task->task_time . '</td>
                 <td>'. $task->subject. '</td>
                 <td>'. $task->task_remark. '</td>
-                <td><a href="'.$url.'">' . $task->contact_person . '</a></td>
+                <td><a href="'.$url.'">' . $name . '</a></td>
                 <td>'.$task->user_name.'</td>
                 <td>' . $task->mobile . '</td>
                 <td>'.$taskStatus.'</td>
