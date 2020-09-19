@@ -1663,7 +1663,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
             var jresp = JSON.parse(resp);
             
             if(jresp.status == 2){
-              $(this).next().next().html(jresp.qty*jresp.price);
+              $(this).next().next().html(jresp.price);
             }
           }
         });
