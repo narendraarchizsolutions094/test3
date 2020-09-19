@@ -200,7 +200,7 @@ class Task extends CI_Controller {
 
     public function search_comment_and_task($date = '') {
         $details = '';
-
+ 
         $date = date_create($date);
 
         $date = date_format($date,'d-m-Y'); 
@@ -239,12 +239,13 @@ class Task extends CI_Controller {
             }*/
            
             $taskStatus = 'Pending'; 
-            foreach($taskstatus_list as $val){
+          /*  foreach($taskstatus_list as $val){
                 if($task->task_status == $val->taskstatus_id){
                     $taskStatus = $val->taskstatus_name;
                     break;
                 }
-            }
+            }*/
+            $taskStatus = !empty($task->task_status)?$task->task_status:$task_status;
             $this->db->where('Enquery_id',$task->query_id);
             $enquiry_row   =    $this->db->get('enquiry')->row_array();
             if (!empty($enquiry_row)) {
@@ -267,7 +268,7 @@ class Task extends CI_Controller {
                 <td><a href="'.$url.'">' . $task->contact_person . '</a></td>
                 <td>'.$task->user_name.'</td>
                 <td>' . $task->mobile . '</td>
-                <td>  <a class="btn btnStatus '.$taskStatus.'">'.$taskStatus.' </a></td>
+                <td>'.$taskStatus.'</td>
                 <td><a data-toggle="modal" type="button" title="Add Target" data-target="#task_edit" onclick="get_modal_content('.$task->resp_id.')" ><i class="fa fa-edit btn btn-primary btn-sm"></i></a>';
 
             if(user_access(92)){ 
@@ -277,7 +278,6 @@ class Task extends CI_Controller {
               $details .= '</td>';
 
         }
-
         $details .= '</tbody></table><script> $(".datatable1").DataTable(); </script>';
         echo $details;
     }
