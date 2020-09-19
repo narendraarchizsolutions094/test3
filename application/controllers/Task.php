@@ -245,7 +245,7 @@ class Task extends CI_Controller {
                     break;
                 }
             }*/
-            $taskStatus = !empty($task->task_status)?$task->task_status:$task_status;
+            $taskStatus = !empty($task->task_status)?$task->task_status:$taskStatus;
             $this->db->where('Enquery_id',$task->query_id);
             $enquiry_row   =    $this->db->get('enquiry')->row_array();
             $name = '';
