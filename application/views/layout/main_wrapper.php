@@ -803,7 +803,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                     
                       <div class = "cart-items"><h4><a href = ""> <?php echo $cart['name'] ?></a></h4>
                           <p>
-                            <a href = "javascript:void(0)"> Price : <i class = "fa fa-price"></i> <?php echo  $cart['price']." X <input type='number' class='cart-qty' value=".$cart['qty']." min='1' data-prodid=".$cart['id']." >";?> = <i class = "fa fa-rupee"></i><span class="item-price"> <?php echo $cart['price']*$cart['qty']  ?></span> </a> 
+                            <a href = "javascript:void(0)"> Price : <i class = "fa fa-price"></i> <?php echo  $cart['price']." X <input type='number' class='cart-qty' value=".$cart['qty']." min='1' data-prodid=".$cart['id']." >";?> = <i class = "fa fa-rupee"></i><span class="item-price-"<?=$cart['id']?>> <?php echo $cart['price']*$cart['qty']  ?></span> </a> 
                             <a href="javascript:void(0)" onclick="remove_cart_item(<?=$cart['id']?>)" class="fa fa-trash btn btn-danger btn-sm pull-right remove-item-cart"></a>
                           </p>
                           <hr />
@@ -1664,7 +1664,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
             
             if(jresp.status == 2){
               console.log(jresp.price);
-              $(this).closest('item-price').html(jresp.price);
+              $('.item-price-'+jresp.prodid).html(jresp.price);
             }
           }
         });
