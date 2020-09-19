@@ -228,12 +228,7 @@
     });
    
    
-    } );
-
-</script>
-
-<script type='text/javascript'>   
-   $(function () {
+   
     $('#calendar').fullCalendar({
        header    : {
          left  : 'prev,next today',
