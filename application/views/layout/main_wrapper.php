@@ -1626,6 +1626,22 @@ if($root=='https://student.spaceinternationals.com'){  ?>
     <script src="<?=base_url().'assets/js/sweetalert2@9.js'?>"></script>
 
          <script>
+    function remove_cart_item(pid){
+      $.ajax({
+          url   : "<?php echo base_url('buy/addtocart'); ?>",
+          type  : "post",
+          data  : {
+            product:$(this).data("prodid"),
+            qty :0
+          },
+          success : function(resp){
+            var jresp = JSON.parse(resp);            
+            if(jresp.status == 1){
+              $("#cart-li-"+$pid).remove();
+            }
+          }
+        });
+    }
   $(document).ready(function(){
 
     $(".cart-qty").on('change',function(){
@@ -1645,22 +1661,6 @@ if($root=='https://student.spaceinternationals.com'){  ?>
         });
     });
 
-    function remove_cart_item(pid){
-      $.ajax({
-          url   : "<?php echo base_url('buy/addtocart'); ?>",
-          type  : "post",
-          data  : {
-            product:$(this).data("prodid"),
-            qty :0
-          },
-          success : function(resp){
-            var jresp = JSON.parse(resp);            
-            if(jresp.status == 1){
-              $("#cart-li-"+$pid).remove();
-            }
-          }
-        });
-    }
     
 
 /*
