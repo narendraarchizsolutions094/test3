@@ -360,7 +360,7 @@ class Buy extends CI_Controller {
 					$gst_price = $product->price*($product->gst/100);				
 				}
 
-				$prdarr = array("status" => 1,"prodid" => $prodno, "product" => $product->country_name, "price" => $product->price+$gst_price * ($qty + $pqty), "qty" => $data['qty'],"total" => count($cardcontent) + 1);
+				$prdarr = array("status" => 1,"prodid" => $prodno, "product" => $product->country_name, "price" => (float)$product->price+(float)$gst_price * ((float)$qty + (float)$pqty), "qty" => (float)$data['qty'],"total" => count($cardcontent) + 1);
 				$this->cart->insert($data);	
 			}				
 			$alltotal = 0;
