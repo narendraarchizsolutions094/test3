@@ -3201,6 +3201,6 @@ function upload_enquiry() {
             $data['level'] = $this->location_model->find_level();
             $data['length'] = $this->location_model->find_length();
         }
-        $this->load->view('enquiry/institute_tab_content',$data,true);
+        echo $this->load->view('enquiry/institute_tab_content',$data,true);
     }
 }
