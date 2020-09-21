@@ -4410,6 +4410,9 @@ $("#toggle_timeline").on('click',function(){
     h  = $(".activitytimelinediv").html();    
     $("#timeline_modal .modal-body").html(h);    
   }
+  $("#institute-tab").on('click',function(){
+    $("#institute").load("<?=base_url().'enquiry/get_institute_tab_content/'.$enquiry_id?>");
+  })
 </script>
 <?php
   if ($this->session->companey_id == 79) {
