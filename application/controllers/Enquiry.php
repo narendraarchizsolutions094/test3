@@ -3196,7 +3196,7 @@ function upload_enquiry() {
         $data['institute_app_status'] = $this->Institute_model->get_institute_app_status();
         
         $data['institute_data'] = $this->enquiry_model->institute_data($data['details']->Enquery_id);
-        echo $this->db->last_query();
+        //echo $this->db->last_query();
         $data['ins_list'] = $this->location_model->get_ins_list($data['details']->Enquery_id);
         
         if ($this->session->companey_id=='67') {
