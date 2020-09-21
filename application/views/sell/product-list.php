@@ -326,7 +326,7 @@
 						currobj.closest("li").prepend('<a href = "javascript:void(0)" class = "minus-quantity" data-prodid = "'+jresp.prodid+'"><span> - </span></a>');
 						var tprice = parseInt(jresp.price) * parseInt(jresp.qty);
 						var htmcnt = '<li id = "cart-li-'+jresp.prodid+'"><div class="cart-items"><h4><a href="">'+jresp.product+' </a></h4>'+
-										'<p><a href=""> Price : <i class="fa fa-rupee"></i> '+jresp.price+' X '+jresp.qty+' = <i class="fa fa-rupee"></i> <span class="item-price-'+jresp.prodid+'">'+tprice+'</span> </a>'+ 
+										'<p><a href=""> Price : <i class="fa fa-rupee"></i> '+jresp.price+' X '+'<input type="number" value="'+jresp.qty+'" min=1 class="cart-qty" data-prodid='+jresp.prodid+'>'+' = <i class="fa fa-rupee"></i> <span class="item-price-'+jresp.prodid+'">'+tprice+'</span> </a>'+ 
 										'</p></div><hr /></li>';
 											$("#cart-nav-menu").prepend(htmcnt);
 											$("#nav-cart-count").text(jresp.total);					
