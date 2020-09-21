@@ -30,7 +30,7 @@
         </th>
           Application URL
         </th>
-        <th>
+        
         <th>
           Major
         </th>
