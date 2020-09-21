@@ -25,9 +25,9 @@
           Tuition Fee
         </th>
      <?php } if ($this->session->companey_id!='67') { ?>
-         <th>
+         <!-- <th>
           Offer letter fee
-        </th>
+        </th> -->
           Application URL
         </th>
         
@@ -303,7 +303,7 @@
  </form>
 </div>                                                
 <script type="text/javascript">
-    // this is the id of the form
+    // this is the id of the form 
 $("#add_institute_form").submit(function(e) {
     e.preventDefault(); // avoid to execute the actual submit of the form.
     var form = $(this);
