@@ -351,7 +351,7 @@ class Buy extends CI_Controller {
 					$gst_price = $product->price*($product->gst/100);				
 				}
 				
-				$prdarr = array("status" => $status,"prodid" => $prodno, "product" => $product->country_name, "price" => (float)$gst_price , "qty" => (int)$qty + (int)$pqty,"total" => count($cardcontent));
+				$prdarr = array("status" => $status,"prodid" => $prodno, "product" => $product->country_name, "price" => (float)$product->price+(float)$gst_price , "qty" => (int)$qty + (int)$pqty,"total" => count($cardcontent));
 				
 			}else{
 
@@ -373,7 +373,7 @@ class Buy extends CI_Controller {
 					if($crt['id'] == $prodno){
 						
 						$prdarr['qty'] 	 = $crt['qty'];
-						$prdarr['price'] = $crt['subtotal'];
+						$prdarr['price'] = $crt['price'];
 						$isavl =  true;
 					}
 					
