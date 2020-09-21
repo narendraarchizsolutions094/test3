@@ -3186,9 +3186,10 @@ function upload_enquiry() {
             }else{
                 echo 0;
             }
-        }
+        } 
 
     public function get_institute_tab_content(){
+        $data = array();
         $data['institute_list'] = $this->Institute_model->institutelist_by_country($data['details']->enq_country); 
         $data['course_list'] = $this->Leads_Model->get_course_list();
         $data['institute_app_status'] = $this->Institute_model->get_institute_app_status();
