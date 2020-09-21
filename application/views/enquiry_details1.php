@@ -3254,25 +3254,6 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
 
   }
 
-  // this is the id of the form
-$("#add_institute_form").submit(function(e) {
-    e.preventDefault(); // avoid to execute the actual submit of the form.
-    var form = $(this);
-    var url = form.attr('action');
-      $.ajax({
-         type: "POST",
-         url: url,
-         data: form.serialize(), // serializes the form's elements.
-         success: function(data)
-         {              
-            data = JSON.parse(data);
-            alert(data.msg);
-            if(data.status == true){
-              window.location.reload();
-            }
-         }
-       });
-  });
 
   function open_comission_modal(id){
     //alert(id);
