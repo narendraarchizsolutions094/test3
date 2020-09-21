@@ -54,13 +54,13 @@ class Payment extends CI_Controller {
 
 			if ($this->input->post('dbt') == 2) {
 				$ch = curl_init();
-				curl_setopt($ch, CURLOPT_URL, 'https://test.instamojo.com/api/1.1/payment-requests/');
+				curl_setopt($ch, CURLOPT_URL, 'https://instamojo.com/api/1.1/payment-requests/');
 				curl_setopt($ch, CURLOPT_HEADER, FALSE);
 				curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
 				curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
 				curl_setopt($ch, CURLOPT_HTTPHEADER,
-				            array("X-Api-Key:test_5603801f39914d976259aa00c95",
-				                  "X-Auth-Token:test_9e3ee171a7cd5845c5bb6ee030c"));
+				            array("X-Api-Key:ca7a223092cfaf2317db5fc00fc83502",
+				                  "X-Auth-Token:b6224670c580b470d7951eaf697e2e9f"));
 				$payload = Array(
 				    'purpose' => 'Product Purchage',
 				    'amount' => $amount,
