@@ -357,7 +357,7 @@
 			});	
 		
 	}
-	
+	 
 	$(document).on("click", ".add-to-cart", function(){		
 		var currobj = $(this);	
 		$.ajax({
@@ -365,7 +365,7 @@
 			type 	: "post",
 			data 	: {
 				product:$(this).data("prodid"),
-				qty:$(this).next().val(),
+				qty:$(this).first().html(),
 				disc:$(this).closest("li").find(".tot-price").val()
 			},
 			success	: function(resp){
