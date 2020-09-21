@@ -54,7 +54,7 @@ class Payment extends CI_Controller {
 
 			if ($this->input->post('dbt') == 2) {
 				$ch = curl_init();
-				curl_setopt($ch, CURLOPT_URL, 'https://instamojo.com/api/1.1/payment-requests/');
+				curl_setopt($ch, CURLOPT_URL, 'https://www.instamojo.com/api/1.1/payment-requests/');
 				curl_setopt($ch, CURLOPT_HEADER, FALSE);
 				curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
 				curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
