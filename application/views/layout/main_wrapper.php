@@ -1644,7 +1644,8 @@ if($root=='https://student.spaceinternationals.com'){  ?>
             if(jresp.status == 2){
               $("#cart-li-"+pid).remove();
               c  = $("#nav-cart-count").html();
-              $("#nav-cart-count").html(c-1);
+              $("#nav-cart-count").html(c-1);              
+              $("a[data-prodid="+pid+"]>.cart-quantity").html('');
             }
           }
         });
