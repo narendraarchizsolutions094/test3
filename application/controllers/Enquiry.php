@@ -3174,7 +3174,7 @@ function upload_enquiry() {
                $zip->close();
                echo "success";
                
-             } else {
+             } else { 
                 echo "error"; 
              }
                 
@@ -3187,4 +3187,18 @@ function upload_enquiry() {
                 echo 0;
             }
         }
+
+    public function get_institute_tab_content(){
+        $data['institute_list'] = $this->Institute_model->institutelist_by_country($data['details']->enq_country); 
+        $data['course_list'] = $this->Leads_Model->get_course_list();
+        $data['institute_app_status'] = $this->Institute_model->get_institute_app_status();
+        $data['institute_data'] = $this->enquiry_model->institute_data($data['details']->Enquery_id);
+        $data['ins_list'] = $this->location_model->get_ins_list($data['details']->Enquery_id);
+        if ($this->session->companey_id=='67') { 
+            $data['discipline'] = $this->location_model->find_discipline();
+            $data['level'] = $this->location_model->find_level();
+            $data['length'] = $this->location_model->find_length();
+        }
+        $this->load->view('enquiry/institute_tab_content',$data,true);
+    }
 }
