@@ -3202,7 +3202,7 @@ function upload_enquiry() {
             $data['length'] = $this->location_model->find_length();
         }
         //echo "string";
-        print_r($data['institute_data']);
+        //print_r($data['institute_data']);
         echo $this->load->view('enquiry/institute_tab_content',$data,true);
     }
 }

@@ -61,7 +61,7 @@ public function all_course($course,$lvl,$length,$disc) {
                         ->join('tbl_datasource', 'tbl_datasource.datasource_id=enquiry.datasource_id', 'left')
                         ->join('tbl_newdeal','tbl_newdeal.enq_id=enquiry.Enquery_id','left')
                         ->where('enquiry.enquiry_id', $leadid)
-                        ->where('enquiry.is_delete', '1')
+                        //->where('enquiry.is_delete', '1')
                         ->get()
                         ->row();
     }
