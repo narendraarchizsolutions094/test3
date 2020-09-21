@@ -365,7 +365,7 @@
 			type 	: "post",
 			data 	: {
 				product:$(this).data("prodid"),
-				qty:$(this).first().find('.cart-quantity').html(),
+				qty:$(this).first().find('.cart-quantity').html()+1,
 				disc:$(this).closest("li").find(".tot-price").val()
 			},
 			success	: function(resp){
