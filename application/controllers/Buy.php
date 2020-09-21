@@ -351,7 +351,7 @@ class Buy extends CI_Controller {
 					$gst_price = $product->price*($product->gst/100);				
 				}
 				
-				$prdarr = array("status" => $status,"prodid" => $prodno, "product" => $product->country_name, "price" => (float)$gst_price * ((int)$qty + (int)$pqty) , "qty" => (int)$qty + (int)$pqty,"total" => count($cardcontent));
+				$prdarr = array("status" => $status,"prodid" => $prodno, "product" => $product->country_name, "price" => (float)$gst_price , "qty" => (int)$qty + (int)$pqty,"total" => count($cardcontent));
 				
 			}else{
 
@@ -360,7 +360,7 @@ class Buy extends CI_Controller {
 					$gst_price = $product->price*($product->gst/100);				
 				}
 
-				$prdarr = array("status" => 1,"prodid" => $prodno, "product" => $product->country_name, "price" => (float)$product->price+(float)$gst_price * ((int)$qty + (int)$pqty), "qty" => (int)$data['qty'],"total" => count($cardcontent) + 1);
+				$prdarr = array("status" => 1,"prodid" => $prodno, "product" => $product->country_name, "price" => (float)$product->price+(float)$gst_price, "qty" => (int)$data['qty'],"total" => count($cardcontent) + 1);
 				$this->cart->insert($data);	
 			}				
 			$alltotal = 0;
