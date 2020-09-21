@@ -98,7 +98,7 @@
             }
             ?>
            <?php if ($this->session->companey_id!='67') { ?>
-              <td><?=$value['ol_fee']?></td>                                    
+              <!-- <td><?=$value['ol_fee']?></td>                                     -->
               <td><?=$value['application_url']?></td>
               <td><?=$value['major']?></td>
               <td><?=$value['user_name']?></td>
