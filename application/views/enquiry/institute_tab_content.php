@@ -25,9 +25,12 @@
           Tuition Fee
         </th>
      <?php } if ($this->session->companey_id!='67') { ?>
+         
          <!-- <th>
           Offer letter fee
         </th> -->
+
+        <th>
           Application URL
         </th>
         
