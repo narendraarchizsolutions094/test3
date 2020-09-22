@@ -108,6 +108,8 @@ class Order_model extends CI_Model {
 				
 				if(!empty($ordcol[$ordpost])){
 					$this->db->order_by($ordcol[$ordpost], $_POST['order']['0']['dir']);
+				}else{
+					$this->db->order_by("ord.id",'DESC');
 				}	
 				
 			}else{
