@@ -58,7 +58,7 @@ class Order_model extends CI_Model {
 		//	$this->db->join('order_prdct ordprd','ord.id=ordprd.ord_id','left');
 			$this->db->join('tbl_product_country prd','prd.id=ord.product','left');
 			$this->db->join('tbl_admin usr','usr.pk_i_admin_id=ord.cus_id','left');		
-			$ordcol = array("ord.id");			
+			$ordcol = array("ord.id","prd.country_name");			
 			$this->order_by($ordcol);
 			$this->limit();			
 			return $this->db->get()->result();	
@@ -69,7 +69,7 @@ class Order_model extends CI_Model {
 	
 	 public function colfilter($flrcol){
 		  
-	     
+	
 			if(!empty($_POST['search']['value'])) 
 			{
 				 $likeqry = " ( ";
@@ -107,14 +107,11 @@ class Order_model extends CI_Model {
 				$ordpost = $_POST['order']['0']['column']; 
 				
 				if(!empty($ordcol[$ordpost])){
-					//$this->db->order_by($ordcol[$ordpost], $_POST['order']['0']['dir']);
-					$this->db->order_by("ord.id",'DESC');					
-				}else{
-					$this->db->order_by("ord.id",'DESC');
+					$this->db->order_by($ordcol[$ordpost], $_POST['order']['0']['dir']);
 				}	
 				
 			}else{
-				$this->db->order_by("ord.id",'DESC');
+				//$this->db->order_by("")
 			} 
 	  }
 	
