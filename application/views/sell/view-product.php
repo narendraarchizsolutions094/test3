@@ -226,6 +226,7 @@
 						}
 
 
+
 						if(!empty($product->othr_price)) { 
 							?><div class = "col-md-12">
 								<label class="col-md-3"><b>MRP :</b></label><p class="col-md-9"><?php echo $product->othr_price; ?></p></div><?php
@@ -260,9 +261,17 @@
 								}
 							}
 						}
+
+
+						if(!empty($product->seller_name)) { 
+							?>
+							<div class = "col-md-12">
+								<label class="col-md-3"><b>Seller Name :</b></label><p class="col-md-9"><?php echo $product->seller_name.' - '.$product->employee_id; ?></p>
+							</div>
+							<?php
+						}
+		
 						?>						
-
-
 					<div class="col-md-12">
 					<br>	
 						<?php						

@@ -123,7 +123,7 @@ class Product_model extends CI_Model {
 	
 	public function productdet($prodno) {
 
-        return $this->db->select("tbl_product_country.*,tbl_category.name as category_name,tbl_subcategory.subcat_name,concat_ws(tbl_admin.s_display_name,' ',tbl_admin.last_name) as seller_name,tbl_proddetails.*,tbl_product_country.id as sb_id,measurement_unit.title as unit")
+        return $this->db->select("tbl_product_country.*,tbl_category.name as category_name,tbl_subcategory.subcat_name,concat_ws(tbl_admin.s_display_name,' ',tbl_admin.last_name) as seller_name,tbl_proddetails.*,tbl_product_country.id as sb_id,measurement_unit.title as unit,tbl_admin.employee_id")
 					->from("tbl_product_country")
 					->join("tbl_proddetails", "tbl_proddetails.prodid = tbl_product_country.id", "LEFT")
 					->join("tbl_admin", "tbl_proddetails.seller_id = tbl_admin.pk_i_admin_id", "LEFT")
