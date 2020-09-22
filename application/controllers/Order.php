@@ -204,6 +204,9 @@ class Order extends CI_Controller {
 		$ordarr  	  = $this->order_model->orders(1);
 
 		/*echo $this->db->last_query();
+
+		echo "<pre>";
+		print_r($ordarr);
 		exit();*/
 		//$data["pay"]  = $this->payment_model->getpayments();		
 		//$data["dlv"] = $this->order_model-> getAllDilevery();

@@ -193,6 +193,14 @@ input[name=lead_stages]{
 					"url":"<?php echo base_url('order/loadorders'); ?>",
 					"type":"post"
 				},
+        "dom": "<'row'<'col-sm-4'l><'col-sm-4 text-center'B><'col-sm-4'f>>tp", 
+        "buttons": [  
+            {extend: 'copy', className: 'btn-sm'}, 
+            {extend: 'csv', title: 'Orders', className: 'btn-sm'}, 
+            {extend: 'excel', title: 'Order', className: 'btn-sm'}, 
+            {extend: 'pdf', title: 'Order', className: 'btn-sm'}, 
+            {extend: 'print', className: 'btn-sm'} 
+        ], 
 				"columnDefs":{
 					"orderable":"false",
 					"target":0
