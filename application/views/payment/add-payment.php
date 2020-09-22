@@ -1,26 +1,21 @@
-<link rel = "stylesheet" href = "<?php echo base_url("assets/plugins/sweet-alert/sweetalert.css"); ?>">
-	<div class="row">
-
-
-    <!--  form area -->
+<div class="row">
     <div class="col-sm-12">
         <div  class="panel panel-default thumbnail"> 
             <div class="panel-heading no-print">
                 <div class="btn-group"> 
-                    <a class="btn btn-primary" href="<?php echo base_url("payment/paylist") ?>"> <i class="fa fa-list"></i> Payment List </a>  
+                    <a class="btn btn-primary" href="<?php echo base_url("order") ?>"> <i class="fa fa-list"></i> Order List </a>  
                 </div>
-				
             </div>
-            <div class="panel-body panel-form">
-
-		
-		<div class="row">
-		
-		
+            <div class="panel-body panel-form">		
+				<div class="row">
 					<div class="col-md-12">
-								<div class="card">
+						<div class="card">
+							<div class="card-body">								
+								<div class = "card">
 									<div class="card-body">
-								<!--		<div class="d-flex">
+										<div class = "row">
+											<div class = "col-md-12">
+																<!--		<div class="d-flex">
 									
 								
 													
@@ -54,53 +49,40 @@
 										</div>
 										<hr> -->
 
-										<div class = "card">
-
-											<div class="card-body">
-										<div class = "row">
-										
-											<div class = "col-md-12">
-										<?php if(!empty($payments)){ 
-										
-												$totalval = $totprice;
-												$remain_balance = $totprice;
-										?>
-												
+												<?php 
+												if(!empty($payments)){ 										
+													$totalval = $totprice;
+													$remain_balance = $totprice;
+													?>
 												<table class="table table-bordered text-center table-hover mb-0">
-														<thead>
-															<tr>
-																
-																<th>Prev Balance</th>
-																<th>Advance</th>
-																<th>Payment</th>
-																<th>Balance</th>
-																<th>Payment Mode</th>
-																<th>Transaction No</th>
-																<th>Payment Date</th>
-																<th>Next Payment</th>
-																<th>status</th>
-																<th>Remark</th>
-																<th>Action</th>
-																
-															</tr>
-														</thead>
-														<tbody>
-												
-										<?php	$prev_balance = 0;
-												
-												foreach($payments as $ind => $pay){ 
-													
+													<thead>
+														<tr>
+															<th>Prev Balance</th>
+															<th>Advance</th>
+															<th>Payment</th>
+															<th>Balance</th>
+															<th>Payment Mode</th>
+															<th>Transaction No</th>
+															<th>Payment Date</th>
+															<th>Next Payment</th>
+															<th>status</th>
+															<th>Remark</th>
+															<th>Action</th>
+														</tr>
+													</thead>
+													<tbody>
+													<?php	
+													$prev_balance = 0;												
+													foreach($payments as $ind => $pay){ 
 													if($pay->ord_id == $ord->id) {
-														
 														$remain_balance = $pay->balance;
 														 $totalval = $pay->balance;
-										?>
-														<tr <?php echo ($pay->	approve == 0) ? "class='bg-border-dash'" : ""; ?>>
-													
+														?>
+														<tr <?php echo ($pay->approve == 0) ? "class='bg-border-dash'" : ""; ?>>
 															<td><?php echo (!empty($pay->prev_balance)) ? "<i class = 'fa fa-rupee'></i> ".$pay->prev_balance : " - "; ?></td>
 															<td><?php echo (!empty($pay->advance_pay)) ? "<i class = 'fa fa-rupee'></i> ".$pay->advance_pay : " - "; ?></td>
 															<td><i class = 'fa fa-rupee'></i> <?php echo  $pay->pay; ?></td>
-															<td><?php echo (!empty($pay->balance)) ? "<i class = 'fa fa-rupee'></i> ".$pay->	balance : " - "; ?></td>
+															<td><?php echo (!empty($pay->balance)) ? "<i class = 'fa fa-rupee'></i> ".$pay->balance : " - "; ?></td>
 															<td>
 																<?php 
 																if($pay->pay_mode == 1){
@@ -116,7 +98,7 @@
 															</td>
 															<td><?php echo $pay->transaction_no ; ?></td>
 															<td><?php echo date("d, m Y", strtotime($pay->pay_date)); ?></td>
-															<td><?php echo date("d, m Y", strtotime($pay->	next_pay)); ?></td>
+															<td><?php echo date("d, m Y", strtotime($pay->next_pay)); ?></td>
 															<td><?php echo $pay->status; ?></td>
 															<td><?php echo substr($pay->remark, 0, 40); ?></td>
 															<td>
@@ -147,12 +129,8 @@
 																</ul>
 															</div>
 															<?php }else{
-																
-																?><!--<a href="<?php echo base64_encode(base64_encode($pay->id)); ?>" class="delete-payment btn btn-pill btn-xs btn-outline-warning">
-															<i class="fe fe-trash" data-toggle="tooltip" title="" data-original-title="Delete"></i> Delete</a> --><?php
-															} ?>																	
+															} ?>		
 															</td>
-														
 														</tr>
 												<?php } ?>		
 										<?php	 }	?>
@@ -161,7 +139,6 @@
 										<?php	}else{
 											$totalval = $totprice;
 										} ?>
-								
 											</div>
 									<?php if($totalval > 0) { ?>		
 											<div class = "col-md-12">
@@ -177,17 +154,9 @@
 														<label>Previous Balance</label>
 														<input type = "text" class = "form-control" name = "prevbalance"value = "<?php echo $remain_balance; ?>" readonly>
 													</div>
-												
-												<!--	<div class = "form-group col-md-4">
-														<label>Advance Balance</label>
-														<input type = "text" class = "form-control" name = "advbalance" value = "0">
-													</div> -->
 												<?php }else{
-													
 													$totalval = $totprice;
-													
 												} ?>	
-												
 													<div class = "form-group col-md-4">
 														<label>Payment</label><span class ="mand">*</span>
 														<input type = "hidden" id = "total-remain" value = "<?php echo $totalval; ?>">
@@ -225,18 +194,15 @@
 														<label>Status</label>
 														<select class = "form-control" name="status">
 															<option value = ""></option>
-																			<?php   if(!empty($masters)) { 
+															<?php   if(!empty($masters)) { 
 																foreach($masters as $key => $mstr) { 
-																
 																if($mstr->type == 2) {
 																?>
-															
 																<option value = "<?php echo $mstr->id; ?>"><?php echo $mstr->title; ?></option>
 															<?php }
 																}
 															}
 															?>
-															
 														</select>
 													</div>
 													<?php }else{
@@ -246,31 +212,27 @@
 														<label>Remark</label>
 														<textarea class = "form-control" name = "remarks"></textarea>
 													</div>
-													
 													<div class = "col-md-12 text-center">
 														<input type = "hidden" name = "customer" value = "<?php echo $ord->cus_id; ?>">
 														<input type = "hidden" name = "orderid" value = "<?php echo $ord->id; ?>">
 														<input type = "hidden" name = "totalpay" value = "<?php echo $totalval; ?>">
-														
 														<button class="btn btn-app btn-pill btn-gray mr-2 mt-1 mb-1">
-																			<i class="fa fa-save"></i> Save
-																		</button>
+															<i class="fa fa-save"></i> Save
+														</button>
 													</div>
 												</div>
 											<?php echo form_close(); ?>	
 											</div>
 									<?php } ?>		
-										</div>
-											
-											</div>
-										</div>	
-																			<div class = "card">
-											<div class="card-header">
-												Order Products
-											</div>
-											<div class="card-body">
-																		<?php 	if(!empty($orders)) {  ?>
-										
+										</div>											
+									</div>
+								</div>	
+								<div class = "card">
+									<div class="card-header">
+										Order Products
+									</div>
+								<div class="card-body">
+									<?php 	if(!empty($orders)) {  ?>
 												<table class="table table-bordered text-center table-hover mb-0">
 														<thead>
 															<tr>
@@ -318,77 +280,47 @@
 										<?php   } ?>	
 										
 											</div>
-										</div>	
-								
+										</div>									
 									</div>
-								</div>	
-									
-								</div>
-								
-							</div>
+								</div>										
+							</div>								
+						</div>
 					</div>
 				</div>		
 		</div>
-	</div>
-	
-				
-		<script src="<?php echo base_url(); ?>assets/plugins/date-picker/jquery-ui.js"></script>
+	</div>				
 		<script>
-
-		    $(document).ready(function(){
-		        
-		        $(".fc-datepicker").datepicker();
-		    });
-			
-			$(document).on("keyup", "#total-paybox", function(){
-				
-				var tot     = parseInt($("#total-remain").val());
-				
+			$(document).on("keyup", "#total-paybox", function(){				
+				var tot     = parseInt($("#total-remain").val());				
 				var val     = $(this).val();
-				var remain  = tot - val;
-				
-				if(val > tot){
-					
+				var remain  = tot - val;				
+				if(val > tot){					
 					var tval = $("#total-paybox").val();
 					$("#total-paybox").val(val.substr(0, val.length - 1));
 					$("#remain-balance").val("");
 				}else{
-						$("#remain-balance").val(remain);	
+					$("#remain-balance").val(remain);	
 				}
-				
-			
-				
 			});
-			
 		</script>
 		<script>
-			$(document).on("click", ".approve-pay", function(e){
-				
-				e.preventDefault();
-				
+			$(document).on("click", ".approve-pay", function(e){				
+				e.preventDefault();				
 				var r = confirm("Are you sure to confirm payment");
-					if (r == true) {
-					 
+					if (r == true) {					 
 					} else {
 					  txt = "You pressed Cancel!";
-					}
-				
+					}				
 				$.ajax({
 					url  	: "<?php echo base_url('ajax/approve/payment'); ?>",
 					type 	: "post",
 					data 	: {"contentno" : $(this).attr("href"), "status" : 1},
-					success	: function (resp){
-						
-						resp = JSON.parse(resp);
-						
-						if(resp.status == "success"){
-							
+					success	: function (resp){						
+						resp = JSON.parse(resp);						
+						if(resp.status == "success"){							
 							location.reload();
 						}
-						
-						
 					}
 				});
-				
 			});
 		</script>

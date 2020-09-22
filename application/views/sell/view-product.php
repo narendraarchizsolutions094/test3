@@ -204,11 +204,7 @@
 							?><div class = "col-md-12">
 								<label class="col-md-3"><b>Brand :</b></label><p class="col-md-9"><?php echo $product->brand; ?></p></div><?php
 						}
-						if(!empty($product->seller_name)) { 
-							?>
-							<div class = "col-md-12">
-								<label class="col-md-3"><b>Seller :</b></label><p class="col-md-9"><?php echo $product->seller_name; ?></p></div><?php
-						}
+						
 
 						if(!empty($product->category)) { 
 							?><div class = "col-md-12">
