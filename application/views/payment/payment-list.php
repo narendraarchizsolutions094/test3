@@ -127,7 +127,7 @@
 												<tr> 
 
 													<td><?= $ind + 1; ?></td>
-													<td><a href="order/view/<?=$pay->ord_no?>"><?php echo $pay->ord_no; ?></a></td>
+													<td><a href="view/<?=$pay->ord_no?>"><?php echo $pay->ord_no; ?></a></td>
 												
 													<!-- <td><?php echo $pay->product ?></td> -->
 													<td>
