@@ -181,11 +181,11 @@
 													</div>
 													<div class = "form-group col-md-4">
 														<label>Pay Date</label><span class ="mand">*</span>
-														<input type = "text" class = "form-control fc-datepicker" name = "paydate" autocomplete = "off">
+														<input type = "date" class = "form-control" name = "paydate" autocomplete = "off">
 													</div>
 													<div class = "form-group col-md-4">
 														<label>Next Date</label>
-														<input type = "text" class = "form-control fc-datepicker" name = "nextpay" autocomplete = "off">
+														<input type = "date" class = "form-control" name = "nextpay" autocomplete = "off">
 													</div>
 													<?php if($this->session->mrole == 1) { ?>
 													<div class = "form-group col-md-4">
