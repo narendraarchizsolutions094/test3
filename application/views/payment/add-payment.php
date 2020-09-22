@@ -252,7 +252,7 @@
 															<tr class = "text-center">
 																<td>
 																<?php $image = (!empty($pord->image)) ? base_url("assets/images/products/".$pord->image)  : base_url("assets/images/profile/33.png");  ?>
-																<p class="font-w600 mb-1"><img class="avatar brround" src="<?php  echo  $image; ?>"> </p>
+																<p class="font-w600 mb-1"><img width="150px" height="150px" class="avatar brround" src="<?php  echo  $image; ?>"> </p>
 																
 																</td>
 																<td><h4><?php echo $pord->product_name; ?></h4></td>
