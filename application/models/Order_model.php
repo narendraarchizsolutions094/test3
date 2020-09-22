@@ -63,7 +63,7 @@ class Order_model extends CI_Model {
 			$this->db->order_by("ord.id",'DESC');
 
 			$this->limit();			
-			$this->db->group_by('ord.ord_no')
+			$this->db->group_by('ord.ord_no');
 			return $this->db->get()->result();	
 		}else{			
 			return $this->db->count_all_results();
