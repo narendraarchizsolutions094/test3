@@ -104,9 +104,10 @@
 									<img src = "<?php  echo base_url("assets/images/products/".$prd->image); ?>" class = "img-responsive">
 												<div class = "card-body card-content-member">
 							<h4><?php echo  $prd->country_name;  ?></h4>
-							<p> <i class = "fa fa-rupee"></i><strike><?php
+							<p> <strike><?php
 								$currdate = date("Y-m-d");
 								if($prd->from_date <= $currdate and $currdate <=  $prd->to_date){
+									echo '<i class = "fa fa-rupee"></i>';
 									if($prd->calc_mth == 1){
 										
 										echo $disc = $prd->price + $prd->price *$prd->discount/100;
@@ -134,7 +135,7 @@
 										
 										?><strike><i class = "fa fa-rupee"></i><?php echo $disc; ?></strike><?php
 									} ?>
-									<p><i class = "fa fa-rupee"></i> <?php echo $prd->total_price ?></p>
+									<p><i class = "fa fa-rupee"></i> <?php echo $prd->price ?></p>
 								</div>
 									 <ul class="icon">
 									<li>

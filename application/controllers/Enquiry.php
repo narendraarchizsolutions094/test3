@@ -156,7 +156,7 @@ class Enquiry extends CI_Controller {
                         $report_to = '';
                         if($this->session->companey_id == 57){
                             $user_right = 200;
-                            $report_to=$this->session->companey_id;
+                            $report_to=273;
                         }
                         $ucid    =   $this->session->companey_id;
                         

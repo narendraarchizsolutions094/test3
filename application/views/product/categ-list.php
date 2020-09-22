@@ -9,13 +9,13 @@
          <div class="panel-heading no-print">
 
             <div class="btn-group"> 
-				<a href = "<?php echo base_url("product/category") ?>" class="btn btn-success"> Category </a>
+				<a href = "javascript:void(0)" onclick="window.history.back()" class="btn btn-success"> Back </a>
               
 
             </div>
 
          </div>
-
+ 
          <div class="panel-body">
 
             <div class="row m-t-20"><?php if($this->session->error!=''){ ?>
@@ -55,7 +55,7 @@
 			</div>
       <form id='product_cat_form'>
             <input type = "hidden" name = "categid" value = "<?php echo $categid; ?>">
-            <table class="datatable table table-striped table-bordered" cellspacing="0" width="100%">
+            <table class="datatable1 table table-striped table-bordered" cellspacing="0" width="100%">
 
                <thead>
 
@@ -71,9 +71,13 @@
 
                      <th class="sorting wid-10" tabindex="0" rowspan="1" colspan="1">Category Name</th>
 
-                     <th class="sorting wid-10" tabindex="0" rowspan="1" colspan="1">Status</th>
-
-                     <th class="sorting wid-10" tabindex="0" rowspan="1" colspan="1">Actions</th>
+                     <!-- <th class="sorting wid-10" tabindex="0" rowspan="1" colspan="1">Status</th> -->
+                     <?php
+                     if (empty($categid)) { ?>
+                      <th class="sorting wid-10" tabindex="0" rowspan="1" colspan="1">Actions</th>
+                       <?php
+                     }
+                     ?>
 
                   </tr>
 
@@ -91,13 +95,18 @@
 
                      <td><?=$ctg->name ?></td>
 
-                     <td><?php echo (($ctg->status==1)?display('active'):display('inactive')); ?></td>
+<!--                      <td><?php echo (($ctg->status==1)?display('active'):display('inactive')); ?></td> -->
 
-                     <td class="center">
 
-                        <a  class="edit" data-toggle="modal" data-target="#product_list<?php echo $ctg->id;?>"><i class="ti-pencil"></i></a> 
-						<a  href = "<?php echo base_url("product/category/".$ctg->id.".html"); ?>"><i class="fa fa-eye"></i></a> 
-                     </td>
+                        <!-- <a  class="edit" data-toggle="modal" data-target="#product_list<?php echo $ctg->id;?>"><i class="ti-pencil"></i></a>  -->
+                        <?php
+                     if (empty($categid)) { ?>
+                       <td class="center">
+  						            <a  href = "<?php echo base_url("product/category/".$ctg->id.".html"); ?>" class="btn btn-primary btn-sm">Go to sub-category</a> 
+                       </td>
+                        <?php
+                      }
+                      ?>
 
                   </tr>
 
@@ -126,68 +135,6 @@
    </div>
 
 </div>
-
-<!----- Add switch box modal -------->
-
-<!-- Modal -->
-
-<div class="modal fade" id="myModal"  role="dialog">
-
-   <div class="modal-dialog">
-
-      <!-- Modal content-->
-
-      <div class="modal-content">
-
-         <div class="modal-header">
-
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
-
-            <h4 class="modal-title">Add Product</h4>
-
-         </div>
-
-         <div class="modal-body">
-
-            <form method="POST" action="<?php echo base_url('dash/add_product')?>">
-
-               <div class="row">
-
-                  <div class="form-group col-md-12">
-
-                     <label>Product Name</label>
-
-                     <input type="text" class="form-control" name="product_name" required>
-
-                  </div>
-
-               </div>
-
-               <div class="row">
-
-                  <div class="form-group col-md-6">
-
-                     <button class="btn btn-success" type="submit">Submit</button>
-
-                  </div>
-
-               </div>
-
-            </form>
-
-         </div>
-
-         <div class="modal-footer">
-
-         </div>
-
-      </div>
-
-   </div>
-
-</div>
-
-<!----------------------------------->       
 
 <script type="text/javascript">
 
@@ -237,42 +184,4 @@
    }else{
       location.reload(); 
    }}
-</script>
-
-<script>
-
-   function delete_switches(){       
-
-      var ids = [];      
-
-     $('input[name^="user_status[]"]').each(function() {          
-
-          ids.push($(this).val());
-
-      });
-
-      if(confirm("Are you sure want to delete...")){          
-
-         $.ajax({             
-
-             url : '<?php echo base_url('dash/delete_switch_box')?>',
-
-             type: 'POST',
-
-             data: {ids:ids},
-
-             success:function(data){                 
-
-                 alert("Deleted successfully");
-
-                 location.reload();
-
-             }
-
-         });
-
-      }   
-
-   }
-
 </script>

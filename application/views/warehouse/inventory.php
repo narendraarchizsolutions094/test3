@@ -18,7 +18,7 @@
             </div>
             <div class="panel-body">
 
-                 <table class="table table-striped table-bordered mobile-optimised" cellspacing="0" width="100%">
+                 <table class="datatable1 table table-striped table-bordered mobile-optimised" cellspacing="0" width="100%">
                     <thead>
                         <tr>
                             <th><?php echo display('serial') ?></th>
@@ -28,6 +28,7 @@
                             <th>Product Name</th>
                             <th>Warehouse</th>
                             <th>Quantity</th>
+                            <th>Added By</th>                            
                             <!-- <th>Brand</th> -->
                    <!--     <th><?php echo display('action') ?></th> -->
                         </tr>
@@ -44,6 +45,7 @@
                                     <td data-th='Product Name'><?php echo ucwords($inventorylist->proname); ?></td>        
                                     <td data-th='Warehouse'><?php echo ucwords($inventorylist->wrname); ?></td>     
                                     <td data-th='Quantity'><?php echo $inventorylist->qty; ?></td>
+                                    <td data-th='Seller'><?php echo $inventorylist->seller_name.' ('.$inventorylist->email.')'; ?></td>
                                     <!-- <td data-th='Brand'><?php echo ucwords($inventorylist->brandname); ?></td> -->                        
                                     <!-- <td class="center">
                                         <a href="<?php echo base_url("lead/editproductcountry1/$inventorylist->id") ?>" class="btn btn-xs  btn-primary"><i class="fa fa-edit"></i></a> 
