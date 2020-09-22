@@ -111,7 +111,7 @@ class Order_model extends CI_Model {
 				}	
 				
 			}else{
-				//$this->db->order_by("")
+				$this->db->order_by("tbl_order.id",'DESC');
 			} 
 	  }
 	
