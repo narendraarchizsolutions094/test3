@@ -43,7 +43,7 @@
 													</div>
 												</div>
 												
-												<input class="form-control fc-datepicker" placeholder="MM/DD/YYYY" type="text" id="fromdate" name="fromdate" required="" style = "width:100%;">
+												<input class="form-control" type="date" id="fromdate" name="fromdate" required="" style = "width:100%;">
 											</div>
 											</div>
 												<div class="form-group col-md-3">
@@ -55,19 +55,19 @@
 													</div>
 												</div>
 												
-												<input class="form-control fc-datepicker" placeholder="MM/DD/YYYY" type="text" id="todate" name="todate" required="" style = "width:100%;">
+												<input class="form-control" type="date" id="todate" name="todate" required="" style = "width:100%;">
 											</div>
 											</div>
 											<div class = "col-md-3">
 												<div class = "form-group">
 													<label>Calculation Method</label><br />
 													
-													<label class="custom-control custom-radio">
-														<input type="radio" class="custom-control-input" name="calcmeth" value="1">
+													<label class="custom-control">
+														<input type="radio" name="calcmeth" value="1">
 														<span class="custom-control-label"> % </span>
 													</label> 
-													<label class="custom-control custom-radio">
-														<input type="radio" class="custom-control-input" name="calcmeth" value="2">
+													<label class="custom-control ">
+														<input type="radio" name="calcmeth" value="2">
 														<span class="custom-control-label"> <i class = "fa fa-rupee"></i> </span>
 													</label>
 												
@@ -77,12 +77,12 @@
 												<div class = "form-group">
 													<label>Calculation Type</label>
 													<div class = "input-group">
-													<label class="custom-control custom-radio">
-														<input type="radio" class="custom-control-input" name="calctype" value="1">
+													<label class="custom-control">
+														<input type="radio" name="calctype" value="1">
 														<span class="custom-control-label"> Add in Total </span>
 													</label> &nbsp;&nbsp;
-													<label class="custom-control custom-radio">
-														<input type="radio" class="custom-control-input" name="calctype" value="2">
+													<label class="custom-control ">
+														<input type="radio" name="calctype" value="2">
 														<span class="custom-control-label"> Highest Apply</span>
 													</label>
 													</div>
@@ -109,63 +109,63 @@
 												<label>Choose</label>
 												<h4 class = "others-sel-area text-success">Apply Scheme to all product</h4>
 													<div class = "input-group  prod-area others-sel-area "  style ="display:none">
-															<label class="custom-control custom-radio">
+															<label class="custom-control ">
 																<input type="radio" class="custom-control-input fade-chk-div" name="prodschemes" value="BR" data-target = "#brand-area">
 																<span class="custom-control-label"> Brand </span>
 															</label> &nbsp;
-															<label class="custom-control custom-radio">
+															<label class="custom-control ">
 																<input type="radio" class="custom-control-input fade-chk-div" name="prodschemes" value="CTG" data-target = "#categ-area">
 																<span class="custom-control-label"> Category </span>
 															</label>&nbsp;
-															<label class="custom-control custom-radio">
+															<label class="custom-control ">
 																<input type="radio" class="custom-control-input fade-chk-div" name="prodschemes" value="SBCTG" data-target = "#sub-categ-area">
 																<span class="custom-control-label"> Subcategory </span>
 															</label>&nbsp;
-															<label class="custom-control custom-radio">
+															<label class="custom-control ">
 																<input type="radio" class="custom-control-input fade-chk-div" name="prodschemes" value="PRD" data-target = "#prod-list-area">
 																<span class="custom-control-label"> Product </span>
 															</label>
 														</div>
 													<div class = "input-group  loc-area others-sel-area"  style ="display:none">
-																<label class="custom-control custom-radio">
+																<label class="custom-control ">
 																<input type="radio" class="custom-control-input fade-chk-div" name="locschemes" value="CTY" data-target = "#usr-city-area">
 																<span class="custom-control-label"> City </span>
 															</label> &nbsp;
 													
-															<label class="custom-control custom-radio">
+															<label class="custom-control ">
 																<input type="radio" class="custom-control-input fade-chk-div" name="locschemes" value="RGN" data-target = "#region-area">
 																<span class="custom-control-label"> Region </span>
 															</label>&nbsp;
-															<label class="custom-control custom-radio">
+															<label class="custom-control ">
 																<input type="radio" class="custom-control-input fade-chk-div" name="locschemes" value="ST" data-target = "#state-area">
 																<span class="custom-control-label"> State </span>
 															</label>					
 													</div>
 													<div class = "input-group  payment-area others-sel-area"  style ="display:none">
-																<label class="custom-control custom-radio">
+																<label class="custom-control ">
 																<input type="radio" class="custom-control-input fade-chk-div" name="payschemes" value="PY-1" data-target = "#pay-mode-area">
 																<span class="custom-control-label"> Mode </span>
 															</label> &nbsp;
-															<label class="custom-control custom-radio">
+															<label class="custom-control ">
 																<input type="radio" class="custom-control-input fade-chk-div" name="payschemes" value="PY-2">
 																<span class="custom-control-label">One Payment Time </span>
 															</label>&nbsp;
-															<label class="custom-control custom-radio">
+															<label class="custom-control ">
 																<input type="radio" class="custom-control-input fade-chk-div" name="payschemes" value="PY-3">
 																<span class="custom-control-label"> Using Debit and Credit Card </span>
 															</label>&nbsp;
 																			
 													</div>
 													<div class = "input-group  user-area others-sel-area"  style ="display:none">
-																<label class="custom-control custom-radio">
+																<label class="custom-control ">
 																<input type="radio" class="custom-control-input fade-chk-div" name="usrschemes" value="SUSR" data-target = "#usr-list-area">
 																<span class="custom-control-label"> Specific Users </span>
 															</label> &nbsp;
-															<label class="custom-control custom-radio">
+															<label class="custom-control ">
 																<input type="radio" class="custom-control-input fade-chk-div" name="usrschemes" value="RUSR" data-target = "#usr-role-area">
 																<span class="custom-control-label"> User Role </span>
 															</label>&nbsp;
-															<label class="custom-control custom-radio">
+															<label class="custom-control ">
 																<input type="radio" class="custom-control-input fade-chk-div" name="usrschemes" value="USRTP" data-target = "#usr-type-area">
 																<span class="custom-control-label"> User Type </span>
 															</label>&nbsp;
@@ -411,17 +411,9 @@
 	</div>
 
 		<!-- End Page -->
-<script src="<?php echo base_url(); ?>assets/plugins/date-picker/jquery-ui.js"></script>
-<script src="<?php echo base_url(); ?>assets/plugins/multipleselect/multiple-select.js"></script>
+		<script src="<?php echo base_url(); ?>assets/plugins/multipleselect/multiple-select.js"></script>
 <script>
-	$(document).ready(function(){
-		        
-		$(".fc-datepicker,.rfc-datepicker,pfc-datepicker").datepicker();
-			$('.add-multi-select').multipleSelect({
-				filter: true
-			})
-		
-	});
+	
 	$(document).on("change", ".sel-show-trg", function(){
 		
 		var val = $(this).find("option:selected").text();
