@@ -1101,6 +1101,9 @@ if($root=='https://student.spaceinternationals.com'){  ?>
 						            <li class="<?php echo (($segment1 == "payment") ? "active" : null) ?>">
                           <a href="<?php echo base_url("payment/paylist"); ?>">Payment</a>
                         </li>
+                        <li class="<?php echo (($segment2 == "measurement_unit") ? "active" : null) ?>">
+                          <a href="<?php echo base_url("product/measurement_unit"); ?>">Measurement Unit</a>
+                        </li>
                      </ul>
 
                   </li>
