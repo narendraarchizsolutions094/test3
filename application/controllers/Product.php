@@ -34,6 +34,7 @@ class Product extends CI_Controller {
 		$this->load->model('warehouse_model');
 		$data['seller_list'] = $this->User_model->read('Seller');
         $data['brand_list'] = $this->warehouse_model->brand_list();		
+    	$data['units'] = $this->Product_model->get_units();        
 		$data['content']  = $this->load->view('product/add-product', $data, true);
         $this->load->view('layout/main_wrapper', $data);		
 	}
@@ -41,7 +42,8 @@ class Product extends CI_Controller {
 		if(isset($_POST['proname'])){			
 			$this-> saveProduct();
 		}
-
+    	$data['units'] = $this->Product_model->get_units();        
+		
 		$data['title'] = 'Update Product';
 		$data['product'] = $this->Product_model->productdet($prodno);		
 		$data['category'] = $this->db->select("*")->where("comp_id", $this->session->companey_id)->get("tbl_category")->result();	
@@ -251,6 +253,7 @@ class Product extends CI_Controller {
 							 "color"        => $this->input->post("color", true),
 							 "details"      => $this->input->post("details", true),
 							 "hsn"			=> $this->input->post("hsn_code", true),
+							 "measurement_unit"	=> $this->input->post("measurement_unit", true),
 							 "seller_id"    => $seller_id,
 							 "skuid"    => $skuid,
 							 "brand"    => $brand
@@ -889,5 +892,24 @@ class Product extends CI_Controller {
     			}
     		}
     	}
+    }
+
+    public function measurement_unit(){
+    	if (!empty($_POST)) {
+    		$unit	=	$this->input->post('unit');
+    		$insarr = array(
+    					'comp_id' => $this->session->companey_id,
+    					'title'   => $unit,
+    					'created_by' => $this->session->user_id
+    				);
+    		if ($this->db->insert('measurement_unit',$insarr)) {
+    			$this->session->set_flashdata('message','Unit Created Successfully.');
+    		}
+    	}
+    	$data = array();
+    	$data['title'] = "Measurement Unit";
+    	$data['units'] = $this->Product_model->get_units();
+    	$data['content']	=	$this->load->view('product/measurement_unit',$data,true);
+    	$this->load->view('layout/main_wrapper',$data);
     }
 }

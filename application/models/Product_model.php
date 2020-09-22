@@ -382,6 +382,13 @@ class Product_model extends CI_Model {
     	$this->db->select('id');
     	$this->db->where('country_name',$name);
     	return $this->db->get('tbl_product_country')->row_array();
+    }
+
+    public function get_units(){
+    	$this->db->select('measurement_unit.*,concat(tbl_admin.s_display_name," ",tbl_admin.last_name) as created_by_name');
+    	$this->db->where('measurement_unit.comp_id',$this->session->companey_id);
+    	$this->db->join('tbl_admin','tbl_admin.pk_i_admin_id=measurement_unit.created_by','inner');
+    	return $this->db->get('measurement_unit')->result();
     }	
 
 }

@@ -182,7 +182,30 @@
 									<input type="text" class="form-control" id="width" name="weight" value="<?php echo ($isedit == true) ? $product->weight : set_value("weight"); ?>">
 								</div>
 							</div> -->
-						
+							
+							<div class="col-md-4">
+								<div class="form-group">
+									<label>Measurement unit</label>
+									<select name="measurement_unit" class="form-control">
+										<option value="">--- Selete Unit ---</option>
+										<?php 
+										if($isedit == true) {
+											$measurement_unit = $product->measurement_unit;
+										}else{
+											$measurement_unit  = 	 set_value("measurement_unit"); 
+										}			
+									
+										if (!empty($units)) {
+											foreach ($units as $unit) { ?>
+												<option value="<?=$unit->id?>" <?php echo ($measurement_unit == $unit->id) ? "selected" : ""; ?> ><?=$unit->title?></option>
+											<?php	
+											}
+										}
+										?>
+									</select>
+								</div>
+							</div>
+							
 							<div class="col-md-4">
 									<div class="form-group">
 										<label>Price</label>
