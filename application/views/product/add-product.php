@@ -229,8 +229,46 @@
 							<div class="col-md-4" id="color">
 									<div class="form-group">
 										<label>Color</label>
+										<?php										
+										if($isedit == true) {
+											$color= $product->color;
+										}else{
+											$color = set_value("color"); 
+										}
+										?>
 										<select class="form-control" id="color" name="color">
 											<option value="">Select</option>
+											<option value="White" <?php echo ($color == 'White') ? "selected" : ""; ?>>White</option>
+											<option value="Yellow" <?php echo ($color == 'Yellow') ? "selected" : ""; ?>>Yellow</option>
+											<option value="Blue" <?php echo ($color == 'Blue') ? "selected" : ""; ?>>Blue</option>
+											<option value="Red" <?php echo ($color == 'Red') ? "selected" : ""; ?>>Red</option>
+											<option value="Green" <?php echo ($color == 'Green') ? "selected" : ""; ?>>Green</option>
+											<option value="Black" <?php echo ($color == 'Black') ? "selected" : ""; ?>>Black</option>
+											<option value="Brown" <?php echo ($color == 'Brown') ? "selected" : ""; ?>>Brown</option>
+											<option value="Azure" <?php echo ($color == 'Azure') ? "selected" : ""; ?>>Azure</option>
+											<option value="Ivory" <?php echo ($color == 'Ivory') ? "selected" : ""; ?>>Ivory</option>
+											<option value="Teal" <?php echo ($color == 'Teal') ? "selected" : ""; ?>>Teal</option>
+											<option value="Silver" <?php echo ($color == 'Silver') ? "selected" : ""; ?>>Silver</option>
+											<option value="Purple" <?php echo ($color == 'Purple') ? "selected" : ""; ?>>Purple</option>
+											<option value="Navy blue" <?php echo ($color == 'Navy blue') ? "selected" : ""; ?>>Navy blue</option>
+											<option value="Pea green" <?php echo ($color == 'Pea green') ? "selected" : ""; ?>>Pea green</option>
+											<option value="Gray" <?php echo ($color == 'Gray') ? "selected" : ""; ?>>Gray</option>
+											<option value="Orange" <?php echo ($color == 'Orange') ? "selected" : ""; ?>>Orange</option>
+											<option value="Maroon" <?php echo ($color == 'Maroon') ? "selected" : ""; ?>>Maroon</option>
+											<option value="Charcoal" <?php echo ($color == 'Charcoal') ? "selected" : ""; ?>>Charcoal</option>
+											<option value="Aquamarine" <?php echo ($color == 'Aquamarine') ? "selected" : ""; ?>>Aquamarine</option>
+											<option value="Coral" <?php echo ($color == 'Coral') ? "selected" : ""; ?>>Coral</option>
+											<option value="Fuchsia" <?php echo ($color == 'Fuchsia') ? "selected" : ""; ?>>Fuchsia</option>
+											<option value="Wheat" <?php echo ($color == 'Fuchsia') ? "selected" : ""; ?>>Wheat</option>
+											<option value="Lime" <?php echo ($color == 'Lime') ? "selected" : ""; ?>>Lime</option>
+											<option value="Crimson" <?php echo ($color == 'Crimson') ? "selected" : ""; ?>>Crimson</option>
+											<option value="Khaki" <?php echo ($color == 'Khaki') ? "selected" : ""; ?>>Khaki</option>
+											<option value="Hot pink" <?php echo ($color == 'Hot pink') ? "selected" : ""; ?>>Hot pink</option>
+											<option value="Magenta" <?php echo ($color == 'Magenta') ? "selected" : ""; ?>>Magenta</option>
+											<option value="Olden" <?php echo ($color == 'Olden') ? "selected" : ""; ?>>Olden</option>
+											<option value="Plum" <?php echo ($color == 'Plum') ? "selected" : ""; ?>>Plum</option>
+											<option value="Olive" <?php echo ($color == 'Olive') ? "selected" : ""; ?>>Olive</option>
+											<option value="Cyan" <?php echo ($color == 'Cyan') ? "selected" : ""; ?>>Cyan</option>
 										</select>
 									</div>
 							</div>
