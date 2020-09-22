@@ -59,7 +59,9 @@ class Order_model extends CI_Model {
 			$this->db->join('tbl_product_country prd','prd.id=ord.product','left');
 			$this->db->join('tbl_admin usr','usr.pk_i_admin_id=ord.cus_id','left');		
 			$ordcol = array("ord.id","prd.country_name");			
-			$this->order_by($ordcol);
+			//$this->order_by($ordcol);
+			$this->db->order_by("ord.id",'DESC');
+
 			$this->limit();			
 			return $this->db->get()->result();	
 		}else{			

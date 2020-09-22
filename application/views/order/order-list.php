@@ -200,8 +200,7 @@ input[name=lead_stages]{
             {extend: 'excel', title: 'Order', className: 'btn-sm'}, 
             {extend: 'pdf', title: 'Order', className: 'btn-sm'}, 
             {extend: 'print', className: 'btn-sm'} 
-        ],				
-				/*"order":[1,"desc"],*/
+        ],								
 				createdRow: function( row, data, dataIndex ) {
 			        $(row).find('td:eq(0)').attr('data-th', 'S.No.');
 			        $(row).find('td:eq(1)').attr('data-th', 'Order No');
