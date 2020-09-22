@@ -803,7 +803,7 @@ input[name=lead_stages]{
                             
                             ?>
                             <option value="<?php echo $user->pk_i_admin_id; ?>">
-                              <?=$user->s_display_name ?>&nbsp;<?=$user->last_name.' '.$user->s_user_email; ?>                                
+                              <?=$user->s_display_name ?>&nbsp;<?=$user->last_name.' - '.$user->s_user_email; ?>                                
                             </option>
                             <?php 
                           //}
