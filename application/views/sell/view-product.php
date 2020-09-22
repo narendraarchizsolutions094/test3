@@ -220,6 +220,11 @@
 								<label class="col-md-3"><b>Subcategory :</b></label><p class="col-md-9"><?php echo $product->subcat_name; ?></p></div><?php
 						}
 
+						if(!empty($product->measurement_unit)) { 
+							?><div class = "col-md-12">
+								<label class="col-md-3"><b>Measurement unit :</b></label><p class="col-md-9"><?php echo $product->unit; ?></p></div><?php
+						}
+
 
 						if(!empty($product->othr_price)) { 
 							?><div class = "col-md-12">
