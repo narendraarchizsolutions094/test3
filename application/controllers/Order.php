@@ -203,11 +203,11 @@ class Order extends CI_Controller {
 		//$this->load->model("datatable_model");		
 		$ordarr  	  = $this->order_model->orders(1);
 
-		echo $this->db->last_query();
+		//echo $this->db->last_query();
 
-		echo "<pre>";
+		/*echo "<pre>";
 		print_r($ordarr);
-		exit();
+		exit();*/
 		//$data["pay"]  = $this->payment_model->getpayments();		
 		//$data["dlv"] = $this->order_model-> getAllDilevery();
 		$neword = array();
