@@ -63,6 +63,7 @@ class Payment_model extends CI_Model {
 			
 			
 			$this->limit();	
+			$this->db->order_by('pay.id','desc');
 			return $this->db->get()
 				 ->result();
 		}else{
