@@ -205,7 +205,7 @@ input[name=lead_stages]{
 					"orderable":"false",
 					"target":0
 				},
-				"order":[1,"desc"],
+				/*"order":[1,"desc"],*/
 				createdRow: function( row, data, dataIndex ) {
 			        $(row).find('td:eq(0)').attr('data-th', 'S.No.');
 			        $(row).find('td:eq(1)').attr('data-th', 'Order No');

@@ -169,12 +169,10 @@
 													</div>
 													<div class = "form-group col-md-4">
 														<label>Payment Mode</label><span class ="mand">*</span>
-														
 														<select class = "form-control" name = "paymode">
 															<option></option>
-															<option value = "1">Online</option>	
-															<option value = "2">Cash</option>
-															<option value = "3">Check/DD</option>
+															<option value = "1">Cash</option>
+															<option value = "2">Online</option>	
 														</select>
 													</div>
 													<div class = "form-group col-md-4">
