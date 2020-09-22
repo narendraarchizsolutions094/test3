@@ -239,11 +239,8 @@
 																					<div class="form-group">
 																						<label>Delivery By</label>
 																						<select class="form-control" name="deliverby">
-																							<!-- <option value="User 1">User 1</option>
-																							<option value="User 2">User 2</option>
-																							<option value="User 3">User 3</option>
-																							<option value="User 4">User 4</option>
-																							<option value="User 5">User 5</option> -->
+																							<option value="Seller">Seller</option>
+																							<option value="Lalantop">Lalantop</option>
 																						</select>
 																					</div>
 																				</div>

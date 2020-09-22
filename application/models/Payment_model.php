@@ -54,8 +54,8 @@ class Payment_model extends CI_Model {
 		$this->colfilter($flrcol);
 		$this->db->from("payment pay");
 		$this->db->join("tbl_order ord", "ord.id= pay.ord_id", "LEFT");
-		//	$this->db->join('users usr','usr.id=pay.cust_id','left');
-					
+		//	$this->db->join('users usr','usr.id=pay.cust_id','left');				
+
 		if($act == 1){
 			
 		//	$this->db->join("masters pmode", "pmode.id=pay.pay_mode", "LEFT");

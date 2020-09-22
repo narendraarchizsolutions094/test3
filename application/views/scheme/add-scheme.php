@@ -12,7 +12,7 @@
 				<div  class="panel panel-default thumbnail"> 
 					<div class="panel-heading no-print">
 						<div class="btn-group"> 
-							<a class="btn btn-primary" href="<?php echo base_url("product/addstock") ?>"> <i class="fa fa-list"></i> Add Scheme </a>  
+							<a class="btn btn-primary" href="<?php echo base_url("scheme") ?>"> <i class="fa fa-list"></i> Scheme List </a>  
 						</div>
 					</div>
 					<div class="panel-body panel-form">

@@ -54,20 +54,24 @@ public function __construct() {
   public function edit($cpn = ""){
 	  
 	  if(isset($_POST["fromdate"])){
-		  
+		   
 		  $this->updatescheme();
 	  }
+    $this->load->model("product_model");
+
 	  
-	   $data['pro_list'] = $this->warehouse_model->product_list();
-     $data['utype_list'] = $this->user_model->usertype_list();
-     $data['region'] = $this->location_model->region_list();
-	 $data['paymode'] = $this->db->select("*")->where("company", $this->session->company)->where("type",3)->get("masters")->result();
-	 $data["alldata"] = $this->warehouse_model->getalldata();  
-	 $data["schemes"] = $this->scheme_model->getSchemeByCoupan($cpn);
+	   $data['pro_list'] = $this->product_model->productlist();
+     //$data['utype_list'] = $this->user_model->usertype_list();
+     //$data['region'] = $this->location_model->region_list();
+	 //$data['paymode'] = $this->db->select("*")->where("company", $this->session->company)->where("type",3)->get("masters")->result();
+	 //$data["alldata"] = $this->warehouse_model->getalldata();  
+	 //$data["schemes"] = $this->scheme_model->getSchemeByCoupan($cpn);
 	 
 	 $data["schm"]    = (!empty($data["schemes"][0])) ? $data["schemes"][0] : ""; 
-	   $this->load->template('scheme/update-scheme',$data);
-  }
+	    $data['content'] = '';//$this->load->view('scheme/update-scheme',true,$data);
+      $this->load->view('layout/main_wrapper',$data);
+
+  } 
 
 	public function updatescheme(){
 		

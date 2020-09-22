@@ -5,7 +5,7 @@
         <div  class="panel panel-default thumbnail"> 
             <div class="panel-heading no-print">
                 <div class="btn-group"> 
-                    <a class="btn btn-primary" href="<?php echo base_url("scheme/add") ?>"> <i class="fa fa-list"></i> Add Scheme </a>  
+                    <a class="btn btn-primary" href="<?php echo base_url("scheme/add") ?>"> <i class="fa fa-plus"></i> Add Scheme </a>  
                 </div>
             </div>
                 <!-- app-content-->

@@ -105,13 +105,13 @@
 												
 													<th class="wd-15p">Order</th>
 											
-													<th class="wd-15p">Product</th>
+													<!-- <th class="wd-15p">Product</th> -->
 													<th class="wd-15p">Total Pay</th>
 													<th class="wd-15p">Paid</th>
 													<th class="wd-15p">Balance</th>
 													<th class="wd-15p">Mode</th>
 													<th class="wd-15p">Transaction No</th>
-													<th class="wd-15p">Status</th>
+													<!-- <th class="wd-15p">Status</th> -->
 													<th class="wd-15p">Payment Date</th>
 													<!-- <th class="wd-15p">Action</th> -->
 													
@@ -124,22 +124,24 @@
 												   $sl=1;
                                                   foreach($payments as $ind =>  $pay){
 												?>
-												<tr>
+												<tr> 
 
 													<td><?= $ind + 1; ?></td>
-													<td><?php echo $pay->ord_no; ?></td>
+													<td><a href="order/view/<?=$pay->ord_no?>"><?php echo $pay->ord_no; ?></a></td>
 												
-													<td><?php echo $pay->product ?></td>
+													<!-- <td><?php echo $pay->product ?></td> -->
 													<td>
 														<?php echo $pay->total_price; ?>
 													</td>
 													<td><?php echo $pay->pay; ?></td>
-													<td> <?php echo $pay->total_price - $pay->pay;  ?></td>
+													<td> <?php echo $pay->balance;  ?></td>
 													<td><?php  if($pay->pay_mode == 1){
+														echo "Cash on delivery";
+													}else if ($pay->pay_mode == 2) {
 														echo "Online";
 													} ?></td>
 													<td><?= $pay->transaction_no; ?></td>
-													<td><?= $pay->status; ?></td>
+													<!-- <td><?= $pay->status; ?></td> -->
 													<td><?= $pay->pay_date;  ?></td>
 													<!--td>
 														<a href="<?php echo base_url("payment/update/".urlencode(base64_encode(base64_encode($pay->id)))); ?>" class="btn btn-info">
