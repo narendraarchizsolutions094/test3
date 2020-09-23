@@ -894,6 +894,16 @@ class Product extends CI_Controller {
     	}
     }
 
+    public function delete_product_unit(){    	
+    	$unit = $this->input->post('unit');
+    	if (!empty($unit)) {
+    		foreach ($unit as $key => $value) {
+    			$this->db->where('id',$value);    			
+    			$this->db->delete('measurement_unit');
+    		}
+    	}
+    }
+
     public function measurement_unit(){
     	if (!empty($_POST)) {
     		$unit	=	$this->input->post('unit');
