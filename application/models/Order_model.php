@@ -53,8 +53,8 @@ class Order_model extends CI_Model {
 				$this->db->where("ord.pend_delv", date("Y-m-d"));
 			}			
 		}		
+		$this->db->join('tbl_product_country prd','prd.id=ord.product','left');			
 		if ($this->session->user_right == 200) {
-			$this->db->join('tbl_product_country prd','prd.id=ord.product','left');			
 			$this->db->join('tbl_proddetails prd2','prd2.prodid=prd.id');
 			$this->db->where('prd2.seller_id',$this->session->user_id);
 		}else{
