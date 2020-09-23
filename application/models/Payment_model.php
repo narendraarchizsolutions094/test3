@@ -30,6 +30,7 @@ class Payment_model extends CI_Model {
 		if($act == 1) {
 			$this->db->select("pay.*,ord.ord_no,ord.product,ord.quantity,ord.total_price");
 		}
+		$this->db->where('pay.company',$this->session->companey_id);
 		if($this->session->mrole != 1){
 			
 			//$this->db->where("pay.cust_id", $this->session->user_id);

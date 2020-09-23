@@ -1,4 +1,15 @@
-	  <div class="row">
+<style type="text/css" media="print">
+   
+    .noprint { 
+      visibility: hidden; 
+   }
+   img:not(#Lalantop_logo){
+   	visibility: hidden;
+   }
+   .content-wrapper{
+   	min-height: unset!important;
+   }
+</style> 
 		
 <div class="row">
     <!--  form area -->
@@ -16,7 +27,7 @@
 									<div class="card-body">
 										<div class="row">
 											<div class="col-md-6 col-sm-12 col-xs-12">
-												<img style="width: 26%;" src="https://thecrm360.com/new_crm/assets/images/Lalantop_logo.jpg" class="m-r-sm">
+												<img id="Lalantop_logo" style="width: 26%;" src="https://thecrm360.com/new_crm/assets/images/Lalantop_logo.jpg" class="m-r-sm">
 											</div>
 
 											<div class="text-right ml-auto col-md-6">
@@ -146,7 +157,7 @@
 									<div class="card-footer text-right">
 										<!-- <a href = "<?php echo base_url("order/pdfinvoice/".$mord->ord_no); ?>" class="btn btn-primary mb-1" target = "_blank"><i class="si si-wallet"></i> Pdf</a> -->
 									
-										<button type="button" class="btn btn-info mb-1" onclick="javascript:window.print();"><i class="si si-printer"></i> Print Invoice</button> 
+										<button type="button" class="btn btn-info mb-1 noprint" onclick="javascript:window.print();"><i class="si si-printer"></i> Print Invoice</button> 
 									</div>
 								</div>
 							</div>

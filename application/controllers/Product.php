@@ -139,7 +139,10 @@ class Product extends CI_Controller {
         {
                 $config['upload_path']          = './assets/images/products/';
                 $config['allowed_types']        = 'gif|jpg|png|jpeg';
-             
+				
+				$config['max_size']      = '1024';
+			    $config['max_width']     = '1024';
+			    $config['max_height']    = '768';             
 
                 $this->load->library('upload', $config);
 
@@ -162,7 +165,7 @@ class Product extends CI_Controller {
 		die();*/
 		
 		$this->form_validation->set_rules('proname', display('product_name'), 'required|max_length[50]');
-		$this->form_validation->set_rules('price', 'Price', 'required|max_length[50]');
+		$this->form_validation->set_rules('price', 'Price', 'required|max_length[10]');
 		$this->form_validation->set_rules('seller', 'Seller', 'required');
 		$this->form_validation->set_rules('brand', 'Brand', 'required');
    
@@ -234,7 +237,8 @@ class Product extends CI_Controller {
 			$othrprice = (!empty($_POST["othrprice"])) ? $this->input->post("othrprice", true) : 0;
 			$tax =  (!empty($_POST["tax"])) ? $this->input->post("tax", true) : 0;			
 			$total = $price + $othrprice + $tax;			
-			if(!empty($prodid)) {				
+			if(!empty($prodid)) {		
+				$err_msg = '';		
 				$imgarr   = $this->do_upload(); 
 				$arr = array(
 							 "last_update"  => date("Y-m-d h:i:s"),
@@ -260,28 +264,33 @@ class Product extends CI_Controller {
 							 );
 				if(!empty($imgarr["upload_data"]["file_name"])){
 					$arr["image"] = $imgarr["upload_data"]["file_name"];
+				}else{
+					$err_msg = $this->upload->display_errors();
 				}			 	
 				$sub_images	=	$this->upload_files('./assets/images/products/','image',$_FILES['sub_images']);
 				if (!empty($sub_images)) {
 					$arr['sub_image'] = json_encode($sub_images);
 				}
-				if(isset($_POST["detailsid"])) {					
-					$detid = $this->input->post("detailsid", true);
-					$this->db->where("id", $detid);
-					$this->db->update("tbl_proddetails", $arr);
-					$ret = true;
-				}else {		
-					$arrp["stock"]    	= 0;
-					$arrp["stockid"]  	= 0;
-					$arr["prodid"]   	= $prodid;	
-					$ret = $this->db->insert("tbl_proddetails", $arr);	
-				}
+				/*$ret = false;
+				if (empty($err_msg)) {	*/				
+					if(isset($_POST["detailsid"])) {					
+						$detid = $this->input->post("detailsid", true);
+						$this->db->where("id", $detid);
+						$this->db->update("tbl_proddetails", $arr);
+						$ret = true;
+					}else {		
+						$arrp["stock"]    	= 0;
+						$arrp["stockid"]  	= 0;
+						$arr["prodid"]   	= $prodid;	
+						$ret = $this->db->insert("tbl_proddetails", $arr);	
+					}
+				/*}*/
 			}
 			if ($ret) {
 				$this->session->set_flashdata('message', "Successfully saved");
 				//redirect(base_url("product"), "refresh");
 			} else {
-				$this->session->set_flashdata('exception', "Failed to saved");
+				$this->session->set_flashdata('exception', 'Something went wrong!');
 			}			
 		}
 	}	
@@ -293,7 +302,10 @@ class Product extends CI_Controller {
             'upload_path'   => $path,
             'allowed_types' => 'jpg|jpeg|gif|png',
             'remove_spaces' => TRUE,
-            'encrypt_name'  => TRUE                      
+            'encrypt_name'  => TRUE,
+            'max_size'      => '1024',
+			'max_width'     => '1024',
+			'max_height'    => '768'                                  
         );
         $this->load->library('upload', $config);
         $images = array();

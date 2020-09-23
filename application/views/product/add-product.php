@@ -32,6 +32,7 @@
 								<div class="form-group">
 									<label>Main Image</label>
 								<input type="file" name="mainimage" class="dropify" data-default-file="" accept="image/*">
+									<small style="font-size: 10px;">Max Upload size is 1MB only with max width of 1024 and max height of 768</small>
 									<?php if($isedit == true ) { ?>
 									<img src = "<?php echo base_url("assets/images/products/".$product->image); ?>" class = "img-responsive" style="height:250px;max-width:250px;">		
 									<?php } ?>
@@ -45,7 +46,9 @@
 							<div class="form-group">
 								<label>Sub Images</label>
 								<input type="file" class="form-control" id="sub-images" name="sub_images[]" multiple accept="image/*">
-							</div>							
+								<small style="font-size: 10px;">Max Upload size is 1MB only with max width of 1024 and max height of 768</small>
+							</div>	
+
 						</div>
 						<div>							
 						<?php if($isedit == true ) { 
