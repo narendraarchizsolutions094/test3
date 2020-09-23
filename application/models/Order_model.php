@@ -53,10 +53,16 @@ class Order_model extends CI_Model {
 				$this->db->where("ord.pend_delv", date("Y-m-d"));
 			}			
 		}		
-		$this->db->where_in("ord.addedby",$retuser);		
+		if ($this->session->user_right == 200) {
+			$this->db->where('prd2.seller_id',$this->session->user_id);
+			$this->db->join('tbl_proddetails prd2','prd2.prodid=prd.id');
+		}else{
+			$this->db->where_in("ord.addedby",$retuser);		
+		}
+
 		if($act == 1) {			
 		//	$this->db->join('order_prdct ordprd','ord.id=ordprd.ord_id','left');
-			$this->db->join('tbl_product_country prd','prd.id=ord.product','left');
+			$this->db->join('tbl_product_country prd','prd.id=ord.product','left');			
 			$this->db->join('tbl_admin usr','usr.pk_i_admin_id=ord.cus_id','left');		
 			$ordcol = array("ord.id","prd.country_name");			
 			//$this->order_by($ordcol);
