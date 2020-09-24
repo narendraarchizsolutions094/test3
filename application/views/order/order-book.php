@@ -52,11 +52,11 @@
 													
 													<div class="panel panel-default">
 														<div class="panel-heading">
-															<h4 class="card-title"><?php echo $ord->product_name; ?></h4>
+															<h4 class="card-title"><?php echo $ord->product_name; ?> <small class="pull-right">Seller - <?=$ord->seller_name?></small></h4>
 															<div class="card-options">
 																<a href="#" class="card-options-collapse" data-toggle="card-collapse"><i class="fe fe-chevron-up "></i></a>
 															<!--	<a href="#" class="card-options-remove" data-toggle="card-remove"><i class="fe fe-x "></i></a> -->
-															</div>
+															</div> 
 														</div>
 														<div class="panel-body">
 															<div class = "row">

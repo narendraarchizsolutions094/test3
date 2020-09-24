@@ -177,7 +177,7 @@ class Order_model extends CI_Model {
 	
 	public function getOrders($ordno){
 		
-	 	$this->db->select("ord.*,prd.id as prdid,prd.country_name as product_name,prddet.price as unit_price, prddet.image,prddet.stock");
+	 	$this->db->select("ord.*,prd.id as prdid,prd.country_name as product_name,prddet.price as unit_price, prddet.image,prddet.stock,CONCAT(tbl_admin.s_display_name,' ',tbl_admin.last_name,' - ',tbl_admin.s_user_email) as seller_name");
 				$this->db->where("ord.company", $this->session->companey_id);
 				$this->db->where("ord.ord_no", $ordno);
 				
@@ -191,6 +191,7 @@ class Order_model extends CI_Model {
 				//$this->db->join('users usr','usr.id=ord.cus_id','left');
 				$this->db->join('tbl_product_country prd','prd.id=ord.product','left');
 				$this->db->join('tbl_proddetails prddet','prd.id=prddet.prodid','left');
+				$this->db->join('tbl_admin','tbl_admin.pk_i_admin_id=prddet.seller_id');
 				$this->db->join('tbl_warehouse wh','ord.warehouse=wh.id','left');
 		return	$this->db->get()
 					 ->result();
