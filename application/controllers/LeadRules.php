@@ -172,6 +172,8 @@ class LeadRules extends CI_Controller {
         $all_description   =   $this->Leads_Model->find_description();        
         $sub_source = $this->Datasource_model->subsourcelist();             
         $products = $this->enquiry_model->get_user_productcntry_list();
+        $this->load->model('ticket_model');
+        $ticket_status = $this->ticket_model->get_ticket_status();
         $rule_source = array();
         if (!empty($source)) {            
             foreach ($source as $key => $value) {
@@ -226,6 +228,13 @@ class LeadRules extends CI_Controller {
                 $rule_process[$value->sb_id]  = $value->product_name;
             }
         }
+        $rule_ticket_status = array();
+        if (!empty($ticket_status)) {
+            foreach ($ticket_status as $key => $value) {
+                $rule_ticket_status[$value->id] = $value->title;
+            }
+        }
+        $data['rule_ticket_status'] = $rule_ticket_status;
         $data['rule_enquiry_status'] = json_encode(array(1=>'Enquiry',2=>'Lead',3=>'Client'));
         $data['lead_source'] = json_encode($rule_source);
         $data['country']     = json_encode($rule_country);
