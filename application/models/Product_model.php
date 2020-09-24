@@ -132,7 +132,7 @@ class Product_model extends CI_Model {
 					->join("tbl_subcategory", "tbl_proddetails.subcatogory = tbl_subcategory.id", "LEFT")
 					->where("tbl_product_country.comp_id", $this->session->userdata('companey_id'))
 					->where("tbl_product_country.id", $prodno)
-					->where("tbl_proddetails.id IS NOT NULL")
+					//->where("tbl_proddetails.id IS NOT NULL")
 					->order_by("tbl_product_country.id DESC")
 					->get()
 					->row();

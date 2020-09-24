@@ -242,8 +242,9 @@ class Buy extends CI_Controller {
 		
 	}
 	
-	public function addtocart(){
-		
+		public function addtocart(){
+		$this->cart->product_name_rules = '[:print:]';
+
 		$this->form_validation->set_rules("product", "Product", "trim|required");
 		
 		if($this->form_validation->run()){
@@ -274,7 +275,7 @@ class Buy extends CI_Controller {
 			
 			$gst_price = 0;
 			if ($product->gst>0) {
-				$gst_price = $product->price*($product->gst/100);				
+				$gst_price = (float)$product->price*((float)$product->gst/100);				
 			}
 
 			$data = array('id'      => $prodno,
@@ -348,7 +349,7 @@ class Buy extends CI_Controller {
 
 				$gst_price = 0;
 				if ($product->gst>0) {
-					$gst_price = $product->price*($product->gst/100);				
+					$gst_price = (float)$product->price*((float)$product->gst/100);				
 				}
 				
 				$prdarr = array("status" => $status,"prodid" => $prodno, "product" => $product->country_name, "price" => (float)$product->price+(float)$gst_price , "qty" => (int)$qty + (int)$pqty,"total" => count($cardcontent));
@@ -357,7 +358,7 @@ class Buy extends CI_Controller {
 
 				$gst_price = 0;
 				if ($product->gst>0) {
-					$gst_price = $product->price*($product->gst/100);				
+					$gst_price = (float)$product->price*((float)$product->gst/100);				
 				}
 
 				$prdarr = array("status" => 1,"prodid" => $prodno, "product" => $product->country_name, "price" => (float)$product->price+(float)$gst_price, "qty" => (int)$data['qty'],"total" => count($cardcontent) + 1);
