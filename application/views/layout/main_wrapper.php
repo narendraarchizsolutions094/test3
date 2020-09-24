@@ -1270,8 +1270,18 @@ if($root=='https://student.spaceinternationals.com'){  ?>
 
                         <li class="<?php echo (($this->uri->segment(2) == "qr_code") ? "active" : null) ?>">
                           <a href="<?php echo base_url("configurations/qr_code") ?>"><?php echo display('qr_code') ?></a>
-                        </li>                        
-
+                        </li>     
+                        <?php
+                        if ($this->session->companey_id == 81) { ?>
+                         <li>
+                          <a href="<?php echo base_url("whatsappapi/facebook") ?>">Facebook</a>
+                        </li>                      
+                        <li>
+                          <a href="<?php echo base_url("facebook") ?>">Facebook Master</a>
+                        </li>
+                        <?php
+                        }
+                        ?>
                      </ul>
 
                   </li>

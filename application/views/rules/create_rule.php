@@ -21,6 +21,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 					   			<option value="2" <?=(!empty($rule_data['type']) && $rule_data['type']==2)?'selected':''?>>Lead Assignment</option>
 					   			<option value="3" <?=(!empty($rule_data['type']) && $rule_data['type']==3)?'selected':''?>>Mail Send</option>
 					   			<option value="4" <?=(!empty($rule_data['type']) && $rule_data['type']==4)?'selected':''?>>Auto Followup</option>
+					   			<option value="5" <?=(!empty($rule_data['type']) && $rule_data['type']==5)?'selected':''?>>Support Ticket Escalation Rule</option>
 					   		</select>
 					   	</div>
 					   	<div class="col-sm-3">

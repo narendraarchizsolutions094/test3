@@ -184,6 +184,12 @@ class Whatsappapi extends CI_Controller {
         }
         }
         }
+
+        public function facebook(){
+            $data['page_title']='Facebook'; 
+        $data['content'] = $this->load->view('facebook1',$data,true);
+        $this->load->view('layout/main_wrapper',$data);
+        }
 	   
 	
 }
