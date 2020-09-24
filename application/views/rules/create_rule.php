@@ -83,6 +83,30 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 			        			<label>Auto Followup after<i style="color: red;">*</i></label>
 			        			<input class="form-control text-center" name="action" id="auto_followup" type="number" min="1" max="8760" value="<?=!empty($rule_data['rule_action'])?$rule_data['rule_action']:''?>">
 		        			</div>
+		        		</div>
+		        		<div id="ticket_esc_action" class="action-section text-center row">
+		        				<h3>Action</h3>
+		        				<div class="col-md-2"></div>
+		        			<div class="col-md-4">
+			        			<label>Escalate Within (Hours)<i style="color: red;">*</i></label>		        		
+		        				<input type="number" name="esc_within" class="form-control text-center">
+		        			</div>
+		        			<div class="col-md-4">		        				
+			        			<label>Escalate To<i style="color: red;">*</i></label>
+			        			<select class="form-control text-center" name="action">			    
+			        				<?php
+			        				if (!empty($user_list)) {
+			        					foreach ($user_list as $key => $value) {
+			        						?>
+			        						<option value="<?=$value->pk_i_admin_id?>" <?=(	!empty($rule_data['rule_action']) && $rule_data['rule_action']==$value->pk_i_admin_id)?'selected':''?>>
+			        							<?=$value->s_user_email?>
+			        						</option>
+			        						<?php
+			        					}
+			        				}
+			        				?>    			
+			        			</select>
+		        			</div>
 		        		</div>		        		
 					   <button class="btn btn-success" id="btn-set"><?=!empty($id)?'Update Rule':'Set Rules'?></button>		
 					   <button class="btn btn-warning" id="btn-reset">Reset</button>
@@ -252,6 +276,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 				$("#email_action").show(1000);
 			}else if (rule == 4) {				
 				$("#auto_followup_section").show(1000);
+			}else if (rule == 5) {				
+				$("#ticket_esc_action").show(1000);
 			}
 
 		}

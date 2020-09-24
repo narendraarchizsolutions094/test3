@@ -20,7 +20,7 @@ class Dashboard extends CI_Controller {
         ));
 
     }
-    public function fb_token() { 
+         public function fb_token() { 
      $challenge = $_REQUEST['hub_challenge'];
         $verify_token = $_REQUEST['hub_verify_token'];
         if ($verify_token === 'abc123') {
@@ -65,18 +65,18 @@ class Dashboard extends CI_Controller {
                 if ($err) {
                 } else {
        foreach(json_decode($response)->field_data as $v){
-            if(!empty($v) && $v->{'name'}==='full_name'){
-                $name=$v->{'values'};
-                $name1=$name[0];
-              }   
-              if(!empty($v) && $v->{'name'}==='phone_number'){
-               $phone=$v->{'values'};
-               $phone1=$phone[0];
-              } 
-              if(!empty($v) && $v->{'name'}==='email'){
-               $email=$v->{'values'};
-               $email1= $email[0];
-              }     
+      if(!empty($v) && $v->{'name'}==='full_name'){
+          $name=$v->{'values'};
+          $name1=$name[0];
+        }   
+        if(!empty($v) && $v->{'name'}==='phone_number'){
+         $phone=$v->{'values'};
+         $phone1=$phone[0];
+        } 
+        if(!empty($v) && $v->{'name'}==='email'){
+         $email=$v->{'values'};
+         $email1= $email[0];
+        }     
             }  
          $this->db->select('from_id,from_name,compaign_name,add_set_name,add_name,course_name');
             $this->db->where('from_id',$form_id);
@@ -105,7 +105,7 @@ class Dashboard extends CI_Controller {
           CURLOPT_TIMEOUT => 30,
           CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
           CURLOPT_CUSTOMREQUEST => "POST",
-          CURLOPT_POSTFIELDS => "------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"mobileno\"\r\n\r\n".$phone1."\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"company_id\"\r\n\r\n81\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"user_id\"\r\n\r\n511\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"process_id\"\r\n\r\n175\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"name\"\r\n\r\n".$name1."\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"email\"\r\n\r\n".$email1."\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"4393\"\r\n\r\n".$compaign_name."\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"4394\"\r\n\r\n".$add_name."\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"4392\"\r\n\r\n".$add_set_name."\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"4395\"\r\n\r\n".$from_name."\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"4016\"\r\n\r\n".$response."\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"enquiry_source\"\r\n\r\n209\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW--",
+          CURLOPT_POSTFIELDS => "------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"mobileno\"\r\n\r\n".$phone1."\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"company_id\"\r\n\r\n81\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"user_id\"\r\n\r\n511\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"process_id\"\r\n\r\n175\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"fname\"\r\n\r\n".$name1."\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"email\"\r\n\r\n".$email1."\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"4393\"\r\n\r\n".$compaign_name."\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"4394\"\r\n\r\n".$add_name."\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"4392\"\r\n\r\n".$add_set_name."\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"4395\"\r\n\r\n".$from_name."\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"4016\"\r\n\r\n".$response."\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"enquiry_source\"\r\n\r\n209\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW--",
                   CURLOPT_HTTPHEADER => array(
                     "cache-control: no-cache",
                     "content-type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW",
@@ -183,18 +183,18 @@ class Dashboard extends CI_Controller {
                     
                 } else {
                 foreach(json_decode($response)->field_data as $v){
-                        if(!empty($v) && $v->{'name'}==='full_name'){
-                            $name=$v->{'values'};
-                            $name1=$name[0];
-                          }   
-                          if(!empty($v) && $v->{'name'}==='phone_number'){
-                           $phone=$v->{'values'};
-                           $phone1=$phone[0];
-                          } 
-                          if(!empty($v) && $v->{'name'}==='email'){
-                           $email=$v->{'values'};
-                           $email1= $email[0];
-                          }     
+                  if(!empty($v) && $v->{'name'}==='full_name'){
+                      $name=$v->{'values'};
+                      $name1=$name[0];
+                    }   
+                    if(!empty($v) && $v->{'name'}==='phone_number'){
+                     $phone=$v->{'values'};
+                     $phone1=$phone[0];
+                    } 
+                    if(!empty($v) && $v->{'name'}==='email'){
+                     $email=$v->{'values'};
+                     $email1= $email[0];
+                    }     
                  } 
             $this->db->select('from_id,from_name,compaign_name,add_set_name,add_name,course_name');
             $this->db->where('from_id',$form_id);
@@ -223,7 +223,7 @@ class Dashboard extends CI_Controller {
           CURLOPT_TIMEOUT => 30,
           CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
           CURLOPT_CUSTOMREQUEST => "POST",
-          CURLOPT_POSTFIELDS => "------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"mobileno\"\r\n\r\n".$phone1."\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"company_id\"\r\n\r\n81\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"user_id\"\r\n\r\n511\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"process_id\"\r\n\r\n175\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"name\"\r\n\r\n".$name1."\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"email\"\r\n\r\n".$email1."\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"4393\"\r\n\r\n".$compaign_name."\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"4394\"\r\n\r\n".$add_name."\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"4392\"\r\n\r\n".$add_set_name."\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"4395\"\r\n\r\n".$from_name."\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"4016\"\r\n\r\n".$response."\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"enquiry_source\"\r\n\r\n209\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW--",
+          CURLOPT_POSTFIELDS => "------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"mobileno\"\r\n\r\n".$phone1."\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"company_id\"\r\n\r\n81\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"user_id\"\r\n\r\n511\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"process_id\"\r\n\r\n175\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"fname\"\r\n\r\n".$name1."\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"email\"\r\n\r\n".$email1."\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"4393\"\r\n\r\n".$compaign_name."\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"4394\"\r\n\r\n".$add_name."\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"4392\"\r\n\r\n".$add_set_name."\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"4395\"\r\n\r\n".$from_name."\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"4016\"\r\n\r\n".$response."\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"enquiry_source\"\r\n\r\n209\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW--",
                   CURLOPT_HTTPHEADER => array(
                     "cache-control: no-cache",
                     "content-type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW",
@@ -245,7 +245,6 @@ class Dashboard extends CI_Controller {
                 }
                 }
      }
-
     public function index() { 
 
         $sessionId      =   $this->input->get('sessionId');

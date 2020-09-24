@@ -154,55 +154,42 @@ class LeadRules extends CI_Controller {
     public function create_rule($id=0){
         $data['title'] = display('leadrules');
         $data['id'] = $id;
-
         $this->load->model('Leads_Model');
         $this->load->model('location_model');
         $this->load->model('user_model');
         $this->load->model('dash_model');
         $this->load->model('Datasource_model');
         $this->load->model('enquiry_model');
-
         if ($id) {
             $data['rule_data']    =   $this->rule_model->get_rule($id);            
         }
- 
         $source    =   $this->Leads_Model->get_leadsource_list();
         $country   =   $this->location_model->country();
         $state     =   $this->location_model->estate_list();
         $city      =   $this->location_model->ecity_list();
         $lead_stages = $this->Leads_Model->get_leadstage_list();
-
         $process_list = $this->dash_model->get_user_product_list();        
-        $all_description   =   $this->Leads_Model->find_description();
-
-        
-        $sub_source = $this->Datasource_model->subsourcelist();     
-        
+        $all_description   =   $this->Leads_Model->find_description();        
+        $sub_source = $this->Datasource_model->subsourcelist();             
         $products = $this->enquiry_model->get_user_productcntry_list();
-/*print_r($sub_source);
-print_r($products);
-exit();*/
         $rule_source = array();
         if (!empty($source)) {            
             foreach ($source as $key => $value) {
               $rule_source[$value->lsid]  = $value->lead_name;
             }
         }
-
         $rule_subsource = array();
         if (!empty($sub_source)) {            
             foreach ($sub_source as $key => $value) {
               $rule_subsource[$value->subsource_id]  = $value->subsource_name;
             }
         }
-
         $rule_product = array();
         if (!empty($products)) {            
             foreach ($products as $key => $value) {
               $rule_product[$value->id]  = $value->country_name;
             }
         }
-
         $rule_country = array();
         if (!empty($country)) {
             foreach ($country as $key => $value) {
@@ -221,7 +208,6 @@ exit();*/
                 $rule_city[$value->id]  = $value->city;
             }
         }
-
         $rule_lead_stage = array();
         if (!empty($lead_stages)) {
             foreach ($lead_stages as $key => $value) {
@@ -241,7 +227,6 @@ exit();*/
             }
         }
         $data['rule_enquiry_status'] = json_encode(array(1=>'Enquiry',2=>'Lead',3=>'Client'));
-
         $data['lead_source'] = json_encode($rule_source);
         $data['country']     = json_encode($rule_country);
         $data['state']       = json_encode($rule_state);
@@ -252,7 +237,6 @@ exit();*/
         $data['user_list']   = $this->user_model->companey_users();
         $data['products']   = json_encode($rule_product);
         $data['sub_source']   = json_encode($rule_subsource);
-
         $data['content'] = $this->load->view('rules/create_rule', $data, true);
         $this->load->view('layout/main_wrapper', $data);       
     }
