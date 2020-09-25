@@ -34,8 +34,7 @@ class Ticket extends CI_Controller {
 		$this->load->view('layout/main_wrapper', $data);
 		
 	}
-	public function view($tckt = ""){
-		
+	public function view1($tckt = ""){		
 		if(isset($_POST["reply"])){
 			            $subject = $this->input->post("subjects", true);
 						$message = $this->input->post("reply", true);
@@ -44,24 +43,39 @@ class Ticket extends CI_Controller {
 			$this->Ticket_Model->saveconv();
 			redirect(base_url("ticket/view/".$tckt), "refresh");
 		}
-		if(isset($_POST["issue"])){
-			
+		if(isset($_POST["issue"])){			
 			$this->Ticket_Model->updatestatus();
 			redirect(base_url("ticket/view/".$tckt), "refresh");
-		}
-		
+		}		
 		$data["ticket"] = $this->Ticket_Model->get($tckt);
 		$data["conversion"] = $this->Ticket_Model->getconv($data["ticket"]->id);
 		if(empty($data["ticket"])){
 			show_404();
-		}
-		
+		}		
 		$data['title'] = "View ";
 		//$data["problem"] = $this->Ticket_Model->getissues();
 		$data['problem'] = $this->Ticket_Model->get_sub_list();
 		$data['content'] = $this->load->view('ticket/view-ticket', $data, true);
-		$this->load->view('layout/main_wrapper', $data);
+		$this->load->view('layout/main_wrapper', $data);		
+	}
+	function view($tckt = ""){
+		$data = array();
+		$data["ticket"] = $this->Ticket_Model->get($tckt);		
+		$data['all_description_lists']    =   $this->Leads_Model->find_description();		
+		$data["conversion"] = $this->Ticket_Model->getconv($data["ticket"]->id);
+		$data['problem'] = $this->Ticket_Model->get_sub_list();
 		
+		//$data['data'] = $data;
+		$this->load->model('enquiry_model');
+        $data['enquiry'] = $this->enquiry_model->enquiry_by_id($data["ticket"]->client);
+		$data['ticket_stages'] = $this->Leads_Model->find_estage($data['enquiry']->product_id);
+
+		$content	 =	$this->load->view('ticket/ticket_disposition',$data,true);
+		$content    .=  $this->load->view('ticket/ticket_details',$data,true);
+		$content    .=  $this->load->view('ticket/timeline',$data,true);
+
+		$data['content'] = $content;        
+        $this->load->view('layout/main_wrapper', $data);
 	}
 	
 public function assign_tickets() {

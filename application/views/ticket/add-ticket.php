@@ -48,7 +48,7 @@
 	
 				<div class="col-md-6">
 					<div class="form-group">
-						<label>Complain Date</label>
+						<label>Complaint Date</label>
 						<input type="text" class="form-control add-date-picker" name = "complaindate" value="<?php echo date('m/d/Y') ?>">
 					</div>
 				</div>

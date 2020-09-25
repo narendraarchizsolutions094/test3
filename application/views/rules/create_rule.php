@@ -84,21 +84,30 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 			        			<input class="form-control text-center" name="action" id="auto_followup" type="number" min="1" max="8760" value="<?=!empty($rule_data['rule_action'])?$rule_data['rule_action']:''?>">
 		        			</div>
 		        		</div>
+		        		<?php
+		        		$esc_hr = '';
+		        		$assign_to = '';
+		        		if (!empty($rule_data['rule_action']) && $rule_data['type'] == 5) {
+		        			$act = json_decode($rule_data['rule_action'],true);		        			
+		        			$esc_within = $act['esc_hr'];
+		        			$assign_to  = $act['assign_to'];
+		        		}
+		        		?>
 		        		<div id="ticket_esc_action" class="action-section text-center row">
 		        				<h3>Action</h3>
 		        				<div class="col-md-2"></div>
 		        			<div class="col-md-4">
 			        			<label>Escalate Within (Hours)<i style="color: red;">*</i></label>		        		
-		        				<input type="number" name="esc_within" class="form-control text-center">
+		        				<input type="number" name="esc_within" class="form-control text-center" value="<?=!empty($rule_data['rule_action'])?$esc_within:''?>">
 		        			</div>
 		        			<div class="col-md-4">		        				
 			        			<label>Escalate To<i style="color: red;">*</i></label>
-			        			<select class="form-control text-center" name="action">			    
+			        			<select class="form-control text-center" name="esc_to">			    
 			        				<?php
 			        				if (!empty($user_list)) {
 			        					foreach ($user_list as $key => $value) {
 			        						?>
-			        						<option value="<?=$value->pk_i_admin_id?>" <?=(	!empty($rule_data['rule_action']) && $rule_data['rule_action']==$value->pk_i_admin_id)?'selected':''?>>
+			        						<option value="<?=$value->pk_i_admin_id?>" <?=(	!empty($rule_data['rule_action']) && $assign_to==$value->pk_i_admin_id)?'selected':''?>>
 			        							<?=$value->s_user_email?>
 			        						</option>
 			        						<?php
@@ -197,6 +206,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		    input: 'select',
 		    values: <?=$rule_enquiry_status?>,
 		    operators: ['equal', 'not_equal','is_null', 'is_not_null']
+		  },{
+		    id: 'tbl_ticket.status',
+		    label: 'Ticket Status',
+		    type: 'integer',
+		    input: 'select',
+		    values: <?=$rule_ticket_status?>,
+		    operators: ['equal', 'not_equal','is_null', 'is_not_null']
 		  }],
 		  rules: rules_basic
 		});
@@ -222,6 +238,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		  		var action_value	=	$("#email_template").val();
 		  	}else if (rule_type==4){
 		  		var action_value	=	$("#auto_followup").val();
+		  	}else if (rule_type==5){
+		  		var esc_hr		=	$("input[name='esc_within']").val();
+		  		var assign_to	=	$("select[name='esc_to']").val();
+		  		action_value =	JSON.stringify({'esc_hr':esc_hr,'assign_to':assign_to});		  	
 		  	}
 		  	if (action_value && title) {
 		  		$.ajax({

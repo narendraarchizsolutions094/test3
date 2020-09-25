@@ -175,7 +175,7 @@ class LeadRules extends CI_Controller {
         $this->load->model('ticket_model');
         $ticket_status = $this->ticket_model->get_ticket_status();
         $rule_source = array();
-        if (!empty($source)) {            
+        if (!empty($source)) {             
             foreach ($source as $key => $value) {
               $rule_source[$value->lsid]  = $value->lead_name;
             }
@@ -234,7 +234,7 @@ class LeadRules extends CI_Controller {
                 $rule_ticket_status[$value->id] = $value->title;
             }
         }
-        $data['rule_ticket_status'] = $rule_ticket_status;
+        $data['rule_ticket_status'] = json_encode($rule_ticket_status);
         $data['rule_enquiry_status'] = json_encode(array(1=>'Enquiry',2=>'Lead',3=>'Client'));
         $data['lead_source'] = json_encode($rule_source);
         $data['country']     = json_encode($rule_country);

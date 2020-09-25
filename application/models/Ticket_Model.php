@@ -107,7 +107,7 @@ class Ticket_Model extends CI_Model {
 		
 		public function do_upload()
         {
-                $config['upload_path']          = './assets/images/';
+                $config['upload_path']          = './uploads/ticket/';
                 $config['allowed_types']        = '*';
             
 
@@ -328,5 +328,8 @@ $where .= " OR tck.assign_to IN (".implode(',', $all_reporting_ids).'))';
             return false;
         }
     }
-    
+    public function get_ticket_status(){
+    	$this->db->where('comp_id',$this->session->companey_id);
+    	return $this->db->get('support_ticket_status')->result();
+    }
 }
