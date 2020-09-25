@@ -39,7 +39,7 @@
                         <input type='checkbox' class="checked_all" value="check all" >&nbsp; 
                      </th>
                      <th class="sorting wid-10" style="border-left:none;">S.N </th>
-                     <th class="sorting wid-10" tabindex="0" rowspan="1" colspan="1">Form Id</th>
+                     <th class="sorting wid-10" tabindex="0" rowspan="1" colspan="1">Ad Id</th>
                      <th class="sorting wid-10" tabindex="0" rowspan="1" colspan="1">Form Name</th>
                      <th class="sorting wid-10" tabindex="0" rowspan="1" colspan="1">Adset Name</th>
                      <th class="sorting wid-10" tabindex="0" rowspan="1" colspan="1">Campaign Name</th>
@@ -77,7 +77,7 @@
                               <form method="POST" action="<?php echo base_url('facebook/add_product')?>">
                                  <div class="col-md-12">
                                 <div class="form-group col-md-6">
-                                   <label>Form Id</label>
+                                   <label>Ad Id</label>
                                    <input type="text" class="form-control" name="from_id" value="<?php echo $row->from_id; ?>" required>
                                 </div>
                                  <div class="form-group col-md-6">
@@ -139,7 +139,7 @@
             <form method="POST" action="<?php echo base_url('facebook/add_product')?>">
                <div class="row">
                   <div class="form-group col-md-6">
-                     <label>Form Id</label>
+                     <label>Ad Id</label>
                      <input type="text" class="form-control" name="from_id" required>
                   </div>
                    <div class="form-group col-md-6">
