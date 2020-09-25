@@ -8,17 +8,17 @@
 								</div>
 							</div>
 							<div class="col-md-2 col-sm-2 col-xs-2 pull-right" >  
-          <div style="float: left;">     
-            <div class="btn-group" role="group" aria-label="Button group">
-              <a class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-expanded="false" title="Actions">
-                <i class="fa fa-sliders"></i>
-              </a>  
-            <div class="dropdown-menu dropdown_css" style="max-height: 400px;overflow: auto;">            
-                  <a class="btn" data-toggle="modal" data-target="#AssignSelected" style="color:#000;cursor:pointer;border-radius: 2px;border-bottom :1px solid #fff;"><?php echo display('assign_selected'); ?></a>                                        
-            </div>                                         
-          </div>  
-        </div>       
-      </div>
+					          <div style="float: left;">     
+					            <div class="btn-group" role="group" aria-label="Button group">
+					              <a class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-expanded="false" title="Actions">
+					                <i class="fa fa-sliders"></i>
+					              </a>  
+					            <div class="dropdown-menu dropdown_css" style="max-height: 400px;overflow: auto;">            
+					                  <a class="btn" data-toggle="modal" data-target="#AssignSelected" style="color:#000;cursor:pointer;border-radius: 2px;border-bottom :1px solid #fff;"><?php echo display('assign_selected'); ?></a>                                        
+					            </div>                                         
+					          </div>  
+					        </div>       
+					      </div>
 						</div>
 					</div>
 					<div class="row">

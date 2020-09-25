@@ -177,11 +177,14 @@ function get_leadstage_name($id) {
     }*/
 
 
-    function find_estage($product_id) {
+    function find_estage($product_id,$stage_for='') {
         if (!empty($product_id)) {
             $this->db->select("*");
             $this->db->from('lead_stage');            
             $this->db->where("FIND_IN_SET($product_id,lead_stage.process_id)>",0);
+            if ($stage_for) {
+                $this->db->where("FIND_IN_SET($stage_for,lead_stage.stage_for)>",0);                
+            }
             $query = $this->db->get();            
             $res = $query->result();
         }else{

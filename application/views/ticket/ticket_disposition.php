@@ -53,7 +53,8 @@
             
               <div id="disposition-section" class="mobile-hide">
                 <div class="row" > 
-                   <?php echo form_open_multipart('ticket/ticket_disposition/'.$ticket->ticketno,array('id'=>'disposition_save_form','class'=>'form-inner')) ?>                     
+                   <?php echo form_open_multipart('ticket/ticket_disposition/'.$ticket->ticketno,array('id'=>'','class'=>'form-inner')) ?>                     
+                   <input type="hidden" name="client" value="<?=$enquiry->enquiry_id?>">
                     <div class="form-group">                 
                       <select class="form-control" id="lead_stage_change" name="lead_stage" onchange="find_description()">
                         <option>---Select Stage---</option>
@@ -64,7 +65,7 @@
                        </select>
                     </div>
                     <div class="form-group">                           
-                       <select class="form-control" id="lead_description" name="lead_description" onchange="showDiv(this)">
+                       <select class="form-control" id="lead_description" name="lead_description">
                            <option>---Select Description---</option>
                           <?php foreach($all_description_lists as $discription){ ?>                                   
                                <option value="<?php echo $discription->id; ?>"><?php echo $discription->description; ?></option>
@@ -77,7 +78,7 @@
 
                    <div class="sgnbtnmn form-group text-center">
                       <div class="sgnbtn">
-                         <input id="disposition_save_btn" type="submit" value="Submit" class="btn btn-primary"  name="Submit">
+                         <input type="submit" value="Submit" class="btn btn-primary"  name="Submit">
                       </div>
                    </div>       
                    <?php echo form_close()?>

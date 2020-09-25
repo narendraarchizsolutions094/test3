@@ -51,7 +51,7 @@ class Ticket extends CI_Controller {
 		$data["conversion"] = $this->Ticket_Model->getconv($data["ticket"]->id);
 		if(empty($data["ticket"])){
 			show_404();
-		}		
+		}		 
 		$data['title'] = "View ";
 		//$data["problem"] = $this->Ticket_Model->getissues();
 		$data['problem'] = $this->Ticket_Model->get_sub_list();
@@ -62,13 +62,13 @@ class Ticket extends CI_Controller {
 		$data = array();
 		$data["ticket"] = $this->Ticket_Model->get($tckt);		
 		$data['all_description_lists']    =   $this->Leads_Model->find_description();		
-		$data["conversion"] = $this->Ticket_Model->getconv($data["ticket"]->id);
+		$data["conversion"] = $this->Ticket_Model->getconv($data["ticket"]->ticketno);
 		$data['problem'] = $this->Ticket_Model->get_sub_list();
-		
+
 		//$data['data'] = $data;
 		$this->load->model('enquiry_model');
         $data['enquiry'] = $this->enquiry_model->enquiry_by_id($data["ticket"]->client);
-		$data['ticket_stages'] = $this->Leads_Model->find_estage($data['enquiry']->product_id);
+		$data['ticket_stages'] = $this->Leads_Model->find_estage($data['enquiry']->product_id,4);
 
 		$content	 =	$this->load->view('ticket/ticket_disposition',$data,true);
 		$content    .=  $this->load->view('ticket/ticket_details',$data,true);
@@ -76,6 +76,17 @@ class Ticket extends CI_Controller {
 
 		$data['content'] = $content;        
         $this->load->view('layout/main_wrapper', $data);
+	}
+
+	public function ticket_disposition($ticketno){
+		$lead_stage	=	$this->input->post('lead_stage');
+		$stage_desc	=	$this->input->post('lead_description');
+		$stage_remark	=	$this->input->post('conversation');
+		$client	=	$this->input->post('client');
+		$user_id = $this->session->user_id;
+		$this->session->set_flashdata('SUCCESSMSG', 'Update Successfully');
+        $this->Ticket_Model->saveconv($ticketno,'Stage Updated',$stage_remark,$client,$user_id,$lead_stage,$stage_desc);
+        redirect('ticket/view/'.$ticketno);
 	}
 	
 public function assign_tickets() {

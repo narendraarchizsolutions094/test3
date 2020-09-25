@@ -33,6 +33,17 @@
         <?php } ?>
       </select>
     </div>
+</div>
+<div class="row">
+    <div class="form-group col-md-6">
+        <label>Stage For</label>
+      <select  class="form-control process" name="stage_for[]" multiple>        
+         <option value="1">Enquiry</option>
+         <option value="2">Lead</option>
+         <option value="3">Client</option>
+         <option value="4">Ticket</option>
+      </select>
+    </div>
     
     
     
@@ -128,6 +139,25 @@
         <?php } ?>
       </select>
     </div>
+
+</div>
+    <div class="row">
+    <div class="form-group col-md-6">
+        <label>Stage For</label>
+        <?php
+        $stage_for = array();
+        if (!empty($stage->stage_for)) {
+            $stage_for    =   explode(',', $stage->stage_for);
+        }
+        ?>
+      <select  class="form-control process" name="stage_for[]" multiple>        
+         <option value="1" <?php if(!empty($stage_for) && in_array(1, $stage_for)){?>selected <?php }?>>Enquiry</option>
+         <option value="2" <?php if(!empty($stage_for) && in_array(2, $stage_for)){?>selected <?php }?>>Lead</option>
+         <option value="3" <?php if(!empty($stage_for) && in_array(3, $stage_for)){?>selected <?php }?>>Client</option>
+         <option value="4" <?php if(!empty($stage_for) && in_array(4, $stage_for)){?>selected <?php }?>>Ticket</option>
+      </select>
+    </div>
+
         
         
         

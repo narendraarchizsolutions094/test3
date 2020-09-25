@@ -125,6 +125,24 @@
          }               
      });        
     } 
-     
+     function find_description() { 
+        var l_stage = $("#lead_stage_change").val();
+        $.ajax({
+        type: 'POST',
+        url: '<?php echo base_url();?>lead/select_des_by_stage',
+        data: {lead_stage:l_stage},            
+        success:function(data){
+            var html='';
+            var obj = JSON.parse(data);                
+            html +='<option value="">---Select---</option>';            
+            for(var i=0; i <(obj.length); i++){                    
+              html +='<option value="'+(obj[i].id)+'">'+(obj[i].description)+'</option>';
+            }                
+            $("#lead_description").html(html);                
+        }
+        });
+       }
+
+            
 </script>
 

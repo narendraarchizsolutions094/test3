@@ -127,32 +127,24 @@ class Ticket_Model extends CI_Model {
                 }
         }
 		
-		public function saveconv(){
-			
-			$insarr = array("tck_id" => $this->input->post("ticketno", true),
+		public function saveconv($tckno,$subjects,$msg,$client,$user_id,$stage=0,$sub_stage=0){			
+			$insarr = array("tck_id" => $tckno,
 							"parent" => 0,
-							"subj"   => $this->input->post("subjects", true),
-							"msg"    => $this->input->post("reply", true),
+							"subj"   => $subjects,
+							"msg"    => $msg,
 							"attacment" => "",
-							"status"  => 0,
-							"send_date" =>	date("Y-m-d h:i:s"),
-							"client"   => $this->input->post("client", true),
-							"added_by" => $this->session->user_id,
-							
-							);
-						
-			$ret = $this->db->insert("tbl_ticket_conv", $insarr);
-			
-			if($ret){
-				
-					$this->session->set_flashdata('message', 'Successfully added ticket');
-			
+							"status"  => 0,							
+							"stage"  => $stage,							
+							"sub_stage"  => $sub_stage,							
+							"client"   => $client,
+							"added_by" => $user_id,							
+							);						
+			$ret = $this->db->insert("tbl_ticket_conv", $insarr);			
+			if($ret){				
+				$this->session->set_flashdata('message', 'Successfully saved');			
 			}else{
-					$this->session->set_flashdata('message', 'Failed to add ticket');
-		
-			}
-			
-					
+				$this->session->set_flashdata('message', 'Failed to save');		
+			}					
 		}
 		
 		function updatestatus(){

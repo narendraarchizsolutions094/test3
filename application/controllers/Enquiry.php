@@ -1394,7 +1394,7 @@ class Enquiry extends CI_Controller {
         $data['product_contry'] = $this->location_model->productcountry();
         $data['get_message'] = $this->Message_models->get_chat($phone_id);
         $data['all_stage_lists'] = $this->Leads_Model->find_stage();
-        $data['all_estage_lists'] = $this->Leads_Model->find_estage($data['details']->product_id);
+        $data['all_estage_lists'] = $this->Leads_Model->find_estage($data['details']->product_id,1);
 
         $data['institute_data'] = $this->enquiry_model->institute_data($data['details']->Enquery_id);
         $data['dynamic_field']  = $this->enquiry_model->get_dyn_fld($enquiry_id);

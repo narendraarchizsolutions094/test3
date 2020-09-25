@@ -222,7 +222,7 @@ public function select_app_by_ins() {
         $data['all_stage_lists'] = $this->Leads_Model->find_stage();
 
         //$data['all_estage_lists'] = $this->Leads_Model->find_estage($enquiry_id);
-        $data['all_estage_lists'] = $this->Leads_Model->find_estage($data['details']->product_id);
+        $data['all_estage_lists'] = $this->Leads_Model->find_estage($data['details']->product_id,2);
         
 
         $data['all_description_lists']    =   $this->Leads_Model->find_description();
@@ -421,12 +421,19 @@ public function select_app_by_ins() {
 
             $lead_stage_name = $this->input->post('stage_name');
             $process = $this->input->post('process');
+            $stage_for = $this->input->post('stage_for');
+            
             if (!empty($process)) {
                 $process    =   implode(',', $process);
             }
+            if (!empty($stage_for)) {
+                $stage_for    =   implode(',', $stage_for);
+            }
+
             $data = array(
                 'lead_stage_name' => $lead_stage_name,
                 'process_id'   => $process,
+                'stage_for'   => $stage_for,
                 'comp_id' => $this->session->userdata('companey_id')
             );
 
@@ -465,11 +472,16 @@ public function select_app_by_ins() {
             $stage_name = $this->input->post('stage_name');
             $stage_id = $this->input->post('stage_id');
             $process = $this->input->post('process');
+            $stage_for = $this->input->post('stage_for');
             if (!empty($process)) {
                 $process    =   implode(',', $process);
             }
+            if (!empty($stage_for)) {
+                $stage_for    =   implode(',', $stage_for);
+            }
             $this->db->set('lead_stage_name', $stage_name);
             $this->db->set('process_id', $process);
+            $this->db->set('stage_for', $stage_for);
             $this->db->where('stg_id', $stage_id);
             $this->db->update('lead_stage');
             $this->session->set_flashdata('SUCCESSMSG', 'Update Successfully');

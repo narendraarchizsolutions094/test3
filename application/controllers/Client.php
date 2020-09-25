@@ -184,7 +184,7 @@ class Client extends CI_Controller {
         $data['get_message'] = $this->Message_models->get_chat($phone_id);
         $data['all_stage_lists'] = $this->Leads_Model->find_stage();
         //$data['all_estage_lists'] = $this->Leads_Model->find_estage($enquiry_id);
-        $data['all_estage_lists'] = $this->Leads_Model->find_estage($data['details']->product_id);
+        $data['all_estage_lists'] = $this->Leads_Model->find_estage($data['details']->product_id,3);
         
 
         $data['institute_data'] = $this->enquiry_model->institute_data($data['details']->Enquery_id);
