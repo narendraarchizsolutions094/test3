@@ -2,18 +2,17 @@
 			<div class="col-md-12"> 
 					<div class="panel-heading no-print" style ="background-color: #fff;padding:7px;border-bottom: 1px solid #C8CED3;">
 						<div class="row">
-							<div class="col-md-10">
-								<div class="btn-group" role="group" aria-label="Button group">
-									<a class="dropdown-toggle btn btn-success" href="<?php echo base_url("ticket/add"); ?>" title="Add New Ticket"> <i class="fa fa-plus" ></i> Add Ticket</a>
-								</div>
-							</div>
+							<div class="btn-group"> 
+				                <a class="pull-left fa fa-arrow-left btn btn-circle btn-default btn-sm" onclick="history.back(-1)" title="Back"></a>        
+				                <a class="dropdown-toggle btn btn-danger btn-circle btn-sm fa fa-plus" href="<?=base_url().'ticket/add'?>" title="New Ticket"></a>                       
+				            </div>
 							<div class="col-md-2 col-sm-2 col-xs-2 pull-right" >  
 					          <div style="float: left;">     
 					            <div class="btn-group" role="group" aria-label="Button group">
 					              <a class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-expanded="false" title="Actions">
 					                <i class="fa fa-sliders"></i>
 					              </a>  
-					            <div class="dropdown-menu dropdown_css" style="max-height: 400px;overflow: auto;">            
+					            <div class="dropdown-menu dropdown_css" style="max-height: 400px;overflow: auto;">
 					                  <a class="btn" data-toggle="modal" data-target="#AssignSelected" style="color:#000;cursor:pointer;border-radius: 2px;border-bottom :1px solid #fff;"><?php echo display('assign_selected'); ?></a>                                        
 					            </div>                                         
 					          </div>  
@@ -22,7 +21,7 @@
 						</div>
 					</div>
 					<div class="row">
-						<div class="col-md-12">
+						<div class="">
 							<div class="panel-body">
 							<form class="form-inner" method="post" id="enquery_assing_from" >
 							<!--<?php echo form_open(base_url("ticket/add")); ?>-->
@@ -42,7 +41,7 @@
 											<?php if($this->session->companey_id!=83){ ?>
 											<th>Product</th>
 											<?php } ?>
-											<th>Related To</th>
+											
 											<th>Assign To</th>
 											<th>Priority</th>
 											<th>Date</th>
@@ -62,8 +61,7 @@
 														<td><?php echo $tck->phone	; ?></td>
 														<?php if($this->session->companey_id!=83){ ?>
 														<td><?=$tck->country_name ; ?></td>
-														<?php } ?>
-														<td><?php echo ucwords($tck->category) ; ?></td>
+														<?php } ?>														
 														<td><?php echo $tck->s_display_name.' '.$tck->last_name ; ?></td>
 														<td><?php 
 															if($tck->priority == 1){

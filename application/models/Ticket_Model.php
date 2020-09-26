@@ -67,6 +67,8 @@ class Ticket_Model extends CI_Model {
 				$arr["send_date"]  	= date("Y-m-d h:i:s");
 				$arr["client"]     	= ($this->input->post("client", true)) ? $this->input->post("client", true) : "";
 				$arr["company"]	 	= $companey_id ;
+				$arr["category"]    = $this->input->post("relatedto", true);
+
 				$arr["added_by"] 	= $user_id ;
 				$arr["complaint_type"] = $this->input->post("complaint_type", true);
 
@@ -160,7 +162,7 @@ class Ticket_Model extends CI_Model {
 		
 		function updatestatus(){
 			
-			$updarr = array("issue" 	=> $this->input->post("issue", true),
+			$updarr = array("category" 	=> $this->input->post("issue", true),
 							"solution" => $this->input->post("solution", true),
 							"status"    => $this->input->post("status", true),
 							"review"    => $this->input->post("review", true)
@@ -283,17 +285,21 @@ $where .= " OR tck.assign_to IN (".implode(',', $all_reporting_ids).'))';
 		
 		public function get($tctno){
 
-			return $this->db->select("tck.*,enq.phone,enq.email,enq.gender,prd.country_name, concat(enq.name,' ', enq.lastname) as clientname")
+			return $this->db->select("tck.*,tbl_ticket_subject.subject_title,lead_source.lead_name as ticket_source,enq.phone,enq.email,enq.gender,prd.country_name, concat(enq.name,' ', enq.lastname) as clientname")
 				 ->where("tck.ticketno", $tctno)
 				 ->where("tck.company", $this->session->companey_id)
 				 ->from("tbl_ticket tck")
 				 ->join("enquiry enq", "enq.enquiry_id = tck.client", "LEFT")
 				 ->join("tbl_product_country prd", "prd.id = tck.product", "LEFT")
-				 
+				 ->join("tbl_ticket_subject", "tbl_ticket_subject.id = tck.category", "LEFT")				 
+				 ->join("lead_source", "lead_source.lsid = tck.sourse", "LEFT")				 
 				 ->order_by("tck.id DESC")
 				 ->get()
 				 ->row();
 		
+		}
+		public function get_issue_list(){
+			return array();
 		}
 		public function getallclient(){
 			

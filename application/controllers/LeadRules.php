@@ -172,8 +172,8 @@ class LeadRules extends CI_Controller {
         $all_description   =   $this->Leads_Model->find_description();        
         $sub_source = $this->Datasource_model->subsourcelist();             
         $products = $this->enquiry_model->get_user_productcntry_list();
-        $this->load->model('ticket_model');
-        $ticket_status = $this->ticket_model->get_ticket_status();
+        $this->load->model('ticket_Model');
+        $ticket_status = $this->ticket_Model->get_ticket_status();
         $rule_source = array();
         if (!empty($source)) {             
             foreach ($source as $key => $value) {

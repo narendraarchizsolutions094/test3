@@ -5,22 +5,13 @@
        	<div class="row">
 				 <div class="panel panel-default"> 
 				<div class="panel-heading no-print">
-							<div class="row">
-					<div class="col-md-12">
-						<h4>Edit Ticket <small><?php echo $ticket->ticketno; ?></small> 
-						
-						<div style="float:right">
-            
-            
-            <div class="btn-group" role="group" aria-label="Button group">
-               <a class="btn" href="<?php echo base_url("ticket"); ?>" title="Refresh">
-               <i class="fa fa-arrow-left icon_color"></i>
-               </a>                                                    
-            </div>
-         </div>
-						</h4>
+					<div class="row">
+						<div class="col-md-12 text-center">
+                <a class="pull-left fa fa-arrow-left btn btn-circle btn-default btn-sm" onclick="history.back(-1)" title="Back"></a>        
+							
+							<h3><?php echo $ticket->ticketno; ?></h3> 				
+						</div>
 					</div>
-				</div>
 				</div>
 				<div class="panel-body">
 				<div class="col-md-2"></div>
@@ -81,11 +72,26 @@
 					<?php  if(!empty($problem)) {
 								foreach($problem as $ind => $prblm){
 									
-									?><option value = "<?php echo $prblm->subject_title; ?>" <?php echo ($prblm->subject_title == $ticket->category) ? "selected" : ""; ?>><?php echo $prblm->subject_title ?> </option><?php
+									?>
+									<option value="">-- Select --</option>
+									<option value = "<?php echo $prblm->id; ?>" <?php echo ($prblm->id == $ticket->category) ? "selected" : ""; ?>><?php echo $prblm->subject_title ?> </option><?php
 								}	
 								
 							} ?>
 				
+						</select>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="form-group">
+						<label>Nature of Complaint</label>
+						<select class="form-control add-select2" name = "issue">
+						<option value = ""> -- Select --</option>
+					<?php  if(!empty($issues)) {
+								foreach($issues as $ind => $issue){
+									?><option value = "<?php echo $issue->id ?>"><?php echo ucfirst($issue->title) ?> </option><?php
+								}	
+							} ?>
 						</select>
 					</div>
 				</div>

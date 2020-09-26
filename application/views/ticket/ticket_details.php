@@ -28,11 +28,49 @@
 		<?php } ?>
 		<div class="col-md-6">
 			<div class="form-group">
-				<label>Related To</label>
-				<input type="text" class="form-control" value="<?php echo ucwords($ticket->category); ?>" disabled>
+				<label>Problem</label>
+				<input type="text" class="form-control" value="<?php echo ucwords($ticket->subject_title); ?>" disabled>
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="form-group">
+				<label>Source</label>
+				<input type="text" class="form-control" value="<?php echo ucwords($ticket->ticket_source); ?>" disabled>
 			</div>
 		</div>
 		
+	
+		<div class="col-md-12">
+			<label>Remark</label>
+			<div style = "padding: 10px;border: 1px solid #e5e1e1;margin-right:25px;border-radius: 10px;font-size:16px;margin-bottom:10px;"><?php echo $ticket->message; ?></div>
+		</div>
+		<div class="col-md-6">
+			<div class="form-group">			
+				<label>Attachment : </label>
+				<?php
+				if ($ticket->attachment) { ?>
+					<span class=''><a target="_blank" href="<?=base_url().'uploads/ticket/'.$ticket->attachment?>"><?=$ticket->attachment?></a></span>
+				<?php
+				}else{
+					echo "<span class='badge badge-danger'>No attachment</span>";
+				}
+				?>
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="form-group">			
+				<label>Complaint Type : </label>
+					<span class='badge badge-danger'>
+					<?php
+						if ($ticket->complaint_type==1) {
+							echo "Complaint";
+						}else if ($ticket->complaint_type==2) {
+							echo "Query";
+						}
+					?>
+					</span>
+			</div>
+		</div>
 		<div class="col-md-6">
 			<div class="form-group">
 				<label>Priority</label>
@@ -47,24 +85,6 @@
 				?>
 			</div>
 		</div>
-		<div class="col-md-12">
-			<label>Remark</label>
-			<div style = "padding: 10px;border: 1px solid #e5e1e1;margin-right:25px;border-radius: 10px;font-size:16px;margin-bottom:10px;"><?php echo $ticket->message; ?></div>
-		</div>
-		<div class="col-md-12">
-			<div class="form-group">			
-				<label>Attachment : </label>
-				<?php
-				if ($ticket->attachment) { ?>
-					<span class=''><a target="_blank" href="<?=base_url().'uploads/ticket/'.$ticket->attachment?>"><?=$ticket->attachment?></a></span>
-				<?php
-				}else{
-					echo "<span class='badge badge-danger'>No attachment</span>";
-				}
-				?>
-			</div>
-		</div>
-
 		<div class="col-md-12">
 			<div class="row">
 				<div class="col-md-12" style ="background: #f7f7f7;border: 1px solid #ccc;padding: 15px;border-radius: 10px;margin-bottom:25px;">
@@ -83,7 +103,7 @@
 									<option value = "">-- Select --</option>
 								<?php if(!empty($problem)) {
 										foreach($problem as $ind => $prblm){
-											?><option value = "<?php echo $prblm->subject_title; ?>" <?php echo ($ticket->	issue == $prblm->subject_title) ? "selected" : "" ?>><?php echo $prblm->subject_title; ?></option><?php
+											?><option value = "<?php echo $prblm->subject_title; ?>" <?php echo ($ticket->category == $prblm->id) ? "selected" : "" ?>><?php echo $prblm->subject_title; ?></option><?php
 										}	
 									} ?>
 								</select>

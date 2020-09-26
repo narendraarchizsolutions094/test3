@@ -74,7 +74,21 @@
 						<option value = "">Select Subject</option>
 					<?php  if(!empty($problem)) {
 								foreach($problem as $ind => $prblm){
-									?><option value = "<?php echo $prblm->subject_title ?>"><?php echo ucfirst($prblm->subject_title) ?> </option><?php
+									?><option value = "<?php echo $prblm->id ?>"><?php echo ucfirst($prblm->subject_title) ?> </option><?php
+								}	
+							} ?>
+						</select>
+					</div>
+				</div>
+
+				<div class="col-md-6">
+					<div class="form-group">
+						<label>Nature of Complaint</label>
+						<select class="form-control add-select2" name = "issue">
+						<option value = ""> -- Select --</option>
+					<?php  if(!empty($issues)) {
+								foreach($issues as $ind => $issue){
+									?><option value = "<?php echo $issue->id ?>"><?php echo ucfirst($issue->title) ?> </option><?php
 								}	
 							} ?>
 						</select>

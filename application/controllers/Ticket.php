@@ -59,6 +59,10 @@ class Ticket extends CI_Controller {
 		$this->load->view('layout/main_wrapper', $data);		
 	}
 	function view($tckt = ""){
+		if(isset($_POST["issue"])){			
+			$this->Ticket_Model->updatestatus();
+			redirect(base_url("ticket/view/".$tckt), "refresh");
+		}
 		$data = array();
 		$data["ticket"] = $this->Ticket_Model->get($tckt);		
 		$data['all_description_lists']    =   $this->Leads_Model->find_description();		
@@ -137,6 +141,8 @@ $this->db->update('tbl_ticket');
 		$data["product"] = $this->Ticket_Model->getproduct();
 		//$data["problem"] = $this->Ticket_Model->getissues();
 		$data['problem'] = $this->Ticket_Model->get_sub_list();
+		$data['issues'] = $this->Ticket_Model->get_issue_list();
+
 		$data['source'] = $this->Leads_Model->get_leadsource_list();
 		//$data["source"] = $this->Ticket_Model->getSource($this->session->companey_id);//getting ticket source list
 		$data['content'] = $this->load->view('ticket/edit-ticket', $data, true);
@@ -331,6 +337,7 @@ $this->db->update('tbl_ticket');
 		$data["product"] = $this->Ticket_Model->getproduct();
 		//$data["problem"] = $this->Ticket_Model->getissues();
 		$data['problem'] = $this->Ticket_Model->get_sub_list();
+		$data['issues'] = $this->Ticket_Model->get_issue_list();
 		//$data["source"] = $this->Ticket_Model->getSource($this->session->companey_id);//getting ticket source list
 		$data['content'] = $this->load->view('ticket/add-ticket', $data, true);
 		$this->load->view('layout/main_wrapper', $data);

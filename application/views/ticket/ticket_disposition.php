@@ -6,7 +6,8 @@
       <div  class="panel panel-default thumbnail">
          <div class="panel-heading no-print">
             <div class="btn-group"> 
-               <a class="btn btn-success" href="<?=base_url().'ticket/add'?>"><i class="fa fa-plus"></i> Add Ticket</a> 
+                <a class="pull-left fa fa-arrow-left btn btn-circle btn-default btn-sm" onclick="history.back(-1)" title="Back"></a>        
+                <a class="dropdown-toggle btn btn-danger btn-circle btn-sm fa fa-plus" href="<?=base_url().'ticket/add'?>" title="New Ticket"></a>                       
             </div>
          </div>
          <div class="panel-body">
