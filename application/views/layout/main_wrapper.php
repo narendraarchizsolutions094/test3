@@ -1213,7 +1213,19 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                         <li class="<?php echo ($segment1=='user' && in_array($segment2,array('user_type','edit_user_role','permissions')) ?"active":'') ?>" style="<?php if(in_array(140,$module) || in_array(141,$module) || in_array(142,$module)|| in_array(143,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
                           <a href="<?php echo base_url(); ?>user/user_type"><?php echo display('user_function') ?></a>
                         </li>
-                          <li class="<?php echo ($segment1=='user' && in_array($segment2,array('index','create','edit')) ?"active":'') ?>" style="<?php if(in_array(130,$module)||in_array(131,$module)){ echo 'display:block';}else{echo 'display:none;';}?>">
+                          <?php
+                          $user_separation  = get_sys_parameter('user_separation','COMPANY_SETTING');
+                          if (!empty($user_separation)) {
+                            $user_separation = json_decode($user_separation,true);
+                            foreach ($user_separation as $key => $value) { ?>
+                              <li class="<?php echo ($segment1=='user' && (!empty($_GET['user_role']) && $_GET['user_role']==$key) && in_array($segment2,array('index','create','edit')) ?"active":'') ?>" style="<?php if(in_array(130,$module)||in_array(131,$module)){ echo 'display:block';}else{echo 'display:none;';}?>">
+                                <a href="<?php echo base_url("user/index?user_role=").$key; ?>"><?php echo $value.' List'; ?></a>
+                              </li> 
+                            <?php    
+                            }
+                          }
+                          ?>
+                          <li class="<?php echo ($segment1=='user' && empty($_GET['user_role']) && in_array($segment2,array('index','create','edit')) ?"active":'') ?>" style="<?php if(in_array(130,$module)||in_array(131,$module)){ echo 'display:block';}else{echo 'display:none;';}?>">
                             <a href="<?php echo base_url("user/index"); ?>"><?php echo display('user_list'); ?></a>
                           </li> 
                         
