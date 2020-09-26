@@ -167,7 +167,7 @@ class Ticket_Model extends CI_Model {
 		function getSource($companyid)
 		{
 			return $this->db->select("s_id,source_name")->where("comp_id",$companyid )->get("tbl_ticket_source")->result();
-		},
+		}
 
 		function getIssuesByCompnyID($companyid){
 			
