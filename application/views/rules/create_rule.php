@@ -85,7 +85,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		        			</div>
 		        		</div>
 		        		<?php
-		        		$esc_hr = '';
+		        		$esc_within = '';
 		        		$assign_to = '';
 		        		if (!empty($rule_data['rule_action']) && $rule_data['type'] == 5) {
 		        			$act = json_decode($rule_data['rule_action'],true);		        			
