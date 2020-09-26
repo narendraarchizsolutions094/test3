@@ -29,6 +29,7 @@ class Ticket_Model extends CI_Model {
 				"other"      => ($_POST["relatedto"] == "Others") ? $this->input->post("otherrel", true ) : "",
 				"product"	 => ($this->input->post("product", true)) ? $this->input->post("product", true) : "",
 				"sourse"     => ($this->input->post("source", true)) ? $this->input->post("source", true) : "",
+				"complaint_type" => $this->input->post("complaint_type", true),
 				"coml_date"	 => $ndate,
 				"last_update"=> date("Y-m-d h:i:s"),
 				"priority"	 => ($this->input->post("priority", true)) ? $this->input->post("priority", true) : "", 
@@ -64,6 +65,8 @@ class Ticket_Model extends CI_Model {
 				$arr["client"]     	= ($this->input->post("client", true)) ? $this->input->post("client", true) : "";
 				$arr["company"]	 	= $companey_id ;
 				$arr["added_by"] 	= $user_id ;
+				$arr["complaint_type"] = $this->input->post("complaint_type", true);
+
 				$arr["ticketno"] 	= "";
 				$arr["status"]   	= 0;
 				$this->db->insert("tbl_ticket", $arr);

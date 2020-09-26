@@ -122,6 +122,15 @@
 						<textarea name="remark" class="form-control"></textarea>
 					</div>
 				</div>
+				<div class="col-md-12 text-center">
+					<div class="form-group">
+						<label>Complaint Type</label>
+						<div>							
+							<input type="radio" name="complaint_type" value="1" checked> <label>Is Complaint</label>
+							<input type="radio" name="complaint_type" value="2"> <label>Is Query</label>
+						</div>
+					</div>
+				</div>
 				<div class = "col-md-12 text-center">
 					<button class="btn btn-success" type="submit">Save</button>
 				</div>

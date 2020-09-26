@@ -124,22 +124,28 @@
 					</div>
 				</div>
 				<?php } ?>
-				<div class="col-md-5">
+				<div class="col-md-12">
 					<div class="form-group">
 						<label>Attachment</label>
 						<input type = "file" name = "attachment" class="form-control">
+						<a href="<?php echo base_url('assets/images/'.$ticket->attachment); ?>" target="_blank"><?php echo $ticket->attachment ?></a> 
 					</div>
 				</div>
-				<div class="col-md-1">
-					<div class="form-group">
-						<label>File</label>
-				 <a href="<?php echo base_url('assets/images/'.$ticket->attachment); ?>" target="_blank"><?php echo $ticket->attachment ?></a> 
-				 </div>
+				
 				</div>
 				<div class="col-md-12">
 					<div class="form-group">
 						<label>Remark</label>
 						<textarea name = "remark" class="form-control"><?php echo $ticket->message; ?></textarea>
+					</div>
+				</div>
+				<div class="col-md-12 text-center">
+					<div class="form-group">
+						<label>Complaint Type</label>
+						<div>							
+							<input type="radio" name="complaint_type" value="1" <?=($ticket->complaint_type==1)?'checked':''?>> <label>Is Complaint</label>
+							<input type="radio" name="complaint_type" value="2" <?=($ticket->complaint_type==2)?'checked':''?>> <label>Is Query</label>
+						</div>
 					</div>
 				</div>
 				<input type = "hidden" name = "ticketno" value = "<?php echo $ticket->ticketno; ?>">
