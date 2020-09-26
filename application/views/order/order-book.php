@@ -42,7 +42,7 @@
 										<div class = "row">
 											<div class = "col-md-12">
 										<?php	$totprice = 0;
-												$pendingodr = 0;;
+												$pendingodr = 0; 
 												
 												if(!empty($orders)) { 
 													foreach($orders as $ind => $ord){ 
@@ -52,7 +52,7 @@
 													
 													<div class="panel panel-default">
 														<div class="panel-heading">
-															<h4 class="card-title"><?php echo $ord->product_name; ?> <small class="pull-right">Seller - <?=$ord->seller_name?></small></h4>
+															<h4 class="card-title"><?php echo $ord->product_name.' #'.$ord->prdid; ?> <small class="pull-right">Seller - <?=$ord->seller_name?></small></h4>
 															<div class="card-options">
 																<a href="#" class="card-options-collapse" data-toggle="card-collapse"><i class="fe fe-chevron-up "></i></a>
 															<!--	<a href="#" class="card-options-remove" data-toggle="card-remove"><i class="fe fe-x "></i></a> -->
