@@ -17,12 +17,9 @@ class Ticket_Model extends CI_Model {
         }
 
     	public function save($companey_id='',$user_id='')
-    	{
-		
-			$cdate = explode("/", $this->input->post("complaindate", true));
-			
-			$ndate = (!empty($cdate[2])) ? $cdate[2]."-".$cdate[0]."-".$cdate[1] : date("Y-m-d"); 
-			
+    	{		
+			$cdate = explode("/", $this->input->post("complaindate", true));			
+			$ndate = (!empty($cdate[2])) ? $cdate[2]."-".$cdate[0]."-".$cdate[1] : date("Y-m-d"); 			
 			$arr = array(
 				"message"    => ($this->input->post("remark", true)) ? $this->input->post("remark", true) : '' ,
 				"category"   => $this->input->post("relatedto", true),
@@ -33,26 +30,18 @@ class Ticket_Model extends CI_Model {
 				"coml_date"	 => $ndate,
 				"last_update"=> date("Y-m-d h:i:s"),
 				"priority"	 => ($this->input->post("priority", true)) ? $this->input->post("priority", true) : "", 
-			);
-			
+			);			
 			if(!empty($_FILES["attachment"]["name"]))
-			{
-				
-				$retdata =  $this->do_upload();
-			
-				if(!empty($retdata["upload_data"]["file_name"])){
-					
+			{				
+				$retdata =  $this->do_upload();			
+				if(!empty($retdata["upload_data"]["file_name"])){					
 					$arr["attachment"] = $retdata["upload_data"]["file_name"];
 				}	
-			}
-			
+			}			
 			if(isset($_POST["ticketno"]))
 			{	
-				//echo "string;";die;
-				
 				$this->db->where("ticketno", $this->input->post("ticketno", true));
-				$this->db->update("tbl_ticket", $arr);
-				
+				$this->db->update("tbl_ticket", $arr);				
 				if($this->db->affected_rows()){
 					return $_POST["ticketno"];					
 				}else{
@@ -60,36 +49,25 @@ class Ticket_Model extends CI_Model {
 				}
 			}
 			else 
-			{
-				
+			{				
 				$arr["name"]   		= ($this->input->post("name", true)) ? $this->input->post("name", true) : "";
 				$arr["email"]  		= ($this->input->post("email", true)) ? $this->input->post("email", true) : "";
 				$arr["send_date"]  	= date("Y-m-d h:i:s");
 				$arr["client"]     	= ($this->input->post("client", true)) ? $this->input->post("client", true) : "";
 				$arr["company"]	 	= $companey_id ;
 				$arr["category"]    = $this->input->post("relatedto", true);
-
 				$arr["added_by"] 	= $user_id ;
 				$arr["complaint_type"] = $this->input->post("complaint_type", true);
-
 				$arr["ticketno"] 	= "";
 				$arr["status"]   	= 0;
-				$this->db->insert("tbl_ticket", $arr);
-				
-				$insid = $this->db->insert_id();
-				
-				$tckno = "TCK".$insid.strtotime(date("y-m-d h:i:s"));
-				
+				$this->db->insert("tbl_ticket", $arr);				
+				$insid = $this->db->insert_id();				
+				$tckno = "TCK".$insid.strtotime(date("y-m-d h:i:s"));				
 				$updarr = array("ticketno" => $tckno);
-				
-		
-				
 				$this->db->where("id", $insid);
-				$this->db->update("tbl_ticket", $updarr);
-				
+				$this->db->update("tbl_ticket", $updarr);				
 				if(!empty($insid))
-				{
-					
+				{					
 					$insarr = array("tck_id" 	=> $insid,
 									"parent" 	=> 0,
 									'comp_id'	=> $this->session->companey_id,
@@ -99,8 +77,7 @@ class Ticket_Model extends CI_Model {
 									"status"  	=> 0,
 									"send_date" =>	date("Y-m-d h:i:s"),
 									"client"   	=> ($this->input->post("client", true)) ? $this->input->post("client", true) : '',
-									"added_by" 	=> $user_id,
-									
+									"added_by" 	=> $user_id,									
 									);
 					if ($this->db->insert("tbl_ticket_conv", $insarr)) {
 						return $tckno;
@@ -110,8 +87,8 @@ class Ticket_Model extends CI_Model {
 				}
 				else
 				{
-					 $this->session->set_flashdata('message', 'Failed to add ticket');
-					 return false;
+					$this->session->set_flashdata('message', 'Failed to add ticket');
+					return false;
           
 				}	
 			}	

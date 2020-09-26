@@ -28,7 +28,7 @@
 		<?php } ?>
 		<div class="col-md-6">
 			<div class="form-group">
-				<label>Problem</label>
+				<label><?=display('ticket_problem')?></label>
 				<input type="text" class="form-control" value="<?php echo ucwords($ticket->subject_title); ?>" disabled>
 			</div>
 		</div>
@@ -98,7 +98,7 @@
 					</div>
 					<div class="col-md-4">
 							<div class="form-group">
-								<label>Problem </label>
+								<label><?=display('ticket_problem')?> </label>
 								<select class="form-control" name = "issue">
 									<option value = "">-- Select --</option>
 								<?php if(!empty($problem)) {

@@ -8,7 +8,7 @@
 					<div class="row">
 						<div class="col-md-12 text-center">
                 <a class="pull-left fa fa-arrow-left btn btn-circle btn-default btn-sm" onclick="history.back(-1)" title="Back"></a>        
-							
+
 							<h3><?php echo $ticket->ticketno; ?></h3> 				
 						</div>
 					</div>
@@ -67,7 +67,7 @@
 				<?php } ?>
 				<div class="col-md-6">
 						<div class="form-group">
-						<label>Problem</label>
+						<label><?=display('ticket_problem')?></label>
 						<select class="form-control add-select2" name = "relatedto">
 					<?php  if(!empty($problem)) {
 								foreach($problem as $ind => $prblm){

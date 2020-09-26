@@ -443,7 +443,7 @@ $this->db->update('tbl_ticket');
 		
 	}
 public function add_subject() {
-        $data['title'] = 'Ticket Subject';
+        $data['title'] = display('ticket_problem_master');
         $data['nav1'] = 'nav2';
         #------------------------------# 
         $leadid = $this->uri->segment(3);

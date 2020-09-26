@@ -69,7 +69,7 @@
 
 				<div class="col-md-6">
 					<div class="form-group">
-						<label>Problem</label>
+						<label><?=display('ticket_problem')?></label>
 						<select class="form-control add-select2" name = "relatedto">
 						<option value = "">Select Subject</option>
 					<?php  if(!empty($problem)) {

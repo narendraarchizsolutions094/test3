@@ -32,7 +32,7 @@
 
            
 
-           <button class="btn btn-sm btn-success" style="float: left" type="button" data-toggle="modal" data-target="#createnewReason"><i class="fa fa-plus"></i> Add New Subject</button>
+           <button class="btn btn-sm btn-success" style="float: left" type="button" data-toggle="modal" data-target="#createnewReason"><i class="fa fa-plus"></i> <?=display('add_ticket_problem_master')?></button>
 
        
         </div>
@@ -51,7 +51,7 @@
 
                             <th class="sorting_asc wid-20 th0" tabindex="0" rowspan="1" colspan="1"><input type='checkbox' class="checked_all" value="check all" >&nbsp; <?php echo display('serial') ?></th>
 
-                            <th class="th1">Ticket Subject</th>
+                            <th class="th1">Title</th>
 
                             <th>Action</th>
 
@@ -113,7 +113,7 @@
 
         <button type="button" class="close" data-dismiss="modal">&times;</button>
 
-        <h4 class="modal-title">Edit Subject</h4>
+        <h4 class="modal-title">Edit</h4>
 
       </div>
 
@@ -133,7 +133,7 @@
 
                 <div class="form-group col-sm-12"> 
 
-                  <label>Subject*</label>
+                  <label>Title*</label>
 
                   <input type="hidden" name="drop_id" value="<?php echo $sub->id;?>">
 
@@ -347,7 +347,7 @@ input[type=number]::-webkit-outer-spin-button {
 
         <button type="button" class="close" data-dismiss="modal">&times;</button>
 
-        <h4 class="modal-title">Create New Subject</h4>
+        <h4 class="modal-title">Create New</h4>
 
       </div>
 
@@ -367,7 +367,7 @@ input[type=number]::-webkit-outer-spin-button {
 
                 <div class="form-group col-sm-12"> 
 
-                  <label>Subject<span style="color:red;">*</span></label>
+                  <label>Title<span style="color:red;">*</span></label>
 
                   <input class="form-control" name="subject" type="text" required="">  
 

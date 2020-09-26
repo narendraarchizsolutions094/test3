@@ -1440,7 +1440,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                      <ul class="treeview-menu">
                          
 						 <li class="<?php echo (($segment1 == "ticket" && $segment2 == "add_subject") ? "active" : null) ?>">
-                          <a href="<?php echo base_url("ticket/add_subject") ?>"><?php echo display('subject') ?></a>
+                          <a href="<?php echo base_url("ticket/add_subject") ?>"><?php echo display('ticket_problem_master') ?></a>
                         </li>
 						
                         <li class="<?php echo (($segment1 == "ticket" && $segment2 == "index") ? "active" : null) ?>">
