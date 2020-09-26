@@ -86,6 +86,7 @@ class Ticket extends CI_Controller {
 		$user_id = $this->session->user_id;
 		$this->session->set_flashdata('SUCCESSMSG', 'Update Successfully');
         $this->Ticket_Model->saveconv($ticketno,'Stage Updated',$stage_remark,$client,$user_id,$lead_stage,$stage_desc);
+        $ticketno	=	$this->input->post('ticketno');
         redirect('ticket/view/'.$ticketno);
 	}
 	

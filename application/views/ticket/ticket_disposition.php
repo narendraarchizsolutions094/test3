@@ -55,6 +55,7 @@
                 <div class="row" > 
                    <?php echo form_open_multipart('ticket/ticket_disposition/'.$ticket->id,array('id'=>'','class'=>'form-inner')) ?>                     
                    <input type="hidden" name="client" value="<?=$enquiry->enquiry_id?>">
+                   <input type="hidden" name="ticketno" value="<?=$ticket->ticketno?>">
                     <div class="form-group">                 
                       <select class="form-control" id="lead_stage_change" name="lead_stage" onchange="find_description()">
                         <option>---Select Stage---</option>
