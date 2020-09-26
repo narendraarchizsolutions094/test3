@@ -167,7 +167,7 @@ class Ticket_Model extends CI_Model {
 		function getSource($companyid)
 		{
 			return $this->db->select("s_id,source_name")->where("comp_id",$companyid )->get("tbl_ticket_source")->result();
-		}
+		},
 
 		function getIssuesByCompnyID($companyid){
 			
@@ -178,10 +178,12 @@ class Ticket_Model extends CI_Model {
 		
 		function getconv($conv){
 			$compid = $this->session->companey_id;
-			return $this->db->select("cnv.*")
+			return $this->db->select("cnv.*,lead_stage.lead_stage_name,lead_description.description as sub_stage")
 				 ->where("cnv.tck_id", $conv)
 				 ->where("cnv.comp_id", $compid)
 				 ->from("tbl_ticket_conv cnv")
+				 ->join("lead_stage",'lead_stage.stg_id=cnv.stage','left')
+				 ->join("lead_description",'lead_description.id=cnv.sub_stage','left')				 
 				 ->order_by("cnv.id ASC")
 				 ->get()
 				 ->result();
