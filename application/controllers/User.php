@@ -20,7 +20,11 @@ class User extends CI_Controller {
     }
 
     public function index() {
-        $data['title'] = display('user_list');
+        if (!empty($_GET['user_role'])) {
+            $data['title'] = $this->User_model->get_role_name_by_id($_GET['user_role']).' List';            
+        }else{
+            $data['title'] = display('user_list');
+        }
         $data['departments'] = $this->User_model->read2();
         //echo $this->db->last_query();
         $data['user_role'] = $this->db->get('tbl_user_role')->result();

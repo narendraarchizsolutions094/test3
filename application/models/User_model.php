@@ -20,7 +20,7 @@ class User_model extends CI_Model {
         $this->db->from('user');
         $this->db->where('status', 1);
   
-        return $this->db->get()->result();
+        return $this->db->get()->result(); 
     }
 
     public function read($user_right='') {        
@@ -70,7 +70,18 @@ class User_model extends CI_Model {
 
 
     public function read2() {
-
+        
+        if (empty($_GET['user_role'])) {            
+            $user_separation  = get_sys_parameter('user_separation','COMPANY_SETTING');
+            $sep_arr=array();
+            if (!empty($user_separation)) {
+                $user_separation = json_decode($user_separation,true);
+                foreach ($user_separation as $key => $value) { 
+                    $sep_arr[] = $key;
+                }
+            }            
+        }
+        
         $user_id = $this->session->user_id;
         $user_role = $this->session->user_role;
         $region_id = $this->session->region_id;
@@ -82,11 +93,28 @@ class User_model extends CI_Model {
         $this->db->select("*");
         $this->db->from($this->table);        
         $this->db->join('tbl_user_role', 'tbl_user_role.use_id=tbl_admin.user_type', 'left');
+        if (!empty($sep_arr)) {
+            $this->db->where_in("tbl_admin.user_type NOT",$sep_arr);            
+        }
+        if (!empty($_GET['user_role'])) {
+            $this->db->where('tbl_admin.user_type', $_GET['user_role']);            
+        }
         $this->db->where('tbl_admin.user_type!=', 1);
         $this->db->where('tbl_admin.companey_id',$this->session->companey_id);  
         return $this->db->get()->result();
     }
 
+    public function get_role_name_by_id($id){
+        $this->db->select('user_role');
+        $this->db->where('comp_id',$this->session->companey_id);
+        $this->db->where('use_id',$id);
+        $res    =   $this->db->get('tbl_user_role')->row_array();
+        if (!empty($res)) {
+            return $res['user_role'];
+        }else{
+            return false;
+        }
+    }
     public function reads() {
         $user_id = $this->session->user_id;
         $user_role = $this->session->user_role;
