@@ -20,8 +20,8 @@
 					<div class="row">
 						<div class="col-md-6">
 							<div class="form-group">
-								<label>Product Name</label>
-								<input type="text" class="form-control" id="proname" name="proname" value="<?php echo ($isedit == true) ? $product->country_name : set_value("proname"); ?>">
+								<label>Product Name <i class="text-danger">*</i></label>
+								<input type="text" class="form-control" id="proname" name="proname" value="<?php echo ($isedit == true) ? $product->country_name : set_value("proname"); ?>" required>
 							</div>							
 						</div>
 
@@ -30,8 +30,8 @@
 								<div class="col-md-2"></div>
 								<div class="col-md-8">
 								<div class="form-group">
-									<label>Main Image</label>
-								<input type="file" name="mainimage" class="dropify" data-default-file="" accept="image/*">
+									<label>Main Image<i class="text-danger">*</i></label>
+								<input type="file" name="mainimage" class="dropify" data-default-file="" accept="image/*" required>
 									<small style="font-size: 10px;">Max Upload size is 1MB only with max width of 1024 and max height of 768</small>
 									<?php if($isedit == true ) { ?>
 									<img src = "<?php echo base_url("assets/images/products/".$product->image); ?>" class = "img-responsive" style="height:250px;max-width:250px;">		
@@ -76,8 +76,8 @@
 						</div>
 						<div class = "col-md-4">
 							<div class = "form-group">
-								<label>Brand</label>
-								<input type="text" name="brand" class="form-control" value="<?php echo ($isedit == true) ? $product->brand : set_value("brand"); ?>">
+								<label>Brand<i class="text-danger">*</i></label>
+								<input type="text" name="brand" class="form-control" value="<?php echo ($isedit == true) ? $product->brand : set_value("brand"); ?>" required>
 								<!--select class = "form-control" name = "brand">
 									<option value="">Select Brand</option>
 								<?php if(!empty($brand_list)) {
@@ -211,14 +211,14 @@
 							
 							<div class="col-md-4">
 									<div class="form-group">
-										<label>Price</label>
-										<input type="text" class="form-control" id="price" placeholder="Enter price" name="price" value="<?php echo ($isedit == true) ? $product->price : set_value("price"); ?>">
+										<label>Price<i class="text-danger">*</i></label>
+										<input type="text" class="form-control" id="price" placeholder="Enter price" name="price" value="<?php echo ($isedit == true) ? $product->price : set_value("price"); ?>" required>
 									</div>
 							</div>
 							<div class="col-md-4">
 									<div class="form-group">
-										<label>MRP</label>
-										<input type="text" class="form-control" id="price" placeholder="Enter price" name="othrprice" value="<?php echo ($isedit == true) ? $product->othr_price : set_value("othr_price"); ?>">
+										<label>MRP<i class="text-danger">*</i></label>
+										<input type="text" class="form-control" id="price" placeholder="Enter price" name="othrprice" value="<?php echo ($isedit == true) ? $product->othr_price : set_value("othr_price"); ?>" required>
 									</div>
 							</div>
 							<div class="col-md-4">
