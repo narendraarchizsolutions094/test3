@@ -53,7 +53,7 @@
             
               <div id="disposition-section" class="mobile-hide">
                 <div class="row" > 
-                   <?php echo form_open_multipart('ticket/ticket_disposition/'.$ticket->ticketno,array('id'=>'','class'=>'form-inner')) ?>                     
+                   <?php echo form_open_multipart('ticket/ticket_disposition/'.$ticket->id,array('id'=>'','class'=>'form-inner')) ?>                     
                    <input type="hidden" name="client" value="<?=$enquiry->enquiry_id?>">
                     <div class="form-group">                 
                       <select class="form-control" id="lead_stage_change" name="lead_stage" onchange="find_description()">

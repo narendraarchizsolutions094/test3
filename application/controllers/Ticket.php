@@ -62,7 +62,7 @@ class Ticket extends CI_Controller {
 		$data = array();
 		$data["ticket"] = $this->Ticket_Model->get($tckt);		
 		$data['all_description_lists']    =   $this->Leads_Model->find_description();		
-		$data["conversion"] = $this->Ticket_Model->getconv($data["ticket"]->ticketno);
+		$data["conversion"] = $this->Ticket_Model->getconv($data["ticket"]->id);
 		$data['problem'] = $this->Ticket_Model->get_sub_list();
 
 		//$data['data'] = $data;
@@ -320,7 +320,7 @@ $this->db->update('tbl_ticket');
 			{
 				$this->session->set_flashdata('message', 'Successfully added ticket');
 				//redirect(base_url("ticket/add") , "refresh");
-            	redirect(base_url('ticket/index'));
+            	redirect(base_url('ticket/view/'.$res));
 			}
 		}
 		

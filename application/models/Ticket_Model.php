@@ -53,10 +53,13 @@ class Ticket_Model extends CI_Model {
 				$this->db->where("ticketno", $this->input->post("ticketno", true));
 				$this->db->update("tbl_ticket", $arr);
 				
-				$ret  = $this->db->affected_rows();
-				return $ret;
+				if($this->db->affected_rows()){
+					return $_POST["ticketno"];					
+				}else{
+					return false;
+				}
 			}
-			else
+			else 
 			{
 				
 				$arr["name"]   		= ($this->input->post("name", true)) ? $this->input->post("name", true) : "";
@@ -87,6 +90,7 @@ class Ticket_Model extends CI_Model {
 					
 					$insarr = array("tck_id" 	=> $insid,
 									"parent" 	=> 0,
+									'comp_id'	=> $this->session->companey_id,
 									"subj"   	=> "Ticked Created",
 									"msg"    	=> ($this->input->post("remark", true)) ? $this->input->post("remark", true) : '' ,
 									"attacment" => "",
@@ -96,13 +100,16 @@ class Ticket_Model extends CI_Model {
 									"added_by" 	=> $user_id,
 									
 									);
-					$ret = $this->db->insert("tbl_ticket_conv", $insarr);
-					return $ret;
-					
+					if ($this->db->insert("tbl_ticket_conv", $insarr)) {
+						return $tckno;
+					}else{
+						return false;
+					}
 				}
 				else
 				{
 					 $this->session->set_flashdata('message', 'Failed to add ticket');
+					 return false;
           
 				}	
 			}	
@@ -132,6 +139,7 @@ class Ticket_Model extends CI_Model {
 		
 		public function saveconv($tckno,$subjects,$msg,$client,$user_id,$stage=0,$sub_stage=0){			
 			$insarr = array("tck_id" => $tckno,
+							"comp_id" => $this->session->companey_id,
 							"parent" => 0,
 							"subj"   => $subjects,
 							"msg"    => $msg,
@@ -190,9 +198,10 @@ class Ticket_Model extends CI_Model {
 
 		
 		function getconv($conv){
-			
+			$compid = $this->session->companey_id;
 			return $this->db->select("cnv.*")
-				 ->where("cnv.tck_id", $conv )
+				 ->where("cnv.tck_id", $conv)
+				 ->where("cnv.comp_id", $compid)
 				 ->from("tbl_ticket_conv cnv")
 				 ->order_by("cnv.id ASC")
 				 ->get()
