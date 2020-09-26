@@ -18,8 +18,11 @@
               <br><span style="font-weight:900;font-size:12px;">Sub Stage - </span><span style="font-weight:900;font-size:12px;"><?php echo $cnv->sub_stage; ?></span><br>
               <?php
             }
-            ?>
+            if (!empty($cnv->msg)) { ?>
             <span style="font-weight:900;font-size:12px;">Remark - </span><span style="font-weight:900;font-size:12px;"><?php echo $cnv->msg; ?></span>               
+              <?php
+            }
+            ?>
             <p><?php echo date("j-M-Y h:i:s a",strtotime($cnv->send_date)); ?><br>
            </p>
           </div>
