@@ -13,8 +13,10 @@
 				</div>
                 <div class="col-md-9 col-sm-12">
 		<?php   $isedit = false;	
+		$mainimage_required = 'required';
 				if(!empty($product)) {
 					$isedit = true;
+					$mainimage_required = '';
 				}	?>
 		<?php  echo form_open_multipart(); ?>
 					<div class="row">
@@ -31,7 +33,7 @@
 								<div class="col-md-8">
 								<div class="form-group">
 									<label>Main Image<i class="text-danger">*</i></label>
-								<input type="file" name="mainimage" class="dropify" data-default-file="" accept="image/*" required>
+								<input type="file" name="mainimage" class="dropify" data-default-file="" accept="image/*" <?=$mainimage_required?>>
 									<small style="font-size: 10px;">Max Upload size is 1MB only with max width of 1024 and max height of 768</small>
 									<?php if($isedit == true ) { ?>
 									<img src = "<?php echo base_url("assets/images/products/".$product->image); ?>" class = "img-responsive" style="height:250px;max-width:250px;">		
