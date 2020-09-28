@@ -48,13 +48,14 @@
 
                      <th class="sorting wid-10" style="border-left:none;">S.N </th>
 					 
-                     <th class="sorting wid-10" tabindex="0" rowspan="1" colspan="1">Product Name</th>
-					 <th>Price</th>
+                     <th class="sorting wid-10">Product Id</th>
+                     <th class="sorting wid-10">Product Name</th>
+					           <th>Price</th>
                      <th>Stock</th>
                      <th>Added Date</th>
-                     <th class="sorting wid-10" tabindex="0" rowspan="1" colspan="1">Status</th> 
+                     <th class="sorting wid-10">Status</th> 
 
-                     <th class="sorting wid-10" tabindex="0" rowspan="1" colspan="1">Actions</th>
+                     <th class="sorting wid-10">Actions</th>
 
                   </tr>
 
@@ -69,6 +70,7 @@
                      <td><input type='checkbox' name='product_status[]' class="checkbox" value='<?php echo $row->id;?>'>
                      </td>
                      <td data-th='S.N'><?=$c++?></td>
+                     <td data-th='Product Id'><?= $row->sb_id; ?></td>
                      <td data-th='Product Name'><?= $row->country_name; ?></td>
                      <td data-th='Price'> <i class = "fa fa-rupee"></i> <?php echo $row->price; ?></td>
             				 <td data-th='Stock'>Stock</td>
