@@ -2107,16 +2107,16 @@ function upload_enquiry() {
                 $dat_array = array();
                 $count++;
                 if ($count == 1) {
-                    
+                     
                 } else {           
 				
 					if(!empty($this->location_model->get_city_by_name($filesop[8]))){                        
                         $res=$this->location_model->get_city_by_name($filesop[8]);
-                        $country_id=$res->country_id;
-                        $region_id=$res->region_id;
-                        $territory_id=$res->territory_id;
-                        $state_id=$res->state_id;
-                        $city_id=$res->cid;
+                        $country_id= !empty($res->country_id)?$res->country_id:'';
+                        $region_id=!empty($res->region_id)?$res->region_id:'';
+                        $territory_id=!empty($res->territory_id)?$res->territory_id:'';
+                        $state_id=!empty($res->state_id)?$res->state_id:'';
+                        $city_id=!empty($res->cid)?$res->cid:'';
 			        }else{                        
                         $country_id='';
                         $region_id='';
