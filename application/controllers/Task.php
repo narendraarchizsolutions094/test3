@@ -266,6 +266,11 @@ class Task extends CI_Controller {
             if(empty($name) || !isset($name) || $name=='  '){
                 $name = 'NA';
             }
+            if (user_access(450)) {
+                $p = '##########';                    
+            }else{
+                $p = $task->mobile;
+            }
               $details .= '
             <tr>
                 <td>' . $task->task_date . '</td>
@@ -274,7 +279,7 @@ class Task extends CI_Controller {
                 <td>'. $task->task_remark. '</td>
                 <td><a href="'.$url.'">' . $name . '</a></td>
                 <td>'.$task->user_name.'</td>
-                <td>' . $task->mobile . '</td>
+                <td>' . $p. '</td>
                 <td>'.$taskStatus.'</td>
                 <td><a data-toggle="modal" type="button" title="Add Target" data-target="#task_edit" onclick="get_modal_content('.$task->resp_id.')" ><i class="fa fa-edit btn btn-primary btn-sm"></i></a>';
 
