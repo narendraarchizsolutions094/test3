@@ -22,6 +22,8 @@
             <?php              
             if (!$invalid_process) { ?>              
             <form method="post" action="<?=base_url()?>enquiry/create" id="enquiry_form">
+              <?php $process_id = $this->session->process[0]; ?>
+              <input type="hidden" name="product_id" value="<?=$process_id?>">
               <div id="process_basic_fields" class="row">
               </div>            
               <div class="row">
@@ -49,7 +51,7 @@
 
 <script type="text/javascript">
   
-  $('input#saveandnew').click( function() {
+  $('input#saveandnmmew').click( function() {
     $.ajax({
         url: "<?=base_url()?>enquiry/create",
         type: 'post',
