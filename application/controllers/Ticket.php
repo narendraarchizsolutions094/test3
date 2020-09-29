@@ -74,6 +74,8 @@ class Ticket extends CI_Controller {
         $data['enquiry'] = $this->enquiry_model->enquiry_by_id($data["ticket"]->client);
 		$data['ticket_stages'] = $this->Leads_Model->find_estage($data['enquiry']->product_id,4);
 		$this->load->model('form_model');
+        $this->load->helper('custom_form_helper');
+		
         $data['tab_list'] = $this->form_model->get_tabs_list($this->session->companey_id,0,2);
 
 		$content	 =	$this->load->view('ticket/ticket_disposition',$data,true);
