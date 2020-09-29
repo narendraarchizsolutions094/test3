@@ -7,7 +7,7 @@
 		if (!empty($tab_list)) {
 			foreach ($tab_list as $key => $value) { ?>
 				<li>
-					<a  href="#<?=$value['title']?>" data-toggle="tab" style="padding: 10px 10px; font-size:12px;">			<?=$value['title']?>
+					<a  href="#<?=$value['id']?>" data-toggle="tab" style="padding: 10px 10px; font-size:12px;">			<?=$value['title']?>
 					</a>
 				</li>
 				<?php
@@ -168,7 +168,7 @@
 			<?php 
 			if (!empty($tab_list)) {
 				foreach ($tab_list as $key => $value) { ?>		
-					<div class="tab-pane" id="<?=$value['title']?>">
+					<div class="tab-pane" id="<?=$value['id']?>">
 					<?php
 					echo tab_content($value['id'],$comp_id,$enquiry->enquiry_id,$value['title']); 
 					?>
