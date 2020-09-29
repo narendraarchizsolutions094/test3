@@ -173,7 +173,7 @@
 					echo tab_content($value['id'],$comp_id,$enquiry->enquiry_id,$value['title']); 
 					?>
 					</div>
-					<? 
+					<?php 
 				}
 			}
 			?>
