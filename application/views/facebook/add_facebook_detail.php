@@ -39,7 +39,7 @@
                         <input type='checkbox' class="checked_all" value="check all" >&nbsp; 
                      </th>
                      <th class="sorting wid-10" style="border-left:none;">S.N </th>
-                     <th class="sorting wid-10" tabindex="0" rowspan="1" colspan="1">Ad Id</th>
+                     <th class="sorting wid-10" tabindex="0" rowspan="1" colspan="1">Form Id</th>
                      <th class="sorting wid-10" tabindex="0" rowspan="1" colspan="1">Form Name</th>
                      <th class="sorting wid-10" tabindex="0" rowspan="1" colspan="1">Adset Name</th>
                      <th class="sorting wid-10" tabindex="0" rowspan="1" colspan="1">Campaign Name</th>
@@ -58,7 +58,7 @@
                      <td data-th='Product Name'><?php echo $row->add_set_name; ?></td>
                      <td data-th='Product Name'><?php echo $row->compaign_name; ?></td>
                      <td data-th='Product Name'><?php echo $row->add_name; ?></td>
-                     <td data-th='Product Name'><?php echo $row->country_name; ?></td>
+                     <td data-th='Product Name'><?php echo $row->productcountry_name; ?></td>
                      <td data-th='Actions' class="center">
                         <a  class="edit" data-toggle="modal" data-target="#test<?php echo $row->form_update;?>"><i class="ti-pencil"></i></a> 
                      </td>
@@ -77,7 +77,7 @@
                               <form method="POST" action="<?php echo base_url('facebook/add_product')?>">
                                  <div class="col-md-12">
                                 <div class="form-group col-md-6">
-                                   <label>Ad Id</label>
+                                   <label>Form Id</label>
                                    <input type="text" class="form-control" name="from_id" value="<?php echo $row->from_id; ?>" required>
                                 </div>
                                  <div class="form-group col-md-6">
@@ -101,8 +101,12 @@
                                    <label>Product</label>
                                   <select class="form-control" name="product_name">
                                     <?php foreach($product_list as $r){ ?>
-                                    <option value="<?php echo $r->id; ?>" <?php if($r->id=$row->course_name){ echo 'selected';}; ?>><?php echo $r->country_name; ?></option>
-                                    <?php } ?>
+                                      <?php if($r->p_id==$row->course_name){  ?>
+                                    <option value="<?php echo $r->p_id; ?>" selected><?php echo $r->country_name; ?></option>
+                                  <?php }else{ ?>
+                                    <option value="<?php echo $r->p_id; ?>" ><?php echo $r->country_name; ?></option>
+                                    <?php }} ?>
+                                  }
                                   </select>
                                 </div>
                                  <input type="hidden" class="form-control" name="form_update" value="<?php echo $row->form_update; ?>" required>
@@ -139,7 +143,7 @@
             <form method="POST" action="<?php echo base_url('facebook/add_product')?>">
                <div class="row">
                   <div class="form-group col-md-6">
-                     <label>Ad Id</label>
+                     <label>Form Id</label>
                      <input type="text" class="form-control" name="from_id" required>
                   </div>
                    <div class="form-group col-md-6">
@@ -163,7 +167,7 @@
                      <label>Product</label>
                     <select class="form-control" name="product_name">
                       <?php foreach($product_list as $row){ ?>
-                      <option value="<?php echo $row->id; ?>"><?php echo $row->country_name; ?></option>
+                      <option value="<?php echo $row->p_id; ?>"><?php echo $row->country_name; ?></option>
                       <?php } ?>
                     </select>
                   </div>

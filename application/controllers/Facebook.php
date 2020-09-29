@@ -9,8 +9,9 @@ class Facebook extends CI_Controller {
     }
 	public function index(){
 		$data['title'] = 'Facebook Field Details';
+        $this->db->select("tbl_product_country.id as p_id");
 		$data['product_list'] = $this->location_model->productcountry();
-		$this->db->select('*,fb_from_details.id as form_update');
+		$this->db->select('*,fb_from_details.id as form_update,tbl_product_country.country_name as productcountry_name');
 		$this->db->join('tbl_product_country','tbl_product_country.id=fb_from_details.course_name');
 		$data['form_details'] = $this->db->get('fb_from_details')->result();
 		$data['content'] = $this->load->view('facebook/add_facebook_detail', $data, true);
