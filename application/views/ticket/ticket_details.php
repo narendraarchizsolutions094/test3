@@ -1,7 +1,13 @@
 <div class="col-md-6" style="border: 1px solid #c8ced3;padding: 15px;border-top: none;">
 	<div class="row">
 		<?php
+		$comp_id = $this->session->companey_id;
 		print_r($tab_list);
+		if (!empty($tab_list)) {
+			foreach ($tab_list as $key => $value) {
+				tab_content($value['id'],$comp_id,$enquiry->enquiry_id,$value['title']);				
+			}
+		}
 		?>
 	</div>
 	<div class="row">
