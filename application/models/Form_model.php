@@ -4,7 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Form_model extends CI_Model {    
 
-    public function get_tabs_list($comp_id,$process_id=0,$form_form=0) {
+    public function get_tabs_list($comp_id,$process_id=0,$form_for=0) {
         $this->db->select('forms.*');
     	$where = " FIND_IN_SET($comp_id,forms.comp_id) > 0";
     	if ($process_id) {
