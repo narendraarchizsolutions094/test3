@@ -5,7 +5,7 @@
 		print_r($tab_list);
 		if (!empty($tab_list)) {
 			foreach ($tab_list as $key => $value) {
-				tab_content($value['id'],$comp_id,$enquiry->enquiry_id,$value['title']);				
+				echo tab_content($value['id'],$comp_id,$enquiry->enquiry_id,$value['title']);				
 			}
 		}
 		?>
