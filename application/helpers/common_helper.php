@@ -139,14 +139,22 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     {
         $ci =& get_instance();
         $ci->load->database();
+        $Ary = array();
         if($param == 'email')
-        {   
-            $Ary = $ci->db->select('pk_i_admin_id')->from('tbl_admin')->where('s_user_email',"$value")->where('companey_id',$ci->session->companey_id)->get()->row();
+        {      
+            if($value !='')
+            {
+                $Ary = $ci->db->select('pk_i_admin_id')->from('tbl_admin')->where('s_user_email',"$value")->where('companey_id',$ci->session->companey_id)->get()->row();
+            }
+            
         }
         else
-        {
-            $Ary = $ci->db->select('pk_i_admin_id')->from('tbl_admin')->where('s_phoneno',$value)->where('companey_id',$ci->session->companey_id)->get()->row();
+        {   
+            if($value !="")
+            {
+                $Ary = $ci->db->select('pk_i_admin_id')->from('tbl_admin')->where('s_phoneno',"$value")->where('companey_id',$ci->session->companey_id)->get()->row();
+            }
+            
         }
-        
         return (!empty($Ary)) ? "yes" : 'no';
     }

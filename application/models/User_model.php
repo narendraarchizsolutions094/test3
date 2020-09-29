@@ -342,7 +342,7 @@ $company=$this->session->userdata('companey_id');
         }else{
             return false;
         }
-    }
+    } 
     /**
     * this method will get the user meta
     * @parm first parameter is user id integer, and second parameter array is data which you want to set of a user
@@ -373,6 +373,9 @@ $company=$this->session->userdata('companey_id');
     }
     public function get_user_by_email($email){
         return $this->db->where('s_user_email',$email)->get('tbl_admin')->row();
+    }
+    public function get_user_by_phone($phone){
+        return $this->db->where('s_phoneno',$phone)->get('tbl_admin')->row();
     }
 }
 

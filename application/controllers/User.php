@@ -43,7 +43,7 @@ class User extends CI_Controller {
         if (!is_dir('assets/csv')) {
             mkdir('assets/csv', 0777, TRUE);
         }
-        $filename = "school_" . date('d-m-Y_H_i_s'); //"school_26-07-2018_16_17_51";
+        $filename = "user" . date('d-m-Y_H_i_s'); //"school_26-07-2018_16_17_51";
         $config = array(
             'upload_path' => "assets/csv",
             'allowed_types' => "text/plain|text/csv|csv",
@@ -76,7 +76,7 @@ class User extends CI_Controller {
                     if(checkAlreadyExist($email,'email') == "no" && checkAlreadyExist($phone,'phone') == "no")
                     {
                         if($userright !='' && $report_to !='' && $process !='')
-                        {   //echo "mkm";die;
+                        {   
                             $postData = array(
                                 's_display_name'        => $firstname,
                                 'last_name'             => $lastname,
@@ -88,8 +88,7 @@ class User extends CI_Controller {
                                 's_password'            => md5('12345678'),
                                 'companey_id'           => $this->session->companey_id
                             );
-                            ///print_r($postData);die;
-                            $this->User_model->create($postData);
+                            $this->db->insert('tbl_admin',$postData);
                             $ic++;
                         }
                     }
