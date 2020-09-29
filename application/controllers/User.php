@@ -32,6 +32,92 @@ class User extends CI_Controller {
         $this->load->view('layout/main_wrapper', $data);
     }
 
+    function userimport() 
+    {
+        $data['title'] = display('import');
+        $data['content'] = $this->load->view('user_import', $data, true);
+        $this->load->view('layout/main_wrapper', $data);
+    }
+
+    function upload_user() {
+        if (!is_dir('assets/csv')) {
+            mkdir('assets/csv', 0777, TRUE);
+        }
+        $filename = "school_" . date('d-m-Y_H_i_s'); //"school_26-07-2018_16_17_51";
+        $config = array(
+            'upload_path' => "assets/csv",
+            'allowed_types' => "text/plain|text/csv|csv",
+            'remove_spaces' => TRUE,
+            'max_size' => "10000",
+            'file_name' => $filename
+        );
+        $this->load->library('upload', $config);
+        // $this->upload->do_upload('file')
+        if ($this->upload->do_upload('file')) {
+            $upload = $this->upload->data();
+            $json['success'] = 1;
+            // $upload['file_name'] = "school_26-07-2018_16_17_51.csv";
+            $filePath = $config['upload_path'] . '/' . $upload['file_name'];
+            $file = $filePath;
+            $handle = fopen($file, "r");
+            $c = 0;
+            $exist = array();
+            $ic = 0;
+            while (($filesop = fgetcsv($handle, 1000, ",")) !== false) {
+                if ($c > 0) {
+
+                    $firstname  = $filesop[0];
+                    $lastname   = $filesop[1];
+                    $email      = $filesop[2];
+                    $phone      = $filesop[3];
+                    $userright  = getUserRight($filesop[4]);
+                    $report_to  = getUserByName($filesop[5]);
+                    $process    = getProcessBynme($filesop[6]);
+                    if(checkAlreadyExist($email,'email') == "no" && checkAlreadyExist($phone,'phone') == "no")
+                    {
+                        if($userright !='' && $report_to !='' && $process !='')
+                        {   //echo "mkm";die;
+                            $postData = array(
+                                's_display_name'        => $firstname,
+                                'last_name'             => $lastname,
+                                's_user_email'          => $email,
+                                's_phoneno'             => $phone,
+                                'report_to'             => $report_to,
+                                'user_permissions'      => $userright,
+                                'process'               => $process,
+                                's_password'            => md5('12345678'),
+                                'companey_id'           => $this->session->companey_id
+                            );
+                            ///print_r($postData);die;
+                            $this->User_model->create($postData);
+                            $ic++;
+                        }
+                    }
+                    else
+                    {
+                        $exist[]= $email;
+                    }
+                }
+                $c++;
+            }
+            if(!empty($exist))
+            {
+                $this->session->set_flashdata('message', count($exist)." user skipped and ".$ic." user added successfully");
+            }
+            else
+            {
+                $this->session->set_flashdata('message',"".$ic." user added successfully");
+            }
+            
+            redirect(base_url() . 'user');
+            // echo '<pre>'; print_r ($discCodeArr); print_r ($stateArr); print_r ($cityArr); print_r ($blockArr); die;
+        } else {
+            $this->session->set_flashdata('error', $this->upload->display_errors());
+            
+            redirect(base_url() . 'user');
+        }
+    }
+
     public function company() {
         $data['title'] = display('Company');
         $data['company'] = $this->User_model->display_company_details();

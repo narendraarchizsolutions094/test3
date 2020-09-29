@@ -101,3 +101,52 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         curl_close($curl);
         return $response;
     }
+
+    function getProcessBynme($process)
+    {
+        $ci =& get_instance();
+        $ci->load->database();
+        $Ary = $ci->db->select('sb_id')->from('tbl_product')->where_in('product_name',explode(",", $process))->where('comp_id',$ci->session->companey_id)->get()->result();
+
+        $ary = array();
+        if(!empty($Ary))
+        {
+            foreach ($Ary as $key => $value) {
+                //print_r($value->sb_id);die;
+                array_push($ary, $value->sb_id);
+            }
+        }
+        return (!empty($ary)) ? implode(",", $ary): '';
+    }
+
+    function getUserByName($user)
+    {
+        $ci =& get_instance();
+        $ci->load->database();
+        $Ary = $ci->db->select('pk_i_admin_id')->from('tbl_admin')->where('s_user_email',"$user")->or_where('s_phoneno',$user)->get()->row();
+        return (!empty($Ary)) ? $Ary->pk_i_admin_id : '';
+    }
+
+    function getUserRight($right)
+    {
+        $ci =& get_instance();
+        $ci->load->database();
+        $Ary = $ci->db->select('use_id')->from('tbl_user_role')->where('user_role',"$right")->where('comp_id',$ci->session->companey_id)->get()->row();
+        return (!empty($Ary)) ? $Ary->use_id : '';
+    }
+
+    function checkAlreadyExist($value,$param)
+    {
+        $ci =& get_instance();
+        $ci->load->database();
+        if($param == 'email')
+        {   
+            $Ary = $ci->db->select('pk_i_admin_id')->from('tbl_admin')->where('s_user_email',"$value")->where('companey_id',$ci->session->companey_id)->get()->row();
+        }
+        else
+        {
+            $Ary = $ci->db->select('pk_i_admin_id')->from('tbl_admin')->where('s_phoneno',$value)->where('companey_id',$ci->session->companey_id)->get()->row();
+        }
+        
+        return (!empty($Ary)) ? "yes" : 'no';
+    }
