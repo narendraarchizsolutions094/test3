@@ -1,15 +1,24 @@
 <div class="col-md-6" style="border: 1px solid #c8ced3;padding: 15px;border-top: none;">
 	<div class="row">
+		<ul  class="nav nav-tabs" role="tablist">              
+              <li class="active"><a  href="#basic" data-toggle="tab" style="padding: 10px 10px; font-size:12px;">Ticket</a></li>   
 		<?php
-		$comp_id = $this->session->companey_id;
-		print_r($tab_list);
+		$comp_id = $this->session->companey_id;		
 		if (!empty($tab_list)) {
-			foreach ($tab_list as $key => $value) {
-				echo tab_content($value['id'],$comp_id,$enquiry->enquiry_id,$value['title']);				
+			foreach ($tab_list as $key => $value) { ?>
+				<li>
+					<a  href="#<?=$value['title']?>" data-toggle="tab" style="padding: 10px 10px; font-size:12px;">			<?=$value['title']?>
+					</a>
+				</li>
+				<?php
 			}
 		}
 		?>
+        </ul>
 	</div>
+	<div class="tab-content">		
+	<div class="tab-pane" id="basic">
+		
 	<div class="row">
 		<div class="col-md-6">
 			<div class="form-group">
@@ -152,6 +161,20 @@
 					<?php echo form_close(); ?>
 				</div>
 			</div>	
+			</div>
 		</div>
+		</div>
+
+			<?php 
+			if (!empty($tab_list)) {
+				foreach ($tab_list as $key => $value) { ?>		
+					<div class="tab-pane" id="<?=$value['title']?>">
+					<?php
+					echo tab_content($value['id'],$comp_id,$enquiry->enquiry_id,$value['title']); 
+					?>
+					</div>
+					<? 
+				}
+			?>
 	</div>
 </div>
