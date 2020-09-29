@@ -17,7 +17,7 @@
         </ul>
 	</div>
 	<div class="tab-content">		
-	<div class="tab-pane" id="basic">
+	<div class="tab-pane active" id="basic" >
 		
 	<div class="row">
 		<div class="col-md-6">
