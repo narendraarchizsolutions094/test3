@@ -61,7 +61,7 @@ class Rule_model extends CI_Model {
                         $this->db->where('Enquery_id',$enquiry_code);                
                     }
                     $this->db->where('comp_id',$this->session->companey_id);                                    
-                    $this->db->where('rule_executed!=',$id);                                    
+                    //$this->db->where('rule_executed!=',$id);                                    
                     $enq_row = $this->db->get('enquiry')->row_array();                    
                     if (!empty($enq_row['email']) && !empty($rule_data['rule_action'])) {
                         
@@ -77,8 +77,8 @@ class Rule_model extends CI_Model {
                             $subject = $row['mail_subject'];
                             $message = $row['template_content'];
                             if($this->Message_models->send_email($enq_row['email'],$subject,$message)){
-                                $this->db->where('Enquery_id',$enquiry_code);
-                                $this->db->update('enquiry',array('rule_executed'=>$id));
+                                //$this->db->where('Enquery_id',$enquiry_code);
+                                //$this->db->update('enquiry',array('rule_executed'=>$id));
                             }
                         }
 
