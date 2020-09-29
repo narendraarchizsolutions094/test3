@@ -58,7 +58,7 @@ class Ticket extends CI_Controller {
 		$data['content'] = $this->load->view('ticket/view-ticket', $data, true);
 		$this->load->view('layout/main_wrapper', $data);		
 	}
-	function view($tckt = ""){
+	function view($tckt = ""){ 
 		if(isset($_POST["issue"])){			
 			$this->Ticket_Model->updatestatus();
 			redirect(base_url("ticket/view/".$tckt), "refresh");
@@ -68,11 +68,13 @@ class Ticket extends CI_Controller {
 		$data['all_description_lists']    =   $this->Leads_Model->find_description();		
 		$data["conversion"] = $this->Ticket_Model->getconv($data["ticket"]->id);
 		$data['problem'] = $this->Ticket_Model->get_sub_list();
-
+ 
 		//$data['data'] = $data;
 		$this->load->model('enquiry_model');
         $data['enquiry'] = $this->enquiry_model->enquiry_by_id($data["ticket"]->client);
 		$data['ticket_stages'] = $this->Leads_Model->find_estage($data['enquiry']->product_id,4);
+		$this->load->model('form_model');
+        $data['tab_list'] = $this->form_model->get_tabs_list($this->session->companey_id,0,2);
 
 		$content	 =	$this->load->view('ticket/ticket_disposition',$data,true);
 		$content    .=  $this->load->view('ticket/ticket_details',$data,true);

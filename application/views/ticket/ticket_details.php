@@ -1,5 +1,10 @@
 <div class="col-md-6" style="border: 1px solid #c8ced3;padding: 15px;border-top: none;">
 	<div class="row">
+		<?php
+		print_r($tab_list);
+		?>
+	</div>
+	<div class="row">
 		<div class="col-md-6">
 			<div class="form-group">
 				<label>Name</label> 

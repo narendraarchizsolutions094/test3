@@ -4,7 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Form_model extends CI_Model {    
 
-    public function get_tabs_list($comp_id,$process_id=0) {
+    public function get_tabs_list($comp_id,$process_id=0,$form_form=0) {
         $this->db->select('forms.*');
     	$where = " FIND_IN_SET($comp_id,forms.comp_id) > 0";
     	if ($process_id) {
@@ -12,6 +12,11 @@ class Form_model extends CI_Model {
     		$where .= " AND FIND_IN_SET($process_id,form_process.process_id) > 0 AND form_process.comp_id=$comp_id";
 
     	}
+        if ($form_for) {
+            $where .= " AND forms.form_for=$form_for";
+        }else{
+            $where .= " AND forms.form_for IS NULL";            
+        }
     	$this->db->where($where);
     	return $this->db->get('forms')->result_array();
 	}
