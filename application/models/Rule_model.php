@@ -54,13 +54,14 @@ class Rule_model extends CI_Model {
                                 $this->db->update('leadrules',array('rule_action'=>$assign_to));       
                             }                                   
                         }
-                    }
+                    } 
                 }else if ($rule_data['type'] == 3) {
                     $this->db->where('('.$rule_data['rule_sql'].')');
                     if ($enquiry_code) {
                         $this->db->where('Enquery_id',$enquiry_code);                
                     }
                     $this->db->where('comp_id',$this->session->companey_id);                                    
+                    $this->db->where('rule_executed!=',$id);                                    
                     $enq_row = $this->db->get('enquiry')->row_array();                    
                     if (!empty($enq_row['email']) && !empty($rule_data['rule_action'])) {
                         
@@ -75,7 +76,10 @@ class Rule_model extends CI_Model {
                             $this->load->model('Message_models');
                             $subject = $row['mail_subject'];
                             $message = $row['template_content'];
-                            $this->Message_models->send_email($enq_row['email'],$subject,$message);
+                            if($this->Message_models->send_email($enq_row['email'],$subject,$message)){
+                                $this->db->where('Enquery_id',$enquiry_code);
+                                $this->db->update('enquiry',array('rule_executed'=>$id));
+                            }
                         }
 
                     }
