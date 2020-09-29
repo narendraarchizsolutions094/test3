@@ -108,6 +108,7 @@ class User extends CI_Controller {
             {
                 $this->session->set_flashdata('message',"".$ic." user added successfully");
             }
+            unlink(base_url('assets/csv').$filename);
             
             redirect(base_url() . 'user');
             // echo '<pre>'; print_r ($discCodeArr); print_r ($stateArr); print_r ($cityArr); print_r ($blockArr); die;
