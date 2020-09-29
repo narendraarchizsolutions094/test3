@@ -2,6 +2,8 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 ?>
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/jquery.query-builder/2.3.3/css/query-builder.default.min.css">
+<link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
 <div>	
    	<div class="row">
 	   	<div class="col-sm-12">
@@ -52,12 +54,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		        			<div class="col-md-4"></div>
 		        			<div class="col-md-4">		        				
 			        			<label>Assign To<i style="color: red;">*</i></label>
-			        			<select class="form-control text-center" name="action">			    
+			        			<select class="form-control text-center multiple-select" name="assignment_action" multiple>			    
 			        				<?php
+			        				$assignment_action_data = explode(',', $rule_data['rule_action']);
 			        				if (!empty($user_list)) {
 			        					foreach ($user_list as $key => $value) {
 			        						?>
-			        						<option value="<?=$value->pk_i_admin_id?>" <?=(	!empty($rule_data['rule_action']) && $rule_data['rule_action']==$value->pk_i_admin_id)?'selected':''?>>
+			        						<option value="<?=$value->pk_i_admin_id?>" <?=(	!empty($rule_data['rule_action']) && in_array($value->pk_i_admin_id, $assignment_action_data) )?'selected':''?>>
 			        							<?=$value->s_user_email?>
 			        						</option>
 			        						<?php
@@ -222,7 +225,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 		$('#btn-reset').on('click', function() {
 		  $('#builder').queryBuilder('reset');
-		});
+		}); 
 		$('#btn-set').on('click', function() {		  
 		  var result = $('#builder').queryBuilder('getRules');
 		  if (!$.isEmptyObject(result)) {
@@ -233,7 +236,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		  	if (rule_type==1) {
 		  		var action_value	=	$("input[name='action']").val();
 		  	}else if (rule_type==2){
-		  		var action_value	=	$("select[name='action']").val();
+		  		var action_value	=	$("select[name='assignment_action']").val();
+		  		action_value	=	action_value.toString();
 		  	}else if (rule_type==3){
 		  		var action_value	=	$("#email_template").val();
 		  	}else if (rule_type==4){
@@ -243,6 +247,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		  		var assign_to	=	$("select[name='esc_to']").val();
 		  		action_value =	JSON.stringify({'esc_hr':esc_hr,'assign_to':assign_to});		  	
 		  	}
+		  	console.info(action_value);
 		  	if (action_value && title) {
 		  		$.ajax({
 				      type: 'POST',
@@ -308,6 +313,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	  		$("#email_template").val(<?=!empty($rule_data['rule_action'])?$rule_data['rule_action']:''?>);
 		}
 	});
+	$(".multiple-select").select2();
 </script>
 
 <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery.query-builder/2.3.3/js/query-builder.standalone.min.js"></script>

@@ -32,14 +32,29 @@ class Rule_model extends CI_Model {
                     $this->db->update('enquiry');                    
                     $affected = $this->db->affected_rows();
                 }else if ($rule_data['type'] == 2) {
-                    $this->db->where('('.$rule_data['rule_sql'].')');
-                    if ($enquiry_code) {
-                        $this->db->where('Enquery_id',$enquiry_code);                
+                    if (!empty($rule_data['rule_action'])) {
+                        $assign_to = explode(',', $rule_data['rule_action']);
+                        if (!empty($assign_to[0])) {
+                            $this->db->where('('.$rule_data['rule_sql'].')');
+                            if ($enquiry_code) {
+                                $this->db->where('Enquery_id',$enquiry_code);                
+                            }
+                            $this->db->where('comp_id',$this->session->companey_id);                
+                            $this->db->where('aasign_to is null');
+                            $this->db->set('aasign_to',$assign_to[0]);
+                            $this->db->update('enquiry');                            
+                            $affected = $this->db->affected_rows();
+                            //echo $affected.'<br>'.$assign_to[0].$this->db->last_query();
+                            if ($affected) { 
+                                //$this->Leads_Model->add_comment_for_events('Converted to client', $enquiry_code);
+                                $this->Leads_Model->add_comment_for_events_stage('Converted to client', $enquiry_code,'','',$rule_data['title'].' '.'Rule Applied','');
+                                array_push($assign_to, array_shift($assign_to));
+                                $assign_to = implode(',', $assign_to);
+                                $this->db->where('id',$id);
+                                $this->db->update('leadrules',array('rule_action'=>$assign_to));       
+                            }                                   
+                        }
                     }
-                    $this->db->where('comp_id',$this->session->companey_id);                
-                    $this->db->set('aasign_to',$rule_data['rule_action']);
-                    $this->db->update('enquiry');
-                    $affected = $this->db->affected_rows();                    
                 }else if ($rule_data['type'] == 3) {
                     $this->db->where('('.$rule_data['rule_sql'].')');
                     if ($enquiry_code) {
