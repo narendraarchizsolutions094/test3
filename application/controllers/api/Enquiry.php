@@ -122,6 +122,9 @@ class Enquiry extends REST_Controller {
 			    
 			    $this->Leads_Model->add_comment_for_events($this->lang->line("enquery_create"), $encode,'',$this->input->post('user_id'));
 
+			    $this->load->model('rule_model');
+            	$this->rule_model->execute_rules($encode,array(1,2,3));            
+
             }
 			if ($insert_id) {
 			    foreach($this->input->post() as $ind => $val){         
