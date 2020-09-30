@@ -2365,7 +2365,7 @@ public function set_layout_to_session() {
             foreach ($test as $k => $v) {
               $fv = addslashes($v['fvalue']);
               $fe = $v['enq_no'];
-                $this->db->query("update extra_enquery set fvalue='".$fv."' where enq_no='".$fe."' and cmp_no=81 and input=4399 and fvalue=''");
+                $this->db->query("update extra_enquery set fvalue='".$fv."' where enq_no='".$fe."' and cmp_no=81 and input=4399");
             }
         }
     }
