@@ -1277,7 +1277,7 @@ public function login_in_process(){
             $this->db->where('status',1);
             $email_row  =   $this->db->get('email_integration')->row_array();
             
-            if(empty($email_row)){
+            if(empty($email_row) && $data->companey_id != 81){ 
                 echo "4";                
             }else{
                 $config['smtp_auth']    = true;
@@ -1305,15 +1305,64 @@ public function login_in_process(){
         if ($data->reset_password === 1) {
             echo "2";
         } else {
-            if ($this->email->send()) {
-                echo "1";
-            }else{
-                echo "0";
+            if ($data->companey_id == 81) {
+              echo $this->forgot_password_email_career_ex ($msg,'Change password',$email);              
+            }else{              
+              if ($this->email->send()) {
+                  echo "1";
+              }else{
+                  echo "0";
+              }
             }
         }
       }
     }
 
+    public function forgot_password_email_career_ex ($message,$email_subject,$to_email){       
+          $curl_fields = array(
+            'mail_datas'=>array(
+              'message'=>array(
+                'html_content'=>$message,
+                'subject'=>$email_subject,
+                'from_mail'=>'support@corefactors.in',
+                'from_name'=>'CareerEx',
+                'reply_to'=>'support@corefactors.in'
+              )
+            )
+          );        
+          $to[]= array('email_id'=>$to_email,'name'=>'');                 
+      
+      $curl_fields['mail_datas']['message']['to_recipients'] = $to;
+      $curl_fields = json_encode($curl_fields);
+      if ($to) {
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+          CURLOPT_URL => "https://teleduce.in/send-email-json-otom/8c999fa1-e303-423d-a804-eb0e6210604d/1007/",
+          CURLOPT_RETURNTRANSFER => true,
+          CURLOPT_ENCODING => "",
+          CURLOPT_MAXREDIRS => 10,
+          CURLOPT_TIMEOUT => 0,
+          CURLOPT_FOLLOWLOCATION => true,
+          CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+          CURLOPT_CUSTOMREQUEST => "POST",
+          CURLOPT_POSTFIELDS =>$curl_fields,
+          CURLOPT_HTTPHEADER => array(
+            "Content-Type: application/json"
+          ),
+        ));
+
+        $response = curl_exec($curl);
+
+        curl_close($curl);
+        /*echo $response;*/
+        $res  = json_decode($response,true);
+        if (!empty($res['response']) && $res['response_type'] == 'success') {
+          return 1;
+        }else{
+          return 0;
+        }
+      }
+    }
 
     //change password mail link...
     public function change_password() {
