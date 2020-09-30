@@ -106,6 +106,7 @@ class Rule_model extends CI_Model {
         if ($user_id == 0) {
             $user_id = $this->session->user_id;
         }
+        echo $user_id.'<br>'.$user_id;
         $results    =   $this->get_rules($type,$comp_id);
         if (!empty($results)) {
             foreach ($results as $key => $value) {
