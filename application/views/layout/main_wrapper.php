@@ -1285,9 +1285,9 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                         </li>     
                         <?php
                         if ($this->session->companey_id == 81) { ?>
-                         <li>
+                         <!-- <li>
                           <a href="<?php echo base_url("whatsappapi/facebook") ?>">Facebook</a>
-                        </li>                      
+                        </li>   -->                    
                         <li>
                           <a href="<?php echo base_url("facebook") ?>">Facebook Master</a>
                         </li>
