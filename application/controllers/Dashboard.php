@@ -2358,12 +2358,15 @@ public function set_layout_to_session() {
 	/********************************************************student panel*******************************************/
  public function careerex(){
         $result    =   $this->db->query("select Enquery_id from enquiry where comp_id = 81 AND enquiry_source=209")->result_array();
-        echo "<pre>";
+        /*echo "<pre>";
         print_r($result);
-        echo "</pre>";
+        echo "</pre>";*/
         foreach ($result as $key => $value) {
           $enq_no= $value['Enquery_id'];
             $test    =   $this->db->query("select enq_no,fvalue from extra_enquery where cmp_no = 81 AND enq_no='".$enq_no."' AND input=4016 AND fvalue !=''")->result_array();                
+            echo "<pre>";
+        print_r($test);
+        echo "</pre>";
             foreach ($test as $k => $v) {
               $fv = addslashes($v['fvalue']);
               $fe = $v['enq_no'];
