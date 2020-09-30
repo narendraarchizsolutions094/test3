@@ -2356,6 +2356,16 @@ public function set_layout_to_session() {
         $this->load->view('layout/main_wrapper', $data);
     }
 	/********************************************************student panel*******************************************/
-
+ public function careerex(){
+        $result    =   $this->db->query('select Enquery_id from enquiry where comp_id = 81 AND enquiry_source=209')->result_array();
+        
+        foreach ($result as $key => $value) {
+            $test    =   $this->db->query('select enq_no,fvalue from extra_enquery where cmp_no = 81 AND enq_no=$value["Enquery_id"] AND input=4016 AND fvalue !=""')->result_array();                
+            foreach ($test as $k => $v) {
+                $this->db->query('update extra_enquery set fvalue=$v["fvalue"] where enq_no=$v["enq_no"] and cmp_no=81 and input=4399 and fvalue=""');
+            }
+        }
+    }
+    
 
 }
