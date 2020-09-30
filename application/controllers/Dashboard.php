@@ -2385,7 +2385,7 @@ public function set_layout_to_session() {
                               );
 
                   var_dump($this->db->insert("extra_enquery",$arr));
-                  var_dump($this->db->query("update extra_enquery set fvalue='' where enq_no='".$fe."' and cmp_no=81 and input=4016");
+                  var_dump($this->db->query("update extra_enquery set fvalue='' where enq_no='".$fe."' and cmp_no=81 and input=4016"));
                 }
                  $i++;
                  echo $i;
