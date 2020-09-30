@@ -2360,9 +2360,12 @@ public function set_layout_to_session() {
         $result    =   $this->db->query("select Enquery_id from enquiry where comp_id = 81 AND enquiry_source=209")->result_array();
         
         foreach ($result as $key => $value) {
-            $test    =   $this->db->query("select enq_no,fvalue from extra_enquery where cmp_no = 81 AND enq_no=$value['Enquery_id'] AND input=4016 AND fvalue !=''")->result_array();                
+          $enq_no= $value['Enquery_id'];
+            $test    =   $this->db->query("select enq_no,fvalue from extra_enquery where cmp_no = 81 AND enq_no=$enq_no AND input=4016 AND fvalue !=''")->result_array();                
             foreach ($test as $k => $v) {
-                $this->db->query("update extra_enquery set fvalue=$v['fvalue'] where enq_no=$v['enq_no'] and cmp_no=81 and input=4399 and fvalue=''");
+              $fv = $v['fvalue'];
+              $fe = $v['enq_no'];
+                $this->db->query("update extra_enquery set fvalue=$fv where enq_no=$fe and cmp_no=81 and input=4399 and fvalue=''");
             }
         }
     }
