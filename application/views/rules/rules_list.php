@@ -37,7 +37,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                   <?php
                   if($value['status']==1){
                   ?>
-                    <a href="<?=base_url().'leadRules/execute_rule/'.$value['id']?>" onclick="return confirm('Are you sure, you want to execute this rule. Once executed you can not revert back.')" class='btn btn-success btn-sm'>Execute</a>
+                    <!-- <a href="<?=base_url().'leadRules/execute_rule/'.$value['id']?>" onclick="return confirm('Are you sure, you want to execute this rule. Once executed you can not revert back.')" class='btn btn-success btn-sm'>Execute</a> -->
                   <?php
                   }
                   ?>
