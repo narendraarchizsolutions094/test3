@@ -98,7 +98,8 @@ if($root=='https://student.spaceinternationals.com'){  ?>
       <?php //echo $this->session->telephony_token;
       if (!empty($this->session->ameyo['sessionId'])) { ?>
         <script type="text/javascript">            
-          function send_parameters(phn){  
+          function send_parameters(phn){ 
+            phn = str.substring(phn.length-10, phn.length); 
             var campaignId = "<?=$this->session->ameyo['campaignId']?>";
               $.ajax({ 
                 url:"<?=base_url().'telephony/ameyo_api'?>",
@@ -119,7 +120,8 @@ if($root=='https://student.spaceinternationals.com'){  ?>
           if(empty($this->session->telephony_token)){  
             if(!empty($this->session->telephony_agent_id)){?>      
       <script>
-        function send_parameters(phn){          
+        function send_parameters(phn){   
+         phn = str.substring(phn.length-10, phn.length);       
           var agent_id = "<?=$this->session->telephony_agent_id?>";
           if(agent_id){          
             //var url="https://agent.c-zentrixcloud.com/apps/appsHandler.php?transaction_id=CTI_DIAL&agent_id="+agent_id+"&phone_num="+phn+"&ip=https://agent.c-zentrixcloud.com&resFormat=3";
@@ -214,7 +216,8 @@ if($root=='https://student.spaceinternationals.com'){  ?>
        <script>
         function send_parameters(phn){
       var x=phn.toString().length;
-           if(x >= 10){     
+           if(x >= 10){
+            phn = str.substring(phn.length-10, phn.length);
             var url="<?=base_url().'telephony/click_to_dial/'?>" + phn; 
               $.ajax({
                   url:url,
