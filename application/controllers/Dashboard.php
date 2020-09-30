@@ -2363,16 +2363,32 @@ public function set_layout_to_session() {
         echo "</pre>";*/
         foreach ($result as $key => $value) {
           $enq_no= $value['Enquery_id'];
-            $test    =   $this->db->query("select enq_no,fvalue from extra_enquery where cmp_no = 81 AND enq_no='".$enq_no."' AND input=4016 AND fvalue !=''")->result_array();                
+            $test    =   $this->db->query("select enq_no,fvalue,parent from extra_enquery where cmp_no = 81 AND enq_no='".$enq_no."' AND input=4016 AND fvalue !=''")->result_array();                
             
           if (!empty($test)) {            
             $i = 1;
               foreach ($test as $k => $v) {
                 $fv = addslashes($v['fvalue']);
                 $fe = $v['enq_no'];
+                $fp = $v['parent'];
                 //echo $fv.'<br>'.$fe;
-                 var_dump($this->db->query("update extra_enquery set fvalue='".$fv."' where enq_no='".$fe."' and cmp_no=81 and input=4399"));
-                 echo $i++;;
+                if($this->db->query("select id from extra_enquery where enq_no='".$fe."' and cmp_no=81 and input=4399")->num_rows()){
+                  //var_dump($this->db->query("update extra_enquery set fvalue='".$fv."' where enq_no='".$fe."' and cmp_no=81 and input=4399"));
+                }else{
+                  $arr  = array(
+                                'enq_no'=>$fe,
+                                'parent'=>$fp,
+                                'input' =>4399,
+                                'fvalue' => $fv,
+                                'com_no' => 81,
+
+                              );
+
+                  var_dump($this->db->insert("extra_enquery",$arr));
+                  var_dump($this->db->query("update extra_enquery set fvalue='' where enq_no='".$fe."' and cmp_no=81 and input=4016")
+                }
+                 $i++;
+                 echo $i;
               }
           }
         }
