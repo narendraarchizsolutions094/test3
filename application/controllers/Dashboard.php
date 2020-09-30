@@ -2380,7 +2380,7 @@ public function set_layout_to_session() {
                                 'parent'=>$fp,
                                 'input' =>4399,
                                 'fvalue' => $fv,
-                                'com_no' => 81,
+                                'cmp_no' => 81,
 
                               );
 
