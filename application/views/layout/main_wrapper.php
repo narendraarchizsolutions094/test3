@@ -99,6 +99,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
       if (!empty($this->session->ameyo['sessionId'])) { ?>
         <script type="text/javascript">            
           function send_parameters(phn){ 
+            phn  = phn.toString();
             phn = phn.substring(phn.length-10, phn.length); 
             console.info(phn);
 
@@ -123,6 +124,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
             if(!empty($this->session->telephony_agent_id)){?>      
       <script>
         function send_parameters(phn){   
+          phn  = phn.toString();
          phn = phn.substring(phn.length-10, phn.length);   
             console.info(phn);
 
@@ -220,6 +222,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
        <script>
         function send_parameters(phn){
       var x=phn.toString().length;
+        phn  = phn.toString();
            if(x >= 10){
             phn = phn.substring(phn.length-10, phn.length);
             console.info(phn);
