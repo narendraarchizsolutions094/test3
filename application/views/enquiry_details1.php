@@ -546,7 +546,7 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
             }
             ?>
             
-            <a href='javascript:void(0)' onclick='send_parameters(".<?php echo $enquiry->phone ?>.")'><?php echo $p ?></a>
+            <a href='javascript:void(0)' onclick='send_parameters("<?php echo $enquiry->phone ?>")'><?php echo $p ?></a>
             <br><?php if(!empty($enquiry->email)) { echo $enquiry->email; } ?>            
             <br><?php if(!empty($enquiry->reference_name)) {               
               $this->db->where('TRIM(partner_id)',trim($enquiry->reference_name));
