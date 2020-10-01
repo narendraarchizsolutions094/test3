@@ -41,7 +41,7 @@ class Login extends REST_Controller {
             'password' => md5($this->input->post('password', true)),
         ];
         $this->load->model('dash_model');
-        
+         
         $data['products'] = $this->dash_model->product_list();
         #-------------------------------#
         if ($this->form_validation->run() === true) {
@@ -60,7 +60,11 @@ class Login extends REST_Controller {
                         $this->db->where('pk_i_admin_id',$check_user->row()->pk_i_admin_id);
                         $this->db->update('tbl_admin',array('mobile_token'=>$this->input->post('mobile_token')));                    
                     }
-
+                    $perm    =   $this->User_model->get_user_role($check_user->row()->user_permissions);
+                    $permission_list = '';
+                    if (!empty($perm)) {
+                        $permission_list = $perm->user_permissions;
+                    }
                     $data=array(
                         'isLogIn'           => true,
                         'user_id'           => $check_user->row()->pk_i_admin_id,
@@ -70,7 +74,8 @@ class Login extends REST_Controller {
                         'telephony_id'      => $check_user->row()->telephony_agent_id,
                         'token'             => $check_user->row()->telephony_token,
                         'phone_no'          => $check_user->row()->s_phoneno,
-                        'availability'      => $check_user->row()->availability
+                        'availability'      => $check_user->row()->availability,
+                        'permissions'       => $permission_list,
                     );
                        $this->set_response([
                     'status' => TRUE,
