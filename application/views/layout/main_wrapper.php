@@ -1334,14 +1334,13 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                   </li>
 
                   <?php
-                  $enquiry_separation  = get_sys_parameter('enquiry_separation','COMPANY_SETTING');
-                  if (!empty($enquiry_separation)) {
+                  $enquiry_separation  = get_sys_parameter('enquiry_separation','COMPANY_SETTING');                  
+                  if (!empty($enquiry_separation)) {                    
                     $enquiry_separation = json_decode($enquiry_separation,true);
-                     foreach ($enquiry_separation as $key => $value) { ?>
-                        ?>
+                     foreach ($enquiry_separation as $key => $value) { ?>                        
                          <li class="<?php echo (($segment1 == "client") ? "active" : null) ?>" style="<?php if(in_array(80,$module) || in_array(81,$module) || in_array(82,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
                           <a href="<?php echo base_url("client/index?stage=").$key ?>">
-                            <i class="fa fa-user-circle-o" style="color:#fff;font-size:20px;background:#3498db;padding:7px;border-radius:4px;width:30px;"></i> &nbsp;<?php echo $value['title'] ?>
+                            <i class="<?=$value['icon']?>" style="color:#fff;font-size:20px;background:#3498db;padding:7px;border-radius:4px;width:30px;"></i> &nbsp;<?php echo $value['title'] ?>
                             <?php  
                             if($this->session->menu==1){ ?></br><p style="color:#fff;font-size:9px;margin-left:-12px;padding-top:10px;"><?php echo $value['title']; ?></p> 
                             <?php 
