@@ -364,7 +364,7 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
         <p style="margin-top: 6px;">
         <?php
         //print_r($enquiry);
-        $back_url = "javascript:void(0)";
+      /*  $back_url = "javascript:void(0)";
         if (!empty($enquiry)) {
           if($enquiry->status == 1){
             echo "Enquiry Details";
@@ -376,7 +376,7 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
             echo "Client Details";     
             $back_url = base_url().'client/index';                                 
           }
-        }
+        }*/
         ?>
       </p>
         <!-- Enquiry / Update Enquiry -->
@@ -579,7 +579,15 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
             <i class="fa fa-user-times"></i>
             </a>
             <?php 
-            } else { ?>                
+            } else { 
+              $enquiry_separation  = get_sys_parameter('enquiry_separation','COMPANY_SETTING');
+              if (!empty($enquiry_separation)) {                                        
+                $enquiry_separation = json_decode($enquiry_separation,true);          
+                $curr_stage  = $enquiry->status;
+                $next_stage = $enquiry->status+1;      
+              }
+
+              ?>                
                 <a class="btn btn-primary btn-sm"  data-toggle="modal" type="button" title="Send SMS" data-target="#sendsms<?php echo $enquiry->enquiry_id ?>" data-toggle="modal"  onclick="getTemplates('2','Send SMS')">
                 <i class="fa fa-paper-plane-o"></i>
                 </a>
@@ -600,16 +608,41 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                 <?php }elseif ($enquiry->status==2) { ?>
                   <a class="btn  btn-info btn-sm" title="Mark as Client" href="<?=base_url().'lead/convert_to_lead/'.$enquiry->enquiry_id?>" onclick="return confirm('Are you sure you want to Mark this lead as client ?')" >
                   <i class="fa fa-user"></i>
+                </a>
                   <a class="btn btn-danger btn-sm"  type="button" title="Drop Lead" data-target="#dropEnquiry" data-toggle="modal">
                   <i class="fa fa-thumbs-o-down"></i>
                 </a>
                   <?php
-                }elseif ($enquiry->status==3) { ?>
+                }elseif ($enquiry->status==3) { 
+                  if (!empty($enquiry_separation)) {
+                    if (!empty($enquiry_separation[$next_stage])) {
+                       ?>                   
+                        <a class="btn  btn-info btn-sm" title="Mark as <?=$enquiry_separation[$next_stage]['title']?>" href="<?=base_url().'lead/convert_to_lead/'.$enquiry->enquiry_id?>" onclick="return confirm('Are you sure you want to Mark this <?=display('client')?> as <?=$enquiry_separation[$next_stage]['title']?> ?')" > <i class="fa <?=$enquiry_separation[$next_stage]['icon']?>"></i>
+                        </a>
+                    <?php
+                    }
+                  }
+                  ?>
                   <a class="btn btn-danger btn-sm"  type="button" title="Drop Client" data-target="#dropEnquiry" data-toggle="modal">
                     <i class="fa fa-thumbs-o-down"></i>
                   </a>
                   <?php
-                } ?>                
+                }else{                
+                  if (!empty($enquiry_separation)) {                    
+                    if (!empty($enquiry_separation[$next_stage])) {
+                      ?>
+                      <a class="btn  btn-info btn-sm" title="Mark as <?=$enquiry_separation[$next_stage]['title']?>" href="<?=base_url().'lead/convert_to_lead/'.$enquiry->enquiry_id?>" onclick="return confirm('Are you sure you want to Mark this <?=$enquiry_separation[$curr_stage]['title']?> as <?=$enquiry_separation[$next_stage]['title']?> ?')" > <i class="fa <?=$enquiry_separation[$next_stage]['icon']?>"></i>
+                      </a>
+                      <?php
+                    }
+                    ?>
+                    <a class="btn btn-danger btn-sm"  type="button" title="Drop" data-target="#dropEnquiry" data-toggle="modal">
+                      <i class="fa fa-thumbs-o-down"></i>
+                    </a>
+                    <?php
+                  }
+                }
+                ?>                
                 <?php 
 
             }
@@ -2850,6 +2883,7 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
          <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal">&times;</button>
             <?php
+            $drop_title = 'Drop';
             if ($enquiry->status == 1) {
               $drop_title = 'Drop Enquiry';
             }else if ($enquiry->status == 2) {

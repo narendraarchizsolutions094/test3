@@ -221,6 +221,16 @@ class Client extends CI_Controller {
             $data['length'] = $this->location_model->find_length();
         }
 		$data['course_list'] = $this->Leads_Model->get_course_list();
+
+        $enquiry_separation  = get_sys_parameter('enquiry_separation','COMPANY_SETTING');                  
+        if (!empty($enquiry_separation) && !empty($_GET['stage'])) {                    
+            $enquiry_separation = json_decode($enquiry_separation,true);
+            $stage    =   $_GET['stage'];
+            $data['title'] = $enquiry_separation[$stage]['title'];            
+        }else{
+            $data['title'] = 'Client';        
+        }
+
         $data['content'] = $this->load->view('enquiry_details1', $data, true);
         $this->enquiry_model->assign_notification_update($enquiry_code);
         $this->load->view('layout/main_wrapper', $data);
@@ -645,7 +655,17 @@ class Client extends CI_Controller {
                 $comment_id  = $this->Leads_Model->add_comment_for_events($this->lang->line('lead_updated'), $en_comments);                   
             }else if($type == 3){
                 $comment_id = $this->Leads_Model->add_comment_for_events($this->lang->line('client_updated'), $en_comments);
-            }          
+            }else{
+                $enquiry_separation  = get_sys_parameter('enquiry_separation','COMPANY_SETTING');
+                if (!empty($enquiry_separation)) {                    
+                    
+                    $enquiry_separation = json_decode($enquiry_separation,true);                    
+                    $title = $enquiry_separation[$type]['title'];                    
+                    $comment_msg = $title.' Updated'; 
+                    $comment_id = $this->Leads_Model->add_comment_for_events($comment_msg, $en_comments);
+                    
+                }
+            }
 
             if($this->session->userdata('companey_id')==29){
             

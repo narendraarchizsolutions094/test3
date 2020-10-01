@@ -801,20 +801,33 @@ if($coment_type == 1){
                // print_r($lead->status); exit;
         if ($lead->status >= 2) {
            //$this->Leads_Model->ClientMove($data);
-            $this->db->set('status', 3);
+            $enquiry_separation  = get_sys_parameter('enquiry_separation','COMPANY_SETTING');
+            if (!empty($enquiry_separation)) {                    
+                $enquiry_separation = json_decode($enquiry_separation,true);
+                $stage    =   $lead->status;
+                $next_stage = $stage+1;     
+                $title = $enquiry_separation[$next_stage]['title'];
+                $url = 'client/index/?stage='.$stage;
+                $comment = 'Converted to '.$title;       
+                $this->db->set('status', $next_stage);                
+            }else{
+                $url = 'led/index';   
+                $comment = 'Converted to client';       
+                $this->db->set('status', 3);
+            }
             $this->db->set('created_date', date('Y-m-d H:i:s'));
             $this->db->set('update_date', '');
             $this->db->where('enquiry_id', $enquiry_id);
             $this->db->update('enquiry'); 
             $data['enquiry'] = $this->Leads_Model->get_leadListDetailsby_id($enquiry_id);
             $lead_code = $data['enquiry']->Enquery_id;
-            $this->Leads_Model->add_comment_for_events('Converted to client', $lead_code);
-            $msg = 'Lead Convert to Client Successfully';
+            $this->Leads_Model->add_comment_for_events($comment, $lead_code);
+            $msg = $comment.' Successfully';
 
             $this->load->model('rule_model');
             $this->rule_model->execute_rules($lead_code,array(1,2,3));  
 
-            if ($this->session->companey_id == 76 || ($this->session->companey_id == 57 && $data['enquiry']->product_id == 122) ) {
+            if ($lead->status == 2 && $this->session->companey_id == 76 || ($this->session->companey_id == 57 && $data['enquiry']->product_id == 122) ) {
                 $user_right = '';
                 if ($data['enquiry']->product_id == 168) {
                     $user_right = 180;  
@@ -898,10 +911,10 @@ if($coment_type == 1){
                 }
         }*/
             $this->session->set_flashdata('message',$msg );
-            redirect('led/index');
+            redirect($url);
         } else {
             $this->session->set_flashdata('exception', 'Please Complete all Stages');
-            redirect('led/index');            
+            redirect($url);            
         }
     }
 

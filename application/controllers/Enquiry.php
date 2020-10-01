@@ -2033,6 +2033,16 @@ Array
             } else if ($data['enquiry']->status == 3) {
                 $url = 'client/view/'.$enquiryid;
                 $comment = display('Client').' dropped';            
+            }else{
+                $enquiry_separation  = get_sys_parameter('enquiry_separation','COMPANY_SETTING');                             
+                if (!empty($enquiry_separation)) {                    
+                    $enquiry_separation = json_decode($enquiry_separation,true);
+                    $stage    =   $data['enquiry']->status;
+                    $title = $enquiry_separation[$stage]['title'];
+                    $url = 'client/view/'.$enquiryid.'?stage='.$stage;
+                    $comment = $title.' dropped';            
+                }
+                
             }
             $this->Leads_Model->add_comment_for_events1($comment, $enquiry_code,$reason,$drop_status); // to insert drop status and reason
             $this->session->set_flashdata('message', "Dropped Successfully");
