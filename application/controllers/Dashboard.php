@@ -79,7 +79,7 @@ class Dashboard extends CI_Controller {
         }     
             }  
          $this->db->select('from_id,from_name,compaign_name,add_set_name,add_name,course_name');
-            $this->db->where('from_id',$form_id);
+            $this->db->where('from_id',$ad_id);
             $res_db=$this->db->get('fb_from_details')->row();      
             if(!empty($res_db)){
              $from_id=$res_db->from_id;
