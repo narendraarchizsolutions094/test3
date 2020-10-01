@@ -1325,7 +1325,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                      
                   </li>
                   
-                  <li class="<?php echo (($segment1 == "client") ? "active" : null) ?>" style="<?php if(in_array(80,$module) || in_array(81,$module) || in_array(82,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
+                  <li class="<?php echo (($segment1 == "client" && empty($_GET['stage'])) ? "active" : null) ?>" style="<?php if(in_array(80,$module) || in_array(81,$module) || in_array(82,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
                     <a href="<?php echo base_url("client/index") ?>">
                     <i class="fa fa-user-circle-o" style="color:#fff;font-size:20px;background:#3498db;padding:7px;border-radius:4px;width:30px;"></i> &nbsp;<?php echo display('client') ?>
           <?php  if($this->session->menu==1){ ?></br><p style="color:#fff;font-size:9px;margin-left:-12px;padding-top:10px;"><?php echo display('client') ?></p> <?php } ?>
@@ -1338,7 +1338,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                   if (!empty($enquiry_separation)) {                    
                     $enquiry_separation = json_decode($enquiry_separation,true);
                      foreach ($enquiry_separation as $key => $value) { ?>                        
-                         <li class="<?php echo (($segment1 == "client") ? "active" : null) ?>" style="<?php if(in_array(80,$module) || in_array(81,$module) || in_array(82,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
+                         <li class="<?php echo (($segment1 == "client") && (!empty($_GET['stage']) && $_GET['stage'] == $key) ) ? "active" : null ?>" style="<?php if(in_array(80,$module) || in_array(81,$module) || in_array(82,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
                           <a href="<?php echo base_url("client/index?stage=").$key ?>">
                             <i class="<?=$value['icon']?>" style="color:#fff;font-size:20px;background:#3498db;padding:7px;border-radius:4px;width:30px;"></i> &nbsp;<?php echo $value['title'] ?>
                             <?php  

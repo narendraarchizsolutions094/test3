@@ -64,8 +64,20 @@ class Client extends CI_Controller {
         $data['sourse'] = $this->report_model->all_source();
         $data['datasourse'] = $this->report_model->all_datasource(); 
 	    $data['dfields']  = $this->enquiry_model-> getformfield();		 
-        $data['data_type'] = 3;
         $data['subsource_list'] = $this->Datasource_model->subsourcelist();     
+
+        $enquiry_separation  = get_sys_parameter('enquiry_separation','COMPANY_SETTING');                  
+        if (!empty($enquiry_separation) && !empty($_GET['stage'])) {                    
+            $enquiry_separation = json_decode($enquiry_separation,true);
+            $stage    =   $_GET['stage'];
+            $data['title'] = $enquiry_separation[$stage]['title'];
+            $data['data_type'] = $stage;
+        }else{
+            $data['title'] = 'Client';
+            $data['data_type'] = 3;
+        }
+
+
         $data['content'] = $this->load->view('enquiry_n', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }

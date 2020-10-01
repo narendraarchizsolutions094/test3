@@ -249,6 +249,8 @@ class Enq extends CI_Controller {
 				$url= base_url('lead/lead_details/').$each->enquiry_id;				
 			}else if ($_POST['data_type'] == 3) {
 				$url= base_url('client/view/').$each->enquiry_id;								
+			}else{
+				$url= base_url('client/view/').$each->enquiry_id.'?stage='.$_POST['data_type'];
 			}		
 
 			$row[] = '<a href="'.$url.'">'.$no/*$each->enquiry_id*/.'</a>';
