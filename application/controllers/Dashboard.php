@@ -96,7 +96,7 @@ class Dashboard extends CI_Controller {
              $add_name='';
              $course_name='';
              } 
-          $curl = curl_init();
+         $curl = curl_init();
           curl_setopt_array($curl, array(
           CURLOPT_URL => "https://thecrm360.com/new_crm/api/enquiry/create",
           CURLOPT_RETURNTRANSFER => true,
