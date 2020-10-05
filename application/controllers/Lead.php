@@ -837,7 +837,7 @@ if($coment_type == 1){
                 $report_to = '';
                 if($this->session->companey_id == 57){
                     $user_right = 200;
-                    $report_to=273;
+                    $report_to=$data['enquiry']->created_by;
                 }
                 $ucid    =   $this->session->companey_id;
                 
