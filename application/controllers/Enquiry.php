@@ -179,7 +179,7 @@ class Enquiry extends CI_Controller {
                                 'report_to'       =>    $report_to
                             );
                         
-                        if (!empty($user_exist)) {
+                        if (!empty($user_exist->pk_i_admin_id)) {
                             
                             $this->db->where('tbl_admin.companey_id',57);
                             $this->db->where('tbl_admin.pk_i_admin_id',$user_exist->pk_i_admin_id);

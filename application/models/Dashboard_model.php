@@ -30,7 +30,7 @@ class Dashboard_model extends CI_Model {
 			->from($this->table)
 			->join('user','user.user_id = tbl_admin.companey_id','left')			
 			->where($where)
-			->get();
+			->get()->row();
 
 	} 
 
