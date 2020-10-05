@@ -861,6 +861,9 @@ if($coment_type == 1){
                         'report_to'       =>    $report_to
                     );
                 if (!empty($user_exist)) {
+                    $this->db->where('tbl_admin.companey_id',57);
+                    $this->db->where('tbl_admin.pk_i_admin_id',$user_exist->pk_i_admin_id);
+                    
                     if($this->db->update('tbl_admin',array('user_permissions'=>200,'user_roles'=>200,'user_type'=>200))){
                         $user_id = $user_exist->pk_i_admin_id;
                     }else{

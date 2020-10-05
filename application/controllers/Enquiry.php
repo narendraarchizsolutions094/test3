@@ -155,6 +155,7 @@ class Enquiry extends CI_Controller {
                         } 
                         $report_to = '';
                         if($this->session->companey_id == 57){
+
                             if (!empty($enq->email) || !empty($enq->phone)) {
                                 $user_exist = $this->dashboard_model->check_user_by_mail_phone(array('email'=>$enq->email,'phone'=>$enq->phone));    
                             } 
@@ -179,6 +180,9 @@ class Enquiry extends CI_Controller {
                             );
                         
                         if (!empty($user_exist)) {
+                            
+                            $this->db->where('tbl_admin.companey_id',57);
+                            $this->db->where('tbl_admin.pk_i_admin_id',$user_exist->pk_i_admin_id);
 
                             if($this->db->update('tbl_admin',array('user_permissions'=>200,'user_roles'=>200,'user_type'=>200))){
                                 $user_id = $user_exist->pk_i_admin_id;
