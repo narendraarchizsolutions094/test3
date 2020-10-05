@@ -20,6 +20,21 @@ class Product extends CI_Controller {
 	}
 	
 	
+	//check product dupolicacy for seller
+	function checkProductDuplicacy()
+	{
+		$seller = $this->input->post('seller');
+		$prod 	= $this->input->post('prod');
+		$check = $this->db->select('*')->from('tbl_product_country')->join("tbl_proddetails", "tbl_proddetails.prodid = tbl_product_country.id", "LEFT")->where('country_name',"$prod")->where("tbl_proddetails.seller_id",$seller)->get()->result();
+		if(!empty($check))
+		{
+			echo json_encode(array('status'=>'exist'));
+		}
+		else
+		{
+			echo json_encode(array('status'=>'notexist'));
+		}
+	}
 	
 	function addproduct(){		
 		if(isset($_POST['proname'])){			

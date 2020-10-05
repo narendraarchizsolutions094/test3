@@ -19,38 +19,34 @@
                 ?>
               <br>
 
-                <br><a href="<?php if(!empty($enquiry->enquiry_id)){ echo base_url().'client/view/'.$enquiry->enquiry_id;}?>"><?php  (!empty($enquiry->name)) ? ucwords($enquiry->name_prefix." ".$enquiry->name." ".$enquiry->lastname) : ""; ?></a>
+                <br><a href="<?=base_url().'client/view/'.$enquiry->enquiry_id?>"><?=ucwords($enquiry->name_prefix." ".$enquiry->name." ".$enquiry->lastname); ?></a>
               <br>
               
               <?php 
-              if(!empty($enquiry->gender))
-              {
-                if($enquiry->gender == 1) {
-                 echo 'Male<br>'; 
-                }else if($enquiry->gender == 2){
-                  echo 'Female<br>';
-                }else if($enquiry->gender == 3){
-                  echo 'Other<br>';
-                } 
-
-              }
-              $p = (!empty($enquiry->gender)) ? $enquiry->phone : '';
+              if($enquiry->gender == 1) {
+               echo 'Male<br>'; 
+              }else if($enquiry->gender == 2){
+                echo 'Female<br>';
+              }else if($enquiry->gender == 3){
+                echo 'Other<br>';
+              } 
+              $p = $enquiry->phone;
               if (user_access(450)) {
                 $p = '##########';
               }
             ?>
-            <a href='javascript:void(0)' onclick='send_parameters(".<?php if(!empty($enquiry->phone)) {echo $enquiry->phone;} ?>.")'><?php echo $p ?></a>
+            <a href='javascript:void(0)' onclick='send_parameters(".<?php echo $enquiry->phone ?>.")'><?php echo $p ?></a>
             <br><?php if(!empty($enquiry->email)) { echo $enquiry->email; }             
             ?>            
          </h5>
          <div class="row text-center">
-              <a class="btn btn-primary btn-sm"  data-toggle="modal" type="button" title="Send SMS" data-target="#sendsms<?php if(!empty($enquiry->enquiry_id)) {echo $enquiry->enquiry_id;} ?>" data-toggle="modal"  onclick="getTemplates('2','Send SMS')">
+              <a class="btn btn-primary btn-sm"  data-toggle="modal" type="button" title="Send SMS" data-target="#sendsms<?php echo $enquiry->enquiry_id ?>" data-toggle="modal"  onclick="getTemplates('2','Send SMS')">
                 <i class="fa fa-paper-plane-o"></i>
               </a>
-              <a class="btn btn-info btn-sm"  data-toggle="modal" type="button" title="Send Email" data-target="#sendsms<?php if(!empty($enquiry->enquiry_id)) {echo $enquiry->enquiry_id;} ?>" data-toggle="modal"  onclick="getTemplates('3','Send Email')">
+              <a class="btn btn-info btn-sm"  data-toggle="modal" type="button" title="Send Email" data-target="#sendsms<?php echo $enquiry->enquiry_id ?>" data-toggle="modal"  onclick="getTemplates('3','Send Email')">
                 <i class="fa fa-envelope"></i>
               </a>
-              <a class="btn btn-primary btn-sm"  data-toggle="modal" type="button" title="Send Whatsapp" data-target="#sendsms<?php if(!empty($enquiry->enquiry_id)) {echo $enquiry->enquiry_id;} ?>" data-toggle="modal"  onclick="getTemplates('1','Send Whatsapp')">
+              <a class="btn btn-primary btn-sm"  data-toggle="modal" type="button" title="Send Whatsapp" data-target="#sendsms<?php echo $enquiry->enquiry_id ?>" data-toggle="modal"  onclick="getTemplates('1','Send Whatsapp')">
                 <i class="fa fa-whatsapp"></i>
               </a>
          </div>
@@ -59,7 +55,7 @@
               <div id="disposition-section" class="mobile-hide">
                 <div class="row" > 
                    <?php echo form_open_multipart('ticket/ticket_disposition/'.$ticket->id,array('id'=>'','class'=>'form-inner')) ?>                     
-                   <input type="hidden" name="client" value="<?php if(!empty($enquiry->enquiry_id)) { echo $enquiry->enquiry_id;}?>">
+                   <input type="hidden" name="client" value="<?=$enquiry->enquiry_id?>">
                    <input type="hidden" name="ticketno" value="<?=$ticket->ticketno?>">
                     <div class="form-group">                 
                       <select class="form-control" id="lead_stage_change" name="lead_stage" onchange="find_description()">

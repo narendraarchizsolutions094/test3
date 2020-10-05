@@ -23,6 +23,71 @@ class Ticket extends CI_Controller {
 	
 
 	}
+
+	public function natureOfComplaintList(){
+		
+		$data['title'] = "Nature Of Complaint List";
+		$data["tickets"] = $this->db->select('*')->from('tbl_nature_of_complaint')->get()->result();
+		$data['content'] = $this->load->view('ticket/natureofcomplain-list', $data, true);
+		$this->load->view('layout/main_wrapper', $data);
+		
+	}
+
+	public function addNatureOfComplaint(){
+		
+		$data['title'] = "Add Nature Of Complaint";
+		if(!empty($_POST))
+        {
+            if(empty($this->input->post('complainid')))
+            {
+                //$added = $this->db->select('id')->from('modulewise_right')->where('module_id',$this->input->post('module'))->get()->num_rows();
+                $data = array(
+                    'title'         => $this->input->post('title'),
+                    'status'     	=> $this->input->post('status'),
+                    'created_at'    => date("Y-m-d H:i:s"),
+                    'updated_at'    => date("Y-m-d H:i:s"),
+                );
+                $this->db->insert('tbl_nature_of_complaint',$data);
+                $this->session->set_flashdata('message','Data Added successfully');
+                redirect('ticket/natureOfComplaintList');
+            }
+            else
+            {
+            	$data = array(
+                    'title'          => $this->input->post('title'),
+                    'status'     => $this->input->post('status'),
+                    'created_at'    => date("Y-m-d H:i:s"),
+                    'updated_at'    => date("Y-m-d H:i:s"),
+                );
+                $this->db->where('id',$this->input->post('complainid'));
+                $this->db->update('tbl_nature_of_complaint',$data);
+                $this->session->set_flashdata('message','Updated successfully');
+                redirect('ticket/natureOfComplaintList');
+            }
+        }
+        else
+        {
+        	$data['content'] = $this->load->view('ticket/addNatureof_complaint', $data, true);
+			$this->load->view('layout/main_wrapper', $data);
+        }
+	}
+
+	public function editNatureOfComplaint($id)
+	{
+		$data['title'] 	= "Edit Nature Of Complaint";
+		$data['detail'] = $this->db->select('*')->from('tbl_nature_of_complaint')->where('id',$id)->get()->row();
+		$data['content'] = $this->load->view('ticket/addNatureof_complaint', $data, true);
+		$this->load->view('layout/main_wrapper', $data);
+	}
+
+	public function deleteNatureOfComplaint($id)
+	{
+		$this->db->where('id',$id);
+		$this->db->delete('tbl_nature_of_complaint');
+		$this->session->set_flashdata('message','Deleted successfully');
+        redirect('ticket/natureOfComplaintList');
+
+	}	
 	
 	public function index(){
 		

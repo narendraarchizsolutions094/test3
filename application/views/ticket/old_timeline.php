@@ -41,7 +41,7 @@
 
 
 
-<div id="sendsms<?php if(!empty($ticket->enquiry_id)){echo $enquiry->enquiry_id;} ?>" class="modal fade" role="dialog">
+<div id="sendsms<?php echo $enquiry->enquiry_id ?>" class="modal fade" role="dialog">
    <div class="modal-dialog modal-lg">
       <!-- Modal content-->
       <?php echo form_open_multipart('message/send_sms','class="form-inner" id="whatsaap"') ?>
@@ -65,8 +65,8 @@
          </div>
          <div class="col-md-12">
             <input type="hidden"  id="mesge_type" name="mesge_type">
-            <input type="hidden" id="mobile" name="mobile" value="<?php if(!empty($ticket->phone)){echo $enquiry->phone;} ?>">
-            <input type="hidden" id="mail" name="mail" value="<?php if(!empty($ticket->email)){echo $enquiry->email;} ?>">
+            <input type="hidden" id="mobile" name="mobile" value="<?php echo $enquiry->phone ?>">
+            <input type="hidden" id="mail" name="mail" value="<?php echo $enquiry->email ?>">
             <button class="btn btn-primary" onclick="send_sms()" type="button">Send</button>            
          </div>
          <div class="modal-footer">

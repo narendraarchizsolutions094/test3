@@ -1,48 +1,68 @@
 <div class="col-md-6" style="border: 1px solid #c8ced3;padding: 15px;border-top: none;">
 	<div class="row">
+		<ul  class="nav nav-tabs" role="tablist">              
+              <li class="active"><a  href="#basic" data-toggle="tab" style="padding: 10px 10px; font-size:12px;">Ticket</a></li>   
+		<?php
+		$comp_id = $this->session->companey_id;		
+		if (!empty($tab_list)) {
+			foreach ($tab_list as $key => $value) { ?>
+				<li>
+					<a  href="#<?=$value['id']?>" data-toggle="tab" style="padding: 10px 10px; font-size:12px;">			<?=$value['title']?>
+					</a>
+				</li>
+				<?php
+			}
+		}
+		?>
+        </ul>
+	</div>
+	<div class="tab-content">		
+	<div class="tab-pane active" id="basic" >
+		
+	<div class="row">
 		<div class="col-md-6">
 			<div class="form-group">
 				<label>Name</label> 
-				<input type="text" class="form-control" value="<?php if(!empty($ticket->name)){ echo $ticket->name;} ?>" disabled>
+				<input type="text" class="form-control" value="<?php echo $ticket->clientname;?>" disabled>
 			</div>
 		</div>
 		<div class="col-md-6">
 			<div class="form-group">
 				<label>Email</label>
-				<input type="email" class="form-control" value="<?php if(!empty($ticket->email)){ echo $ticket->email;} ?>" disabled>
+				<input type="email" class="form-control" value="<?php echo $ticket->email; ?>" disabled>
 			</div>
 		</div>
 		<div class="col-md-6">
 			<div class="form-group">
 				<label>Phone</label>
-				<input type="text" class="form-control" value="<?php  if(!empty($ticket->phone)){ echo $ticket->phone; } ?>" disabled>
+				<input type="text" class="form-control" value="<?php echo $ticket->phone;?>" disabled>
 			</div>
 		</div>
 		<?php if($this->session->companey_id!=83){ ?>
 		<div class="col-md-6">
 			<div class="form-group">
 				<label>Product</label>
-				<input type="text" class="form-control" value="<?php if(!empty($ticket->country_name)){ echo $ticket->country_name;} ?>" disabled>
+				<input type="text" class="form-control" value="<?php echo $ticket->country_name; ?>" disabled>
 			</div>
 		</div>
 		<?php } ?>
 		<div class="col-md-6">
 			<div class="form-group">
 				<label><?=display('ticket_problem')?></label>
-				<input type="text" class="form-control" value="<?php if(!empty($ticket->subject_title)){echo ucwords($ticket->subject_title);} ?>" disabled>
+				<input type="text" class="form-control" value="<?php echo ucwords($ticket->subject_title); ?>" disabled>
 			</div>
 		</div>
 		<div class="col-md-6">
 			<div class="form-group">
 				<label>Source</label>
-				<input type="text" class="form-control" value="<?php if(!empty($ticket->ticket_source)){ echo ucwords($ticket->ticket_source);} ?>" disabled>
+				<input type="text" class="form-control" value="<?php echo ucwords($ticket->ticket_source); ?>" disabled>
 			</div>
 		</div>
 		
 	
 		<div class="col-md-12">
 			<label>Remark</label>
-			<div style = "padding: 10px;border: 1px solid #e5e1e1;margin-right:25px;border-radius: 10px;font-size:16px;margin-bottom:10px;"><?php if(!empty($ticket->message)){ echo $ticket->message;} ?></div>
+			<div style = "padding: 10px;border: 1px solid #e5e1e1;margin-right:25px;border-radius: 10px;font-size:16px;margin-bottom:10px;"><?php echo $ticket->message; ?></div>
 		</div>
 		<div class="col-md-6">
 			<div class="form-group">			
@@ -141,6 +161,21 @@
 					<?php echo form_close(); ?>
 				</div>
 			</div>	
+			</div>
 		</div>
+		</div>
+
+			<?php 
+			if (!empty($tab_list)) {
+				foreach ($tab_list as $key => $value) { ?>		
+					<div class="tab-pane" id="<?=$value['id']?>">
+					<?php
+					echo tab_content($value['id'],$comp_id,$enquiry->enquiry_id,$value['title']); 
+					?>
+					</div>
+					<?php 
+				}
+			}
+			?>
 	</div>
 </div>

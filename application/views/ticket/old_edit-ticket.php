@@ -23,14 +23,7 @@
 				<div class="col-md-6">
 					<div class="form-group">
 						<label>Problem For</label>
-						<select class="form-control add-select2 choose-client" name = "client" required>
-							<option value = "" style ="display:none;">---Select---</option>
-							<?php if(!empty($clients)){
-								foreach($clients as $ind => $clt){
-									?><option value ="<?php echo $clt->enquiry_id ?>" <?php if($ticket->client == $clt->enquiry_id){ echo "selected";} ?> ><?php echo $clt->name." ".$clt->lastname; ?> </option><?php
-								}
-							} ?>
-						</select>
+						<span class="form-control"><?php echo $ticket->clientname; ?></span>
 					</div>
 				</div>
 				
@@ -40,12 +33,6 @@
 					<div class="form-group">
 						<label>Name</label>
 						<input type = "text" class="form-control" value = "<?php echo $ticket->name; ?>" name = "name">
-					</div>
-				</div>
-				<div class="col-md-6">
-					<div class="form-group">
-						<label>Phone Number </label>
-						<input type="text" class="form-control" name = "phone" value = "<?php echo $ticket->phone; ?>">
 					</div>
 				</div>
 				<div class="col-md-6">
@@ -100,9 +87,9 @@
 						<label>Nature of Complaint</label>
 						<select class="form-control add-select2" name = "issue">
 						<option value = ""> -- Select --</option>
-					<?php  if(!empty($natureofcomplain)) {
-								foreach($natureofcomplain as $ind => $issue){
-									?><option value = "<?php echo $issue->id ?>" <?php echo ($issue->id == $ticket->issue) ? "selected" : ""; ?> ><?php echo ucfirst($issue->title) ?> </option><?php
+					<?php  if(!empty($issues)) {
+								foreach($issues as $ind => $issue){
+									?><option value = "<?php echo $issue->id ?>"><?php echo ucfirst($issue->title) ?> </option><?php
 								}	
 							} ?>
 						</select>
@@ -190,17 +177,5 @@
 			 format: 'yyyy/mm/dd',
 			 startDate: '-7d'
 		});	
-	});
-	$(document).on("change", ".choose-client", function(){		
-		$.ajax({
-			url     : "<?php echo base_url('ticket/loadinfo'); ?>",
-			type    : "post",
-			data    : {clientno : $(this).val()},
-			success : function (resp){
-				var jdata = JSON.parse(resp);
-				$("input[name=name]").val(jdata.name);
-				$("input[name=email]").val(jdata.email);
-			}
-		})
 	});
 </script>

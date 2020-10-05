@@ -72,8 +72,18 @@
 	</style>
    <div class="col-sm-12">
       <div  class="panel panel-default thumbnail">
-         <div class="panel-heading no-print pull-right" style="margin-right: 30px; margin-bottom: 3px;">
-            <a class="btn-xs btn btn-success" href = "<?php echo base_url("buy"); ?>"> Items : <?php echo $totalprod; ?></a> 
+         <div class="panel-heading no-print col-md-12" style="padding-top:15px;">
+         	<form action="<?=base_url('buy');?>" method="get">
+         		<div class="col-md-8">
+         			<input type="text" name="searched_product" class="form-control" placeholder="Enter Keywords...">
+         		</div>
+         		<div class="col-md-2">
+         			<button type="submit" class="btn btn-primary ">Search</button>
+         		</div>
+         	</form>
+         	<div class="col-md-2">
+            	<a class=" btn btn-success " href = "<?php echo base_url("buy"); ?>"> Items : <?php echo $totalprod; ?></a> 
+            </div>
             <!-- <a href="#" class="btn-xs btn btn-default"><i class="fa fa-filter"></i>Filters</a>             -->
          </div>
          <div class="panel-body">
@@ -207,15 +217,23 @@
 					 <li class="page-item"><a class="page-link" href="<?php echo $page - 1; ?>">Previous</a></li>
 					<?php
 						}
+					$nurl = "";	
+					foreach ($_GET as $key => $gt) {
+
+						if ($key != "page") {
+							$nurl = "&".$key."=".$gt;
+						}
 					
-					for($i = 1; $i <= $tpage; $i++) { 
+					}
+					//for($i = 1; $i <= $tpage; $i++) { 
 					
+
 						?>
-						<li class="page-item <?php echo ($page == $i) ? "active" : "";  ?>" ><a class="page-link" href="<?php echo base_url("buy?page=".$i); ?>"><?php echo $i; ?></a></li>		
-			<?php	}
+						<!-- <li class="page-item <?php echo ($page == $i) ? "active" : "";  ?>" ><a class="page-link" href="<?php echo base_url("buy?page=".$i.$nurl); ?>"><?php echo $i; ?></a></li>	 -->	
+			<?php	//}
 				if($page < $tpage) {
 			?>
-			<li class="page-item"><a class="page-link" href="<?php echo base_url("buy?page=".($page + 1)); ?>">Next</a></li>
+			<li class="page-item"><a class="page-link" href="<?php echo base_url("buy?page=".($page + 1)).$nurl.''; ?>">Next</a></li>
 			<?php }
 			}	
 			?>	

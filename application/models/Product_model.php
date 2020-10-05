@@ -75,6 +75,10 @@ class Product_model extends CI_Model {
 					if ($status == 0) {
 						$this->db->where_in("tbl_proddetails.seller_id",$retuser);
 					}
+					if(isset($_GET['searched_product']))
+					{
+						$this->db->like("tbl_product_country.country_name", trim($_GET['searched_product']));
+					}
 					
 					if(isset($_GET['sc'])){
 						

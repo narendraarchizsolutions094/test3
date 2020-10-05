@@ -100,8 +100,8 @@
 						<div class = "col-md-4">
 							<div class = "form-group">
 								<label>Seller</label>
-								<select class = "form-control" name = "seller">
-									<!-- <option value="">Select Seller</option> -->
+								<select class = "form-control" name = "seller" onchange="checkProductDuplicacy(this.value)">
+									<option value="">Select Seller</option>
 								<?php if(!empty($seller_list)) {
 										if($isedit == true) {
 											$seller = ($isedit == true) ? $product->seller_id:set_value("seller"); 
@@ -378,6 +378,28 @@
 	function get_product_field(cat){
 		var pid = "<?=!empty($isedit)?$pid:''?>";
 		$("#product_fields").load("<?php echo base_url('form/form/get_product_field_content/') ?>"+cat+'/'+pid);
+	}
+
+	
+	function checkProductDuplicacy(seller)
+	{
+		var prod = $('#proname').val();
+		$.ajax({
+			url : '<?=base_url('product/checkProductDuplicacy')?>',
+			type : "post",
+			data : {'seller':seller,'prod':prod},
+			dataType : "json",
+			success : function(data)
+			{
+				if(data.status=='exist')
+				{
+					alert('same product already exist for the selected seller');
+					$('#proname').val('');
+					$(this).val('');
+				}
+			}
+
+		});
 	}
 
 </script>
