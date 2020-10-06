@@ -24,6 +24,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 					   			<option value="3" <?=(!empty($rule_data['type']) && $rule_data['type']==3)?'selected':''?>>Mail Send</option>
 					   			<option value="4" <?=(!empty($rule_data['type']) && $rule_data['type']==4)?'selected':''?>>Auto Followup</option>
 					   			<option value="5" <?=(!empty($rule_data['type']) && $rule_data['type']==5)?'selected':''?>>Support Ticket Escalation Rule</option>
+					   			<option value="6" <?=(!empty($rule_data['type']) && $rule_data['type']==6)?'selected':''?>>Send SMS </option>
+					   			<option value="7" <?=(!empty($rule_data['type']) && $rule_data['type']==7)?'selected':''?>>Send WhatsApp</option>
 					   		</select>
 					   	</div>
 					   	<div class="col-sm-3">
@@ -246,6 +248,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		  		var esc_hr		=	$("input[name='esc_within']").val();
 		  		var assign_to	=	$("select[name='esc_to']").val();
 		  		action_value =	JSON.stringify({'esc_hr':esc_hr,'assign_to':assign_to});		  	
+		  	}else if (rule_type==6){
+		  		var action_value	=	$("#email_template").val();
+		  	}else if (rule_type==7){
+		  		var action_value	=	$("#email_template").val();
 		  	}
 		  	console.info(action_value);
 		  	if (action_value && title) {
@@ -303,6 +309,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 				$("#auto_followup_section").show(1000);
 			}else if (rule == 5) {				
 				$("#ticket_esc_action").show(1000);
+			}else if (rule == 6) {				
+				$("#email_action").show(1000);
+			}else if (rule == 7) {				
+				$("#email_action").show(1000);
 			}
 
 		}

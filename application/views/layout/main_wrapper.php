@@ -814,7 +814,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                     
                       <div class = "cart-items"><h4><a href = ""> <?php echo $cart['name'] ?></a></h4>
                           <p>
-                            <a href = "javascript:void(0)"> Price : <i class = "fa fa-price"></i> <?php echo  $cart['price']." X <input type='number' class='cart-qty' value=".$cart['qty']." min='1' data-prodid=".$cart['id']." >";?> = <i class = "fa fa-rupee"></i><span class="item-price-<?=$cart['id']?>"> <?php echo $cart['price']*$cart['qty']  ?></span> </a> 
+                            <a href = "javascript:void(0)"> Price : <i class = "fa fa-price"></i> <?php echo  $cart['price']." X <input type='hidden' name='minimum' class='minimum' value='".$cart['minalert']."'> <input type='number' class='cart-qty' value=".$cart['qty']." min='1' data-prodid=".$cart['id']." >";?> = <i class = "fa fa-rupee"></i><span class="item-price-<?=$cart['id']?>"> <?php echo $cart['price']*$cart['qty']  ?></span> </a> 
                             <a href="javascript:void(0)" onclick="remove_cart_item(<?=$cart['id']?>)" class="fa fa-trash btn btn-danger btn-sm pull-right remove-item-cart"></a>
                           </p>
                           <hr />
@@ -1489,6 +1489,9 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                         <li class="<?php echo (($segment1 == "ticket" && $segment2 == "index") ? "active" : null) ?>">
                           <a href="<?php echo base_url("ticket/index") ?>"><?php echo display('ticketing') ?></a>
                         </li>
+                        <li class="<?php echo (($segment1 == "ticket" && $segment2 == "natureOfComplaintList") ? "active" : null) ?>">
+                          <a href="<?php echo base_url("ticket/natureOfComplaintList") ?>"><?php echo "natureOfComplaintList"; ?></a>
+                        </li>
 						
                      </ul>
 
@@ -1601,7 +1604,13 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                   <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                   <?php echo validation_errors(); ?>
                </div>
-               <?php } ?> 
+               <?php } ?>
+               <?php if($this->session->companey_id == 57){ ?>
+                 <div class="alert alert-info alert-dismissible fade in">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    <strong>Need Help! </strong> Call us on our Tollfree Number : <a href="tel:18005722426">18005722426</a>.
+                  </div>
+                <?php } ?>
                <!-- content -->
           <?php echo (!empty($content)?$content:null) ?>
            </div>
@@ -1649,6 +1658,22 @@ if($root=='https://student.spaceinternationals.com'){  ?>
 	  $this->load->view('chats/chats');
 	  
 	}?>	  
+  <script type="text/javascript">
+    $(document).on('click','.checkout-btn',function(e){
+      $(".cart-items").each(function(){
+
+          var cartval = parseInt($(this).find('.cart-qty').val());
+          var minval  = parseInt($(this).find('.minimum').val());
+
+           if(minval> cartval){
+              e.preventDefault();
+              alert("Please order minimum value "+minval);
+           } 
+
+      });
+
+    });
+  </script>
 	 
 	  <script src="<?=base_url().'assets/js/sweetalert2@9.js'?>"></script>
 

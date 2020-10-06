@@ -300,6 +300,12 @@
 									</select>
 								</div>
 							</div>
+							<div class="col-md-4">
+								<div class="form-group">
+									<label>Minimum Order Quantity</label>
+									<input type="number" class="form-control" id="minimum_order_quantity" placeholder="Enter Minimum Order Quantity" name="minimum_order_quantity" value="<?php echo ($isedit == true) ? $product->minimum_order_quantity : set_value("minimum_order_quantity"); ?>">
+								</div>
+							</div>
 							<div class="row" id="product_fields">							
 							</div>
 				
@@ -384,22 +390,30 @@
 	function checkProductDuplicacy(seller)
 	{
 		var prod = $('#proname').val();
-		$.ajax({
-			url : '<?=base_url('product/checkProductDuplicacy')?>',
-			type : "post",
-			data : {'seller':seller,'prod':prod},
-			dataType : "json",
-			success : function(data)
-			{
-				if(data.status=='exist')
+		if(seller !='' && prod !='')
+		{
+			$.ajax({
+				url : '<?=base_url('product/checkProductDuplicacy')?>',
+				type : "post",
+				data : {'seller':seller,'prod':prod},
+				dataType : "json",
+				success : function(data)
 				{
-					alert('same product already exist for the selected seller');
-					$('#proname').val('');
-					$(this).val('');
+					if(data.status=='exist')
+					{
+						alert('same product already exist for the selected seller');
+						$('#proname').val('');
+						$(this).val('');
+					}
 				}
-			}
 
-		});
+			});
+		}
+		else
+		{
+			alert("Please fill product name and then select a seller");
+		}
+		
 	}
 
 </script>

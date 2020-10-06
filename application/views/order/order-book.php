@@ -22,15 +22,16 @@
 															
 																
 											</a> -->
-											<!--	<address>
-												<h4><i class = "fa fa-user-o"></i> <?php echo $ord->customer; ?></h4>
-													<i class = "fa fa-map-signs"></i> <?php echo $ord->address; ?>
-													<i class = "fa fa-globe"></i> <?php echo $ord->state.", ".$ord->city; ?><br>
+											<?php if(!empty($getUserDetails)){ ?>
+											<address>
+												<h4>
+													<i class = "fa fa-user-o"></i> <?php echo $getUserDetails->employee_id; ?></h4>
+													<i class = "fa fa-map-signs"></i> <?php echo $getUserDetails->s_user_email; ?><br>
+													<i class = "fa fa-globe"></i> <?php echo $getUserDetails->add_ress; ?><br>
 													<br>
-													<i class = "fa fa-envelope-o"></i> <?php echo $ord->email; ?>
-													
-													<i class = "fa fa-phone"></i><?php echo $ord->phone; ?>													
-													</address> -->
+																									
+											</address>
+											<?php } ?>
 											<div class="text-right ml-auto">
 												<h2 class="mb-1"> <?php echo $ord->ord_no; ?></h2>
 												<p class="mb-1"><span class="font-weight-semibold">Order Date :</span> <?php echo date("d, F Y", strtotime($ord->order_date)); ?> </p>

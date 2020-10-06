@@ -103,6 +103,7 @@ class Buy extends CI_Controller {
 		if (empty($prodcart)) {
 			$data['content'] = '<br><div class="alert alert-danger text-center"><h2>Your Cart in empty.</h2></div>';
 		}else{
+
 			$data['content']	=	$this->load->view('sell/checkout_form',$data,true);
 		}
         $this->load->view('layout/main_wrapper', $data);	
@@ -283,6 +284,7 @@ class Buy extends CI_Controller {
 							'price'     => $product->price+$gst_price,
 							'name'		=> $product->country_name,
 							'discount'  => (isset($_POST['disc'])) ? $this->input->post("disc", true) : 0,
+							'minalert'	=> (isset($_POST['minimum'])) ? $this->input->post("minimum", true) : 0,
 							'gst'		=> $product->gst
 							);
 			$newcart = array();	
@@ -352,7 +354,7 @@ class Buy extends CI_Controller {
 					$gst_price = (float)$product->price*((float)$product->gst/100);				
 				}
 				
-				$prdarr = array("status" => $status,"prodid" => $prodno, "product" => $product->country_name, "price" => (float)$product->price+(float)$gst_price , "qty" => (int)$qty + (int)$pqty,"total" => count($cardcontent));
+				$prdarr = array("status" => $status,"prodid" => $prodno, "product" => $product->country_name, "price" => (float)$product->price+(float)$gst_price , "qty" => (int)$qty + (int)$pqty,"total" => count($cardcontent),'minalert'=>$_POST['minimum']);
 				
 			}else{
 
@@ -361,7 +363,7 @@ class Buy extends CI_Controller {
 					$gst_price = (float)$product->price*((float)$product->gst/100);				
 				}
 
-				$prdarr = array("status" => 1,"prodid" => $prodno, "product" => $product->country_name, "price" => (float)$product->price+(float)$gst_price, "qty" => (int)$data['qty'],"total" => count($cardcontent) + 1);
+				$prdarr = array("status" => 1,"prodid" => $prodno, "product" => $product->country_name, "price" => (float)$product->price+(float)$gst_price, "qty" => (int)$data['qty'],"total" => count($cardcontent) + 1,'minalert'=>$data['minalert']);
 				$this->cart->insert($data);	
 			}				
 			$alltotal = 0;
@@ -375,6 +377,7 @@ class Buy extends CI_Controller {
 						
 						$prdarr['qty'] 	 = $crt['qty'];
 						$prdarr['price'] = $crt['price'];
+						
 						$isavl =  true;
 					}
 					

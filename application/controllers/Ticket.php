@@ -44,6 +44,8 @@ class Ticket extends CI_Controller {
                 $data = array(
                     'title'         => $this->input->post('title'),
                     'status'     	=> $this->input->post('status'),
+                    'comp_id'		=> $this->session->companey_id,
+                    'created_by'	=> $this->session->user_id,
                     'created_at'    => date("Y-m-d H:i:s"),
                     'updated_at'    => date("Y-m-d H:i:s"),
                 );
@@ -56,6 +58,8 @@ class Ticket extends CI_Controller {
             	$data = array(
                     'title'          => $this->input->post('title'),
                     'status'     => $this->input->post('status'),
+                    'comp_id'		=> $this->session->companey_id,
+                    'created_by'	=> $this->session->user_id,
                     'created_at'    => date("Y-m-d H:i:s"),
                     'updated_at'    => date("Y-m-d H:i:s"),
                 );

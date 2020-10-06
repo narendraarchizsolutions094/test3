@@ -75,14 +75,14 @@
          <div class="panel-heading no-print col-md-12" style="padding-top:15px;">
          	<form action="<?=base_url('buy');?>" method="get">
          		<div class="col-md-8">
-         			<input type="text" name="searched_product" class="form-control" placeholder="Enter Keywords...">
+         			<input type="text" name="searched_product" class="form-control" placeholder="Enter Keywords..."><br>
          		</div>
          		<div class="col-md-2">
-         			<button type="submit" class="btn btn-primary ">Search</button>
+         			<button type="submit" class="btn btn-primary col-xs-12 col-sm-12 ">Search</button><br>
          		</div>
          	</form>
          	<div class="col-md-2">
-            	<a class=" btn btn-success " href = "<?php echo base_url("buy"); ?>"> Items : <?php echo $totalprod; ?></a> 
+            	<a class=" btn btn-success col-xs-12 col-sm-12" href = "<?php echo base_url("buy"); ?>"> Items : <?php echo $totalprod; ?></a> 
             </div>
             <!-- <a href="#" class="btn-xs btn btn-default"><i class="fa fa-filter"></i>Filters</a>             -->
          </div>
@@ -154,10 +154,10 @@
 											echo "Out of stock";
 										}else { ?>
 									<?php if(!empty($incart[$prd->id])) { ?>
-									<a href = "javascript:void(0)" class = "minus-quantity" data-prodid = "<?php echo $prd->sb_id; ?>"><span> - </span></a>
+									<a href = "javascript:void(0)" class = "minus-quantity" data-prodid = "<?php echo $prd->sb_id; ?>" data-minalert = "<?php echo $prd->minimum_order_quantity ?>" ><span> - </span></a>
 									<?php } ?>
 									
-									<a href = "javascript:void(0)" data-prodid = "<?php echo $prd->sb_id; ?>" class = "add-to-cart">
+									<a href = "javascript:void(0)" data-prodid = "<?php echo $prd->sb_id; ?>" class = "add-to-cart" data-minalert = "<?php echo $prd->minimum_order_quantity ?>">
 									<?php
 									$plus = "shopping-cart";	
 									if(!empty($incart[$prd->id])) {  ?>
@@ -331,7 +331,7 @@
 			$.ajax({
 				url  	: "<?php echo base_url('buy/addtocart'); ?>",
 				type 	: "post",
-				data 	: {product:currobj.data("prodid"),qty : qty},
+				data 	: {product:currobj.data("prodid"),qty : qty, "minimum" : crtobj.data("minalert")},
 				success	: function(resp){
 					var jresp = JSON.parse(resp);
 					
@@ -345,7 +345,7 @@
 						currobj.closest("li").prepend('<a href = "javascript:void(0)" class = "minus-quantity" data-prodid = "'+jresp.prodid+'"><span> - </span></a>');
 						var tprice = parseInt(jresp.price) * parseInt(jresp.qty);
 						var htmcnt = '<li id = "cart-li-'+jresp.prodid+'"><div class="cart-items"><h4><a href="">'+jresp.product+' </a></h4>'+
-										'<p><a href=""> Price : <i class="fa fa-rupee"></i> '+jresp.price+' X '+'<input type="number" value="'+jresp.qty+'" min=1 class="cart-qty" data-prodid='+jresp.prodid+'>'+' = <i class="fa fa-rupee"></i> <span class="item-price-'+jresp.prodid+'">'+tprice+'</span> </a>'+ 
+										'<p><a href=""> Price : <i class="fa fa-rupee"></i> '+jresp.price+' X '+'<input type="number" value="'+jresp.qty+'" min=1 class="cart-qty" data-prodid='+jresp.prodid+'><input type="hidden" name="minimum" class="minimum" value="'+jresp.minalert+'">'+' = <i class="fa fa-rupee"></i> <span class="item-price-'+jresp.prodid+'">'+tprice+'</span> </a>'+ 
 										'</p></div><hr /></li>';
 											$("#cart-nav-menu").prepend(htmcnt);
 											$("#nav-cart-count").text(jresp.total);					
@@ -358,7 +358,7 @@
 					
 						var tprice = parseInt(jresp.price) * parseInt(jresp.qty);
 						$("#cart-li-"+jresp.prodid).html('<div class="cart-items"><h4><a href="">'+jresp.product+' </a></h4>'+
-										'<p><a href=""> Price : <i class="fa fa-rupee"></i> '+jresp.price+' X '+'<input type="number" value="'+jresp.qty+'" min=1 class="cart-qty" data-prodid='+jresp.prodid+'>'+' = <i class="fa fa-rupee"></i> <span class="item-price-'+jresp.prodid+'">'+tprice+'</span> </a>'+ 
+										'<p><a href=""> Price : <i class="fa fa-rupee"></i> '+jresp.price+' X '+'<input type="number" value="'+jresp.qty+'" min=1 class="cart-qty" data-prodid='+jresp.prodid+'><input type="hidden" name="minimum" class="minimum" value="'+jresp.minalert+'">'+' = <i class="fa fa-rupee"></i> <span class="item-price-'+jresp.prodid+'">'+tprice+'</span> </a>'+ 
 										'</p></div>');
 						}else{
 						
@@ -385,7 +385,8 @@
 			data 	: {
 				product:$(this).data("prodid"),
 				qty:parseInt($(this).first().find('.cart-quantity').html())+1,
-				disc:$(this).closest("li").find(".tot-price").val()
+				disc:$(this).closest("li").find(".tot-price").val(),
+				minimum : currobj.data("minalert")
 			},
 			success	: function(resp){
 				var jresp = JSON.parse(resp);				
@@ -396,7 +397,7 @@
 					currobj.closest("li").prepend('<a href = "javascript:void(0)" class = "minus-quantity" data-prodid = "'+jresp.prodid+'"><span> - </span></a>');
 					var tprice = parseInt(jresp.price) * parseInt(jresp.qty);
 					var htmcnt = '<li id = "cart-li-'+jresp.prodid+'"><div class="cart-items"><h4><a href="">'+jresp.product+' </a></h4>'+
-									'<p><a href=""> Price : <i class="fa fa-rupee"></i> '+jresp.price+' X '+'<input type="number" value="'+jresp.qty+'" min=1 class="cart-qty" data-prodid='+jresp.prodid+'>'+' = <i class="fa fa-rupee"></i> <span class="item-price-'+jresp.prodid+'">'+tprice+'</span> </a>'+ 
+									'<p><a href=""> Price : <i class="fa fa-rupee"></i> '+jresp.price+' X '+'<input type="number" value="'+jresp.qty+'" min=1 class="cart-qty" data-prodid='+jresp.prodid+'><input type="hidden" name="minimum" class="minimum" value="'+jresp.minalert+'">'+' = <i class="fa fa-rupee"></i> <span class="item-price-'+jresp.prodid+'">'+tprice+'</span> </a>'+ 
 									'<a href="javascript:void(0)" onclick="remove_cart_item('+jresp.prodid+')" class="fa fa-trash btn btn-danger btn-sm pull-right remove-item-cart"></a></p></div><hr /></li>';
 										$("#cart-nav-menu").prepend(htmcnt);
 										$("#nav-cart-count").text(jresp.total);					
@@ -405,7 +406,7 @@
 				
 					var tprice = parseInt(jresp.price) * parseInt(jresp.qty);
 					$("#cart-li-"+jresp.prodid).html('<div class="cart-items"><h4><a href="">'+jresp.product+' </a></h4>'+
-									'<p><a href=""> Price : <i class="fa fa-rupee"></i> '+jresp.price+' X '+'<input type="number" value="'+jresp.qty+'" min=1 class="cart-qty" data-prodid='+jresp.prodid+'>'+' = <i class="fa fa-rupee"></i> <span class="item-price-'+jresp.prodid+'">'+tprice+'</span> </a>'+ 
+									'<p><a href=""> Price : <i class="fa fa-rupee"></i> '+jresp.price+' X '+'<input type="number" value="'+jresp.qty+'" min=1 class="cart-qty" data-prodid='+jresp.prodid+'><input type="hidden" name="minimum" class="minimum" value="'+jresp.minalert+'">'+' = <i class="fa fa-rupee"></i> <span class="item-price-'+jresp.prodid+'">'+tprice+'</span> </a>'+ 
 									'<a href="javascript:void(0)" onclick="remove_cart_item('+jresp.prodid+')" class="fa fa-trash btn btn-danger btn-sm pull-right remove-item-cart"></a></p></div>');
 				}
 				

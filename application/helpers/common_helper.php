@@ -20,6 +20,21 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	    	}
 	    }
     }
+
+    function expirePreviousOTP($user)
+    {   
+
+        $ci = & get_instance();
+        $ci->load->database();
+        $ci->db->set('reset_password',1);
+        $ci->db->where('pk_i_admin_id',$user);
+        $ci->db->update('tbl_admin');
+
+        $ci->db->set('status',2);
+        $ci->db->where('user_id',$user);
+        $ci->db->update('tbl_otp');
+    }
+
     function is_active_field_api($id,$process=0,$comp_id){       
         $ci =& get_instance();
         $comp_id    =   $comp_id;

@@ -31,9 +31,9 @@
 					<div class="form-group">
 						<label>Status <i class="text-danger">*</i></label>
 						<select class="form-control add-select2 choose-client" name = "status" required>
-							<option value = "" style ="display:none;">---Select---</option>
+							<!-- <option value = "" style ="display:none;">---Select---</option> -->
 							<option value="1" <?php if(!empty($detail->status ) && $detail->status == 1){ echo "selected"; } ?> >Active</option>
-							<option value="0" <?php if(!empty($detail->status ) && $detail->status == 0){ echo "selected"; } ?> >InActive</option>
+							<option value="0" <?php if(empty($detail->status )){ echo "selected"; } ?> >InActive</option>
 						</select>
 					</div>
 				</div>

@@ -2,7 +2,7 @@
 
 class Message_models extends CI_Model {
 
- public function smssend($phone,$message){
+ public function smssend($phone,$message,$companey_id='',$user_id=''){
     /* $search = array(
 		'/\n/',			// replace end of line by a space
 		'/\>[^\S ]+/s',		// strip whitespaces after tags, except space
@@ -18,10 +18,10 @@ class Message_models extends CI_Model {
 	  );*/
  
 	$meg = urlencode($message);
-
+  $companey_id = ($companey_id == '') ? $this->session->companey_id : $companey_id;
  //$url="https://api.msg91.com/api/sendhttp.php?authkey=308172AuZ3VC9dU5df325a4&route=1&sender=LALANT&mobiles=".$phone."&message=".$meg."&country=91";
  
-$this->db->where('comp_id',$this->session->companey_id);
+$this->db->where('comp_id',$companey_id);
 $this->db->where('api_for',2);
 $api_conf  = $this->db->get('api_integration')->row_array();
 
@@ -57,14 +57,14 @@ curl_setopt_array($curl, array(
       } else {
         $response;
       }
-                $insert_array = array(
-                                  'mobile_no'     => $phone,
-                                  'created_by'    =>  $this->session->user_id,
-                                  'msg'           => $message,
-                                  'response'      => $response,
-                                  'comp_id'       => $this->session->companey_id,
-                                  'url'           => $url
-                              );
+          $insert_array = array(
+            'mobile_no'     => $phone,
+            'created_by'    =>  ($this->session->user_id != '') ? $this->session->user_id : $user_id,
+            'msg'           => $message,
+            'response'      => $response,
+            'comp_id'       => $companey_id,
+            'url'           => $url
+          );
           $this->db->insert('sms_send_log',$insert_array);
       
     }

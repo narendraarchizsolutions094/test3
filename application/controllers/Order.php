@@ -351,6 +351,11 @@ class Order extends CI_Controller {
 		
 		$data['ord'] = $this->order_model->getOrder($ordno);
 		$data['orders'] = $this->order_model->getOrders($ordno);
+		if(!empty($data['ord']->cus_id))
+		{
+			$data['getUserDetails'] = $this->db->select('*')->from('tbl_admin')->where('pk_i_admin_id',$data['ord']->cus_id)->get()->row();	
+		}
+		
 		
 		if(!empty($data["ord"])) {
 		//	$data['payments'] = $this->payment_model->getpayment($data["ord"]->cus_id);
@@ -388,7 +393,10 @@ class Order extends CI_Controller {
 			//$data['payments'] = $this->payment_model->getpayment($data["ord"]->cus_id);
 		}
 		//if(empty($data['order'])) show_404();
-		
+		if(!empty($data['ord']->cus_id))
+		{
+			$data['getUserDetails'] = $this->db->select('*')->from('tbl_admin')->where('pk_i_admin_id',$data['ord']->cus_id)->get()->row();	
+		}
 		$data["schemes"]  = $this->order_model->getCurrentScheme();
 		
 		$this->load->model("scheme_model");

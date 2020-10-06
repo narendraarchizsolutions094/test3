@@ -1271,34 +1271,67 @@ public function login_in_process(){
      public function forgot_password() {
              
             $email = $this->input->post('femail');
-            $data = $this->dashboard_model->change_pass($email);
-            $this->load->library('email');
-            $this->db->where('comp_id',$data->companey_id);
-            $this->db->where('status',1);
-            $email_row  =   $this->db->get('email_integration')->row_array();
+            if(is_numeric($email) == 1)
+            {
+              $data = $this->dashboard_model->getUserDataByPhone($email);
+              //$this->load->library('email');
+              $this->db->where('comp_id',$data->companey_id);
+              $this->db->where('api_key','message');
+              $email_row  =   $this->db->get('api_integration')->row_array();
+            }
+            else
+            {
+              $data = $this->dashboard_model->change_pass($email);
+              $this->load->library('email');
+              $this->db->where('comp_id',$data->companey_id);
+              $this->db->where('status',1);
+              $email_row  =   $this->db->get('email_integration')->row_array();
+            }
+            
             
             if(empty($email_row) && $data->companey_id != 81){ 
                 echo "4";                
             }else{
-                $config['smtp_auth']    = true;
-                $config['protocol']     = $email_row['protocol'];
-                $config['smtp_host']    = $email_row['smtp_host'];
-                $config['smtp_port']    = $email_row['smtp_port'];
-                $config['smtp_timeout'] = '7';
-                $config['smtp_user']    = $email_row['smtp_user'];
-                $config['smtp_pass']    = $email_row['smtp_pass'];
-                $config['charset']      = 'utf-8';
-                $config['mailtype']     = 'html'; // or html
-                $config['newline']      = "\r\n";                  
-                $config['validation']   = TRUE; // bool whether to validate email or not 
-               $this->email->initialize($config);
-               $email_data['url'] = $this->config->base_url()."change-password/" . base64_encode($data->pk_i_admin_id);
-               //$this->load->library('email');
-               $this->email->from($email_row['smtp_user'], 'thecrm360');
-               $this->email->to($email);
-               $this->email->subject('Change password');
-               $msg = $this->load->view('templates/forgot_password_email',$email_data,true);
-               $this->email->message($msg);
+
+                if(is_numeric($email) == 1)
+                {
+                  expirePreviousOTP($data->pk_i_admin_id);
+                  $phone= '91'.$this->input->post('femail');
+                  //$otp = mt_rand(100000, 999999);
+                  $otp = 123456;
+                  $otpAry = array(
+                    'otp'     => $otp,
+                    'user_id' => $data->pk_i_admin_id,
+                    'status'  => 1
+                  );
+                  $this->db->insert('tbl_otp',$otpAry);
+                  $message = "Your OTP is $otp";
+                  $this->Message_models->smssend($phone,$message,$data->companey_id,$data->pk_i_admin_id);
+                  echo "99";
+                }
+                else
+                {
+                    $config['smtp_auth']    = true;
+                    $config['protocol']     = $email_row['protocol'];
+                    $config['smtp_host']    = $email_row['smtp_host'];
+                    $config['smtp_port']    = $email_row['smtp_port'];
+                    $config['smtp_timeout'] = '7';
+                    $config['smtp_user']    = $email_row['smtp_user'];
+                    $config['smtp_pass']    = $email_row['smtp_pass'];
+                    $config['charset']      = 'utf-8';
+                    $config['mailtype']     = 'html'; // or html
+                    $config['newline']      = "\r\n";                  
+                    $config['validation']   = TRUE; // bool whether to validate email or not 
+                   $this->email->initialize($config);
+                   $email_data['url'] = $this->config->base_url()."change-password/" . base64_encode($data->pk_i_admin_id);
+                   //$this->load->library('email');
+                   $this->email->from($email_row['smtp_user'], 'thecrm360');
+                   $this->email->to($email);
+                   $this->email->subject('Change password');
+                   $msg = $this->load->view('templates/forgot_password_email',$email_data,true);
+                   $this->email->message($msg);
+                }
+                
         
         //var_dump($this->email->send());exit();
         
@@ -1307,16 +1340,42 @@ public function login_in_process(){
         } else {
             if ($data->companey_id == 81) {
               echo $this->forgot_password_email_career_ex ($msg,'Change password',$email);              
-            }else{              
+            }else{          
+            if(is_numeric($email) != 1)
+            {
               if ($this->email->send()) {
                   echo "1";
               }else{
                   echo "0";
               }
+            }   
+              
             }
         }
       }
     }
+
+    public function verifyOTP()
+    {
+      $mobno  = $this->input->post('mobno');
+      $otp    = $this->input->post('otp');
+      $data = $this->dashboard_model->getUserDataByPhone($mobno);
+      $getOtp = $this->db->select('*')->from('tbl_otp')->where('user_id',$data->pk_i_admin_id)->where('status',1)->get()->row();
+      if($otp == $getOtp->otp)
+      {
+        $this->db->where('id',$getOtp->id);
+        $this->db->set('status',2);
+        $this->db->update('tbl_otp');
+        echo json_encode(array('status'=>'verified','user'=>base64_encode($data->pk_i_admin_id)));
+      }
+      else
+      {
+        echo json_encode(array('status'=>'notverified'));
+      }
+
+    }
+
+
 
     public function forgot_password_email_career_ex ($message,$email_subject,$to_email){       
           $curl_fields = array(
@@ -1423,6 +1482,7 @@ public function login_in_process(){
                 's_password' => $new_pass,
                 'reset_password' => 0
             );
+            //echo $user;die;
             if ($this->dashboard_model->set_new_pass($user, $data) == true) {
                 echo "1";
             }

@@ -191,6 +191,7 @@ class Product extends CI_Controller {
 							 "hsn_sac"	    => $this->input->post("hsn_code", true),
 							 "status"       => $this->input->post("status", true),
 							 "gst"			=> $this->input->post("tax", true),
+							 "minimum_order_quantity" => $this->input->post("minimum_order_quantity", true),
 							 "created_by"   => $this->session->user_id,
 							 "updated_date" => date("Y-m-d h:i:s"),
 							 );

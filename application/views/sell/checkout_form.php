@@ -92,7 +92,9 @@ p{
 <form action="<?=base_url().'payment/make_payment_mojo'?>" method="post">
 <div class="">
   <div class="checkout-title">
+    <a href="<?=base_url('buy');?>" class="btn btn-md pull-right">Back</a>
       <h2>Product Order Form</h2>
+
   </div>
 <div class="row">
   <br>

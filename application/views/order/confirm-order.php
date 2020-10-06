@@ -9,7 +9,17 @@
         <div  class="panel panel-default thumbnail"> 
             <div class="panel-heading no-print">
                 <div class="btn-group"> 
-                    <a class="btn btn-primary" href="<?php echo base_url("order") ?>"> <i class="fa fa-list"></i> Order List </a>  
+                    <a class="btn btn-primary" href="<?php echo base_url("order") ?>"> <i class="fa fa-list"></i> Order List </a> <br><br>
+                    <?php if(!empty($getUserDetails)){ ?>
+					<address>
+						<h4>
+							<i class = "fa fa-user-o"></i> <?php echo"ID : ".$getUserDetails->employee_id; ?></h4>
+							<i class = "fa fa-map-signs"></i> <?php echo "Email : ".$getUserDetails->s_user_email; ?><br>
+							<i class = "fa fa-globe"></i> <?php echo "Address : ".$getUserDetails->add_ress; ?><br>
+							<br>
+																			
+					</address>
+					<?php } ?> 
                 </div>
             </div>
             <div class="panel-body panel-form">

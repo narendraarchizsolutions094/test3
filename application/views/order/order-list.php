@@ -163,12 +163,16 @@ input[name=lead_stages]{
 													<th> Order No </th>												
 													<th>Product</th>
 													<th>Quantity</th>
-													<th>Price</th>													
-													<th>Payment</th>
-													<th>Pay</th>
+													<th>Price</th>
+                          <th>Order By</th>													
+                          <th>Seller Name</th>
+                          <th>Payment Mode</th>
+                          <th>Amount Paid</th>
+													<!-- <th>Payment</th>
+													<th>Pay</th> -->
 													<th>Balance</th>
-													<th>Delivery Date</th>
-													<th> Date</th>													
+													<!-- <th>Delivery Date</th>
+													<th> Date</th> -->													
 													<th>Status</th>
 													<th>Action</th>													
 												</tr>

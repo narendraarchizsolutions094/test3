@@ -23,7 +23,7 @@
 				<div class="col-md-6">
 					<div class="form-group">
 						<label>Problem For <i class="text-danger">*</i></label>
-						<select class="form-control add-select2 choose-client" name = "client" required>
+						<select class="form-control add-select2 choose-client" name = "client" >
 							<option value = "" style ="display:none;">---Select---</option>
 							<?php if(!empty($clients)){
 								foreach($clients as $ind => $clt){

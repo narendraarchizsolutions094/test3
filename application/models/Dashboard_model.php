@@ -962,6 +962,12 @@ class Dashboard_model extends CI_Model {
 
     }
 
+    public function getUserDataByPhone($mob)
+    {
+    	return $this->db->select("*")->from('tbl_admin')->where('s_phoneno',$mob)->get()->row();
+
+    }
+
     
 
     //change password

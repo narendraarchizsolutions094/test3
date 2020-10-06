@@ -30,7 +30,7 @@ class Order_model extends CI_Model {
 		$this->load->model('common_model');
 		$retuser   = $this->common_model->get_categories($this->session->user_id);
 		if($act == 1){			
-			$this->db->select("ord.*,concat(usr.s_display_name, ' ', usr.last_name) as customer,usr.region,prd.country_name as product_name");
+			$this->db->select("ord.*,concat(usr.s_display_name, ' ', usr.last_name) as customer,concat(seller.s_display_name, ' ', seller.last_name) as sellername,usr.region,prd.country_name as product_name");
 		}		
 		$this->db->where("ord.company", $this->session->companey_id);
 		$this->db->from("tbl_order ord");
@@ -63,7 +63,8 @@ class Order_model extends CI_Model {
 
 		if($act == 1) {			
 		//	$this->db->join('order_prdct ordprd','ord.id=ordprd.ord_id','left');
-			$this->db->join('tbl_admin usr','usr.pk_i_admin_id=ord.cus_id','left');		
+			$this->db->join('tbl_admin usr','usr.pk_i_admin_id=ord.cus_id','left');
+			$this->db->join('tbl_admin seller','seller.pk_i_admin_id=prd2.seller_id','left');		
 			$ordcol = array("ord.id","prd.country_name");			
 			//$this->order_by($ordcol);
 			$this->db->order_by("ord.id",'DESC');

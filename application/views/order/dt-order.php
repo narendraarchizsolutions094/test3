@@ -31,6 +31,8 @@
 					}else{
 						$cols[] = " "; 	
 					}
+					$cols[] = $ord->customer;
+					$cols[] = $ord->sellername;
 						/*if($ord->pay_mode == 1){
 							$mode = "Online";	
 						}else if($ord->pay_mode == 2){
@@ -83,8 +85,7 @@
 							$paymode = false;
 						}
 						if(!empty($paymode)) {
-						$cols[]  =	'<span class = "badge badge-info">Mode : '.$paymode.'</span><br /><span class = "badge badge-warning">
-										Status : '.$paysts.'</span>';
+						$cols[]  =	$paymode;
 						}else {
 						$cols[]  =		" - ";
 						}
@@ -92,8 +93,8 @@
 					
 						$cols[]  =	(!empty($balance)) ? $balance : " ";
 					
-					$cols[] = (!empty($ord->conf_delv) and $ord->conf_delv != "0000-00-00") ?  date("d, M Y", strtotime($ord->conf_delv)).' Next :'.$ord->pend_delv.''	 :  " - ";
-					$cols[] = (!empty($ord->order_date )) ?  date("d, M Y", strtotime($ord->order_date))  : " - ";
+					//$cols[] = (!empty($ord->conf_delv) and $ord->conf_delv != "0000-00-00") ?  date("d, M Y", strtotime($ord->conf_delv)).' Next :'.$ord->pend_delv.''	 :  " - ";
+					//$cols[] = (!empty($ord->order_date )) ?  date("d, M Y", strtotime($ord->order_date))  : " - ";
 					
 					if($ord->status  == 1 ){
 						$cols[] = "Request";

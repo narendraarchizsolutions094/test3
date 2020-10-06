@@ -163,11 +163,17 @@ if($root=='https://student.spaceinternationals.com'){	 ?>
                     <div class="panel-body" id="ForgetPasswordDiv" style="display:none">
                         <form id="ForgetPassword">
                             <div class="form-group">
-                                <label class="control-label" for="email"><?= display('email') ?></label>
-                                <input type="text" placeholder="<?= display('email') ?>" name="femail" id="femail" class="form-control"> 
+                                <label class="control-label" for="email"><?php echo "Enter Email Or Phone";?></label>
+                                <input type="text" placeholder="<?php echo "Enter Email Or Phone"; ?>" name="femail" id="femail" class="form-control"> 
                             </div>
+                            <div class="form-group">
+                                
+                                <input type="text" placeholder="<?php echo "Enter OTP"; ?>" name="otp" id="otp" class="form-control" style="display:none"> 
+                            </div>
+                            
                             <div> 
-                                <button  type="submit" class="btn btn-success"><?php echo display('submit'); ?></button>  <span class="pull-right"><a href="javascript:" id="Llogin"><?php echo display("login"); ?></a></span>
+                                <button type="button" class="btn btn-success" style="display:none" id="votp" onclick="verifyOTP()">VerifyOtp</button>
+                                <button  type="submit" id="fsubmit" class="btn btn-success"><?php echo display('submit'); ?></button>  <span class="pull-right"><a href="javascript:" id="Llogin"><?php echo display("login"); ?></a></span>
                             </div>
                             
                         </form>
@@ -283,20 +289,40 @@ if($root=='https://student.spaceinternationals.com'){	 ?>
                         data: $(this).serialize(),
                         success:function(data){
                             console.log(data);
-                            if(data==1){                                
+                            if(data==1){
+                                                        
                                 Swal.fire({
                                           title: "Congratulation",
                                           text: "Your password reset link is sent on your email id",
                                           icon: "success",
                                           button: "OK",                                          
-                                }).then((value) => {                                    
-                                    location.reload();
+                                }).then((value) => {  
+                                    
+                                        location.reload();
+                                                               
+                                    
                                 });                            
                             }else if(data==3){                                
                                 Swal.fire("Warning!", "This email doesn't exist", "warning");                                
                             }
                             else if(data==4){                                
                                 Swal.fire("Warning!", "Email is not configured", "warning");                                
+                            }
+                            else if(data == 99)
+                            {
+                                Swal.fire({
+                                          title: "Congratulation",
+                                          text: "Please Enter otp received on phone",
+                                          icon: "success",
+                                          button: "OK",                                          
+                                }).then((value) => {  
+                                    
+                                        $("#otp").css('display','block');
+                                        $("#votp").css('display','block');
+                                        $("#fsubmit").css('display','none');
+                                                               
+                                    
+                                }); 
                             }
                             else{                                
                                 Swal.fire({                                    
@@ -381,6 +407,40 @@ if($root=='https://student.spaceinternationals.com'){	 ?>
                     }         
                 });
             });
+
+            function verifyOTP()
+            {
+                var mobno  = $("#femail").val();
+                var otp    =  $("#otp").val();
+                $.ajax({
+                    url : '<?=base_url();?>/dashboard/verifyOTP',
+                    type : "post",
+                    data : {'mobno' : mobno,'otp' : otp},
+                    dataType : "json",
+                    success : function(data)
+                    {
+                        if(data.status=="verified")
+                        {
+                            Swal.fire({
+                              title: "Congratulation",
+                              text: "Your otp has been verified successfully",
+                              icon: "success",
+                              button: "OK",                                          
+                            }).then((value) => {  
+                                window.location.href="<?=base_url('change-password')?>/"+data.user;
+                                //location.reload();
+                                                   
+
+                            }); 
+                        }
+                        else
+                        {
+                            Swal.fire('warning','opt you have entered is incorrect please enter valid otp','warning');
+                        }
+                    }
+
+                })
+            }
         </script>        
     </body>
 </html>
