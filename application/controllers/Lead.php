@@ -792,7 +792,7 @@ if($coment_type == 1){
         } else {
             echo "<script>alert('Something Went Wrong')</script>";
             redirect('lead');
-        }
+        } 
     }
 
     public function convert_to_lead() {        
@@ -815,12 +815,14 @@ if($coment_type == 1){
                 $comment = 'Converted to client';       
                 $this->db->set('status', 3);
             }
+
             $this->db->set('created_date', date('Y-m-d H:i:s'));
             $this->db->set('update_date', '');
             $this->db->where('enquiry_id', $enquiry_id);
             $this->db->update('enquiry'); 
             $data['enquiry'] = $this->Leads_Model->get_leadListDetailsby_id($enquiry_id);
             $lead_code = $data['enquiry']->Enquery_id;
+            
             $this->Leads_Model->add_comment_for_events($comment, $lead_code);
             $msg = $comment.' Successfully';
 
@@ -834,9 +836,13 @@ if($coment_type == 1){
                 }else if ($data['enquiry']->product_id == 169) {
                     $user_right = 186;
                 } 
-                $report_to = '';
+                $report_to = ''; 
                 if($this->session->companey_id == 57){
-                    $user_right = 200;
+
+                    if (!empty($data['enquiry']->email) || !empty($data['enquiry']->phone)) {
+                        $user_exist = $this->dashboard_model->check_user_by_mail_phone(array('email'=>$data['enquiry']->email,'phone'=>$data['enquiry']->phone));    
+                    }                    
+                    $user_right = 200;                    
                     $report_to=$data['enquiry']->created_by;
                 }
                 $ucid    =   $this->session->companey_id;
@@ -854,7 +860,19 @@ if($coment_type == 1){
                         's_password'      =>    md5(12345678),
                         'report_to'       =>    $report_to
                     );
-                $user_id    =   $this->user_model->create($postData);
+                if (!empty($user_exist)) {
+                    $this->db->where('tbl_admin.companey_id',57);
+                    $this->db->where('tbl_admin.pk_i_admin_id',$user_exist->pk_i_admin_id);
+                    
+                    if($this->db->update('tbl_admin',array('user_permissions'=>200,'user_roles'=>200,'user_type'=>200))){
+                        $user_id = $user_exist->pk_i_admin_id;
+                    }else{
+                        $user_id = '';
+                    }
+
+                }else{
+                    $user_id    =   $this->user_model->create($postData);
+                }
                 $message = 'Email - '.$data['enquiry']->email.'<br>Password - 12345678';                
                 $subject = 'Login Details';
 
