@@ -1297,8 +1297,8 @@ public function login_in_process(){
                 {
                   expirePreviousOTP($data->pk_i_admin_id);
                   $phone= '91'.$this->input->post('femail');
-                  //$otp = mt_rand(100000, 999999);
-                  $otp = 123456;
+                  $otp = mt_rand(100000, 999999);
+                  //$otp = 123456;
                   $otpAry = array(
                     'otp'     => $otp,
                     'user_id' => $data->pk_i_admin_id,
