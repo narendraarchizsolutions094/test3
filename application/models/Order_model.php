@@ -25,6 +25,16 @@ class Order_model extends CI_Model {
 					 ->get()
 					 ->row();
 	}
+
+	public function getBuyers($ordno){
+		
+	 	$this->db->select("tbl_admin.s_display_name,tbl_admin.last_name,tbl_admin.add_ress,tbl_admin.contact_pname,tbl_admin.contact_phone,tbl_order.ord_no");
+				$this->db->from('tbl_admin');
+				$this->db->join('tbl_order','tbl_order.cus_id=tbl_admin.pk_i_admin_id','left');
+				$this->db->where("tbl_order.ord_no", $ordno);
+		return	$this->db->get()
+					 ->row();
+	}
 	
 	public function orders($act = "1",$sdate='',$edate=''){
 		$this->load->model('common_model');

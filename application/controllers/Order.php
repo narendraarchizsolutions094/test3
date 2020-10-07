@@ -496,7 +496,7 @@ class Order extends CI_Controller {
 		
 		////$this->load->model("payment_model");
 		$data['orders'] = $this->order_model->getOrders($ordno);
-		
+		$data['buyer_details'] = $this->order_model->getBuyers($ordno);
 		if(empty($data['orders'])) show_404();
 		
 		$data['ord']      = $data['orders'][0];

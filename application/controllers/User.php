@@ -284,6 +284,14 @@ class User extends CI_Controller {
         } else {
             $permission = '';
         }
+
+$inactive = $this->input->post('status', true);
+            if($inactive=="0"){
+            $inactive_date = date("Y-m-d h:i:s");   
+            }else{
+            $inactive_date = '';
+            }
+        
         $data['department'] = (object) $postData = [
             'pk_i_admin_id' => $this->input->post('dprt_id', true),
             'user_roles' => $this->input->post('user_role', true),
@@ -294,7 +302,7 @@ class User extends CI_Controller {
             'second_email' => $this->input->post('second_email', true),
             'second_phone' => $this->input->post('second_phone', true),
             's_password' => $password,
-           
+           'inactive_date' => $inactive_date,
             's_display_name' => $this->input->post('Name', true),
             'state_id' => $this->input->post('state_id', true),
             'city_id' => $this->input->post('city_name', true),
