@@ -168,7 +168,12 @@
 																	<?php if(!empty($ord->tax)){ ?>
 																	<label>TAX : </label> <?php echo (!empty($ord->tax)) ? $ord->tax."%" : "0%"; ?>
 																	<?php } ?>
-																	<br><label>Total : </label> <i class ="fa fa-rupee"></i> <?php echo $ord->quantity*$ord->price + $ord->other_price; ?>
+																	<br><label>Total : </label> <i class ="fa fa-rupee"></i> <?php $total = $ord->quantity*$ord->price + $ord->other_price; 
+																		if (!empty($ord->tax)) {
+																			$total+=$total*($ord->tax/100);
+																		}
+																		echo $total;
+																	?>
 																</div>
 																<div class = "col-md-9">
 																<div class = "row">
