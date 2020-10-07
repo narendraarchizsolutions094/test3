@@ -34,7 +34,6 @@
 												<th>Stock</th>
 												<th>Price</th>
 												<th>GST</th>
-												<th>Total Price</th>
 												<th>Scheme</th>
 												<th>Discount</th>
 												<th>Quantity</th>
@@ -55,8 +54,8 @@
 														<td><?php echo $ord->stock; ?></td>
 														<td><i class ="fa fa-rupee"></i> <?php echo $ord->price; ?></td>
 														<td><?php echo (!empty($ord->tax)) ? $ord->tax."%" : "0%"; ?></td>
-														<td><i class = "fa fa-rupee"></i> <?php echo $totprice = ($ord->price - $ord->offer) + floor($ord->tax/100); ?>
-														</td>
+														<!-- <td><i class = "fa fa-rupee"></i> <?php echo $totprice = ($ord->price - $ord->offer) + floor($ord->tax/100); ?>
+														</td> -->
 														<td>
 															<?php
 															$totper = 0;
@@ -77,7 +76,11 @@
 													<td>
 													<i class = "fa fa-rupee"></i> 
 													<?php 
-														echo  $totprice*$ord->quantity; 
+														$total = $totprice*$ord->quantity; 
+														if (!empty($ord->tax)) {
+															$total += $total*($ord->tax/100); 
+														}
+														echo $total;
 													?>
 													</td>
 													<td>
