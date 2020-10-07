@@ -51,7 +51,7 @@
         <select class="form-control" name="org_name" id="user_id_fortask" >
            <option value="" style="display:none;">--Select---</option>
            <?php foreach($user_list as $user){?>
-           <option value="<?=$user->pk_i_admin_id ?>" <?php if($this->session->user_id==$user->pk_i_admin_id){echo 'selected';} ?>><?=$user->s_display_name ?>&nbsp;<?=$user->last_name; ?></option>
+           <option value="<?=$user->pk_i_admin_id ?>" <?php if($this->session->user_id==$user->pk_i_admin_id){echo 'selected';} ?>><?=$user->s_display_name ?>&nbsp;<?=$user->last_name; ?> -  <?=$user->s_user_email?$user->s_user_email:$user->s_phoneno;?></option>
            <?php } ?>
         </select>
         <br>
