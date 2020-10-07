@@ -109,23 +109,27 @@
 							<div class="col-md-12">
 								<div class="panel panel-default">
 									<div class="panel-body">
-										<div class="col-md-12">
-										<div class="pull-left">
-									<?php if(!empty($getUserDetails)){ ?>
-											<address>
-												<h4>
-													<i class = "fa fa-user-o"></i> <?php echo $getUserDetails->employee_id; ?></h4>
-													<i class = "fa fa-map-signs"></i> <?php echo $getUserDetails->s_user_email; ?><br>
-													<i class = "fa fa-globe"></i> <?php echo $getUserDetails->add_ress; ?><br>
-													<br>
-																									
-											</address>
-											<?php } ?>
-										</div>
-										<div class="pull-right">
-											<h2 class="mb-1"> <?php echo $ord->ord_no; ?></h2>
-											<p class="mb-1"><span class="font-weight-semibold">Order Date :</span> <?php echo date("d, F Y", strtotime($ord->order_date)); ?> </p>
-										</div>
+										<div class="row">
+											<div class="col-md-6 col-sm-12 col-xs-12">
+											<div class="pull-left">
+											<?php if(!empty($getUserDetails)){ ?>
+												<address>
+													<h4>
+														<i class = "fa fa-user-o"></i> <?php echo $getUserDetails->employee_id; ?></h4>
+														<i class = "fa fa-map-signs"></i> <?php echo $getUserDetails->s_user_email; ?><br>
+														<i class = "fa fa-globe"></i> <?php echo $getUserDetails->add_ress; ?><br>
+														<br>
+																										
+												</address>
+												<?php } ?>
+											</div>
+											</div>
+											<div class="col-md-6 col-sm-12 col-xs-12">											
+											<div class="pull-right">
+												<h2> <?php echo $ord->ord_no; ?></h2>
+												<p><span>Order Date :</span> <?php echo date("d, F Y", strtotime($ord->order_date)); ?> </p>
+											</div>
+											</div>
 										</div>
 										<?php $mord = $ord; ?>
 										<br>
