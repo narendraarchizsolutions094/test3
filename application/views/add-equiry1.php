@@ -97,7 +97,11 @@ function add_more_phone(add_more_phone) {
   });
   function get_basic_field(){
       var process_id = "<?=$process_id?>";   
-      var url = "<?=base_url().'form/form/get_basic_field_by_process'?>";       
+      var para ='';
+      if ("<?=!empty($_GET['phone'])?$_GET['phone']:''?>"!="") {
+        para = "?phone=<?=!empty($_GET['phone'])?$_GET['phone']:''?>";
+      }
+      var url = "<?=base_url().'form/form/get_basic_field_by_process'?>"+para;       
       $.ajax({
           type: "POST",
           url: url,

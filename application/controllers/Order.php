@@ -384,7 +384,7 @@ class Order extends CI_Controller {
 			$this->savebooking();
 			redirect(base_url("order/view/".$ordno), "refresh");	
 		}
-		
+		 
 		if(empty($ordno)) show_404();
 		
 		$data['ord'] = $this->order_model->getOrder($ordno);
@@ -415,7 +415,9 @@ class Order extends CI_Controller {
 	}
 	
 	public function savebooking(){
-		
+		echo "<pre>";
+		print_r($_POST);
+		exit();
 		$prdarr    =  $this->input->post("productord", true);
 		$cnford    = $this->input->post("productconf", true);
 		$remord    = $this->input->post("productrem", true);
@@ -499,7 +501,6 @@ class Order extends CI_Controller {
 		////$this->load->model("payment_model");
 		$data['orders'] = $this->order_model->getOrders($ordno);
 		$data['buyer_details'] = $this->order_model->getBuyers($ordno);
-		//echo'<pre>';print_r($data['buyer_details']);exit;
 		if(empty($data['orders'])) show_404();
 		
 		$data['ord']      = $data['orders'][0];
@@ -603,6 +604,25 @@ class Order extends CI_Controller {
 		$this->db->update("tbl_order", $arr);	
 	}
 	
+	public function updateorder_product_status(){			
+		$arr = array(
+				"comp_id"    => $this->session->companey_id,
+				"ord_no"     => $this->input->post('order_id'),
+				"pid" 		 => $this->input->post('product_id'),
+				"status" 	 => $this->input->post('status'),
+				"created_by" => $this->session->user_id,
+				);
+		echo $this->db->insert("ord_prod_stage", $arr);	
+	}
+	public function updateorder_product_deliveredBy(){
+		$update_arr = array(
+			'deliver_by' => $this->input->post('deliver_by')
+		);
+		$this->db->where('company',$this->session->companey_id);
+		$this->db->where('ord_no',$this->input->post('order_id'));
+		$this->db->where('product',$this->input->post('product_id'));
+		echo $this->db->update('tbl_order',$update_arr);		
+	}
 	public function update($ordno = ""){
 		
 		$data["title"] = "Add Delivery";

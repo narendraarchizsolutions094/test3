@@ -380,7 +380,7 @@ class Report extends CI_Controller {
             'sub_disposition' =>  $sub_disposition,
             'enq_product1'    =>  $enq_product,
             'drop_status1'    =>  $drop_status,
-            'all1'            =>  $all,
+            'all1'            =>  $all, 
             'post_report_columns'=>$post_report_columns,
             'productlst'=>$productlst
             );
@@ -394,8 +394,8 @@ class Report extends CI_Controller {
         $data['datasourse'] = $this->report_model->all_datasource();
         
         $data['datasourse'] = $this->report_model->all_datasource();
-        
-        $data['employee'] = $this->report_model->all_company_employee($this->session->userdata('companey_id'));
+        $this->load->model('User_model');
+        $data['employee'] =$this->User_model->companey_users();
         $data['process'] = $this->dash_model->product_list();
         $data["dfields"] = $this->report_model->get_dynfields();
         $data["fieldsval"]        = $this->report_model->getdynfielsval();  
