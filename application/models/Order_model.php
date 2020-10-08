@@ -26,7 +26,7 @@ class Order_model extends CI_Model {
 					 ->row();
 	}
 
-	public function getBuyers($ordno){
+	/*public function getBuyers($ordno){
 		
 	 	$this->db->select("tbl_admin.s_display_name,tbl_admin.last_name,tbl_admin.add_ress,tbl_admin.contact_pname,tbl_admin.contact_phone,tbl_order.ord_no");
 				$this->db->from('tbl_admin');
@@ -35,7 +35,7 @@ class Order_model extends CI_Model {
 		return	$this->db->get()
 					 ->row();
 	}
-	
+	*/
 	public function orders($act = "1",$sdate='',$edate=''){
 		$this->load->model('common_model');
 		$retuser   = $this->common_model->get_categories($this->session->user_id);
