@@ -59,17 +59,17 @@
 								
 								        <div class="row">
 											<div class="text-left ml-auto col-md-4">
-											<p class="mb-1" style=""><span class="font-weight-semibold" style="font-weight: 700;">Buyer :</span> <?php echo $buyer_details->s_display_name.' '.$buyer_details->last_name; ?> </p>
-											<p class="mb-1" style=""><span class="font-weight-semibold" style="font-weight: 700;">Prop. :</span> <?php echo $buyer_details->add_ress; ?> </p>
-											<p class="mb-1" style="margin:0px;"><span class="font-weight-semibold" style="font-weight: 700;">Contact Persion . :</span> <?php echo $buyer_details->contact_pname; ?> </p>
-											<p class="mb-1" style="margin:0px;"><span class="font-weight-semibold" style="font-weight: 700;">Contact No :</span> <?php echo $buyer_details->contact_phone; ?> </p>
-											<p class="mb-1" style="margin:0px;"><span class="font-weight-semibold" style="font-weight: 700;">GSTIN. :</span>  </p>
+											<p class="mb-1" style=""><span class="font-weight-semibold" style="font-weight: 700;">Buyer :</span> <?php echo $buyer_details['0']->order_value; ?> </p>
+											<p class="mb-1" style=""><span class="font-weight-semibold" style="font-weight: 700;">Prop. :</span> <?php echo $buyer_details['3']->order_value; ?> </p>
+											<p class="mb-1" style="margin:0px;"><span class="font-weight-semibold" style="font-weight: 700;">Contact Persion . :</span> <?php echo $buyer_details['0']->order_value; ?> </p>
+											<p class="mb-1" style="margin:0px;"><span class="font-weight-semibold" style="font-weight: 700;">Contact No :</span> <?php echo $buyer_details['2']->order_value; ?> </p>
+											<p class="mb-1" style="margin:0px;"><span class="font-weight-semibold" style="font-weight: 700;">GSTIN. :</span> <?php echo $buyer_details['8']->order_value; ?> </p>
 											</div>
 											<div class="text-left ml-auto col-md-4">
 											<p class="mb-1" style=""><span class="font-weight-semibold" style="font-weight: 700;">Invoice No :</span>  </p>
 											<p class="mb-1" style=""><span class="font-weight-semibold" style="font-weight: 700;">Delivery Note :</span>  </p>
 											<p class="mb-1" style=""><span class="font-weight-semibold" style="font-weight: 700;">Supplier's Ref. :</span>  </p>
-											<p class="mb-1" style=""><span class="font-weight-semibold" style="font-weight: 700;">Buyer's Order No. :</span>  <?php echo $buyer_details->ord_no; ?></p>
+											<p class="mb-1" style=""><span class="font-weight-semibold" style="font-weight: 700;">Buyer's Order No. :</span>  <?php echo $buyer_details['0']->order_id; ?></p>
 											<p class="mb-1" style=""><span class="font-weight-semibold" style="font-weight: 700;">Despatch Doc.No. :</span>  </p>
 											<p class="mb-1" style=""><span class="font-weight-semibold" style="font-weight: 700;">Despatched Thr. :</span>  </p>
 											</div>
@@ -79,7 +79,7 @@
 											<p class="mb-1" style=""><span class="font-weight-semibold" style="font-weight: 700;">Other Ref.(s) :</span>  </p>
 											<p class="mb-1" style=""><span class="font-weight-semibold" style="font-weight: 700;">Dated :</span>  </p>
 											<p class="mb-1" style=""><span class="font-weight-semibold" style="font-weight: 700;">Delivery Date :</span>  </p>
-											<p class="mb-1" style=""><span class="font-weight-semibold" style="font-weight: 700;">Distination :</span>  </p>
+											<p class="mb-1" style=""><span class="font-weight-semibold" style="font-weight: 700;">Distination :</span> <?php echo $buyer_details['4']->order_value; ?></p>
 											</div>
 										</div>
 								</br>

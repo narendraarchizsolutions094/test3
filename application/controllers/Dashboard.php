@@ -65,6 +65,8 @@ class Dashboard extends CI_Controller {
                 if ($err) {
                 } else {
        foreach(json_decode($response)->field_data as $v){
+          $email1 = $phone1  = $name1 = '';
+        
       if(!empty($v) && $v->{'name'}==='full_name'){
           $name=$v->{'values'};
           $name1=$name[0];
@@ -183,6 +185,8 @@ class Dashboard extends CI_Controller {
                     
                 } else {
                 foreach(json_decode($response)->field_data as $v){
+                   $email1 = $phone1  = $name1 = '';
+                 
                   if(!empty($v) && $v->{'name'}==='full_name'){
                       $name=$v->{'values'};
                       $name1=$name[0];
