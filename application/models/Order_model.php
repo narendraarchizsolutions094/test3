@@ -175,10 +175,18 @@ class Order_model extends CI_Model {
 				$this->db->limit($limit, $offset);
 		return		$this->db->get()->result();
 	}
+
+	public function getBuyers($ordno){
+		
+	 	$this->db->select("*");
+				$this->db->from('order_parameters');
+				$this->db->where("order_id", $ordno);
+		return	$this->db->get()->result();
+	}
 	
 	public function getOrders($ordno){
 		
-	 	$this->db->select("ord.*,prd.id as prdid,prd.country_name as product_name,prddet.price as unit_price, prddet.image,prddet.stock,CONCAT(tbl_admin.s_display_name,' ',tbl_admin.last_name,' - ',tbl_admin.s_user_email) as seller_name");
+	 	$this->db->select("ord.*,prd.id as prdid,prd.country_name as product_name,prddet.price as unit_price, prddet.image,prddet.stock,CONCAT(tbl_admin.s_display_name,' ',tbl_admin.last_name,' - ',tbl_admin.s_user_email) as seller_name,prddet.hsn,prddet.brand");
 				$this->db->where("ord.company", $this->session->companey_id);
 				$this->db->where("ord.ord_no", $ordno);
 				

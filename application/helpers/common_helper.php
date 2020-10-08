@@ -35,6 +35,31 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         $ci->db->update('tbl_otp');
     }
 
+    function getOrderNumber($id)
+    {
+        $ci = & get_instance();
+        $ci->load->database();
+        $data = $ci->db->select('ord_no')->from('tbl_order')->where('id',$id)->get()->row();
+        return $data->ord_no;
+    }
+    function getOrderTotal($arr)
+    {   
+        $price = 0;
+        $ci = & get_instance();
+        $ci->load->database();
+        $data = $ci->db->select('total_price')->from('tbl_order')->where('id',$arr[0]->id)->get()->row();
+        //ord_no
+        return $data->total_price;
+        //print_r($arr);die;
+    }
+    function getPaidAmount($id)
+    {
+        $ci = & get_instance();
+        $ci->load->database();
+        $data = $ci->db->select('sum(pay) as paid')->from('payment')->where('ord_id',$id)->get()->row();
+        return $data->paid;
+    }
+
     function is_active_field_api($id,$process=0,$comp_id){       
         $ci =& get_instance();
         $comp_id    =   $comp_id;

@@ -75,7 +75,9 @@
          <div class="panel-heading no-print col-md-12" style="padding-top:15px;">
          	<form action="<?=base_url('buy');?>" method="get">
          		<div class="col-md-8">
-         			<input type="text" name="searched_product" class="form-control" placeholder="Enter Keywords..."><br>
+         			<input type="text" name="searched_product" value="<?php if(isset($_GET['searched_product'])){ echo $_GET['searched_product'];} ?>" class="form-control" placeholder="Enter Keywords..."><br>
+         			<input type="hidden" name="sc" value="<?php if(isset($_GET['sc'])){ echo $_GET['sc'];} ?>">
+         			<input type="hidden" name="c" value="<?php if(isset($_GET['c'])){ echo $_GET['c'];} ?>">
          		</div>
          		<div class="col-md-2">
          			<button type="submit" class="btn btn-primary col-xs-12 col-sm-12 ">Search</button><br>
@@ -344,7 +346,7 @@
 						currobj.append('<span class="cart-quantity">1</span>');
 						currobj.closest("li").prepend('<a href = "javascript:void(0)" class = "minus-quantity" data-prodid = "'+jresp.prodid+'"><span> - </span></a>');
 						var tprice = parseInt(jresp.price) * parseInt(jresp.qty);
-						var htmcnt = '<li id = "cart-li-'+jresp.prodid+'"><div class="cart-items"><h4><a href="">'+jresp.product+' </a></h4>'+
+						var htmcnt = '<li id = "cart-li-'+jresp.prodid+'"><div class="cart-items"><h4><a href="" class="prodname">'+jresp.product+' </a></h4>'+
 										'<p><a href=""> Price : <i class="fa fa-rupee"></i> '+jresp.price+' X '+'<input type="number" value="'+jresp.qty+'" min=1 class="cart-qty" data-prodid='+jresp.prodid+'><input type="hidden" name="minimum" class="minimum" value="'+jresp.minalert+'">'+' = <i class="fa fa-rupee"></i> <span class="item-price-'+jresp.prodid+'">'+tprice+'</span> </a>'+ 
 										'</p></div><hr /></li>';
 											$("#cart-nav-menu").prepend(htmcnt);
@@ -357,7 +359,7 @@
 									crtobj.find(".cart-quantity").text(parseInt(crtobj.find(".cart-quantity").text()) + qty);
 					
 						var tprice = parseInt(jresp.price) * parseInt(jresp.qty);
-						$("#cart-li-"+jresp.prodid).html('<div class="cart-items"><h4><a href="">'+jresp.product+' </a></h4>'+
+						$("#cart-li-"+jresp.prodid).html('<div class="cart-items"><h4><a class="prodname" href="">'+jresp.product+' </a></h4>'+
 										'<p><a href=""> Price : <i class="fa fa-rupee"></i> '+jresp.price+' X '+'<input type="number" value="'+jresp.qty+'" min=1 class="cart-qty" data-prodid='+jresp.prodid+'><input type="hidden" name="minimum" class="minimum" value="'+jresp.minalert+'">'+' = <i class="fa fa-rupee"></i> <span class="item-price-'+jresp.prodid+'">'+tprice+'</span> </a>'+ 
 										'</p></div>');
 						}else{
@@ -396,7 +398,7 @@
 					currobj.append('<span class="cart-quantity">1</span>');
 					currobj.closest("li").prepend('<a href = "javascript:void(0)" class = "minus-quantity" data-prodid = "'+jresp.prodid+'"><span> - </span></a>');
 					var tprice = parseInt(jresp.price) * parseInt(jresp.qty);
-					var htmcnt = '<li id = "cart-li-'+jresp.prodid+'"><div class="cart-items"><h4><a href="">'+jresp.product+' </a></h4>'+
+					var htmcnt = '<li id = "cart-li-'+jresp.prodid+'"><div class="cart-items"><h4><a href="" class="prodname">'+jresp.product+' </a></h4>'+
 									'<p><a href=""> Price : <i class="fa fa-rupee"></i> '+jresp.price+' X '+'<input type="number" value="'+jresp.qty+'" min=1 class="cart-qty" data-prodid='+jresp.prodid+'><input type="hidden" name="minimum" class="minimum" value="'+jresp.minalert+'">'+' = <i class="fa fa-rupee"></i> <span class="item-price-'+jresp.prodid+'">'+tprice+'</span> </a>'+ 
 									'<a href="javascript:void(0)" onclick="remove_cart_item('+jresp.prodid+')" class="fa fa-trash btn btn-danger btn-sm pull-right remove-item-cart"></a></p></div><hr /></li>';
 										$("#cart-nav-menu").prepend(htmcnt);
@@ -405,7 +407,7 @@
 					currobj.find(".cart-quantity").text(parseInt(currobj.find(".cart-quantity").text()) + 1);
 				
 					var tprice = parseInt(jresp.price) * parseInt(jresp.qty);
-					$("#cart-li-"+jresp.prodid).html('<div class="cart-items"><h4><a href="">'+jresp.product+' </a></h4>'+
+					$("#cart-li-"+jresp.prodid).html('<div class="cart-items"><h4><a href="" class="prodname">'+jresp.product+' </a></h4>'+
 									'<p><a href=""> Price : <i class="fa fa-rupee"></i> '+jresp.price+' X '+'<input type="number" value="'+jresp.qty+'" min=1 class="cart-qty" data-prodid='+jresp.prodid+'><input type="hidden" name="minimum" class="minimum" value="'+jresp.minalert+'">'+' = <i class="fa fa-rupee"></i> <span class="item-price-'+jresp.prodid+'">'+tprice+'</span> </a>'+ 
 									'<a href="javascript:void(0)" onclick="remove_cart_item('+jresp.prodid+')" class="fa fa-trash btn btn-danger btn-sm pull-right remove-item-cart"></a></p></div>');
 				}

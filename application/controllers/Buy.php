@@ -96,9 +96,12 @@ class Buy extends CI_Controller {
 			
 		} 
 		$this->load->model('user_model');
+		$this->load->model('location_model');
 		$uid = $this->session->user_id;
 		$data['uid'] = $uid;
 		$data['user_row']	=	$this->user_model->read_by_id($uid);
+		$data['user_city']	=	$this->location_model->ecity_list();
+		$data['user_state']	=	$this->location_model->estate_list_api();
 		$data['user_meta'] = $this->user_model->get_user_meta($uid,array('postal_code','gstin'));
 		if (empty($prodcart)) {
 			$data['content'] = '<br><div class="alert alert-danger text-center"><h2>Your Cart in empty.</h2></div>';
@@ -206,6 +209,7 @@ class Buy extends CI_Controller {
 	
 	public function view($prodno){	
 		$data['product'] = $this->Product_model->productdet($prodno) ;
+		//print_r($data['product']);die;
 		$data['category'] = $this->sell_model->subCategory();
 		$carts = $this->cart->contents();		
 		$prodcart = array();
@@ -354,7 +358,7 @@ class Buy extends CI_Controller {
 					$gst_price = (float)$product->price*((float)$product->gst/100);				
 				}
 				
-				$prdarr = array("status" => $status,"prodid" => $prodno, "product" => $product->country_name, "price" => (float)$product->price+(float)$gst_price , "qty" => (int)$qty + (int)$pqty,"total" => count($cardcontent),'minalert'=>$_POST['minimum']);
+				$prdarr = array("status" => $status,"prodid" => $prodno, "product" => $product->country_name, "price" => (float)$product->price+(float)$gst_price , "qty" => (int)$qty + (int)$pqty,"total" => count($cardcontent),'minalert'=>($_POST['minimum'] !='') ? $_POST['minimum'] : 0);
 				
 			}else{
 

@@ -52,6 +52,7 @@
                      <th class="sorting wid-10">Product Name</th>
 					           <th>Price</th>
                      <th>Stock</th>
+                     <th>Minimum Order Quantity</th>
                      <th>Added Date</th>
                      <th class="sorting wid-10">Status</th> 
 
@@ -74,6 +75,7 @@
                      <td data-th='Product Name'><?= $row->country_name; ?></td>
                      <td data-th='Price'> <i class = "fa fa-rupee"></i> <?php echo $row->price; ?></td>
             				 <td data-th='Stock'>Stock</td>
+                     <td data-th='Minimum Order Quantity'><?=$row->minimum_order_quantity?></td>
             				 <td data-th='Added Date'><?=$row->created_date?></td>
             				 <td data-th='Status'> 
                       <?php

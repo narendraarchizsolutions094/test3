@@ -145,8 +145,36 @@ input[name=lead_stages]{
           }
           ?>
         </div>
-         <div class="col-md-4 col-sm-8 col-xs-8 pull-right">  
-         
+         <div class="col-md-8 col-sm-8 col-xs-8 pull-right">  
+<div class="col-md-4">
+<div class="form-group">        
+<select name="city" id="city" class="form-control">
+<option value="">Select Product</option>
+<?php foreach($product_list as $product){ ?>
+  <option value="<?php echo $product->id; ?>"><?php echo $product->country_name; ?></option>
+<?php } ?>
+</select> 
+</div>
+</div>
+<div class="col-md-4">
+<div class="form-group">        
+<select name="city" id="city" class="form-control">
+<option value="">Select Seller</option>
+<?php foreach($seller_list as $seller){ ?>
+  <option value="<?php echo $seller->pk_i_admin_id; ?>"><?php echo $seller->s_display_name.' '.$seller->last_name.' - '.$seller->s_user_email; ?></option>
+<?php } ?>
+</select> 
+</div>
+</div>
+<div class="col-md-4">
+<div class="form-group">        
+<select name="city" id="city" class="form-control">
+<option value="">Select Status</option>
+  <option value="">Pending</option>
+  <option value="">delivered</option>
+</select> 
+</div>
+</div>
       </div>
 </div>
 	<br>
@@ -161,19 +189,11 @@ input[name=lead_stages]{
 												<tr>
 													<th>S.No.</th>
 													<th> Order No </th>												
-													<th>Product</th>
-													<th>Quantity</th>
-													<th>Price</th>
-                          <th>Order By</th>													
-                          <th>Seller Name</th>
-                          <th>Payment Mode</th>
+													<th>Total</th>
+                          <th>Buyer Name</th>	
+                          <!-- <th>Payment Mode</th> -->
                           <th>Amount Paid</th>
-													<!-- <th>Payment</th>
-													<th>Pay</th> -->
 													<th>Balance</th>
-													<!-- <th>Delivery Date</th>
-													<th> Date</th> -->													
-													<th>Status</th>
 													<th>Action</th>													
 												</tr>
 											</thead>

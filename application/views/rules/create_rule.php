@@ -81,6 +81,25 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 			        			</select>
 		        			</div>
 		        		</div>
+		        		<div class="row text-center action-section" id="sms_action" style="display: none;">   
+		        			<h3>Action</h3>
+		        			<div class="col-md-4"></div>
+		        			<div class="col-md-4">		        				
+			        			<label>Select Template<i style="color: red;">*</i></label>
+			        			<select class="form-control text-center" name="action" id="sms_template">			    
+			        			</select>
+		        			</div>
+		        		</div>
+		        		<div class="row text-center action-section" id="whatsapp_action" style="display: none;">   
+		        			<h3>Action</h3>
+		        			<div class="col-md-4"></div>
+		        			<div class="col-md-4">		        				
+			        			<label>Select Template<i style="color: red;">*</i></label>
+			        			<select class="form-control text-center" name="action" id="whatsapp_template">			    
+			        			</select>
+		        			</div>
+		        		</div>
+		        		
 		        		<div class="row text-center action-section" id="auto_followup_section" style="display: none;">   
 		        			<h3>Action</h3>
 		        			<div class="col-md-4"></div>
@@ -249,9 +268,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		  		var assign_to	=	$("select[name='esc_to']").val();
 		  		action_value =	JSON.stringify({'esc_hr':esc_hr,'assign_to':assign_to});		  	
 		  	}else if (rule_type==6){
-		  		var action_value	=	$("#email_template").val();
+		  		var action_value	=	$("#sms_template").val();
 		  	}else if (rule_type==7){
-		  		var action_value	=	$("#email_template").val();
+		  		var action_value	=	$("#whatsapp_template").val();
 		  	}
 		  	console.info(action_value);
 		  	if (action_value && title) {
@@ -310,17 +329,21 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 			}else if (rule == 5) {				
 				$("#ticket_esc_action").show(1000);
 			}else if (rule == 6) {				
-				$("#email_action").show(1000);
+				$("#sms_action").show(1000);
 			}else if (rule == 7) {				
-				$("#email_action").show(1000);
+				$("#whatsapp_action").show(1000);
 			}
 
 		}
 		$("#email_template").load("<?=base_url().'message/get_templates/3'?>");
+		$("#sms_template").load("<?=base_url().'message/get_templates/2'?>");
+		$("#whatsapp_template").load("<?=base_url().'message/get_templates/1'?>");
 	});
 	$(document).ajaxComplete(function() {
 		if ("<?=!empty($rule_data['type'])?>") {
 	  		$("#email_template").val(<?=!empty($rule_data['rule_action'])?$rule_data['rule_action']:''?>);
+	  		$("#sms_template").val(<?=!empty($rule_data['rule_action'])?$rule_data['rule_action']:''?>);
+	  		$("#whatsapp_template").val(<?=!empty($rule_data['rule_action'])?$rule_data['rule_action']:''?>);
 		}
 	});
 	$(".multiple-select").select2();

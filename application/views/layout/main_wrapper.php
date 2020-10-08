@@ -812,7 +812,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                     
                       ?><li id = "cart-li-<?php echo $cart['id']; ?>" > 
                     
-                      <div class = "cart-items"><h4><a href = ""> <?php echo $cart['name'] ?></a></h4>
+                      <div class = "cart-items"><h4><a class="prodname" href = ""> <?php echo $cart['name'] ?></a></h4>
                           <p>
                             <a href = "javascript:void(0)"> Price : <i class = "fa fa-price"></i> <?php echo  $cart['price']." X <input type='hidden' name='minimum' class='minimum' value='".$cart['minalert']."'> <input type='number' class='cart-qty' value=".$cart['qty']." min='1' data-prodid=".$cart['id']." >";?> = <i class = "fa fa-rupee"></i><span class="item-price-<?=$cart['id']?>"> <?php echo $cart['price']*$cart['qty']  ?></span> </a> 
                             <a href="javascript:void(0)" onclick="remove_cart_item(<?=$cart['id']?>)" class="fa fa-trash btn btn-danger btn-sm pull-right remove-item-cart"></a>
@@ -1660,17 +1660,25 @@ if($root=='https://student.spaceinternationals.com'){  ?>
 	}?>	  
   <script type="text/javascript">
     $(document).on('click','.checkout-btn',function(e){
+      var alert1 = "";
       $(".cart-items").each(function(){
 
           var cartval = parseInt($(this).find('.cart-qty').val());
           var minval  = parseInt($(this).find('.minimum').val());
+          var prodname    = $(this).find('.prodname').text();
+          
 
            if(minval> cartval){
               e.preventDefault();
-              alert("Please order minimum value "+minval);
-           } 
-
+              alert1+= " Please order minimum "+minval+" "+prodname;
+           }
+           
       });
+      if(alert1 !='')
+       {
+        //e.preventDefault();
+        alert(alert1);
+       } 
 
     });
   </script>

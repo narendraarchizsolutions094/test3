@@ -268,8 +268,16 @@
 							</div>
 							<?php
 						}
+						if(!empty($product->scity)) { 
+							?>
+							<div class = "col-md-12">
+								<label class="col-md-3"><b>Seller City :</b></label><p class="col-md-9"><?php echo $product->scity; ?></p>
+							</div>
+							<?php
+						}
 		
-						?>						
+						?>	
+
 					<div class="col-md-12">
 					<br>	
 						<?php						

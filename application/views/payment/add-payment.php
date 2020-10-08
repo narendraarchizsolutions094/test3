@@ -97,39 +97,16 @@
 																?>
 															</td>
 															<td><?php echo $pay->transaction_no ; ?></td>
-															<td><?php echo date("d, m Y", strtotime($pay->pay_date)); ?></td>
-															<td><?php echo date("d, m Y", strtotime($pay->next_pay)); ?></td>
+															<td><?php echo date("d-M-Y", strtotime($pay->pay_date)); ?></td>
+															<td><?php echo date("d-M-Y", strtotime($pay->next_pay)); ?></td>
 															<td><?php echo $pay->status; ?></td>
 															<td><?php echo substr($pay->remark, 0, 40); ?></td>
 															<td>
-															<?php if($this->session->mrole == 1 or ($pay->	approve == 0)) { ?>	
-															<div class="btn-group mt-2 mb-2">
-																<button type="button" class="btn btn-outline-success btn-pill dropdown-toggle" data-toggle="dropdown">
-																	<i class="fe fe-edit" data-toggle="tooltip" title="" data-original-title="Edit"></i> 
-																	<i class="fe fe-trash" data-toggle="tooltip" title="" data-original-title="Delete"></i>
-																	<span class="caret"></span>
-																</button>
-																<ul class="dropdown-menu" role="menu">
-																	<li class="dropdown-plus-title">
-																		Close
-																		<b class="fa fa-angle-up" aria-hidden="true"></b>
-																	</li>
-																	<?php if($this->session->mrole == 1 and $pay->approve == 0) { ?>
-																			<li>
-																				<a href="<?php echo urlencode(base64_encode(base64_encode($pay->id))); ?>" class="approve-pay">
-																				<i class="fa fa-thumbs-up" aria-hidden="true"></i> Confirm</a>
-																			</li>
 																	
-																	<?php } ?>	
-																	
-																	<li><a href="<?php echo base_url("payment/update/".urlencode(base64_encode(base64_encode($pay->id)))); ?>">
-																	<i class="fe fe-edit" data-toggle="tooltip" title="" data-original-title="Edit"></i> Edit</a></li>
-																	<li><a href="<?php echo base64_encode(base64_encode($pay->id)); ?>" class="delete-stocks">
-																	<i class="fa fa-trash" data-toggle="tooltip" title="" data-original-title="Delete"></i> Delete</a></li>
-																</ul>
-															</div>
-															<?php }else{
-															} ?>		
+																	<a href="<?php echo base_url("payment/update/".base64_encode($pay->id)); ?>">
+																	<i class="fe fe-edit" data-toggle="tooltip" title="" data-original-title="Edit"></i> Edit</a>
+																	<!-- <a href="<?php echo base64_encode(base64_encode($pay->id)); ?>" class="delete-stocks">
+																	<i class="fa fa-trash" data-toggle="tooltip" title="" data-original-title="Delete"></i> Delete</a> -->		
 															</td>
 														</tr>
 												<?php } ?>		
@@ -225,7 +202,7 @@
 										</div>											
 									</div>
 								</div>	
-								<div class = "card">
+								<!-- <div class = "card">
 									<div class="card-header">
 										Order Products
 									</div>
@@ -278,7 +255,7 @@
 										<?php   } ?>	
 										
 											</div>
-										</div>									
+										</div> -->									
 									</div>
 								</div>										
 							</div>								

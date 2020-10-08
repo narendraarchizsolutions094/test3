@@ -299,11 +299,15 @@ public function contact($lead_code) {
                         ->result();
     }
 
-      public function estate_list_api($compno) {
-      
+      public function estate_list_api($compno='') {
+          if(!empty($compno)){
+              $company=$compno;
+          }else{
+              $company=$this->session->userdata('companey_id');
+          }
         return $this->db->select("*")
                         ->from("state")
-                        ->where('state.comp_id', $compno)
+                        ->where('state.comp_id', $company)
                         ->get()
                         ->result();
     }

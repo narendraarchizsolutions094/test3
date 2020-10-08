@@ -13,6 +13,7 @@ class Payment extends CI_Controller {
 		}
 	}
 	public function make_payment_mojo(){
+
 		$this->session->unset_userdata('part_payment_amount');
 		$this->form_validation->set_rules('fname','Name','trim|required');
 		$this->form_validation->set_rules('email','Email','trim|required|valid_email');
@@ -27,6 +28,12 @@ class Payment extends CI_Controller {
 			$email	=	$this->input->post('email');
 			$phone	=	$this->input->post('phone');
 			$address=	$this->input->post('address');
+			
+			$ship_address	=	$this->input->post('ship_address');
+			$state	=	$this->input->post('state');
+			$city	=	$this->input->post('city');
+			$pincode =	$this->input->post('pincode');
+			$gstin  =	$this->input->post('gstin');
 
 			$this->session->set_userdata('payment_mode',$this->input->post('dbt'));
 
@@ -91,6 +98,18 @@ class Payment extends CI_Controller {
 				$this->load->model('order_model');
 				$ord_no	=	$this->order_model->placeorder();
 				if($ord_no){
+			$this->user_model->set_order_meta($ord_no,$comp_id,$user_id,array(
+		'fname' =>	$this->input->post('fname'),
+		'email' =>	$this->input->post('email'),
+		'phone' =>	$this->input->post('phone'),
+		'address' =>	$this->input->post('address'),			
+		'ship_address' =>	$this->input->post('ship_address'),
+		'state' =>	$this->input->post('state'),
+		'city' =>	$this->input->post('city'),
+		'pincode' =>	$this->input->post('pincode'),
+		'gstin' =>	$this->input->post('gstin')
+			)
+			);
 					$this->session->set_flashdata('message','Your order is successfully placed');
 					redirect(base_url("order/invoice/".$ord_no), "refresh");			
 				}
@@ -100,6 +119,9 @@ class Payment extends CI_Controller {
 			redirect('buy/checkout');
 		}
 	}
+
+
+	
 	public function index(){
 		$data = array();
 		$this->load->view('payment/payment-pending',$data);        
@@ -415,24 +437,17 @@ class Payment extends CI_Controller {
 		if(isset($_POST["paymentid"])){
 			
 			$this->savepayment();
-			redirect(base_url("payment/update/".$payno), "refresh");
+			redirect(base_url("payment/add/".$_POST["orderid"]), "refresh");
 		}
 		
 		$this->load->model("order_model");
 		$this->load->model("payment_model");
-		$payno = base64_decode(base64_decode(urldecode($payno)));
-		
-		if(empty($payno)) show_404();
-		$data["pay"] = $this->payment_model->getPaymentById($payno);
-		if(empty($data["pay"])) show_404(); 
-		$data["ord"]      = $this->order_model->getOrder($data["pay"]->ord_no);
-		
-		
-		$data["orders"]   = $this->order_model->getOrdersProduct($data["pay"]->ord_no);
-		$data["payments"] = $this->payment_model->getpayment($data["ord"]->cus_id);
+		$payno = base64_decode($payno);
+		$data['paydata'] = $this->db->select('*')->from('payment')->where('id',$payno)->get()->row();
 	//	$data["masters"]  = $this->payment_model->getmaster();	
 		$data["title"] = "Update Payment";
-		$this->load->template("payment/update-payment", $data);
+		$data['content'] = $this->load->view("payment/update-payment", $data,true);
+		$this->load->view('layout/main_wrapper', $data);
 	}
 	
 	public function savepayment(){
@@ -444,12 +459,13 @@ class Payment extends CI_Controller {
 					"pay_mode" 		 => $this->input->post("paymode", true),
 					"transaction_no" => $this->input->post("transactiono", true),
 					"status" 		=> $this->input->post("status", true),
-					"pay_date" 		=> $this->cleandate("paydate"), 
-					"next_pay"		=> $this->cleandate("nextpay"),
+					"pay_date" 		=> date("Y-m-d",strtotime($this->input->post("paydate", true))), 
+					"next_pay"		=> date("Y-m-d",strtotime($this->input->post("nextpay", true))),
 					"remark" 		=> $this->input->post("remarks", true),
 				//	"advance_pay"	 => (!empty($_POST["advbalance"])) ? $this->input->post("advbalance", true) : 0,
 						
 					);
+		//print_r($arr);die;
 	
 		if(isset($_POST["paymentid"])){
 			

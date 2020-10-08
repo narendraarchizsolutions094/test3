@@ -18,9 +18,11 @@ class Order extends CI_Controller {
 			echo "<script> window.location='".base_url('order') ."';</script>";
 			
 		}
-		
+		$this->load->model("User_model");
+		$this->load->model("Product_model");
 		$data["orders"] = $this->order_model->orders(1);
-		
+		$data['seller_list'] = $this->User_model->read('Seller');
+		$data['product_list'] = $this->Product_model->productlist();
 	//	$this->load->template("order/order-list", $data);
 		
 	    $data['content'] = $this->load->view('order/order-list', $data, true);
@@ -496,7 +498,8 @@ class Order extends CI_Controller {
 		
 		////$this->load->model("payment_model");
 		$data['orders'] = $this->order_model->getOrders($ordno);
-		
+		$data['buyer_details'] = $this->order_model->getBuyers($ordno);
+		//echo'<pre>';print_r($data['buyer_details']);exit;
 		if(empty($data['orders'])) show_404();
 		
 		$data['ord']      = $data['orders'][0];

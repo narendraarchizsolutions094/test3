@@ -1271,13 +1271,18 @@ public function login_in_process(){
      public function forgot_password() {
              
             $email = $this->input->post('femail');
+            $email_row = array();
             if(is_numeric($email) == 1)
             {
               $data = $this->dashboard_model->getUserDataByPhone($email);
               //$this->load->library('email');
-              $this->db->where('comp_id',$data->companey_id);
-              $this->db->where('api_key','message');
-              $email_row  =   $this->db->get('api_integration')->row_array();
+              if(!empty($data))
+              {
+                $this->db->where('comp_id',$data->companey_id);
+                $this->db->where('api_key','message');
+                $email_row  =   $this->db->get('api_integration')->row_array();
+              }
+              
             }
             else
             {
@@ -1290,7 +1295,7 @@ public function login_in_process(){
             
             
             if(empty($email_row) && $data->companey_id != 81){ 
-                echo "4";                
+                echo "4";die;                
             }else{
 
                 if(is_numeric($email) == 1)
@@ -1360,13 +1365,21 @@ public function login_in_process(){
       $mobno  = $this->input->post('mobno');
       $otp    = $this->input->post('otp');
       $data = $this->dashboard_model->getUserDataByPhone($mobno);
-      $getOtp = $this->db->select('*')->from('tbl_otp')->where('user_id',$data->pk_i_admin_id)->where('status',1)->get()->row();
-      if($otp == $getOtp->otp)
+      if(!empty($data))
       {
-        $this->db->where('id',$getOtp->id);
-        $this->db->set('status',2);
-        $this->db->update('tbl_otp');
-        echo json_encode(array('status'=>'verified','user'=>base64_encode($data->pk_i_admin_id)));
+
+        $getOtp = $this->db->select('*')->from('tbl_otp')->where('user_id',$data->pk_i_admin_id)->where('status',1)->get()->row();
+        if($otp == $getOtp->otp)
+        {
+          $this->db->where('id',$getOtp->id);
+          $this->db->set('status',2);
+          $this->db->update('tbl_otp');
+          echo json_encode(array('status'=>'verified','user'=>base64_encode($data->pk_i_admin_id)));
+        }
+        else
+        {
+          echo json_encode(array('status'=>'notverified'));
+        }
       }
       else
       {

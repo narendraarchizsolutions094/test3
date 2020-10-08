@@ -34,7 +34,7 @@ h2{
 
 .Yorder{
   margin-top: 15px;
-  height: 600px;
+  height: 650px;
   padding: 20px;
   border: 1px solid #dadada;
 }
@@ -105,68 +105,81 @@ p{
                 <label>Full Name <i class="required">*</i></label>
                 <input type="text" name="fname" class="form-control" required value="<?=$user_row->s_display_name.' '.$user_row->last_name?>">
             </div>        
-        </div>        
-      <!--   <div class="col-md-12">
-            <div class="form-group">        
-
-          <label>Country <i class="required">*</i></label>
-          <select name="selection" class="form-control">
-            <option value="select">Select a country...</option>
-            <option value="SGS">South Georgia and the South Sandwich Islands</option>       
-          </select>
-        </div>
-        </div>  -->       
+        </div>       
         
         <div class="col-md-12">
            <div class="form-group">        
-            <label>Address <i class="required">*</i></label>
-            <input type="text" name="address" placeholder="House number and street name" required class="form-control" value="<?=$user_row->add_ress?>">
+            <label>Billing Address <i class="required">*</i></label>
+            <input type="text" name="address" placeholder="House number and street name with zipcode" required class="form-control" value="<?=$user_row->add_ress?>">
           </div>          
-        </div>          
-        
-          
-
-       <!--  <div class="col-md-12">
-            <div class="form-group">        
-
-          <label>Town / City <i class="required">*</i></label>
-          <input type="text" name="city" class="form-control"> 
         </div>
-        </div>        
-        <div class="col-md-12">
-            <div class="form-group">        
+<div class="col-md-12">   
+<label for="chkshipping">
+    <input type="checkbox" id="chkshipping" />
+    SHIP TO A DIFFERENT ADDRESS?
+</label>
+</div>
+<div class="col-md-12" id="dvship" style="display: none">
+   <div class="col-md-12">
+           <div class="form-group">        
+            <label>Shipping Address <i class="required">*</i></label>
+            <input type="text" name="ship_address" placeholder="House number and street name with zipcode" required class="form-control">
+          </div>          
+        </div>    
+                  
+</div>
 
-          <label>State / County <i class="required">*</i></label>
-          <input type="text" name="city" class="form-control"> 
-        </div>
-        </div>       -->  
-        <div class="col-md-12">
+<div class="col-md-6">
+<div class="form-group">        
+<label> State <i class="required">*</i></label>
+<select name="state" id="state" class="form-control" required>
+<option value="">Select State</option>
+<?php foreach($user_state as $state){ ?>
+  <option value="<?php echo $state->id; ?>"><?php echo $state->state; ?></option>
+<?php } ?>
+</select> 
+</div>
+</div>        
+<div class="col-md-6">
+<div class="form-group">        
+<label> City <i class="required">*</i></label>
+<select name="city" id="city" class="form-control" required>
+<option value="">Select City</option>
+<?php foreach($user_city as $city){ ?>
+  <option value="<?php echo $city->id; ?>"><?php echo $city->city; ?></option>
+<?php } ?>
+</select> 
+</div>
+</div>
+       
+        <div class="col-md-6">
           <div class="form-group">        
           <label>Postcode / ZIP <i class="required">*</i></label>
           <input type="text" name="pincode" class="form-control" required value="<?=!empty($user_meta['postal_code'])?$user_meta['postal_code']:''?>"> 
         </div>
         </div>        
-        <div class="col-md-12">
+        <div class="col-md-6">
             <div class="form-group">        
 
           <label>Mobile no. <i class="required">*</i></label>
           <input type="tel" name="phone" class="form-control" required value="<?=$user_row->s_phoneno?>"> 
         </div>
         </div>        
-        <div class="col-md-12">
+        <div class="col-md-6">
             <div class="form-group">    
               <label>Email Address <i class="required">*</i></label>
               <input type="email" name="email" class="form-control" required value="<?=$user_row->s_user_email?>"> 
               
             </div>
         </div>
-        <div class="col-md-12">
+        <div class="col-md-6">
             <div class="form-group">    
               <label>GSTIN No (optional)</label>
               <input type="text" name="gstin" class="form-control" value="<?=!empty($user_meta['gstin'])?$user_meta['gstin']:''?>"> 
               <br>
             </div>
         </div>
+    
     </div>    
 </div>
 <div class="col-md-4">
@@ -240,4 +253,16 @@ p{
       }
     }
   });
+</script>
+
+ <script type="text/javascript">
+    $(function () {
+        $("#chkshipping").click(function () {
+            if ($(this).is(":checked")) {
+                $("#dvship").show();
+            } else {
+                $("#dvship").hide();
+            }
+        });
+    });
 </script>
