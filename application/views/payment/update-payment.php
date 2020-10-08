@@ -8,11 +8,13 @@
 				<div class="bg-white p-3 header-secondary header-submenu">
 					<div class="container ">
 						<div class="row">
+							<a class="pull-right fa fa-arrow-left btn btn-circle  btn-default btn-sm" onclick="history.back(-1)" title="Back"></a>
 							<div class="col">
 									<ol class="breadcrumb"><!-- breadcrumb -->
-								<li class="breadcrumb-item"><a href="<?php echo base_url("Payment"); ?>">Payment</a></li>
+								<li class="breadcrumb-item">Payment</li>
 								<li class="breadcrumb-item active" aria-current="page"><?php echo $title; ?></li>
 							</ol><!-- End breadcrumb -->
+
 							</div>
 							<!-- <div class="col col-auto">
 								<a href="<?php echo base_url("Payment"); ?>" class="btn btn-pill btn-secondary"><i class="fe fe-arrow-left"></i> Payment List </a>

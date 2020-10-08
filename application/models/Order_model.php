@@ -39,6 +39,9 @@ class Order_model extends CI_Model {
 	public function orders($act = "1",$sdate='',$edate=''){
 		$this->load->model('common_model');
 		$retuser   = $this->common_model->get_categories($this->session->user_id);
+		$searchproduct 	= ($this->input->post('sproduct') !='') ? $this->input->post('sproduct') : "";
+     	$searchseller 	= ($this->input->post('sseller') !='') ? $this->input->post('sseller') : "";
+     	$searchstatus 	= ($this->input->post('sstatus') !="") ? $this->input->post('sstatus') : "";
 		if($act == 1){			
 			$this->db->select("ord.*,concat(usr.s_display_name, ' ', usr.last_name) as customer,concat(seller.s_display_name, ' ', seller.last_name) as sellername,usr.region,prd.country_name as product_name");
 		}		
@@ -68,16 +71,39 @@ class Order_model extends CI_Model {
 		if ($this->session->user_right == 200) {
 			$this->db->where('prd2.seller_id',$this->session->user_id);
 		}else{
-			$this->db->where_in("prd2.seller_id",$retuser);		
+			if($searchseller == "")
+			{
+				$this->db->where_in("prd2.seller_id",$retuser);	
+			}
+				
 		}
+		// if(!empty($_POST))
+		// {
+			
+		//}
+		
 
 		if($act == 1) {			
 		//	$this->db->join('order_prdct ordprd','ord.id=ordprd.ord_id','left');
 			$this->db->join('tbl_admin usr','usr.pk_i_admin_id=ord.cus_id','left');
 			$this->db->join('tbl_admin seller','seller.pk_i_admin_id=prd2.seller_id','left');		
-			$ordcol = array("ord.id","prd.country_name");			
+			$ordcol = array("ord.id","prd.country_name");	
+			if($searchproduct !='')
+			{
+				$this->db->where("prd.id",$searchproduct);
+			}
+			if($searchseller !='')
+			{
+				$this->db->where("prd2.seller_id",$searchseller);
+			}
+			if($searchstatus !='')
+			{
+				$this->db->where("prd.id",$searchproduct);
+			}
+
 			//$this->order_by($ordcol);
 			$this->db->order_by("ord.id",'DESC');
+
 
 			$this->limit();			
 			$this->db->group_by('ord.ord_no');
@@ -186,13 +212,13 @@ class Order_model extends CI_Model {
 		return		$this->db->get()->result();
 	}
 
-	public function getBuyers($ordno){
+	// public function getBuyers($ordno){
 		
-	 	$this->db->select("*");
-				$this->db->from('order_parameters');
-				$this->db->where("order_id", $ordno);
-		return	$this->db->get()->result();
-	}
+	//  	$this->db->select("*");
+	// 			$this->db->from('order_parameters');
+	// 			$this->db->where("order_id", $ordno);
+	// 	return	$this->db->get()->result();
+	// }
 	
 	public function getOrders($ordno){
 		

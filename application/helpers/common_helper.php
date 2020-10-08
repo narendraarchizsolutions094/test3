@@ -44,12 +44,25 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     }
     function getOrderTotal($arr)
     {   
-        $price = 0;
-        $ci = & get_instance();
+        $price  = 0;
+        $tax    = 0;
+        $ci     = & get_instance();
         $ci->load->database();
-        $data = $ci->db->select('total_price')->from('tbl_order')->where('id',$arr[0]->id)->get()->row();
+        $data   = $ci->db->select('total_price,tax,price')->from('tbl_order')->where('ord_no',$arr[0]->ord_no)->get()->result();
+        foreach ($data as $key => $value) 
+        {   
+            $cost   = 0;
+            $cost   = $value->total_price;
+            $tax    = 0;
+            if($value->tax !=0 && $value->tax > 0)
+            {
+                $tax = (($value->total_price * $value->tax)/100);
+            }
+            $cost += $tax;
+            $price+= $cost;
+        }
         //ord_no
-        return $data->total_price;
+        return $price;
         //print_r($arr);die;
     }
     function getPaidAmount($id)
