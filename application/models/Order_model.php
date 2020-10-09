@@ -214,13 +214,13 @@ class Order_model extends CI_Model {
 		return		$this->db->get()->result();
 	}
 
-	// public function getBuyers($ordno){
+	 public function getBuyers($ordno){
 		
-	//  	$this->db->select("*");
-	// 			$this->db->from('order_parameters');
-	// 			$this->db->where("order_id", $ordno);
-	// 	return	$this->db->get()->result();
-	// }
+	  	$this->db->select("*");
+	 			$this->db->from('order_parameters');
+	 			$this->db->where("order_id", $ordno);
+	 	return	$this->db->get()->result();
+	 }
 	
 	public function getOrders($ordno){
 		
