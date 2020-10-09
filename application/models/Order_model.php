@@ -43,7 +43,7 @@ class Order_model extends CI_Model {
      	$searchseller 	= ($this->input->post('sseller') !='') ? $this->input->post('sseller') : "";
      	$searchstatus 	= ($this->input->post('sstatus') !="") ? $this->input->post('sstatus') : "";
 		if($act == 1){			
-			$this->db->select("ord.*,concat(usr.s_display_name, ' ', usr.last_name) as customer,concat(seller.s_display_name, ' ', seller.last_name) as sellername,usr.region,prd.country_name as product_name");
+			$this->db->select("ord.*,concat_ws(' ',usr.s_display_name,usr.last_name) as customer,concat(seller.s_display_name, ' ', seller.last_name) as sellername,usr.region,prd.country_name as product_name");
 		}		
 		$this->db->where("ord.company", $this->session->companey_id);
 		$this->db->from("tbl_order ord");

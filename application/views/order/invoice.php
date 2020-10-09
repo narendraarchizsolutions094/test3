@@ -61,7 +61,7 @@
 											<div class="text-left ml-auto col-md-4">
 											<p class="mb-1" style=""><span class="font-weight-semibold" style="font-weight: 700;">Buyer :</span> <?php echo $buyer_details['0']->order_value; ?> </p>
 											<p class="mb-1" style=""><span class="font-weight-semibold" style="font-weight: 700;">Prop. :</span> <?php echo $buyer_details['3']->order_value; ?> </p>
-											<p class="mb-1" style="margin:0px;"><span class="font-weight-semibold" style="font-weight: 700;">Contact Persion . :</span> <?php echo $buyer_details['0']->order_value; ?> </p>
+											<p class="mb-1" style="margin:0px;"><span class="font-weight-semibold" style="font-weight: 700;">Contact Person. :</span> <?php echo $buyer_details['0']->order_value; ?> </p>
 											<p class="mb-1" style="margin:0px;"><span class="font-weight-semibold" style="font-weight: 700;">Contact No :</span> <?php echo $buyer_details['2']->order_value; ?> </p>
 											<p class="mb-1" style="margin:0px;"><span class="font-weight-semibold" style="font-weight: 700;">GSTIN. :</span> <?php echo $buyer_details['8']->order_value; ?> </p>
 											</div>
@@ -70,8 +70,8 @@
 											<p class="mb-1" style=""><span class="font-weight-semibold" style="font-weight: 700;">Delivery Note :</span>  </p>
 											<p class="mb-1" style=""><span class="font-weight-semibold" style="font-weight: 700;">Supplier's Ref. :</span>  </p>
 											<p class="mb-1" style=""><span class="font-weight-semibold" style="font-weight: 700;">Buyer's Order No. :</span>  <?php echo $buyer_details['0']->order_id; ?></p>
-											<p class="mb-1" style=""><span class="font-weight-semibold" style="font-weight: 700;">Despatch Doc.No. :</span>  </p>
-											<p class="mb-1" style=""><span class="font-weight-semibold" style="font-weight: 700;">Despatched Thr. :</span>  </p>
+											<p class="mb-1" style=""><span class="font-weight-semibold" style="font-weight: 700;">Dispatch Doc.No. :</span>  </p>
+											<p class="mb-1" style=""><span class="font-weight-semibold" style="font-weight: 700;">Dispatched Thr. :</span>  </p>
 											</div>
 											<div class="text-left ml-auto col-md-4">
 											<p class="mb-1" style=""><span class="font-weight-semibold" style="font-weight: 700;">Date :</span>  <?php echo date("d-m-Y h:i:sa"); ?></p>
@@ -79,7 +79,7 @@
 											<p class="mb-1" style=""><span class="font-weight-semibold" style="font-weight: 700;">Other Ref.(s) :</span>  </p>
 											<p class="mb-1" style=""><span class="font-weight-semibold" style="font-weight: 700;">Dated :</span>  </p>
 											<p class="mb-1" style=""><span class="font-weight-semibold" style="font-weight: 700;">Delivery Date :</span>  </p>
-											<p class="mb-1" style=""><span class="font-weight-semibold" style="font-weight: 700;">Distination :</span> <?php echo $buyer_details['4']->order_value; ?></p>
+											<p class="mb-1" style=""><span class="font-weight-semibold" style="font-weight: 700;">Destination :</span> <?php echo $buyer_details['4']->order_value; ?></p>
 											</div>
 										</div>
 								</br>
@@ -126,10 +126,12 @@
 															<?php 
 															if ($ord->tax) {
 																$p = $qty * (float)$price;
-																echo $ptotal = $p+($p*($ord->tax/100)  - (float)$ord->offer); 	
+															//	echo $ptotal = $p+($p*($ord->tax/100)  - (float)$ord->offer); 	
 															}else{
-																echo $ptotal = (($qty * (float)$price)  - (float)$ord->offer); 
+															//	echo $ptotal = (($qty * (float)$price)  - (float)$ord->offer); 
 															}
+																echo $ptotal = (($qty * (float)$ord->total_price)  - (float)$ord->offer); 
+
 															?>
 														</td>
 													</tr>		

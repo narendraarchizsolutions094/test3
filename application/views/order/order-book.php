@@ -161,17 +161,17 @@
 																	<h4>Stock : <?php echo $ord->stock; ?></h4>
 																	<?php  } ?>
 																	<h6><label>Scheme : </label> <?php echo $ord->scheme; ?> </h6>
-																	<label>Price : </label> <i class ="fa fa-rupee"></i> <?php echo $ord->price; ?>
+																	<label>Unit Price : </label> <i class ="fa fa-rupee"></i> <?php echo $ord->unit_price; ?>
 																	<?php if(!empty($ord->offer)){
 																	?><br><label>Discount : </label> <?php echo $ord->offer; ?><?php	
 																	} ?>
 																	<?php if(!empty($ord->tax)){ ?>
 																	<label>TAX : </label> <?php echo (!empty($ord->tax)) ? $ord->tax."%" : "0%"; ?>
 																	<?php } ?>
-																	<br><label>Total : </label> <i class ="fa fa-rupee"></i> <?php $total = $ord->quantity*$ord->price + $ord->other_price; 
-																		if (!empty($ord->tax)) {
+																	<br><label>Total : </label> <i class ="fa fa-rupee"></i> <?php $total = $ord->quantity*$ord->total_price; 
+																		/*if (!empty($ord->tax)) {
 																			$total+=$total*($ord->tax/100);
-																		}
+																		}*/
 																		echo $total;
 																	?>
 																</div>

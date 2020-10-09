@@ -32,7 +32,7 @@
 												<th>Srno</th>
 												<th>Product</th>
 												<th>Stock</th>
-												<th>Price</th>
+												<th>Unit Price</th>
 												<th>GST</th>
 												<th>Scheme</th>
 												<th>Discount</th>
@@ -52,7 +52,7 @@
 														<th scope="row"><?php echo $ind+1; ?></th>
 														<td><?php echo $ord->product_name; ?></td>
 														<td><?php echo $ord->stock; ?></td>
-														<td><i class ="fa fa-rupee"></i> <?php echo $ord->price; ?></td>
+														<td><i class ="fa fa-rupee"></i> <?php echo $ord->unit_price; ?></td>
 														<td><?php echo (!empty($ord->tax)) ? $ord->tax."%" : "0%"; ?></td>
 														<!-- <td><i class = "fa fa-rupee"></i> <?php echo $totprice = ($ord->price - $ord->offer) + floor($ord->tax/100); ?>
 														</td> -->
@@ -77,9 +77,9 @@
 													<i class = "fa fa-rupee"></i> 
 													<?php 
 														$total = $totprice*$ord->quantity; 
-														if (!empty($ord->tax)) {
+														/*if (!empty($ord->tax)) {
 															$total += $total*($ord->tax/100); 
-														}
+														}*/
 														echo $total;
 													?>
 													</td>
