@@ -1586,6 +1586,12 @@ if($root=='https://student.spaceinternationals.com'){  ?>
          </aside>
          <!-- =============================================== -->
          <div class="content-wrapper" style="">
+             <?php if($this->session->companey_id == 57){ ?>
+               <div class="alert alert-info  alert-dismissible fade in text-center ">
+                  <a href="#" class="close btn btn-xs btn-danger" data-dismiss="alert" aria-label="close" style="top: unset; color: white;">&times;</a>
+                  <strong>Need Help! </strong> Call us on our Tollfree Number  <a href="tel:18005722426">18005722426</a>
+                </div>
+              <?php } ?>
             <div class="content">
                <?php if ($this->session->flashdata('message') != null) {  ?>
                <div class="alert alert-info alert-dismissable">
@@ -1605,12 +1611,6 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                   <?php echo validation_errors(); ?>
                </div>
                <?php } ?>
-               <?php if($this->session->companey_id == 57){ ?>
-                 <div class="alert alert-info alert-dismissible fade in">
-                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                    <strong>Need Help! </strong> Call us on our Tollfree Number : <a href="tel:18005722426">18005722426</a>.
-                  </div>
-                <?php } ?>
                <!-- content -->
           <?php echo (!empty($content)?$content:null) ?>
            </div>

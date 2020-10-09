@@ -36,6 +36,7 @@
 					$balance = $total - $paid;
 
 					$cols[] = number_format($balance,2);
+					$cols[] = $ord->order_date;
 					
 						
 						$mode = "";

@@ -224,7 +224,7 @@ class Order_model extends CI_Model {
 	
 	public function getOrders($ordno){
 		
-	 	$this->db->select("ord.*,prd.id as prdid,prd.country_name as product_name,prddet.price as unit_price, prddet.image,prddet.stock,CONCAT(tbl_admin.s_display_name,' ',tbl_admin.last_name,' - ',tbl_admin.s_user_email) as seller_name,prddet.hsn,prddet.brand");
+	 	$this->db->select("ord.*,prd.id as prdid,prd.country_name as product_name,prddet.price as unit_price, prddet.image,prddet.stock,concat_ws(' ',tbl_admin.s_display_name,tbl_admin.last_name) as seller_name,prddet.hsn,prddet.brand");
 				$this->db->where("ord.company", $this->session->companey_id);
 				$this->db->where("ord.ord_no", $ordno);
 				

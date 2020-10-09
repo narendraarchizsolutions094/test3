@@ -509,7 +509,7 @@ class Order extends CI_Controller {
 		//$data["payment"]  = $this->payment_model->getPaymentByOrder($data['ord']->id);
 	
 		$data["title"] 	  = $data['ord']->ord_no;
-		
+		$data['order_no'] = $ordno;
 		$data['content'] = $this->load->view('order/invoice', $data, true);
         $this->load->view('layout/main_wrapper', $data);
 		

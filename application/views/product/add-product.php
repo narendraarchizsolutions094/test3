@@ -215,6 +215,7 @@
 									<div class="form-group">
 										<label>Price<i class="text-danger">*</i></label>
 										<input type="text" class="form-control" id="price" placeholder="Enter price" name="price" value="<?php echo ($isedit == true) ? $product->price : set_value("price"); ?>" required>
+										<small id="note_playwood_cat">You need to update pricing per piece/board</small>
 									</div>
 							</div>
 							<div class="col-md-4">
@@ -361,12 +362,24 @@
 </div>
 	
 <script>
-	
+	if($("#cat").val() == 34){
+		$("#note_playwood_cat").show();
+	}else{
+		$("#note_playwood_cat").hide();		
+	}
 	if($("#cat").val() == 19){
 		$("#color").hide();
 	}else{
 		$("#color").show();
 	}
+	$("#cat").on('change',function(){
+		var cat	=	$(this).val();
+		if (cat == 34) {
+			$("#note_playwood_cat").show();
+		}else{
+			$("#note_playwood_cat").hide();			
+		}
+	});
 
 	$(document).on("change", ".load-subcateg", function(){
 		if ($(this).val() == 19) {

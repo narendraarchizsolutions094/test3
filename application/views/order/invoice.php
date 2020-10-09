@@ -19,8 +19,10 @@
                 <div class="btn-group"> 
                     <a class="btn btn-primary" href="<?php echo base_url("order") ?>"> <i class="fa fa-list"></i> Order List </a>  
                 </div>
+				<button type="button" class="btn btn-primary mb-1 noprint pull-right" id="pdfsave"><i class="fa fa-download"></i> Invoice Pdf</button>
+
             </div>
-			<div class="panel-body panel-form">
+			<div class="panel-body panel-form" id="pdf-invoice">
                 <div class="row">
 							<div class="col-md-12">
 								<div class="card">
@@ -44,7 +46,7 @@
 										
 										<div class="row">
 											<div class="text-center ml-auto col-md-4">
-											<p class="mb-1" style="margin:0px;"><span class="font-weight-semibold" style="font-weight: 700;">Contact :</span> 011-42750485,9560348549 </p>
+											<p class="mb-1" style="margin:0px;"><span class="font-weight-semibold" style="font-weight: 700;">Contact :</span> 18005722426 </p>
 											</div>
 
 											<div class="text-center ml-auto col-md-4">
@@ -54,7 +56,7 @@
 											<p class="mb-1" style="margin:0px;"><span class="font-weight-semibold" style="font-weight: 700;">E-MAIL :</span> accounts@lalantop.com </p>
 											</div>
 										</div>
-										
+										 
 										<hr>
 								
 								        <div class="row">
@@ -216,20 +218,13 @@ This is Computer generated invoice,so no signature in required. </p>
 											<p class="mb-1" style=""><span class="font-weight-semibold" style="font-weight: 700;">IGST Amt.(Rs.) :</span> 76636.80 </p>
 											</div>-->
 										</div>
-										
-									</br></br>	
-										<div class="row">
-											<div class="text-left ml-auto col-md-6">
-											<p class="mb-1" style=""><span class="font-weight-semibold" style="font-weight: 700;">Note. :</span></br>
-Commission Criteria as Followings:-</br>
-1. Agency Commission -8%</br>
-2. Scheme Commission -5%. </p>
-											</div>
-											<div class="text-center ml-auto col-md-6">
+											<div class="text-center ml-auto col-md-6 pull-right">
 											<p class="mb-1" style=""><span class="font-weight-semibold" style="font-weight: 700;">For Lalantop Consumers Pvt.Ltd. :</span></br></br> Authorised Signatory </p>
 											</div>
-										</div>
 										
+									</br>
+									</br>
+									</br>
 										<div>
 									<?php if(!empty($payment)) { 
 											$data["payments"] = $payment;
@@ -259,8 +254,7 @@ Commission Criteria as Followings:-</br>
 									<div class="card-footer text-right no-print">
 										<!-- <a href = "<?php echo base_url("order/pdfinvoice/".$mord->ord_no); ?>" class="btn btn-primary mb-1" target = "_blank"><i class="si si-wallet"></i> Pdf</a> -->
 									    
-										<button type="button" class="btn btn-info mb-1 noprint" id="pdfsave"><i class="si si-printer"></i> Save Invoice</button>
-										<button type="button" class="btn btn-info mb-1 noprint" onclick="javascript:window.print();"><i class="si si-printer"></i> Print Invoice</button> 
+										<!-- <button type="button" class="btn btn-info mb-1 noprint" onclick="javascript:window.print();"><i class="si si-printer"></i> Print Invoice</button>  -->
 									</div>
 								</div>
 							</div>
@@ -279,8 +273,10 @@ $('#pdfsave').click(function () {
 	let doc = new jsPDF('p','pt','a4');
 	$('.no-print').hide();
 doc.addHTML($('.content')[0], function () {
-     doc.save('Test.pdf');
+	var title = 'Invoice-'+"<?=$order_no?>"+'.pdf';
+     doc.save(title);
  });
+location.reload();
 });
 $('.no-print').show();
  </script>

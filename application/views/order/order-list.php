@@ -147,8 +147,9 @@ input[name=lead_stages]{
           }
           ?>
         </div>
-         <div class="col-md-8 col-sm-8 col-xs-8 pull-right">  
-            <div class="col-md-4">
+      </div><br>
+      <div class="row">
+            <div class="col-md-4 col-xs-12 col-sm-12">
             <div class="form-group">        
             <select name="productdd" id="productdd" class="form-control">
             <option value="">Select Product</option>
@@ -158,7 +159,7 @@ input[name=lead_stages]{
             </select> 
             </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-4 col-xs-12 col-sm-12">
             <div class="form-group">        
             <select name="sellerdd" id="sellerdd" class="form-control">
             <option value="">Select Seller</option>
@@ -168,7 +169,7 @@ input[name=lead_stages]{
             </select> 
             </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-4 col-xs-12 col-sm-12">
             <div class="form-group">        
             <select name="statusdd" id="statusdd" class="form-control">
             <option value="">Select Status</option>
@@ -177,7 +178,7 @@ input[name=lead_stages]{
             </select> 
             </div>
             </div>
-      </div>
+      
 </div>
 	<br>
       <div class="row">
@@ -195,7 +196,8 @@ input[name=lead_stages]{
                           <th>Buyer Name</th>	
                           <!-- <th>Payment Mode</th> -->
                           <th>Amount Paid</th>
-													<th>Balance</th>
+                          <th>Balance</th>
+													<th>Ordered At</th>
 													<th>Action</th>													
 												</tr>
 											</thead>
