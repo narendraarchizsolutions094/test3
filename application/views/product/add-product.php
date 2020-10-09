@@ -215,7 +215,7 @@
 									<div class="form-group">
 										<label>Price<i class="text-danger">*</i></label>
 										<input type="text" class="form-control" id="price" placeholder="Enter price" name="price" value="<?php echo ($isedit == true) ? $product->price : set_value("price"); ?>" required>
-										<small id="note_playwood_cat">You need to update pricing per piece/board</small>
+										<small id="note_playwood_cat" style="font-size: 10px;">You need to update pricing per piece/board</small>
 									</div>
 							</div>
 							<div class="col-md-4">
