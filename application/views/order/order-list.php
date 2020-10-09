@@ -134,6 +134,8 @@ input[name=lead_stages]{
 }
 
 </style>
+
+
 	
 	
 	<div class="row" style="background-color: #fff;padding:7px;border-bottom: 1px solid #C8CED3;">  
@@ -148,7 +150,7 @@ input[name=lead_stages]{
          <div class="col-md-8 col-sm-8 col-xs-8 pull-right">  
 <div class="col-md-4">
 <div class="form-group">        
-<select name="city" id="city" class="form-control">
+<select name="productdd" id="productdd" class="form-control">
 <option value="">Select Product</option>
 <?php foreach($product_list as $product){ ?>
   <option value="<?php echo $product->id; ?>"><?php echo $product->country_name; ?></option>
@@ -158,7 +160,7 @@ input[name=lead_stages]{
 </div>
 <div class="col-md-4">
 <div class="form-group">        
-<select name="city" id="city" class="form-control">
+<select name="sellerdd" id="sellerdd" class="form-control">
 <option value="">Select Seller</option>
 <?php foreach($seller_list as $seller){ ?>
   <option value="<?php echo $seller->pk_i_admin_id; ?>"><?php echo $seller->s_display_name.' '.$seller->last_name.' - '.$seller->s_user_email; ?></option>
@@ -168,7 +170,7 @@ input[name=lead_stages]{
 </div>
 <div class="col-md-4">
 <div class="form-group">        
-<select name="city" id="city" class="form-control">
+<select name="statusdd" id="statusdd" class="form-control">
 <option value="">Select Status</option>
   <option value="">Pending</option>
   <option value="">delivered</option>
@@ -210,12 +212,17 @@ input[name=lead_stages]{
 	</div>	
 	<script>
 	$(document).ready(function(){
-			$("#add-datatable").dataTable({
+			var orderDataTable  = $("#add-datatable").dataTable({
 				"serverSide":"true",
 				"lengthMenu":[10,20,50,100,500,1000,"All"],
 				"ajax":{
 					"url":"<?php echo base_url('order/loadorders'); ?>",
-					"type":"post"
+					"type":"post",
+          "data": function(data){
+               data.sproduct = $('#productdd').val();
+               data.sseller = $('#sellerdd').val();
+               data.sstatus = $('#statusdd').val();
+            }
 				},
         "dom": "<'row'<'col-sm-4'l><'col-sm-4 text-center'B><'col-sm-4'f>>tp", 
         "buttons": [  
@@ -240,6 +247,9 @@ input[name=lead_stages]{
 			        $(row).find('td:eq(11)').attr('data-th', 'Action');
 			    }
 			});
+      $('#productdd,#sellerdd,#statusdd').change(function(){
+          orderDataTable.api().ajax.reload( null, true );
+       });
 			
 		});
 	</script>

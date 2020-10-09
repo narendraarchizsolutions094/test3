@@ -44,8 +44,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     }
     function getOrderTotal($arr)
     {   
-        $price = 0;
-        $ci = & get_instance();
+        $price  = 0;
+        $tax    = 0;
+        $ci     = & get_instance();
         $ci->load->database();
         $data = $ci->db->select('total_price,tax')->from('tbl_order')->where('ord_no',$arr[0]->ord_no)->get()->result_array();
         $total = 0;

@@ -33,13 +33,19 @@
 					$paid = getPaidAmount($ord->id);	
 						$cols[] = $paid;
 
-						$balance = $total - $paid;
+					$balance = $total - $paid;
 
-						$cols[] = $balance;
+					$cols[] = number_format($balance,2);
 					
 						
 						$mode = "";
 						
+						/*
+						if($ord->pay_status == 1){
+							$paysts = "Pending";
+						}else{
+							$paysts = "Complete";
+						} */
 						$paysts  = "Pending";
 						
 						$paymode  =  " - ";
@@ -54,7 +60,31 @@
 						}else{
 							$paymode = false;
 						}
-						
+						// if(!empty($paymode)) {
+						// $cols[]  =	$paymode;
+						// }else {
+						// $cols[]  =		" - ";
+						// }
+						//$cols[]  =	(!empty($payprice)) ? $payprice : "  - ";
+					
+						//$cols[]  =	(!empty($balance)) ? $balance : " ";
+					
+					//$cols[] = (!empty($ord->conf_delv) and $ord->conf_delv != "0000-00-00") ?  date("d, M Y", strtotime($ord->conf_delv)).' Next :'.$ord->pend_delv.''	 :  " - ";
+					//$cols[] = (!empty($ord->order_date )) ?  date("d, M Y", strtotime($ord->order_date))  : " - ";
+					
+					// if($ord->status  == 1 ){
+					// 	$cols[] = "Request";
+					// }else if($ord->status  == 2 ){
+					// 	$cols[] =  "Waiting";
+					// }else if($ord->status  == 3 ){
+					// 	$cols[] =  "Half Confirm";
+					// }else if($ord->status  == 4 ){
+					// 	$cols[] =  "Full Confirm";
+					// }else if($ord->status  == 5 ){
+					// 	$cols[] =  "Reject";
+					// }else{
+					// 	$cols[] = $ord->status; 
+					// } 
 					
 						$payment_act = $conf_act = $invoice_act = '';
 
