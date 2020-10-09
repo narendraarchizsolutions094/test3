@@ -66,9 +66,9 @@
 															<td>
 																<?php 
 																if($pay->pay_mode == 1){
-																	echo "Online";
-																}else if ($pay->pay_mode == 2) {
 																	echo "Cash";
+																}else if ($pay->pay_mode == 2) {
+																	echo "Online";
 																}else if ($pay->pay_mode == 3) {
 																	echo "Check/DD";
 																}else{

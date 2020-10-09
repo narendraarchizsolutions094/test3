@@ -19,6 +19,7 @@ class Payment_model extends CI_Model {
 						//->join("masters pmode", "pmode.id=pay.pay_mode", "LEFT")
 						->join("(select * from tbl_order where ord_no='".$ord_no."' group by ord_no) as ord", "ord.ord_no= pay.ord_id", "inner")
 						//->join("masters pstatus", "pstatus.id=pay.status", "LEFT")
+						->order_by('pay.id','DESC')
 						->get()
 						->result();
 		

@@ -29,7 +29,7 @@ class Buy extends CI_Controller {
 			$arr = array(
 					"pay" 			 => $pay,
 					"balance" 		 => $amt-$pay,
-					"pay_mode" 		 => 1, // Online
+					"pay_mode" 		 => 2, // Online
 					"transaction_no" => $res['payment_id'],
 					"status" 		 => 1,
 					"pay_date" 		 => date('Y-m-d'), 
