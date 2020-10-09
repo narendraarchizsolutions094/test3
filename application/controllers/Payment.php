@@ -66,7 +66,7 @@ class Payment extends CI_Controller {
 				curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
 				curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
 				curl_setopt($ch, CURLOPT_HTTPHEADER,
-				            array("X-Api-Key:ca7a223092cfaf2317db5fc00fc83502",
+				             array("X-Api-Key:ca7a223092cfaf2317db5fc00fc83502",
 				                  "X-Auth-Token:b6224670c580b470d7951eaf697e2e9f"));
 				$payload = Array(
 				    'purpose' => 'Product Purchage',
@@ -407,7 +407,7 @@ class Payment extends CI_Controller {
 	
 	public function add($ordno = ""){
 		
-		if(isset($_POST["orderid"])){
+		if(isset($_POST["orderid"])){ 
 			
 			$this->savepayment();
 			redirect(base_url("payment/add/".$ordno), "refresh");
@@ -424,7 +424,7 @@ class Payment extends CI_Controller {
 		
 		if(!empty($data["ord"])){
 			
-			$data["payments"] = $this->payment_model->getpayment($data["ord"]->cus_id);
+			$data["payments"] = $this->payment_model->getpayment($data["ord"]->ord_no);
 			
 		}
 		
