@@ -1918,7 +1918,7 @@ Array
             $move_enquiry = $this->input->post('enquiry_id');
             $enquiry = $this->enquiry_model->read_by_id($move_enquiry);
             $lead_score = $this->input->post('lead_score');
-            $lead_stage = $this->input->post('lead_stage');
+            $lead_stage = $this->input->post('move_lead_stage');
             $lead_discription = $this->input->post('lead_description');
             
             $comment = $this->input->post('comment');
@@ -1927,7 +1927,7 @@ Array
                 $lead_score = $this->input->post('lead_score');
             }
             if (!empty($lead_stage)) {
-                $lead_stage = $this->input->post('lead_stage');
+                $lead_stage = $this->input->post('move_lead_stage');
             }
             if (!empty($comment)) {
                 $comment = $this->input->post('comment');
