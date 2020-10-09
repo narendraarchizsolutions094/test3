@@ -237,16 +237,12 @@ input[name=lead_stages]{
 				createdRow: function( row, data, dataIndex ) {
 			        $(row).find('td:eq(0)').attr('data-th', 'S.No.');
 			        $(row).find('td:eq(1)').attr('data-th', 'Order No');
-			        $(row).find('td:eq(2)').attr('data-th', 'Product');
-			        $(row).find('td:eq(3)').attr('data-th', 'Quantity');
-			        $(row).find('td:eq(4)').attr('data-th', 'Price');
-			        $(row).find('td:eq(5)').attr('data-th', 'Payment');
-			        $(row).find('td:eq(6)').attr('data-th', 'Pay');
-			        $(row).find('td:eq(7)').attr('data-th', 'Balance');
-			        $(row).find('td:eq(8)').attr('data-th', 'Delivery Date');
-			        $(row).find('td:eq(9)').attr('data-th', 'Date');
-			        $(row).find('td:eq(10)').attr('data-th', 'Status');
-			        $(row).find('td:eq(11)').attr('data-th', 'Action');
+			        $(row).find('td:eq(2)').attr('data-th', 'Total');
+			        $(row).find('td:eq(3)').attr('data-th', 'Buyer Name');
+			        $(row).find('td:eq(4)').attr('data-th', 'Amount Paid');
+			        $(row).find('td:eq(5)').attr('data-th', 'Balance');
+			        $(row).find('td:eq(6)').attr('data-th', 'Ordered At');
+			        $(row).find('td:eq(7)').attr('data-th', 'Action');
 			    }
 			});
       $('#productdd,#sellerdd,#statusdd').change(function(){
@@ -262,3 +258,4 @@ input[name=lead_stages]{
 			$(trgt).slideToggle(trgt);
 		});
 	</script>
+
