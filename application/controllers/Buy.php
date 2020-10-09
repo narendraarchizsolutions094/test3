@@ -358,7 +358,7 @@ class Buy extends CI_Controller {
 					$gst_price = (float)$product->price*((float)$product->gst/100);				
 				}
 				
-				$prdarr = array("status" => $status,"prodid" => $prodno, "product" => $product->country_name, "price" => (float)$product->price+(float)$gst_price , "qty" => (int)$qty + (int)$pqty,"total" => count($cardcontent),'minalert'=>($_POST['minimum'] !='') ? $_POST['minimum'] : 0);
+				$prdarr = array("status" => $status,"prodid" => $prodno, "product" => $product->country_name, "price" => (float)$product->price+(float)$gst_price , "qty" => (int)$qty + (int)$pqty,"total" => count($cardcontent),'minalert'=>!empty($_POST['minimum']) ? $_POST['minimum'] : 0);
 				
 			}else{
 

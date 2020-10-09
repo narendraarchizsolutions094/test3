@@ -5,9 +5,9 @@
 					$ord    = $allord[0]; 					
 					$cols   = array();
 					$srno   = ++$srno;
-					$total  = count($allord);								
+					$total  = count($allord);						 		
 					$cols[] = $srno;
-					if (user_access(461)) {
+					if (user_access(463)) {
 						$cols[] = "<a href = '".base_url('order/view/'.$ord->ord_no)."'>".$ord->ord_no."</a>";
 					}else{
 						$cols[] = $ord->ord_no;
