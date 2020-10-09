@@ -77,7 +77,8 @@ class Client extends CI_Controller {
             $data['data_type'] = 3;
         }
 
-
+        $data['all_stage_lists'] = $this->Leads_Model->find_stage();
+        
         $data['content'] = $this->load->view('enquiry_n', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }

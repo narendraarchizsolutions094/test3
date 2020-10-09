@@ -1919,6 +1919,8 @@ Array
             $enquiry = $this->enquiry_model->read_by_id($move_enquiry);
             $lead_score = $this->input->post('lead_score');
             $lead_stage = $this->input->post('lead_stage');
+            $lead_discription = $this->input->post('lead_description');
+            
             $comment = $this->input->post('comment');
             $expected_date = $this->input->post('expected_date');
             if (!empty($lead_score)) {
@@ -1965,6 +1967,7 @@ Array
 			
             $this->db->set('lead_score', $lead_score);
             $this->db->set('lead_stage', $lead_stage);
+            $this->db->set('lead_discription', $lead_discription);
             $this->db->set('lead_comment', $comment);
             $this->db->set('lead_expected_date', $expected_date);
             $this->db->set('lead_drop_status', 0);
