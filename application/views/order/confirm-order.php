@@ -11,15 +11,7 @@
             <div class="panel-body">
             		<div class="row">
             			<div class="col-md-4 col-sm-12 col-xs-12">            				
-		            		<?php if(!empty($order_meta)){ ?>
-							<!-- <address>
-								<h4>
-									<i class = "fa fa-user-o"></i> <?php echo"ID : ".$getUserDetails->employee_id; ?></h4>
-									<i class = "fa fa-map-signs"></i> <?php echo "Email : ".$getUserDetails->s_user_email; ?><br>
-									<i class = "fa fa-globe"></i> <?php echo "Address : ".$getUserDetails->add_ress; ?><br>
-									<br>
-																					
-							</address> -->
+		            		<?php if(!empty($order_meta)){ ?>						
 							<fieldset>
 		  						<legend style="width: unset;font-size: 12px;">Billing Details:</legend>
 								<label>Name : </label>&nbsp;<?=!empty($order_meta['BILLING_DETAILS']['fname'])?$order_meta['BILLING_DETAILS']['fname']:''?>
@@ -98,10 +90,10 @@
 								?>
 								<br><label>Pincode : </label>&nbsp;<?=!empty($order_meta['SHIPPING_DETAILS']['pincode'])?$order_meta['SHIPPING_DETAILS']['pincode']:''?>
 							</fieldset>
+					<?php } ?> 
             			</div>
             		</div>
 
-					<?php } ?> 
 					<br>
 					<div class="row">
 						<div class = "col-md-12">

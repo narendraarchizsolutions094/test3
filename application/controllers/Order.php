@@ -394,11 +394,7 @@ class Order extends CI_Controller {
 		if(!empty($data["ord"])) {
 			//$data['payments'] = $this->payment_model->getpayment($data["ord"]->cus_id);
 		}
-		//if(empty($data['order'])) show_404();
-		if(!empty($data['ord']->cus_id))
-		{
-			$data['getUserDetails'] = $this->db->select('*')->from('tbl_admin')->where('pk_i_admin_id',$data['ord']->cus_id)->get()->row();	
-		}
+		
 		$data["schemes"]  = $this->order_model->getCurrentScheme();
 		
 		$this->load->model("scheme_model");
