@@ -132,7 +132,7 @@
 															}else{
 															//	echo $ptotal = (($qty * (float)$price)  - (float)$ord->offer); 
 															}
-																echo $ptotal = (($qty * (float)$ord->total_price)  - (float)$ord->offer); 
+																echo $ptotal = (float)$ord->total_price  - (float)$ord->offer; 
 
 															?>
 														</td>
