@@ -30,6 +30,10 @@ if(empty($api_conf)){
   exit();
 }
 
+if (strlen($phone) > 14) {
+    $phone = substr($phone, 2, 10);
+}
+
  $url=$api_conf['api_url']."&".$api_conf['key_moblie']."=".$phone."&".$api_conf['api_key']."=".$meg."&country=91";
 
  $curl = curl_init();
