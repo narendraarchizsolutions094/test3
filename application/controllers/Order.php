@@ -496,7 +496,7 @@ class Order extends CI_Controller {
 	
 	}
 	
-	public function invoice($ordno = ""){
+	public function invoice($ordno = ""){ 
 		
 		////$this->load->model("payment_model");
 		$data['orders'] = $this->order_model->getOrders($ordno);
