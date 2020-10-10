@@ -236,7 +236,7 @@ class Order_model extends CI_Model {
 				
 				$this->db->from('tbl_order ord');
 				//$this->db->join('users usr','usr.id=ord.cus_id','left');
-				$this->db->join("tbl_inventory", "tbl_inventory.product_name=ord.product");
+				$this->db->join("tbl_inventory", "tbl_inventory.product_name=ord.product",'left');
 				$this->db->join('tbl_product_country prd','prd.id=ord.product');
 				$this->db->join('tbl_proddetails prddet','prd.id=prddet.prodid');
 				$this->db->join('tbl_admin','tbl_admin.pk_i_admin_id=prddet.seller_id');
