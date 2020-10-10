@@ -40,7 +40,19 @@ public function warehouse(){
 
 
 }
+public function get_product_stock(){
+    $pid    =   $this->input->post('pid');
+    $comp_id = $this->session->companey_id;
+    $this->db->where('comp_id',$comp_id);
+    $this->db->where('product_name',$pid);
+    $row    =   $this->db->get('tbl_inventory')->row_array();
+    if (!empty($row)) {
+        echo json_encode($row);
+    }else{
+        echo 0;
+    }
 
+}
 public function addwarehouse(){
 
 
