@@ -455,6 +455,28 @@ class Order_model extends CI_Model {
         }
     }
 
+
+    public function get_order_meta($ord_no,$meta_key){
+        if (!empty($meta_key) && !empty($ord_no)) {                        
+            $this->db->select('order_parameters as parameter,order_value as value');
+            $this->db->where('order_id',$ord_no);        
+            $this->db->where_in('order_parameters',$meta_key);
+            $result    =   $this->db->get('order_parameters')->result_array();
+            $data = array();
+            if (!empty($result)) {
+                foreach ($result as $key => $value) {
+                    $parm    =   $value['parameter'];
+                    $data[$parm]   = $value['value'];
+                }
+                return $data;   
+            }else{
+                return false;
+            }
+        }else{
+            return false;
+        }
+    } 
+
     public function getBuyers($ordno){		
 	  	$this->db->select("*");
 	 			$this->db->from('order_parameters');
