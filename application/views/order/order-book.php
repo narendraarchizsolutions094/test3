@@ -198,8 +198,66 @@
 						  						<legend style="width: unset;font-size: 12px;">Order Details:</legend>
 												<h2> <?php echo $ord->ord_no; ?></h2>
 												<p><span>Order Date :</span> <?php echo date("d, F Y", strtotime($ord->order_date)); ?> </p>
+												<p><span>Order Total :</span> <i class="fa fa-rupee"></i> <?php echo getOrderTotal($orders); ?> </p>												
 											</fieldset>
 										</div>
+				            		</div>
+
+				            		<div class="col-md-12">
+				            			<fieldset class="table-responsive">
+						  					<legend style="width: unset;font-size: 12px;">Payment Details:</legend>
+			       							<table class="table table-bordered text-center">
+												<thead>
+													<tr>
+														<th>Prev Balance</th>
+														<th>Payment</th>
+														<th>Balance</th>
+														<th>Payment Mode</th>
+														<th>Transaction No</th>
+														<th>Payment Date</th>
+														<th>Next Payment</th>
+														<th>Remark</th>
+													</tr>
+												</thead>
+												<tbody>
+												<?php	
+												$prev_balance = 0;												
+												foreach($payments as $ind => $pay){ 
+												if($pay->ord_id == $ord->ord_no) {
+													$remain_balance = $pay->balance;
+													 $totalval = $pay->balance;
+													?>
+													<tr <?php echo ($pay->approve == 0) ? "class='bg-border-dash'" : ""; ?>>
+														<td><?php echo (!empty($pay->prev_balance)) ? "<i class = 'fa fa-rupee'></i> ".$pay->prev_balance : " - "; ?></td>
+														
+														<td><i class = 'fa fa-rupee'></i> <?php echo  $pay->pay; ?></td>
+														
+														<td><?php echo (!empty($pay->balance)) ? "<i class = 'fa fa-rupee'></i> ".$pay->balance : " - "; ?></td>
+														
+														<td>
+															<?php 
+															if($pay->pay_mode == 1){
+																echo "Cash";
+															}else if ($pay->pay_mode == 2) {
+																echo "Online";
+															}else if ($pay->pay_mode == 3) {
+																echo "Check/DD";
+															}else{
+																echo "N/A";
+															}	
+															?>
+														</td>
+														<td><?php echo $pay->transaction_no ; ?></td>
+														<td><?php echo $pay->pay_date; ?></td>
+														<td><?php echo $pay->next_pay; ?></td>
+														
+														<td><?php echo $pay->remark?substr($pay->remark, 0, 40):'NA'; ?></td>
+													</tr>
+											<?php } ?>		
+									<?php	 }	?>
+												</tbody>
+										   </table>
+										</fieldset>
 				            		</div>
 				            		<br>
 										<?php $mord = $ord; ?>
@@ -239,11 +297,12 @@
 																	<?php if(!empty($ord->tax)){ ?>
 																	<label>TAX : </label> <?php echo (!empty($ord->tax)) ? $ord->tax."%" : "0%"; ?>
 																	<?php } ?>
-																	<br><label>Total : </label> <i class ="fa fa-rupee"></i> <?php $total = $ord->quantity*$ord->total_price; 
+																	<br><label>Total : </label> <i class ="fa fa-rupee"></i> <?php $total = $ord->total_price; 
 																		/*if (!empty($ord->tax)) {
 																			$total+=$total*($ord->tax/100);
 																		}*/
 																		echo $total;
+
 																	?>
 																</div>
 																<div class = "col-md-9">

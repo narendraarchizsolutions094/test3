@@ -428,7 +428,7 @@ class Payment extends CI_Controller {
 		
 		//$data["masters"]  = $this->payment_model->getmaster();	
 		
-		if(!empty($data["ord"])){
+		if(!empty($data["ord"]->ord_no)){
 			
 			$data["payments"] = $this->payment_model->getpayment($data["ord"]->ord_no);
 			

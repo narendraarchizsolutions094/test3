@@ -348,8 +348,9 @@ class Order extends CI_Controller {
 		if(empty($ordno)) show_404();
 		$data['ord'] = $this->order_model->getOrder($ordno);
 		$data['orders'] = $this->order_model->getOrders($ordno);
-		if(!empty($data["ord"])) {
-		//	$data['payments'] = $this->payment_model->getpayment($data["ord"]->cus_id);
+		if(!empty($data["ord"]->ord_no)) {
+			$this->load->model('payment_model');
+			$data['payments'] = $this->payment_model->getpayment($data["ord"]->ord_no);
 		}
 		$data["delivery"]    = $this->order_model->getDilevery($ordno);		
 		$order_meta = array('fname','email','phone','address','state','city','pincode','gstin');
