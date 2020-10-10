@@ -373,22 +373,7 @@ $company=$this->session->userdata('companey_id');
     }
 
 
-    public function set_order_meta($ord_no,$comp_id,$user_id,$meta_key){
-        if (!empty($meta_key) && !empty($ord_no)) {
-            foreach ($meta_key as $key=>$value) {
-                    $ins_arr = array(
-                    'comp_id'      => $comp_id,
-                    'order_id'      => $ord_no,
-                                'created_by'      => $user_id,
-                                'order_parameter'=> $key,
-                                'order_value'    => $value,
-                                );
-                    $this->db->insert('order_parameters',$ins_arr);
-            }
-        }else{
-            return false;
-        }
-    }
+    
     
     public function get_user_by_email($email){
         return $this->db->where('s_user_email',$email)->get('tbl_admin')->row();

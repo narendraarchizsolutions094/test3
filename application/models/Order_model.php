@@ -214,13 +214,7 @@ class Order_model extends CI_Model {
 		return		$this->db->get()->result();
 	}
 
-	 public function getBuyers($ordno){
-		
-	  	$this->db->select("*");
-	 			$this->db->from('order_parameters');
-	 			$this->db->where("order_id", $ordno);
-	 	return	$this->db->get()->result();
-	 }
+	 
 	
 	public function getOrders($ordno){
 		
@@ -441,6 +435,30 @@ class Order_model extends CI_Model {
 			return false;
 		}	
 	}
-	
-	
+
+
+	public function set_order_meta($ord_no,$comp_id,$user_id,$meta_key,$type){
+        if (!empty($meta_key) && !empty($ord_no)) {
+            foreach ($meta_key as $key=>$value) {
+                $ins_arr = array(
+                'comp_id'         => $comp_id,
+                'order_id'        => $ord_no,
+                'created_by'      => $user_id,
+                'order_parameter' => $key,
+                'order_value'     => $value,
+                'type'     	      => $type,
+                );
+                $this->db->insert('order_parameters',$ins_arr);
+            }
+        }else{
+            return false;
+        }
+    }
+
+    public function getBuyers($ordno){		
+	  	$this->db->select("*");
+	 			$this->db->from('order_parameters');
+	 			$this->db->where("order_id", $ordno);
+	 	return	$this->db->get()->result();
+	}
 }
