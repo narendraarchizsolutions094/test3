@@ -30,7 +30,7 @@ if(empty($api_conf)){
   exit();
 }
 
-if (strlen($phone) > 14) {
+if (strlen($phone) >= 14) {
     $phone = substr($phone, 2, 10);
 }
 
