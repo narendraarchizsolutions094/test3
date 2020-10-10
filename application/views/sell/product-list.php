@@ -130,15 +130,15 @@
 										
 								}		
 								?></strike> <b><i class = "fa fa-rupee"></i><?php echo $prd->price ?></b>
-								</p>
-									<div>
-									<?php if($prd->stock  == 0){
+									
+									<?php if(empty($prd->stock_qty) || $prd->stock_qty  <= $prd->minimum_order_quantity){
 										?>Out Of Stock<?php
 									}else{
 										
 										
 									} ?>
-									</div>
+									
+								</p>
 								</div>
 								<div class = "box-content text-left" style = "text-align:left;">
 								
@@ -151,9 +151,9 @@
 								</div>
 									 <ul class="icon">
 									<li>
-										<?php if($prd->stock  == 0){
+										<?php if(empty($prd->stock_qty) || $prd->stock_qty  <= $prd->minimum_order_quantity){
 											
-											echo "Out of stock";
+											//echo "Out of stock";
 										}else { ?>
 									<?php if(!empty($incart[$prd->id])) { ?>
 									<a href = "javascript:void(0)" class = "minus-quantity" data-prodid = "<?php echo $prd->sb_id; ?>" data-minalert = "<?php echo $prd->minimum_order_quantity ?>" ><span> - </span></a>

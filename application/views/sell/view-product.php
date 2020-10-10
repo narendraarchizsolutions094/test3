@@ -285,9 +285,14 @@
 							?>
 							<a href = "<?php echo base_url("buy/checkout"); ?>" class = "btn btn-success">Added in cart </a><?php
 						}else{
-							?>
+							if(empty($product->stock_qty) || $product->stock_qty  < $product->minimum_order_quantity){ ?>
+
+							 <a href="javascript:void(0)" class="btn btn-danger">Out of stock</a> 
+								<?php
+							}else{ ?>
 							 <a href = "javascript:void(0)" data-prodid="<?=$product->sb_id?>" class = "btn btn-danger add-to-cart"><i class = "fa fa-shopping-cart"></i> Add to cart</a> 
 							<?php
+							}
 						} 
 						?>
 					</div>
