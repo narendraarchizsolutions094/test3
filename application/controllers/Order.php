@@ -340,37 +340,23 @@ class Order extends CI_Controller {
 	
 	
 	public function view($ordno = ""){
-		
-		//$ord = base64_decode(base64_decode(urldecode($ordno)));
-		
-	//	$this->load->model("payment_model");
+		$this->load->model("location_model");
 		if(isset($_POST["orderno"])){
 			$this->updatedelivery();
 			redirect(base_url("order/view/".$ordno), "refresh");	
 		}
-		
 		if(empty($ordno)) show_404();
-		
 		$data['ord'] = $this->order_model->getOrder($ordno);
 		$data['orders'] = $this->order_model->getOrders($ordno);
-		if(!empty($data['ord']->cus_id))
-		{
-			$data['getUserDetails'] = $this->db->select('*')->from('tbl_admin')->where('pk_i_admin_id',$data['ord']->cus_id)->get()->row();	
-		}
-		
-		
 		if(!empty($data["ord"])) {
 		//	$data['payments'] = $this->payment_model->getpayment($data["ord"]->cus_id);
 		}
-		//if(empty($data['order'])) show_404();
-		
-		$data["delivery"]    = $this->order_model->getDilevery($ordno);
-		$data["title"] = $data['ord']->ord_no;
-		
-	   $data['content'] = $this->load->view('order/order-book', $data, true);
+		$data["delivery"]    = $this->order_model->getDilevery($ordno);		
+		$order_meta = array('fname','email','phone','address','state','city','pincode','gstin');
+		$data['order_meta']	=	$this->order_model->get_order_meta($ordno,$order_meta);
+		$data["title"] = $data['ord']->ord_no;		
+	   	$data['content'] = $this->load->view('order/order-book', $data, true);
         $this->load->view('layout/main_wrapper', $data);
-		
-	
 	}
 	
 	

@@ -109,28 +109,99 @@
 							<div class="col-md-12">
 								<div class="panel panel-default">
 									<div class="panel-body">
-										<div class="row">
-											<div class="col-md-6 col-sm-12 col-xs-12">
-											<div class="pull-left">
-											<?php if(!empty($getUserDetails)){ ?>
-												<address>
-													<h4>
-														<i class = "fa fa-user-o"></i> <?php echo $getUserDetails->employee_id; ?></h4>
-														<i class = "fa fa-map-signs"></i> <?php echo $getUserDetails->s_user_email; ?><br>
-														<i class = "fa fa-globe"></i> <?php echo $getUserDetails->add_ress; ?><br>
-														<br>
-																										
-												</address>
-												<?php } ?>
-											</div>
-											</div>
-											<div class="col-md-6 col-sm-12 col-xs-12">											
-											<div class="pull-right">
+
+									<div class="row">
+				            			<div class="col-md-4 col-sm-12 col-xs-12">            				
+						            		<?php if(!empty($order_meta)){ ?>						
+											<fieldset>
+						  						<legend style="width: unset;font-size: 12px;">Billing Details:</legend>
+												<label>Name : </label>&nbsp;<?=!empty($order_meta['BILLING_DETAILS']['fname'])?$order_meta['BILLING_DETAILS']['fname']:''?>
+												<br><label>Email : </label>&nbsp;<?=!empty($order_meta['BILLING_DETAILS']['email'])?$order_meta['BILLING_DETAILS']['email']:''?>
+												<br><label>Mobile No. : </label>&nbsp;<?=!empty($order_meta['BILLING_DETAILS']['phone'])?$order_meta['BILLING_DETAILS']['phone']:''?>
+												<br><label>Address : </label>&nbsp;<?=!empty($order_meta['BILLING_DETAILS']['address'])?$order_meta['BILLING_DETAILS']['address']:''?>
+												<br><label>State : </label>&nbsp;
+												<?php
+												if(!empty($order_meta['BILLING_DETAILS']['state'])){
+													$sid	=	$order_meta['BILLING_DETAILS']['state'];
+													$state_row	=	$this->location_model->get_state_name_by_id($sid);
+													if (!empty($state_row['state'])) {
+														echo $state_row['state'];
+													}else{
+														echo "NA";
+													}
+												}else{
+													echo "NA";
+												}
+												?>								
+												<br><label>City : </label>&nbsp;
+												<?php
+												if(!empty($order_meta['BILLING_DETAILS']['city'])){
+													$cid	=	$order_meta['BILLING_DETAILS']['city'];
+													$city_row	=	$this->location_model->get_city_name_by_id($cid);
+													if (!empty($city_row['city'])) {
+														echo $city_row['city'];
+													}else{
+														echo "NA";
+													}
+												}else{
+													echo "NA";
+												}
+												?>
+												<br><label>Pincode : </label>&nbsp;<?=!empty($order_meta['BILLING_DETAILS']['pincode'])?$order_meta['BILLING_DETAILS']['pincode']:''?>
+												<br><label>GSTIN : </label>&nbsp;<?=!empty($order_meta['BILLING_DETAILS']['gstin'])?$order_meta['BILLING_DETAILS']['gstin']:''?>
+											</fieldset>
+									<?php } ?> 
+
+				            			</div>
+				            			<div class="col-md-4 col-sm-12 col-xs-12" >            				
+						            		<?php if(!empty($order_meta)){ ?>
+											<fieldset>
+						  						<legend style="width: unset;font-size: 12px;">Shipping Details:</legend>
+												<label>Name : </label>&nbsp; <?=!empty($order_meta['SHIPPING_DETAILS']['fname'])?$order_meta['SHIPPING_DETAILS']['fname']:''?>
+												<br><label>Email : </label> &nbsp;<?=!empty($order_meta['SHIPPING_DETAILS']['email'])?$order_meta['SHIPPING_DETAILS']['email']:''?>
+												<br><label>Mobile No. : </label>&nbsp;<?=!empty($order_meta['SHIPPING_DETAILS']['phone'])?$order_meta['SHIPPING_DETAILS']['phone']:''?>
+												<br><label>Address : </label>&nbsp;<?=!empty($order_meta['SHIPPING_DETAILS']['address'])?$order_meta['SHIPPING_DETAILS']['address']:''?>
+												<br><label>State : </label>&nbsp;
+												<?php
+												if(!empty($order_meta['SHIPPING_DETAILS']['state'])){
+													$sid	=	$order_meta['SHIPPING_DETAILS']['state'];
+													$state_row	=	$this->location_model->get_state_name_by_id($sid);
+													if (!empty($state_row['state'])) {
+														echo $state_row['state'];
+													}else{
+														echo "NA";
+													}
+												}else{
+													echo "NA";
+												}
+												?>								
+												<br><label>City : </label>&nbsp;
+												<?php
+												if(!empty($order_meta['SHIPPING_DETAILS']['city'])){
+													$cid	=	$order_meta['SHIPPING_DETAILS']['city'];
+													$city_row	=	$this->location_model->get_city_name_by_id($cid);
+													if (!empty($city_row['city'])) {
+														echo $city_row['city'];
+													}else{
+														echo "NA";
+													}
+												}else{
+													echo "NA";
+												}
+												?>
+												<br><label>Pincode : </label>&nbsp;<?=!empty($order_meta['SHIPPING_DETAILS']['pincode'])?$order_meta['SHIPPING_DETAILS']['pincode']:''?>
+											</fieldset>
+									<?php } ?> 
+										</div>
+				            			<div class="col-md-4 col-sm-12 col-xs-12" >  
+											<fieldset>
+						  						<legend style="width: unset;font-size: 12px;">Order Details:</legend>
 												<h2> <?php echo $ord->ord_no; ?></h2>
 												<p><span>Order Date :</span> <?php echo date("d, F Y", strtotime($ord->order_date)); ?> </p>
-											</div>
-											</div>
+											</fieldset>
 										</div>
+				            		</div>
+				            		<br>
 										<?php $mord = $ord; ?>
 										<br>
 										<div class = "row">
