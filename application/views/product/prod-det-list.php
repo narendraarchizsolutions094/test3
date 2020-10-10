@@ -14,7 +14,7 @@
 
             </div>
             <?php
-          }
+          } 
           ?>
          </div>
 
@@ -74,7 +74,19 @@
                      <td data-th='Product Id'><?= $row->sb_id; ?></td>
                      <td data-th='Product Name'><?= $row->country_name; ?></td>
                      <td data-th='Price'> <i class = "fa fa-rupee"></i> <?php echo $row->price; ?></td>
-            				 <td data-th='Stock'>Stock</td>
+            				 <td data-th='Stock'><?php
+                     if ($row->stock_qty < 25) {
+                      if ($row->stock_qty == NULL) {
+                        echo "<a class='badge badge-danger' style='background:red;'>No Stock Found!</a>";                        
+                      }else{
+                        echo "<a class='badge badge-danger' style='background:orange;'>$row->stock_qty
+                      </a>";
+                      }
+                     }else{
+                        echo "<a class='badge badge-success' style='background:green;'>$row->stock_qty
+                      </a>";                                                                    
+                     }
+                     ?></td>
                      <td data-th='Minimum Order Quantity'><?=$row->minimum_order_quantity?></td>
             				 <td data-th='Added Date'><?=$row->created_date?></td>
             				 <td data-th='Status'> 

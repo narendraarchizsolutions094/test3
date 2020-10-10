@@ -612,7 +612,40 @@ class Order extends CI_Controller {
 				"status" 	 => $this->input->post('status'),
 				"created_by" => $this->session->user_id,
 				);
-		echo $this->db->insert("ord_prod_stage", $arr);	
+		if($this->db->insert("ord_prod_stage", $arr)){	
+			
+			$comp_id	=	$this->session->companey_id;
+			$pid	=	$this->input->post('product_id');				
+			$odr_id	=	$this->input->post('order_id');				
+
+			$this->db->where('ord_no',$odr_id);
+			$this->db->where('product',$pid);
+			$this->db->where('company',$comp_id);
+			$this->db->set('status',$this->input->post('status'));
+			$this->db->update('tbl_order');
+
+			if ($this->input->post('status') == 4) {
+				$this->db->select('quantity');
+				$this->db->where('ord_no',$odr_id);
+				$this->db->where('product',$pid);
+				$this->db->where('company',$comp_id);
+				$order_row	=	$this->db->get('tbl_order')->row_array(); 
+				$order_qty = $order_row['quantity'];
+				/*echo $order_qty;
+				echo $odr_id;
+				echo $pid;
+				exit();*/
+				$this->db->where('comp_id',$comp_id);
+				$this->db->where('product_name',$pid);
+				$this->db->set('qty',"qty-".$order_qty,false);
+				$this->db->limit(1);
+				echo $this->db->update('tbl_inventory');
+			}else{
+				echo 1;
+			}		
+		}else{
+			echo 0;
+		}
 	}
 	public function updateorder_product_deliveredBy(){
 		$update_arr = array(
@@ -771,6 +804,26 @@ class Order extends CI_Controller {
 		
 		
 	}
-	
-	
+
+	public function check_stock($odr_id,$pid){
+		$return = '0';
+		$comp_id	=	$this->session->companey_id;
+		$this->db->select('quantity');
+		$this->db->where('ord_no',$odr_id);
+		$this->db->where('product',$pid);
+		$this->db->where('company',$comp_id);
+		$order_row	=	$this->db->get('tbl_order')->row_array();
+		if (!empty($order_row)) {
+			$this->db->select('qty');
+			$this->db->where('product_name',$pid);		
+			$this->db->where('comp_id',$comp_id);		
+			$stock_row	=	$this->db->get('tbl_inventory')->row_array();		
+			if (!empty($stock_row)) {
+				if($stock_row['qty']>=$order_row['quantity']){
+					$return = '1';
+				}
+			}
+		}
+		echo $return;
+	}
 }	

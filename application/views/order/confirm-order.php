@@ -51,7 +51,7 @@
 													<tr>
 														<th scope="row"><?php echo $ind+1; ?></th>
 														<td><?php echo $ord->product_name; ?></td>
-														<td><?php echo $ord->stock; ?></td>
+														<td><?php echo $ord->stock_qty; ?></td>
 														<td><i class ="fa fa-rupee"></i> <?php echo $ord->unit_price; ?></td>
 														<td><?php echo (!empty($ord->tax)) ? $ord->tax."%" : "0%"; ?></td>
 														<!-- <td><i class = "fa fa-rupee"></i> <?php echo $totprice = ($ord->price - $ord->offer) + floor($ord->tax/100); ?>
@@ -91,11 +91,11 @@
 													</td>
 													<td>
 														<select class="form-control" name="deliverstatus" onchange='update_delivery_status("<?=$ord->ord_no?>","<?=$ord->product?>",this)'>
-															<option value="1">Request</option>
-															<option value="2">Waiting</option>
-															<option value="3">Dispatch</option>
-															<option value="4">Delivery Confirm</option>
-															<option value="5">Reject</option>
+															<option value="1" <?=($ord->status==1)?'selected':''?> >Request</option>
+															<option value="2" <?=($ord->status==2)?'selected':''?>>Waiting</option>
+															<option value="3" <?=($ord->status==3)?'selected':''?>>Dispatch</option>
+															<option value="4" <?=($ord->status==4)?'selected':''?>>Delivery Confirm</option>
+															<option value="5" <?=($ord->status==5)?'selected':''?>>Reject</option>
 														</select>
 													</td>
 												</tr>
@@ -165,25 +165,42 @@
        
 <script type="text/javascript">
 	function update_delivery_status(order_id,product_id,curr){
-		var url = "<?=base_url().'order/updateorder_product_status'?>";
-		status = curr.value;
 		$.ajax({
-		    type: 'POST',
-		    url: url,
-		    data: {
-		    	order_id:order_id,
-		    	product_id:product_id,
-		    	status:status
-		    },
+		    type: 'GET',
+		    url: "<?=base_url().'order/check_stock/'?>"+order_id+'/'+product_id,
 		    success:function(data){
-		      Swal.fire(
-	            'success',
-	            'Updated Successfully',
-	            'success'
-	            );
+		    	if (data=='1') {
+					var url = "<?=base_url().'order/updateorder_product_status'?>";
+					status = curr.value;
+					$.ajax({
+					    type: 'POST',
+					    url: url,
+					    data: {
+					    	order_id:order_id,
+					    	product_id:product_id,
+					    	status:status
+					    },
+					    success:function(data){
+					      Swal.fire(
+				            'success',
+				            'Updated Successfully',
+				            'success'
+				            );
+					      location.reload();
+					    }
+					});			
+		    	}else{
+		    		Swal.fire(
+			            'Error',
+			            'Out of stock item',
+			            'error'
+			            );
+		    	}		      
 		    }
 		});			
+
 	}
+
 	function update_delivery_by(order_id,product_id,curr){
 		var url = "<?=base_url().'order/updateorder_product_deliveredBy'?>";
 		deliver_by = curr.value;
