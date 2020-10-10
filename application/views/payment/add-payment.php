@@ -38,14 +38,12 @@
 													<thead>
 														<tr>
 															<th>Prev Balance</th>
-															<!-- <th>Advance</th> -->
 															<th>Payment</th>
 															<th>Balance</th>
 															<th>Payment Mode</th>
 															<th>Transaction No</th>
 															<th>Payment Date</th>
 															<th>Next Payment</th>
-															<!-- <th>status</th> -->
 															<th>Remark</th>
 															<th>Action</th>
 														</tr>
@@ -60,7 +58,6 @@
 														?>
 														<tr <?php echo ($pay->approve == 0) ? "class='bg-border-dash'" : ""; ?>>
 															<td><?php echo (!empty($pay->prev_balance)) ? "<i class = 'fa fa-rupee'></i> ".$pay->prev_balance : " - "; ?></td>
-															<!-- <td><?php echo (!empty($pay->advance_pay)) ? "<i class = 'fa fa-rupee'></i> ".$pay->advance_pay : " - "; ?></td> -->
 															<td><i class = 'fa fa-rupee'></i> <?php echo  $pay->pay; ?></td>
 															<td><?php echo (!empty($pay->balance)) ? "<i class = 'fa fa-rupee'></i> ".$pay->balance : " - "; ?></td>
 															<td>
@@ -79,7 +76,6 @@
 															<td><?php echo $pay->transaction_no ; ?></td>
 															<td><?php echo $pay->pay_date; ?></td>
 															<td><?php echo $pay->next_pay; ?></td>
-															<!-- <td><?php echo $pay->status; ?></td> -->
 															<td><?php echo $pay->remark?substr($pay->remark, 0, 40):'NA'; ?></td>
 															<td>	
 																<a href="<?php echo base_url("payment/update/".base64_encode($pay->id)); ?>">

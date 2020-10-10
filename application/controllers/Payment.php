@@ -449,6 +449,7 @@ class Payment extends CI_Controller {
 		$this->load->model("order_model");
 		$this->load->model("payment_model");
 		$payno = base64_decode($payno);
+		//echo $payno;
 		$data['paydata'] = $this->db->select('*')->from('payment')->where('id',$payno)->get()->row();
 	//	$data["masters"]  = $this->payment_model->getmaster();	
 		$data["title"] = "Update Payment";

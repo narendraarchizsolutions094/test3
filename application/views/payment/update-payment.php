@@ -18,9 +18,14 @@
 				<?php if(!empty($payments)){ ?>
 					
 				<?php }else{
-				} ?>	
+				} 
+
+				/*echo "<pre>";
+				print_r($paydata);
+				echo "</pre>";*/
+				?>	
 				<input type="hidden" name = "paymentid" value="<?php echo $paydata->id; ?>">
-				<input type="hidden" name = "orderid" value="<?php echo getOrderNumber($paydata->ord_id); ?>">
+				<input type="hidden" name = "orderid" value="<?php echo $paydata->ord_id; ?>">
 					<div class = "form-group col-md-4">
 						<label>Previous Balance</label>
 						<input type = "text" class = "form-control" name = "prevbalance" value = "<?php echo $paydata->prev_balance; ?>" readonly>
