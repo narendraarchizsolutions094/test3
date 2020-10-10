@@ -493,6 +493,10 @@ class Order extends CI_Controller {
 		//$data["payment"]  = $this->payment_model->getPaymentByOrder($data['ord']->id);
 	
 		$data["title"] 	  = $data['ord']->ord_no;
+		$this->load->model("location_model");
+		$order_meta = array('fname','email','phone','address','state','city','pincode','gstin');
+		$data['buyer_details']	=	$this->order_model->get_order_meta($ordno,$order_meta);
+		
 		$data['order_no'] = $ordno;
 		$data['content'] = $this->load->view('order/invoice', $data, true);
         $this->load->view('layout/main_wrapper', $data);

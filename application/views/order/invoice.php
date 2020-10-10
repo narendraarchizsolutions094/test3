@@ -61,17 +61,17 @@
 								
 								        <div class="row">
 											<div class="text-left ml-auto col-md-4">
-											<p class="mb-1" style=""><span class="font-weight-semibold" style="font-weight: 700;">Buyer :</span> <?php echo $buyer_details['0']->order_value; ?> </p>
-											<p class="mb-1" style=""><span class="font-weight-semibold" style="font-weight: 700;">Prop. :</span> <?php echo $buyer_details['3']->order_value; ?> </p>
-											<p class="mb-1" style="margin:0px;"><span class="font-weight-semibold" style="font-weight: 700;">Contact Person. :</span> <?php echo $buyer_details['0']->order_value; ?> </p>
-											<p class="mb-1" style="margin:0px;"><span class="font-weight-semibold" style="font-weight: 700;">Contact No :</span> <?php echo $buyer_details['2']->order_value; ?> </p>
-											<p class="mb-1" style="margin:0px;"><span class="font-weight-semibold" style="font-weight: 700;">GSTIN. :</span> <?php echo $buyer_details['8']->order_value; ?> </p>
-											</div>
+											<p class="mb-1" style=""><span class="font-weight-semibold" style="font-weight: 700;">Buyer :</span> <?php echo $buyer_details['BILLING_DETAILS']['fname']; ?> </p>
+											<p class="mb-1" style=""><span class="font-weight-semibold" style="font-weight: 700;">Prop. :</span> <?php //echo $buyer_details['3']->order_value; ?> </p>
+											<p class="mb-1" style="margin:0px;"><span class="font-weight-semibold" style="font-weight: 700;">Contact Person. :</span> <?php echo $buyer_details['SHIPPING_DETAILS']['fname']; ?> </p>
+											<p class="mb-1" style="margin:0px;"><span class="font-weight-semibold" style="font-weight: 700;">Contact No :</span> <?php echo $buyer_details['SHIPPING_DETAILS']['phone']; ?> </p>
+											<p class="mb-1" style="margin:0px;"><span class="font-weight-semibold" style="font-weight: 700;">GSTIN. :</span> <?php echo $buyer_details['BILLING_DETAILS']['gstin']; ?> </p>
+											</div> 
 											<div class="text-left ml-auto col-md-4">
 											<p class="mb-1" style=""><span class="font-weight-semibold" style="font-weight: 700;">Invoice No :</span>  </p>
 											<p class="mb-1" style=""><span class="font-weight-semibold" style="font-weight: 700;">Delivery Note :</span>  </p>
 											<p class="mb-1" style=""><span class="font-weight-semibold" style="font-weight: 700;">Supplier's Ref. :</span>  </p>
-											<p class="mb-1" style=""><span class="font-weight-semibold" style="font-weight: 700;">Buyer's Order No. :</span>  <?php echo $buyer_details['0']->order_id; ?></p>
+											<p class="mb-1" style=""><span class="font-weight-semibold" style="font-weight: 700;">Buyer's Order No. :</span>  <?php echo $order_no; ?></p>
 											<p class="mb-1" style=""><span class="font-weight-semibold" style="font-weight: 700;">Dispatch Doc.No. :</span>  </p>
 											<p class="mb-1" style=""><span class="font-weight-semibold" style="font-weight: 700;">Dispatched Thr. :</span>  </p>
 											</div>
@@ -81,7 +81,7 @@
 											<p class="mb-1" style=""><span class="font-weight-semibold" style="font-weight: 700;">Other Ref.(s) :</span>  </p>
 											<p class="mb-1" style=""><span class="font-weight-semibold" style="font-weight: 700;">Dated :</span>  </p>
 											<p class="mb-1" style=""><span class="font-weight-semibold" style="font-weight: 700;">Delivery Date :</span>  </p>
-											<p class="mb-1" style=""><span class="font-weight-semibold" style="font-weight: 700;">Destination :</span> <?php echo $buyer_details['4']->order_value; ?></p>
+											<p class="mb-1" style=""><span class="font-weight-semibold" style="font-weight: 700;">Destination :</span> <?php echo $buyer_details['SHIPPING_DETAILS']['address']; ?></p>
 											</div>
 										</div>
 								</br>
@@ -96,7 +96,7 @@
 													<th class="text-right">HSN/SAC</th>
 													<th class="text-center" style="width: 1%">Quantity</th>													
 													<th class="text-right">Unit Price</th>
-<?php if($buyer_details['5']->order_value=='442'){	?>												
+<?php if($buyer_details['SHIPPING_DETAILS']['state']=='442'){	?>												
 <th class="text-right">CGST</th>
 <th class="text-right">SGST</th>
 <?php }else{ ?>
@@ -117,7 +117,7 @@
 														<td class="text-right"><?php echo $ord->hsn; ?></td>
 														<td class="text-center"><?php echo $qty = $ord->quantity; ?></td>														
 														<td class="text-right"><i class ="fa fa-rupee"></i> <i ><?php echo $price = $ord->unit_price; ?></td>
-<?php if($buyer_details['5']->order_value=='442'){	?>												
+<?php if($buyer_details['SHIPPING_DETAILS']['city']=='442'){	?>												
 <td class="text-right"><?php echo  (!empty($ord->tax)) ? ($ord->tax/2)."%" : ""; ?></td>
 <td class="text-right"><?php echo  (!empty($ord->tax)) ? ($ord->tax/2)."%" : ""; ?></td>
 <?php }else{ ?>
@@ -144,7 +144,7 @@
 												} ?>
 								
 												<tr>
-													<td colspan="<?php if($buyer_details['5']->order_value=='442'){	echo '9';}else{ echo '8';} ?>" class="font-weight-bold text-uppercase text-right">Total</td>
+													<td colspan="<?php if($buyer_details['SHIPPING_DETAILS']['state']=='442'){	echo '9';}else{ echo '8';} ?>" class="font-weight-bold text-uppercase text-right">Total</td>
 													<td class="font-weight-bold text-right h4"> <i class ="fa fa-rupee"></i>  <?php echo $total; ?></td>
 												</tr>
 											</tbody></table>
