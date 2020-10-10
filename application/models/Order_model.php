@@ -458,15 +458,16 @@ class Order_model extends CI_Model {
 
     public function get_order_meta($ord_no,$meta_key){
         if (!empty($meta_key) && !empty($ord_no)) {                        
-            $this->db->select('order_parameters as parameter,order_value as value');
+            $this->db->select('order_parameter as parameter,order_value as value,type');
             $this->db->where('order_id',$ord_no);        
-            $this->db->where_in('order_parameters',$meta_key);
+            $this->db->where_in('order_parameter',$meta_key);
             $result    =   $this->db->get('order_parameters')->result_array();
             $data = array();
             if (!empty($result)) {
                 foreach ($result as $key => $value) {
                     $parm    =   $value['parameter'];
-                    $data[$parm]   = $value['value'];
+                    $type    =   $value['type'];
+                    $data[$type][$parm]   = $value['value'];
                 }
                 return $data;   
             }else{

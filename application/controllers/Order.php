@@ -378,7 +378,7 @@ class Order extends CI_Controller {
 	
 	
 	public function booking($ordno = ""){
-		
+		$this->load->model('location_model');
 	//		$this->load->model("payment_model");
 		if(isset($_POST["orderno"])){
 			$this->savebooking();
@@ -406,7 +406,8 @@ class Order extends CI_Controller {
 		
 		
 		$data["delivery"] = $this->order_model->getDilevery($ordno);
-		
+		$order_meta = array('fname','email','phone','address','state','city','pincode','gstin');
+		$data['order_meta']	=	$this->order_model->get_order_meta($ordno,$order_meta);
 		$data["title"] = "ORDER : ".$data['ord']->ord_no;
 		
 		$data['content'] = $this->load->view('order/confirm-order', $data, true);

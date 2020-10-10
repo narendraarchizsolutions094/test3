@@ -834,4 +834,16 @@ public function find_discipline() {
                         ->result();
     }
 
+    public function get_city_name_by_id($cid){
+        $this->db->select('city');
+        $this->db->where('id',$cid);
+        return $this->db->get('city')->row_array();
+    }
+    
+    public function get_state_name_by_id($sid){
+        $this->db->select('state');
+        $this->db->where('id',$sid);
+        return $this->db->get('state')->row_array();
+    }
+
 }
