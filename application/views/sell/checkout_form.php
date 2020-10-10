@@ -124,7 +124,7 @@ p{
                       <select name="state" id="state" class="form-control" required>
                         <option value="">Select State</option>
                         <?php foreach($user_state as $state){ ?>
-                          <option value="<?php echo $state->id; ?>"><?php echo $state->state; ?></option>
+                          <option value="<?php echo $state->id; ?>" <?=($user_row->state_id == $state->id)?'selected':''?> ><?php echo $state->state; ?></option>
                         <?php } ?>
                       </select> 
                     </div>
@@ -135,7 +135,7 @@ p{
                     <select name="city" id="city" class="form-control" required>
                       <option value="">Select City</option>
                       <?php foreach($user_city as $city){ ?>
-                        <option value="<?php echo $city->id; ?>"><?php echo $city->city; ?></option>
+                        <option value="<?php echo $city->id; ?>" <?=($user_row->city_id == $city->id)?'selected':''?>><?php echo $city->city; ?></option>
                       <?php } ?>
                     </select> 
                     </div>
@@ -166,10 +166,7 @@ p{
                         <br>
                       </div>
                   </div>
-                  <label for="chkshipping" style="float: right;">
-                    <input type="checkbox" id="chkshipping" />
-                      SHIP TO A DIFFERENT ADDRESS?
-                  </label>
+                  
               </div>
             </div>
           </div>  
@@ -177,21 +174,25 @@ p{
 
         <div class="panel panel-default" style="border: 4px solid #53d4fa;" id="shipping-form">
           <div class="panel-heading no-print" style="background-color: #53d4fa;">
-              Shipping Details              
+              Shipping Details
+              <label for="same_as_above" style="float: right;">
+                  <input type="checkbox" id="same_as_above" />
+                    Same as above?
+                </label>              
           </div>
           <div class="panel-body panel-form" >
             <div class="row ">
                 <div class="col-md-12">
                     <div class="form-group">        
                         <label>Full Name <i class="required">*</i></label>
-                        <input type="text" name="shipping_fname" class="form-control">
+                        <input type="text" name="shipping_fname" class="form-control" required>
                     </div>        
                 </div>       
                 
                 <div class="col-md-12">
                    <div class="form-group">        
                     <label>Address <i class="required">*</i></label>
-                    <input type="text" name="shipping_address" placeholder="House number and street name with zipcode" class="form-control" >
+                    <input type="text" name="shipping_address" placeholder="House number and street name with zipcode" class="form-control" required>
                   </div>          
                 </div>
 
@@ -221,19 +222,19 @@ p{
                 <div class="col-md-6">
                   <div class="form-group">        
                     <label>Postcode / ZIP <i class="required">*</i></label>
-                    <input type="text" name="shipping_pincode" class="form-control" > 
+                    <input type="text" name="shipping_pincode" class="form-control" required> 
                   </div>
                 </div>        
                 <div class="col-md-6">
                     <div class="form-group">
                     <label>Mobile no. <i class="required">*</i></label>
-                    <input type="tel" name="shipping_phone" class="form-control" > 
+                    <input type="tel" name="shipping_phone" class="form-control" required> 
                   </div>
                 </div>        
                 <div class="col-md-6">
                     <div class="form-group">    
                       <label>Email Address <i class="required">*</i></label>
-                      <input type="email" name="shipping_email" class="form-control"> 
+                      <input type="email" name="shipping_email" class="form-control" required> 
                     </div>
                 </div>
             </div>
@@ -315,13 +316,26 @@ p{
 
  <script type="text/javascript">
     $(function () {
-        $("#shipping-form").hide(800);
-        $("#chkshipping").click(function () {
-            if ($(this).is(":checked")) {
-                $("#shipping-form").show(800);
-            } else {
-                $("#shipping-form").hide(800);
-            }
+        $("#same_as_above").on('click',function(){
+          
+          var name    = $("input[name='fname']").val();
+          var address = $("input[name='address']").val();
+          var state   = $("select[name='state']").val();
+          var city    = $("select[name='city']").val();
+          var pincode = $("input[name='pincode']").val();
+          var phone   = $("input[name='phone']").val();
+          var email   = $("input[name='email']").val();
+
+
+          $("input[name='shipping_fname']").val(name);
+          $("input[name='shipping_address']").val(address);
+          $("select[name='shipping_state']").val(state);
+          $("select[name='shipping_city']").val(city);
+          $("input[name='shipping_pincode']").val(pincode);
+          $("input[name='shipping_phone']").val(phone);
+          $("input[name='shipping_email']").val(email);
+
+
         });
     });
 </script>
