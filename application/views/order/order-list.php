@@ -149,34 +149,41 @@ input[name=lead_stages]{
         </div>
       </div><br>
       <div class="row">
-            <div class="col-md-4 col-xs-12 col-sm-12">
-            <div class="form-group">        
-            <select name="productdd" id="productdd" class="form-control">
-            <option value="">Select Product</option>
-            <?php foreach($product_list as $product){ ?>
-              <option value="<?php echo $product->id; ?>"><?php echo $product->country_name; ?></option>
-            <?php } ?>
-            </select> 
+            <div class="col-md-3 col-xs-12 col-sm-12">
+              <label>Order Date</label>
+              <input type="date" name="date_filter" class="form-control">
             </div>
+            <div class="col-md-3 col-xs-12 col-sm-12">
+              <label>Product</label>
+              <div class="form-group">        
+                <select name="productdd" id="productdd" class="form-control">
+                  <option value="">Select Product</option>
+                  <?php foreach($product_list as $product){ ?>
+                    <option value="<?php echo $product->id; ?>"><?php echo $product->country_name; ?></option>
+                  <?php } ?>
+                </select> 
+              </div>
             </div>
-            <div class="col-md-4 col-xs-12 col-sm-12">
-            <div class="form-group">        
-            <select name="sellerdd" id="sellerdd" class="form-control">
-            <option value="">Select Seller</option>
-            <?php foreach($seller_list as $seller){ ?>
-              <option value="<?php echo $seller->pk_i_admin_id; ?>"><?php echo $seller->s_display_name.' '.$seller->last_name.' - '.$seller->s_user_email; ?></option>
-            <?php } ?>
-            </select> 
+            <div class="col-md-3 col-xs-12 col-sm-12">
+              <label>Seller</label>
+              <div class="form-group">        
+              <select name="sellerdd" id="sellerdd" class="form-control">
+                <option value="">Select Seller</option>
+                <?php foreach($seller_list as $seller){ ?>
+                  <option value="<?php echo $seller->pk_i_admin_id; ?>"><?php echo $seller->s_display_name.' '.$seller->last_name.' - '.$seller->s_user_email; ?></option>
+                <?php } ?>
+              </select> 
+              </div>
             </div>
-            </div>
-            <div class="col-md-4 col-xs-12 col-sm-12">
-            <div class="form-group">        
-            <select name="statusdd" id="statusdd" class="form-control">
-            <option value="">Select Status</option>
-              <option value="">Pending</option>
-              <option value="">delivered</option>
-            </select> 
-            </div>
+            <div class="col-md-3 col-xs-12 col-sm-12">
+              <label>Order Status</label>
+              <div class="form-group">        
+                <select name="statusdd" id="statusdd" class="form-control">
+                  <option value="">Select Status</option>
+                    <option value="">Pending</option>
+                    <option value="">delivered</option>
+                  </select> 
+              </div>
             </div>
       
 </div>
