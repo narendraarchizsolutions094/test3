@@ -2896,4 +2896,58 @@ public function alertstatus() {
         }
         redirect('lead/vidlist');
     }
+    
+    ///////////////// FAQ SECTION START////////////////////
+    public function faq() {
+        $data['nav1'] = 'nav2';
+        if (!empty($_POST)) {
+
+            $faq_title = $this->input->post('faq_title');
+            $faq_dscptn = $this->input->post('faq_dscptn');
+
+            $data = array(
+                'que_type'   => $faq_title,
+                'answer'   => $faq_dscptn,
+                'comp_id' => $this->session->userdata('companey_id'),
+                'created_by' => $this->session->userdata('user_id'),
+                'status' => '1'
+            );
+
+            $insert_id = $this->Leads_Model->faq_add($data);
+            $this->session->set_flashdata('SUCCESSMSG', 'Lead Stage Add Successfully');
+            redirect('lead/faq');
+        }
+
+
+        $data['all_faq'] = $this->Leads_Model->faq_select();
+        $data['title'] = 'FAQ';
+        $data['content'] = $this->load->view('faq/faq_list', $data, true);
+        $this->load->view('layout/main_wrapper', $data);
+    }
+
+    public function delete_faq($faq_id = null) {
+        if ($this->Leads_Model->delete_faq($faq_id)) {
+            #set success message
+            $this->session->set_flashdata('message', display('delete_successfully'));
+        } else {
+            #set exception message
+            $this->session->set_flashdata('exception', display('please_try_again'));
+        }
+        redirect('lead/faq');
+    }
+
+    public function update_faq() {
+        if (!empty($_POST)) {
+            $faq_title = $this->input->post('faq_title');
+            $faq_dscptn = $this->input->post('faq_dscptn');
+            $faq_id = $this->input->post('faq_id');            
+            $this->db->set('que_type', $faq_title);
+            $this->db->set('answer', $faq_dscptn);
+            $this->db->where('id', $faq_id);
+            $this->db->update('tbl_faq');
+            $this->session->set_flashdata('SUCCESSMSG', 'Update Successfully');
+            redirect('lead/faq');
+        }
+    }   
+    ///////////////// FAQ SECTION END////////////////////
 }

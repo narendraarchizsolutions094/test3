@@ -586,6 +586,7 @@ $this->load->library('zip');
                             'expiry_date'           => strtotime($user_data->valid_upto),
                             'availability'    => $user_data->availability,
                         ]);
+                        //$this->user_model->add_login_history();
                         $res = array('status'=>true,'message'=>'Successfully Logged In');                       
                    }
             } else {

@@ -303,8 +303,8 @@
 							</div>
 							<div class="col-md-4">
 								<div class="form-group">
-									<label>Minimum Order Quantity</label>
-									<input type="number" class="form-control" min="1" max="500" id="minimum_order_quantity" placeholder="Enter Minimum Order Quantity" name="minimum_order_quantity" value="<?php echo ($isedit == true) ? $product->minimum_order_quantity : set_value("minimum_order_quantity"); ?>">
+									<label>Minimum Order Quantity<i class="text-danger">*</i></label>
+									<input type="number" class="form-control" min="1" max="500" id="minimum_order_quantity" placeholder="Enter Minimum Order Quantity" name="minimum_order_quantity" value="<?php echo ($isedit == true) ? $product->minimum_order_quantity : set_value("minimum_order_quantity"); ?>" required>
 								</div>
 							</div>
 							<div class="row" id="product_fields">							

@@ -1174,6 +1174,35 @@ public function all_description($diesc) {
         return $query->row();
     }
    
-   
-   
+     /***************************************************faq section start************************************/
+    public function faq_add($data) {
+        $this->db->insert('tbl_faq', $data);
+    }
+        
+    public function faq_select() {
+        $this->db->select("*");
+        $this->db->from('tbl_faq');
+        $this->db->where('comp_id', $this->session->userdata('companey_id'));
+        $query = $this->db->get();
+        return $query->result();
+    }
+        
+    public function logdata_select() {
+        $this->db->select("*");
+        $this->db->from('login_histery');
+        $this->db->where('lg_userid', $this->session->userdata('user_id'));
+        $this->db->where('lgot_date_time!=', '');
+        $query = $this->db->get();
+        return $query->result();
+    }   
+
+    public function delete_faq($faq_id = null) {
+        $this->db->where('id', $faq_id)->delete('tbl_faq');
+        if ($this->db->affected_rows()) {
+            return true;
+        } else {
+            return false;
+        }
+    }   
+    /**********************************faq section end*****************************************************/      
 }

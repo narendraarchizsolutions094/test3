@@ -1050,6 +1050,18 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                            <?php echo display('center_management');?>                             
                           </a>
                         </li>
+                        <?php
+                        if ($this->session->companey_id == 83) { ?>
+                        
+                        <li class="<?php echo (in_array($segment2,array('faq','add_faq','edit_faq')) ?"active":'') ?>" style="">
+                          <a href="<?php echo base_url() ?>lead/faq">
+                           <?php echo display('faq');?>                             
+                          </a>
+                        </li>
+                        
+                        <?php  
+                        }
+                        ?>
 
                      </ul>
                   </li>
