@@ -2203,7 +2203,7 @@ function upload_enquiry() {
 			            $product_name='';
 			        }
 
-                    $enquiry_source = $this->enquiry_model->enquiry_source_byname($filesop[11]);       //     source         
+                    $enquiry_source = !empty($filesop[11])?$this->enquiry_model->enquiry_source_byname($filesop[11]):'';       //     source         
                     
 
                     $enquiry_source_id = '';
