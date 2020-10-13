@@ -373,7 +373,7 @@ public function add_inventory(){
         $batchno = substr(str_shuffle($str_result),0, 10); 
  
         $data['formdata'] = (object) $postData = [
-            'id' => $this->input->post('id', true),
+            //'id' => $this->input->post('id', true),
             'comp_id' => $this->session->userdata('companey_id'),
             'product_name' => $this->input->post('proname', true),
             'skuid' => $this->input->post('skuid', true),
@@ -394,7 +394,7 @@ public function add_inventory(){
                 }
                 redirect('warehouse/inventory');
             } else {
-                unset($postData['id']);
+               // unset($postData['id']);
                
                 if ($this->warehouse_model->updateinventory($postData)) {
                     $this->session->set_flashdata('message', display('update_successfully'));
