@@ -237,8 +237,8 @@
     
 <!---------------------------->
 <script type="text/javascript">
- $("#filter_and_save,#filter_report").on('click',function(e){
-    if ($("input[name='hier_wise']").is(":checked") && $("#employee").select2('data').length==1) {
+ $("#filter_and_save_form").on('submit',function(e){
+    if ($("input[name='hier_wise']").is(":checked") && $("#employee").select2('data').length!=1) {
       alert("please select one employee for hierarchy wise report");
       e.preventDefault();
     }
