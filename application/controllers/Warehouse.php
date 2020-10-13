@@ -176,7 +176,6 @@ public function addtypeofproduct(){
             } else {
                 if (user_role('31') == true) {                    
                 }
-                unset($postData['id']);
                 if ($this->warehouse_model->updatetypeofproduct($postData)) {
                     $this->session->set_flashdata('message', display('update_successfully'));
                 } else {
@@ -395,6 +394,7 @@ public function add_inventory(){
                 }
                 redirect('warehouse/inventory');
             } else {
+                unset($postData['id']);
                
                 if ($this->warehouse_model->updateinventory($postData)) {
                     $this->session->set_flashdata('message', display('update_successfully'));
