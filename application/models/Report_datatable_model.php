@@ -5,12 +5,17 @@ class Report_datatable_model extends CI_Model {
         parent::__construct();
         $this->load->model('common_model');		
     }
-    var $table = 'enquiry';
+    var $table = 'enquiry'; 
     public function _get_datatables_query(){
-    	$all_reporting_ids    =    $this->common_model->get_categories($this->session->user_id);      
+        $employe = $this->session->userdata('employe1');
+        if ($this->session->hier_wise && $employe) {
+           $uid = $employe[0];
+           $employe    =    $this->common_model->get_categories($uid);                  
+        }else{
+    	   $all_reporting_ids    =    $this->common_model->get_categories($this->session->user_id);      
+        }
         $from = $this->session->userdata('from1');
         $to= $this->session->userdata('to1');
-        $employe = $this->session->userdata('employe1');
         $phone = $this->session->userdata('phone1');
         $country = $this->session->userdata('country1');
         $institute = $this->session->userdata('institute1');
@@ -50,7 +55,7 @@ class Report_datatable_model extends CI_Model {
                 $to = str_replace('/', '-', $to);            $to = date('Y-m-d H:i:s', strtotime($to));
                 $where .= " AND enquiry.created_date LIKE '%$to%'";
             }
-           if($employe!=''){			
+           if($employe!=''){	            		
     			$where .= " AND ( enquiry.created_by IN (".implode(',', $employe).')';
     			$where .= " OR enquiry.aasign_to IN (".implode(',', $employe).'))';  		  
             }else{

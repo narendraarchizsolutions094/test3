@@ -354,6 +354,12 @@ class Report extends CI_Controller {
             }else{
                $drop_status = $this->input->post('drop_status');
             }
+
+            if($this->input->post('hier_wise')==''){
+                $hier_wise = '';
+            }else{
+               $hier_wise = $this->input->post('hier_wise');
+            }
             
             $data['post_report_columns'] = $this->input->post('report_columns');
              $post_report_columns = $this->input->post('report_columns');
@@ -382,7 +388,8 @@ class Report extends CI_Controller {
             'drop_status1'    =>  $drop_status,
             'all1'            =>  $all, 
             'post_report_columns'=>$post_report_columns,
-            'productlst'=>$productlst
+            'productlst'=>$productlst,
+            'hier_wise' => $hier_wise
             );
             $this->session->set_userdata($data_arr);
             

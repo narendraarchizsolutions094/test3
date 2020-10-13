@@ -29,11 +29,14 @@
                         <div class="form-group col-md-3">
                           <label for="inputPassword4"><?php echo display("employee"); ?></label>
                           <select data-placeholder="Begin typing a name to filter..." multiple class="form-control chosen-select" name="employee[]" id="employee">
+                          
                               
 							   <?php foreach ($employee as $user) {?>
                                     <option value="<?=$user->pk_i_admin_id?>" <?php if(!empty(set_value('employee'))){if (in_array($user->pk_i_admin_id,set_value('employee'))) {echo 'selected';}}?>><?=$user->s_display_name . " " . $user->last_name;?> -  <?=$user->s_user_email?$user->s_user_email:$user->s_phoneno;?></option>
                                 <?php }?>
                           </select>
+                          <input type="checkbox" name="hier_wise" value="1" <?php if (!empty(set_value('hier_wise')) && set_value('hier_wise')==1) {echo 'checked';}?>>
+                          Hierarchy wise
                         </div>
 						<div class="form-group col-md-3">
                           <label for="inputPassword4"><?php echo display("source"); ?></label>
