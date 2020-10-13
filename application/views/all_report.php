@@ -30,7 +30,7 @@
                           <label for="inputPassword4"><?php echo display("employee"); ?></label>
                           <select data-placeholder="Begin typing a name to filter..." multiple class="form-control chosen-select" name="employee[]" id="employee">
                           
-                              
+
 							   <?php foreach ($employee as $user) {?>
                                     <option value="<?=$user->pk_i_admin_id?>" <?php if(!empty(set_value('employee'))){if (in_array($user->pk_i_admin_id,set_value('employee'))) {echo 'selected';}}?>><?=$user->s_display_name . " " . $user->last_name;?> -  <?=$user->s_user_email?$user->s_user_email:$user->s_phoneno;?></option>
                                 <?php }?>
@@ -204,7 +204,7 @@
                      <br>
                       <div class="row">
                         <div class="col-md-12 text-center">
-                            <button type="submit" class="btn btn-success"><?php echo display("filter"); ?></button>
+                            <button type="submit" class="btn btn-success" id="filter_report"><?php echo display("filter"); ?></button>
                             <button type="submit" class="btn btn-primary" id="filter_and_save"><?php echo display("filter_and_save"); ?></button>
 							              <input type=button class="btn btn-warning" onClick="location.href='<?php echo base_url('report/view_details'); ?>'" value='Reset'>                            
                         </div>
@@ -237,7 +237,12 @@
     
 <!---------------------------->
 <script type="text/javascript">
- 
+ $("#filter_and_save,#filter_report").on('click',function(e){
+    if ($("input[name='hier_wise']").is(":checked") && $("#employee").select2('data').length==1) {
+      alert("please select one employee for hierarchy wise report");
+      e.preventDefault();
+    }
+ });
 	$(document).ready(function(){		
     $("#selected-col").select2();
 		$(".chosen-select").select2();
