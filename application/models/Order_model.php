@@ -67,7 +67,7 @@ class Order_model extends CI_Model {
 				$this->db->where("ord.pend_delv", date("Y-m-d"));
 			}			
 		}		
-		$this->db->join('tbl_product_country prd','prd.id=ord.product','left');			
+		$this->db->join('tbl_product_country prd','prd.id=ord.product');			
 		$this->db->join('tbl_proddetails prd2','prd2.prodid=prd.id');
 		if ($this->session->user_right == 200) {
 			$this->db->where('prd2.seller_id',$this->session->user_id);
@@ -88,7 +88,7 @@ class Order_model extends CI_Model {
 
 		if($act == 1) {			
 		//	$this->db->join('order_prdct ordprd','ord.id=ordprd.ord_id','left');
-			$this->db->join('tbl_admin usr','usr.pk_i_admin_id=ord.cus_id','left');
+			$this->db->join('tbl_admin usr','usr.pk_i_admin_id=ord.cus_id');
 			//$this->db->join('tbl_admin seller','seller.pk_i_admin_id=prd2.seller_id','left');		
 			$ordcol = array("ord.id","prd.country_name");	
 			if($searchproduct !='')
@@ -115,7 +115,8 @@ class Order_model extends CI_Model {
 
 			$this->limit();			
 			$this->db->group_by('ord.ord_no');
-			return $this->db->get()->result();	
+			 $this->db->get()->result();	
+			 echo $this->db->last_query();
 		}else{			
 			return $this->db->count_all_results();
 		}
