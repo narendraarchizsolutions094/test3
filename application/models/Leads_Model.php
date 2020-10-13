@@ -1189,8 +1189,8 @@ public function all_description($diesc) {
         
     public function logdata_select() {
         $this->db->select("*");
-        $this->db->from('login_histery');
-        $this->db->where('lg_userid', $this->session->userdata('user_id'));
+        $this->db->from('login_history');
+        $this->db->where('uid', $this->session->userdata('user_id'));
         $this->db->where('lgot_date_time!=', '');
         $query = $this->db->get();
         return $query->result();

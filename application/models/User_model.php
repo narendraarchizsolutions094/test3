@@ -19,10 +19,10 @@ class User_model extends CI_Model {
 
     public function add_login_history(){
         $arr    =   array( 
-                    "lg_userid"   => $user_data->pk_i_admin_id,                    
+                    "uid"   => $this->session->user_id,                    
                     "comp_id"     => $this->session->companey_id,
                  );
-        $this->db->insert('tbl_login',$arr);
+        $this->db->insert('login_history',$arr);
     }
     public function companyList() {
         $this->db->select("user_id,a_companyname");

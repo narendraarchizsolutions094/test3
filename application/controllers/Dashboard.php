@@ -582,11 +582,11 @@ $this->load->library('zip');
                             'favicon'               => (!empty($setting->favicon) ? $setting->favicon : null),
                             'footer_text'           => (!empty($setting->footer_text) ? $setting->footer_text : null),                    
                             'telephony_agent_id'    => $user_data->telephony_agent_id,
-							'telephony_token'       => $user_data->telephony_token,
+							               'telephony_token'       => $user_data->telephony_token,
                             'expiry_date'           => strtotime($user_data->valid_upto),
                             'availability'    => $user_data->availability,
                         ]);
-                        //$this->user_model->add_login_history();
+                        $this->user_model->add_login_history();
                         $res = array('status'=>true,'message'=>'Successfully Logged In');                       
                    }
             } else {
@@ -1261,11 +1261,27 @@ public function login_in_process(){
         }
     }
     public function logout() {        
-        $comp_id = base64_encode($this->session->companey_id);
+    
+      $comp_id = base64_encode($this->session->companey_id);
+      
+      $this->db->select('id');
+      $this->db->from('login_history');
+      $this->db->where('uid',$this->session->user_id);
+      $this->db->order_by('id', 'DESC');
+      $this->db->limit(1);
+      $q = $this->db->get()->row();
 
-        $this->rememberme->deleteCookie();
-        redirect('login/?c='.$comp_id);
+      $std = date('Y-m-d H:i:s', time());
+      if(!empty($q)){
+        $this->db->set('lgot_date_time',$std);
+        $this->db->where('id', $q->id);
+        $this->db->update('login_history');
+      }
+
+      $this->rememberme->deleteCookie();
+      redirect('login/?c='.$comp_id);
     }
+
     //Select country..
     public function selected_country() {
         $country = $this->input->post('country');
@@ -1679,8 +1695,13 @@ public function user_profile() {
 		$data['length'] = $this->location_model->find_length();
 		$data['course_list'] = $this->Institute_model->courselist();
 		$data['institute_list'] = $this->Institute_model->institutelist();
-		$data['institute'] = $this->Institute_model->findinstitute();		
-        $data['all_description_lists']    =   $this->Leads_Model->find_description();
+		$data['institute'] = $this->Institute_model->findinstitute();
+    
+    $data['all_faq'] = $this->Leads_Model->faq_select();
+    
+    $data['login_details'] = $this->Leads_Model->logdata_select();		
+    
+    $data['all_description_lists']    =   $this->Leads_Model->find_description();
 		$data['all_extra'] = $this->location_model->get_qualification_tab($en_id);        
         $data['content'] = $this->load->view('student/profile_wrapper', $data, true);
         $this->load->view('layout/main_wrapper', $data);

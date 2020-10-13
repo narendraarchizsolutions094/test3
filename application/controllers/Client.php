@@ -1247,77 +1247,87 @@ if(empty($eid)){
     }
 	/*************************************English tab End **********************************/
 	
-	/***********************************payment tab **************************************/
-	    public function create_payment() {  
-      /* echo "<pre>";
-	   print_r($_POST);
-        echo "</pre>";
-exit();*/
 
-                    $this->db->select('*');
-                    $this->db->from('enquiry');
-                    $this->db->where('enquiry_id',$this->uri->segment(3));
-                    $q= $this->db->get()->row();
-         $enq_no=$q->Enquery_id;
-         $cmp_no=$q->comp_id;
-		$pay_type   = $this->input->post("typpay", true);
-	    $lead_stage   = $this->input->post("lead_stage_pay", true);
-		$lead_description   = $this->input->post("lead_description_pay", true);
-		$installment  = $this->input->post("modepay", true);
-		$pay_date   = $this->input->post("dt", true);
-		$amount   = $this->input->post("amt", true);
-				$biarr[] = array( "enq_id"  => $enq_no,
-								  "stage_id"   => $lead_stage,
-								  "desc_id"  => $lead_description, 
-								  "pay_mode"  => $installment,
-								  "pay_type"  => $pay_type,
-								  "ins_dt"  => $pay_date,
-								  "ins_amt"  => $amount,
-								  "cmp_no"  => $cmp_no,
-								  "created_by" => $this->session->user_id,
-								  "created_date"  => date('d/m/Y')
-								 ); 	
-								 
-			if(!empty($biarr)){
-				$this->db->insert_batch('tbl_payment', $biarr); 
-			}
-				
+	   /***********************************payment tab **************************************/
+        public function create_payment() {      
+            $this->db->select('*');
+            $this->db->from('enquiry');
+            $this->db->where('enquiry_id',$this->uri->segment(3));
+            $q = $this->db->get()->row();
+            $enq_no = $q->Enquery_id;
+            $cmp_no = $q->comp_id;
+            $pay_type   = $this->input->post("typpay", true);
+            $lead_stage   = $this->input->post("lead_stage_pay", true);
+            $lead_description   = $this->input->post("lead_description_pay", true);
+            $installment  = $this->input->post("modepay", true);
+            $pay_date   = $this->input->post("dt", true);
+            $amount   = $this->input->post("amt", true);        
+            $reg_amount   = $this->input->post("reg_amt", true);
+            $stamp_amount   = $this->input->post("stamp_amt", true);
+            $biarr[] = array( "enq_id"  => $enq_no,
+                              "stage_id"   => $lead_stage,
+                              "desc_id"  => $lead_description, 
+                              "pay_mode"  => $installment,
+                              "pay_type"  => $pay_type,
+                              "ins_dt"  => $pay_date,
+                              "ins_amt"  => $amount,
+                              "reg_amt"  => $reg_amount,
+                              "stamp_amt"  => $stamp_amount,
+                              "cmp_no"  => $cmp_no,
+                              "created_by" => $this->session->user_id,
+                              "created_date"  => date('d/m/Y')
+                             );
+                                 
+            if(!empty($biarr)){
+                $this->db->insert_batch('tbl_payment', $biarr); 
+            }                
             $this->session->set_flashdata('message', 'Save successfully');
             redirect($this->agent->referrer()); //updateclient
     }
+    
+    public function update_setlled() {
+        $recieved_amt   = $this->input->post("recieved_amt", true);
+        $recieved_date   = $this->input->post("recieved_date", true);
+        $pay_id   = $this->input->post("pay_id", true);     
+        $this->db->set('recieved_amt', $recieved_amt);
+        $this->db->set('recieved_date', $recieved_date);//if 2 columns
+        $this->db->where('id', $pay_id);
+        $this->db->update('tbl_payment');
+        $this->session->set_flashdata('message', 'Updated successfully');
+        redirect($this->agent->referrer());
+    }   
+    
+    /*************************************payment tab End **********************************/
 	/*************************************payment tab End **********************************/
-	/*******************************************************************************add aggriment******************************************************/
-    public function create_aggrement() {  
-      /* echo "<pre>";
-	   print_r($_POST);
-        echo "</pre>";
-exit();*/
-
-                    $this->db->select('*');
+	/************************************add aggriment**************************/
+    public function create_aggrement() {
+        $this->db->select('*');
                     $this->db->from('enquiry');
                     $this->db->where('enquiry_id',$this->uri->segment(3));
                     $q= $this->db->get()->row();
          $enq_no=$q->Enquery_id;
          $cmp_no=$q->comp_id;
-	    $agg_user   = $this->input->post("agg_user", true);
-		$agg_mobile   = $this->input->post("agg_mobile", true);
-		$agg_email  = $this->input->post("agg_email", true);
-		$agg_adrs   = $this->input->post("agg_adrs", true);
-				$biarr[] = array( "enq_id"  => $enq_no,
-								  "agg_name"   => $agg_user,
-								  "agg_phone"  => $agg_mobile, 
-								  "agg_email"  => $agg_email,
-								  "agg_adrs"  => $agg_adrs,
-								  "comp_id"  => $cmp_no,
-								  "created_by" => $this->session->user_id,
-								  "created_date"  => date('d/m/Y')
-								 ); 	
-			
-		
-			if(!empty($biarr)){
-				$this->db->insert_batch('tbl_aggriment', $biarr); 
-			}
-				
+        $agg_user   = $this->input->post("agg_user", true);
+        $agg_mobile   = $this->input->post("agg_mobile", true);
+        $agg_email  = $this->input->post("agg_email", true);
+        $agg_adrs   = $this->input->post("agg_adrs", true);
+        $agg_date   = $this->input->post("agg_date", true);
+                $biarr[] = array( "enq_id"  => $enq_no,
+                                  "agg_name"   => $agg_user,
+                                  "agg_phone"  => $agg_mobile, 
+                                  "agg_email"  => $agg_email,
+                                  "agg_adrs"  => $agg_adrs,
+                                  "agg_date"  => $agg_date,
+                                  "comp_id"  => $cmp_no,
+                                  "created_by" => $this->session->user_id,
+                                  "created_date"  => date('d/m/Y')
+                                 );     
+            
+        
+            if(!empty($biarr)){
+                $this->db->insert_batch('tbl_aggriment', $biarr); 
+            }
+                
             $this->session->set_flashdata('message', 'Save successfully');
             redirect($this->agent->referrer()); //updateclient
     }
@@ -1411,7 +1421,20 @@ if(!empty($_FILES['file']['name'])){
                         );
            $this->db->insert_batch('query_response',$assign_data_noti);
            $this->load->library('user_agent');
-redirect($this->agent->referrer());
-}
-/*******************************************************************************end add aggriment***************************************************/
+    redirect($this->agent->referrer());
+    }
+    /***********************end add aggriment***********************/
+
+    /**************************Grenerate aggriment**************************/
+    public function generate_aggrement() {
+        $pdf_name = $this->input->post('agg_frmt');
+        if($pdf_name=='BAA'){
+            $data['title'] = 'Bangalore-Australia-Agreement';
+            $this->load->helpers('dompdf');
+            $viewfile = $this->load->view('aggrement/Bangalore-Australia-Agreement', $data, TRUE);
+            pdf_create($viewfile,'Bangalore-Australia-Agreement'.$this->session->user_id);
+            redirect($this->agent->referrer());
+        }
+    }
+    /***********************end Generate aggriment*****************************/
 }

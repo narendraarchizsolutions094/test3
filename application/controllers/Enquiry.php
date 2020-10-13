@@ -552,7 +552,30 @@ class Enquiry extends CI_Controller {
             }
 
             $name = $this->input->post('enquirername');
-            $name_w_prefix = $name;
+            
+            $name_w_prefix = $name;            
+            if($this->session->companey_id=='83'){
+                $daynamic = $this->input->post('enqueryfield[4400]', true);
+                $input_id = $this->input->post('inputfieldno', true);
+                foreach($input_id as $key=>$value){
+                    if($value=='4400'){
+                       $branch_code = $daynamic[$key]; 
+                    }
+                }
+                //print_r($branch_code);exit;
+                $branch=strtoupper($branch_code);
+                $first=substr("$branch",0,3);
+                $dt=date('d');
+                $mt=date('m');
+                $yt=date('y');
+                $second=$dt.''.$mt.''.$yt;
+                $third=mt_rand(10000,99999);
+                $encode=$first.''.$second.''.$third;
+            }else{
+                $encode = $this->get_enquery_code();
+            }
+
+
             $encode = $this->get_enquery_code();
             if(!empty($other_phone)){
                $other_phone =   implode(',', $other_phone);
