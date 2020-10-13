@@ -2176,7 +2176,7 @@ function upload_enquiry() {
                      
                 } else {           
 				
-					if(!empty($this->location_model->get_city_by_name($filesop[8]))){                        
+					if(!empty($filesop[8]) && !empty($this->location_model->get_city_by_name($filesop[8]))){                        
                         $res=$this->location_model->get_city_by_name($filesop[8]);
                         $country_id= !empty($res->country_id)?$res->country_id:'';
                         $region_id=!empty($res->region_id)?$res->region_id:'';
