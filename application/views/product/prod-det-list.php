@@ -48,15 +48,15 @@
 
                      <th class="sorting wid-10" style="border-left:none;">S.N </th>
 					 
-                     <th class="sorting wid-10">Product Id</th>
-                     <th class="sorting wid-10">Product Name</th>
+                     <th>Product Id</th>
+                     <th>Product Name</th>
 					           <th>Price</th>
                      <th>Stock</th>
                      <th>Minimum Order Quantity</th>
                      <th>Seller</th>
                      <th>Seller Mobile</th>
-                     <th class="sorting wid-10">Status</th> 
-                     <th class="sorting wid-10">Actions</th>
+                     <th>Status</th> 
+                     <th>Actions</th>
                   </tr>
                </thead>
                <tbody>
