@@ -68,46 +68,46 @@ class Product_model extends CI_Model {
 		$this->load->model('common_model');
 		$retuser   = $this->common_model->get_categories($this->session->user_id);
          $this->db->select("tbl_proddetails.*,tbl_inventory.qty as stock_qty,tbl_product_country.*,tbl_product_country.id as sb_id,tbl_scheme.from_date,tbl_scheme.to_date,tbl_scheme.apply_qty,tbl_scheme.from_qty,tbl_scheme.to_qty,tbl_scheme.discount,tbl_scheme.calc_mth");
-					$this->db->from("tbl_product_country");
-					$this->db->join("tbl_proddetails", "tbl_proddetails.prodid = tbl_product_country.id", "LEFT");
-					$this->db->join("tbl_scheme", "tbl_scheme.id=tbl_proddetails.scheme", "LEFT");
-					$this->db->join("tbl_inventory", "tbl_inventory.product_name=tbl_product_country.id", "LEFT");
-					$this->db->where("tbl_product_country.comp_id", $this->session->userdata('companey_id'));
-					if ($status == 0) {
-						$this->db->where_in("tbl_proddetails.seller_id",$retuser);
-					}
-					if(isset($_GET['searched_product']))
-					{
-						$this->db->like("tbl_product_country.country_name", trim($_GET['searched_product']));
-					}
-					
-					if(isset($_GET['sc']) && $_GET['sc'] !=''){
-						
-						$this->db->where("tbl_proddetails.subcatogory", $_GET['sc']);
-					}
-					if(isset($_GET['c']) && $_GET['c'] !=''){
-						
-						$this->db->where("tbl_proddetails.category", $_GET['c']);
-					}
-					if ($status) {
-						$this->db->where("tbl_product_country.status", 1);											
-					}
-					
-					if(isset($_GET['page'])){
-						
-						$offset = $limit * ($_GET['page'] - 1);
-					}
-					 
-					$this->db->order_by("tbl_product_country.id DESC");
-					
-					if($act == 2 ) {
-						return $this->db->count_all_results();
-					}else{
-						if ($status == 1) {
-							$this->db->limit($limit, $offset);							
-						}
-						return		$this->db->get()->result();
-					}
+		$this->db->from("tbl_product_country");
+		$this->db->join("tbl_proddetails", "tbl_proddetails.prodid = tbl_product_country.id", "LEFT");
+		$this->db->join("tbl_scheme", "tbl_scheme.id=tbl_proddetails.scheme", "LEFT");
+		$this->db->join("tbl_inventory", "tbl_inventory.product_name=tbl_product_country.id", "LEFT");
+		$this->db->where("tbl_product_country.comp_id", $this->session->userdata('companey_id'));
+		if ($status == 0) {
+			$this->db->where_in("tbl_proddetails.seller_id",$retuser);
+		}
+		if(isset($_GET['searched_product']))
+		{
+			$this->db->like("tbl_product_country.country_name", trim($_GET['searched_product']));
+		}
+		
+		if(isset($_GET['sc']) && $_GET['sc'] !=''){
+			
+			$this->db->where("tbl_proddetails.subcatogory", $_GET['sc']);
+		}
+		if(isset($_GET['c']) && $_GET['c'] !=''){
+			
+			$this->db->where("tbl_proddetails.category", $_GET['c']);
+		}
+		if ($status) {
+			$this->db->where("tbl_product_country.status", 1);											
+		}
+		
+		if(isset($_GET['page'])){
+			
+			$offset = $limit * ($_GET['page'] - 1);
+		}
+		 
+		$this->db->order_by("tbl_product_country.id DESC");
+		
+		if($act == 2 ) {
+			return $this->db->count_all_results();
+		}else{
+			if ($status == 1) {
+				$this->db->limit($limit, $offset);							
+			}
+			return		$this->db->get()->result();
+		}
 				
 
     }

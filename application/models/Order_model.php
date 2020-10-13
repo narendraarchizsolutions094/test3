@@ -42,6 +42,7 @@ class Order_model extends CI_Model {
 		$searchproduct 	= ($this->input->post('sproduct') !='') ? $this->input->post('sproduct') : "";
      	$searchseller 	= ($this->input->post('sseller') !='') ? $this->input->post('sseller') : "";
      	$searchstatus 	= ($this->input->post('sstatus') !="") ? $this->input->post('sstatus') : "";
+     	$order_date 	= ($this->input->post('ord_date') !="") ? $this->input->post('ord_date') : "";
 		if($act == 1){			
 			$this->db->select("ord.*,concat_ws(' ',usr.s_display_name,usr.last_name) as customer,concat(seller.s_display_name, ' ', seller.last_name) as sellername,usr.region,prd.country_name as product_name");
 		}		
@@ -100,7 +101,12 @@ class Order_model extends CI_Model {
 			}
 			if($searchstatus !='')
 			{
-				$this->db->where("prd.id",$searchproduct);
+				$this->db->join('ord_prod_stage','ord_prod_stage.ord_no=ord.ord_no','left');		
+				$this->db->where("ord_prod_stage.status",$searchproduct);
+			}
+			if($order_date !='')
+			{
+				$this->db->where("DATE(ord.order_date)",$order_date);
 			}
 
 			//$this->order_by($ordcol);

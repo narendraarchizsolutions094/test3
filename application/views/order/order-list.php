@@ -180,8 +180,11 @@ input[name=lead_stages]{
               <div class="form-group">        
                 <select name="statusdd" id="statusdd" class="form-control">
                   <option value="">Select Status</option>
-                    <option value="">Pending</option>
-                    <option value="">delivered</option>
+                    <option value="1">Request</option>
+                    <option value="2">Waiting</option>
+                    <option value="3">Dispatch</option>
+                    <option value="4">Delivery Confirm</option>
+                    <option value="5">Reject</option>
                   </select> 
               </div>
             </div>
@@ -222,8 +225,9 @@ input[name=lead_stages]{
 	<script>
 	$(document).ready(function(){
 			var orderDataTable  = $("#add-datatable").dataTable({
-				"serverSide":"true",
+				"serverSide":"true", 
 				"lengthMenu":[10,20,50,100,500,1000,"All"],
+        "processing": true,
 				"ajax":{
 					"url":"<?php echo base_url('order/loadorders'); ?>",
 					"type":"post",
@@ -231,6 +235,7 @@ input[name=lead_stages]{
                data.sproduct = $('#productdd').val();
                data.sseller = $('#sellerdd').val();
                data.sstatus = $('#statusdd').val();
+               data.ord_date = $("input[name='date_filter']").val();
             }
 				},
         "dom": "<'row'<'col-sm-4'l><'col-sm-4 text-center'B><'col-sm-4'f>>tp", 
@@ -252,7 +257,7 @@ input[name=lead_stages]{
 			        $(row).find('td:eq(7)').attr('data-th', 'Action');
 			    }
 			});
-      $('#productdd,#sellerdd,#statusdd').change(function(){
+      $('#productdd,#sellerdd,#statusdd,input[name="date_filter"]').change(function(){
           orderDataTable.api().ajax.reload( null, true );
        });
 			

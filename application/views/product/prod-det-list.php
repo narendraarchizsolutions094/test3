@@ -53,21 +53,15 @@
 					           <th>Price</th>
                      <th>Stock</th>
                      <th>Minimum Order Quantity</th>
-                     <th>Added Date</th>
+                     <th>Seller</th>
+                     <th>Seller Mobile</th>
                      <th class="sorting wid-10">Status</th> 
-
                      <th class="sorting wid-10">Actions</th>
-
                   </tr>
-
                </thead>
-
                <tbody>
-
                   <?php $c=1; foreach($product_list as $i => $row){ ?>
-
                   <tr>
-
                      <td><input type='checkbox' name='product_status[]' class="checkbox" value='<?php echo $row->id;?>'>
                      </td>
                      <td data-th='S.N'><?=$c++?></td>
@@ -88,6 +82,8 @@
                      }
                      ?></td>
                      <td data-th='Minimum Order Quantity'><?=$row->minimum_order_quantity?></td>
+                     <td data-th='Seller'><?=$row->minimum_order_quantity?></td>
+                     <td data-th='Seller Mobile'><?=$row->minimum_order_quantity?></td>
             				 <td data-th='Added Date'><?=$row->created_date?></td>
             				 <td data-th='Status'> 
                       <?php
