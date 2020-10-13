@@ -12,22 +12,13 @@
 					}else{
 						$cols[] = $ord->ord_no;
 					}
-						$total = getOrderTotal($allord);
-						$cols[]= $total;
-
-						
-
-					//$cols[] = (!empty($ord->product_name)) ? ucwords($ord->product_name)  : " ";					
+					$total = getOrderTotal($allord);
+					$cols[]= $total;
 					$qtyarr = $prdarr = $payarr = $dlvarr =  array();
 					$totconfrm = 0;	
 					$pending   = $totprice = $totqty = $disc = 0;				
 					$totprice = $ord->price;
-					$totqty   =  $ord->quantity;
-					if(!empty($ord->quantity)){
-						//$cols[]= $totqty;	
-					}else{
-						//$cols[]=  "";
-					}
+					$totqty   =  $ord->quantity;					
 					
 					$cols[] = $ord->customer;
 					$cols[] = $ord->s_phoneno;
@@ -37,67 +28,17 @@
 						$cols[] = $paid;
 
 					$balance = $total - $paid;
-
 					$cols[] = number_format($balance,2);
 					$cols[] = $ord->order_date;
-					
-						
-						$mode = "";
-						
-						/*
-						if($ord->pay_status == 1){
-							$paysts = "Pending";
-						}else{
-							$paysts = "Complete";
-						} */
-						$paysts  = "Pending";
-						
-						$paymode  =  " - ";
-						$payprice = $balance =  0;
-						$balance  = $totprice;
-						if(!empty($pay[$ord->id])){							
-							foreach($pay[$ord->id] as $ind => $py){
-								
-								$payprice  = $payprice  + $py->pay;
-							}
-							$balance = $totprice - $payprice;
-						}else{
-							$paymode = false;
-						}
-						// if(!empty($paymode)) {
-						// $cols[]  =	$paymode;
-						// }else {
-						// $cols[]  =		" - ";
-						// }
-						//$cols[]  =	(!empty($payprice)) ? $payprice : "  - ";
-					
-						//$cols[]  =	(!empty($balance)) ? $balance : " ";
-					
-					//$cols[] = (!empty($ord->conf_delv) and $ord->conf_delv != "0000-00-00") ?  date("d, M Y", strtotime($ord->conf_delv)).' Next :'.$ord->pend_delv.''	 :  " - ";
-					//$cols[] = (!empty($ord->order_date )) ?  date("d, M Y", strtotime($ord->order_date))  : " - ";
-					
-					// if($ord->status  == 1 ){
-					// 	$cols[] = "Request";
-					// }else if($ord->status  == 2 ){
-					// 	$cols[] =  "Waiting";
-					// }else if($ord->status  == 3 ){
-					// 	$cols[] =  "Half Confirm";
-					// }else if($ord->status  == 4 ){
-					// 	$cols[] =  "Full Confirm";
-					// }else if($ord->status  == 5 ){
-					// 	$cols[] =  "Reject";
-					// }else{
-					// 	$cols[] = $ord->status; 
-					// } 
-					
-						$payment_act = $conf_act = $invoice_act = '';
+				
+					$payment_act = $conf_act = $invoice_act = '';
 
-						if (user_access(461)) {
-							$conf_act  = '<a class="btn btn-xs btn-info" href="'.base_url("order/booking/".$ord->ord_no).'"><i class="fa fa-gavel" data-toggle="tooltip" title="" data-original-title="Edit"></i>  Status</a>';
-							$payment_act = '<a href="'.base_url("payment/add/".$ord->ord_no).'" class="btn btn-xs btn-primary"><i class="fa fa-cc" data-toggle="tooltip" title="" data-original-title="Edit"></i>  Payment</a>';
-						}
+					if (user_access(461)) {
+						$conf_act  = '<a class="btn btn-xs btn-info" href="'.base_url("order/booking/".$ord->ord_no).'"><i class="fa fa-gavel" data-toggle="tooltip" title="" data-original-title="Edit"></i>  Status</a>';
+						$payment_act = '<a href="'.base_url("payment/add/".$ord->ord_no).'" class="btn btn-xs btn-primary"><i class="fa fa-cc" data-toggle="tooltip" title="" data-original-title="Edit"></i>  Payment</a>';
+					}
 
-						$invoice_act	=	'<a class="btn btn-xs btn-default" href="'.base_url("order/invoice/".$ord->ord_no).'"><i class="fa fa-eye" data-toggle="tooltip" title="" data-original-title="Edit"></i>  Invoice</a>';					
+					$invoice_act	=	'<a class="btn btn-xs btn-default" href="'.base_url("order/invoice/".$ord->ord_no).'"><i class="fa fa-eye" data-toggle="tooltip" title="" data-original-title="Edit"></i>  Invoice</a>';					
 
 
 					$cols[] =  $conf_act.$invoice_act.$payment_act;
@@ -114,22 +55,4 @@
 						"data" => $rows,
 						);
 			die(json_encode($output));
-	/*function buttonwrap($arr, $total, $col, $title){
-		
-		$list = "";
-		
-		foreach($arr as $ind => $val){
-			
-			$list .= $val->$col."<br />";
-		}
-		$list = trim($list);
-	  	'<button type="button" class="btn btn-primary" data-container="body" data-toggle="popover" data-popover-color="default" data-placement="top" title="" data-content="'.$list.'" data-original-title="'.$title.'" aria-describedby="popover827091">'.$total.'+</button>';
-		
-		if($total > 1){
-			return ' <a href = "#" class ="badge badge-info" data-toggle="tooltip" data-placement="top" title="" data-original-title="'.$list.'"> '.($total- 1).'+ </a>'; 
-		}else{
-			return "";
-		}
-											
-	}
-		*/
+	

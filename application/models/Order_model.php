@@ -86,37 +86,30 @@ class Order_model extends CI_Model {
 		//}
 		
 
-		if($act == 1) {			
-		//	$this->db->join('order_prdct ordprd','ord.id=ordprd.ord_id','left');
-			$this->db->join('tbl_admin usr','usr.pk_i_admin_id=ord.cus_id');
-			//$this->db->join('tbl_admin seller','seller.pk_i_admin_id=prd2.seller_id','left');		
-			$ordcol = array("ord.id","prd.country_name");	
-			if($searchproduct !='')
-			{
-				$this->db->where("prd.id",$searchproduct);
-			}
-			if($searchseller !='')
-			{
-				$this->db->where("prd2.seller_id",$searchseller);
-			}
-			if($searchstatus !='')
-			{
-				$this->db->join('ord_prod_stage','ord_prod_stage.ord_no=ord.ord_no','left');		
-				$this->db->where("ord_prod_stage.status",$searchproduct);
-			}
-			if($order_date !='')
-			{
-				$this->db->where("DATE(ord.order_date)",$order_date);
-			}
-
-			//$this->order_by($ordcol);
+		$this->db->join('tbl_admin usr','usr.pk_i_admin_id=ord.cus_id');	
+		$ordcol = array("ord.id","prd.country_name");	
+		if($searchproduct !='')
+		{
+			$this->db->where("prd.id",$searchproduct);
+		}
+		if($searchseller !='')
+		{
+			$this->db->where("prd2.seller_id",$searchseller);
+		}
+		if($searchstatus !='')
+		{
+			$this->db->join('ord_prod_stage','ord_prod_stage.ord_no=ord.ord_no','left');		
+			$this->db->where("ord_prod_stage.status",$searchproduct);
+		}
+		if($order_date !='')
+		{
+			$this->db->where("DATE(ord.order_date)",$order_date);
+		}
+		if($act == 1) {
 			$this->db->order_by("ord.id",'DESC');
-
-
 			$this->limit();			
 			$this->db->group_by('ord.ord_no');
 			return $this->db->get()->result();	
-			 //echo $this->db->last_query();
 		}else{			
 			return $this->db->count_all_results();
 		}
