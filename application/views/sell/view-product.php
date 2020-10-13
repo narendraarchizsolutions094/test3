@@ -178,9 +178,9 @@
 					<div class = "row">
 						<div class = "col-md-12">
 					<p style="font-size: 32px;"><?php echo !empty($product->country_name)?$product->country_name:''; 
-					echo " <small style='font-size: 16px;'>#".$product->id.'</small>';
+					echo " <small style='font-size: 16px;'>#".$product->sb_id.'</small>';
 					?>		
-					</p> 					
+					</p> 					 
 					<h1><i class = "fa fa-rupee"></i> <?php echo !empty($product->price)?$product->price:''; ?></h1>					
 					</div>
 					</div>
