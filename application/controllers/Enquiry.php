@@ -2211,7 +2211,7 @@ function upload_enquiry() {
                         $enquiry_source_id =  $enquiry_source->lsid;                  
                     }                    
 
-					$service_row    =   $this->enquiry_model->name_services_list_byname($filesop[14]);					
+					$service_row    =   !empty($filesop[14])?$this->enquiry_model->name_services_list_byname($filesop[14]):'';					
 					if(!empty($service_row)){
                         $ser_id =  $service_row->id;                  
                     }
