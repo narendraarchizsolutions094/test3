@@ -82,7 +82,7 @@
                      }
                      ?></td>
                      <td data-th='Minimum Order Quantity'><?=$row->minimum_order_quantity?></td>                     
-                     <td data-th='Seller'><a href="<?=base_url().'client/view/'.$row->enquiry_id?>"><?=!empty($row->seller)?$row->seller:'NA'?></a></td>
+                     <td data-th='Seller'><a href="<?=base_url().'client/view/'.$row->enquiry_id?>"><?=($row->seller!='')?$row->seller:'NA'?></a></td>
             				 <td data-th='Seller Mobile'><a href="tel:<?=$row->seller_phone?>"><?=$row->seller_phone?></a></td>
             				 <td data-th='Status'> 
                       <?php                      
