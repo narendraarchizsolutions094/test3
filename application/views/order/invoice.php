@@ -269,6 +269,7 @@ This is Computer generated invoice,so no signature in required. </p>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.0.272/jspdf.debug.js"></script>	
 <script type="text/javascript">     
+location.reload();
 $('#pdfsave').click(function () {
 	let doc = new jsPDF('p','pt','a4');
 	$('.no-print').hide();
