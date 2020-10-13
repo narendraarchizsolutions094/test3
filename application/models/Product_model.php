@@ -73,7 +73,7 @@ class Product_model extends CI_Model {
 		$this->db->join("tbl_scheme", "tbl_scheme.id=tbl_proddetails.scheme", "LEFT");
 		$this->db->join("tbl_inventory", "tbl_inventory.product_name=tbl_product_country.id", "LEFT");
 		$this->db->join("tbl_admin seller", "seller.pk_i_admin_id=tbl_proddetails.seller_id");
-		$this->db->join("enquiry", "enquiry.phone=seller.s_phoneno");
+		$this->db->join("enquiry", "enquiry.phone=seller.s_phoneno",'left');
 		$this->db->where("tbl_product_country.comp_id", $this->session->userdata('companey_id'));
 		if ($status == 0) {
 			$this->db->where_in("tbl_proddetails.seller_id",$retuser);
