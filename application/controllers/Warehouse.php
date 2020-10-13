@@ -176,6 +176,7 @@ public function addtypeofproduct(){
             } else {
                 if (user_role('31') == true) {                    
                 }
+                unset($postData['id']);
                 if ($this->warehouse_model->updatetypeofproduct($postData)) {
                     $this->session->set_flashdata('message', display('update_successfully'));
                 } else {
