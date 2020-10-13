@@ -67,7 +67,7 @@ class Product_model extends CI_Model {
 		$offset  = 0;
 		$this->load->model('common_model');
 		$retuser   = $this->common_model->get_categories($this->session->user_id);
-         $this->db->select("tbl_proddetails.price,tbl_proddetails.id,tbl_product_country.minimum_order_quantity,tbl_proddetails.image,tbl_inventory.qty as stock_qty,tbl_product_country.country_name,tbl_product_country.id as sb_id,tbl_scheme.from_date,tbl_scheme.to_date,tbl_scheme.apply_qty,tbl_scheme.from_qty,tbl_scheme.to_qty,tbl_scheme.discount,tbl_scheme.calc_mth,concat_ws(' ',seller.s_display_name,seller.last_name) as seller,seller.s_phoneno as seller_phone,enquiry.enquiry_id");
+         $this->db->select("tbl_proddetails.price,tbl_product_country.minimum_order_quantity,tbl_proddetails.image,tbl_inventory.qty as stock_qty,tbl_product_country.country_name,tbl_product_country.id as id,tbl_scheme.from_date,tbl_scheme.to_date,tbl_scheme.apply_qty,tbl_scheme.from_qty,tbl_scheme.to_qty,tbl_scheme.discount,tbl_scheme.calc_mth,concat_ws(' ',seller.s_display_name,seller.last_name) as seller,seller.s_phoneno as seller_phone,enquiry.enquiry_id");
 		$this->db->from("tbl_product_country");
 		$this->db->join("tbl_proddetails", "tbl_proddetails.prodid = tbl_product_country.id");
 		$this->db->join("tbl_scheme", "tbl_scheme.id=tbl_proddetails.scheme", "LEFT");

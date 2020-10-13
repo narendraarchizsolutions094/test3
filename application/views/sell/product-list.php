@@ -156,15 +156,15 @@
 											//echo "Out of stock";
 										}else { ?>
 									<?php if(!empty($incart[$prd->id])) { ?>
-									<a href = "javascript:void(0)" class = "minus-quantity" data-prodid = "<?php echo $prd->sb_id; ?>" data-minalert = "<?php echo $prd->minimum_order_quantity ?>" ><span> - </span></a>
+									<a href = "javascript:void(0)" class = "minus-quantity" data-prodid = "<?php echo $prd->id; ?>" data-minalert = "<?php echo $prd->minimum_order_quantity ?>" ><span> - </span></a>
 									<?php } ?>
 									
-									<a href = "javascript:void(0)" data-prodid = "<?php echo $prd->sb_id; ?>" class = "add-to-cart" data-minalert = "<?php echo $prd->minimum_order_quantity ?>">
+									<a href = "javascript:void(0)" data-prodid = "<?php echo $prd->id; ?>" class = "add-to-cart" data-minalert = "<?php echo $prd->minimum_order_quantity ?>">
 									<?php
 									$plus = "shopping-cart";	
 									if(!empty($incart[$prd->id])) {  ?>
 									
-											<span class="cart-quantity"><?php echo $incart[$prd->sb_id]; ?></span> 
+											<span class="cart-quantity"><?php echo $incart[$prd->id]; ?></span> 
 										<?php 
 										$plus = "cart-plus";
 										} ?>	
@@ -181,7 +181,7 @@
 							
 											</li>
 									<li>	
-										<a href = "<?php echo base_url("buy/view/".$prd->sb_id); ?>"> <i class="fa fa-eye" aria-hidden="true"></i> </a></li>
+										<a href = "<?php echo base_url("buy/view/".$prd->id); ?>"> <i class="fa fa-eye" aria-hidden="true"></i> </a></li>
 									</ul>
 								
 								</div>

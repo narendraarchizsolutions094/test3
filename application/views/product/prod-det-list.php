@@ -65,7 +65,7 @@
                      <td><input type='checkbox' name='product_status[]' class="checkbox" value='<?php echo $row->id;?>'>
                      </td>
                      <td data-th='S.N'><?=$c++?></td>
-                     <td data-th='Product Id'><?= $row->sb_id; ?></td>
+                     <td data-th='Product Id'><?= $row->id; ?></td>
                      <td data-th='Product Name'><?= $row->country_name; ?></td>
                      <td data-th='Price'> <i class = "fa fa-rupee"></i> <?php echo $row->price; ?></td>
             				 <td data-th='Stock'><?php
