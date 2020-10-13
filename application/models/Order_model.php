@@ -115,8 +115,8 @@ class Order_model extends CI_Model {
 
 			$this->limit();			
 			$this->db->group_by('ord.ord_no');
-			 $this->db->get()->result();	
-			 echo $this->db->last_query();
+			return $this->db->get()->result();	
+			 //echo $this->db->last_query();
 		}else{			
 			return $this->db->count_all_results();
 		}
