@@ -30,6 +30,7 @@
 					}
 					
 					$cols[] = $ord->customer;
+					$cols[] = $ord->add_ress;
 					$paid = getPaidAmount($ord->id);	
 						$cols[] = $paid;
 

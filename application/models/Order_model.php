@@ -44,7 +44,7 @@ class Order_model extends CI_Model {
      	$searchstatus 	= ($this->input->post('sstatus') !="") ? $this->input->post('sstatus') : "";
      	$order_date 	= ($this->input->post('ord_date') !="") ? $this->input->post('ord_date') : "";
 		if($act == 1){			
-			$this->db->select("ord.*,concat_ws(' ',usr.s_display_name,usr.last_name) as customer,concat(seller.s_display_name, ' ', seller.last_name) as sellername,usr.region,prd.country_name as product_name");
+			$this->db->select("ord.*,concat_ws(' ',usr.s_display_name,usr.last_name) as customer,usr.add_ress,prd.country_name as product_name");
 		}		
 		$this->db->where("ord.company", $this->session->companey_id);
 		$this->db->from("tbl_order ord");
@@ -89,7 +89,7 @@ class Order_model extends CI_Model {
 		if($act == 1) {			
 		//	$this->db->join('order_prdct ordprd','ord.id=ordprd.ord_id','left');
 			$this->db->join('tbl_admin usr','usr.pk_i_admin_id=ord.cus_id','left');
-			$this->db->join('tbl_admin seller','seller.pk_i_admin_id=prd2.seller_id','left');		
+			//$this->db->join('tbl_admin seller','seller.pk_i_admin_id=prd2.seller_id','left');		
 			$ordcol = array("ord.id","prd.country_name");	
 			if($searchproduct !='')
 			{
