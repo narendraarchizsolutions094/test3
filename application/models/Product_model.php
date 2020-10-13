@@ -108,9 +108,9 @@ class Product_model extends CI_Model {
 			if ($status == 1) {
 				$this->db->limit($limit, $offset);							
 			}
-					$this->db->get()->result();
+			return	$this->db->get()->result();
 		}
-			echo $this->db->last_query();	
+		//	echo $this->db->last_query();	
 
     }
 	public function productdetin($prdarr) {
