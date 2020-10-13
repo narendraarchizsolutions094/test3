@@ -2192,7 +2192,7 @@ function upload_enquiry() {
 			        }
 					$product_name='';
 
-                    $product_row    =   $this->enquiry_model->name_product_list_byname($filesop[10]);   // process                  
+                    $product_row    =   !empty($filesop[10])?$this->enquiry_model->name_product_list_byname($filesop[10]):'';   // process                  
 
                     if(!empty($product_row)){
                         $sb_id =  $product_row->sb_id;                  
