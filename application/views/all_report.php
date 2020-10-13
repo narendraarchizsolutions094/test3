@@ -238,11 +238,13 @@
 <!---------------------------->
 <script type="text/javascript">
  $("#filter_and_save_form").on('submit',function(e){
+  alert($("input[name='hier_wise']").is(":checked"));
     if ($("input[name='hier_wise']").is(":checked") && $("#employee").select2('data').length!=1) {
       alert("please select one employee for hierarchy wise report");
       e.preventDefault();
     }
  });
+
 	$(document).ready(function(){		
     $("#selected-col").select2();
 		$(".chosen-select").select2();
