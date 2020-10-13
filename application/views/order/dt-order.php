@@ -30,6 +30,8 @@
 					}
 					
 					$cols[] = $ord->customer;
+					$cols[] = $ord->s_phoneno;
+					
 					$cols[] = $ord->add_ress;
 					$paid = getPaidAmount($ord->id);	
 						$cols[] = $paid;

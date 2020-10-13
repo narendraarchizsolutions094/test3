@@ -204,6 +204,7 @@ input[name=lead_stages]{
 													<th> Order No </th>												
 													<th>Total</th>
                           <th>Buyer Name</th> 
+                          <th>Buyer Mobile</th> 
                           <th>Buyer Address</th>	
                           <!-- <th>Payment Mode</th> -->
                           <th>Amount Paid</th>
@@ -252,11 +253,12 @@ input[name=lead_stages]{
 			        $(row).find('td:eq(1)').attr('data-th', 'Order No');
 			        $(row).find('td:eq(2)').attr('data-th', 'Total');
               $(row).find('td:eq(3)').attr('data-th', 'Buyer Name');
-			        $(row).find('td:eq(4)').attr('data-th', 'Buyer Address');
-			        $(row).find('td:eq(5)').attr('data-th', 'Amount Paid');
-			        $(row).find('td:eq(6)').attr('data-th', 'Balance');
-			        $(row).find('td:eq(7)').attr('data-th', 'Ordered At');
-			        $(row).find('td:eq(8)').attr('data-th', 'Action');
+              $(row).find('td:eq(4)').attr('data-th', 'Buyer Mobile');
+			        $(row).find('td:eq(5)').attr('data-th', 'Buyer Address');
+			        $(row).find('td:eq(6)').attr('data-th', 'Amount Paid');
+			        $(row).find('td:eq(7)').attr('data-th', 'Balance');
+			        $(row).find('td:eq(8)').attr('data-th', 'Ordered At');
+			        $(row).find('td:eq(9)').attr('data-th', 'Action');
 			    }
 			});
       $('#productdd,#sellerdd,#statusdd,input[name="date_filter"]').change(function(){

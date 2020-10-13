@@ -81,12 +81,11 @@
                       </a>";                                                                    
                      }
                      ?></td>
-                     <td data-th='Minimum Order Quantity'><?=$row->minimum_order_quantity?></td>
-                     <td data-th='Seller'><?=$row->minimum_order_quantity?></td>
-                     <td data-th='Seller Mobile'><?=$row->minimum_order_quantity?></td>
-            				 <td data-th='Added Date'><?=$row->created_date?></td>
+                     <td data-th='Minimum Order Quantity'><?=$row->minimum_order_quantity?></td>                     
+                     <td data-th='Seller'><a href="<?=base_url().'client/view/'.$row->enquiry_id?>"><?=$row->seller?></a></td>
+            				 <td data-th='Seller Mobile'><?=$row->seller_phone?></td>
             				 <td data-th='Status'> 
-                      <?php
+                      <?php                      
                       if (!empty($row->status)) {
                         if ($row->status == 1) {
                           echo "Active";
@@ -97,8 +96,8 @@
                       ?>
                      </td>
                      <td class="center" data-th='Actions'>
-                      <?php if (user_access(471)) { ?>            
-                        <a  class="edit btn btn-xs btn-primary" href = "<?php echo base_url("product/editproduct/".$row->id); ?>"><i class="ti-pencil"></i></a> 
+                      <?php if (user_access(471)) { ?>
+                        <a  class="edit btn btn-xs btn-primary" href = "<?php echo base_url("product/editproduct/".$row->id); ?>"><i class="ti-pencil"></i></a>
                       <?php
                       }
                       ?>

@@ -44,7 +44,7 @@ class Order_model extends CI_Model {
      	$searchstatus 	= ($this->input->post('sstatus') !="") ? $this->input->post('sstatus') : "";
      	$order_date 	= ($this->input->post('ord_date') !="") ? $this->input->post('ord_date') : "";
 		if($act == 1){			
-			$this->db->select("ord.*,concat_ws(' ',usr.s_display_name,usr.last_name) as customer,usr.add_ress,prd.country_name as product_name");
+			$this->db->select("ord.*,concat_ws(' ',usr.s_display_name,usr.last_name) as customer,usr.s_phoneno,usr.add_ress,prd.country_name as product_name");
 		}		
 		$this->db->where("ord.company", $this->session->companey_id);
 		$this->db->from("tbl_order ord");
