@@ -96,9 +96,11 @@ class Buy extends CI_Controller {
         if(empty($check))
         {
             echo json_encode(array('status'=>"notexist"));
+        }else{
+        	echo json_encode(array('status'=>"exist"));
         }
     }
-    
+
 	public function checkout(){		
 		$data = array();
 		$prodcart = array();

@@ -362,17 +362,16 @@ $(document).on("change",'#bstate',function () {
             
             success:function(data)
             {
-                    if(data.status == "notexist")
-                    {
-                        $(".alreadyexistspan").html("This user Id is invalid");
-                        $("#preferd").val("");
-            $( ".alreadyexistspan" ).show();
-            $( ".alreadyexistspan1" ).hide();
-                    }else{
-            $(".alreadyexistspan1").html("User Id is valid");
-            $( ".alreadyexistspan1" ).show();
-            $( ".alreadyexistspan" ).hide();
-          }
+              if(data.status == "notexist"){
+                  $(".alreadyexistspan").html("Invalid");
+                  $("#preferd").val("");
+                  $( ".alreadyexistspan" ).show();
+                  $( ".alreadyexistspan1" ).hide();
+              }else{
+                $(".alreadyexistspan1").html("Valid");
+                $( ".alreadyexistspan1" ).show();
+                $( ".alreadyexistspan" ).hide();
+              }
             }
         });
     }
