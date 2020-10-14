@@ -24,8 +24,8 @@
 					$cols[] = $ord->s_phoneno;
 					
 					$cols[] = $ord->add_ress;
-					$paid = getPaidAmount($ord->id);	
-						$cols[] = $paid;
+					$paid = getPaidAmount($ord->ord_no);	
+						$cols[] = !empty($paid)?$paid:'0';
 
 					$balance = $total - $paid;
 					$cols[] = number_format($balance,2);
