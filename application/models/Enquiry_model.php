@@ -768,7 +768,7 @@ class Enquiry_model extends CI_Model {
     }
 
     public function enquiry_by_id($enquiry_id) {
-        return $this->db->select("*,enquiry.created_date,enquiry.status,enquiry.address,tbl_product_country.country_name,tbl_product_country.id as country_id,tbl_product.product_name,tbl_center.center_name")
+        return $this->db->select("*,enquiry.city_id as enquiry_city_id,enquiry.state_id as enquiry_state_id,,enquiry.created_date,enquiry.status,enquiry.address,tbl_product_country.country_name,tbl_product_country.id as country_id,tbl_product.product_name,tbl_center.center_name")
                         ->from($this->table)
                         ->join('tbl_product_country', 'tbl_product_country.id=enquiry.country_id', 'left')
                         ->join('tbl_admin', 'tbl_admin.pk_i_admin_id=enquiry.created_by', 'left')

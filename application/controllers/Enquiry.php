@@ -170,6 +170,8 @@ class Enquiry extends CI_Controller {
                                 'last_name'       =>    $enq->lastname,  
                                 's_user_email'    =>    $enq->email,
                                 's_phoneno'       =>    $enq->phone,
+                                'city_id'         =>    $enq->enquiry_city_id,
+                                'state_id'        =>    $enq->enquiry_state_id,
                                 'companey_id'     =>    $ucid,
                                 'b_status'        =>    1,
                                 'user_permissions'=>    $user_right,

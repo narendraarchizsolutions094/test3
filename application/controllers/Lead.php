@@ -852,6 +852,10 @@ if($coment_type == 1){
                         'last_name'       =>    $data['enquiry']->lastname,  
                         's_user_email'    =>    $data['enquiry']->email,
                         's_phoneno'       =>    $data['enquiry']->phone,
+                        
+                        'city_id'         =>    $data['enquiry']->enquiry_city_id,
+                        'state_id'        =>    $data['enquiry']->enquiry_state_id,
+
                         'companey_id'     =>    $ucid,
                         'b_status'        =>    1,
                         'user_permissions'=>    $user_right,

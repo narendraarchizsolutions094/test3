@@ -1,4 +1,4 @@
-<div id="login-tab" class="tab-content" style="width:100%;">
+<div id="login-tab" class="tab-pane" style="width:100%;">
 
 <div class="row" style="padding-top:4%;">
 <div class="col-lg-12">
