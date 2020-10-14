@@ -220,14 +220,7 @@ class Order_model extends CI_Model {
 		
 	 	$this->db->select("ord.*,prd.id as prdid,prd.country_name as product_name,prddet.price as unit_price, prddet.image,tbl_inventory.qty as stock_qty,concat_ws(' ',tbl_admin.s_display_name,tbl_admin.last_name) as seller_name,prddet.hsn,prddet.brand");
 				$this->db->where("ord.company", $this->session->companey_id);
-				$this->db->where("ord.ord_no", $ordno);
-				
-				$mrole = $this->session->mrole;
-				if($mrole == 2 or $mrole == 3 or $mrole == 4 or $mrole == 5){
-					
-					$this->db->where("ord.addedby", $this->session->user_id);
-				}
-				
+				$this->db->where("ord.ord_no", $ordno);				
 				$this->db->from('tbl_order ord');
 				//$this->db->join('users usr','usr.id=ord.cus_id','left');
 				$this->db->join("tbl_inventory", "tbl_inventory.product_name=ord.product",'left');
