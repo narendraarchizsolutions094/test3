@@ -107,8 +107,8 @@ p{
                   
                   <div class="col-md-6">
                     <div class="form-group">        
-                      <label>Referred by </label>
-                      <input type="text" name="preferd" placeholder="preferd by" id="preferd" onchange="checkAlreadyExist(this.value,'userid')" class="form-control">
+                      <label>Referred by (Optional)</label>
+                      <input type="text" name="preferd" id="preferd" onchange="checkAlreadyExist(this.value,'userid')" class="form-control">
                       <span class="alreadyexistspan" style="color: red;"></span>
                         <span class="alreadyexistspan1" style="color: green;"></span>
                     </div>          
