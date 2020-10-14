@@ -1187,14 +1187,21 @@ public function all_description($diesc) {
         return $query->result();
     }
         
-    public function logdata_select() {
-        $this->db->select("*");
-        $this->db->from('login_history');
-        $this->db->where('uid', $this->session->userdata('user_id'));
-        $this->db->where('lgot_date_time!=', '');
-        $query = $this->db->get();
-        return $query->result();
-    }   
+    public function logdata_select($uid='') {
+        if(!empty($uid)){
+           $user_id = $uid;
+        }else{
+           $user_id = $this->session->userdata('user_id');  
+        }
+           $this->db->select("*");
+           $this->db->from('login_history');
+           $this->db->where('uid', $user_id);
+           $this->db->where('lgot_date_time!=', '');
+           $query = $this->db->get();
+           return $query->result();
+    }
+
+   
 
     public function delete_faq($faq_id = null) {
         $this->db->where('id', $faq_id)->delete('tbl_faq');

@@ -93,7 +93,13 @@ class Payment extends CI_Controller {
 				}	
 			}else{
 				$this->load->model('order_model');
+				
+				$emp_id    =	$this->input->post('preferd');
+				$pk_i_admin_id	=	$this->order_model->get_pk_admin_id($emp_id);
+				$ord_no	=	!empty($pk_i_admin_id->pk_i_admin_id)?$this->order_model->placeorder($pk_i_admin_id->pk_i_admin_id):$this->order_model->placeorder();
+
 				$ord_no	=	$this->order_model->placeorder();
+
 				if($ord_no){ 
 					$this->order_model->set_order_meta($ord_no,$comp_id,$user_id,array(
 							'fname' =>	$this->input->post('fname'),

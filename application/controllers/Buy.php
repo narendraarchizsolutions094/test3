@@ -83,6 +83,22 @@ class Buy extends CI_Controller {
 		
 	}
 
+	public function checkAlreadyExist()
+    {
+        $user      = $this->input->post('user');
+        $parameter  = $this->input->post('parameter');
+
+        if($parameter == 'userid')
+        {
+            $check  = $this->db->select('pk_i_admin_id')->from('tbl_admin')->where('employee_id',"$user")->get()->result();
+        }
+        
+        if(empty($check))
+        {
+            echo json_encode(array('status'=>"notexist"));
+        }
+    }
+    
 	public function checkout(){		
 		$data = array();
 		$prodcart = array();
@@ -100,7 +116,8 @@ class Buy extends CI_Controller {
 		$uid = $this->session->user_id;
 		$data['uid'] = $uid;
 		$data['user_row']	=	$this->user_model->read_by_id($uid);
-		$data['user_city']	=	$this->location_model->ecity_list();
+		//$data['user_city']	=	$this->location_model->ecity_list();
+
 		$data['user_state']	=	$this->location_model->estate_list_api();
 		$data['user_meta'] = $this->user_model->get_user_meta($uid,array('postal_code','gstin'));
 		if (empty($prodcart)) {

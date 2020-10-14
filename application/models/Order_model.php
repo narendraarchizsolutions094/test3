@@ -391,15 +391,24 @@ class Order_model extends CI_Model {
 		
 	}
 
-	public function placeorder(){		
+	public function get_pk_admin_id($emp_id){		
+		return $this->db->select("pk_i_admin_id")
+				->where("employee_id", $emp_id)
+				->from("tbl_admin")
+				->get()	 
+				->row();					 
+	}	
+	public function placeorder($pk_i_admin_id = ''){		
 		$ordno = "ORD".strtotime(date("Y-m-d h:i:s"));		
 		$carts = $this->cart->contents();
 		$ret   = false; 
 		if(!empty($carts)){
+
 			foreach($carts as $ind => $crt){				
 				$arr[] = array(
 							 "ord_no"  		=> $ordno,
 							 "cus_id"  		=> $this->session->user_id,
+							 "preferd_by"  	=> $pk_i_admin_id,
 							 "enq_no"  		=> "",
 							 "payment_mode" => $this->session->payment_mode,
 							 "warehouse"    => "",

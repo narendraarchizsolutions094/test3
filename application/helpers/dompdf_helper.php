@@ -34,7 +34,7 @@ function pdf_create($html, $filename = '', $stream = TRUE, $set_paper = '', $att
     }
 
     $dompdf->render();
-
+    $dompdf->stream($filename.".pdf");
    /* if ($stream) {
         $pdf_string = $dompdf->output();
         if (!empty($attach)) {
@@ -48,9 +48,9 @@ function pdf_create($html, $filename = '', $stream = TRUE, $set_paper = '', $att
             $dompdf->stream($filename . ".pdf");
         }
     } else {*/
-       $pdf_string = $dompdf->output();
-        $folder = "uploads/" . $filename . ".pdf";
-         file_put_contents($folder, $pdf_string);
+      // $pdf_string = $dompdf->output();
+      //  $folder = "uploads/" . $filename . ".pdf";
+      //   file_put_contents($folder, $pdf_string);
    // }
 }
 

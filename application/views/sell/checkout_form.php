@@ -120,8 +120,24 @@ p{
 
                   <div class="col-md-6">
                     <div class="form-group">        
+                      <label>Referred by </label>
+                      <input type="text" name="preferd" placeholder="preferd by" id="preferd" onchange="checkAlreadyExist(this.value,'userid')" class="form-control">
+                      <span class="alreadyexistspan" style="color: red;"></span>
+                        <span class="alreadyexistspan1" style="color: green;"></span>
+                    </div>          
+                  </div>          
+                  
+                  <div class="col-md-12">
+                     <div class="form-group">        
+                      <label>Address <i class="required">*</i></label>
+                      <input type="text" name="address" placeholder="House number and street name with zipcode" required class="form-control" value="<?=$user_row->add_ress?>">
+                    </div>          
+                  </div>
+
+                  <div class="col-md-6">
+                    <div class="form-group">        
                       <label> State <i class="required">*</i></label>
-                      <select name="state" id="state" class="form-control" required>
+                      <select name="state" id="bstate" class="form-control" required>
                         <option value="">Select State</option>
                         <?php foreach($user_state as $state){ ?>
                           <option value="<?php echo $state->id; ?>" <?=($user_row->state_id == $state->id)?'selected':''?> ><?php echo $state->state; ?></option>
@@ -132,11 +148,8 @@ p{
                   <div class="col-md-6">
                     <div class="form-group">        
                     <label> City <i class="required">*</i></label>
-                    <select name="city" id="city" class="form-control" required>
-                      <option value="">Select City</option>
-                      <?php foreach($user_city as $city){ ?>
-                        <option value="<?php echo $city->id; ?>" <?=($user_row->city_id == $city->id)?'selected':''?>><?php echo $city->city; ?></option>
-                      <?php } ?>
+                    <select name="city" id="bcity" class="form-control" required>
+
                     </select> 
                     </div>
                   </div>
@@ -199,7 +212,7 @@ p{
                 <div class="col-md-6">
                   <div class="form-group">        
                     <label> State <i class="required">*</i></label>
-                    <select name="shipping_state" id="state" class="form-control" required>
+                    <select name="shipping_state" id="sstate" class="form-control" required>
                       <option value="">Select State</option>
                       <?php foreach($user_state as $state){ ?>
                         <option value="<?php echo $state->id; ?>"><?php echo $state->state; ?></option>
@@ -210,11 +223,8 @@ p{
                 <div class="col-md-6">
                   <div class="form-group">        
                   <label> City <i class="required">*</i></label>
-                  <select name="shipping_city" id="city" class="form-control" required>
-                    <option value="">Select City</option>
-                    <?php foreach($user_city as $city){ ?>
-                      <option value="<?php echo $city->id; ?>"><?php echo $city->city; ?></option>
-                    <?php } ?>
+                  <select name="shipping_city" id="scity" class="form-control" required>
+
                   </select> 
                   </div>
                 </div>
@@ -314,6 +324,63 @@ p{
   });
 </script>
 
+<script>
+$(document).on("change",'#sstate',function () {
+    var id = $(this).val(); // <-- change this line
+    $.ajax({
+        url: '<?php echo base_url();?>location/get_city_byid',
+        async: false,
+        type: "POST",
+        data: {state_id:id},
+       dataType: 'html',
+        success: function(data) {
+          $('#scity').html(data);
+        }
+    })
+}); 
+
+
+$(document).on("change",'#bstate',function () {
+    var id = $(this).val(); // <-- change this line
+    $.ajax({
+        url: '<?php echo base_url();?>location/get_city_byid',
+        async: false,
+        type: "POST",
+        data: {state_id:id},
+       dataType: 'html',
+        success: function(data) {
+          $('#bcity').html(data);
+        }
+    })
+});
+
+
+
+    function checkAlreadyExist(preferd,userid)
+    {
+        $.ajax({
+            type: 'POST',
+            url: '<?php echo base_url();?>Buy/checkAlreadyExist',
+            data: {user : preferd,parameter: userid},
+            dataType : "JSON",
+            
+            success:function(data)
+            {
+                    if(data.status == "notexist")
+                    {
+                        $(".alreadyexistspan").html("This user Id is invalid");
+                        $("#preferd").val("");
+            $( ".alreadyexistspan" ).show();
+            $( ".alreadyexistspan1" ).hide();
+                    }else{
+            $(".alreadyexistspan1").html("User Id is valid");
+            $( ".alreadyexistspan1" ).show();
+            $( ".alreadyexistspan" ).hide();
+          }
+            }
+        });
+    }
+</script>
  <script type="text/javascript">
     $(function () {
         $("#same_as_above").on('click',function(){

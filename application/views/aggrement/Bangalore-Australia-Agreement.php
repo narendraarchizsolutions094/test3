@@ -4,7 +4,7 @@
 #footer {	
   position: fixed;
   bottom: 100px;
-  width:80%;
+  width:30%;
   left:0px;
 }
 #content {

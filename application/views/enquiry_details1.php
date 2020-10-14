@@ -773,7 +773,9 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
 			<?php } ?>
 			<li><a href="#task" data-toggle="tab" style="padding: 10px 10px;">Task</a></li>
               <li><a  href="#related_enquiry" data-toggle="tab" style="padding: 10px 10px;">Related Data</a></li>
-
+            <?php if($this->session->companey_id=='83'){ ?>
+            <li><a href="#login-tab" data-toggle="tab" style="padding: 10px 10px;">Login Trail</a></li>
+            <?php } ?>
             </ul>
             <div class="tab-content clearfix">
                 <div class="tab-pane active" id="basic">
@@ -2021,6 +2023,7 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
 			  <?php include('tab_payment.php'); ?>
 			  <?php include('tab_aggriment.php'); ?>
 			  <?php include('tab_qualification.php'); ?>
+        <?php include('tab_login_trail.php'); ?>
 			  <?php include('tab_english.php'); ?>
             </div>
       </div>
