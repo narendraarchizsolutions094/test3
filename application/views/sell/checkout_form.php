@@ -354,26 +354,25 @@ $(document).on("change",'#bstate',function () {
 
     function checkAlreadyExist(preferd,userid)
     {
-        $.ajax({
-            type: 'POST',
-            url: '<?php echo base_url();?>Buy/checkAlreadyExist',
-            data: {user : preferd,parameter: userid},
-            dataType : "JSON",
-            
-            success:function(data)
-            {
-              if(data.status == "notexist"){
-                  $(".alreadyexistspan").html("Invalid");
-                  $("#preferd").val("");
-                  $( ".alreadyexistspan" ).show();
-                  $( ".alreadyexistspan1" ).hide();
-              }else{
-                $(".alreadyexistspan1").html("Valid");
-                $( ".alreadyexistspan1" ).show();
-                $( ".alreadyexistspan" ).hide();
-              }
+      $.ajax({
+          type: 'POST',
+          url: '<?php echo base_url();?>Buy/checkAlreadyExist',
+          data: {user : preferd,parameter: userid},
+          dataType : "JSON",          
+          success:function(data)
+          {
+            if(data.status == "notexist"){
+                $(".alreadyexistspan").html("Invalid");
+                $("#preferd").val("");
+                $( ".alreadyexistspan" ).show();
+                $( ".alreadyexistspan1" ).hide();
+            }else{
+              $(".alreadyexistspan1").html("Valid");
+              $( ".alreadyexistspan1" ).show();
+              $( ".alreadyexistspan" ).hide();
             }
-        });
+          }
+      });
     }
 </script>
  <script type="text/javascript">
