@@ -1431,7 +1431,7 @@ class Enquiry extends CI_Controller {
         
 
         $data['login_user_id'] = $this->user_model->get_user_by_email($data['details']->email);
-        if (!empty($data['details']->email)) {
+        if (!empty($data['login_user_id']->pk_i_admin_id)) {
             $data['login_details'] = $this->Leads_Model->logdata_select($data['login_user_id']->pk_i_admin_id);            
         }
 
