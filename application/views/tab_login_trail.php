@@ -2,7 +2,7 @@
 
 <div class="row" style="padding-top:4%;">
 <div class="col-lg-12">
-<table id="examplelog" class="table table-striped table-bordered" style="width:100%">
+<table class="table table-striped table-bordered" style="width:100%">
 <thead>
 <tr>
 <th class="" style="font-size: 10px;">S.No</th>
@@ -93,9 +93,3 @@ $ttt = explode(':',$tt);
 </div>
 </div>
         </div>
-		
- <script>
-     $(document).ready(function () {
-  $('#examplelog').DataTable();
-});
- </script>
