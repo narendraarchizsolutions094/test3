@@ -104,6 +104,16 @@ p{
             </div>
             <div class="panel-body panel-form" >
               <div class="row ">
+                  
+                  <div class="col-md-6">
+                    <div class="form-group">        
+                      <label>Referred by </label>
+                      <input type="text" name="preferd" placeholder="preferd by" id="preferd" onchange="checkAlreadyExist(this.value,'userid')" class="form-control">
+                      <span class="alreadyexistspan" style="color: red;"></span>
+                        <span class="alreadyexistspan1" style="color: green;"></span>
+                    </div>          
+                  </div>
+
                   <div class="col-md-12">
                       <div class="form-group">        
                           <label>Full Name <i class="required">*</i></label>
@@ -118,21 +128,7 @@ p{
                     </div>          
                   </div>
 
-                  <div class="col-md-6">
-                    <div class="form-group">        
-                      <label>Referred by </label>
-                      <input type="text" name="preferd" placeholder="preferd by" id="preferd" onchange="checkAlreadyExist(this.value,'userid')" class="form-control">
-                      <span class="alreadyexistspan" style="color: red;"></span>
-                        <span class="alreadyexistspan1" style="color: green;"></span>
-                    </div>          
-                  </div>          
-                  
-                  <div class="col-md-12">
-                     <div class="form-group">        
-                      <label>Address <i class="required">*</i></label>
-                      <input type="text" name="address" placeholder="House number and street name with zipcode" required class="form-control" value="<?=$user_row->add_ress?>">
-                    </div>          
-                  </div>
+       
 
                   <div class="col-md-6">
                     <div class="form-group">        
