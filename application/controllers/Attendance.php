@@ -4,7 +4,7 @@ class Attendance extends CI_Controller {
 	
 	private $limit = 16;
 	
-	public function __construct()
+	public function __construct() 
 	{
 		parent::__construct();		
 		$this->load->model(array(
