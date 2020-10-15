@@ -7,6 +7,9 @@ class Task extends CI_Controller {
         $this->load->model(array(
             'Task_Model', 'Leads_Model', 'Client_Model', 'enquiry_model', 'User_model','Taskstatus_model'
         ));
+        if(empty($this->session->user_id)){
+         redirect('login');   
+        }
     }
     public function abc(){
         echo phpinfo();

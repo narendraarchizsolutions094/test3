@@ -36,7 +36,7 @@ class User_model extends CI_Model {
         $this->load->model('common_model');
         $all_reporting_ids    =   $this->common_model->get_categories($this->session->user_id);                      
         $this->db->select("*");
-        $this->db->from($this->table);
+        $this->db->from($this->table); 
         //$this->db->join('user', 'user.user_id = tbl_admin.companey_id');
         $this->db->join('tbl_user_role', 'tbl_user_role.use_id=tbl_admin.user_permissions', 'left');
         $where = "  tbl_admin.pk_i_admin_id IN (".implode(',', $all_reporting_ids).')';                

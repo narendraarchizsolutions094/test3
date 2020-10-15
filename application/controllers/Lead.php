@@ -554,7 +554,7 @@ public function select_app_by_ins() {
                 }
             } 
             $this->load->model('rule_model');
-            $this->rule_model->execute_rules($enq_code,array(1,2,3,6,7));
+            $this->rule_model->execute_rules($enq_code,array(1,2));
 			//print_r($coment_type);exit;
 if($coment_type == 1){			
     redirect('enquiry/view/'.$en_id);
