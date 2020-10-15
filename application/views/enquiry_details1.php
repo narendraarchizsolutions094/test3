@@ -2070,6 +2070,7 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
       </div>
       <div class="col-md-3 col-xs-12 col-sm-12 col-height activitytimelinediv">        
          <h3 class="text-center">Activity Timeline</h3><hr>
+         <div class="activitytimelinediv"></div>
           
       </div>
       <i class="fa fa-angle-right btn btn-secondary btn-sm" id="toggle_timeline"></i>      
