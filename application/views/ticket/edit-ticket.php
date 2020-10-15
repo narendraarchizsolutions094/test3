@@ -101,7 +101,7 @@
 						<select class="form-control add-select2" name = "issue">
 						<option value = ""> -- Select --</option>
 					<?php  if(!empty($issues)) {
-								foreach($issues as $ind => $issues){
+								foreach($issues as $ind => $issue){
 									?><option value = "<?php echo $issue->id ?>" <?php echo ($issue->id == $ticket->issue) ? "selected" : ""; ?> ><?php echo ucfirst($issue->title) ?> </option><?php
 								}	
 							} ?>
