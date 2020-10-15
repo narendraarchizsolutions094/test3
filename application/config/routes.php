@@ -272,6 +272,9 @@ $route['installation-dates/(:any)'] = 'Installationprocess/readiness_confirmatio
 
 $route['change-password/(:any)'] = 'dashboard/send_change_password_link/$1';
 
+//admin routes.
+$route['customer/logged-in-as-user/(:any)'] = 'customer/logged_in_as_user/$1';
+
 
 
 

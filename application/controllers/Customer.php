@@ -22,7 +22,145 @@ class Customer extends CI_Controller {
         $data['content'] = $this->load->view('doctor', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }
+   
+    public function logged_in_as_user() {  
+        $user_id=$this->uri->segment('3');
+        $userd = $this->dashboard_model->check_userByID($user_id);   
+        if ($userd->num_rows() === 1) {
+        $userdata=$userd->row();
+        $check_user = $this->dashboard_model->check_userByMAIL($userdata->email);                       
+            if ($check_user->num_rows() === 1) {
+                //logout old user
+                $this->session->unset_userdata([
+                    'menu'                  =>'',
+                    'isLogIn'               => false,
+                    'user_id'               =>'',
+                    'companey_id'           => '',
+                    'email'                 => '',
+                    'designation'           => '',
+                    'phone'                 => '',
+                    'fullname'              => '',
+                    'expiry_date'           => '',
+                ]);
+                // $this->rememberme->deleteCookie();
+                // ends
 
+                
+                $city_row = $this->db->select("*")
+                        ->from("city")
+                        ->where('id', $check_user->row()->city_id)
+                        ->get();                        
+                
+                $user_data = $check_user->row();
+                $this->session->set_userdata('user_id',$user_data->pk_i_admin_id);                
+                if(user_access(230) || user_access(231) || user_access(232) || user_access(233) || user_access(234) || user_access(235) || user_access(236)){ 
+
+                    $arr = explode(',', $user_data->process);
+                    $this->session->set_userdata('companey_id',$user_data->companey_id);                
+                    $process_filter =   get_cookie('selected_process');
+                    
+                    if (!empty($process_filter)) {
+                        $process_filter = explode(',', $process_filter);                                
+                        $process_filter = array_intersect($process_filter, $arr);
+                        if(empty($process_filter)){
+                            $this->session->set_userdata('process',$arr);
+                        }else{
+                            $this->session->set_userdata('process',$process_filter);
+                        }
+                    }else{
+                        $process_filter = array();
+                
+                        $this->session->set_userdata('process',$arr);
+                    }
+                    $c = implode(',', $this->session->process);
+                    set_cookie('selected_process',$c,'31536000'); 
+                 
+                }               
+                $location_arr = array();
+                if(!empty($city_row->row_array())){
+                    $location_arr = $city_row->row_array();
+                }                
+                   if(0){                        
+                        $user_process = explode(',', $user_data->process);                        
+
+                        $this->db->select('sb_id,product_name');
+                        $this->db->where('comp_id',$this->session->companey_id);
+                        $this->db->where_in('sb_id',$user_process);
+                       $process_arr     =   $this->db->get('tbl_product')->result_array();                      
+                       
+                       $process = [];
+                       
+                       $process_html = '';
+                       
+                       if(!empty($process_arr)){
+							
+                            if(user_access(270)){								
+								$process_html .= "<select class='form-control text-center' name='user_process[]' multiple id='process_elem'>";
+							}else{
+								$process_html .= "<select class='form-control text-center' name='user_process[]' id='process_elem'>";
+							}
+                            foreach ($process_arr as $value) {                                
+                                $process_html .= "<option value='".$value['sb_id']."'>".$value['product_name']."</option>";
+                                $process[$value['sb_id']] = $value['product_name'];
+                            }
+							$process_html .= "</select>";                                                       
+
+                            $res = array('status'=>true,'message'=>'Successfully Logged In','process'=>$process_html);
+
+                       }else{
+                            $res = array('status'=>false,'message'=>'You are not in any process. Please contact your admin!','process'=>$process_html);
+                       }
+                   }else{
+					   if($user_data->user_permissions==151){
+                    	   $menu=1;
+                    	}else{
+                    	   $menu=2;
+                    	}
+                        $data = $this->session->set_userdata([
+						    'menu'                  => $menu,
+                            'isLogIn'               => true,
+                            'user_id'               => $user_data->pk_i_admin_id,
+                            'companey_id'           => $user_data->companey_id,
+                            //'process'               => $check_user->row()->process,
+                            'email'                 => $user_data->s_user_email,
+                            'designation'           => $user_data->designation,
+                            'phone'                 => $user_data->s_phoneno,
+                            'fullname'              => $user_data->s_display_name . ' ' . $user_data->last_name,
+                            'country_id'            => !empty($location_arr)?$location_arr['country_id']:'',
+                            'region_id'             => !empty($location_arr)?$location_arr['region_id']:'',
+                            'territory_id'          => !empty($location_arr)?$location_arr['territory_id']:'',
+                            'state_id'              => !empty($location_arr)?$location_arr['state_id']:'',
+                            'city_id'               => $user_data->city_id,                   
+                            'user_right'            => $user_data->user_permissions,
+                            'picture'               => $user_data->picture,
+                            'modules'               => $user_data->modules,
+                            'title'                 => (!empty($setting->title) ? $setting->title : null),
+                            'address'               => (!empty($setting->description) ? $setting->description : null),
+                            'logo'                  => (!empty($setting->logo) ? $setting->logo : null),
+                            'favicon'               => (!empty($setting->favicon) ? $setting->favicon : null),
+                            'footer_text'           => (!empty($setting->footer_text) ? $setting->footer_text : null),                    
+                            'telephony_agent_id'    => $user_data->telephony_agent_id,
+							'telephony_token'       => $user_data->telephony_token,
+                            'expiry_date'           => strtotime($user_data->valid_upto),
+                            'availability'    => $user_data->availability,
+                        ]);
+                        //$this->user_model->add_login_history();
+                        $res = array('status'=>true,'message'=>'Successfully Logged In');   
+                redirect('dashboard/home');
+
+                   }
+            } else {
+            $this->session->set_flashdata('exception', display('please_try_again'));
+                redirect('login');
+            }
+        } else {
+            $this->session->set_flashdata('exception', display('please_try_again'));
+
+            redirect('login');
+        }
+      
+
+    }
     public function update_formfields(){
      if($_POST){
 

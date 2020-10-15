@@ -33,6 +33,7 @@
             <div class="panel-body panel-form">
                 <div class="row">				
                     <div class="col-md-12">
+                    
                        <?php echo form_open_multipart('user/create',array('class'=>"form-inner",'id'=>'user_form')) ?>
                             <?php echo form_hidden('dprt_id',$department->pk_i_admin_id) ?>  
                               <ul class="nav nav-tabs">

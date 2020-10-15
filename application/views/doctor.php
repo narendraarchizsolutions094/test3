@@ -64,6 +64,7 @@
                                         <div class="action-btn">
                                         <a href="<?php echo base_url("customer/profile/$doctor->user_id") ?>" class="btn btn-xs btn-success"><i class="fa fa-eye"></i></a> 
                                         <a href="<?php echo base_url("customer/edit/$doctor->user_id") ?>" class="btn btn-xs btn-primary"><i class="fa fa-edit"></i></a> 
+                                        <a href="<?php echo base_url("customer/logged-in-as-user/$doctor->user_id") ?>" class="btn btn-xs btn-primary"><i class="fa fa-sign-in"></i></a> 
                                        <!-- <a href="<?php echo base_url("customer/delete/$doctor->user_id") ?>" class="btn btn-xs btn-danger" onclick="return confirm('<?php echo display('are_you_sure') ?> ')"><i class="fa fa-trash"></i></a>-->
                                         </div> 
                                     </td>
