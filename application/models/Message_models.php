@@ -30,7 +30,7 @@ if(empty($api_conf)){
   exit();
 }
 
-if (strlen($phone) >= 12 && $this->session->companey_id==83) {
+if (strlen($phone) >= 12 && ($this->session->companey_id==83 || $this->session->companey_id==81)) {
     $phone = substr($phone, 2, 10);
 }
 
