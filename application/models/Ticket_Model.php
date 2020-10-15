@@ -380,7 +380,8 @@ $where .= " OR tck.assign_to IN (".implode(',', $all_reporting_ids).'))';
 		
 		}
 		public function get_issue_list(){
-			return array();
+			$this->db->where('comp_id',$this->session->companey_id);
+			return $this->db->get('tbl_nature_of_complaint')->result_array();
 		}
 		public function getallclient(){
 			
