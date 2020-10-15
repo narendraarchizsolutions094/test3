@@ -732,10 +732,28 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
             </div>
       </div>
 
+ <style type="text/css">
+            .nav-tabs
+            {
+             overflow-x: hidden;
+             overflow-y:hidden;
+             white-space: nowrap;
+             height: 50px;
+            }
+            .nav-tabs > li
+            {
+               white-space: nowrap;
+               float: none;
+               display: inline-block;
+            }
+           
+          </style>
+
       <div class="col-md-6 col-xs-12 col-sm-12 card card-body col-height details-column" style="background:#fff;border-top: unset;">
          <div id="exTab3" class="">
-            <ul  class="nav nav-tabs" role="tablist">              
-              <li class="active"><a  href="#basic" data-toggle="tab" style="padding: 10px 10px; font-size:12px;">Basic</a></li>   
+            <ul  class="nav nav-tabs hideScroll" role="tablist">  
+            <span style="position: absolute; left: 0; font-size: 22px; line-height: 40px; z-index: 999"><i class="fa fa-caret-left" onclick="tabScroll('left')"></i></span>            
+              <li class="active"><a  href="#basic" data-toggle="tab" style="padding: 10px 10px; ">Basic</a></li>   
              <?php if($this->session->userdata('companey_id')==292) {  if($enquiry->status==3) {?>
               <li><a href="#followup" data-toggle="tab" style="padding: 10px 10px;">AMC</a></li>
 
@@ -776,11 +794,33 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
             <?php if($this->session->companey_id=='83'){ ?>
             <li><a href="#login-tab" data-toggle="tab" style="padding: 10px 10px;">Login Trail</a></li>
             <?php } ?>
+            <span style="position: absolute; right: 0; font-size: 22px; line-height: 40px; z-index: 999"><i class="fa fa-caret-right"  onclick="tabScroll('right')"></i></span>
             </ul>
             <div class="tab-content clearfix">
                 <div class="tab-pane active" id="basic">
                   <?php echo tab_content(1,$this->session->companey_id,$enquiry_id); ?>
                </div>
+<script type="text/javascript">
+  function tabScroll(side)
+  {
+    if(side=='left')
+    {
+      var leftPos = $('.nav-tabs').scrollLeft();
+     
+        $(".nav-tabs").animate({
+            scrollLeft: leftPos - 200
+        }, 100);
+    }
+    else if (side=='right')
+    {   
+        var leftPos = $('.nav-tabs').scrollLeft();
+      
+        $(".nav-tabs").animate({
+            scrollLeft: leftPos + 200
+        }, 100);
+    }
+  }
+</script>
 
                
                <div class="tab-pane" id="order">
@@ -2862,7 +2902,7 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                <label><?php echo display('subject') ?></label>
                <input type="text" name="email_subject" class="form-control" id="email_subject">
                <label><?php echo display('message') ?></label>
-               <textarea class="form-control summernote" name="message_name"  rows="10" id="template_message"></textarea>  
+               <textarea class="form-control" name="message_name"  rows="10" id="template_message"></textarea>  
             </div>
          </div>
          <div class="col-md-12">
@@ -3350,7 +3390,15 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
     if(type != 'Send Email'){
       $("#email_subject").hide();
       $("#email_subject").prev().hide();
+       $("#template_message").summernote('destroy');
+      $("#template_message").html('');
     }else{
+      $("#template_message").summernote({
+        height: 200,                 // set editor height
+        minHeight: null,             // set minimum height of editor
+        maxHeight: null,             // set maximum height of editor
+        focus: false                 // set focus to editable area after initializing summernote
+      });
       $("#email_subject").show();
       $("#email_subject").prev().show();
     }
@@ -3696,7 +3744,9 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
          success:function(data){
              var obj = JSON.parse(data);
               $('#templates option[value='+tmpl_id+']').attr("selected", "selected");
+
               $(".summernote").summernote("code", obj.template_content);
+
               $("#email_subject").val(obj.mail_subject);
              //$("#template_message").html(obj.template_content);
          }               

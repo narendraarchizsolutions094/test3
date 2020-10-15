@@ -115,8 +115,7 @@ class Form extends CI_Controller {
 			$input_readonly = $this->input->post('readonly');
 			$input_disabled = $this->input->post('disabled');
 			$form_id = $this->input->post('form_id');
-			$page_id	=	$this->input->post('page_id');
-
+			$page_id	=	0;
 
 			$process_list = $this->input->post('process_list');		
 			if (!empty($process_list)) {
