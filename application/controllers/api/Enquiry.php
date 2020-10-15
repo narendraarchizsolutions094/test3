@@ -125,7 +125,7 @@ class Enquiry extends REST_Controller {
 
             }
 		    $this->load->model('rule_model');
-        	$this->rule_model->execute_rules($encode,array(1,2,3),$comp_id,$this->input->post('user_id'));  
+        	$this->rule_model->execute_rules($encode,array(1,2,3,6,7),$comp_id,$this->input->post('user_id'));  
         	          
 			if ($insert_id) {
 			    foreach($this->input->post() as $ind => $val){         

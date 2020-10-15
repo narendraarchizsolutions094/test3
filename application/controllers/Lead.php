@@ -554,7 +554,7 @@ public function select_app_by_ins() {
                 }
             } 
             $this->load->model('rule_model');
-            $this->rule_model->execute_rules($enq_code,array(1,2,3));
+            $this->rule_model->execute_rules($enq_code,array(1,2,3,6,7));
 			//print_r($coment_type);exit;
 if($coment_type == 1){			
     redirect('enquiry/view/'.$en_id);
@@ -827,7 +827,7 @@ if($coment_type == 1){
             $msg = $comment.' Successfully';
 
             $this->load->model('rule_model');
-            $this->rule_model->execute_rules($lead_code,array(1,2,3));  
+            $this->rule_model->execute_rules($lead_code,array(1,2,3,6,7));  
 
             if ($lead->status == 2 && $this->session->companey_id == 76 || ($this->session->companey_id == 57 && $data['enquiry']->product_id == 122) ) {
                 $user_right = '';
