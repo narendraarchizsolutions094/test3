@@ -141,12 +141,23 @@
 							  <option <?php if(!empty(set_value('report_columns'))){if (in_array('Gender',set_value('report_columns'))) {echo 'selected';}}?>>Gender</option>
 							  <option <?php if(!empty(set_value('report_columns'))){if (in_array('Source',set_value('report_columns'))) {echo 'selected';}}?>>Source</option>
 							  <option <?php if(!empty(set_value('report_columns'))){if (in_array('Subsource',set_value('report_columns'))) {echo 'selected';}}?>>Subsource</option>
+							  <option <?php if(!empty(set_value('report_columns'))){if (in_array('Disposition',set_value('report_columns'))) {echo 'selected';}}?>>Disposition</option>
 							  <option <?php if(!empty(set_value('report_columns'))){if (in_array('Lead Description',set_value('report_columns'))) {echo 'selected';}}?>>Lead Description</option>
+                
+                <option <?php if(!empty(set_value('report_columns'))){if (in_array('Disposition Remark',set_value('report_columns'))) {echo 'selected';}}?>>Disposition Remark</option>
+
+                <option <?php if(!empty(set_value('report_columns'))){if (in_array('Drop Reason',set_value('report_columns'))) {echo 'selected';}}?>>Drop Reason</option>
+
+                <option <?php if(!empty(set_value('report_columns'))){if (in_array('Drop Comment',set_value('report_columns'))) {echo 'selected';}}?>>Drop Comment</option>
+
+                <option <?php if(!empty(set_value('report_columns'))){if (in_array('Conversion Probability',set_value('report_columns'))) {echo 'selected';}}?>>Conversion Probability</option>
+
+                <option <?php if(!empty(set_value('report_columns'))){if (in_array('Remark',set_value('report_columns'))) {echo 'selected';}}?>>Remark</option>
+
 							  <option <?php if(!empty(set_value('report_columns'))){if (in_array('Status',set_value('report_columns'))) {echo 'selected';}}?>>Status</option>
 							  <option <?php if(!empty(set_value('report_columns'))){if (in_array('DOE',set_value('report_columns'))) {echo 'selected';}}?>>DOE</option>
 							  <option <?php if(!empty(set_value('report_columns'))){if (in_array('Process',set_value('report_columns'))) {echo 'selected';}}?>>Process</option>
 							  <option <?php if(!empty(set_value('report_columns'))){if (in_array('Updated Date',set_value('report_columns'))) {echo 'selected';}}?>>Updated Date</option>
-							  <option <?php if(!empty(set_value('report_columns'))){if (in_array('Disposition',set_value('report_columns'))) {echo 'selected';}}?>>Disposition</option>
                 <option <?php if(!empty(set_value('report_columns'))){if (in_array('State',set_value('report_columns'))) {echo 'selected';}}?>>State</option>
                 <option <?php if(!empty(set_value('report_columns'))){if (in_array('City',set_value('report_columns'))) {echo 'selected';}}?>>City</option>
                 

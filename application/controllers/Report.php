@@ -188,9 +188,31 @@ class Report extends CI_Controller {
               if (in_array('Subsource', $report_columns)){
                 $row[] = (!empty($repdetails->subsource_name)) ? $repdetails->subsource_name:'NA'; 
               }
+               if (in_array('Disposition', $report_columns)){
+                  $row[] = (!empty($repdetails->followup_name)) ? $repdetails->followup_name:'NA';
+               }
               if (in_array('Lead Description', $report_columns)){
-                $row[] = (!empty($repdetails->lead_discription)) ? $repdetails->lead_discription :"NA"; 
+                $row[] = (!empty($repdetails->description)) ? $repdetails->description :"NA"; 
               }
+
+              if (in_array('Disposition Remark', $report_columns)){
+                $row[] = (!empty($repdetails->lead_discription_reamrk)) ? $repdetails->lead_discription_reamrk :"NA"; 
+              }
+
+              if (in_array('Drop Reason', $report_columns)){
+                $row[] = (!empty($repdetails->drop_status)) ? $repdetails->drop_status :"NA"; 
+              }
+
+              if (in_array('Drop Comment', $report_columns)){
+                $row[] = (!empty($repdetails->drop_reason)) ? $repdetails->drop_reason :"NA"; 
+              }
+              if (in_array('Conversion Probability', $report_columns)){
+                $row[] = (!empty($repdetails->lead_score)) ? $repdetails->lead_score :"NA"; 
+              }
+              if (in_array('Remark', $report_columns)){
+                $row[] = (!empty($repdetails->enq_remark)) ? $repdetails->enq_remark :"NA"; 
+              }              
+
               if (in_array('Status', $report_columns)) {
                  if ($repdetails->status == 1) {
                  $status = 'Enquiry';
@@ -209,9 +231,6 @@ class Report extends CI_Controller {
                }
                if (in_array('Updated Date', $report_columns)){
                 $row[] = $repdetails->update_date; 
-               }
-               if (in_array('Disposition', $report_columns)){
-                  $row[] = (!empty($repdetails->followup_name)) ? $repdetails->followup_name:'NA';
                }
                if (in_array('State', $report_columns)){
                   $row[] = (!empty($repdetails->state_id)) ? get_state_name($repdetails->state_id):'NA';
@@ -481,9 +500,35 @@ class Report extends CI_Controller {
               if (in_array('Subsource', $this->session->userdata('post_report_columns'))){
                 $row[] = (!empty($repdetails->subsource_name)) ? $repdetails->subsource_name:'NA'; 
               }
+               if (in_array('Disposition', $this->session->userdata('post_report_columns'))){
+                  $row[] = (!empty($repdetails->followup_name)) ? $repdetails->followup_name:'NA';
+               }
               if (in_array('Lead Description', $this->session->userdata('post_report_columns'))){
                 $row[] = (!empty($repdetails->description)) ? $repdetails->description :"NA"; 
               }
+
+
+
+              if (in_array('Disposition Remark', $this->session->userdata('post_report_columns'))){
+                $row[] = (!empty($repdetails->lead_discription_reamrk)) ? $repdetails->lead_discription_reamrk :"NA"; 
+              }
+
+              if (in_array('Drop Reason', $this->session->userdata('post_report_columns'))){
+                $row[] = (!empty($repdetails->drop_status)) ? $repdetails->drop_status :"NA"; 
+              }
+
+              if (in_array('Drop Comment', $this->session->userdata('post_report_columns'))){
+                $row[] = (!empty($repdetails->drop_reason)) ? $repdetails->drop_reason :"NA"; 
+              }
+              if (in_array('Conversion Probability', $this->session->userdata('post_report_columns'))){
+                $row[] = (!empty($repdetails->lead_score)) ? $repdetails->lead_score :"NA"; 
+              }
+              if (in_array('Remark', $this->session->userdata('post_report_columns'))){
+                $row[] = (!empty($repdetails->enq_remark)) ? $repdetails->enq_remark :"NA"; 
+              }              
+
+
+
               if (in_array('Status', $this->session->userdata('post_report_columns'))) {
                  if ($repdetails->status == 1) {
                  $status = 'Enquiry';
@@ -502,9 +547,6 @@ class Report extends CI_Controller {
                }
                if (in_array('Updated Date',$this->session->userdata('post_report_columns'))){
                 $row[] = $repdetails->update_date; 
-               }
-               if (in_array('Disposition', $this->session->userdata('post_report_columns'))){
-                  $row[] = (!empty($repdetails->followup_name)) ? $repdetails->followup_name:'NA';
                }
                if (in_array('State', $this->session->userdata('post_report_columns'))){
                   $row[] = (!empty($repdetails->state_id)) ? get_state_name($repdetails->state_id):'NA';
