@@ -1231,6 +1231,12 @@ if($root=='https://student.spaceinternationals.com'){  ?>
 
                         <li class="<?php echo (in_array($segment2,array('backupfiles')) ?"active":'') ?>"> <a  href="<?php echo base_url("dashboard/backupfiles"); ?>">Backup Files</a>
                           </li>
+                          <li class="<?php echo (in_array($segment2,array('user_type')) ?"active":'') ?>"> <a  href="<?php echo base_url('user/user_type'); ?>"><?php echo display('user_function') ?></a>
+                          </li>
+                          <li class="<?php echo (in_array($segment2,array('user')) ?"active":'') ?>"> <a  href="<?php echo base_url("user/index"); ?>"><?php echo display('user_list'); ?></a>
+                          </li>
+                          <li class="<?php echo (in_array($segment2,array('user_tree')) ?"active":'') ?>"> <a  href="<?php echo base_url("user/user_tree") ?>">User Hierarchy</a>
+                          </li>
                       <?php
                         }else{ ?>                          
                         <li class="<?php echo ($segment1=='user' && in_array($segment2,array('user_type','edit_user_role','permissions')) ?"active":'') ?>" style="<?php if(in_array(140,$module) || in_array(141,$module) || in_array(142,$module)|| in_array(143,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">

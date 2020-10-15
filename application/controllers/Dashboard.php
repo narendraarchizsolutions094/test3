@@ -414,7 +414,7 @@ class Dashboard extends CI_Controller {
                     'logo' => (!empty($setting->logo) ? $setting->logo : null),
                     'favicon' => (!empty($setting->favicon) ? $setting->favicon : null),
                     'footer_text' => (!empty($setting->footer_text) ? $setting->footer_text : null),
-                    'process' => $process,
+                    // 'process' => $process,
                     'telephony_agent_id' => $check_user->row()->telephony_agent_id,
 					'telephony_token'    => $check_user->row()->telephony_token,
                     'availability'    => $check_user->row()->availability,
@@ -479,9 +479,9 @@ $this->load->library('zip');
             $check_user = $this->dashboard_model->check_user($postData);                       
            
             $active = 1;
-            if($check_user->num_rows() && $check_user->row()->user_permissions!=1 && ($check_user->row()->status == 0 || $check_user->row()->status == null) ){
-                $active = 0;
-            }
+            // if($check_user->num_rows() && $check_user->row()->user_permissions!=1 && ($check_user->row()->status == 0 || $check_user->row()->status == null) ){
+            //     $active = 0;
+            // }
             if ($check_user->num_rows() === 1 && $active) {
                 
                 $city_row = $this->db->select("*")
