@@ -40,10 +40,8 @@ class Enquiry extends REST_Controller {
         }    
     }
     public function create_post()
-    { 	$this->set_response([
-                'status' => TRUE,
-                'message' => "checking msg"
-            ], REST_Controller::HTTP_OK);
+    { 	
+    	
     	$upd =$this->input->post('update');		
 		if(!empty($this->input->post('email') && !empty($this->input->post('mobileno')))){
 		  	$comp_id	=	$this->input->post('company_id');		
