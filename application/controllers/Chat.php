@@ -38,21 +38,25 @@ class Chat extends CI_Controller {
 			$where .= ' AND product_id='.$process_id;
 		}
 		$row	=	$this->enquiry_model->is_enquiry_exist($where);
+		
+
 		if (!empty($row)) {			
 			$res  = $row['Enquery_id'];
-			$this->session->set_userdata('user_id',$res);
-			$this->session->set_userdata('fullname',$row['name'].' '.$row['lastname']);
+			$this->session->set_userdata('chat_user_id',$res);
+			$this->session->set_userdata('chat_fullname',$row['name'].' '.$row['lastname']);
 			
-			$this->session->set_userdata('mobile',$row['phone']);
-			$this->session->set_userdata('email',$row['email']);
-			$this->session->set_userdata('companey_id',$row['comp_id']);
-
+			$this->session->set_userdata('chat_mobile',$row['phone']);
+			$this->session->set_userdata('chat_email',$row['email']);
+			$this->session->set_userdata('chat_companey_id',$row['comp_id']);
+			
 		}else{
 
 			$name	=	explode(' ', $name);
 			
 			$fname  	= !empty($name[0])?$name[0]:'';
 			$last_name  = !empty($name[1])?$name[1]:'';
+
+			
 
 			$curl = curl_init();
 			$api_url = base_url()."api/enquiry/create";
@@ -64,30 +68,39 @@ class Chat extends CI_Controller {
 			  	CURLOPT_TIMEOUT => 0,
 			  	CURLOPT_FOLLOWLOCATION => true,
 			  	CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+			  	CURLOPT_SSL_VERIFYPEER =>false, // line added beacuse of SSL Error 60
 			  	CURLOPT_CUSTOMREQUEST => "POST",
 			  	CURLOPT_POSTFIELDS => array('fname' => $fname,'lastname' => $last_name,'email' => $email,'mobileno' => $mobile,'company_id' => $comp_id,'process_id' => $process_id,'user_id' => 154),
 			  	CURLOPT_HTTPHEADER => array(
 			    	"Cookie: ci_session=3ba7d4lq4alv2pgpq3sc8t2ojrh41s04"
 			  	),
 			));
-			$response = curl_exec($curl);		
+			$response = curl_exec($curl);
+
+			if(curl_error($curl))
+				echo curl_error($curl);
+
 			curl_close($curl);	
 
 			$row	=	$this->enquiry_model->is_enquiry_exist($where);	
+
+			//echo $row;
+			//echo $response.'by me';
 			//echo $this->db->last_query();
 			//var_dump($response);
 			//var_dump($api_url);
 			if (!empty($row)) {			
 				$res  = $row['Enquery_id'];
-				$this->session->set_userdata('user_id',$res);
-				$this->session->set_userdata('fullname',$row['name'].' '.$row['lastname']);
-				$this->session->set_userdata('mobile',$row['phone']);
-				$this->session->set_userdata('email',$row['email']);
-				$this->session->set_userdata('companey_id',$row['comp_id']);
+				$this->session->set_userdata('chat_user_id',$res);
+				$this->session->set_userdata('chat_fullname',$row['name'].' '.$row['lastname']);
+				$this->session->set_userdata('chat_mobile',$row['phone']);
+				$this->session->set_userdata('chat_email',$row['email']);
+				$this->session->set_userdata('chat_companey_id',$row['comp_id']);
 			}
-
+			//echo"Els";
 		}
-		echo json_encode(array('user_id'=>$this->session->user_id,'fullname'=>$this->session->fullname,'mobile'=>$this->session->mobile,'email'=>$this->session->email,'companey_id'=>$this->session->companey_id));
+		//print_r($_SESSION);
+		echo json_encode(array('user_id'=>$this->session->chat_user_id,'fullname'=>$this->session->chat_fullname,'mobile'=>$this->session->chat_mobile,'email'=>$this->session->chat_email,'companey_id'=>$this->session->chat_companey_id));
 	}
 	public function get_current_chat_session(){
 		echo json_encode(array('user_id'=>$this->session->user_id,'fullname'=>$this->session->fullname,'mobile'=>$this->session->mobile,'email'=>$this->session->email,'companey_id'=>$this->session->companey_id));	
