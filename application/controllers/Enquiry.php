@@ -512,7 +512,6 @@ class Enquiry extends CI_Controller {
         // $ruledata   = $this->db->select("*")->from("tbl_new_settings")->where('comp_id',$this->session->companey_id)->get()->row();
         // if($ruledata->duplicacy_status == 0)
         // { 
-            
         //     if($ruledata->field_for_identification == 'email')
         //     {
         //         $this->form_validation->set_rules('email', display('email'), 'xss_clean|required|is_unique[enquiry.email]', array('is_unique'=>'Email already exist'));
@@ -705,6 +704,7 @@ class Enquiry extends CI_Controller {
             $data['content'] = $this->load->view('add-equiry1', $data, true);                
             $this->load->view('layout/main_wrapper', $data);
         }
+
 
     }
 

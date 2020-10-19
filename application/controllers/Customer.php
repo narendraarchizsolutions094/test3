@@ -1,7 +1,9 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
-class Customer extends CI_Controller {
-    public function __construct() {
+defined('BASEPATH') or exit('No direct script access allowed');
+class Customer extends CI_Controller
+{
+    public function __construct()
+    {
         parent::__construct();
         $this->load->model(array(
             'doctor_model',
@@ -11,30 +13,32 @@ class Customer extends CI_Controller {
             'dash_model'
         ));
 
-        
+
         if ($this->session->user_right != 1) {
-            redirect('','refresh');
+            redirect('', 'refresh');
         }
     }
-    public function index() {
+    public function index()
+    {
         $data['page_title'] = display('doctor_list');
         $data['doctors'] = $this->doctor_model->read();
         $data['content'] = $this->load->view('doctor', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }
-   
-    public function logged_in_as_user() {  
-        $user_id=$this->uri->segment('3');
-        $userd = $this->dashboard_model->check_userByID($user_id);   
+
+    public function logged_in_as_user()
+    {
+        $user_id = $this->uri->segment('3');
+        $userd = $this->dashboard_model->check_userByID($user_id);
         if ($userd->num_rows() === 1) {
-        $userdata=$userd->row();
-        $check_user = $this->dashboard_model->check_userByMAIL($userdata->email);                       
+            $userdata = $userd->row();
+            $check_user = $this->dashboard_model->check_userByMAIL($userdata->email);
             if ($check_user->num_rows() === 1) {
                 //logout old user
                 $this->session->unset_userdata([
-                    'menu'                  =>'',
+                    'menu'                  => '',
                     'isLogIn'               => false,
-                    'user_id'               =>'',
+                    'user_id'               => '',
                     'companey_id'           => '',
                     'email'                 => '',
                     'designation'           => '',
@@ -45,112 +49,109 @@ class Customer extends CI_Controller {
                 // $this->rememberme->deleteCookie();
                 // ends
 
-                
+
                 $city_row = $this->db->select("*")
-                        ->from("city")
-                        ->where('id', $check_user->row()->city_id)
-                        ->get();                        
-                
+                    ->from("city")
+                    ->where('id', $check_user->row()->city_id)
+                    ->get();
+
                 $user_data = $check_user->row();
-                $this->session->set_userdata('user_id',$user_data->pk_i_admin_id);                
-                if(user_access(230) || user_access(231) || user_access(232) || user_access(233) || user_access(234) || user_access(235) || user_access(236)){ 
+                $this->session->set_userdata('user_id', $user_data->pk_i_admin_id);
+                if (user_access(230) || user_access(231) || user_access(232) || user_access(233) || user_access(234) || user_access(235) || user_access(236)) {
 
                     $arr = explode(',', $user_data->process);
-                    $this->session->set_userdata('companey_id',$user_data->companey_id);                
+                    $this->session->set_userdata('companey_id', $user_data->companey_id);
                     $process_filter =   get_cookie('selected_process');
-                    
+
                     if (!empty($process_filter)) {
-                        $process_filter = explode(',', $process_filter);                                
+                        $process_filter = explode(',', $process_filter);
                         $process_filter = array_intersect($process_filter, $arr);
-                        if(empty($process_filter)){
-                            $this->session->set_userdata('process',$arr);
-                        }else{
-                            $this->session->set_userdata('process',$process_filter);
+                        if (empty($process_filter)) {
+                            $this->session->set_userdata('process', $arr);
+                        } else {
+                            $this->session->set_userdata('process', $process_filter);
                         }
-                    }else{
+                    } else {
                         $process_filter = array();
-                
-                        $this->session->set_userdata('process',$arr);
+
+                        $this->session->set_userdata('process', $arr);
                     }
                     $c = implode(',', $this->session->process);
-                    set_cookie('selected_process',$c,'31536000'); 
-                 
-                }               
+                    set_cookie('selected_process', $c, '31536000');
+                }
                 $location_arr = array();
-                if(!empty($city_row->row_array())){
+                if (!empty($city_row->row_array())) {
                     $location_arr = $city_row->row_array();
-                }                
-                   if(0){                        
-                        $user_process = explode(',', $user_data->process);                        
+                }
+                if (0) {
+                    $user_process = explode(',', $user_data->process);
 
-                        $this->db->select('sb_id,product_name');
-                        $this->db->where('comp_id',$this->session->companey_id);
-                        $this->db->where_in('sb_id',$user_process);
-                       $process_arr     =   $this->db->get('tbl_product')->result_array();                      
-                       
-                       $process = [];
-                       
-                       $process_html = '';
-                       
-                       if(!empty($process_arr)){
-							
-                            if(user_access(270)){								
-								$process_html .= "<select class='form-control text-center' name='user_process[]' multiple id='process_elem'>";
-							}else{
-								$process_html .= "<select class='form-control text-center' name='user_process[]' id='process_elem'>";
-							}
-                            foreach ($process_arr as $value) {                                
-                                $process_html .= "<option value='".$value['sb_id']."'>".$value['product_name']."</option>";
-                                $process[$value['sb_id']] = $value['product_name'];
-                            }
-							$process_html .= "</select>";                                                       
+                    $this->db->select('sb_id,product_name');
+                    $this->db->where('comp_id', $this->session->companey_id);
+                    $this->db->where_in('sb_id', $user_process);
+                    $process_arr     =   $this->db->get('tbl_product')->result_array();
 
-                            $res = array('status'=>true,'message'=>'Successfully Logged In','process'=>$process_html);
+                    $process = [];
 
-                       }else{
-                            $res = array('status'=>false,'message'=>'You are not in any process. Please contact your admin!','process'=>$process_html);
-                       }
-                   }else{
-					   if($user_data->user_permissions==151){
-                    	   $menu=1;
-                    	}else{
-                    	   $menu=2;
-                    	}
-                        $data = $this->session->set_userdata([
-						    'menu'                  => $menu,
-                            'isLogIn'               => true,
-                            'user_id'               => $user_data->pk_i_admin_id,
-                            'companey_id'           => $user_data->companey_id,
-                            //'process'               => $check_user->row()->process,
-                            'email'                 => $user_data->s_user_email,
-                            'designation'           => $user_data->designation,
-                            'phone'                 => $user_data->s_phoneno,
-                            'fullname'              => $user_data->s_display_name . ' ' . $user_data->last_name,
-                            'country_id'            => !empty($location_arr)?$location_arr['country_id']:'',
-                            'region_id'             => !empty($location_arr)?$location_arr['region_id']:'',
-                            'territory_id'          => !empty($location_arr)?$location_arr['territory_id']:'',
-                            'state_id'              => !empty($location_arr)?$location_arr['state_id']:'',
-                            'city_id'               => $user_data->city_id,                   
-                            'user_right'            => $user_data->user_permissions,
-                            'picture'               => $user_data->picture,
-                            'modules'               => $user_data->modules,
-                            'title'                 => (!empty($setting->title) ? $setting->title : null),
-                            'address'               => (!empty($setting->description) ? $setting->description : null),
-                            'logo'                  => (!empty($setting->logo) ? $setting->logo : null),
-                            'favicon'               => (!empty($setting->favicon) ? $setting->favicon : null),
-                            'footer_text'           => (!empty($setting->footer_text) ? $setting->footer_text : null),                    
-                            'telephony_agent_id'    => $user_data->telephony_agent_id,
-							'telephony_token'       => $user_data->telephony_token,
-                            'expiry_date'           => strtotime($user_data->valid_upto),
-                            'availability'    => $user_data->availability,
-                        ]);
-                        //$this->user_model->add_login_history();
-                        $res = array('status'=>true,'message'=>'Successfully Logged In');   
-                redirect('dashboard/home');
+                    $process_html = '';
 
-                   }
+                    if (!empty($process_arr)) {
+
+                        if (user_access(270)) {
+                            $process_html .= "<select class='form-control text-center' name='user_process[]' multiple id='process_elem'>";
+                        } else {
+                            $process_html .= "<select class='form-control text-center' name='user_process[]' id='process_elem'>";
+                        }
+                        foreach ($process_arr as $value) {
+                            $process_html .= "<option value='" . $value['sb_id'] . "'>" . $value['product_name'] . "</option>";
+                            $process[$value['sb_id']] = $value['product_name'];
+                        }
+                        $process_html .= "</select>";
+
+                        $res = array('status' => true, 'message' => 'Successfully Logged In', 'process' => $process_html);
+                    } else {
+                        $res = array('status' => false, 'message' => 'You are not in any process. Please contact your admin!', 'process' => $process_html);
+                    }
+                } else {
+                    if ($user_data->user_permissions == 151) {
+                        $menu = 1;
+                    } else {
+                        $menu = 2;
+                    }
+                    $data = $this->session->set_userdata([
+                        'menu'                  => $menu,
+                        'isLogIn'               => true,
+                        'user_id'               => $user_data->pk_i_admin_id,
+                        'companey_id'           => $user_data->companey_id,
+                        //'process'               => $check_user->row()->process,
+                        'email'                 => $user_data->s_user_email,
+                        'designation'           => $user_data->designation,
+                        'phone'                 => $user_data->s_phoneno,
+                        'fullname'              => $user_data->s_display_name . ' ' . $user_data->last_name,
+                        'country_id'            => !empty($location_arr) ? $location_arr['country_id'] : '',
+                        'region_id'             => !empty($location_arr) ? $location_arr['region_id'] : '',
+                        'territory_id'          => !empty($location_arr) ? $location_arr['territory_id'] : '',
+                        'state_id'              => !empty($location_arr) ? $location_arr['state_id'] : '',
+                        'city_id'               => $user_data->city_id,
+                        'user_right'            => $user_data->user_permissions,
+                        'picture'               => $user_data->picture,
+                        'modules'               => $user_data->modules,
+                        'title'                 => (!empty($setting->title) ? $setting->title : null),
+                        'address'               => (!empty($setting->description) ? $setting->description : null),
+                        'logo'                  => (!empty($setting->logo) ? $setting->logo : null),
+                        'favicon'               => (!empty($setting->favicon) ? $setting->favicon : null),
+                        'footer_text'           => (!empty($setting->footer_text) ? $setting->footer_text : null),
+                        'telephony_agent_id'    => $user_data->telephony_agent_id,
+                        'telephony_token'       => $user_data->telephony_token,
+                        'expiry_date'           => strtotime($user_data->valid_upto),
+                        'availability'    => $user_data->availability,
+                    ]);
+                    //$this->user_model->add_login_history();
+                    $res = array('status' => true, 'message' => 'Successfully Logged In');
+                    redirect('dashboard/home');
+                }
             } else {
-            $this->session->set_flashdata('exception', display('please_try_again'));
+                $this->session->set_flashdata('exception', display('please_try_again'));
                 redirect('login');
             }
         } else {
@@ -158,51 +159,47 @@ class Customer extends CI_Controller {
 
             redirect('login');
         }
-      
-
     }
-    public function update_formfields(){
-     if($_POST){
+    public function update_formfields()
+    {
+        if ($_POST) {
 
-        $id = $_POST['id'];
-        $active = $_POST['active'];
-        $proc = $_POST['proc'];
-        // print_r($proc);
-        $user_id = $this->session->userdata('com_id');
-        // print_r($user_id);
-        if($active==1){
-         $status = 1;
+            $id = $_POST['id'];
+            $active = $_POST['active'];
+            $proc = $_POST['proc'];
+            // print_r($proc);
+            $user_id = $this->session->userdata('com_id');
+            // print_r($user_id);
+            if ($active == 1) {
+                $status = 1;
+            }
+            if ($active == 0) {
+                $status = 0;
+            }
+            // print_r($status);exit();
+
+            $proc1 = implode(',', $proc);
+            $arr = array(
+                'process_id' => $proc1,
+                'status' => $status
+            );
+            // print_r($arr);
+            $res = $this->User_model->update_inputfileds($arr, $id, $user_id);
+            if ($res) {
+
+                $this->session->set_flashdata('message', "Updated Successfuly");
+                // redirect('customer/edit/'.$user_id);
+                echo 1;
+            } else {
+                echo 0;
+            }
         }
-        if($active==0){
-            $status = 0;
-        }
-        // print_r($status);exit();
-
-        $proc1 = implode(',', $proc);
-        $arr = array(
-         'process_id'=>$proc1,   
-         'status' => $status
-        );
-        // print_r($arr);
-        $res = $this->User_model->update_inputfileds($arr,$id,$user_id);
-        if($res){
-
-        $this->session->set_flashdata('message', "Updated Successfuly");
-        // redirect('customer/edit/'.$user_id);
-        echo 1;
-
-        }
-        else{
-            echo 0;
-        }
-
-       }
-
     }
 
-    public function create() {
+    public function create()
+    {
 
-    
+
         $data['page_title'] = display('add_doctor');
         $this->form_validation->set_rules('firstname', display('first_name'), 'required|max_length[50]');
         $this->form_validation->set_rules('lastname', display('last_name'), 'required|max_length[50]');
@@ -225,16 +222,19 @@ class Customer extends CI_Controller {
         $this->form_validation->set_rules('address', display('address'), 'required|max_length[255]');
         $this->form_validation->set_rules('status', display('status'), 'required');
         $this->form_validation->set_rules('a_validupto', 'Valid Upto', 'required');
-        $this->form_validation->set_rules('a_accounttype', 'Account Type' , 'required');
+        $this->form_validation->set_rules('a_accounttype', 'Account Type', 'required');
         #-------------------------------#
         //picture upload
         $picture = $this->fileupload->do_upload(
-                'assets/images/doctor/', 'picture'
+            'assets/images/doctor/',
+            'picture'
         );
         // if picture is uploaded then resize the picture
         if ($picture !== false && $picture != null) {
             $this->fileupload->do_resize(
-                    $picture, 293, 350
+                $picture,
+                293,
+                350
             );
         }
         //if picture is not uploaded
@@ -276,8 +276,8 @@ class Customer extends CI_Controller {
                 'degree' => $this->input->post('degree', true),
                 'created_by' => $this->session->userdata('user_id'),
                 'create_date' => date('Y-m-d'),
-                'account_type'=> ($this->input->post("a_accounttype")) ? $this->input->post("a_accounttype") : "",
-                'valid_upto'=> ($this->input->post("a_validupto")) ? date('Y-m-d',strtotime($this->input->post("a_validupto"))) : "",
+                'account_type' => ($this->input->post("a_accounttype")) ? $this->input->post("a_accounttype") : "",
+                'valid_upto' => ($this->input->post("a_validupto")) ? date('Y-m-d', strtotime($this->input->post("a_validupto"))) : "",
                 'status' => $this->input->post('status', true),
             ];
         } else { //update a user
@@ -304,14 +304,14 @@ class Customer extends CI_Controller {
                 'blood_group' => $this->input->post('blood_group', true),
                 'degree' => $this->input->post('degree', true),
                 'created_by' => $this->session->userdata('user_id'),
-                'account_type'=> ($this->input->post("a_accounttype")) ? $this->input->post("a_accounttype") : "",
-                'valid_upto'=> ($this->input->post("a_validupto")) ? date('Y-m-d',strtotime($this->input->post("a_validupto"))) : "",
+                'account_type' => ($this->input->post("a_accounttype")) ? $this->input->post("a_accounttype") : "",
+                'valid_upto' => ($this->input->post("a_validupto")) ? date('Y-m-d', strtotime($this->input->post("a_validupto"))) : "",
                 'create_date' => date('Y-m-d'),
                 'status' => $this->input->post('status', true),
             ];
         }
-        
-        if($this->form_validation->run() === true) {
+
+        if ($this->form_validation->run() === true) {
             if (empty($postData['user_id'])) {
                 $companey_id    =   $this->doctor_model->create($postData);
                 $companey_insert_id = $this->db->insert_id();
@@ -319,16 +319,17 @@ class Customer extends CI_Controller {
                     'comp_id' => $companey_insert_id,
                     'user_role' => 'Admin',
                     'user_permissions' => '10,11,12,13,30,31,32,33,60,61,62,63,70,71,72,73,80,81,82,83,90,91,92,93,120,121,122,123,130,131,132,133,140,141,142,143',
-                    'status' => '1');
-                $user_right    =   $this->db->insert('tbl_user_role',$tbl_user_role);
+                    'status' => '1'
+                );
+                $user_right    =   $this->db->insert('tbl_user_role', $tbl_user_role);
                 $right_insert_id = $this->db->insert_id();
 
-                
+
 
                 if ($companey_id) {
                     $post_data = $postData;
                     $post_data['companey_id'] = $companey_insert_id;
-                    $post_data['user_permissions'] = $right_insert_id;                                        
+                    $post_data['user_permissions'] = $right_insert_id;
                     $this->create_user($post_data);
                     $this->session->set_flashdata('message', display('save_successfully'));
                 } else {
@@ -346,35 +347,33 @@ class Customer extends CI_Controller {
                     $id = $this->input->post('role_id');
                     $user_role = $this->input->post('user_type');
                     $permissions = $this->input->post('permissions');
-                   
 
-                   if(in_array(230, $permissions) || in_array(231, $permissions) || in_array(232, $permissions) || in_array(233, $permissions) || in_array(234, $permissions) || in_array(235, $permissions) || in_array(236, $permissions)){
-                   		
-                   		$this->db->where('comp_id',$this->input->post('user_id', true));
-                   		$c_product	=	$this->db->get('tbl_product')->num_rows();
-                   		
-                   		if($c_product == 0){
-	                   		$product_name = 'Demo Process';
-						    $main_fun_name='';
-						    $process_data = array(					        
-						        'product_name'=>$product_name,
-								'comp_id'=>$this->input->post('user_id', true),
-						        'main_fun'=>$main_fun_name,
-						        'status'=>1,
-						        'added_by'  =>1,
-						        'added_on'  =>date('d-m-Y')
-						   );		
-						   $this->load->model('dash_model');			   
-						   $this->dash_model->add_product($process_data);
 
-						   	$process_id	=	$this->db->insert_id();
+                    if (in_array(230, $permissions) || in_array(231, $permissions) || in_array(232, $permissions) || in_array(233, $permissions) || in_array(234, $permissions) || in_array(235, $permissions) || in_array(236, $permissions)) {
 
-						   	$this->db->where('user_permissions',$id);
-						   	$this->db->update('tbl_admin',array('process'=>$process_id));
+                        $this->db->where('comp_id', $this->input->post('user_id', true));
+                        $c_product    =    $this->db->get('tbl_product')->num_rows();
 
-                   		}
+                        if ($c_product == 0) {
+                            $product_name = 'Demo Process';
+                            $main_fun_name = '';
+                            $process_data = array(
+                                'product_name' => $product_name,
+                                'comp_id' => $this->input->post('user_id', true),
+                                'main_fun' => $main_fun_name,
+                                'status' => 1,
+                                'added_by'  => 1,
+                                'added_on'  => date('d-m-Y')
+                            );
+                            $this->load->model('dash_model');
+                            $this->dash_model->add_product($process_data);
 
-					}
+                            $process_id    =    $this->db->insert_id();
+
+                            $this->db->where('user_permissions', $id);
+                            $this->db->update('tbl_admin', array('process' => $process_id));
+                        }
+                    }
 
 
                     $permissions = implode(',', $permissions);
@@ -405,32 +404,34 @@ class Customer extends CI_Controller {
         }
     }
 
-    public function create_user($post_data){
+    public function create_user($post_data)
+    {
         /*echo "<pre>";
         print_r($post_data);
         echo "</pre>";
-        exit();*/        
-        
-        $post_data    =   array(       
-            'user_permissions'      => $post_data['user_permissions'],                                                  
+        exit();*/
+
+        $post_data    =   array(
+            'user_permissions'      => $post_data['user_permissions'],
             's_password'            => $post_data['password'],
             's_display_name'        => $post_data['firstname'],
             'last_name'             => $post_data['lastname'],
             'date_of_birth'         => $post_data['date_of_birth'],
-            'joining_date'          => $post_data['create_date'],            
+            'joining_date'          => $post_data['create_date'],
             'designation'           => $post_data['designation'],
             'employee_band'         => $post_data['blood_group'],
-            'orgisation_name'       => $post_data['a_companyname'],            
+            'orgisation_name'       => $post_data['a_companyname'],
             'companey_id'           => $post_data['companey_id'],
-            's_user_email'          => $post_data['email'],           
+            's_user_email'          => $post_data['email'],
             's_phoneno'             => $post_data['mobile'],
             'process'               => NULL
-          );
+        );
 
-        $this->db->insert('tbl_admin',$post_data);
+        $this->db->insert('tbl_admin', $post_data);
     }
 
-    public function profile($user_id = null) {
+    public function profile($user_id = null)
+    {
         if (!empty($_POST)) {
             if (!empty($this->input->post('rights'))) {
                 $rights = implode(",", $this->input->post('rights'));
@@ -457,51 +458,86 @@ class Customer extends CI_Controller {
         }
     }
 
-    public function edit($user_id = null) {
+    public function edit($user_id = null)
+    {
         $user_role = $this->session->userdata('user_role');
-        if ($user_role == 1 && $this->session->userdata('user_id') == $user_id)
-            $data['page_title'] = display('edit_profile');
-        elseif ($user_role == 2)
-            $data['page_title'] = display('edit_profile');
-        else
-        $data['page_title'] = display('edit_customer');
-        $data['department_list'] = $this->Modules_model->modules_list();
-        $data['doctor'] = $this->doctor_model->read_by_id($user_id);
+        $checkcompany = $this->doctor_model->geCompanybyId($user_id);
+        if ($checkcompany == 1) {
 
-        $this->db->select('user_permissions');
-        $this->db->where('s_phoneno',$data['doctor']->mobile);
-        $user_row    =   $this->db->get('tbl_admin')->result_array();
+            if ($user_role == 1 && $this->session->userdata('user_id') == $user_id)
+                $data['page_title'] = display('edit_profile');
+            elseif ($user_role == 2)
+                $data['page_title'] = display('edit_profile');
+            else
+                $data['page_title'] = display('edit_customer');
+            $data['department_list'] = $this->Modules_model->modules_list();
+            $data['doctor'] = $this->doctor_model->read_by_id($user_id);
+            $data['users'] = $this->doctor_model->geCompanyUsers($user_id);
 
-        $this->db->select('id,title');  
-        $this->db->where('status',1);      
-        $data['modules']    =   $this->db->get('all_modules')->result_array();
+            // print_r($data['users']);
+            // die();
+            $this->db->select('user_permissions');
+            $this->db->where('s_phoneno', $data['doctor']->mobile);
+            $user_row    =   $this->db->get('tbl_admin')->result_array();
 
-        if(count($user_row)>1){
-            echo "Error: there are multiple mobile of this company";
-            exit();
-        }
-        $this->load->model('User_model');
-        
-        /*echo $user_row[0]['user_permissions'];
+            $this->db->select('id,title');
+            $this->db->where('status', 1);
+            $data['modules']    =   $this->db->get('all_modules')->result_array();
+
+            if (count($user_row) > 1) {
+                echo "Error: there are multiple mobile of this company";
+                exit();
+            }
+            $this->load->model('User_model');
+
+            /*echo $user_row[0]['user_permissions'];
         exit();*/
-        
-        
-
-        $data['user_role'] = $this->User_model->get_user_role($user_row[0]['user_permissions']);
-        $data['user_right_content'] = $this->load->view('company_right', $data, true);
-        $data['content'] = $this->load->view('doctor_form', $data, true);
-        $this->load->view('layout/main_wrapper', $data);
+            $data['user_role'] = $this->User_model->get_user_role($user_row[0]['user_permissions']);
+            $data['user_right_content'] = $this->load->view('company_right', $data, true);
+            $data['content'] = $this->load->view('doctor_form', $data, true);
+            $this->load->view('layout/main_wrapper', $data);
+        } else {
+            $this->session->set_flashdata('exception', display('please_try_again'));
+            redirect('customer');
+        }
     }
-
-    public function delete($user_id = null) {
+    public function update_billing_date()
+    {
+        $user_id = $this->input->post('user_id');
+        $companyId = $this->input->post('company_id');
+        $path = $this->input->post('path');
+        $start_billing_date = $this->input->post('start_billing_date');
+        $valid_upto = $this->input->post('valid_upto');
+        $this->form_validation->set_rules('user_id', display('user_id'), 'required');
+        $this->form_validation->set_rules('company_id', display('company_id'), 'required');
+        $this->form_validation->set_rules('start_billing_date', display('start_billing_date'), 'required');
+        $this->form_validation->set_rules('valid_upto', display('valid_upto'), 'required');
+        if ($this->form_validation->run() === true) {
+               $checkcompany = $this->doctor_model->checkCompany_userbyId($companyId, $user_id);
+               //check company and user_id exist or not
+            if ($checkcompany == 1) {
+                $data = ['start_billing_date' => $start_billing_date, 'valid_upto_date' => $valid_upto];
+                $update = $this->doctor_model->updateUser($companyId, $user_id, $data);
+                if ($update) {
+                    $this->session->set_flashdata('message', display('save_successfully'));
+                } else {
+                    $this->session->set_flashdata('exception', display('please_try_again'));
+                }
+            } else {
+                $this->session->set_flashdata('exception', display('please_try_again'));
+            }
+        } else {
+                $this->session->set_flashdata('exception', display('please_try_again'));
+        }
+        redirect($path);
+    }
+    public function delete($user_id = null)
+    {
         if ($this->doctor_model->delete($user_id)) {
             $this->session->set_flashdata('message', display('delete_successfully'));
         } else {
             $this->session->set_flashdata('exception', display('please_try_again'));
         }
         redirect('customer');
-    }    
-
-
-   
+    }
 }

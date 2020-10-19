@@ -274,6 +274,7 @@ $route['change-password/(:any)'] = 'dashboard/send_change_password_link/$1';
 
 //admin routes.
 $route['customer/logged-in-as-user/(:any)'] = 'customer/logged_in_as_user/$1';
+$route['customer/update-billing-date'] = 'customer/update_billing_date';
 
 
 

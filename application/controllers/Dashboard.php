@@ -479,17 +479,68 @@ $this->load->library('zip');
             $check_user = $this->dashboard_model->check_user($postData);                       
            
             $active = 1;
+            $validity_msg="";
+            $validity_status=0;
             // if($check_user->num_rows() && $check_user->row()->user_permissions!=1 && ($check_user->row()->status == 0 || $check_user->row()->status == null) ){
             //     $active = 0;
             // }
-            if ($check_user->num_rows() === 1 && $active) {
+            $user_data = $check_user->row();
                 
+            if($user_data->companey_id==0){
+                $validity_msg="";
+                $validity_status=0;
+            }else{
+            date_default_timezone_set('Asia/Kolkata');
+            $from =strtotime($user_data->valid_upto);
+            $today = time();
+            $difference = $from - $today;
+            $days = floor($difference / 86400);
+            //echo "string".$days;die;
+            if($user_data->account_type == 1)
+            {
+                $validity_msg="";
+                $validity_status=0;
+              
+                if($days <= 5 && $days > 0)
+                {
+                    // $data['msg'] = "Your Account will expire after $days days Please contact your site admin to extend validity";
+                    $validity_msg="Your Account will expire after $days days Please contact your site admin to extend validity";
+                    $validity_status=1;
+                }
+                if($days <= 0)
+                {
+                    $validity_msg="Your Account has been expired on ".date('d-M-Y',$from)." Please contact your site admin to extend validity";
+                    $validity_status=2;
+                }
+            }
+            else
+            {   if($days <= 5 && $days > 0)
+                {
+                    $validity_msg="Your Account will expire after $days days Please contact your site admin to extend validity";
+                    $validity_status=3;
+                }
+                if($days <= 0)
+                {
+                    // $array['heading'] = "Trial Account Expired";
+                    // $array['message'] = "Your trial account validity has been ended please contact to site administrator";
+                    // $this->load->view("errors/html/error_general",$array,true);
+                $res = array('status'=>false,'message'=>display('incorrect_email_password'));
+                $validity_msg="";
+                $validity_status=3;
+                $active = 0;
+                }
+            }
+        }
+
+            if ($check_user->num_rows() === 1 AND $active==1) {
+            //check validity of account and account type 
+          
+            //end
                 $city_row = $this->db->select("*")
                         ->from("city")
                         ->where('id', $check_user->row()->city_id)
                         ->get();                        
                 
-                $user_data = $check_user->row();
                 $this->session->set_userdata('user_id',$user_data->pk_i_admin_id);                
                 if(user_access(230) || user_access(231) || user_access(232) || user_access(233) || user_access(234) || user_access(235) || user_access(236)){ 
 
@@ -582,9 +633,11 @@ $this->load->library('zip');
                             'favicon'               => (!empty($setting->favicon) ? $setting->favicon : null),
                             'footer_text'           => (!empty($setting->footer_text) ? $setting->footer_text : null),                    
                             'telephony_agent_id'    => $user_data->telephony_agent_id,
-							               'telephony_token'       => $user_data->telephony_token,
+							'telephony_token'       => $user_data->telephony_token,
                             'expiry_date'           => strtotime($user_data->valid_upto),
                             'availability'    => $user_data->availability,
+                            'validity_status' =>$validity_status,
+                            'validity_msg'=>$validity_msg
                         ]);
                         $this->user_model->add_login_history();
                         $res = array('status'=>true,'message'=>'Successfully Logged In');                       
@@ -726,38 +779,8 @@ public function login_in_process(){
         else
         {
             $data['counts'] = $this->enquiry_model->enquiryLeadClientCount($this->session->user_id,$this->session->companey_id);
-            $data['msg'] = '';
-            //print_r($_SESSION);die;
-            date_default_timezone_set('Asia/Kolkata');
-            $from = $this->session->expiry_date;
-            $today = time();
-            $difference = $from - $today;
-            $days = floor($difference / 86400);
-            //echo "string".$days;die;
-            if($this->session->account_type == 1)
-            {
-                if($days <= 5 && $days > 0)
-                {
-                    $data['msg'] = "Your Account will expire after $days days Please contact your site admin to extend validity";
-                }
-                if($days <= 0)
-                {
-                    $data['msg'] = "Your Account hs been expired on ".date('d-M-Y',strtotime($this->session->expiry_date))." Please contact your site admin to extend validity";
-                }
-            }
-            else
-            {   if($days <= 5 && $days > 0)
-                {
-                    $data['msg'] = "Your Account will expire after $days days Please contact your site admin to extend validity";
-                }
-                if($days <= 0)
-                {
-                    $array['heading'] = "Trial Account Expired";
-                    $array['message'] = "Your trial account validity has been ended please contact to site administrator";
-                    $this->load->view("errors/html/error_general",$array,true);
-                }
-            }
-            
+            // print_r($_SESSION);die;
+            $data['msg']='';
             $data['state']   = $this->enquiry_model->get_state();
             $data['products'] = $this->dash_model->product_list_graph();
             $data['taskdata'] = $this->dash_model->task_list();

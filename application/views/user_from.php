@@ -148,12 +148,11 @@
                                      <label><?php echo display('country_name')?> </label>
                                      <select class="form-control" name="country" id="country">
                                        <option value="" >---Select country---</option>
-                                  <?php  foreach($county_list as $c){
-                                  if($c->id_c==$department->country){?>
-                                   <option value="<?php echo $c->id_c; ?>" selected><?php echo $c->country_name; ?></option>
-                                   <?php }else{ ?>
-                                    <option value="<?php echo $c->id_c; ?>" ><?php echo $c->country_name; ?></option>
-                                  <?php }}?>
+                                  <?php  foreach($county_list as $c){ ?>
+                                    <option value="<?php echo $c->id_c; ?>"  <?php if ($c->id_c==$department->country) {
+                                       echo'selected';
+                                    } ?>><?php echo $c->country_name; ?></option>
+                                  <?php }?>
                                    </select>
                                     
                                 </div>
@@ -174,7 +173,8 @@
                                                 <option value="<?=$region->region_id ?>" ><?=$region->region_name ?></option>
                                            <?php  } }?>                                            
                                      </select>                                    
-                                </div>                   
+                                </div>       
+
                                 <div class="form-group col-md-4">                                    
                                     <label><?php echo display('state_name')?> </label>                                <select class="form-control state_id" name="state_id" id="state_id"> 
                                           <option value="" >---Select state---</option>
@@ -190,8 +190,10 @@
                                           <option value="" >---Select territory---</option>
 
                                        <?php 
+                                       
                                        if (!empty($territory_lsit)) {
-                                           
+                                        // print_r($territory_lsit);
+                                        // die(); 
                                        foreach($territory_lsit as $territory){?>                          
                                             <option value="<?= $territory->territory_id ?>" <?php if($territory->territory_id==$department->territory_name){echo 'selected';} ?>><?=$territory->territory_name ?></option>  
                                        <?php } 

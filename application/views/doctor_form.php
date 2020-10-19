@@ -33,6 +33,7 @@
                                       <li><a data-toggle="tab" href="#cmp-right"><?php echo display('company_right'); ?> </a></li>
 									  
                                       <li><a data-toggle="tab" href="#cmp-custom_form"><?php echo display('custom_form_company'); ?> </a></li>
+                                      <li><a data-toggle="tab" href="#cmp-user_list"> User List</a></li>
 
 									</ul>
 									<div class="tab-content">
@@ -241,7 +242,62 @@
 												</div>
 											</div>
                                       </div>
-
+                                      <div id="cmp-user_list" class="tab-pane fade">
+                                      <table class="datatable table table-striped table-bordered" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th style="width:20px;"><?php echo display('serial') ?></th>
+                            <th><?php echo display('picture') ?></th>
+                            <th><?php echo display('name') ?></th>
+                        
+                            <th><?php echo display('email') ?></th> 
+                            <th>Created Date</th> 
+                            <th>Start Billing Date</th> 
+                            <th>Valid upto</th> 
+                            <th>Last Login</th> 
+                            <th><?php echo display('status') ?></th> 
+                            
+                            <th><?php echo display('action') ?></th> 
+                            
+                          
+                       
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php if (!empty($users)) { ?>
+                            <?php $sl = 1; ?>
+                            <?php foreach ($users as $user) { ?>
+                                <tr class="<?php echo ($sl & 1)?"odd gradeX":"even gradeC" ?>">
+                                    <td style="width:20px;"><?php echo $sl; ?></td>
+                                    <td><img src="<?php echo base_url($user->picture); ?>" alt="" width="65" height="50"/></td>
+                                    <td><?php echo $user->s_display_name; ?></td>
+                                    <td><?php echo $user->s_user_email; ?></td>
+                                    <td><?= date('Y-m-d',strtotime($user->dt_create_date)) ?></td>
+                                    <td><?= $user->start_billing_date ?></td>
+                                    <td><?= $user->valid_upto_date ?></td>
+                                    <td><?= $user->last_log ?></td>
+                                    
+                                    <td><?php 
+                                    if ($user->b_status==1) {
+                                        echo "Active";
+                                    }else{
+                                        echo "Inactive";                                        
+                                    } ?>
+                                    </td>
+                                   
+                                    <td>
+                                        <div class="action-btn">
+                              <a  class="btn btn-xs btn-primary"  data-toggle="modal" data-target="#user_edit<?= $user->pk_i_admin_id ?>"><i class="fa fa-edit"></i></a> 
+                                        </div> 
+                                    </td>
+                                 
+                                </tr>
+                                <?php $sl++; ?>
+                            <?php } ?> 
+                        <?php } ?> 
+                    </tbody>
+                </table>  <!-- /.table-responsive -->
+									  </div>
                                       <div class="form-group row comp-status">
                                         <label class="col-sm-3"><?php echo display('status') ?></label>
                                         <div class="col-xs-9">
@@ -288,6 +344,46 @@
 
 </div>
 
+<?php if (!empty($users)) { ?>
+                            <?php $sl = 1; ?>
+                            <?php foreach ($users as $user) { ?>
+                                        <div id="user_edit<?= $user->pk_i_admin_id ?>" class="modal fade in" role="dialog" >
+  <div class="modal-dialog modal-lg">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">×</button>
+        <h4 class="modal-title">Update Billing and Valid upto date</h4>
+      </div>
+      <div class="modal-body">         
+         <form role="form" method="post" id="custom_field_form" action="<?= base_url('customer/update-billing-date') ?>">
+          <input type="hidden" name="user_id" value="<?= $user->pk_i_admin_id ?>">
+          <input type="hidden" name="company_id" value="<?= $user->companey_id ?>">
+          <input type="hidden" name="path" value="<?= current_url() ?>">
+             <div class="form-row">                
+                <div class="form-group col-md-6">
+                    <label for="stdate">Billing Start Date<i class="text-danger">*</i></label>
+                      <input type="date" id="stdate" class="form-control"  value="<?= $user->start_billing_date ?>" name="start_billing_date" required="">
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="label_name">Valid Upto Date<i class="text-danger">*</i></label>
+                      <input type="date" id="label_name" class="form-control"  value="<?= $user->valid_upto_date ?>" name="valid_upto" required="">
+                </div>
+            </div>
+            <div class="row">
+              <div class="col-md-2 col-md-offset-5">
+                <button type="submit" class="btn btn-success">Update</button>                                    
+              </div>
+            </div>
+        </form>                                         
+      </div>      
+      </div>      
+      </div>      
+    </div>
+  
+                                <?php $sl++; ?>
+                            <?php } ?> 
+                        <?php } ?> 
 <script type="text/javascript"> 
     $(function(){
         url = "<?=base_url().'form/form/enquiry_extra_field/'?>"+"<?=$doctor->user_id?>";     

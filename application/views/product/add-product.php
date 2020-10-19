@@ -33,11 +33,12 @@
 								<div class="col-md-8">
 								<div class="form-group">
 									<label>Main Image<i class="text-danger">*</i></label>
-								<input type="file" name="mainimage" class="dropify" data-default-file="" accept="image/*" <?=$mainimage_required?>>
+								<input type="file" name="mainimage" class="dropify" data-default-file="" accept="image/*" <?=$mainimage_required?> id="mainimage">
 									<small style="font-size: 10px;">Max Upload size is 1MB only with max width of 1024 and max height of 768</small>
 									<?php if($isedit == true ) { ?>
 									<img src = "<?php echo base_url("assets/images/products/".$product->image); ?>" class = "img-responsive" style="height:250px;max-width:250px;">		
 									<?php } ?>
+									Width: <span id='width'></span>  |  Height: <span id='height'></span>
 								</div>
 								</div>
 							</div>
@@ -47,8 +48,10 @@
 						<div class="col-md-12">							
 							<div class="form-group">
 								<label>Sub Images</label>
-								<input type="file" class="form-control" id="sub-images" name="sub_images[]" multiple accept="image/*">
+								<input type="file" class="form-control sub_images" id="sub-images" name="sub_images[]" multiple accept="image/*">
 								<small style="font-size: 10px;">Max Upload size is 1MB only with max width of 1024 and max height of 768</small>
+									Width: <span id='swidth'></span>  |  Height: <span id='sheight'></span>
+										
 							</div>	
 
 						</div>
@@ -428,5 +431,82 @@
 		}
 		
 	}
+	$(document).ready(function(){
 
+var _URL = window.URL || window.webkitURL;
+
+$('#mainimage').change(function () {
+ var file = $(this)[0].files[0];
+
+ img = new Image();
+ var imgwidth = 0;
+ var imgheight = 0;
+ var maxwidth = 1024;
+ var maxheight = 768;
+ var sizeInKB = $(this)[0].files[0].size/1024; //Normally files are in bytes but for KB divide by 1024 and so on
+var sizeLimit=1024;
+
+if (sizeInKB >= sizeLimit) {
+    alert("Max file size 1MB");
+    // return false;
+	$('#mainimage').val('');
+}
+ img.src = _URL.createObjectURL(file);
+ img.onload = function() {
+  imgwidth = this.width;
+  imgheight = this.height;
+
+  $("#width").text(imgwidth);
+  $("#height").text(imgheight);
+  if(imgwidth == maxwidth && imgheight == maxheight){
+ }else{
+  alert("Image size must be "+maxwidth+"X"+maxheight);
+  $('#mainimage').val('');
+ }
+};
+img.onerror = function() {
+	alert("not a valid file: " + file.type);
+	$('#mainimage').val('');
+}
+});
+});
+$(document).ready(function(){
+
+var _URL = window.URL || window.webkitURL;
+
+$('#sub-images').change(function () {
+ var file = $(this)[0].files[0];
+
+ simg = new Image();
+ var simgwidth = 0;
+ var simgheight = 0;
+ var smaxwidth = 1024;
+ var smaxheight = 1080;
+ var sizeInKB = $(this)[0].files[0].size/1024; //Normally files are in bytes but for KB divide by 1024 and so on
+var sizeLimit=768;
+
+if (sizeInKB >= sizeLimit) {
+    alert("Max file size 1MB");
+    // return false;
+	$('#sub-images').val('');
+}
+ simg.src = _URL.createObjectURL(file);
+ simg.onload = function() {
+  simgwidth = this.width;
+  simgheight = this.height;
+
+  $("#swidth").text(simgwidth);
+  $("#sheight").text(simgheight);
+  if(simgwidth == smaxwidth && simgheight == smaxheight){
+ }else{
+  alert("Image size must be "+smaxwidth+"X"+smaxheight);
+  $('#sub-images').val('');
+ }
+};
+simg.onerror = function() {
+	alert("not a valid file: " + file.type);
+	$('#sub-images').val('');
+}
+});
+});
 </script>
