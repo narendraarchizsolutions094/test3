@@ -458,7 +458,7 @@ if (sizeInKB >= sizeLimit) {
 
   $("#width").text(imgwidth);
   $("#height").text(imgheight);
-  if(imgwidth == maxwidth && imgheight == maxheight){
+  if(imgwidth <= maxwidth && imgheight <= maxheight){
  }else{
   alert("Image size must be "+maxwidth+"X"+maxheight);
   $('#mainimage').val('');
@@ -497,7 +497,7 @@ if (sizeInKB >= sizeLimit) {
 
   $("#swidth").text(simgwidth);
   $("#sheight").text(simgheight);
-  if(simgwidth == smaxwidth && simgheight == smaxheight){
+  if(simgwidth <= smaxwidth && simgheight <= smaxheight){
  }else{
   alert("Image size must be "+smaxwidth+"X"+smaxheight);
   $('#sub-images').val('');
