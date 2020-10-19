@@ -24,7 +24,6 @@
             <form method="post" action="<?=base_url()?>enquiry/create" id="enquiry_form">
               <?php $process_id = $this->session->process[0]; ?>
               <input type="hidden" name="product_id" value="<?=$process_id?>">
-              <div class="form-group col-sm-4"><label>Other No </label><input class="form-control"  name="other_no[]" type="text" placeholder="Other Number"   ></div>
               <div id="process_basic_fields" class="row">
               </div>            
               <div class="row">

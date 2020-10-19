@@ -2357,38 +2357,15 @@ $('#something').click(function() {
 <script>
 var content = document.getElementById("main");
 var btn = document.getElementById("btn");
-// btn.addEventListener("click", function() {
- 
- 
-//     $("body").removeClass("sidebar-collapse");
-
-// });
-// $('btn').hover(
-//   $("body").removeClass("sidebar-collapse")
-
-// )
-
-// btn.mouseover(function() {
-//     $("body").removeClass("sidebar-collapse");
-
-//   })
-//   btn.mouseout(function() {
-//     $("body").addClass("sidebar-collapse");
-
-//   });
 $(document).ready(function(){
   $("#btn").hover(function(){
     if($('body').hasClass('sidebar-collapse')){
       $("body").removeClass("sidebar-collapse");
-      // $("#main").css("width", "250px");
       $("body").addClass("sidebar-byme");
     }
     }, function(){
     if($('body').hasClass('sidebar-byme')){
-
       var timeout = setTimeout(function(){ $("body").addClass("sidebar-collapse");
-      // $("#main").css("width", "56px");
-        
       }, 500);
     }
 
