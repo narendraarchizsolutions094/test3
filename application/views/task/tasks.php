@@ -188,6 +188,14 @@
         "processing": true,
         /*"scrollX": true,*/
         "scrollY": 800,
+        "dom": "<'row'<'col-sm-4'l><'col-sm-4 text-center'B><'col-sm-4'f>>tp",         
+        "buttons": [  
+            {extend: 'copy', className: 'btn-sm'}, 
+            {extend: 'csv',  className: 'btn-sm'}, 
+            {extend: 'excel', className: 'btn-sm'}, 
+            {extend: 'pdf', className: 'btn-sm'}, 
+            {extend: 'print', className: 'btn-sm'} 
+        ], 
         "serverSide": true,
         "lengthMenu": [ [30, 50, -1], [30, 50, "All"] ],
         "ajax": {

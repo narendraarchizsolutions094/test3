@@ -82,11 +82,11 @@
 						<div class="form-group">
 						<label><?=display('ticket_problem')?></label>
 						<select class="form-control add-select2" name = "relatedto">
-					<?php  if(!empty($problem)) {
-								foreach($problem as $ind => $prblm){
-									
-									?>
+					<?php  if(!empty($problem)) { ?>
 									<option value="">-- Select --</option>
+								<?php
+								foreach($problem as $ind => $prblm){									
+									?>
 									<option value = "<?php echo $prblm->id; ?>" <?php echo ($prblm->id == $ticket->category) ? "selected" : ""; ?>><?php echo $prblm->subject_title ?> </option><?php
 								}	
 								
@@ -100,8 +100,8 @@
 						<label>Nature of Complaint</label>
 						<select class="form-control add-select2" name = "issue">
 						<option value = ""> -- Select --</option>
-					<?php  if(!empty($natureofcomplain)) {
-								foreach($natureofcomplain as $ind => $issue){
+					<?php  if(!empty($issues)) {
+								foreach($issues as $ind => $issue){
 									?><option value = "<?php echo $issue->id ?>" <?php echo ($issue->id == $ticket->issue) ? "selected" : ""; ?> ><?php echo ucfirst($issue->title) ?> </option><?php
 								}	
 							} ?>

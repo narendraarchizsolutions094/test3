@@ -373,7 +373,7 @@ public function select_app_by_ins() {
             $mobileno = $this->input->post('mobileno');
             $email = $this->input->post('email');
             $designation = $this->input->post('designation');
-            $conversation = trim($this->input->post('conversation'));
+            $conversation = trim($this->input->post('task_remark'));
             $subject = $this->input->post('subject');
             
              $task_date = date("d-m-Y",strtotime($this->input->post('task_date')));
@@ -405,7 +405,10 @@ public function select_app_by_ins() {
             $this->db->where('resp_id', $lead_id);
             $this->db->set('create_by', $this->session->user_id);
             $this->db->update('query_response');
-             $this->Leads_Model->add_comment_for_events('Task Updated Successfully', $lead_id);
+            $task_enquiry_code = $this->input->post('task_enquiry_code');
+             
+             $this->Leads_Model->add_comment_for_events_stage('Task Updated Successfully', $task_enquiry_code,0,0,$subject.'<br>'.$conversation,1);
+
             $this->session->set_flashdata('message', 'Task Updated Successfully');
             redirect($this->agent->referrer());
         } else {
@@ -554,7 +557,7 @@ public function select_app_by_ins() {
                 }
             } 
             $this->load->model('rule_model');
-            $this->rule_model->execute_rules($enq_code,array(1,2,3,6,7));
+            $this->rule_model->execute_rules($enq_code,array(1,2));
 			//print_r($coment_type);exit;
 if($coment_type == 1){			
     redirect('enquiry/view/'.$en_id);

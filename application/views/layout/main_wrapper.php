@@ -1511,7 +1511,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                           <a href="<?php echo base_url("ticket/index") ?>"><?php echo display('ticketing') ?></a>
                         </li>
                         <li class="<?php echo (($segment1 == "ticket" && $segment2 == "natureOfComplaintList") ? "active" : null) ?>">
-                          <a href="<?php echo base_url("ticket/natureOfComplaintList") ?>"><?php echo "natureOfComplaintList"; ?></a>
+                          <a href="<?php echo base_url("ticket/natureOfComplaintList") ?>"><?php echo display("natureOfComplaint"); ?></a>
                         </li>
 						
                      </ul>

@@ -117,6 +117,7 @@ class Form extends CI_Controller {
 			$form_id = $this->input->post('form_id');
 			$page_id	=	$this->input->post('page_id');
 
+			// print_r($this->input->post()); exit();
 
 			$process_list = $this->input->post('process_list');		
 			if (!empty($process_list)) {
