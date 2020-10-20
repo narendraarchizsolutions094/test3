@@ -22,7 +22,7 @@
 </div> 
 <div id="body"> 
   <?php
-print_r($_SESSION);
+var_dump($_SESSION);
   ?>
 <div id="chat-circle" class="btn btn-raised">
         <div id="chat-overlay"></div>
