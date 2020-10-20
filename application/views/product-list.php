@@ -34,6 +34,7 @@
                      <th class="sorting wid-10" tabindex="0" rowspan="1" colspan="1">Actions</th>
                   </tr>
                </thead>
+               
                <tbody>
                   <?php $i=1; foreach($product_list as $row){?>
                   <tr>

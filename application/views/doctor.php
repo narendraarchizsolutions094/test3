@@ -15,7 +15,7 @@
             <div class="panel-body">
                 <table class="datatable table table-striped table-bordered" cellspacing="0" width="100%">
                     <thead>
-                        <tr><th style="width:20px;"><input type="checkbox"></th>
+                        <tr>
                             <th style="width:20px;"><?php echo display('serial') ?></th>
                             <th><?php echo display('picture') ?></th>
                             <th><?php echo display('first_name') ?></th>
@@ -25,6 +25,8 @@
                             <th><?php echo display('mobile') ?></th> 
                             <th><?php echo "No of users" ?></th> 
                             <th><?php echo display('status') ?></th> 
+                            <th>Created Date</th> 
+                            <th>Expiry Date</th> 
                             
                             <th><?php echo display('action') ?></th> 
                             
@@ -37,9 +39,7 @@
                             <?php $sl = 1; ?>
                             <?php foreach ($doctors as $doctor) { ?>
                                 <tr class="<?php echo ($sl & 1)?"odd gradeX":"even gradeC" ?>">
-                                        <td style="width:20px;"><input type="checkbox"></td>
                                     <td style="width:20px;"><?php echo $sl; ?></td>
-                                
                                     <td><img src="<?php echo base_url($doctor->pictures); ?>" alt="" width="65" height="50"/></td>
                                     <td><?php echo $doctor->firstname; ?></td>
                                     <td><?php echo $doctor->lastname; ?></td>
@@ -51,7 +51,6 @@
                                             echo $this->db->get('tbl_admin')->num_rows(); 
                                         ?>                                                
                                     </td>
-
                                     <td><?php 
                                     if ($doctor->status) {
                                         echo "Active";
@@ -59,11 +58,15 @@
                                         echo "Inactive";                                        
                                     } ?>
                                     </td>
+                                    <td><?= $doctor->create_date ?></td>
+                                    <td><?= date('Y-m-d',strtotime($doctor->valid_upto)) ?></td>
+                                   
                                    
                                     <td>
                                         <div class="action-btn">
                                         <a href="<?php echo base_url("customer/profile/$doctor->user_id") ?>" class="btn btn-xs btn-success"><i class="fa fa-eye"></i></a> 
                                         <a href="<?php echo base_url("customer/edit/$doctor->user_id") ?>" class="btn btn-xs btn-primary"><i class="fa fa-edit"></i></a> 
+                                        <a href="<?php echo base_url("customer/logged-in-as-user/$doctor->user_id") ?>" class="btn btn-xs btn-primary"><i class="fa fa-sign-in"></i></a> 
                                        <!-- <a href="<?php echo base_url("customer/delete/$doctor->user_id") ?>" class="btn btn-xs btn-danger" onclick="return confirm('<?php echo display('are_you_sure') ?> ')"><i class="fa fa-trash"></i></a>-->
                                         </div> 
                                     </td>

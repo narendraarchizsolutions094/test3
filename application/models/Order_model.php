@@ -42,8 +42,9 @@ class Order_model extends CI_Model {
 		$searchproduct 	= ($this->input->post('sproduct') !='') ? $this->input->post('sproduct') : "";
      	$searchseller 	= ($this->input->post('sseller') !='') ? $this->input->post('sseller') : "";
      	$searchstatus 	= ($this->input->post('sstatus') !="") ? $this->input->post('sstatus') : "";
+     	$order_date 	= ($this->input->post('ord_date') !="") ? $this->input->post('ord_date') : "";
 		if($act == 1){			
-			$this->db->select("ord.*,concat(usr.s_display_name, ' ', usr.last_name) as customer,concat(seller.s_display_name, ' ', seller.last_name) as sellername,usr.region,prd.country_name as product_name");
+			$this->db->select("ord.*,concat_ws(' ',usr.s_display_name,usr.last_name) as customer,usr.s_phoneno,usr.add_ress,prd.country_name as product_name");
 		}		
 		$this->db->where("ord.company", $this->session->companey_id);
 		$this->db->from("tbl_order ord");
@@ -66,10 +67,12 @@ class Order_model extends CI_Model {
 				$this->db->where("ord.pend_delv", date("Y-m-d"));
 			}			
 		}		
-		$this->db->join('tbl_product_country prd','prd.id=ord.product','left');			
+		$this->db->join('tbl_product_country prd','prd.id=ord.product');			
 		$this->db->join('tbl_proddetails prd2','prd2.prodid=prd.id');
 		if ($this->session->user_right == 200) {
 			$this->db->where('prd2.seller_id',$this->session->user_id);
+		}else if($this->session->user_right == 201){
+			$this->db->where('ord.cus_id',$this->session->user_id);			
 		}else{
 			if($searchseller == "")
 			{
@@ -83,28 +86,27 @@ class Order_model extends CI_Model {
 		//}
 		
 
-		if($act == 1) {			
-		//	$this->db->join('order_prdct ordprd','ord.id=ordprd.ord_id','left');
-			$this->db->join('tbl_admin usr','usr.pk_i_admin_id=ord.cus_id','left');
-			$this->db->join('tbl_admin seller','seller.pk_i_admin_id=prd2.seller_id','left');		
-			$ordcol = array("ord.id","prd.country_name");	
-			if($searchproduct !='')
-			{
-				$this->db->where("prd.id",$searchproduct);
-			}
-			if($searchseller !='')
-			{
-				$this->db->where("prd2.seller_id",$searchseller);
-			}
-			if($searchstatus !='')
-			{
-				$this->db->where("prd.id",$searchproduct);
-			}
-
-			//$this->order_by($ordcol);
+		$this->db->join('tbl_admin usr','usr.pk_i_admin_id=ord.cus_id');	
+		$ordcol = array("ord.id","prd.country_name");	
+		if($searchproduct !='')
+		{
+			$this->db->where("prd.id",$searchproduct);
+		}
+		if($searchseller !='')
+		{
+			$this->db->where("prd2.seller_id",$searchseller);
+		}
+		if($searchstatus !='')
+		{
+			$this->db->join('ord_prod_stage','ord_prod_stage.ord_no=ord.ord_no','left');		
+			$this->db->where("ord_prod_stage.status",$searchproduct);
+		}
+		if($order_date !='')
+		{
+			$this->db->where("DATE(ord.order_date)",$order_date);
+		}
+		if($act == 1) {
 			$this->db->order_by("ord.id",'DESC');
-
-
 			$this->limit();			
 			$this->db->group_by('ord.ord_no');
 			return $this->db->get()->result();	
@@ -212,30 +214,18 @@ class Order_model extends CI_Model {
 		return		$this->db->get()->result();
 	}
 
-	// public function getBuyers($ordno){
-		
-	//  	$this->db->select("*");
-	// 			$this->db->from('order_parameters');
-	// 			$this->db->where("order_id", $ordno);
-	// 	return	$this->db->get()->result();
-	// }
+	 
 	
 	public function getOrders($ordno){
 		
-	 	$this->db->select("ord.*,prd.id as prdid,prd.country_name as product_name,prddet.price as unit_price, prddet.image,prddet.stock,CONCAT(tbl_admin.s_display_name,' ',tbl_admin.last_name,' - ',tbl_admin.s_user_email) as seller_name,prddet.hsn,prddet.brand");
+	 	$this->db->select("ord.*,prd.id as prdid,prd.country_name as product_name,prddet.price as unit_price, prddet.image,tbl_inventory.qty as stock_qty,concat_ws(' ',tbl_admin.s_display_name,tbl_admin.last_name) as seller_name,prddet.hsn,prddet.brand");
 				$this->db->where("ord.company", $this->session->companey_id);
-				$this->db->where("ord.ord_no", $ordno);
-				
-				$mrole = $this->session->mrole;
-				if($mrole == 2 or $mrole == 3 or $mrole == 4 or $mrole == 5){
-					
-					$this->db->where("ord.addedby", $this->session->user_id);
-				}
-				
+				$this->db->where("ord.ord_no", $ordno);				
 				$this->db->from('tbl_order ord');
 				//$this->db->join('users usr','usr.id=ord.cus_id','left');
-				$this->db->join('tbl_product_country prd','prd.id=ord.product','left');
-				$this->db->join('tbl_proddetails prddet','prd.id=prddet.prodid','left');
+				$this->db->join("tbl_inventory", "tbl_inventory.product_name=ord.product",'left');
+				$this->db->join('tbl_product_country prd','prd.id=ord.product');
+				$this->db->join('tbl_proddetails prddet','prd.id=prddet.prodid');
 				$this->db->join('tbl_admin','tbl_admin.pk_i_admin_id=prddet.seller_id');
 				$this->db->join('tbl_warehouse wh','ord.warehouse=wh.id','left');
 		return	$this->db->get()
@@ -394,15 +384,24 @@ class Order_model extends CI_Model {
 		
 	}
 
-	public function placeorder(){		
+	public function get_pk_admin_id($emp_id){		
+		return $this->db->select("pk_i_admin_id")
+				->where("employee_id", $emp_id)
+				->from("tbl_admin")
+				->get()	 
+				->row();					 
+	}	
+	public function placeorder($pk_i_admin_id = ''){		
 		$ordno = "ORD".strtotime(date("Y-m-d h:i:s"));		
 		$carts = $this->cart->contents();
 		$ret   = false; 
 		if(!empty($carts)){
+
 			foreach($carts as $ind => $crt){				
 				$arr[] = array(
 							 "ord_no"  		=> $ordno,
 							 "cus_id"  		=> $this->session->user_id,
+							 "preferd_by"  	=> $pk_i_admin_id,
 							 "enq_no"  		=> "",
 							 "payment_mode" => $this->session->payment_mode,
 							 "warehouse"    => "",
@@ -438,6 +437,53 @@ class Order_model extends CI_Model {
 			return false;
 		}	
 	}
-	
-	
+
+
+	public function set_order_meta($ord_no,$comp_id,$user_id,$meta_key,$type){
+        if (!empty($meta_key) && !empty($ord_no)) {
+            foreach ($meta_key as $key=>$value) {
+                $ins_arr = array(
+                'comp_id'         => $comp_id,
+                'order_id'        => $ord_no,
+                'created_by'      => $user_id,
+                'order_parameter' => $key,
+                'order_value'     => $value,
+                'type'     	      => $type,
+                );
+                $this->db->insert('order_parameters',$ins_arr);
+            }
+        }else{
+            return false;
+        }
+    }
+
+
+    public function get_order_meta($ord_no,$meta_key){
+        if (!empty($meta_key) && !empty($ord_no)) {                        
+            $this->db->select('order_parameter as parameter,order_value as value,type');
+            $this->db->where('order_id',$ord_no);        
+            $this->db->where_in('order_parameter',$meta_key);
+            $result    =   $this->db->get('order_parameters')->result_array();
+            $data = array();
+            if (!empty($result)) {
+                foreach ($result as $key => $value) {
+                    $parm    =   $value['parameter'];
+                    $type    =   $value['type'];
+                    $data[$type][$parm]   = $value['value'];
+                }
+                return $data;   
+            }else{
+                return false;
+            }
+        }else{
+            return false;
+        }
+    } 
+
+    public function getBuyers($ordno){		
+	  	$this->db->select("*");
+	 			$this->db->from('order_parameters');
+	 			$this->db->where("order_id", $ordno);
+	 	return	$this->db->get()->result();
+	}
 }

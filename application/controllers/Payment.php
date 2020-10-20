@@ -13,7 +13,6 @@ class Payment extends CI_Controller {
 		}
 	}
 	public function make_payment_mojo(){
-
 		$this->session->unset_userdata('part_payment_amount');
 		$this->form_validation->set_rules('fname','Name','trim|required');
 		$this->form_validation->set_rules('email','Email','trim|required|valid_email');
@@ -21,22 +20,20 @@ class Payment extends CI_Controller {
 		$this->form_validation->set_rules('pincode','Pincode','trim|required|numeric');		
 		$this->form_validation->set_rules('address','Address','trim|required');		
 		$this->form_validation->set_rules('dbt','Mode of Payment','trim|required');		
-		/*$this->form_validation->set_rules('amount','Amount','trim|required|numeric');*/
-		
+		/*$this->form_validation->set_rules('amount','Amount','trim|required|numeric');*/		
 		if ($this->form_validation->run() == true) {
-			$name	=	$this->input->post('fname');
-			$email	=	$this->input->post('email');
-			$phone	=	$this->input->post('phone');
-			$address=	$this->input->post('address');
+			$name		=	$this->input->post('fname');
+			$email		=	$this->input->post('email');
+			$phone		=	$this->input->post('phone');
+			$address    =	$this->input->post('address');
 			
 			$ship_address	=	$this->input->post('ship_address');
-			$state	=	$this->input->post('state');
-			$city	=	$this->input->post('city');
-			$pincode =	$this->input->post('pincode');
-			$gstin  =	$this->input->post('gstin');
+			$state			=	$this->input->post('state');
+			$city			=	$this->input->post('city');
+			$pincode 		=	$this->input->post('pincode');
+			$gstin  		=	$this->input->post('gstin');
 
 			$this->session->set_userdata('payment_mode',$this->input->post('dbt'));
-
 			$this->user_model->set_user_meta($this->session->user_id,array(
 				'postal_code'=>$this->input->post('pincode'),
 				'gstin' => $this->input->post('gstin')
@@ -66,7 +63,7 @@ class Payment extends CI_Controller {
 				curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
 				curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
 				curl_setopt($ch, CURLOPT_HTTPHEADER,
-				            array("X-Api-Key:ca7a223092cfaf2317db5fc00fc83502",
+				             array("X-Api-Key:ca7a223092cfaf2317db5fc00fc83502",
 				                  "X-Auth-Token:b6224670c580b470d7951eaf697e2e9f"));
 				$payload = Array(
 				    'purpose' => 'Product Purchage',
@@ -96,20 +93,35 @@ class Payment extends CI_Controller {
 				}	
 			}else{
 				$this->load->model('order_model');
-				$ord_no	=	$this->order_model->placeorder();
-				if($ord_no){
-			$this->user_model->set_order_meta($ord_no,$comp_id,$user_id,array(
-		'fname' =>	$this->input->post('fname'),
-		'email' =>	$this->input->post('email'),
-		'phone' =>	$this->input->post('phone'),
-		'address' =>	$this->input->post('address'),			
-		'ship_address' =>	$this->input->post('ship_address'),
-		'state' =>	$this->input->post('state'),
-		'city' =>	$this->input->post('city'),
-		'pincode' =>	$this->input->post('pincode'),
-		'gstin' =>	$this->input->post('gstin')
-			)
-			);
+				
+				$emp_id    =	$this->input->post('preferd');
+				$pk_i_admin_id	=	$this->order_model->get_pk_admin_id($emp_id);
+				$ord_no	=	!empty($pk_i_admin_id->pk_i_admin_id)?$this->order_model->placeorder($pk_i_admin_id->pk_i_admin_id):$this->order_model->placeorder();
+
+		//$ord_no	=	$this->order_model->placeorder($pk_i_admin_id->pk_i_admin_id);
+
+				if($ord_no){ 
+					$this->order_model->set_order_meta($ord_no,$comp_id,$user_id,array(
+							'fname' =>	$this->input->post('fname'),
+							'email' =>	$this->input->post('email'),
+							'phone' =>	$this->input->post('phone'),
+							'address' =>	$this->input->post('address'),			
+							'state' =>	$this->input->post('state'),
+							'city' =>	$this->input->post('city'),
+							'pincode' =>	$this->input->post('pincode'),
+							'gstin' =>	$this->input->post('gstin')
+						),'BILLING_DETAILS'
+					);
+					$this->order_model->set_order_meta($ord_no,$comp_id,$user_id,array(
+							'fname' =>	$this->input->post('shipping_fname'),
+							'email' =>	$this->input->post('shipping_email'),
+							'phone' =>	$this->input->post('shipping_phone'),
+							'address' =>	$this->input->post('shipping_address'),			
+							'state' =>	$this->input->post('shipping_state'),
+							'city' =>	$this->input->post('shipping_city'),
+							'pincode' =>	$this->input->post('shipping_pincode'),
+						),'SHIPPING_DETAILS'
+					);
 					$this->session->set_flashdata('message','Your order is successfully placed');
 					redirect(base_url("order/invoice/".$ord_no), "refresh");			
 				}
@@ -407,7 +419,7 @@ class Payment extends CI_Controller {
 	
 	public function add($ordno = ""){
 		
-		if(isset($_POST["orderid"])){
+		if(isset($_POST["orderid"])){ 
 			
 			$this->savepayment();
 			redirect(base_url("payment/add/".$ordno), "refresh");
@@ -422,9 +434,9 @@ class Payment extends CI_Controller {
 		
 		//$data["masters"]  = $this->payment_model->getmaster();	
 		
-		if(!empty($data["ord"])){
+		if(!empty($data["ord"]->ord_no)){
 			
-			$data["payments"] = $this->payment_model->getpayment($data["ord"]->cus_id);
+			$data["payments"] = $this->payment_model->getpayment($data["ord"]->ord_no);
 			
 		}
 		
@@ -443,6 +455,7 @@ class Payment extends CI_Controller {
 		$this->load->model("order_model");
 		$this->load->model("payment_model");
 		$payno = base64_decode($payno);
+		//echo $payno;
 		$data['paydata'] = $this->db->select('*')->from('payment')->where('id',$payno)->get()->row();
 	//	$data["masters"]  = $this->payment_model->getmaster();	
 		$data["title"] = "Update Payment";

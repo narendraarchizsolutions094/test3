@@ -40,7 +40,8 @@ class Enquiry extends REST_Controller {
         }    
     }
     public function create_post()
-    { 
+    { 	
+    	
     	$upd =$this->input->post('update');		
 		if(!empty($this->input->post('email') && !empty($this->input->post('mobileno')))){
 		  	$comp_id	=	$this->input->post('company_id');		
@@ -98,7 +99,7 @@ class Enquiry extends REST_Controller {
                 //'status' => 1
             ];
             
-            
+
             if(!empty($upd)){																	
             
             	$this->db->where('Enquery_id',$this->input->post('update'));
@@ -125,7 +126,7 @@ class Enquiry extends REST_Controller {
 
             }
 		    $this->load->model('rule_model');
-        	$this->rule_model->execute_rules($encode,array(1,2,3),$comp_id,$this->input->post('user_id'));  
+        	$this->rule_model->execute_rules($encode,array(1,2,3,6,7),$comp_id,$this->input->post('user_id'));  
         	          
 			if ($insert_id) {
 			    foreach($this->input->post() as $ind => $val){         

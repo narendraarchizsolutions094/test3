@@ -29,11 +29,14 @@
                         <div class="form-group col-md-3">
                           <label for="inputPassword4"><?php echo display("employee"); ?></label>
                           <select data-placeholder="Begin typing a name to filter..." multiple class="form-control chosen-select" name="employee[]" id="employee">
-                              
+                          
+
 							   <?php foreach ($employee as $user) {?>
                                     <option value="<?=$user->pk_i_admin_id?>" <?php if(!empty(set_value('employee'))){if (in_array($user->pk_i_admin_id,set_value('employee'))) {echo 'selected';}}?>><?=$user->s_display_name . " " . $user->last_name;?> -  <?=$user->s_user_email?$user->s_user_email:$user->s_phoneno;?></option>
                                 <?php }?>
                           </select>
+                          <input type="checkbox" name="hier_wise" value="1" <?php if (!empty(set_value('hier_wise')) && set_value('hier_wise')==1) {echo 'checked';}?>>
+                          Hierarchy wise
                         </div>
 						<div class="form-group col-md-3">
                           <label for="inputPassword4"><?php echo display("source"); ?></label>
@@ -138,12 +141,23 @@
 							  <option <?php if(!empty(set_value('report_columns'))){if (in_array('Gender',set_value('report_columns'))) {echo 'selected';}}?>>Gender</option>
 							  <option <?php if(!empty(set_value('report_columns'))){if (in_array('Source',set_value('report_columns'))) {echo 'selected';}}?>>Source</option>
 							  <option <?php if(!empty(set_value('report_columns'))){if (in_array('Subsource',set_value('report_columns'))) {echo 'selected';}}?>>Subsource</option>
+							  <option <?php if(!empty(set_value('report_columns'))){if (in_array('Disposition',set_value('report_columns'))) {echo 'selected';}}?>>Disposition</option>
 							  <option <?php if(!empty(set_value('report_columns'))){if (in_array('Lead Description',set_value('report_columns'))) {echo 'selected';}}?>>Lead Description</option>
+                
+                <option <?php if(!empty(set_value('report_columns'))){if (in_array('Disposition Remark',set_value('report_columns'))) {echo 'selected';}}?>>Disposition Remark</option>
+
+                <option <?php if(!empty(set_value('report_columns'))){if (in_array('Drop Reason',set_value('report_columns'))) {echo 'selected';}}?>>Drop Reason</option>
+
+                <option <?php if(!empty(set_value('report_columns'))){if (in_array('Drop Comment',set_value('report_columns'))) {echo 'selected';}}?>>Drop Comment</option>
+
+                <option <?php if(!empty(set_value('report_columns'))){if (in_array('Conversion Probability',set_value('report_columns'))) {echo 'selected';}}?>>Conversion Probability</option>
+
+                <option <?php if(!empty(set_value('report_columns'))){if (in_array('Remark',set_value('report_columns'))) {echo 'selected';}}?>>Remark</option>
+
 							  <option <?php if(!empty(set_value('report_columns'))){if (in_array('Status',set_value('report_columns'))) {echo 'selected';}}?>>Status</option>
 							  <option <?php if(!empty(set_value('report_columns'))){if (in_array('DOE',set_value('report_columns'))) {echo 'selected';}}?>>DOE</option>
 							  <option <?php if(!empty(set_value('report_columns'))){if (in_array('Process',set_value('report_columns'))) {echo 'selected';}}?>>Process</option>
 							  <option <?php if(!empty(set_value('report_columns'))){if (in_array('Updated Date',set_value('report_columns'))) {echo 'selected';}}?>>Updated Date</option>
-							  <option <?php if(!empty(set_value('report_columns'))){if (in_array('Disposition',set_value('report_columns'))) {echo 'selected';}}?>>Disposition</option>
                 <option <?php if(!empty(set_value('report_columns'))){if (in_array('State',set_value('report_columns'))) {echo 'selected';}}?>>State</option>
                 <option <?php if(!empty(set_value('report_columns'))){if (in_array('City',set_value('report_columns'))) {echo 'selected';}}?>>City</option>
                 
@@ -201,7 +215,7 @@
                      <br>
                       <div class="row">
                         <div class="col-md-12 text-center">
-                            <button type="submit" class="btn btn-success"><?php echo display("filter"); ?></button>
+                            <button type="submit" class="btn btn-success" id="filter_report"><?php echo display("filter"); ?></button>
                             <button type="submit" class="btn btn-primary" id="filter_and_save"><?php echo display("filter_and_save"); ?></button>
 							              <input type=button class="btn btn-warning" onClick="location.href='<?php echo base_url('report/view_details'); ?>'" value='Reset'>                            
                         </div>
@@ -234,7 +248,14 @@
     
 <!---------------------------->
 <script type="text/javascript">
- 
+ $("#filter_and_save_form").on('submit',function(e){
+  //alert($("input[name='hier_wise']").is(":checked"));
+    if ($("input[name='hier_wise']").is(":checked") && $("#employee").select2('data').length!=1) {
+      alert("please select one employee for hierarchy wise report");
+      e.preventDefault();
+    }
+ });
+
 	$(document).ready(function(){		
     $("#selected-col").select2();
 		$(".chosen-select").select2();

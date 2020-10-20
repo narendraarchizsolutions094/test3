@@ -28,9 +28,7 @@
                             <th>Product Name</th>
                             <th>Warehouse</th>
                             <th>Quantity</th>
-                            <th>Added By</th>                            
-                            <!-- <th>Brand</th> -->
-                   <!--     <th><?php echo display('action') ?></th> -->
+                            <th>Added By</th>                                                       
                         </tr>
                     </thead>
                     <tbody>
@@ -46,17 +44,13 @@
                                     <td data-th='Warehouse'><?php echo ucwords($inventorylist->wrname); ?></td>     
                                     <td data-th='Quantity'><?php echo $inventorylist->qty; ?></td>
                                     <td data-th='Seller'><?php echo $inventorylist->seller_name.' ('.$inventorylist->email.')'; ?></td>
-                                    <!-- <td data-th='Brand'><?php echo ucwords($inventorylist->brandname); ?></td> -->                        
-                                    <!-- <td class="center">
-                                        <a href="<?php echo base_url("lead/editproductcountry1/$inventorylist->id") ?>" class="btn btn-xs  btn-primary"><i class="fa fa-edit"></i></a> 
-                                        <a href="<?php echo base_url("lead/deleteproductcountry/$inventorylist->id") ?>" onclick="return confirm('<?php echo display("are_you_sure") ?>')" class="btn btn-xs  btn-danger"><i class="fa fa-trash"></i></a> 
-                                    </td> -->
+                                 
                                 </tr>
                                 <?php $sl++; ?>
                             <?php } ?> 
                         <?php } ?> 
                     </tbody>
-                </table>  <!-- /.table-responsive -->
+                </table> 
 
               
             </div>
@@ -109,8 +103,7 @@
                   <option>Select</option>
                   <?php if(!empty($country)){ foreach($country as $cntry) { ?>
                     <option value="<?= $cntry->id?>"><?= ucwords($cntry->country_name); ?></option>
-                  <?php }}?>
-                  
+                  <?php }}?>                  
                 </select>
                 </div>  
                 <div class="form-group col-sm-6"> 
@@ -136,15 +129,6 @@
                 </div>           
       </div>
       <div class="row">
-               <!-- <div class="form-group col-sm-6"> 
-                <label>Brand</label>
-                <select name="brand" class="form-control" required="" id="brand"> 
-                  <option value="">Select</option>
-                   <?php if(!empty($brand_list)){ foreach($brand_list as $brandlist) { ?>
-                    <option value="<?= $brandlist->id?>"><?= ucwords($brandlist->name); ?></option>
-                  <?php }}?>
-                </select>
-                </div>   -->
                 <div class="form-group col-sm-6"> 
                 <label>Quantity</label>
                 <input type="number" name="qty" class="form-control" required=""> 
@@ -163,13 +147,10 @@
 
 
 <script>
+
   $('#proname').on('change',function(){
 
-   var id = $(this).val();
-    // select_brand(id);
-
-    
-    // alert(id)
+   var id = $(this).val();   
     $.ajax({
       type: 'POST',
       url: '<?php echo base_url();?>warehouse/select_skuid',
@@ -183,32 +164,25 @@
           }          
           $("#skuid").html(html);
       }
-      });
-    
-
-
-
+    });
+  });
+  
+  $("#proname").on('change',function(){
+    var pid  = $(this).val();
+    $.ajax({
+      type: 'POST',
+      url: '<?php echo base_url();?>warehouse/get_product_stock',
+      data: {pid:pid},      
+      success:function(data){                 
+          if (data) {
+            data = JSON.parse(data);
+            $("select[name='skuid']").val(data.skuid);
+            $("input[name='serialno']").val(data.serialno);
+            $("select[name='warehouse']").val(data.warehouse);
+            $("input[name='qty']").val(data.qty);
+          }          
+      }
+    });
   });
 
-  //  function select_brand(id){
-  //   // alert(id)
-  //   $.ajax({
-  //     type: 'POST',
-  //     url: '<?php echo base_url();?>warehouse/select_brand',
-  //     data: {id:id},      
-  //     success:function(data){         
-  //         var html='';
-  //         var obj = JSON.parse(data);          
-  //         html +='<option value="" style="display:none">---Select---</option>';
-  //         for(var i=0; i <(obj.length); i++){              
-  //             html +='<option value="'+(obj[i].brand)+'">'+(obj[i].skuid)+'</option>';
-  //         }          
-  //         $("#skuid").html(html);
-  //     }
-  //     });
-    
-
-
-
-  // });
 </script>

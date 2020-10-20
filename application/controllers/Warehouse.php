@@ -40,7 +40,19 @@ public function warehouse(){
 
 
 }
+public function get_product_stock(){
+    $pid    =   $this->input->post('pid');
+    $comp_id = $this->session->companey_id;
+    $this->db->where('comp_id',$comp_id);
+    $this->db->where('product_name',$pid);
+    $row    =   $this->db->get('tbl_inventory')->row_array();
+    if (!empty($row)) {
+        echo json_encode($row);
+    }else{
+        echo 0;
+    }
 
+}
 public function addwarehouse(){
 
 
@@ -361,7 +373,7 @@ public function add_inventory(){
         $batchno = substr(str_shuffle($str_result),0, 10); 
  
         $data['formdata'] = (object) $postData = [
-            'id' => $this->input->post('id', true),
+            //'id' => $this->input->post('id', true),
             'comp_id' => $this->session->userdata('companey_id'),
             'product_name' => $this->input->post('proname', true),
             'skuid' => $this->input->post('skuid', true),
@@ -382,6 +394,7 @@ public function add_inventory(){
                 }
                 redirect('warehouse/inventory');
             } else {
+               // unset($postData['id']);
                
                 if ($this->warehouse_model->updateinventory($postData)) {
                     $this->session->set_flashdata('message', display('update_successfully'));

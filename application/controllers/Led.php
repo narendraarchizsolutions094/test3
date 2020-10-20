@@ -15,7 +15,7 @@ class Led extends CI_Controller {
         }
     }
 
-   	public function index() {
+   	public function index() { 
         $this->session->unset_userdata('enquiry_filters_sess');
         $process_id = $this->session->userdata('process');
         if (user_role('70') == true) {}  
@@ -29,6 +29,8 @@ class Led extends CI_Controller {
         $data['sourse'] = $this->report_model->all_source();
 		$data['datasourse'] = $this->report_model->all_datasource();
         $data['drops'] 		= $this->enquiry_model->get_drop_list();		
+	    $data['all_stage_lists'] = $this->Leads_Model->find_stage();
+        
 		$data['lead_score'] = $this->enquiry_model->get_leadscore_list();	
 		$data['created_bylist'] = $this->User_model->user_list();	
 		$data['data_type'] = 2;

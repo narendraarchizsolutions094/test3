@@ -64,7 +64,7 @@
 
                               <tr href="<?php echo base_url("user/edit/$department->pk_i_admin_id") ?>" class="<?php echo ($sl & 1)?"odd gradeX":"even gradeC" ?><?php if($department->b_status==0){echo 'color:red';} ?>" style="cursor: pointer;">
 
-                                    <td style="<?php if($department->b_status==0){echo 'color:red';} ?>"><?php echo $sl; ?></td>
+                                    <td style="<?php if($department->b_status==0){echo 'color:red';} ?>"><input type="checkbox" > <?php echo $sl; ?></td>
 
                                      <td style="<?php if($department->b_status==0){echo 'color:red';} ?>"><?php echo $department->employee_id; ?></td>
 

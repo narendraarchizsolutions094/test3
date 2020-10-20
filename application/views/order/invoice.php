@@ -19,8 +19,10 @@
                 <div class="btn-group"> 
                     <a class="btn btn-primary" href="<?php echo base_url("order") ?>"> <i class="fa fa-list"></i> Order List </a>  
                 </div>
+				<button type="button" class="btn btn-primary mb-1 noprint pull-right" id="pdfsave"><i class="fa fa-download"></i> Invoice Pdf</button>
+
             </div>
-			<div class="panel-body panel-form">
+			<div class="panel-body panel-form" id="pdf-invoice">
                 <div class="row">
 							<div class="col-md-12">
 								<div class="card">
@@ -44,7 +46,7 @@
 										
 										<div class="row">
 											<div class="text-center ml-auto col-md-4">
-											<p class="mb-1" style="margin:0px;"><span class="font-weight-semibold" style="font-weight: 700;">Contact :</span> 011-42750485,9560348549 </p>
+											<p class="mb-1" style="margin:0px;"><span class="font-weight-semibold" style="font-weight: 700;">Contact :</span> 18005722426 </p>
 											</div>
 
 											<div class="text-center ml-auto col-md-4">
@@ -54,24 +56,24 @@
 											<p class="mb-1" style="margin:0px;"><span class="font-weight-semibold" style="font-weight: 700;">E-MAIL :</span> accounts@lalantop.com </p>
 											</div>
 										</div>
-										
+										 
 										<hr>
 								
 								        <div class="row">
 											<div class="text-left ml-auto col-md-4">
-											<p class="mb-1" style=""><span class="font-weight-semibold" style="font-weight: 700;">Buyer :</span> <?php echo $buyer_details['0']->order_value; ?> </p>
-											<p class="mb-1" style=""><span class="font-weight-semibold" style="font-weight: 700;">Prop. :</span> <?php echo $buyer_details['3']->order_value; ?> </p>
-											<p class="mb-1" style="margin:0px;"><span class="font-weight-semibold" style="font-weight: 700;">Contact Persion . :</span> <?php echo $buyer_details['0']->order_value; ?> </p>
-											<p class="mb-1" style="margin:0px;"><span class="font-weight-semibold" style="font-weight: 700;">Contact No :</span> <?php echo $buyer_details['2']->order_value; ?> </p>
-											<p class="mb-1" style="margin:0px;"><span class="font-weight-semibold" style="font-weight: 700;">GSTIN. :</span> <?php echo $buyer_details['8']->order_value; ?> </p>
-											</div>
+											<p class="mb-1" style=""><span class="font-weight-semibold" style="font-weight: 700;">Buyer :</span> <?php echo $buyer_details['BILLING_DETAILS']['fname']; ?> </p>
+											<p class="mb-1" style=""><span class="font-weight-semibold" style="font-weight: 700;">Prop. :</span> <?php //echo $buyer_details['3']->order_value; ?> </p>
+											<p class="mb-1" style="margin:0px;"><span class="font-weight-semibold" style="font-weight: 700;">Contact Person. :</span> <?php echo $buyer_details['SHIPPING_DETAILS']['fname']; ?> </p>
+											<p class="mb-1" style="margin:0px;"><span class="font-weight-semibold" style="font-weight: 700;">Contact No :</span> <?php echo $buyer_details['SHIPPING_DETAILS']['phone']; ?> </p>
+											<p class="mb-1" style="margin:0px;"><span class="font-weight-semibold" style="font-weight: 700;">GSTIN. :</span> <?php echo $buyer_details['BILLING_DETAILS']['gstin']; ?> </p>
+											</div> 
 											<div class="text-left ml-auto col-md-4">
 											<p class="mb-1" style=""><span class="font-weight-semibold" style="font-weight: 700;">Invoice No :</span>  </p>
 											<p class="mb-1" style=""><span class="font-weight-semibold" style="font-weight: 700;">Delivery Note :</span>  </p>
 											<p class="mb-1" style=""><span class="font-weight-semibold" style="font-weight: 700;">Supplier's Ref. :</span>  </p>
-											<p class="mb-1" style=""><span class="font-weight-semibold" style="font-weight: 700;">Buyer's Order No. :</span>  <?php echo $buyer_details['0']->order_id; ?></p>
-											<p class="mb-1" style=""><span class="font-weight-semibold" style="font-weight: 700;">Despatch Doc.No. :</span>  </p>
-											<p class="mb-1" style=""><span class="font-weight-semibold" style="font-weight: 700;">Despatched Thr. :</span>  </p>
+											<p class="mb-1" style=""><span class="font-weight-semibold" style="font-weight: 700;">Buyer's Order No. :</span>  <?php echo $order_no; ?></p>
+											<p class="mb-1" style=""><span class="font-weight-semibold" style="font-weight: 700;">Dispatch Doc.No. :</span>  </p>
+											<p class="mb-1" style=""><span class="font-weight-semibold" style="font-weight: 700;">Dispatched Thr. :</span>  </p>
 											</div>
 											<div class="text-left ml-auto col-md-4">
 											<p class="mb-1" style=""><span class="font-weight-semibold" style="font-weight: 700;">Date :</span>  <?php echo date("d-m-Y h:i:sa"); ?></p>
@@ -79,7 +81,7 @@
 											<p class="mb-1" style=""><span class="font-weight-semibold" style="font-weight: 700;">Other Ref.(s) :</span>  </p>
 											<p class="mb-1" style=""><span class="font-weight-semibold" style="font-weight: 700;">Dated :</span>  </p>
 											<p class="mb-1" style=""><span class="font-weight-semibold" style="font-weight: 700;">Delivery Date :</span>  </p>
-											<p class="mb-1" style=""><span class="font-weight-semibold" style="font-weight: 700;">Distination :</span> <?php echo $buyer_details['4']->order_value; ?></p>
+											<p class="mb-1" style=""><span class="font-weight-semibold" style="font-weight: 700;">Destination :</span> <?php echo $buyer_details['SHIPPING_DETAILS']['address']; ?></p>
 											</div>
 										</div>
 								</br>
@@ -94,7 +96,7 @@
 													<th class="text-right">HSN/SAC</th>
 													<th class="text-center" style="width: 1%">Quantity</th>													
 													<th class="text-right">Unit Price</th>
-<?php if($buyer_details['5']->order_value=='442'){	?>												
+<?php if($buyer_details['SHIPPING_DETAILS']['state']=='442'){	?>												
 <th class="text-right">CGST</th>
 <th class="text-right">SGST</th>
 <?php }else{ ?>
@@ -115,7 +117,7 @@
 														<td class="text-right"><?php echo $ord->hsn; ?></td>
 														<td class="text-center"><?php echo $qty = $ord->quantity; ?></td>														
 														<td class="text-right"><i class ="fa fa-rupee"></i> <i ><?php echo $price = $ord->unit_price; ?></td>
-<?php if($buyer_details['5']->order_value=='442'){	?>												
+<?php if($buyer_details['SHIPPING_DETAILS']['city']=='442'){	?>												
 <td class="text-right"><?php echo  (!empty($ord->tax)) ? ($ord->tax/2)."%" : ""; ?></td>
 <td class="text-right"><?php echo  (!empty($ord->tax)) ? ($ord->tax/2)."%" : ""; ?></td>
 <?php }else{ ?>
@@ -126,10 +128,12 @@
 															<?php 
 															if ($ord->tax) {
 																$p = $qty * (float)$price;
-																echo $ptotal = $p+($p*($ord->tax/100)  - (float)$ord->offer); 	
+															//	echo $ptotal = $p+($p*($ord->tax/100)  - (float)$ord->offer); 	
 															}else{
-																echo $ptotal = (($qty * (float)$price)  - (float)$ord->offer); 
+															//	echo $ptotal = (($qty * (float)$price)  - (float)$ord->offer); 
 															}
+																echo $ptotal = (float)$ord->total_price  - (float)$ord->offer; 
+
 															?>
 														</td>
 													</tr>		
@@ -140,7 +144,7 @@
 												} ?>
 								
 												<tr>
-													<td colspan="<?php if($buyer_details['5']->order_value=='442'){	echo '9';}else{ echo '8';} ?>" class="font-weight-bold text-uppercase text-right">Total</td>
+													<td colspan="<?php if($buyer_details['SHIPPING_DETAILS']['state']=='442'){	echo '9';}else{ echo '8';} ?>" class="font-weight-bold text-uppercase text-right">Total</td>
 													<td class="font-weight-bold text-right h4"> <i class ="fa fa-rupee"></i>  <?php echo $total; ?></td>
 												</tr>
 											</tbody></table>
@@ -214,20 +218,13 @@ This is Computer generated invoice,so no signature in required. </p>
 											<p class="mb-1" style=""><span class="font-weight-semibold" style="font-weight: 700;">IGST Amt.(Rs.) :</span> 76636.80 </p>
 											</div>-->
 										</div>
-										
-									</br></br>	
-										<div class="row">
-											<div class="text-left ml-auto col-md-6">
-											<p class="mb-1" style=""><span class="font-weight-semibold" style="font-weight: 700;">Note. :</span></br>
-Commission Criteria as Followings:-</br>
-1. Agency Commission -8%</br>
-2. Scheme Commission -5%. </p>
-											</div>
-											<div class="text-center ml-auto col-md-6">
+											<div class="text-center ml-auto col-md-6 pull-right">
 											<p class="mb-1" style=""><span class="font-weight-semibold" style="font-weight: 700;">For Lalantop Consumers Pvt.Ltd. :</span></br></br> Authorised Signatory </p>
 											</div>
-										</div>
 										
+									</br>
+									</br>
+									</br>
 										<div>
 									<?php if(!empty($payment)) { 
 											$data["payments"] = $payment;
@@ -257,8 +254,7 @@ Commission Criteria as Followings:-</br>
 									<div class="card-footer text-right no-print">
 										<!-- <a href = "<?php echo base_url("order/pdfinvoice/".$mord->ord_no); ?>" class="btn btn-primary mb-1" target = "_blank"><i class="si si-wallet"></i> Pdf</a> -->
 									    
-										<button type="button" class="btn btn-info mb-1 noprint" id="pdfsave"><i class="si si-printer"></i> Save Invoice</button>
-										<button type="button" class="btn btn-info mb-1 noprint" onclick="javascript:window.print();"><i class="si si-printer"></i> Print Invoice</button> 
+										<!-- <button type="button" class="btn btn-info mb-1 noprint" onclick="javascript:window.print();"><i class="si si-printer"></i> Print Invoice</button>  -->
 									</div>
 								</div>
 							</div>
@@ -273,12 +269,16 @@ Commission Criteria as Followings:-</br>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.0.272/jspdf.debug.js"></script>	
 <script type="text/javascript">     
+//location.reload();
 $('#pdfsave').click(function () {
 	let doc = new jsPDF('p','pt','a4');
 	$('.no-print').hide();
+	$('.alert').hide();
 doc.addHTML($('.content')[0], function () {
-     doc.save('Test.pdf');
+	var title = 'Invoice-'+"<?=$order_no?>"+'.pdf';
+     doc.save(title);
  });
+location.reload();
 });
 $('.no-print').show();
  </script>

@@ -14,7 +14,7 @@
 
             </div>
             <?php
-          }
+          } 
           ?>
          </div>
 
@@ -48,37 +48,44 @@
 
                      <th class="sorting wid-10" style="border-left:none;">S.N </th>
 					 
-                     <th class="sorting wid-10">Product Id</th>
-                     <th class="sorting wid-10">Product Name</th>
+                     <th>Product Id</th>
+                     <th>Product Name</th>
 					           <th>Price</th>
                      <th>Stock</th>
                      <th>Minimum Order Quantity</th>
-                     <th>Added Date</th>
-                     <th class="sorting wid-10">Status</th> 
-
-                     <th class="sorting wid-10">Actions</th>
-
+                     <th>Seller</th>
+                     <th>Seller Mobile</th>
+                     <th>Status</th> 
+                     <th>Actions</th>
                   </tr>
-
                </thead>
-
                <tbody>
-
                   <?php $c=1; foreach($product_list as $i => $row){ ?>
-
                   <tr>
-
                      <td><input type='checkbox' name='product_status[]' class="checkbox" value='<?php echo $row->id;?>'>
                      </td>
                      <td data-th='S.N'><?=$c++?></td>
-                     <td data-th='Product Id'><?= $row->sb_id; ?></td>
+                     <td data-th='Product Id'><?= $row->id; ?></td>
                      <td data-th='Product Name'><?= $row->country_name; ?></td>
                      <td data-th='Price'> <i class = "fa fa-rupee"></i> <?php echo $row->price; ?></td>
-            				 <td data-th='Stock'>Stock</td>
-                     <td data-th='Minimum Order Quantity'><?=$row->minimum_order_quantity?></td>
-            				 <td data-th='Added Date'><?=$row->created_date?></td>
+            				 <td data-th='Stock'><?php
+                     if ($row->stock_qty < 25) {
+                      if ($row->stock_qty == NULL) {
+                        echo "<a class='badge badge-danger' style='background:red;'>No Stock Found!</a>";                        
+                      }else{
+                        echo "<a class='badge badge-danger' style='background:orange;'>$row->stock_qty
+                      </a>";
+                      }
+                     }else{
+                        echo "<a class='badge badge-success' style='background:green;'>$row->stock_qty
+                      </a>";                                                                    
+                     }
+                     ?></td>
+                     <td data-th='Minimum Order Quantity'><?=$row->minimum_order_quantity?></td>                     
+                     <td data-th='Seller'><a href="<?=base_url().'client/view/'.$row->enquiry_id?>"><?=($row->seller!='')?$row->seller:'NA'?></a></td>
+            				 <td data-th='Seller Mobile'><a href="tel:<?=$row->seller_phone?>"><?=$row->seller_phone?></a></td>
             				 <td data-th='Status'> 
-                      <?php
+                      <?php                      
                       if (!empty($row->status)) {
                         if ($row->status == 1) {
                           echo "Active";
@@ -89,8 +96,8 @@
                       ?>
                      </td>
                      <td class="center" data-th='Actions'>
-                      <?php if (user_access(471)) { ?>            
-                        <a  class="edit btn btn-xs btn-primary" href = "<?php echo base_url("product/editproduct/".$row->id); ?>"><i class="ti-pencil"></i></a> 
+                      <?php if (user_access(471)) { ?>
+                        <a  class="edit btn btn-xs btn-primary" href = "<?php echo base_url("product/editproduct/".$row->id); ?>"><i class="ti-pencil"></i></a>
                       <?php
                       }
                       ?>

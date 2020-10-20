@@ -5,20 +5,96 @@
         <div  class="panel panel-default thumbnail"> 
             <div class="panel-heading no-print">
                 <div class="btn-group"> 
-                    <a class="btn btn-primary" href="<?php echo base_url("order") ?>"> <i class="fa fa-list"></i> Order List </a> <br><br>
-                    <?php if(!empty($getUserDetails)){ ?>
-					<address>
-						<h4>
-							<i class = "fa fa-user-o"></i> <?php echo"ID : ".$getUserDetails->employee_id; ?></h4>
-							<i class = "fa fa-map-signs"></i> <?php echo "Email : ".$getUserDetails->s_user_email; ?><br>
-							<i class = "fa fa-globe"></i> <?php echo "Address : ".$getUserDetails->add_ress; ?><br>
-							<br>
-																			
-					</address>
-					<?php } ?> 
+                    <a class="btn btn-primary" href="<?php echo base_url("order") ?>"> <i class="fa fa-list"></i> Order List </a>
                 </div>
-            </div>
+            </div> 
             <div class="panel-body">
+            		<div class="row">
+            			<div class="col-md-4 col-sm-12 col-xs-12">            				
+		            		<?php if(!empty($order_meta)){ ?>						
+							<fieldset>
+		  						<legend style="width: unset;font-size: 12px;">Billing Details:</legend>
+								<label>Name : </label>&nbsp;<?=!empty($order_meta['BILLING_DETAILS']['fname'])?$order_meta['BILLING_DETAILS']['fname']:''?>
+								<br><label>Email : </label>&nbsp;<?=!empty($order_meta['BILLING_DETAILS']['email'])?$order_meta['BILLING_DETAILS']['email']:''?>
+								<br><label>Mobile No. : </label>&nbsp;<?=!empty($order_meta['BILLING_DETAILS']['phone'])?$order_meta['BILLING_DETAILS']['phone']:''?>
+								<br><label>Address : </label>&nbsp;<?=!empty($order_meta['BILLING_DETAILS']['address'])?$order_meta['BILLING_DETAILS']['address']:''?>
+								<br><label>State : </label>&nbsp;
+								<?php
+								if(!empty($order_meta['BILLING_DETAILS']['state'])){
+									$sid	=	$order_meta['BILLING_DETAILS']['state'];
+									$state_row	=	$this->location_model->get_state_name_by_id($sid);
+									if (!empty($state_row['state'])) {
+										echo $state_row['state'];
+									}else{
+										echo "NA";
+									}
+								}else{
+									echo "NA";
+								}
+								?>								
+								<br><label>City : </label>&nbsp;
+								<?php
+								if(!empty($order_meta['BILLING_DETAILS']['city'])){
+									$cid	=	$order_meta['BILLING_DETAILS']['city'];
+									$city_row	=	$this->location_model->get_city_name_by_id($cid);
+									if (!empty($city_row['city'])) {
+										echo $city_row['city'];
+									}else{
+										echo "NA";
+									}
+								}else{
+									echo "NA";
+								}
+								?>
+								<br><label>Pincode : </label>&nbsp;<?=!empty($order_meta['BILLING_DETAILS']['pincode'])?$order_meta['BILLING_DETAILS']['pincode']:''?>
+								<br><label>GSTIN : </label>&nbsp;<?=!empty($order_meta['BILLING_DETAILS']['gstin'])?$order_meta['BILLING_DETAILS']['gstin']:''?>
+							</fieldset>
+					<?php } ?> 
+
+            			</div>
+            			<div class="col-md-4 col-sm-12 col-xs-12 pull-right" >            				
+		            		<?php if(!empty($order_meta)){ ?>
+							<fieldset>
+		  						<legend style="width: unset;font-size: 12px;">Shipping Details:</legend>
+								<label>Name : </label>&nbsp; <?=!empty($order_meta['SHIPPING_DETAILS']['fname'])?$order_meta['SHIPPING_DETAILS']['fname']:''?>
+								<br><label>Email : </label> &nbsp;<?=!empty($order_meta['SHIPPING_DETAILS']['email'])?$order_meta['SHIPPING_DETAILS']['email']:''?>
+								<br><label>Mobile No. : </label>&nbsp;<?=!empty($order_meta['SHIPPING_DETAILS']['phone'])?$order_meta['SHIPPING_DETAILS']['phone']:''?>
+								<br><label>Address : </label>&nbsp;<?=!empty($order_meta['SHIPPING_DETAILS']['address'])?$order_meta['SHIPPING_DETAILS']['address']:''?>
+								<br><label>State : </label>&nbsp;
+								<?php
+								if(!empty($order_meta['SHIPPING_DETAILS']['state'])){
+									$sid	=	$order_meta['SHIPPING_DETAILS']['state'];
+									$state_row	=	$this->location_model->get_state_name_by_id($sid);
+									if (!empty($state_row['state'])) {
+										echo $state_row['state'];
+									}else{
+										echo "NA";
+									}
+								}else{
+									echo "NA";
+								}
+								?>								
+								<br><label>City : </label>&nbsp;
+								<?php
+								if(!empty($order_meta['SHIPPING_DETAILS']['city'])){
+									$cid	=	$order_meta['SHIPPING_DETAILS']['city'];
+									$city_row	=	$this->location_model->get_city_name_by_id($cid);
+									if (!empty($city_row['city'])) {
+										echo $city_row['city'];
+									}else{
+										echo "NA";
+									}
+								}else{
+									echo "NA";
+								}
+								?>
+								<br><label>Pincode : </label>&nbsp;<?=!empty($order_meta['SHIPPING_DETAILS']['pincode'])?$order_meta['SHIPPING_DETAILS']['pincode']:''?>
+							</fieldset>
+					<?php } ?> 
+            			</div>
+            		</div>
+
+					<br>
 					<div class="row">
 						<div class = "col-md-12">
 							<div class="card">
@@ -32,7 +108,7 @@
 												<th>Srno</th>
 												<th>Product</th>
 												<th>Stock</th>
-												<th>Price</th>
+												<th>Unit Price</th>
 												<th>GST</th>
 												<th>Scheme</th>
 												<th>Discount</th>
@@ -51,8 +127,8 @@
 													<tr>
 														<th scope="row"><?php echo $ind+1; ?></th>
 														<td><?php echo $ord->product_name; ?></td>
-														<td><?php echo $ord->stock; ?></td>
-														<td><i class ="fa fa-rupee"></i> <?php echo $ord->price; ?></td>
+														<td><?php echo $ord->stock_qty; ?></td>
+														<td><i class ="fa fa-rupee"></i> <?php echo $ord->unit_price; ?></td>
 														<td><?php echo (!empty($ord->tax)) ? $ord->tax."%" : "0%"; ?></td>
 														<!-- <td><i class = "fa fa-rupee"></i> <?php echo $totprice = ($ord->price - $ord->offer) + floor($ord->tax/100); ?>
 														</td> -->
@@ -77,9 +153,9 @@
 													<i class = "fa fa-rupee"></i> 
 													<?php 
 														$total = $totprice*$ord->quantity; 
-														if (!empty($ord->tax)) {
+														/*if (!empty($ord->tax)) {
 															$total += $total*($ord->tax/100); 
-														}
+														}*/
 														echo $total;
 													?>
 													</td>
@@ -91,11 +167,11 @@
 													</td>
 													<td>
 														<select class="form-control" name="deliverstatus" onchange='update_delivery_status("<?=$ord->ord_no?>","<?=$ord->product?>",this)'>
-															<option value="1">Request</option>
-															<option value="2">Waiting</option>
-															<option value="3">Dispatch</option>
-															<option value="4">Delivery Confirm</option>
-															<option value="5">Reject</option>
+															<option value="1" <?=($ord->status==1)?'selected':''?> >Request</option>
+															<option value="2" <?=($ord->status==2)?'selected':''?>>Waiting</option>
+															<option value="3" <?=($ord->status==3)?'selected':''?>>Dispatch</option>
+															<option value="4" <?=($ord->status==4)?'selected':''?>>Delivery Confirm</option>
+															<option value="5" <?=($ord->status==5)?'selected':''?>>Reject</option>
 														</select>
 													</td>
 												</tr>
@@ -165,25 +241,42 @@
        
 <script type="text/javascript">
 	function update_delivery_status(order_id,product_id,curr){
-		var url = "<?=base_url().'order/updateorder_product_status'?>";
-		status = curr.value;
 		$.ajax({
-		    type: 'POST',
-		    url: url,
-		    data: {
-		    	order_id:order_id,
-		    	product_id:product_id,
-		    	status:status
-		    },
+		    type: 'GET',
+		    url: "<?=base_url().'order/check_stock/'?>"+order_id+'/'+product_id,
 		    success:function(data){
-		      Swal.fire(
-	            'success',
-	            'Updated Successfully',
-	            'success'
-	            );
+		    	if (data=='1') {
+					var url = "<?=base_url().'order/updateorder_product_status'?>";
+					status = curr.value;
+					$.ajax({
+					    type: 'POST',
+					    url: url,
+					    data: {
+					    	order_id:order_id,
+					    	product_id:product_id,
+					    	status:status
+					    },
+					    success:function(data){
+					      Swal.fire(
+				            'success',
+				            'Updated Successfully',
+				            'success'
+				            );
+					      location.reload();
+					    }
+					});			
+		    	}else{
+		    		Swal.fire(
+			            'Error',
+			            'Out of stock item',
+			            'error'
+			            );
+		    	}		      
 		    }
 		});			
+
 	}
+
 	function update_delivery_by(order_id,product_id,curr){
 		var url = "<?=base_url().'order/updateorder_product_deliveredBy'?>";
 		deliver_by = curr.value;

@@ -14,7 +14,16 @@ class User_model extends CI_Model {
         }
         return $insert_id;
     }
-    
+
+
+
+    public function add_login_history(){
+        $arr    =   array( 
+                    "uid"   => $this->session->user_id,                    
+                    "comp_id"     => $this->session->companey_id,
+                 );
+        $this->db->insert('login_history',$arr);
+    }
     public function companyList() {
         $this->db->select("user_id,a_companyname");
         $this->db->from('user');
@@ -27,7 +36,7 @@ class User_model extends CI_Model {
         $this->load->model('common_model');
         $all_reporting_ids    =   $this->common_model->get_categories($this->session->user_id);                      
         $this->db->select("*");
-        $this->db->from($this->table);
+        $this->db->from($this->table); 
         //$this->db->join('user', 'user.user_id = tbl_admin.companey_id');
         $this->db->join('tbl_user_role', 'tbl_user_role.use_id=tbl_admin.user_permissions', 'left');
         $where = "  tbl_admin.pk_i_admin_id IN (".implode(',', $all_reporting_ids).')';                
@@ -373,22 +382,7 @@ $company=$this->session->userdata('companey_id');
     }
 
 
-    public function set_order_meta($ord_no,$comp_id,$user_id,$meta_key){
-        if (!empty($meta_key) && !empty($ord_no)) {
-            foreach ($meta_key as $key=>$value) {
-                    $ins_arr = array(
-                    'comp_id'      => $comp_id,
-                    'order_id'      => $ord_no,
-                                'created_by'      => $user_id,
-                                'order_parameter'=> $key,
-                                'order_value'    => $value,
-                                );
-                    $this->db->insert('order_parameters',$ins_arr);
-            }
-        }else{
-            return false;
-        }
-    }
+    
     
     public function get_user_by_email($email){
         return $this->db->where('s_user_email',$email)->get('tbl_admin')->row();

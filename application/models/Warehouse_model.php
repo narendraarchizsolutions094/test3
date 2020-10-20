@@ -165,7 +165,20 @@ public function get_brandid_byname($name){
 
 public function addinventory($data){
 
-	return $this->db->insert('tbl_inventory',$data);
+	$pid    =   $data['product_name'];
+    $comp_id = $this->session->companey_id;
+    $this->db->where('comp_id',$comp_id);
+    $this->db->where('product_name',$pid);
+    $row    =   $this->db->get('tbl_inventory')->row_array();
+    if (empty($row)) {
+		return $this->db->insert('tbl_inventory',$data);
+    }else{
+    	$this->db->where('product_name',$pid);
+    	$this->db->where('comp_id',$comp_id);
+    	return $this->db->update('tbl_inventory',$data);
+    }
+
+
 }
 
 public function productcountry(){

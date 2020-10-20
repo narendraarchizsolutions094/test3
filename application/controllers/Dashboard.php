@@ -414,7 +414,7 @@ class Dashboard extends CI_Controller {
                     'logo' => (!empty($setting->logo) ? $setting->logo : null),
                     'favicon' => (!empty($setting->favicon) ? $setting->favicon : null),
                     'footer_text' => (!empty($setting->footer_text) ? $setting->footer_text : null),
-                    'process' => $process,
+                    // 'process' => $process,
                     'telephony_agent_id' => $check_user->row()->telephony_agent_id,
 					'telephony_token'    => $check_user->row()->telephony_token,
                     'availability'    => $check_user->row()->availability,
@@ -479,17 +479,68 @@ $this->load->library('zip');
             $check_user = $this->dashboard_model->check_user($postData);                       
            
             $active = 1;
-            if($check_user->num_rows() && $check_user->row()->user_permissions!=1 && ($check_user->row()->status == 0 || $check_user->row()->status == null) ){
-                $active = 0;
-            }
-            if ($check_user->num_rows() === 1 && $active) {
+            $validity_msg="";
+            $validity_status=0;
+            // if($check_user->num_rows() && $check_user->row()->user_permissions!=1 && ($check_user->row()->status == 0 || $check_user->row()->status == null) ){
+            //     $active = 0;
+            // }
+            $user_data = $check_user->row();
                 
+            if($user_data->companey_id==0){
+                $validity_msg="";
+                $validity_status=0;
+            }else{
+            date_default_timezone_set('Asia/Kolkata');
+            $from =strtotime($user_data->valid_upto);
+            $today = time();
+            $difference = $from - $today;
+            $days = floor($difference / 86400);
+            //echo "string".$days;die;
+            if($user_data->account_type == 1)
+            {
+                $validity_msg="";
+                $validity_status=0;
+              
+                if($days <= 5 && $days > 0)
+                {
+                    // $data['msg'] = "Your Account will expire after $days days Please contact your site admin to extend validity";
+                    $validity_msg="Your Account will expire after $days days Please contact your site admin to extend validity";
+                    $validity_status=1;
+                }
+                if($days <= 0)
+                {
+                    $validity_msg="Your Account has been expired on ".date('d-M-Y',$from)." Please contact your site admin to extend validity";
+                    $validity_status=2;
+                }
+            }
+            else
+            {   if($days <= 5 && $days > 0)
+                {
+                    $validity_msg="Your Account will expire after $days days Please contact your site admin to extend validity";
+                    $validity_status=3;
+                }
+                if($days <= 0)
+                {
+                    // $array['heading'] = "Trial Account Expired";
+                    // $array['message'] = "Your trial account validity has been ended please contact to site administrator";
+                    // $this->load->view("errors/html/error_general",$array,true);
+                $res = array('status'=>false,'message'=>display('incorrect_email_password'));
+                $validity_msg="";
+                $validity_status=3;
+                $active = 0;
+                }
+            }
+        }
+
+            if ($check_user->num_rows() === 1 AND $active==1) {
+            //check validity of account and account type 
+          
+            //end
                 $city_row = $this->db->select("*")
                         ->from("city")
                         ->where('id', $check_user->row()->city_id)
                         ->get();                        
                 
-                $user_data = $check_user->row();
                 $this->session->set_userdata('user_id',$user_data->pk_i_admin_id);                
                 if(user_access(230) || user_access(231) || user_access(232) || user_access(233) || user_access(234) || user_access(235) || user_access(236)){ 
 
@@ -585,7 +636,10 @@ $this->load->library('zip');
 							'telephony_token'       => $user_data->telephony_token,
                             'expiry_date'           => strtotime($user_data->valid_upto),
                             'availability'    => $user_data->availability,
+                            'validity_status' =>$validity_status,
+                            'validity_msg'=>$validity_msg
                         ]);
+                        $this->user_model->add_login_history();
                         $res = array('status'=>true,'message'=>'Successfully Logged In');                       
                    }
             } else {
@@ -725,38 +779,8 @@ public function login_in_process(){
         else
         {
             $data['counts'] = $this->enquiry_model->enquiryLeadClientCount($this->session->user_id,$this->session->companey_id);
-            $data['msg'] = '';
-            //print_r($_SESSION);die;
-            date_default_timezone_set('Asia/Kolkata');
-            $from = $this->session->expiry_date;
-            $today = time();
-            $difference = $from - $today;
-            $days = floor($difference / 86400);
-            //echo "string".$days;die;
-            if($this->session->account_type == 1)
-            {
-                if($days <= 5 && $days > 0)
-                {
-                    $data['msg'] = "Your Account will expire after $days days Please contact your site admin to extend validity";
-                }
-                if($days <= 0)
-                {
-                    $data['msg'] = "Your Account hs been expired on ".date('d-M-Y',strtotime($this->session->expiry_date))." Please contact your site admin to extend validity";
-                }
-            }
-            else
-            {   if($days <= 5 && $days > 0)
-                {
-                    $data['msg'] = "Your Account will expire after $days days Please contact your site admin to extend validity";
-                }
-                if($days <= 0)
-                {
-                    $array['heading'] = "Trial Account Expired";
-                    $array['message'] = "Your trial account validity has been ended please contact to site administrator";
-                    $this->load->view("errors/html/error_general",$array,true);
-                }
-            }
-            
+            // print_r($_SESSION);die;
+            $data['msg']='';
             $data['state']   = $this->enquiry_model->get_state();
             $data['products'] = $this->dash_model->product_list_graph();
             $data['taskdata'] = $this->dash_model->task_list();
@@ -1260,11 +1284,27 @@ public function login_in_process(){
         }
     }
     public function logout() {        
-        $comp_id = base64_encode($this->session->companey_id);
+    
+      $comp_id = base64_encode($this->session->companey_id);
+      
+      $this->db->select('id');
+      $this->db->from('login_history');
+      $this->db->where('uid',$this->session->user_id);
+      $this->db->order_by('id', 'DESC');
+      $this->db->limit(1);
+      $q = $this->db->get()->row();
 
-        $this->rememberme->deleteCookie();
-        redirect('login/?c='.$comp_id);
+      $std = date('Y-m-d H:i:s', time());
+      if(!empty($q)){
+        $this->db->set('lgot_date_time',$std);
+        $this->db->where('id', $q->id);
+        $this->db->update('login_history');
+      }
+
+      $this->rememberme->deleteCookie();
+      redirect('login/?c='.$comp_id);
     }
+
     //Select country..
     public function selected_country() {
         $country = $this->input->post('country');
@@ -1678,8 +1718,13 @@ public function user_profile() {
 		$data['length'] = $this->location_model->find_length();
 		$data['course_list'] = $this->Institute_model->courselist();
 		$data['institute_list'] = $this->Institute_model->institutelist();
-		$data['institute'] = $this->Institute_model->findinstitute();		
-        $data['all_description_lists']    =   $this->Leads_Model->find_description();
+		$data['institute'] = $this->Institute_model->findinstitute();
+    
+    $data['all_faq'] = $this->Leads_Model->faq_select();
+    
+    $data['login_details'] = $this->Leads_Model->logdata_select();		
+    
+    $data['all_description_lists']    =   $this->Leads_Model->find_description();
 		$data['all_extra'] = $this->location_model->get_qualification_tab($en_id);        
         $data['content'] = $this->load->view('student/profile_wrapper', $data, true);
         $this->load->view('layout/main_wrapper', $data);

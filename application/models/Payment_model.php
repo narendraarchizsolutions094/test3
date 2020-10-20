@@ -11,14 +11,15 @@ class Payment_model extends CI_Model {
 		
     }
 	
-	function getpayment($custno){
+	function getpayment($ord_no){
 		
 		return $this->db->select("pay.*,ord.ord_no,ord.product,ord.quantity,ord.total_price")
-					//	->where("pay.cust_id", $custno)
+//						->where("pay.ord_id", $ord_no)
 						->from("payment pay")
 						//->join("masters pmode", "pmode.id=pay.pay_mode", "LEFT")
-						->join("tbl_order ord", "ord.id= pay.ord_id", "LEFT")
+						->join("(select * from tbl_order where ord_no='".$ord_no."' group by ord_no) as ord", "ord.ord_no= pay.ord_id", "inner")
 						//->join("masters pstatus", "pstatus.id=pay.status", "LEFT")
+						->order_by('pay.id','DESC')
 						->get()
 						->result();
 		

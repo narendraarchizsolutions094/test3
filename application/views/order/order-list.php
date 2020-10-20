@@ -147,37 +147,48 @@ input[name=lead_stages]{
           }
           ?>
         </div>
-         <div class="col-md-8 col-sm-8 col-xs-8 pull-right">  
-<div class="col-md-4">
-<div class="form-group">        
-<select name="productdd" id="productdd" class="form-control">
-<option value="">Select Product</option>
-<?php foreach($product_list as $product){ ?>
-  <option value="<?php echo $product->id; ?>"><?php echo $product->country_name; ?></option>
-<?php } ?>
-</select> 
-</div>
-</div>
-<div class="col-md-4">
-<div class="form-group">        
-<select name="sellerdd" id="sellerdd" class="form-control">
-<option value="">Select Seller</option>
-<?php foreach($seller_list as $seller){ ?>
-  <option value="<?php echo $seller->pk_i_admin_id; ?>"><?php echo $seller->s_display_name.' '.$seller->last_name.' - '.$seller->s_user_email; ?></option>
-<?php } ?>
-</select> 
-</div>
-</div>
-<div class="col-md-4">
-<div class="form-group">        
-<select name="statusdd" id="statusdd" class="form-control">
-<option value="">Select Status</option>
-  <option value="">Pending</option>
-  <option value="">delivered</option>
-</select> 
-</div>
-</div>
-      </div>
+      </div><br>
+      <div class="row">
+            <div class="col-md-3 col-xs-12 col-sm-12">
+              <label>Order Date</label>
+              <input type="date" name="date_filter" class="form-control">
+            </div>
+            <div class="col-md-3 col-xs-12 col-sm-12">
+              <label>Product</label>
+              <div class="form-group">        
+                <select name="productdd" id="productdd" class="form-control">
+                  <option value="">Select Product</option>
+                  <?php foreach($product_list as $product){ ?>
+                    <option value="<?php echo $product->id; ?>"><?php echo $product->country_name; ?></option>
+                  <?php } ?>
+                </select> 
+              </div>
+            </div>
+            <div class="col-md-3 col-xs-12 col-sm-12">
+              <label>Seller</label>
+              <div class="form-group">        
+              <select name="sellerdd" id="sellerdd" class="form-control">
+                <option value="">Select Seller</option>
+                <?php foreach($seller_list as $seller){ ?>
+                  <option value="<?php echo $seller->pk_i_admin_id; ?>"><?php echo $seller->s_display_name.' '.$seller->last_name.' - '.$seller->s_user_email; ?></option>
+                <?php } ?>
+              </select> 
+              </div>
+            </div>
+            <div class="col-md-3 col-xs-12 col-sm-12">
+              <label>Order Status</label>
+              <div class="form-group">        
+                <select name="statusdd" id="statusdd" class="form-control">
+                  <option value="">Select Status</option>
+                    <option value="1">Request</option>
+                    <option value="2">Waiting</option>
+                    <option value="3">Dispatch</option>
+                    <option value="4">Delivery Confirm</option>
+                    <option value="5">Reject</option>
+                  </select> 
+              </div>
+            </div>
+      
 </div>
 	<br>
       <div class="row">
@@ -192,10 +203,13 @@ input[name=lead_stages]{
 													<th>S.No.</th>
 													<th> Order No </th>												
 													<th>Total</th>
-                          <th>Buyer Name</th>	
+                          <th>Buyer Name</th> 
+                          <th>Buyer Mobile</th> 
+                          <th>Buyer Address</th>	
                           <!-- <th>Payment Mode</th> -->
                           <th>Amount Paid</th>
-													<th>Balance</th>
+                          <th>Balance</th>
+													<th>Ordered At</th>
 													<th>Action</th>													
 												</tr>
 											</thead>
@@ -213,8 +227,9 @@ input[name=lead_stages]{
 	<script>
 	$(document).ready(function(){
 			var orderDataTable  = $("#add-datatable").dataTable({
-				"serverSide":"true",
+				"serverSide":"true", 
 				"lengthMenu":[10,20,50,100,500,1000,"All"],
+        "processing": true,
 				"ajax":{
 					"url":"<?php echo base_url('order/loadorders'); ?>",
 					"type":"post",
@@ -222,6 +237,7 @@ input[name=lead_stages]{
                data.sproduct = $('#productdd').val();
                data.sseller = $('#sellerdd').val();
                data.sstatus = $('#statusdd').val();
+               data.ord_date = $("input[name='date_filter']").val();
             }
 				},
         "dom": "<'row'<'col-sm-4'l><'col-sm-4 text-center'B><'col-sm-4'f>>tp", 
@@ -235,19 +251,17 @@ input[name=lead_stages]{
 				createdRow: function( row, data, dataIndex ) {
 			        $(row).find('td:eq(0)').attr('data-th', 'S.No.');
 			        $(row).find('td:eq(1)').attr('data-th', 'Order No');
-			        $(row).find('td:eq(2)').attr('data-th', 'Product');
-			        $(row).find('td:eq(3)').attr('data-th', 'Quantity');
-			        $(row).find('td:eq(4)').attr('data-th', 'Price');
-			        $(row).find('td:eq(5)').attr('data-th', 'Payment');
-			        $(row).find('td:eq(6)').attr('data-th', 'Pay');
+			        $(row).find('td:eq(2)').attr('data-th', 'Total');
+              $(row).find('td:eq(3)').attr('data-th', 'Buyer Name');
+              $(row).find('td:eq(4)').attr('data-th', 'Buyer Mobile');
+			        $(row).find('td:eq(5)').attr('data-th', 'Buyer Address');
+			        $(row).find('td:eq(6)').attr('data-th', 'Amount Paid');
 			        $(row).find('td:eq(7)').attr('data-th', 'Balance');
-			        $(row).find('td:eq(8)').attr('data-th', 'Delivery Date');
-			        $(row).find('td:eq(9)').attr('data-th', 'Date');
-			        $(row).find('td:eq(10)').attr('data-th', 'Status');
-			        $(row).find('td:eq(11)').attr('data-th', 'Action');
+			        $(row).find('td:eq(8)').attr('data-th', 'Ordered At');
+			        $(row).find('td:eq(9)').attr('data-th', 'Action');
 			    }
 			});
-      $('#productdd,#sellerdd,#statusdd').change(function(){
+      $('#productdd,#sellerdd,#statusdd,input[name="date_filter"]').change(function(){
           orderDataTable.api().ajax.reload( null, true );
        });
 			
@@ -260,3 +274,4 @@ input[name=lead_stages]{
 			$(trgt).slideToggle(trgt);
 		});
 	</script>
+

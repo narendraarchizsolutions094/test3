@@ -8,6 +8,20 @@ class Dashboard_model extends CI_Model {
 
 	private $table = "tbl_admin"; 
 
+	public function check_userByID($user_id)
+	{
+		$user=$this->db->where(array('user_id'=>$user_id,'user_role'=>2))->get('user');
+		return $user;
+	}
+	public function check_userByMAIL($email)
+	{
+		$check_user=  $this->db->select("*")
+         ->from('tbl_admin')
+         ->join('user','user.user_id = tbl_admin.companey_id','left')			
+         ->where(array('s_user_email'=>$email))
+		 ->get();
+		 return $check_user;
+	}
  
 
 	public function check_user($data = []){

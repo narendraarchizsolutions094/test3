@@ -8,8 +8,15 @@
       <th class="th-sm">Payment Mode</th>
       <th class="th-sm">Stage</th>
       <th class="th-sm">Disposition</th>
-	  <th class="th-sm">Date</th>
+    <th class="th-sm">Date</th>
+<?php if($this->session->companey_id=='83'){ ?>   
+    <th class="th-sm">Registration fees</th>
+    <th class="th-sm">Stamp Paper Charge</th>
+    <th class="th-sm">Received amount</th>
+    <th class="th-sm">Received date</th>
+<?php }else{ ?>
       <th class="th-sm">Amount</th>
+<?php } ?>
       <th class="th-sm">Action</th>
     </tr>
   </thead>
@@ -21,15 +28,60 @@
       <td><?php if($val->stage_id!='---Select Stage---'){foreach($all_stage_lists as $stage){ if($stage->stg_id==$val->stage_id){echo $stage->lead_stage_name;}}}else{ echo 'NA';} ?></td>
       <td><?php if($val->desc_id!='---Select Description---'){ foreach($all_description_lists as $discription){ if($discription->id==$val->desc_id){echo $discription->description;}}}else{ echo 'NA';} ?></td>
       <td><?php if($val->ins_dt!=''){echo $val->ins_dt;}else{ echo 'NA'; } ?></td>
-	  <td><?php echo $val->ins_amt; ?></td>
+<?php if($this->session->companey_id=='83'){ ?>   
+    <td><?php echo $val->reg_amt; ?></td>
+    <td><?php echo $val->stamp_amt; ?></td>
+    <td><?php echo $val->recieved_amt; ?></td>
+    <td><?php echo $val->recieved_date; ?></td>
+<?php }else{ ?>
+    <td><?php echo $val->ins_amt; ?></td>
+<?php } ?>
       <td>
+<?php if($this->session->companey_id=='83'){ ?>
+<a href="#modal7<?= $i?>" class="btn btn-info" data-toggle="modal" data-animation="effect-scale">Close</a>
+ <?php } ?>
  <?php if($val->pay_status=='0'){ ?>
  <a href="#modal6<?= $i?>" class="btn btn-danger" data-toggle="modal" data-animation="effect-scale">Send Link</a>
 <?php }else{ ?>
-    <sapn class="btn btn-success">Paid</span>
+    <span class="btn btn-success">Paid</span>
 <?php } ?> 
       </td>
     </tr>
+  
+       <!--------------------------------Modal Popup for Update Payment----------------------------------------------------------------------------->
+                      
+      <div class="modal fade" id="modal7<?= $i?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel6" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <?php
+              echo form_open('client/update_setlled',array('class'=>"",'name'=>'paymentform'));
+            ?>
+        <div class="modal-content tx-14">
+          <div class="modal-header">
+            <h6 class="modal-title" id="exampleModalLabel6">Update Payment</h6>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+      <input type="hidden" class="form-control" name="pay_id" value="<?= $val->id; ?>">
+                  <label for="date">Received amount</label>
+                  <input type="text" class="form-control" name="recieved_amt" placeholder="Received amount">
+          
+          <label for="date">Received date</label>
+                  <input type="date" class="form-control" name="recieved_date" placeholder="Received date">
+          
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary tx-13" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary tx-13">Send</button>
+          </div>
+        </div>
+        <?php echo form_close()?>
+      </div>
+    </div>
+
+<!-----------------------------------------------END------------------------------------>
+  
      <!--------------------------------Modal Popup for Amount----------------------------------------------------------------------------->
                       
       <div class="modal fade" id="modal6<?= $i?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel6" aria-hidden="true">
@@ -45,11 +97,11 @@
             </button>
           </div>
           <div class="modal-body">
-		  
+      
                   <label for="date">Amount</label>
                   <input type="text" class="form-control" name="amount" value="<?= $val->ins_amt; ?>">
-				  
-				  <label for="date">Remark</label>
+          
+          <label for="date">Remark</label>
                   <textarea type="text" class="form-control" name="remark"></textarea>
           
           </div>
@@ -95,7 +147,7 @@
               <option value = "1">From Stage</option>
               <option value = "2">From Date</option>
             </select>
-        </div>		
+        </div>    
 
 <div id="hidden_div1" class="container1" style="display:none;">
         
@@ -106,7 +158,7 @@
                               <?php 
                               $id = '';
                               foreach($all_estage_lists as $single){                 
-							                   $id=$single->lead_stage;                              
+                                 $id=$single->lead_stage;                              
                               }
                               ?>
                               <?php foreach ($all_stage_lists as $stage) {  ?>
@@ -127,10 +179,23 @@
             <label>Date<i class="text-danger"></i></label>
             <input type="date" class="form-control" placeholder="Enter Date" name="dt">
         </div>
+    
+<?php if($this->session->companey_id=='83'){ ?>
+<div class="col-md-6">
+            <label>Registration fees<i class="text-danger"></i></label>
+            <input type="text" class="form-control" placeholder="Enter Fee" name="reg_amt">
+        </div>
+
+<div class="col-md-6">
+            <label>Stamp Paper Charge<i class="text-danger"></i></label>
+            <input type="text" class="form-control" placeholder="Enter Charge" name="stamp_amt">
+        </div>    
+<?php }else{ ?>   
 <div class="col-md-6">
             <label>Amount<i class="text-danger"></i></label>
             <input type="text" class="form-control" placeholder="Enter Ammount" name="amt">
         </div>
+<?php } ?>
 <div class="col-md-6" style="padding:20px;">                                                
                               <input class="btn btn-success" type="submit" value="Submit" name="submit" >           
                            </div>

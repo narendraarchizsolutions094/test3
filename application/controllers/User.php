@@ -330,6 +330,8 @@ $inactive = $this->input->post('status', true);
             'process' => !empty($this->input->post('process', true))?implode(',', $this->input->post('process', true)):'',
 			'products' => !empty($this->input->post('product', true))?implode(',', $this->input->post('product', true)):'',
         ];
+        // print_r($data['department']);
+        // die();
         #-------------------------------#
         if ($this->form_validation->run() === true) {
             #if empty $dprt_id then insert data

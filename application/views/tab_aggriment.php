@@ -9,8 +9,9 @@
       <th class="th-sm">Mobile</th>
       <th class="th-sm">Email</th>
       <th class="th-sm">Address</th>
+    <th class="th-sm">Aggrement Date</th>
       <th class="th-sm">Before sign</th>
-	  <th class="th-sm">After sign</th>
+    <th class="th-sm">After sign</th>
     </tr>
   </thead>
   <tbody>
@@ -21,16 +22,17 @@
       <td><?php echo $val->agg_phone;  ?></td>
       <td><?php echo $val->agg_email;  ?></td>
       <td><?php echo $val->agg_adrs; ?></td>
+    <td><?php echo $val->agg_date; ?></td>
       <td>
  <!-- <a href="#modal7<?= $i?>" class="btn btn-success" data-toggle="modal" data-animation="effect-scale"><i class="fa fa-eye" aria-hidden="true"></i></a> -->
 <?php if(!empty($val->file)){ ?>
-<a href="<?php	 echo base_url($val->file); ?>"  target="_blank"><i class="fa fa-file" aria-hidden="true" style="font-size:20px;margin-top:-30px;color:#10A3FF;"></i></a>
+<a href="<?php   echo base_url($val->file); ?>"  target="_blank"><i class="fa fa-file" aria-hidden="true" style="font-size:20px;margin-top:-30px;color:#10A3FF;"></i></a>
 <?php } ?>
       </td>
-	  <td>
+    <td>
  <!-- <a href="#modal7<?= $i?>" class="btn btn-success" data-toggle="modal" data-animation="effect-scale"><i class="fa fa-eye" aria-hidden="true"></i></a> -->
 <?php if(!empty($val->sign_file)){ ?>
-<a href="<?php	 echo base_url($val->sign_file); ?>"  target="_blank"><i class="fa fa-file" aria-hidden="true" style="font-size:20px;margin-top:-30px;color:#10A3FF;"></i></a>
+<a href="<?php   echo base_url($val->sign_file); ?>"  target="_blank"><i class="fa fa-file" aria-hidden="true" style="font-size:20px;margin-top:-30px;color:#10A3FF;"></i></a>
 <?php } ?>
       </td>
     </tr>
@@ -70,15 +72,26 @@
   $('.dataTables_length').addClass('bs-select');
 });
  </script>
+
+<form class="" action="<?php echo base_url()?>client/generate_aggrement" method="post" enctype="multipart/form-data">
+<div class="col-md-6" style="padding:20px;">
+            <select class="form-control"  name="agg_frmt"  id="agg_frmt"> 
+              <option>Select Format</option>
+              <option value = "BAA">Bangalore-Australia-Agreement</option>
+            </select>
+</div>
+<div class="col-md-6" style="padding:20px;">                                                
+            <input class="btn btn-primary" type="submit" value="Genereate pdf" name="submit" >           
+</div>
+</form>
  
  <form class="" action="<?php echo base_url()?>client/create_aggrement/<?php echo $this->uri->segment(3); ?>" id="" method="post" enctype="multipart/form-data">
             <div class="col-md-12 col-sm-12">        
-                  <div class="row">
-                      
+                  <div class="row">                      
                     <div class="form-group col-sm-10">
                           <label>If Details Are Same As Privious Data (Click Checkbox) <i class="text-danger"></i></label>
                         <input type="checkbox" name="agg_same" id="agg_same" value="<?php echo $this->uri->segment(3); ?>" onclick="myaggrement()" class="form-control">
-                     </div>  
+                    </div>  
                       <div class="form-group col-sm-2"><a href="#modalagg" data-toggle="modal" class="btn" data-animation="effect-scale"><i class="fa fa-upload" aria-hidden="true"></i></a></div>
                     <div class="form-group col-sm-6">
                           <label>Name <i class="text-danger"></i></label>
@@ -99,8 +112,13 @@
                         <label>Address <i class="text-danger"></i></label>
                         <input type="text" id="agg_adrs" name="agg_adrs" value="" class="form-control"> 
                      </div>
+           
+           <div class="form-group col-sm-6">
+                        <label>Agreement Date <i class="text-danger"></i></label>
+                        <input type="date" id="agg_date" name="agg_date" value="" class="form-control"> 
+                     </div>
 
-<div class="col-md-6" style="padding:20px;">                                                
+<div class="col-md-12" style="padding:20px;">                                                
                               <input class="btn btn-success" type="submit" value="Submit" name="submit" >           
                            </div>
 

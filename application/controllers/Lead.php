@@ -373,7 +373,7 @@ public function select_app_by_ins() {
             $mobileno = $this->input->post('mobileno');
             $email = $this->input->post('email');
             $designation = $this->input->post('designation');
-            $conversation = trim($this->input->post('conversation'));
+            $conversation = trim($this->input->post('task_remark'));
             $subject = $this->input->post('subject');
             
              $task_date = date("d-m-Y",strtotime($this->input->post('task_date')));
@@ -405,7 +405,10 @@ public function select_app_by_ins() {
             $this->db->where('resp_id', $lead_id);
             $this->db->set('create_by', $this->session->user_id);
             $this->db->update('query_response');
-             $this->Leads_Model->add_comment_for_events('Task Updated Successfully', $lead_id);
+            $task_enquiry_code = $this->input->post('task_enquiry_code');
+             
+             $this->Leads_Model->add_comment_for_events_stage('Task Updated Successfully', $task_enquiry_code,0,0,$subject.'<br>'.$conversation,1);
+
             $this->session->set_flashdata('message', 'Task Updated Successfully');
             redirect($this->agent->referrer());
         } else {
@@ -554,7 +557,7 @@ public function select_app_by_ins() {
                 }
             } 
             $this->load->model('rule_model');
-            $this->rule_model->execute_rules($enq_code,array(1,2,3));
+            $this->rule_model->execute_rules($enq_code,array(1,2));
 			//print_r($coment_type);exit;
 if($coment_type == 1){			
     redirect('enquiry/view/'.$en_id);
@@ -827,7 +830,7 @@ if($coment_type == 1){
             $msg = $comment.' Successfully';
 
             $this->load->model('rule_model');
-            $this->rule_model->execute_rules($lead_code,array(1,2,3));  
+            $this->rule_model->execute_rules($lead_code,array(1,2,3,6,7));  
 
             if ($lead->status == 2 && $this->session->companey_id == 76 || ($this->session->companey_id == 57 && $data['enquiry']->product_id == 122) ) {
                 $user_right = '';
@@ -852,6 +855,10 @@ if($coment_type == 1){
                         'last_name'       =>    $data['enquiry']->lastname,  
                         's_user_email'    =>    $data['enquiry']->email,
                         's_phoneno'       =>    $data['enquiry']->phone,
+                        
+                        'city_id'         =>    $data['enquiry']->enquiry_city_id,
+                        'state_id'        =>    $data['enquiry']->enquiry_state_id,
+
                         'companey_id'     =>    $ucid,
                         'b_status'        =>    1,
                         'user_permissions'=>    $user_right,
@@ -2896,4 +2903,58 @@ public function alertstatus() {
         }
         redirect('lead/vidlist');
     }
+    
+    ///////////////// FAQ SECTION START////////////////////
+    public function faq() {
+        $data['nav1'] = 'nav2';
+        if (!empty($_POST)) {
+
+            $faq_title = $this->input->post('faq_title');
+            $faq_dscptn = $this->input->post('faq_dscptn');
+
+            $data = array(
+                'que_type'   => $faq_title,
+                'answer'   => $faq_dscptn,
+                'comp_id' => $this->session->userdata('companey_id'),
+                'created_by' => $this->session->userdata('user_id'),
+                'status' => '1'
+            );
+
+            $insert_id = $this->Leads_Model->faq_add($data);
+            $this->session->set_flashdata('SUCCESSMSG', 'Lead Stage Add Successfully');
+            redirect('lead/faq');
+        }
+
+
+        $data['all_faq'] = $this->Leads_Model->faq_select();
+        $data['title'] = 'FAQ';
+        $data['content'] = $this->load->view('faq/faq_list', $data, true);
+        $this->load->view('layout/main_wrapper', $data);
+    }
+
+    public function delete_faq($faq_id = null) {
+        if ($this->Leads_Model->delete_faq($faq_id)) {
+            #set success message
+            $this->session->set_flashdata('message', display('delete_successfully'));
+        } else {
+            #set exception message
+            $this->session->set_flashdata('exception', display('please_try_again'));
+        }
+        redirect('lead/faq');
+    }
+
+    public function update_faq() {
+        if (!empty($_POST)) {
+            $faq_title = $this->input->post('faq_title');
+            $faq_dscptn = $this->input->post('faq_dscptn');
+            $faq_id = $this->input->post('faq_id');            
+            $this->db->set('que_type', $faq_title);
+            $this->db->set('answer', $faq_dscptn);
+            $this->db->where('id', $faq_id);
+            $this->db->update('tbl_faq');
+            $this->session->set_flashdata('SUCCESSMSG', 'Update Successfully');
+            redirect('lead/faq');
+        }
+    }   
+    ///////////////// FAQ SECTION END////////////////////
 }

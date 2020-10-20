@@ -27,7 +27,7 @@ class Ticket extends CI_Controller {
 	public function natureOfComplaintList(){
 		
 		$data['title'] = "Nature Of Complaint List";
-		$data["tickets"] = $this->db->select('*')->from('tbl_nature_of_complaint')->get()->result();
+		$data["tickets"] = $this->db->select('*')->from('tbl_nature_of_complaint')->where('comp_id',$this->session->companey_id)->get()->result();
 		$data['content'] = $this->load->view('ticket/natureofcomplain-list', $data, true);
 		$this->load->view('layout/main_wrapper', $data);
 		

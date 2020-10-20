@@ -130,15 +130,15 @@
 										
 								}		
 								?></strike> <b><i class = "fa fa-rupee"></i><?php echo $prd->price ?></b>
-								</p>
-									<div>
-									<?php if($prd->stock  == 0){
+									
+									<?php if(empty($prd->stock_qty) || $prd->stock_qty  <= $prd->minimum_order_quantity){
 										?>Out Of Stock<?php
 									}else{
 										
 										
 									} ?>
-									</div>
+									
+								</p>
 								</div>
 								<div class = "box-content text-left" style = "text-align:left;">
 								
@@ -151,20 +151,20 @@
 								</div>
 									 <ul class="icon">
 									<li>
-										<?php if($prd->stock  == 0){
+										<?php if(empty($prd->stock_qty) || $prd->stock_qty  <= $prd->minimum_order_quantity){
 											
-											echo "Out of stock";
+											//echo "Out of stock";
 										}else { ?>
 									<?php if(!empty($incart[$prd->id])) { ?>
-									<a href = "javascript:void(0)" class = "minus-quantity" data-prodid = "<?php echo $prd->sb_id; ?>" data-minalert = "<?php echo $prd->minimum_order_quantity ?>" ><span> - </span></a>
+									<a href = "javascript:void(0)" class = "minus-quantity" data-prodid = "<?php echo $prd->id; ?>" data-minalert = "<?php echo $prd->minimum_order_quantity ?>" ><span> - </span></a>
 									<?php } ?>
 									
-									<a href = "javascript:void(0)" data-prodid = "<?php echo $prd->sb_id; ?>" class = "add-to-cart" data-minalert = "<?php echo $prd->minimum_order_quantity ?>">
+									<a href = "javascript:void(0)" data-prodid = "<?php echo $prd->id; ?>" class = "add-to-cart" data-minalert = "<?php echo $prd->minimum_order_quantity ?>">
 									<?php
 									$plus = "shopping-cart";	
 									if(!empty($incart[$prd->id])) {  ?>
 									
-											<span class="cart-quantity"><?php echo $incart[$prd->sb_id]; ?></span> 
+											<span class="cart-quantity"><?php echo $incart[$prd->id]; ?></span> 
 										<?php 
 										$plus = "cart-plus";
 										} ?>	
@@ -181,7 +181,7 @@
 							
 											</li>
 									<li>	
-										<a href = "<?php echo base_url("buy/view/".$prd->sb_id); ?>"> <i class="fa fa-eye" aria-hidden="true"></i> </a></li>
+										<a href = "<?php echo base_url("buy/view/".$prd->id); ?>"> <i class="fa fa-eye" aria-hidden="true"></i> </a></li>
 									</ul>
 								
 								</div>

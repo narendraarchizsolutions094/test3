@@ -97,6 +97,58 @@ class Rule_model extends CI_Model {
                         }
 
                     }
+                }else if($rule_data['type'] == 6){
+                    $this->db->where('('.$rule_data['rule_sql'].')');
+                    if ($enquiry_code) {
+                        $this->db->where('Enquery_id',$enquiry_code);                
+                    }
+                    $this->db->where('comp_id',$comp_id);
+                    //$this->db->where('rule_executed!=',$id);                                    
+                    $enq_row = $this->db->get('enquiry')->row_array();                    
+                    if (!empty($enq_row['phone']) && !empty($rule_data['rule_action'])) {
+                        $phone    =   $enq_row['phone'];
+                        $row   =   $this->db->select('*')
+                                    ->from('api_templates')                                    
+                                    ->where('temp_id',$rule_data['rule_action'])                        
+                                    ->get()
+                                    ->row_array();
+                        
+                        if (!empty($row)) { 
+                            $this->load->model('Message_models');                            
+                            $message = $row['template_content'];
+                            if($this->Message_models->smssend($phone,$message,$companey_id='',$user_id='')){
+                                //$this->db->where('Enquery_id',$enquiry_code);
+                                //$this->db->update('enquiry',array('rule_executed'=>$id));
+                            }
+                        }
+
+                    }
+                }else if($rule_data['type'] == 7){
+                    $this->db->where('('.$rule_data['rule_sql'].')');
+                    if ($enquiry_code) {
+                        $this->db->where('Enquery_id',$enquiry_code);                
+                    }
+                    $this->db->where('comp_id',$comp_id);
+                    //$this->db->where('rule_executed!=',$id);                                    
+                    $enq_row = $this->db->get('enquiry')->row_array();                    
+                    if (!empty($enq_row['phone']) && !empty($rule_data['rule_action'])) {
+                        $phone    =   $enq_row['phone'];
+                        $row   =   $this->db->select('*')
+                                    ->from('api_templates')                                    
+                                    ->where('temp_id',$rule_data['rule_action'])                        
+                                    ->get()
+                                    ->row_array();
+                        
+                        if (!empty($row)) { 
+                            $this->load->model('Message_models');                            
+                            $message = $row['template_content'];
+                            if($this->Message_models->sendwhatsapp($phone,$message)){
+                                //$this->db->where('Enquery_id',$enquiry_code);
+                                //$this->db->update('enquiry',array('rule_executed'=>$id));
+                            }
+                        }
+
+                    }
                 }
             }
         }

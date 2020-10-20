@@ -340,37 +340,24 @@ class Order extends CI_Controller {
 	
 	
 	public function view($ordno = ""){
-		
-		//$ord = base64_decode(base64_decode(urldecode($ordno)));
-		
-	//	$this->load->model("payment_model");
+		$this->load->model("location_model");
 		if(isset($_POST["orderno"])){
 			$this->updatedelivery();
 			redirect(base_url("order/view/".$ordno), "refresh");	
 		}
-		
 		if(empty($ordno)) show_404();
-		
 		$data['ord'] = $this->order_model->getOrder($ordno);
 		$data['orders'] = $this->order_model->getOrders($ordno);
-		if(!empty($data['ord']->cus_id))
-		{
-			$data['getUserDetails'] = $this->db->select('*')->from('tbl_admin')->where('pk_i_admin_id',$data['ord']->cus_id)->get()->row();	
+		if(!empty($data["ord"]->ord_no)) {
+			$this->load->model('payment_model');
+			$data['payments'] = $this->payment_model->getpayment($data["ord"]->ord_no);
 		}
-		
-		
-		if(!empty($data["ord"])) {
-		//	$data['payments'] = $this->payment_model->getpayment($data["ord"]->cus_id);
-		}
-		//if(empty($data['order'])) show_404();
-		
-		$data["delivery"]    = $this->order_model->getDilevery($ordno);
-		$data["title"] = $data['ord']->ord_no;
-		
-	   $data['content'] = $this->load->view('order/order-book', $data, true);
+		$data["delivery"]    = $this->order_model->getDilevery($ordno);		
+		$order_meta = array('fname','email','phone','address','state','city','pincode','gstin');
+		$data['order_meta']	=	$this->order_model->get_order_meta($ordno,$order_meta);
+		$data["title"] = $data['ord']->ord_no;		
+	   	$data['content'] = $this->load->view('order/order-book', $data, true);
         $this->load->view('layout/main_wrapper', $data);
-		
-	
 	}
 	
 	
@@ -378,7 +365,7 @@ class Order extends CI_Controller {
 	
 	
 	public function booking($ordno = ""){
-		
+		$this->load->model('location_model');
 	//		$this->load->model("payment_model");
 		if(isset($_POST["orderno"])){
 			$this->savebooking();
@@ -394,11 +381,7 @@ class Order extends CI_Controller {
 		if(!empty($data["ord"])) {
 			//$data['payments'] = $this->payment_model->getpayment($data["ord"]->cus_id);
 		}
-		//if(empty($data['order'])) show_404();
-		if(!empty($data['ord']->cus_id))
-		{
-			$data['getUserDetails'] = $this->db->select('*')->from('tbl_admin')->where('pk_i_admin_id',$data['ord']->cus_id)->get()->row();	
-		}
+		
 		$data["schemes"]  = $this->order_model->getCurrentScheme();
 		
 		$this->load->model("scheme_model");
@@ -406,7 +389,8 @@ class Order extends CI_Controller {
 		
 		
 		$data["delivery"] = $this->order_model->getDilevery($ordno);
-		
+		$order_meta = array('fname','email','phone','address','state','city','pincode','gstin');
+		$data['order_meta']	=	$this->order_model->get_order_meta($ordno,$order_meta);
 		$data["title"] = "ORDER : ".$data['ord']->ord_no;
 		
 		$data['content'] = $this->load->view('order/confirm-order', $data, true);
@@ -496,7 +480,7 @@ class Order extends CI_Controller {
 	
 	}
 	
-	public function invoice($ordno = ""){
+	public function invoice($ordno = ""){ 
 		
 		////$this->load->model("payment_model");
 		$data['orders'] = $this->order_model->getOrders($ordno);
@@ -509,7 +493,11 @@ class Order extends CI_Controller {
 		//$data["payment"]  = $this->payment_model->getPaymentByOrder($data['ord']->id);
 	
 		$data["title"] 	  = $data['ord']->ord_no;
+		$this->load->model("location_model");
+		$order_meta = array('fname','email','phone','address','state','city','pincode','gstin');
+		$data['buyer_details']	=	$this->order_model->get_order_meta($ordno,$order_meta);
 		
+		$data['order_no'] = $ordno;
 		$data['content'] = $this->load->view('order/invoice', $data, true);
         $this->load->view('layout/main_wrapper', $data);
 		
@@ -612,7 +600,40 @@ class Order extends CI_Controller {
 				"status" 	 => $this->input->post('status'),
 				"created_by" => $this->session->user_id,
 				);
-		echo $this->db->insert("ord_prod_stage", $arr);	
+		if($this->db->insert("ord_prod_stage", $arr)){	
+			
+			$comp_id	=	$this->session->companey_id;
+			$pid	=	$this->input->post('product_id');				
+			$odr_id	=	$this->input->post('order_id');				
+
+			$this->db->where('ord_no',$odr_id);
+			$this->db->where('product',$pid);
+			$this->db->where('company',$comp_id);
+			$this->db->set('status',$this->input->post('status'));
+			$this->db->update('tbl_order');
+
+			if ($this->input->post('status') == 4) {
+				$this->db->select('quantity');
+				$this->db->where('ord_no',$odr_id);
+				$this->db->where('product',$pid);
+				$this->db->where('company',$comp_id);
+				$order_row	=	$this->db->get('tbl_order')->row_array(); 
+				$order_qty = $order_row['quantity'];
+				/*echo $order_qty;
+				echo $odr_id;
+				echo $pid;
+				exit();*/
+				$this->db->where('comp_id',$comp_id);
+				$this->db->where('product_name',$pid);
+				$this->db->set('qty',"qty-".$order_qty,false);
+				$this->db->limit(1);
+				echo $this->db->update('tbl_inventory');
+			}else{
+				echo 1;
+			}		
+		}else{
+			echo 0;
+		}
 	}
 	public function updateorder_product_deliveredBy(){
 		$update_arr = array(
@@ -771,6 +792,26 @@ class Order extends CI_Controller {
 		
 		
 	}
-	
-	
+
+	public function check_stock($odr_id,$pid){
+		$return = '0';
+		$comp_id	=	$this->session->companey_id;
+		$this->db->select('quantity');
+		$this->db->where('ord_no',$odr_id);
+		$this->db->where('product',$pid);
+		$this->db->where('company',$comp_id);
+		$order_row	=	$this->db->get('tbl_order')->row_array();
+		if (!empty($order_row)) {
+			$this->db->select('qty');
+			$this->db->where('product_name',$pid);		
+			$this->db->where('comp_id',$comp_id);		
+			$stock_row	=	$this->db->get('tbl_inventory')->row_array();		
+			if (!empty($stock_row)) {
+				if($stock_row['qty']>=$order_row['quantity']){
+					$return = '1';
+				}
+			}
+		}
+		echo $return;
+	}
 }	

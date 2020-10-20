@@ -44,6 +44,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
   <title>thecrm360 - <?php echo (!empty($title)?$title:null) ?></title>
 <?php } ?>
       <!--<link rel="shortcut icon" href="<?= base_url($this->session->userdata('favicon')) ?>">-->
+      <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
       <link href="<?php echo base_url('assets/css/jquery-ui.min.css') ?>" rel="stylesheet" type="text/css"/>
       <link href="<?php echo base_url(); ?>assets/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
 
@@ -852,7 +853,15 @@ if($root=='https://student.spaceinternationals.com'){  ?>
               </ul>               
             </nav>
          </header>
-         <aside class="main-sidebar">
+         <?php 
+         
+         // validity expired popup
+         if($this->session->userdata('validity_status')==2){?>
+          <script>
+            swal("<?= $this->session->userdata('validity_msg') ?>");
+            </script>
+      <?php   }?>
+         <aside class="main-sidebar" id="btn">
             <div class="sidebar">
                <div class="user-panel text-center">
                   <?php $picture = $this->session->picture; ?>
@@ -864,13 +873,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                      <a href="#"><i class="fa fa-circle text-success"></i>
                      </a>
                   </div>
-					<?php if ($this->session->companey_id!=67) { ?>
-									  <br>
-					<label class="switch">
-					  <input type="checkbox" checked>
-					  <span class="slider round"></span>
-					</label>
-					<?php } ?>
+				
                </div>
                <ul class="sidebar-menu">
          <?php if(($this->session->user_right!=151 && $this->session->user_right!=180 && $this->session->user_right!=186 && $this->session->user_right!=200 && $this->session->userdata('user_right')!=214 && $this->session->userdata('user_right')!=201)){ ?>
@@ -1050,6 +1053,18 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                            <?php echo display('center_management');?>                             
                           </a>
                         </li>
+                        <?php
+                        if ($this->session->companey_id == 83) { ?>
+                        
+                        <li class="<?php echo (in_array($segment2,array('faq','add_faq','edit_faq')) ?"active":'') ?>" style="">
+                          <a href="<?php echo base_url() ?>lead/faq">
+                           <?php echo display('faq');?>                             
+                          </a>
+                        </li>
+                        
+                        <?php  
+                        }
+                        ?>
 
                      </ul>
                   </li>
@@ -1197,13 +1212,13 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                 <?php   }
                    } ?>
          
-         
-                  <li class="treeview <?php echo in_array($segment1, array('user','customer')) ? "active" : null ?>" style="<?php if(in_array(130,$module) || in_array(131,$module) || in_array(132,$module) || in_array(133,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
+         <!-- start  super admin -->
+                    <li  class="treeview <?php echo in_array($segment1, array('user','customer')) ? "active" : null ?>" style="<?php if(in_array(130,$module) || in_array(131,$module) || in_array(132,$module) || in_array(133,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
                      <a href="#">
                        <i class="fa fa-user-plus" style="color:#fff;font-size:15px;background:#9b59b6;padding:7px;border-radius:4px;width:30px;"></i> &nbsp;<?php echo display('User_mgment') ?>
                        <span class="pull-right-container">
                         <i class="fa fa-angle-left pull-right"></i>
-                       </span>
+                       </span>  
            <?php  if($this->session->menu==1){ ?></br><p style="color:#fff;font-size:9px;margin-left:-12px;padding-top:10px;"><?php echo display('User_mgment'); ?></p> <?php } ?>  
                      </a>
                      <!-- <?=$segment1?> -->
@@ -1218,6 +1233,12 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                         </li>
 
                         <li class="<?php echo (in_array($segment2,array('backupfiles')) ?"active":'') ?>"> <a  href="<?php echo base_url("dashboard/backupfiles"); ?>">Backup Files</a>
+                          </li>
+                          <li class="<?php echo (in_array($segment2,array('user_type')) ?"active":'') ?>"> <a  href="<?php echo base_url('user/user_type'); ?>"><?php echo display('user_function') ?></a>
+                          </li>
+                          <li class="<?php echo (in_array($segment2,array('user')) ?"active":'') ?>"> <a  href="<?php echo base_url("user/index"); ?>"><?php echo display('user_list'); ?></a>
+                          </li>
+                          <li class="<?php echo (in_array($segment2,array('user_tree')) ?"active":'') ?>"> <a  href="<?php echo base_url("user/user_tree") ?>">User Hierarchy</a>
                           </li>
                       <?php
                         }else{ ?>                          
@@ -1490,7 +1511,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                           <a href="<?php echo base_url("ticket/index") ?>"><?php echo display('ticketing') ?></a>
                         </li>
                         <li class="<?php echo (($segment1 == "ticket" && $segment2 == "natureOfComplaintList") ? "active" : null) ?>">
-                          <a href="<?php echo base_url("ticket/natureOfComplaintList") ?>"><?php echo "natureOfComplaintList"; ?></a>
+                          <a href="<?php echo base_url("ticket/natureOfComplaintList") ?>"><?php echo display("natureOfComplaint"); ?></a>
                         </li>
 						
                      </ul>
@@ -1586,6 +1607,12 @@ if($root=='https://student.spaceinternationals.com'){  ?>
          </aside>
          <!-- =============================================== -->
          <div class="content-wrapper" style="">
+             <?php if($this->session->companey_id == 57){ ?>
+               <div class="alert alert-info  alert-dismissible fade in text-center ">
+                  <a href="#" class="close btn btn-xs btn-danger" data-dismiss="alert" aria-label="close" style="top: unset; color: white;">&times;</a>
+                  <strong>Need Help! </strong> Call us on our Tollfree Number  <a href="tel:18005722426">18005722426</a>
+                </div>
+              <?php } ?>
             <div class="content">
                <?php if ($this->session->flashdata('message') != null) {  ?>
                <div class="alert alert-info alert-dismissable">
@@ -1605,12 +1632,6 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                   <?php echo validation_errors(); ?>
                </div>
                <?php } ?>
-               <?php if($this->session->companey_id == 57){ ?>
-                 <div class="alert alert-info alert-dismissible fade in">
-                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                    <strong>Need Help! </strong> Call us on our Tollfree Number : <a href="tel:18005722426">18005722426</a>.
-                  </div>
-                <?php } ?>
                <!-- content -->
           <?php echo (!empty($content)?$content:null) ?>
            </div>
@@ -2321,7 +2342,8 @@ $('#something').click(function() {
       <script src="<?php echo base_url() ?>assets/js/semantic.min.js?v=1.0" type="text/javascript"></script>
       <!-- DataTables JavaScript -->
       <script src="<?php echo base_url("assets/datatables/js/dataTables.min.js?v=1.0") ?>"></script>
-      <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>      
+      <!-- <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>     -->
+      <script src="https://cdn.tiny.cloud/1/82ebac134d772tbx3olhim9yme0o5ed3xt3viu42lmgviyu7/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>  
       <script src="<?php echo base_url() ?>assets/js/tableHeadFixer.js?v=1.0" type="text/javascript"></script> 
       <!-- Admin Script -->
       <script src="<?php echo base_url('assets/js/frame.js?v=1.0?v=1.0') ?>" type="text/javascript"></script> 
@@ -2330,3 +2352,23 @@ $('#something').click(function() {
       <script src="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
    </body>
 </html>
+
+
+<script>
+var content = document.getElementById("main");
+var btn = document.getElementById("btn");
+$(document).ready(function(){
+  $("#btn").hover(function(){
+    if($('body').hasClass('sidebar-collapse')){
+      $("body").removeClass("sidebar-collapse");
+      $("body").addClass("sidebar-byme");
+    }
+    }, function(){
+    if($('body').hasClass('sidebar-byme')){
+      var timeout = setTimeout(function(){ $("body").addClass("sidebar-collapse");
+      }, 500);
+    }
+
+  });
+});
+</script>

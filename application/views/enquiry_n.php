@@ -1,5 +1,10 @@
 <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script> 
+
+<script src="<?=base_url()?>/assets/summernote/summernote-bs4.min.js"></script>
+<link href="<?=base_url()?>/assets/summernote/summernote-bs4.css" rel="stylesheet" />
+
+
 <style>
   /*TAG STYLE START*/
 .tag {
@@ -937,7 +942,7 @@ input[name=lead_stages]{
            
           <?php
         
-          if(!empty($dfields) and !empty($dacolarr)) {          
+          if(!empty($dfields)) {          
             foreach($dfields as $ind => $fld){              
             ?>
             <div class = "col-md-4">  
@@ -1230,7 +1235,15 @@ $('.checked_all1').on('change', function() {
      if(type != 'Send Email'){
       $("#email_subject").hide();
       $("#email_subject").prev().hide();
+       $("#template_message").summernote('destroy');
+       $("#template_message").html('');
     }else{
+      $("#template_message").summernote({
+        height: 200,                 // set editor height
+        minHeight: null,             // set minimum height of editor
+        maxHeight: null,             // set maximum height of editor
+        focus: false                 // set focus to editable area after initializing summernote
+      });
       $("#email_subject").show();
       $("#email_subject").prev().show();
     }

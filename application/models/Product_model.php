@@ -63,51 +63,54 @@ class Product_model extends CI_Model {
     }
 	
 	public function productdetlist($act = "1",$status=0) {
-		$limit   = 8;
+		$limit   = 8; 
 		$offset  = 0;
 		$this->load->model('common_model');
 		$retuser   = $this->common_model->get_categories($this->session->user_id);
-         $this->db->select("tbl_proddetails.*,tbl_product_country.*,tbl_product_country.id as sb_id,tbl_scheme.from_date,tbl_scheme.to_date,tbl_scheme.apply_qty,tbl_scheme.from_qty,tbl_scheme.to_qty,tbl_scheme.discount,tbl_scheme.calc_mth");
-					$this->db->from("tbl_product_country");
-					$this->db->join("tbl_proddetails", "tbl_proddetails.prodid = tbl_product_country.id", "LEFT");
-					$this->db->join("tbl_scheme", "tbl_scheme.id=tbl_proddetails.scheme", "LEFT");
-					$this->db->where("tbl_product_country.comp_id", $this->session->userdata('companey_id'));
-					if ($status == 0) {
-						$this->db->where_in("tbl_proddetails.seller_id",$retuser);
-					}
-					if(isset($_GET['searched_product']))
-					{
-						$this->db->like("tbl_product_country.country_name", trim($_GET['searched_product']));
-					}
-					
-					if(isset($_GET['sc']) && $_GET['sc'] !=''){
-						
-						$this->db->where("tbl_proddetails.subcatogory", $_GET['sc']);
-					}
-					if(isset($_GET['c']) && $_GET['c'] !=''){
-						
-						$this->db->where("tbl_proddetails.category", $_GET['c']);
-					}
-					if ($status) {
-						$this->db->where("tbl_product_country.status", 1);											
-					}
-					
-					if(isset($_GET['page'])){
-						
-						$offset = $limit * ($_GET['page'] - 1);
-					}
-					 
-					$this->db->order_by("tbl_product_country.id DESC");
-					
-					if($act == 2 ) {
-						return $this->db->count_all_results();
-					}else{
-						if ($status == 1) {
-							$this->db->limit($limit, $offset);							
-						}
-						return		$this->db->get()->result();
-					}
-				
+         $this->db->select("tbl_proddetails.price,tbl_product_country.minimum_order_quantity,tbl_proddetails.image,tbl_inventory.qty as stock_qty,tbl_product_country.country_name,tbl_product_country.id as id,tbl_scheme.from_date,tbl_scheme.to_date,tbl_scheme.apply_qty,tbl_scheme.from_qty,tbl_scheme.to_qty,tbl_scheme.discount,tbl_scheme.calc_mth,concat_ws(' ',seller.s_display_name,seller.last_name) as seller,seller.s_phoneno as seller_phone,enquiry.enquiry_id");
+		$this->db->from("tbl_product_country");
+		$this->db->join("tbl_proddetails", "tbl_proddetails.prodid = tbl_product_country.id");
+		$this->db->join("tbl_scheme", "tbl_scheme.id=tbl_proddetails.scheme", "LEFT");
+		$this->db->join("tbl_inventory", "tbl_inventory.product_name=tbl_product_country.id", "LEFT");
+		$this->db->join("tbl_admin seller", "seller.pk_i_admin_id=tbl_proddetails.seller_id");
+		$this->db->join("enquiry", "enquiry.phone=seller.s_phoneno",'left');
+		$this->db->where("tbl_product_country.comp_id", $this->session->userdata('companey_id'));
+		if ($status == 0) {
+			$this->db->where_in("tbl_proddetails.seller_id",$retuser);
+		}
+		if(isset($_GET['searched_product']))
+		{
+			$this->db->like("tbl_product_country.country_name", trim($_GET['searched_product']));
+		}
+		
+		if(isset($_GET['sc']) && $_GET['sc'] !=''){
+			
+			$this->db->where("tbl_proddetails.subcatogory", $_GET['sc']);
+		}
+		if(isset($_GET['c']) && $_GET['c'] !=''){
+			
+			$this->db->where("tbl_proddetails.category", $_GET['c']);
+		}
+		if ($status) {
+			$this->db->where("tbl_product_country.status", 1);											
+		}
+		
+		if(isset($_GET['page'])){
+			
+			$offset = $limit * ($_GET['page'] - 1);
+		}
+		 
+		$this->db->order_by("tbl_product_country.id DESC");
+		
+		if($act == 2 ) {
+			return $this->db->count_all_results();
+		}else{
+			if ($status == 1) {
+				$this->db->limit($limit, $offset);							
+			}
+			return	$this->db->get()->result();
+		}
+		//	echo $this->db->last_query();	
 
     }
 	public function productdetin($prdarr) {
@@ -127,8 +130,9 @@ class Product_model extends CI_Model {
 	
 	public function productdet($prodno) {
 
-        return $this->db->select("tbl_product_country.*,tbl_category.name as category_name,tbl_subcategory.subcat_name,concat_ws(tbl_admin.s_display_name,' ',tbl_admin.last_name) as seller_name,city.city as scity,tbl_proddetails.*,tbl_product_country.id as sb_id,measurement_unit.title as unit,tbl_admin.employee_id")
+        return $this->db->select("tbl_product_country.*,tbl_inventory.qty as stock_qty,tbl_category.name as category_name,tbl_subcategory.subcat_name,concat_ws(tbl_admin.s_display_name,' ',tbl_admin.last_name) as seller_name,city.city as scity,tbl_proddetails.*,tbl_product_country.id as sb_id,measurement_unit.title as unit,tbl_admin.employee_id")
 					->from("tbl_product_country")
+					->join("tbl_inventory", "tbl_inventory.product_name=tbl_product_country.id", "LEFT")
 					->join("tbl_proddetails", "tbl_proddetails.prodid = tbl_product_country.id", "LEFT")
 					->join("tbl_admin", "tbl_proddetails.seller_id = tbl_admin.pk_i_admin_id", "LEFT")
 					->join("tbl_category", "tbl_proddetails.category = tbl_category.id", "LEFT")

@@ -1,6 +1,8 @@
 </form>
 <form role="form" method="post" action="<?=base_url().'form/form/enquiry_save_custom_field/'.$comp_id?>">
 <input type="hidden" name="fld_id" value="<?=$field_row['input_id']?>">
+
+
    <div class="form-row">                
       <div class="form-group col-md-6">
           <label for="label_name"> Label Name <i class="text-danger">*</i></label>

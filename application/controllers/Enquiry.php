@@ -140,7 +140,7 @@ class Enquiry extends CI_Controller {
                     $this->db->update('enquiry');
                     
                     $this->load->model('rule_model');
-                    $this->rule_model->execute_rules($enq->Enquery_id,array(1,2,3));  
+                    $this->rule_model->execute_rules($enq->Enquery_id,array(1,2,3,6,7));  
 
                     $this->Leads_Model->add_comment_for_events(display("move_to_client"), $enq->Enquery_id);
                     $insert_id = $this->Leads_Model->LeadAdd($data);
@@ -170,6 +170,8 @@ class Enquiry extends CI_Controller {
                                 'last_name'       =>    $enq->lastname,  
                                 's_user_email'    =>    $enq->email,
                                 's_phoneno'       =>    $enq->phone,
+                                'city_id'         =>    $enq->enquiry_city_id,
+                                'state_id'        =>    $enq->enquiry_state_id,
                                 'companey_id'     =>    $ucid,
                                 'b_status'        =>    1,
                                 'user_permissions'=>    $user_right,
@@ -510,7 +512,6 @@ class Enquiry extends CI_Controller {
         // $ruledata   = $this->db->select("*")->from("tbl_new_settings")->where('comp_id',$this->session->companey_id)->get()->row();
         // if($ruledata->duplicacy_status == 0)
         // { 
-            
         //     if($ruledata->field_for_identification == 'email')
         //     {
         //         $this->form_validation->set_rules('email', display('email'), 'xss_clean|required|is_unique[enquiry.email]', array('is_unique'=>'Email already exist'));
@@ -552,7 +553,30 @@ class Enquiry extends CI_Controller {
             }
 
             $name = $this->input->post('enquirername');
-            $name_w_prefix = $name;
+            
+            $name_w_prefix = $name;            
+            if($this->session->companey_id=='83'){
+                $daynamic = $this->input->post('enqueryfield[4400]', true);
+                $input_id = $this->input->post('inputfieldno', true);
+                foreach($input_id as $key=>$value){
+                    if($value=='4400'){
+                       $branch_code = $daynamic[$key]; 
+                    }
+                }
+                //print_r($branch_code);exit;
+                $branch=strtoupper($branch_code);
+                $first=substr("$branch",0,3);
+                $dt=date('d');
+                $mt=date('m');
+                $yt=date('y');
+                $second=$dt.''.$mt.''.$yt;
+                $third=mt_rand(10000,99999);
+                $encode=$first.''.$second.''.$third;
+            }else{
+                $encode = $this->get_enquery_code();
+            }
+
+
             $encode = $this->get_enquery_code();
             if(!empty($other_phone)){
                $other_phone =   implode(',', $other_phone);
@@ -626,7 +650,7 @@ class Enquiry extends CI_Controller {
                 $ins    =   $this->db->insert('institute_data',$institute_data);                
             }
             $this->load->model('rule_model');
-            $this->rule_model->execute_rules($encode,array(1,2,3));            
+            $this->rule_model->execute_rules($encode,array(1,2,3,6,7));            
             if ($insert_id) {                
                 $this->Leads_Model->add_comment_for_events($this->lang->line("enquery_create"), $encode);       
                 if($this->input->is_ajax_request())
@@ -680,6 +704,7 @@ class Enquiry extends CI_Controller {
             $data['content'] = $this->load->view('add-equiry1', $data, true);                
             $this->load->view('layout/main_wrapper', $data);
         }
+
 
     }
 
@@ -1407,6 +1432,11 @@ class Enquiry extends CI_Controller {
         $data['comission_data'] = $this->enquiry_model->comission_data($data['details']->Enquery_id);
         
 
+        $data['login_user_id'] = $this->user_model->get_user_by_email($data['details']->email);
+        if (!empty($data['login_user_id']->pk_i_admin_id)) {
+            $data['login_details'] = $this->Leads_Model->logdata_select($data['login_user_id']->pk_i_admin_id);            
+        }
+
         $data['datasource_list'] = $this->Datasource_model->datasourcelist();
         $data['taskstatus_list'] = $this->Taskstatus_model->taskstatuslist();
         $data['state_list'] = $this->location_model->estate_list();
@@ -1552,7 +1582,8 @@ class Enquiry extends CI_Controller {
    $html.='  <li>
                   <div class="cbp_tmicon cbp_tmicon-phone"  style=""></div>
                   <div class="cbp_tmlabel"  style="background:#95a5a6;">
-                    <span style="font-weight:900;font-size:15px;">'. ucfirst($comments->comment_msg).' </span></br>';
+                    <span style="font-weight:900;font-size:15px;">'. ucfirst($comments->comment_msg).' </span></br>
+                    <span style="font-weight:900;font-size:10px;">'.ucfirst($comments->remark).'</span>';
                      if($comments->comment_msg=='Stage Updated'){ 
               $html.='<span style="font-weight:900;font-size:12px;">'. ucfirst($comments->lead_stage_name).' </span>
                     </br>
@@ -1898,7 +1929,7 @@ Array
 					$this->db->update('enquiry');
 
                     $this->load->model('rule_model');
-                    $this->rule_model->execute_rules($enq->Enquery_id,array(1,2,3));      
+                    $this->rule_model->execute_rules($enq->Enquery_id,array(1,2,3,6,7));      
 
 					$this->Leads_Model->add_comment_for_events($this->lang->line("move_to_lead"), $enq->Enquery_id);
 					$insert_id = $this->Leads_Model->LeadAdd($data);
@@ -1918,14 +1949,16 @@ Array
             $move_enquiry = $this->input->post('enquiry_id');
             $enquiry = $this->enquiry_model->read_by_id($move_enquiry);
             $lead_score = $this->input->post('lead_score');
-            $lead_stage = $this->input->post('lead_stage');
+            $lead_stage = $this->input->post('move_lead_stage');
+            $lead_discription = $this->input->post('lead_description');
+            
             $comment = $this->input->post('comment');
             $expected_date = $this->input->post('expected_date');
             if (!empty($lead_score)) {
                 $lead_score = $this->input->post('lead_score');
             }
             if (!empty($lead_stage)) {
-                $lead_stage = $this->input->post('lead_stage');
+                $lead_stage = $this->input->post('move_lead_stage');
             }
             if (!empty($comment)) {
                 $comment = $this->input->post('comment');
@@ -1965,6 +1998,7 @@ Array
 			
             $this->db->set('lead_score', $lead_score);
             $this->db->set('lead_stage', $lead_stage);
+            $this->db->set('lead_discription', $lead_discription);
             $this->db->set('lead_comment', $comment);
             $this->db->set('lead_expected_date', $expected_date);
             $this->db->set('lead_drop_status', 0);
@@ -1975,7 +2009,7 @@ Array
             $this->db->update('enquiry');
             
             $this->load->model('rule_model');
-            $this->rule_model->execute_rules($enquiry->row()->Enquery_id,array(1,2,3));            
+            $this->rule_model->execute_rules($enquiry->row()->Enquery_id,array(1,2,3,6,7));            
 
             $this->Leads_Model->add_comment_for_events('Enquiry Moved ', $enquiry->row()->Enquery_id);
             $this->session->set_flashdata('message', 'Enquiry Convert to Lead Successfully');
@@ -2150,7 +2184,7 @@ function upload_enquiry() {
                      
                 } else {           
 				
-					if(!empty($this->location_model->get_city_by_name($filesop[8]))){                        
+					if(!empty($filesop[8]) && !empty($this->location_model->get_city_by_name($filesop[8]))){                        
                         $res=$this->location_model->get_city_by_name($filesop[8]);
                         $country_id= !empty($res->country_id)?$res->country_id:'';
                         $region_id=!empty($res->region_id)?$res->region_id:'';
@@ -2166,7 +2200,7 @@ function upload_enquiry() {
 			        }
 					$product_name='';
 
-                    $product_row    =   $this->enquiry_model->name_product_list_byname($filesop[10]);   // process                  
+                    $product_row    =   !empty($filesop[10])?$this->enquiry_model->name_product_list_byname($filesop[10]):'';   // process                  
 
                     if(!empty($product_row)){
                         $sb_id =  $product_row->sb_id;                  
@@ -2177,7 +2211,7 @@ function upload_enquiry() {
 			            $product_name='';
 			        }
 
-                    $enquiry_source = $this->enquiry_model->enquiry_source_byname($filesop[11]);       //     source         
+                    $enquiry_source = !empty($filesop[11])?$this->enquiry_model->enquiry_source_byname($filesop[11]):'';       //     source         
                     
 
                     $enquiry_source_id = '';
@@ -2185,7 +2219,7 @@ function upload_enquiry() {
                         $enquiry_source_id =  $enquiry_source->lsid;                  
                     }                    
 
-					$service_row    =   $this->enquiry_model->name_services_list_byname($filesop[14]);					
+					$service_row    =   !empty($filesop[14])?$this->enquiry_model->name_services_list_byname($filesop[14]):'';					
 					if(!empty($service_row)){
                         $ser_id =  $service_row->id;                  
                     }

@@ -109,28 +109,157 @@
 							<div class="col-md-12">
 								<div class="panel panel-default">
 									<div class="panel-body">
-										<div class="row">
-											<div class="col-md-6 col-sm-12 col-xs-12">
-											<div class="pull-left">
-											<?php if(!empty($getUserDetails)){ ?>
-												<address>
-													<h4>
-														<i class = "fa fa-user-o"></i> <?php echo $getUserDetails->employee_id; ?></h4>
-														<i class = "fa fa-map-signs"></i> <?php echo $getUserDetails->s_user_email; ?><br>
-														<i class = "fa fa-globe"></i> <?php echo $getUserDetails->add_ress; ?><br>
-														<br>
-																										
-												</address>
-												<?php } ?>
-											</div>
-											</div>
-											<div class="col-md-6 col-sm-12 col-xs-12">											
-											<div class="pull-right">
+
+									<div class="row">
+				            			<div class="col-md-4 col-sm-12 col-xs-12">            				
+						            		<?php if(!empty($order_meta)){ ?>						
+											<fieldset>
+						  						<legend style="width: unset;font-size: 12px;">Billing Details:</legend>
+												<label>Name : </label>&nbsp;<?=!empty($order_meta['BILLING_DETAILS']['fname'])?$order_meta['BILLING_DETAILS']['fname']:''?>
+												<br><label>Email : </label>&nbsp;<?=!empty($order_meta['BILLING_DETAILS']['email'])?$order_meta['BILLING_DETAILS']['email']:''?>
+												<br><label>Mobile No. : </label>&nbsp;<?=!empty($order_meta['BILLING_DETAILS']['phone'])?$order_meta['BILLING_DETAILS']['phone']:''?>
+												<br><label>Address : </label>&nbsp;<?=!empty($order_meta['BILLING_DETAILS']['address'])?$order_meta['BILLING_DETAILS']['address']:''?>
+												<br><label>State : </label>&nbsp;
+												<?php
+												if(!empty($order_meta['BILLING_DETAILS']['state'])){
+													$sid	=	$order_meta['BILLING_DETAILS']['state'];
+													$state_row	=	$this->location_model->get_state_name_by_id($sid);
+													if (!empty($state_row['state'])) {
+														echo $state_row['state'];
+													}else{
+														echo "NA";
+													}
+												}else{
+													echo "NA";
+												}
+												?>								
+												<br><label>City : </label>&nbsp;
+												<?php
+												if(!empty($order_meta['BILLING_DETAILS']['city'])){
+													$cid	=	$order_meta['BILLING_DETAILS']['city'];
+													$city_row	=	$this->location_model->get_city_name_by_id($cid);
+													if (!empty($city_row['city'])) {
+														echo $city_row['city'];
+													}else{
+														echo "NA";
+													}
+												}else{
+													echo "NA";
+												}
+												?>
+												<br><label>Pincode : </label>&nbsp;<?=!empty($order_meta['BILLING_DETAILS']['pincode'])?$order_meta['BILLING_DETAILS']['pincode']:''?>
+												<br><label>GSTIN : </label>&nbsp;<?=!empty($order_meta['BILLING_DETAILS']['gstin'])?$order_meta['BILLING_DETAILS']['gstin']:''?>
+											</fieldset>
+									<?php } ?> 
+
+				            			</div>
+				            			<div class="col-md-4 col-sm-12 col-xs-12" >            				
+						            		<?php if(!empty($order_meta)){ ?>
+											<fieldset>
+						  						<legend style="width: unset;font-size: 12px;">Shipping Details:</legend>
+												<label>Name : </label>&nbsp; <?=!empty($order_meta['SHIPPING_DETAILS']['fname'])?$order_meta['SHIPPING_DETAILS']['fname']:''?>
+												<br><label>Email : </label> &nbsp;<?=!empty($order_meta['SHIPPING_DETAILS']['email'])?$order_meta['SHIPPING_DETAILS']['email']:''?>
+												<br><label>Mobile No. : </label>&nbsp;<?=!empty($order_meta['SHIPPING_DETAILS']['phone'])?$order_meta['SHIPPING_DETAILS']['phone']:''?>
+												<br><label>Address : </label>&nbsp;<?=!empty($order_meta['SHIPPING_DETAILS']['address'])?$order_meta['SHIPPING_DETAILS']['address']:''?>
+												<br><label>State : </label>&nbsp;
+												<?php
+												if(!empty($order_meta['SHIPPING_DETAILS']['state'])){
+													$sid	=	$order_meta['SHIPPING_DETAILS']['state'];
+													$state_row	=	$this->location_model->get_state_name_by_id($sid);
+													if (!empty($state_row['state'])) {
+														echo $state_row['state'];
+													}else{
+														echo "NA";
+													}
+												}else{
+													echo "NA";
+												}
+												?>								
+												<br><label>City : </label>&nbsp;
+												<?php
+												if(!empty($order_meta['SHIPPING_DETAILS']['city'])){
+													$cid	=	$order_meta['SHIPPING_DETAILS']['city'];
+													$city_row	=	$this->location_model->get_city_name_by_id($cid);
+													if (!empty($city_row['city'])) {
+														echo $city_row['city'];
+													}else{
+														echo "NA";
+													}
+												}else{
+													echo "NA";
+												}
+												?>
+												<br><label>Pincode : </label>&nbsp;<?=!empty($order_meta['SHIPPING_DETAILS']['pincode'])?$order_meta['SHIPPING_DETAILS']['pincode']:''?>
+											</fieldset>
+									<?php } ?> 
+										</div>
+				            			<div class="col-md-4 col-sm-12 col-xs-12" >  
+											<fieldset>
+						  						<legend style="width: unset;font-size: 12px;">Order Details:</legend>
 												<h2> <?php echo $ord->ord_no; ?></h2>
 												<p><span>Order Date :</span> <?php echo date("d, F Y", strtotime($ord->order_date)); ?> </p>
-											</div>
-											</div>
+												<p><span>Order Total :</span> <i class="fa fa-rupee"></i> <?php echo getOrderTotal($orders); ?> </p>												
+											</fieldset>
 										</div>
+				            		</div>
+
+				            		<div class="col-md-12">
+				            			<fieldset class="table-responsive">
+						  					<legend style="width: unset;font-size: 12px;">Payment Details:</legend>
+			       							<table class="table table-bordered text-center">
+												<thead>
+													<tr>
+														<th>Prev Balance</th>
+														<th>Payment</th>
+														<th>Balance</th>
+														<th>Payment Mode</th>
+														<th>Transaction No</th>
+														<th>Payment Date</th>
+														<th>Next Payment</th>
+														<th>Remark</th>
+													</tr>
+												</thead>
+												<tbody>
+												<?php	
+												$prev_balance = 0;												
+												foreach($payments as $ind => $pay){ 
+												if($pay->ord_id == $ord->ord_no) {
+													$remain_balance = $pay->balance;
+													 $totalval = $pay->balance;
+													?>
+													<tr <?php echo ($pay->approve == 0) ? "class='bg-border-dash'" : ""; ?>>
+														<td><?php echo (!empty($pay->prev_balance)) ? "<i class = 'fa fa-rupee'></i> ".$pay->prev_balance : " - "; ?></td>
+														
+														<td><i class = 'fa fa-rupee'></i> <?php echo  $pay->pay; ?></td>
+														
+														<td><?php echo (!empty($pay->balance)) ? "<i class = 'fa fa-rupee'></i> ".$pay->balance : " - "; ?></td>
+														
+														<td>
+															<?php 
+															if($pay->pay_mode == 1){
+																echo "Cash";
+															}else if ($pay->pay_mode == 2) {
+																echo "Online";
+															}else if ($pay->pay_mode == 3) {
+																echo "Check/DD";
+															}else{
+																echo "N/A";
+															}	
+															?>
+														</td>
+														<td><?php echo $pay->transaction_no ; ?></td>
+														<td><?php echo $pay->pay_date; ?></td>
+														<td><?php echo $pay->next_pay; ?></td>
+														
+														<td><?php echo $pay->remark?substr($pay->remark, 0, 40):'NA'; ?></td>
+													</tr>
+											<?php } ?>		
+									<?php	 }	?>
+												</tbody>
+										   </table>
+										</fieldset>
+				            		</div>
+				            		<br>
 										<?php $mord = $ord; ?>
 										<br>
 										<div class = "row">
@@ -161,18 +290,19 @@
 																	<h4>Stock : <?php echo $ord->stock; ?></h4>
 																	<?php  } ?>
 																	<h6><label>Scheme : </label> <?php echo $ord->scheme; ?> </h6>
-																	<label>Price : </label> <i class ="fa fa-rupee"></i> <?php echo $ord->price; ?>
+																	<label>Unit Price : </label> <i class ="fa fa-rupee"></i> <?php echo $ord->unit_price; ?>
 																	<?php if(!empty($ord->offer)){
 																	?><br><label>Discount : </label> <?php echo $ord->offer; ?><?php	
 																	} ?>
 																	<?php if(!empty($ord->tax)){ ?>
 																	<label>TAX : </label> <?php echo (!empty($ord->tax)) ? $ord->tax."%" : "0%"; ?>
 																	<?php } ?>
-																	<br><label>Total : </label> <i class ="fa fa-rupee"></i> <?php $total = $ord->quantity*$ord->price + $ord->other_price; 
-																		if (!empty($ord->tax)) {
+																	<br><label>Total : </label> <i class ="fa fa-rupee"></i> <?php $total = $ord->total_price; 
+																		/*if (!empty($ord->tax)) {
 																			$total+=$total*($ord->tax/100);
-																		}
+																		}*/
 																		echo $total;
+
 																	?>
 																</div>
 																<div class = "col-md-9">
