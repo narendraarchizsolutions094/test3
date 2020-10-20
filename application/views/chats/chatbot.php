@@ -21,7 +21,9 @@
 <div id="center-text">   
 </div> 
 <div id="body"> 
-  
+  <?php
+print_r($_SESSION);
+  ?>
 <div id="chat-circle" class="btn btn-raised">
         <div id="chat-overlay"></div>
         <i class="material-icons">message</i>

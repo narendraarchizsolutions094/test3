@@ -25,7 +25,7 @@ class Chat extends CI_Controller {
         $this->load->view('layout/main_wrapper', $data);		
 	}
 	public function submit_identity($comp_id,$created_by,$process_id=2){
-		
+		print_r($_POST);
 		$name	=	$this->input->post('name');
 		$mobile	=	$this->input->post('mobile');
 		$email	=	$this->input->post('email');
