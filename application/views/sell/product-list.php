@@ -205,6 +205,16 @@
 				<nav aria-label="Page navigation example">
 			<?php if(!empty($limit) and !empty($totalprod)) {
 					$tpage  =  ceil($totalprod/$limit);
+					$nurl = "";	
+					// print_r($_GET);die;
+					foreach ($_GET as $key => $gt) {
+
+						if ($key != "page") 
+						{
+							$nurl.= "&".$key."=".$gt;
+						}
+					
+					}
 					if($tpage > 1) { 
 					?> <ul class="pagination">
 					<?php 
@@ -216,17 +226,10 @@
 							$page = 1;
 						} 
 						if($page > 1) { ?>
-					 <li class="page-item"><a class="page-link" href="<?php echo $page - 1; ?>">Previous</a></li>
+					 <li class="page-item"><a class="page-link" href="<?php echo base_url("buy?page=".($page - 1)).$nurl.''; ?>">Previous</a></li>
 					<?php
 						}
-					$nurl = "";	
-					foreach ($_GET as $key => $gt) {
-
-						if ($key != "page") {
-							$nurl = "&".$key."=".$gt;
-						}
 					
-					}
 					//for($i = 1; $i <= $tpage; $i++) { 
 					
 

@@ -95,26 +95,30 @@ class Ticket_Model extends CI_Model {
 		}*/
 
 		public function save($companey_id='',$user_id='')
-    	{	
-    		if(empty($_POST['client']) && count($_SESSION['process']) == 1)
+    	{	$cid='';
+    		if(empty($companey_id) && empty($user_id))
     		{
-    			$encode = get_enquery_code();
-    			$postData = array(
-                            'Enquery_id' 	=> $encode,
-							'comp_id' 		=> $this->session->companey_id,
-                            'email' 		=> $this->input->post("email", true),
-                            'phone' 		=> $this->input->post("phone", true),
-                            'name' 			=> $this->input->post("name", true),
-                            'checked' 		=> 0,
-                            'product_id' 	=>  $_SESSION['process'][0],
-                            'created_date' 	=>  date("Y-m-d H:i:s"),
-                            'status' 		=> 1,
-                            'created_by' 	=> $this->session->user_id,
-                            'phone'			=> $this->input->post('phone'),
-                        );
-    			$this->db->insert('enquiry', $postData);
-				$cid = $this->db->insert_id();
+    			if( empty($_POST['client']) && count($_SESSION['process']) == 1)
+	    		{
+	    			$encode = get_enquery_code();
+	    			$postData = array(
+	                            'Enquery_id' 	=> $encode,
+								'comp_id' 		=> $this->session->companey_id,
+	                            'email' 		=> $this->input->post("email", true),
+	                            'phone' 		=> $this->input->post("phone", true),
+	                            'name' 			=> $this->input->post("name", true),
+	                            'checked' 		=> 0,
+	                            'product_id' 	=>  $_SESSION['process'][0],
+	                            'created_date' 	=>  date("Y-m-d H:i:s"),
+	                            'status' 		=> 1,
+	                            'created_by' 	=> $this->session->user_id,
+	                            'phone'			=> $this->input->post('phone'),
+	                        );
+	    			$this->db->insert('enquiry', $postData);
+					$cid = $this->db->insert_id();
+	    		}
     		}
+    		
 			$cdate = explode("/", $this->input->post("complaindate", true));			
 			$ndate = (!empty($cdate[2])) ? $cdate[2]."-".$cdate[0]."-".$cdate[1] : date("Y-m-d"); 			
 			$arr = array(
@@ -172,7 +176,7 @@ class Ticket_Model extends CI_Model {
 				{					
 					$insarr = array("tck_id" 	=> $insid,
 									"parent" 	=> 0,
-									'comp_id'	=> $this->session->companey_id,
+									'comp_id'	=> ($this->session->companey_id !='') ? $this->session->companey_id : $companey_id,
 									"subj"   	=> "Ticked Created",
 									"msg"    	=> ($this->input->post("remark", true)) ? $this->input->post("remark", true) : '' ,
 									"attacment" => "",
