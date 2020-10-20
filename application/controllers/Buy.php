@@ -304,10 +304,10 @@ class Buy extends CI_Controller {
 
 			$data = array('id'      => $prodno,
 							'qty'       => 1,
-							'price'     => $product->price+$gst_price,
+							'price'     => round($product->price+$gst_price,0),
 							'name'		=> $product->country_name,
 							'discount'  => (isset($_POST['disc'])) ? $this->input->post("disc", true) : 0,
-							'minalert'	=> (isset($_POST['minimum'])) ? $this->input->post("minimum", true) : 0,
+							'minalert' => !empty($product->minimum_order_quantity)?$product->minimum_order_quantity:0,
 							'gst'		=> $product->gst
 							);
 			$newcart = array();	

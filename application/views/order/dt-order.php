@@ -30,7 +30,7 @@
 					$balance = $total - $paid;
 					$cols[] = number_format($balance,2);
 					$cols[] = $ord->order_date;
-				
+					$cols[] = $ord->cust_id;
 					$payment_act = $conf_act = $invoice_act = $invoice_tax = '';
 
 					if (user_access(461)) {

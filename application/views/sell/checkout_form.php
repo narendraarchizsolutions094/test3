@@ -382,7 +382,7 @@ $(document).on("change",'#bstate',function () {
           var name    = $("input[name='fname']").val();
           var address = $("input[name='address']").val();
           var state   = $("select[name='state']").val();
-          var city    = $("select[name='city']").val();
+          var city    = $("select[name='city'] > option:selected")[0].outerHTML;
           var pincode = $("input[name='pincode']").val();
           var phone   = $("input[name='phone']").val();
           var email   = $("input[name='email']").val();
@@ -391,7 +391,7 @@ $(document).on("change",'#bstate',function () {
           $("input[name='shipping_fname']").val(name);
           $("input[name='shipping_address']").val(address);
           $("select[name='shipping_state']").val(state);
-          $("select[name='shipping_city']").val(city);
+          $("select[name='shipping_city']").html(city);
           $("input[name='shipping_pincode']").val(pincode);
           $("input[name='shipping_phone']").val(phone);
           $("input[name='shipping_email']").val(email);

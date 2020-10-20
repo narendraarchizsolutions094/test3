@@ -811,11 +811,13 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                     $cartarr = $this->cart->contents();
                     foreach($cartarr as $ind => $cart) {
                     
+                    $productData = $this->Product_model->productdet($cart['id']);
+
                       ?><li id = "cart-li-<?php echo $cart['id']; ?>" > 
                     
                       <div class = "cart-items"><h4><a class="prodname" href = ""> <?php echo $cart['name'] ?></a></h4>
                           <p>
-                            <a href = "javascript:void(0)"> Price : <i class = "fa fa-price"></i> <?php echo  $cart['price']." X <input type='hidden' name='minimum' class='minimum' value='".$cart['minalert']."'> <input type='number' class='cart-qty' value=".$cart['qty']." min='1' data-prodid=".$cart['id']." >";?> = <i class = "fa fa-rupee"></i><span class="item-price-<?=$cart['id']?>"> <?php echo $cart['price']*$cart['qty']  ?></span> </a> 
+                           Price : <i class = "fa fa-price"></i> <?php echo  $cart['price']." X <input type='hidden' name='minimum' class='minimum' value='".$productData->minimum_order_quantity."'> <input type='number' class='cart-qty' value=".$cart['qty']." min='1' data-prodid=".$cart['id']." >";?> = <i class = "fa fa-rupee"></i><span class="item-price-<?=$cart['id']?>"> <?php echo $cart['price']*$cart['qty']  ?></span> 
                             <a href="javascript:void(0)" onclick="remove_cart_item(<?=$cart['id']?>)" class="fa fa-trash btn btn-danger btn-sm pull-right remove-item-cart"></a>
                           </p>
                           <hr />
@@ -1760,9 +1762,9 @@ if($root=='https://student.spaceinternationals.com'){  ?>
           }
         });
     }
-  $(document).ready(function(){
-
-    $(".cart-qty").on('change',function(){
+function manageCartQty()
+    {
+      $(".cart-qty").on('change',function(){
       $.ajax({
           url   : "<?php echo base_url('buy/addtocart'); ?>",
           type  : "post",
@@ -1775,11 +1777,15 @@ if($root=='https://student.spaceinternationals.com'){  ?>
             
             if(jresp.status == 2){
               console.log(jresp.price);
-              $('.item-price-'+jresp.prodid).html(jresp.price);
+              $('.item-price-'+jresp.prodid).html(jresp.price * jresp.qty);
             }
           }
         });
-    });
+      });
+    }
+  $(document).ready(function(){
+
+    manageCartQty();
 
     
 

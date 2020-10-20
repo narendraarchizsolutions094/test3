@@ -210,6 +210,7 @@ input[name=lead_stages]{
                           <th>Amount Paid</th>
                           <th>Balance</th>
 													<th>Ordered At</th>
+                          <th>Customer ID</th>
 													<th>Action</th>													
 												</tr>
 											</thead>
@@ -258,7 +259,8 @@ input[name=lead_stages]{
 			        $(row).find('td:eq(6)').attr('data-th', 'Amount Paid');
 			        $(row).find('td:eq(7)').attr('data-th', 'Balance');
 			        $(row).find('td:eq(8)').attr('data-th', 'Ordered At');
-			        $(row).find('td:eq(9)').attr('data-th', 'Action');
+              $(row).find('td:eq(9)').attr('data-th', 'Customer ID');
+              $(row).find('td:eq(10)').attr('data-th', 'Action');
 			    }
 			});
       $('#productdd,#sellerdd,#statusdd,input[name="date_filter"]').change(function(){

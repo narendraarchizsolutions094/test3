@@ -745,14 +745,15 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                white-space: nowrap;
                float: none;
                display: inline-block;
+               font-size: 11px;
             }
            
           </style>
 
       <div class="col-md-6 col-xs-12 col-sm-12 card card-body col-height details-column" style="background:#fff;border-top: unset;">
          <div id="exTab3" class="">
-            <ul  class="nav nav-tabs hideScroll" role="tablist">  
-            <span style="position: absolute; left: 0; font-size: 22px; line-height: 40px; z-index: 999"><i class="fa fa-caret-left" onclick="tabScroll('left')"></i></span>            
+            <ul  class="nav nav-tabs" role="tablist">  
+            <span class="scrollTab" style="position: absolute; left: 0; font-size: 22px; line-height: 40px; z-index: 999"><i class="fa fa-caret-left" onclick="tabScroll('left')"></i></span>            
               <li class="active"><a  href="#basic" data-toggle="tab" style="padding: 10px 10px; ">Basic</a></li>   
              <?php if($this->session->userdata('companey_id')==292) {  if($enquiry->status==3) {?>
               <li><a href="#followup" data-toggle="tab" style="padding: 10px 10px;">AMC</a></li>
@@ -794,13 +795,30 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
             <?php if($this->session->companey_id=='83'){ ?>
             <li><a href="#login-tab" data-toggle="tab" style="padding: 10px 10px;">Login Trail</a></li>
             <?php } ?>
-            <span style="position: absolute; right: 0; font-size: 22px; line-height: 40px; z-index: 999"><i class="fa fa-caret-right"  onclick="tabScroll('right')"></i></span>
+            <span class="scrollTab" style="position: absolute; right: 0; font-size: 22px; line-height: 40px; z-index: 999"><i class="fa fa-caret-right"  onclick="tabScroll('right')"></i></span>
             </ul>
             <div class="tab-content clearfix">
                 <div class="tab-pane active" id="basic">
                   <?php echo tab_content(1,$this->session->companey_id,$enquiry_id); ?>
                </div>
 <script type="text/javascript">
+  manageScroll();
+function manageScroll()
+{
+  if($(".nav-tabs")[0].scrollWidth > $(".nav-tabs")[0].clientWidth)
+            {
+              $(".scrollTab").show();
+            }
+            else
+            {
+               $(".scrollTab").hide();
+            }
+}
+
+$(window).resize(function(){
+  manageScroll();
+});
+
   function tabScroll(side)
   {
     if(side=='left')
