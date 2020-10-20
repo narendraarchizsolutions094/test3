@@ -22,10 +22,10 @@
 </div> 
 <div id="body"> 
   <?php
-  ini_set('session.cookie_samesite', 'None');
-  ini_set('session.cookie_secure', 'true');
+  /*ini_set('session.cookie_samesite', 'None');
+  ini_set('session.cookie_secure', 'true');*/
   //session_start();
-  var_dump($_SESSION);
+  //var_dump($_SESSION);
   ?>
 <div id="chat-circle" class="btn btn-raised">
         <div id="chat-overlay"></div>
