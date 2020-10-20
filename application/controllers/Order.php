@@ -480,10 +480,14 @@ class Order extends CI_Controller {
 	
 	}
 	
-	public function invoice($ordno = ""){ 
+	public function invoice($ordno = "",$type = ""){ 
 		
 		////$this->load->model("payment_model");
-		$data['orders'] = $this->order_model->getOrders($ordno);
+		if((base64_decode($type))=='tax'){
+		    $data['orders'] = $this->order_model->getOrders($ordno,4);
+		}else{
+			$data['orders'] = $this->order_model->getOrders($ordno);
+		}
 		$data['buyer_details'] = $this->order_model->getBuyers($ordno);
 		if(empty($data['orders'])) show_404();
 		

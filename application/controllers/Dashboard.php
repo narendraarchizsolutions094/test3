@@ -485,55 +485,54 @@ $this->load->library('zip');
             //     $active = 0;
             // }
             $user_data = $check_user->row();
-                
-            if($user_data->companey_id==0){
-                $validity_msg="";
-                $validity_status=0;
-            }else{
-            date_default_timezone_set('Asia/Kolkata');
-            $from =strtotime($user_data->valid_upto);
-            $today = time();
-            $difference = $from - $today;
-            $days = floor($difference / 86400);
-            //echo "string".$days;die;
-            if($user_data->account_type == 1)
-            {
-                $validity_msg="";
-                $validity_status=0;
-              
-                if($days <= 5 && $days > 0)
-                {
-                    // $data['msg'] = "Your Account will expire after $days days Please contact your site admin to extend validity";
-                    $validity_msg="Your Account will expire after $days days Please contact your site admin to extend validity";
-                    $validity_status=1;
-                }
-                if($days <= 0)
-                {
-                    $validity_msg="Your Account has been expired on ".date('d-M-Y',$from)." Please contact your site admin to extend validity";
-                    $validity_status=2;
-                }
-            }
-            else
-            {   if($days <= 5 && $days > 0)
-                {
-                    $validity_msg="Your Account will expire after $days days Please contact your site admin to extend validity";
-                    $validity_status=3;
-                }
-                if($days <= 0)
-                {
-                    // $array['heading'] = "Trial Account Expired";
-                    // $array['message'] = "Your trial account validity has been ended please contact to site administrator";
-                    // $this->load->view("errors/html/error_general",$array,true);
-                $res = array('status'=>false,'message'=>display('incorrect_email_password'));
-                $validity_msg="";
-                $validity_status=3;
-                $active = 0;
-                }
-            }
-        }
-
             if ($check_user->num_rows() === 1 AND $active==1) {
             //check validity of account and account type 
+              if($user_data->companey_id==0){
+                  $validity_msg="";
+                  $validity_status=0;
+              }else{
+                date_default_timezone_set('Asia/Kolkata');
+                $from =strtotime($user_data->valid_upto);
+                $today = time();
+                $difference = $from - $today;
+                $days = floor($difference / 86400);
+                //echo "string".$days;die;
+                if($user_data->account_type == 1)
+                {
+                    $validity_msg="";
+                    $validity_status=0;
+                  
+                    if($days <= 5 && $days > 0)
+                    {
+                        // $data['msg'] = "Your Account will expire after $days days Please contact your site admin to extend validity";
+                        $validity_msg="Your Account will expire after $days days Please contact your site admin to extend validity";
+                        $validity_status=1;
+                    }
+                    if($days <= 0)
+                    {
+                        $validity_msg="Your Account has been expired on ".date('d-M-Y',$from)." Please contact your site admin to extend validity";
+                        $validity_status=2;
+                    }
+                }
+                else
+                {   if($days <= 5 && $days > 0)
+                    {
+                        $validity_msg="Your Account will expire after $days days Please contact your site admin to extend validity";
+                        $validity_status=3;
+                    }
+                    if($days <= 0)
+                    {
+                        // $array['heading'] = "Trial Account Expired";
+                        // $array['message'] = "Your trial account validity has been ended please contact to site administrator";
+                        // $this->load->view("errors/html/error_general",$array,true);
+                    $res = array('status'=>false,'message'=>display('incorrect_email_password'));
+                    $validity_msg="";
+                    $validity_status=3;
+                    $active = 0;
+                    }
+                }
+            }
+
           
             //end
                 $city_row = $this->db->select("*")

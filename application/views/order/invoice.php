@@ -33,7 +33,9 @@
 											</div>
 
 											<div class="text-center ml-auto col-md-6">
+												<?php if($this->uri->segment(4)==''){ ?>
 												<h2 class="mb-1" style="font-family: 'Montserrat';">PROFORMA INVOICE</h2>
+											    <?php } ?>
 												<h3 class="mb-1" style="margin:0px;font-family: 'Montserrat';">LALANTOP CONSUMERS PVT. LTD</h3>
 												<p class="mb-1" style="margin:0px;"><span class="font-weight-semibold">1st Floor,office no.9,D-5,Awadh Complex,Laxmi Nagar , Delhi-110092 </p>
 											    <p class="mb-1" style="margin:0px;"><span class="font-weight-semibold">Corp.Off.at.IHDP Business Park.7 , Sector-127,Noida-201301 </p>

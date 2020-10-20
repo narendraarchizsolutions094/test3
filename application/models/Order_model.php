@@ -216,12 +216,15 @@ class Order_model extends CI_Model {
 
 	 
 	
-	public function getOrders($ordno){
+	public function getOrders($ordno,$status=0){
 		
 	 	$this->db->select("ord.*,prd.id as prdid,prd.country_name as product_name,prddet.price as unit_price, prddet.image,tbl_inventory.qty as stock_qty,concat_ws(' ',tbl_admin.s_display_name,tbl_admin.last_name) as seller_name,prddet.hsn,prddet.brand");
 				$this->db->where("ord.company", $this->session->companey_id);
 				$this->db->where("ord.ord_no", $ordno);				
 				$this->db->from('tbl_order ord');
+				if ($status !=0 ) {
+                	$this->db->where("ord.status", $status);									
+				}
 				//$this->db->join('users usr','usr.id=ord.cus_id','left');
 				$this->db->join("tbl_inventory", "tbl_inventory.product_name=ord.product",'left');
 				$this->db->join('tbl_product_country prd','prd.id=ord.product');
@@ -231,6 +234,24 @@ class Order_model extends CI_Model {
 		return	$this->db->get()
 					 ->result();
 	}
+
+
+	/*public function getOrdersconfirms($ordno){
+		
+	 	$this->db->select("ord.*,prd.id as prdid,prd.country_name as product_name,prddet.price as unit_price, prddet.image,tbl_inventory.qty as stock_qty,concat_ws(' ',tbl_admin.s_display_name,tbl_admin.last_name) as seller_name,prddet.hsn,prddet.brand");
+				$this->db->where("ord.company", $this->session->companey_id);
+				$this->db->where("ord.ord_no", $ordno);
+                $this->db->where("ord.status", '4');				
+				$this->db->from('tbl_order ord');
+				//$this->db->join('users usr','usr.id=ord.cus_id','left');
+				$this->db->join("tbl_inventory", "tbl_inventory.product_name=ord.product",'left');
+				$this->db->join('tbl_product_country prd','prd.id=ord.product');
+				$this->db->join('tbl_proddetails prddet','prd.id=prddet.prodid');
+				$this->db->join('tbl_admin','tbl_admin.pk_i_admin_id=prddet.seller_id');
+				$this->db->join('tbl_warehouse wh','ord.warehouse=wh.id','left');
+		return	$this->db->get()
+					 ->result();
+	}*/
 	
 	public function getOrdersProduct($ordno){
 		

@@ -31,19 +31,20 @@
 					$cols[] = number_format($balance,2);
 					$cols[] = $ord->order_date;
 				
-					$payment_act = $conf_act = $invoice_act = '';
+					$payment_act = $conf_act = $invoice_act = $invoice_tax = '';
 
 					if (user_access(461)) {
 						$conf_act  = '<a class="btn btn-xs btn-info" href="'.base_url("order/booking/".$ord->ord_no).'"><i class="fa fa-gavel" data-toggle="tooltip" title="" data-original-title="Edit"></i>  Status</a>';
 						if ($this->session->user_right != 200) {							
 							$payment_act = '<a href="'.base_url("payment/add/".$ord->ord_no).'" class="btn btn-xs btn-primary"><i class="fa fa-cc" data-toggle="tooltip" title="" data-original-title="Edit"></i>  Payment</a>';
-							$invoice_act	=	'<a class="btn btn-xs btn-default" href="'.base_url("order/invoice/".$ord->ord_no).'"><i class="fa fa-eye" data-toggle="tooltip" title="" data-original-title="Edit"></i>  Invoice</a>';					
+							$invoice_act	=	'<a class="btn btn-xs btn-default" href="'.base_url("order/invoice/".$ord->ord_no).'"><i class="fa fa-eye" data-toggle="tooltip" title="" data-original-title="Edit"></i>  Invoice</a>';
+							$invoice_tax ='<a class="btn btn-xs btn-success" href="'.base_url("order/invoice/".$ord->ord_no."/".base64_encode('tax')).'"><i class="fa fa-eye" data-toggle="tooltip" title="" data-original-title="Edit"></i>  Tax Invoice</a>';					
 						}
 					}
 
 
 
-					$cols[] =  $conf_act.$invoice_act.$payment_act;
+					$cols[] =  $conf_act.$invoice_act.$payment_act.$invoice_tax;
 					$rows[] = $cols;
 				}
 				
