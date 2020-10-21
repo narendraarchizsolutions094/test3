@@ -301,8 +301,6 @@ if (!empty($this->session->chat_mobile)) {
           }
         });
     });     
-    document.cookie = 'cookie2=value2; SameSite=None; Secure';
-
 </script>
 
 </body>
