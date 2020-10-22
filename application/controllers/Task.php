@@ -19,8 +19,10 @@ class Task extends CI_Controller {
         $response = simplexml_load_string($xml);
         $ns = $response->getNamespaces(true);
         print_r($response);
-        echo phpinfo();
         exit();
+    }
+    public function phpinfo(){
+        echo phpinfo();
     }
     public function index() {
         $this->session->unset_userdata('filter_user_id');
