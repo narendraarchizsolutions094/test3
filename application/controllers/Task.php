@@ -11,23 +11,9 @@ class Task extends CI_Controller {
          redirect('login');   
         }
     }
-    public function abc(){
-        $url = "http://203.112.143.175/VTWS/Service.asmx?wsdl";
-        $soapclient = new SoapClient($url,array('UserName' => 'vtransweb','Password'=>'vt@2016'));
-        $response = $soapclient->__soapCall('GetTrackNTraceData', array('parameters'=>array('UserName' => 'vtransweb','Password'=>'vt@2016','Gc_No'=>'6134709')));
-        $xml = $response->GetTrackNTraceDataResult->any;
-        $response = simplexml_load_string($xml);
-        $ns = $response->getNamespaces(true);
-        
-        echo "<pre>";
-        print_r($response);
-        echo "</pre>";
-        
-        exit();
-    }
-    public function phpinfo(){
+    /* public function phpinfo(){
         echo phpinfo();
-    }
+    } */
     public function index() {
         $this->session->unset_userdata('filter_user_id');
         $aid = $this->session->userdata('user_id');

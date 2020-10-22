@@ -567,6 +567,19 @@ public function add_subject() {
             $this->session->set_flashdata('exception', display('please_try_again'));
         }
         redirect('Ticket/add_subject');
+	}
+	public function gc_vtrans_api($gc_no){
+        $url = "http://203.112.143.175/VTWS/Service.asmx?wsdl";
+        $soapclient = new SoapClient($url,array('UserName' => 'vtransweb','Password'=>'vt@2016'));
+        $response = $soapclient->__soapCall('GetTrackNTraceData', array('parameters'=>array('UserName' => 'vtransweb','Password'=>'vt@2016','Gc_No'=>$gc_no)));
+        $xml = $response->GetTrackNTraceDataResult->any;
+        $response = simplexml_load_string($xml);
+        $ns = $response->getNamespaces(true);
+        $res = '';
+        if(!empty($response->NewDataSet)){
+            $res = json_encode($response->NewDataSet);
+        }
+        echo $res;
     }
 }
 
