@@ -97,11 +97,11 @@ class Chat extends CI_Controller {
 				$this->session->set_userdata('chat_fullname',$row['name'].' '.$row['lastname']);
 				$this->session->set_userdata('chat_mobile',$row['phone']);
 				$this->session->set_userdata('chat_email',$row['email']);
-				echo $this->session->set_userdata('chat_companey_id',$row['comp_id']);
+				$this->session->set_userdata('chat_companey_id',$row['comp_id']);
 			}
 			//echo"Els";
 		}
-		print_r($_SESSION);
+		//print_r($_SESSION);
 		echo json_encode(array('user_id'=>$this->session->chat_user_id,'fullname'=>$this->session->chat_fullname,'mobile'=>$this->session->chat_mobile,'email'=>$this->session->chat_email,'companey_id'=>$this->session->chat_companey_id));		
 
 	}
