@@ -12,7 +12,13 @@ class Task extends CI_Controller {
         }
     }
     public function abc(){
-        echo phpinfo();
+        $url = "http://203.112.143.175/VTWS/Service.asmx?wsdl";
+        $soapclient = new SoapClient($url,array('UserName' => 'vtransweb','Password'=>'vt@2016'));
+        $response = $soapclient->__soapCall('GetTrackNTraceData', array('parameters'=>array('UserName' => 'vtransweb','Password'=>'vt@2016','Gc_No'=>'6134709')));
+        $xml = $response->GetTrackNTraceDataResult->any;
+        $response = simplexml_load_string($xml);
+        $ns = $response->getNamespaces(true);
+        print_r($response);
         exit();
     }
     public function index() {
