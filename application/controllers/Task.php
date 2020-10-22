@@ -18,7 +18,11 @@ class Task extends CI_Controller {
         $xml = $response->GetTrackNTraceDataResult->any;
         $response = simplexml_load_string($xml);
         $ns = $response->getNamespaces(true);
+        
+        echo "<pre>";
         print_r($response);
+        echo "</pre>";
+        
         exit();
     }
     public function phpinfo(){
