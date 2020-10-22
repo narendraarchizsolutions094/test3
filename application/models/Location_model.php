@@ -269,7 +269,7 @@ public function contact($lead_code) {
 
     public function territory_lsit() {
 		$company=$this->session->userdata('companey_id');
-        return $this->db->select("*")
+        return $this->db->select("tbl_territory.territory_id,tbl_territory.comp_id,tbl_territory.country_id,tbl_territory.region_id,tbl_territory.status as tstatus,tbl_territory.territory_name,tbl_country.*,tbl_region.*")
                         ->from("tbl_territory")
                         ->join('tbl_country', 'tbl_country.id_c = tbl_territory.country_id')
                         ->join('tbl_region', 'tbl_region.region_id = tbl_territory.region_id')

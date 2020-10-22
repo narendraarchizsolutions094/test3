@@ -31,7 +31,19 @@ class User extends CI_Controller {
         $data['content'] = $this->load->view('user', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }
-
+    public function inactiveAlluser()
+    {
+        // print_r($_POST);
+       $user_ids= $this->input->post('user_ids');
+       $com_id= $this->input->post('com_id');
+        foreach ($user_ids as $key => $value) {
+           $user_id=$user_ids[$key];
+           $data=['b_status'=>0];
+           $this->User_model->ChangeStatus($data,$user_id,$com_id);
+        }
+        $this->session->set_flashdata('message',"Status updated successfully");
+        redirect('user/index');
+    }
     function userimport() 
     {
         $data['title'] = display('import');

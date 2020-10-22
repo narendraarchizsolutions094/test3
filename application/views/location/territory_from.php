@@ -12,7 +12,9 @@
             <div class="panel-body panel-form">
                 <div class="row">
                     <div class="col-md-9 col-sm-12">
-                        <?php echo form_open_multipart('location/add_territory','class="form-inner" id="territory"') ?> 
+                        <?php 
+                        
+                        echo form_open_multipart('location/add_territory','class="form-inner" id="territory"') ?> 
 
                             <?php echo form_hidden('user_id',$doctor->territory_id) ?>
                             
@@ -40,52 +42,40 @@
                             </div>
                             
                             <div class="form-group row">
-                                
                                 <label  class="col-md-3 col-xs-12 col-form-label"><?php echo display('state_name')?> <i class="text-danger">*</i></label>
-                                
                                 <div class="col-md-9 col-xs-12">
                                     
                                     <select class="form-control" name="state_id" id="state_id">
                                         <option value="" style="display:none">---Select---</option>
-                                        <?php foreach($state as $row){ ?>
-                                            
-                                            <option value="<?php echo $row->id ?>"><?php echo $row->state; ?></option>
+                                        <?php 
+                                        foreach($state as $row){ ?>
+                                            <option value="<?php echo $row->id ?>" <?php if ($row->state_id==$row->id) {  echo'selected';
+                                            } ?>><?php echo $row->state; ?></option>
                                             
                                         <?php } ?>
-                                        
                                     </select>
-                                    
                                 </div>
-                                
-                                
                             </div>
-                            
-                            
                              <div class="form-group row">
                                 <label for="territory_name" class="col-md-3 col-xs-12 col-form-label"><?php echo display('territory_name')?> <i class="text-danger">*</i></label>
                                 <div class="col-md-9 col-xs-12">
                                     <input name="territory_name" type="text" class="form-control" id="firstname" placeholder="<?php echo display('territory_name')?>" value="<?php echo $doctor->territory_name ?>" >
                                 </div>
                             </div>
-                            
-                            
-                            
-                              
                                <div class="form-group row">
                                 <label class="col-md-3 col-xs-12"><?php echo display('status') ?></label>
                                 <div class="col-md-9 col-xs-12">
                                     <div class="form-check">
                                         <label class="radio-inline">
-                                        <input type="radio" name="status" value="1" <?php echo  set_radio('status', '1', TRUE); ?> ><?php echo display('active') ?>
+                                        <input type="radio" name="status" value="1" <?php if ($doctor->status==1) {  echo'checked'; } echo  set_radio('status', '1', TRUE); ?> ><?php echo display('active') ?>
                                         </label>
                                         <label class="radio-inline">
-                                        <input type="radio" name="status" value="0" <?php echo  set_radio('status', '0'); ?> ><?php echo display('inactive') ?>
+                                        <input type="radio" name="status" value="0" <?php  if ($doctor->status==0) {
+                                          echo'checked';  } echo  set_radio('status', '0'); ?> ><?php echo display('inactive') ?>
                                         </label>
                                     </div>
                                 </div>
                             </div>
-                           
-                           
                             <div class="form-group row">
                                 <div class="col-sm-offset-3 col-sm-6">
                                     <div class="ui buttons">

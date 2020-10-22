@@ -491,7 +491,7 @@ class Customer extends CI_Controller
             $this->load->model('User_model');
 
             /*echo $user_row[0]['user_permissions'];
-        exit();*/
+             exit();*/
             $data['user_role'] = $this->User_model->get_user_role($user_row[0]['user_permissions']);
             $data['user_right_content'] = $this->load->view('company_right', $data, true);
             $data['content'] = $this->load->view('doctor_form', $data, true);
@@ -501,22 +501,73 @@ class Customer extends CI_Controller
             redirect('customer');
         }
     }
+    public function displayusers()
+    {
+        $companyId=$this->uri->segment('3');
+       $users= $this->db->where(array('companey_id' => $companyId))->join('user','user.user_id=tbl_admin.companey_id')->get('tbl_admin')->result();
+         if (!empty($users)) { 
+             $sl = 1;
+             foreach ($users as $user) {
+                  if ($user->b_status==1) { $status= "Active"; }else{   $status= "Inactive";   }
+             echo '<tr>
+                    <td style="width:20px;">'.$sl.'</td>
+                    <td><img src="'.base_url($user->picture).'" alt="" width="65" height="50"/></td>
+                    <td>'.$user->s_display_name.'</td>
+                    <td>'.$user->s_user_email.'</td>
+                    <td>'.date('Y-m-d',strtotime($user->dt_create_date)).'</td>
+                    <td>'.$user->start_billing_date.'</td>
+                    <td>'.date('Y-m-d',strtotime($user->valid_upto)).'</td>
+                    <td>'.$user->last_log.'</td>
+                    <td>'.$status.'</td>
+                    <td>
+                     <a    class="btn btn-xs btn-primary usermodal" id="usermodal" data-toggle="modal" data-target="#empModal" data-userid="'.$user->pk_i_admin_id .'" onclick="myFunction('.$user->pk_i_admin_id .')"><i class="fa fa-edit"></i></a> 
+                    </td>
+                </tr>';
+             $sl++;  }
+        }
+    }
+    public function userModal()
+    {
+        $uid=$this->input->get('proid');
+        $users= $this->db->where(array('pk_i_admin_id'=>$uid))->get('tbl_admin')->result();
+        if (!empty($users)) { 
+             foreach ($users as $user) {
+        echo' <form  method="post"  action="'.base_url('customer/update-billing-date').'">
+                  <input type="hidden" name="user_id" value="'.$user->pk_i_admin_id.'">
+                  <input type="hidden" name="company_id" value="'. $user->companey_id.'">
+                  <input type="hidden" name="path" value="'.base_url('customer/edit/'.$user->companey_id.'').'">
+                     <div class="form-row">                
+                        <div class="form-group col-md-6 col-md-offset-2">
+                            <label for="stdate">Billing Start Date<i class="text-danger">*</i></label>
+                              <input type="date" id="stdate" class="form-control"  value="'.$user->start_billing_date.'" name="start_billing_date" required="">
+                        </div>
+                     
+                    </div>
+                    <div class="row">
+                      <div class="col-md-2 col-md-offset-5">
+                        <button type="submit" class="btn btn-success">Update</button>                                    
+                      </div>
+                    </div>
+                </form>'; 
+         }
+        } 
+    }
     public function update_billing_date()
     {
         $user_id = $this->input->post('user_id');
         $companyId = $this->input->post('company_id');
         $path = $this->input->post('path');
         $start_billing_date = $this->input->post('start_billing_date');
-        $valid_upto = $this->input->post('valid_upto');
+        // $valid_upto = $this->input->post('valid_upto');
         $this->form_validation->set_rules('user_id', display('user_id'), 'required');
         $this->form_validation->set_rules('company_id', display('company_id'), 'required');
         $this->form_validation->set_rules('start_billing_date', display('start_billing_date'), 'required');
-        $this->form_validation->set_rules('valid_upto', display('valid_upto'), 'required');
+        // $this->form_validation->set_rules('valid_upto', display('valid_upto'), 'required');
         if ($this->form_validation->run() === true) {
                $checkcompany = $this->doctor_model->checkCompany_userbyId($companyId, $user_id);
                //check company and user_id exist or not
             if ($checkcompany == 1) {
-                $data = ['start_billing_date' => $start_billing_date, 'valid_upto_date' => $valid_upto];
+                $data = ['start_billing_date' => $start_billing_date];
                 $update = $this->doctor_model->updateUser($companyId, $user_id, $data);
                 if ($update) {
                     $this->session->set_flashdata('message', display('save_successfully'));

@@ -1407,6 +1407,7 @@ function assign_enquiry(){
       var re_url = '<?php echo base_url();?>client/index';
     }    
 
+
   $.ajax({
     type: 'POST',
     url: p_url,

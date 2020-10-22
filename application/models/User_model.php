@@ -390,5 +390,16 @@ $company=$this->session->userdata('companey_id');
     public function get_user_by_phone($phone){
         return $this->db->where('s_phoneno',$phone)->get('tbl_admin')->row();
     }
+
+//update user data
+public function ChangeStatus($data,$user_id,$com_id)
+{
+   $update= $this->db->where(array('pk_i_admin_id'=>$user_id,'companey_id'=>$com_id));
+    $update=$this->db->update('tbl_admin',$data);
+    return $update;
+
+}
+
+
 }
 
