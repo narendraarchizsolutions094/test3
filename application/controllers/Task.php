@@ -19,6 +19,7 @@ class Task extends CI_Controller {
         $response = simplexml_load_string($xml);
         $ns = $response->getNamespaces(true);
         print_r($response);
+        echo phpinfo();
         exit();
     }
     public function index() {
