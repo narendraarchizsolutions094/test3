@@ -53,6 +53,9 @@
 
                             <th><?php echo display('mobile') ?></th>
                             <th><?php echo display("proccess"); ?></th>
+                            <th>Start Billing Date</th> 
+                            <th>Valid upto</th> 
+                            <th>Last Login</th> 
                             <th><?php echo display("created_date"); ?></th>
 
                             <th><?php echo display('status') ?></th>
@@ -102,6 +105,9 @@
                                                 echo $value['product_name'].', '; 
                                             }   } ?>
                                         </td>
+                                        <td style="<?php if($department->b_status==0){echo 'color:red';} ?>"><?php echo !empty($department->start_billing_date)?$department->start_billing_date:'NA'; ?></td>
+                                        <td style="<?php if($department->b_status==0){echo 'color:red';} ?>"><?php echo $department->valid_upto ?></td>
+                                        <td style="<?php if($department->b_status==0){echo 'color:red';} ?>"><?php echo !empty($department->last_log)?$department->last_log:'NA'; ?></td>
                                     <td style="<?php if($department->b_status==0){echo 'color:red';} ?>"><?php echo !empty($department->dt_create_date)?$department->dt_create_date:'NA'; ?></td>
                                     <td style="<?php if($department->b_status==0){echo 'color:red';} ?>"><?php echo (($department->b_status==1)?display('active'):display('inactive')); ?></td>
                                 </tr>

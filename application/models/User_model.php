@@ -37,7 +37,7 @@ class User_model extends CI_Model {
         $all_reporting_ids    =   $this->common_model->get_categories($this->session->user_id);                      
         $this->db->select("*");
         $this->db->from($this->table); 
-        //$this->db->join('user', 'user.user_id = tbl_admin.companey_id');
+        // $this->db->join('user', 'user.user_id = tbl_admin.companey_id');
         $this->db->join('tbl_user_role', 'tbl_user_role.use_id=tbl_admin.user_permissions', 'left');
         $where = "  tbl_admin.pk_i_admin_id IN (".implode(',', $all_reporting_ids).')';                
         $where .= "  AND tbl_admin.b_status=1";                                
@@ -99,8 +99,9 @@ class User_model extends CI_Model {
         $assign_territory = $this->session->territory_id;
         $assign_state = $this->session->state_id;
         $assign_city = $this->session->city_id;
-        $this->db->select("*");
-        $this->db->from($this->table);        
+        $this->db->select("user.valid_upto,user.user_id,tbl_admin.*,tbl_user_role.*");
+        $this->db->from($this->table);     
+        $this->db->join('user', 'user.user_id = tbl_admin.companey_id');
         $this->db->join('tbl_user_role', 'tbl_user_role.use_id=tbl_admin.user_type', 'left');
         if (!empty($sep_arr)) {
             $this->db->where_in("tbl_admin.user_type NOT",$sep_arr);            
