@@ -25,9 +25,9 @@ class Chat extends CI_Controller {
         $this->load->view('layout/main_wrapper', $data);		
 	}
 	public function submit_identity($comp_id,$created_by,$process_id=2){
-		echo 'comp_id'.$comp_id;
+		/* echo 'comp_id'.$comp_id;
 		echo 'created_by'.$created_by;
-		echo 'process_id'.$process_id;
+		echo 'process_id'.$process_id; */
 		$name	=	$this->input->post('name');
 		$mobile	=	$this->input->post('mobile');
 		$email	=	$this->input->post('email');
@@ -97,13 +97,12 @@ class Chat extends CI_Controller {
 				$this->session->set_userdata('chat_fullname',$row['name'].' '.$row['lastname']);
 				$this->session->set_userdata('chat_mobile',$row['phone']);
 				$this->session->set_userdata('chat_email',$row['email']);
-				$this->session->set_userdata('chat_companey_id',$row['comp_id']);
+				echo $this->session->set_userdata('chat_companey_id',$row['comp_id']);
 			}
 			//echo"Els";
 		}
-		//print_r($_SESSION);
-		echo json_encode(array('user_id'=>$this->session->chat_user_id,'fullname'=>$this->session->chat_fullname,'mobile'=>$this->session->chat_mobile,'email'=>$this->session->chat_email,'companey_id'=>$this->session->chat_companey_id));
-		session_write_close();
+		print_r($_SESSION);
+		echo json_encode(array('user_id'=>$this->session->chat_user_id,'fullname'=>$this->session->chat_fullname,'mobile'=>$this->session->chat_mobile,'email'=>$this->session->chat_email,'companey_id'=>$this->session->chat_companey_id));		
 
 	}
 	public function get_current_chat_session(){
