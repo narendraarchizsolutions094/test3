@@ -33,6 +33,9 @@ if(empty($api_conf)){
 if (strlen($phone) >= 12 && ($this->session->companey_id==83 || $this->session->companey_id==81)) {
     $phone = substr($phone, 2, 10);
 }
+if($this->session->companey_id == 65 && strlen($phone) < 12){
+  $phone = "91".$phone;
+}
 
  $url=$api_conf['api_url']."&".$api_conf['key_moblie']."=".$phone."&".$api_conf['api_key']."=".$meg."&country=91";
 
