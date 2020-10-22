@@ -87,7 +87,7 @@ class Order_model extends CI_Model {
 		
 
 		$this->db->join('tbl_admin usr','usr.pk_i_admin_id=ord.cus_id');	
-		$this->db->join('tbl_admin ref_usr','ref.pk_i_admin_id=ord.preferd_by');	
+		$this->db->join('tbl_admin ref_usr','ref_usr.pk_i_admin_id=ord.preferd_by');	
 		$ordcol = array("ord.id","prd.country_name");	
 		if($searchproduct !='')
 		{
