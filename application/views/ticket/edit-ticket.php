@@ -1,6 +1,6 @@
-
+ 
 <link href="<?= base_url('assets/datatables/css/dataTables.min.css') ?>" rel="stylesheet" type="text/css"/> 
-        <script src="<?php echo base_url('assets/js/jquery.min.js') ?>" type="text/javascript"></script>
+<script src="<?php echo base_url('assets/js/jquery.min.js') ?>" type="text/javascript"></script>
 	
        	<div class="row">
 				 <div class="panel panel-default"> 
@@ -18,7 +18,7 @@
 				<div class="col-md-8 panel-default panel-body" style ="border:1px solid #f7f7f7">
 		
 				
-				<?php echo form_open_multipart(base_url("ticket/edit/".$ticket->ticketno)); ?>
+			<?php echo form_open_multipart(base_url("ticket/edit/".$ticket->ticketno)); ?>
 			<div class="row ">
 				<div class="col-md-6">
 					<div class="form-group">
@@ -34,7 +34,7 @@
 					</div>
 				</div>
 				
-						<input type = "hidden" class="form-control" value = "<?php echo $ticket->ticketno; ?>" name = "ticketno">
+				<input type = "hidden" class="form-control" value = "<?php echo $ticket->ticketno; ?>" name = "ticketno">
 				
 				<div class="col-md-6">
 					<div class="form-group">

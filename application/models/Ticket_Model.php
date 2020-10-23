@@ -96,10 +96,13 @@ class Ticket_Model extends CI_Model {
 
 		public function save($companey_id='',$user_id='')
     	{	$cid='';
-    		if(empty($companey_id) && empty($user_id))
-    		{
-    			if( empty($_POST['client']) && count($_SESSION['process']) == 1)
+    		//print_r($_POST); 
+    		if(!empty($companey_id) && !empty($user_id))
+    		{	
+    			if(!empty($_POST['client']) && count($_SESSION['process']) == 1)
 	    		{
+	    			// echo 'in';
+    				// exit();
 	    			$encode = get_enquery_code();
 	    			$postData = array(
 	                            'Enquery_id' 	=> $encode,
@@ -113,12 +116,13 @@ class Ticket_Model extends CI_Model {
 	                            'status' 		=> 1,
 	                            'created_by' 	=> $this->session->user_id,
 	                            'phone'			=> $this->input->post('phone'),
+	  
 	                        );
 	    			$this->db->insert('enquiry', $postData);
 					$cid = $this->db->insert_id();
 	    		}
-    		}
-    		
+    		}//echo'out';
+    		//exit();
 			$cdate = explode("/", $this->input->post("complaindate", true));			
 			$ndate = (!empty($cdate[2])) ? $cdate[2]."-".$cdate[0]."-".$cdate[1] : date("Y-m-d"); 			
 			$arr = array(
@@ -132,6 +136,8 @@ class Ticket_Model extends CI_Model {
 				"last_update"=> date("Y-m-d h:i:s"),
 				"priority"	 => ($this->input->post("priority", true)) ? $this->input->post("priority", true) : "",
 				"issue"	 => ($this->input->post("issue", true)) ? $this->input->post("issue", true) : "",
+				"tracking_no"   => ($this->input->post("tracking_no", true)) ? $this->input->post("tracking_no", true) : "",
+				
 				 
 			);			
 			if(!empty($_FILES["attachment"]["name"]))
@@ -146,7 +152,7 @@ class Ticket_Model extends CI_Model {
 				$arr["name"]   		= ($this->input->post("name", true)) ? $this->input->post("name", true) : "";
 				$arr["email"]  		= ($this->input->post("email", true)) ? $this->input->post("email", true) : "";
 				$arr["client"]     	= ($this->input->post("client", true)) ? $this->input->post("client", true) : "";
-				$this->db->where("ticketno", $this->input->post("ticketno", true));
+				$this->db->where("id", $this->input->post("ticketno", true));
 				$this->db->update("tbl_ticket", $arr);				
 				if($this->db->affected_rows()){
 					return $_POST["ticketno"];					
@@ -250,6 +256,8 @@ class Ticket_Model extends CI_Model {
 							"status"    => $this->input->post("status", true),
 							"review"    => $this->input->post("review", true)
 							);
+			//print_r($updarr); exit();
+			//echo $this->input->post("ticketno", true); exit();
 			$this->db->where("id", $this->input->post("ticketno", true));
 			$this->db->update("tbl_ticket", $updarr);
 			$ret = $this->db->affected_rows();
@@ -370,7 +378,7 @@ $where .= " OR tck.assign_to IN (".implode(',', $all_reporting_ids).'))';
 		
 		public function get($tctno){
 
-			return $this->db->select("tck.*,tbl_ticket_subject.subject_title,lead_source.lead_name as ticket_source,enq.phone,enq.email,enq.gender,prd.country_name, concat(enq.name,' ', enq.lastname) as clientname")
+			return $this->db->select("tck.*,tck.email as tck_email,tbl_ticket_subject.subject_title,lead_source.lead_name as ticket_source,enq.phone,enq.email,enq.gender,prd.country_name, concat(enq.name,' ', enq.lastname) as clientname")
 				 ->where("tck.ticketno", $tctno)
 				 ->where("tck.company", $this->session->companey_id)
 				 ->from("tbl_ticket tck")

@@ -10,7 +10,7 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
               $module=array();
             }
 
-?>
+?> 
 
 <script src="<?=base_url()?>/assets/summernote/summernote-bs4.min.js"></script>
 <link href="<?=base_url()?>/assets/summernote/summernote-bs4.css" rel="stylesheet" />
@@ -390,27 +390,7 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
             </div>
 
             <?php } }?>
-            <!-- <div class="btn-group" role="group" aria-label="Button group">
-               <a class="btn" onClick="window.location.reload();" title="Refresh">
-               <i class="fa fa-refresh icon_color"></i>
-               </a>  
-            </div>
-             For invenotry company -->
-            <!--<?php  if(in_array(300,$module) || in_array(301,$module) || in_array(302,$module) || in_array(303,$module) || in_array(304,$module) || in_array(305,$module) || in_array(306,$module)){ ?>
-            <div class="btn-group" role="group" aria-label="Button group">
-               <a class="dropdown-toggle" href="#" data-toggle="modal" data-target="#addnewdeal" title="Add New Deal"> <i class="fa fa-plus" style="background:#fff !important;border:none!important;color:green;"></i></a>&nbsp;&nbsp;&nbsp;
-            </div>
-
-            <?php } ?>
-            <div class="btn-group" role="group" aria-label="Button group">
-               <a class="dropdown-toggle" href="<?php echo base_url()?>enquiry/create" title="<?php echo display('add_new_enquiry');?>"> <i class="fa fa-plus" style="background:#fff !important;border:none!important;color:green;"></i></a>&nbsp;&nbsp;&nbsp;
-            </div>
-          
-            <div class="btn-group" role="group" aria-label="Button group">
-               <a class="btn" href="<?php echo $back_url; ?>" title="Back">
-               <i class="fa fa-arrow-left icon_color"></i>
-               </a>                                                    
-            </div> -->
+           
          </div>
       </div>
    </div>
@@ -673,7 +653,7 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                              <select class="form-control" id="lead_stage_change" name="lead_stage" onchange="find_description()">
                                 <option>---Select Stage---</option>
                                 <?php foreach($all_estage_lists as $single){                               
-                                  $id=$single->lead_stage;                                                            
+                                 // $id=$single->lead_stage;                                                            
                                 ?>                              
                                 <option value="<?= $single->stg_id?>" <?php if ($single->stg_id == $details->lead_stage) {echo 'selected';}?>><?php echo $single->lead_stage_name; ?></option>
                                 <?php } ?>
@@ -691,7 +671,7 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
 
 
                       <input type="hidden" name="enq_code1"  value="<?php echo  $details->Enquery_id; ?>" >
-                      <div class="form-group col-sm-6" style="display:none;">
+                    <div class="form-group col-sm-6" style="display:none;">
                     <label>Contact Person Name</label>
                     <input type="text" class="form-control" value="<?php if(!empty($details->name)){echo $details->name;} ?>" name="contact_person1"  placeholder="Contact Person Name">
                  </div>
@@ -708,15 +688,15 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                     <input type="text" class="form-control" value="<?php if(!empty($details->email)){echo $details->email;} ?>" name="email1" placeholder="Email">
                  </div>
 
-                       <div class="" id="otherTypev">
-                                      <div class="form-group col-sm-12">
-                                      <input type="date" name="c_date" id='disposition_c_date' class="form-control" placeholder=""  >
-                                  </div>
-                                  <div class="form-group col-sm-12">
-                                      <input type="time" name="c_time" id='disposition_c_time' class="form-control" placeholder=""  >
-                                      <input type="hidden" name="dis_notification_id" >
-                                  </div>
-                                  </div>
+                <div class="" id="otherTypev">
+                    <div class="form-group col-sm-12">
+                    <input type="date" name="c_date" id='disposition_c_date' class="form-control" placeholder=""  >
+                    </div>
+                    <div class="form-group col-sm-12">
+                        <input type="time" name="c_time" id='disposition_c_time' class="form-control" placeholder=""  >
+                        <input type="hidden" name="dis_notification_id" >
+                    </div>
+               </div>
                      
                           <div class="form-group col-sm-12">
                                       <!--<label>Remaks</label>-->
@@ -942,7 +922,7 @@ $(window).resize(function(){
             </div>
             
             <input type="hidden" value="<?= $compid; ?>" class="" name="compid" id="compid">  
-            <!-- <input type="hidden" value="<?= $enqid ?>" class="" name="userid" id="userid">          -->
+            
      
             </div>
             
@@ -2490,27 +2470,36 @@ $(window).resize(function(){
                   <label>Problem</label>
                   <select class="form-control" name="problem">
                      <option></option>
-                     <?php foreach ($problems as $problem) { ?>
+                     <?php 
+                     if(!empty($problems))
+                     {
+                     foreach ($problems as $problem) { ?>
                      <option value="<?php echo $problem->tp_id; ?>"><?php echo $problem->problem_name; ?></option>
-                     <?php } ?>
+                     <?php } }?>
                   </select>
                </div>
                <div class="form-group col-md-6">
                   <label>Priority</label>
                   <select class="form-control" name="priority">
                      <option></option>
-                     <?php foreach ($ticketpriority as $priority) { ?>
+                     <?php 
+                     if(!empty($ticketpriority))
+                     {
+                     foreach ($ticketpriority as $priority) { ?>
                      <option value="<?php echo $priority->priority_id; ?>"><?php echo $priority->priority_name; ?></option>
-                     <?php } ?>
+                     <?php } }?>
                   </select>
                </div>
                <div class="form-group col-md-6">
                   <label>Source</label>
                   <select class="form-control" name="source">
                      <option></option>
-                     <?php foreach ($ticketsource as $tsource) { ?>
+                     <?php 
+                     if(!empty($ticketsource))
+                     {
+                     foreach ($ticketsource as $tsource) { ?>
                      <option value="<?php echo $tsource->ts_id; ?>"><?php echo $tsource->ticket_source; ?></option>
-                     <?php } ?>
+                     <?php } }?>
                   </select>
                </div>
                <div class="form-group col-md-6">
@@ -2682,12 +2671,9 @@ $(window).resize(function(){
                         <label><?php echo display('lead_stage') ?> <i class="text-danger">*</i></label>                  
                         <select class="form-control" id="move_lead_stage_change" name="move_lead_stage" onchange="find_description1()" required>
                            <option value="">-- Select Lead Stage --</option>
-                              <?php foreach($all_estage_lists as $single){                               
-                              $id=$single->lead_stage;                              
-                              }
-                              ?>
+                             
                               <?php foreach ($all_stage_lists as $stage) {  ?>
-                              <option value="<?= $stage->stg_id?>" <?php if ($stage->stg_id == $id) {echo 'selected';}?>><?php echo $stage->lead_stage_name; ?></option>
+                              <option value="<?= $stage->stg_id?>" <?php if ($stage->stg_id == $details->lead_stage) {echo 'selected';}?>><?php echo $stage->lead_stage_name; ?></option>
                               <?php } ?>                                        
                         </select>
                      </div>

@@ -4,7 +4,10 @@
 
  
  <form class="" action="<?php echo base_url()?>client/create_qualification/<?php echo $this->uri->segment(3); ?>" id="" method="post" enctype="multipart/form-data">
-<?php foreach($qualification_data as $quali){ ?>
+<?php
+if(!empty($qualification_data))
+{
+ foreach($qualification_data as $quali){ ?>
             <div class="col-md-12 col-sm-12">        
                   <div class="row">
 <input type="hidden" class="form-control"  name="enquiryid" value="<?php if(!empty($quali->enq_id)){echo $quali->enq_id; }?>">
@@ -143,7 +146,8 @@
 </div>
 
 </div>
-<?php } ?>
+<?php }}
+ ?>
 </form>
 
             </div>

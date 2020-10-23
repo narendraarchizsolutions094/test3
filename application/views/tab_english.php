@@ -4,9 +4,13 @@
 
  
  <form class="" action="<?php echo base_url()?>client/create_english/<?php echo $this->uri->segment(3); ?>" id="" method="post" enctype="multipart/form-data">
- <?php foreach($english_data as $eng){ ?>
+ <?php
+if(!empty($english_data))
+{
+  foreach($english_data as $eng){ ?>
             <div class="col-md-12 col-sm-12">        
                   <div class="row">
+
 <input type="hidden" class="form-control"  name="enquiryid" value="<?php if(!empty($eng->enq_id)){echo $eng->enq_id; }?>">
 <div class="col-md-12">
 <label style="color:#283593;">International Exams<i class="text-danger"></i></label>
@@ -117,7 +121,9 @@
 
 </div>
 </div>
- <?php } ?>
+ <?php } 
+}
+?>
 </form>
 
             </div>
