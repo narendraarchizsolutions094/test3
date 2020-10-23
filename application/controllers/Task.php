@@ -13,7 +13,7 @@ class Task extends CI_Controller {
     }
     public function phpinfo(){
         echo phpinfo();
-        $this->load->view('test');
+        //$this->load->view('test');
     } 
     public function index() {
         $this->session->unset_userdata('filter_user_id');
