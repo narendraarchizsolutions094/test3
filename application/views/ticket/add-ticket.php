@@ -1,4 +1,4 @@
-<link href="<?= base_url('assets/datatables/css/dataTables.min.css') ?>" rel="stylesheet" type="text/css"/> 
+<link href="<?= base_url('assets/datatables/css/dataTables.min.css') ?>" rel="stylesheet" type="text/css"/>  
         <script src="<?php echo base_url('assets/js/jquery.min.js') ?>" type="text/javascript"></script>
 	<style>
 		#waranty-start,#waranty-end {
@@ -20,6 +20,17 @@
 				<div class="col-md-8 panel-default panel-body" style ="border:1px solid #f7f7f7">
 				<?php echo form_open_multipart(base_url("ticket/add")); ?>
 			<div class="row ">
+				<?php if($this->session->companey_id==1){ ?>
+
+					<div class="trackingDetails"></div>
+
+				<div class="col-md-6">
+					<div class="form-group">
+						<label>Tracking Number <i class="text-danger">*</i></label>
+						<input type="text" name="tracking_no" class="form-control" onblur="loadTracking(this)">
+					</div>
+				</div>
+			<?php } ?>
 				<div class="col-md-6">
 					<div class="form-group">
 						<label>Problem For <i class="text-danger">*</i></label>
@@ -100,6 +111,7 @@
 				<div class = "col-md-6" id = "waranty-end">
 				</div>
 				<?php if($this->session->user_right!=214){ ?>
+					
 				<div class="col-md-6">
 					<div class="form-group">
 						<label>Priority</label>
@@ -203,5 +215,33 @@
 			 format: 'yyyy/mm/dd',
 			 startDate: '-7d'
 		});	
+
 	});
+
+	function loadTracking(that)
+	{	//alert(key);
+		if(that.value=='')
+		{
+
+		}else{
+			
+			$.ajax({
+				url:'<?=base_url('ticket/view_tracking')?>',
+				type:'post',
+				data:{trackingno:that.value},
+				beforeSend:function(){
+
+					$(that).parents('form').find('input,select,button').attr('disabled','disabled');
+				},
+				success:function(q)
+				{	$(that).parents('form').find('input,select,button').removeAttr('disabled');
+					$(".trackingDetails").html(q);
+				},
+				error:function(u,v,w)
+				{
+					alert(w);
+				}
+			});
+		}
+	}
 </script>

@@ -2131,7 +2131,8 @@ function update_notification(userId,notication_id,reminder_txt,enq_id,rem_date,r
       $("input[name='dis_subject']").val(subject);
       time  =   $("#disposition_c_time").val();      
       task_date =   $("#disposition_c_date").val();            
-      var uid = "<?=$this->session->user_id?>";      
+      var uid = "<?=$this->session->user_id?>";   
+      //alert("UID:"+uid+" subj:"+subject+" enqid:"+enq_id+" task:"+task_date+" time:"+time);   
       id  = writeUserData(uid,subject,enq_id,task_date,time);
       //console.log(id);
       $("input[name='dis_notification_id']").val(id);

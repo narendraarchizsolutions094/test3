@@ -51,7 +51,7 @@
               </a>
          </div>
               <button class="btn btn-basic" type="button" style="width: 100%; margin-top: 5px;margin-bottom: 5px;">Disposition</button>
-            
+             
               <div id="disposition-section" class="mobile-hide">
                 <div class="row" > 
                    <?php echo form_open_multipart('ticket/ticket_disposition/'.$ticket->id,array('id'=>'','class'=>'form-inner')) ?>                     
@@ -73,7 +73,8 @@
                                <option value="<?php echo $discription->id; ?>"><?php echo $discription->description; ?></option>
                                <?php } ?>
                        </select>
-                    </div>             
+                    </div>     
+                     
                     <div class="form-group">
                       <textarea class="form-control" name="conversation"></textarea>
                     </div>

@@ -1478,7 +1478,7 @@ class Enquiry extends CI_Controller
         $this->enquiry_model->assign_notification_update($enquiry_code);
         $this->load->view('layout/main_wrapper', $data);
     }
-
+ 
     function activityTimeline()
     {
         $enqid = $this->input->post('id');

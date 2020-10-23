@@ -11,10 +11,10 @@ class Task extends CI_Controller {
          redirect('login');   
         }
     }
-    public function abc(){
+    public function phpinfo(){
         echo phpinfo();
-        exit();
-    }
+        //$this->load->view('test');
+    } 
     public function index() {
         $this->session->unset_userdata('filter_user_id');
         $aid = $this->session->userdata('user_id');

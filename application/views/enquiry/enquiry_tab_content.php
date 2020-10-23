@@ -697,7 +697,26 @@ if (user_access(450)) { ?>
                <?php if($fld['input_type']==18){?>
                <label><?php echo(!empty($fld["input_label"])) ?  ucwords($fld["input_label"]) : ""; ?></label>
                <input type="tel"  name="enqueryfield[<?=$fld_id?>]"  class="form-control" value ="<?php echo  (!empty($fld["fvalue"])) ? $fld["fvalue"] : ""; ?>">
-               <?php }?>			  			   
+               <?php }?>	
+               
+               <?php
+               if($fld['input_type']==20){?>
+               <label><?php echo(!empty($fld["input_label"])) ?  ucwords($fld["input_label"]) : ""; ?></label>
+               <?php $optarr = (!empty($fld['input_values'])) ? explode(",",$fld['input_values']) : array(); 
+               ?>
+               <input type="hidden"  name="enqueryfield[]"  id="multi-<?=$fld['input_name']?>"  value ="<?php echo  (!empty($fld["fvalue"])) ? $fld["fvalue"] : ""; ?>">
+               <select class="multiple-select" name='multi[]' multiple onchange="changeSelect(this)" id="<?=$fld['input_name']?>">
+                  <?php  foreach($optarr as $key => $val){                  
+                    $fvalues  = explode(',', $fld['fvalue']);
+                    ?>
+                    <option value = "<?php echo $val; ?>" <?php echo (!empty($fld["fvalue"]) and in_array($val, $fvalues)) ? "selected" : ""; ?>><?php echo $val; ?></option>
+                  <?php
+                     } 
+                  ?>
+               </select>
+               <?php }
+               ?>
+               
                <input type="hidden" name= "inputfieldno[]" value = "<?=$fld['input_id']; ?>">
                <input type="hidden" name= "inputtype[]" value = "<?=$fld['input_type']?>">
             </div>

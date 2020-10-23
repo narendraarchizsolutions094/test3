@@ -58,14 +58,14 @@
             
               <div id="disposition-section" class="mobile-hide">
                 <div class="row" > 
-                   <?php echo form_open_multipart('ticket/ticket_disposition/'.$ticket->id,array('id'=>'','class'=>'form-inner')) ?>                     
+                   <?php echo form_open_multipart('ticket/ticket_disposition/'.$ticket->id,array('id'=>'ticket_disposition_form','class'=>'form-inner')) ?>                     
                    <input type="hidden" name="client" value="<?php if(!empty($enquiry->enquiry_id)) { echo $enquiry->enquiry_id;}?>">
                    <input type="hidden" name="ticketno" value="<?=$ticket->ticketno?>">
                     <div class="form-group">                 
                       <select class="form-control" id="lead_stage_change" name="lead_stage" onchange="find_description()">
                         <option>---Select Stage---</option>
                         <?php foreach($ticket_stages as $single){                               
-                                $id=$single->lead_stage; ?>                              
+                               // $id=$single->lead_stage; ?>                              
                             <option value="<?=$single->stg_id?>"><?php echo $single->lead_stage_name; ?></option>
                             <?php } ?>
                        </select>
@@ -77,14 +77,22 @@
                                <option value="<?php echo $discription->id; ?>"><?php echo $discription->description; ?></option>
                                <?php } ?>
                        </select>
-                    </div>             
+                    </div>     
+
+                    <div class="form-group">
+                       <input type="date" name="c_date" id='disposition_c_date' class="form-control" placeholder=""  >
+                    </div>
+                    <div class="form-group">
+                        <input type="time" name="c_time" id='disposition_c_time' class="form-control" placeholder=""  >
+                        <input type="hidden" name="dis_notification_id" >
+                    </div>          
                     <div class="form-group">
                       <textarea class="form-control" name="conversation"></textarea>
                     </div>
 
                    <div class="sgnbtnmn form-group text-center">
                       <div class="sgnbtn">
-                         <input type="submit" value="Submit" class="btn btn-primary"  name="Submit">
+                         <input id="ticket_disposition_save" type="button" value="Submit" class="btn btn-primary"  name="Submit">
                       </div>
                    </div>       
                    <?php echo form_close()?>
@@ -92,3 +100,20 @@
               </div>
             </div>
          
+
+<script type="text/javascript">
+  $("#ticket_disposition_save").on('click',function(e){
+   e.preventDefault();
+   var disposition = getSelectedText('lead_stage_change');
+   var name = $("#ticket_holder").val();
+    var time  =   $("#disposition_c_time").val();      
+     var task_date =   $("#disposition_c_date").val();            
+      var uid = "<?=$this->session->user_id?>"; 
+      var msg = disposition+" : "+name;
+      var ticketno = $("input[name=ticketno]").val();
+      var response_id = writeUserData(uid,msg,ticketno,task_date,time);
+      $("input[name=dis_notification_id]").val(response_id);
+    //alert(name);
+    $("#ticket_disposition_form").submit();
+  });
+</script>

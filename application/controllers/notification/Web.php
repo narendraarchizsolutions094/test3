@@ -11,8 +11,13 @@ class Web extends CI_Controller{
     	$enq_id	=	$this->input->post('enq_id');
     	$this->db->where('notification_id',$notification_id);
     	$res	=	$this->db->get('query_response')->row_array();
+
     	$html = '';
+
     	if(!empty($res)){
+
+            if($res['task_type']!=17)
+            {
     		$this->db->select('enquiry_id,name_prefix,name,lastname,status');
     		$this->db->where('Enquery_id',$enq_id);
     		$enq_res	=	$this->db->get('enquiry')->row_array();    		
@@ -32,6 +37,18 @@ class Web extends CI_Controller{
                     <label>Snooze Till? (Time)</label>
                     <input name='snooze_till' type='time' class='form-control'>
             </div>`;*/
+        }
+        else
+        {
+            $this->db->select('*');
+            $this->db->where('ticketno',$enq_id);
+            $enq_res    =   $this->db->get('tbl_ticket')->row_array(); 
+
+            $url  = base_url().'ticket/view/'.$enq_res['ticketno'];
+           
+           $html .= '<b>Subject :'.$enq_res['message'].'</b><br>'.$res['task_remark'].'<br><a href="'.$url.'"><b>'.$enq_res['name'].'</b></a><br>';
+        }
+
     	}
     	echo $html;
     }

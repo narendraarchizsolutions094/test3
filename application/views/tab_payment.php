@@ -158,11 +158,11 @@
                               <?php 
                               $id = '';
                               foreach($all_estage_lists as $single){                 
-                                 $id=$single->lead_stage;                              
+                                 //$id=$single->lead_stage;                              
                               }
                               ?>
                               <?php foreach ($all_stage_lists as $stage) {  ?>
-                              <option value="<?= $stage->stg_id?>" <?php if ($stage->stg_id == $id) {echo 'selected';}?>><?php echo $stage->lead_stage_name; ?></option>
+                              <option value="<?= $stage->stg_id?>" <?php if ($stage->stg_id == $details->lead_stage) {echo 'selected';}?>><?php echo $stage->lead_stage_name; ?></option>
                               <?php } ?>
                            </select>
                      </div>

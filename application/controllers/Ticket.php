@@ -94,15 +94,184 @@ class Ticket extends CI_Controller {
 	}	
 	
 	public function index(){
-		
-		$data['title'] = "All Ticket";
-		$data["tickets"] = $this->Ticket_Model->getall();
+	
+		$this->load->model('Datasource_model'); 
+        $this->load->model('dash_model'); 
+        $this->load->model('enquiry_model'); 
+        $this->load->model('report_model'); 
+
+        if(isset($_SESSION['ticket_filters_sess']))
+      		 unset($_SESSION['ticket_filters_sess']);
+
+        $data['sourse'] = $this->report_model->all_source();
+        $data['title'] = "All Ticket";
+        $data["tickets"] = $this->Ticket_Model->getall();
+        //print_r($data['tickets']); exit();
+        $data['created_bylist'] = $this->User_model->read();
+        $data['products'] = $this->dash_model->get_user_product_list();
+        $data['prodcntry_list'] = $this->enquiry_model->get_user_productcntry_list();
+        $data['problem'] = $this->Ticket_Model->get_sub_list();
 		//print_r($data["tickets"]);die;
+		$data['issues'] = $this->Ticket_Model->get_issue_list();
 		$data['user_list'] = $this->User_model->companey_users();
 		$data['content'] = $this->load->view('ticket/list-ticket', $data, true);
 		$this->load->view('layout/main_wrapper', $data);
 		
 	}
+
+
+
+    public function ticket_set_filters_session(){
+         $this->session->set_userdata('ticket_filters_sess',$_POST);
+         //print_r($_SESSION);
+     }
+      public function chk()
+      {
+      	//$data['problem'] = $this->Ticket_Model->get_sub_list();
+      	//print_r($data['problem']); exit();
+      	//print_r($this->session->ticket_filters_sess); exit();
+
+      	$data['issues'] = $this->Ticket_Model->get_issue_list();
+      	//print_r($data['issues']); exit();
+
+      	$all_reporting_ids    =   $this->common_model->get_categories($this->session->user_id);
+      	// print_r($all_reporting_ids); exit();
+      	print_r($this->session->ticket_filters_sess).'<br><Br>';
+          $post = array('search'=>array('value'=>''),'length'=>10,'start'=>0);
+         $this->load->model('Ticket_datatable_model');
+         $this->Ticket_datatable_model->_get_datatables_query($post);
+         $query = $this->db->get();
+        print_r($query->result());
+         // //$data  = array();
+         // // foreach ($res as $point)
+         // // {
+         // //     $sub = array_values((array)$point);
+         // //     $data[] = array_slice($sub, 0,11);
+         // // }
+
+         // print_r($res);
+      }
+     public function ticket_load_data()
+     {
+        // $_POST = array('search'=>array('value'=>''),'length'=>10,'start'=>0);
+         $this->load->model('Ticket_datatable_model');
+         
+         $res = $this->Ticket_datatable_model->getRows($_POST);
+         //print_r($res); exit();
+         $data  = array();
+         foreach ($res as $point)
+         {
+             $sub = array();
+             $sub[] = '<input type="checkbox" onclick="event.stopPropagation();">';
+             $sub[] = $point->id;
+             $sub[] = '<a href="'.base_url('ticket/view/'.$point->ticketno).'">'.$point->ticketno.'</a>';
+             $sub[] = $point->clientname??"NA";
+             $sub[] = $point->email??"NA";
+             $sub[] = $point->phone??"NA";
+             $sub[] = $point->country_name??"NA";
+             $sub[] = $point->assign_to_name??"NA";
+             $sub[] = $point->created_by_name??"NA";
+             $sub[] = '<span class="label label-'.($point->priority==1? 'success">Low' : ($point->priority==2?'warning">Medium':'danger">High')).'</span>';
+             $sub[] = $point->coml_date;
+             $data[] = $sub;
+           }
+
+         //print_r($res);
+         $output = array(
+            "draw" => $_POST['draw'],
+            "recordsTotal" => $this->Ticket_datatable_model->countAll(),
+            "recordsFiltered" => $this->Ticket_datatable_model->countFiltered($_POST),
+            "data" => $data,
+        );
+          echo json_encode($output);
+     }
+
+
+     public function view_tracking()
+     {
+     	if($post = $this->input->post())
+     	{
+     		if($post['trackingno'])
+     		{
+     			 $ch = curl_init();
+
+		        curl_setopt($ch, CURLOPT_URL, "https://thecrm360.com/new_crm/ticket/gc_vtrans_api/".$post['trackingno']);
+
+		        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+
+		        $output = curl_exec($ch);
+
+		        curl_close($ch);  
+
+		        if($output=='')
+		        {
+		        	echo '<center>No Record Found.</center>';
+		        	exit();
+		        }
+
+		        $a = json_decode($output);
+		        $table  = $a->Table;
+		        $table1 = $a->Table1;
+		        $table2 = $a->Table2;
+		        $table3 = $a->Table3;
+		        //echo 
+		        echo'<table class="table table-bordered">
+		        <tr><th colspan="4" style="text-align:center;">Tracking Number: '.$table->GCNO.'</td></tr>
+		        <tr><th>Date:</th><td>'.$table->GC_Date.'</td><th>Status:</th><td>'.$table->status.'</td></tr>
+		         <tr><th>Delivery Location:</th><td  colspan="3">'.$table->DeliveryLocation.'</td></tr>
+		         <tr><th>Delivery Branch:</th><td>'.$table->DeliveryBranch.'</td><th>Booking Branch:</th><td>'.$table->BookingBranch.'</td></tr>';
+		        if(sizeof((array)$table->EDD))
+		        	echo' <tr><th>EDD</th><td colspan="3">'.print_r($table->EDD).'</td></tr>';
+
+		         echo'<tr><th>Delivery Date:</th><td>'.$table->DeliveryDate.'</td><th>Arrival Date:</th><td>'.$table->ArrivalDate.'</td></tr>
+		         <tr><th>Delivery Type:</th><td>'.$table->DeliveryType.'</td><th>CRNO:</th><td>'.$table->CRNO.'</td></tr>
+		        </table>
+		        <center style="color:red; padding:0px 0px 0px 10px; cursor:pointer;" onclick="$(this).hide(),$(\'.hiddenTrackingDetails\').show();">View More</center>
+		        <div class="hiddenTrackingDetails" style="display:none;">
+	        	<table class="table table-bordered">
+		        	<tr><th colspan="4" style="text-align:center;">Branch Details</th></tr>
+		        	<tr><th>Branch Name:</th><td>'.$table1->Branch_Name.'</td><th>Contact Person:</th><td>'.$table1->Contact_Person.'</td></tr>	
+		        	<tr><th>Branch Address:</th><td colspan="3">'.$table1->Address.'</td></tr>
+		        	<tr><th>City Name:</th><td>'.$table1->City_name.'</td><th>Pincode:</th><td>'.$table1->Pin_Code.'</td></tr>
+		        	<tr><th>STD Code:</th><td>'.$table1->Std_Code.'</td><th>Mobile:</th><td>'.$table1->mobileno.'</td></tr>
+		        	<tr><th>Phone No:</th><td>'.$table1->phoneno.'</td><th>Email:</th><td>'.$table1->EMail_Id.'</td></tr>
+		        	<tr><th>Latitude:</th><td>'.$table1->Latitude.'</td><th>Longitude:</th><td>'.$table1->Longitude.'</td></tr>
+	        	</table>
+
+	        	<table class="table table-bordered">
+		        	<tr><th colspan="4" style="text-align:center;">Delivery Details</th></tr>
+		        	<tr><th>Branch Name:</th><td>'.$table2->Branch_Name.'</td><th>Contact Person:</th><td>'.$table2->Contact_Person.'</td></tr>	
+		        	<tr><th>Branch Address:</th><td colspan="3">'.$table2->Address.'</td></tr>
+		        	<tr><th>City Name:</th><td>'.$table2->City_name.'</td><th>Pincode:</th><td>'.$table2->Pin_Code.'</td></tr>
+		        	<tr><th>STD Code:</th><td>'.$table2->Std_Code.'</td><th>Mobile:</th><td>'.$table2->mobileno.'</td></tr>
+		        	<tr><th>Phone No:</th><td>'.$table2->phoneno.'</td><th>Email:</th><td>'.$table2->EMail_Id.'</td></tr>
+		        	<tr><th>Latitude:</th><td>'.$table2->Latitude.'</td><th>Longitude:</th><td>'.$table2->Longitude.'</td></tr>
+	        	</table>';
+	        	if(sizeof($table3)>0)
+	        	{
+	        		echo'<table class="table table-bordered">
+		        	<tr><th colspan="5" style="text-align:center;">Timeline</th></tr>
+		        	<tr><th>From</th><th>To</th><th>Dep. Date</th><th>Arr. Date</th><th>Status</th></tr>
+		        	';
+		        	
+		        	foreach($table3 as $res)
+		        	{
+		        		echo'<tr>
+		        				<td>'.$res->From_Station.'</td>
+		        				<td>'.$res->To_Station.'</td>
+		        				<td>'.$res->Depature_Date.'</td>
+		        				<td>'.$res->Arrival_Date.'</td>
+		        				<td>'.$res->Status_Name.'</td>
+		        			</tr>';
+		        	}
+		        	echo'</table>';
+	        	}
+		        echo'</div>
+		        ';
+	     	}
+     	}
+     }
+
 	public function view1($tckt = ""){		
 		if(isset($_POST["reply"])){
 			            $subject = $this->input->post("subjects", true);
@@ -123,25 +292,36 @@ class Ticket extends CI_Controller {
 		}		 
 		$data['title'] = "View ";
 		//$data["problem"] = $this->Ticket_Model->getissues();
-		$data['problem'] = $this->Ticket_Model->get_sub_list();
+		$datexpressiona['problem'] = $this->Ticket_Model->get_sub_list();
 		$data['content'] = $this->load->view('ticket/view-ticket', $data, true);
 		$this->load->view('layout/main_wrapper', $data);		
 	}
 	function view($tckt = ""){ 
-		if(isset($_POST["issue"])){			
-			$this->Ticket_Model->updatestatus();
-			redirect(base_url("ticket/view/".$tckt), "refresh");
-		}
+		
+		$this->load->model('enquiry_model');
+		
 		$data = array();
-		$data["ticket"] = $this->Ticket_Model->get($tckt);		
+		$data["ticket"] = $this->Ticket_Model->get($tckt);	
+		//print_r($data['ticket']);exit();	
 		$data['all_description_lists']    =   $this->Leads_Model->find_description();		
+
+
+		$data["clients"] = $this->Ticket_Model->getallclient();
+		$data["product"] = $this->Ticket_Model->getproduct();
+
 		$data["conversion"] = $this->Ticket_Model->getconv($data["ticket"]->id);
 		$data['problem'] = $this->Ticket_Model->get_sub_list();
  
+ 		$data['prodcntry_list'] = $this->enquiry_model->get_user_productcntry_list();
+        $data['problem'] = $this->Ticket_Model->get_sub_list();
+        $data['issues'] = $this->Ticket_Model->get_issue_list();
 		//$data['data'] = $data;
 		$this->load->model('enquiry_model');
         $data['enquiry'] = $this->enquiry_model->enquiry_by_id($data["ticket"]->client);
 		$data['ticket_stages'] = $this->Leads_Model->find_estage($data['enquiry']->product_id,4);
+		$data['leadsource'] = $this->Leads_Model->get_leadsource_list();
+		//print_r($data['leadsource']);	
+		//print_r($data['ticket_stages']); exit();
 		$this->load->model(array('form_model','dash_model','location_model'));
         $this->load->helper('custom_form_helper');
 
@@ -156,13 +336,28 @@ class Ticket extends CI_Controller {
 	}
 
 	public function ticket_disposition($ticketno){
+		//print_r($_POST); exit();
 		$lead_stage	=	$this->input->post('lead_stage');
 		$stage_desc	=	$this->input->post('lead_description');
 		$stage_remark	=	$this->input->post('conversation');
 		$client	=	$this->input->post('client');
+
+		$stage_date = date("d-m-Y",strtotime($this->input->post('c_date')));
+		$stage_time = date("H:i:s",strtotime($this->input->post('c_time')));
+
 		$user_id = $this->session->user_id;
 		$this->session->set_flashdata('SUCCESSMSG', 'Update Successfully');
         $this->Ticket_Model->saveconv($ticketno,'Stage Updated',$stage_remark,$client,$user_id,$lead_stage,$stage_desc);
+
+        $contact_person = '';
+        $mobileno = '';
+        $email = '';
+        $designation = '';
+        $enq_code = $this->input->post('ticketno');
+        $notification_id = $this->input->post('dis_notification_id');
+        $dis_subject = '';
+
+        $this->Leads_Model->add_comment_for_events_popup($stage_remark,$stage_date,$contact_person,$mobileno,$email,$designation,$stage_time,$enq_code,$notification_id,$dis_subject,17);
         $ticketno	=	$this->input->post('ticketno');
         redirect('ticket/view/'.$ticketno);
 	}
@@ -176,9 +371,9 @@ public function assign_tickets() {
             $notification_data=array();$assign_data=array();
             if (!empty($move_enquiry)) {
                 foreach ($move_enquiry as $key) {
-$this->db->set('assign_to', $assign_employee);
-$this->db->where('id', $key);
-$this->db->update('tbl_ticket');    
+					$this->db->set('assign_to', $assign_employee);
+					$this->db->where('id', $key);
+					$this->db->update('tbl_ticket');    
                 }
                 echo display('save_successfully');
             } else {
@@ -187,7 +382,29 @@ $this->db->update('tbl_ticket');
         }
     }	
 	
-	public function edit($tckt = ""){
+	public function update_ticket($tckt = "")
+	{	
+		//print_r($_POST); exit();
+		if(isset($_POST["ticketno"]))
+		{
+			$_POST['relatedto'] = $_POST['issue'];
+			$this->Ticket_Model->updatestatus();
+			//echo $this->session->flashdata('message'); exit();
+				//redirect(base_url("ticket/view/".$tckt), "refresh");
+
+			$res = $this->Ticket_Model->save($this->session->companey_id,$this->session->user_id);
+			
+			if($res)
+			{
+				$this->session->set_flashdata('message', 'Successfully Updated ticket');
+            	redirect(base_url('ticket/view/'.$tckt), "refresh");
+				//echo'in';
+			}
+		
+		}
+		echo 'out';
+	}
+	public function edit($tckt=""){
 		
 		if(isset($_POST["ticketno"]))
 		{
@@ -394,8 +611,8 @@ $this->db->update('tbl_ticket');
 	public function add(){
 		
 		if(isset($_POST["client"])){
-			
-			$res = $this->Ticket_Model->save($this->session->companey_id,$this->session->user_id);
+		$res = $this->Ticket_Model->save($this->session->companey_id,$this->session->user_id);
+			// $res = $this->Ticket_Model->save($this->session->companey_id,$this->session->user_id);
 			if($res)
 			{
 				$this->session->set_flashdata('message', 'Successfully added ticket');
@@ -567,6 +784,19 @@ public function add_subject() {
             $this->session->set_flashdata('exception', display('please_try_again'));
         }
         redirect('Ticket/add_subject');
+	}
+	public function gc_vtrans_api($gc_no){
+        $url = "http://203.112.143.175/VTWS/Service.asmx?wsdl";
+        $soapclient = new SoapClient($url,array('UserName' => 'vtransweb','Password'=>'vt@2016'));
+        $response = $soapclient->__soapCall('GetTrackNTraceData', array('parameters'=>array('UserName' => 'vtransweb','Password'=>'vt@2016','Gc_No'=>$gc_no)));
+        $xml = $response->GetTrackNTraceDataResult->any;
+        $response = simplexml_load_string($xml);
+        $ns = $response->getNamespaces(true);
+        $res = '';
+        if(!empty($response->NewDataSet)){
+            $res = json_encode($response->NewDataSet);
+        }
+        echo $res;
     }
 }
 
