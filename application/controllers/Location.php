@@ -26,7 +26,8 @@ class location extends CI_Controller {
     function territory() {
         if (user_role('13') == true) {
         }
-        $data['title'] = display('country_list');
+
+        $data['title'] = display('territory_lsit');
         $data['country'] = $this->location_model->territory_lsit();
         $data['content'] = $this->load->view('location/territory_list', $data, true);
         $this->load->view('layout/main_wrapper', $data);
@@ -242,7 +243,7 @@ class location extends CI_Controller {
             $this->form_validation->set_rules('country_id', display('country_name'), 'required|max_length[50]');
         }
         #-------------------------------# 
-        //when create a user
+        //when create a territory
         if (empty($this->input->post('user_id'))) {
             $data['doctor'] = (object) $postData = [
                 'territory_id' => $this->input->post('user_id', true),
@@ -255,7 +256,7 @@ class location extends CI_Controller {
                 'created_date' => date('Y-m-d'),
                 'state_id' => $this->input->post('state_id')
             ];
-        } else { //update a user
+        } else { //update a territory
             $data['doctor'] = (object) $postData = [
                 'territory_id' => $this->input->post('user_id', true),
 				'comp_id' => $this->session->userdata('companey_id'),
@@ -267,6 +268,8 @@ class location extends CI_Controller {
                 'created_date' => date('Y-m-d'),
                 'state_id' => $this->input->post('state_id')
             ];
+            // print_r( $data['doctor']);
+            // die();
         }
         #-------------------------------#
         if ($this->form_validation->run() === true) {

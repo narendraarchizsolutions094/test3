@@ -1005,7 +1005,8 @@ public function all_description($diesc) {
     }
 
     public function add_comment_for_events($conversation, $lead_id,$stage_code=0,$user_id=0) {
-        
+        $assign_employee = $this->input->post('assign_employee');
+
          if(!empty($this->session->userdata('userno'))){
             $ld_updt_by = $this->session->userdata('userno');
          }else{
@@ -1020,12 +1021,15 @@ public function all_description($diesc) {
         $this->db->set('comment_msg', $conversation);
 		$this->db->set('stage_id', $stage_code);
         $this->db->set('created_by', $ld_updt_by);
+        $this->db->set('assigned_user', $assign_employee);
         $this->db->insert('tbl_comment');
         return $this->db->insert_id();
     }
 
     // to insert drop status and reason
-    public function add_comment_for_events1($conversation, $lead_id,$reason,$drop_status) {        
+    public function add_comment_for_events1($conversation, $lead_id,$reason,$drop_status) {  
+        $assign_employee = $this->input->post('assign_employee');
+
         $ld_updt_by = $this->session->user_id;        
         $adt = date("Y-m-d H:i:s");        
         $this->db->set('lead_id', $lead_id);
@@ -1034,6 +1038,7 @@ public function all_description($diesc) {
         $this->db->set('comment_msg', $conversation);
         $this->db->set('drop_status', $drop_status);
         $this->db->set('drop_reason', $reason);
+        $this->db->set('assigned_user', $assign_employee);
         $this->db->set('created_by', $ld_updt_by);
         $this->db->insert('tbl_comment');
     }

@@ -210,7 +210,7 @@ input[name=lead_stages]{
                           <th>Amount Paid</th>
                           <th>Balance</th>
 													<th>Ordered At</th>
-                          <th>Customer ID</th>
+                          <th>Referrered By</th>
 													<th>Action</th>													
 												</tr>
 											</thead>

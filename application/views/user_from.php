@@ -494,13 +494,16 @@ $(function() {
 
                 var obj = JSON.parse(data);
 
-                html += '<option value="" style="display:none">---Select Region---</option>';
+                html += '<option value="">---Select Region---</option>';
 
                 for (var i = 0; i < (obj.length); i++) {
 
                     html += '<option value="' + obj[i].region_id + '">' + obj[i].region_name + '</option>';
                 }
                 $("#region").html(html);
+                $(".state_id").prop('selectedIndex',0);
+                $('.city_name').prop('selectedIndex',0);
+                $('.territory').prop('selectedIndex',0);
             }
 
 
@@ -533,7 +536,7 @@ $(function() {
 
                 } else {
 
-                    html1 += '<option value="" style="display:none">---Select State---</option>';
+                    html1 += '<option value="" >---Select State---</option>';
 
                     for (var i = 0; i < (obj.length); i++) {
 
@@ -541,6 +544,9 @@ $(function() {
                     }
 
                     $(".state_id").html(html1);
+                $('.city_name').prop('selectedIndex',0);
+                $('.territory').prop('selectedIndex',0);
+
 
                 }
 
@@ -573,7 +579,7 @@ $(function() {
 
                 var obj = JSON.parse(data);
 
-                html += '<option value="" style="display:none">---Select Territory---</option>';
+                html += '<option value="" >---Select Territory---</option>';
 
                 for (var i = 0; i < (obj.length); i++) {
 
@@ -581,6 +587,7 @@ $(function() {
                 }
 
                 $('.territory').html(html);
+                $('.city_name').prop('selectedIndex',0);
             }
         });
     });
@@ -597,7 +604,7 @@ $(function() {
             },
             success: function(data) {
                 var obj = JSON.parse(data);
-                html += '<option value="" style="display:none">---Select City---</option>';
+                html += '<option value="" >---Select City---</option>';
                 for (var i = 0; i < (obj.length); i++) {
 
                     html += '<option value="' + obj[i].id + '">' + obj[i].city + '</option>';

@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <link rel="icon" href="https://archizsolutions.com/wp-content/uploads/2018/03/cropped-Archiz-logo-1-32x32.jpg" sizes="32x32" />
+
   <title></title>
   <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/4.0.2/bootstrap-material-design.css">
 
@@ -205,25 +207,20 @@ if (!empty($this->session->chat_mobile)) {
   <?php
 }
 ?>
-<script>   
-
+<script>    
     var firebaseConfig = {
       apiKey: 'AIzaSyARZpwl0KKW6AUZvRxopOJH1ZBG6ms6j8o',
       authDomain: 'new-crm-f6355.firebaseapp.com',
       projectId: 'new-crm-f6355'
-    };    
+    };
     firebase.initializeApp(firebaseConfig);
     var db = firebase.firestore();
-    
-
-    function add_user(data){ 
+    function add_user(data){
       datetime = "<?=date('Y-m-d h:i:sa')?>";                     
       //user = "<?=$this->session->user_id?>";
       user = data.user_id;
       fullname = data.fullname;
       companey_id = data.companey_id;   
-
-
       db.collection("users").doc(user).set({
           name:fullname,
           comp_id:companey_id,
@@ -236,8 +233,7 @@ if (!empty($this->session->chat_mobile)) {
       })
       .catch(function(error) {
           console.error("Error adding document: ", error);
-      });
-   generate_message('We have accepted your details.We will reach you soon.', 'user',"<?=date('Y-m-d h:i:sa')?>");
+      });      
     }
 
     function makeid(length) {
@@ -280,10 +276,14 @@ if (!empty($this->session->chat_mobile)) {
     } 
     comp_id = "<?=$this->session->chat_companey_id?>"
     user_id = "<?=$this->session->chat_user_id?>"
+    if(user_id){
+      generate_message('We have accepted your details.We will reach you soon.', 'user',"<?=date('Y-m-d h:i:sa')?>");
+    }
     const msg = db.collection('messages').orderBy('created_at').where('comp_id','==',comp_id);
     const msg_observer = msg.onSnapshot(docSnapshot => {          
         docSnapshot.docChanges().forEach(change => {                  
             console.log(docSnapshot.docChanges());
+            
           if (change.type === 'added') {
             msg1_data = change.doc.data(); 
             uid = msg1_data.receiver_id;      

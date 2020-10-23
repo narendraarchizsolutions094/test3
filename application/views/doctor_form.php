@@ -242,6 +242,17 @@
 												</div>
 											</div>
                                       </div>
+                                    
+                                    
+
+
+
+                                      <div id="cmp-custom_form" class="tab-pane fade">
+                                            <div class="row">
+                                                
+                                            </div>
+                                      </div>
+
                                       <div id="cmp-user_list" class="tab-pane fade">
                                       <table class="datatable table table-striped table-bordered" cellspacing="0" width="100%">
                     <thead>
@@ -263,41 +274,11 @@
                        
                         </tr>
                     </thead>
-                    <tbody>
-                        <?php if (!empty($users)) { ?>
-                            <?php $sl = 1; ?>
-                            <?php foreach ($users as $user) { ?>
-                                <tr class="<?php echo ($sl & 1)?"odd gradeX":"even gradeC" ?>">
-                                    <td style="width:20px;"><?php echo $sl; ?></td>
-                                    <td><img src="<?php echo base_url($user->picture); ?>" alt="" width="65" height="50"/></td>
-                                    <td><?php echo $user->s_display_name; ?></td>
-                                    <td><?php echo $user->s_user_email; ?></td>
-                                    <td><?= date('Y-m-d',strtotime($user->dt_create_date)) ?></td>
-                                    <td><?= $user->start_billing_date ?></td>
-                                    <td><?= $user->valid_upto_date ?></td>
-                                    <td><?= $user->last_log ?></td>
-                                    
-                                    <td><?php 
-                                    if ($user->b_status==1) {
-                                        echo "Active";
-                                    }else{
-                                        echo "Inactive";                                        
-                                    } ?>
-                                    </td>
-                                   
-                                    <td>
-                                        <div class="action-btn">
-                              <a  class="btn btn-xs btn-primary"  data-toggle="modal" data-target="#user_edit<?= $user->pk_i_admin_id ?>"><i class="fa fa-edit"></i></a> 
-                                        </div> 
-                                    </td>
-                                 
-                                </tr>
-                                <?php $sl++; ?>
-                            <?php } ?> 
-                        <?php } ?> 
+                    <tbody id="display_users" class="display_users">
+                      
                     </tbody>
                 </table>  <!-- /.table-responsive -->
-									  </div>
+                                      </div>
                                       <div class="form-group row comp-status">
                                         <label class="col-sm-3"><?php echo display('status') ?></label>
                                         <div class="col-xs-9">
@@ -313,6 +294,7 @@
                                     </div>
                                     
                                     
+                                    
 
                                     <div class="form-group row form-btns">
                                         <div class="col-sm-offset-3 col-sm-6">
@@ -323,67 +305,44 @@
                                             </div>
                                         </div>
                                     </div>
-
-
-
-                                      <div id="cmp-custom_form" class="tab-pane fade">
-                                            <div class="row">
-                                                
-                                            </div>
-                                      </div>
 									</div>
 								</div>
 							</div>
                         </form>
                     </div>
-                    <div class="col-md-3"></div>
+             
+   
+ 
+   
                 </div>
             </div>
         </div>
     </div>
 
 </div>
+<style>
+    .ui.dimmer{
+        background-color: transparent;
+        margin-top: 180px;
+    }
+     .scrolling .transition {
 
-<?php if (!empty($users)) { ?>
-                            <?php $sl = 1; ?>
-                            <?php foreach ($users as $user) { ?>
-                                        <div id="user_edit<?= $user->pk_i_admin_id ?>" class="modal fade in" role="dialog" >
-  <div class="modal-dialog modal-lg">
+     }
+</style>
+
+<div id="empModal" class="modal fade" role="dialog">
+  <div class="modal-dialog" >
     <!-- Modal content-->
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">×</button>
-        <h4 class="modal-title">Update Billing and Valid upto date</h4>
+        <h4 class="modal-title">Update Start Date</h4>
       </div>
-      <div class="modal-body">         
-         <form role="form" method="post" id="custom_field_form" action="<?= base_url('customer/update-billing-date') ?>">
-          <input type="hidden" name="user_id" value="<?= $user->pk_i_admin_id ?>">
-          <input type="hidden" name="company_id" value="<?= $user->companey_id ?>">
-          <input type="hidden" name="path" value="<?= current_url() ?>">
-             <div class="form-row">                
-                <div class="form-group col-md-6">
-                    <label for="stdate">Billing Start Date<i class="text-danger">*</i></label>
-                      <input type="date" id="stdate" class="form-control"  value="<?= $user->start_billing_date ?>" name="start_billing_date" required="">
-                </div>
-                <div class="form-group col-md-6">
-                    <label for="label_name">Valid Upto Date<i class="text-danger">*</i></label>
-                      <input type="date" id="label_name" class="form-control"  value="<?= $user->valid_upto_date ?>" name="valid_upto" required="">
-                </div>
-            </div>
-            <div class="row">
-              <div class="col-md-2 col-md-offset-5">
-                <button type="submit" class="btn btn-success">Update</button>                                    
-              </div>
-            </div>
-        </form>                                         
-      </div>      
-      </div>      
+      <div class="modal-body modal-body1">         
+                                                
       </div>      
     </div>
-  
-                                <?php $sl++; ?>
-                            <?php } ?> 
-                        <?php } ?> 
+  </div>
+</div>
 <script type="text/javascript"> 
     $(function(){
         url = "<?=base_url().'form/form/enquiry_extra_field/'?>"+"<?=$doctor->user_id?>";     
@@ -395,5 +354,33 @@
           }
         });
     }); 
+    $(function(){
+          var comp_id = "<?=$doctor->user_id?>";
+          url = "<?=base_url().'customer/displayusers/'?>"+comp_id;     
+          $.ajax({
+            type: "POST",
+            url: url,
+            beforeSend: function(){
+              $("#display_users").html("<div class='lds-hourglass text-center'></div>");            
+            },      
+            success: function(data){                
+              $("#display_users").html(data);              
+            },
+          });
+        }); 
 
+    function  myFunction(userid){
+        $.ajax({
+             url:'<?=base_url().'customer/userModal/'?>',
+             method:'GET',
+             data:{ proid:userid },        
+             beforeSend: function(){
+             $("#userModal").html("<div class='lds-hourglass text-center'></div>");            
+             },      
+            success:function(data)
+            {
+            $('.modal-body1').html(data);
+           }
+        });
+    }
 </script>

@@ -422,7 +422,7 @@
                 <!-- <input type="text" placeholder="Search" />
                 <a href="javascript:;" class="fa fa-search btn btn-circle btn-default btn-sm search"></a> -->
             </div>
-            <ul class="people" style="list-style-type: none;padding-left: 0px;">       
+            <ul class="people" style="list-style-type: none;padding-left: 0px; max-height: 550px;overflow-y: scroll;">       
             </ul>
         </div>
         <div class="right" style="min-height: 575px; max-height: 575px;">
