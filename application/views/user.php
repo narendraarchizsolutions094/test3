@@ -81,7 +81,7 @@
 
                                     <td style="<?php if($department->b_status==0){echo 'color:red';} ?>"><input type="checkbox" value="<?= $department->pk_i_admin_id  ?>" id="checkitem" name="user_ids[]"> <?php echo $sl; ?></td>
 
-                                     <td><a  href="<?php echo base_url("user/edit/$department->pk_i_admin_id") ?>"><?php echo $department->employee_id; ?></a></td>
+                                     <td ><a   href="<?php echo base_url("user/edit/$department->pk_i_admin_id") ?>"><?php echo $department->employee_id; ?></a></td>
 
                                     <td style="<?php if($department->b_status==0){echo 'color:red';} ?>"><?php echo $department->s_display_name;echo '&nbsp;';echo $department->last_name; ?></td>
 

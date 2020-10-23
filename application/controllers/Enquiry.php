@@ -139,7 +139,10 @@ class Enquiry extends CI_Controller
                     $this->rule_model->execute_rules($enq->Enquery_id, array(1, 2, 3, 6, 7));
 
                     $this->Leads_Model->add_comment_for_events(display("move_to_client"), $enq->Enquery_id);
+                
                     $insert_id = $this->Leads_Model->LeadAdd($data);
+                    //insert follow up counter (3 is for client )
+                    $this->enquiry_model->insetFollowupTime($key, 3, $enq->lead_created_date, date('Y-m-d H:i:s'));
 
 
                     if ($this->session->companey_id == 76 || ($this->session->companey_id == 57 && $enq->product_id == 122)) {
@@ -1488,15 +1491,19 @@ class Enquiry extends CI_Controller
         }
 
         $comment_details = $this->Leads_Model->comment_byId($enquiry_code);
-        
+        $countdassigned=0;
         $html = '<br><br><ul class="cbp_tmtimeline" >';
         foreach ($comment_details as $comments) {
             //fetching assigned user start
             $assigned_user = $comments->assigned_user;
-        if ($assigned_user != NULL) {
-           $dassigned= $this->db->select('pk_i_admin_id,s_display_name,last_name')->where(array('pk_i_admin_id'=>$assigned_user))->get('tbl_admin')->row();
-           $userFName=$dassigned->s_display_name;
-           $userLName=$dassigned->last_name;
+        if ($assigned_user != NULL ) {
+           $dassigned= $this->db->select('pk_i_admin_id,s_display_name,last_name')->where(array('pk_i_admin_id'=>$assigned_user))->get('tbl_admin');
+          $countdassigned=$dassigned->num_rows();
+           if($countdassigned==1){
+            $asdata=$dassigned->row();
+           $userFName=$asdata->s_display_name;
+           $userlName=$asdata->last_name;
+           }
         }
             //fetching assigned user end
 
@@ -1545,7 +1552,7 @@ class Enquiry extends CI_Controller
                     <span style="font-weight:900;font-size:10px;">' . ucfirst($comments->remark) . ' </span>';
                 }
                 $html .= '<p>' . date("j-M-Y h:i:s a", strtotime($comments->ddate)) . ' <br>
-                    Updated By : <strong>' . ucfirst($comments->comment_created_by . ' ' . $comments->lastname) . ' </strong></p>
+                    Updated By1 : <strong>' . ucfirst($comments->comment_created_by . ' ' . $comments->lastname) . ' </strong></p>
                   </div>
                 </li>';
             } else if ($comments->comment_msg == 'Enquiry Created') {
@@ -1607,9 +1614,11 @@ class Enquiry extends CI_Controller
                 }
 
                 if ($assigned_user != NULL) {
-                    if ($comments->comment_msg == 'Enquiry Assigned') {
-                    $html .= 'Assigned To: <strong>'.$userFName.' '.$userLName.'</strong>';
+                    if($countdassigned==1){
+                    if ($comments->comment_msg == 'Enquiry Assigned' OR $comments->comment_msg == 'Assign Leads' OR $comments->comment_msg == 'Client Assigned' ) {
+                    $html .= 'Assigned To: <strong>'.$userFName.' '.$userlName.' </strong>';
                     }
+                }
                 }
                 if ($comments->coment_type == 6) {
                     $html .= '<p>' . date("j-M-Y h:i:s a", strtotime($comments->ddate)) . ' <br>
@@ -1953,6 +1962,8 @@ Array
 
                     $this->Leads_Model->add_comment_for_events($this->lang->line("move_to_lead"), $enq->Enquery_id);
                     $insert_id = $this->Leads_Model->LeadAdd($data);
+                     //insert follow up counter (3 is for client )
+                     $this->enquiry_model->insetFollowupTime($key, 2, $enq->created_date, date('Y-m-d H:i:s'));
                 }
                 echo '1';
             } else {
@@ -2027,10 +2038,15 @@ Array
             $this->db->where('enquiry_id', $move_enquiry);
             $this->db->update('enquiry');
 
+
             $this->load->model('rule_model');
             $this->rule_model->execute_rules($enquiry->row()->Enquery_id, array(1, 2, 3, 6, 7));
 
             $this->Leads_Model->add_comment_for_events('Enquiry Moved ', $enquiry->row()->Enquery_id);
+           
+            //insert follow up counter (2 is for lead )
+            $this->enquiry_model->insetFollowupTime($move_enquiry,2,$enquiry->row()->created_date,date('Y-m-d H:i:s'));
+            
             $this->session->set_flashdata('message', 'Enquiry Convert to Lead Successfully');
             redirect('enquiry');
         } else {
