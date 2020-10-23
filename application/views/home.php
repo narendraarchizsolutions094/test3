@@ -404,8 +404,9 @@
                 <div class="timeline-heading">
                   <!--<h4 class="timeline-title">Average</h4>-->
                   <p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>&nbsp;
-                  <?php  if ($leadSum->row()->time!=0) {
-                echo  round(($leadSum->row()->time)/$leadSum,2).' Minutes';}else{echo 'N/A';} ?> 
+                  <?php $leadTime=$leadSum->row()->time;
+                    if ($leadTime!=0) {
+                echo  round(($leadTime/$leadCount),2).' Minutes';}else{echo 'N/A';} ?> 
                   </small></p>
                 </div>
               </div>
