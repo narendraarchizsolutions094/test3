@@ -2807,5 +2807,25 @@ $cpny_id=$this->session->companey_id;
 		$this->db->insert_batch("tbl_comment", $insarr);
 	}
 	imap_close($inbox);
-	}
+    }
+    
+public function insetFollowupTime($enquiry_id,$stageType,$oldTime,$newTime)
+{
+// get the type of stage
+//  $time=$oldTime-$newTime;
+ $datetime1 = strtotime($oldTime);
+ $datetime2 = strtotime($newTime);
+  $secs = $datetime2 - $datetime1; // == return sec in difference
+  $minutes = floor($secs/60);
+// old enq time and stage
+  $data=['enq_id'=>$enquiry_id,'time'=>$minutes,'type'=>$stageType,'date1'=>$oldTime,'date2'=>$newTime,'comp_id' => $this->session->userdata('companey_id'),];
+  $this->db->insert('tbl_followupAvgtime',$data);
+}
+
+
+
+
+
+
+
 }

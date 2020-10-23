@@ -377,80 +377,11 @@
           </div>
       
 <!------------------------------------------------------------------Timeline START-------------------------------------------->
-<!-- <?php
-$eldate=array();$lcdate=array();$cdate=array();$all=array();
-foreach($all_enquiery as $timeline){
-  foreach($cmtdata as $cmt){
-    if($timeline->Enquery_id==$cmt->lead_id){
-    if($cmt->comment_msg==display('enquery_create')){
-      $enqdate = $cmt->created_date;
-    }else if($cmt->comment_msg==display('move_to_lead')){
-      $leaddate = $cmt->created_date;
-    }else if($cmt->comment_msg==display('move_to_client')){
-      $clientdate = $cmt->created_date;
-    }
-    
-  if(!empty($leaddate)){
-      $leaddate=$leaddate;  
-      }else{
-        $leaddate='';
-      }
-  if(!empty($enqdate)){
-      $enqdate=$enqdate;  
-      }else{
-        $enqdate='';
-      }
-  if(!empty($clientdate)){
-      $clientdate=$clientdate;  
-      }else{
-        $clientdate='';
-      }
- 
-$start_date = strtotime($enqdate); 
-$end_date = strtotime($leaddate); 
- 
-$days=($end_date - $start_date)/60/60/24; 
+<?php
 
-$start_date1 = strtotime($leaddate); 
-$end_date1 = strtotime($clientdate); 
-  
-$days1=($end_date1 - $start_date1)/60/60/24;
-
-}
-  }
-  if(!empty($days)){
-    $days=$days;
-  }else{
-    $days=0;
-  }
-  if(!empty($days1)){
-    $days1=$days1;
-  }else{
-    $days1=0;
-  }
-$eldate[]= $days;
-$lcdate[]= $days1;
-$all[]=$timeline->Enquery_id;
-}
-$d=array_sum($eldate);
-$d1=array_sum($lcdate);
-$dd = max(0, $d);
-$dd1 = max(0, $d1);
-$alle=count($all);
-if($alle=='0'){
-  $alle=1;  
-}
-if($dd=='0'){
-  $dd=1;  
-}
-if($dd1=='0'){
-  $dd1=1;  
-}
-$avg1=$dd/$alle;
-$avg2=$dd1/$alle;
 
 //print_r($eldate);exit;
-?> -->
+?>
 <div class="col-lg-6 col-xl-12 mg-t-10">
             <div class="card" style="height:95%;">
 
@@ -472,7 +403,7 @@ $avg2=$dd1/$alle;
               <div class="timeline-panel" style="width:100px !important;border-radius: 30px;">
                 <div class="timeline-heading">
                   <!--<h4 class="timeline-title">Average</h4>-->
-                  <p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>&nbsp;<?php echo round($avg1).' '.'Days'; ?></small></p>
+                  <p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>&nbsp;<?php echo round(($leadSum->row()->time)/$leadCount,2)?> Minutes</small></p>
                 </div>
               </div>
             </li>
@@ -487,7 +418,7 @@ $avg2=$dd1/$alle;
               <div class="timeline-panel" style="width:100px !important;border-radius: 30px;">
                 <div class="timeline-heading">
                   <!--<h4 class="timeline-title">Average</h4>-->
-                  <p><small class="text-muted"><i class="glyphicon glyphicon-time"></i> &nbsp;<?php echo round($avg2).' '.'Days'; ?></small></p>
+                  <p><small class="text-muted"><i class="glyphicon glyphicon-time"></i> &nbsp;<?php echo round(($clientsum->row()->time)/$clientCount2,2)?> Minutes</small></p>
                 </div>
               </div>
             </li>
@@ -496,6 +427,36 @@ $avg2=$dd1/$alle;
                   <?php echo display("Client"); ?>
               </div>
             </li>
+<!-- //dynamic case -->
+<?php
+    if (!empty($enquiry_separation)) {
+$enquiry_separation = json_decode($enquiry_separation, true);
+    foreach ($enquiry_separation as $key => $value) {
+            $ctitle = $enquiry_separation[$key]['title']; 
+            $Count=$this->dashboard_model->countLead($key);
+$sum=$this->dashboard_model->dataLead($key);
+            $stime= $sum->row()->time;
+           
+           ?>
+<li class="timeline-item" style="left:40px !important;">
+              <div class="timeline-badge danger"><i class="glyphicon glyphicon-check"></i></div>
+              <div class="timeline-panel" style="width:100px !important;border-radius: 30px;">
+                <div class="timeline-heading">
+                  <!--<h4 class="timeline-title">Average</h4>-->
+                  <p><small class="text-muted"><i class="glyphicon glyphicon-time"></i> &nbsp;<?php  if ($stime!=0) {
+                echo  round(($stime)/$Count,2).' Minutes';}else{echo 'N/A';} ?> </small></p>
+                </div>
+              </div>
+            </li>
+            <li class="timeline-item">
+              <div class="timeline-badge warning" style="width:150px !important;border-radius: 30px;">
+                 <?= $ctitle ?>
+              </div>
+            </li>
+    <?php } } ?>
+
+
+<!-- // dynamic case end -->
           </ul>
         </div>
         </div>
