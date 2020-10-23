@@ -301,7 +301,11 @@ class Ticket extends CI_Controller {
 		$this->load->model('enquiry_model');
 		
 		$data = array();
-		$data["ticket"] = $this->Ticket_Model->get($tckt);	
+		$data["ticket"] = $this->Ticket_Model->get($tckt);
+		if(empty($data['ticket']))
+		{
+			show_404();
+		}	
 		//print_r($data['ticket']);exit();	
 		$data['all_description_lists']    =   $this->Leads_Model->find_description();		
 
