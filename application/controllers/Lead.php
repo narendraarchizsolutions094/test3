@@ -2726,7 +2726,7 @@ class Lead extends CI_Controller
 
         if (!empty($filter)) {
 
-            $qpart = " (enq.Enquery_id LIKE '%{$filter}%' OR enq.email LIKE '%{$filter}%' OR enq.phone LIKE '%{$filter}%' OR enq.name LIKE '%{$filter}%' OR enq.lastname LIKE '%{$filter}%' OR CONCAT_WS(enq.name,' ',enq.lastname) LIKE '%{$filter}%' OR CONCAT_WS(enq.name_prefix,' ',enq.name,' ',enq.lastname) LIKE '%{$filter}%' OR usr.s_display_name LiKE '%{$filter}%' OR usr.last_name LiKE '%{$filter}%' OR asgn.s_display_name LiKE '%{$filter}%' OR asgn.last_name LiKE '%{$filter}%') AND";
+            $qpart = " (enq.Enquery_id LIKE '%{$filter}%' OR enq.email LIKE '%{$filter}%' OR enq.phone LIKE '%{$filter}%' OR enq.name LIKE '%{$filter}%' OR enq.lastname LIKE '%{$filter}%' OR CONCAT(enq.name,' ',enq.lastname) LIKE '%{$filter}%' OR CONCAT(enq.name_prefix,' ',enq.name,' ',enq.lastname) LIKE '%{$filter}%' OR usr.s_display_name LiKE '%{$filter}%' OR usr.last_name LiKE '%{$filter}%' OR asgn.s_display_name LiKE '%{$filter}%' OR asgn.last_name LiKE '%{$filter}%') AND";
         } else {
             $qpart = "";
         }
