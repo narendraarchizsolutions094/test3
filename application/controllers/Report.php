@@ -421,7 +421,9 @@ class Report extends CI_Controller {
         
         $data['datasourse'] = $this->report_model->all_datasource();
         $this->load->model('User_model');
-        $data['employee'] =$this->User_model->companey_users();
+        //$data['employee'] =$this->User_model->companey_users();
+        $data['employee'] = $this->User_model->read();
+
         $data['process'] = $this->dash_model->product_list();
         $data["dfields"] = $this->report_model->get_dynfields();
         $data["fieldsval"]        = $this->report_model->getdynfielsval();  
