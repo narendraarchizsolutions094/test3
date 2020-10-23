@@ -20,7 +20,7 @@
 				<div class="col-md-8 panel-default panel-body" style ="border:1px solid #f7f7f7">
 				<?php echo form_open_multipart(base_url("ticket/add")); ?>
 			<div class="row ">
-				<?php if($this->session->companey_id==1){ ?>
+				<?php if($this->session->companey_id==65){ ?>
 
 					<div class="trackingDetails"></div>
 
@@ -217,7 +217,10 @@
 		});	
 
 	});
-
+<?php
+if($this->session->companey_id==65)
+{
+?>
 	function loadTracking(that)
 	{	//alert(key);
 		if(that.value=='')
@@ -244,4 +247,7 @@
 			});
 		}
 	}
+<?php 
+}
+?>
 </script>

@@ -3,7 +3,7 @@
 <?php echo form_open_multipart(base_url("ticket/update_ticket/".$ticket->ticketno)); ?>
 
 
-		<?php if($this->session->companey_id==1){ ?>
+		<?php if($this->session->companey_id==65){ ?>
 
 					<div class="trackingDetails"></div>
 
@@ -247,6 +247,11 @@
 			}
 		})
 	});
+
+<?php
+if($this->session->companey_id==65)
+{
+?>
 	function loadTracking(that)
 	{	//alert(key);
 		//alert(that.value);
@@ -274,4 +279,7 @@
 			});
 		}
 	}
+<?php
+}
+?>
 </script>

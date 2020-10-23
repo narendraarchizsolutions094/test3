@@ -518,8 +518,6 @@ function moveto_client(){
   }
 }
 
-
-
 $(document).ready(function() {
 
       $('#ticket_table').DataTable({         

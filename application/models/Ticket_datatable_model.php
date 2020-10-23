@@ -60,6 +60,7 @@ class Ticket_datatable_model extends CI_Model{
          ->join("tbl_admin as for_assign", "for_assign.pk_i_admin_id = tck.assign_to", "LEFT")
          ->join("tbl_admin as for_created", "for_created.pk_i_admin_id = tck.added_by", "LEFT")
          ->join("tbl_product_country prd", "prd.id = tck.product", "LEFT")
+         ->where("tck.company",$this->session->companey_id)
          ->group_by("tck.id");
 
 
