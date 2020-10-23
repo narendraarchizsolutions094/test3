@@ -405,7 +405,7 @@
                   <!--<h4 class="timeline-title">Average</h4>-->
                   <p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>&nbsp;
                   <?php  if ($leadSum->row()->time!=0) {
-                echo  round(($leadSum->row()->time)/$clientCount2,2).' Minutes';}else{echo 'N/A';} ?> 
+                echo  round(($leadSum->row()->time)/$leadSum,2).' Minutes';}else{echo 'N/A';} ?> 
                   </small></p>
                 </div>
               </div>
