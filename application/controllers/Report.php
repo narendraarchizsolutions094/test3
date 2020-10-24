@@ -49,8 +49,10 @@ class Report extends CI_Controller {
          
             $data['from'] = '';
             $data['to'] = '';
+            
             $from = $this->session->userdata('fromdt');
             $to =  $this->session->userdata('todt');
+            
             if($from && $to){
                 $from = date("d/m/Y", strtotime($from));
                 $to = date("d/m/Y", strtotime($to)); 
@@ -72,6 +74,32 @@ class Report extends CI_Controller {
                     $data['to'] = $to1;
                 }
             }
+
+            $updated_from = $this->session->userdata('updated_from1');
+            $updated_to =  $this->session->userdata('updated_to1');
+            
+            if($updated_from && $updated_to){
+                $updated_from = date("d/m/Y", strtotime($updated_from));
+                $updated_to = date("d/m/Y", strtotime($updated_to)); 
+            }else{                
+                if(empty($filters['updated_from_exp'])){
+                    $updated_from ='';  
+                }else{
+                    $updated_dfrom= $filters['updated_from_exp'];
+                    $updated_from = date("d/m/Y", strtotime($updated_dfrom));
+                    $updated_from1= $filters['updated_from_exp'];
+                    $data['updated_from'] = $updated_from1;
+                }
+                if(empty($filters['updated_to_exp'])){
+                    $updated_to ='';
+                }else{
+                   $updated_tto= $filters['updated_to_exp'];
+                   $updated_to = date("d/m/Y", strtotime($updated_tto)); 
+                   $updated_to1= $filters['updated_to_exp'];
+                    $data['updated_to'] = $updated_to1;
+                }
+            }
+
             if(empty($filters['employee'])){
                 $employe ='';
             }else{
@@ -142,7 +170,7 @@ class Report extends CI_Controller {
             }else{
                $all = $filters['all'];
             }
-            $rep_details = $this->report_datatable_model->get_datatables($from,$to,$employe,$phone,$country,$institute,$center,$source,$subsource,$datasource,$state,$lead_source,$lead_subsource,$enq_product,$drop_status,$all);
+            $rep_details = $this->report_datatable_model->get_datatables($from,$to,$updated_from,$updated_to,$employe,$phone,$country,$institute,$center,$source,$subsource,$datasource,$state,$lead_source,$lead_subsource,$enq_product,$drop_status,$all);
             $i=1;
             $data = array();
            foreach ($rep_details as  $repdetails) {
@@ -287,12 +315,29 @@ class Report extends CI_Controller {
            $dfrom= $this->input->post('from_exp');
            $from = date("d/m/Y", strtotime($dfrom));
             }
+            
             if($this->input->post('to_exp')==''){
                 $to ='';
             }else{
                $tto= $this->input->post('to_exp');
                $to = date("d/m/Y", strtotime($tto)); 
             }
+
+
+            if($this->input->post('updated_from_exp')==''){
+              $updated_from ='';  
+             }else{
+            $updated_dfrom= $this->input->post('updated_from_exp');
+            $updated_from = date("d/m/Y", strtotime($updated_dfrom));
+             }
+             
+             if($this->input->post('updated_to_exp')==''){
+                 $updated_to ='';
+             }else{
+                $updated_tto= $this->input->post('updated_to_exp');
+                $updated_to = date("d/m/Y", strtotime($updated_tto)); 
+             }
+
             if($this->input->post('employee')==''){
                 $employe ='';
             }else{
@@ -391,6 +436,8 @@ class Report extends CI_Controller {
    
             'from1'           =>  $from,
             'to1'             =>  $to,
+            'updated_from1'   =>  $updated_from,
+            'updated_to1'     =>  $updated_to,
             'employe1'        =>  $employe,
             'phone1'          =>  $phone,
             'country1'        =>  $country,

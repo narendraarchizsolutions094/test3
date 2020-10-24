@@ -16,6 +16,10 @@ class Report_datatable_model extends CI_Model {
         }
         $from = $this->session->userdata('from1');
         $to= $this->session->userdata('to1');
+        
+        $updated_from = $this->session->userdata('updated_from1');
+        $updated_to = $this->session->userdata('updated_to1');
+
         $phone = $this->session->userdata('phone1');
         $country = $this->session->userdata('country1');
         $institute = $this->session->userdata('institute1');
@@ -49,12 +53,14 @@ class Report_datatable_model extends CI_Model {
                 $where .= " AND Date(enquiry.created_date) >= '$from' AND Date(enquiry.created_date) <= '$to'";
             } else if ($from && !$to) {
                 $from = str_replace('/', '-', $from);            
-                $from = date('Y-m-d H:i:s', strtotime($from));
-                $where .= " AND enquiry.created_date LIKE '%$from%'";
+                $from = date('Y-m-d', strtotime($from));
+                $where .= " AND Date(enquiry.created_date) LIKE '%$from%'";
             } else if (!$from && $to) {            
-                $to = str_replace('/', '-', $to);            $to = date('Y-m-d H:i:s', strtotime($to));
-                $where .= " AND enquiry.created_date LIKE '%$to%'";
-            }
+                $to = str_replace('/', '-', $to);
+                $to = date('Y-m-d', strtotime($to));
+                $where .= " AND Date(enquiry.created_date) LIKE '%$to%'";
+            }            
+
            if($employe!=''){	            		
     			$where .= " AND ( enquiry.created_by IN (".implode(',', $employe).')';
     			$where .= " OR enquiry.aasign_to IN (".implode(',', $employe).'))';  		  
@@ -86,10 +92,27 @@ class Report_datatable_model extends CI_Model {
             if($enq_product!=''){
                $where .= " AND enquiry.product_id IN (".implode(',', $enq_product).')';  
             }
-            if($all!=''){
-                $where.= "AND comment_msg='Stage Updated'";
+            if($all!='' || $updated_from || $updated_to){
+                if ($updated_from && $updated_to) {
+                    $updated_to = str_replace('/', '-', $updated_to);
+                    $updated_from = str_replace('/', '-', $updated_from);            
+                    $updated_from = date('Y-m-d', strtotime($updated_from));
+                    $updated_to = date('Y-m-d', strtotime($updated_to));            
+                    $where .= " AND Date(tbl_comment.created_date) >= '$updated_from' AND Date(tbl_comment.created_date) <= '$updated_to'";
+                } else if ($updated_from && !$updated_to) {
+                    $updated_from = str_replace('/', '-', $updated_from);            
+                    $updated_from = date('Y-m-d', strtotime($updated_from));
+                    $where .= " AND Date(tbl_comment.created_date) LIKE '%$updated_from%'";
+                } else if (!$updated_from && $updated_to) {            
+                    $updated_to = str_replace('/', '-', $updated_to);           
+                     $updated_to = date('Y-m-d', strtotime($updated_to));
+                    $where .= " AND Date(tbl_comment.created_date) LIKE '%$updated_to%'";
+                }                
                 $this->db->join('tbl_comment','tbl_comment.lead_id=enquiry.Enquery_id','inner');              
-                $this->db->join('lead_stage as lead_stage2','lead_stage2.stg_id=tbl_comment.stage_id','left'); 
+                if($all!=''){
+                    $where.= "AND comment_msg='Stage Updated'";
+                    $this->db->join('lead_stage as lead_stage2','lead_stage2.stg_id=tbl_comment.stage_id','left'); 
+                }
             }
             if($drop_status!=''){            
                 if(!empty($drop_status[0])){
