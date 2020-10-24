@@ -41,7 +41,7 @@
 							if($ord->is_invoice_generated == 1){
 								$invoice_tax ='<a class="btn btn-xs btn-success" href="'.base_url("order/invoice/".$ord->ord_no."/".base64_encode('tax')).'"><i class="fa fa-eye" data-toggle="tooltip" title="" data-original-title="Edit"></i>  Tax Invoice</a>';					
 							}else{
-								$invoice_tax ='<a class="btn btn-xs btn-primary" href="javascript:void(0)" onclick="generate_tax_invoice('.$ord->ord_no.')">Generate Tax Invoice</a>';					
+								$invoice_tax ='<a class="btn btn-xs btn-primary" href="javascript:void(0)" onclick="generate_tax_invoice(`'.$ord->ord_no.'`)">Generate Tax Invoice</a>';					
 							}
 						}
 					}
