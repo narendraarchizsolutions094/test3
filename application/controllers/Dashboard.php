@@ -645,6 +645,9 @@ $this->load->library('zip');
                             if(($ac_type == 'seller' && $user_right!=200) || ($ac_type == 'buyer' && ($user_right!=201 || $user_right!=200)) || ($ac_type == 'admin' && ($user_right==200 || $user_right==201)) ){
                                 $this->session->sess_destroy();
                                 $res = array('status'=>false,'message'=>display('incorrect_email_password'));
+                            }else{
+                                $this->user_model->add_login_history();
+                                $res = array('status'=>true,'message'=>'Successfully Logged In');                           
                             }
                         }else{
                             $this->user_model->add_login_history();
