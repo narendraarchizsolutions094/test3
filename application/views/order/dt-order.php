@@ -38,7 +38,11 @@
 						if ($this->session->user_right != 200) {							
 							$payment_act = '<a href="'.base_url("payment/add/".$ord->ord_no).'" class="btn btn-xs btn-primary"><i class="fa fa-cc" data-toggle="tooltip" title="" data-original-title="Edit"></i>  Payment</a>';
 							$invoice_act	=	'<a class="btn btn-xs btn-default" href="'.base_url("order/invoice/".$ord->ord_no).'"><i class="fa fa-eye" data-toggle="tooltip" title="" data-original-title="Edit"></i>  Invoice</a>';
-							$invoice_tax ='<a class="btn btn-xs btn-success" href="'.base_url("order/invoice/".$ord->ord_no."/".base64_encode('tax')).'"><i class="fa fa-eye" data-toggle="tooltip" title="" data-original-title="Edit"></i>  Tax Invoice</a>';					
+							if($ord->is_invoice_generated == 1){
+								$invoice_tax ='<a class="btn btn-xs btn-success" href="'.base_url("order/invoice/".$ord->ord_no."/".base64_encode('tax')).'"><i class="fa fa-eye" data-toggle="tooltip" title="" data-original-title="Edit"></i>  Tax Invoice</a>';					
+							}else{
+								$invoice_tax ='<a class="btn btn-xs btn-primary" href="javascript:void(0)" onclick="generate_tax_invoice("'.$ord->ord_no.'")">Generate Tax Invoice</a>';					
+							}
 						}
 					}
 

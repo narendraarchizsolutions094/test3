@@ -275,5 +275,10 @@ input[name=lead_stages]{
 			var trgt = $(this).data("target");
 			$(trgt).slideToggle(trgt);
 		});
+    function generate_tax_invoice(ord){
+      if(confirm('Are you sure ?') && ord){
+        alert(ord);
+      }
+    }
 	</script>
 
