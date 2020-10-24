@@ -287,7 +287,8 @@ input[name=lead_stages]{
             'Tax invoice generated successfylly!',
             'Now Tax invoice will be visible to buyer',
             'success'
-          )
+            )
+            location.reload();
           }
         });
       }

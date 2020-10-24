@@ -205,7 +205,7 @@ class Order extends CI_Controller {
 		$this->db->where('company',$comp_id);
 		$this->db->where('ord_no',$ord);
 		$this->db->set('is_invoice_generated',1);
-		$this->db->update('tbl_order');
+		echo $this->db->update('tbl_order');
 	}
 	public function loadorders(){
 		//$this->load->model("datatable_model");		
