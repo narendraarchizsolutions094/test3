@@ -200,7 +200,13 @@ class Order extends CI_Controller {
 			$this->session->set_flashdata("error", validation_errors());
 		}
 	}
-	
+	public function generate_tax_invoice($ord){
+		$comp_id	=	$this->session->companey_id;
+		$this->db->where('company',$comp_id);
+		$this->db->where('ord_no',$ord);
+		$this->db->set('is_invoice_generated',1);
+		$this->db->update('tbl_order');
+	}
 	public function loadorders(){
 		//$this->load->model("datatable_model");		
 		$ordarr  	  = $this->order_model->orders(1);

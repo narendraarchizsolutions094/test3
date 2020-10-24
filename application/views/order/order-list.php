@@ -277,7 +277,19 @@ input[name=lead_stages]{
 		});
     function generate_tax_invoice(ord){
       if(confirm('Are you sure ?') && ord){
-        alert(ord);
+        $.ajax({
+          url: "<?= base_url() ?>order/generate_tax_invoice/"?>+ord,
+          type: 'post',
+          dataType: 'json',
+          data: $('form#enquiry_form').serialize(),
+          success: function(data) {
+            Swal.fire(
+            'Tax invoice generated successfylly!',
+            'Now Tax invoice will be visible to buyer',
+            'success'
+          )
+          }
+        });
       }
     }
 	</script>
