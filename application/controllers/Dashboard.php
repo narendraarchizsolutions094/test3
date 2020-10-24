@@ -460,6 +460,7 @@ $this->load->library('zip');
  }
 
     public function validate_login() {  
+        
 	
         $this->form_validation->set_rules('email', display('email'), 'required|max_length[50]|trim');
         $this->form_validation->set_rules('password', display('password'), 'required|max_length[32]|md5');        
@@ -486,7 +487,7 @@ $this->load->library('zip');
             // }
             $user_data = $check_user->row();
             if ($check_user->num_rows() === 1 AND $active==1) {
-            //check validity of account and account type 
+                //check validity of account and account type 
               if($user_data->companey_id==0){
                   $validity_msg="";
                   $validity_status=0;
@@ -634,12 +635,21 @@ $this->load->library('zip');
                             'telephony_agent_id'    => $user_data->telephony_agent_id,
 							'telephony_token'       => $user_data->telephony_token,
                             'expiry_date'           => strtotime($user_data->valid_upto),
-                            'availability'    => $user_data->availability,
-                            'validity_status' =>$validity_status,
-                            'validity_msg'=>$validity_msg
+                            'availability'          => $user_data->availability,
+                            'validity_status'       => $validity_status,
+                            'validity_msg'          => $validity_msg
                         ]);
-                        $this->user_model->add_login_history();
-                        $res = array('status'=>true,'message'=>'Successfully Logged In');                       
+                        if($user_data->companey_id==57){
+                            $user_right = $this->session->user_right;
+                            $ac_type = $this->input->get('type');
+                            if(($ac_type == 'seller' && $user_right!=200) || ($ac_type == 'buyer' && ($user_right!=201 || $user_right!=200)) || ($ac_type == 'admin' && ($user_right==200 || $user_right==201)) ){
+                                $this->session->sess_destroy();
+                                $res = array('status'=>false,'message'=>display('incorrect_email_password'));
+                            }
+                        }else{
+                            $this->user_model->add_login_history();
+                            $res = array('status'=>true,'message'=>'Successfully Logged In');                       
+                        }
                    }
             } else {
                 $res = array('status'=>false,'message'=>display('incorrect_email_password'));

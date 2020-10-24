@@ -341,7 +341,11 @@ if($root=='https://student.spaceinternationals.com'){	 ?>
             $("#loginForm").on("submit",function(e){
                 e.preventDefault();
                 var form = $(this);
-                var url = form.attr('action');
+                var para = '';
+                if("<?=$this->input->get('type')?>"){
+                    para = "?type="+"<?=$this->input->get('type')?>";
+                }
+                var url = form.attr('action')+para;
                 $.ajax({
                     type: "POST",
                     url: url,

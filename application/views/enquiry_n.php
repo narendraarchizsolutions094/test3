@@ -1169,7 +1169,7 @@ for (var i = 0; i < checkboxes.length; i++) {
             success: function(data){       
             $(".nav-stage").html(data);  
             $("#nav-process").hide();   
-            stage_counter();               
+            //stage_counter();               
             }
           });
       }
@@ -1210,7 +1210,7 @@ for (var i = 0; i < checkboxes.length; i++) {
         data: form_data,
         success: function(responseData){
           $('#enq_table').DataTable().ajax.reload();
-          stage_counter();      
+          //stage_counter();      
         }
       });
       });
@@ -1587,7 +1587,7 @@ function delete_recorde() {
 </script>
 <script type='text/javascript'>
 $(window).load(function(){
-  stage_counter();
+  //stage_counter();
 $("#active_class p").click(function() {
     $('.border_bottom_active').removeClass('border_bottom_active');
     $(this).addClass("border_bottom_active");
