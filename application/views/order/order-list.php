@@ -278,7 +278,7 @@ input[name=lead_stages]{
     function generate_tax_invoice(ord){
       if(confirm('Are you sure ?') && ord){
         $.ajax({
-          url: "<?= base_url() ?>order/generate_tax_invoice/"?>+ord,
+          url: "<?=base_url().'order/generate_tax_invoice/'?>"+ord,
           type: 'post',
           dataType: 'json',
           data: $('form#enquiry_form').serialize(),
