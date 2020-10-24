@@ -233,10 +233,10 @@ class Report extends CI_Controller {
                 $row[] = $repdetails->update_date; 
                }
                if (in_array('State', $report_columns)){
-                  $row[] = (!empty($repdetails->state_id)) ? get_state_name($repdetails->state_id):'NA';
+                  $row[] = (!empty($repdetails->state_name)) ? $repdetails->state_name:'NA';
                }
                 if (in_array('City', $report_columns)){
-                  $row[] = (!empty($repdetails->city_id)) ? get_city_name($repdetails->city_id):'NA';
+                  $row[] = (!empty($repdetails->city_name)) ? $repdetails->city_name:'NA';
                }
                if (in_array('Company Name', $report_columns)){
                   $row[] = (!empty($repdetails->company)) ? $repdetails->company:'NA';
@@ -551,10 +551,10 @@ class Report extends CI_Controller {
                 $row[] = $repdetails->update_date; 
                }
                if (in_array('State', $this->session->userdata('post_report_columns'))){
-                  $row[] = (!empty($repdetails->state_id)) ? get_state_name($repdetails->state_id):'NA';
+                  $row[] = (!empty($repdetails->state_name)) ? $repdetails->state_name:'NA';
                }
                 if (in_array('City', $this->session->userdata('post_report_columns'))){
-                  $row[] = (!empty($repdetails->city_id)) ? get_city_name($repdetails->city_id):'NA';
+                  $row[] = (!empty($repdetails->city_name)) ? $repdetails->city_name:'NA';
                }
                if (in_array('Company Name', $this->session->userdata('post_report_columns'))){
                   $row[] = (!empty($repdetails->company)) ? $repdetails->company:'NA';

@@ -34,9 +34,9 @@ class Report_datatable_model extends CI_Model {
         $productlst = $this->session->userdata('productlst');
         $all = $this->session->userdata('all1');        
         if($all){
-            $select = 'enquiry.enquiry_id,enquiry.name_prefix,enquiry.name,enquiry.lastname,enquiry.phone,enquiry.update_date,enquiry.email,enquiry.gender,enquiry.enquiry as enq_remark,tbl_drop.drop_reason as drop_status,enquiry.drop_reason,enquiry.status,lead_source.lead_name,tbl_subsource.subsource_name,lead_description.description,enquiry.lead_discription_reamrk,lead_score.score_name as lead_score,enquiry.status as inq_status,enquiry.created_date as inq_created_date, CONCAT(tbl_admin.s_display_name,tbl_admin.last_name) as created_by_name,CONCAT(admin2.s_display_name,admin2.last_name) as assign_to_name,tbl_product.product_name,lead_stage2.lead_stage_name as followup_name,tbl_product_country.country_name as enq_product_name';
+            $select = 'enquiry.enquiry_id,enquiry.name_prefix,enquiry.name,enquiry.lastname,enquiry.phone,enquiry.update_date,enquiry.email,enquiry.gender,enquiry.enquiry as enq_remark,tbl_drop.drop_reason as drop_status,enquiry.drop_reason,enquiry.status,lead_source.lead_name,tbl_subsource.subsource_name,lead_description.description,enquiry.lead_discription_reamrk,lead_score.score_name as lead_score,enquiry.status as inq_status,enquiry.created_date as inq_created_date, CONCAT(tbl_admin.s_display_name,tbl_admin.last_name) as created_by_name,CONCAT(admin2.s_display_name,admin2.last_name) as assign_to_name,tbl_product.product_name,lead_stage2.lead_stage_name as followup_name,tbl_product_country.country_name as enq_product_name,state.state as state_name,city.city as city_name';
             }else{
-                $select = 'enquiry.enquiry_id,enquiry.name_prefix,enquiry.name,enquiry.lastname,enquiry.phone,enquiry.update_date,enquiry.email,enquiry.gender,enquiry.enquiry as enq_remark,tbl_drop.drop_reason as drop_status,enquiry.drop_reason,enquiry.status,lead_source.lead_name,tbl_subsource.subsource_name,lead_description.description,lead_score.score_name as lead_score,enquiry.lead_discription_reamrk,lead_stage.lead_stage_name as followup_name,enquiry.status,enquiry.created_date as inq_created_date,tbl_product.product_name, CONCAT(tbl_admin.s_display_name,tbl_admin.last_name) as created_by_name,CONCAT(admin2.s_display_name,admin2.last_name) as assign_to_name,tbl_product_country.country_name as enq_product_name';
+                $select = 'enquiry.enquiry_id,enquiry.name_prefix,enquiry.name,enquiry.lastname,enquiry.phone,enquiry.update_date,enquiry.email,enquiry.gender,enquiry.enquiry as enq_remark,tbl_drop.drop_reason as drop_status,enquiry.drop_reason,enquiry.status,lead_source.lead_name,tbl_subsource.subsource_name,lead_description.description,lead_score.score_name as lead_score,enquiry.lead_discription_reamrk,lead_stage.lead_stage_name as followup_name,enquiry.status,enquiry.created_date as inq_created_date,tbl_product.product_name, CONCAT(tbl_admin.s_display_name,tbl_admin.last_name) as created_by_name,CONCAT(admin2.s_display_name,admin2.last_name) as assign_to_name,tbl_product_country.country_name as enq_product_name,state.state as state_name,city.city as city_name';
             }
             $select .= ',enquiry.company';
             $this->db->select($select);                    
@@ -114,6 +114,8 @@ class Report_datatable_model extends CI_Model {
             $this->db->join("(select * from tbl_subsource where comp_id=$comp_id) as tbl_subsource",'tbl_subsource.subsource_id=enquiry.sub_source','left');        
             
             $this->db->join('tbl_datasource','tbl_datasource.datasource_id=enquiry.datasource_id','left');
+            $this->db->join('state','state.id=enquiry.state_id','left');
+            $this->db->join('city','city.id=enquiry.city_id','left');
             $this->db->join('tbl_admin','tbl_admin.pk_i_admin_id=enquiry.created_by','left');
             $this->db->join('tbl_admin as admin2','admin2.pk_i_admin_id=enquiry.aasign_to','left');      
             $this->db->join('lead_stage','lead_stage.stg_id=enquiry.lead_stage','left');        
