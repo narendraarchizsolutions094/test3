@@ -1,15 +1,8 @@
 <div class="row">
-
     <!--  table area -->
-
     <div class="col-sm-12">
-
         <div  class="panel panel-default thumbnail">
-
- 
-
             <div class="panel-heading no-print">
-
                 <?php if(user_access(130)){ ?>
                     <div class="btn-group"> 
 
@@ -47,10 +40,7 @@
                             <th><?php echo display('disolay_name') ?></th>
 
                             <th><?php echo display('user_function') ?></th>
-
-
                             <th>Email</th>
-
                             <th><?php echo display('mobile') ?></th>
                             <th><?php echo display("proccess"); ?></th>
                             <th>Start Billing Date</th> 

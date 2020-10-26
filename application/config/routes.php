@@ -280,6 +280,7 @@ $route['customer/update-billing-date'] = 'customer/update_billing_date';
 
 $route['user/inactive-all'] = 'user/inactiveAlluser';
 
+$route['edit-userrights/(:any)']   = 'userrights/userrights_edit/$1'; 
 
 
 
