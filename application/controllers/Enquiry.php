@@ -113,6 +113,7 @@ class Enquiry extends CI_Controller
             if (!empty($move_enquiry)) {
                 foreach ($move_enquiry as $key) {
                     $enq = $this->enquiry_model->enquiry_by_id($key);
+                    // print_r($enq);
                     $data = array(
                         // 'adminid' => $enq->created_by,
                         'ld_name' => $enq->name,
@@ -1951,9 +1952,11 @@ Array
                         'lead_score' => $lead_score,
                         'lead_stage' => 1,
                         'comment' => $comment,
-                        'ld_status' => '1'
+                        'ld_status' => '1',
+                        
                     );
                     $this->db->set('status', 2);
+                    $this->db->set('lead_created_date',date('Y-m-d H:i:s'));
                     $this->db->where('enquiry_id', $key);
                     $this->db->update('enquiry');
 
@@ -1962,7 +1965,7 @@ Array
 
                     $this->Leads_Model->add_comment_for_events($this->lang->line("move_to_lead"), $enq->Enquery_id);
                     $insert_id = $this->Leads_Model->LeadAdd($data);
-                     //insert follow up counter (3 is for client )
+                     //insert follow up counter (2 is for lead )
                      $this->enquiry_model->insetFollowupTime($key, 2, $enq->created_date, date('Y-m-d H:i:s'));
                 }
                 echo '1';

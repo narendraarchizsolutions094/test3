@@ -83,15 +83,15 @@
 
                                      <td ><a   href="<?php echo base_url("user/edit/$department->pk_i_admin_id") ?>"><?php echo $department->employee_id; ?></a></td>
 
-                                    <td style="<?php if($department->b_status==0){echo 'color:red';} ?>"><?php echo $department->s_display_name;echo '&nbsp;';echo $department->last_name; ?></td>
+                                    <td style="<?php if($department->b_status==0){echo 'color:red';} ?>"><a   href="<?php echo base_url("user/edit/$department->pk_i_admin_id") ?>"><?php echo $department->s_display_name;echo '&nbsp;';echo $department->last_name; ?></a></td>
 
                                     <td style="<?php if($department->b_status==0){echo 'color:red';} ?>"><?php echo $department->user_role;   ?></td>
 
                                   
 
-                                    <td style="<?php if($department->b_status==0){echo 'color:red';} ?>"><?php echo $department->s_user_email; ?></td>
+                                    <td style="<?php if($department->b_status==0){echo 'color:red';} ?>"><a style="<?php if($department->b_status==0){echo 'color:red';}else{echo'color:black; ';} ?>"  href="<?php echo base_url("user/edit/$department->pk_i_admin_id") ?>"><?php echo $department->s_user_email; ?></a></td>
 
-                                    <td style="<?php if($department->b_status==0){echo 'color:red';} ?>"><?php echo $department->s_phoneno; ?></td>
+                                    <td style="<?php if($department->b_status==0){echo 'color:red';} ?>"><a style="<?php if($department->b_status==0){echo 'color:red';}else{echo'color:black; ';} ?>"  href="<?php echo base_url("user/edit/$department->pk_i_admin_id") ?>"><?php echo $department->s_phoneno; ?></a></td>
                                     <td style="<?php if($department->b_status==0){echo 'color:red';} ?>">
                                         <?php 
                                         $process_arr = explode(',', $department->process);
