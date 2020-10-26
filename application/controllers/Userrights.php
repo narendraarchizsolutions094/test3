@@ -24,7 +24,7 @@ class Userrights extends CI_Controller {
         //echo $this->db->last_query();
         $data['user_role'] = $this->db->get('all_modules')->result();
         //print_r($data['user_role']);die;
-        $data['content'] = $this->load->view('Userrights', $data, true);
+        $data['content'] = $this->load->view('userrights', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }
     
