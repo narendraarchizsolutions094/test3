@@ -642,10 +642,11 @@ $this->load->library('zip');
                         if($user_data->companey_id==57){
                             $user_right = $this->session->user_right;
                             $ac_type = $this->input->get('type');
-                            if(($ac_type == 'seller' && $user_right!=200) || ($ac_type == 'buyer' && ($user_right!=201 || $user_right!=200)) || ($ac_type == 'admin' && ($user_right==200 || $user_right==201)) ){
+                            if(($user_right==200 && ($ac_type != 'seller' && $ac_type != 'buyer')) || ($user_right==201 && $ac_type != 'buyer') || ($ac_type == 'admin' && ($user_right==200 && $user_right==201))){
                                 $this->session->sess_destroy();
                                 $res = array('status'=>false,'message'=>display('incorrect_email_password'));
                             }else{
+                                $this->session->set_userdata('app_type',$ac_type);
                                 $this->user_model->add_login_history();
                                 $res = array('status'=>true,'message'=>'Successfully Logged In');                           
                             }
@@ -660,6 +661,7 @@ $this->load->library('zip');
         } else {
             $res = array('status'=>false,'message'=>validation_errors());            
         }
+        
         echo json_encode($res);
     }
 
@@ -773,7 +775,7 @@ public function login_in_process(){
         if ($this->session->userdata('isLogIn') == false)
         redirect('login');
 
-        if ($this->session->userdata('user_right') == 201) // lalantop user
+        if ($this->session->userdata('user_right') == 201 || $this->session->app_type == 'buyer') // lalantop user
         redirect('buy');        
         
         if ($this->session->userdata('user_right') == 200) // lalantop user
@@ -1325,8 +1327,14 @@ $data['clientsum']=$this->dashboard_model->dataLead(3);
         $this->db->update('login_history');
       }
 
-      $this->rememberme->deleteCookie();
-      redirect('login/?c='.$comp_id);
+      if($this->session->companey_id == 57){
+        $parma = '?c='.$comp_id.'&type='.$this->session->app_type;
+      }else{
+        $parma = '?c='.$comp_id;
+      }
+
+      $this->rememberme->deleteCookie();      
+      redirect('login/'.$parma);
     }
 
     //Select country..
