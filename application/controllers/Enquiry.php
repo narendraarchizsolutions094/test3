@@ -147,6 +147,7 @@ class Enquiry extends CI_Controller
 
 
                     if ($this->session->companey_id == 76 || ($this->session->companey_id == 57 && $enq->product_id == 122)) {
+
                         $user_right = '';
                         if ($enq->product_id == 168) {
                             $user_right = 180;
@@ -193,7 +194,7 @@ class Enquiry extends CI_Controller
                         } else {
                             $user_id    =   $this->user_model->create($postData);
                         }
-
+                        
                         $message = 'Email - ' . $enq->email . '<br>Password - 12345678';
                         $subject = 'Login Details';
 
@@ -220,7 +221,7 @@ class Enquiry extends CI_Controller
                         }
                         // $msg .=    " And user created successfully";
                     }
-                }
+                } 
                 echo '1';
             } else {
                 echo "Please Check Enquiry";
