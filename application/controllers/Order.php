@@ -608,6 +608,7 @@ class Order extends CI_Controller {
 				"ord_no"     => $this->input->post('order_id'),
 				"pid" 		 => $this->input->post('product_id'),
 				"status" 	 => $this->input->post('status'),
+				"remark" 	 => $this->input->post('remark'),
 				"created_by" => $this->session->user_id,
 				);
 		if($this->db->insert("ord_prod_stage", $arr)){	
