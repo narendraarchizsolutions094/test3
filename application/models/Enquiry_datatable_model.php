@@ -255,6 +255,8 @@ class Enquiry_datatable_model extends CI_Model {
         $this->db->group_by('enquiry.Enquery_id');        
         $query = $this->db->get();
         return $query->result();
+        //  $query->result();
+        //  echo $this->db->last_query();
     }
  
     function count_filtered()

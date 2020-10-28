@@ -30,10 +30,10 @@ if(empty($api_conf)){
   exit();
 }
 
-if (strlen($phone) >= 12 && ($this->session->companey_id==83 || $this->session->companey_id==81)) {
+if (strlen($phone) >= 12 && ($companey_id==83 || $companey_id==81)) {
     $phone = substr($phone, 2, 10);
 }
-if($this->session->companey_id == 65 && strlen($phone) < 12){
+if($companey_id == 65 && strlen($phone) < 12){
   $phone = "91".$phone;
 }
 
@@ -104,9 +104,10 @@ curl_setopt_array($curl, array(
       ->num_rows(); 
    }
  
-     public function sendwhatsapp($number,$message){
-          
-          $this->db->where('comp_id',$this->session->companey_id);          
+     public function sendwhatsapp($number,$message,$companey_id='',$user_id=''){
+
+          $companey_id = ($companey_id == '') ? $this->session->companey_id : $companey_id;
+          $this->db->where('comp_id',$companey_id);          
           $this->db->where('api_for',1);          
           $email_row  = $this->db->get('api_integration')->row_array();
 
@@ -148,7 +149,7 @@ curl_setopt_array($curl, array(
           $insert_array = array(
                                   'mobile_no'     => $wp_mob_num,
                                   'status'        =>  $response['result_code'],
-                                  'created_by'    =>  $this->session->user_id,
+                                  'created_by'    =>  ($this->session->user_id != '') ? $this->session->user_id : $user_id,
                                   'msg'           => $message,
                                   'response'      => json_encode($response)
                               );
@@ -184,8 +185,10 @@ public function get_chat($number){
         
        }
 
-       public function send_email($to,$subject,$message){
-          $this->db->where('comp_id',$this->session->companey_id);
+       public function send_email($to,$subject,$message,$companey_id=''){
+          $companey_id = ($companey_id == '') ? $this->session->companey_id : $companey_id;
+
+          $this->db->where('comp_id',$companey_id);
           $this->db->where('status',1);
           $email_row  = $this->db->get('email_integration')->row_array();
           

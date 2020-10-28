@@ -1271,11 +1271,11 @@ function  send_sms(){
     alert('You can not send more that 1000 sms at once');
   }else{
     var sms_type = $("#mesge_type").val();
-    if ("<?=$this->session->companey_id?>" == 81 && sms_type!=1) {
-      url =  '<?php echo base_url();?>message/send_sms_career_ex';
-    }else{
+    //if ("<?=$this->session->companey_id?>" == 81 && sms_type!=1) {
+      //url =  '<?php echo base_url();?>message/send_sms_career_ex';
+    //}else{
      url =  '<?php echo base_url();?>message/send_sms';
-    }
+    //}
      $.ajax({
     type: 'POST',
     url: url,

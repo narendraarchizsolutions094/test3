@@ -90,7 +90,7 @@ class Rule_model extends CI_Model {
                             $this->load->model('Message_models');
                             $subject = $row['mail_subject'];
                             $message = $row['template_content'];
-                            if($this->Message_models->send_email($enq_row['email'],$subject,$message)){
+                            if($this->Message_models->send_email($enq_row['email'],$subject,$message,$comp_id)){
                                 //$this->db->where('Enquery_id',$enquiry_code);
                                 //$this->db->update('enquiry',array('rule_executed'=>$id));
                             }
@@ -116,7 +116,7 @@ class Rule_model extends CI_Model {
                         if (!empty($row)) { 
                             $this->load->model('Message_models');                            
                             $message = $row['template_content'];
-                            if($this->Message_models->smssend($phone,$message,$companey_id='',$user_id='')){
+                            if($this->Message_models->smssend($phone,$message,$comp_id,$user_id)){
                                 //$this->db->where('Enquery_id',$enquiry_code);
                                 //$this->db->update('enquiry',array('rule_executed'=>$id));
                             }
@@ -142,7 +142,7 @@ class Rule_model extends CI_Model {
                         if (!empty($row)) { 
                             $this->load->model('Message_models');                            
                             $message = $row['template_content'];
-                            if($this->Message_models->sendwhatsapp($phone,$message)){
+                            if($this->Message_models->sendwhatsapp($phone,$message,$comp_id,$user_id)){
                                 //$this->db->where('Enquery_id',$enquiry_code);
                                 //$this->db->update('enquiry',array('rule_executed'=>$id));
                             }
