@@ -1033,7 +1033,14 @@ class Report_model extends CI_Model {
         $this->db->from('tbl_admin');
         $this->db->where('companey_id',$company_id);
         $this->db->where('b_status',1);
-        $this->db->where_in('pk_i_admin_id',$users);        
+        
+        $this->db->group_start();
+        $user_ids_chunk = array_chunk($users,100);
+        foreach($user_ids_chunk as $id){
+            $this->db->or_where_in('pk_i_admin_id', $id);
+        }
+        $this->db->group_end();
+        //$this->db->where_in('pk_i_admin_id',$users);        
         return $query = $this->db->get()->result();
     }
     public function get_all_reports(){

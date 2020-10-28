@@ -241,40 +241,45 @@
        
 <script type="text/javascript">
 	function update_delivery_status(order_id,product_id,curr){
-		$.ajax({
-		    type: 'GET',
-		    url: "<?=base_url().'order/check_stock/'?>"+order_id+'/'+product_id,
-		    success:function(data){
-		    	if (data=='1') {
-					var url = "<?=base_url().'order/updateorder_product_status'?>";
-					status = curr.value;
-					$.ajax({
-					    type: 'POST',
-					    url: url,
-					    data: {
-					    	order_id:order_id,
-					    	product_id:product_id,
-					    	status:status
-					    },
-					    success:function(data){
-					      Swal.fire(
-				            'success',
-				            'Updated Successfully',
-				            'success'
-				            );
-					      location.reload();
-					    }
-					});			
-		    	}else{
-		    		Swal.fire(
-			            'Error',
-			            'Out of stock item',
-			            'error'
-			            );
-		    	}		      
-		    }
-		});			
-
+		var status_comment = prompt("Please enter your remark", "");	
+		if(status_comment){
+			$.ajax({
+				type: 'GET',
+				url: "<?=base_url().'order/check_stock/'?>"+order_id+'/'+product_id,
+				success:function(data){
+					if (data=='1') {
+						var url = "<?=base_url().'order/updateorder_product_status'?>";
+						status = curr.value;
+						$.ajax({
+							type: 'POST',
+							url: url,
+							data: {
+								order_id:order_id,
+								product_id:product_id,
+								status:status,
+								remark:status_comment
+							},
+							success:function(data){
+							Swal.fire(
+								'success',
+								'Updated Successfully',
+								'success'
+								);
+							location.reload();
+							}
+						});			
+					}else{
+						Swal.fire(
+							'Error',
+							'Out of stock item',
+							'error'
+							);
+					}		      
+				}
+			});
+		}else{
+			location.reload();
+		}			
 	}
 
 	function update_delivery_by(order_id,product_id,curr){

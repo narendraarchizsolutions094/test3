@@ -1,15 +1,8 @@
 <div class="row">
-
     <!--  table area -->
-
     <div class="col-sm-12">
-
         <div  class="panel panel-default thumbnail">
-
- 
-
             <div class="panel-heading no-print">
-
                 <?php if(user_access(130)){ ?>
                     <div class="btn-group"> 
 
@@ -47,10 +40,7 @@
                             <th><?php echo display('disolay_name') ?></th>
 
                             <th><?php echo display('user_function') ?></th>
-
-
                             <th>Email</th>
-
                             <th><?php echo display('mobile') ?></th>
                             <th><?php echo display("proccess"); ?></th>
                             <th>Start Billing Date</th> 
@@ -83,15 +73,15 @@
 
                                      <td ><a   href="<?php echo base_url("user/edit/$department->pk_i_admin_id") ?>"><?php echo $department->employee_id; ?></a></td>
 
-                                    <td style="<?php if($department->b_status==0){echo 'color:red';} ?>"><?php echo $department->s_display_name;echo '&nbsp;';echo $department->last_name; ?></td>
+                                    <td style="<?php if($department->b_status==0){echo 'color:red';} ?>"><a   href="<?php echo base_url("user/edit/$department->pk_i_admin_id") ?>"><?php echo $department->s_display_name;echo '&nbsp;';echo $department->last_name; ?></a></td>
 
                                     <td style="<?php if($department->b_status==0){echo 'color:red';} ?>"><?php echo $department->user_role;   ?></td>
 
                                   
 
-                                    <td style="<?php if($department->b_status==0){echo 'color:red';} ?>"><?php echo $department->s_user_email; ?></td>
+                                    <td style="<?php if($department->b_status==0){echo 'color:red';} ?>"><a style="<?php if($department->b_status==0){echo 'color:red';}else{echo'color:black; ';} ?>"  href="<?php echo base_url("user/edit/$department->pk_i_admin_id") ?>"><?php echo $department->s_user_email; ?></a></td>
 
-                                    <td style="<?php if($department->b_status==0){echo 'color:red';} ?>"><?php echo $department->s_phoneno; ?></td>
+                                    <td style="<?php if($department->b_status==0){echo 'color:red';} ?>"><a style="<?php if($department->b_status==0){echo 'color:red';}else{echo'color:black; ';} ?>"  href="<?php echo base_url("user/edit/$department->pk_i_admin_id") ?>"><?php echo $department->s_phoneno; ?></a></td>
                                     <td style="<?php if($department->b_status==0){echo 'color:red';} ?>">
                                         <?php 
                                         $process_arr = explode(',', $department->process);

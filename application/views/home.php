@@ -403,7 +403,11 @@
               <div class="timeline-panel" style="width:100px !important;border-radius: 30px;">
                 <div class="timeline-heading">
                   <!--<h4 class="timeline-title">Average</h4>-->
-                  <p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>&nbsp;<?php echo round(($leadSum->row()->time)/$leadCount,2)?> Minutes</small></p>
+                  <p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>&nbsp;
+                  <?php $leadTime=$leadSum->row()->time;
+                    if ($leadTime!=0) {
+                echo  round(($leadTime/$leadCount),2).' Minutes';}else{echo 'N/A';} ?> 
+                  </small></p>
                 </div>
               </div>
             </li>
@@ -418,7 +422,10 @@
               <div class="timeline-panel" style="width:100px !important;border-radius: 30px;">
                 <div class="timeline-heading">
                   <!--<h4 class="timeline-title">Average</h4>-->
-                  <p><small class="text-muted"><i class="glyphicon glyphicon-time"></i> &nbsp;<?php echo round(($clientsum->row()->time)/$clientCount2,2)?> Minutes</small></p>
+                  <p><small class="text-muted"><i class="glyphicon glyphicon-time"></i> &nbsp;
+                  <?php  if ($clientsum->row()->time!=0) {
+                echo  round(($clientsum->row()->time)/$clientCount2,2).' Minutes';}else{echo 'N/A';} ?>
+                  </small></p>
                 </div>
               </div>
             </li>

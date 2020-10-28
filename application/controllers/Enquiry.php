@@ -113,6 +113,7 @@ class Enquiry extends CI_Controller
             if (!empty($move_enquiry)) {
                 foreach ($move_enquiry as $key) {
                     $enq = $this->enquiry_model->enquiry_by_id($key);
+                    // print_r($enq);
                     $data = array(
                         // 'adminid' => $enq->created_by,
                         'ld_name' => $enq->name,
@@ -146,6 +147,7 @@ class Enquiry extends CI_Controller
 
 
                     if ($this->session->companey_id == 76 || ($this->session->companey_id == 57 && $enq->product_id == 122)) {
+
                         $user_right = '';
                         if ($enq->product_id == 168) {
                             $user_right = 180;
@@ -192,7 +194,7 @@ class Enquiry extends CI_Controller
                         } else {
                             $user_id    =   $this->user_model->create($postData);
                         }
-
+                        
                         $message = 'Email - ' . $enq->email . '<br>Password - 12345678';
                         $subject = 'Login Details';
 
@@ -219,7 +221,7 @@ class Enquiry extends CI_Controller
                         }
                         // $msg .=    " And user created successfully";
                     }
-                }
+                } 
                 echo '1';
             } else {
                 echo "Please Check Enquiry";
@@ -525,9 +527,9 @@ class Enquiry extends CI_Controller
         //         $this->form_validation->set_rules('mobileno', display('mobileno'), 'max_length[20]|callback_phone_check|required', array('phone_check' => 'Duplicate Entry for phone'));
         //     }
         // }
-        $this->form_validation->set_rules('mobileno', display('mobileno'), 'max_length[20]|callback_phone_check|required', array('phone_check' => 'Duplicate Entry for phone'));
+        $this->form_validation->set_rules('mobileno', display('mobileno'), 'max_length[20]|required|callback_phone_check', array('phone_check' => 'Duplicate Entry for phone'));
         if (!empty($this->input->post('email'))) {
-            $this->form_validation->set_rules('email', display('email'), 'callback_email_check|required', array('email_check' => 'The Email you entered is already exist'));
+            $this->form_validation->set_rules('email', display('email'), 'required|callback_email_check', array('email_check' => 'The Email you entered is already exist'));
         }
 
         $enquiry_date = $this->input->post('enquiry_date');
@@ -1951,9 +1953,11 @@ Array
                         'lead_score' => $lead_score,
                         'lead_stage' => 1,
                         'comment' => $comment,
-                        'ld_status' => '1'
+                        'ld_status' => '1',
+                        
                     );
                     $this->db->set('status', 2);
+                    $this->db->set('lead_created_date',date('Y-m-d H:i:s'));
                     $this->db->where('enquiry_id', $key);
                     $this->db->update('enquiry');
 
@@ -1962,7 +1966,7 @@ Array
 
                     $this->Leads_Model->add_comment_for_events($this->lang->line("move_to_lead"), $enq->Enquery_id);
                     $insert_id = $this->Leads_Model->LeadAdd($data);
-                     //insert follow up counter (3 is for client )
+                     //insert follow up counter (2 is for lead )
                      $this->enquiry_model->insetFollowupTime($key, 2, $enq->created_date, date('Y-m-d H:i:s'));
                 }
                 echo '1';

@@ -275,5 +275,23 @@ input[name=lead_stages]{
 			var trgt = $(this).data("target");
 			$(trgt).slideToggle(trgt);
 		});
+    function generate_tax_invoice(ord){
+      if(confirm('Are you sure ?') && ord){
+        $.ajax({
+          url: "<?=base_url().'order/generate_tax_invoice/'?>"+ord,
+          type: 'post',
+          dataType: 'json',
+          data: $('form#enquiry_form').serialize(),
+          success: function(data) {
+            Swal.fire(
+            'Tax invoice generated successfylly!',
+            'Now Tax invoice will be visible to buyer',
+            'success'
+            )
+            location.reload();
+          }
+        });
+      }
+    }
 	</script>
 

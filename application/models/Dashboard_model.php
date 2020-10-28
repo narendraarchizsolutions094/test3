@@ -37,14 +37,27 @@ class Dashboard_model extends CI_Model {
 	} 
 
 	public function check_user_by_mail_phone($data = []){
-
-		$where = "(tbl_admin.s_user_email='".$data['email']."' OR tbl_admin.s_phoneno='".$data['phone']."')";
-		
-		return $this->db->select("*")
+		if(!empty($data['email']) || !empty($data['phone'])){
+			$where = '';
+			if(!empty($data['email'])){
+				$where = "tbl_admin.s_user_email='".$data['email'];
+			}
+			if(!empty($data['phone'])){
+				if(!empty($where)){
+					$where 	.=	" OR tbl_admin.s_phoneno=".$data['phone'];
+				}else{
+					$where 	.=	"tbl_admin.s_phoneno=".$data['phone'];
+				}
+			}
+			
+			return $this->db->select("*")
 			->from($this->table)
 			->join('user','user.user_id = tbl_admin.companey_id','left')			
 			->where($where)
 			->get()->row();
+		}else{
+			return false;
+		}
 
 	} 
 

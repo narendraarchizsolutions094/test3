@@ -460,6 +460,7 @@ $this->load->library('zip');
  }
 
     public function validate_login() {  
+        
 	
         $this->form_validation->set_rules('email', display('email'), 'required|max_length[50]|trim');
         $this->form_validation->set_rules('password', display('password'), 'required|max_length[32]|md5');        
@@ -486,7 +487,7 @@ $this->load->library('zip');
             // }
             $user_data = $check_user->row();
             if ($check_user->num_rows() === 1 AND $active==1) {
-            //check validity of account and account type 
+                //check validity of account and account type 
               if($user_data->companey_id==0){
                   $validity_msg="";
                   $validity_status=0;
@@ -634,12 +635,25 @@ $this->load->library('zip');
                             'telephony_agent_id'    => $user_data->telephony_agent_id,
 							'telephony_token'       => $user_data->telephony_token,
                             'expiry_date'           => strtotime($user_data->valid_upto),
-                            'availability'    => $user_data->availability,
-                            'validity_status' =>$validity_status,
-                            'validity_msg'=>$validity_msg
+                            'availability'          => $user_data->availability,
+                            'validity_status'       => $validity_status,
+                            'validity_msg'          => $validity_msg
                         ]);
-                        $this->user_model->add_login_history();
-                        $res = array('status'=>true,'message'=>'Successfully Logged In');                       
+                        if($user_data->companey_id==57){
+                            $user_right = $this->session->user_right;
+                            $ac_type = $this->input->get('type');
+                            if(($user_right==200 && ($ac_type != 'seller' && $ac_type != 'buyer')) || ($user_right==201 && $ac_type != 'buyer') || ($ac_type == 'admin' && ($user_right==200 && $user_right==201))){
+                                $this->session->sess_destroy();
+                                $res = array('status'=>false,'message'=>display('incorrect_email_password'));
+                            }else{
+                                $this->session->set_userdata('app_type',$ac_type);
+                                $this->user_model->add_login_history();
+                                $res = array('status'=>true,'message'=>'Successfully Logged In');                           
+                            }
+                        }else{
+                            $this->user_model->add_login_history();
+                            $res = array('status'=>true,'message'=>'Successfully Logged In');                       
+                        }
                    }
             } else {
                 $res = array('status'=>false,'message'=>display('incorrect_email_password'));
@@ -647,6 +661,7 @@ $this->load->library('zip');
         } else {
             $res = array('status'=>false,'message'=>validation_errors());            
         }
+        
         echo json_encode($res);
     }
 
@@ -760,7 +775,7 @@ public function login_in_process(){
         if ($this->session->userdata('isLogIn') == false)
         redirect('login');
 
-        if ($this->session->userdata('user_right') == 201) // lalantop user
+        if ($this->session->userdata('user_right') == 201 || $this->session->app_type == 'buyer') // lalantop user
         redirect('buy');        
         
         if ($this->session->userdata('user_right') == 200) // lalantop user
@@ -1312,8 +1327,14 @@ $data['clientsum']=$this->dashboard_model->dataLead(3);
         $this->db->update('login_history');
       }
 
-      $this->rememberme->deleteCookie();
-      redirect('login/?c='.$comp_id);
+      if($this->session->companey_id == 57){
+        $parma = '?c='.$comp_id.'&type='.$this->session->app_type;
+      }else{
+        $parma = '?c='.$comp_id;
+      }
+
+      $this->rememberme->deleteCookie();      
+      redirect('login/'.$parma);
     }
 
     //Select country..
