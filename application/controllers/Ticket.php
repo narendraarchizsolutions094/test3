@@ -321,6 +321,8 @@ class Ticket extends CI_Controller {
 		$data['all_description_lists']    =   $this->Leads_Model->find_description();	
 
 		$data["clients"] = $this->Ticket_Model->getallclient();
+
+		
 		$data["product"] = $this->Ticket_Model->getproduct();
 		//print_r($data['product']); exit();
 		$data["conversion"] = $this->Ticket_Model->getconv($data["ticket"]->id);

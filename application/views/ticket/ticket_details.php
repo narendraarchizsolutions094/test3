@@ -24,12 +24,16 @@
 		<div class="col-md-6">
 			<div class="form-group">
 				<label>Problem For</label>
-				<select class="form-control add-select2 choose-client" name = "client" required>
+				<select class="form-control add-select2 choose-client" name = "client" required readonly>
 					<option value = "" style ="display:none;">---Select---</option>
 					<?php if(!empty($clients)){
 						foreach($clients as $ind => $clt){
-							?><option value ="<?php echo $clt->enquiry_id ?>" <?php if($ticket->client == $clt->enquiry_id){ echo "selected";} ?> ><?php echo $clt->name." ".$clt->lastname; ?> </option><?php
-						}
+							?> <?php if($ticket->client == $clt->enquiry_id)
+								{ 
+				echo "<option value =".$clt->enquiry_id." selected>".$clt->name."</option>";
+								} 
+
+								}
 					} ?>
 				</select>
 			</div>

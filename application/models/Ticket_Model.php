@@ -111,7 +111,7 @@ class Ticket_Model extends CI_Model {
 	                            'checked' 		=> 0,
 	                            'product_id' 	=>  $_SESSION['process'][0],
 	                            'created_date' 	=>  date("Y-m-d H:i:s"),
-	                            'status' 		=> 1,
+	                            'status' 		=> 3,
 	                            'created_by' 	=> $this->session->user_id,
 	                            'phone'			=> $this->input->post('phone'),
 	                        );
@@ -156,7 +156,6 @@ class Ticket_Model extends CI_Model {
 				}	
 			}	
 
-			//exit();		
 			if(isset($_POST["ticketno"]))
 			{	
 				$arr["name"]   		= ($this->input->post("name", true)) ? $this->input->post("name", true) : "";
@@ -182,6 +181,8 @@ class Ticket_Model extends CI_Model {
 				$arr["complaint_type"] = $this->input->post("complaint_type", true);
 				$arr["ticketno"] 	= "";
 				$arr["status"]   	= 0;
+				// echo $arr['attachment'];
+				// exit();
 				$this->db->insert("tbl_ticket", $arr);				
 				$insid = $this->db->insert_id();				
 				$tckno = "TCK".$insid.strtotime(date("y-m-d h:i:s"));				
@@ -403,12 +404,16 @@ $where .= " OR tck.assign_to IN (".implode(',', $all_reporting_ids).'))';
 			$this->db->where('comp_id',$this->session->companey_id);
 			return $this->db->get('tbl_nature_of_complaint')->result();
 		}
-		public function getallclient(){
+		public function getallclient()
+		{
 			
 			if(($this->session->userdata('user_right')==214)){
+
 			return $this->db->select("*")->where(array("status" => 3, "phone" => $this->session->phone))->get("enquiry")->result();
+
 			}else{
 			return $this->db->select("*")->where(array("status" => 3, "comp_id" => $this->session->companey_id))->get("enquiry")->result();
+			
 			}
 		}
 	public function add_tsub($data) 
