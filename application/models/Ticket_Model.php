@@ -115,7 +115,7 @@ class Ticket_Model extends CI_Model {
 	                            'created_by' 	=> $this->session->user_id,
 	                            'phone'			=> $this->input->post('phone'),
 	                        );
-	    			print_r($postData);
+	    			//print_r($postData);
 	    			$this->db->insert('enquiry', $postData);
 					$cid = $this->db->insert_id();
 					
@@ -150,13 +150,13 @@ class Ticket_Model extends CI_Model {
 			if(!empty($_FILES["attachment"]["name"]))
 			{	echo 'in';
 				$retdata =  $this->do_upload();
-				print_r($retdata);			
+				//print_r($retdata);			
 				if(!empty($retdata["upload_data"]["file_name"])){					
 					$arr["attachment"] = $retdata["upload_data"]["file_name"];
 				}	
 			}	
 
-			exit();		
+			//exit();		
 			if(isset($_POST["ticketno"]))
 			{	
 				$arr["name"]   		= ($this->input->post("name", true)) ? $this->input->post("name", true) : "";
