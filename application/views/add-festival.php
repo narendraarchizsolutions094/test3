@@ -35,7 +35,10 @@
 				{	$i=1;
 					foreach ($festivals->result_array() as $res)
 					{
-					echo'<tr><td>'.$i++.'</td><td>'.$res['festival_name'].'</td><td></td></tr>';
+					echo'<tr><td>'.$i++.'</td><td>'.$res['festival_name'].'</td><td>
+						<a href="'.base_url('holiday/edit-festival/').$res['id'].'"><i class="fa fa-edit"></i></a> &nbsp; 
+						<a onclick="delete_festival('.$res['id'].')"><i class="fa fa-trash"></i></a>
+						</td></tr>';
 					}
 				}
 			?>
@@ -44,3 +47,12 @@
 		</table>
 	</div>
 </div>
+<script type="text/javascript">
+	function delete_festival(id)
+	{
+		if(confirm("Delete ?"))
+		{
+			location.href="<?=base_url('holiday/delete_festival/')?>"+id;
+		}
+	}
+</script>
