@@ -37,36 +37,6 @@
 				</div>
 
 				<div class="form-group col-lg-3">
-					<label>Country</label>
-					<select name="country" class="form-control" onchange="find_region(this.value)" required>
-						<?php
-						echo "<option value=''>--- Select Country---</option>";
-							if(!empty($country))
-							{	$i=1;
-								foreach ($country as $res)
-								{
-								echo'<option value="'.$res->id_c.'" '.($res->id_c == $holiday['country'] ? 'selected':'').'>'.$res->country_name.'</option>';
-								}
-							}
-						?>
-					</select>
-				</div>
-				<div class="form-group col-lg-3">
-					<label>Regions</label>
-					<select name="region" class="form-control" onchange="find_state(this.value)" required>
-					<?php
-						echo "<option value=''>--- Select Region---</option>";
-							if(!empty($region))
-							{	$i=1;
-								foreach ($region as $res)
-								{
-								echo'<option value="'.$res->region_id.'" '.($res->region_id == $holiday['region'] ? 'selected':'').'>'.$res->region_name.'</option>';
-								}
-							}
-						?>
-					</select>
-				</div>
-				<div class="form-group col-lg-3">
 					<label>State</label>
 					<select name="state" class="form-control" onchange="find_city(this.value)" required>
 						<?php

@@ -28,7 +28,7 @@ class Holiday extends CI_controller
 
 		$data['user_list'] = $this->User_model->companey_users();
 		$data['festivals']  = $this->Holiday_Model->getFestival();
-		$data['country'] = $this->location_model->country();
+		$data['state'] = $this->location_model->estate_list();
 		$data['holiday_table'] = $this->Holiday_Model->holiday_table();
 		
 		$data['content'] = $this->load->view('add-holiday', $data, true);
@@ -92,11 +92,7 @@ class Holiday extends CI_controller
 
 		$data['holiday']  = $h = $this->Holiday_Model->holiday_table(array('holi.id'=>$holi_id))[0];
 
-		$data['country'] = $this->location_model->country();
-
-		$data['region'] = $this->location_model->get_region_byid($h['country']);
-
-		$data['state'] = $this->location_model->get_state_byid($h['country'],$h['region']);
+		$data['state'] = $this->location_model->estate_list();
 		
 		$data['city'] = $this->location_model->all_city_bystate($h['state']);
 		
