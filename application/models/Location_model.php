@@ -16,7 +16,7 @@ class Location_model extends CI_Model {
 
         foreach ($data['country'] as $r) {
 
-            echo '<option value="' . $r->id . '">' . $r->city . '</option>';
+             echo '<option value="' . $r->id . '">' . $r->city . '</option>';
 
         }*/
 

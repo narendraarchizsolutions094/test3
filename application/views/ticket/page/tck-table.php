@@ -15,14 +15,17 @@
 			
 			?><tr>
 				<td><?php echo $tck->ticketno ?></td>
-				<td><?php echo $tck->category ?></td>
+				<td><?php echo $tck->issue_name??'NA' ?></td>
 				<td><?php if($tck->sourse  == 1) {
 					echo "Email";
 				}else if($tck->sourse  == 2) {
 					echo "Phone";	
 				} else if($tck->sourse  == 3) {
 					echo "Visit";
-				} ?></td>
+				}else{
+					echo $tck->source_name;
+				}
+				?></td>
 				<td><?php echo date("d, M Y h:i A", strtotime($tck->last_update)); ?></td>
 				<?php
 			?></tr><?php

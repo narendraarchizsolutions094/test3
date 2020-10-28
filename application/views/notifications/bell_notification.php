@@ -3,22 +3,41 @@
       <li><a href="#bell_read" data-toggle="tab">Read</a></li>
       <li><a href="#bell_unread" data-toggle="tab">Unread</a></li>
       <li><a href="#bell_today" data-toggle="tab">Today's</a></li>
-    </ul>    
+    </ul>     
     <!-- Tab panes -->
     <div class="tab-content bell-tab-content" id="notificationdiv">
       <div class="tab-pane active" id="bell_all">        
         <?php
+
           if (!empty($res)) {
             foreach ($res as $key => $value) { 
-              if ($value['enq_status'] == 1) {
-                $url  = base_url().'enquiry/view/'.$value['enquiry_id'];
-              }else if($value['enq_status'] == 2) {
-                $url  = base_url().'lead/lead_details/'.$value['enquiry_id'];
-              }else if($value['enq_status'] == 3) {
-                $url  = base_url().'client/view/'.$value['enquiry_id'];
-              }else{
-                $url  = 'javascript:void(0)';
+
+
+              if($value['task_type']!=17)
+              {
+
+                  if ($value['enq_status'] == 1) {
+                    $url  = base_url().'enquiry/view/'.$value['enquiry_id'];
+                  }else if($value['enq_status'] == 2) {
+                    $url  = base_url().'lead/lead_details/'.$value['enquiry_id'];
+                  }else if($value['enq_status'] == 3) {
+                    $url  = base_url().'client/view/'.$value['enquiry_id'];
+                  }else{
+                    $url  = 'javascript:void(0)';
+                  }
               }
+              else
+              {
+                   $url  = base_url().'ticket/view/'.$value['query_id'];
+                   $CI = & get_instance();
+
+                   $CI->load->model('Ticket_Model');
+                  $ticket =  $CI->Ticket_Model->get($value['query_id']);
+                  //print_r($tic);
+                  $value['subject'] = $ticket->name;
+                  $value['user_name'] = $ticket->clientname;
+              }
+
               if ($value['noti_read']) {
                 $flag = "<a href='javascript:void(0)' onclick='noti_make_unread(".$value["resp_id"].")' class='btn btn-default btn-sm pull-right'>Unread</a>";
               }else{

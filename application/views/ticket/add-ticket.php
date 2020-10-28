@@ -52,6 +52,12 @@
 				</div>
 				<div class="col-md-6">
 					<div class="form-group">
+						<label>Phone <i class="text-danger">*</i></label>
+						<input type = "text" class="form-control" name = "phone" required>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="form-group">
 						<label>Email <i class="text-danger">*</i></label>
 						<input type = "text" class="form-control" name = "email" required>
 					</div>
@@ -186,6 +192,7 @@
 				var jdata = JSON.parse(resp);
 				$("input[name=name]").val(jdata.name);
 				$("input[name=email]").val(jdata.email);
+				$("input[name=phone]").val(jdata.phone);
 			}
 		})
 	});
@@ -195,6 +202,7 @@
 				type    : "post",
 			    data    : {product: $(this).val(), client : $(".choose-client").val()},
 				success : function(resp){
+					//alert(resp);
 					var jresp = JSON.parse(resp);
 					if(jresp.status == "found"){
 						$("#waranty-start").html("<b>AMC From : </b>"+jresp.from_date+"<br />");
