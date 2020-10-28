@@ -36,29 +36,20 @@
 					<input type="date" name="dateto" class="form-control" value="<?=date('Y-m-d')?>" required>
 				</div>
 
-				<div class="form-group col-lg-3">
-					<label>Country</label>
-					<select name="country" class="form-control" onchange="find_region(this.value)" required>
-						<?php
-						echo "<option value=''>--- Select Country---</option>";
-							if(!empty($country))
-							{	$i=1;
-								foreach ($country as $res)
-								{
-								echo'<option value="'.$res->id_c.'">'.$res->country_name.'</option>';
-								}
-							}
-						?>
-					</select>
-				</div>
-				<div class="form-group col-lg-3">
-					<label>Regions</label>
-					<select name="region" class="form-control" onchange="find_state(this.value)" required>
-					</select>
-				</div>
+				
 				<div class="form-group col-lg-3">
 					<label>State</label>
 					<select name="state" class="form-control" onchange="find_city(this.value)" required>
+						<?php
+						echo "<option value=''>--- Select State---</option>";
+							if(!empty($state))
+							{	$i=1;
+								foreach ($state as $res)
+								{
+								echo'<option value="'.$res->id.'">'.$res->state.'</option>';
+								}
+							}
+						?>
 					</select>
 				</div>
 			<!-- 	<div class="form-group col-lg-3">
@@ -135,141 +126,32 @@
 	 		location.href="<?=base_url('Holiday/delete-holiday/')?>"+id;
 	 	}
 	 }
-
-            function find_region(id) {
-       
-            $.ajax({
-            type: 'POST',
-            url: '<?=base_url()?>/location/get_region_byid',
-            data: {country_id:id}
-            })
-            .done(function(data){
-            if(data!=''){
-              $("select[name=region]").html(data);
-            }else{
-             $("select[name=region]").html(''); 
-            }
-            })
-            .fail(function() {
-            
-            });
-            }
-        </script>
+           
+function find_city() 
+{
+    
+    var state = $("select[name=state]").val();
+    
+    $.ajax({
+    type: 'POST',
+    url: 'https://localhost/crm/location/select_city_by_state',
+    data: {state_id:state},
+    
+    success:function(data){
+        //alert(data);
+        var html='';
+        var obj = JSON.parse(data);
         
-        <script type="text/javascript">
-            function find_territory() 
-            {
-       			var con = $("select[name=country]").val();
-       			var reg = $("select[name=region]").val();
-            $.ajax({
-            type: 'POST',
-            url: 'https://localhost/crm/location/get_tretory_byid',
-            data: {country_id:con,region_id:reg}
-            })
-            .done(function(data){
-            if(data!=''){
-              $("select[name=territory]").html(data);
-            }else{
-               $("select[name=territory]").html('');  
-            }
-            })
-            .fail(function() {
+        html='';
+        for(var i=0; i <(obj.length); i++){
             
-            });
-            }
-        </script>
-         <script type="text/javascript">
-            function find_state() {
-            
-            var region_id = $("select[name=region]").val();
-            
-            $.ajax({
-            type: 'POST',
-            url: 'https://localhost/crm/location/select_state_by_region',
-            data: {region_id:region_id},
-            
-            success:function(data){
-                
-                var html='';
-                var obj = JSON.parse(data);
-                
-                html +='<option value="" style="display:none">---Select---</option>';
-                for(var i=0; i <(obj.length); i++){
-                    
-                    html +='<option value="'+(obj[i].id)+'">'+(obj[i].state)+'</option>';
-                }
-                
-                $("select[name=state]").html(html);
-                
-            }
-            
-            
-            });
-            }
-
-             function find_city() 
-            {
-            
-            var state = $("select[name=state]").val();
-            
-            $.ajax({
-            type: 'POST',
-            url: 'https://localhost/crm/location/select_city_by_state',
-            data: {state_id:state},
-            
-            success:function(data){
-                //alert(data);
-                var html='';
-                var obj = JSON.parse(data);
-                
-                html +='<option value="" style="display:none">---Select---</option>';
-                for(var i=0; i <(obj.length); i++){
-                    
-                    html +='<option value="'+(obj[i].id)+'">'+(obj[i].city)+'</option>';
-                }
-                
-                $("select[name='city[]']").html(html);
-                
-            }
-            
-            
-            });
-            }
-        </script>
+            html +='<option value="'+(obj[i].id)+'">'+(obj[i].city)+'</option>';
+        }
         
-        <script>
-            
-            $(function(){
-                
-                $("#state_id").change(function(){
-                    
-                    var state_id = $("#state_id").val();
-                
-                $.ajax({
-                    
-                    url: 'https://localhost/crm/location/select_territory_by_state',
-                    type:'POST',
-                    data:{state_id:state_id},
-                    success:function(data){
-                        
-                        var html='';
-                        var obj = JSON.parse(data);
-                        
-                        html +='<option value="" style="display:none">---Select---</option>';
-                        for(var i=0; i <(obj.length);i++){
-                            
-                            html +='<option value="'+(obj[i].territory_id)+'">'+(obj[i].territory_name)+'</option>';
-                        }
-                        
-                        $("#territory_id").html(html);
-                    }
-                    
-                    
-                });
-                    
-                });
-                
-                
-                
-            });
+        $("select[name='city[]']").html(html);
+        
+    }
+  });
+}
+         
         </script>
