@@ -2569,7 +2569,8 @@ public function set_layout_to_session() {
                         $this->db->where('status',3);
                         $this->db->where('product_id',122);
                         $this->db->where('enquiry_id',$enq['enquiry_id']);
-                        $this->db->delete('enquiry');
+                        $this->db->set('status',2);
+                        $this->db->update('enquiry');
 
                         $this->db->where('pk_i_admin_id',$user['pk_i_admin_id']);
                         $this->db->where('companey_id',57);
