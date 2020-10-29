@@ -2548,15 +2548,17 @@ public function set_layout_to_session() {
     }
     */
 
-    // public function data_fix_lalantop(){
-    //     $this->db->select('')
-    //     $this->db->where('comp_id',57);
-    //     $this->db->where('status',3);
-    //     $this->db->where('product_id',122);
-    //     $this->db->get('enquiry')->result_array();
-
-
-    // }
+    public function data_fix_lalantop(){
+        $this->db->select('phone,enquiry_id');
+        $this->db->where('comp_id',57);
+        $this->db->where('status',3);
+        $this->db->where('product_id',122);
+        $enqs = $this->db->get('enquiry')->result_array();
+        if(!empty($enqs)){
+            $this->db->where('s_');
+            $this->db->get('tbl_admin');
+        }
+    }
 
     public function updatefb_page(){ 
         $page_token='';
@@ -2661,24 +2663,24 @@ public function set_layout_to_session() {
                         $enquiry_id=$enqdata->enquiry_id;
                         //response 
                          $this->db->set('fvalue',$response);
-                        $this->db->where(array('enquiry_id'=>$enquiry_id,'input'=>4399));
+                        $this->db->where(array('parent'=>$enquiry_id,'input'=>4399));
                         $this->db->update('extra_enquery');  
                         //
                         $this->db->set('fvalue',$compaign_name);
-                        $this->db->where(array('enquiry_id'=>$enquiry_id,'input'=>4393));
+                        $this->db->where(array('parent'=>$enquiry_id,'input'=>4393));
                         $this->db->update('extra_enquery');
                         //
                         $this->db->set('fvalue',$from_name);
-                        $this->db->where(array('enquiry_id'=>$enquiry_id,'input'=>4395));
+                        $this->db->where(array('parent'=>$enquiry_id,'input'=>4395));
                         $this->db->update('extra_enquery');
                         //
                         $this->db->set('fvalue',$add_set_name);
-                        $this->db->where(array('enquiry_id'=>$enquiry_id,'input'=>4392));
+                        $this->db->where(array('parent'=>$enquiry_id,'input'=>4392));
                         $this->db->update('extra_enquery'); 
                          //
                          $this->db->set('fvalue',$add_name);
-                         $this->db->where(array('enquiry_id'=>$enquiry_id,'input'=>4394));
-                         $this->db->update('extra_enquery');  
+                         $this->db->where(array('parent'=>$enquiry_id,'input'=>4394));
+                         echo $this->db->update('extra_enquery').'<br>';  
                        }
 
                     }
