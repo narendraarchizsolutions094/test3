@@ -63,8 +63,9 @@
 					              <a class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-expanded="false" title="Actions">
 					                <i class="fa fa-sliders"></i>
 					              </a>  
-					            <div class="dropdown-menu dropdown_css" style="max-height: 400px;overflow: auto;">
+					            <div class="dropdown-menu dropdown_css" style="max-height: 400px;overflow: auto; left: unset; right: 0!important;">
 					                  <a class="btn" data-toggle="modal" data-target="#AssignSelected" style="color:#000;cursor:pointer;border-radius: 2px;border-bottom :1px solid #fff;"><?php echo display('assign_selected'); ?></a>                                        
+                            <a class="btn" data-toggle="modal" data-target="#DeleteSelected" style="color:#000;cursor:pointer;border-radius: 2px;border-bottom :1px solid #fff;"><?php echo display('delete'); ?></a>
 					            </div>                                         
 					          </div>  
 					        </div>       
@@ -202,7 +203,7 @@
 								<div class="col-md-12">
 									<table id="ticket_table" class=" table table-striped table-bordered" style="width:100%;">
 										<thead>
-										<th class="noExport">
+										<th class="noExport sorting_disabled">
                     <input type='checkbox' class="checked_all1" value="check all" >
                      </th>
 											<th>S.No.</th>
@@ -277,6 +278,28 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
       </div>
+    </div>
+
+  </div>
+</div>
+
+
+ <div id="DeleteSelected" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Ticket Assignment</h4>
+      </div>
+      <div class="modal-body">
+          <i class="fa fa-question-circle" style="font-size:100px;"></i><br><h1>Are you sure, you want to permanently delete selected record?</h1>
+        </div>
+      <div class="modal-footer">
+            <button type="button" class="btn btn-success" onclick="delete_recorde()">Ok</button>
+          <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+        </div>
     </div>
 
   </div>
@@ -526,6 +549,8 @@ $(document).ready(function() {
           "scrollY": 520,
           "serverSide": true,          
           "lengthMenu": [ [10,30, 50,100,500,1000, -1], [10,30, 50,100,500,1000, "All"] ],
+          "columnDefs": [{ "orderable": false, "targets": 0 }],
+           "order": [[ 1, "desc" ]],
           "ajax": {
               "url": "<?=base_url().'Ticket/ticket_load_data'?>",
               "type": "POST",
@@ -565,4 +590,30 @@ $(document).ready(function() {
         });
     });
 });
+
+
+function delete_recorde(){
+  var x = $(".checkbox1:checked");
+  if(x.length > 0)
+  {   
+      var Arr = new Array();
+      $(x).each(function(k,v){
+        Arr.push($(this).val());
+      });
+      $.ajax({
+        url:'<?=base_url().'ticket/delete_ticket'?>',
+        type:'post',
+        data:{ticket_list:Arr},
+        success:function(q)
+        {
+          $("#DeleteSelected").find('button[data-dismiss=modal]').click();
+           $('#ticket_table').DataTable().ajax.reload();
+        }
+      });
+  }else{
+    alert("0 Record Selected.");
+  }
+ 
+}
+
 </script>

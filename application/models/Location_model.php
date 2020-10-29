@@ -16,7 +16,7 @@ class Location_model extends CI_Model {
 
         foreach ($data['country'] as $r) {
 
-            echo '<option value="' . $r->id . '">' . $r->city . '</option>';
+             echo '<option value="' . $r->id . '">' . $r->city . '</option>';
 
         }*/
 
@@ -175,7 +175,7 @@ public function contact($lead_code) {
                         ->get()
                         ->row();
     }
-
+ 
     public function region_list() {
 		$company=$this->session->userdata('companey_id');
         return $this->db->select("*")
@@ -226,12 +226,11 @@ public function contact($lead_code) {
                         ->result();
     }
 
-    public function get_state_byid($id, $id2, $id3) {
+    public function get_state_byid($id, $id2) {
         return $this->db->select("*")
                         ->from("state")
                         ->where('country_id', $id)
                         ->where('region_id', $id2)
-                        ->where('territory_id', $id3)
                         ->get()
                         ->result();
     }

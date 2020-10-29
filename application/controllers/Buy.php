@@ -238,6 +238,7 @@ class Buy extends CI_Controller {
 	
 	public function view($prodno){	
 		$data['product'] = $this->Product_model->productdet($prodno) ;
+		//print_r($data['product']); exit();
 		//print_r($data['product']);die;
 		$data['category'] = $this->sell_model->subCategory();
 		$carts = $this->cart->contents();		
@@ -314,7 +315,7 @@ class Buy extends CI_Controller {
 
 			$data = array('id'      => $prodno,
 							'qty'       => 1,
-							'price'     => round($product->price+$gst_price,0),
+							'price'     => round($product->price+$gst_price,1),
 							'name'		=> $product->country_name,
 							'discount'  => (isset($_POST['disc'])) ? $this->input->post("disc", true) : 0,
 							'minalert' => !empty($product->minimum_order_quantity)?$product->minimum_order_quantity:0,

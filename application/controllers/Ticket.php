@@ -162,7 +162,7 @@ class Ticket extends CI_Controller {
          foreach ($res as $point)
          {
              $sub = array();
-             $sub[] = '<input type="checkbox" onclick="event.stopPropagation();">';
+             $sub[] = '<input type="checkbox" class="checkbox1" onclick="event.stopPropagation();" value="'.$point->id.'">';
              $sub[] = $point->id;
              $sub[] = '<a href="'.base_url('ticket/view/'.$point->ticketno).'">'.$point->ticketno.'</a>';
              $sub[] = $point->clientname??"NA";
@@ -214,7 +214,9 @@ class Ticket extends CI_Controller {
 		        $table1 = $a->Table1;
 		        $table2 = $a->Table2;
 		        $table3 = $a->Table3;
-		        //echo 
+		        
+	        if(isset($a->Table))
+	        {
 		        echo'<table class="table table-bordered">
 		        <tr><th colspan="4" style="text-align:center;">Tracking Number: '.$table->GCNO.'</td></tr>
 		        <tr><th>Date:</th><td>'.$table->GC_Date.'</td><th>Status:</th><td>'.$table->status.'</td></tr>
@@ -225,8 +227,12 @@ class Ticket extends CI_Controller {
 
 		         echo'<tr><th>Delivery Date:</th><td>'.$table->DeliveryDate.'</td><th>Arrival Date:</th><td>'.$table->ArrivalDate.'</td></tr>
 		         <tr><th>Delivery Type:</th><td>'.$table->DeliveryType.'</td><th>CRNO:</th><td>'.$table->CRNO.'</td></tr>
-		        </table>
-		        <center style="color:red; padding:0px 0px 0px 10px; cursor:pointer;" onclick="$(this).hide(),$(\'.hiddenTrackingDetails\').show();">View More</center>
+		        </table>';
+		    }
+
+		    if(isset($a->Table1))
+		    {
+		        echo'<center style="color:red; padding:0px 0px 0px 10px; cursor:pointer;" onclick="$(this).hide(),$(\'.hiddenTrackingDetails\').show();">View More</center>
 		        <div class="hiddenTrackingDetails" style="display:none;">
 	        	<table class="table table-bordered">
 		        	<tr><th colspan="4" style="text-align:center;">Branch Details</th></tr>
@@ -236,9 +242,12 @@ class Ticket extends CI_Controller {
 		        	<tr><th>STD Code:</th><td>'.$table1->Std_Code.'</td><th>Mobile:</th><td>'.$table1->mobileno.'</td></tr>
 		        	<tr><th>Phone No:</th><td>'.$table1->phoneno.'</td><th>Email:</th><td>'.$table1->EMail_Id.'</td></tr>
 		        	<tr><th>Latitude:</th><td>'.$table1->Latitude.'</td><th>Longitude:</th><td>'.$table1->Longitude.'</td></tr>
-	        	</table>
+	        	</table>';
+	        }
 
-	        	<table class="table table-bordered">
+	        if(isset($a->Table2))
+	        {
+	        	echo'<table class="table table-bordered">
 		        	<tr><th colspan="4" style="text-align:center;">Delivery Details</th></tr>
 		        	<tr><th>Branch Name:</th><td>'.$table2->Branch_Name.'</td><th>Contact Person:</th><td>'.$table2->Contact_Person.'</td></tr>	
 		        	<tr><th>Branch Address:</th><td colspan="3">'.$table2->Address.'</td></tr>
@@ -247,25 +256,27 @@ class Ticket extends CI_Controller {
 		        	<tr><th>Phone No:</th><td>'.$table2->phoneno.'</td><th>Email:</th><td>'.$table2->EMail_Id.'</td></tr>
 		        	<tr><th>Latitude:</th><td>'.$table2->Latitude.'</td><th>Longitude:</th><td>'.$table2->Longitude.'</td></tr>
 	        	</table>';
-	        	if(sizeof($table3)>0)
+	        }
+
+        	if(isset($a->Table3) && sizeof($table3)>0)
+        	{
+        		echo'<table class="table table-bordered">
+	        	<tr><th colspan="5" style="text-align:center;">Timeline</th></tr>
+	        	<tr><th>From</th><th>To</th><th>Dep. Date</th><th>Arr. Date</th><th>Status</th></tr>
+	        	';
+	        	
+	        	foreach($table3 as $res)
 	        	{
-	        		echo'<table class="table table-bordered">
-		        	<tr><th colspan="5" style="text-align:center;">Timeline</th></tr>
-		        	<tr><th>From</th><th>To</th><th>Dep. Date</th><th>Arr. Date</th><th>Status</th></tr>
-		        	';
-		        	
-		        	foreach($table3 as $res)
-		        	{
-		        		echo'<tr>
-		        				<td>'.$res->From_Station.'</td>
-		        				<td>'.$res->To_Station.'</td>
-		        				<td>'.$res->Depature_Date.'</td>
-		        				<td>'.$res->Arrival_Date.'</td>
-		        				<td>'.$res->Status_Name.'</td>
-		        			</tr>';
-		        	}
-		        	echo'</table>';
+	        		echo'<tr>
+	        				<td>'.$res->From_Station.'</td>
+	        				<td>'.$res->To_Station.'</td>
+	        				<td>'.$res->Depature_Date.'</td>
+	        				<td>'.$res->Arrival_Date.'</td>
+	        				<td>'.$res->Status_Name.'</td>
+	        			</tr>';
 	        	}
+	        	echo'</table>';
+	        }
 		        echo'</div>
 		        ';
 	     	}
@@ -307,21 +318,25 @@ class Ticket extends CI_Controller {
 			show_404();
 		}	
 		//print_r($data['ticket']);exit();	
-		$data['all_description_lists']    =   $this->Leads_Model->find_description();		
-
+		$data['all_description_lists']    =   $this->Leads_Model->find_description();	
 
 		$data["clients"] = $this->Ticket_Model->getallclient();
-		$data["product"] = $this->Ticket_Model->getproduct();
 
+		
+		$data["product"] = $this->Ticket_Model->getproduct();
+		//print_r($data['product']); exit();
 		$data["conversion"] = $this->Ticket_Model->getconv($data["ticket"]->id);
 		$data['problem'] = $this->Ticket_Model->get_sub_list();
  
  		$data['prodcntry_list'] = $this->enquiry_model->get_user_productcntry_list();
-        $data['problem'] = $this->Ticket_Model->get_sub_list();
         $data['issues'] = $this->Ticket_Model->get_issue_list();
 		//$data['data'] = $data;
+		//echo $data["ticket"]->client;
+		if(!$data["ticket"]->client)
+			show_404();
 		$this->load->model('enquiry_model');
         $data['enquiry'] = $this->enquiry_model->enquiry_by_id($data["ticket"]->client);
+		
 		$data['ticket_stages'] = $this->Leads_Model->find_estage($data['enquiry']->product_id,4);
 		$data['leadsource'] = $this->Leads_Model->get_leadsource_list();
 		//print_r($data['leadsource']);	
@@ -338,6 +353,37 @@ class Ticket extends CI_Controller {
 		$data['content'] = $content;        
         $this->load->view('layout/main_wrapper', $data);
 	}
+
+
+	public function get_enquery_code()
+    {
+
+        $code = $this->genret_code();
+        $code2 = 'ENQ' . $code;
+        $response = $this->enquiry_model->check_existance($code2);
+
+        if ($response) {
+
+            $this->get_enquery_code();
+        } else {
+
+            return $code2;
+
+            //exit;
+        }
+        //exit;
+    }
+
+    function genret_code()
+    {
+        $pass = "";
+        $chars = array("0", "1", "2", "3", "4", "5", "6", "7", "8", "9");
+
+        for ($i = 0; $i < 12; $i++) {
+            $pass .= $chars[mt_rand(0, count($chars) - 1)];
+        }
+        return $pass;
+    }
 
 	public function ticket_disposition($ticketno){
 		//print_r($_POST); exit();
@@ -444,6 +490,18 @@ public function assign_tickets() {
 		
 	}
 	
+	public function delete_ticket()
+	{
+		foreach ($this->input->post('ticket_list') as $key => $value) 
+		{
+			$this -> db -> where('id', $value);
+			$this -> db -> delete('tbl_ticket');
+			$ret = $this->db->affected_rows();
+			$this -> db -> where('tck_id', $value);
+			$this -> db -> delete('tbl_ticket_conv');	
+		}
+	}
+
 	function tdelete(){
 		
 		$cnt = $this->input->post("content", true);
@@ -614,8 +672,14 @@ public function assign_tickets() {
 	
 	public function add(){
 		
+		//print_r($_SESSION); exit();
+
 		if(isset($_POST["client"])){
-		$res = $this->Ticket_Model->save($this->session->companey_id,$this->session->user_id);
+
+
+			$res = $this->Ticket_Model->save($this->session->companey_id,$this->session->user_id);
+			// echo'ruk';
+			// exit();
 			// $res = $this->Ticket_Model->save($this->session->companey_id,$this->session->user_id);
 			if($res)
 			{
@@ -644,7 +708,8 @@ public function assign_tickets() {
 		
 		$user = $this->db->select("*")->where("enquiry_id", $usr)->get("enquiry")->row();
 		
-		if(!empty($user)){
+		if(!empty($user))
+		{
 			
 			$jarr = array("name"   => $user->name_prefix." ".$user->name." ".$user->lastname, 
 						  "email"  => $user->email,
@@ -678,8 +743,13 @@ public function assign_tickets() {
 	
 	public function loadoldticket($prd = ""){
 		
-		$data['oldticket'] = $this->db->select("*")->where("product", $prd)->where("company", $this->session->companey_id)->get("tbl_ticket")->result();
-		
+		$data['oldticket'] = $this->db->select("tck.*,sour.lead_name as source_name,subj.subject_title as issue_name")
+					->from("tbl_ticket as tck")
+					->join("lead_source as sour","tck.sourse=sour.lsid","left")
+					->join("tbl_ticket_subject as subj","tck.issue=subj.id","left")
+					->where("tck.product", $prd)
+					->where("tck.company", $this->session->companey_id)
+					->get()->result();
 		$this->load->view("ticket/page/tck-table",$data);
 	}
 

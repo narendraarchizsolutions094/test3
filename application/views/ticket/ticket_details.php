@@ -13,17 +13,27 @@
 						<input type="text" name="tracking_no" class="form-control" onblur="loadTracking(this)" value="<?php if(!empty($ticket->tracking_no)){ echo $ticket->tracking_no;} ?>">
 					</div>
 				</div>
+				<script type="text/javascript">
+
+					$(document).ready(function(){
+						loadTracking($("input[name=tracking_no]").get(0));
+					});
+				</script>
 		<?php } ?>
 
 		<div class="col-md-6">
 			<div class="form-group">
 				<label>Problem For</label>
-				<select class="form-control add-select2 choose-client" name = "client" required>
+				<select class="form-control add-select2 choose-client" name = "client" required readonly>
 					<option value = "" style ="display:none;">---Select---</option>
 					<?php if(!empty($clients)){
 						foreach($clients as $ind => $clt){
-							?><option value ="<?php echo $clt->enquiry_id ?>" <?php if($ticket->client == $clt->enquiry_id){ echo "selected";} ?> ><?php echo $clt->name." ".$clt->lastname; ?> </option><?php
-						}
+							?> <?php if($ticket->client == $clt->enquiry_id)
+								{ 
+				echo "<option value =".$clt->enquiry_id." selected>".$clt->name."</option>";
+								} 
+
+								}
 					} ?>
 				</select>
 			</div>
@@ -43,7 +53,7 @@
 		<div class="col-md-6">
 			<div class="form-group">
 				<label>Phone</label>
-				<input type="text" name="phone" class="form-control" value="<?php  if(!empty($ticket->phone)){ echo $ticket->phone; } ?>" >
+				<input type="text" name="phone" class="form-control" value="<?php  if(!empty($ticket->phone)){ echo $ticket->phone; } ?>" readonly>
 			</div>
 		</div>
 		<div class="col-md-6">
@@ -58,7 +68,7 @@
 				<label>Product</label>
 				<select name="product" class="form-control">
 				<?php
-				foreach ($prodcntry_list as $prd)
+				foreach ($product as $prd)
 				{
 					echo'<option value="'.$prd->id.'" '.($prd->id==$ticket->product?'selected':'').'>'.$prd->country_name.'</option>';
 				}
@@ -163,7 +173,7 @@
 		</div> -->
 		<div class="col-md-12">
 			<div class="row">
-				<div class="col-md-12" style ="background: #f7f7f7;border: 1px solid #ccc;padding: 15px;border-radius: 10px;margin-bottom:25px;">
+				<div class="col-md-12" style ="background: #f7f7f7;border: 1px solid #ccc;padding: 15px;border-radius: 10px;margin-bottom:25px; display: none;">
 				
 					<div class="row">
 					<div class = "col-md-12">
@@ -212,10 +222,11 @@
 					<div class="text-center">					
 						<input type ="hidden" name = "ticketno" value = "<?php echo $ticket->id; ?>">
 						<input type ="hidden" name = "client" value = "<?php echo $ticket->client; ?>">
-						<button type = "submit" class="btn btn-success">Update</button>
+						<!-- <button type = "submit" class="btn btn-success">Update</button> -->
 					</div>
 					
 				</div>
+				<center><button type = "submit" class="btn btn-success">Update</button></center>
 			</div>	
 		</div>
 	</div>

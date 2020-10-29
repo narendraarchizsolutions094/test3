@@ -385,7 +385,7 @@ class location extends CI_Controller {
             $data['content'] = $this->load->view('location/state_from', $data, true);
             $this->load->view('layout/main_wrapper', $data);
         }
-    }
+    } 
     public function dublicate_city($id) {
         $region = $this->location_model->get_city_byname($this->input->post('territory_id'), $this->input->post('region_id'), $this->input->post('country_id'), $this->input->post('state_id'), $this->input->post('city_name'));
         if (!empty($region)) {

@@ -97,12 +97,10 @@ class Ticket_Model extends CI_Model {
 		public function save($companey_id='',$user_id='')
     	{	$cid='';
     		//print_r($_POST); 
-    		if(!empty($companey_id) && !empty($user_id))
+    		if(!empty($companey_id) && !empty($user_id) && $_POST['client']=='')
     		{	
-    			if(!empty($_POST['client']) && count($_SESSION['process']) == 1)
+    			if(isset($_SESSION['process']) && count($_SESSION['process']) == 1)
 	    		{
-	    			// echo 'in';
-    				// exit();
 	    			$encode = get_enquery_code();
 	    			$postData = array(
 	                            'Enquery_id' 	=> $encode,
@@ -113,16 +111,25 @@ class Ticket_Model extends CI_Model {
 	                            'checked' 		=> 0,
 	                            'product_id' 	=>  $_SESSION['process'][0],
 	                            'created_date' 	=>  date("Y-m-d H:i:s"),
-	                            'status' 		=> 1,
+	                            'status' 		=> 3,
 	                            'created_by' 	=> $this->session->user_id,
 	                            'phone'			=> $this->input->post('phone'),
-	  
 	                        );
+	    			//print_r($postData);
 	    			$this->db->insert('enquiry', $postData);
 					$cid = $this->db->insert_id();
+					
 	    		}
-    		}//echo'out';
-    		//exit();
+	    		else
+	    		{
+	    			//echo $this->session->userdata('process');
+	    		// 	echo count($_SESSION['process']);
+
+	    			$this->session->set_flashdata('message','Please Select Atmost 1 process while creating a Ticket.');
+	    			return false;
+	    		}
+    		}
+    		
 			$cdate = explode("/", $this->input->post("complaindate", true));			
 			$ndate = (!empty($cdate[2])) ? $cdate[2]."-".$cdate[0]."-".$cdate[1] : date("Y-m-d"); 			
 			$arr = array(
@@ -141,12 +148,14 @@ class Ticket_Model extends CI_Model {
 				 
 			);			
 			if(!empty($_FILES["attachment"]["name"]))
-			{				
-				$retdata =  $this->do_upload();			
+			{	echo 'in';
+				$retdata =  $this->do_upload();
+				//print_r($retdata);			
 				if(!empty($retdata["upload_data"]["file_name"])){					
 					$arr["attachment"] = $retdata["upload_data"]["file_name"];
 				}	
-			}			
+			}	
+
 			if(isset($_POST["ticketno"]))
 			{	
 				$arr["name"]   		= ($this->input->post("name", true)) ? $this->input->post("name", true) : "";
@@ -172,6 +181,8 @@ class Ticket_Model extends CI_Model {
 				$arr["complaint_type"] = $this->input->post("complaint_type", true);
 				$arr["ticketno"] 	= "";
 				$arr["status"]   	= 0;
+				// echo $arr['attachment'];
+				// exit();
 				$this->db->insert("tbl_ticket", $arr);				
 				$insid = $this->db->insert_id();				
 				$tckno = "TCK".$insid.strtotime(date("y-m-d h:i:s"));				
@@ -211,7 +222,6 @@ class Ticket_Model extends CI_Model {
                 $config['upload_path']          = './uploads/ticket/';
                 $config['allowed_types']        = '*';
             
-
                 $this->load->library('upload', $config);
 
                 if ( ! $this->upload->do_upload('attachment'))
@@ -372,8 +382,7 @@ $where .= " OR tck.assign_to IN (".implode(',', $all_reporting_ids).'))';
 		{
 			
 			return $this->db->select("*")->where(array("comp_id" => $this->session->companey_id, "status" => 1))->get("tbl_product_country")->result();
-	
-			
+
 		}
 		
 		public function get($tctno){
@@ -395,12 +404,16 @@ $where .= " OR tck.assign_to IN (".implode(',', $all_reporting_ids).'))';
 			$this->db->where('comp_id',$this->session->companey_id);
 			return $this->db->get('tbl_nature_of_complaint')->result();
 		}
-		public function getallclient(){
+		public function getallclient()
+		{
 			
 			if(($this->session->userdata('user_right')==214)){
+
 			return $this->db->select("*")->where(array("status" => 3, "phone" => $this->session->phone))->get("enquiry")->result();
+
 			}else{
 			return $this->db->select("*")->where(array("status" => 3, "comp_id" => $this->session->companey_id))->get("enquiry")->result();
+			
 			}
 		}
 	public function add_tsub($data) 

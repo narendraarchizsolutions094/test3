@@ -1471,6 +1471,25 @@ if($root=='https://student.spaceinternationals.com'){  ?>
           <?php  if($this->session->menu==1){ ?></br><p style="color:#fff;font-size:9px;margin-left:-12px;padding-top:10px;"><?php echo display('ticketing') ?></p> <?php } ?>
           </a>
                 </li>
+                <?php           
+if($this->session->companey_id==65)
+  {
+  ?>
+  
+     <li class="">
+        <a href="<?php echo base_url("holiday/add-festival") ?>">Add Festival</a>
+      </li>
+
+      <li class="">
+        <a href="<?php echo base_url("holiday/add-holiday") ?>">Add Holiday</a>
+      </li>
+
+
+  <?php
+}
+
+ ?>
+
 <?php }else{ ?>				
 		<li class="treeview <?php echo (($segment1 == "ticket" || $segment1 == "smsapi") ? "active" : null) ?>"  style="<?php if(in_array(310,$module) || in_array(311,$module) || in_array(312,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
                      <a href="#">
@@ -1493,11 +1512,30 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                         <li class="<?php echo (($segment1 == "ticket" && $segment2 == "natureOfComplaintList") ? "active" : null) ?>">
                           <a href="<?php echo base_url("ticket/natureOfComplaintList") ?>"><?php echo display("natureOfComplaint"); ?></a>
                         </li>
-						
+<?php						
+if($this->session->companey_id==65)
+  {
+  ?>
+  
+     <li class="">
+        <a href="<?php echo base_url("holiday/add-festival") ?>">Add Festival</a>
+      </li>
+
+      <li class="">
+        <a href="<?php echo base_url("holiday") ?>">Add Holiday</a>
+      </li>
+
+
+  <?php
+}
+
+ ?>
+
                      </ul>
 
         </li>
-<?php } ?>        
+<?php }
+?>        
         <li class="treeview <?php echo (($segment1 == "appointment") ? "active" : null) ?>" style="<?php if(in_array(330,$module) || in_array(331,$module) || in_array(332,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
                     <a href="<?php echo base_url("appointment/index") ?>"><i class="fa fa-language" style="color:#fff;font-size:18px;background:#FF00FF;padding:7px;border-radius:4px;width:30px;"></i> &nbsp;<?php echo display('appointment') ?>
           <?php  if($this->session->menu==1){ ?></br><p style="color:#fff;font-size:9px;margin-left:-12px;padding-top:10px;"><?php echo display('appointment') ?></p> <?php } ?>
