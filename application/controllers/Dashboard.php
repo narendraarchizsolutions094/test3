@@ -2653,7 +2653,7 @@ public function set_layout_to_session() {
                  $course_name='';
                  } 
             
-                     $enq=  $this->db->where(array('mobileno'=>$phone1,'email'=>$email1,'enquiry_source'=>209,'comp_id'=>81));
+                     $enq=  $this->db->where(array('phone'=>$phone1,'email'=>$email1,'enquiry_source'=>209,'comp_id'=>81));
                      $enq=  $this->db->get('enquiry');
                        if($enq->num_rows()==1){
                        $enqdata= $enq->row();
