@@ -2565,7 +2565,17 @@ public function set_layout_to_session() {
                     if($this->db->get('tbl_proddetails')->num_rows()){
 
                     }else{
+                        $this->db->where('comp_id',57);
+                        $this->db->where('status',3);
+                        $this->db->where('product_id',122);
+                        $this->db->where('enquiry_id',$enq['enquiry_id']);
+                        $this->db->delete('enquiry');
 
+                        $this->db->where('pk_i_admin_id',$user['pk_i_admin_id']);
+                        $this->db->where('companey_id',57);
+                        $this->db->delete('tbl_admin');
+
+                        echo $enq['enquiry_id'].' '.$user['pk_i_admin_id'];
                     }
                 }
             }
@@ -2669,6 +2679,7 @@ public function set_layout_to_session() {
             
                      $this->db->where(array('phone'=>$phone1,'email'=>$email1,'enquiry_source'=>209,'comp_id'=>81));
                      $enq=  $this->db->get('enquiry');
+                     echo $this->db->last_query();
                        if($enq->num_rows()==1){
                        $enqdata= $enq->row();
                         $enqid=$enqdata->Enquery_id;
