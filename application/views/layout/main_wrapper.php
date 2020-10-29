@@ -803,29 +803,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
               <div class="dropdown-menu dropdown-menu-large" style="width: 280px;">   
                   <ul class ="cart-dropdown-menu"  id = "cart-nav-menu" style = "padding:0px;list-style:none;max-height: 400px;
     overflow-y: auto;">
-                <?php 
                 
-                
-                if(!empty($this->cart->contents())) {
-                    
-                    $cartarr = $this->cart->contents();
-                    foreach($cartarr as $ind => $cart) {
-                    
-                    $productData = $this->Product_model->productdet($cart['id']);
-
-                      ?><li id = "cart-li-<?php echo $cart['id']; ?>" > 
-                    
-                      <div class = "cart-items"><h4><a class="prodname" href = ""> <?php echo $cart['name'] ?></a></h4>
-                          <p>
-                           Price : <i class = "fa fa-price"></i> <?php echo  $cart['price']." X <input type='hidden' name='minimum' class='minimum' value='".$productData->minimum_order_quantity."'> <input type='number' class='cart-qty' value=".$cart['qty']." min='1' data-prodid=".$cart['id']." >";?> = <i class = "fa fa-rupee"></i><span class="item-price-<?=$cart['id']?>"> <?php echo $cart['price']*$cart['qty']  ?></span> 
-                            <a href="javascript:void(0)" onclick="remove_cart_item(<?=$cart['id']?>)" class="fa fa-trash btn btn-danger btn-sm pull-right remove-item-cart"></a>
-                          </p>
-                          <hr />
-                          </div>
-                      </li><?php
-                    } ?>
-                      
-              <?php } ?>  
                     
                   </ul>
                   <ul style = "padding:0px;list-style:none;">
@@ -2378,4 +2356,6 @@ $(document).ready(function(){
 
   });
 });
+
+$("#cart-nav-menu").load("<?=base_url().'buy/cart'?>");
 </script>

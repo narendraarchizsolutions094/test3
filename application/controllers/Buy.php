@@ -66,6 +66,7 @@ class Buy extends CI_Controller {
 		//$data['category'] = $this->sell_model->subCategory();
 		$carts = $this->cart->contents();
 		
+
 		$prodcart = array();
 		if(!empty($carts)){
 			foreach($carts as $ind =>$crd) {
@@ -107,12 +108,21 @@ class Buy extends CI_Controller {
 		$carts = $this->cart->contents();
 		if(!empty($carts)){
 			foreach($carts as $ind =>$crd) {
-				
+				// echo'=> min'. $crd['minalert'];
+				// echo'<br>';
+				// echo $crd['qty'];
+				if($crd['qty']<$crd['minalert']){
+		      	$this->session->set_flashdata('exception', 'Please order minimum '.$crd['minalert'].' '.$crd['name'].' Product');
+					redirect('buy');
+					// echo'yes';
+					// exit();
+				}
 				$prodid = $crd['id'];
 				$prodcart[$prodid]	= $crd['qty'];
 			}
 			
 		} 
+		// die();
 		$this->load->model('user_model');
 		$this->load->model('location_model');
 		$uid = $this->session->user_id;
@@ -423,5 +433,25 @@ class Buy extends CI_Controller {
 		die(json_encode($prdarr));	
 
 	}
-	
+	public function cart()
+	{
+		$cols=[];
+		if(!empty($this->cart->contents())) {
+			$cartarr = $this->cart->contents();
+			foreach($cartarr as $ind => $cart) {
+			$productData = $this->Product_model->productdet($cart['id']);
+			
+
+		echo ' <li id = "cart-li-'.$cart['id'].'" >  
+			  <div class = "cart-items"><h4><a class="prodname" href = "">'.$cart['name'].'</a></h4>
+				  <p> Price : <i class = "fa fa-price"></i> '.$cart['price'].' X <input type="hidden" name="minimum" class="minimum" value="'.$productData->minimum_order_quantity.'"> <input type="number" class="cart-qty" value="'.$cart['qty'].'" min="1" data-prodid="'.$cart['id'].'" > = <i class = "fa fa-rupee"></i><span class="item-price-'.$cart['id'].'">'.round($cart['price']*$cart['qty'],2).'</span> 
+					<a href="javascript:void(0)" onclick="remove_cart_item('.$cart['id'].')" class="fa fa-trash btn btn-danger btn-sm pull-right remove-item-cart"></a>
+				  </p>
+				  <hr />
+				  </div>
+			  </li>';
+
+	}
+}
+	}
 }
