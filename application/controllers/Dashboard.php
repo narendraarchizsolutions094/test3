@@ -2555,8 +2555,20 @@ public function set_layout_to_session() {
         $this->db->where('product_id',122);
         $enqs = $this->db->get('enquiry')->result_array();
         if(!empty($enqs)){
-            $this->db->where('s_');
-            $this->db->get('tbl_admin');
+            foreach($enqs as $enq){
+                $this->db->select('pk_i_admin_id');
+                $this->db->where('companey_id',57);
+                $this->db->where('s_phoneno',$enq['phone']);
+                $user = $this->db->get('tbl_admin')->row_array();
+                if(!empty($user)){
+                    $this->db->where('seller_id',$user['pk_i_admin_id']);
+                    if($this->db->get('tbl_proddetails')->num_rows()){
+
+                    }else{
+
+                    }
+                }
+            }
         }
     }
 
@@ -2655,7 +2667,7 @@ public function set_layout_to_session() {
                  $course_name='';
                  } 
             
-                     $enq=  $this->db->where(array('phone'=>$phone1,'email'=>$email1,'enquiry_source'=>209,'comp_id'=>81));
+                     $this->db->where(array('phone'=>$phone1,'email'=>$email1,'enquiry_source'=>209,'comp_id'=>81));
                      $enq=  $this->db->get('enquiry');
                        if($enq->num_rows()==1){
                        $enqdata= $enq->row();
@@ -2681,6 +2693,8 @@ public function set_layout_to_session() {
                          $this->db->set('fvalue',$add_name);
                          $this->db->where(array('parent'=>$enquiry_id,'input'=>4394));
                          echo $this->db->update('extra_enquery').'<br>';  
+                       }else{
+                           echo 'na<br>';
                        }
 
                     }
