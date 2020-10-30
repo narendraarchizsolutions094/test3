@@ -98,9 +98,9 @@ $('#example').DataTable({
     "scrollX": true,
     "scrollY": 520,
     "serverSide": true,          
-    "lengthMenu": [ [10,30, 50,100,500,1000, -1], [10,30, 50,100,500,1000, "All"] ],
+    "lengthMenu": [ [10,30, 50,100,500,1000], [10,30, 50,100,500,1000] ],
     "ajax": {
-        "url": "<?=base_url().'user/departments/'?>"+role,
+        "url": "<?=base_url().'user/departments'?>"+role,
         "type": "POST",
         //"dataType":"html",
         //success:function(q){ //alert(q); //document.write(q);},

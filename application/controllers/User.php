@@ -133,6 +133,12 @@ class User extends CI_Controller
             $sub[] = $status;
             $data[] = $sub;
         }
+        if (!empty($sep_arr)) {
+            $this->db->where_in("tbl_admin.user_type NOT", $sep_arr);
+        }
+        if (!empty($_GET['user_role'])) {
+            $this->db->where('tbl_admin.user_type', $_GET['user_role']);
+        }
         $iTotalRecords = $this->db->where('tbl_admin.user_type!=', 1)->where('tbl_admin.companey_id', $this->session->companey_id)->count_all_results('tbl_admin');
 
         //print_r($res);
