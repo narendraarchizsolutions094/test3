@@ -7,13 +7,13 @@ class User_model extends CI_Model {
         $insert_id = 0;
         $where = '';
         if(!empty($data['s_user_email'])){
-            $where = 's_user_email='.$data['s_user_email'];
+            $where = "s_user_email='".$data['s_user_email'].'\'';
         }
         if(!empty($data['s_phoneno'])){
             if(!empty($where)){
                 $where .= " OR";
             }
-            $where .= ' s_phoneno='.$data['s_phoneno'];
+            $where .= " s_phoneno='".$data['s_phoneno'].'\'';
         }
         $this->db->where($where);
         $user_row    =   $this->db->get('tbl_admin')->row_array();
