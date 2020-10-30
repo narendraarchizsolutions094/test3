@@ -38,7 +38,7 @@ class User extends CI_Controller
         } else {
             $data['title'] = display('user_list');
         }
-        $data['departments'] = $this->User_model->read2();
+        //$data['departments'] = $this->User_model->read2();
         //echo $this->db->last_query();
         $data['user_role'] = $this->db->get('tbl_user_role')->result();
         $data['content'] = $this->load->view('user', $data, true);
@@ -49,6 +49,18 @@ class User extends CI_Controller
 
         // print($_GET['search']);
         // die();
+       
+        if (empty($_GET['user_role'])) {            
+            $user_separation  = get_sys_parameter('user_separation','COMPANY_SETTING');
+            $sep_arr=array();
+            if (!empty($user_separation)) {
+                $user_separation = json_decode($user_separation,true);
+                foreach ($user_separation as $key => $value) { 
+                    $sep_arr[] = $key;
+                }
+            }            
+        }
+
         $this->db->select("user.valid_upto,user.user_id,tbl_admin.*");
         $this->db->from('tbl_admin');
         $this->db->join('user', 'user.user_id = tbl_admin.companey_id');
