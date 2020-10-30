@@ -2678,7 +2678,7 @@ public function set_layout_to_session() {
                  $course_name='';
                  } 
             
-                     $this->db->where(array('phone'=>$phone1,'email'=>$email1,'enquiry_source'=>209,'comp_id'=>81));
+                     $this->db->where(array('email'=>$email1,'enquiry_source'=>209,'comp_id'=>81));
                      $enq=  $this->db->get('enquiry');
                      echo $this->db->last_query();
                        if($enq->num_rows()==1){
@@ -2686,25 +2686,55 @@ public function set_layout_to_session() {
                         $enqid=$enqdata->Enquery_id;
                         $enquiry_id=$enqdata->enquiry_id;
                         //response 
-                         $this->db->set('fvalue',$response);
+                        
                         $this->db->where(array('parent'=>$enquiry_id,'input'=>4399));
-                        $this->db->update('extra_enquery');  
+                        
+                        if($this->db->get('extra_enquery')->num_rows()){
+                            $this->db->set('fvalue',$response);
+                            $this->db->where(array('parent'=>$enquiry_id,'input'=>4399));
+                            $this->db->update('extra_enquery');  
+                        }else{
+                            $this->db->insert('extra_enquery',array('enq_no'=>$enqid,'parent'=>$enquiry_id,'input'=>4399,'fvalue'=>$response,'cmp_no'=>81));
+                        }
+
                         //
-                        $this->db->set('fvalue',$compaign_name);
                         $this->db->where(array('parent'=>$enquiry_id,'input'=>4393));
-                        $this->db->update('extra_enquery');
+                        if($this->db->get('extra_enquery')->num_rows()){
+                            $this->db->set('fvalue',$compaign_name);
+                            $this->db->where(array('parent'=>$enquiry_id,'input'=>4393));
+                            $this->db->update('extra_enquery');
+                        }else{
+                            $this->db->insert('extra_enquery',array('enq_no'=>$enqid,'parent'=>$enquiry_id,'input'=>4393,'fvalue'=>$compaign_name,'cmp_no'=>81));
+                        }
                         //
-                        $this->db->set('fvalue',$from_name);
                         $this->db->where(array('parent'=>$enquiry_id,'input'=>4395));
-                        $this->db->update('extra_enquery');
+                        if($this->db->get('extra_enquery')->num_rows()){
+                            $this->db->set('fvalue',$from_name);
+                            $this->db->where(array('parent'=>$enquiry_id,'input'=>4395));
+                            $this->db->update('extra_enquery');
+                        }else{
+                            $this->db->insert('extra_enquery',array('enq_no'=>$enqid,'parent'=>$enquiry_id,'input'=>4395,'fvalue'=>$from_name,'cmp_no'=>81));
+                        }
                         //
-                        $this->db->set('fvalue',$add_set_name);
                         $this->db->where(array('parent'=>$enquiry_id,'input'=>4392));
-                        $this->db->update('extra_enquery'); 
+                        if($this->db->get('extra_enquery')->num_rows()){                        
+                            $this->db->set('fvalue',$add_set_name);
+                            $this->db->where(array('parent'=>$enquiry_id,'input'=>4392));
+                            $this->db->update('extra_enquery'); 
+                        }else{
+                            $this->db->insert('extra_enquery',array('enq_no'=>$enqid,'parent'=>$enquiry_id,'input'=>4392,'fvalue'=>$add_set_name,'cmp_no'=>81));
+                        }
                          //
-                         $this->db->set('fvalue',$add_name);
                          $this->db->where(array('parent'=>$enquiry_id,'input'=>4394));
-                         echo $this->db->update('extra_enquery').'<br>';  
+                        
+                         if($this->db->get('extra_enquery')->num_rows()){                                                
+                            $this->db->set('fvalue',$add_name);
+                            $this->db->where(array('parent'=>$enquiry_id,'input'=>4394));
+                            echo $this->db->update('extra_enquery').'<br>';  
+                        }else{
+                            $this->db->insert('extra_enquery',array('enq_no'=>$enqid,'parent'=>$enquiry_id,'input'=>4394,'fvalue'=>$add_name,'cmp_no'=>81));
+                        }
+
                        }else{
                            echo 'na<br>';
                        }
