@@ -61,7 +61,7 @@ class User extends CI_Controller
             }            
         }
 
-        $this->db->select("user.valid_upto,user.user_id,tbl_admin.*");
+        $this->db->select("user.valid_upto,user.user_id,tbl_admin.*,tbl_user_role.user_role as user_role_title");
         $this->db->from('tbl_admin');
         $this->db->join('user', 'user.user_id = tbl_admin.companey_id');
         $this->db->join('tbl_user_role', 'tbl_user_role.use_id=tbl_admin.user_type', 'left');
@@ -100,7 +100,8 @@ class User extends CI_Controller
         $countUsers = $userData->num_rows();
         $data_get = $userData->result();
         $data  = array();
-        $value['product_name'] = '';
+        //$value['product_name'] = '';
+        $process = '';
         $i = 1;
         foreach ($data_get as $department) {
             $process_arr = explode(',', $department->process);
@@ -109,7 +110,7 @@ class User extends CI_Controller
             $p_res    =   $this->db->get('tbl_product')->result_array();
             if (!empty($p_res)) {
                 foreach ($p_res as $key => $value) {
-                    $value['product_name'] . ', ';
+                    $process .= ', ';
                 }
             }
             if($department->b_status == 1){ 
@@ -122,10 +123,10 @@ class User extends CI_Controller
             $sub[] = '<input name="com_id" hidden value="' . $department->companey_id . '"> <input type="checkbox" value="' . $department->pk_i_admin_id . '" id="checkitem" name="user_ids[]"> ' . $i++ . '';
             $sub[] = '<a   href="' . base_url('user/edit/' . $department->pk_i_admin_id . '') . '">' . $department->employee_id . '</a>';
             $sub[] = '<a   href="' . base_url('user/edit/' . $department->pk_i_admin_id . '') . '">' . $department->s_display_name . ' ' . $department->last_name . '</a>';
-            $sub[] = $department->user_role ?? "NA";
+            $sub[] = $department->user_role_title ?? "NA";
             $sub[] = '<a   href="' . base_url('user/edit/' . $department->pk_i_admin_id . '') . '">' . $department->s_user_email . '</a>';
             $sub[] = $department->s_phoneno ?? "NA";
-            $sub[] = $value['product_name'] ?? "NA";
+            $sub[] = $process ?? "NA";
             $sub[] = $department->start_billing_date ?? "NA";
             $sub[] = $department->valid_upto ?? "NA";
             $sub[] = $department->last_log ?? "NA";
