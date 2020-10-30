@@ -2643,8 +2643,8 @@ public function set_layout_to_session() {
                     if ($err) {
                         
                     } else {
+                    $email1 = $phone1  = $name1 = '';
                     foreach(json_decode($response)->field_data as $v){
-                       $email1 = $phone1  = $name1 = '';
                      
                       if(!empty($v) && $v->{'name'}==='full_name'){
                           $name=$v->{'values'};
