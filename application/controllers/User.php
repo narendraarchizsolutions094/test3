@@ -101,9 +101,9 @@ class User extends CI_Controller
         $data_get = $userData->result();
         $data  = array();
         //$value['product_name'] = '';
-        $process = '';
         $i = 1;
         foreach ($data_get as $department) {
+            $process = '';
             $process_arr = explode(',', $department->process);
             $this->db->select('product_name');
             $this->db->where_in('sb_id', $process_arr);
