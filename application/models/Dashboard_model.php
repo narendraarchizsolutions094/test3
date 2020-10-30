@@ -40,7 +40,7 @@ class Dashboard_model extends CI_Model {
 		if(!empty($data['email']) || !empty($data['phone'])){
 			$where = '';
 			if(!empty($data['email'])){
-				$where = "tbl_admin.s_user_email='".$data['email'];
+				$where = "tbl_admin.s_user_email='".$data['email'].'\'';
 			}
 			if(!empty($data['phone'])){
 				if(!empty($where)){
