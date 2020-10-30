@@ -44,9 +44,9 @@ class Dashboard_model extends CI_Model {
 			}
 			if(!empty($data['phone'])){
 				if(!empty($where)){
-					$where 	.=	" OR tbl_admin.s_phoneno=".$data['phone'];
+					$where 	.=	" OR tbl_admin.s_phoneno='".$data['phone'].'\'';
 				}else{
-					$where 	.=	"tbl_admin.s_phoneno=".$data['phone'];
+					$where 	.=	"tbl_admin.s_phoneno='".$data['phone'].'\'';
 				}
 			}
 			
