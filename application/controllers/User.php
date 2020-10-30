@@ -110,7 +110,7 @@ class User extends CI_Controller
             $p_res    =   $this->db->get('tbl_product')->result_array();
             if (!empty($p_res)) {
                 foreach ($p_res as $key => $value) {
-                    $process .= ', ';
+                    $process .= $value['product_name'].', ';
                 }
             }
             if($department->b_status == 1){ 
