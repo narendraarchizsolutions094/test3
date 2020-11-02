@@ -172,7 +172,7 @@ if($root=='https://student.spaceinternationals.com'){	 ?>
                             </div>
                             
                             <div> 
-                                <button type="button" class="btn btn-success" style="display:none" id="votp" onclick="verifyOTP()">VerifyOtp</button>
+                                <button type="button" class="btn btn-success" style="display:none" id="votp" onclick="verifyOTP()">Verify OTP</button>
                                 <button  type="submit" id="fsubmit" class="btn btn-success"><?php echo display('submit'); ?></button>  <span class="pull-right"><a href="javascript:" id="Llogin"><?php echo display("login"); ?></a></span>
                             </div>
                             

@@ -1,10 +1,12 @@
 <?php
 
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
-class User extends CI_Controller {
+class User extends CI_Controller
+{
 
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
 
         $this->load->model(array(
@@ -15,43 +17,165 @@ class User extends CI_Controller {
             'doctor_model',
             'enquiry_model'
         ));
-     if(empty($this->session->userdata('isLogIn')))
-        redirect('login');
+        $this->column_search = array('tbl_admin.employee_id',
+                                     'tbl_admin.s_display_name',
+                                     'tbl_admin.last_name',
+                                     'tbl_admin.s_user_email',
+                                     'tbl_admin.s_phoneno',
+                                     'tbl_admin.start_billing_date',
+                                     'user.valid_upto',
+                                     'tbl_admin.b_status'
+                                     );
+
+        if (empty($this->session->userdata('isLogIn')))
+            redirect('login');
     }
 
-    public function index() {
+    public function index()
+    {
         if (!empty($_GET['user_role'])) {
-            $data['title'] = $this->User_model->get_role_name_by_id($_GET['user_role']).' List';            
-        }else{
+            $data['title'] = $this->User_model->get_role_name_by_id($_GET['user_role']) . ' List';
+        } else {
             $data['title'] = display('user_list');
         }
-        $data['departments'] = $this->User_model->read2();
+        //$data['departments'] = $this->User_model->read2();
         //echo $this->db->last_query();
         $data['user_role'] = $this->db->get('tbl_user_role')->result();
         $data['content'] = $this->load->view('user', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }
+    public function departments()
+    {
+
+        // print($_GET['search']);
+        // die();
+       
+        if (empty($_GET['user_role'])) {            
+            $user_separation  = get_sys_parameter('user_separation','COMPANY_SETTING');
+            $sep_arr=array();
+            if (!empty($user_separation)) {
+                $user_separation = json_decode($user_separation,true);
+                foreach ($user_separation as $key => $value) { 
+                    $sep_arr[] = $key;
+                }
+            }            
+        }
+
+        $this->db->select("user.valid_upto,user.user_id,tbl_admin.*,tbl_user_role.user_role as user_role_title");
+        $this->db->from('tbl_admin');
+        $this->db->join('user', 'user.user_id = tbl_admin.companey_id');
+        $this->db->join('tbl_user_role', 'tbl_user_role.use_id=tbl_admin.user_type', 'left');
+        if (!empty($sep_arr)) {
+            $this->db->where_in("tbl_admin.user_type NOT", $sep_arr);
+        }
+        if (!empty($_GET['user_role'])) {
+            $this->db->where('tbl_admin.user_type', $_GET['user_role']);
+        }
+        $this->db->where('tbl_admin.user_type!=', 1);
+        $this->db->where('tbl_admin.companey_id', $this->session->companey_id);
+        $this->db->limit($_POST['length'], $_POST['start']);
+        $i = 0;
+        // loop searchable columns 
+        foreach($this->column_search as $item){
+            // if datatable send POST for search
+            if($_POST['search']['value']){
+                // first loop
+                if($i===0){
+                    // open bracket
+                    $this->db->group_start();
+                    $this->db->like($item, $_POST['search']['value']);
+                }else{
+                    $this->db->or_like($item, $_POST['search']['value']);
+                }
+                
+                // last loop
+                if(count($this->column_search) - 1 == $i){
+                    // close bracket
+                    $this->db->group_end();
+                }
+            }
+            $i++;
+        }
+        $userData = $this->db->get();
+        $countUsers = $userData->num_rows();
+        $data_get = $userData->result();
+        $data  = array();
+        //$value['product_name'] = '';
+        $i = 1;
+        foreach ($data_get as $department) {
+            $process = '';
+            $process_arr = explode(',', $department->process);
+            $this->db->select('product_name');
+            $this->db->where_in('sb_id', $process_arr);
+            $p_res    =   $this->db->get('tbl_product')->result_array();
+            if (!empty($p_res)) {
+                foreach ($p_res as $key => $value) {
+                    $process .= $value['product_name'].', ';
+                }
+            }
+            if($department->b_status == 1){ 
+                $status= display('active');
+                }elseif($department->b_status == 0){
+                $status='<a style="color:red">Inactive</a>';
+                }
+
+                
+            $sub = array();
+            $sub[] = '<input name="com_id" hidden value="' . $department->companey_id . '"> <input type="checkbox" value="' . $department->pk_i_admin_id . '" id="checkitem" name="user_ids[]"> ' . $i++ . '';
+            $sub[] = '<a   href="' . base_url('user/edit/' . $department->pk_i_admin_id . '') . '">' . $department->employee_id . '</a>';
+            $sub[] = '<a   href="' . base_url('user/edit/' . $department->pk_i_admin_id . '') . '">' . $department->s_display_name . ' ' . $department->last_name . '</a>';
+            $sub[] = $department->user_role_title ?? "NA";
+            $sub[] = '<a   href="' . base_url('user/edit/' . $department->pk_i_admin_id . '') . '">' . $department->s_user_email . '</a>';
+            $sub[] = $department->s_phoneno ?? "NA";
+            $sub[] = $process ?? "NA";
+            $sub[] = $department->start_billing_date ?? "NA";
+            $sub[] = $department->valid_upto ?? "NA";
+            $sub[] = $department->last_log ?? "NA";
+            $sub[] = $department->dt_create_date ?? "NA";
+            $sub[] = $status;
+            $data[] = $sub;
+        }
+        if (!empty($sep_arr)) {
+            $this->db->where_in("tbl_admin.user_type NOT", $sep_arr);
+        }
+        if (!empty($_GET['user_role'])) {
+            $this->db->where('tbl_admin.user_type', $_GET['user_role']);
+        }
+        $iTotalRecords = $this->db->where('tbl_admin.user_type!=', 1)->where('tbl_admin.companey_id', $this->session->companey_id)->count_all_results('tbl_admin');
+
+        //print_r($res);
+        $output = array(
+            "draw" => $_POST['draw'],
+            "recordsTotal" => $iTotalRecords,
+            "iTotalRecords" => $iTotalRecords,
+            "recordsFiltered" => $countUsers,
+            "iTotalDisplayRecords" => $iTotalRecords,
+            "data" => $data,
+        );
+        echo json_encode($output);
+    }
     public function inactiveAlluser()
     {
         // print_r($_POST);
-       $user_ids= $this->input->post('user_ids');
-       $com_id= $this->input->post('com_id');
+        $user_ids = $this->input->post('user_ids');
+        $com_id = $this->input->post('com_id');
         foreach ($user_ids as $key => $value) {
-           $user_id=$user_ids[$key];
-           $data=['b_status'=>0];
-           $this->User_model->ChangeStatus($data,$user_id,$com_id);
+            $user_id = $user_ids[$key];
+            $data = ['b_status' => 0];
+            $this->User_model->ChangeStatus($data, $user_id, $com_id);
         }
-        $this->session->set_flashdata('message',"Status updated successfully");
+        $this->session->set_flashdata('message', "Status updated successfully");
         redirect('user/index');
     }
-    function userimport() 
+    function userimport()
     {
         $data['title'] = display('import');
         $data['content'] = $this->load->view('user_import', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }
 
-    function upload_user() {
+    function upload_user()
+    {
         if (!is_dir('assets/csv')) {
             mkdir('assets/csv', 0777, TRUE);
         }
@@ -85,10 +209,8 @@ class User extends CI_Controller {
                     $userright  = getUserRight($filesop[4]);
                     $report_to  = getUserByName($filesop[5]);
                     $process    = getProcessBynme($filesop[6]);
-                    if(checkAlreadyExist($email,'email') == "no" && checkAlreadyExist($phone,'phone') == "no")
-                    {
-                        if($userright !='' && $report_to !='' && $process !='')
-                        {   
+                    if (checkAlreadyExist($email, 'email') == "no" && checkAlreadyExist($phone, 'phone') == "no") {
+                        if ($userright != '' && $report_to != '' && $process != '') {
                             $postData = array(
                                 's_display_name'        => $firstname,
                                 'last_name'             => $lastname,
@@ -100,37 +222,33 @@ class User extends CI_Controller {
                                 's_password'            => md5('12345678'),
                                 'companey_id'           => $this->session->companey_id
                             );
-                            $this->db->insert('tbl_admin',$postData);
+                            $this->db->insert('tbl_admin', $postData);
                             $ic++;
                         }
-                    }
-                    else
-                    {
-                        $exist[]= $email;
+                    } else {
+                        $exist[] = $email;
                     }
                 }
                 $c++;
             }
-            if(!empty($exist))
-            {
-                $this->session->set_flashdata('message', count($exist)." user skipped and ".$ic." user added successfully");
+            if (!empty($exist)) {
+                $this->session->set_flashdata('message', count($exist) . " user skipped and " . $ic . " user added successfully");
+            } else {
+                $this->session->set_flashdata('message', "" . $ic . " user added successfully");
             }
-            else
-            {
-                $this->session->set_flashdata('message',"".$ic." user added successfully");
-            }
-            unlink(base_url('assets/csv').$filename);
-            
+            unlink(base_url('assets/csv') . $filename);
+
             redirect(base_url() . 'user');
             // echo '<pre>'; print_r ($discCodeArr); print_r ($stateArr); print_r ($cityArr); print_r ($blockArr); die;
         } else {
             $this->session->set_flashdata('error', $this->upload->display_errors());
-            
+
             redirect(base_url() . 'user');
         }
     }
 
-    public function company() {
+    public function company()
+    {
         $data['title'] = display('Company');
         $data['company'] = $this->User_model->display_company_details();
         $data['user_role'] = $this->db->get('tbl_user_role')->result();
@@ -138,7 +256,8 @@ class User extends CI_Controller {
         $this->load->view('layout/main_wrapper', $data);
     }
 
-    public function add_company() {
+    public function add_company()
+    {
         $data['title'] = display('Company');
         $data['company'] = $this->User_model->display_company_details();
         $data['user_role'] = $this->db->get('tbl_user_role')->result();
@@ -146,7 +265,8 @@ class User extends CI_Controller {
         $this->load->view('layout/main_wrapper', $data);
     }
 
-    public function channel_partner() {
+    public function channel_partner()
+    {
         $data['title'] = display('user_list');
         $data['page_title'] = 'Channel Partner';
         $data['departments'] = $this->User_model->partner();
@@ -156,13 +276,14 @@ class User extends CI_Controller {
         $this->load->view('layout/main_wrapper', $data);
     }
 
-    public function user_type() {
+    public function user_type()
+    {
         $data['title'] = display('user_list');
         $data['page_title'] = display('user_function');
-        $data['nav1'] = 'nav3';       
+        $data['nav1'] = 'nav3';
 
-        $this->db->where('use_id!=',1);
-        $this->db->where('comp_id',$this->session->companey_id);
+        $this->db->where('use_id!=', 1);
+        $this->db->where('comp_id', $this->session->companey_id);
         $data['lead_score'] = $this->db->get('tbl_user_role')->result();
 
 
@@ -170,7 +291,8 @@ class User extends CI_Controller {
         $this->load->view('layout/main_wrapper', $data);
     }
 
-    public function user_type_add() {
+    public function user_type_add()
+    {
         if (!empty($_POST)) {
             $this->load->library('form_validation');
             $user_type = $this->input->post('user_type');
@@ -199,43 +321,45 @@ class User extends CI_Controller {
         }
     }
 
-    public function prepare_hierarchy_nodes($data){
+    public function prepare_hierarchy_nodes($data)
+    {
         $nodes = array();
-        
+
         //$nodes[] = array('id'=>1,'pid'=>0,'name'=>'abc','txt'=>'','isCollapsed'=>false,'img'=>'');
 
-        $this->db->where_in('pk_i_admin_id',$data);
-        
+        $this->db->where_in('pk_i_admin_id', $data);
+
         $user_results    =   $this->db->get('tbl_admin')->result_array();
 
         if (!empty($user_results)) {
-            
+
             foreach ($user_results as $key => $value) {
-                if($this->session->user_id == $value['pk_i_admin_id']){
+                if ($this->session->user_id == $value['pk_i_admin_id']) {
                     $nodes[] = array(
-                        'id'            =>$value['pk_i_admin_id'],
-                        'pid'           =>0,
-                        'name'          =>"<a href=".base_url()."user/edit/".$value['pk_i_admin_id'].">".$value['s_display_name']."</a>",                    
-                        'txt'           =>$value['designation'],
-                        'isCollapsed'   =>false,
-                        'img'           =>$value['picture']?base_url().$value['picture']:''
+                        'id'            => $value['pk_i_admin_id'],
+                        'pid'           => 0,
+                        'name'          => "<a href=" . base_url() . "user/edit/" . $value['pk_i_admin_id'] . ">" . $value['s_display_name'] . "</a>",
+                        'txt'           => $value['designation'],
+                        'isCollapsed'   => false,
+                        'img'           => $value['picture'] ? base_url() . $value['picture'] : ''
                     );
-                }else{
+                } else {
                     $nodes[] = array(
-                        'id'            =>$value['pk_i_admin_id'],
-                        'pid'           =>$value['report_to'],
-                        'name'          =>"<a href=".base_url()."user/edit/".$value['pk_i_admin_id'].">".$value['s_display_name']."</a>",                    
-                        'txt'           =>$value['designation'],
-                        'isCollapsed'   =>false,
-                        'img'           =>$value['picture']?base_url().$value['picture']:''
-                    );                    
+                        'id'            => $value['pk_i_admin_id'],
+                        'pid'           => $value['report_to'],
+                        'name'          => "<a href=" . base_url() . "user/edit/" . $value['pk_i_admin_id'] . ">" . $value['s_display_name'] . "</a>",
+                        'txt'           => $value['designation'],
+                        'isCollapsed'   => false,
+                        'img'           => $value['picture'] ? base_url() . $value['picture'] : ''
+                    );
                 }
             }
-        }        
-        return $nodes;        
+        }
+        return $nodes;
     }
 
-    public function user_tree(){
+    public function user_tree()
+    {
 
         $data['title'] = 'User Hierarchy';
 
@@ -247,15 +371,15 @@ class User extends CI_Controller {
 
         $data['nodes_data'] = $nodes;
         $data['content'] = $this->load->view('user_hierarchy', $data, true);
-        $this->load->view('layout/main_wrapper', $data); 
-
+        $this->load->view('layout/main_wrapper', $data);
     }
 
-    public function create() {
+    public function create()
+    {
         // if (user_role('131') == true || user_role('130') == true) {
-           
+
         // } 
-	
+
         $data['page_title'] = display('add_user');
         $this->form_validation->set_rules('Name', display('disolay_name'), 'required');
         $this->form_validation->set_rules('designation', 'designation', 'required');
@@ -265,29 +389,32 @@ class User extends CI_Controller {
 
         $this->form_validation->set_rules('status', display('status'), 'required');
         //$this->form_validation->set_rules('cname', 'Contact person Name ', 'differs[Name]');
-        
+
 
         if (empty($this->input->post('dprt_id'))) {
             $this->form_validation->set_rules('employee_id', display('employee_id'), 'required|is_unique[tbl_admin.employee_id]', array('is_unique' => 'Duplicate Entery For Employee Id '));
             $this->form_validation->set_rules('password', display('password'), 'required|min_length[8]');
             $this->form_validation->set_rules('email', display('email'), 'required|is_unique[tbl_admin.s_user_email]', array('is_unique' => 'Duplicate Entery For email'));
-            $this->form_validation->set_rules('cell', display('cell'),'required|is_unique[tbl_admin.s_phoneno]');        
+            $this->form_validation->set_rules('cell', display('cell'), 'required|is_unique[tbl_admin.s_phoneno]');
         }
 
 
         #-------------------------------#
-     
+
         if (empty($this->input->post('dprt_id'))) {
             $password = md5($this->input->post('password', true));
         } else {
             $password = $this->input->post('old_pass', true);
         }
         $img = $this->fileupload->do_upload(
-                'assets/images/user/', 'file'
+            'assets/images/user/',
+            'file'
         );
         if ($img !== false && $img != null) {
             $this->fileupload->do_resize(
-                    $img, 293, 350
+                $img,
+                293,
+                350
             );
         }
 
@@ -297,13 +424,13 @@ class User extends CI_Controller {
             $permission = '';
         }
 
-$inactive = $this->input->post('status', true);
-            if($inactive=="0"){
-            $inactive_date = date("Y-m-d h:i:s");   
-            }else{
+        $inactive = $this->input->post('status', true);
+        if ($inactive == "0") {
+            $inactive_date = date("Y-m-d h:i:s");
+        } else {
             $inactive_date = '';
-            }
-        
+        }
+
         $data['department'] = (object) $postData = [
             'pk_i_admin_id' => $this->input->post('dprt_id', true),
             'user_roles' => $this->input->post('user_role', true),
@@ -314,11 +441,11 @@ $inactive = $this->input->post('status', true);
             'second_email' => $this->input->post('second_email', true),
             'second_phone' => $this->input->post('second_phone', true),
             's_password' => $password,
-           'inactive_date' => $inactive_date,
+            'inactive_date' => $inactive_date,
             's_display_name' => $this->input->post('Name', true),
             'state_id' => $this->input->post('state_id', true),
             'city_id' => $this->input->post('city_name', true),
-            'companey_id' =>$this->session->userdata('companey_id'),
+            'companey_id' => $this->session->userdata('companey_id'),
             'user_permissions' => $permission,
             'last_name' => $this->input->post('last_name', true),
             'b_status' => $this->input->post('status', true),
@@ -336,11 +463,12 @@ $inactive = $this->input->post('status', true);
             'contact_semail' => $this->input->post('csemail', true),
             'contact_phone' => $this->input->post('cphone', true),
             'contact_sphone' => $this->input->post('csphone', true),
+           
             'picture' => (!empty($img) ? $img : $this->input->post('new_file')),
             'report_to' => $this->input->post('report_to', true),
             'telephony_agent_id' => $this->input->post('telephony_agent_id', true),
-            'process' => !empty($this->input->post('process', true))?implode(',', $this->input->post('process', true)):'',
-			'products' => !empty($this->input->post('product', true))?implode(',', $this->input->post('product', true)):'',
+            'process' => !empty($this->input->post('process', true)) ? implode(',', $this->input->post('process', true)) : '',
+            'products' => !empty($this->input->post('product', true)) ? implode(',', $this->input->post('product', true)) : '',
         ];
         // print_r($data['department']);
         // die();
@@ -348,7 +476,14 @@ $inactive = $this->input->post('status', true);
         if ($this->form_validation->run() === true) {
             #if empty $dprt_id then insert data
             if (empty($this->input->post('dprt_id'))) {
-                if ($this->User_model->create($postData)) {
+              $insert_id=$this->User_model->create($postData);
+                if ($insert_id) {
+                      //insert wharsapp api
+                    $this->user_model->set_user_meta($insert_id,array(
+                        'api_name'=>$this->input->post('api_name'),
+                        'api_url' => $this->input->post('api_url')
+                        )
+                    );
                     $this->session->set_flashdata('message', display('save_successfully'));
                 } else {
                     $this->session->set_flashdata('exception', display('please_try_again'));
@@ -356,10 +491,16 @@ $inactive = $this->input->post('status', true);
                 redirect('user');
             } else {
                 if ($this->User_model->update($postData)) {
-					//print_r($this->db->last_query());exit;
+                    //print_r($this->db->last_query());exit;
                     if (!empty($this->session->password_error)) {
                         $this->session->set_flashdata('exception', 'pasword not updated');
                     } else {
+                          //insert wharsapp api
+                          $this->user_model->set_user_meta($this->input->post('dprt_id'),array(
+                            'api_name'=>$this->input->post('api_name'),
+                            'api_url' => $this->input->post('api_url')
+                            )
+                        );
                         $this->session->set_flashdata('message', display('update_successfully'));
                     }
                 } else {
@@ -370,26 +511,26 @@ $inactive = $this->input->post('status', true);
         } else {
             $data['state_list'] = $this->location_model->state_list();
             $data['region_list'] = $this->location_model->region_list();
-            $data['county_list'] = $this->User_model->display_country();    
-            $this->db->where('use_id!=',1);
-            $this->db->where('comp_id',$this->session->companey_id);
+            $data['county_list'] = $this->User_model->display_country();
+            $this->db->where('use_id!=', 1);
+            $this->db->where('comp_id', $this->session->companey_id);
             $data['user_role'] = $this->db->get('tbl_user_role')->result();
             $data['user_list'] = $this->User_model->user_list();
-            $data['companey_list']= $this->User_model->companyList();
-            
+            $data['companey_list'] = $this->User_model->companyList();
+
             $this->load->model('dash_model');
             $data['products'] = $this->dash_model->all_process_list();
-			$data['products_list'] = $this->dash_model->all_product_list();
-            
+            $data['products_list'] = $this->dash_model->all_product_list();
+          
             $data['enq_id'] = 'LT/IN/EI/' . str_pad($this->User_model->get_empid(), 2, '0', STR_PAD_LEFT);
             $data['content'] = $this->load->view('user_from', $data, true);
             $this->load->view('layout/main_wrapper', $data);
         }
     }
 
-    public function add_partner() {
+    public function add_partner()
+    {
         if (user_role('130') == true) {
-            
         }
         $data['title'] = display('add_user');
         $data['page_title'] = 'Channel Partner';
@@ -425,12 +566,15 @@ $inactive = $this->input->post('status', true);
         //Upload employee image..
         //picture upload
         $img = $this->fileupload->do_upload(
-                'assets/images/user/', 'file'
+            'assets/images/user/',
+            'file'
         );
         // if picture is uploaded then resize the picture
         if ($img !== false && $img != null) {
             $this->fileupload->do_resize(
-                    $img, 293, 350
+                $img,
+                293,
+                350
             );
         }
 
@@ -519,7 +663,8 @@ $inactive = $this->input->post('status', true);
         }
     }
 
-    public function password_check($str) {
+    public function password_check($str)
+    {
         if (preg_match('#[0-9]#', $str) && preg_match('#[a-zA-Z]#', $str)) {
 
             return TRUE;
@@ -528,7 +673,8 @@ $inactive = $this->input->post('status', true);
         return FALSE;
     }
 
-    public function partner_edit($id = null) {
+    public function partner_edit($id = null)
+    {
         $data['title'] = display('edit_user');
         $data['page_title'] = 'Channel Partner';
         #-------------------------------#
@@ -536,7 +682,7 @@ $inactive = $this->input->post('status', true);
         $data['city_list'] = $this->location_model->city_list();
         $data['region_list'] = $this->location_model->region_list();
         $data['territory_lsit'] = $this->location_model->territory_lsit();
-//		$data['companey_list']= $this->doctor_model->reads();
+        //		$data['companey_list']= $this->doctor_model->reads();
         $data['user_list'] = $this->User_model->user_list();
         $data['department_list'] = $this->Modules_model->modules_list();
         $data['user_role'] = $this->db->get('tbl_user_role')->result();
@@ -548,32 +694,36 @@ $inactive = $this->input->post('status', true);
         $this->load->view('layout/main_wrapper', $data);
     }
 
-    public function edit($id = null) {
+    public function edit($id = null)
+    {
         $data['title'] = display('edit_user');
         #-------------------------------#
         $data['state_list'] = $this->location_model->state_list();
         $data['city_list'] = $this->location_model->city_list();
         $data['region_list'] = $this->location_model->region_list();
         $data['territory_lsit'] = $this->location_model->territory_lsit();
-        $data['companey_list']= $this->User_model->companyList();
+        $data['companey_list'] = $this->User_model->companyList();
         $data['user_list'] = $this->User_model->user_list();
         $data['department_list'] = $this->Modules_model->modules_list();
         $data['user_role'] = $this->User_model->get_user_role_cid();
         $data['department'] = $this->User_model->read_by_id($id);
         $data['county_list'] = $this->location_model->country();
-		
+
         //echo "<pre>";
         //print_r($data['county_list']);exit();
-        
+
         $this->load->model('dash_model');
         $data['products_list'] = $this->dash_model->all_product_list();
         $data['products'] = $this->dash_model->all_process_list();
-        
+        $data['user_meta'] = $this->user_model->get_user_meta($id,array('api_name','api_url'));
+        // print_r($data['user_meta']->api_name);
+        // die();
         $data['content'] = $this->load->view('user_from', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }
 
-    public function delete($dprt_id = null) {
+    public function delete($dprt_id = null)
+    {
         if ($this->User_model->delete($dprt_id)) {
             #set success message
             $this->session->set_flashdata('message', display('delete_successfully'));
@@ -584,10 +734,10 @@ $inactive = $this->input->post('status', true);
         redirect('user');
     }
 
-    public function delete_userrole($user_role = null) 
+    public function delete_userrole($user_role = null)
     {
-        if (user_role('141') == true)
-        {}
+        if (user_role('141') == true) {
+        }
         if ($this->User_model->delete_userrole($user_role)) {
             #set success message
             $this->session->set_flashdata('message', display('delete_successfully'));
@@ -596,11 +746,10 @@ $inactive = $this->input->post('status', true);
             $this->session->set_flashdata('exception', display('please_try_again'));
         }
         redirect('user/user_type');
-        
-        
     }
 
-    public function update_role() {
+    public function update_role()
+    {
 
         if (!empty($_POST)) {
             $user_type = $this->input->post('user_type');
@@ -614,7 +763,8 @@ $inactive = $this->input->post('status', true);
         }
     }
 
-    public function update_status() {
+    public function update_status()
+    {
 
         if (!empty($_POST)) {
             $status = $this->input->post('someSwitchOption001');
@@ -629,10 +779,11 @@ $inactive = $this->input->post('status', true);
     }
 
     //Define user Permissions..
-    public function permissions() {
+    public function permissions()
+    {
         $data['title'] = display('user_list');
 
-        $this->db->select('id,title');        
+        $this->db->select('id,title');
         $data['modules']    =   $this->db->get('all_modules')->result_array();
 
         $data['content'] = $this->load->view('user_permissions', $data, true);
@@ -640,21 +791,23 @@ $inactive = $this->input->post('status', true);
     }
 
     //Open Edit user role form
-    public function edit_user_role($role_id) {
-        if (user_role('142') == true)
-        {}
+    public function edit_user_role($role_id)
+    {
+        if (user_role('142') == true) {
+        }
         $data['title'] = display('user_list');
         $data['user_role'] = $this->User_model->get_user_role($role_id);
-        
-        $this->db->select('id,title');        
+
+        $this->db->select('id,title');
         $data['modules']    =   $this->db->get('all_modules')->result_array();
-		
+
         $data['content'] = $this->load->view('edit_user_role', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }
 
     //Save updated user role data
-    public function update_user_role() {
+    public function update_user_role()
+    {
         $id = $this->input->post('role_id');
         $user_role = $this->input->post('user_type');
         $permissions = $this->input->post('permissions');
@@ -670,15 +823,16 @@ $inactive = $this->input->post('status', true);
 
 
 
-    public function upload_users(){
+    public function upload_users()
+    {
         ini_set('max_execution_time', '-1');
         $filename = "enquiry_" . date('d-m-Y_H_i_s');
         $config = array(
-            'upload_path' =>$_SERVER["DOCUMENT_ROOT"]."/assets/enquiry", 
+            'upload_path' => $_SERVER["DOCUMENT_ROOT"] . "/assets/enquiry",
             'allowed_types' => "application/vnd.ms-excel|csv|xlsx",
             /*'remove_spaces' => TRUE,*/
             'file_name' => $filename
-        );       
+        );
         $this->load->library('upload', $config);
         $this->upload->initialize($config);
         if ($this->upload->do_upload('user')) {
@@ -692,13 +846,13 @@ $inactive = $this->input->post('status', true);
             $count = 0;
             $record = 0;
             $failed_record = 0;
-            $i=0;
-            $u=0;
-            $dat_array=array();            
+            $i = 0;
+            $u = 0;
+            $dat_array = array();
             while (($filesop = fgetcsv($handle, 2000, ",")) !== false) {
-                if ($c) {                                        
-                   // $right = 166;                                        
-                   /* $post_data    =   array(       
+                if ($c) {
+                    // $right = 166;                                        
+                    /* $post_data    =   array(       
                             'user_permissions'      => $right, 
                             'user_type'             => $right, 
                             's_password'            => md5('12345678'),
@@ -712,47 +866,47 @@ $inactive = $this->input->post('status', true);
                             'report_to'             => $filesop[3]   
                           );                
 */
-            $post_data = array('s_phoneno'=>$filesop['2']);
-            //$this->db->where('s_user_email',$post_data['s_user_email']);
-            $this->db->where('s_phoneno',$post_data['s_phoneno']); 
-            $r    =   $this->db->get('tbl_admin')->row_array();
-            
-            /*echo "<pre>";
+                    $post_data = array('s_phoneno' => $filesop['2']);
+                    //$this->db->where('s_user_email',$post_data['s_user_email']);
+                    $this->db->where('s_phoneno', $post_data['s_phoneno']);
+                    $r    =   $this->db->get('tbl_admin')->row_array();
+
+                    /*echo "<pre>";
             print_r($r['s_user_email']);
             echo "</pre>";*/
-            
-                if (empty($r) && $post_data['s_phoneno']) {                    
-                    //$this->db->insert('tbl_admin',$post_data);
-                    $this->db->set('status',2);
-                    $this->db->where('phone',$post_data['s_phoneno']);
-                    $this->db->where('status',3);
-                    $this->db->where('comp_id',57);
-                    $this->db->update('enquiry');
-                    $i++;
-                }else{
-                    /*$this->db->where('s_user_email',$post_data['s_user_email']);
+
+                    if (empty($r) && $post_data['s_phoneno']) {
+                        //$this->db->insert('tbl_admin',$post_data);
+                        $this->db->set('status', 2);
+                        $this->db->where('phone', $post_data['s_phoneno']);
+                        $this->db->where('status', 3);
+                        $this->db->where('comp_id', 57);
+                        $this->db->update('enquiry');
+                        $i++;
+                    } else {
+                        /*$this->db->where('s_user_email',$post_data['s_user_email']);
                     $this->db->set('user_permissions',$post_data['user_permissions']);
                     $this->db->set('user_type',$post_data['user_type']);
                     $this->db->update('tbl_admin');*/
-                    //$u++;
+                        //$u++;
+                    }
                 }
-            }  
-            if ($filesop[7]) {                
-                $c++;
+                if ($filesop[7]) {
+                    $c++;
+                }
             }
-            } 
         }
-echo $this->upload->display_errors();
-        echo $i.'<br>';
-        echo $c.'<br>';
+        echo $this->upload->display_errors();
+        echo $i . '<br>';
+        echo $c . '<br>';
         echo $u;
-        unlink($filePath);        
+        unlink($filePath);
 
         echo "<pre>";
         print_r($post_data);
         echo "</pre>";
-        exit();        
-        
+        exit();
+
         /*$post_data    =   array(       
             'user_permissions'      => $post_data['user_permissions'],                                                  
             's_password'            => $post_data['password'],
@@ -770,13 +924,13 @@ echo $this->upload->display_errors();
           );*/
 
         //$this->db->insert('tbl_admin',$post_data);
-    
+
     }
 
-    public function bulk_upload_user(){
+    public function bulk_upload_user()
+    {
         $data['title']  = 'test';
         $data['content'] = $this->load->view('upload_bulk_user', $data, true);
         $this->load->view('layout/main_wrapper', $data);
-
     }
 }

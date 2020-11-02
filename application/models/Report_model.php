@@ -1047,6 +1047,7 @@ class Report_model extends CI_Model {
         $this->db->select("reports.*,CONCAT_WS(' ',tbl_admin.s_display_name,tbl_admin.last_name) as created_by_name");
         $this->db->join('tbl_admin','tbl_admin.pk_i_admin_id=reports.created_by','inner');
         $this->db->where('comp_id',$this->session->companey_id);
+        $this->db->where('reports.created_by',$this->session->user_id);
         return $this->db->get('reports')->result_array();
     }
 	
@@ -1064,11 +1065,11 @@ class Report_model extends CI_Model {
 		
 	}
 	public function getdynfielsval(){
-	    $filter_date= date('Y-m-d H:i:s', strtotime("-3 days"));
+	    //$filter_date= date('Y-m-d H:i:s', strtotime("-3 days"));
 		$this->db->select("flds.*,inp.input_label");
         $this->db->where("flds.cmp_no", $this->session->companey_id);
 		$this->db->where("inp.status", 1);
-		$this->db->where("flds.created_date>", $filter_date);
+		//$this->db->where("flds.created_date>", $filter_date);
 		$this->db->from("extra_enquery flds");
 		$this->db->join("tbl_input inp", "inp.input_id = flds.input");
 		$fldarr = $this->db->get()->result();

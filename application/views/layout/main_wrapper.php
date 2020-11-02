@@ -337,6 +337,11 @@ if($root=='https://student.spaceinternationals.com'){  ?>
       
     
       <style>
+        .btn-default:hover {
+    color: #333;
+    background-color: white;
+    border-color: #adadad;
+}
       .content {
        /*min-height: 900px;
        margin-right: auto;
@@ -714,7 +719,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                       <br />
                       <?php echo form_open(base_url("master_lead_search"), array("class" => "form-inline", "method"=> "GET",'id'=>'master_search_form')); ?>
                         <div class="input-group">               
-                        <input type="text" class="form-control master-search" placeholder = "Search here" name="search" value = "<?php echo (!empty($_GET['search'])) ? $_GET['search'] : ""; ?>" style="width:77%;" >
+                        <input type="text" class="form-control master-search" required placeholder = "Search here" name="search" value = "<?php echo (!empty($_GET['search'])) ? $_GET['search'] : ""; ?>" style="width:77%;" >
                         
                         <div class="input-group-prepend">
                           <button type="submit" class="input-group-text btn btn-default master-search-icon" style=""><i class="fa fa-search" aria-hidden="true"></i></button>&nbsp;
@@ -803,29 +808,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
               <div class="dropdown-menu dropdown-menu-large" style="width: 280px;">   
                   <ul class ="cart-dropdown-menu"  id = "cart-nav-menu" style = "padding:0px;list-style:none;max-height: 400px;
     overflow-y: auto;">
-                <?php 
                 
-                
-                if(!empty($this->cart->contents())) {
-                    
-                    $cartarr = $this->cart->contents();
-                    foreach($cartarr as $ind => $cart) {
-                    
-                    $productData = $this->Product_model->productdet($cart['id']);
-
-                      ?><li id = "cart-li-<?php echo $cart['id']; ?>" > 
-                    
-                      <div class = "cart-items"><h4><a class="prodname" href = ""> <?php echo $cart['name'] ?></a></h4>
-                          <p>
-                           Price : <i class = "fa fa-price"></i> <?php echo  $cart['price']." X <input type='hidden' name='minimum' class='minimum' value='".$productData->minimum_order_quantity."'> <input type='number' class='cart-qty' value=".$cart['qty']." min='1' data-prodid=".$cart['id']." >";?> = <i class = "fa fa-rupee"></i><span class="item-price-<?=$cart['id']?>"> <?php echo $cart['price']*$cart['qty']  ?></span> 
-                            <a href="javascript:void(0)" onclick="remove_cart_item(<?=$cart['id']?>)" class="fa fa-trash btn btn-danger btn-sm pull-right remove-item-cart"></a>
-                          </p>
-                          <hr />
-                          </div>
-                      </li><?php
-                    } ?>
-                      
-              <?php } ?>  
                     
                   </ul>
                   <ul style = "padding:0px;list-style:none;">
@@ -2292,7 +2275,11 @@ $("#anch_notification_dropdown").on('click',function(){
         }
       });      
     });  
-    if (("<?=$this->session->companey_id?>" == "57")) {      
+    if (("<?=$this->session->companey_id?>" == "57")) {    
+        m = $("#mark_attendance").hasClass('btn-danger');
+        if (m) {          
+          record_geolocation();
+        }  
         setInterval(function() {
           m=$("#mark_attendance").hasClass('btn-danger');
           if (m) {          
@@ -2355,7 +2342,7 @@ $("#anch_notification_dropdown").on('click',function(){
               }
             },
             error: function (xhr, desc, err){
-              alert("mark attendance error");
+             // alert("mark attendance error");
             }
         });
     });
@@ -2424,4 +2411,6 @@ $(document).ready(function(){
 
   });
 });
+
+$("#cart-nav-menu").load("<?=base_url().'buy/cart'?>");
 </script>

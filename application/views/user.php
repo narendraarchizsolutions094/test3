@@ -27,14 +27,15 @@
             <div class="panel-body">
                  <form id="inactive_all" method="POST" action="<?= base_url('user/inactive-all') ?>">   
                    
-                <table class="datatable1 table table-striped table-bordered" cellspacing="0" width="100%">
+                <table class="table table-striped table-bordered" id="example" cellspacing="0" width="100%">
 
                     <thead>
 
                         <tr>
 
-                            <th><input type='checkbox' id="checkAll" value="check all" > <?php echo display('serial') ?></th>
-
+                        <th class="noExport">
+                     <input type='checkbox' class="checked_all1" value="check all"  onclick="event.stopPropagation();">
+                     </th>
                             <th>Emp Id</th>
 
                             <th><?php echo display('disolay_name') ?></th>
@@ -56,53 +57,7 @@
 
                     </thead>
 
-                    <tbody>
-
-                        <?php if (!empty($departments)) { ?>
-
-                            <?php $sl = 1; ?>
-
-                            <?php foreach ($departments as $department) { 
-                                if ($sl==1) {   echo' <input name="com_id" hidden value="'.$department->companey_id.'"> ';  }
-                                ?>
-                            
-
-                              <tr  class="<?php echo ($sl & 1)?"odd gradeX":"even gradeC" ?><?php if($department->b_status==0){echo 'color:red';} ?>" style="cursor: pointer;">
-
-                                    <td style="<?php if($department->b_status==0){echo 'color:red';} ?>"><input type="checkbox" value="<?= $department->pk_i_admin_id  ?>" id="checkitem" name="user_ids[]"> <?php echo $sl; ?></td>
-
-                                     <td ><a   href="<?php echo base_url("user/edit/$department->pk_i_admin_id") ?>"><?php echo $department->employee_id; ?></a></td>
-
-                                    <td style="<?php if($department->b_status==0){echo 'color:red';} ?>"><a   href="<?php echo base_url("user/edit/$department->pk_i_admin_id") ?>"><?php echo $department->s_display_name;echo '&nbsp;';echo $department->last_name; ?></a></td>
-
-                                    <td style="<?php if($department->b_status==0){echo 'color:red';} ?>"><?php echo $department->user_role;   ?></td>
-
-                                  
-
-                                    <td style="<?php if($department->b_status==0){echo 'color:red';} ?>"><a style="<?php if($department->b_status==0){echo 'color:red';}else{echo'color:black; ';} ?>"  href="<?php echo base_url("user/edit/$department->pk_i_admin_id") ?>"><?php echo $department->s_user_email; ?></a></td>
-
-                                    <td style="<?php if($department->b_status==0){echo 'color:red';} ?>"><a style="<?php if($department->b_status==0){echo 'color:red';}else{echo'color:black; ';} ?>"  href="<?php echo base_url("user/edit/$department->pk_i_admin_id") ?>"><?php echo $department->s_phoneno; ?></a></td>
-                                    <td style="<?php if($department->b_status==0){echo 'color:red';} ?>">
-                                        <?php 
-                                        $process_arr = explode(',', $department->process);
-                                        $this->db->select('product_name');
-                                        $this->db->where_in('sb_id',$process_arr);
-                                        $p_res    =   $this->db->get('tbl_product')->result_array();                                        
-                                        if (!empty($p_res)) {
-                                            foreach ($p_res as $key => $value) {
-                                                echo $value['product_name'].', '; 
-                                            }   } ?>
-                                        </td>
-                                        <td style="<?php if($department->b_status==0){echo 'color:red';} ?>"><?php echo !empty($department->start_billing_date)?$department->start_billing_date:'NA'; ?></td>
-                                        <td style="<?php if($department->b_status==0){echo 'color:red';} ?>"><?php echo $department->valid_upto ?></td>
-                                        <td style="<?php if($department->b_status==0){echo 'color:red';} ?>"><?php echo !empty($department->last_log)?$department->last_log:'NA'; ?></td>
-                                    <td style="<?php if($department->b_status==0){echo 'color:red';} ?>"><?php echo !empty($department->dt_create_date)?$department->dt_create_date:'NA'; ?></td>
-                                    <td style="<?php if($department->b_status==0){echo 'color:red';} ?>"><?php echo (($department->b_status==1)?display('active'):display('inactive')); ?></td>
-                                </tr>
-                                <?php $sl++; ?>
-                            <?php } ?> 
-                        <?php } ?> 
-                    </tbody>
+                    
                 </table>  <!-- /.table-responsive -->
                  </form>
             </div>
@@ -111,7 +66,18 @@
 </div>
 
 
+<script>
+function reset_input(){
+$('input:checkbox').removeAttr('checked');
+}
+
+$('.checked_all1').on('change', function() {     
+    // $('.checkbox1').prop('checked', $(this).prop("checked"));    
+    $('input:checkbox').not(this).prop('checked', this.checked);
+}); 
+</script>
 <script> 
+
 $("#checkAll").click(function(){
     $('input:checkbox').not(this).prop('checked', this.checked);
 });
@@ -121,5 +87,40 @@ $(document).ready(function(){
     $("#inactive_all").submit(); //if requestNew is the id of your form
   });
 });
+
+// Pipelining function for DataTables. To be used to the `ajax` option of DataTables
+
+$(document).ready(function() {
+role = "<?=!empty($_GET['user_role'])?'?user_role='.$_GET['user_role']:''?>";
+
+$('#example').DataTable({         
+    "processing": true,
+    "scrollX": true,
+    "scrollY": 520,
+    "serverSide": true,          
+    "lengthMenu": [ [10,30, 50,100,500,1000], [10,30, 50,100,500,1000] ],
+    "ajax": {
+        "url": "<?=base_url().'user/departments'?>"+role,
+        "type": "POST",
+        //"dataType":"html",
+        //success:function(q){ //alert(q); //document.write(q);},
+        error:function(u,v,w)
+        {
+          alert(w); 
+        }
+        },
+    // "columnDefs": [{ "orderable": false, "targets": 0 }],
+    // "order": [[ 1, "desc" ]],
+    // createdRow: function( row, data, dataIndex ) {            
+    //   var th = $("table>th");            
+    //   l = $("table").find('th').length;
+    //   for(j=1;j<=l;j++){
+    //     h = $("table").find('th:eq('+j+')').html();
+    //     $(row).find('td:eq('+j+')').attr('data-th',h);
+    //   }  
+    // }                
+});
+  });
+
 
 </script>

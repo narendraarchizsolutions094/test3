@@ -42,7 +42,7 @@ class Common_model extends CI_Model {
 
         array_push($categories, $user_id);
         
-        return $categories;
+        return array_unique($categories);
     }
 
 
