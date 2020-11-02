@@ -22,7 +22,7 @@
                             <th><?php echo display('action') ?></th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody> 
                         <?php if (!empty($country)) { ?>
                             <?php $sl = 1; ?>
                             <?php foreach ($country as $department) { ?>
@@ -33,7 +33,7 @@
                                       <td><?php echo $department->region_name; ?></td>
                                     <td><?php echo $department->country_name; ?></td>
                                  
-                                    <td><?php echo (($department->c_status==1)?display('active'):display('inactive')); ?></td>
+                                    <td><?php echo (($department->state_status==1)?display('active'):display('inactive')); ?></td>
                                     <td class="center">
                                         <a href="<?php echo base_url("location/edit_state/$department->id") ?>" class="btn btn-xs  btn-primary"><i class="fa fa-edit"></i></a> 
                                         <a href="<?php echo base_url("location/delete_state/$department->id") ?>" onclick="return confirm('<?php echo display("are_you_sure") ?>')" class="btn btn-xs  btn-danger"><i class="fa fa-trash"></i></a> 

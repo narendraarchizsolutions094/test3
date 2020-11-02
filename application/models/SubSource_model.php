@@ -60,17 +60,19 @@ class SubSource_model extends CI_Model {
     public function descriptionlist() {
 		$company=$this->session->userdata('companey_id');
         $userid =$this->session->userdata('user_id');
-        return $this->db->select("lead_description.*,lead_stage.lead_stage_name,tbl_product.product_name")
+      
+        return $this->db->select("lead_description.*,GROUP_CONCAT(lead_stage.lead_stage_name) as stage_list,tbl_product.product_name")
                         ->from("lead_description")
-                        ->join('lead_stage', 'lead_stage.stg_id = lead_description.lead_stage_id','left')
+                        ->join('lead_stage', 'FIND_IN_SET(lead_stage.stg_id,lead_description.lead_stage_id)>0','left')
                         ->join('tbl_product','tbl_product.sb_id=lead_stage.process_id','left')
 						->where('lead_description.comp_id', $company)
-                    
+                        ->group_by('lead_description.id')
                         ->get()
                         ->result();
-         
+
+        //echo $this->db->last_query(); exit();
     }
-    
+    /*ruko batata hu ok sir ye query puri theekchl jati hai bs using hta do to */
     public function all_lead_source() {
 		$company=$this->session->userdata('companey_id');
         return $this->db->select("*")

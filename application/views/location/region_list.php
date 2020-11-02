@@ -1,5 +1,5 @@
 <div class="row">
-    <!--  table area -->
+    <!--  table area --> 
     <div class="col-sm-12">
         <div  class="panel panel-default thumbnail">
  
@@ -20,7 +20,7 @@
                             <th><?php echo display('action') ?></th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody> 
                         <?php if (!empty($country)) { ?>
                             <?php $sl = 1; ?>
                             <?php foreach ($country as $department) { ?>
@@ -29,7 +29,7 @@
                                       <td><?php echo $department->region_name; ?></td>
                                     <td><?php echo $department->country_name; ?></td>
                                  
-                                    <td><?php echo (($department->c_status==1)?display('active'):display('inactive')); ?></td>
+                                    <td><?php echo (($department->status==1)?display('active'):display('inactive')); ?></td>
                                     <td class="center">
                                         <a href="<?php echo base_url("location/edit_region/$department->region_id") ?>" class="btn btn-xs  btn-primary"><i class="fa fa-edit"></i></a> 
                                         <a href="<?php echo base_url("location/delete_region/$department->region_id") ?>" onclick="return confirm('<?php echo display("are_you_sure") ?>')" class="btn btn-xs  btn-danger"><i class="fa fa-trash"></i></a> 

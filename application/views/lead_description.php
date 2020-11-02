@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row"> 
     <!--  table area -->
     <div class="col-sm-12">
         <div  class="panel panel-default thumbnail">
@@ -13,9 +13,9 @@
                 <thead>
                 <tr>
                     <th><?php echo display('serial') ?></th>
-                    <th><?php echo display('lead_stage') ?></th>
-                    <th><?php echo 'Process';?></th>                          
-                    <th><?php echo display('Description')?></th>                          
+                    <th><?php echo display('Description')?></th>
+                    <th><?php echo display('lead_stage') ?></th>   
+                    <th><?php echo 'Process';?></th>                        
                     <th><?php echo display('status') ?></th>
                     <th><?php echo display('action') ?></th>
                 </tr>
@@ -25,9 +25,9 @@
                     $sl = 1;foreach ($description_list as $description) {?>
                         <tr class="<?php echo ($sl & 1)?"odd gradeX":"even gradeC" ?>">
                             <td><?php echo $sl; ?></td>
-                            <td><?php echo $description->lead_stage_name; ?></td>
-                            <td><?php echo !empty($description->product_name)?$description->product_name:'NA';?></td>                            
-                            <td><?php echo $description->description; ?></td>                               
+                            <td><?php echo $description->description; ?></td>
+                            <td> <?php echo $description->stage_list; ?></td>
+                            <td><?php echo !empty($description->product_name)?$description->product_name:'NA';?></td>                    
                             <td><?php echo (($description->status==1)?display('active'):display('inactive')); ?></td>
                             <td class="subsource">
                                 <a href="<?php echo base_url("lead/edit_discription/$description->id") ?>" class="btn btn-xs  btn-primary"><i class="fa fa-edit"></i></a> 

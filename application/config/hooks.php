@@ -38,3 +38,10 @@ $hook['post_controller_constructor'] = array(
     "filename" => "Vitels.php",// where the class declared
     "filepath" => "hooks"// this is location inside application folder
 );
+
+// $hook['post_controller'] = array(
+//     "class"    => "LoginHook",// any name of class that you want
+//     "function" => "verifyLogin",// a method of class
+//     "filename" => "LoginHook.php",// where the class declared
+//     "filepath" => "hooks"// this is location inside application folder
+// );

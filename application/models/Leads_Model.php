@@ -133,6 +133,31 @@ public function all_course($course,$lvl,$length,$disc) {
                         ->row();
     }
 
+    public function save_referred_by($post,$id=0)
+    {
+        if($id)
+            $this->db->where('id',$id)->update('tbl_referred_by',$post);
+        else
+            $this->db->insert('tbl_referred_by',$post);
+        $this->session->set_flashdata('SUCCESSMSG','Saved Successfully.');
+    }
+
+    public function get_referred_by($where=0)
+    {
+       if($where)
+            $this->db->where($where);
+        $this->db->where('company_id',$this->session->companey_id);
+        return $this->db->get('tbl_referred_by')->result();
+         //echo $this->db->last_query(); exit();
+    }
+
+    public function delete_referred_by($id)
+    {
+        $this->db->where(array('id'=>$id,'company_id'=>$this->session->companey_id));
+        $this->db->delete('tbl_referred_by');
+        $this->session->set_flashdata('SUCCESSMSG','Deleted Successfully');
+    }
+
     public function get_ld_srce_list($ld_source_id) {
         $this->db->select("lead_name");
         $this->db->from('lead_source');
@@ -226,9 +251,10 @@ public function all_description($diesc) {
 
         $this->db->select("*");
         $this->db->from('lead_description');
-		$this->db->where('lead_stage_id',$diesc);
+		$this->db->where('FIND_IN_SET("'.$diesc.'",lead_stage_id) >0');
 		$this->db->where('comp_id', $this->session->userdata('companey_id'));
         $query = $this->db->get();
+      // echo  $this->db->last_query(); exit();
         return $query->result();
     }
 

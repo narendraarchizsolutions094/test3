@@ -20,6 +20,7 @@ class location extends CI_Controller {
         }
         $data['title'] = display('region_list');
         $data['country'] = $this->location_model->region_list();
+       // print_r($data['country']); exit();
         $data['content'] = $this->load->view('location/region_list', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }
@@ -91,6 +92,7 @@ class location extends CI_Controller {
         }
         $data['title'] = display('country_list');
         $data['country'] = $this->location_model->state_list();
+       // print_r($data['country']); exit();
         $data['content'] = $this->load->view('location/state_list', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }
@@ -186,6 +188,8 @@ class location extends CI_Controller {
                 'created_by' => $this->session->userdata('user_id'),
                 'created_date' => date('Y-m-d'),
             ];
+
+
         }
         #-------------------------------#
         if ($this->form_validation->run() === true) {
@@ -205,7 +209,7 @@ class location extends CI_Controller {
                 if (user_role('11') == true) {
                 }
                 if ($this->location_model->update_region($postData)) {
-                    #set success message
+                    // print_r($data['doctor']); exit();
                     $this->session->set_flashdata('message', display('update_successfully'));
                 } else {
                     #set exception message
@@ -403,7 +407,7 @@ class location extends CI_Controller {
             $this->form_validation->set_rules('city_name', display('city_name'), 'required|max_length[50]|callback_dublicate_city');
             #-------------------------------#
         } else {
-            $this->form_validation->set_rules('city_name', display('city_name'), 'required|max_length[50]|callback_dublicate_city');
+            $this->form_validation->set_rules('city_name', display('city_name'), 'required|max_length[50]');
         }
         $this->form_validation->set_rules('country_id', display('country_name'), 'required|max_length[50]');
         $this->form_validation->set_rules('region_id', display('region_name'), 'required|max_length[50]');
@@ -479,7 +483,7 @@ class location extends CI_Controller {
         $this->load->view('layout/main_wrapper', $data);
     }
     public function edit_region($user_id = null) {
-        if (user_role('11') == true) {
+        if (user_role('11') == true) { 
         }
         $data['doctor'] = $this->location_model->read_by_region($user_id);
         $data['country'] = $this->location_model->country();

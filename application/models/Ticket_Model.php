@@ -111,7 +111,7 @@ class Ticket_Model extends CI_Model {
 	                            'checked' 		=> 0,
 	                            'product_id' 	=>  $_SESSION['process'][0],
 	                            'created_date' 	=>  date("Y-m-d H:i:s"),
-	                            'status' 		=> 3,
+	                            'status' 		=> 1,
 	                            'created_by' 	=> $this->session->user_id,
 	                            'phone'			=> $this->input->post('phone'),
 	                        );
@@ -139,11 +139,13 @@ class Ticket_Model extends CI_Model {
 				"product"	 => ($this->input->post("product", true)) ? $this->input->post("product", true) : "",
 				"sourse"     => ($this->input->post("source", true)) ? $this->input->post("source", true) : "",
 				"complaint_type" => $this->input->post("complaint_type", true),
-				"coml_date"	 => $ndate,
+				//"coml_date"	 => $ndate,
 				"last_update"=> date("Y-m-d h:i:s"),
 				"priority"	 => ($this->input->post("priority", true)) ? $this->input->post("priority", true) : "",
 				"issue"	 => ($this->input->post("issue", true)) ? $this->input->post("issue", true) : "",
 				"tracking_no"   => ($this->input->post("tracking_no", true)) ? $this->input->post("tracking_no", true) : "",
+				"referred_by"   => ($this->input->post("referred_by", true)) ? $this->input->post("referred_by", true) : "",
+				
 				
 				 
 			);			
@@ -308,7 +310,7 @@ class Ticket_Model extends CI_Model {
 				 ->from("tbl_ticket_conv cnv")
 				 ->join("lead_stage",'lead_stage.stg_id=cnv.stage','left')
 				 ->join("lead_description",'lead_description.id=cnv.sub_stage','left')				 
-				 ->order_by("cnv.id ASC")
+				 ->order_by("cnv.id DESC")
 				 ->get()
 				 ->result();
 			
@@ -377,7 +379,45 @@ $where .= " OR tck.assign_to IN (".implode(',', $all_reporting_ids).'))';
 		
 		}
 		
-		
+
+		public function all_related_tickets($where)
+		{
+			 $this->db->select("tck.*,enq.phone,enq.gender,prd.product_name, concat(enq.name_prefix,' ' , enq.name,' ', enq.lastname) as clientname , COUNT(cnv.id) as tconv, cnv.msg");
+				 $this->db->where("tck.company", $this->session->companey_id );
+				
+
+				
+				 $this->db->from("tbl_ticket tck");
+				 $this->db->join("tbl_ticket_conv cnv", "cnv.tck_id = tck.id", "LEFT");
+				 $this->db->join("enquiry enq", "enq.enquiry_id = tck.client", "LEFT");
+				 $this->db->join("tbl_product prd", "prd.sb_id = tck.product", "LEFT");
+				 $ticketno = $where['ticket_no'];
+				 unset($where['ticket_no']);
+				if(!empty($where))
+				{
+					$i=0;
+					foreach ($where as $key => $value)
+					{
+						if(!empty($value))
+						{
+							if($i==0)
+								$this->db->where($key,$value);
+							else 
+								$this->db->or_where($key,$value);
+							$i=1;
+						}
+					}
+					
+				}
+				
+				 
+				 $this->db->group_by("tck.id");
+				 $this->db->having("tck.ticketno !=",$ticketno);
+				 $this->db->order_by("tck.id DESC");
+				return  $this->db->get()->result();
+				// echo $this->db->last_query(); exit();
+		}
+
 		public function getproduct()
 		{
 			
@@ -415,6 +455,10 @@ $where .= " OR tck.assign_to IN (".implode(',', $all_reporting_ids).'))';
 			return $this->db->select("*")->where(array("status" => 3, "comp_id" => $this->session->companey_id))->get("enquiry")->result();
 			
 			}
+		}
+		public function getclient($client_id)
+		{
+			return $this->db->select("enquiry.enquiry_id,enquiry.name")->where(array("enquiry_id" => $client_id, "comp_id" => $this->session->companey_id))->get("enquiry")->result();
 		}
 	public function add_tsub($data) 
 	{
