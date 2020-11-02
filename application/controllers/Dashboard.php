@@ -2679,4 +2679,202 @@ public function set_layout_to_session() {
     }
     */
 
+    public function data_fix_lalantop(){
+        $this->db->select('phone,enquiry_id');
+        $this->db->where('comp_id',57);
+        $this->db->where('status',3);
+        $this->db->where('product_id',122);
+        $enqs = $this->db->get('enquiry')->result_array();
+        if(!empty($enqs)){
+            foreach($enqs as $enq){
+                $this->db->select('pk_i_admin_id');
+                $this->db->where('companey_id',57);
+                $this->db->where('s_phoneno',$enq['phone']);
+                $user = $this->db->get('tbl_admin')->row_array();
+                if(!empty($user)){
+                    $this->db->where('seller_id',$user['pk_i_admin_id']);
+                    if($this->db->get('tbl_proddetails')->num_rows()){
+
+                    }else{
+                        $this->db->where('comp_id',57);
+                        $this->db->where('status',3);
+                        $this->db->where('product_id',122);
+                        $this->db->where('enquiry_id',$enq['enquiry_id']);
+                        $this->db->set('status',2);
+                        $this->db->update('enquiry');
+
+                        $this->db->where('pk_i_admin_id',$user['pk_i_admin_id']);
+                        $this->db->where('companey_id',57);
+                        $this->db->delete('tbl_admin');
+
+                        echo $enq['enquiry_id'].' '.$user['pk_i_admin_id'];
+                    }
+                }
+            }
+        }
+    }
+
+    public function updatefb_page(){ 
+        $page_token='';
+        $pageId='';
+          // $this->db->where('page_id',$pageId);
+            // $res=$this->db->get('fb_page')->row();
+            // if(empty($res)){
+            //  $this->db->set('page_id',$pageId);
+            //  $this->db->set('page_token',$page_token);
+            //  $this->db->insert('fb_page');
+            //  }else{
+            //  $this->db->set('page_token',$page_token);
+            //  $this->db->where('page_id',$pageId);
+            //  $this->db->update('fb_page');  
+            // }
+      $start=2675;
+      $end=4184;
+      
+            for ($i = $start; $i< $end; $i++)
+            {
+          
+           $this->db->select('response,id');
+           $this->db->where('id',$i);
+           $res_fb=$this->db->get('fb_setting')->result();
+            if(!empty($res_fb)){
+            foreach ($res_fb as $d){
+            if(!empty(json_decode($d->response)->entry[0]->changes[0]->value->leadgen_id)){
+                    $leadgen_id=json_decode($d->response)->entry[0]->changes[0]->value->leadgen_id;
+                    $page_id=json_decode($d->response)->entry[0]->changes[0]->value->page_id;
+                    $form_id=json_decode($d->response)->entry[0]->changes[0]->value->form_id;
+                    $ad_id=json_decode($d->response)->entry[0]->changes[0]->value->ad_id;
+                    $this->db->select('page_token');
+                     $this->db->where('page_id',$page_id);
+                     $res=$this->db->get('fb_page')->row();
+                     $access_token='';
+                    if(!empty($res)){
+                     $access_token=$res->page_token;
+                    }
+                    $curl = curl_init();
+                    curl_setopt_array($curl, array(
+                      CURLOPT_URL => "https://graph.facebook.com/v8.0/".$leadgen_id."?access_token=".$access_token,
+                      CURLOPT_RETURNTRANSFER => true,
+                      CURLOPT_ENCODING => "",
+                      CURLOPT_MAXREDIRS => 10,
+                      CURLOPT_TIMEOUT => 30,
+                      CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                      CURLOPT_CUSTOMREQUEST => "GET",
+                      CURLOPT_POSTFIELDS => "",
+                      CURLOPT_HTTPHEADER => array(
+                        "cache-control: no-cache",
+                        "content-type: application/json"
+                      ),
+                    ));
+                    $response = curl_exec($curl);
+                    $err = curl_error($curl);
+    
+                    curl_close($curl);
+    
+                    if ($err) {
+                        
+                    } else {
+                    $email1 = $phone1  = $name1 = '';
+                    foreach(json_decode($response)->field_data as $v){
+                     
+                      if(!empty($v) && $v->{'name'}==='full_name'){
+                          $name=$v->{'values'};
+                          $name1=$name[0];
+                        }   
+                        if(!empty($v) && $v->{'name'}==='phone_number'){
+                         $phone=$v->{'values'};
+                         $phone1=$phone[0];
+                        } 
+                        if(!empty($v) && $v->{'name'}==='email'){
+                         $email=$v->{'values'};
+                         $email1= $email[0];
+                        }     
+                     } 
+                $this->db->select('from_id,from_name,compaign_name,add_set_name,add_name,course_name');
+                $this->db->where('from_id',$ad_id);
+                $res_db=$this->db->get('fb_from_details')->row();      
+                if(!empty($res_db)){
+                 $from_id=$res_db->from_id;
+                 $from_name=$res_db->from_name;
+                 $compaign_name=$res_db->compaign_name;
+                 $add_set_name=$res_db->add_set_name;
+                 $add_name=$res_db->add_name;
+                 $course_name=$res_db->course_name;
+                 }else{
+                 $from_id='';
+                 $from_name='';
+                 $compaign_name='';
+                 $add_set_name='';
+                 $add_name='';
+                 $course_name='';
+                 } 
+            
+                     $this->db->where(array('email'=>$email1,'enquiry_source'=>209,'comp_id'=>81));
+                     $enq=  $this->db->get('enquiry');
+                     echo $this->db->last_query();
+                       if($enq->num_rows()==1){
+                       $enqdata= $enq->row();
+                        $enqid=$enqdata->Enquery_id;
+                        $enquiry_id=$enqdata->enquiry_id;
+                        //response 
+                        
+                        $this->db->where(array('parent'=>$enquiry_id,'input'=>4399));
+                        
+                        if($this->db->get('extra_enquery')->num_rows()){
+                            $this->db->set('fvalue',$response);
+                            $this->db->where(array('parent'=>$enquiry_id,'input'=>4399));
+                            $this->db->update('extra_enquery');  
+                        }else{
+                            $this->db->insert('extra_enquery',array('enq_no'=>$enqid,'parent'=>$enquiry_id,'input'=>4399,'fvalue'=>$response,'cmp_no'=>81));
+                        }
+
+                        //
+                        $this->db->where(array('parent'=>$enquiry_id,'input'=>4393));
+                        if($this->db->get('extra_enquery')->num_rows()){
+                            $this->db->set('fvalue',$compaign_name);
+                            $this->db->where(array('parent'=>$enquiry_id,'input'=>4393));
+                            $this->db->update('extra_enquery');
+                        }else{
+                            $this->db->insert('extra_enquery',array('enq_no'=>$enqid,'parent'=>$enquiry_id,'input'=>4393,'fvalue'=>$compaign_name,'cmp_no'=>81));
+                        }
+                        //
+                        $this->db->where(array('parent'=>$enquiry_id,'input'=>4395));
+                        if($this->db->get('extra_enquery')->num_rows()){
+                            $this->db->set('fvalue',$from_name);
+                            $this->db->where(array('parent'=>$enquiry_id,'input'=>4395));
+                            $this->db->update('extra_enquery');
+                        }else{
+                            $this->db->insert('extra_enquery',array('enq_no'=>$enqid,'parent'=>$enquiry_id,'input'=>4395,'fvalue'=>$from_name,'cmp_no'=>81));
+                        }
+                        //
+                        $this->db->where(array('parent'=>$enquiry_id,'input'=>4392));
+                        if($this->db->get('extra_enquery')->num_rows()){                        
+                            $this->db->set('fvalue',$add_set_name);
+                            $this->db->where(array('parent'=>$enquiry_id,'input'=>4392));
+                            $this->db->update('extra_enquery'); 
+                        }else{
+                            $this->db->insert('extra_enquery',array('enq_no'=>$enqid,'parent'=>$enquiry_id,'input'=>4392,'fvalue'=>$add_set_name,'cmp_no'=>81));
+                        }
+                         //
+                         $this->db->where(array('parent'=>$enquiry_id,'input'=>4394));
+                        
+                         if($this->db->get('extra_enquery')->num_rows()){                                                
+                            $this->db->set('fvalue',$add_name);
+                            $this->db->where(array('parent'=>$enquiry_id,'input'=>4394));
+                            echo $this->db->update('extra_enquery').'<br>';  
+                        }else{
+                            $this->db->insert('extra_enquery',array('enq_no'=>$enqid,'parent'=>$enquiry_id,'input'=>4394,'fvalue'=>$add_name,'cmp_no'=>81));
+                        }
+
+                       }else{
+                           echo 'na<br>';
+                       }
+
+                    }
+                    }
+                    }
+                    }
+                    }
+                    //end for loop
+                }
 }

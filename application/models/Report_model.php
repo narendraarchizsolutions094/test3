@@ -1064,11 +1064,11 @@ class Report_model extends CI_Model {
 		
 	}
 	public function getdynfielsval(){
-	    $filter_date= date('Y-m-d H:i:s', strtotime("-3 days"));
+	    //$filter_date= date('Y-m-d H:i:s', strtotime("-3 days"));
 		$this->db->select("flds.*,inp.input_label");
         $this->db->where("flds.cmp_no", $this->session->companey_id);
 		$this->db->where("inp.status", 1);
-		$this->db->where("flds.created_date>", $filter_date);
+		//$this->db->where("flds.created_date>", $filter_date);
 		$this->db->from("extra_enquery flds");
 		$this->db->join("tbl_input inp", "inp.input_id = flds.input");
 		$fldarr = $this->db->get()->result();
