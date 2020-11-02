@@ -1426,8 +1426,8 @@ $data['clientsum']=$this->dashboard_model->dataLead(3);
             if(is_numeric($email) != 1)
             {
               if ($this->email->send()) {
-                  echo "1".'l';
-                  echo $this->email->print_debugger();
+                  echo "1";
+                  //echo $this->email->print_debugger();
               }else{
                   echo "0";
               }
