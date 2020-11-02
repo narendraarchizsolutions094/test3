@@ -897,7 +897,7 @@ class Lead extends CI_Controller
                         $user_exist = $this->dashboard_model->check_user_by_mail_phone(array('email' => $data['enquiry']->email, 'phone' => $data['enquiry']->phone));
                     }
                     $user_right = 200;
-                    $report_to = $data['enquiry']->created_by;
+                    $report_to = $data['enquiry']->enq_created_by;
                 }
                 $ucid    =   $this->session->companey_id;
 
