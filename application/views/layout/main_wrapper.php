@@ -1786,6 +1786,7 @@ if($this->session->companey_id==65)
 function manageCartQty()
     {
       $(".cart-qty").on('change',function(){
+        // alert('update');
       $.ajax({
           url   : "<?php echo base_url('buy/addtocart'); ?>",
           type  : "post",
