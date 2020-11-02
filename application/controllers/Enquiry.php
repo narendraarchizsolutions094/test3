@@ -3,7 +3,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 class Enquiry extends CI_Controller
 {
     public function __construct()
-    {
+    { 
         parent::__construct();
         $this->load->model(
             array('Leads_Model', 'setting_model', 'website/home_model', 'schedule_model', 'enquiry_model', 'dashboard_model', 'Task_Model', 'User_model', 'location_model', 'Message_models', 'Institute_model', 'Datasource_model', 'Taskstatus_model', 'dash_model', 'Center_model', 'SubSource_model', 'Kyc_model', 'Education_model', 'SocialProfile_model', 'Closefemily_model', 'form_model', 'Doctor_model')
@@ -1473,7 +1473,7 @@ class Enquiry extends CI_Controller
             $data['discipline'] = $this->location_model->find_discipline();
             $data['level'] = $this->location_model->find_level();
             $data['length'] = $this->location_model->find_length();
-        }
+        } 
         $this->enquiry_model->make_enquiry_read($data['details']->Enquery_id);
         //echo"<pre>";print_r($data);die;
         $data['content'] = $this->load->view('enquiry_details1', $data, true);

@@ -81,10 +81,10 @@
                                 <div class="col-md-9 col-xs-12">
                                     <div class="form-check">
                                         <label class="radio-inline">
-                                        <input type="radio" name="status" value="1" <?php echo  set_radio('status', '1', TRUE); ?> ><?php echo display('active') ?>
+                                        <input type="radio" name="status" value="1" <?=$doctor->status?'checked':''?> ><?php echo display('active') ?>
                                         </label>
                                         <label class="radio-inline">
-                                        <input type="radio" name="status" value="0" <?php echo  set_radio('status', '0'); ?> ><?php echo display('inactive') ?>
+                                        <input type="radio" name="status" value="0" <?=$doctor->status?'':'checked'?>><?php echo display('inactive') ?>
                                         </label>
                                     </div>
                                 </div>

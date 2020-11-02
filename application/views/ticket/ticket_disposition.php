@@ -60,7 +60,9 @@
                 <div class="row" > 
                    <?php echo form_open_multipart('ticket/ticket_disposition/'.$ticket->id,array('id'=>'ticket_disposition_form','class'=>'form-inner')) ?>                     
                    <input type="hidden" name="client" value="<?php if(!empty($enquiry->enquiry_id)) { echo $enquiry->enquiry_id;}?>">
-                   <input type="hidden" name="ticketno" value="<?=$ticket->ticketno?>">
+                   <input type="hidden" name="ticketno" value="<?=$ticket->ticketno?>"> 
+                  
+
                     <div class="form-group">                 
                       <select class="form-control" id="lead_stage_change" name="lead_stage" onchange="find_description()">
                         <option>---Select Stage---</option>
@@ -73,9 +75,9 @@
                     <div class="form-group">                           
                        <select class="form-control" id="lead_description" name="lead_description">
                            <option>---Select Description---</option>
-                          <?php foreach($all_description_lists as $discription){ ?>                                   
-                               <option value="<?php echo $discription->id; ?>"><?php echo $discription->description; ?></option>
-                               <?php } ?>
+                          <?php// foreach($all_description_lists as $discription){ ?>                                   
+                               <!-- <option value="<?php// echo $discription->id; ?>"><?php //echo $discription->description; ?></option> -->
+                               <?php //} ?>
                        </select>
                     </div>     
 

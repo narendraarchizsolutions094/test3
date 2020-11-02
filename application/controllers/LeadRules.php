@@ -233,7 +233,7 @@ class LeadRules extends CI_Controller {
             foreach ($ticket_status as $key => $value) {
                 $rule_ticket_status[$value->id] = $value->title;
             }
-        }
+        }  
         $data['rule_ticket_status'] = json_encode($rule_ticket_status);
         $data['rule_enquiry_status'] = json_encode(array(1=>'Enquiry',2=>'Lead',3=>'Client'));
         $data['lead_source'] = json_encode($rule_source);

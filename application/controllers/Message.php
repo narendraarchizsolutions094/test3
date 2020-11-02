@@ -23,16 +23,26 @@ class Message extends CI_Controller {
     	    $res=$this->db->get('api_templates');
     	    $q=$res->result();
     	    if(!empty($q)){
-    	        echo ' <option value="0" selected style="display:none">Select Templates</option>';
+    	        echo '<option value="0" selected style="display:none">Select Templates</option>';
     	    foreach($q as $value){
     	        echo '<option value="'.$value->temp_id.'">'.$value->template_name.'</option>';
     	       
-    	    }
+    	    		}
     	    
     	    }
 	    }
-	
-	
+
+	    public function all_description()
+	    {
+	    	$this->load->model('Leads_Model');
+	    	$list = $this->Leads_Model->find_description();
+	    	//print_r($list);exit();
+	    	foreach ($list as $res)
+	    	{
+	    		echo'<option value="'.$res->id.'">'.$res->description.'</option>';
+	    	}
+	    }
+
 		public function getMessage($id){
 		if((int)$id){
 	    $this->db->where('temp_id',$id);
@@ -46,6 +56,33 @@ class Message extends CI_Controller {
 	   
 	}
 	
+	public function find_substage($id)
+	{
+		$this->load->model('Leads_Model');
+		
+		$res = $this->Leads_Model->all_description($id);
+		//print_r($res); exit();
+		echo'<option value="">Select Sub Stage</option>';
+		foreach ($res as $row)
+		{
+			echo'<option value="'.$row->id.'">'.$row->description.'</option>';
+		}
+
+	}
+
+	public function all_stages($id)
+	{
+		$this->load->model('Leads_Model');
+		
+		$res = $this->Leads_Model->find_estage($this->session->process[0],$id);
+		echo'<option value="">Select Stage</option>';
+		foreach ($res as $row)
+		{
+			echo'<option value="'.$row->stg_id.'">'.$row->lead_stage_name.'</option>';
+		}
+
+	}
+
 	public function send_sms_career_ex(){
 		if ($this->input->post('mesge_type')== 3) {
 			$temp_id = $this->input->post('templates');

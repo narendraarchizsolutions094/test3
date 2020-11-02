@@ -4,7 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 
 
-class Ticket extends CI_Controller {
+class Ticket extends CI_Controller { 
 
 
     public function __construct()
@@ -12,7 +12,7 @@ class Ticket extends CI_Controller {
 	{
 
 		parent::__construct();
-
+ 
 
 		$this->load->model(array(
 
@@ -318,10 +318,21 @@ class Ticket extends CI_Controller {
 			show_404();
 		}	
 		//print_r($data['ticket']);exit();	
+		$match = array(	
+						'ticket_no' =>$data['ticket']->ticketno,
+						'tck.client'=>$data['ticket']->client,
+						'tck.tracking_no'=>$data['ticket']->tracking_no,
+						'enq.phone'=>$data['ticket']->phone,
+					);
+		$data['related_tickets'] = $this->Ticket_Model->all_related_tickets($match);
+		//print_r($data['related_tickets']); exit();
+
 		$data['all_description_lists']    =   $this->Leads_Model->find_description();	
 
 		$data["clients"] = $this->Ticket_Model->getallclient();
 
+ 		$data["problem_for"] = $this->Ticket_Model->getclient($data['ticket']->client);
+ 		//print_r($data['problem_for']); exit();
 		
 		$data["product"] = $this->Ticket_Model->getproduct();
 		//print_r($data['product']); exit();
@@ -693,7 +704,7 @@ public function assign_tickets() {
 		$data['source'] = $this->Leads_Model->get_leadsource_list();
 		$data["clients"] = $this->Ticket_Model->getallclient();
 		$data["product"] = $this->Ticket_Model->getproduct();
-		//$data["problem"] = $this->Ticket_Model->getissues();
+		$data["referred_type"] =$this->Leads_Model->get_referred_by();
 		$data['problem'] = $this->Ticket_Model->get_sub_list();
 		$data['issues'] = $this->Ticket_Model->get_issue_list();
 		//$data["source"] = $this->Ticket_Model->getSource($this->session->companey_id);//getting ticket source list
@@ -702,6 +713,43 @@ public function assign_tickets() {
 		
 	}
 	
+
+	public function view_previous_ticket()
+	{
+		if($post = $this->input->post())
+		{
+			$no = $post['tracking_no'];
+			$res = $this->Ticket_Model->filterticket(array('tracking_no'=>$no));
+			//print_r($res); exit();
+			if($res)
+			{
+				echo'<table class="table table-bordered">
+				<tr>
+				<th>Tracking No</th>
+				<th>Ticket Number</th>
+				<th>Name</th>
+				<th>Type</th>
+				<th>Action</th>
+				</tr>';
+				foreach ($res as $row)
+				{
+				echo'<tr>
+					<td>'.$row->tracking_no.'</td>
+					<td>'.$row->ticketno.'</td>
+					<td>'.$row->name.'</td>
+					<td>'.($row->complaint_type?"Enquiry":"Complaint").'</td>
+					<th><a href="'.base_url('ticket/view/'.$row->ticketno).'"><button class="btn btn-small btn-primary">View</button></a></th>
+					</tr>';
+				}	
+				echo'</table>';
+			}
+			else
+			{
+				echo'0';
+			}
+		}
+	}
+
 	public function loadinfo(){
 		
 		$usr = $this->input->post("clientno", true);
@@ -719,6 +767,38 @@ public function assign_tickets() {
 		}
 	
 	}
+
+
+    public function referred_by($id=0)
+    {   
+
+        $data['nav1'] = 'nav2';
+        $data['title']    =display('Lead Details');
+        $data['header']= ($id?' Edit ':' Add ').'Referred By';
+        $data['table'] = $this->Leads_Model->get_referred_by();
+            if($id)
+            {
+                $data['data']= $this->Leads_Model->get_referred_by(array('id'=>$id));
+            }
+
+            if($_POST)
+            {   
+                $_POST['company_id'] = $this->session->companey_id;
+                $_POST['created_by'] = $this->session->userdata('user_id');
+                $this->Leads_Model->save_referred_by($_POST,$id);
+                redirect(base_url('ticket/referred_by/'.$id));
+            }
+
+          $data['content']  = $this->load->view('add_referred_by',$data,true);
+          $this->load->view('layout/main_wrapper',$data);
+    }
+
+    public function delete_referred_by($id)
+    {
+        $this->Leads_Model->delete_referred_by($id);
+        redirect(base_url('ticket/referred_by'));
+    }
+
 	
 	public function loadamc(){
 		

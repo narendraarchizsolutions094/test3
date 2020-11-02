@@ -925,7 +925,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
            <?php  if($this->session->menu==1){ ?></br><p style="color:#fff;font-size:9px;margin-left:-12px;padding-top:10px;"><?php echo display('sales_setting'); ?></p> <?php } ?>
                      </a>
                      <ul class="treeview-menu <?php echo (($segment1 == "lead" && $segment2 != "index" && $segment2 != "lead_details") ?"menu-open":'') ?>">
-                        <li class="<?php echo (in_array($segment2,array('stage')) ?"active":'') ?>">
+                        <li class="<?=($segment1=="leadRules")?"active":''?>">
                           <a href="<?php echo base_url(); ?>leadRules"> <?php echo display('lead_rules'); ?> </a>
                         </li>
 
@@ -936,6 +936,8 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                         <li class="<?php echo (in_array($segment2,array('description')) ?"active":'') ?>">
                           <a href="<?php echo base_url(); ?>lead/description"> <?php echo display("lead_description"); ?> </a>
                         </li>
+
+                        
 
                         <li class="<?php echo (in_array($segment2,array('lead_score')) ?"active":'') ?>">
                           <a href="<?php echo base_url(); ?>lead/lead_score"> <?php echo display('conversion_probability'); ?></a>
@@ -1093,7 +1095,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                      
                      <ul class="treeview-menu">
 
-                         <li class="<?php echo (in_array($segment2,array('addwarehouse')) ?"active":'') ?>">
+                         <li class="<?php echo (in_array($segment2,array('warehouse')) ?"active":'') ?>">
                           <a href="<?php echo base_url() ?>warehouse/warehouse">Warehouse</a>
                         </li>
                          <li class="<?php echo (in_array($segment2,array('typeofproduct')) ?"active":'') ?>">
@@ -1103,7 +1105,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                           <a href="<?php echo base_url() ?>warehouse/brand">Brand</a>
                         </li> -->
 				
-				          		<li class="<?php echo (($segment1 == "category") ? "active" : null) ?>">
+				          		<li class="<?php echo (($segment1 == "product" && $segment2=='category') ? "active" : null) ?>">
                           <a href="<?php echo base_url("product/category"); ?>">Category</a>
                         </li>						
         		            <li class="<?php echo (($segment1 == "scheme") ? "active" : null) ?>">
@@ -1370,7 +1372,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
 
 
 
-                  <li class="treeview <?php echo (($segment1 == "whatsappapi" || $segment1 == "smsapi" || $segment1 == "configurations" ||$segment1 == "emailapi") ? "active" : null) ?>"  style="<?php if(in_array(210,$module) || in_array(211,$module) || in_array(212,$module) || in_array(213,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
+                  <li class="treeview"  style="<?php if(in_array(210,$module) || in_array(211,$module) || in_array(212,$module) || in_array(213,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
                      <a href="#">
                       <i class="fa fa-cog" style="color:#fff;font-size:20px;background:#69e2f7;padding:7px;border-radius:4px;width:30px;"></i> &nbsp;Forecasting
                       <span class="pull-right-container">
@@ -1381,16 +1383,16 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                      
                      <ul class="treeview-menu">                     
                         
-                        <li class="<?php echo (($segment1 == "forecasting") ? "active" : null) ?>" style="<?php if(in_array(250,$module) || in_array(251,$module) || in_array(252,$module) || in_array(253,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
+                        <li class="<?php echo (($segment2 == "target") ? "active" : null) ?>" style="<?php if(in_array(250,$module) || in_array(251,$module) || in_array(252,$module) || in_array(253,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
                           <a href="<?php echo base_url("forecasting/target") ?>">Set Target</a>
                         </li>
                         
-                        <li class="<?php echo (($segment1 == "forecasting") ? "active" : null) ?>" style="<?php if(in_array(250,$module) || in_array(251,$module) || in_array(252,$module) || in_array(253,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
+                        <li class="<?php echo (($segment2 == "target_view") ? "active" : null) ?>" style="<?php if(in_array(250,$module) || in_array(251,$module) || in_array(252,$module) || in_array(253,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
                           <a href="<?php echo base_url("forecasting/target_view") ?>">View Target</a>
                         </li>
 
 
-                        <li class="<?php echo (($segment1 == "forecasting") ? "active" : null) ?>" style="<?php if(in_array(260,$module) || in_array(261,$module) || in_array(262,$module) || in_array(263,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
+                        <li class="<?php echo (($segment2 == "user_target") ? "active" : null) ?>" style="<?php if(in_array(260,$module) || in_array(261,$module) || in_array(262,$module) || in_array(263,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
                           <a href="<?php echo base_url("forecasting/user_target") ?>">User Forecasting</a>
                         </li>
 
@@ -1476,6 +1478,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
           <?php  if($this->session->menu==1){ ?></br><p style="color:#fff;font-size:9px;margin-left:-12px;padding-top:10px;"><?php echo display('ticketing') ?></p> <?php } ?>
           </a>
                 </li>
+
                 <?php           
 if($this->session->companey_id==65)
   {
@@ -1517,6 +1520,9 @@ if($this->session->companey_id==65)
                         <li class="<?php echo (($segment1 == "ticket" && $segment2 == "natureOfComplaintList") ? "active" : null) ?>">
                           <a href="<?php echo base_url("ticket/natureOfComplaintList") ?>"><?php echo display("natureOfComplaint"); ?></a>
                         </li>
+                        <li class="<?php echo (in_array($segment2,array('referred_by')) ?"active":'') ?>">
+                          <a href="<?php echo base_url(); ?>ticket/referred_by"> <?php echo 'Referred By'; ?> </a>
+              </li>
 <?php						
 if($this->session->companey_id==65)
   {
@@ -1784,7 +1790,7 @@ if($this->session->companey_id==65)
         });
     }
 function manageCartQty()
-    {
+{
       $(".cart-qty").on('change',function(){
         // alert('update');
       $.ajax({
@@ -1799,6 +1805,8 @@ function manageCartQty()
             
             if(jresp.status == 2){
               console.log(jresp.price);
+              // alert(jresp.price);
+              // alert(jresp.price * jresp.qty);
               $('.item-price-'+jresp.prodid).html(jresp.price * jresp.qty);
             }
           }

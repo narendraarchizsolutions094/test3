@@ -279,7 +279,7 @@ public function contact($lead_code) {
 
     public function state_list() {
 		$company=$this->session->userdata('companey_id');
-        return $this->db->select("*")
+        return $this->db->select("*,state.status as state_status")
                         ->from("state")
                         ->join('tbl_country', 'tbl_country.id_c = state.country_id')
                         ->join('tbl_region', 'tbl_region.region_id = state.region_id')

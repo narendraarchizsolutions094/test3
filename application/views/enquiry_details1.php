@@ -179,7 +179,7 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
 
 .cbp_tmicon-screen:before {
   content: "☣";
-}
+} 
 
 .cbp_tmicon-mail:before {
   content: "☣";
@@ -652,8 +652,7 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                              <!--<label class="col-form-label">Lead Stage</label>-->
                              <select class="form-control" id="lead_stage_change" name="lead_stage" onchange="find_description()">
                                 <option>---Select Stage---</option>
-                                <?php foreach($all_estage_lists as $single){                               
-                                 // $id=$single->lead_stage;                                                            
+                                <?php foreach($all_estage_lists as $single){
                                 ?>                              
                                 <option value="<?= $single->stg_id?>" <?php if ($single->stg_id == $details->lead_stage) {echo 'selected';}?>><?php echo $single->lead_stage_name; ?></option>
                                 <?php } ?>
@@ -663,9 +662,9 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                       <div class="form-group col-sm-12">                           
                              <select class="form-control" id="lead_description" name="lead_description" onchange="showDiv(this)">
                                  <option>---Select Description---</option>
-                                <?php foreach($all_description_lists as $discription){ ?>                                   
+                              <!--   <?php /*foreach($all_description_lists as $discription){ ?>                                   
                                      <option value="<?php echo $discription->id; ?>"><?php echo $discription->description; ?></option>
-                                     <?php } ?>
+                                     <?php }*/ ?> -->
                              </select>
                           </div>
 
@@ -2901,6 +2900,7 @@ $(window).resize(function(){
             <div class="form-group col-sm-12">
                <label>Template</label>
                <select class="form-control" name="templates" required id="templates"  onchange="getMessage(),this.form.reset();">
+                <!--  -->
                </select>
             </div>
             <div class="form-group col-sm-12">
@@ -3395,9 +3395,11 @@ $(window).resize(function(){
     if(type != 'Send Email'){
       $("#email_subject").hide();
       $("#email_subject").prev().hide();
-       $("#template_message").summernote('destroy');
-      $("#template_message").html('');
+      $("#template_message").summernote('code','');
+      $("#template_message").summernote('destroy');
+      //alert("empt");
     }else{
+      $("#template_message").html('');
       $("#template_message").summernote({
         height: 200,                 // set editor height
         minHeight: null,             // set minimum height of editor
@@ -3747,13 +3749,24 @@ $(window).resize(function(){
          type: 'POST',
          data: {tmpl_id:tmpl_id},
          success:function(data){
+          //alert(data);
              var obj = JSON.parse(data);
               $('#templates option[value='+tmpl_id+']').attr("selected", "selected");
+              $("#template_message").summernote('destroy');
+                
+              if($("#email_subject").is(':visible'))
+              {
+                   $("#template_message").summernote("code", obj.template_content);
+                   $("#email_subject").val(obj.mail_subject);
+              }
+              else
+              {
+                $("#template_message").html(obj.template_content);
+              }
+             
 
-              $(".summernote").summernote("code", obj.template_content);
-
-              $("#email_subject").val(obj.mail_subject);
-             //$("#template_message").html(obj.template_content);
+              
+             
          }               
      });        
     } 
@@ -3793,7 +3806,7 @@ $(window).resize(function(){
             data: {lead_stage:l_stage},
             
             success:function(data){
-               // alert(data);
+                //alert(data);
                 var html='';
                 var obj = JSON.parse(data);
                 

@@ -1,5 +1,11 @@
 <div class="col-md-6" style="border: 1px solid #c8ced3;padding: 15px;border-top: none;">
-	<div class="row">
+	<div align="center">
+	<div class="btn-group" style="padding: 10px;">
+		<button class="btn btn-primary active btn-sm" onclick="tabchange(this,0)">Ticket Details</button>
+		<button class="btn btn-primary btn-sm" onclick="tabchange(this,1)">Related Tickets</button>
+	</div>
+	</div>
+	<div class="row" id="ticket_details">
 <?php echo form_open_multipart(base_url("ticket/update_ticket/".$ticket->ticketno)); ?>
 
 
@@ -25,16 +31,16 @@
 			<div class="form-group">
 				<label>Problem For</label>
 				<select class="form-control add-select2 choose-client" name = "client" required readonly>
-					<option value = "" style ="display:none;">---Select---</option>
-					<?php if(!empty($clients)){
-						foreach($clients as $ind => $clt){
-							?> <?php if($ticket->client == $clt->enquiry_id)
-								{ 
+					<?php 
+					if(!empty($problem_for))
+					{
+						foreach($problem_for as $ind => $clt)
+						{
 				echo "<option value =".$clt->enquiry_id." selected>".$clt->name."</option>";
-								} 
 
-								}
-					} ?>
+						}
+					} 
+					?>
 				</select>
 			</div>
 		</div>
@@ -56,7 +62,7 @@
 				<input type="text" name="phone" class="form-control" value="<?php  if(!empty($ticket->phone)){ echo $ticket->phone; } ?>" readonly>
 			</div>
 		</div>
-		<div class="col-md-6">
+		<div class="col-md-6" style="display: none;">
 			<div class="form-group">
 				<label>Complain Date</label>
 				<input type = "text" class="form-control add-date-picker" name = "complaindate" value= "<?php echo date("m/d/Y", strtotime($ticket->coml_date)) ?>">
@@ -79,20 +85,22 @@
 		</div>
 		<?php } ?>
 		
-		<?php if($this->session->user_right!=214){ ?>
-		<div class="col-md-6">
-			<div class="form-group">
-				<label>Nature of Complaint</label>
-				<select class="form-control add-select2" name = "issue">
-				<option value = ""> -- Select --</option>
-			<?php  if(!empty($issues)) {
-						foreach($issues as $ind => $issue){
-							?><option value = "<?php echo $issue->id ?>" <?php echo ($issue->id == $ticket->issue) ? "selected" : ""; ?> ><?php echo ucfirst($issue->title) ?> </option><?php
-						}	
-					} ?>
-				</select>
-			</div>
-		</div>
+		<?php if($this->session->user_right!=214){ 
+			?>
+
+				<div class="col-md-6">
+					<div class="form-group">
+						<label>Nature of Complaint</label>
+						<select class="form-control add-select2" name = "issue">
+						<option value = ""> -- Select --</option>
+						<?php  if(!empty($issues)) {
+								foreach($issues as $ind => $issue){
+									?><option value = "<?php echo $issue->id ?>" <?php echo ($issue->id == $ticket->issue) ? "selected" : ""; ?> ><?php echo ucfirst($issue->title) ?> </option><?php
+								}	
+							} ?>
+						</select>
+					</div>
+				</div>
 		<div class="col-md-6">
 			<div class="form-group">
 				<label>Source</label>
@@ -229,8 +237,37 @@
 				<center><button type = "submit" class="btn btn-success">Update</button></center>
 			</div>	
 		</div>
+		<?=form_close()?>
 	</div>
-	<?=form_close()?>
+	<div class="row" id="old_tickets" style="display: none;">
+		<?php
+		if(!empty($related_tickets))
+		{
+			echo'<table class="table table-bordered">
+			<tr>
+			<th>Tracking No</th>
+			<th>Ticket Number</th>
+			<th>Name</th>
+			<th>Type</th>
+			<th>Action</th>
+			</tr>';
+				foreach ($related_tickets as $row)
+				{ //print_r($row); exit();
+				echo'<tr>
+					<td>'.$row->tracking_no.'</td>
+					<td>'.$row->ticketno.'</td>
+					<td>'.$row->name.'</td>
+					<td>'.($row->complaint_type?"Enquiry":"Complaint").'</td>
+					<th><a href="'.base_url('ticket/view/'.$row->ticketno).'"><button class="btn btn-small btn-primary">View</button></a></th>
+					</tr>';
+				}	
+			echo'</table>';
+		}else 
+		{
+			echo'<div class="alert alert-danger">No Related Ticket found.</div>';
+		}
+		?>
+	</div>
 </div>
 <!-- jquery-ui js -->
 <script src="<?php echo base_url('assets/js/jquery-ui.min.js') ?>" type="text/javascript"></script>      
@@ -293,4 +330,22 @@ if($this->session->companey_id==65)
 <?php
 }
 ?>
+function tabchange(t,key)
+{
+	$(".btn").removeClass("active");
+	if(key)
+	{
+		
+		$(t).addClass('active');
+		$("#old_tickets").show();
+		$("#ticket_details").hide();
+	}
+	else
+	{
+		$(t).addClass('active');
+		$("#old_tickets").hide();
+		$("#ticket_details").show();
+	}
+}
+
 </script>

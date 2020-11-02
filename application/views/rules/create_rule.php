@@ -5,7 +5,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
 <div>	
-   	<div class="row">
+   	<div class="row">  
 	   	<div class="col-sm-12">
 	      	<div  class="panel panel-default thumbnail">
 		        <div class="panel-heading no-print">
@@ -26,6 +26,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 					   			<option value="5" <?=(!empty($rule_data['type']) && $rule_data['type']==5)?'selected':''?>>Support Ticket Escalation Rule</option>
 					   			<option value="6" <?=(!empty($rule_data['type']) && $rule_data['type']==6)?'selected':''?>>Send SMS </option>
 					   			<option value="7" <?=(!empty($rule_data['type']) && $rule_data['type']==7)?'selected':''?>>Send WhatsApp</option>
+					   			<option value="8" <?=(!empty($rule_data['type']) && $rule_data['type']==8)?'selected':''?>>Auto Ticket Priority</option>
+					   			<option value="9" <?=(!empty($rule_data['type']) && $rule_data['type']==9)?'selected':''?>>Default Ticket Stage</option>
+					   			<option value="10" <?=(!empty($rule_data['type']) && $rule_data['type']==10)?'selected':''?>>Default Ticket Disposition</option>
 					   		</select>
 					   	</div>
 					   	<div class="col-sm-3">
@@ -78,6 +81,27 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		        			<div class="col-md-4">		        				
 			        			<label>Select Template<i style="color: red;">*</i></label>
 			        			<select class="form-control text-center" name="action" id="email_template">			    
+			        			</select>
+		        			</div>
+		        		</div>
+						<div class="row text-center action-section" id="priority_action" style="display: none;">   
+		        			<h3>Action</h3>
+		        			<div class="col-md-4"></div>
+		        			<div class="col-md-4">		        				
+			        			<label>Select Priority<i style="color: red;">*</i></label>
+			        			<select class="form-control text-center" name="action" id="default_priority">
+			        			<option value="1">Low</option>
+			        			<option value="2">Medium</option>
+			        			<option value="3">High</option>			    
+			        			</select>
+		        			</div>
+		        		</div>
+						<div class="row text-center action-section" id="description_action" style="display: none;">   
+		        			<h3>Action</h3>
+		        			<div class="col-md-4"></div>
+		        			<div class="col-md-4">		        				
+			        			<label>Select Description<i style="color: red;">*</i></label>
+			        			<select class="form-control text-center" name="action" id="default_description"> 
 			        			</select>
 		        			</div>
 		        		</div>
@@ -139,6 +163,18 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 			        				}
 			        				?>    			
 			        			</select>
+		        			</div>
+		        		</div>		 
+		        		<div id="disposition_action" class="action-section text-center row">
+		        				<h3>Action</h3>
+		        				<div class="col-md-2"></div>
+		        			<div class="col-md-4">
+			        			<label>Stage<i style="color: red;">*</i></label>		        		
+		        				<select class="form-control" name="stage"></select>
+		        			</div>
+		        			<div class="col-md-4">		        				
+			        			<label>Sub Stage<i style="color: red;">*</i></label>
+			        			<select class="form-control text-center" name="sub_stage"></select>
 		        			</div>
 		        		</div>		        		
 					   <button class="btn btn-success" id="btn-set"><?=!empty($id)?'Update Rule':'Set Rules'?></button>		
@@ -237,6 +273,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		    input: 'select',
 		    values: <?=$rule_ticket_status?>,
 		    operators: ['equal', 'not_equal','is_null', 'is_not_null']
+		  },{
+		    id: 'tbl_ticket.complaint_type',
+		    label: 'Ticket Type',
+		    type: 'integer',
+		    input: 'select',
+		    values: {"0":"Complaint","1":"Query"},
+		    operators: ['equal', 'not_equal','is_null', 'is_not_null']
 		  }],
 		  rules: rules_basic
 		});
@@ -271,6 +314,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		  		var action_value	=	$("#sms_template").val();
 		  	}else if (rule_type==7){
 		  		var action_value	=	$("#whatsapp_template").val();
+		  	}else if (rule_type==8){
+		  		var action_value	=	$("#default_priority").val();
+		  	}else if (rule_type==9){
+		  		var action_value	=	$("#default_description").val();
+		  	}else if (rule_type==10){
+		  		var stage		=	$("select[name='stage']").val();
+		  		var sub_stage	=	$("select[name='sub_stage']").val();
+		  	var	action_value =	JSON.stringify({'stage':stage,'sub_stage':sub_stage});
 		  	}
 		  	console.info(action_value);
 		  	if (action_value && title) {
@@ -332,9 +383,16 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 				$("#sms_action").show(1000);
 			}else if (rule == 7) {				
 				$("#whatsapp_action").show(1000);
+			}else if (rule == 8) {				
+				$("#priority_action").show(1000);
+			}else if (rule == 9) {				
+				$("#description_action").show(1000);
+			}else if (rule == 10) {				
+				$("#disposition_action").show(1000);
+			$("select[name=stage]").load("<?=base_url().'message/all_stages/4'?>");
 			}
-
 		}
+		$("#default_description").load("<?=base_url().'message/all_description'?>");
 		$("#email_template").load("<?=base_url().'message/get_templates/3'?>");
 		$("#sms_template").load("<?=base_url().'message/get_templates/2'?>");
 		$("#whatsapp_template").load("<?=base_url().'message/get_templates/1'?>");
@@ -347,6 +405,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		}
 	});
 	$(".multiple-select").select2();
+
+	$("select[name=stage]").change(function(){
+		$("select[name=sub_stage]").load("<?=base_url('message/find_substage/')?>"+this.value);
+	});
+
 </script>
 
 <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery.query-builder/2.3.3/js/query-builder.standalone.min.js"></script>

@@ -6,7 +6,7 @@ class Lead extends CI_Controller
     {
         parent::__construct();
         $this->load->library('user_agent');
-        $this->load->helper('date');
+        $this->load->helper('date'); 
         $this->load->model(
             array('Leads_Model', 'common_model', 'enquiry_model', 'dashboard_model', 'Task_Model', 'User_model', 'location_model', 'Message_models', 'Institute_model', 'Datasource_model', 'Taskstatus_model', 'dash_model', 'Center_model', 'SubSource_model', 'Kyc_model', 'Education_model', 'SocialProfile_model', 'Closefemily_model', 'Doctor_model', 'form_model', 'warehouse_model')
         );
@@ -266,7 +266,7 @@ class Lead extends CI_Controller
     {
         $diesc = $this->input->post('lead_stage');
         echo json_encode($this->Leads_Model->all_description($diesc));
-
+        //print_r($this->Leads_Model->all_description($diesc));
         // echo $diesc;
     }
 
@@ -278,10 +278,12 @@ class Lead extends CI_Controller
         redirect('lead/lead_details/' . $lead_code);
     }
 
+
     public function add_comment()
     {
         $CI = &get_instance();
         if (!empty($_POST)) {
+            
             $ld_updt_by = $this->session->userdata('user_id');
             $lead_id = $this->input->post('lid');
             $conversation = trim($this->input->post('conversation'));
@@ -2311,6 +2313,7 @@ class Lead extends CI_Controller
         }
         $data['title'] = display('Description_list');
         $data['description_list'] = $this->SubSource_model->descriptionlist();
+        //print_r($data['description_list']); exit();
         $data['content'] = $this->load->view('lead_description', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }
@@ -2364,11 +2367,16 @@ class Lead extends CI_Controller
         $data['title'] = display('add_description');
         $data['description'] = '';
         $this->form_validation->set_rules('description_name', display('description_name'), 'required');
-        $this->form_validation->set_rules('lead_stage_id', display('lead_stage_id'), 'required');
+        $this->form_validation->set_rules('lead_stage_id[]', display('lead_stage_id'), 'required');
+        $stage_list = '';
+        if($_POST)
+        {
+            $stage_list = implode(',', $this->input->post('lead_stage_id', true));
+        }
         $data['description'] = (object) $postData = [
             'id' => $this->input->post('description_id', true),
             'comp_id' => $this->session->userdata('companey_id'),
-            'lead_stage_id' => $this->input->post('lead_stage_id', true),
+            'lead_stage_id' => $stage_list,
             'description' => $this->input->post('description_name', true),
             'status' => $this->input->post('status', true),
             'created_by' => $this->session->userdata('user_id'),
@@ -2440,6 +2448,7 @@ class Lead extends CI_Controller
         $data['title'] = display('update_deiscription');
         $data['description'] = $this->SubSource_model->readRowdes($description_id);
         $data['lead_description_list'] = $this->SubSource_model->all_stage_des();
+        //print_r( $data['description'] ); exit();
         $data['content'] = $this->load->view('description_form', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }
