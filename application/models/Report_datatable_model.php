@@ -161,15 +161,19 @@ class Report_datatable_model extends CI_Model {
     }
     function count_filtered(){
         $this->_get_datatables_query();
-        $where = "";
-        $user_id   = $this->session->user_id;
-        $user_role = $this->session->user_role;
         $query = $this->db->get($this->table);
         return $query->num_rows();
     }
 
     public function count_all(){
-        $all_reporting_ids    =   $this->common_model->get_categories($this->session->user_id);
+        $employe = $this->session->userdata('employe1');
+        if ($this->session->hier_wise && $employe) {
+           $uid = $employe[0];
+           $employe    =    $this->common_model->get_categories($uid);                  
+        }else{
+    	   $all_reporting_ids    =    $this->common_model->get_categories($this->session->user_id);      
+        }
+        //$all_reporting_ids    =   $this->common_model->get_categories($this->session->user_id);
         $this->db->from($this->table);        
         $where = "";                        
         $where .= " (enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
