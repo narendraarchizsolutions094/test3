@@ -1435,7 +1435,7 @@ $data['clientsum']=$this->dashboard_model->dataLead(3);
             }
         }
       }
-      echo $this->email->print_debugger()
+      echo $this->email->print_debugger();
 
     }
 
