@@ -15,7 +15,7 @@ class Dashboard extends CI_Controller {
 			'website/home_model',
 			'Institute_model',
 			'schedule_model',
-            'report', 'location_model', 'report_model', 'User_model', 'Modules_model',
+            'report', 'location_model', 'report_model', 'Modules_model',
             'enquiry_model', 'Leads_Model', 'Client_Model','Message_models',
             'Product_model'
         ));
@@ -2585,7 +2585,7 @@ public function set_layout_to_session() {
         }
     }
 
-    public function updatefb_page__(){ 
+    public function updatefb_page(){ 
         $page_token='';
         $pageId='';
           // $this->db->where('page_id',$pageId);
