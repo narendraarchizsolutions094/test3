@@ -414,17 +414,16 @@
 								
                             
 							 <div class="form-group row">
-                                  <label for="specialist" class="col-xs-9 col-form-label "><h1>Setup Whatsapp API</h1></label>
                                   <div class="row">
                 <div class="form-group   col-sm-6">
                     <label>API Name*</label>
-                <input class="form-control" name="api_name" type="text" required="" value="<?= $user_meta['api_name']?>"> 
+                <input class="form-control" name="api_name" type="text" required="" value="<?php if(!empty($user_meta['api_name'])){ echo $user_meta['api_name'];}?>"> 
                 
                 </div>  
             
                 <div class="form-group col-sm-6"> 
                   <label>HTTP API*</label>
-                  <input class="form-control" name="api_url" type="text" required="" value="<?= $user_meta['api_url'] ?>">  
+                  <input class="form-control" name="api_url" type="text" required="" value="<?php if(!empty($user_meta['api_url'])){ echo $user_meta['api_url'];}?>">  
                 </div> 
                 
               </div>
