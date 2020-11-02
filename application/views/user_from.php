@@ -39,8 +39,11 @@
                               <ul class="nav nav-tabs">
               									<li class="active"><a data-toggle="tab" href="#prsnl-info" id="prsnl-info-tab"><?php echo display('personal_info'); ?></a></li>
               									<li><a data-toggle="tab" href="#acnt-details"  id="act-det-info">Contact Person Details</a></li>
-              									<li><a data-toggle="tab" href="#comp-details" id="add-cmp-det"><?php echo display('account_details') ?></a></li>
-              								</ul>
+                                                  <li><a data-toggle="tab" href="#comp-details" id="add-cmp-det"><?php echo display('account_details') ?></a></li>
+                                                 <li><a data-toggle="tab" href="#user_whatsapp">Setup Whatsapp API</a></li>
+                                                  
+                                              </ul>
+                                              
 				<div class="tab-content">
 									<br/>
 					<div id="prsnl-info" class="tab-pane fade in active">
@@ -400,6 +403,39 @@
                                 <div class="col-sm-offset-3 col-sm-6">
                                     <div class="ui buttons">
 										<button href="#act-det-info" class="ui button nxt-tab-btn">  Prev </button>
+                                        <div class="or"></div>
+                                        <button class="ui positive button" type="submit" id="submit_btn"><?php echo display('save') ?></button>
+                                    </div>
+                                </div>
+                            </div>
+							
+                    </div>
+                    <div id="user_whatsapp" class="tab-pane fade">
+								
+                            
+							 <div class="form-group row">
+                                  <label for="specialist" class="col-xs-9 col-form-label "><h1>Setup Whatsapp API</h1></label>
+                                  <div class="row">
+                <div class="form-group   col-sm-6">
+                    <label>API Name*</label>
+                <input class="form-control" name="api_name" type="text" required="" value="<?= $user_meta['api_name']?>"> 
+                
+                </div>  
+            
+                <div class="form-group col-sm-6"> 
+                  <label>HTTP API*</label>
+                  <input class="form-control" name="api_url" type="text" required="" value="<?= $user_meta['api_url'] ?>">  
+                </div> 
+                
+              </div>
+                                  
+                            </div>
+                           
+                            
+                            <div class="form-group row">
+                                <div class="col-sm-offset-3 col-sm-6">
+                                    <div class="ui buttons">
+										<button href="#add-cmp-det" class="ui button nxt-tab-btn">  Prev </button>
                                         <div class="or"></div>
                                         <button class="ui positive button" type="submit" id="submit_btn"><?php echo display('save') ?></button>
                                     </div>

@@ -337,6 +337,11 @@ if($root=='https://student.spaceinternationals.com'){  ?>
       
     
       <style>
+        .btn-default:hover {
+    color: #333;
+    background-color: white;
+    border-color: #adadad;
+}
       .content {
        /*min-height: 900px;
        margin-right: auto;
@@ -714,7 +719,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                       <br />
                       <?php echo form_open(base_url("master_lead_search"), array("class" => "form-inline", "method"=> "GET",'id'=>'master_search_form')); ?>
                         <div class="input-group">               
-                        <input type="text" class="form-control master-search" placeholder = "Search here" name="search" value = "<?php echo (!empty($_GET['search'])) ? $_GET['search'] : ""; ?>" style="width:77%;" >
+                        <input type="text" class="form-control master-search" required placeholder = "Search here" name="search" value = "<?php echo (!empty($_GET['search'])) ? $_GET['search'] : ""; ?>" style="width:77%;" >
                         
                         <div class="input-group-prepend">
                           <button type="submit" class="input-group-text btn btn-default master-search-icon" style=""><i class="fa fa-search" aria-hidden="true"></i></button>&nbsp;

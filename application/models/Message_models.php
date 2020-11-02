@@ -105,21 +105,20 @@ curl_setopt_array($curl, array(
    }
  
      public function sendwhatsapp($number,$message,$companey_id='',$user_id=''){
-
+       $this->load->model('user_model');
+      $usermeta = $this->user_model->get_user_meta( $this->session->user_id,array('api_name','api_url'));
+      $destination =$number;
+        if (count($usermeta)!=0) {
+           $api_url = $usermeta['api_url'];
+        }else{
           $companey_id = ($companey_id == '') ? $this->session->companey_id : $companey_id;
           $this->db->where('comp_id',$companey_id);          
           $this->db->where('api_for',1);          
           $email_row  = $this->db->get('api_integration')->row_array();
-
-
-
-
            //$my_apikey = "CW9FFHPDJGC5RXUWSIC6";
-           $destination =$number;
           // $message = "MESSAGE TO SEND";
-
            $api_url = $email_row['api_url'];
-
+           }
            //$api_url = "https://panel.apiwha.com/send_message.php";
            //$api_url .= "?apikey=". urlencode ($my_apikey);
 
@@ -155,8 +154,7 @@ curl_setopt_array($curl, array(
                               );
           $this->db->insert('whatsapp_send_log',$insert_array);
 
-        }
-        
+      }
         $err = curl_error($curl);
         //echo $err;
         curl_close($curl);

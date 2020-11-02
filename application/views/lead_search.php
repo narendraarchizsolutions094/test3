@@ -1,28 +1,14 @@
 <div class="row">
-
-
-
     <div class="col-sm-12" id="PrintMe">
-
         <div  class="panel panel-default thumbnail"> 
-
-        
-
             <!-- <div class="panel-heading no-print">
-
                  <div class="btn-group">
-
-
                 </div>
-
             </div> -->
-
             <div class="panel-body">  
-
                 <div class="row">
 					<div class="col-md-12">
 						<h4><small>Filtered : </small><?php echo (!empty($filter)) ? $filter : "All"; ?> <small>Total Result :</small> <?php echo count($result); ?></h4>
-					
 						<hr />
 					</div>
 					<div class="col-sm-12" align="center">
@@ -46,30 +32,41 @@
                                     <tbody>
 								<?php   if(!empty($result)){
 											foreach($result as $key => $rslt){
-
+                                                $leadSataus=$rslt->status;
 												if($rslt->status == 1){
 												//Enquery
 												$url  = "enquiry/view/".$rslt->enquiry_id;
 												$type = '<a class="btn-sm btn-primary" href = "'.base_url($url).'">E</a>'; 
-												
 											}else if($rslt->status == 2){
 												//LEad
 												$url = "lead/lead_details/".$rslt->enquiry_id;
-												
 												$type = '<a class="btn-sm btn-warning"  href = "'.base_url($url).'">L</a>';
-												
 											}else if($rslt->status == 3){
 												//Client
 												$url = "client/view/".$rslt->enquiry_id;
-												
 												$type = '<a class="btn-sm btn-success"  href = "'.base_url($url).'">C</a>';
-												
 											}else{
-												$url ="#";
-											}
+                                                $enquiry_separation  = get_sys_parameter('enquiry_separation', 'COMPANY_SETTING');
+                                                if (!empty($enquiry_separation) and $leadSataus  >= 3) {
+                                                $enquiry_separation = json_decode($enquiry_separation, true);
+                                                if ($leadSataus != 3) {
+                                                    foreach ($enquiry_separation as $key => $value) {
+                                                        // print_r($enquiry_separation);
+                                                        if ($leadSataus== $key) {
+                                                            $ctitle = $enquiry_separation[$key]['title'];
 
-												?>
-										
+                                                            $firstChar = mb_substr($ctitle, 0, 1, "UTF-8");
+
+                                                            $url = 'client/view/'.$rslt->enquiry_id.'?stage='.$key;
+												            $type = '<a class="btn-sm btn-success"  href = "'.base_url($url).'">'.$firstChar.'</a>';
+                                                        }
+                                                    }
+                                                }
+                                            }else{
+												$url ="#";
+
+                                            }
+											} ?>
 										<tr>	
 											<td><a href="<?php echo base_url($url); ?>"><?php echo $key + 1; ?></a></td>
 											<td><a href="<?php echo base_url($url); ?>"><?php echo $rslt->Enquery_id; ?></a></td>
@@ -92,8 +89,6 @@
 											<td><a href="<?php echo base_url($url); ?>"><?php echo $rslt->address; ?></a></td>
 											<td><?php echo $rslt->username; ?></td>
 											<td><?php echo $rslt->asignuser; ?></td>
-									
-											
 										</tr>		
 								<?php		}
 										

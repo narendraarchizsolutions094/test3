@@ -106,6 +106,7 @@ class User extends CI_Controller
                 $status='<a style="color:red">Inactive</a>';
                 }
 
+                
             $sub = array();
             $sub[] = '<input name="com_id" hidden value="' . $department->companey_id . '"> <input type="checkbox" value="' . $department->pk_i_admin_id . '" id="checkitem" name="user_ids[]"> ' . $i++ . '';
             $sub[] = '<a   href="' . base_url('user/edit/' . $department->pk_i_admin_id . '') . '">' . $department->employee_id . '</a>';
@@ -443,6 +444,7 @@ class User extends CI_Controller
             'contact_semail' => $this->input->post('csemail', true),
             'contact_phone' => $this->input->post('cphone', true),
             'contact_sphone' => $this->input->post('csphone', true),
+           
             'picture' => (!empty($img) ? $img : $this->input->post('new_file')),
             'report_to' => $this->input->post('report_to', true),
             'telephony_agent_id' => $this->input->post('telephony_agent_id', true),
@@ -455,7 +457,14 @@ class User extends CI_Controller
         if ($this->form_validation->run() === true) {
             #if empty $dprt_id then insert data
             if (empty($this->input->post('dprt_id'))) {
-                if ($this->User_model->create($postData)) {
+              $insert_id=$this->User_model->create($postData);
+                if ($insert_id) {
+                      //insert wharsapp api
+                    $this->user_model->set_user_meta($insert_id,array(
+                        'api_name'=>$this->input->post('api_name'),
+                        'api_url' => $this->input->post('api_url')
+                        )
+                    );
                     $this->session->set_flashdata('message', display('save_successfully'));
                 } else {
                     $this->session->set_flashdata('exception', display('please_try_again'));
@@ -467,6 +476,12 @@ class User extends CI_Controller
                     if (!empty($this->session->password_error)) {
                         $this->session->set_flashdata('exception', 'pasword not updated');
                     } else {
+                          //insert wharsapp api
+                          $this->user_model->set_user_meta($this->input->post('dprt_id'),array(
+                            'api_name'=>$this->input->post('api_name'),
+                            'api_url' => $this->input->post('api_url')
+                            )
+                        );
                         $this->session->set_flashdata('message', display('update_successfully'));
                     }
                 } else {
@@ -487,7 +502,7 @@ class User extends CI_Controller
             $this->load->model('dash_model');
             $data['products'] = $this->dash_model->all_process_list();
             $data['products_list'] = $this->dash_model->all_product_list();
-
+          
             $data['enq_id'] = 'LT/IN/EI/' . str_pad($this->User_model->get_empid(), 2, '0', STR_PAD_LEFT);
             $data['content'] = $this->load->view('user_from', $data, true);
             $this->load->view('layout/main_wrapper', $data);
@@ -681,7 +696,9 @@ class User extends CI_Controller
         $this->load->model('dash_model');
         $data['products_list'] = $this->dash_model->all_product_list();
         $data['products'] = $this->dash_model->all_process_list();
-
+        $data['user_meta'] = $this->user_model->get_user_meta($id,array('api_name','api_url'));
+        // print_r($data['user_meta']->api_name);
+        // die();
         $data['content'] = $this->load->view('user_from', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }
