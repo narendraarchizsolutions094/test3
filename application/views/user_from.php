@@ -416,13 +416,13 @@
 							 <div class="form-group row">
                                   <div class="row">
                 <div class="form-group   col-sm-6">
-                    <label>API Name*</label>
+                    <label>API Name</label>
                 <input class="form-control" name="api_name" type="text"  value="<?php if(!empty($user_meta['api_name'])){ echo $user_meta['api_name'];}?>"> 
                 
                 </div>  
             
                 <div class="form-group col-sm-6"> 
-                  <label>HTTP API*</label>
+                  <label>HTTP API</label>
                   <input class="form-control" name="api_url" type="text"  value="<?php if(!empty($user_meta['api_url'])){ echo $user_meta['api_url'];}?>">  
                 </div> 
                 
