@@ -2714,7 +2714,7 @@ public function set_layout_to_session() {
         }
     }
 
-    public function updatefb_page(){ 
+    public function updatefb_page__(){ 
         $page_token='';
         $pageId='';
           // $this->db->where('page_id',$pageId);
