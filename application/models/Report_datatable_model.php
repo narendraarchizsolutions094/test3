@@ -169,7 +169,7 @@ class Report_datatable_model extends CI_Model {
         $employe = $this->session->userdata('employe1');
         if ($this->session->hier_wise && $employe) {
            $uid = $employe[0];
-           $employe    =    $this->common_model->get_categories($uid);                  
+           $all_reporting_ids    =    $this->common_model->get_categories($uid);                  
         }else{
     	   $all_reporting_ids    =    $this->common_model->get_categories($this->session->user_id);      
         }
