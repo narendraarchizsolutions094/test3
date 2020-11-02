@@ -161,8 +161,9 @@ class Report_datatable_model extends CI_Model {
     }
     function count_filtered(){
         $this->_get_datatables_query();
-        $query = $this->db->get($this->table);
-        return $query->count_all_results();
+        $this->db->from($this->table);        
+        $query = $this->db->count_all_results($this->table);
+        return $query;
     }
 
     public function count_all(){
