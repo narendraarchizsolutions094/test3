@@ -264,10 +264,10 @@ class Buy extends CI_Controller {
 			$sbcateg = $this->db->select("*")->where("cat_id", $categ)->get("tbl_subcategory")->result();
 			
 			if(!empty($sbcateg)){
-				?><option value = ""></option><?php
+				?><option value=""></option><?php
 				foreach($sbcateg as $ind => $sbctg){
 					
-					?><option value = "<?php echo $sbctg->id ?>"><?php echo $sbctg->subcat_name; ?></option><?php
+					?><option value="<?php echo $sbctg->id ?>"><?php echo $sbctg->subcat_name; ?></option><?php
 				}
 				
 			}

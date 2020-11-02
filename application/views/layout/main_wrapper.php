@@ -2267,7 +2267,11 @@ $("#anch_notification_dropdown").on('click',function(){
         }
       });      
     });  
-    if (("<?=$this->session->companey_id?>" == "57")) {      
+    if (("<?=$this->session->companey_id?>" == "57")) {    
+        m = $("#mark_attendance").hasClass('btn-danger');
+        if (m) {          
+          record_geolocation();
+        }  
         setInterval(function() {
           m=$("#mark_attendance").hasClass('btn-danger');
           if (m) {          
@@ -2330,7 +2334,7 @@ $("#anch_notification_dropdown").on('click',function(){
               }
             },
             error: function (xhr, desc, err){
-              alert("mark attendance error");
+             // alert("mark attendance error");
             }
         });
     });
