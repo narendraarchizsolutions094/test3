@@ -1566,6 +1566,8 @@ $data['clientsum']=$this->dashboard_model->dataLead(3);
             }
         }
       }
+      echo $this->email->print_debugger()
+
     }
 
     public function verifyOTP()
