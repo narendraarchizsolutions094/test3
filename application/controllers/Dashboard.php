@@ -1427,6 +1427,7 @@ $data['clientsum']=$this->dashboard_model->dataLead(3);
             {
               if ($this->email->send()) {
                   echo "1";
+                  //echo $this->email->print_debugger();
               }else{
                   echo "0";
               }
@@ -1435,6 +1436,7 @@ $data['clientsum']=$this->dashboard_model->dataLead(3);
             }
         }
       }
+
     }
 
     public function verifyOTP()
