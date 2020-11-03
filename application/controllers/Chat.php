@@ -31,26 +31,18 @@ class Chat extends CI_Controller {
 		$name	=	$this->input->post('name');
 		$mobile	=	$this->input->post('mobile');
 		$email	=	$this->input->post('email');
-
 		$where = " comp_id=".$comp_id;
 		$where .= " AND (phone=".$mobile;
 		$where .= " OR email='".$email.'\')';
-
-		if ($process_id) {
-			$where .= ' AND product_id='.$process_id;
-		}
+		if ($process_id) { $where .= ' AND product_id='.$process_id; }
 		$row	=	$this->enquiry_model->is_enquiry_exist($where);
-		
-
 		if (!empty($row)) {			
 			$res  = $row['Enquery_id'];
 			$this->session->set_userdata('chat_user_id',$res);
 			$this->session->set_userdata('chat_fullname',$row['name'].' '.$row['lastname']);
-			
 			$this->session->set_userdata('chat_mobile',$row['phone']);
 			$this->session->set_userdata('chat_email',$row['email']);
 			$this->session->set_userdata('chat_companey_id',$row['comp_id']);
-			
 		}else{
 
 			$name	=	explode(' ', $name);
