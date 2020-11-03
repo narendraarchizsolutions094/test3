@@ -11,7 +11,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		        <div class="panel-heading no-print">
 		            <div class="btn-group"> 
 		               <a class="btn btn-primary" href="<?php echo base_url("leadRules") ?>"> <i class="fa fa-list"></i> <?php echo display('leadrules') ?> </a>  
-		            </div>
+		            </div> 
 		        </div>
 		        <div class="panel-body">
 		        	<div class="row">					   		   	
@@ -27,8 +27,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 					   			<option value="6" <?=(!empty($rule_data['type']) && $rule_data['type']==6)?'selected':''?>>Send SMS </option>
 					   			<option value="7" <?=(!empty($rule_data['type']) && $rule_data['type']==7)?'selected':''?>>Send WhatsApp</option>
 					   			<option value="8" <?=(!empty($rule_data['type']) && $rule_data['type']==8)?'selected':''?>>Auto Ticket Priority</option>
-					   			<option value="9" <?=(!empty($rule_data['type']) && $rule_data['type']==9)?'selected':''?>>Default Ticket Stage</option>
-					   			<option value="10" <?=(!empty($rule_data['type']) && $rule_data['type']==10)?'selected':''?>>Default Ticket Disposition</option>
+					   			<option value="9" <?=(!empty($rule_data['type']) && $rule_data['type']==9)?'selected':''?>>Default Ticket Disposition</option>
 					   		</select>
 					   	</div>
 					   	<div class="col-sm-3">
@@ -61,7 +60,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 			        			<label>Assign To<i style="color: red;">*</i></label>
 			        			<select class="form-control text-center multiple-select" name="assignment_action" multiple>			    
 			        				<?php
-			        				$assignment_action_data = explode(',', $rule_data['rule_action']);
+			        				$assignment_action_data = array();
+			        				if(!empty($rule_data['rule_action']))
+			        					$assignment_action_data = explode(',', $rule_data['rule_action']);
+
 			        				if (!empty($user_list)) {
 			        					foreach ($user_list as $key => $value) {
 			        						?>
@@ -90,21 +92,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		        			<div class="col-md-4">		        				
 			        			<label>Select Priority<i style="color: red;">*</i></label>
 			        			<select class="form-control text-center" name="action" id="default_priority">
-			        			<option value="1">Low</option>
-			        			<option value="2">Medium</option>
-			        			<option value="3">High</option>			    
+			        			<option value="1" <?=@$rule_data['rule_action']=='1'?'selected':''?>>Low</option>
+			        			<option value="2"  <?=@$rule_data['rule_action']=='2'?'selected':''?>>Medium</option>
+			        			<option value="3"  <?=@$rule_data['rule_action']=='3'?'selected':''?>>High</option>			    
 			        			</select>
 		        			</div>
 		        		</div>
-						<div class="row text-center action-section" id="description_action" style="display: none;">   
-		        			<h3>Action</h3>
-		        			<div class="col-md-4"></div>
-		        			<div class="col-md-4">		        				
-			        			<label>Select Description<i style="color: red;">*</i></label>
-			        			<select class="form-control text-center" name="action" id="default_description"> 
-			        			</select>
-		        			</div>
-		        		</div>
+						
 		        		<div class="row text-center action-section" id="sms_action" style="display: none;">   
 		        			<h3>Action</h3>
 		        			<div class="col-md-4"></div>
@@ -171,6 +165,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		        			<div class="col-md-4">
 			        			<label>Stage<i style="color: red;">*</i></label>		        		
 		        				<select class="form-control" name="stage"></select>
+
 		        			</div>
 		        			<div class="col-md-4">		        				
 			        			<label>Sub Stage<i style="color: red;">*</i></label>
@@ -317,8 +312,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		  	}else if (rule_type==8){
 		  		var action_value	=	$("#default_priority").val();
 		  	}else if (rule_type==9){
-		  		var action_value	=	$("#default_description").val();
-		  	}else if (rule_type==10){
 		  		var stage		=	$("select[name='stage']").val();
 		  		var sub_stage	=	$("select[name='sub_stage']").val();
 		  	var	action_value =	JSON.stringify({'stage':stage,'sub_stage':sub_stage});
@@ -386,13 +379,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 			}else if (rule == 8) {				
 				$("#priority_action").show(1000);
 			}else if (rule == 9) {				
-				$("#description_action").show(1000);
-			}else if (rule == 10) {				
 				$("#disposition_action").show(1000);
-			$("select[name=stage]").load("<?=base_url().'message/all_stages/4'?>");
+				<?php
+				if(empty($rule_data['rule_action']))
+				{
+					echo'$("select[name=stage]").load("'.base_url().'message/all_stages/4");';
+				}
+				?>
 			}
 		}
-		$("#default_description").load("<?=base_url().'message/all_description'?>");
 		$("#email_template").load("<?=base_url().'message/get_templates/3'?>");
 		$("#sms_template").load("<?=base_url().'message/get_templates/2'?>");
 		$("#whatsapp_template").load("<?=base_url().'message/get_templates/1'?>");
@@ -406,9 +401,19 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	});
 	$(".multiple-select").select2();
 
-	$("select[name=stage]").change(function(){
+	$("select[name=stage]").change(function(){ 
 		$("select[name=sub_stage]").load("<?=base_url('message/find_substage/')?>"+this.value);
 	});
+
+	<?php
+	if( !empty($rule_data['rule_action']) && $rule_data['type']==9)
+	{
+		$res = json_decode($rule_data['rule_action']);
+		echo'$("select[name=stage]").load("'.base_url('message/all_stages/4/').$res->stage.'");
+		';
+		echo'$("select[name=sub_stage]").load("'.base_url('message/find_substage/').$res->stage.'/'.$res->sub_stage.'");';
+	}
+	?>
 
 </script>
 
