@@ -27,7 +27,7 @@
 					</select>
 				</div>
 				<div class="form-group col-lg-4">
-					<label>Date</label>
+					<label>Date From</label>
 					<input type="date" name="datefrom" class="form-control" value="<?=date('Y-m-d')?>" required>
 				</div>
 
