@@ -620,7 +620,7 @@ class Report extends CI_Controller {
                }
 
                if (in_array('Enquiry Id', $this->session->userdata('post_report_columns'))){
-                $row[] = (!empty($repdetails->enquiry_id)) ? $repdetails->enquiry_id:'NA';
+                $row[] = (!empty($repdetails->Enquery_id)) ? $repdetails->Enquery_id:'NA';
               }
                  if(!empty($dfields)){
                     foreach($dfields as $ind => $dfld){ 
