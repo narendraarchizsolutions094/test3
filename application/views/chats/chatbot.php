@@ -39,7 +39,7 @@
       </div>
       <div class="chat-logs">
         <div class="card">
-          <div class="text-center" style="padding: 8px;">Please tell your identity</div><br>          
+          <div class="text-center" style="padding: 8px;">Share your details</div><br>          
           <div class="card-body" style="padding: 8px;">             
             <form action="<?=base_url().'chat/submit_identity/'.$comp_id.'/'.$created_by?>" id='chat_identity_form' method='post'>
               <div class="form-group row">
@@ -106,7 +106,7 @@
             if (data) {
               data = JSON.parse(data);
               add_user(data);  
-              $("#submit-form").html('Thank You');
+              $("#submit-form").html('Thank you for sharing the details.');
               $("#submit-form").prop('disabled', true);              
               // generate_message('We have accepted your details.We will reach you soon.', 'user',"<?=date('Y-m-d h:i:sa')?>");
             }else{
@@ -277,7 +277,7 @@ if (!empty($this->session->chat_mobile)) {
     comp_id = "<?=$this->session->chat_companey_id?>"
     user_id = "<?=$this->session->chat_user_id?>"
     if(user_id){
-      generate_message('We have accepted your details.We will reach you soon.', 'user',"<?=date('Y-m-d h:i:sa')?>");
+      generate_message('Thanks for sharing details, We will reach you soon.', 'user',"<?=date('Y-m-d h:i:sa')?>");
     }
     const msg = db.collection('messages').orderBy('created_at').where('comp_id','==',comp_id);
     const msg_observer = msg.onSnapshot(docSnapshot => {          

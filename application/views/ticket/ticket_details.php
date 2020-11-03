@@ -85,9 +85,8 @@
 		</div>
 		<?php } ?>
 		
-		<?php if($this->session->user_right!=214){ 
+		<?php if($this->session->user_right!=214 && 0){ 
 			?>
-
 				<div class="col-md-6">
 					<div class="form-group">
 						<label>Nature of Complaint</label>

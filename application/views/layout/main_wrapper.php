@@ -1517,9 +1517,14 @@ if($this->session->companey_id==65)
                         <li class="<?php echo (($segment1 == "ticket" && $segment2 == "index") ? "active" : null) ?>">
                           <a href="<?php echo base_url("ticket/index") ?>"><?php echo display('ticketing') ?></a>
                         </li>
+                        <?php
+                        if($this->session->companey_id!=65 && 0){ ?>                        
                         <li class="<?php echo (($segment1 == "ticket" && $segment2 == "natureOfComplaintList") ? "active" : null) ?>">
                           <a href="<?php echo base_url("ticket/natureOfComplaintList") ?>"><?php echo display("natureOfComplaint"); ?></a>
                         </li>
+                        <?php
+                        }
+                        ?>
                         <li class="<?php echo (in_array($segment2,array('referred_by')) ?"active":'') ?>">
                           <a href="<?php echo base_url(); ?>ticket/referred_by"> <?php echo 'Referred By'; ?> </a>
               </li>
