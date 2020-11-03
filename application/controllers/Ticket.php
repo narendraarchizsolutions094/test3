@@ -210,23 +210,23 @@ class Ticket extends CI_Controller {
 		        }
 
 		        $a = json_decode($output);
-		        $table  = $a->Table;
-		        $table1 = $a->Table1;
-		        $table2 = $a->Table2;
-		        $table3 = $a->Table3;
+		        $table  = empty($a->Table)?'':$a->Table;
+		        $table1 = empty($a->Table1)?'':$a->Table1;
+		        $table2 = empty($a->Table2)?'':$a->Table2;
+		        $table3 = empty($a->Table3)?'':$a->Table3;
 		        
 	        if(isset($a->Table))
 	        {
 		        echo'<table class="table table-bordered">
-		        <tr><th colspan="4" style="text-align:center;">Tracking Number: '.$table->GCNO.'</td></tr>
-		        <tr><th>Date:</th><td>'.$table->GC_Date.'</td><th>Status:</th><td>'.$table->status.'</td></tr>
-		         <tr><th>Delivery Location:</th><td  colspan="3">'.$table->DeliveryLocation.'</td></tr>
-		         <tr><th>Delivery Branch:</th><td>'.$table->DeliveryBranch.'</td><th>Booking Branch:</th><td>'.$table->BookingBranch.'</td></tr>';
+		        <tr><th colspan="4" style="text-align:center;">Tracking Number: '.(empty($table->GCNO)?'':$table->GCNO).'</td></tr>
+		        <tr><th>Date:</th><td>'.(empty($table->GC_Date)?'':$table->GC_Date).'</td><th>Status:</th><td>'.(empty($table->status)?'':$table->status).'</td></tr>
+		         <tr><th>Delivery Location:</th><td  colspan="3">'.(empty($table->DeliveryLocation)?'':$table->DeliveryLocation).'</td></tr>
+		         <tr><th>Delivery Branch:</th><td>'.(empty($table->DeliveryBranch)?'':$table->DeliveryBranch).'</td><th>Booking Branch:</th><td>'.(empty($table->BookingBranch)?'':$table->BookingBranch).'</td></tr>';
 		        if(sizeof((array)$table->EDD))
 		        	echo' <tr><th>EDD</th><td colspan="3">'.print_r($table->EDD).'</td></tr>';
 
-		         echo'<tr><th>Delivery Date:</th><td>'.$table->DeliveryDate.'</td><th>Arrival Date:</th><td>'.$table->ArrivalDate.'</td></tr>
-		         <tr><th>Delivery Type:</th><td>'.$table->DeliveryType.'</td><th>CRNO:</th><td>'.$table->CRNO.'</td></tr>
+		         echo'<tr><th>Delivery Date:</th><td>'.(empty($table->DeliveryDate)?'':$table->DeliveryDate).'</td><th>Arrival Date:</th><td>'.(empty($table->ArrivalDate)?'':$table->ArrivalDate).'</td></tr>
+		         <tr><th>Delivery Type:</th><td>'.(empty($table->DeliveryType)?'':$table->DeliveryType).'</td><th>CRNO:</th><td>'.(empty($table->CRNO)?'':$table->CRNO).'</td></tr>
 		        </table>';
 		    }
 
@@ -236,12 +236,12 @@ class Ticket extends CI_Controller {
 		        <div class="hiddenTrackingDetails" style="display:none;">
 	        	<table class="table table-bordered">
 		        	<tr><th colspan="4" style="text-align:center;">Branch Details</th></tr>
-		        	<tr><th>Branch Name:</th><td>'.$table1->Branch_Name.'</td><th>Contact Person:</th><td>'.$table1->Contact_Person.'</td></tr>	
-		        	<tr><th>Branch Address:</th><td colspan="3">'.$table1->Address.'</td></tr>
-		        	<tr><th>City Name:</th><td>'.$table1->City_name.'</td><th>Pincode:</th><td>'.$table1->Pin_Code.'</td></tr>
-		        	<tr><th>STD Code:</th><td>'.$table1->Std_Code.'</td><th>Mobile:</th><td>'.$table1->mobileno.'</td></tr>
-		        	<tr><th>Phone No:</th><td>'.$table1->phoneno.'</td><th>Email:</th><td>'.$table1->EMail_Id.'</td></tr>
-		        	<tr><th>Latitude:</th><td>'.$table1->Latitude.'</td><th>Longitude:</th><td>'.$table1->Longitude.'</td></tr>
+		        	<tr><th>Branch Name:</th><td>'.(empty($table1->Branch_Name)?'':$table1->Branch_Name).'</td><th>Contact Person:</th><td>'.(empty($table1->Contact_Person)?'':$table1->Contact_Person).'</td></tr>	
+		        	<tr><th>Branch Address:</th><td colspan="3">'.(empty($table1->Address)?'':$table1->Address).'</td></tr>
+		        	<tr><th>City Name:</th><td>'.(empty($table1->City_name)?'':$table1->City_name).'</td><th>Pincode:</th><td>'.(empty($table1->Pin_Code)?'':$table1->Pin_Code).'</td></tr>
+		        	<tr><th>STD Code:</th><td>'.(empty($table1->Std_Code)?'':$table1->Std_Code).'</td><th>Mobile:</th><td>'.(empty($table1->mobileno)?'':$table1->mobileno).'</td></tr>
+		        	<tr><th>Phone No:</th><td>'.(empty($table1->phoneno)?'':$table1->phoneno).'</td><th>Email:</th><td>'.(empty($table1->EMail_Id)?'':$table1->EMail_Id).'</td></tr>
+		        	<tr><th>Latitude:</th><td>'.(empty($table1->Latitude)?'':$table1->Latitude).'</td><th>Longitude:</th><td>'.(empty($table1->Longitude)?'':$table1->Longitude).'</td></tr>
 	        	</table>';
 	        }
 
@@ -249,12 +249,12 @@ class Ticket extends CI_Controller {
 	        {
 	        	echo'<table class="table table-bordered">
 		        	<tr><th colspan="4" style="text-align:center;">Delivery Details</th></tr>
-		        	<tr><th>Branch Name:</th><td>'.$table2->Branch_Name.'</td><th>Contact Person:</th><td>'.$table2->Contact_Person.'</td></tr>	
-		        	<tr><th>Branch Address:</th><td colspan="3">'.$table2->Address.'</td></tr>
-		        	<tr><th>City Name:</th><td>'.$table2->City_name.'</td><th>Pincode:</th><td>'.$table2->Pin_Code.'</td></tr>
-		        	<tr><th>STD Code:</th><td>'.$table2->Std_Code.'</td><th>Mobile:</th><td>'.$table2->mobileno.'</td></tr>
-		        	<tr><th>Phone No:</th><td>'.$table2->phoneno.'</td><th>Email:</th><td>'.$table2->EMail_Id.'</td></tr>
-		        	<tr><th>Latitude:</th><td>'.$table2->Latitude.'</td><th>Longitude:</th><td>'.$table2->Longitude.'</td></tr>
+		        	<tr><th>Branch Name:</th><td>'.(empty($table2->Branch_Name)?'':$table2->Branch_Name).'</td><th>Contact Person:</th><td>'.(empty($table2->Contact_Person)?'':$table2->Contact_Person).'</td></tr>	
+		        	<tr><th>Branch Address:</th><td colspan="3">'.(empty($table2->Address)?'':$table2->Address).'</td></tr>
+		        	<tr><th>City Name:</th><td>'.(empty($table2->City_name)?'':$table2->City_name).'</td><th>Pincode:</th><td>'.(empty($table2->Pin_Code)?'':$table2->Pin_Code).'</td></tr>
+		        	<tr><th>STD Code:</th><td>'.(empty($table2->Std_Code)?'':$table2->Std_Code).'</td><th>Mobile:</th><td>'.(empty($table2->mobileno)?'':$table2->mobileno).'</td></tr>
+		        	<tr><th>Phone No:</th><td>'.(empty($table2->phoneno)?'':$table2->phoneno).'</td><th>Email:</th><td>'.(empty($table2->EMail_Id)?'':$table2->EMail_Id).'</td></tr>
+		        	<tr><th>Latitude:</th><td>'.(empty($table2->Latitude)?'':$table2->Latitude).'</td><th>Longitude:</th><td>'.(empty($table2->Longitude)?'':$table2->Longitude).'</td></tr>
 	        	</table>';
 	        }
 
@@ -268,11 +268,11 @@ class Ticket extends CI_Controller {
 	        	foreach($table3 as $res)
 	        	{
 	        		echo'<tr>
-	        				<td>'.$res->From_Station.'</td>
-	        				<td>'.$res->To_Station.'</td>
-	        				<td>'.$res->Depature_Date.'</td>
-	        				<td>'.$res->Arrival_Date.'</td>
-	        				<td>'.$res->Status_Name.'</td>
+	        				<td>'.(empty($res->From_Station)?'':$res->From_Station).'</td>
+	        				<td>'.(empty($res->To_Station?'':$res->To_Station)).'</td>
+	        				<td>'.(empty($res->Depature_Date)?'':$res->Depature_Date).'</td>
+	        				<td>'.(empty($res->Arrival_Date)?'':$res->Arrival_Date).'</td>
+	        				<td>'.(empty($res->Status_Name)?'':$res->Status_Name).'</td>
 	        			</tr>';
 	        	}
 	        	echo'</table>';
