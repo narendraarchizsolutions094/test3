@@ -160,7 +160,7 @@ class Rule_model extends CI_Model {
                     if (!empty($rule_data['rule_action'])) {
                         $this->db->where('tbl_ticket.ticketno',$enquiry_code);
                         $this->db->where('tbl_ticket.company',$comp_id);
-                        $this->db->update('tbl_ticket.priority',$rule_data['rule_action']);
+                        $this->db->update('tbl_ticket',array('tbl_ticket.priority'=>$rule_data['rule_action']));
                     }
                 }
             }
