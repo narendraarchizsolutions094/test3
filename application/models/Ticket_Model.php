@@ -256,6 +256,17 @@ class Ticket_Model extends CI_Model {
 			$ret = $this->db->insert("tbl_ticket_conv", $insarr);			
 			if($ret){				
 				$this->session->set_flashdata('message', 'Successfully saved');			
+				if($stage){
+					$this->db->set('tbl_ticket.ticket_stage',$stage);
+				}
+				if($sub_stage){
+					$this->db->set('tbl_ticket.ticket_substage',$sub_stage);
+				}
+				if($stage || $sub_stage){
+					$this->db->where('tbl_ticket.company',$this->session->companey_id);
+					$this->db->where('tbl_ticket.ticketno',$ticketno);
+					$this->db->update('tbl_ticket');
+				}
 			}else{
 				$this->session->set_flashdata('message', 'Failed to save');		
 			}					
