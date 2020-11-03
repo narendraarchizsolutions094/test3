@@ -240,9 +240,7 @@ class Report extends CI_Controller {
               if (in_array('Remark', $report_columns)){
                 $row[] = (!empty($repdetails->enq_remark)) ? $repdetails->enq_remark :"NA"; 
               }              
-                 if (in_array('Remark', $report_columns)){
-                $row[] = (!empty($repdetails->enq_remark)) ? $repdetails->enq_remark :"NA"; 
-              }              
+                          
 
               if (in_array('Status', $report_columns)) {
                  if ($repdetails->status == 1) {
