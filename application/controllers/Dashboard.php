@@ -15,7 +15,7 @@ class Dashboard extends CI_Controller {
 			'website/home_model',
 			'Institute_model',
 			'schedule_model',
-            'report', 'location_model', 'report_model', 'user_model','Modules_model',
+            'report', 'location_model', 'report_model','Modules_model',
             'enquiry_model', 'Leads_Model', 'Client_Model','Message_models',
             'Product_model'
         ));
@@ -1301,10 +1301,10 @@ $data['clientsum']=$this->dashboard_model->dataLead(3);
             $data['city_list'] = $this->location_model->city_list();
             $data['region_list'] = $this->location_model->region_list();
             $data['territory_lsit'] = $this->location_model->territory_lsit();
-            $data['user_list'] = $this->User_model->user_list();
+            $data['user_list'] = $this->user_model->user_list();
             $data['department_list'] = $this->Modules_model->modules_list();
             $data['user_role'] = $this->db->get('tbl_user_role')->result();
-            $data['department'] = $this->User_model->read_by_id($user_id);
+            $data['department'] = $this->user_model->read_by_id($user_id);
             $data['county_list'] = $this->location_model->country();
             $data['content'] = $this->load->view('profile_form', $data, true);
             $this->load->view('layout/main_wrapper', $data);
