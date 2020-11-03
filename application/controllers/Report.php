@@ -240,6 +240,9 @@ class Report extends CI_Controller {
               if (in_array('Remark', $report_columns)){
                 $row[] = (!empty($repdetails->enq_remark)) ? $repdetails->enq_remark :"NA"; 
               }              
+                 if (in_array('Remark', $report_columns)){
+                $row[] = (!empty($repdetails->enq_remark)) ? $repdetails->enq_remark :"NA"; 
+              }              
 
               if (in_array('Status', $report_columns)) {
                  if ($repdetails->status == 1) {
@@ -272,6 +275,9 @@ class Report extends CI_Controller {
                if (in_array('Product', $report_columns)){
                   $row[] = (!empty($repdetails->enq_product_name)) ? $repdetails->enq_product_name:'NA';
                }
+              if (in_array('Enquiry Id', $this->session->userdata('post_report_columns'))){
+                $row[] = (!empty($repdetails->Enquery_id)) ? $repdetails->Enquery_id:'NA';
+              }
                  if(!empty($dfields)){
                     foreach($dfields as $ind => $dfld){ 
                       if (in_array(trim($dfld['input_label']), $report_columns)) {                  
@@ -424,8 +430,14 @@ class Report extends CI_Controller {
             }else{
                $hier_wise = $this->input->post('hier_wise');
             }
-            
+            if($this->input->post('Enquiry_Id')==''){
+              $Enquiry_Id = '';
+          }else{
+             $Enquiry_Id = $this->input->post('Enquiry_Id');
+          }
             $data['post_report_columns'] = $this->input->post('report_columns');
+            // print_r($data['post_report_columns']);
+            // die();
              $post_report_columns = $this->input->post('report_columns');
             if($this->input->post('all')==''){ // follow up report
                 $all = '';
@@ -433,7 +445,6 @@ class Report extends CI_Controller {
                $all = $this->input->post('all');
             }        
             $data_arr = array(
-   
             'from1'           =>  $from,
             'to1'             =>  $to,
             'updated_from1'   =>  $updated_from,
@@ -455,7 +466,7 @@ class Report extends CI_Controller {
             'all1'            =>  $all, 
             'post_report_columns'=>$post_report_columns,
             'productlst'=>$productlst,
-            'hier_wise' => $hier_wise
+            'hier_wise' => $hier_wise,
             );
             $this->session->set_userdata($data_arr);
             
@@ -473,8 +484,11 @@ class Report extends CI_Controller {
 
         $data['process'] = $this->dash_model->product_list();
         $data["dfields"] = $this->report_model->get_dynfields();
+      
         $data["fieldsval"]        = $this->report_model->getdynfielsval();  
         $data['products'] = $this->location_model->productcountry();
+          // print_r($data["fieldsval"]);
+          // die();
         $data['content'] = $this->load->view('all_report', $data, true);        
         $this->load->view('layout/main_wrapper', $data);
        
@@ -503,6 +517,7 @@ class Report extends CI_Controller {
         $drop_status = $this->session->userdata('drop_status1');
         $all = $this->session->userdata('all1');
         $productlst = $this->session->userdata('productlst');
+        $Enquiry_Id = $this->session->userdata('Enquiry_Id');
         $rep_details = $this->report_datatable_model->get_datatables();  
             $i=1;
             $data = array();
@@ -609,7 +624,10 @@ class Report extends CI_Controller {
                if (in_array('Product', $this->session->userdata('post_report_columns'))){
                   $row[] = (!empty($repdetails->enq_product_name)) ? $repdetails->enq_product_name:'NA';
                }
-               
+
+               if (in_array('Enquiry Id', $this->session->userdata('post_report_columns'))){
+                $row[] = (!empty($repdetails->Enquery_id)) ? $repdetails->Enquery_id:'NA';
+              }
                  if(!empty($dfields)){
                     foreach($dfields as $ind => $dfld){ 
                     if (in_array(trim($dfld['input_label']), $this->session->userdata('post_report_columns'))) {
