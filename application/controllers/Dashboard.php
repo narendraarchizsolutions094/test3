@@ -15,7 +15,7 @@ class Dashboard extends CI_Controller {
 			'website/home_model',
 			'Institute_model',
 			'schedule_model',
-            'report', 'location_model', 'report_model', 'Modules_model',
+            'report', 'location_model', 'report_model', 'user_model','Modules_model',
             'enquiry_model', 'Leads_Model', 'Client_Model','Message_models',
             'Product_model'
         ));
