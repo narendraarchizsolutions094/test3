@@ -557,7 +557,7 @@ $(document).on("click", ".add-to-cart", function() {
                 $("#cart-nav-menu").prepend(htmcnt);
                 $("#nav-cart-count").text(jresp.total);
                 try {
-                    manageCartQty();
+                    //manageCartQty();
                 } catch (e) {
                     alert(e);
                 }
