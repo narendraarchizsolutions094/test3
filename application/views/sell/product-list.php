@@ -8,7 +8,7 @@
     }
 
     .card-header {
-        padding: 0px;
+        padding: 0px; 
     }
 
     .card-header img {
