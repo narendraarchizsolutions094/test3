@@ -284,7 +284,7 @@ input[name=lead_stages]{
           data: $('form#enquiry_form').serialize(),
           success: function(data) {
             Swal.fire(
-            'Tax invoice generated successfylly!',
+            'Tax invoice generated successfully!',
             'Now Tax invoice will be visible to buyer',
             'success'
             )

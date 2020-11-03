@@ -445,7 +445,7 @@ class Buy extends CI_Controller {
 
 		echo ' <li id = "cart-li-'.$cart['id'].'" >  
 			  <div class = "cart-items"><h4><a class="prodname" href = "">'.$cart['name'].'</a></h4>
-				  <p> Price : <i class = "fa fa-price"></i> '.$cart['price'].' X <input type="hidden" name="minimum" class="minimum" value="'.$productData->minimum_order_quantity.'"> <input type="number" class="cart-qty" value="'.$cart['qty'].'" min="1" data-prodid="'.$cart['id'].'" > = <i class = "fa fa-rupee"></i><span class="item-price-'.$cart['id'].'">'.round($cart['price']*$cart['qty'],2).'</span> 
+				  <p> Price : <i class = "fa fa-price"></i> '.$cart['price'].' X <input type="hidden" name="minimum" class="minimum" value="'.$productData->minimum_order_quantity.'"> <input type="number" onchange="manageCartQty()" class="cart-qty" value="'.$cart['qty'].'" min="1" data-prodid="'.$cart['id'].'" > = <i class = "fa fa-rupee"></i><span class="item-price-'.$cart['id'].'">'.round($cart['price']*$cart['qty'],2).'</span> 
 					<a href="javascript:void(0)" onclick="remove_cart_item('.$cart['id'].')" class="fa fa-trash btn btn-danger btn-sm pull-right remove-item-cart"></a>
 				  </p>
 				  <hr />

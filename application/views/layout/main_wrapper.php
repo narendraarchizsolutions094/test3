@@ -1791,7 +1791,7 @@ if($this->session->companey_id==65)
     }
   $(document).ready(function(){
 
-    manageCartQty();
+    //manageCartQty();
 
     
 
