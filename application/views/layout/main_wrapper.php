@@ -1518,7 +1518,7 @@ if($this->session->companey_id==65)
                           <a href="<?php echo base_url("ticket/index") ?>"><?php echo display('ticketing') ?></a>
                         </li>
                         <?php
-                        if($this->session->companey_id!=65){ ?>                        
+                        if($this->session->companey_id!=65 && 0){ ?>                        
                         <li class="<?php echo (($segment1 == "ticket" && $segment2 == "natureOfComplaintList") ? "active" : null) ?>">
                           <a href="<?php echo base_url("ticket/natureOfComplaintList") ?>"><?php echo display("natureOfComplaint"); ?></a>
                         </li>
