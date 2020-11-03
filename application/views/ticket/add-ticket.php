@@ -305,7 +305,7 @@ if($this->session->companey_id==65)
 				},
 				error:function(u,v,w)
 				{
-					alert(w);
+					console.info(w);
 				}
 			});
 		}
@@ -339,7 +339,7 @@ if($this->session->companey_id==65)
 				},
 				error:function(u,v,w)
 				{
-					alert(w);
+					console.info(w);
 				}
 			});
 		}

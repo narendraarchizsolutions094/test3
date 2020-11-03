@@ -402,13 +402,16 @@ class Ticket extends CI_Controller {
 		$stage_desc	=	$this->input->post('lead_description');
 		$stage_remark	=	$this->input->post('conversation');
 		$client	=	$this->input->post('client');
-
+ 
 		$stage_date = date("d-m-Y",strtotime($this->input->post('c_date')));
 		$stage_time = date("H:i:s",strtotime($this->input->post('c_time')));
 
 		$user_id = $this->session->user_id;
 		$this->session->set_flashdata('SUCCESSMSG', 'Update Successfully');
         $this->Ticket_Model->saveconv($ticketno,'Stage Updated',$stage_remark,$client,$user_id,$lead_stage,$stage_desc);
+		
+		$this->load->model('rule_model');
+        $this->rule_model->execute_rules($ticketno, array(8));
 
         $contact_person = '';
         $mobileno = '';
@@ -694,6 +697,8 @@ public function assign_tickets() {
 			// $res = $this->Ticket_Model->save($this->session->companey_id,$this->session->user_id);
 			if($res)
 			{
+				$this->load->model('rule_model');
+				$this->rule_model->execute_rules($res, array(8));
 				$this->session->set_flashdata('message', 'Successfully added ticket');
 				//redirect(base_url("ticket/add") , "refresh");
             	redirect(base_url('ticket/view/'.$res));

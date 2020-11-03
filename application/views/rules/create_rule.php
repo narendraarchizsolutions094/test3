@@ -280,6 +280,20 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		    input: 'select',
 		    values: {"0":"Complaint","1":"Query"},
 		    operators: ['equal', 'not_equal','is_null', 'is_not_null']
+		  },{
+		    id: 'ticket_stage',
+		    label: 'Ticket Disposition',
+		    type: 'integer',
+		    input: 'select',
+		    values: <?=$lead_stages?>,
+		    operators: ['equal', 'not_equal','is_null', 'is_not_null']
+		  },{
+		    id: 'ticket_substage',
+		    label: 'Ticket Sub Disposition',
+		    type: 'integer',
+		    input: 'select',
+		    values: <?=$lead_description?>,
+		    operators: ['equal', 'not_equal','is_null', 'is_not_null']
 		  }],
 		  rules: rules_basic
 		});
