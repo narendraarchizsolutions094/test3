@@ -4,7 +4,7 @@
 		<button class="btn btn-primary active btn-sm" onclick="tabchange(this,0)">Ticket Details</button>
 		<button class="btn btn-primary btn-sm" onclick="tabchange(this,1)">Related Tickets</button>
 	</div>
-	</div>
+	</div> 
 	<div class="row" id="ticket_details">
 <?php echo form_open_multipart(base_url("ticket/update_ticket/".$ticket->ticketno)); ?>
 
@@ -26,6 +26,24 @@
 					});
 				</script>
 		<?php } ?>
+
+		<div class="col-md-6">
+			<div class="form-group">
+				<label>Referred By</label>
+				<select class="form-control add-select2 choose-client" name = "referred_by" required>
+					<?php 
+					if(!empty($referred_type))
+					{
+						foreach($referred_type as $ref)
+						{
+				echo "<option value =".$ref->id." ".($ref->id==$ticket->referred_by?'selected':'').">".$ref->name."</option>";
+
+						}
+					} 
+					?>
+				</select>
+			</div>
+		</div>
 
 		<div class="col-md-6">
 			<div class="form-group">

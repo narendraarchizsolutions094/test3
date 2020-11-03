@@ -12,15 +12,15 @@
          </div>
          <div class="panel-body">
             <div class="col-md-3 col-height">          
-              <h5 style="text-align:center">
+              <h5 style="text-align:center"> 
                 <br>
                 <?php
                 echo 'Ticket No - '.$ticket->ticketno;
                 ?>
               <br>
 
-                <br><a href="<?php if(!empty($enquiry->enquiry_id)){ echo base_url().'client/view/'.$enquiry->enquiry_id;}?>"><?php  (!empty($enquiry->name)) ? ucwords($enquiry->name_prefix." ".$enquiry->name." ".$enquiry->lastname) : ""; ?></a>
-              <br>
+            <a href="<?php if(!empty($enquiry->enquiry_id)){ echo base_url().'client/view/'.$enquiry->enquiry_id;}?>"><?php  (!empty($enquiry->name)) ? '<br>'.ucwords($enquiry->name_prefix." ".$enquiry->name." ".$enquiry->lastname).'<br>' : ""; ?></a>
+              
               
               <?php 
               if(!empty($enquiry->gender))
