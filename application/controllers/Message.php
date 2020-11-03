@@ -56,30 +56,45 @@ class Message extends CI_Controller {
 	   
 	}
 	
-	public function find_substage($id)
+	public function find_substage($id=0,$selected=0)
 	{
 		$this->load->model('Leads_Model');
 		
-		$res = $this->Leads_Model->all_description($id);
-		//print_r($res); exit();
-		echo'<option value="">Select Sub Stage</option>';
-		foreach ($res as $row)
+		if($id)
 		{
-			echo'<option value="'.$row->id.'">'.$row->description.'</option>';
+			$res = $this->Leads_Model->all_description($id);
+			//print_r($res); exit();
+			echo'<option value="">Select Sub Stage</option>';
+			foreach ($res as $row)
+			{
+				echo'<option value="'.$row->id.'" '.($selected==$row->id?'selected':'').'>'.$row->description.'</option>';
+			}
 		}
+		else
+		{
+			echo'<option value=""></option>';
+		}
+		
 
 	}
 
-	public function all_stages($id)
+	public function all_stages($id,$selected=0)
 	{
 		$this->load->model('Leads_Model');
-		
-		$res = $this->Leads_Model->find_estage($this->session->process[0],$id);
-		echo'<option value="">Select Stage</option>';
-		foreach ($res as $row)
+		if(sizeof($this->session->process)==1)
 		{
-			echo'<option value="'.$row->stg_id.'">'.$row->lead_stage_name.'</option>';
+			$res = $this->Leads_Model->find_estage($this->session->process[0],$id);
+			echo'<option value="">Select Stage</option>';
+			foreach ($res as $row)
+			{
+				echo'<option value="'.$row->stg_id.'" '.($selected==$row->stg_id?'selected':'').'>'.$row->lead_stage_name.'</option>';
+			}
 		}
+		else
+		{
+			echo'<option value="">First Please Select only One Process</option>';
+		}
+		
 
 	}
 

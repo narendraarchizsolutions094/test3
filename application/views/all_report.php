@@ -174,7 +174,8 @@
                                               'Disposition',
                                               'State',
                                               'City',
-                                              'Product'
+                                              'Product',
+                                              'Enquiry Id'
                                             );
                            // $this->session->set_userdata($report_columns);             
                         ?>
@@ -265,6 +266,9 @@
                                 <option
                                     <?php if(!empty(set_value('report_columns'))){if (in_array('Product',set_value('report_columns'))) {echo 'selected';}}?>>
                                     Product</option>
+                                    <option
+                                    <?php if(!empty(set_value('report_columns'))){if (in_array('Enquiry Id',set_value('report_columns'))) {echo 'selected';}}?>>
+                                    Enquiry Id</option>
 
                                 <?php if(!empty($dfields)) { 
 								foreach($dfields as $dind => $df){									

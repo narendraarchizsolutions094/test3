@@ -326,7 +326,7 @@ class Ticket extends CI_Controller {
 					);
 		$data['related_tickets'] = $this->Ticket_Model->all_related_tickets($match);
 		//print_r($data['related_tickets']); exit();
-
+		$data["referred_type"] =$this->Leads_Model->get_referred_by();
 		$data['all_description_lists']    =   $this->Leads_Model->find_description();	
 
 		$data["clients"] = $this->Ticket_Model->getallclient();

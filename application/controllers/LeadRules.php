@@ -160,7 +160,7 @@ class LeadRules extends CI_Controller {
         $this->load->model('dash_model');
         $this->load->model('Datasource_model');
         $this->load->model('enquiry_model');
-        if ($id) {
+        if ($id) { 
             $data['rule_data']    =   $this->rule_model->get_rule($id);            
         }
         $source    =   $this->Leads_Model->get_leadsource_list();
