@@ -23,7 +23,7 @@
               <?php
             }
             ?>
-            <p><?php echo date("j-M-Y h:i:s a",strtotime($cnv->send_date)); ?><br>
+            <p><?php echo date("j-M-Y h:i:s A",strtotime($cnv->send_date)); ?><br>
            </p>
           </div>
         </li>

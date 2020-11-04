@@ -47,28 +47,34 @@
 						</select>
 					</div>
 				</div>
-				<?php if($this->session->companey_id==65){ ?>
+				<?php if($this->session->companey_id==1){ ?>
 					<script type="text/javascript">
 					$("input[name=complaint_type]").on('change',function(){
 							var x = $("input[name=complaint_type]:checked").val();
 							if(x=='1')
+							{
 								$('input[name=tracking_no]').attr("required","required");
+								$(".opt").show();
+							}
 							else if(x=='2')
+							{
 								$('input[name=tracking_no]').removeAttr("required");
+								$(".opt").hide();
+							}
 					});
 				</script>
 					<div class="trackingDetails"></div>
 
 				<div class="col-md-6">
 					<div class="form-group">
-						<label>Tracking Number <i class="text-danger">*</i></label>
-						<input type="text" name="tracking_no" class="form-control" onblur="loadTracking(this)" onkeyup="match_previous(this.value)" required>
+						<label>Tracking Number <i class="text-danger opt">*</i></label>
+						<input type="text" name="tracking_no" class="form-control" onblur="loadTracking(this),match_previous(this.value)" required>
 					</div>
 				</div>
 			<?php } ?>
 				<div class="col-md-6">
 					<div class="form-group">
-						<label>Problem For <i class="text-danger">*</i></label>
+						<label>Problem For </label>
 						<select class="form-control add-select2 choose-client" name = "client" >
 							<option value = "" style ="display:none;">---Select---</option>
 							<?php if(!empty($clients)){
@@ -134,7 +140,7 @@
 				</div>
 
 				<?php
-				if($this->session->companey_id!=65)
+				if($this->session->companey_id!=1)
 				{
 				?>
 				<div class="col-md-6">
@@ -223,13 +229,32 @@
         	<div class="old_ticket_data">
          </div>
         <div class="modal-footer">
-        	<button type="button" class="btn btn-success" onclick="$('#old_ticket').hide()">Anyway New Ticket </button>
+        	<button type="button" class="btn btn-success" onclick="$('#old_ticket').hide()">New Ticket </button>
           <button type="button" class="btn btn-danger" onclick="$('#old_ticket').hide(),$('input[name=tracking_no]').val('')">Cancel</button>
         </div>
       </div>
      
   </div>
 </div>
+
+<div id="no_match" class="modal" role="dialog" style="display:block;">
+  <div class="modal-dialog">
+
+     <div class="modal-content">
+        
+        <div class="modal-body">
+        	<h2><center>Old Tickets</center></h2>
+        	<div class="old_ticket_data">
+         </div>
+        <div class="modal-footer">
+        	<button type="button" class="btn btn-success" onclick="$('#old_ticket').hide()">New Ticket </button>
+          <button type="button" class="btn btn-danger" onclick="$('#old_ticket').hide(),$('input[name=tracking_no]').val('')">Cancel</button>
+        </div>
+      </div>
+     
+  </div>
+</div>
+
         
 <!-- jquery-ui js -->
 <script src="<?php echo base_url('assets/js/jquery-ui.min.js') ?>" type="text/javascript"></script>      
@@ -271,6 +296,7 @@
 		$("#oldticket").load("<?php echo base_url('ticket/loadoldticket') ?>/"+$(this).val())
 	});
 </script>
+
 <script>
 	$(document).ready(function(){
 		
@@ -281,7 +307,7 @@
 
 	});
 <?php
-if($this->session->companey_id==65)
+if($this->session->companey_id==1)
 {
 ?>
 	function loadTracking(that)
@@ -301,7 +327,15 @@ if($this->session->companey_id==65)
 				},
 				success:function(q)
 				{	$(that).parents('form').find('input,select,button').removeAttr('disabled');
-					$(".trackingDetails").html(q);
+					if(q!='0')
+						$(".trackingDetails").html(q);
+					else
+					{
+						Swal.fire({
+		                    title: 'No Record Found ',
+		                    cancelButtonText: 'Ok!'
+                  			});
+					}
 				},
 				error:function(u,v,w)
 				{

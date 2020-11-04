@@ -7,15 +7,16 @@
 	</div> 
 	<div class="row" id="ticket_details">
 <?php echo form_open_multipart(base_url("ticket/update_ticket/".$ticket->ticketno)); ?>
+	
+		<input type="hidden" name="complaint_type" value="<?=$ticket->complaint_type?>">
 
-
-		<?php if($this->session->companey_id==65){ ?>
+		<?php if($this->session->companey_id==1){ ?>
 
 					<div class="trackingDetails"></div>
-
+					
 				<div class="col-md-6">
 					<div class="form-group">
-						<label>Tracking Number <i class="text-danger">*</i></label>
+						<label>Tracking Number <i class="text-danger opt" style="display: none;">*</i></label>
 						<input type="text" name="tracking_no" class="form-control" onblur="loadTracking(this)" value="<?php if(!empty($ticket->tracking_no)){ echo $ticket->tracking_no;} ?>">
 					</div>
 				</div>
@@ -25,6 +26,15 @@
 						loadTracking($("input[name=tracking_no]").get(0));
 					});
 				</script>
+
+				<?php if($ticket->complaint_type=='1'){
+						echo'<script type="text/javascript">
+						$(".opt").show();
+						$("input[name=tracking_no]").attr("required","required");
+						</script>';
+					}?>
+					
+
 		<?php } ?>
 
 		<div class="col-md-6">
@@ -314,7 +324,7 @@
 	});
 
 <?php
-if($this->session->companey_id==65)
+if($this->session->companey_id==1)
 {
 ?>
 	function loadTracking(that)
