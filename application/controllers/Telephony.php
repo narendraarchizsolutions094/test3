@@ -162,6 +162,9 @@ class Telephony extends CI_Controller {
     
     public function click_to_dial($phone='')
     {
+        if($this->session->companey_id==65){
+            print_r($_SESSION);
+        }
     $phone           = '+91'.$phone;
     $token           = $this->input->post("token");
     $support_user_id = $this->session->telephony_agent_id;
