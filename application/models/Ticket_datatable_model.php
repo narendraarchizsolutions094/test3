@@ -64,8 +64,8 @@ class Ticket_datatable_model extends CI_Model{
          ->group_by("tck.id");
 
 
-    if(isset($this->session->ticket_filters_sess))
-    {
+    // if(isset($this->session->ticket_filters_sess))
+    // {
         $enquiry_filters_sess   =   $this->session->ticket_filters_sess;
             
         $from_created           =   !empty($enquiry_filters_sess['from_created'])?$enquiry_filters_sess['from_created']:'';       
@@ -184,7 +184,7 @@ $CHK = 0;
 
 
         $this->db->where($where);
-    }
+    //}
 
         $i = 0;
         // loop searchable columns 
