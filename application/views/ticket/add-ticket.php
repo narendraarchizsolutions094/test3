@@ -339,7 +339,7 @@ if($this->session->companey_id==1)
 				},
 				error:function(u,v,w)
 				{
-					alert(w);
+					console.info(w);
 				}
 			});
 		}
@@ -373,7 +373,7 @@ if($this->session->companey_id==1)
 				},
 				error:function(u,v,w)
 				{
-					alert(w);
+					console.info(w);
 				}
 			});
 		}

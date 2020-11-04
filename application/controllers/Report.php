@@ -240,9 +240,7 @@ class Report extends CI_Controller {
               if (in_array('Remark', $report_columns)){
                 $row[] = (!empty($repdetails->enq_remark)) ? $repdetails->enq_remark :"NA"; 
               }              
-                 if (in_array('Remark', $report_columns)){
-                $row[] = (!empty($repdetails->enq_remark)) ? $repdetails->enq_remark :"NA"; 
-              }              
+                          
 
               if (in_array('Status', $report_columns)) {
                  if ($repdetails->status == 1) {
@@ -275,7 +273,7 @@ class Report extends CI_Controller {
                if (in_array('Product', $report_columns)){
                   $row[] = (!empty($repdetails->enq_product_name)) ? $repdetails->enq_product_name:'NA';
                }
-              if (in_array('Enquiry Id', $this->session->userdata('post_report_columns'))){
+              if (in_array('Enquiry Id', $report_columns)){
                 $row[] = (!empty($repdetails->Enquery_id)) ? $repdetails->Enquery_id:'NA';
               }
                  if(!empty($dfields)){
