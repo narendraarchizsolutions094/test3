@@ -81,6 +81,7 @@ class Ticket extends CI_Controller
 	{
 		$this->db->where('id', $id);
 		$this->db->delete('tbl_nature_of_complaint');
+<<<<<<< HEAD
 		$this->session->set_flashdata('message', 'Deleted successfully');
 		redirect('ticket/natureOfComplaintList');
 	}
@@ -104,15 +105,49 @@ class Ticket extends CI_Controller
 		$data['products'] = $this->dash_model->get_user_product_list();
 		$data['prodcntry_list'] = $this->enquiry_model->get_user_productcntry_list();
 		$data['problem'] = $this->Ticket_Model->get_sub_list();
+=======
+		$this->session->set_flashdata('message','Deleted successfully');
+        redirect('ticket/natureOfComplaintList');
+
+	}	
+	
+	public function index(){
+	
+		$this->load->model('Datasource_model'); 
+        $this->load->model('dash_model'); 
+        $this->load->model('enquiry_model'); 
+        $this->load->model('report_model'); 
+
+        if(isset($_SESSION['ticket_filters_sess']))
+      		 unset($_SESSION['ticket_filters_sess']);
+
+
+        $data['sourse'] = $this->report_model->all_source();
+        $data['title'] = "All Ticket";
+        $data["tickets"] = $this->Ticket_Model->getall();
+
+		$data['dfields']  = $this->enquiry_model->getformfield();
+		//print_r($data['dfields']); exit();
+        //print_r($data['tickets']); exit();
+        $data['created_bylist'] = $this->User_model->read();
+        $data['products'] = $this->dash_model->get_user_product_list();
+        $data['prodcntry_list'] = $this->enquiry_model->get_user_productcntry_list();
+        $data['problem'] = $this->Ticket_Model->get_sub_list();
+>>>>>>> b7754655fedf6a5f70fe1ce8f69e71ed46529950
 		//print_r($data["tickets"]);die;
 		$data['issues'] = $this->Ticket_Model->get_issue_list();
 		$data['user_list'] = $this->User_model->companey_users();
 		$data['content'] = $this->load->view('ticket/list-ticket', $data, true);
 		$this->load->view('layout/main_wrapper', $data);
+<<<<<<< HEAD
+=======
+		
+>>>>>>> b7754655fedf6a5f70fe1ce8f69e71ed46529950
 	}
 
 
 
+<<<<<<< HEAD
 	public function ticket_set_filters_session()
 	{
 		$this->session->set_userdata('ticket_filters_sess', $_POST);
@@ -215,6 +250,119 @@ class Ticket extends CI_Controller
 
 					echo '<tr><th>Delivery Date:</th><td>' . (empty($table->DeliveryDate) ? '' : $table->DeliveryDate) . '</td><th>Arrival Date:</th><td>' . (empty($table->ArrivalDate) ? '' : $table->ArrivalDate) . '</td></tr>
 		         <tr><th>Delivery Type:</th><td>' . (empty($table->DeliveryType) ? '' : $table->DeliveryType) . '</td><th>CRNO:</th><td>' . (empty($table->CRNO) ? '' : $table->CRNO) . '</td></tr>
+=======
+    public function ticket_set_filters_session(){
+         $this->session->set_userdata('ticket_filters_sess',$_POST);
+         //print_r($_SESSION);
+     }
+      public function chk()
+      {
+      	//$data['problem'] = $this->Ticket_Model->get_sub_list();
+      	//print_r($data['problem']); exit();
+      	//print_r($this->session->ticket_filters_sess); exit();
+
+      	$data['issues'] = $this->Ticket_Model->get_issue_list();
+      	//print_r($data['issues']); exit();
+
+      	$all_reporting_ids    =   $this->common_model->get_categories($this->session->user_id);
+      	// print_r($all_reporting_ids); exit();
+      	print_r($this->session->ticket_filters_sess).'<br><Br>';
+          $post = array('search'=>array('value'=>''),'length'=>10,'start'=>0);
+         $this->load->model('Ticket_datatable_model');
+         $this->Ticket_datatable_model->_get_datatables_query($post);
+         $query = $this->db->get();
+        print_r($query->result());
+         // //$data  = array();
+         // // foreach ($res as $point)
+         // // {
+         // //     $sub = array_values((array)$point);
+         // //     $data[] = array_slice($sub, 0,11);
+         // // }
+
+         // print_r($res);
+      }
+     public function ticket_load_data()
+     {
+        // $_POST = array('search'=>array('value'=>''),'length'=>10,'start'=>0);
+         $this->load->model('Ticket_datatable_model');
+         
+         $res = $this->Ticket_datatable_model->getRows($_POST);
+         //print_r($res); exit();
+         $data  = array();
+         foreach ($res as $point)
+         {
+             $sub = array();
+             $sub[] = '<input type="checkbox" class="checkbox1" onclick="event.stopPropagation();" value="'.$point->id.'">';
+             $sub[] = $point->id;
+             $sub[] = '<a href="'.base_url('ticket/view/'.$point->ticketno).'">'.$point->ticketno.'</a>';
+             $sub[] = $point->clientname??"NA";
+			 $sub[] = $point->email??"NA";
+			 if (user_access(220) && !empty($point->phone)) {
+				$sub[] = "<a href='javascript:void(0)' onclick='send_parameters(" . $point->phone . ")'>" . $point->phone . "</a>";
+			} else {
+				$sub[] = $point->phone??"NA";
+			}
+             //$sub[] = $point->phone??"NA";
+             $sub[] = $point->country_name??"NA";
+             $sub[] = $point->assign_to_name??"NA";
+             $sub[] = $point->created_by_name??"NA";
+             $sub[] = '<span class="label label-'.($point->priority==1? 'success">Low' : ($point->priority==2?'warning">Medium':'danger">High')).'</span>';
+             $sub[] = $point->coml_date;
+             $data[] = $sub;
+           }
+
+         //print_r($res);
+         $output = array(
+            "draw" => $_POST['draw'],
+            "recordsTotal" => $this->Ticket_datatable_model->countAll(),
+            "recordsFiltered" => $this->Ticket_datatable_model->countFiltered($_POST),
+            "data" => $data,
+        );
+          echo json_encode($output);
+     }
+
+
+     public function view_tracking()
+     {
+     	if($post = $this->input->post())
+     	{
+     		if($post['trackingno'])
+     		{
+     			 $ch = curl_init();
+
+		        curl_setopt($ch, CURLOPT_URL, "https://thecrm360.com/new_crm/ticket/gc_vtrans_api/".$post['trackingno']);
+
+		        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+
+		        $output = curl_exec($ch);
+
+		        curl_close($ch);  
+
+		        if($output=='')
+		        {
+		        	echo '0';
+		        	exit();
+		        }
+
+		        $a = json_decode($output);
+		        $table  = empty($a->Table)?'':$a->Table;
+		        $table1 = empty($a->Table1)?'':$a->Table1;
+		        $table2 = empty($a->Table2)?'':$a->Table2;
+		        $table3 = empty($a->Table3)?'':$a->Table3;
+		        
+	        if(isset($a->Table))
+	        {
+		        echo'<table class="table table-bordered">
+		        <tr><th colspan="4" style="text-align:center;">Tracking Number: '.(empty($table->GCNO)?'':$table->GCNO).'</td></tr>
+		        <tr><th>Date:</th><td>'.(empty($table->GC_Date)?'':$table->GC_Date).'</td><th>Status:</th><td>'.(empty($table->status)?'':$table->status).'</td></tr>
+		         <tr><th>Delivery Location:</th><td  colspan="3">'.(empty($table->DeliveryLocation)?'':$table->DeliveryLocation).'</td></tr>
+		         <tr><th>Delivery Branch:</th><td>'.(empty($table->DeliveryBranch)?'':$table->DeliveryBranch).'</td><th>Booking Branch:</th><td>'.(empty($table->BookingBranch)?'':$table->BookingBranch).'</td></tr>';
+		        if(sizeof((array)$table->EDD))
+		        	echo' <tr><th>EDD</th><td colspan="3">'.print_r($table->EDD).'</td></tr>';
+
+		         echo'<tr><th>Delivery Date:</th><td>'.(empty($table->DeliveryDate)?'':$table->DeliveryDate).'</td><th>Arrival Date:</th><td>'.(empty($table->ArrivalDate)?'':$table->ArrivalDate).'</td></tr>
+		         <tr><th>Delivery Type:</th><td>'.(empty($table->DeliveryType)?'':$table->DeliveryType).'</td><th>CRNO:</th><td>'.(empty($table->CRNO)?'':$table->CRNO).'</td></tr>
+>>>>>>> b7754655fedf6a5f70fe1ce8f69e71ed46529950
 		        </table>';
 				}
 
@@ -674,11 +822,22 @@ class Ticket extends CI_Controller
 			// echo'ruk';
 			// exit();
 			// $res = $this->Ticket_Model->save($this->session->companey_id,$this->session->user_id);
+<<<<<<< HEAD
 			if ($res) {
 
 				$this->session->set_flashdata('message', 'Successfully added ticket');
 				//redirect(base_url("ticket/add") , "refresh");
 				redirect(base_url('ticket/view/' . $res));
+=======
+			if($res)
+			{
+				$this->load->model('rule_model');
+        		$this->rule_model->execute_rules($res, array(9));
+				$this->session->set_flashdata('message', 'Successfully added ticket');
+				//redirect(base_url("ticket/add") , "refresh");
+				redirect(base_url('ticket/view/'.$res));
+				//echo $this->db->last_query();
+>>>>>>> b7754655fedf6a5f70fe1ce8f69e71ed46529950
 			}
 		}
 
@@ -697,12 +856,24 @@ class Ticket extends CI_Controller
 
 	public function view_previous_ticket()
 	{
+<<<<<<< HEAD
 		if ($post = $this->input->post()) {
 			$no = $post['tracking_no'];
 			$res = $this->Ticket_Model->filterticket(array('tracking_no' => $no));
 
 			if ($res) {
 				echo '<table class="table table-bordered">
+=======
+		//$_POST['tracking_no'] = '06134707';
+		if($post = $this->input->post())
+		{
+			$no = $post['tracking_no'];
+			$res = $this->Ticket_Model->filterticket(array('tracking_no'=>$no));
+			//print_r($res[0]); exit();
+			if($res)
+			{
+				echo'<table class="table table-bordered">
+>>>>>>> b7754655fedf6a5f70fe1ce8f69e71ed46529950
 				<tr>
 				<th>Tracking No</th>
 				<th>Ticket Number</th>
@@ -711,6 +882,7 @@ class Ticket extends CI_Controller
 				<th>Created At</th>
 				<th>Action</th>
 				</tr>';
+<<<<<<< HEAD
 				foreach ($res as $row) {
 					echo '<tr>
 					<td>' . $row->tracking_no . '</td>
@@ -719,6 +891,17 @@ class Ticket extends CI_Controller
 					<td></td>
 					<td>' . date('d-m-Y <br> h:i A', strtotime($row->coml_date)) . '</td>
 					<th><a href="' . base_url('ticket/view/' . $row->ticketno) . '"><button class="btn btn-small btn-primary">View</button></a></th>
+=======
+				foreach ($res as $row)
+				{
+				echo'<tr>
+					<td>'.$row->tracking_no.'</td>
+					<td>'.$row->ticketno.'</td>
+					<td>'.$row->name.'</td>
+					<td>'.(!empty($row->lead_stage_name)?$row->lead_stage_name:'Ticket Created').' <small>'.(!empty($row->description)?'<br>'.$row->description:'').'</small></td>
+					<td>'.date('d-m-Y <br> h:i A',strtotime($row->coml_date)).'</td>
+					<th><a href="'.base_url('ticket/view/'.$row->ticketno).'"><button class="btn btn-small btn-primary">View</button></a></th>
+>>>>>>> b7754655fedf6a5f70fe1ce8f69e71ed46529950
 					</tr>';
 				}
 				echo '</table>';

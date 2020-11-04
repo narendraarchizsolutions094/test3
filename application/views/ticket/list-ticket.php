@@ -64,8 +64,8 @@
 					                <i class="fa fa-sliders"></i>
 					              </a>  
 					            <div class="dropdown-menu dropdown_css" style="max-height: 400px;overflow: auto; left: unset; right: 0!important;">
-					                  <a class="btn" data-toggle="modal" data-target="#AssignSelected" style="color:#000;cursor:pointer;border-radius: 2px;border-bottom :1px solid #fff;"><?php echo display('assign_selected'); ?></a>                                        
-                            <a class="btn" data-toggle="modal" data-target="#DeleteSelected" style="color:#000;cursor:pointer;border-radius: 2px;border-bottom :1px solid #fff;"><?php echo display('delete'); ?></a>
+					                  <a class="btn" data-toggle="modal" data-target="#AssignSelected" style="color:#000;cursor:pointer;border-radius: 2px;border-bottom :1px solid #ccc; width: 100%; text-align: left"><?php echo display('assign_selected'); ?></a>                                        
+                            <a class="btn" data-toggle="modal" data-target="#DeleteSelected" style="color:#000;cursor:pointer;border-radius: 2px;border-bottom :1px solid #ccc; width: 100%; text-align: left"><?php echo display('delete'); ?></a>
 					            </div>                                         
 					          </div>  
 					        </div>       
@@ -124,8 +124,8 @@
                         <div class="form-group col-md-3" id="priorityfilter">
                           <label for="priority">Priority</label>
                           <select class="form-control" name="priority" id="priority">
-                              <option value="" style="display:">---Select Priority---</option>
-                            <option value="1">Low</option>
+              <option value="" style="display:">---Select Priority---</option>
+              <option value="1">Low</option>
 							<option value="2">Medium</option>
 							<option value="3">High</option>n>
                            </select>

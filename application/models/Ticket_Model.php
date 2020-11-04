@@ -150,7 +150,7 @@ class Ticket_Model extends CI_Model {
 				 
 			);			
 			if(!empty($_FILES["attachment"]["name"]))
-			{	echo 'in';
+			{	//echo 'in';
 				$retdata =  $this->do_upload();
 				//print_r($retdata);			
 				if(!empty($retdata["upload_data"]["file_name"])){					
@@ -175,7 +175,7 @@ class Ticket_Model extends CI_Model {
 			{				
 				$arr["name"]   		= ($this->input->post("name", true)) ? $this->input->post("name", true) : "";
 				$arr["email"]  		= ($this->input->post("email", true)) ? $this->input->post("email", true) : "";
-				$arr["send_date"]  	= date("Y-m-d h:i:s");
+				$arr["send_date"]  	= date("Y-m-d H:i:s");
 				$arr["client"]     	= ($this->input->post("client", true)) ? $this->input->post("client", true) : $cid;
 				$arr["company"]	 	= $companey_id ;
 				$arr["category"]    = $this->input->post("relatedto", true);
@@ -200,7 +200,7 @@ class Ticket_Model extends CI_Model {
 									"msg"    	=> ($this->input->post("remark", true)) ? $this->input->post("remark", true) : '' ,
 									"attacment" => "",
 									"status"  	=> 0,
-									"send_date" =>	date("Y-m-d h:i:s"),
+									"send_date" =>	date("Y-m-d H:i:s"),
 									"client"   	=> ($this->input->post("client", true)) ? $this->input->post("client", true) : $cid,
 									"added_by" 	=> $user_id,									
 									);
@@ -370,7 +370,7 @@ $where .= " OR tck.assign_to IN (".implode(',', $all_reporting_ids).'))';
 		
 		public function filterticket($where){
 
-			 $this->db->select("tck.*,enq.phone,enq.gender,prd.product_name, concat(enq.name_prefix,' ' , enq.name,' ', enq.lastname) as clientname , COUNT(cnv.id) as tconv, cnv.msg");
+			 $this->db->select("tck.*,enq.phone,enq.gender,prd.product_name, concat(enq.name_prefix,' ' , enq.name,' ', enq.lastname) as clientname , COUNT(cnv.id) as tconv, cnv.msg,stage.lead_stage_name,sub_stage.description");
 				 $this->db->where("tck.company", $this->session->companey_id );
 				
 				if(!empty($where)){
@@ -383,6 +383,9 @@ $where .= " OR tck.assign_to IN (".implode(',', $all_reporting_ids).'))';
 				 $this->db->join("tbl_ticket_conv cnv", "cnv.tck_id = tck.id", "LEFT");
 				 $this->db->join("enquiry enq", "enq.enquiry_id = tck.client", "LEFT");
 				 $this->db->join("tbl_product prd", "prd.sb_id = tck.product", "LEFT");
+				 $this->db->join("lead_stage stage", "tck.ticket_stage = stage.stg_id", "LEFT");
+				 $this->db->join("lead_description sub_stage", "tck.ticket_substage = sub_stage.id", "LEFT");
+				 
 				 $this->db->order_by("tck.id DESC");
 				 $this->db->group_by("tck.id");
 				 
@@ -421,7 +424,6 @@ $where .= " OR tck.assign_to IN (".implode(',', $all_reporting_ids).'))';
 					}
 					
 				}
-				
 				 
 				 $this->db->group_by("tck.id");
 				 $this->db->having("tck.ticketno !=",$ticketno);
