@@ -264,12 +264,13 @@ class Ticket_Model extends CI_Model {
 				}
 				if($stage || $sub_stage){
 					$this->db->where('tbl_ticket.company',$this->session->companey_id);
-					$this->db->where('tbl_ticket.ticketno',$ticketno);
+					$this->db->where('tbl_ticket.id',$tckno);
 					$this->db->update('tbl_ticket');
 				}
 			}else{
 				$this->session->set_flashdata('message', 'Failed to save');		
-			}					
+			}	
+			//echo $this->db->last_query();				
 		}
 		
 		function updatestatus(){
