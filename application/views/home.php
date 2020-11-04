@@ -1,3 +1,4 @@
+
 <!-- <link rel="stylesheet" href="<?php echo base_url()?>custom_dashboard/assets/css/dashforge.css"> -->
 <link rel="stylesheet" href="<?php echo base_url()?>custom_dashboard/assets/css/dashforge.dashboard.css">
 <link href="<?php echo base_url()?>custom_dashboard/lib/morris.js/morris.css" rel="stylesheet">
@@ -43,8 +44,15 @@
 </style> 
   </head>
   <body class="page-profile" style="background-color:#fff;" >
-  
-  <?php if($this->session->userdata('user_right')==151) { ?>
+  <?php if(user_access(310)) { ?>
+
+<div class="row">
+  <a href="<?= base_url('ticket/dashboard') ?>"><button style=" float:right" class="btn btn-primary">
+Ticket Dashboard
+  </button></a>
+</div>
+
+  <?php } if($this->session->userdata('user_right')==151) { ?>
 <?php //include('student/course_wrapper.php'); ?>
  <?php }else{ ?> 
   
