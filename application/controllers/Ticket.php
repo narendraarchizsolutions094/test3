@@ -107,6 +107,9 @@ class Ticket extends CI_Controller {
         $data['sourse'] = $this->report_model->all_source();
         $data['title'] = "All Ticket";
         $data["tickets"] = $this->Ticket_Model->getall();
+
+		$data['dfields']  = $this->enquiry_model->getformfield();
+		//print_r($data['dfields']); exit();
         //print_r($data['tickets']); exit();
         $data['created_bylist'] = $this->User_model->read();
         $data['products'] = $this->dash_model->get_user_product_list();
@@ -731,7 +734,7 @@ public function assign_tickets() {
 
 	public function view_previous_ticket()
 	{
-		$_POST['tracking_no'] = '06134707';
+		//$_POST['tracking_no'] = '06134707';
 		if($post = $this->input->post())
 		{
 			$no = $post['tracking_no'];
