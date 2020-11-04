@@ -109,7 +109,7 @@ curl_setopt_array($curl, array(
       $usermeta = $this->user_model->get_user_meta( $this->session->user_id,array('api_name','api_url'));
       $destination =$number;
       // die();
-        if (!empty($usermeta)) {
+        if (!empty($usermeta['api_url'])) {
           if ($usermeta['api_url']!='') {
             $api_url = $usermeta['api_url'];
           }else{
@@ -145,7 +145,7 @@ curl_setopt_array($curl, array(
         $response = curl_exec($curl);
         
         $response = json_decode($response,true);
-        if ($response['result_code']==null) {
+        if (empty($response)) {
           echo "Api URL is not configured";
             exit();
         }
