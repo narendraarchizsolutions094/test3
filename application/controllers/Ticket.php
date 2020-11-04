@@ -711,6 +711,7 @@ public function assign_tickets() {
 		$data['content'] = $this->load->view('ticket/add-ticket', $data, true);
 		$this->load->view('layout/main_wrapper', $data);
 		
+
 	}
 	
 
@@ -951,6 +952,31 @@ public function add_subject() {
             $res = json_encode($response->NewDataSet);
         }
         echo $res;
-    }
+	}
+	
+	public function Dashboard()
+	{
+		$data['title'] = 'Ticket Dashboard';
+        $data['subject'] = $this->Ticket_Model->get_sub_list();
+
+        $data['content'] = $this->load->view('ticket/dashboard', $data, true);
+        $this->load->view('layout/main_wrapper', $data);
+	}
+	public function createddatewise()
+	{
+		$get=$this->db->limit(1)->get('tbl_ticket')->row()->coml_date;
+			 $date= date('Y-m-d', strtotime($get));
+		 $date2= date('Y-m-d');
+		$begin = new DateTime($date);
+		$end   = new DateTime($date2);
+		for($i = $begin; $i <= $end; $i->modify('+1 day')){
+			$idate= $i->format("Y-m-d");
+			$isdate= strtotime($i->format("Y-m-d")).'000';
+			$count=$this->db->like('coml_date',$idate)->count_all_results('tbl_ticket');
+			$data[]=[(int)$isdate,$count];
+		}
+		// print_r($data);
+		echo json_encode($data);
+	}
 }
 

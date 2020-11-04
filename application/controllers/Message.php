@@ -202,7 +202,10 @@ class Message extends CI_Controller {
    
 	public function send_sms(){
 	    
-	    
+		
+		// $usermeta = $this->user_model->get_user_meta( $this->session->user_id,array('api_name','api_url'));
+		// print_r($usermeta);
+		// die();
 
 	    $signature   = $this->enquiry_model->get_signature();
         if($this->input->post('mesge_type')== 1){
