@@ -205,7 +205,7 @@ class Ticket extends CI_Controller {
 
 		        if($output=='')
 		        {
-		        	echo '<center>No Record Found.</center>';
+		        	echo '0';
 		        	exit();
 		        }
 
@@ -728,7 +728,7 @@ public function assign_tickets() {
 		{
 			$no = $post['tracking_no'];
 			$res = $this->Ticket_Model->filterticket(array('tracking_no'=>$no));
-			//print_r($res); exit();
+
 			if($res)
 			{
 				echo'<table class="table table-bordered">
@@ -736,7 +736,8 @@ public function assign_tickets() {
 				<th>Tracking No</th>
 				<th>Ticket Number</th>
 				<th>Name</th>
-				<th>Type</th>
+				<th>Ticket Stage</th>
+				<th>Created At</th>
 				<th>Action</th>
 				</tr>';
 				foreach ($res as $row)
@@ -745,7 +746,8 @@ public function assign_tickets() {
 					<td>'.$row->tracking_no.'</td>
 					<td>'.$row->ticketno.'</td>
 					<td>'.$row->name.'</td>
-					<td>'.($row->complaint_type?"Enquiry":"Complaint").'</td>
+					<td></td>
+					<td>'.date('d-m-Y <br> h:i A',strtotime($row->coml_date)).'</td>
 					<th><a href="'.base_url('ticket/view/'.$row->ticketno).'"><button class="btn btn-small btn-primary">View</button></a></th>
 					</tr>';
 				}	
