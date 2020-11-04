@@ -103,6 +103,7 @@ class Ticket extends CI_Controller {
         if(isset($_SESSION['ticket_filters_sess']))
       		 unset($_SESSION['ticket_filters_sess']);
 
+
         $data['sourse'] = $this->report_model->all_source();
         $data['title'] = "All Ticket";
         $data["tickets"] = $this->Ticket_Model->getall();
@@ -722,11 +723,12 @@ public function assign_tickets() {
 
 	public function view_previous_ticket()
 	{
+		$_POST['tracking_no'] = '06134707';
 		if($post = $this->input->post())
 		{
 			$no = $post['tracking_no'];
 			$res = $this->Ticket_Model->filterticket(array('tracking_no'=>$no));
-
+			//print_r($res[0]); exit();
 			if($res)
 			{
 				echo'<table class="table table-bordered">
@@ -744,7 +746,7 @@ public function assign_tickets() {
 					<td>'.$row->tracking_no.'</td>
 					<td>'.$row->ticketno.'</td>
 					<td>'.$row->name.'</td>
-					<td></td>
+					<td>'.(!empty($row->lead_stage_name)?$row->lead_stage_name:'Ticket Created').' <small>'.(!empty($row->description)?'<br>'.$row->description:'').'</small></td>
 					<td>'.date('d-m-Y <br> h:i A',strtotime($row->coml_date)).'</td>
 					<th><a href="'.base_url('ticket/view/'.$row->ticketno).'"><button class="btn btn-small btn-primary">View</button></a></th>
 					</tr>';

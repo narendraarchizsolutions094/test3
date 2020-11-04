@@ -49,7 +49,7 @@ class Enq extends CI_Controller
 		$data['prodcntry_list'] = $this->enquiry_model->get_user_productcntry_list();
 		$data['state_list'] = $this->enquiry_model->get_user_state_list();
 		$data['city_list'] = $this->enquiry_model->get_user_city_list();
-
+ 
 		$data['content'] = $this->load->view('enquiry_n', $data, true);
 		$this->load->view('layout/main_wrapper', $data);
 	}

@@ -8,7 +8,8 @@
         <li>
           <div class="cbp_tmicon cbp_tmicon-phone" style="background:#cb4335;"></div>
           <div class="cbp_tmlabel"  style="background:#95a5a6;">
-            <span style="font-weight:900;font-size:15px;"><?php echo $cnv->subj; ?></span><br>
+            <span style="font-weight:900;font-size:15px;"><?php echo $cnv->subj; ?></span>
+            <br>
             <?php
             if (!empty($cnv->lead_stage_name)) { ?>
               <br><span style="font-weight:900;font-size:12px;">Stage - </span>  <span style="font-weight:900;font-size:12px;"><?php echo $cnv->lead_stage_name; ?></span>

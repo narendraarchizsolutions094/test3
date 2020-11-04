@@ -10,7 +10,7 @@
 	
 		<input type="hidden" name="complaint_type" value="<?=$ticket->complaint_type?>">
 
-		<?php if($this->session->companey_id==1){ ?>
+		<?php if($this->session->companey_id==65){ ?>
 
 					<div class="trackingDetails"></div>
 					
@@ -74,20 +74,20 @@
 		</div>
 		<div class="col-md-6">
 			<div class="form-group">
-				<label>Name</label> 
-				<input type="text" name="name" id="ticket_holder" class="form-control" value="<?php if(!empty($ticket->name)){ echo $ticket->name;} ?>" >
+				<label>Name<span class="text-danger">*</span></label> 
+				<input type="text" name="name" id="ticket_holder" class="form-control" value="<?php if(!empty($ticket->name)){ echo $ticket->name;} ?>" required>
 			</div>
 		</div>
 		<div class="col-md-6">
 			<div class="form-group">
-				<label>Email</label>
-				<input type="email" class="form-control" name="email" value="<?php if(!empty($ticket->tck_email)){ echo $ticket->tck_email;} ?>" >
+				<label>Email<span class="text-danger">*</span></label>
+				<input type="email" class="form-control" name="email" value="<?php if(!empty($ticket->tck_email)){ echo $ticket->tck_email;} ?>" required>
 			</div>
 		</div>
 		<div class="col-md-6">
 			<div class="form-group">
-				<label>Phone</label>
-				<input type="text" name="phone" class="form-control" value="<?php  if(!empty($ticket->phone)){ echo $ticket->phone; } ?>" readonly>
+				<label>Phone<span class="text-danger">*</span></label>
+				<input type="text" name="phone" class="form-control" value="<?php  if(!empty($ticket->phone)){ echo $ticket->phone; } ?>" required readonly>
 			</div>
 		</div>
 		<div class="col-md-6" style="display: none;">
@@ -179,7 +179,7 @@
 			</div>
 			<div class="form-group">
 				<label>Ticket Type : </label> 
-				<span class='badge badge-info'><?=$ticket->complaint_type?'Compaint':'Query'?></span>
+				<span class='badge badge-info'><?=$ticket->complaint_type=='1'?'Compaint':($ticket->complaint_type=='2'?'Query':'NA')?></span>
 			</div>
 		</div>
 		<!-- <div class="col-md-6">
@@ -285,10 +285,10 @@
 				foreach ($related_tickets as $row)
 				{ //print_r($row); exit();
 				echo'<tr>
-					<td>'.$row->tracking_no.'</td>
+					<td>'.($row->tracking_no==''?'NA':$row->tracking_no).'</td>
 					<td>'.$row->ticketno.'</td>
 					<td>'.$row->name.'</td>
-					<td>'.($row->complaint_type?"Enquiry":"Complaint").'</td>
+					<td>'.($ticket->complaint_type=='1'?'Compaint':($ticket->complaint_type=='2'?'Query':'NA')).'</td>
 					<th><a href="'.base_url('ticket/view/'.$row->ticketno).'"><button class="btn btn-small btn-primary">View</button></a></th>
 					</tr>';
 				}	
@@ -328,7 +328,7 @@
 	});
 
 <?php
-if($this->session->companey_id==1)
+if($this->session->companey_id==65)
 {
 ?>
 	function loadTracking(that)

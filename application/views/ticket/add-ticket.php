@@ -47,7 +47,7 @@
 						</select>
 					</div>
 				</div>
-				<?php if($this->session->companey_id==1){ ?>
+				<?php if($this->session->companey_id==65){ ?>
 					<script type="text/javascript">
 					$("input[name=complaint_type]").on('change',function(){
 							var x = $("input[name=complaint_type]:checked").val();
@@ -140,7 +140,7 @@
 				</div>
 
 				<?php
-				if($this->session->companey_id!=1)
+				if($this->session->companey_id!=65)
 				{
 				?>
 				<div class="col-md-6">
@@ -307,7 +307,7 @@
 
 	});
 <?php
-if($this->session->companey_id==1)
+if($this->session->companey_id==65)
 {
 ?>
 	function loadTracking(that)
