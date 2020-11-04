@@ -276,7 +276,7 @@
 		{
 			echo'<table class="table table-bordered">
 			<tr>
-			<th>Tracking No</th>
+			'.($this->session->companey_id==65?'<th>Tracking No</th>':'').'
 			<th>Ticket Number</th>
 			<th>Name</th>
 			<th>Type</th>
@@ -285,7 +285,8 @@
 				foreach ($related_tickets as $row)
 				{ //print_r($row); exit();
 				echo'<tr>
-					<td>'.($row->tracking_no==''?'NA':$row->tracking_no).'</td>
+
+					'.($this->session->companey_id==65?('<td>'.($row->tracking_no==''?'NA':$row->tracking_no).'</td>'):'').'
 					<td>'.$row->ticketno.'</td>
 					<td>'.$row->name.'</td>
 					<td>'.($ticket->complaint_type=='1'?'Compaint':($ticket->complaint_type=='2'?'Query':'NA')).'</td>

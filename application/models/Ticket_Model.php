@@ -424,7 +424,6 @@ $where .= " OR tck.assign_to IN (".implode(',', $all_reporting_ids).'))';
 					}
 					
 				}
-				
 				 
 				 $this->db->group_by("tck.id");
 				 $this->db->having("tck.ticketno !=",$ticketno);
