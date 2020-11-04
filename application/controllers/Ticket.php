@@ -699,10 +699,12 @@ public function assign_tickets() {
 			// $res = $this->Ticket_Model->save($this->session->companey_id,$this->session->user_id);
 			if($res)
 			{
-				
+				$this->load->model('rule_model');
+        		$this->rule_model->execute_rules($res, array(9));
 				$this->session->set_flashdata('message', 'Successfully added ticket');
 				//redirect(base_url("ticket/add") , "refresh");
-            	redirect(base_url('ticket/view/'.$res));
+				redirect(base_url('ticket/view/'.$res));
+				//echo $this->db->last_query();
 			}
 		}
 		
