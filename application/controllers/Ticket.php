@@ -167,8 +167,13 @@ class Ticket extends CI_Controller {
              $sub[] = $point->id;
              $sub[] = '<a href="'.base_url('ticket/view/'.$point->ticketno).'">'.$point->ticketno.'</a>';
              $sub[] = $point->clientname??"NA";
-             $sub[] = $point->email??"NA";
-             $sub[] = $point->phone??"NA";
+			 $sub[] = $point->email??"NA";
+			 if (user_access(220) && !empty($point->phone)) {
+				$sub[] = "<a href='javascript:void(0)' onclick='send_parameters(" . $point->phone . ")'>" . $point->phone . "</a>";
+			} else {
+				$sub[] = $point->phone??"NA";
+			}
+             //$sub[] = $point->phone??"NA";
              $sub[] = $point->country_name??"NA";
              $sub[] = $point->assign_to_name??"NA";
              $sub[] = $point->created_by_name??"NA";
@@ -700,10 +705,12 @@ public function assign_tickets() {
 			// $res = $this->Ticket_Model->save($this->session->companey_id,$this->session->user_id);
 			if($res)
 			{
-				
+				$this->load->model('rule_model');
+        		$this->rule_model->execute_rules($res, array(9));
 				$this->session->set_flashdata('message', 'Successfully added ticket');
 				//redirect(base_url("ticket/add") , "refresh");
-            	redirect(base_url('ticket/view/'.$res));
+				redirect(base_url('ticket/view/'.$res));
+				//echo $this->db->last_query();
 			}
 		}
 		
@@ -718,6 +725,7 @@ public function assign_tickets() {
 		$data['content'] = $this->load->view('ticket/add-ticket', $data, true);
 		$this->load->view('layout/main_wrapper', $data);
 		
+
 	}
 	
 
@@ -961,6 +969,31 @@ public function add_subject() {
             $res = json_encode($response->NewDataSet);
         }
         echo $res;
-    }
+	}
+	
+	public function Dashboard()
+	{
+		$data['title'] = 'Ticket Dashboard';
+        $data['subject'] = $this->Ticket_Model->get_sub_list();
+
+        $data['content'] = $this->load->view('ticket/dashboard', $data, true);
+        $this->load->view('layout/main_wrapper', $data);
+	}
+	public function createddatewise()
+	{
+		$get=$this->db->limit(1)->get('tbl_ticket')->row()->coml_date;
+			 $date= date('Y-m-d', strtotime($get));
+		 $date2= date('Y-m-d');
+		$begin = new DateTime($date);
+		$end   = new DateTime($date2);
+		for($i = $begin; $i <= $end; $i->modify('+1 day')){
+			$idate= $i->format("Y-m-d");
+			$isdate= strtotime($i->format("Y-m-d")).'000';
+			$count=$this->db->like('coml_date',$idate)->count_all_results('tbl_ticket');
+			$data[]=[(int)$isdate,$count];
+		}
+		// print_r($data);
+		echo json_encode($data);
+	}
 }
 

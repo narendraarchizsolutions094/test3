@@ -108,8 +108,15 @@ curl_setopt_array($curl, array(
        $this->load->model('user_model');
       $usermeta = $this->user_model->get_user_meta( $this->session->user_id,array('api_name','api_url'));
       $destination =$number;
-        if (count($usermeta)!=0) {
-           $api_url = $usermeta['api_url'];
+      // die();
+        if (!empty($usermeta)) {
+          if ($usermeta['api_url']!='') {
+            $api_url = $usermeta['api_url'];
+          }else{
+            echo "Api URL is not configured";
+            exit();
+          }
+         
         }else{
           $companey_id = ($companey_id == '') ? $this->session->companey_id : $companey_id;
           $this->db->where('comp_id',$companey_id);          
@@ -138,6 +145,10 @@ curl_setopt_array($curl, array(
         $response = curl_exec($curl);
         
         $response = json_decode($response,true);
+        if ($response['result_code']==null) {
+          echo "Api URL is not configured";
+            exit();
+        }
         //print_r($response);
         $wp_mob_num = $number;
         if (strlen($number) == 12 && substr($number, 0, 2) == "91")

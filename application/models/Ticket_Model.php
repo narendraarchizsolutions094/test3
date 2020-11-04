@@ -150,7 +150,7 @@ class Ticket_Model extends CI_Model {
 				 
 			);			
 			if(!empty($_FILES["attachment"]["name"]))
-			{	echo 'in';
+			{	//echo 'in';
 				$retdata =  $this->do_upload();
 				//print_r($retdata);			
 				if(!empty($retdata["upload_data"]["file_name"])){					

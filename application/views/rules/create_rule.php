@@ -273,7 +273,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		    label: 'Ticket Type',
 		    type: 'integer',
 		    input: 'select',
-		    values: {"0":"Complaint","1":"Query"},
+		    values: {"1":"Complaint","2":"Query"},
 		    operators: ['equal', 'not_equal','is_null', 'is_not_null']
 		  },{
 		    id: 'ticket_stage',
