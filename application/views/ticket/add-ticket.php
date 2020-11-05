@@ -94,13 +94,13 @@
 				<div class="col-md-6">
 					<div class="form-group">
 						<label>Phone <i class="text-danger">*</i></label>
-						<input type = "text" class="form-control" name = "phone" required value="<?=!empty($_GET['phone'])?$_GET['phone']:''?>"> 
+						<input type = "text" class="form-control" name = "phone" required value="<?=!empty($_GET['phone'])?$_GET['phone']:''?>" onkeyup="autoFill('phone',this.value)"> 
 					</div>
 				</div>
 				<div class="col-md-6">
 					<div class="form-group">
 						<label>Email <i class="text-danger">*</i></label>
-						<input type = "text" class="form-control" name = "email" required>
+						<input type = "text" class="form-control" name = "email" onblur="autoFill('email',this.value)" required>
 					</div>
 				</div>
 	
@@ -255,7 +255,12 @@
   </div>
 </div>
 
-        
+  <style type="text/css">
+  	.swal-width-custom{
+  		width: 600px;
+  		max-width: 100%!important;
+  	}
+  </style>     
 <!-- jquery-ui js -->
 <script src="<?php echo base_url('assets/js/jquery-ui.min.js') ?>" type="text/javascript"></script>      
 <!-- DataTables JavaScript -->
@@ -306,7 +311,49 @@
 		});	
 
 	});
+
+
+function autoFill(find_by,key)
+{ //alert(find_by);
+	$.ajax({
+		url:'<?= base_url('ticket/autofill')?>',
+		type:'post',
+		data:{key:key,find_by:find_by},
+		dataType:'JSON',
+		success:function(res) 
+		{
+			if(res.status)
+			{	if(!find_by=='email')
+					$("input[name=email").val(res.email);
+				if(!find_by=='phone')	
+					$("input[name=phone]").val(res.phone);
+				
+				$("input[name=name]").val(res.name);
+				
+				$("select[name=client]").find('option[value='+res.problem_for+']').attr("selected","selected");
+				//alert(res.html);
+				if(res.html!='0')
+				{
+					Swal.fire({
+						title:'Privious Tickets',
+						html:res.html,
+						customClass:'swal-width-custom',
+						//showCancelButton: true,
+						cancelButtonText: 'Ok'
+					});
+				}
+			}
+		}
+	});
+}
+
 <?php
+
+if(!empty($_GET['phone']))
+{
+	echo'autoFill("phone","'.$_GET['phone'].'")';
+}	
+
 if($this->session->companey_id==65)
 {
 ?>
@@ -381,4 +428,5 @@ if($this->session->companey_id==65)
 <?php 
 }
 ?>
+
 </script>
