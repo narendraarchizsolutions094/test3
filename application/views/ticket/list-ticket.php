@@ -66,6 +66,8 @@
 					            <div class="dropdown-menu dropdown_css" style="max-height: 400px;overflow: auto; left: unset; right: 0!important;">
 					                  <a class="btn" data-toggle="modal" data-target="#AssignSelected" style="color:#000;cursor:pointer;border-radius: 2px;border-bottom :1px solid #ccc; width: 100%; text-align: left"><?php echo display('assign_selected'); ?></a>                                        
                             <a class="btn" data-toggle="modal" data-target="#DeleteSelected" style="color:#000;cursor:pointer;border-radius: 2px;border-bottom :1px solid #ccc; width: 100%; text-align: left"><?php echo display('delete'); ?></a>
+
+                            <a class="btn" data-toggle="modal" data-target="#table-col-conf" style="color:#000;cursor:pointer;border-radius: 2px;border-bottom :1px solid #ccc; width: 100%; text-align: left"><?php echo display('table_config'); ?></a>
 					            </div>                                         
 					          </div>  
 					        </div>       
@@ -197,6 +199,24 @@
         </div>
     </div> 
 </form>
+
+ <?php 
+        $acolarr = array();
+        $dacolarr = array();
+        if(isset($_COOKIE["ticket_allowcols"])) {
+          $showall = false;
+          $acolarr  = explode(",", trim($_COOKIE["ticket_allowcols"], ","));       
+        }else{          
+          $showall = true;
+        }         
+        if(isset($_COOKIE["ticket_dallowcols"])) {
+          $dshowall = false;
+          $dacolarr  = explode(",", trim($_COOKIE["ticket_dallowcols"], ","));       
+        }else{
+          $dshowall = false;
+        }       
+ ?>
+
 							<!-- Filter Panel End -->
 							<div class="row">
 								<div class="col-md-1"></div>
@@ -207,18 +227,31 @@
                     <input type='checkbox' class="checked_all1" value="check all" >
                      </th>
 											<th>S.No.</th>
-											<th>Ticket</th>
-											<th>Client</th>
-											<th>Email </th>
-											<th>Phone </th>
-											<?php if($this->session->companey_id!=83){ ?>
-											<th>Product</th>
-											<?php } ?>
-											
-											<th>Assign To</th>
-                      <th>Created By</th>
-											<th>Priority</th>
-											<th>Date</th>
+                      <?=($showall or in_array(1,$acolarr))?'<th>Ticket</th>':''?>
+											<?=($showall or in_array(2,$acolarr))?'<th>Client</th>':''?>
+										  <?=($showall or in_array(3,$acolarr))?'<th>Email</th>':''?>
+											<?=($showall or in_array(4,$acolarr))?'<th>Phone</th>':''?>
+											<?=($showall or in_array(5,$acolarr))?'<th>Product</th>':''?>
+											<?=($showall or in_array(6,$acolarr))?'<th>Assign To</th>':''?>
+                      <?=($showall or in_array(7,$acolarr))?'<th>Created By</th>':''?>
+                      <?=($showall or in_array(8,$acolarr))?'<th>Priority</th>':''?>
+                      <?=($showall or in_array(9,$acolarr))?'<th>Date</th>':''?>
+										  <?=($showall or in_array(10,$acolarr))?'<th>Referred By</th>':''?>
+                      <?=($showall or in_array(11,$acolarr))?'<th>'.display('data_source').'</th>':''?>
+                      <?=($showall or in_array(12,$acolarr))?'<th>'.display('stage').'</th>':''?>
+                      <?=($showall or in_array(13,$acolarr))?'<th>Sub Stage</th>':''?>
+                      <?=($showall or in_array(14,$acolarr))?'<th>Review</th>':''?>
+
+                      <?php
+                      if($this->session->companey_id==65)
+                      {
+                      ?>
+                         <?=($showall or in_array(15,$acolarr))?'<th>Tracking No</th>':''?>
+                      <?php
+                      }
+                      ?>
+                     
+
 										</thead>
 										<tbody>
 										</tbody>
@@ -232,6 +265,189 @@
 				</div>
 			</div>
 		</div>
+
+
+<!--------------------TABLE COLOUMN CONFIG----------------------------------------------->
+<div id="table-col-conf" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-lg" style="width: 96%;">
+ 
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Table Column Configuration</h4>
+      </div>
+      <div class="modal-body">         
+           <div class="row">
+             <div class="col-md-3">
+                <label class=""><input type="checkbox" id="selectall" onclick="select_all()">&nbsp;Select All</label>
+             </div>
+           </div>
+        <hr>
+          <div class="row">
+          <div class = "col-md-4">             
+          <label class=""><input type="checkbox" class="choose-col" id="choose-col" value = "1" <?php echo ($showall == true or in_array(1, $acolarr)) ? "checked" : ""; ?>> Ticket</label>
+          </div>
+          <div class = "col-md-4">  
+          <label class=""><input type="checkbox" class="choose-col"  value = "2"  <?php echo ($showall == true or in_array(2, $acolarr)) ? "checked" : ""; ?>>  Client</label> 
+          </div>
+          <div class = "col-md-4">  
+          <label  class=""><input type="checkbox" class="choose-col"  value = "3"  <?php echo ($showall == true or in_array(3, $acolarr)) ? "checked" : ""; ?>> Email</label>
+          </div>
+          <div class = "col-md-4">  
+          <label class=""><input type="checkbox" class="choose-col"  value = "4"  <?php echo ($showall == true or in_array(4, $acolarr)) ? "checked" : ""; ?>>  Phone </label>
+          </div>
+          
+          
+          
+          <div class = "col-md-4">  
+          <label class=""><input type="checkbox" class="choose-col"  value = "5"  <?php echo ($showall == true or in_array(5, $acolarr)) ? "checked" : ""; ?>>  Product </label>
+              </div>
+          <div class = "col-md-4">  
+          <label class=""><input type="checkbox" class="choose-col"  value = "6"  <?php echo ($showall == true or in_array(6, $acolarr)) ? "checked" : ""; ?>>  Assign To </label>  &nbsp;
+          </div>
+          <div class = "col-md-4">  
+          <label class=""><input type="checkbox" class="choose-col"  value = "7"  <?php echo ($showall == true or in_array(7, $acolarr)) ? "checked" : ""; ?>> Created By</label>  &nbsp;
+          </div>
+          <div class = "col-md-4">  
+          <label class=""><input type="checkbox" class="choose-col"  value = "8"  <?php echo ($showall == true or in_array(8, $acolarr)) ? "checked" : ""; ?>>  Priority</label>  &nbsp;
+          </div>
+
+
+          <div class = "col-md-4">  
+          
+              <label class=""><input type="checkbox" class="choose-col"  value = "9"  <?php echo ($showall == true or in_array(9, $acolarr)) ? "checked" : ""; ?>>     <?php echo display("create_date"); ?></label> &nbsp;
+          </div>
+
+        <div class = "col-md-4">  
+          
+           <label  class=""><input type="checkbox" class="choose-col"  value = "10"  <?php echo ($showall == true or in_array(10, $acolarr)) ? "checked" : ""; ?>> <?php echo "<th>Referred By</th>"; ?></label>  &nbsp; 
+         </div>
+
+         <div class = "col-md-4">  
+          
+               <label class=""><input type="checkbox" class="choose-col"  value = "11"  <?php echo ($showall == true or in_array(11, $acolarr)) ? "checked" : ""; ?>>   <?php echo display("data_source"); ?></label>  &nbsp; 
+           </div>
+          
+         <div class = "col-md-4">  
+            <label class=""><input type="checkbox" class="choose-col"  value = "12"  <?php echo ($showall == true or in_array(12, $acolarr)) ? "checked" : ""; ?>>  Stage</label>  &nbsp;
+          </div>
+
+          <div class = "col-md-4">  
+            <label class=""><input type="checkbox" class="choose-col"  value = "13"  <?php echo ($showall == true or in_array(13, $acolarr)) ? "checked" : ""; ?>>  Sub Stage</label>  &nbsp;
+          </div>
+
+           <div class = "col-md-4">  
+            <label class=""><input type="checkbox" class="choose-col"  value = "14"  <?php echo ($showall == true or in_array(14, $acolarr)) ? "checked" : ""; ?>>  Review</label>  &nbsp;
+          </div>
+
+          <?php
+          if($this->session->companey_id==65)
+          {
+          ?>
+           <div class = "col-md-4">  
+            <label class=""><input type="checkbox" class="choose-col"  value = "15"  <?php echo ($showall == true or in_array(15, $acolarr)) ? "checked" : ""; ?>>  Tracking No</label>  &nbsp;
+          </div>
+
+          <?php
+        }
+        ?>
+           
+          <!-- 
+          <?php
+        
+          // if(!empty($dfields)) {          
+          //   foreach($dfields as $ind => $fld){              
+            ?>
+            <div class = "col-md-4">  
+          <label class=""><input type="checkbox" class="dchoose-col choose-col"  value = " <?php //echo $fld->input_id; ?>"  <?php// echo (in_array($fld->input_id, $dacolarr)) ? "checked" : ""; ?>>   <?php //echo ucwords($fld->input_label); ?></label>  &nbsp;
+          </div>
+            <?php   
+              
+            //}?>
+             </div>
+          <?php //} ?>-->
+                
+              <div class="col-12" style="padding: 0px;">
+                <div class="row">              
+                  <div class="col-12" style="text-align:center;">                                                
+                               
+                  </div>
+                </div>                                   
+              </div> 
+                  
+         
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-success set-col-table" type="button">Save</button> 
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  function select_all(){
+
+var select_all = document.getElementById("selectall"); //select all checkbox
+var checkboxes = document.getElementsByClassName("choose-col"); //checkbox items
+
+//select all checkboxes
+select_all.addEventListener("change", function(e){
+  for (i = 0; i < checkboxes.length; i++) { 
+    checkboxes[i].checked = select_all.checked;
+  }
+});
+
+
+for (var i = 0; i < checkboxes.length; i++) {
+  checkboxes[i].addEventListener('change', function(e){ //".checkbox" change 
+    //uncheck "select all", if one of the listed checkbox item is unchecked
+    if(this.checked == false){
+      select_all.checked = false;
+    }
+    //check "select all" if all checkbox items are checked
+    if(document.querySelectorAll('.choose-col:checked').length == checkboxes.length){
+      select_all.checked = true;
+    }
+  });
+}
+
+}
+
+</script>
+
+<script type="text/javascript">
+
+  $(document).on("click", ".set-col-table", function(e){
+    
+    e.preventDefault();
+    if($(".choose-col:checked").length == 0 && $(".dchoose-col:checked").length == 0 ){
+      
+      return false;
+    }
+    var chkval = "";
+    $(".choose-col:checked").each(function(){
+      
+      chkval += $(this).val()+",";
+    });
+    var dchkval = "";
+    $(".dchoose-col:checked").each(function(){
+      
+      dchkval += $(this).val()+",";
+    });
+    
+    document.cookie = "ticket_allowcols="+chkval+"; expires=Thu, 18 Dec 2053 12:00:00 UTC; path=/";
+    document.cookie = "ticket_dallowcols="+dchkval+"; expires=Thu, 18 Dec 2053 12:00:00 UTC; path=/";
+   // alert("C");
+    location.reload();    
+  });
+</script>
+
+
+<!--   Table Config -->
+
 
  <div id="AssignSelected" class="modal fade" role="dialog">
   <div class="modal-dialog">

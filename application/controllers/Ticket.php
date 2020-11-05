@@ -113,108 +113,171 @@ class Ticket extends CI_Controller
 
 
 
-	public function ticket_set_filters_session()
-	{
-		$this->session->set_userdata('ticket_filters_sess', $_POST);
-		//print_r($_SESSION);
-	}
-	public function chk()
-	{
-		//$data['problem'] = $this->Ticket_Model->get_sub_list();
-		//print_r($data['problem']); exit();
-		//print_r($this->session->ticket_filters_sess); exit();
+    public function ticket_set_filters_session(){
+         $this->session->set_userdata('ticket_filters_sess',$_POST);
+         //print_r($_SESSION);
+     }
+      public function chk()
+      {
+      	
+      }
+     public function ticket_load_data()
+     {
+        // $_POST = array('search'=>array('value'=>''),'length'=>10,'start'=>0);
+         $this->load->model('Ticket_datatable_model');
+         
+         $res = $this->Ticket_datatable_model->getRows($_POST);
+         //print_r($res); exit();
+         $data  = array();
 
-		$data['issues'] = $this->Ticket_Model->get_issue_list();
-		//print_r($data['issues']); exit();
+        $acolarr = array();
+        $dacolarr = array();
+        if(isset($_COOKIE["ticket_allowcols"])) {
+          $showall = false;
+          $acolarr  = explode(",", trim($_COOKIE["ticket_allowcols"], ","));       
+        }else{          
+          $showall = true;
+        }         
+        if(isset($_COOKIE["ticket_dallowcols"])) {
+          $dshowall = false;
+          $dacolarr  = explode(",", trim($_COOKIE["ticket_dallowcols"], ","));       
+        }else{
+          $dshowall = false;
+        }       
 
-		$all_reporting_ids    =   $this->common_model->get_categories($this->session->user_id);
-		// print_r($all_reporting_ids); exit();
-		print_r($this->session->ticket_filters_sess) . '<br><Br>';
-		$post = array('search' => array('value' => ''), 'length' => 10, 'start' => 0);
-		$this->load->model('Ticket_datatable_model');
-		$this->Ticket_datatable_model->_get_datatables_query($post);
-		$query = $this->db->get();
-		print_r($query->result());
-		// //$data  = array();
-		// // foreach ($res as $point)
-		// // {
-		// //     $sub = array_values((array)$point);
-		// //     $data[] = array_slice($sub, 0,11);
-		// // }
+         foreach ($res as $point)
+         {
+             $sub = array();
+             $sub[] = '<input type="checkbox" class="checkbox1" onclick="event.stopPropagation();" value="'.$point->id.'">';
+             $sub[] = $point->id;
+             if($showall or in_array(1,$acolarr))
+             {
+             	$sub[] = '<a href="'.base_url('ticket/view/'.$point->ticketno).'">'.$point->ticketno.'</a>';
+             }
+             	
+            if($showall or in_array(2,$acolarr))
+            {
+            	 $sub[] = $point->clientname??"NA";
+         	}
 
-		// print_r($res);
-	}
-	public function ticket_load_data()
-	{
-		// $_POST = array('search'=>array('value'=>''),'length'=>10,'start'=>0);
-		$this->load->model('Ticket_datatable_model');
+			if($showall or in_array(3,$acolarr))
+            {
+            	$sub[] = $point->email??"NA";
+            }
 
-		$res = $this->Ticket_datatable_model->getRows($_POST);
-		//print_r($res); exit();
-		$data  = array();
-		foreach ($res as $point) {
-			$sub = array();
-			$sub[] = '<input type="checkbox" class="checkbox1" onclick="event.stopPropagation();" value="' . $point->id . '">';
-			$sub[] = $point->id;
-			$sub[] = '<a href="' . base_url('ticket/view/' . $point->ticketno) . '">' . $point->ticketno . '</a>';
-			$sub[] = $point->clientname ?? "NA";
-			$sub[] = $point->email ?? "NA";
-			$sub[] = $point->phone ?? "NA";
-			$sub[] = $point->country_name ?? "NA";
-			$sub[] = $point->assign_to_name ?? "NA";
-			$sub[] = $point->created_by_name ?? "NA";
-			$sub[] = '<span class="label label-' . ($point->priority == 1 ? 'success">Low' : ($point->priority == 2 ? 'warning">Medium' : 'danger">High')) . '</span>';
-			$sub[] = $point->coml_date;
-			$data[] = $sub;
-		}
-
-		//print_r($res);
-		$output = array(
-			"draw" => $_POST['draw'],
-			"recordsTotal" => $this->Ticket_datatable_model->countAll(),
-			"recordsFiltered" => $this->Ticket_datatable_model->countFiltered($_POST),
-			"data" => $data,
-		);
-		echo json_encode($output);
-	}
-
-
-	public function view_tracking()
-	{
-		if ($post = $this->input->post()) {
-			if ($post['trackingno']) {
-				$ch = curl_init();
-
-				curl_setopt($ch, CURLOPT_URL, "https://thecrm360.com/new_crm/ticket/gc_vtrans_api/" . $post['trackingno']);
-
-				curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-
-				$output = curl_exec($ch);
-
-				curl_close($ch);
-
-				if ($output == '') {
-					echo '0';
-					exit();
+            if($showall or in_array(4,$acolarr))
+            {
+				 if (user_access(220) && !empty($point->phone)) 
+				 {
+					$sub[] = "<a href='javascript:void(0)' onclick='send_parameters(" . $point->phone . ")'>" . $point->phone . "</a>";
+				} else {
+					$sub[] = $point->phone??"NA";
 				}
+			}
 
-				$a = json_decode($output);
-				$table  = empty($a->Table) ? '' : $a->Table;
-				$table1 = empty($a->Table1) ? '' : $a->Table1;
-				$table2 = empty($a->Table2) ? '' : $a->Table2;
-				$table3 = empty($a->Table3) ? '' : $a->Table3;
+             //$sub[] = $point->phone??"NA";
+			if($showall or in_array(5,$acolarr))
+            {
+            	 $sub[] = $point->country_name??"NA";
+            }
 
-				if (isset($a->Table)) {
-					echo '<table class="table table-bordered">
-		        <tr><th colspan="4" style="text-align:center;">Tracking Number: ' . (empty($table->GCNO) ? '' : $table->GCNO) . '</td></tr>
-		        <tr><th>Date:</th><td>' . (empty($table->GC_Date) ? '' : $table->GC_Date) . '</td><th>Status:</th><td>' . (empty($table->status) ? '' : $table->status) . '</td></tr>
-		         <tr><th>Delivery Location:</th><td  colspan="3">' . (empty($table->DeliveryLocation) ? '' : $table->DeliveryLocation) . '</td></tr>
-		         <tr><th>Delivery Branch:</th><td>' . (empty($table->DeliveryBranch) ? '' : $table->DeliveryBranch) . '</td><th>Booking Branch:</th><td>' . (empty($table->BookingBranch) ? '' : $table->BookingBranch) . '</td></tr>';
-					if (sizeof((array)$table->EDD))
-						echo ' <tr><th>EDD</th><td colspan="3">' . print_r($table->EDD) . '</td></tr>';
+            if($showall or in_array(6,$acolarr))
+            {
+            	 $sub[] = $point->assign_to_name??"NA";
+            }
+            if($showall or in_array(7,$acolarr))
+            {
+             	$sub[] = $point->created_by_name??"NA";
+            }
+            if($showall or in_array(8,$acolarr))
+            {
+            	 $sub[] = '<span class="label label-'.($point->priority==1? 'success">Low' : ($point->priority==2?'warning">Medium':'danger">High')).'</span>';
+           	}
+           	if($showall or in_array(9,$acolarr))
+            {
+            	 $sub[] = $point->coml_date??'NA';
+           	}
+			if($showall or in_array(10,$acolarr))
+            {
+            	 $sub[] = $point->referred_name??'NA';
+           	}
+           	if($showall or in_array(11,$acolarr))
+            {
+            	 $sub[] = $point->source_name??'NA';
+           	}
+           	if($showall or in_array(12,$acolarr))
+            {
+            	 $sub[] = $point->lead_stage_name??'NA';
+           	}
+           	if($showall or in_array(13,$acolarr))
+            {
+            	 $sub[] = $point->description??'NA';
+           	}
 
-					echo '<tr><th>Delivery Date:</th><td>' . (empty($table->DeliveryDate) ? '' : $table->DeliveryDate) . '</td><th>Arrival Date:</th><td>' . (empty($table->ArrivalDate) ? '' : $table->ArrivalDate) . '</td></tr>
-		         <tr><th>Delivery Type:</th><td>' . (empty($table->DeliveryType) ? '' : $table->DeliveryType) . '</td><th>CRNO:</th><td>' . (empty($table->CRNO) ? '' : $table->CRNO) . '</td></tr>
+           	if($showall or in_array(14,$acolarr))
+            {
+            	 $sub[] = $point->message==''?'NA':$point->message;
+           	}
+
+           	if($this->session->companey_id==65 && ($showall or in_array(15,$acolarr)))
+            {
+            	 $sub[] = $point->tracking_no==''?'NA':$point->tracking_no;
+           	}
+
+             $data[] = $sub;
+           }
+
+         //print_r($res);
+         $output = array(
+            "draw" => $_POST['draw'],
+            "recordsTotal" => $this->Ticket_datatable_model->countAll(),
+            "recordsFiltered" => $this->Ticket_datatable_model->countFiltered($_POST),
+            "data" => $data,
+        );
+          echo json_encode($output);
+     }
+
+
+     public function view_tracking()
+     {
+     	if($post = $this->input->post())
+     	{
+     		if($post['trackingno'])
+     		{
+     			 $ch = curl_init();
+
+		        curl_setopt($ch, CURLOPT_URL, "https://thecrm360.com/new_crm/ticket/gc_vtrans_api/".$post['trackingno']);
+
+		        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+
+		        $output = curl_exec($ch);
+
+		        curl_close($ch);  
+
+		        if($output=='')
+		        {
+		        	echo '0';
+		        	exit();
+		        }
+
+		        $a = json_decode($output);
+		        $table  = empty($a->Table)?'':$a->Table;
+		        $table1 = empty($a->Table1)?'':$a->Table1;
+		        $table2 = empty($a->Table2)?'':$a->Table2;
+		        $table3 = empty($a->Table3)?'':$a->Table3;
+		        
+	        if(isset($a->Table))
+	        {
+		        echo'<table class="table table-bordered">
+		        <tr><th colspan="4" style="text-align:center;">Tracking Number: '.(empty($table->GCNO)?'':$table->GCNO).'</td></tr>
+		        <tr><th>Date:</th><td>'.(empty($table->GC_Date)?'':$table->GC_Date).'</td><th>Status:</th><td>'.(empty($table->status)?'':$table->status).'</td></tr>
+		         <tr><th>Delivery Location:</th><td  colspan="3">'.(empty($table->DeliveryLocation)?'':$table->DeliveryLocation).'</td></tr>
+		         <tr><th>Delivery Branch:</th><td>'.(empty($table->DeliveryBranch)?'':$table->DeliveryBranch).'</td><th>Booking Branch:</th><td>'.(empty($table->BookingBranch)?'':$table->BookingBranch).'</td></tr>';
+		        if(sizeof((array)$table->EDD))
+		        	echo' <tr><th>EDD</th><td colspan="3">'.print_r($table->EDD).'</td></tr>';
+
+		         echo'<tr><th>Delivery Date:</th><td>'.(empty($table->DeliveryDate)?'':$table->DeliveryDate).'</td><th>Arrival Date:</th><td>'.(empty($table->ArrivalDate)?'':$table->ArrivalDate).'</td></tr>
+		         <tr><th>Delivery Type:</th><td>'.(empty($table->DeliveryType)?'':$table->DeliveryType).'</td><th>CRNO:</th><td>'.(empty($table->CRNO)?'':$table->CRNO).'</td></tr>
 		        </table>';
 				}
 
@@ -711,14 +774,15 @@ class Ticket extends CI_Controller
 				<th>Created At</th>
 				<th>Action</th>
 				</tr>';
-				foreach ($res as $row) {
-					echo '<tr>
-					<td>' . $row->tracking_no . '</td>
-					<td>' . $row->ticketno . '</td>
-					<td>' . $row->name . '</td>
-					<td></td>
-					<td>' . date('d-m-Y <br> h:i A', strtotime($row->coml_date)) . '</td>
-					<th><a href="' . base_url('ticket/view/' . $row->ticketno) . '"><button class="btn btn-small btn-primary">View</button></a></th>
+				foreach ($res as $row)
+				{
+				echo'<tr>
+					<td>'.$row->tracking_no.'</td>
+					<td>'.$row->ticketno.'</td>
+					<td>'.$row->name.'</td>
+					<td>'.(!empty($row->lead_stage_name)?$row->lead_stage_name:'NA').' <small>'.(!empty($row->description)?'<br>'.$row->description:'').'</small></td>
+					<td>'.date('d-m-Y <br> h:i A',strtotime($row->coml_date)).'</td>
+					<th><a href="'.base_url('ticket/view/'.$row->ticketno).'"><button class="btn btn-small btn-primary">View</button></a></th>
 					</tr>';
 				}
 				echo '</table>';

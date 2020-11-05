@@ -24,6 +24,10 @@ class Telephony extends CI_Controller {
     }
 
     public function forword_to($phone=''){
+        if($this->session->companey_id == 65){
+            $url = 'ticket/add?phone='.$phone;
+            redirect($url);
+        }
         if(!empty($_GET['phone'])){
             $phone=$_GET['phone'];
         }else{$phone=$phone;}
