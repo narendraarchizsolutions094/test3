@@ -94,7 +94,7 @@
 				<div class="col-md-6">
 					<div class="form-group">
 						<label>Phone <i class="text-danger">*</i></label>
-						<input type = "text" class="form-control" name = "phone" required>
+						<input type = "text" class="form-control" name = "phone" required value="<?=!empty($_GET['phone'])?$_GET['phone']:''?>"> 
 					</div>
 				</div>
 				<div class="col-md-6">
