@@ -94,7 +94,7 @@ class Ticket extends CI_Controller {
 	}	
 	
 	public function index(){
-	
+
 		$this->load->model('Datasource_model'); 
         $this->load->model('dash_model'); 
         $this->load->model('enquiry_model'); 
@@ -131,29 +131,7 @@ class Ticket extends CI_Controller {
      }
       public function chk()
       {
-      	//$data['problem'] = $this->Ticket_Model->get_sub_list();
-      	//print_r($data['problem']); exit();
-      	//print_r($this->session->ticket_filters_sess); exit();
-
-      	$data['issues'] = $this->Ticket_Model->get_issue_list();
-      	//print_r($data['issues']); exit();
-
-      	$all_reporting_ids    =   $this->common_model->get_categories($this->session->user_id);
-      	// print_r($all_reporting_ids); exit();
-      	print_r($this->session->ticket_filters_sess).'<br><Br>';
-          $post = array('search'=>array('value'=>''),'length'=>10,'start'=>0);
-         $this->load->model('Ticket_datatable_model');
-         $this->Ticket_datatable_model->_get_datatables_query($post);
-         $query = $this->db->get();
-        print_r($query->result());
-         // //$data  = array();
-         // // foreach ($res as $point)
-         // // {
-         // //     $sub = array_values((array)$point);
-         // //     $data[] = array_slice($sub, 0,11);
-         // // }
-
-         // print_r($res);
+      	
       }
      public function ticket_load_data()
      {
@@ -163,25 +141,101 @@ class Ticket extends CI_Controller {
          $res = $this->Ticket_datatable_model->getRows($_POST);
          //print_r($res); exit();
          $data  = array();
+
+        $acolarr = array();
+        $dacolarr = array();
+        if(isset($_COOKIE["ticket_allowcols"])) {
+          $showall = false;
+          $acolarr  = explode(",", trim($_COOKIE["ticket_allowcols"], ","));       
+        }else{          
+          $showall = true;
+        }         
+        if(isset($_COOKIE["ticket_dallowcols"])) {
+          $dshowall = false;
+          $dacolarr  = explode(",", trim($_COOKIE["ticket_dallowcols"], ","));       
+        }else{
+          $dshowall = false;
+        }       
+
          foreach ($res as $point)
          {
              $sub = array();
              $sub[] = '<input type="checkbox" class="checkbox1" onclick="event.stopPropagation();" value="'.$point->id.'">';
              $sub[] = $point->id;
-             $sub[] = '<a href="'.base_url('ticket/view/'.$point->ticketno).'">'.$point->ticketno.'</a>';
-             $sub[] = $point->clientname??"NA";
-			 $sub[] = $point->email??"NA";
-			 if (user_access(220) && !empty($point->phone)) {
-				$sub[] = "<a href='javascript:void(0)' onclick='send_parameters(" . $point->phone . ")'>" . $point->phone . "</a>";
-			} else {
-				$sub[] = $point->phone??"NA";
+             if($showall or in_array(1,$acolarr))
+             {
+             	$sub[] = '<a href="'.base_url('ticket/view/'.$point->ticketno).'">'.$point->ticketno.'</a>';
+             }
+             	
+            if($showall or in_array(2,$acolarr))
+            {
+            	 $sub[] = $point->clientname??"NA";
+         	}
+
+			if($showall or in_array(3,$acolarr))
+            {
+            	$sub[] = $point->email??"NA";
+            }
+
+            if($showall or in_array(4,$acolarr))
+            {
+				 if (user_access(220) && !empty($point->phone)) 
+				 {
+					$sub[] = "<a href='javascript:void(0)' onclick='send_parameters(" . $point->phone . ")'>" . $point->phone . "</a>";
+				} else {
+					$sub[] = $point->phone??"NA";
+				}
 			}
+
              //$sub[] = $point->phone??"NA";
-             $sub[] = $point->country_name??"NA";
-             $sub[] = $point->assign_to_name??"NA";
-             $sub[] = $point->created_by_name??"NA";
-             $sub[] = '<span class="label label-'.($point->priority==1? 'success">Low' : ($point->priority==2?'warning">Medium':'danger">High')).'</span>';
-             $sub[] = $point->coml_date;
+			if($showall or in_array(5,$acolarr))
+            {
+            	 $sub[] = $point->country_name??"NA";
+            }
+
+            if($showall or in_array(6,$acolarr))
+            {
+            	 $sub[] = $point->assign_to_name??"NA";
+            }
+            if($showall or in_array(7,$acolarr))
+            {
+             	$sub[] = $point->created_by_name??"NA";
+            }
+            if($showall or in_array(8,$acolarr))
+            {
+            	 $sub[] = '<span class="label label-'.($point->priority==1? 'success">Low' : ($point->priority==2?'warning">Medium':'danger">High')).'</span>';
+           	}
+           	if($showall or in_array(9,$acolarr))
+            {
+            	 $sub[] = $point->coml_date??'NA';
+           	}
+			if($showall or in_array(10,$acolarr))
+            {
+            	 $sub[] = $point->referred_name??'NA';
+           	}
+           	if($showall or in_array(11,$acolarr))
+            {
+            	 $sub[] = $point->source_name??'NA';
+           	}
+           	if($showall or in_array(12,$acolarr))
+            {
+            	 $sub[] = $point->lead_stage_name??'NA';
+           	}
+           	if($showall or in_array(13,$acolarr))
+            {
+            	 $sub[] = $point->description??'NA';
+           	}
+
+           	if($showall or in_array(14,$acolarr))
+            {
+            	 $sub[] = $point->message==''?'NA':$point->message;
+           	}
+
+           	if($this->session->companey_id==65 && ($showall or in_array(15,$acolarr)))
+            {
+            	 $sub[] = $point->tracking_no==''?'NA':$point->tracking_no;
+           	}
+
              $data[] = $sub;
            }
 
@@ -757,7 +811,7 @@ public function assign_tickets() {
 					<td>'.$row->tracking_no.'</td>
 					<td>'.$row->ticketno.'</td>
 					<td>'.$row->name.'</td>
-					<td>'.(!empty($row->lead_stage_name)?$row->lead_stage_name:'Ticket Created').' <small>'.(!empty($row->description)?'<br>'.$row->description:'').'</small></td>
+					<td>'.(!empty($row->lead_stage_name)?$row->lead_stage_name:'NA').' <small>'.(!empty($row->description)?'<br>'.$row->description:'').'</small></td>
 					<td>'.date('d-m-Y <br> h:i A',strtotime($row->coml_date)).'</td>
 					<th><a href="'.base_url('ticket/view/'.$row->ticketno).'"><button class="btn btn-small btn-primary">View</button></a></th>
 					</tr>';

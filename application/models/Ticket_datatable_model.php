@@ -5,11 +5,87 @@ class Ticket_datatable_model extends CI_Model{
     
     function __construct() {
         // Set table name
+
+        $acolarr = array();
+        $dacolarr = array();
+        if(isset($_COOKIE["ticket_allowcols"])) {
+          $showall = false;
+          $acolarr  = explode(",", trim($_COOKIE["ticket_allowcols"], ","));       
+        }else{          
+          $showall = true;
+        }         
+        if(isset($_COOKIE["ticket_dallowcols"])) {
+          $dshowall = false;
+          $dacolarr  = explode(",", trim($_COOKIE["ticket_dallowcols"], ","));       
+        }else{
+          $dshowall = false;
+        }       
+
+       $search_string = array();
+
+        if($showall or in_array(1,$acolarr))
+        {
+            $search_string[] = "tck.ticketno";
+        }
+        if($showall or in_array(3,$acolarr))
+        {
+            $search_string[] = "tck.email";
+        }
+        if($showall or in_array(4,$acolarr))
+        {
+            $search_string[] = "enq.phone";
+        }
+        if($showall or in_array(5,$acolarr))
+        {
+            $search_string[] = "prd.country_name";
+        }
+         if($showall or in_array(8,$acolarr))
+        {
+            $search_string[] = "tck.priority";
+        }
+        if($showall or in_array(9,$acolarr))
+        {
+            $search_string[] = "tck.coml_date";
+        }
+        if($showall or in_array(10,$acolarr))
+        {
+            $search_string[] = "ref.name";
+        }
+        if($showall or in_array(11,$acolarr))
+        {
+            $search_string[] = "source.lead_name";
+        }
+        if($showall or in_array(12,$acolarr))
+        {
+            $search_string[] = "stage.lead_stage_name";
+        }
+        if($showall or in_array(13,$acolarr))
+        {
+            $search_string[] = "sub_stage.description";
+        }
+        if($showall or in_array(14,$acolarr))
+        {
+            $search_string[] = "tck.message";    
+        }
+        if($this->session->companey_id==65)
+        {
+            if($showall or in_array(15,$acolarr))
+            {
+                $search_string[] = "tck.tracking_no";    
+            }
+        }
+
+
         $this->table = 'tbl_ticket';
         // Set orderable column fields
-        $this->column_order = array('', 'tck.id','tck.ticketno','tck.client','tck.email','enq.phone','prd.country_name','tck.assign_to','tck.priority','tck.coml_date');
+        $this->column_order = array('', 'tck.id','tck.ticketno','tck.client','tck.email','enq.phone','prd.country_name','tck.assign_to','tck.added_by','tck.priority','tck.coml_date','ref.name','source.lead_name','stage.lead_stage_name','sub_stage.description','tck.message','tck.tracking_no');
         // Set searchable column fields
-        $this->column_search = array('tck.ticketno','tck.id','tck.category','tck.name','tck.email','tck.product','tck.message','tck.issue','tck.solution','tck.sourse','tck.ticket_stage','tck.review','tck.status','tck.priority','tck.complaint_type','tck.coml_date','tck.last_update','tck.send_date','tck.client','tck.assign_to','tck.company','tck.added_by','enq.phone','enq.gender','prd.country_name','cnv.msg');
+       
+
+        $this->column_search = $search_string;
+
+        // $this->column_search = array('tck.ticketno','tck.id','tck.category','tck.name','tck.email','tck.product','tck.message','tck.issue','tck.solution','tck.sourse','tck.ticket_stage','tck.review','tck.status','tck.priority','tck.complaint_type','tck.coml_date','tck.last_update','tck.send_date','tck.client','tck.assign_to','tck.company','tck.added_by','enq.phone','enq.gender','prd.country_name');
+        
         // Set default order
         $this->order = array('tck.id' => 'desc');
     }
@@ -53,15 +129,130 @@ class Ticket_datatable_model extends CI_Model{
     public function _get_datatables_query($postData){
         $this->load->model('common_model');
         $all_reporting_ids    =   $this->common_model->get_categories($this->session->user_id);
-        $this->db->select("tck.*,enq.phone,enq.gender,prd.country_name, concat(enq.name_prefix,' ' , enq.name,' ', enq.lastname) as clientname , COUNT(cnv.id) as tconv, cnv.msg, concat(for_assign.s_display_name,' ',for_assign.last_name) as assign_to_name , concat(for_created.s_display_name,' ',for_created.last_name) as created_by_name ");
-        $this->db->from($this->table." tck")
-         ->join("tbl_ticket_conv cnv", "cnv.tck_id = tck.id", "LEFT")
-         ->join("enquiry enq", "enq.enquiry_id = tck.client", "LEFT")
-         ->join("tbl_admin as for_assign", "for_assign.pk_i_admin_id = tck.assign_to", "LEFT")
-         ->join("tbl_admin as for_created", "for_created.pk_i_admin_id = tck.added_by", "LEFT")
-         ->join("tbl_product_country prd", "prd.id = tck.product", "LEFT")
-         ->where("tck.company",$this->session->companey_id)
-         ->group_by("tck.id");
+
+        $acolarr = array();
+        $dacolarr = array();
+        if(isset($_COOKIE["ticket_allowcols"])) {
+          $showall = false;
+          $acolarr  = explode(",", trim($_COOKIE["ticket_allowcols"], ","));       
+        }else{          
+          $showall = true;
+        }         
+        if(isset($_COOKIE["ticket_dallowcols"])) {
+          $dshowall = false;
+          $dacolarr  = explode(",", trim($_COOKIE["ticket_dallowcols"], ","));       
+        }else{
+          $dshowall = false;
+        }       
+
+        $sel_string = array();
+        $sel_string[] = "tck.*"; 
+
+        // if($showall or in_array(1,$acolarr))
+        // {
+        //     $sel_string[] = " tck.ticketno ";
+        // }
+        if($showall or in_array(2,$acolarr))
+        {
+            $sel_string[] = " concat(enq.name_prefix,' ' , enq.name,' ', enq.lastname) as clientname ";
+        }
+        // if($showall or in_array(3,$acolarr))
+        // {
+        //     $sel_string[] = " tck.email ";
+        // }
+        if($showall or in_array(4,$acolarr))
+        {
+            $sel_string[] = " enq.phone ";
+        }
+        if($showall or in_array(5,$acolarr))
+        {
+            $sel_string[] = " prd.country_name ";
+        }
+        if($showall or in_array(6,$acolarr))
+        {
+            $sel_string[] = " concat(for_assign.s_display_name,' ',for_assign.last_name) as assign_to_name  ";
+        }
+        if($showall or in_array(7,$acolarr))
+        {
+            $sel_string[] = " concat(for_created.s_display_name,' ',for_created.last_name) as created_by_name ";
+        }
+        // if($showall or in_array(8,$acolarr))
+        // {
+        //     $sel_string[] = " tck.priority ";
+        // }
+        // if($showall or in_array(9,$acolarr))
+        // {
+        //     $sel_string[] = " tck.coml_date ";
+        // }
+        if($showall or in_array(10,$acolarr))
+        {
+            $sel_string[] = " ref.name as referred_name ";
+        }
+        if($showall or in_array(11,$acolarr))
+        {
+            $sel_string[] = " source.lead_name as source_name ";
+        }
+        if($showall or in_array(12,$acolarr))
+        {
+            $sel_string[] = " stage.lead_stage_name ";
+        }
+        if($showall or in_array(13,$acolarr))
+        {
+            $sel_string[] = " sub_stage.description ";
+        }
+        // if($showall or in_array(14,$acolarr))
+        // {
+        //     $sel_string[] = " tck.message ";    
+        // }
+
+        $select = implode(',', $sel_string);
+
+        $this->db->select($select);
+        $this->db->from($this->table." tck");
+
+        //->join("tbl_ticket_conv cnv", "cnv.tck_id = tck.id", "LEFT")
+        if($showall or count(array_intersect(array(2,4),$acolarr))==2)
+        {
+            $this->db->join("enquiry enq", "enq.enquiry_id = tck.client", "LEFT");
+        }
+        
+        if($showall or in_array(5, $acolarr))
+        {
+            $this->db->join("tbl_product_country prd", "prd.id = tck.product", "LEFT");
+        }
+
+        if($showall or in_array(6,$acolarr))
+        {
+            $this->db->join("tbl_admin as for_assign", "for_assign.pk_i_admin_id = tck.assign_to", "LEFT");
+        }
+         
+        if($showall or in_array(7, $acolarr))
+        {
+            $this->db->join("tbl_admin as for_created", "for_created.pk_i_admin_id = tck.added_by", "LEFT");
+        }
+        
+        if($showall or in_array(10, $acolarr))
+        {
+         $this->db->join("tbl_referred_by ref","tck.referred_by=ref.id","LEFT");
+        }
+
+        if($showall or in_array(11, $acolarr))
+        {
+         $this->db->join("lead_source source","tck.sourse=source.lsid","LEFT");
+        }
+       
+        if($showall or in_array(12, $acolarr))
+        {
+         $this->db->join("lead_stage stage","tck.ticket_stage=stage.stg_id","LEFT");
+        } 
+        
+        if($showall or in_array(13, $acolarr))
+        {
+         $this->db->join("lead_description sub_stage","tck.ticket_substage=sub_stage.id","LEFT");
+        } 
+         
+         $this->db->where("tck.company",$this->session->companey_id);
+         $this->db->group_by("tck.id");
 
 
     if(isset($this->session->ticket_filters_sess))
@@ -85,12 +276,14 @@ class Ticket_datatable_model extends CI_Model{
 
         $where='';
 $CHK = 0;
+
          if(!empty($from_created) && !empty($to_created)){
             $from_created = date("Y-m-d",strtotime($from_created));
             $to_created = date("Y-m-d",strtotime($to_created));
             $where .= " DATE(tck.coml_date) >= '".$from_created."' AND DATE(tck.coml_date) <= '".$to_created."'";
             $CHK = 1;
         }
+
         if(!empty($from_created) && empty($to_created)){
             $from_created = date("Y-m-d",strtotime($from_created));
             $where .= " DATE(tck.coml_date) >=  '".$from_created."'"; 

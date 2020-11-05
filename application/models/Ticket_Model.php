@@ -365,7 +365,6 @@ $where .= " OR tck.assign_to IN (".implode(',', $all_reporting_ids).'))';
 				 ->group_by("tck.id")
 				 ->get()
 				 ->result();
-		
 		}
 		
 		public function filterticket($where){
