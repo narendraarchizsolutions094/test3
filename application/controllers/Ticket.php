@@ -687,11 +687,11 @@ class Ticket extends CI_Controller
 						?><span class="badge badge-info">Low</span><?php
 																} else if ($tck->priority == 2) {
 																	?><span class="badge badge-warning">Medium</span><?php
-																		} else if ($tck->priority == 2) {
-																			?><span class="badge badge-danger">High</span><?php
-																		}
+																													} else if ($tck->priority == 2) {
+																														?><span class="badge badge-danger">High</span><?php
+																																									}
 
-																			?></td>
+																																										?></td>
 					<td><?php echo $tck->message; ?></td>
 					<td><?php echo date("d, M, Y", strtotime($tck->send_date)); ?></td>
 					<td style="min-width:125px;"><a class="btn  btn-success" href="<?php echo base_url("ticket/view/" . $tck->ticketno) ?>"><i class="fa fa-eye" aria-hidden="true"></i>
@@ -1054,7 +1054,7 @@ class Ticket extends CI_Controller
 
 	public function Dashboard()
 	{
-		if ( user_access(310)) {
+		if (user_access(310)) {
 			$data['title'] = 'Ticket Dashboard';
 			$data['subject'] = $this->Ticket_Model->get_sub_list();
 
@@ -1142,5 +1142,65 @@ class Ticket extends CI_Controller
 			$data[] = ['name' => $value->description, 'value' => $count];
 		}
 		echo json_encode($data);
+	}
+	public function autoticketAssign2($ticketID)
+	{
+		$times = [];
+		$fetchTicket = $this->db->where(array('tbl_ticket.company' => $this->session->companey_id, 'tbl_ticket.id' => $ticketID))->get('tbl_ticket')->result();
+		foreach ($fetchTicket as $key => $value2) {
+			$coml_date = $value2->coml_date;
+			$currentDate = date('Y-m-d H:i:s');
+			$time1 = strtotime($coml_date);
+			$time2 = strtotime($currentDate);
+			$hourTime = round(($time2 - $time1) / 60 / 60, 1);
+			$tid = $value2->id;
+			$fetchrules = $this->db->where(array('comp_id' => $this->session->companey_id, 'type' => 5))->get('leadrules')->result();
+			foreach ($fetchrules as $key => $value) {
+				$data = json_decode($value->rule_json);
+				$stageId = $data->rules[0]->value;
+				$substageId = $data->rules[1]->value;
+				$rule_action = json_decode($value->rule_action);
+				$esc_hr = $rule_action->esc_hr;
+				$assign_to = $rule_action->assign_to;
+				$leadtitle = $value->title;
+				$lid = $value->id;
+				$times[] = ['tid' => $tid, 'lid' => $lid, 'uid' => $assign_to, 'esc_hr' => $esc_hr, 'current' => round($hourTime, 0)];
+			}
+		}
+
+		$id = $this->Ticket_Model->sortarray($times);
+		if ($id != NULL) {
+			//move to user
+			$ticket_update = ['assign_to' => $times[$id]['uid']];
+			$this->db->where(array('id' => $times[$id]['tid']))->update('tbl_ticket', $ticket_update);
+			$counta = $this->db->where(array('tck_id' => $times[$id]['tid'], 'lid' => $times[$id]['lid']))->count_all_results('tbl_ticket_conv');
+			if ($counta == 0) {
+				//save to assignid 	
+				$data_msg = ['comp_id' => $this->session->companey_id, 'tck_id' => $times[$id]['tid'], 'subj' => 'Ticked Assigned', 'lid' => $times[$id]['lid'], 'assignedTo' => $times[$id]['uid'], 'msg' => 'Update by rule'];
+				$this->db->insert('tbl_ticket_conv', $data_msg);
+			}
+		}
+	}
+
+	public function autoticketAssign()
+	{
+		$fetchrules = $this->db->where(array('comp_id' => $this->session->companey_id, 'type' => 5))->get('leadrules')->result();
+		foreach ($fetchrules as $key => $value) {
+			$data = json_decode($value->rule_json);
+			$stageId = $data->rules[0]->value;
+			$substageId = $data->rules[1]->value;
+			$rule_action = json_decode($value->rule_action);
+			$fetchTicket = $this->db->where(array('company' => $this->session->companey_id, 'ticket_stage' => $stageId))->get('tbl_ticket')->result();
+			foreach ($fetchTicket as $key => $value2) {
+				if ($value2->ticket_substage != NULL) {
+					$subsource = $this->db->where(array('comp_id' => $this->session->companey_id, 'id' => $value2->ticket_substage))->get('lead_description')->row();
+					if ($subsource->id != $substageId) {
+						// echo $value2->id;
+						$this->autoticketAssign2($value2->id);
+					}
+				}
+			}
+			//subsatge
+		}
 	}
 }

@@ -8,8 +8,7 @@ class Appointment extends CI_Controller {
             'appointment_model',
             'department_model'
         ));
-        if ($this->session->userdata('isLogIn') == false 
-        || $this->session->userdata('user_role') != 1) 
+        if ($this->session->userdata('isLogIn') == false) 
         redirect('login'); 
     }
  
