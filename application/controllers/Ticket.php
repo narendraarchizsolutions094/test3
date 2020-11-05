@@ -159,7 +159,11 @@ class Ticket extends CI_Controller
 			$sub[] = '<a href="' . base_url('ticket/view/' . $point->ticketno) . '">' . $point->ticketno . '</a>';
 			$sub[] = $point->clientname ?? "NA";
 			$sub[] = $point->email ?? "NA";
-			$sub[] = $point->phone ?? "NA";
+			if (user_access(220) && !empty($point->phone)) {
+                $sub[] = "<a href='javascript:void(0)' onclick='send_parameters(" . $point->phone . ")'>" . $point->phone . "</a>";
+            } else {
+                $sub[] = $point->phone??"NA";
+            }
 			$sub[] = $point->country_name ?? "NA";
 			$sub[] = $point->assign_to_name ?? "NA";
 			$sub[] = $point->created_by_name ?? "NA";
