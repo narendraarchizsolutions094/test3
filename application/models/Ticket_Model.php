@@ -262,24 +262,6 @@ class Ticket_Model extends CI_Model
 	function updatestatus()
 	{
 
-<<<<<<< HEAD
-		$updarr = array(
-			"category" 	=> $this->input->post("issue", true),
-			"solution" => $this->input->post("solution", true),
-			"status"    => $this->input->post("status", true),
-			"review"    => $this->input->post("review", true)
-		);
-		//print_r($updarr); exit();
-		//echo $this->input->post("ticketno", true); exit();
-		$this->db->where("id", $this->input->post("ticketno", true));
-		$this->db->update("tbl_ticket", $updarr);
-		$ret = $this->db->affected_rows();
-		if ($ret) {
-
-			$this->session->set_flashdata('message', 'Successfully added ticket');
-		} else {
-			$this->session->set_flashdata('message', 'Failed to add ticket');
-=======
 		public function getTicketListByCompnyID($companyid,$userid){
 			$all_reporting_ids    =   $this->common_model->get_categories($userid);
 			$where = '';
@@ -297,7 +279,6 @@ class Ticket_Model extends CI_Model
 				 ->group_by("tck.id")
 				 ->get()
 				 ->result();
->>>>>>> 8ba3abbea7025cbc02c29d6988f1b71866530c3c
 		}
 	}
 
