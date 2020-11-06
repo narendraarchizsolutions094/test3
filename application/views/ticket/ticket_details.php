@@ -166,15 +166,18 @@
 			<textarea name="remark" class="form-control"><?=$ticket->message?></textarea>
 		</div>
 		
-		<div class="col-md-6">
-			<div class="form-group">			
+		<div class="col-md-6"><br>
+			<div class="form-group" >			
 				<label>Attachment : </label>
+				<div id="attachment" style="display: none;"></div>
 				<?php
 				if ($ticket->attachment) { ?>
-					<span class=''><a target="_blank" href="<?=base_url().'uploads/ticket/'.$ticket->attachment?>"><?=$ticket->attachment?></a></span>
+					<span class=''><a target="_blank" href="<?=base_url().'uploads/ticket/'.$ticket->attachment?>"><?=$ticket->attachment?></a><br>
+						<button class="btn btn-xs btn-primary" type="button" onclick="changeAttachment(this)">Change Attachment</button>
+					</span>
 				<?php
 				}else{
-					echo "<span class='badge badge-danger'>No attachment</span>";
+					echo "<span class='badge badge-danger'>No attachment</span><input type='file' name='attachment' style='display:inline'>";
 				}
 				?>
 			</div>
@@ -397,6 +400,19 @@
 <script src="<?php echo base_url("assets/datatables/js/dataTables.min.js") ?>"></script>  
 <script src="<?php echo base_url() ?>assets/js/custom.js" type="text/javascript"></script>
 <script>
+
+function changeAttachment(t)
+{
+	var x = document.createElement("INPUT");
+	x.setAttribute("type", "file");
+	x.setAttribute("name", "attachment");
+	$("#attachment").html(x);
+	$(x).click();
+	$(t).removeClass('btn-primary');
+	$(t).addClass('btn-success');
+	$(t).html("Attachment Changed");
+}
+
 	$(document).ready(function(){
 		
 		$(".add-date-picker").datepicker({
