@@ -68,7 +68,7 @@
                         <option>---Select Stage---</option>
                         <?php foreach($ticket_stages as $single){                               
                                // $id=$single->lead_stage; ?>                              
-                            <option value="<?=$single->stg_id?>"><?php echo $single->lead_stage_name; ?></option>
+                            <option value="<?=$single->stg_id?>" <?=($single->stg_id==$ticket->ticket_stage?'selected':'')?>><?php echo $single->lead_stage_name; ?></option>
                             <?php } ?>
                        </select>
                     </div>
@@ -118,4 +118,8 @@
     //alert(name);
     $("#ticket_disposition_form").submit();
   });
+  <?php
+if(!empty($ticket->ticket_stage) && !empty($ticket->ticket_substage))
+echo'$("select[name=lead_description]").load("'.base_url('message/find_substage/').$ticket->ticket_stage.'/'.$ticket->ticket_substage.'");';
+?>
 </script>

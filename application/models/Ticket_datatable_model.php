@@ -274,6 +274,10 @@ class Ticket_datatable_model extends CI_Model{
 
          $productcntry          =   !empty($enquiry_filters_sess['prodcntry'])?$enquiry_filters_sess['prodcntry']:'';
 
+          $stage          =   !empty($enquiry_filters_sess['stage'])?$enquiry_filters_sess['stage']:'';
+           $sub_stage          =   !empty($enquiry_filters_sess['sub_stage'])?$enquiry_filters_sess['sub_stage']:'';
+
+
         $where='';
 $CHK = 0;
 
@@ -356,6 +360,26 @@ $CHK = 0;
                 $where .= 'AND';
 
             $where .= " tck.category =  '".$issue."'"; 
+            $CHK =1;                             
+        }
+
+
+        if(!empty($stage)){            
+                   // $to_created = date("Y-m-d",strtotime($to_created));
+            if($CHK)
+                $where .= 'AND';
+
+            $where .= " tck.ticket_stage =  '".$stage."'"; 
+            $CHK =1;                             
+        }
+
+
+        if(!empty($sub_stage)){            
+                   // $to_created = date("Y-m-d",strtotime($to_created));
+            if($CHK)
+                $where .= 'AND';
+
+            $where .= " tck.ticket_substage =  '".$sub_stage."'"; 
             $CHK =1;                             
         }
 

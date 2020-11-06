@@ -53,7 +53,14 @@
                       <label>
                       <input type="checkbox" value="product" id="prodcheckbox" name="filter_checkbox"> Product</label>
                     </li> 
-                   
+                    <li>
+                      <label>
+                      <input type="checkbox" value="stage" id="stagecheckbox" name="filter_checkbox"> Stage</label>
+                    </li> 
+                   <li>
+                      <label>
+                      <input type="checkbox" value="sub_stage" id="sub_stagecheckbox" name="filter_checkbox"> Sub Stage</label>
+                    </li> 
                     <li class="text-center">
                       <a href="javascript:void(0)" class="btn btn-sm btn-primary " id='save_advance_filters' title="Save Filters Settings"><i class="fa fa-save"></i></a>
                     </li>                   
@@ -189,8 +196,35 @@
                     </select> 
                     </div> 
                     
-                 
+                     <div class="form-group col-md-3" id="stagefilter">
+                    <label for="">Stage</label>  
+                    <select name="stage" class="form-control"> 
+                          <option value="">Select</option>
+                         <?php 
+                              if (!empty($stage)) {
+                              foreach ($stage as $stage_list) {?>
+                              <option value="<?=$stage_list->stg_id?>"><?=$stage_list->lead_stage_name?> </option>
+                              <?php 
+                              }
+                            }
+                        ?>    
+                    </select> 
+                    </div> 
 
+                     <div class="form-group col-md-3" id="sub_stagefilter">
+                    <label for="">Sub Stage</label>  
+                    <select name="sub_stage" class="form-control"> 
+                          <option value="">Select</option>
+                         <?php 
+                              if (!empty($sub_stage)) {
+                              foreach ($sub_stage as $sub_stage_list) {?>
+                              <option value="<?=$sub_stage_list->id?>"><?=$sub_stage_list->description?> </option>
+                              <?php 
+                              }
+                            }
+                        ?>     
+                    </select> 
+                    </div> 
                    
 
                     </div>
@@ -468,12 +502,24 @@ if (!enq_filters.includes('created_by')) {
 }else{
   $("input[value='created_by']").prop('checked', true);
 }
+
 if (!enq_filters.includes('assign_to')) {
   $('#assignfilter').hide();
 }else{
   $("input[value='assign_to']").prop('checked', true);
 }
 
+if (!enq_filters.includes('stage')) {
+  $('#stagefilter').hide();
+}else{
+  $("input[value='stage']").prop('checked', true);
+}
+
+if (!enq_filters.includes('sub_stage')) {
+  $('#sub_stagefilter').hide();
+}else{
+  $("input[value='sub_stage']").prop('checked', true);
+}
 
 $('#buttongroup').hide();
  $('input[name="filter_checkbox"]').click(function(){              
@@ -536,9 +582,19 @@ $('#buttongroup').hide();
        }
        else{
          $('#prodfilter').hide();
-         //alert("not");
        }
-    
+      if($('#stagecheckbox').is(":checked")){
+          $('#stagefilter').show();
+        }
+        else{
+          $('#stagefilter').hide();
+        }
+        if($('#sub_stagecheckbox').is(":checked")){
+          $('#sub_stagefilter').show();
+        }
+        else{
+          $('#sub_stagefilter').hide();
+        }
     });
 })
 

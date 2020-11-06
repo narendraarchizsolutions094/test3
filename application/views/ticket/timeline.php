@@ -9,12 +9,12 @@
           <div class="cbp_tmicon cbp_tmicon-phone" style="background:#cb4335;"></div>
           <div class="cbp_tmlabel"  style="background:#95a5a6;">
             <span style="font-weight:900;font-size:15px;"><?php echo $cnv->subj; ?></span>
-            <br>
             <?php
             if (!empty($cnv->lead_stage_name)) { ?>
               <br><span style="font-weight:900;font-size:12px;">Stage - </span>  <span style="font-weight:900;font-size:12px;"><?php echo $cnv->lead_stage_name; ?></span>
               <?php
             }
+
             if (!empty($cnv->sub_stage)) { ?>
               <br><span style="font-weight:900;font-size:12px;">Sub Stage - </span><span style="font-weight:900;font-size:12px;"><?php echo $cnv->sub_stage; ?></span><br>
               <?php
@@ -23,8 +23,14 @@
             <span style="font-weight:900;font-size:12px;">Remark - </span><span style="font-weight:900;font-size:12px;"><?php echo $cnv->msg; ?></span>               
               <?php
             }
+
+            if (!empty($cnv->updated_by)) { ?>
+              <br><span style="font-weight:100;font-size:12px;">By - </span><span style="font-weight:100;font-size:12px;"><?php echo $cnv->updated_by; ?></span><br>
+              <?php
+            }
+
             ?>
-            <p><?php echo date("j-M-Y h:i:s A",strtotime($cnv->send_date)); ?><br>
+            <p style="font-size: 13px;"> <?php echo date("j-M-Y h:i:s A",strtotime($cnv->send_date)); ?><br>
            </p>
           </div>
         </li>
