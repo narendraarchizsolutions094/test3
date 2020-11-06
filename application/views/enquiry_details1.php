@@ -711,7 +711,7 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
             </div>
       </div>
 
- <style type="text/css">
+          <style type="text/css">
             .nav-tabs
             {
              overflow-x: hidden;
@@ -727,7 +727,7 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                font-size: 11px;
             }
            
-          </style>
+          </style> 
 
       <div class="col-md-6 col-xs-12 col-sm-12 card card-body col-height details-column" style="background:#fff;border-top: unset;">
          <div id="exTab3" class="">

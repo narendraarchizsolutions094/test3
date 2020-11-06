@@ -1,14 +1,15 @@
-<div class="col-md-6" style="border: 1px solid #c8ced3;padding: 15px;border-top: none;">
-	<div align="center">
-	<div class="btn-group" style="padding: 10px;">
-		<button class="btn btn-primary active btn-sm" onclick="tabchange(this,0)">Ticket Details</button>
-		<button class="btn btn-primary btn-sm" onclick="tabchange(this,1)">Related Tickets</button>
-	</div>
-	</div> 
-	<div class="row" id="ticket_details">
+<div class="col-md-6 col-sm-12 card card-body col-height details-column" style="border: 1px solid #c8ced3;padding: 15px;border-top: none;">
+<div class="exTab3">
+	<ul  class="nav nav-tabs" role="tablist">
+		 <li class="active"><a  href="#basic" data-toggle="tab" style="padding: 10px 10px; ">Basic</a></li> 
+		 <li class=""><a  href="#related_tickets" data-toggle="tab" style="padding: 10px 10px; ">Related Tickets</a></li>   
+	</ul>
+	<div class="tab-content clearfix">
+        <div class="tab-pane active" id="basic">
+			<div class="row">
 <?php echo form_open_multipart(base_url("ticket/update_ticket/".$ticket->ticketno)); ?>
 	
-		<input type="hidden" name="complaint_type" value="<?=$ticket->complaint_type?>">
+			<input type="hidden" name="complaint_type" value="<?=$ticket->complaint_type?>">
 
 		<?php if($this->session->companey_id==65){ ?>
 
@@ -165,15 +166,18 @@
 			<textarea name="remark" class="form-control"><?=$ticket->message?></textarea>
 		</div>
 		
-		<div class="col-md-6">
-			<div class="form-group">			
+		<div class="col-md-6"><br>
+			<div class="form-group" >			
 				<label>Attachment : </label>
+				<div id="attachment" style="display: none;"></div>
 				<?php
 				if ($ticket->attachment) { ?>
-					<span class=''><a target="_blank" href="<?=base_url().'uploads/ticket/'.$ticket->attachment?>"><?=$ticket->attachment?></a></span>
+					<span class=''><a target="_blank" href="<?=base_url().'uploads/ticket/'.$ticket->attachment?>"><?=$ticket->attachment?></a><br>
+						<button class="btn btn-xs btn-primary" type="button" onclick="changeAttachment(this)">Change Attachment</button>
+					</span>
 				<?php
 				}else{
-					echo "<span class='badge badge-danger'>No attachment</span>";
+					echo "<span class='badge badge-danger'>No attachment</span><input type='file' name='attachment' style='display:inline'>";
 				}
 				?>
 			</div>
@@ -269,8 +273,10 @@
 			</div>	
 		</div>
 		<?=form_close()?>
+	  </div>
 	</div>
-	<div class="row" id="old_tickets" style="display: none;">
+	<div class="tab-pane" id="related_tickets">
+		<div class="row">
 		<?php
 		if(!empty($related_tickets))
 		{
@@ -299,14 +305,114 @@
 			echo'<div class="alert alert-danger">No Related Ticket found.</div>';
 		}
 		?>
+		</div>
 	</div>
+  </div>
 </div>
+</div>
+ <style>
+		.nav-tabs
+        {
+         overflow-x: hidden;
+         overflow-y:hidden;
+         white-space: nowrap;
+         height: 50px;
+        }
+        .nav-tabs > li
+        {
+           white-space: nowrap;
+           float: none;
+           display: inline-block;
+           font-size: 11px;
+           background-color: #283593;
+        }
+
+		.nav-tabs > li.active > a {
+		    color: #555 !important;
+		    background-color: #fff;
+		}
+        .nav-tabs > li > a {
+         border-radius: 4px 4px 0 0 ;
+         color: #fff!important;
+         }
+         #exTab3 .tab-content {
+         /*color : white;*/
+         background-color: #fff;
+         padding : 5px 15px;
+         }
+      .nav-tabs > li.active > a:hover {
+	    color: #555;
+	    cursor: default;
+	    background-color: #fff;
+	    border: none!important;
+	   }
+	   .nav-tabs > li.active > a {
+	    color: #555;
+	    cursor: default;
+	    background-color: #fff;
+	    border: none!important;
+	   }
+
+         .card {
+         position: relative;
+         display: -ms-flexbox;
+         display: flex;
+         -ms-flex-direction: column;
+         flex-direction: column;
+         min-width: 0;
+         word-wrap: break-word;
+         /*background-color: #fff;*/
+         background-clip: border-box;
+         border: 1px solid #c8ced3;
+         border-radius: 0.25rem;
+         }
+         .card-body {
+         -ms-flex: 1 1 auto;
+         flex: 1 1 auto;
+         padding: 1.25rem;
+         }
+         .list-group {
+         display: -ms-flexbox;
+         display: flex;
+         -ms-flex-direction: column;
+         flex-direction: column;
+         padding-left: 0;
+         margin-bottom: 0;
+         }
+         .list-group-item {
+         position: relative;
+         display: block;
+         padding: 0.75rem 1.25rem;
+         margin-bottom: -1px;
+         background-color: #fff;
+         border: 1px solid rgba(0, 0, 0, 0.125);
+         }
+         .list-group-item-action {
+         width: 100%;
+         color: #5c6873;
+         text-align: inherit;
+         }
+         .active .badge{color: white!important;}
+      </style>
 <!-- jquery-ui js -->
 <script src="<?php echo base_url('assets/js/jquery-ui.min.js') ?>" type="text/javascript"></script>      
 <!-- DataTables JavaScript -->
 <script src="<?php echo base_url("assets/datatables/js/dataTables.min.js") ?>"></script>  
 <script src="<?php echo base_url() ?>assets/js/custom.js" type="text/javascript"></script>
 <script>
+
+function changeAttachment(t)
+{
+	var x = document.createElement("INPUT");
+	x.setAttribute("type", "file");
+	x.setAttribute("name", "attachment");
+	$("#attachment").html(x);
+	$(x).click();
+	$(t).removeClass('btn-primary');
+	$(t).addClass('btn-success');
+	$(t).html("Attachment Changed");
+}
+
 	$(document).ready(function(){
 		
 		$(".add-date-picker").datepicker({

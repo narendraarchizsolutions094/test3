@@ -92,18 +92,27 @@ class Ticket extends CI_Controller
 		$this->load->model('dash_model');
 		$this->load->model('enquiry_model');
 		$this->load->model('report_model');
+		$this->load->model('Leads_Model');
 
 		if (isset($_SESSION['ticket_filters_sess']))
 			unset($_SESSION['ticket_filters_sess']);
 
 		$data['sourse'] = $this->report_model->all_source();
 		$data['title'] = "All Ticket";
+
 		$data["tickets"] = $this->Ticket_Model->getall();
 		//print_r($data['tickets']); exit();
 		$data['created_bylist'] = $this->User_model->read();
 		$data['products'] = $this->dash_model->get_user_product_list();
 		$data['prodcntry_list'] = $this->enquiry_model->get_user_productcntry_list();
 		$data['problem'] = $this->Ticket_Model->get_sub_list();
+
+		if(count($this->session->process)==1)
+			$data['stage'] =  $this->Leads_Model->find_estage($this->session->process[0],4);
+		$data['sub_stage'] = $this->Leads_Model->find_description();
+
+		
+		
 		//print_r($data["tickets"]);die;
 		$data['issues'] = $this->Ticket_Model->get_issue_list();
 		$data['user_list'] = $this->User_model->companey_users();
@@ -413,6 +422,7 @@ class Ticket extends CI_Controller
 		$data["product"] = $this->Ticket_Model->getproduct();
 		//print_r($data['product']); exit();
 		$data["conversion"] = $this->Ticket_Model->getconv($data["ticket"]->id);
+		//print_r($data['conversion']); exit(); 
 		$data['problem'] = $this->Ticket_Model->get_sub_list();
 
 		$data['prodcntry_list'] = $this->enquiry_model->get_user_productcntry_list();
@@ -509,7 +519,8 @@ class Ticket extends CI_Controller
 	{
 
 		if (!empty($_POST)) {
-			$move_enquiry = $this->input->post('enquiry_id[]');
+			$move_enquiry = $this->input->post('tickets');
+			//print_r($move_enquiry); exit();
 			// echo json_encode($move_enquiry);
 			$assign_employee = $this->input->post('epid');
 			$notification_data = array();
@@ -521,7 +532,9 @@ class Ticket extends CI_Controller
 					$this->db->update('tbl_ticket');
 				}
 				echo display('save_successfully');
-			} else {
+			} 
+			else 
+			{
 				echo display('please_try_again');
 			}
 		}
@@ -802,6 +815,7 @@ class Ticket extends CI_Controller
 				<th>Created At</th>
 				<th>Action</th>
 				</tr>';
+<<<<<<< HEAD
 				foreach ($res as $row) {
 					echo '<tr>
 					' . ($this->session->companey_id == 65 ? '<td>' . $row->tracking_no . '</td>' : '') . '
@@ -810,6 +824,17 @@ class Ticket extends CI_Controller
 					<td>' . (!empty($row->lead_stage_name) ? $row->lead_stage_name : 'NA') . ' <small>' . (!empty($row->description) ? '<br>' . $row->description : '') . '</small></td>
 					<td>' . date('d-m-Y <br> h:i A', strtotime($row->coml_date)) . '</td>
 					<th><a href="' . base_url('ticket/view/' . $row->ticketno) . '"><button class="btn btn-small btn-primary">View</button></a></th>
+=======
+				foreach ($res as $row)
+				{
+				echo'<tr>
+					'.($this->session->companey_id==65?'<td>'.(empty($row->tracking_no)?'NA':$row->tracking_no).'</td>':'').'
+					<td>'.$row->ticketno.'</td>
+					<td>'.$row->name.'</td>
+					<td>'.(!empty($row->lead_stage_name)?$row->lead_stage_name:'NA').' <small>'.(!empty($row->description)?'<br>'.$row->description:'').'</small></td>
+					<td>'.date('d-m-Y <br> h:i A',strtotime($row->coml_date)).'</td>
+					<th><a href="'.base_url('ticket/view/'.$row->ticketno).'"><button class="btn btn-small btn-primary">View</button></a></th>
+>>>>>>> 3eb96f45115bab632e27189d1dc2e1d69eb38149
 					</tr>';
 				}
 				echo '</table>';
