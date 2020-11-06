@@ -221,17 +221,17 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         {   
             if(empty($data))
             {
-                $str.='<div class="col-md-3"><input type="checkbox" name="permissions[]"  value="'.$value->right_id.'"><label class="" >'.ucwords($value->name).'</label></div>';  
+                $str.='<div class="col-md-3"><input type="checkbox" name="permissions[]"  value="'.$value->right_id.'" id="rid_'.$value->right_id.'"><label for="rid_'.$value->right_id.'" class="" >'.ucwords($value->name).'</label></div>';  
             }
             else
             {   //print_r($data);
                 if(in_array($value->right_id,$data))
                 {
-                    $str.='<div class="col-md-3"><input type="checkbox" name="permissions[]" checked value="'.$value->right_id.'"  ><label class="" >'.ucwords($value->name).'</label></div>';    
+                    $str.='<div class="col-md-3"><input id="rid_'.$value->right_id.'" type="checkbox" name="permissions[]" checked value="'.$value->right_id.'"  ><label for="rid_'.$value->right_id.'" class="" >'.ucwords($value->name).'</label></div>';    
                 }
                 else
                 {
-                    $str.='<div class="col-md-3"><input type="checkbox" name="permissions[]"  value="'.$value->right_id.'"  ><label class="" >'.ucwords($value->name).'</label></div>';
+                    $str.='<div class="col-md-3"><input id="rid_'.$value->right_id.'" type="checkbox" name="permissions[]"  value="'.$value->right_id.'"  ><label for="rid_'.$value->right_id.'" class="" >'.ucwords($value->name).'</label></div>';
                 }
                   
             } 
