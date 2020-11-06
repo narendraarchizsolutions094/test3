@@ -319,10 +319,10 @@ class Ticket_Model extends CI_Model
 		$where = '';
 		$where .= "( tck.added_by IN (" . implode(',', $all_reporting_ids) . ')';
 		$where .= " OR tck.assign_to IN (" . implode(',', $all_reporting_ids) . '))';
+
 		return $this->db->select("tck.*,enq.phone,enq.gender,prd.country_name, concat(enq.name_prefix,' ' , enq.name,' ', enq.lastname) as clientname , COUNT(cnv.id) as tconv, cnv.msg, tbl_admin.s_display_name,tbl_admin.last_name")
 			->where($where)
 			->where("tck.company", $this->session->companey_id)
-
 			->from("tbl_ticket tck")
 			->join("tbl_ticket_conv cnv", "cnv.tck_id = tck.id", "LEFT")
 			->join("enquiry enq", "enq.enquiry_id = tck.client", "LEFT")
@@ -332,6 +332,7 @@ class Ticket_Model extends CI_Model
 			->group_by("tck.id")
 			->get()
 			->result();
+			//echo $this->db->last_query(); exit();
 	}
 
 	public function getTicketListByCompnyID($companyid, $userid)
@@ -382,10 +383,9 @@ class Ticket_Model extends CI_Model
 
 	public function all_related_tickets($where)
 	{
+
 		$this->db->select("tck.*,enq.phone,enq.gender,prd.product_name, concat(enq.name_prefix,' ' , enq.name,' ', enq.lastname) as clientname , COUNT(cnv.id) as tconv, cnv.msg");
 		$this->db->where("tck.company", $this->session->companey_id);
-
-
 
 		$this->db->from("tbl_ticket tck");
 		$this->db->join("tbl_ticket_conv cnv", "cnv.tck_id = tck.id", "LEFT");
@@ -410,7 +410,7 @@ class Ticket_Model extends CI_Model
 		$this->db->having("tck.ticketno !=", $ticketno);
 		$this->db->order_by("tck.id DESC");
 		return  $this->db->get()->result();
-		// echo $this->db->last_query(); exit();
+		//echo $this->db->last_query(); exit();
 	}
 
 	public function getproduct()

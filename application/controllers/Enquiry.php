@@ -10,7 +10,7 @@ class Enquiry extends CI_Controller
         );
         $this->load->library('email');
         $this->load->library('user_agent');
-        $this->lang->load("activitylogmsg", "english");
+        $this->lang->load("activitylogmsg", "english"); 
         $apiarr = explode("/", $_SERVER['REQUEST_URI']);
 
         if (in_array("viewapi", $apiarr)) {

@@ -98,6 +98,7 @@ class Ticket extends CI_Controller
 
 		$data['sourse'] = $this->report_model->all_source();
 		$data['title'] = "All Ticket";
+
 		$data["tickets"] = $this->Ticket_Model->getall();
 		//print_r($data['tickets']); exit();
 		$data['created_bylist'] = $this->User_model->read();
@@ -536,7 +537,8 @@ class Ticket extends CI_Controller
 	{
 
 		if (!empty($_POST)) {
-			$move_enquiry = $this->input->post('enquiry_id[]');
+			$move_enquiry = $this->input->post('tickets');
+			//print_r($move_enquiry); exit();
 			// echo json_encode($move_enquiry);
 			$assign_employee = $this->input->post('epid');
 			$notification_data = array();
@@ -548,7 +550,9 @@ class Ticket extends CI_Controller
 					$this->db->update('tbl_ticket');
 				}
 				echo display('save_successfully');
-			} else {
+			} 
+			else 
+			{
 				echo display('please_try_again');
 			}
 		}
