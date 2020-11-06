@@ -66,10 +66,17 @@
                     <div class="form-group">                 
                       <select class="form-control" id="lead_stage_change" name="lead_stage" onchange="find_description()">
                         <option>---Select Stage---</option>
-                        <?php foreach($ticket_stages as $single){                               
-                               // $id=$single->lead_stage; ?>                              
-                            <option value="<?=$single->stg_id?>" <?=($single->stg_id==$ticket->ticket_stage?'selected':'')?>><?php echo $single->lead_stage_name; ?></option>
-                            <?php } ?>
+                        <?php
+                          if(!empty($ticket_stages))
+                          {
+                            foreach($ticket_stages as $single)
+                            {  
+                              ?>                              
+                              <option value="<?=$single->stg_id?>" <?=($single->stg_id==$ticket->ticket_stage?'selected':'')?>><?php echo $single->lead_stage_name; ?></option>
+                              <?php 
+                            }
+                          }
+                           ?>
                        </select>
                     </div>
                     <div class="form-group">                           
@@ -78,6 +85,22 @@
                           <?php// foreach($all_description_lists as $discription){ ?>                                   
                                <!-- <option value="<?php// echo $discription->id; ?>"><?php //echo $discription->description; ?></option> -->
                                <?php //} ?>
+                       </select>
+                    </div>     
+
+                    <div class="form-group">                           
+                       <select class="form-control" id="" name="ticket_status">
+                           <option>---Select Status---</option>
+                          <?php
+                           if(!empty($ticket_status))
+                          {
+                            foreach($ticket_status as $status)
+                            {  
+                              ?>                              
+                              <option value="<?=$status->id?>" <?=($status->id==$ticket->ticket_status?'selected':'')?>><?php echo $status->status_name; ?></option>
+                              <?php 
+                            }
+                          }?>
                        </select>
                     </div>     
 

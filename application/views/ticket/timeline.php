@@ -16,7 +16,11 @@
             }
 
             if (!empty($cnv->sub_stage)) { ?>
-              <br><span style="font-weight:900;font-size:12px;">Sub Stage - </span><span style="font-weight:900;font-size:12px;"><?php echo $cnv->sub_stage; ?></span><br>
+              <br><span style="font-weight:900;font-size:12px;">Sub Stage - </span><span style="font-weight:900;font-size:12px;"><?php echo $cnv->sub_stage; ?></span>
+              <?php
+            }
+             if (!empty($cnv->status_name)) { ?>
+              <br><span style="font-weight:900;font-size:12px;">Status - </span><span style="font-weight:900;font-size:12px;"><?php echo $cnv->status_name; ?></span><br>
               <?php
             }
             if (!empty($cnv->msg)) { ?>

@@ -143,11 +143,12 @@ class Ticket_Model extends CI_Model
 
 
 		);
-		if (!empty($_FILES["attachment"]["name"]) && $_FILES["attachment"]["size"]>0) {	//echo 'in';
+		if (!empty($_FILES["attachment"]["name"]) && $_FILES["attachment"]["size"]>0) {	
+		//echo 'in';
 			$retdata =  $this->do_upload();
 			//print_r($retdata);			
-			if (!empty($retdata["upload_data"]["file_name"])) {
-				$arr["attachment"] = $retdata["upload_data"]["file_name"];
+			if (!empty($retdata)) {
+				$arr["attachment"] = $retdata;
 			}
 		}
 
@@ -209,23 +210,48 @@ class Ticket_Model extends CI_Model
 	public function do_upload()
 	{
 		$config['upload_path']          = './uploads/ticket/';
-		$config['allowed_types']        = '*';
+		$config['allowed_types']        = 'jpg|JPG|jpeg|JPEG|GIF|gif|png|PNG|pdf|PDF';
+		$config['max_size']             = 5000;
 
 		$this->load->library('upload', $config);
+		
+		$files = $_FILES;
+		unset($_FILES);
 
-		if (!$this->upload->do_upload('attachment')) {
-			$error = array('error' => $this->upload->display_errors());
+		$done  = array();
 
-			return $error;
-		} else {
-			$data = array('upload_data' => $this->upload->data());
-
-			return $data;
+		for( $i=0; $i< sizeof($files['attachment']['name']); $i++ )
+		{
+			$_FILES['img']['name'] = $files['attachment']['name'][$i];
+			$_FILES['img']['type'] = $files['attachment']['type'][$i];
+			$_FILES['img']['tmp_name'] = $files['attachment']['tmp_name'][$i];
+			$_FILES['img']['error'] = $files['attachment']['error'][$i];
+			$_FILES['img']['size'] = $files['attachment']['size'][$i];
+			
+			if (!$this->upload->do_upload('img'))
+			{
+				$this->session->set_flashdata('error',$this->upload->display_errors());
+			} 
+			else 
+			{
+				$done[] = $this->upload->data()['file_name'];
+			}
 		}
+		return json_encode($done);
+	}
+
+
+	public function ticket_status($where= 0)
+	{
+		if($where)
+			$this->db->where($where);
+		return $this->db->get('tbl_ticket_status');
 	}
 
 	public function saveconv($tckno, $subjects, $msg, $client, $user_id, $stage = 0, $sub_stage = 0)
 	{
+		$ticket_status = $this->input->post('ticket_status')??'';
+		//echo $ticket_status; exit();
 		$insarr = array(
 			"tck_id" => $tckno,
 			"comp_id" => $this->session->companey_id,
@@ -234,6 +260,7 @@ class Ticket_Model extends CI_Model
 			"msg"    => $msg,
 			"attacment" => "",
 			"status"  => 0,
+			"ticket_status"=>$ticket_status,
 			"stage"  => $stage,
 			"sub_stage"  => $sub_stage,
 			"client"   => $client,
@@ -248,7 +275,11 @@ class Ticket_Model extends CI_Model
 			if ($sub_stage) {
 				$this->db->set('tbl_ticket.ticket_substage', $sub_stage);
 			}
-			if ($stage || $sub_stage) {
+			if($this->input->post('ticket_status'))
+			{
+				$this->db->set('tbl_ticket.ticket_status',$ticket_status);
+			}
+			if ($stage || $sub_stage || $ticket_status) {
 				$this->db->where('tbl_ticket.company', $this->session->companey_id);
 				$this->db->where('tbl_ticket.id', $tckno);
 				$this->db->update('tbl_ticket');
@@ -303,13 +334,14 @@ class Ticket_Model extends CI_Model
 	function getconv($conv)
 	{
 		$compid = $this->session->companey_id;
-		return $this->db->select("cnv.*,lead_stage.lead_stage_name,lead_description.description as sub_stage,concat(admin.s_display_name,' ',admin.last_name) as updated_by")
+		return $this->db->select("cnv.*,lead_stage.lead_stage_name,lead_description.description as sub_stage,concat(admin.s_display_name,' ',admin.last_name) as updated_by,status.status_name")
 			->where("cnv.tck_id", $conv)
 			->where("cnv.comp_id", $compid)
 			->from("tbl_ticket_conv cnv")
 			->join("lead_stage", 'lead_stage.stg_id=cnv.stage', 'left')
 			->join("lead_description", 'lead_description.id=cnv.sub_stage', 'left')
 			->join("tbl_admin as admin","admin.pk_i_admin_id=cnv.added_by")
+			->join("tbl_ticket_status status","cnv.ticket_status = status.id","LEFT")
 			->order_by("cnv.id DESC")
 			->get()
 			->result();

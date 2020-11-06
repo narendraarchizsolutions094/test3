@@ -446,6 +446,8 @@ class Ticket extends CI_Controller
 		$data["problem_for"] = $this->Ticket_Model->getclient($data['ticket']->client);
 		//print_r($data['problem_for']); exit();
 
+		$data['ticket_status'] = $this->Ticket_Model->ticket_status()->result();
+
 		$data["product"] = $this->Ticket_Model->getproduct();
 		//print_r($data['product']); exit();
 		$data["conversion"] = $this->Ticket_Model->getconv($data["ticket"]->id);
@@ -516,13 +518,13 @@ class Ticket extends CI_Controller
 		$stage_desc	=	$this->input->post('lead_description');
 		$stage_remark	=	$this->input->post('conversation');
 		$client	=	$this->input->post('client');
-
+		
 		$stage_date = date("d-m-Y", strtotime($this->input->post('c_date')));
 		$stage_time = date("H:i:s", strtotime($this->input->post('c_time')));
 
 		$user_id = $this->session->user_id;
 		$this->session->set_flashdata('SUCCESSMSG', 'Update Successfully');
-		$this->Ticket_Model->saveconv($ticketno, 'Stage Updated', $stage_remark, $client, $user_id, $lead_stage, $stage_desc);
+		$this->Ticket_Model->saveconv($ticketno, 'Stage Updated', $stage_remark, $client, $user_id, $lead_stage, $stage_desc,);
 
 
 
@@ -908,6 +910,34 @@ class Ticket extends CI_Controller
 		redirect(base_url('ticket/referred_by'));
 	}
 
+	public function remove_attachment($ticketno,$delete_key)
+	{
+		$res = $this->Ticket_Model->get($ticketno);
+		if(!empty($res->attachment))
+		{
+			$att = json_decode($res->attachment);
+			
+			$del = $att[$delete_key];
+
+			unset($att[$delete_key]);
+
+			$att = json_encode(array_values($att));
+			//json_encode($att); exit();
+ 			//print_r($att); exit();
+ 			if($del!='' && unlink(('uploads/ticket/'.$del)))
+ 			{
+ 				$this->db->set('attachment',$att);
+ 				$this->db->where('ticketno',$res->ticketno)->update('tbl_ticket');
+ 				redirect(site_url('ticket/view/'.$res->ticketno));
+ 			}
+ 			else
+ 			{
+ 				$this->session->set_flashdata('error','Unable to delete File');
+ 			}
+		}
+		
+
+	}
 
 	public function loadamc()
 	{

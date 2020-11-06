@@ -166,20 +166,38 @@
 			<textarea name="remark" class="form-control"><?=$ticket->message?></textarea>
 		</div>
 		
-		<div class="col-md-6"><br>
+		<div class="col-md-12">
+			<?php
+			if($error =$this->session->flashdata('error'))
+			{
+				echo'<div class="label label-danger">'.$error.'</div>';
+			}
+			?>
+			<br>
+
 			<div class="form-group" >			
-				<label>Attachment : </label>
-				<div id="attachment" style="display: none;"></div>
+				<label>Attachment <small> ( Only Image/PDF ) </small>:</label>
+				
 				<?php
-				if ($ticket->attachment) { ?>
-					<span class=''><a target="_blank" href="<?=base_url().'uploads/ticket/'.$ticket->attachment?>"><?=$ticket->attachment?></a><br>
-						<button class="btn btn-xs btn-primary" type="button" onclick="changeAttachment(this)">Change Attachment</button>
-					</span>
-				<?php
-				}else{
-					echo "<span class='badge badge-danger'>No attachment</span><input type='file' name='attachment' style='display:inline'>";
+				if($ticket->attachment)
+				{
+					$attachment  = json_decode($ticket->attachment);
+					echo'<ul class="list-group">';
+					$i=0;
+					foreach ($attachment as $at)
+					{
+						echo '<li class="list-group-item">'.$at.'
+						<div class="btn-group pull-right">
+						<a href="'.base_url('uploads/ticket/'.$at).'" target="_blank"><span class="btn btn-primary  btn-xs">View</span></a>
+						<a href="'.base_url('ticket/remove_attachment/'.$ticket->ticketno.'/'.$i).'"><span class="btn btn-danger  btn-xs">Delete</span></a>
+						</div>
+						</li>';
+						$i++;
+					}
+					echo'</ul><br>';
 				}
 				?>
+				<input type="file" name="attachment[]" class="attachFiles" multiple>
 			</div>
 			<div class="form-group">
 				<label>Ticket Type : </label> 
@@ -401,17 +419,30 @@
 <script src="<?php echo base_url() ?>assets/js/custom.js" type="text/javascript"></script>
 <script>
 
-function changeAttachment(t)
-{
-	var x = document.createElement("INPUT");
-	x.setAttribute("type", "file");
-	x.setAttribute("name", "attachment");
-	$("#attachment").html(x);
-	$(x).click();
-	$(t).removeClass('btn-primary');
-	$(t).addClass('btn-success');
-	$(t).html("Attachment Changed");
-}
+
+	// $(".attachFiles").on('change',function(e){
+			
+	// 	 var myform = new FormData();
+
+	// 	myform.append('attachment[]',this.files);
+
+	// 		$.ajax({
+	// 				url:"<?php //base_url('ticket/add_attachment')?>",
+	// 				type:"post",
+	// 				data:myform,
+	// 				contentType: false,
+ //    				processData: false,
+
+	// 				success:function (res)
+	// 				{
+	// 					document.write(res);
+	// 				},
+	// 				error:function(u,v,w)
+	// 				{
+	// 					alert(w);
+	// 				}
+	// 		});
+	// });
 
 	$(document).ready(function(){
 		
