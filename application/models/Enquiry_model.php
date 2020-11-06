@@ -47,6 +47,13 @@ class Enquiry_model extends CI_Model {
      
     }
 
+    public function getEnquiry($where=0)
+    {
+    	if($where)
+    		$this->db->where($where);
+    	return $this->db->get('enquiry');
+    }
+
 	public function get_user_productcntry_list(){
 
 		$this->db->select("*");

@@ -117,10 +117,65 @@ class Ticket extends CI_Controller
          $this->session->set_userdata('ticket_filters_sess',$_POST);
          //print_r($_SESSION);
      }
-      public function chk()
-      {
-      	
-      }
+	  public function autofill()
+	  {
+	  	if($post = $this->input->post())
+	  	{
+	  		$this->load->model('Enquiry_model');
+	  		$result = $this->Enquiry_model->getEnquiry(array($post['find_by']=>$post['key']));
+	  		//echo $result->num_rows();
+	  		if($result->num_rows())
+	  		{
+	  			$enq = $result->row();
+	  			
+	  			//print_r($enq); exit();
+		  		$res = $this->Ticket_Model->filterticket(array('tck.client' => $enq->enquiry_id));
+		  		$html = "";
+				if ($res) 
+				{
+					$html.= '<table class="table table-bordered">
+					<tr>
+					'.($this->session->companey_id==65?'<th>Tracking No</th>':'').'
+					<th>Ticket Number</th>
+					<th>Name</th>
+					<th>Ticket Stage</th>
+					<th>Created At</th>
+					<th>Action</th>
+					</tr>';
+					foreach ($res as $row)
+					{
+					$html.='<tr>
+						'.($this->session->companey_id==65?'<td>'.$row->tracking_no.'</td>':'').'
+						<td>'.$row->ticketno.'</td>
+						<td>'.$row->name.'</td>
+						<td>'.(!empty($row->lead_stage_name)?$row->lead_stage_name:'NA').' <small>'.(!empty($row->description)?'<br>'.$row->description:'').'</small></td>
+						<td>'.date('d-m-Y <br> h:i A',strtotime($row->coml_date)).'</td>
+						<th><a href="'.base_url('ticket/view/'.$row->ticketno).'"><button class="btn btn-small btn-primary">View</button></a></th>
+						</tr>';
+					}
+					$html.= '</table>';
+				} 
+				else 
+				{
+					$html= '0';
+				}
+
+				$data = array(
+	  						'status'=>'1',
+	  						'problem_for'=>$enq->enquiry_id,
+	  						'name'=>$enq->name.' '.$enq->lastname,
+	  						'email'=>$enq->email,
+	  						'phone'=>$enq->phone,
+	  						'html'=>$html,
+	  					);
+
+	  			echo json_encode($data);
+	  		}
+	  		else{
+	  			echo json_encode(array('status'=>'0','html'=>'0'));
+	  		}
+	  	}
+	  }
      public function ticket_load_data()
      {
         // $_POST = array('search'=>array('value'=>''),'length'=>10,'start'=>0);
@@ -767,7 +822,7 @@ class Ticket extends CI_Controller
 			if ($res) {
 				echo '<table class="table table-bordered">
 				<tr>
-				<th>Tracking No</th>
+				'.($this->session->companey_id==65?'<th>Tracking No</th>':'').'
 				<th>Ticket Number</th>
 				<th>Name</th>
 				<th>Ticket Stage</th>
@@ -777,7 +832,7 @@ class Ticket extends CI_Controller
 				foreach ($res as $row)
 				{
 				echo'<tr>
-					<td>'.$row->tracking_no.'</td>
+					'.($this->session->companey_id==65?'<td>'.$row->tracking_no.'</td>':'').'
 					<td>'.$row->ticketno.'</td>
 					<td>'.$row->name.'</td>
 					<td>'.(!empty($row->lead_stage_name)?$row->lead_stage_name:'NA').' <small>'.(!empty($row->description)?'<br>'.$row->description:'').'</small></td>

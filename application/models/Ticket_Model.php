@@ -262,23 +262,22 @@ class Ticket_Model extends CI_Model
 	function updatestatus()
 	{
 
-		public function getTicketListByCompnyID($companyid,$userid){
-			$all_reporting_ids    =   $this->common_model->get_categories($userid);
-			$where = '';
-			$where .= "( tck.added_by IN (".implode(',', $all_reporting_ids).')';
-			$where .= " OR tck.assign_to IN (".implode(',', $all_reporting_ids).'))';
-			return $this->db->select("tck.*,enq.phone,enq.gender,prd.country_name, concat(enq.name_prefix,' ' , enq.name,' ', enq.lastname) as clientname , COUNT(cnv.id) as tconv, cnv.msg")
-				 ->where($where)
-				 ->where("tck.company",$companyid )
-				
-				 ->from("tbl_ticket tck")
-				 ->join("tbl_ticket_conv cnv", "cnv.tck_id = tck.id", "LEFT")
-				 ->join("enquiry enq", "enq.enquiry_id = tck.client", "LEFT")
-				 ->join("tbl_product_country prd", "prd.id = tck.product", "LEFT")
-				 ->order_by("tck.id DESC")
-				 ->group_by("tck.id")
-				 ->get()
-				 ->result();
+		$updarr = array(
+			"category" 	=> $this->input->post("issue", true),
+			"solution" => $this->input->post("solution", true),
+			"status"    => $this->input->post("status", true),
+			"review"    => $this->input->post("review", true)
+		);
+		//print_r($updarr); exit();
+		//echo $this->input->post("ticketno", true); exit();
+		$this->db->where("id", $this->input->post("ticketno", true));
+		$this->db->update("tbl_ticket", $updarr);
+		$ret = $this->db->affected_rows();
+		if ($ret) {
+
+			$this->session->set_flashdata('message', 'Successfully added ticket');
+		} else {
+			$this->session->set_flashdata('message', 'Failed to add ticket');
 		}
 	}
 
