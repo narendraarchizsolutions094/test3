@@ -543,32 +543,25 @@ class Ticket_Model extends CI_Model
 		$count = $this->db->where(array('company' => $this->session->companey_id, 'ticket_stage' => $stg_id))->count_all_results('tbl_ticket');
 		return $count;
 	}
-	public function sortarray($times)
-	{
-		if (!function_exists('invenDescSort')) {
-			function invenDescSort($item1, $item2)
-			{
-				if ($item1['esc_hr'] == $item2['current']) return 0;
-				return ($item1['esc_hr'] > $item2['current']) ? 1 : -1;
-			}
-			usort($times, 'invenDescSort');
-		}
-		if (!function_exists('searchForId')) {
 
-			function searchForId($array)
-			{
-				foreach ($array as $key => $val) {
-					// if ($val['esc_hr'] == $val['current'] ) {
-					// 	return $val['lid'];
-					// }else{
-					if ($val['esc_hr'] < $val['current'] or $val['esc_hr'] == $val['current']) {
-						return $ukey = $key + 1;
-						// }
-					}
-				}
-				return null;
+	public function insertData($uid,$tid,$lid)
+	{
+		
+			//move to user
+			$ticket_update = ['assign_to' => $uid];
+			$this->db->where(array('id' => $tid))->update('tbl_ticket', $ticket_update);
+			$counta = $this->db->where(array('tck_id' => $tid, 'lid' => $lid))->count_all_results('tbl_ticket_conv');
+			if ($counta == 0) {
+				//save to assignid 	
+				$data_msg = ['comp_id' => $this->session->companey_id, 'tck_id' => $tid, 'subj' => 'Ticked Assigned', 'lid' => $lid, 'assignedTo' => $uid, 'msg' => 'Update by rule'];
+				$this->db->insert('tbl_ticket_conv', $data_msg);
 			}
-			return searchForId($times);
-		}
 	}
+	public function insertNextAssignTime($nextAssignment,$tid)
+	{
+		$ticket_update = ['nextAssignTime' => $nextAssignment];
+		$this->db->where(array('id' => $tid))->update('tbl_ticket', $ticket_update);
+	}
+
 }
+
