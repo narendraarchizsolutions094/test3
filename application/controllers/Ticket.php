@@ -122,226 +122,199 @@ class Ticket extends CI_Controller
 
 
 
-    public function ticket_set_filters_session(){
-         $this->session->set_userdata('ticket_filters_sess',$_POST);
-         //print_r($_SESSION);
-     }
-	  public function autofill()
-	  {
-	  	if($post = $this->input->post())
-	  	{
-	  		$this->load->model('Enquiry_model');
-	  		$result = $this->Enquiry_model->getEnquiry(array($post['find_by']=>$post['key']));
-	  		//echo $result->num_rows();
-	  		if($result->num_rows())
-	  		{
-	  			$enq = $result->row();
-	  			
-	  			//print_r($enq); exit();
-		  		$res = $this->Ticket_Model->filterticket(array('tck.client' => $enq->enquiry_id));
-		  		$html = "";
-				if ($res) 
-				{
-					$html.= '<table class="table table-bordered">
+	public function ticket_set_filters_session()
+	{
+		$this->session->set_userdata('ticket_filters_sess', $_POST);
+		//print_r($_SESSION);
+	}
+	public function autofill()
+	{
+		if ($post = $this->input->post()) {
+			$this->load->model('Enquiry_model');
+			$result = $this->Enquiry_model->getEnquiry(array($post['find_by'] => $post['key']));
+			//echo $result->num_rows();
+			if ($result->num_rows()) {
+				$enq = $result->row();
+
+				//print_r($enq); exit();
+				$res = $this->Ticket_Model->filterticket(array('tck.client' => $enq->enquiry_id));
+				$html = "";
+				if ($res) {
+					$html .= '<table class="table table-bordered">
 					<tr>
-					'.($this->session->companey_id==65?'<th>Tracking No</th>':'').'
+					' . ($this->session->companey_id == 65 ? '<th>Tracking No</th>' : '') . '
 					<th>Ticket Number</th>
 					<th>Name</th>
 					<th>Ticket Stage</th>
 					<th>Created At</th>
 					<th>Action</th>
 					</tr>';
-					foreach ($res as $row)
-					{
-					$html.='<tr>
-						'.($this->session->companey_id==65?'<td>'.$row->tracking_no.'</td>':'').'
-						<td>'.$row->ticketno.'</td>
-						<td>'.$row->name.'</td>
-						<td>'.(!empty($row->lead_stage_name)?$row->lead_stage_name:'NA').' <small>'.(!empty($row->description)?'<br>'.$row->description:'').'</small></td>
-						<td>'.date('d-m-Y <br> h:i A',strtotime($row->coml_date)).'</td>
-						<th><a href="'.base_url('ticket/view/'.$row->ticketno).'"><button class="btn btn-small btn-primary">View</button></a></th>
+					foreach ($res as $row) {
+						$html .= '<tr>
+						' . ($this->session->companey_id == 65 ? '<td>' . $row->tracking_no . '</td>' : '') . '
+						<td>' . $row->ticketno . '</td>
+						<td>' . $row->name . '</td>
+						<td>' . (!empty($row->lead_stage_name) ? $row->lead_stage_name : 'NA') . ' <small>' . (!empty($row->description) ? '<br>' . $row->description : '') . '</small></td>
+						<td>' . date('d-m-Y <br> h:i A', strtotime($row->coml_date)) . '</td>
+						<th><a href="' . base_url('ticket/view/' . $row->ticketno) . '"><button class="btn btn-small btn-primary">View</button></a></th>
 						</tr>';
 					}
-					$html.= '</table>';
-				} 
-				else 
-				{
-					$html= '0';
+					$html .= '</table>';
+				} else {
+					$html = '0';
 				}
 
 				$data = array(
-	  						'status'=>'1',
-	  						'problem_for'=>$enq->enquiry_id,
-	  						'name'=>$enq->name.' '.$enq->lastname,
-	  						'email'=>$enq->email,
-	  						'phone'=>$enq->phone,
-	  						'html'=>$html,
-	  					);
+					'status' => '1',
+					'problem_for' => $enq->enquiry_id,
+					'name' => $enq->name . ' ' . $enq->lastname,
+					'email' => $enq->email,
+					'phone' => $enq->phone,
+					'html' => $html,
+				);
 
-	  			echo json_encode($data);
-	  		}
-	  		else{
-	  			echo json_encode(array('status'=>'0','html'=>'0'));
-	  		}
-	  	}
-	  }
-     public function ticket_load_data()
-     {
-        // $_POST = array('search'=>array('value'=>''),'length'=>10,'start'=>0);
-         $this->load->model('Ticket_datatable_model');
-         
-         $res = $this->Ticket_datatable_model->getRows($_POST);
-         //print_r($res); exit();
-         $data  = array();
+				echo json_encode($data);
+			} else {
+				echo json_encode(array('status' => '0', 'html' => '0'));
+			}
+		}
+	}
+	public function ticket_load_data()
+	{
+		// $_POST = array('search'=>array('value'=>''),'length'=>10,'start'=>0);
+		$this->load->model('Ticket_datatable_model');
 
-        $acolarr = array();
-        $dacolarr = array();
-        if(isset($_COOKIE["ticket_allowcols"])) {
-          $showall = false;
-          $acolarr  = explode(",", trim($_COOKIE["ticket_allowcols"], ","));       
-        }else{          
-          $showall = true;
-        }         
-        if(isset($_COOKIE["ticket_dallowcols"])) {
-          $dshowall = false;
-          $dacolarr  = explode(",", trim($_COOKIE["ticket_dallowcols"], ","));       
-        }else{
-          $dshowall = false;
-        }       
+		$res = $this->Ticket_datatable_model->getRows($_POST);
+		//print_r($res); exit();
+		$data  = array();
 
-         foreach ($res as $point)
-         {
-             $sub = array();
-             $sub[] = '<input type="checkbox" class="checkbox1" onclick="event.stopPropagation();" value="'.$point->id.'">';
-             $sub[] = $point->id;
-             if($showall or in_array(1,$acolarr))
-             {
-             	$sub[] = '<a href="'.base_url('ticket/view/'.$point->ticketno).'">'.$point->ticketno.'</a>';
-             }
-             	
-            if($showall or in_array(2,$acolarr))
-            {
-            	 $sub[] = $point->clientname??"NA";
-         	}
+		$acolarr = array();
+		$dacolarr = array();
+		if (isset($_COOKIE["ticket_allowcols"])) {
+			$showall = false;
+			$acolarr  = explode(",", trim($_COOKIE["ticket_allowcols"], ","));
+		} else {
+			$showall = true;
+		}
+		if (isset($_COOKIE["ticket_dallowcols"])) {
+			$dshowall = false;
+			$dacolarr  = explode(",", trim($_COOKIE["ticket_dallowcols"], ","));
+		} else {
+			$dshowall = false;
+		}
 
-			if($showall or in_array(3,$acolarr))
-            {
-            	$sub[] = $point->email??"NA";
-            }
+		foreach ($res as $point) {
+			$sub = array();
+			$sub[] = '<input type="checkbox" class="checkbox1" onclick="event.stopPropagation();" value="' . $point->id . '">';
+			$sub[] = $point->id;
+			if ($showall or in_array(1, $acolarr)) {
+				$sub[] = '<a href="' . base_url('ticket/view/' . $point->ticketno) . '">' . $point->ticketno . '</a>';
+			}
 
-            if($showall or in_array(4,$acolarr))
-            {
-				 if (user_access(220) && !empty($point->phone)) 
-				 {
+			if ($showall or in_array(2, $acolarr)) {
+				$sub[] = $point->clientname ?? "NA";
+			}
+
+			if ($showall or in_array(3, $acolarr)) {
+				$sub[] = $point->email ?? "NA";
+			}
+
+			if ($showall or in_array(4, $acolarr)) {
+				if (user_access(220) && !empty($point->phone)) {
 					$sub[] = "<a href='javascript:void(0)' onclick='send_parameters(" . $point->phone . ")'>" . $point->phone . "</a>";
 				} else {
-					$sub[] = $point->phone??"NA";
+					$sub[] = $point->phone ?? "NA";
 				}
 			}
 
-             //$sub[] = $point->phone??"NA";
-			if($showall or in_array(5,$acolarr))
-            {
-            	 $sub[] = $point->country_name??"NA";
-            }
+			//$sub[] = $point->phone??"NA";
+			if ($showall or in_array(5, $acolarr)) {
+				$sub[] = $point->country_name ?? "NA";
+			}
 
-            if($showall or in_array(6,$acolarr))
-            {
-            	 $sub[] = $point->assign_to_name??"NA";
-            }
-            if($showall or in_array(7,$acolarr))
-            {
-             	$sub[] = $point->created_by_name??"NA";
-            }
-            if($showall or in_array(8,$acolarr))
-            {
-            	 $sub[] = '<span class="label label-'.($point->priority==1? 'success">Low' : ($point->priority==2?'warning">Medium':'danger">High')).'</span>';
-           	}
-           	if($showall or in_array(9,$acolarr))
-            {
-            	 $sub[] = $point->coml_date??'NA';
-           	}
-			if($showall or in_array(10,$acolarr))
-            {
-            	 $sub[] = $point->referred_name??'NA';
-           	}
-           	if($showall or in_array(11,$acolarr))
-            {
-            	 $sub[] = $point->source_name??'NA';
-           	}
-           	if($showall or in_array(12,$acolarr))
-            {
-            	 $sub[] = $point->lead_stage_name??'NA';
-           	}
-           	if($showall or in_array(13,$acolarr))
-            {
-            	 $sub[] = $point->description??'NA';
-           	}
+			if ($showall or in_array(6, $acolarr)) {
+				$sub[] = $point->assign_to_name ?? "NA";
+			}
+			if ($showall or in_array(7, $acolarr)) {
+				$sub[] = $point->created_by_name ?? "NA";
+			}
+			if ($showall or in_array(8, $acolarr)) {
+				$sub[] = '<span class="label label-' . ($point->priority == 1 ? 'success">Low' : ($point->priority == 2 ? 'warning">Medium' : 'danger">High')) . '</span>';
+			}
+			if ($showall or in_array(9, $acolarr)) {
+				$sub[] = $point->coml_date ?? 'NA';
+			}
+			if ($showall or in_array(10, $acolarr)) {
+				$sub[] = $point->referred_name ?? 'NA';
+			}
+			if ($showall or in_array(11, $acolarr)) {
+				$sub[] = $point->source_name ?? 'NA';
+			}
+			if ($showall or in_array(12, $acolarr)) {
+				$sub[] = $point->lead_stage_name ?? 'NA';
+			}
+			if ($showall or in_array(13, $acolarr)) {
+				$sub[] = $point->description ?? 'NA';
+			}
 
-           	if($showall or in_array(14,$acolarr))
-            {
-            	 $sub[] = $point->message==''?'NA':$point->message;
-           	}
+			if ($showall or in_array(14, $acolarr)) {
+				$sub[] = $point->message == '' ? 'NA' : $point->message;
+			}
 
-           	if($this->session->companey_id==65 && ($showall or in_array(15,$acolarr)))
-            {
-            	 $sub[] = $point->tracking_no==''?'NA':$point->tracking_no;
-           	}
+			if ($this->session->companey_id == 65 && ($showall or in_array(15, $acolarr))) {
+				$sub[] = $point->tracking_no == '' ? 'NA' : $point->tracking_no;
+			}
 
-             $data[] = $sub;
-           }
+			$data[] = $sub;
+		}
 
-         //print_r($res);
-         $output = array(
-            "draw" => $_POST['draw'],
-            "recordsTotal" => $this->Ticket_datatable_model->countAll(),
-            "recordsFiltered" => $this->Ticket_datatable_model->countFiltered($_POST),
-            "data" => $data,
-        );
-          echo json_encode($output);
-     }
+		//print_r($res);
+		$output = array(
+			"draw" => $_POST['draw'],
+			"recordsTotal" => $this->Ticket_datatable_model->countAll(),
+			"recordsFiltered" => $this->Ticket_datatable_model->countFiltered($_POST),
+			"data" => $data,
+		);
+		echo json_encode($output);
+	}
 
 
-     public function view_tracking()
-     {
-     	if($post = $this->input->post())
-     	{
-     		if($post['trackingno'])
-     		{
-     			 $ch = curl_init();
+	public function view_tracking()
+	{
+		if ($post = $this->input->post()) {
+			if ($post['trackingno']) {
+				$ch = curl_init();
 
-		        curl_setopt($ch, CURLOPT_URL, "https://thecrm360.com/new_crm/ticket/gc_vtrans_api/".$post['trackingno']);
+				curl_setopt($ch, CURLOPT_URL, "https://thecrm360.com/new_crm/ticket/gc_vtrans_api/" . $post['trackingno']);
 
-		        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 
-		        $output = curl_exec($ch);
+				$output = curl_exec($ch);
 
-		        curl_close($ch);  
+				curl_close($ch);
 
-		        if($output=='')
-		        {
-		        	echo '0';
-		        	exit();
-		        }
+				if ($output == '') {
+					echo '0';
+					exit();
+				}
 
-		        $a = json_decode($output);
-		        $table  = empty($a->Table)?'':$a->Table;
-		        $table1 = empty($a->Table1)?'':$a->Table1;
-		        $table2 = empty($a->Table2)?'':$a->Table2;
-		        $table3 = empty($a->Table3)?'':$a->Table3;
-		        
-	        if(isset($a->Table))
-	        {
-		        echo'<table class="table table-bordered">
-		        <tr><th colspan="4" style="text-align:center;">Tracking Number: '.(empty($table->GCNO)?'':$table->GCNO).'</td></tr>
-		        <tr><th>Date:</th><td>'.(empty($table->GC_Date)?'':$table->GC_Date).'</td><th>Status:</th><td>'.(empty($table->status)?'':$table->status).'</td></tr>
-		         <tr><th>Delivery Location:</th><td  colspan="3">'.(empty($table->DeliveryLocation)?'':$table->DeliveryLocation).'</td></tr>
-		         <tr><th>Delivery Branch:</th><td>'.(empty($table->DeliveryBranch)?'':$table->DeliveryBranch).'</td><th>Booking Branch:</th><td>'.(empty($table->BookingBranch)?'':$table->BookingBranch).'</td></tr>';
-		        if(sizeof((array)$table->EDD))
-		        	echo' <tr><th>EDD</th><td colspan="3">'.print_r($table->EDD).'</td></tr>';
+				$a = json_decode($output);
+				$table  = empty($a->Table) ? '' : $a->Table;
+				$table1 = empty($a->Table1) ? '' : $a->Table1;
+				$table2 = empty($a->Table2) ? '' : $a->Table2;
+				$table3 = empty($a->Table3) ? '' : $a->Table3;
 
-		         echo'<tr><th>Delivery Date:</th><td>'.(empty($table->DeliveryDate)?'':$table->DeliveryDate).'</td><th>Arrival Date:</th><td>'.(empty($table->ArrivalDate)?'':$table->ArrivalDate).'</td></tr>
-		         <tr><th>Delivery Type:</th><td>'.(empty($table->DeliveryType)?'':$table->DeliveryType).'</td><th>CRNO:</th><td>'.(empty($table->CRNO)?'':$table->CRNO).'</td></tr>
+				if (isset($a->Table)) {
+					echo '<table class="table table-bordered">
+		        <tr><th colspan="4" style="text-align:center;">Tracking Number: ' . (empty($table->GCNO) ? '' : $table->GCNO) . '</td></tr>
+		        <tr><th>Date:</th><td>' . (empty($table->GC_Date) ? '' : $table->GC_Date) . '</td><th>Status:</th><td>' . (empty($table->status) ? '' : $table->status) . '</td></tr>
+		         <tr><th>Delivery Location:</th><td  colspan="3">' . (empty($table->DeliveryLocation) ? '' : $table->DeliveryLocation) . '</td></tr>
+		         <tr><th>Delivery Branch:</th><td>' . (empty($table->DeliveryBranch) ? '' : $table->DeliveryBranch) . '</td><th>Booking Branch:</th><td>' . (empty($table->BookingBranch) ? '' : $table->BookingBranch) . '</td></tr>';
+					if (sizeof((array)$table->EDD))
+						echo ' <tr><th>EDD</th><td colspan="3">' . print_r($table->EDD) . '</td></tr>';
+
+					echo '<tr><th>Delivery Date:</th><td>' . (empty($table->DeliveryDate) ? '' : $table->DeliveryDate) . '</td><th>Arrival Date:</th><td>' . (empty($table->ArrivalDate) ? '' : $table->ArrivalDate) . '</td></tr>
+		         <tr><th>Delivery Type:</th><td>' . (empty($table->DeliveryType) ? '' : $table->DeliveryType) . '</td><th>CRNO:</th><td>' . (empty($table->CRNO) ? '' : $table->CRNO) . '</td></tr>
 		        </table>';
 				}
 
@@ -837,13 +810,23 @@ class Ticket extends CI_Controller
 			if ($res) {
 				echo '<table class="table table-bordered">
 				<tr>
-				'.($this->session->companey_id==65?'<th>Tracking No</th>':'').'
+				' . ($this->session->companey_id == 65 ? '<th>Tracking No</th>' : '') . '
 				<th>Ticket Number</th>
 				<th>Name</th>
 				<th>Ticket Stage</th>
 				<th>Created At</th>
 				<th>Action</th>
 				</tr>';
+<<<<<<< HEAD
+				foreach ($res as $row) {
+					echo '<tr>
+					' . ($this->session->companey_id == 65 ? '<td>' . $row->tracking_no . '</td>' : '') . '
+					<td>' . $row->ticketno . '</td>
+					<td>' . $row->name . '</td>
+					<td>' . (!empty($row->lead_stage_name) ? $row->lead_stage_name : 'NA') . ' <small>' . (!empty($row->description) ? '<br>' . $row->description : '') . '</small></td>
+					<td>' . date('d-m-Y <br> h:i A', strtotime($row->coml_date)) . '</td>
+					<th><a href="' . base_url('ticket/view/' . $row->ticketno) . '"><button class="btn btn-small btn-primary">View</button></a></th>
+=======
 				foreach ($res as $row)
 				{
 				echo'<tr>
@@ -853,6 +836,7 @@ class Ticket extends CI_Controller
 					<td>'.(!empty($row->lead_stage_name)?$row->lead_stage_name:'NA').' <small>'.(!empty($row->description)?'<br>'.$row->description:'').'</small></td>
 					<td>'.date('d-m-Y <br> h:i A',strtotime($row->coml_date)).'</td>
 					<th><a href="'.base_url('ticket/view/'.$row->ticketno).'"><button class="btn btn-small btn-primary">View</button></a></th>
+>>>>>>> 3eb96f45115bab632e27189d1dc2e1d69eb38149
 					</tr>';
 				}
 				echo '</table>';
@@ -1186,64 +1170,84 @@ class Ticket extends CI_Controller
 		}
 		echo json_encode($data);
 	}
-	public function autoticketAssign2($ticketID)
-	{
-		$times = [];
-		$fetchTicket = $this->db->where(array('tbl_ticket.company' => $this->session->companey_id, 'tbl_ticket.id' => $ticketID))->get('tbl_ticket')->result();
-		foreach ($fetchTicket as $key => $value2) {
-			$coml_date = $value2->coml_date;
-			$currentDate = date('Y-m-d H:i:s');
-			$time1 = strtotime($coml_date);
-			$time2 = strtotime($currentDate);
-			$hourTime = round(($time2 - $time1) / 60 / 60, 1);
-			$tid = $value2->id;
-			$fetchrules = $this->db->where(array('comp_id' => $this->session->companey_id, 'type' => 5))->get('leadrules')->result();
-			foreach ($fetchrules as $key => $value) {
-				$data = json_decode($value->rule_json);
-				$stageId = $data->rules[0]->value;
-				$substageId = $data->rules[1]->value;
-				$rule_action = json_decode($value->rule_action);
-				$esc_hr = $rule_action->esc_hr;
-				$assign_to = $rule_action->assign_to;
-				$leadtitle = $value->title;
-				$lid = $value->id;
-				$times[] = ['tid' => $tid, 'lid' => $lid, 'uid' => $assign_to, 'esc_hr' => $esc_hr, 'current' => round($hourTime, 0)];
-			}
-		}
-
-		$id = $this->Ticket_Model->sortarray($times);
-		if ($id != NULL) {
-			//move to user
-			$ticket_update = ['assign_to' => $times[$id]['uid']];
-			$this->db->where(array('id' => $times[$id]['tid']))->update('tbl_ticket', $ticket_update);
-			$counta = $this->db->where(array('tck_id' => $times[$id]['tid'], 'lid' => $times[$id]['lid']))->count_all_results('tbl_ticket_conv');
-			if ($counta == 0) {
-				//save to assignid 	
-				$data_msg = ['comp_id' => $this->session->companey_id, 'tck_id' => $times[$id]['tid'], 'subj' => 'Ticked Assigned', 'lid' => $times[$id]['lid'], 'assignedTo' => $times[$id]['uid'], 'msg' => 'Update by rule'];
-				$this->db->insert('tbl_ticket_conv', $data_msg);
-			}
-		}
-	}
 
 	public function autoticketAssign()
 	{
-		$fetchrules = $this->db->where(array('comp_id' => $this->session->companey_id, 'type' => 5))->get('leadrules')->result();
+		$fetchrules = $this->db->where(array('comp_id' => $this->session->companey_id, 'type' => 5))->order_by("id", "ASC")->get('leadrules')->result();
 		foreach ($fetchrules as $key => $value) {
 			$data = json_decode($value->rule_json);
 			$stageId = $data->rules[0]->value;
 			$substageId = $data->rules[1]->value;
 			$rule_action = json_decode($value->rule_action);
+			$esc_hr = $rule_action->esc_hr;
+			$assign_to = $rule_action->assign_to;
+			$leadtitle = $value->title;
+			$lid = $value->id;
 			$fetchTicket = $this->db->where(array('company' => $this->session->companey_id, 'ticket_stage' => $stageId))->get('tbl_ticket')->result();
 			foreach ($fetchTicket as $key => $value2) {
 				if ($value2->ticket_substage != NULL) {
 					$subsource = $this->db->where(array('comp_id' => $this->session->companey_id, 'id' => $value2->ticket_substage))->get('lead_description')->row();
 					if ($subsource->id != $substageId) {
-						// echo $value2->id;
-						$this->autoticketAssign2($value2->id);
+						$coml_date = $value2->coml_date;
+						$currentDate = date('Y-m-d H:i:s');
+						$currentD = date('Y-m-d H:i');
+						$time1 = strtotime($coml_date);
+						$time2 = strtotime($currentDate);
+						$hourTime = round(($time2 - $time1) / 60, 1);
+						$tid = $value2->id;
+						$nextAssignTimeF=$value2->nextAssignTime;
+						if ($hourTime >= $esc_hr) {
+							// user check
+							// check office time
+							$inTime='10:00';
+							$outTime='18:00';
+							$currentTime = date('H:i');
+							$todayIntime=date('Y-m-d '.$inTime);
+							$nextAssignment = date('Y-m-d H:i',strtotime($todayIntime . "+1 days"));
+							if ($nextAssignTimeF <= $currentD OR $nextAssignTimeF!=NULL) {
+								if ($currentTime >= $outTime ) {
+									//if out is grater then check the holiday exist or not.
+									//FETCH STATE AND CITY  from user table
+									$userData=$this->db->get('tbl_admin')->row();
+									$state_id=$userData->state_id;
+									$city_id =$userData->city_id;
+									if($state_id!=0 OR $city_id!=0){
+										$gettholiday=$this->db->where(array('state'=>$state_id,'city'=>$city_id))
+															  ->where('t_deadline >=',$nextAssignment)
+															  ->where('t_deadline <=',$nextAssignment)
+															  ->get('holidays');
+										if ($gettholiday->num_rows()==1) {
+												$getHoliday=$gettholiday->row();
+												$dateFrom=$getHoliday->datefrom;
+												$dateTo=$getHoliday->dateto;
+												$days=$dateTo-$dateFrom;
+												if($days==0){ $days=1; }
+										        echo'Added next assignmnet time ';
+
+												$nextAssignment = date('Y-m-d H:i',strtotime($todayIntime . "+".$days." days"));
+												$this->Ticket_Model->insertNextAssignTime($assign_to,$nextAssignment,$tid);
+										}else{
+										//change next assign time and exit
+										echo'Added next assignmnet time ';
+										$this->Ticket_Model->insertNextAssignTime($assign_to,$nextAssignment,$tid);
+										}
+									}else{
+										$todayIntime=date('Y-m-d '.$inTime);
+										$nextAssignment = date('Y-m-d H:i',strtotime($todayIntime . "+1 days"));
+										echo'Add next assignmnet time ';
+										$this->Ticket_Model->insertNextAssignTime($assign_to,$nextAssignment,$tid);
+									}
+								 	}else{
+										echo'Assign ticket to user';
+										$this->Ticket_Model->insertData($assign_to, $tid, $lid);
+									}
+									}
+							}
+						}
 					}
 				}
 			}
 			//subsatge
 		}
-	}
+	
 }
