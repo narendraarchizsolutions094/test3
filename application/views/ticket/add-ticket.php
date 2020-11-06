@@ -351,7 +351,8 @@ function autoFill(find_by,key)
 
 if(!empty($_GET['phone']))
 {
-	echo'autoFill("phone","'.$_GET['phone'].'")';
+	echo'autoFill("phone","'.$_GET['phone'].'"); 
+	';
 }	
 
 if($this->session->companey_id==65)
