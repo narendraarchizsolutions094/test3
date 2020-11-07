@@ -87,7 +87,6 @@ class Ticket extends CI_Controller
 
 	public function index()
 	{
-
 		$this->load->model('Datasource_model');
 		$this->load->model('dash_model');
 		$this->load->model('enquiry_model');
@@ -111,6 +110,7 @@ class Ticket extends CI_Controller
 			$data['stage'] =  $this->Leads_Model->find_estage($this->session->process[0],4);
 		$data['sub_stage'] = $this->Leads_Model->find_description();
 
+		$data['ticket_status'] = $this->Ticket_Model->ticket_status()->result();
 		
 		
 		//print_r($data["tickets"]);die;
@@ -129,17 +129,22 @@ class Ticket extends CI_Controller
 	}
 	public function autofill()
 	{
-		if ($post = $this->input->post()) {
+		if($post = $this->input->post())
+		{
 			$this->load->model('Enquiry_model');
-			$result = $this->Enquiry_model->getEnquiry(array($post['find_by'] => $post['key']));
-			//echo $result->num_rows();
-			if ($result->num_rows()) {
-				$enq = $result->row();
 
-				//print_r($enq); exit();
-				$res = $this->Ticket_Model->filterticket(array('tck.client' => $enq->enquiry_id));
-				$html = "";
-				if ($res) {
+
+			$res = $this->Ticket_Model->filterticket(array('tck.'.$post['find_by'] => $post['key']));
+
+			$html = "";
+
+			if($res)
+			{
+
+				$enq = $this->Enquiry_model->getEnquiry(array('enquiry_id'=>$res[0]->client))->row();
+				
+				if($enq)
+				{
 					$html .= '<table class="table table-bordered">
 					<tr>
 					' . ($this->session->companey_id == 65 ? '<th>Tracking No</th>' : '') . '
@@ -160,23 +165,32 @@ class Ticket extends CI_Controller
 						</tr>';
 					}
 					$html .= '</table>';
-				} else {
-					$html = '0';
-				}
 
-				$data = array(
+					$data = array(
 					'status' => '1',
 					'problem_for' => $enq->enquiry_id,
-					'name' => $enq->name . ' ' . $enq->lastname,
-					'email' => $enq->email,
-					'phone' => $enq->phone,
+					'name' => $res[0]->name,
+					'email' => $res[0]->email,
+					'phone' => $res[0]->phone,
 					'html' => $html,
-				);
+					);
 
-				echo json_encode($data);
-			} else {
+					echo json_encode($data);
+
+				}
+				else
+				{
+					echo json_encode(array('status' => '0', 'html' => '0'));
+				}
+			} 
+			else
+			{
 				echo json_encode(array('status' => '0', 'html' => '0'));
 			}
+		}
+		else
+		{
+			echo json_encode(array('status' => '0', 'html' => '0'));
 		}
 	}
 	public function ticket_load_data()
@@ -235,6 +249,11 @@ class Ticket extends CI_Controller
 			if ($showall or in_array(6, $acolarr)) {
 				$sub[] = $point->assign_to_name ?? "NA";
 			}
+
+			if ($showall or in_array(17, $acolarr)) {
+				$sub[] = $point->assigned_by_name ?? "NA";
+			}
+
 			if ($showall or in_array(7, $acolarr)) {
 				$sub[] = $point->created_by_name ?? "NA";
 			}
@@ -263,6 +282,10 @@ class Ticket extends CI_Controller
 
 			if ($this->session->companey_id == 65 && ($showall or in_array(15, $acolarr))) {
 				$sub[] = $point->tracking_no == '' ? 'NA' : $point->tracking_no;
+			}
+
+			if ($showall or in_array(16, $acolarr)) {
+				$sub[] = $point->status_name == '' ? 'NA' : $point->status_name;
 			}
 
 			$data[] = $sub;
@@ -398,6 +421,7 @@ class Ticket extends CI_Controller
 
 		$data = array();
 		$data["ticket"] = $this->Ticket_Model->get($tckt);
+		//print_r($data['ticket']); exit();
 		if (empty($data['ticket'])) {
 			show_404();
 		}
@@ -406,7 +430,7 @@ class Ticket extends CI_Controller
 			'ticket_no' => $data['ticket']->ticketno,
 			'tck.client' => $data['ticket']->client,
 			'tck.tracking_no' => $data['ticket']->tracking_no,
-			'enq.phone' => $data['ticket']->phone,
+			'tck.phone' => $data['ticket']->phone,
 		);
 		$data['related_tickets'] = $this->Ticket_Model->all_related_tickets($match);
 		//print_r($data['related_tickets']); exit();
@@ -417,6 +441,8 @@ class Ticket extends CI_Controller
 
 		$data["problem_for"] = $this->Ticket_Model->getclient($data['ticket']->client);
 		//print_r($data['problem_for']); exit();
+
+		$data['ticket_status'] = $this->Ticket_Model->ticket_status()->result();
 
 		$data["product"] = $this->Ticket_Model->getproduct();
 		//print_r($data['product']); exit();
@@ -450,7 +476,16 @@ class Ticket extends CI_Controller
 		$this->load->view('layout/main_wrapper', $data);
 	}
 
-
+	public function ticket_status($rule_ticket_status=0){
+		$ticket_status = $this->Ticket_Model->ticket_status()->result();
+		if(!empty($ticket_status)){
+			foreach($ticket_status as $status)
+			{ ?>
+				<option value="<?=$status->id?>" <?=($status->id==$rule_ticket_status)?'selected':''?>><?php echo $status->status_name; ?></option>
+			<?php
+			}
+		}
+	}
 	public function get_enquery_code()
 	{
 
@@ -488,7 +523,7 @@ class Ticket extends CI_Controller
 		$stage_desc	=	$this->input->post('lead_description');
 		$stage_remark	=	$this->input->post('conversation');
 		$client	=	$this->input->post('client');
-
+		
 		$stage_date = date("d-m-Y", strtotime($this->input->post('c_date')));
 		$stage_time = date("H:i:s", strtotime($this->input->post('c_time')));
 
@@ -513,7 +548,8 @@ class Ticket extends CI_Controller
 	public function assign_tickets()
 	{
 
-		if (!empty($_POST)) {
+		if (!empty($_POST))
+		{
 			$move_enquiry = $this->input->post('tickets');
 			//print_r($move_enquiry); exit();
 			// echo json_encode($move_enquiry);
@@ -521,8 +557,10 @@ class Ticket extends CI_Controller
 			$notification_data = array();
 			$assign_data = array();
 			if (!empty($move_enquiry)) {
-				foreach ($move_enquiry as $key) {
+				foreach ($move_enquiry as $key)
+				{
 					$this->db->set('assign_to', $assign_employee);
+					$this->db->set('assigned_by', $this->session->user_id);
 					$this->db->where('id', $key);
 					$this->db->update('tbl_ticket');
 				}
@@ -691,31 +729,11 @@ class Ticket extends CI_Controller
 	public function getmail()
 	{
 
-
-		//		'smtp_host' => 'ssl://smtp.googlemail.com',
-		//					'smtp_port' => 465,
-		//					'smtp_user' => 'admin@digitalanthub.com',
-		//					'smtp_pass' => 'Digital@123',
-
-		/* connect to gmail */
-
-		//	pop.gmail.com
-
-		//Requires SSL: Yes
-
-		//Port: 995
-
-
 		$hostname =  '{imappro.zoho.com:993/imap/ssl}INBOX';
 		$username = 'shahnawazbx@gmail.com';
 		$password = 'BuX@76543210';
 		$username = 'shahnawaz@archizsolutions.com';
 		$password = 'Archiz321';
-
-		//	$hostname =  '{imap.googlemail.com:993/imap/ssl}INBOX';
-		//	$username = 'admin@digitalanthub.com';
-		//	$password = 'Digital@123';
-
 		echo "Hello 1";
 
 		/* try to connect */
@@ -756,34 +774,25 @@ class Ticket extends CI_Controller
 
 			echo $output;
 		}
-
-		/* close the connection */
 		imap_close($inbox);
 	}
 
 	public function add()
 	{
-
-		//print_r($_SESSION); exit();
-
+		$this->load->model('Enquiry_model');
 		if (isset($_POST["client"])) {
-
-
 			$res = $this->Ticket_Model->save($this->session->companey_id, $this->session->user_id);
-			// echo'ruk';
-			// exit();
-			// $res = $this->Ticket_Model->save($this->session->companey_id,$this->session->user_id);
 			if ($res) {
-
+				$this->load->model('rule_model');
+				$this->rule_model->execute_rules($res, array(9));
 				$this->session->set_flashdata('message', 'Successfully added ticket');
-				//redirect(base_url("ticket/add") , "refresh");
 				redirect(base_url('ticket/view/' . $res));
 			}
 		}
 
 		$data['title'] = "Add Ticket";
 		$data['source'] = $this->Leads_Model->get_leadsource_list();
-		$data["clients"] = $this->Ticket_Model->getallclient();
+		$data["clients"] = $this->Enquiry_model->getEnquiry()->result();
 		$data["product"] = $this->Ticket_Model->getproduct();
 		$data["referred_type"] = $this->Leads_Model->get_referred_by();
 		$data['problem'] = $this->Ticket_Model->get_sub_list();
@@ -876,6 +885,34 @@ class Ticket extends CI_Controller
 		redirect(base_url('ticket/referred_by'));
 	}
 
+	public function remove_attachment($ticketno,$delete_key)
+	{
+		$res = $this->Ticket_Model->get($ticketno);
+		if(!empty($res->attachment))
+		{
+			$att = json_decode($res->attachment);
+			
+			$del = $att[$delete_key];
+
+			unset($att[$delete_key]);
+
+			$att = json_encode(array_values($att));
+			//json_encode($att); exit();
+ 			//print_r($att); exit();
+ 			if($del!='' && unlink(('uploads/ticket/'.$del)))
+ 			{
+ 				$this->db->set('attachment',$att);
+ 				$this->db->where('ticketno',$res->ticketno)->update('tbl_ticket');
+ 				redirect(site_url('ticket/view/'.$res->ticketno));
+ 			}
+ 			else
+ 			{
+ 				$this->session->set_flashdata('error','Unable to delete File');
+ 			}
+		}
+		
+
+	}
 
 	public function loadamc()
 	{
@@ -968,8 +1005,6 @@ class Ticket extends CI_Controller
 		$data['nav1'] = 'nav2';
 		#------------------------------# 
 		$leadid = $this->uri->segment(3);
-
-		//////////////////////////////////////////////////////
 		if (!empty($_POST)) {
 
 			$reason = $this->input->post('subject');
@@ -983,8 +1018,6 @@ class Ticket extends CI_Controller
 
 			redirect('ticket/add_subject');
 		}
-		//////////////////////////////////////////////////////
-
 
 		$data['subject'] = $this->Ticket_Model->get_sub_list();
 
