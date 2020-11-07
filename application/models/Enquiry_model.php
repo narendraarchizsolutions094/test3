@@ -44,13 +44,15 @@ class Enquiry_model extends CI_Model {
 
      $this->db->insert('tbl_newdeal',$data);
      return $this->db->insert_id();
-     
+      
     }
 
     public function getEnquiry($where=0)
     {
     	if($where)
-    		$this->db->where($where);
+            $this->db->where($where);
+            $comp_id    =   $this->session->companey_id;
+            $this->db->where('comp_id',$comp_id);
     	return $this->db->get('enquiry');
     }
 

@@ -135,7 +135,6 @@ class Ticket extends CI_Controller
 			//echo $result->num_rows();
 			if ($result->num_rows()) {
 				$enq = $result->row();
-
 				//print_r($enq); exit();
 				$res = $this->Ticket_Model->filterticket(array('tck.client' => $enq->enquiry_id));
 				$html = "";
