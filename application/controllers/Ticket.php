@@ -458,7 +458,7 @@ class Ticket extends CI_Controller
 		if(!empty($ticket_status)){
 			foreach($ticket_status as $status)
 			{ ?>
-				<option value="<?=$status->id?>">><?php echo $status->status_name; ?></option>
+				<option value="<?=$status->id?>"><?php echo $status->status_name; ?></option>
 			<?php
 			}
 		}
