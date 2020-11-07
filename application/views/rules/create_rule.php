@@ -161,15 +161,19 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		        		</div>		 
 		        		<div id="disposition_action" class="action-section text-center row">
 		        				<h3>Action</h3>
-		        				<div class="col-md-2"></div>
-		        			<div class="col-md-4">
+		        			<div class="col-md-1"></div>
+		        			<div class="col-md-3">
 			        			<label>Stage<i style="color: red;">*</i></label>		        		
 		        				<select class="form-control" name="stage"></select>
 
 		        			</div>
-		        			<div class="col-md-4">		        				
+		        			<div class="col-md-3">		        				
 			        			<label>Sub Stage<i style="color: red;">*</i></label>
 			        			<select class="form-control text-center" name="sub_stage"></select>
+		        			</div>
+							<div class="col-md-3">		        				
+			        			<label>Ticket Status<i style="color: red;">*</i></label>
+			        			<select class="form-control text-center" name="ticket_status"></select>
 		        			</div>
 		        		</div>		        		
 					   <button class="btn btn-success" id="btn-set"><?=!empty($id)?'Update Rule':'Set Rules'?></button>		
@@ -292,9 +296,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		  }],
 		  rules: rules_basic
 		});
-	    /****************************************************************
-	    						Triggers and Changers QueryBuilder
-	 *****************************************************************/		
+	    /*********	Triggers and Changers QueryBuilder   ********************/		
 
 		$('#btn-reset').on('click', function() {
 		  $('#builder').queryBuilder('reset');
@@ -328,7 +330,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		  	}else if (rule_type==9){
 		  		var stage		=	$("select[name='stage']").val();
 		  		var sub_stage	=	$("select[name='sub_stage']").val();
-		  	var	action_value =	JSON.stringify({'stage':stage,'sub_stage':sub_stage});
+		  		var ticket_status =	$("select[name='ticket_status']").val();
+		  		var	action_value =	JSON.stringify({'stage':stage,'sub_stage':sub_stage,'ticket_status':ticket_status});
 		  	}
 		  	console.info(action_value);
 		  	if (action_value && title) {
@@ -398,6 +401,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 				if(empty($rule_data['rule_action']))
 				{
 					echo'$("select[name=stage]").load("'.base_url().'message/all_stages/4");';
+					echo'$("select[name=ticket_status]").load("'.base_url().'ticket/ticket_status");';
 				}
 				?>
 			}
@@ -426,6 +430,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		echo'$("select[name=stage]").load("'.base_url('message/all_stages/4/').$res->stage.'");
 		';
 		echo'$("select[name=sub_stage]").load("'.base_url('message/find_substage/').$res->stage.'/'.$res->sub_stage.'");';
+		echo'$("select[name=ticket_status]").load("'.base_url().'ticket/ticket_status/'.$res->ticket_status.'");';
+
 	}
 	?>
 
