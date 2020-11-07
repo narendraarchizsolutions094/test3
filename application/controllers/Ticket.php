@@ -760,6 +760,8 @@ class Ticket extends CI_Controller
 		if (isset($_POST["client"])) {
 			$res = $this->Ticket_Model->save($this->session->companey_id, $this->session->user_id);
 			if ($res) {
+				$this->load->model('rule_model');
+				$this->rule_model->execute_rules($res, array(9));
 				$this->session->set_flashdata('message', 'Successfully added ticket');
 				redirect(base_url('ticket/view/' . $res));
 			}

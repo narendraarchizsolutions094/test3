@@ -248,9 +248,9 @@ class Ticket_Model extends CI_Model
 		return $this->db->get('tbl_ticket_status');
 	}
 
-	public function saveconv($tckno, $subjects, $msg, $client, $user_id, $stage = 0, $sub_stage = 0)
+	public function saveconv($tckno, $subjects, $msg, $client, $user_id, $stage = 0, $sub_stage = 0,$ticket_status=0)
 	{
-		$ticket_status = $this->input->post('ticket_status')??'';
+		$ticket_status = $this->input->post('ticket_status')??$ticket_status;
 		//echo $ticket_status; exit();
 		$insarr = array(
 			"tck_id" => $tckno,
