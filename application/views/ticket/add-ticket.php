@@ -259,6 +259,7 @@
   	.swal-width-custom{
   		width: 600px;
   		max-width: 100%!important;
+  		overflow: auto;
   	}
   </style>     
 <!-- jquery-ui js -->
@@ -315,17 +316,20 @@
 
 function autoFill(find_by,key)
 { //alert(find_by);
+	if(key=='') return;
 	$.ajax({
 		url:'<?= base_url('ticket/autofill')?>',
 		type:'post',
 		data:{key:key,find_by:find_by},
 		dataType:'JSON',
 		success:function(res) 
-		{
-			if(res.status)
-			{	if(!find_by=='email')
+		{	
+			if(res.status=='1')
+			{	//alert(JSON.stringify(res));
+				//alert(find_by);
+				if(find_by!='email')
 					$("input[name=email").val(res.email);
-				if(!find_by=='phone')	
+				if(find_by!='phone')	
 					$("input[name=phone]").val(res.phone);
 				
 				$("input[name=name]").val(res.name);
@@ -343,6 +347,10 @@ function autoFill(find_by,key)
 					});
 				}
 			}
+		},
+		error:function(u,v,w)
+		{
+			alert(w);
 		}
 	});
 }
@@ -394,7 +402,7 @@ if($this->session->companey_id==65)
 	}
 
 	function match_previous(tracking_no)
-	{ //alert(tracking_no);
+	{ 
 		if(tracking_no=='')
 		{
 

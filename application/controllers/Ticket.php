@@ -111,6 +111,7 @@ class Ticket extends CI_Controller
 			$data['stage'] =  $this->Leads_Model->find_estage($this->session->process[0],4);
 		$data['sub_stage'] = $this->Leads_Model->find_description();
 
+		$data['ticket_status'] = $this->Ticket_Model->ticket_status()->result();
 		
 		
 		//print_r($data["tickets"]);die;
@@ -129,16 +130,22 @@ class Ticket extends CI_Controller
 	}
 	public function autofill()
 	{
-		if ($post = $this->input->post()) {
+		if($post = $this->input->post())
+		{
 			$this->load->model('Enquiry_model');
-			$result = $this->Enquiry_model->getEnquiry(array($post['find_by'] => $post['key']));
-			//echo $result->num_rows();
-			if ($result->num_rows()) {
-				$enq = $result->row();
-				//print_r($enq); exit();
-				$res = $this->Ticket_Model->filterticket(array('tck.client' => $enq->enquiry_id));
-				$html = "";
-				if ($res) {
+
+
+			$res = $this->Ticket_Model->filterticket(array('tck.'.$post['find_by'] => $post['key']));
+
+			$html = "";
+
+			if($res)
+			{
+
+				$enq = $this->Enquiry_model->getEnquiry(array('enquiry_id'=>$res[0]->client))->row();
+				
+				if($enq)
+				{
 					$html .= '<table class="table table-bordered">
 					<tr>
 					' . ($this->session->companey_id == 65 ? '<th>Tracking No</th>' : '') . '
@@ -159,23 +166,32 @@ class Ticket extends CI_Controller
 						</tr>';
 					}
 					$html .= '</table>';
-				} else {
-					$html = '0';
-				}
 
-				$data = array(
+					$data = array(
 					'status' => '1',
 					'problem_for' => $enq->enquiry_id,
-					'name' => $enq->name . ' ' . $enq->lastname,
-					'email' => $enq->email,
-					'phone' => $enq->phone,
+					'name' => $res[0]->name,
+					'email' => $res[0]->email,
+					'phone' => $res[0]->phone,
 					'html' => $html,
-				);
+					);
 
-				echo json_encode($data);
-			} else {
+					echo json_encode($data);
+
+				}
+				else
+				{
+					echo json_encode(array('status' => '0', 'html' => '0'));
+				}
+			} 
+			else
+			{
 				echo json_encode(array('status' => '0', 'html' => '0'));
 			}
+		}
+		else
+		{
+			echo json_encode(array('status' => '0', 'html' => '0'));
 		}
 	}
 	public function ticket_load_data()
@@ -262,6 +278,10 @@ class Ticket extends CI_Controller
 
 			if ($this->session->companey_id == 65 && ($showall or in_array(15, $acolarr))) {
 				$sub[] = $point->tracking_no == '' ? 'NA' : $point->tracking_no;
+			}
+
+			if ($showall or in_array(16, $acolarr)) {
+				$sub[] = $point->status_name == '' ? 'NA' : $point->status_name;
 			}
 
 			$data[] = $sub;
@@ -398,6 +418,7 @@ class Ticket extends CI_Controller
 
 		$data = array();
 		$data["ticket"] = $this->Ticket_Model->get($tckt);
+		//print_r($data['ticket']); exit();
 		if (empty($data['ticket'])) {
 			show_404();
 		}
@@ -406,7 +427,7 @@ class Ticket extends CI_Controller
 			'ticket_no' => $data['ticket']->ticketno,
 			'tck.client' => $data['ticket']->client,
 			'tck.tracking_no' => $data['ticket']->tracking_no,
-			'enq.phone' => $data['ticket']->phone,
+			'tck.phone' => $data['ticket']->phone,
 		);
 		$data['related_tickets'] = $this->Ticket_Model->all_related_tickets($match);
 		//print_r($data['related_tickets']); exit();
@@ -756,6 +777,7 @@ class Ticket extends CI_Controller
 
 	public function add()
 	{
+		$this->load->model('Enquiry_model');
 		if (isset($_POST["client"])) {
 			$res = $this->Ticket_Model->save($this->session->companey_id, $this->session->user_id);
 			if ($res) {
@@ -768,7 +790,7 @@ class Ticket extends CI_Controller
 
 		$data['title'] = "Add Ticket";
 		$data['source'] = $this->Leads_Model->get_leadsource_list();
-		$data["clients"] = $this->Ticket_Model->getallclient();
+		$data["clients"] = $this->Enquiry_model->getEnquiry()->result();
 		$data["product"] = $this->Ticket_Model->getproduct();
 		$data["referred_type"] = $this->Leads_Model->get_referred_by();
 		$data['problem'] = $this->Ticket_Model->get_sub_list();

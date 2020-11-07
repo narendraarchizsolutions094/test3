@@ -140,15 +140,24 @@ class Ticket_Model extends CI_Model
 			"tracking_no"   => ($this->input->post("tracking_no", true)) ? $this->input->post("tracking_no", true) : "",
 			"referred_by"   => ($this->input->post("referred_by", true)) ? $this->input->post("referred_by", true) : "",
 
-
-
 		);
-		if (!empty($_FILES["attachment"]["name"]) && $_FILES["attachment"]["size"]>0) {	
-		//echo 'in';
+		if (empty($_FILES["attachment"]["name"]) && $_FILES["attachment"]["size"][0]>0) {	
 			$retdata =  $this->do_upload();
 			//print_r($retdata);			
-			if (!empty($retdata)) {
-				$arr["attachment"] = $retdata;
+			if (!empty($retdata))
+			{	
+				if(isset($_POST["ticketno"]))
+				{	
+					$old_ticket =  $this->db->where(array('id'=>$_POST['ticketno']))->get('tbl_ticket')->row();
+	
+					if(!empty($old_ticket->attachment))
+					{	//echo'sdf';
+						$new_res = json_decode($old_ticket->attachment);
+						$retdata = array_merge($new_res,$retdata);
+					}
+				}
+				//print_r($retdata); exit();
+				$arr["attachment"] = json_encode($retdata);
 			}
 		}
 
@@ -156,6 +165,7 @@ class Ticket_Model extends CI_Model
 			$arr["name"]   		= ($this->input->post("name", true)) ? $this->input->post("name", true) : "";
 			$arr["email"]  		= ($this->input->post("email", true)) ? $this->input->post("email", true) : "";
 			$arr["client"]     	= ($this->input->post("client", true)) ? $this->input->post("client", true) : "";
+			$arr["phone"]     	= ($this->input->post("phone", true)) ? $this->input->post("phone", true) : "";
 			$this->db->where("id", $this->input->post("ticketno", true));
 			$this->db->update("tbl_ticket", $arr);
 			if ($this->db->affected_rows()) {
@@ -166,6 +176,7 @@ class Ticket_Model extends CI_Model
 		} else {
 			$arr["name"]   		= ($this->input->post("name", true)) ? $this->input->post("name", true) : "";
 			$arr["email"]  		= ($this->input->post("email", true)) ? $this->input->post("email", true) : "";
+			$arr["phone"]  		= ($this->input->post("phone", true)) ? $this->input->post("phone", true) : "";
 			$arr["send_date"]  	= date("Y-m-d H:i:s");
 			$arr["client"]     	= ($this->input->post("client", true)) ? $this->input->post("client", true) : $cid;
 			$arr["company"]	 	= $companey_id;
@@ -237,7 +248,7 @@ class Ticket_Model extends CI_Model
 				$done[] = $this->upload->data()['file_name'];
 			}
 		}
-		return json_encode($done);
+		return $done;
 	}
 
 
@@ -353,7 +364,7 @@ class Ticket_Model extends CI_Model
 		$where .= "( tck.added_by IN (" . implode(',', $all_reporting_ids) . ')';
 		$where .= " OR tck.assign_to IN (" . implode(',', $all_reporting_ids) . '))';
 
-		return $this->db->select("tck.*,enq.phone,enq.gender,prd.country_name, concat(enq.name_prefix,' ' , enq.name,' ', enq.lastname) as clientname , COUNT(cnv.id) as tconv, cnv.msg, tbl_admin.s_display_name,tbl_admin.last_name")
+		return $this->db->select("tck.*,enq.gender,prd.country_name, concat(enq.name_prefix,' ' , enq.name,' ', enq.lastname) as clientname , COUNT(cnv.id) as tconv, cnv.msg, tbl_admin.s_display_name,tbl_admin.last_name")
 			->where($where)
 			->where("tck.company", $this->session->companey_id)
 			->from("tbl_ticket tck")
@@ -374,7 +385,7 @@ class Ticket_Model extends CI_Model
 		$where = '';
 		$where .= "( tck.added_by IN (" . implode(',', $all_reporting_ids) . ')';
 		$where .= " OR tck.assign_to IN (" . implode(',', $all_reporting_ids) . '))';
-		return $this->db->select("tck.*,enq.phone,enq.gender,prd.country_name, concat(enq.name_prefix,' ' , enq.name,' ', enq.lastname) as clientname , COUNT(cnv.id) as tconv, cnv.msg")
+		return $this->db->select("tck.*,enq.gender,prd.country_name, concat(enq.name_prefix,' ' , enq.name,' ', enq.lastname) as clientname , COUNT(cnv.id) as tconv, cnv.msg")
 			->where($where)
 			->where("tck.company", $companyid)
 
@@ -391,7 +402,7 @@ class Ticket_Model extends CI_Model
 	public function filterticket($where)
 	{
 
-		$this->db->select("tck.*,enq.phone,enq.gender,prd.product_name, concat(enq.name_prefix,' ' , enq.name,' ', enq.lastname) as clientname , COUNT(cnv.id) as tconv, cnv.msg,stage.lead_stage_name,sub_stage.description");
+		$this->db->select("tck.*,enq.gender,prd.product_name, concat(enq.name_prefix,' ' , enq.name,' ', enq.lastname) as clientname , COUNT(cnv.id) as tconv, cnv.msg,stage.lead_stage_name,sub_stage.description");
 		$this->db->where("tck.company", $this->session->companey_id);
 
 		if (!empty($where)) {
@@ -417,7 +428,7 @@ class Ticket_Model extends CI_Model
 	public function all_related_tickets($where)
 	{
 
-		$this->db->select("tck.*,enq.phone,enq.gender,prd.product_name, concat(enq.name_prefix,' ' , enq.name,' ', enq.lastname) as clientname , COUNT(cnv.id) as tconv, cnv.msg");
+		$this->db->select("tck.*,enq.gender,prd.product_name, concat(enq.name_prefix,' ' , enq.name,' ', enq.lastname) as clientname , COUNT(cnv.id) as tconv, cnv.msg");
 		$this->db->where("tck.company", $this->session->companey_id);
 
 		$this->db->from("tbl_ticket tck");
@@ -455,7 +466,7 @@ class Ticket_Model extends CI_Model
 	public function get($tctno)
 	{
 
-		return $this->db->select("tck.*,tck.email as tck_email,tbl_ticket_subject.subject_title,lead_source.lead_name as ticket_source,enq.phone,enq.email,enq.gender,prd.country_name, concat(enq.name,' ', enq.lastname) as clientname")
+		return $this->db->select("tck.*,tck.email as tck_email,tbl_ticket_subject.subject_title,lead_source.lead_name as ticket_source,enq.gender,prd.country_name, concat(enq.name,' ', enq.lastname) as clientname")
 			->where("tck.ticketno", $tctno)
 			->where("tck.company", $this->session->companey_id)
 			->from("tbl_ticket tck")
