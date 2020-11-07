@@ -52,7 +52,7 @@
 
 
 
-<div id="sendsms<?php if(!empty($ticket->enquiry_id)){echo $enquiry->enquiry_id;} ?>" class="modal fade" role="dialog">
+<div id="sendsms" class="modal fade" role="dialog">
    <div class="modal-dialog modal-lg">
       <!-- Modal content-->
       <?php echo form_open_multipart('message/send_sms','class="form-inner" id="whatsaap"') ?>

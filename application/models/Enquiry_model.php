@@ -44,7 +44,7 @@ class Enquiry_model extends CI_Model {
 
      $this->db->insert('tbl_newdeal',$data);
      return $this->db->insert_id();
-     
+      
     }
 
     public function getEnquiry($where=0)
