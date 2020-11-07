@@ -259,6 +259,7 @@
   	.swal-width-custom{
   		width: 600px;
   		max-width: 100%!important;
+  		overflow: auto;
   	}
   </style>     
 <!-- jquery-ui js -->
@@ -394,7 +395,7 @@ if($this->session->companey_id==65)
 	}
 
 	function match_previous(tracking_no)
-	{ //alert(tracking_no);
+	{ 
 		if(tracking_no=='')
 		{
 

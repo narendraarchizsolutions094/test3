@@ -111,6 +111,7 @@ class Ticket extends CI_Controller
 			$data['stage'] =  $this->Leads_Model->find_estage($this->session->process[0],4);
 		$data['sub_stage'] = $this->Leads_Model->find_description();
 
+		$data['ticket_status'] = $this->Ticket_Model->ticket_status()->result();
 		
 		
 		//print_r($data["tickets"]);die;
@@ -265,6 +266,10 @@ class Ticket extends CI_Controller
 				$sub[] = $point->tracking_no == '' ? 'NA' : $point->tracking_no;
 			}
 
+			if ($showall or in_array(16, $acolarr)) {
+				$sub[] = $point->status_name == '' ? 'NA' : $point->status_name;
+			}
+
 			$data[] = $sub;
 		}
 
@@ -399,6 +404,7 @@ class Ticket extends CI_Controller
 
 		$data = array();
 		$data["ticket"] = $this->Ticket_Model->get($tckt);
+		//print_r($data['ticket']); exit();
 		if (empty($data['ticket'])) {
 			show_404();
 		}

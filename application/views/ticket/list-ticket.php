@@ -61,6 +61,10 @@
                       <label>
                       <input type="checkbox" value="sub_stage" id="sub_stagecheckbox" name="filter_checkbox"> Sub Stage</label>
                     </li> 
+                    <li>
+                      <label>
+                      <input type="checkbox" value="status" id="statuscheckbox" name="filter_checkbox"> Status</label>
+                    </li> 
                     <li class="text-center">
                       <a href="javascript:void(0)" class="btn btn-sm btn-primary " id='save_advance_filters' title="Save Filters Settings"><i class="fa fa-save"></i></a>
                     </li>                   
@@ -226,6 +230,20 @@
                     </select> 
                     </div> 
                    
+                   <div class="form-group col-md-3" id="statusfilter">
+                    <label for="">Ticket Status</label>  
+                    <select name="ticket_status" class="form-control"> 
+                          <option value="">Select</option>
+                         <?php 
+                              if (!empty($ticket_status)) {
+                              foreach ($ticket_status as $sub_stage_list) {?>
+                              <option value="<?=$sub_stage_list->id?>"><?=$sub_stage_list->status_name?> </option>
+                              <?php 
+                              }
+                            }
+                        ?>     
+                    </select> 
+                    </div> 
 
                     </div>
           
@@ -284,7 +302,7 @@
                       <?php
                       }
                       ?>
-                     
+                      <?=($showall or in_array(16,$acolarr))?'<th>Status</th>':''?>
 
 										</thead>
 										<tbody>
@@ -521,6 +539,12 @@ if (!enq_filters.includes('sub_stage')) {
   $("input[value='sub_stage']").prop('checked', true);
 }
 
+if (!enq_filters.includes('status')) {
+  $('#statusfilter').hide();
+}else{
+  $("input[value='status']").prop('checked', true);
+}
+
 $('#buttongroup').hide();
  $('input[name="filter_checkbox"]').click(function(){              
         if($('#datecheckbox').is(":checked")){
@@ -594,6 +618,12 @@ $('#buttongroup').hide();
         }
         else{
           $('#sub_stagefilter').hide();
+        }
+        if($('#statuscheckbox').is(":checked")){
+          $('#statusfilter').show();
+        }
+        else{
+          $('#statusfilter').hide();
         }
     });
 })
@@ -799,6 +829,9 @@ function delete_recorde(){
           <?php
         }
         ?>
+         <div class = "col-md-4">  
+            <label class=""><input type="checkbox" class="choose-col"  value = "16"  <?php echo ($showall == true or in_array(16, $acolarr)) ? "checked" : ""; ?>>Ticket Status</label>  &nbsp;
+          </div>
            
           <!-- 
           <?php

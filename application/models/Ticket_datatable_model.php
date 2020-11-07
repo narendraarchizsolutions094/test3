@@ -75,6 +75,10 @@ class Ticket_datatable_model extends CI_Model{
             }
         }
 
+        if($showall or in_array(16,$acolarr))
+        {
+            $sel_string[] = " status.status_name ";    
+        }
 
         $this->table = 'tbl_ticket';
         // Set orderable column fields
@@ -200,10 +204,10 @@ class Ticket_datatable_model extends CI_Model{
         {
             $sel_string[] = " sub_stage.description ";
         }
-        // if($showall or in_array(14,$acolarr))
-        // {
-        //     $sel_string[] = " tck.message ";    
-        // }
+        if($showall or in_array(16,$acolarr))
+        {
+            $sel_string[] = " status.status_name ";    
+        }
 
         $select = implode(',', $sel_string);
 
@@ -250,6 +254,11 @@ class Ticket_datatable_model extends CI_Model{
         {
          $this->db->join("lead_description sub_stage","tck.ticket_substage=sub_stage.id","LEFT");
         } 
+
+        if($showall or in_array(16, $acolarr))
+        {
+         $this->db->join("tbl_ticket_status status","tck.ticket_status=status.id","LEFT");
+        } 
          
          $this->db->where("tck.company",$this->session->companey_id);
          $this->db->group_by("tck.id");
@@ -272,10 +281,12 @@ class Ticket_datatable_model extends CI_Model{
 
         $issue                 =   !empty($enquiry_filters_sess['issue'])?$enquiry_filters_sess['issue']:'';
 
-         $productcntry          =   !empty($enquiry_filters_sess['prodcntry'])?$enquiry_filters_sess['prodcntry']:'';
+        $productcntry          =   !empty($enquiry_filters_sess['prodcntry'])?$enquiry_filters_sess['prodcntry']:'';
 
-          $stage          =   !empty($enquiry_filters_sess['stage'])?$enquiry_filters_sess['stage']:'';
-           $sub_stage          =   !empty($enquiry_filters_sess['sub_stage'])?$enquiry_filters_sess['sub_stage']:'';
+        $stage          =   !empty($enquiry_filters_sess['stage'])?$enquiry_filters_sess['stage']:'';
+        $sub_stage          =   !empty($enquiry_filters_sess['sub_stage'])?$enquiry_filters_sess['sub_stage']:'';
+
+        $ticket_status          =   !empty($enquiry_filters_sess['ticket_status'])?$enquiry_filters_sess['ticket_status']:'';
 
 
         $where='';
@@ -383,6 +394,14 @@ $CHK = 0;
             $CHK =1;                             
         }
 
+        if(!empty($ticket_status)){            
+                           // $to_created = date("Y-m-d",strtotime($to_created));
+            if($CHK)
+                $where .= 'AND';
+
+            $where .= " tck.ticket_status =  '".$ticket_status."'"; 
+            $CHK =1;                             
+        }
 
         if($CHK){
             $where .= 'AND';

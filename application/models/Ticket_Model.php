@@ -140,15 +140,25 @@ class Ticket_Model extends CI_Model
 			"tracking_no"   => ($this->input->post("tracking_no", true)) ? $this->input->post("tracking_no", true) : "",
 			"referred_by"   => ($this->input->post("referred_by", true)) ? $this->input->post("referred_by", true) : "",
 
-
-
 		);
 		if (!empty($_FILES["attachment"]["name"]) && $_FILES["attachment"]["size"]>0) {	
 		//echo 'in';
 			$retdata =  $this->do_upload();
 			//print_r($retdata);			
-			if (!empty($retdata)) {
-				$arr["attachment"] = $retdata;
+			if (!empty($retdata))
+			{	
+				if(isset($_POST["ticketno"]))
+				{	
+					$old_ticket =  $this->db->where(array('id'=>$_POST['ticketno']))->get('tbl_ticket')->row();
+	
+					if(!empty($old_ticket->attachment))
+					{	//echo'sdf';
+						$new_res = json_decode($old_ticket->attachment);
+						$retdata = array_merge($new_res,$retdata);
+					}
+				}
+				//print_r($retdata); exit();
+				$arr["attachment"] = json_encode($retdata);
 			}
 		}
 
@@ -237,7 +247,7 @@ class Ticket_Model extends CI_Model
 				$done[] = $this->upload->data()['file_name'];
 			}
 		}
-		return json_encode($done);
+		return $done;
 	}
 
 
