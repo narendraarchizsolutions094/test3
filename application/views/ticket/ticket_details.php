@@ -167,17 +167,16 @@
 		</div>
 		
 		<div class="col-md-12">
-			<?php
-			if($error =$this->session->flashdata('error'))
-			{
-				echo'<div class="label label-danger">'.$error.'</div>';
-			}
-			?>
-			<br>
-
+			
 			<div class="form-group" >			
 				<label>Attachment <small> ( Only Image/PDF ) </small>:</label>
-				
+				<?php
+				//$error="This file is not availible";
+				if($error =$this->session->flashdata('error'))
+				{
+					echo'<div class="alert alert-danger">'.$error.'</div>';
+				}
+				?>
 				<?php
 				if($ticket->attachment)
 				{
@@ -199,7 +198,7 @@
 					echo'</ul><br>';
 				}
 				?>
-				<input type="file" name="attachment[]" class="attachFiles" multiple>
+				<input type="file" name="attachment[]" class="attachFiles" accept=".jpg,.jpeg,.png,.pdf" multiple>
 			</div>
 			<div class="form-group">
 				<label>Ticket Type : </label> 
