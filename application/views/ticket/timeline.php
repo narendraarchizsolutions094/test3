@@ -3,8 +3,10 @@
 	<h3 class="text-center">Activity Timeline</h3><hr>
   	<ul class="cbp_tmtimeline" style="margin-left:-30px;">
       <?php
+      
 	  if(!empty($conversion)){		
-      foreach($conversion as $cnv){ ?>
+      foreach($conversion as $cnv){
+        $ticketId=$cnv->tck_id;?>
         <li>
           <div class="cbp_tmicon cbp_tmicon-phone" style="background:#cb4335;"></div>
           <div class="cbp_tmlabel"  style="background:#95a5a6;">
@@ -72,6 +74,8 @@
          </div>
          <div class="col-md-12">
             <input type="hidden"  id="mesge_type" name="mesge_type">
+            <input type="hidden" name="ticketId" value="<?= $ticket->ticketno; ?>">
+            <input type="hidden"  id="msg_from"  name="msg_from"  value="<?= $this->router->fetch_class(); ?>">
             <input type="hidden" id="mobile" name="mobile" value="<?php if(!empty($ticket->phone)){echo $enquiry->phone;} ?>">
             <input type="hidden" id="mail" name="mail" value="<?php if(!empty($ticket->email)){echo $enquiry->email;} ?>">
             <button class="btn btn-primary" onclick="send_sms()" type="button">Send</button>            

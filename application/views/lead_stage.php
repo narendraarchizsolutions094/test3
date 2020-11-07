@@ -26,7 +26,7 @@
     </div>
     <div class="form-group col-md-6">
         <label>Process</label>
-      <select  class="form-control process" name="process[]" multiple>        
+      <select  class="form-control process" name="process[]" multiple required>        
          <?php foreach($products as $product){?>
          <option value="<?=$product->sb_id ?>"><?=$product->product_name ?></option>
         <?php } ?>
@@ -36,7 +36,7 @@
 <div class="row">
     <div class="form-group col-md-6">
         <label>Stage For</label>
-      <select  class="form-control process" name="stage_for[]" multiple>        
+      <select  class="form-control process" name="stage_for[]" multiple required>        
          <option value="1">Enquiry</option>
          <option value="2">Lead</option>
          <option value="3">Client</option>
