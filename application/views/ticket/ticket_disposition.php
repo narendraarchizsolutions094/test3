@@ -44,13 +44,13 @@
             ?>            
          </h5>
          <div class="row text-center">
-              <a class="btn btn-primary btn-sm"  data-toggle="modal" type="button" title="Send SMS" data-target="#sendsms<?php if(!empty($enquiry->enquiry_id)) {echo $enquiry->enquiry_id;} ?>" data-toggle="modal"  onclick="getTemplates('2','Send SMS')">
+              <a class="btn btn-primary btn-sm"  data-toggle="modal" type="button" title="Send SMS" data-target="#sendsms" data-toggle="modal"  onclick="getTemplates('2','Send SMS')">
                 <i class="fa fa-paper-plane-o"></i>
               </a>
-              <a class="btn btn-info btn-sm"  data-toggle="modal" type="button" title="Send Email" data-target="#sendsms<?php if(!empty($enquiry->enquiry_id)) {echo $enquiry->enquiry_id;} ?>" data-toggle="modal"  onclick="getTemplates('3','Send Email')">
+              <a class="btn btn-info btn-sm"  data-toggle="modal" type="button" title="Send Email" data-target="#sendsms" data-toggle="modal"  onclick="getTemplates('3','Send Email')">
                 <i class="fa fa-envelope"></i>
               </a>
-              <a class="btn btn-primary btn-sm"  data-toggle="modal" type="button" title="Send Whatsapp" data-target="#sendsms<?php if(!empty($enquiry->enquiry_id)) {echo $enquiry->enquiry_id;} ?>" data-toggle="modal"  onclick="getTemplates('1','Send Whatsapp')">
+              <a class="btn btn-primary btn-sm"  data-toggle="modal" type="button" title="Send Whatsapp" data-target="#sendsms" data-toggle="modal"  onclick="getTemplates('1','Send Whatsapp')">
                 <i class="fa fa-whatsapp"></i>
               </a>
          </div>
