@@ -453,7 +453,16 @@ class Ticket extends CI_Controller
 		$this->load->view('layout/main_wrapper', $data);
 	}
 
-
+	public function ticket_status(){
+		$ticket_status = $this->Ticket_Model->ticket_status()->result();
+		if(!empty($ticket_status)){
+			foreach($ticket_status as $status)
+			{ ?>
+				<option value="<?=$status->id?>" <?=($status->id==$ticket->ticket_status?'selected':'')?>><?php echo $status->status_name; ?></option>
+			<?php
+			}
+		}
+	}
 	public function get_enquery_code()
 	{
 
@@ -698,31 +707,11 @@ class Ticket extends CI_Controller
 	public function getmail()
 	{
 
-
-		//		'smtp_host' => 'ssl://smtp.googlemail.com',
-		//					'smtp_port' => 465,
-		//					'smtp_user' => 'admin@digitalanthub.com',
-		//					'smtp_pass' => 'Digital@123',
-
-		/* connect to gmail */
-
-		//	pop.gmail.com
-
-		//Requires SSL: Yes
-
-		//Port: 995
-
-
 		$hostname =  '{imappro.zoho.com:993/imap/ssl}INBOX';
 		$username = 'shahnawazbx@gmail.com';
 		$password = 'BuX@76543210';
 		$username = 'shahnawaz@archizsolutions.com';
 		$password = 'Archiz321';
-
-		//	$hostname =  '{imap.googlemail.com:993/imap/ssl}INBOX';
-		//	$username = 'admin@digitalanthub.com';
-		//	$password = 'Digital@123';
-
 		echo "Hello 1";
 
 		/* try to connect */
@@ -763,27 +752,15 @@ class Ticket extends CI_Controller
 
 			echo $output;
 		}
-
-		/* close the connection */
 		imap_close($inbox);
 	}
 
 	public function add()
 	{
-
-		//print_r($_SESSION); exit();
-
 		if (isset($_POST["client"])) {
-
-
 			$res = $this->Ticket_Model->save($this->session->companey_id, $this->session->user_id);
-			// echo'ruk';
-			// exit();
-			// $res = $this->Ticket_Model->save($this->session->companey_id,$this->session->user_id);
 			if ($res) {
-
 				$this->session->set_flashdata('message', 'Successfully added ticket');
-				//redirect(base_url("ticket/add") , "refresh");
 				redirect(base_url('ticket/view/' . $res));
 			}
 		}
@@ -1003,8 +980,6 @@ class Ticket extends CI_Controller
 		$data['nav1'] = 'nav2';
 		#------------------------------# 
 		$leadid = $this->uri->segment(3);
-
-		//////////////////////////////////////////////////////
 		if (!empty($_POST)) {
 
 			$reason = $this->input->post('subject');
@@ -1018,8 +993,6 @@ class Ticket extends CI_Controller
 
 			redirect('ticket/add_subject');
 		}
-		//////////////////////////////////////////////////////
-
 
 		$data['subject'] = $this->Ticket_Model->get_sub_list();
 
