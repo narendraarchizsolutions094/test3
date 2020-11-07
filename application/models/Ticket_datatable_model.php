@@ -39,7 +39,7 @@ class Ticket_datatable_model extends CI_Model{
         {
             $search_string[] = "prd.country_name";
         }
-         if($showall or in_array(8,$acolarr))
+        if($showall or in_array(8,$acolarr))
         {
             $search_string[] = "tck.priority";
         }
@@ -77,9 +77,13 @@ class Ticket_datatable_model extends CI_Model{
 
         if($showall or in_array(16,$acolarr))
         {
-            $sel_string[] = " status.status_name ";    
+            $search_string[] = " status.status_name ";    
         }
 
+        if($showall or in_array(17,$acolarr))
+        {
+            $search_string[] = " assign_by.s_display_name ";    
+        }
         $this->table = 'tbl_ticket';
         // Set orderable column fields
         $this->column_order = array('', 'tck.id','tck.ticketno','tck.client','tck.email','prd.country_name','tck.assign_to','tck.added_by','tck.priority','tck.coml_date','ref.name','source.lead_name','stage.lead_stage_name','sub_stage.description','tck.message','tck.tracking_no');
@@ -206,6 +210,11 @@ class Ticket_datatable_model extends CI_Model{
             $sel_string[] = " status.status_name ";    
         }
 
+        if($showall or in_array(17,$acolarr))
+        {
+            $sel_string[] = " concat(assign_by.s_display_name,' ',assign_by.last_name) as assigned_by_name";    
+        }
+                
         $select = implode(',', $sel_string);
 
         $this->db->select($select);
@@ -256,7 +265,11 @@ class Ticket_datatable_model extends CI_Model{
         {
          $this->db->join("tbl_ticket_status status","tck.ticket_status=status.id","LEFT");
         } 
-         
+
+        if($showall or in_array(17, $acolarr))
+        {
+         $this->db->join("tbl_admin assign_by","tck.assigned_by=assign_by.pk_i_admin_id","LEFT");
+        } 
          $this->db->where("tck.company",$this->session->companey_id);
          $this->db->group_by("tck.id");
 
@@ -284,6 +297,8 @@ class Ticket_datatable_model extends CI_Model{
         $sub_stage          =   !empty($enquiry_filters_sess['sub_stage'])?$enquiry_filters_sess['sub_stage']:'';
 
         $ticket_status          =   !empty($enquiry_filters_sess['ticket_status'])?$enquiry_filters_sess['ticket_status']:'';
+
+         $assign_by          =   !empty($enquiry_filters_sess['assign_by'])?$enquiry_filters_sess['assign_by']:'';
 
 
         $where='';
@@ -332,6 +347,15 @@ $CHK = 0;
                 $where .= 'AND';
 
             $where .= " tck.assign_to =  '".$assign."'"; 
+            $CHK =1;                             
+        }
+
+        if(!empty($assign_by)){            
+                   // $to_created = date("Y-m-d",strtotime($to_created));
+            if($CHK)
+                $where .= 'AND';
+
+            $where .= " tck.assigned_by =  '".$assign_by."'"; 
             $CHK =1;                             
         }
 

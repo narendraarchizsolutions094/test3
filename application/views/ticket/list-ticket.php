@@ -49,6 +49,11 @@
                       <input type="checkbox" value="assign_to" id="assigncheckbox" name="filter_checkbox"> Assign To</label>
                     </li>
                    
+                   <li>
+                      <label>
+                      <input type="checkbox" value="assign_by" id="assign_bycheckbox" name="filter_checkbox"> Assign By</label>
+                    </li>
+
                     <li>
                       <label>
                       <input type="checkbox" value="product" id="prodcheckbox" name="filter_checkbox"> Product</label>
@@ -184,6 +189,18 @@
                               <?php }}?>    
                          </select>                          
                         </div>
+
+                         <div class="form-group col-md-3" id="assign_byfilter">
+                          <label for="">Assign By</label>  
+                         <select name="assign_by" class="form-control"> 
+                          <option value="">Select</option>
+                         <?php 
+                              if (!empty($created_bylist)) {
+                              foreach ($created_bylist as $createdbylist) {?>
+                              <option value="<?=$createdbylist->pk_i_admin_id;?>" <?php if(!empty(set_value('assign'))){if (in_array($product->sb_id,set_value('assign'))) {echo 'selected';}}?>><?=$createdbylist->s_display_name.' '.$createdbylist->last_name;?> -  <?=$createdbylist->s_user_email?$createdbylist->s_user_email:$createdbylist->s_phoneno;?></option>
+                              <?php }}?>    
+                         </select>                          
+                        </div>
                         
                     </div>
 
@@ -285,6 +302,7 @@
 											<?=($showall or in_array(4,$acolarr))?'<th>Phone</th>':''?>
 											<?=($showall or in_array(5,$acolarr))?'<th>Product</th>':''?>
 											<?=($showall or in_array(6,$acolarr))?'<th>Assign To</th>':''?>
+                      <?=($showall or in_array(17,$acolarr))?'<th>Assign By</th>':''?>
                       <?=($showall or in_array(7,$acolarr))?'<th>Created By</th>':''?>
                       <?=($showall or in_array(8,$acolarr))?'<th>Priority</th>':''?>
                       <?=($showall or in_array(9,$acolarr))?'<th>Date</th>':''?>
@@ -527,6 +545,12 @@ if (!enq_filters.includes('assign_to')) {
   $("input[value='assign_to']").prop('checked', true);
 }
 
+if (!enq_filters.includes('assign_by')) {
+  $('#assign_byfilter').hide();
+}else{
+  $("input[value='assign_by']").prop('checked', true);
+}
+
 if (!enq_filters.includes('stage')) {
   $('#stagefilter').hide();
 }else{
@@ -588,6 +612,13 @@ $('#buttongroup').hide();
         else{
           $('#assignfilter').hide();
         }
+        if($('#assign_bycheckbox').is(":checked")){
+          $('#assign_byfilter').show();
+        }
+        else{
+          $('#assign_byfilter').hide();
+        }
+
         if($('#issuecheckbox').is(":checked")){
           $('#issuefilter').show();
         }
@@ -782,6 +813,9 @@ function delete_recorde(){
               </div>
           <div class = "col-md-4">  
           <label class=""><input type="checkbox" class="choose-col"  value = "6"  <?php echo ($showall == true or in_array(6, $acolarr)) ? "checked" : ""; ?>>  Assign To </label>  &nbsp;
+          </div>
+          <div class = "col-md-4">  
+          <label class=""><input type="checkbox" class="choose-col"  value = "17"  <?php echo ($showall == true or in_array(17, $acolarr)) ? "checked" : ""; ?>>  Assign By </label>  &nbsp;
           </div>
           <div class = "col-md-4">  
           <label class=""><input type="checkbox" class="choose-col"  value = "7"  <?php echo ($showall == true or in_array(7, $acolarr)) ? "checked" : ""; ?>> Created By</label>  &nbsp;

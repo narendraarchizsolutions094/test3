@@ -87,7 +87,6 @@ class Ticket extends CI_Controller
 
 	public function index()
 	{
-
 		$this->load->model('Datasource_model');
 		$this->load->model('dash_model');
 		$this->load->model('enquiry_model');
@@ -250,6 +249,11 @@ class Ticket extends CI_Controller
 			if ($showall or in_array(6, $acolarr)) {
 				$sub[] = $point->assign_to_name ?? "NA";
 			}
+
+			if ($showall or in_array(17, $acolarr)) {
+				$sub[] = $point->assigned_by_name ?? "NA";
+			}
+
 			if ($showall or in_array(7, $acolarr)) {
 				$sub[] = $point->created_by_name ?? "NA";
 			}
@@ -549,7 +553,8 @@ class Ticket extends CI_Controller
 	public function assign_tickets()
 	{
 
-		if (!empty($_POST)) {
+		if (!empty($_POST))
+		{
 			$move_enquiry = $this->input->post('tickets');
 			//print_r($move_enquiry); exit();
 			// echo json_encode($move_enquiry);
@@ -557,8 +562,10 @@ class Ticket extends CI_Controller
 			$notification_data = array();
 			$assign_data = array();
 			if (!empty($move_enquiry)) {
-				foreach ($move_enquiry as $key) {
+				foreach ($move_enquiry as $key)
+				{
 					$this->db->set('assign_to', $assign_employee);
+					$this->db->set('assigned_by', $this->session->user_id);
 					$this->db->where('id', $key);
 					$this->db->update('tbl_ticket');
 				}
