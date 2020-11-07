@@ -453,12 +453,12 @@ class Ticket extends CI_Controller
 		$this->load->view('layout/main_wrapper', $data);
 	}
 
-	public function ticket_status(){
+	public function ticket_status($ticket_status=0){
 		$ticket_status = $this->Ticket_Model->ticket_status()->result();
 		if(!empty($ticket_status)){
 			foreach($ticket_status as $status)
 			{ ?>
-				<option value="<?=$status->id?>"><?php echo $status->status_name; ?></option>
+				<option value="<?=$status->id?>" <?=($status->id==$ticket_status?'selected':'')?>><?php echo $status->status_name; ?></option>
 			<?php
 			}
 		}

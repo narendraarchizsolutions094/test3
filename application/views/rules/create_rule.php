@@ -430,6 +430,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		echo'$("select[name=stage]").load("'.base_url('message/all_stages/4/').$res->stage.'");
 		';
 		echo'$("select[name=sub_stage]").load("'.base_url('message/find_substage/').$res->stage.'/'.$res->sub_stage.'");';
+		echo'$("select[name=ticket_status]").load("'.base_url().'ticket/ticket_status/");'.$res->ticket_status;
+
 	}
 	?>
 
