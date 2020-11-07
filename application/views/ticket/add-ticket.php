@@ -380,7 +380,7 @@ if($this->session->companey_id==65)
 					else
 					{
 						Swal.fire({
-		                    title: 'No Record Found ',
+		                    title: 'GC. No. Not Found!',
 		                    cancelButtonText: 'Ok!'
                   			});
 					}

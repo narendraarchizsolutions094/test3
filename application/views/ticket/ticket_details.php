@@ -183,15 +183,17 @@
 					$attachment  = json_decode($ticket->attachment);
 					echo'<ul class="list-group">';
 					$i=0;
-					foreach ($attachment as $at)
-					{
-						echo '<li class="list-group-item">'.$at.'
-						<div class="btn-group pull-right">
-						<a href="'.base_url('uploads/ticket/'.$at).'" target="_blank"><span class="btn btn-primary  btn-xs">View</span></a>
-						<a href="'.base_url('ticket/remove_attachment/'.$ticket->ticketno.'/'.$i).'"><span class="btn btn-danger  btn-xs">Delete</span></a>
-						</div>
-						</li>';
-						$i++;
+					if(!empty($attachment)){
+						foreach ($attachment as $at)
+						{
+							echo '<li class="list-group-item">'.$at.'
+							<div class="btn-group pull-right">
+							<a href="'.base_url('uploads/ticket/'.$at).'" target="_blank"><span class="btn btn-primary  btn-xs">View</span></a>
+							<a href="'.base_url('ticket/remove_attachment/'.$ticket->ticketno.'/'.$i).'"><span class="btn btn-danger  btn-xs">Delete</span></a>
+							</div>
+							</li>';
+							$i++;
+						}
 					}
 					echo'</ul><br>';
 				}
