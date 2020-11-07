@@ -192,7 +192,7 @@
 				<div class="col-md-6">
 					<div class="form-group">
 						<label>Attachment</label>
-						<input type="file" name="attachment" class="form-control">
+						<input type="file" name="attachment[]" class="form-control" accept=".jpg,.jpeg,.png,.pdf" multiple>
 					</div>
 				</div>
 				<div class="col-md-12">

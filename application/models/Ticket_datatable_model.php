@@ -211,7 +211,7 @@ class Ticket_datatable_model extends CI_Model{
         $this->db->from($this->table." tck");
 
         //->join("tbl_ticket_conv cnv", "cnv.tck_id = tck.id", "LEFT")
-        if($showall or count(array_intersect(array(2,4),$acolarr))==2)
+        if($showall or count(array_intersect(array(2,4),$acolarr))>0)
         {
             $this->db->join("enquiry enq", "enq.enquiry_id = tck.client", "LEFT");
         }
