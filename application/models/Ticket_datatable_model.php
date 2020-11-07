@@ -33,7 +33,7 @@ class Ticket_datatable_model extends CI_Model{
         }
         if($showall or in_array(4,$acolarr))
         {
-            $search_string[] = "enq.phone";
+            $search_string[] = "tck.phone";
         }
         if($showall or in_array(5,$acolarr))
         {
@@ -82,7 +82,7 @@ class Ticket_datatable_model extends CI_Model{
 
         $this->table = 'tbl_ticket';
         // Set orderable column fields
-        $this->column_order = array('', 'tck.id','tck.ticketno','tck.client','tck.email','enq.phone','prd.country_name','tck.assign_to','tck.added_by','tck.priority','tck.coml_date','ref.name','source.lead_name','stage.lead_stage_name','sub_stage.description','tck.message','tck.tracking_no');
+        $this->column_order = array('', 'tck.id','tck.ticketno','tck.client','tck.email','prd.country_name','tck.assign_to','tck.added_by','tck.priority','tck.coml_date','ref.name','source.lead_name','stage.lead_stage_name','sub_stage.description','tck.message','tck.tracking_no');
         // Set searchable column fields
        
 
@@ -164,10 +164,7 @@ class Ticket_datatable_model extends CI_Model{
         // {
         //     $sel_string[] = " tck.email ";
         // }
-        if($showall or in_array(4,$acolarr))
-        {
-            $sel_string[] = " enq.phone ";
-        }
+
         if($showall or in_array(5,$acolarr))
         {
             $sel_string[] = " prd.country_name ";

@@ -51,6 +51,7 @@ class Enquiry_model extends CI_Model {
     {
     	if($where)
     		$this->db->where($where);
+    	$this->db->where('comp_id',$this->session->companey_id);
     	return $this->db->get('enquiry');
     }
 
