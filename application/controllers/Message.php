@@ -236,7 +236,13 @@ class Message extends CI_Controller {
             }else{
               	$this->Message_models->sendwhatsapp($phone,$message_name); 
               	if($template_row['media']){	      	   
-              		$media_url = $template_row['media'];     	
+					  $media_url = $template_row['media'];    
+					  if ($msg_from=='ticket') {
+						//timeline add
+						$saveMsgTimelineId=$this->message_models->AddMsgtimline($msgType,$ticketId,$user_id,$templates_id,$template_name,'Whatsapp Send');
+						//save logs
+						$this->message_models->saveMsgLogs($msgType,$ticketId,$user_id,$templates_id,$message_name,$phone,base_url().$media_url,$saveMsgTimelineId,0);
+				  } 	
       	        	$this->Message_models->sendwhatsapp($phone,base_url().$media_url);      	        		      	
 				  }
 				  //only for ticket
@@ -342,8 +348,10 @@ class Message extends CI_Controller {
 	        $message = $this->input->post('message_name');
 	        $move_enquiry = $this->input->post('enquiry_id');
 	           
-			if(!empty($this->input->post('mobile'))){	              	
+			if(!empty($this->input->post('mobile'))){
+				// echo'test';	              	
 				$phone= '91'.$this->input->post('mobile');
+				
 				$this->Message_models->smssend($phone,$message);
 				echo "Message sent successfully";
 				  //only for ticket

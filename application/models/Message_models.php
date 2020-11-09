@@ -270,4 +270,13 @@ class Message_models extends CI_Model
     $insert = $this->db->insert('msg_logs', $data);
     return $insert;
   }
+  public function tempName($temp_id)
+  {
+    $rows	=	$this->db->select('*')
+    ->from('api_templates')
+    ->where('temp_id',$temp_id)                        
+    ->get()
+    ->row();
+    return $rows->template_name;
+  }
 }
