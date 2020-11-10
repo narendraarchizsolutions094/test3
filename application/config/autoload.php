@@ -180,7 +180,7 @@ $autoload['drivers'] = array();
 
 */
 
-$autoload['helper'] =  array('url', 'file', 'html', 'text', 'form', 'lang', 'security','common_helper','cookie');
+$autoload['helper'] =  array('url', 'file', 'html', 'text', 'form', 'lang', 'security','common_helper','cookie','string');
 
 
 

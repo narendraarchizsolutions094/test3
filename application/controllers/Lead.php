@@ -432,16 +432,23 @@ class Lead extends CI_Controller
     {
         $data['nav1'] = 'nav2';
         if (!empty($_POST)) {
+           
 
             $lead_stage_name = $this->input->post('stage_name');
             $process = $this->input->post('process');
             $stage_for = $this->input->post('stage_for');
-
+            
             if (!empty($process)) {
                 $process    =   implode(',', $process);
+            }else{
+                $this->session->set_flashdata('SUCCESSMSG', 'Process is requried');
+                redirect('lead/stage');
             }
             if (!empty($stage_for)) {
                 $stage_for    =   implode(',', $stage_for);
+            }else{
+            $this->session->set_flashdata('exception', display('please_try_again'));
+                redirect('lead/stage');
             }
 
             $data = array(

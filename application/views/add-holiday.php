@@ -134,7 +134,7 @@ function find_city()
     
     $.ajax({
     type: 'POST',
-    url: 'https://localhost/crm/location/select_city_by_state',
+    url: '<?= base_url('location/select_city_by_state');?>',
     data: {state_id:state},
     
     success:function(data){

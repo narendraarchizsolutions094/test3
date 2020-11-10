@@ -30,5 +30,31 @@ class Reminder extends CI_Controller {
     	echo "</pre>"; 		
  		$this->load->view('reminder_test');
 
- 	}
+	 }
+	 public function birthday_reminder()
+	 {
+		$todaydate=date('m-d');
+		$data=$this->db->where(array('companey_id'=>$this->session->companey_id))->where_not_in('date_of_birth','')->where_not_in('joining_date','')->get('tbl_admin')->result();
+		foreach ($data as $key => $value) {
+			// where('date_of_birth',$date)->or_where('date_of_birth',$date)
+			$bdate=date('m-d',strtotime($value->date_of_birth));
+			$jdate=date('m-d',strtotime($value->joining_date));
+			$task_date=date('m-d-Y');
+			$task_time='01:30:00';
+		if($bdate==$todaydate){
+			$rid= random_string('alnum', 16);
+			$task="Do not forget today's your colleague ".ucfirst($value->s_display_name)."'s Birthday";
+			$data=['create_by'=>$value->pk_i_admin_id,'task_remark'=>$task,'task_date'=>$task_date,'task_time'=>$task_time,'notification_id'=>$rid,'comp_id'=>$this->session->companey_id,'task_type'=>50];
+			print_r($data);
+			$insert=$this->db->insert('query_response',$data);
+		}
+		if($jdate==$todaydate){
+				$rid= random_string('alnum', 16);
+				$task=ucfirst($value->s_display_name)."'s work anniversary";
+			    $data=['create_by'=>$value->pk_i_admin_id,'task_remark'=>$task,'task_date'=>$task_date,'task_time'=>$task_time,'notification_id'=>$rid,'comp_id'=>$this->session->companey_id,'task_type'=>50];
+				$insert=$this->db->insert('query_response',$data);
+			}
+		}
+
+	 }
 }

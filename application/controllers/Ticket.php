@@ -417,7 +417,6 @@ class Ticket extends CI_Controller
 	}
 	function view($tckt = "")
 	{
-
 		$this->load->model('enquiry_model');
 
 		$data = array();
@@ -531,10 +530,6 @@ class Ticket extends CI_Controller
 		$user_id = $this->session->user_id;
 		$this->session->set_flashdata('SUCCESSMSG', 'Update Successfully');
 		$this->Ticket_Model->saveconv($ticketno, 'Stage Updated', $stage_remark, $client, $user_id, $lead_stage, $stage_desc);
-
-
-
-
 		$contact_person = '';
 		$mobileno = '';
 		$email = '';
@@ -1215,7 +1210,7 @@ class Ticket extends CI_Controller
 												$dateFrom=$getHoliday->datefrom;
 												$dateTo=$getHoliday->dateto;
 												$days=$dateTo-$dateFrom;
-												if($days==0){ $days=1; }
+												if($days==0){ $days=2; }
 										        echo'Added next assignmnet time ';
 
 												$nextAssignment = date('Y-m-d H:i',strtotime($todayIntime . "+".$days." days"));

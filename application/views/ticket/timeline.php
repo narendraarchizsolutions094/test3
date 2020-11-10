@@ -3,11 +3,14 @@
 	<h3 class="text-center">Activity Timeline</h3><hr>
   	<ul class="cbp_tmtimeline" style="margin-left:-30px;">
       <?php
+      
 	  if(!empty($conversion)){		
-      foreach($conversion as $cnv){ ?>
+      foreach($conversion as $cnv){
+        $ticketId=$cnv->tck_id;?>
         <li>
           <div class="cbp_tmicon cbp_tmicon-phone" style="background:#cb4335;"></div>
-          <div class="cbp_tmlabel"  style="background:#95a5a6;">
+         
+          <div class="cbp_tmlabel"  style="background:#95a5a6;" onclick="getTimelinestatus('<?= $cnv->id ?>')" data-toggle="modal"  data-target="#timelineshow" data-toggle="modal">
             <span style="font-weight:900;font-size:15px;"><?php echo $cnv->subj; ?></span>
             <?php
             if (!empty($cnv->lead_stage_name)) { ?>
@@ -76,12 +79,46 @@
          </div>
          <div class="col-md-12">
             <input type="hidden"  id="mesge_type" name="mesge_type">
+            <input type="hidden" name="ticketId" value="<?= $ticket->ticketno; ?>">
+            <input type="hidden"  id="msg_from"  name="msg_from"  value="<?= $this->router->fetch_class(); ?>">
             <input type="hidden" id="mobile" name="mobile" value="<?php if(!empty($ticket->phone)){echo $enquiry->phone;} ?>">
             <input type="hidden" id="mail" name="mail" value="<?php if(!empty($ticket->email)){echo $enquiry->email;} ?>">
             <button class="btn btn-primary" onclick="send_sms()" type="button">Send</button>            
          </div>
          <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+         </div>
+      </div>
+      </form>
+   </div>
+</div>
+<div id="timelineshow" class="modal fade" role="dialog">
+   <div class="modal-dialog modal-lg">
+      <!-- Modal content-->
+     
+      <div class="modal-content card">
+         <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title" id="timlineTitle"></h4>
+         </div>
+         <div id="timeline-tempname"></div>
+         <div id="timelinesdata">
+           
+         </div>
+         
+         <div class="modal-footer">
+           <div class="row">
+             <div class="col-md-4">
+         <h4  id="timeline-cratedate"></h4>
+             </div>
+             <div class="col-md-4">
+         <h4  id="timeline-crateby"></h4>
+             </div>
+             <div class="col-md-4">
+             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+             </div>
+            
+           </div>
          </div>
       </div>
       </form>
@@ -167,6 +204,28 @@
         });
        }
 
-            
+       function getTimelinestatus(timelineId){     
+        $('#timlineTitle').empty();      
+        $('#timelinesdata').empty(); 
+        $('#timeline-cratedate').empty(); 
+        $('#timeline-crateby').empty(); 
+        $('#timeline-tembname').empty(); 
+             
+     $.ajax({               
+         url : '<?php echo base_url('enquiry/timelinePopup') ?>',
+         type: 'POST',
+         data: {timelineId:timelineId},
+         success:function(data){
+          var obj = JSON.parse(data);
+          
+             $("#timlineTitle").append(obj.subject);
+             $("#timelinesdata").append(obj.msg);
+             $("#timeline-cratedate").append(obj.created_at);
+             $("#timeline-crateby").append(obj.created_by);
+             $("#timeline-tembname").append(obj.tempname);
+
+         }               
+     });        
+    }     
 </script>
 

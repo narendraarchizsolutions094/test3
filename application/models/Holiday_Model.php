@@ -11,7 +11,6 @@ class Holiday_Model extends CI_model
 	public function add_festival($data)
 	{
 		$this->db->insert('festivals',$data);
-		$this->session->set_flashdata('SUCCESSMSG','Festival Added.');
 	}
 
 	public function getFestival($where=0)
@@ -20,7 +19,11 @@ class Holiday_Model extends CI_model
 			$this->db->where($where);
 		return $this->db->get('festivals');
 	}
-
+  public function getFestivalNotID($data,$fest_id)
+  {
+	$get=$this->db->where_not_in('id',$fest_id)->where($data)->get('festivals');
+	return $get;
+  }
 	public function add_holiday($data)
 	{
 		$this->db->insert('holidays',$data);
