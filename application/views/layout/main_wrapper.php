@@ -704,8 +704,8 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                <span class="pe-7s-keypad"></span>
                </a>                    
                <div class="navbar-custom-menu" style="float:left;margin-top:10px;margin-left:20px;  display:inline-block;">
-               <div class="row">
-               <div class="col-md-6 col-sm-12"  >
+               <!-- <div class="row"> -->
+               <!-- <div class="col-md-6 col-sm-12"  > -->
                 
                 <?php 
                   if(!empty($title)){ ?>                            
@@ -713,9 +713,9 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                   <?php }else{ ?>                                
                     <h1 style="font-size: 26px;"><?php echo str_replace('_', ' ', ucfirst($segment1)) ?></h1>
                   <?php } ?>
-                  </div>
-                <?php  if($this->session->userdata('companey_id')==1 ){?>
-                  <style>
+                  <!-- </div> -->
+                <?php  if($this->session->userdata('companey_id')==65 ){?>
+                  <!-- <style>
                       #center_logoimg {
     /* visibility: hidden; */
     display: block;
@@ -740,14 +740,14 @@ if($root=='https://student.spaceinternationals.com'){  ?>
     height:70px;width:200px; margin-left: -38px;
                   }
                 }
-                      </style>
-                  <div class="col-md-6" id="center_logo">
+                      </style> -->
+                  <!-- <div class="col-md-6" id="center_logo">
 
   <img id="center_logoimg"  src="<?php echo base_url("assets/images/new_logo.png") ?>" alt="">
 
-                  </div>
+                  </div> -->
               <?php }?>
-                  </div>
+                  <!-- </div> -->
                </div>
                <div class="navbar-custom-menu" id="mob">
                   <ul class="nav navbar-nav">   

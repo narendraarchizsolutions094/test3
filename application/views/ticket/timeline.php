@@ -14,7 +14,7 @@
          
           <div class="cbp_tmlabel"  style="background:#95a5a6;"  <?php 
           if( $subj=='Send Whatsapp' OR $subj =='Send Mail' OR $subj  =='Send SMS'){
-          echo'onclick="getTimelinestatus("<?= $cnv->id ?>")" data-toggle="modal"  data-target="#timelineshow" data-toggle="modal"'; } ?> >
+          echo'onclick="getTimelinestatus("'.$cnv->id.'")" data-toggle="modal"  data-target="#timelineshow" data-toggle="modal"'; } ?> >
             <span style="font-weight:900;font-size:15px;"><?php echo $cnv->subj; ?></span>
             <?php
             if (!empty($cnv->lead_stage_name)) { ?>

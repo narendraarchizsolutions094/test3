@@ -220,6 +220,7 @@ class Message extends CI_Controller {
 		  $userphone=$this->session->userdata('phone');
 		  $designation=$this->session->userdata('designation');
 		  $media_url='';
+		
 		  if($this->session->companey_id==65){
 			if(!empty($move_enquiry)){
 				
@@ -228,6 +229,7 @@ class Message extends CI_Controller {
 			    $replacePhone=	$enqData->phone;
 			   
 		  }else{
+
 				$enqData=$this->Message_models->fetchenqById('ticket',$ticketId);
 				$replaceName=	$enqData->name;
 				$replacePhone=	$enqData->phone;
@@ -249,7 +251,7 @@ class Message extends CI_Controller {
             $phone= '91'.$this->input->post('mobile');
             $move_enquiry = $this->input->post('enquiry_id');
         	if(!empty($move_enquiry)){
-      	      foreach($move_enquiry as $key){
+      	      foreach($move_enquiry as $key){	
       	        $enq = $this->enquiry_model->enquiry_by_id($key);
       	        $phone='91'.$enq->phone;
       	        $this->Message_models->sendwhatsapp($phone,$message);
@@ -386,7 +388,7 @@ class Message extends CI_Controller {
 					//timeline add
 					$saveMsgTimelineId=$this->Message_models->AddMsgtimline($msgType,$ticketId,$user_id,0,$message,'Send SMS');
 					//save logs
-					$this->Message_models->saveMsgLogs($msgType,$ticketId,$user_id,0,$message,$phone,$media_url,$saveMsgTimelineId,'');
+					$this->Message_models->saveMsgLogs($msgType,$ticketId,$user_id,0,$message,$phone,$media_url,$saveMsgTimelineId,' ');
 			  }
 			}else{
 				if(!empty($move_enquiry)){
