@@ -561,7 +561,7 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
             <?php 
             } else { 
               $enquiry_separation  = get_sys_parameter('enquiry_separation','COMPANY_SETTING');
-              if (!empty($enquiry_separation)) {                                        
+              if (!empty($enquiry_separation)) {
                 $enquiry_separation = json_decode($enquiry_separation,true);          
                 $curr_stage  = $enquiry->status;
                 $next_stage = $enquiry->status+1;      

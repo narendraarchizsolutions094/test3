@@ -231,7 +231,7 @@ class LeadRules extends CI_Controller {
         $rule_ticket_status = array();
         if (!empty($ticket_status)) {
             foreach ($ticket_status as $key => $value) {
-                $rule_ticket_status[$value->id] = $value->title;
+                $rule_ticket_status[$value->id] = $value->status_name;
             }
         }  
         $data['rule_ticket_status'] = json_encode($rule_ticket_status);
