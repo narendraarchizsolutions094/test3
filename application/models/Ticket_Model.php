@@ -588,7 +588,7 @@ class Ticket_Model extends CI_Model
 		return $count;
 	}
 
-	public function insertData($uid,$tid,$lid)
+	public function insertData($uid,$tid,$lid,$esc_level)
 	{
 		
 			//move to user
@@ -597,7 +597,7 @@ class Ticket_Model extends CI_Model
 			$counta = $this->db->where(array('tck_id' => $tid, 'lid' => $lid))->count_all_results('tbl_ticket_conv');
 			if ($counta == 0) {
 				//save to assignid 	
-				$data_msg = ['comp_id' => $this->session->companey_id, 'tck_id' => $tid, 'subj' => 'Ticked Assigned', 'lid' => $lid, 'assignedTo' => $uid, 'msg' => 'Update by rule'];
+				$data_msg = ['comp_id' => $this->session->companey_id, 'tck_id' => $tid, 'subj' => 'Ticked Assigned','msg'=>$esc_level, 'lid' => $lid, 'assignedTo' => $uid, 'msg' => 'Update by rule'];
 				$this->db->insert('tbl_ticket_conv', $data_msg);
 			}
 	}

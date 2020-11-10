@@ -1191,10 +1191,12 @@ class Ticket extends CI_Controller
 						if ($hourTime >= $esc_hr) {
 							// user check
 							// check office time
+							
 							$inTime='10:00';
 							$outTime='18:00';
 							$currentTime = date('H:i');
 							$todayIntime=date('Y-m-d '.$inTime);
+
 							$nextAssignment = date('Y-m-d H:i',strtotime($todayIntime . "+1 days"));
 							if ($nextAssignTimeF <= $currentD OR $nextAssignTimeF!=NULL) {
 								if ($currentTime >= $outTime ) {
@@ -1241,5 +1243,179 @@ class Ticket extends CI_Controller
 			}
 			//subsatge
 		}
+
+		public function tat_run(){
+			$fetchrules = $this->db->where(array('comp_id' => $this->session->companey_id, 'type' => 5))->order_by("id", "ASC")->get('leadrules')->result();
+			foreach ($fetchrules as $key => $value) {
+				$rule_action = json_decode($value->rule_action);
+				$esc_hr = $rule_action->esc_hr;
+				$assign_to = $rule_action->assign_to;
+				$leadtitle = $value->title;
+				$lid = $value->id;
+
+				$this->db->where($value->rule_sql);
+				$tickets	=	$this->db->get('tbl_ticket')->result_array();
+
+				if(!empty($tickets)){
+					foreach($tickets as $tck){
+						$created_date = $tck['coml_date'];
+						$currentDate = date('Y-m-d H:i:s');
+						
+						$time1 = strtotime($created_date);
+						$time2 = strtotime($currentDate);
+						$hourTime = round(($time2 - $time1) / 60, 1);
+
+						if($this->isBusinessHr()){
+							$this->Ticket_Model->insertData($assign_to, $tid, $lid,$leadtitle);
+						}
+					}
+				}
+
+			}
+		}
 	
+		function currect_created_date($d){
+			if($this->isBusinessHr(new DateTime($d))){
+				if($this->is_woking_day($d)){
+					return $d;
+				}else{
+					return $this->next_woking_day($d);
+				}
+			}else{
+				$wdate =	$this->get_working_date($d);			
+				$this->currect_created_date($wdate);				
+			}
+		}
+
+		function get_working_date($d){
+						
+			$timeObject = new DateTime($d);
+			$timestamp = $timeObject->getTimeStamp();
+			$act_time = date('H:i', $timestamp);			
+			$act_date = date('Y-m-d', $timestamp);			
+			if($act_time < '10:00'){
+				$next_time = $act_date.' 10:00:00';
+				
+			}else if($act_time > '06:00') {
+				$next_time = '';
+				$next_date = date('Y-m-d', strtotime($act_date .' +1 day'));
+				$next_time .= $next_date.' 10:00:00';
+			}
+			
+			return $next_time;
+
+		}
+
+		function isBusinessHr($timeObject=0) {		
+
+			$status = FALSE;
+			$storeSchedule = [
+				'Mon' => ['10:00 AM' => '06:00 PM'],				
+				'Tue' => ['10:00 AM' => '10:00 PM'],
+				'Wed' => ['10:00 AM' => '06:00 PM'],
+				'Thu' => ['10:00 AM' => '06:00 PM'],
+				'Fri' => ['10:00 AM' => '06:00 PM']
+			];
+		
+			if(empty($timeObject)){
+				$timeObject = new DateTime();
+				$timestamp = $timeObject->getTimeStamp();
+				$currentTime = $timeObject->setTimestamp($timestamp)->format('H:i A');
+			}else{
+				$timestamp = $timeObject->getTimeStamp();
+				$currentTime = $timeObject->setTimestamp($timestamp)->format('H:i A');
+			}
+
+			// echo $currentTime.'<br>';
+			// echo date('D', $timestamp);
+			// loop through time ranges for current day
+			if(!empty($storeSchedule[date('D', $timestamp)])){				
+				foreach ($storeSchedule[date('D', $timestamp)] as $startTime => $endTime) {		
+					// create time objects from start/end times and format as string (24hr AM/PM)
+					$startTime = DateTime::createFromFormat('h:i A', $startTime)->format('H:i A');
+					$endTime = DateTime::createFromFormat('h:i A', $endTime)->format('H:i A');		
+					// check if current time is within the range
+					if (($startTime < $currentTime) && ($currentTime < $endTime)) {
+						$status = TRUE;
+						break;
+					}
+				}
+			}
+			return $status;
+		}
+
+
+		function get_working_hours($from='2020-11-12 09:00:00',$to='2020-11-12 17:00:00')
+		{
+			// timestamps
+			$from_timestamp = strtotime($from);
+			$to_timestamp = strtotime($to);
+
+			// work day seconds
+			$workday_start_hour = 10;
+			$workday_end_hour = 18;
+			$workday_seconds = ($workday_end_hour - $workday_start_hour)*3600;
+
+			// work days beetwen dates, minus 1 day
+			$from_date = date('Y-m-d',$from_timestamp);
+			$to_date = date('Y-m-d',$to_timestamp);
+			$workdays_number = count($this->get_workdays($from_date,$to_date))-1;
+			$workdays_number = $workdays_number<0 ? 0 : $workdays_number;
+			
+			echo $workdays_number.'<br>';
+
+			// start and end time
+			$start_time_in_seconds = date("H",$from_timestamp)*3600+date("i",$from_timestamp)*60;
+			$end_time_in_seconds = date("H",$to_timestamp)*3600+date("i",$to_timestamp)*60;
+
+			// final calculations
+			$working_hours = ($workdays_number * $workday_seconds + $end_time_in_seconds - $start_time_in_seconds) / 86400 * 24;
+
+			echo $working_hours;
+		}
+
+		function get_workdays($from,$to) 
+		{
+			// arrays
+			$days_array = array();
+			$skipdays = array("Saturday", "Sunday");
+			$skipdates = $this->get_holidays();
+
+			// other variables
+			$i = 0;
+			$current = $from;
+
+			if($current == $to) // same dates
+			{
+				$timestamp = strtotime($from);
+				if (!in_array(date("l", $timestamp), $skipdays)&&!in_array(date("Y-m-d", $timestamp), $skipdates)) {
+					$days_array[] = date("Y-m-d",$timestamp);
+				}
+			}
+			elseif($current < $to) // different dates
+			{
+				while ($current < $to) {
+					$timestamp = strtotime($from." +".$i." day");
+					if (!in_array(date("l", $timestamp), $skipdays)&&!in_array(date("Y-m-d", $timestamp), $skipdates)) {
+						$days_array[] = date("Y-m-d",$timestamp);
+					}
+					$current = date("Y-m-d",$timestamp);
+					$i++;
+				}
+			}
+
+			return $days_array;
+		}
+
+		function get_holidays() 
+		{
+			// arrays
+			$days_array = array();
+
+			// You have to put there your source of holidays and make them as array...
+			// For example, database in Codeigniter:
+			// $days_array = $this->my_model->get_holidays_array();
+
+			return $days_array;
+		}
 }
