@@ -247,7 +247,9 @@ class Ticket extends CI_Controller
 			}
 
 			if ($showall or in_array(6, $acolarr)) {
-				$sub[] = $point->assign_to_name ?? "NA";
+				$assign_to = $point->assign_to_name ?? "NA";
+				$assign_to .=	!empty($point->last_esc)?' (<small style="color:red;">'.$point->last_esc.'</small>)':"";
+				$sub[] = $assign_to;
 			}
 
 			if ($showall or in_array(17, $acolarr)) {
@@ -1329,8 +1331,8 @@ class Ticket extends CI_Controller
 
 			$status = FALSE;
 			$storeSchedule = [
-				'Mon' => ['10:00 AM' => '09:00 PM'],				
-				'Tue' => ['10:00 AM' => '09:00 PM'],
+				'Mon' => ['10:00 AM' => '06:00 PM'],				
+				'Tue' => ['10:00 AM' => '06:00 PM'],
 				'Wed' => ['10:00 AM' => '06:00 PM'],
 				'Thu' => ['10:00 AM' => '06:00 PM'],
 				'Fri' => ['10:00 AM' => '06:00 PM']
@@ -1372,7 +1374,7 @@ class Ticket extends CI_Controller
 
 			// work day seconds
 			$workday_start_hour = 10;
-			$workday_end_hour = 21;
+			$workday_end_hour = 18;
 			$workday_seconds = ($workday_end_hour - $workday_start_hour)*3600;
 
 			// work days beetwen dates, minus 1 day
