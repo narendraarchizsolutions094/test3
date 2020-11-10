@@ -417,6 +417,7 @@ class Ticket extends CI_Controller
 	}
 	function view($tckt = "")
 	{
+
 		$this->load->model('enquiry_model');
 
 		$data = array();
@@ -530,6 +531,10 @@ class Ticket extends CI_Controller
 		$user_id = $this->session->user_id;
 		$this->session->set_flashdata('SUCCESSMSG', 'Update Successfully');
 		$this->Ticket_Model->saveconv($ticketno, 'Stage Updated', $stage_remark, $client, $user_id, $lead_stage, $stage_desc);
+
+
+
+
 		$contact_person = '';
 		$mobileno = '';
 		$email = '';
@@ -1210,7 +1215,7 @@ class Ticket extends CI_Controller
 												$dateFrom=$getHoliday->datefrom;
 												$dateTo=$getHoliday->dateto;
 												$days=$dateTo-$dateFrom;
-												if($days==0){ $days=2; }
+												if($days==0){ $days=1; }
 										        echo'Added next assignmnet time ';
 
 												$nextAssignment = date('Y-m-d H:i',strtotime($todayIntime . "+".$days." days"));
@@ -1253,15 +1258,17 @@ class Ticket extends CI_Controller
 
 				if(!empty($tickets)){
 					foreach($tickets as $tck){
-						$created_date = $tck['coml_date'];
-						$currentDate = date('Y-m-d H:i:s');
+						$d = $tck['coml_date'];
+						 $currentDate = date('Y-m-d H:i:s');
 						
-						$time1 = strtotime($created_date);
-						$time2 = strtotime($currentDate);
-						$hourTime = round(($time2 - $time1) / 60, 1);
+						// $time1 = strtotime($created_date);
+						//$time2 = strtotime($currentDate);
+						// $hourTime = round(($time2 - $time1) / 60, 1);
 
 						if($this->isBusinessHr()){
-							$this->Ticket_Model->insertData($assign_to, $tid, $lid,$leadtitle);
+							$created_date	=	$this->currect_created_date($d,$uid);
+							$working_hrs	=	$this->get_working_hours($created_date,$currentDate);
+							echo $working_hrs;
 						}
 					}
 				}
@@ -1269,18 +1276,31 @@ class Ticket extends CI_Controller
 			}
 		}
 	
-		function currect_created_date($d){
+		function currect_created_date($d,$uid){
 			if($this->isBusinessHr(new DateTime($d))){
-				if($this->is_woking_day($d)){
+				$timeObject = new DateTime($d);
+				$timestamp = $timeObject->getTimeStamp();
+				$date1 = date('Y-m-d', $timestamp);	
+				if($this->is_woking_day($date1,$uid)){
 					return $d;
 				}else{
-					return $this->next_woking_day($d);
+					$next_date = date('Y-m-d H:i:s', strtotime($d .' +1 day'));
+					$this->currect_created_date($next_date,$uid);					
 				}
 			}else{
 				$wdate =	$this->get_working_date($d);			
-				$this->currect_created_date($wdate);				
+				$this->currect_created_date($wdate,$uid);				
 			}
 		}
+		function is_working_day($d,$user){
+			$hlist	=	$this->ticket_Model->get_user_holidays($uid);
+			if(in_array($d,$hlist)){
+				return false;
+			}else{
+				return true;
+			}
+		}
+		
 
 		function get_working_date($d){
 						
@@ -1404,8 +1424,8 @@ class Ticket extends CI_Controller
 
 		function get_holidays() 
 		{
-			// arrays
-			$days_array = array();
+			// arrays			
+			$days_array = $this->ticket_Model->get_user_holidays($uid);;
 
 			// You have to put there your source of holidays and make them as array...
 			// For example, database in Codeigniter:

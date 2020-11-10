@@ -587,7 +587,30 @@ class Ticket_Model extends CI_Model
 		$count = $this->db->where(array('company' => $this->session->companey_id, 'ticket_stage' => $stg_id))->count_all_results('tbl_ticket');
 		return $count;
 	}
-
+	public function get_user_holidays($uid){
+		$holidays = array();
+		$this->db->where('pk_i_admin_id',$uid);
+		$userData=$this->db->get('tbl_admin')->row();
+		$state_id=$userData->state_id;
+		$city_id =$userData->city_id;
+		if($state_id!=0 OR $city_id!=0){
+			$holidays = $this->db->where(array('state'=>$state_id,'city'=>$city_id,'status'=>1))->get('holidays')->result_array();
+		}		
+		$list = array();
+		if(!empty($holidays)){
+			foreach($holidays as $key=>$value){
+				$period = new DatePeriod(
+					new DateTime($value['datefrom']),
+					new DateInterval('P1D'),
+					new DateTime($value['dateto'])
+				);
+				foreach ($period as $key => $value) {
+					$list[] = $value->format('Y-m-d');
+				}
+			}
+		}
+		return $list;
+	}
 	public function insertData($uid,$tid,$lid,$esc_level)
 	{
 		
