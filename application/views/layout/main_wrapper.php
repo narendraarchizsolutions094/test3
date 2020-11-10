@@ -703,13 +703,51 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                <span class="sr-only">Toggle navigation</span>
                <span class="pe-7s-keypad"></span>
                </a>                    
-               <div class="navbar-custom-menu" id="title" style="float:left;margin-top:10px;margin-left:20px;">
-                  <?php 
+               <div class="navbar-custom-menu" style="float:left;margin-top:10px;margin-left:20px;  display:inline-block;">
+               <div class="row">
+               <div class="col-md-6 col-sm-12"  >
+                
+                <?php 
                   if(!empty($title)){ ?>                            
                     <h1 style="font-size: 26px;"><?php echo $title; ?></h1>
                   <?php }else{ ?>                                
                     <h1 style="font-size: 26px;"><?php echo str_replace('_', ' ', ucfirst($segment1)) ?></h1>
                   <?php } ?>
+                  </div>
+                <?php  if($this->session->userdata('companey_id')==1 ){?>
+                  <style>
+                      #center_logoimg {
+    /* visibility: hidden; */
+    display: block;
+    height:70px;width:200px; margin-left:50px;
+                  }
+                    
+                      @media screen and (max-width: 786px) {
+  #center_logo {
+    visibility: hidden;
+    display: none;
+    
+                  }
+                }
+                @media screen and (max-width: 1024px) {
+  #center_logo {
+    display: block;
+    
+                  }
+                  #center_logoimg {
+    /* visibility: hidden; */
+    display: block;
+    height:70px;width:200px; margin-left: -38px;
+                  }
+                }
+                      </style>
+                  <div class="col-md-6" id="center_logo">
+
+  <img id="center_logoimg"  src="<?php echo base_url("assets/images/new_logo.png") ?>" alt="">
+
+                  </div>
+              <?php }?>
+                  </div>
                </div>
                <div class="navbar-custom-menu" id="mob">
                   <ul class="nav navbar-nav">   

@@ -1,4 +1,4 @@
-       	<div class="row">
+    <div class="row">
 			<div class="col-md-12"> 
 					<div class="panel-heading no-print" style ="background-color: #fff;padding:7px;border-bottom: 1px solid #C8CED3;">
 						<div class="row">
@@ -80,7 +80,9 @@
 					                <i class="fa fa-sliders"></i>
 					              </a>  
 					            <div class="dropdown-menu dropdown_css" style="max-height: 400px;overflow: auto; left: unset; right: 0!important;">
-					                  <a class="btn" data-toggle="modal" data-target="#AssignSelected" style="color:#000;cursor:pointer;border-radius: 2px;border-bottom :1px solid #ccc; width: 100%; text-align: left"><?php echo display('assign_selected'); ?></a>                                        
+                      <?php if(user_access(317)) { ?>
+                            <a class="btn" data-toggle="modal" data-target="#AssignSelected" style="color:#000;cursor:pointer;border-radius: 2px;border-bottom :1px solid #ccc; width: 100%; text-align: left"><?php echo display('assign_selected'); ?></a>                                        
+                      <?php } ?>
                             <a class="btn" data-toggle="modal" data-target="#DeleteSelected" style="color:#000;cursor:pointer;border-radius: 2px;border-bottom :1px solid #ccc; width: 100%; text-align: left"><?php echo display('delete'); ?></a>
 
                             <a class="btn" data-toggle="modal" data-target="#table-col-conf" style="color:#000;cursor:pointer;border-radius: 2px;border-bottom :1px solid #ccc; width: 100%; text-align: left"><?php echo display('table_config'); ?></a>
@@ -699,7 +701,6 @@ $(document).ready(function(){
 // }
 
 $(document).ready(function() {
-
       $('#ticket_table').DataTable({         
           "processing": true,
           "scrollX": true,
@@ -718,19 +719,25 @@ $(document).ready(function() {
                 alert(w);
               }
               },
-          // "columnDefs": [{ "orderable": false, "targets": 0 }],
-          // "order": [[ 1, "desc" ]],
-          // createdRow: function( row, data, dataIndex ) {            
-          //   var th = $("table>th");            
-          //   l = $("table").find('th').length;
-          //   for(j=1;j<=l;j++){
-          //     h = $("table").find('th:eq('+j+')').html();
-          //     $(row).find('td:eq('+j+')').attr('data-th',h);
-          //   }  
-          // }                
-        });
-
-
+              <?php if(user_access(317)) { ?>
+        // "lengthMenu": [[30, 60, 90, -1], [30, 60, 90, "All"]], 
+        buttons: [  
+            {extend: 'copy', className: 'btn-xs btn',exportOptions: {
+                        columns: "thead th:not(.noExport)"
+                    }}, 
+            {extend: 'csv', title: 'list<?=date("Y-m-d H:i:s")?>', className: 'btn-xs btn',exportOptions: {
+                        columns: "thead th:not(.noExport)"
+                    }}, 
+            {extend: 'excel', title: 'list<?=date("Y-m-d H:i:s")?>', className: 'btn-xs btn', title: 'exportTitle',exportOptions: {
+                        columns: "thead th:not(.noExport)"
+                    }}, 
+            {extend: 'pdf', title: 'list<?=date("Y-m-d H:i:s")?>', className: 'btn-xs btn',exportOptions: {
+                        columns: "thead th:not(.noExport)"
+                    }}, 
+            {extend: 'print', className: 'btn-xs btn',exportOptions: {
+                        columns: "thead th:not(.noExport)"
+                    }} 
+             ] ,  <?php  } ?>  });
     $('#ticket_filter').change(function() {
 
         var form_data = $("#ticket_filter").serialize();       
@@ -961,3 +968,9 @@ for (var i = 0; i < checkboxes.length; i++) {
 
 
 <!--   Table Config -->
+
+<!-- jquery-ui js -->
+<script src="<?php echo base_url('assets/js/jquery-ui.min.js') ?>" type="text/javascript"></script> 
+<!-- DataTables JavaScript -->
+<script src="<?php echo base_url("assets/datatables/js/dataTables.min.js") ?>"></script>  
+<script src="<?php echo base_url() ?>assets/js/custom.js" type="text/javascript"></script>
