@@ -1269,7 +1269,7 @@ class Ticket extends CI_Controller
 								 echo $created_date.'-';
 								 echo $currentDate.'hi';
 								$working_hrs	=	$this->get_working_hours($created_date,$currentDate,$assign_to);
-								echo $working_hrs;
+								//echo $working_hrs;
 							}
 						}
 					}
