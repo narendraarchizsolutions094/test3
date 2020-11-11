@@ -627,7 +627,7 @@ class Ticket_Model extends CI_Model
 	{
 		
 			//move to user
-			$ticket_update = ['assign_to' => $uid,'assigned_by'=>$added_by];
+			$ticket_update = ['assign_to' => $uid,'assigned_by'=>$added_by,'last_esc'=>$esc_level];
 			$this->db->where(array('id' => $tid))->update('tbl_ticket', $ticket_update);
 			$counta = $this->db->where(array('tck_id' => $tid, 'lid' => $lid))->count_all_results('tbl_ticket_conv');
 			if ($counta == 0) {
