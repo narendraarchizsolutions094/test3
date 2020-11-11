@@ -1243,33 +1243,31 @@ class Ticket extends CI_Controller
 			}
 			//subsatge
 		}
-
-		public function tat_run(){
-			$fetchrules = $this->db->where(array('comp_id' => $this->session->companey_id, 'type' => 5))->order_by("id", "ASC")->get('leadrules')->result();
+		// tat rule code start
+		public function tat_run($comp_id){			
+			$fetchrules = $this->db->where(array('comp_id' => $comp_id, 'type' => 5))->order_by("id", "ASC")->get('leadrules')->result();
 			if(!empty($fetchrules)){
 				foreach ($fetchrules as $key => $value) {
 					$rule_action = json_decode($value->rule_action);
 					$esc_hr = $rule_action->esc_hr;
 					$assign_to = $rule_action->assign_to;
-					$leadtitle = $value->title;
-					$lid = $value->id;
-					
-					$this->db->where($value->rule_sql);
-					$tickets	=	$this->db->get('tbl_ticket')->result_array();
-					echo "<pre>sd";
-					print_r($tickets);
-					echo "</pre>";
+					$rule_title = $value->title;
+					$lid = $value->id;					
+					$this->db->where($value->rule_sql);					
+					$tickets	=	$this->db->get('tbl_ticket')->result_array();					
 					if(!empty($tickets)){
 						foreach($tickets as $tck){
-							$d = $tck['coml_date'];
-							$currentDate = date('Y-m-d H:i:s');
-							$bh	=	$this->isBusinessHr(new DateTime($currentDate));	
-							if($bh){
-								$created_date	=	$this->currect_created_date($d,$assign_to);
-								 echo $created_date.'-';
-								 echo $currentDate.'hi';
-								$working_hrs	=	$this->get_working_hours($created_date,$currentDate,$assign_to);
-								echo '<b>'.$working_hrs.'</br>';
+							if(!$this->Ticket_Model->is_tat_rule_executed($tck['tck_id'],$lid)){
+								$d = $tck['coml_date'];
+								$currentDate = date('Y-m-d H:i:s');
+								$bh	=	$this->isBusinessHr(new DateTime($currentDate));	
+								if($bh){
+									$created_date	=	$this->currect_created_date($d,$assign_to);								
+									$working_hrs	=	$this->get_working_hours($created_date,$currentDate,$assign_to);
+									if($working_hrs >= $esc_hr){
+										$this->Ticket_Model->insertData($assign_to,$tck['tck_id'],$lid,$rule_title,$comp_id);
+									}
+								}
 							}
 						}
 					}
@@ -1277,8 +1275,7 @@ class Ticket extends CI_Controller
 				}
 			}
 		}
-	
-		function currect_created_date($d,$uid){
+		public function currect_created_date($d,$uid){
 			$is_bus_hr	=	$this->isBusinessHr(new DateTime($d));			
 			if($is_bus_hr){
 				$timeObject = new DateTime($d);
@@ -1439,4 +1436,5 @@ class Ticket extends CI_Controller
 
 			return $days_array;
 		}
+		// tat code end
 }

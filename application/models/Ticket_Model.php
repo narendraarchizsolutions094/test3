@@ -587,6 +587,7 @@ class Ticket_Model extends CI_Model
 		$count = $this->db->where(array('company' => $this->session->companey_id, 'ticket_stage' => $stg_id))->count_all_results('tbl_ticket');
 		return $count;
 	}
+	// tat rule holiday list
 	public function get_user_holidays($uid){
 		$holidays = array();
 		$this->db->where('pk_i_admin_id',$uid);
@@ -611,7 +612,18 @@ class Ticket_Model extends CI_Model
 		}
 		return $list;
 	}
-	public function insertData($uid,$tid,$lid,$esc_level)
+	
+	public function is_tat_rule_executed($tid,$lid){
+		$this->db->where('tbl_ticket_conv.tck_id',$tid);
+		$this->db->where('tbl_ticket_conv.lid',$lid);
+		if($this->db->get('tbl_ticket_conv')->num_row()){
+			return true;
+		}else{
+			return false;
+		}
+	}
+
+	public function insertData($uid,$tid,$lid,$esc_level,$comp_id)
 	{
 		
 			//move to user
@@ -620,7 +632,7 @@ class Ticket_Model extends CI_Model
 			$counta = $this->db->where(array('tck_id' => $tid, 'lid' => $lid))->count_all_results('tbl_ticket_conv');
 			if ($counta == 0) {
 				//save to assignid 	
-				$data_msg = ['comp_id' => $this->session->companey_id, 'tck_id' => $tid, 'subj' => 'Ticked Assigned','msg'=>$esc_level, 'lid' => $lid, 'assignedTo' => $uid, 'msg' => 'Update by rule'];
+				$data_msg = ['comp_id' => $comp_id, 'tck_id' => $tid, 'subj' => 'Ticked Assigned','msg'=>$esc_level, 'lid' => $lid, 'assignedTo' => $uid];
 				$this->db->insert('tbl_ticket_conv', $data_msg);
 			}
 	}
