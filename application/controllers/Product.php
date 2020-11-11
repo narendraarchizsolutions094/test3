@@ -175,9 +175,9 @@ class Product extends CI_Controller
 		$maxheight = 768;
 		$_FILES["mainimage"]["tmp_name"];
 		// die();
-		if ($_FILES["mainimage"]["size"] == 0 or $_FILES["mainimage"]["tmp_name"] == '') {
+		if (($_FILES["mainimage"]["size"] == 0 or $_FILES["mainimage"]["tmp_name"] == '') && empty($_POST["productid"])) {
 			$this->session->set_flashdata('exception', 'Image Field is Required');
-			redirect(base_url("product/addproduct"));
+			redirect($_SERVER['REQUEST_URI'], 'refresh'); 
 			exit();
 		}
 		$this->form_validation->set_rules('proname', display('product_name'), 'required|max_length[50]');
