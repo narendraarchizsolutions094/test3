@@ -1257,7 +1257,7 @@ class Ticket extends CI_Controller
 					$tickets	=	$this->db->get('tbl_ticket')->result_array();					
 					if(!empty($tickets)){
 						foreach($tickets as $tck){
-							if(!$this->Ticket_Model->is_tat_rule_executed($tck['tck_id'],$lid)){
+							if(!$this->Ticket_Model->is_tat_rule_executed($tck['id'],$lid)){
 								$d = $tck['coml_date'];
 								$currentDate = date('Y-m-d H:i:s');
 								$bh	=	$this->isBusinessHr(new DateTime($currentDate));	
@@ -1265,7 +1265,7 @@ class Ticket extends CI_Controller
 									$created_date	=	$this->currect_created_date($d,$assign_to);								
 									$working_hrs	=	$this->get_working_hours($created_date,$currentDate,$assign_to);
 									if($working_hrs >= $esc_hr){
-										$this->Ticket_Model->insertData($assign_to,$tck['tck_id'],$lid,$rule_title,$comp_id);
+										$this->Ticket_Model->insertData($assign_to,$tck['id'],$lid,$rule_title,$comp_id);
 									}
 								}
 							}
