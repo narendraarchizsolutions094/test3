@@ -1331,8 +1331,8 @@ class Ticket extends CI_Controller
 
 			$status = FALSE;
 			$storeSchedule = [
-				'Mon' => ['10:00 AM' => '06:00 PM'],				
-				'Tue' => ['10:00 AM' => '06:00 PM'],
+				'Mon' => ['10:00 AM' => '09:00 PM'],				
+				'Tue' => ['10:00 AM' => '09:00 PM'],
 				'Wed' => ['10:00 AM' => '06:00 PM'],
 				'Thu' => ['10:00 AM' => '06:00 PM'],
 				'Fri' => ['10:00 AM' => '06:00 PM']
