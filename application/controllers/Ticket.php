@@ -1265,7 +1265,8 @@ class Ticket extends CI_Controller
 									$created_date	=	$this->currect_created_date($d,$assign_to);								
 									$working_hrs	=	$this->get_working_hours($created_date,$currentDate,$assign_to);
 									if($working_hrs >= $esc_hr){
-										$this->Ticket_Model->insertData($assign_to,$tck['id'],$lid,$rule_title,$comp_id);
+										$this->Ticket_Model->insertData($assign_to,$tck['id'],$lid,$rule_title,$comp_id,286);
+										// 286 is bhavan user id
 									}
 								}
 							}
