@@ -201,7 +201,7 @@ class Product extends CI_Controller
 				if ($imgwidth <= $maxwidth && $imgheight <= $maxheight) {
 				} else {
 					$this->session->set_flashdata('exception', 'max width of 1024 and max height of 768');
-					redirect(base_url("product/addproduct"));
+			        redirect($_SERVER['REQUEST_URI'], 'refresh'); 					
 					exit();
 				}
 			}
