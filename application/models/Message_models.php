@@ -262,7 +262,7 @@ class Message_models extends CI_Model
       'temp_id' => $templates_id,
       'msg' => $message_name,
       'attachment' => $media_url,
-      'created_at' => $user_id,
+      'created_by' => $user_id,
       'comp_id' => $this->session->companey_id,
       'timelineId'=>$saveMsgTimelineId,
       'subject'=>$subject
