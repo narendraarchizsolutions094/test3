@@ -1374,7 +1374,7 @@ class Ticket extends CI_Controller
 
 			// work day seconds
 			$workday_start_hour = 10;
-			$workday_end_hour = 18;
+			$workday_end_hour = 21;
 			$workday_seconds = ($workday_end_hour - $workday_start_hour)*3600;
 
 			// work days beetwen dates, minus 1 day
@@ -1383,7 +1383,7 @@ class Ticket extends CI_Controller
 			$workdays_number = count($this->get_workdays($from_date,$to_date,$uid))-1;
 			$workdays_number = $workdays_number<0 ? 0 : $workdays_number;
 			
-			echo $workdays_number.'<br>';
+			// echo $workdays_number.'<br>';
 
 			// start and end time
 			$start_time_in_seconds = date("H",$from_timestamp)*3600+date("i",$from_timestamp)*60;
@@ -1392,7 +1392,7 @@ class Ticket extends CI_Controller
 			// final calculations
 			$working_hours = ($workdays_number * $workday_seconds + $end_time_in_seconds - $start_time_in_seconds) / 86400 * 24;
 
-			echo $working_hours;
+			return $working_hours;
 		}
 
 		function get_workdays($from,$to,$uid) 
