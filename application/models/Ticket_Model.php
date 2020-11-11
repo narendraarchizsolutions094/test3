@@ -526,8 +526,8 @@ class Ticket_Model extends CI_Model
 	}
 	public function get_ticket_status()
 	{
-		$this->db->where('comp_id', $this->session->companey_id);
-		return $this->db->get('support_ticket_status')->result();
+		$this->db->where('company_id', $this->session->companey_id);
+		return $this->db->get('tbl_ticket_status')->result();
 	}
 	public function createddatewise($idate)
 	{
