@@ -1256,7 +1256,7 @@ class Ticket extends CI_Controller
 					
 					$this->db->where($value->rule_sql);
 					$tickets	=	$this->db->get('tbl_ticket')->result_array();
-					echo "<pre>";
+					echo "<pre>sd";
 					print_r($tickets);
 					echo "</pre>";
 					if(!empty($tickets)){
