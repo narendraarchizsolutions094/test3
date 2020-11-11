@@ -345,13 +345,14 @@ class Ticket_Model extends CI_Model
 	function getconv($conv)
 	{
 		$compid = $this->session->companey_id;
-		return $this->db->select("cnv.*,lead_stage.lead_stage_name,lead_description.description as sub_stage,concat(admin.s_display_name,' ',admin.last_name) as updated_by,status.status_name")
+		return $this->db->select("cnv.*,lead_stage.lead_stage_name,lead_description.description as sub_stage,concat(admin.s_display_name,' ',admin.last_name) as updated_by,status.status_name,concat(user.s_display_name,' ',user.last_name) as assignedTo")
 			->where("cnv.tck_id", $conv)
 			->where("cnv.comp_id", $compid)
 			->from("tbl_ticket_conv cnv")
 			->join("lead_stage", 'lead_stage.stg_id=cnv.stage', 'left')
 			->join("lead_description", 'lead_description.id=cnv.sub_stage', 'left')
 			->join("tbl_admin as admin","admin.pk_i_admin_id=cnv.added_by")
+			->join("tbl_admin as user","user.pk_i_admin_id=cnv.assignedTo",'left')
 			->join("tbl_ticket_status status","cnv.ticket_status = status.id","LEFT")
 			->order_by("cnv.id DESC")
 			->get()

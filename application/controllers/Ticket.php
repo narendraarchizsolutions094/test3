@@ -450,7 +450,7 @@ class Ticket extends CI_Controller
 		$data["product"] = $this->Ticket_Model->getproduct();
 		//print_r($data['product']); exit();
 		$data["conversion"] = $this->Ticket_Model->getconv($data["ticket"]->id);
-		//print_r($data['conversion']); exit(); 
+		// print_r($data['conversion']); exit(); 
 		$data['problem'] = $this->Ticket_Model->get_sub_list();
 
 		$data['prodcntry_list'] = $this->enquiry_model->get_user_productcntry_list();

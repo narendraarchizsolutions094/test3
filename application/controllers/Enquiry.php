@@ -3386,14 +3386,16 @@ Array
 public function timelinePopup()
 {
     $data='Stage Update';
+    $subject='';
+    $tempname='';
+    $created_at='';
     $timelineId=$this->input->post('timelineId');
-    $log=$this->db->select('tbl_admin.pk_i_admin_id,tbl_admin.s_display_name,msg_logs.*')->where('timelineId',$timelineId)->join('tbl_admin','tbl_admin.pk_i_admin_id=msg_logs.created_by')->get('msg_logs');
+    $log=$this->db->select('msg_logs.*')->where('timelineId',$timelineId)->get('msg_logs');
     // print_r($log->result());
     if($log->num_rows()==1){
         foreach ($log->result() as $key => $value) {
            $subject='Subject: '.$value->subject;
            $created_at='Created At: '.$value->created_at;
-           $created_by='Created By: '.$value->s_display_name;
            $data='<b>Message:</b>'.$value->msg;
            $tempname='';
            if($value->msg_type==0 OR $value->msg_type==2){
@@ -3401,8 +3403,9 @@ public function timelinePopup()
            }
             
         }
+
     }
-    echo json_encode(array('subject'=>$subject,'created_at'=>$created_at,'created_by'=>$created_by,'msg'=>$data,'tempname'=>$tempname));
+    echo json_encode(array('subject'=>$subject,'created_at'=>$created_at,'msg'=>$data,'tempname'=>$tempname));
 
     // }else{
     //     echo json_encode(array('msg'=>'Stage Updated'));

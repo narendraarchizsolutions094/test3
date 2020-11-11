@@ -13,8 +13,7 @@
           <div class="cbp_tmicon cbp_tmicon-phone" style="background:#cb4335;"></div>
          
           <div class="cbp_tmlabel"  style="background:#95a5a6;"  <?php 
-          if( $subj=='Send Whatsapp' OR $subj =='Send Mail' OR $subj  =='Send SMS'){
-          echo'onclick="getTimelinestatus("'.$cnv->id.'")" data-toggle="modal"  data-target="#timelineshow" data-toggle="modal"'; } ?> >
+          if( $subj=='Send Whatsapp' OR $subj =='Send Mail' OR $subj  =='Send SMS'){ ?> onclick="getTimelinestatus('<?= trim($cnv->id) ?>');" data-toggle="modal"  data-target="#timelineshow" data-toggle="modal" <?php } ?> >
             <span style="font-weight:900;font-size:15px;"><?php echo $cnv->subj; ?></span>
             <?php
             if (!empty($cnv->lead_stage_name)) { ?>
@@ -39,8 +38,11 @@
               <br><span style="font-weight:100;font-size:12px;">By - </span><span style="font-weight:100;font-size:12px;"><?php echo $cnv->updated_by; ?></span><br>
               <?php
             }
-
-            ?>
+            
+             if (!empty($cnv->assignedTo)) { ?>
+              <br><span style="font-weight:100;font-size:12px;">To - </span><span style="font-weight:100;font-size:12px;"><?php echo $cnv->assignedTo; ?></span><br>
+              <?php
+            } ?>
             <p style="font-size: 13px;"> <?php echo date("j-M-Y h:i:s A",strtotime($cnv->send_date)); ?><br>
            </p>
           </div>
@@ -115,9 +117,7 @@
              <div class="col-md-4">
          <h4  id="timeline-cratedate"></h4>
              </div>
-             <div class="col-md-4">
-         <h4  id="timeline-crateby"></h4>
-             </div>
+            
              <div class="col-md-4">
              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
              </div>
@@ -210,7 +210,6 @@
         $('#timlineTitle').empty();      
         $('#timelinesdata').empty(); 
         $('#timeline-cratedate').empty(); 
-        $('#timeline-crateby').empty(); 
         $('#timeline-tembname').empty(); 
              
      $.ajax({               
@@ -223,7 +222,6 @@
              $("#timlineTitle").append(obj.subject);
              $("#timelinesdata").append(obj.msg);
              $("#timeline-cratedate").append(obj.created_at);
-             $("#timeline-crateby").append(obj.created_by);
              $("#timeline-tembname").append(obj.tempname);
 
          }               
