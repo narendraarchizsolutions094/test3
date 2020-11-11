@@ -207,32 +207,80 @@ class Message extends CI_Controller {
 		// print_r($usermeta);
 		// die();
 
-	    $signature   = $this->enquiry_model->get_signature();
+		  $signature   = $this->enquiry_model->get_signature();
+		  $msgType= $this->input->post('mesge_type');
+		  $ticketId= $this->input->post('ticketId');
+		  $msg_from=$this->input->post('msg_from');
+		  $user_id = $this->session->user_id;
+		  $move_enquiry = $this->input->post('enquiry_id');
+		  $message=$this->input->post('message_name');
+		  $replaceName='';
+		  $replacePhone='';
+		  $username=$this->session->userdata('fullname');
+		  $userphone=$this->session->userdata('phone');
+		  $designation=$this->session->userdata('designation');
+		  $media_url='';
+		
+		  if($this->session->companey_id==65){
+			if(!empty($move_enquiry)){
+				
+				$enqData=$this->Message_models->fetchenqById('enquiry',$move_enquiry);
+				$replaceName=	$enqData->name_prefix.' '.$enqData->name;
+			    $replacePhone=	$enqData->phone;
+			   
+		  }else{
+
+				$enqData=$this->Message_models->fetchenqById('ticket',$ticketId);
+				$replaceName=	$enqData->name;
+				$replacePhone=	$enqData->phone;
+		  }
+		  // Word to be replaced 
+			$w1 = array('@name','@phone','@username','@userphone','@designation'); 
+			//  Replaced by 
+			$w2 = array($replaceName,$replacePhone,$username,$userphone,$designation); 
+			// Using str_replace() function  
+			// to replace the word  
+			$message = str_replace($w1, $w2, $message); 
+		}
         if($this->input->post('mesge_type')== 1){
 	      	$templates_id	=	$this->input->post('templates');
 	      	$this->db->where('temp_id',$templates_id);
-	      	$template_row	=	$this->db->get('api_templates')->row_array();
-	        $message_name=$this->input->post('message_name');
+			  $template_row	=	$this->db->get('api_templates')->row_array();
+			  $template_name=$template_row['template_name'];
+			
             $phone= '91'.$this->input->post('mobile');
             $move_enquiry = $this->input->post('enquiry_id');
-
         	if(!empty($move_enquiry)){
-      	      foreach($move_enquiry as $key){
+      	      foreach($move_enquiry as $key){	
       	        $enq = $this->enquiry_model->enquiry_by_id($key);
       	        $phone='91'.$enq->phone;
-      	        $this->Message_models->sendwhatsapp($phone,$message_name);
+      	        $this->Message_models->sendwhatsapp($phone,$message);
       	        if($template_row['media']){	      	        	
       	        	$media_url	=	$template_row['media'];
       	        	$this->Message_models->sendwhatsapp($phone,base_url().$media_url);
       	        }
-      	      }
+				}
+				
       	       echo "Message sent successfully";
             }else{
-              	$this->Message_models->sendwhatsapp($phone,$message_name); 
+              	$this->Message_models->sendwhatsapp($phone,$message); 
               	if($template_row['media']){	      	   
-              		$media_url = $template_row['media'];     	
+					  $media_url = $template_row['media'];    
+					  if ($msg_from=='ticket') {
+						//timeline add
+						$saveMsgTimelineId=$this->Message_models->AddMsgtimline($msgType,$ticketId,$user_id,$templates_id,$template_name,'Send Whatsapp');
+						//save logs
+						$this->Message_models->saveMsgLogs($msgType,$ticketId,$user_id,$templates_id,$message,$phone,base_url().$media_url,$saveMsgTimelineId,0);
+				  } 	
       	        	$this->Message_models->sendwhatsapp($phone,base_url().$media_url);      	        		      	
-      	        }
+				  }
+				  //only for ticket
+				  if ($msg_from=='ticket') {
+					  //timeline add
+					  $saveMsgTimelineId=$this->Message_models->AddMsgtimline($msgType,$ticketId,$user_id,$templates_id,$template_name,'Send Whatsapp');
+					  //save logs
+				      $this->Message_models->saveMsgLogs($msgType,$ticketId,$user_id,$templates_id,$message,$phone,base_url().$media_url,$saveMsgTimelineId,0);
+				}
               echo "Message sent successfully";
            }
         }else if($this->input->post('mesge_type')== 3){
@@ -243,7 +291,7 @@ class Message extends CI_Controller {
                         ->where('temp_id',$temp_id)                        
                         ->get()
                         ->row();
-            $message = $this->input->post('message_name');
+            // $message = $this->input->post('message_name');
             $email_subject = $this->input->post('email_subject');
 	        $to = $this->input->post('mail');
 	        $move_enquiry = $this->input->post('enquiry_id');
@@ -314,19 +362,34 @@ class Message extends CI_Controller {
 	            //}
 	            if($this->email->send()){
 						echo "Mail sent successfully";
+						if ($msg_from=='ticket') {
+							//timeline add
+							$saveMsgTimelineId=$this->Message_models->AddMsgtimline($msgType,$ticketId,$user_id,$temp_id,$email_subject,'Send Mail');
+							//save logs
+							$this->Message_models->saveMsgLogs($msgType,$ticketId,$user_id,$temp_id,$message,$to,base_url().$media_url,$saveMsgTimelineId,$email_subject);
+					  }
 	            }else{
 	            	echo $this->email->print_debugger();
 						echo "Something went wrong";			                	
 	            }                 
     		}	        
     	}else if($this->input->post('mesge_type')== 2){
-	        $message = $this->input->post('message_name');
+	        // $message = $this->input->post('message_name');
 	        $move_enquiry = $this->input->post('enquiry_id');
 	           
-			if(!empty($this->input->post('mobile'))){	              	
+			if(!empty($this->input->post('mobile'))){
+				// echo'test';	              	
 				$phone= '91'.$this->input->post('mobile');
+				
 				$this->Message_models->smssend($phone,$message);
 				echo "Message sent successfully";
+				  //only for ticket
+				  if ($msg_from=='ticket') {
+					//timeline add
+					$saveMsgTimelineId=$this->Message_models->AddMsgtimline($msgType,$ticketId,$user_id,0,$message,'Send SMS');
+					//save logs
+					$this->Message_models->saveMsgLogs($msgType,$ticketId,$user_id,0,$message,$phone,$media_url,$saveMsgTimelineId,' ');
+			  }
 			}else{
 				if(!empty($move_enquiry)){
 				  foreach($move_enquiry as $key){
@@ -335,6 +398,7 @@ class Message extends CI_Controller {
 				    $this->Message_models->smssend($phone,$message);
 				  }
 				  echo "Message sent successfully";
+				  
 				}
 			}
     	}

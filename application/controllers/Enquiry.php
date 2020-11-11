@@ -3378,4 +3378,36 @@ Array
 
         echo $this->load->view('enquiry/institute_tab_content', $data, true);
     }
+
+public function timelinePopup()
+{
+    $data='Stage Update';
+    $subject='';
+    $tempname='';
+    $created_at='';
+    $timelineId=$this->input->post('timelineId');
+    $log=$this->db->select('msg_logs.*')->where('timelineId',$timelineId)->get('msg_logs');
+    // print_r($log->result());
+    if($log->num_rows()==1){
+        foreach ($log->result() as $key => $value) {
+           $subject='Subject: '.$value->subject;
+           $created_at='Created At: '.$value->created_at;
+           $data='<b>Message:</b>'.$value->msg;
+           $tempname='';
+           if($value->msg_type==0 OR $value->msg_type==2){
+            $tempname=  'Template Name: '.$this->message_models->tempName($value->temp_id);
+           }
+            
+        }
+
+    }
+    echo json_encode(array('subject'=>$subject,'created_at'=>$created_at,'msg'=>$data,'tempname'=>$tempname));
+
+    // }else{
+    //     echo json_encode(array('msg'=>'Stage Updated'));
+
+    // }
+}
+
+
 }

@@ -266,7 +266,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		    values: <?=$rule_enquiry_status?>,
 		    operators: ['equal', 'not_equal','is_null', 'is_not_null']
 		  },{
-		    id: 'tbl_ticket.status',
+		    id: 'tbl_ticket.ticket_status',
 		    label: 'Ticket Status',
 		    type: 'integer',
 		    input: 'select',

@@ -37,6 +37,9 @@ class Web extends CI_Controller{
                     <label>Snooze Till? (Time)</label>
                     <input name='snooze_till' type='time' class='form-control'>
             </div>`;*/
+        }elseif($res['task_type']==50)
+        {
+           $html .= '<b>'.$res['task_remark'].'</b>';
         }
         else
         {

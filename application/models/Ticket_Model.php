@@ -347,13 +347,14 @@ class Ticket_Model extends CI_Model
 	function getconv($conv)
 	{
 		$compid = $this->session->companey_id;
-		return $this->db->select("cnv.*,lead_stage.lead_stage_name,lead_description.description as sub_stage,concat(admin.s_display_name,' ',admin.last_name) as updated_by,status.status_name")
+		return $this->db->select("cnv.*,lead_stage.lead_stage_name,lead_description.description as sub_stage,concat(admin.s_display_name,' ',admin.last_name) as updated_by,status.status_name,concat(user.s_display_name,' ',user.last_name) as assignedTo")
 			->where("cnv.tck_id", $conv)
 			->where("cnv.comp_id", $compid)
 			->from("tbl_ticket_conv cnv")
 			->join("lead_stage", 'lead_stage.stg_id=cnv.stage', 'left')
 			->join("lead_description", 'lead_description.id=cnv.sub_stage', 'left')
 			->join("tbl_admin as admin","admin.pk_i_admin_id=cnv.added_by")
+			->join("tbl_admin as user","user.pk_i_admin_id=cnv.assignedTo",'left')
 			->join("tbl_ticket_status status","cnv.ticket_status = status.id","LEFT")
 			->order_by("cnv.id DESC")
 			->get()
@@ -528,8 +529,8 @@ class Ticket_Model extends CI_Model
 	}
 	public function get_ticket_status()
 	{
-		$this->db->where('comp_id', $this->session->companey_id);
-		return $this->db->get('support_ticket_status')->result();
+		$this->db->where('company_id', $this->session->companey_id);
+		return $this->db->get('tbl_ticket_status')->result();
 	}
 	public function createddatewise($idate)
 	{
@@ -589,17 +590,52 @@ class Ticket_Model extends CI_Model
 		$count = $this->db->where(array('company' => $this->session->companey_id, 'ticket_stage' => $stg_id))->count_all_results('tbl_ticket');
 		return $count;
 	}
+	// tat rule holiday list
+	public function get_user_holidays($uid){
+		$holidays = array();
+		$this->db->where('pk_i_admin_id',$uid);
+		$userData=$this->db->get('tbl_admin')->row();
+		$state_id=$userData->state_id;
+		$city_id =$userData->city_id;
+		if($state_id!=0 OR $city_id!=0){
+			$holidays = $this->db->where(array('state'=>$state_id,'city'=>$city_id,'status'=>1))->get('holidays')->result_array();
+		}		
+		$list = array();
+		if(!empty($holidays)){
+			foreach($holidays as $key=>$value){
+				$period = new DatePeriod(
+					new DateTime($value['datefrom']),
+					new DateInterval('P1D'),
+					new DateTime($value['dateto'])
+				);
+				foreach ($period as $key => $value) {
+					$list[] = $value->format('Y-m-d');
+				}
+			}
+		}
+		return $list;
+	}
+	
+	public function is_tat_rule_executed($tid,$lid){
+		$this->db->where('tbl_ticket_conv.tck_id',$tid);
+		$this->db->where('tbl_ticket_conv.lid',$lid);
+		if($this->db->get('tbl_ticket_conv')->num_rows()){
+			return true;
+		}else{
+			return false;
+		}
+	}
 
-	public function insertData($uid,$tid,$lid)
+	public function insertData($uid,$tid,$lid,$esc_level,$comp_id,$added_by)
 	{
 		
 			//move to user
-			$ticket_update = ['assign_to' => $uid];
+			$ticket_update = ['assign_to' => $uid,'assigned_by'=>$added_by,'last_esc'=>$esc_level];
 			$this->db->where(array('id' => $tid))->update('tbl_ticket', $ticket_update);
 			$counta = $this->db->where(array('tck_id' => $tid, 'lid' => $lid))->count_all_results('tbl_ticket_conv');
 			if ($counta == 0) {
 				//save to assignid 	
-				$data_msg = ['comp_id' => $this->session->companey_id, 'tck_id' => $tid, 'subj' => 'Ticked Assigned', 'lid' => $lid, 'assignedTo' => $uid, 'msg' => 'Update by rule'];
+				$data_msg = ['comp_id' => $comp_id, 'tck_id' => $tid, 'subj' => 'Ticked Assigned','msg'=>$esc_level, 'lid' => $lid, 'assignedTo' => $uid,'added_by'=>$added_by];
 				$this->db->insert('tbl_ticket_conv', $data_msg);
 			}
 	}

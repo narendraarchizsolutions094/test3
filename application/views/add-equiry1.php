@@ -21,7 +21,7 @@
       <div class="row">
         <?php
         if (!$invalid_process) { ?>
-          <form method="post" action="<?= base_url() ?>enquiry/create" id="enquiry_form">
+          <form method="post" action="<?= base_url() ?>enquiry/create" id="enquiry_form" autocomplete="off">
             <?php $process_id = $this->session->process[0]; ?>
             <input type="hidden" name="product_id" value="<?= $process_id ?>">
             <div id="process_basic_fields" class="row">

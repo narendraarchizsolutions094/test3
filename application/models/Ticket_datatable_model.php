@@ -176,6 +176,7 @@ class Ticket_datatable_model extends CI_Model{
         if($showall or in_array(6,$acolarr))
         {
             $sel_string[] = " concat(for_assign.s_display_name,' ',for_assign.last_name) as assign_to_name  ";
+            $sel_string[] = "tck.last_esc";
         }
         if($showall or in_array(7,$acolarr))
         {
@@ -214,7 +215,7 @@ class Ticket_datatable_model extends CI_Model{
         {
             $sel_string[] = " concat(assign_by.s_display_name,' ',assign_by.last_name) as assigned_by_name";    
         }
-                
+        
         $select = implode(',', $sel_string);
 
         $this->db->select($select);
@@ -265,6 +266,8 @@ class Ticket_datatable_model extends CI_Model{
         {
          $this->db->join("tbl_ticket_status status","tck.ticket_status=status.id","LEFT");
         } 
+
+        // $this->db->join("(select * from tbl_ticket_conv as tck_conv1 group by tck_conv1.tck_id ORDER BY tck_conv1.id DESC) as tck_conv","tck_conv.tck_id=tck.id","LEFT");
 
         if($showall or in_array(17, $acolarr))
         {

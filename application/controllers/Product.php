@@ -175,9 +175,9 @@ class Product extends CI_Controller
 		$maxheight = 768;
 		$_FILES["mainimage"]["tmp_name"];
 		// die();
-		if ($_FILES["mainimage"]["size"] == 0 or $_FILES["mainimage"]["tmp_name"] == '') {
+		if (($_FILES["mainimage"]["size"] == 0 or $_FILES["mainimage"]["tmp_name"] == '') && empty($_POST["productid"])) {
 			$this->session->set_flashdata('exception', 'Image Field is Required');
-			redirect(base_url("product/addproduct"));
+			redirect($_SERVER['REQUEST_URI'], 'refresh'); 
 			exit();
 		}
 		$this->form_validation->set_rules('proname', display('product_name'), 'required|max_length[50]');
@@ -195,14 +195,15 @@ class Product extends CI_Controller
 				"created_by"   => $this->session->user_id,
 				"updated_date" => date("Y-m-d h:i:s"),
 			);
-
 			$file = $_FILES["mainimage"]['tmp_name'];
-			list($imgwidth, $imgheight) = getimagesize($file);
-			if ($imgwidth <= $maxwidth && $imgheight <= $maxheight) {
-			} else {
-				$this->session->set_flashdata('exception', 'max width of 1024 and max height of 768');
-				redirect(base_url("product/addproduct"));
-				exit();
+			if($file || empty($_POST["productid"])){
+				list($imgwidth, $imgheight) = getimagesize($file);
+				if ($imgwidth <= $maxwidth && $imgheight <= $maxheight) {
+				} else {
+					$this->session->set_flashdata('exception', 'max width of 1024 and max height of 768');
+			        redirect($_SERVER['REQUEST_URI'], 'refresh'); 					
+					exit();
+				}
 			}
 			$seller_id = $this->input->post('seller');
 			$brand = $this->input->post('brand');

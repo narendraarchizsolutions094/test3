@@ -3,11 +3,17 @@
 	<h3 class="text-center">Activity Timeline</h3><hr>
   	<ul class="cbp_tmtimeline" style="margin-left:-30px;">
       <?php
+      
 	  if(!empty($conversion)){		
-      foreach($conversion as $cnv){ ?>
+      foreach($conversion as $cnv){
+        $ticketId=$cnv->tck_id;
+        $subj=$cnv->subj;
+        ?>
         <li>
           <div class="cbp_tmicon cbp_tmicon-phone" style="background:#cb4335;"></div>
-          <div class="cbp_tmlabel"  style="background:#95a5a6;">
+         
+          <div class="cbp_tmlabel"  style="background:#95a5a6;"  <?php 
+          if( $subj=='Send Whatsapp' OR $subj =='Send Mail' OR $subj  =='Send SMS'){ ?> onclick="getTimelinestatus('<?= trim($cnv->id) ?>');" data-toggle="modal"  data-target="#timelineshow" data-toggle="modal" <?php } ?> >
             <span style="font-weight:900;font-size:15px;"><?php echo $cnv->subj; ?></span>
             <?php
             if (!empty($cnv->lead_stage_name)) { ?>
@@ -32,8 +38,11 @@
               <br><span style="font-weight:100;font-size:12px;">By - </span><span style="font-weight:100;font-size:12px;"><?php echo $cnv->updated_by; ?></span><br>
               <?php
             }
-
-            ?>
+            
+             if (!empty($cnv->assignedTo)) { ?>
+              <br><span style="font-weight:100;font-size:12px;">To - </span><span style="font-weight:100;font-size:12px;"><?php echo $cnv->assignedTo; ?></span><br>
+              <?php
+            } ?>
             <p style="font-size: 13px;"> <?php echo date("j-M-Y h:i:s A",strtotime($cnv->send_date)); ?><br>
            </p>
           </div>
@@ -76,6 +85,8 @@
          </div>
          <div class="col-md-12">
             <input type="hidden"  id="mesge_type" name="mesge_type">
+            <input type="hidden" name="ticketId" value="<?= $ticketId ?>">
+            <input type="hidden"  name="msg_from"  value="ticket">
             <input type="hidden" id="mobile" name="mobile" value="<?php if(!empty($ticket->phone)){echo $enquiry->phone;} ?>">
             <input type="hidden" id="mail" name="mail" value="<?php if(!empty($ticket->email)){echo $enquiry->email;} ?>">
             <button class="btn btn-primary" onclick="send_sms()" type="button">Send</button>            
@@ -87,8 +98,39 @@
       </form>
    </div>
 </div>
-
-
+<?php 
+// if( $subj=='Send Whatsapp' OR $subj =='Send Mail' OR $subj  =='Send SMS'){
+?>
+<div id="timelineshow" class="modal fade" role="dialog">
+   <div class="modal-dialog modal-lg">
+      <!-- Modal content-->
+      <div class="modal-content card">
+         <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title" id="timlineTitle"></h4>
+         </div>
+         <div class="row" style="padding: 30px;">
+         <div id="timeline-tempname"></div>
+         <div id="timelinesdata">
+         </div>
+         </div>
+         <div class="modal-footer">
+           <div class="row">
+             <div class="col-md-4">
+             <h4  id="timeline-cratedate"></h4>
+             </div>
+             <div class="col-md-4">
+             </div>
+             <div class="col-md-4">
+             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+             </div>
+            
+           </div>
+         </div>
+      </div>
+      </form>
+   </div>
+</div>
 
 <script type="text/javascript">
 	function getTemplates(SMS,type){       
@@ -167,6 +209,26 @@
         });
        }
 
-            
+       function getTimelinestatus(timelineId){     
+        $('#timlineTitle').empty();      
+        $('#timelinesdata').empty(); 
+        $('#timeline-cratedate').empty(); 
+        $('#timeline-tembname').empty(); 
+             
+     $.ajax({               
+         url : '<?php echo base_url('enquiry/timelinePopup') ?>',
+         type: 'POST',
+         data: {timelineId:timelineId},
+         success:function(data){
+          var obj = JSON.parse(data);
+          
+             $("#timlineTitle").append(obj.subject);
+             $("#timelinesdata").append(obj.msg);
+             $("#timeline-cratedate").append(obj.created_at);
+             $("#timeline-tembname").append(obj.tempname);
+
+         }               
+     });        
+    }     
 </script>
 
