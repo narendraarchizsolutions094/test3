@@ -266,7 +266,7 @@ class Ticket_datatable_model extends CI_Model{
          $this->db->join("tbl_ticket_status status","tck.ticket_status=status.id","LEFT");
         } 
 
-        $this->db->join("(select * from (select * from tbl_ticket_conv order by id) as tck_conv group by tck_conv.tck_id ) as tck_conv","tck_conv.tck_id=tck.id","LEFT");
+        $this->db->join("(select * from (select * from tbl_ticket_conv order by id) as tck_conv group by tck_conv.tck_id desc) as tck_conv","tck_conv.tck_id=tck.id","LEFT");
 
         if($showall or in_array(17, $acolarr))
         {
