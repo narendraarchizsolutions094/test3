@@ -247,7 +247,9 @@ class Ticket extends CI_Controller
 			}
 
 			if ($showall or in_array(6, $acolarr)) {
-				$sub[] = ($point->assign_to_name ?? "NA").$point->last_esc?'<small style="color:red;">'.$point->last_esc.'</small>':'';
+				$assign_to = $point->assign_to_name ?? "NA";
+				$assign_to .=	!empty($point->last_esc)?'<small style="color:red;">'.$point->last_esc.'</small>':"";
+				$sub[] = $assign_to;
 			}
 
 			if ($showall or in_array(17, $acolarr)) {
