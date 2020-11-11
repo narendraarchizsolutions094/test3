@@ -195,14 +195,15 @@ class Product extends CI_Controller
 				"created_by"   => $this->session->user_id,
 				"updated_date" => date("Y-m-d h:i:s"),
 			);
-
 			$file = $_FILES["mainimage"]['tmp_name'];
-			list($imgwidth, $imgheight) = getimagesize($file);
-			if ($imgwidth <= $maxwidth && $imgheight <= $maxheight) {
-			} else {
-				$this->session->set_flashdata('exception', 'max width of 1024 and max height of 768');
-				redirect(base_url("product/addproduct"));
-				exit();
+			if($file || empty($_POST["productid"])){
+				list($imgwidth, $imgheight) = getimagesize($file);
+				if ($imgwidth <= $maxwidth && $imgheight <= $maxheight) {
+				} else {
+					$this->session->set_flashdata('exception', 'max width of 1024 and max height of 768');
+					redirect(base_url("product/addproduct"));
+					exit();
+				}
 			}
 			$seller_id = $this->input->post('seller');
 			$brand = $this->input->post('brand');
