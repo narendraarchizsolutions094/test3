@@ -43,7 +43,6 @@ border-bottom: 1px solid #c8ced3! important;}
 
 <div class="row">
  <div class="col-md-12" style="background-color: #fff;padding:7px;border-bottom: 1px solid #C8CED3;">
-  
 
         <div class="col-md-6" > <a class="dropdown-toggle btn btn-danger" href="<?php echo base_url()?>enquiry/create" title="<?php echo display('add_new_enquiry');?>">Create New</a>
         </div>

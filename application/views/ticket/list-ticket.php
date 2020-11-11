@@ -322,6 +322,19 @@
                       ?>
                       <?=($showall or in_array(16,$acolarr))?'<th>Status</th>':''?>
 
+
+                      <?php 
+                      if(!empty($dacolarr) and !empty($dfields))
+                      {
+                        foreach($dfields as $ind => $flds)
+                        {                
+                          if(!empty(in_array($flds->input_id, $dacolarr )))
+                          {            
+                          ?><th><?php echo $flds->input_label; ?></th><?php 
+                          }
+                        }
+                       } ?>
+
 										</thead>
 										<tbody>
 										</tbody>
@@ -867,20 +880,18 @@ function delete_recorde(){
             <label class=""><input type="checkbox" class="choose-col"  value = "16"  <?php echo ($showall == true or in_array(16, $acolarr)) ? "checked" : ""; ?>>Ticket Status</label>  &nbsp;
           </div>
            
-          <!-- 
-          <?php
-        
-          // if(!empty($dfields)) {          
-          //   foreach($dfields as $ind => $fld){              
+        <?php   
+        if(!empty($dfields)) {           
+            foreach($dfields as $ind => $fld){              
             ?>
             <div class = "col-md-4">  
-          <label class=""><input type="checkbox" class="dchoose-col choose-col"  value = " <?php //echo $fld->input_id; ?>"  <?php// echo (in_array($fld->input_id, $dacolarr)) ? "checked" : ""; ?>>   <?php //echo ucwords($fld->input_label); ?></label>  &nbsp;
+          <label class=""><input type="checkbox" class="dchoose-col"  value = "<?php echo $fld->input_id; ?>"  <?php echo (in_array($fld->input_id, $dacolarr)) ? "checked" : ""; ?>>   <?php echo ucwords($fld->input_label); ?></label>  &nbsp;
           </div>
             <?php   
               
-            //}?>
+            }?>
              </div>
-          <?php //} ?>-->
+          <?php } ?>
                 
               <div class="col-12" style="padding: 0px;">
                 <div class="row">              

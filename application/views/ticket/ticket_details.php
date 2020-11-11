@@ -1,8 +1,25 @@
 <div class="col-md-6 col-sm-12 card card-body col-height details-column" style="border: 1px solid #c8ced3;padding: 15px;border-top: none;">
 <div class="exTab3">
-	<ul  class="nav nav-tabs" role="tablist">
-		 <li class="active"><a  href="#basic" data-toggle="tab" style="padding: 10px 10px; ">Basic</a></li> 
-		 <li class=""><a  href="#related_tickets" data-toggle="tab" style="padding: 10px 10px; ">Related Tickets</a></li>   
+	<ul  class="nav nav-tabs" role="tablist"> 
+		<li class="active"><a  href="#basic" data-toggle="tab" style="padding: 10px 10px; ">Basic</a></li> 
+		<li class=""><a  href="#related_tickets" data-toggle="tab" style="padding: 10px 10px; ">Related Tickets</a></li>   
+
+		 <?php
+		 //print_r($tab_list);
+            if(!empty($tab_list)){
+                //print_r($tab_list);die;
+                foreach ($tab_list as $key => $value) 
+                { 
+                  if ($value['id'] != 1) 
+                  	{ ?>
+                    <li><a href="#<?=str_replace(' ', '_', $value['title'])?>" data-toggle="tab" style="padding: 10px 10px;"><?=$value['title']?></a></li>
+                   <?php
+               		}
+               	}
+            }
+
+          ?>
+
 	</ul>
 	<div class="tab-content clearfix">
         <div class="tab-pane active" id="basic">
@@ -326,6 +343,22 @@
 		?>
 		</div>
 	</div>
+
+	 <?php
+	   if(!empty($tab_list)){
+	    foreach ($tab_list as $key => $value) { ?>
+	      <div class="tab-pane" id="<?=str_replace(' ', '_', $value['title'])?>">
+	      <?php
+	      if ($value['id'] != 1) {
+	        echo tab_content($value['id'],$this->session->companey_id,$ticket->ticketno,str_replace(' ', '_', $value['title']),2); 
+	      }
+	      ?>
+	      </div>
+	      <?php
+	    }
+	  }
+	  ?>
+	
   </div>
 </div>
 </div>

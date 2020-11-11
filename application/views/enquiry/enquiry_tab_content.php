@@ -441,11 +441,11 @@ $type="text";
                         } 
                         ?>                        
                         <td><?=$d?></td>                                                           
-                        <?php
-                      } 
+                      <?php
+                      }
                       ?>
                       <td><?=!empty($arr1[2])?$arr1[2]:'NA'?></td>
-                      <td><?=!empty($arr1[3])? "<a class='btn btn-danger' href='".base_url("enquiry/deleteDocument/$arr1[3]/$details->Enquery_id/".base64_encode($tabname)."")."' onclick='return alert(\'are you sure\')'><i class='fa fa-trash'></i></a> " :'NA'?></td>                                                  
+                      <td><?=!empty($arr1[3])? "<a class='btn btn-danger' href='".base_url("enquiry/deleteDocument/$arr1[3]/$details->Enquery_id/".base64_encode($tabname)."")."' onclick='return alert(\'are you sure\')'><i class='fa fa-trash'></i></a> " :'NA'?></td>                                
                       <?php
                     } ?>                    
                     </tr>
@@ -700,7 +700,7 @@ $type="text";
                <label><?php echo(!empty($fld["input_label"])) ?  ucwords($fld["input_label"]) : ""; ?></label>
                <input type="tel"  name="enqueryfield[<?=$fld_id?>]"  class="form-control" value ="<?php echo  (!empty($fld["fvalue"])) ? $fld["fvalue"] : ""; ?>">
                <?php }?>	
-               
+                
                <?php
                if($fld['input_type']==20){?>
                <label><?php echo(!empty($fld["input_label"])) ?  ucwords($fld["input_label"]) : ""; ?></label>

@@ -39,7 +39,19 @@
                                 <?php echo form_open_multipart('form/form/create_tab','class="form-inner"') ?>
 
                                     <div class="row">
+                                        <div class="form-group">
 
+                                            <div class="col-md-12">
+                                                <input type="radio" name="tab_type" checked value="0">
+                                                &nbsp; Sales
+                                               
+                                                &nbsp; &nbsp;
+                                                  <input type="radio" name="tab_type" value="2">
+                                                &nbsp; Support
+                                            </div>
+                                            
+                                        </div>
+                                        <br>
                                         <div class="form-group col-md-12">
                                             <label>Tab Name</label>
                                             <input class="form-control" name="tab_name" placeholder="Tab name" type="text" value="" required>
@@ -48,7 +60,7 @@
                                         <div class="form-group col-md-12">
                                             <!-- <label>Tab Name</label>
                                             <input class="form-control" name="tab_name" placeholder="Tab name" type="text" value="" required> -->
-                                            <input type="checkbox" name="isqueryform" class="form-control" value="1">Is Query Type Form
+                                            <input type="checkbox" name="isqueryform" class="" value="1"> &nbsp;Is Query Type Form
 
                                         </div>
 
@@ -99,6 +111,8 @@
                             </th>
                             <th>Tab Title</th>
                             <th>Tab For</th>
+                            <th>Is Query</th>
+                            <th>Tab Type</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -136,12 +150,29 @@
                                         }
                                         ?>
                                     </td>
-
+                                     <td><?php
+                                        if($tab['form_type']==1)
+                                        {
+                                            echo'Query<br>
+                                            <i class="fa fa-'.($tab['is_edit']?'check-circle text-success':'times-circle text-danger').'"></i> Edit<br>   
+                                            <i class="fa fa-'.($tab['is_delete']?'check-circle text-success':'times-circle text-danger').'"></i> Delete<br>
+                                            ';
+                                        }
+                                        
+                                        ?>
+                                            
+                                    </td>
+                                    <td><?php
+                                        if($tab['form_for']==0)
+                                            echo'Sales';
+                                        else if($tab['form_for']==2)
+                                            echo 'Support';
+                                        ?></td>
                                     <td class="center">
 
                                         <a href="" class="btn btn-xs  btn-primary edit_tab" data-tid="<?=$tab['id']?>" data-toggle="modal" data-target="#EditTab"><i class="fa fa-edit"></i></a>
 
-                                        <a href="" onclick="return confirm('<?php echo display("are_you_sure") ?>')" class="btn btn-xs  btn-danger"><i class="fa fa-trash"></i></a>
+                                        <a href="<?=base_url('form/form/delete_tab/'.$tab['id'])?>" onclick="return confirm('<?php echo display("are_you_sure") ?>')" class="btn btn-xs  btn-danger"><i class="fa fa-trash"></i></a>
 
                                     </td>
 

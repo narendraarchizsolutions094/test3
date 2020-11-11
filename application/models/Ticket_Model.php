@@ -278,6 +278,7 @@ class Ticket_Model extends CI_Model
 			"added_by" => $user_id,
 		);
 		$ret = $this->db->insert("tbl_ticket_conv", $insarr);
+		$last_id = $this->db->insert_id();
 		if ($ret) {
 			$this->session->set_flashdata('message', 'Successfully saved');
 			if ($stage) {
@@ -295,6 +296,7 @@ class Ticket_Model extends CI_Model
 				$this->db->where('tbl_ticket.id', $tckno);
 				$this->db->update('tbl_ticket');
 			}
+			return $last_id;
 		} else {
 			$this->session->set_flashdata('message', 'Failed to save');
 		}
@@ -466,7 +468,7 @@ class Ticket_Model extends CI_Model
 	public function get($tctno)
 	{
 
-		return $this->db->select("tck.*,tck.email as tck_email,tbl_ticket_subject.subject_title,lead_source.lead_name as ticket_source,enq.gender,prd.country_name, concat(enq.name,' ', enq.lastname) as clientname")
+		return $this->db->select("tck.*,tck.email as tck_email,tbl_ticket_subject.subject_title,lead_source.lead_name as ticket_source,enq.gender,prd.country_name, CONCAT(IFNULL(enq.name,'USER'),' ', IFNULL(enq.lastname,'')) as clientname")
 			->where("tck.ticketno", $tctno)
 			->where("tck.company", $this->session->companey_id)
 			->from("tbl_ticket tck")

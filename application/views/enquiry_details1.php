@@ -59,7 +59,7 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
   /* select2 css end*/
 
 .cbp_tmtimeline {
-  margin: 30px 0 0 0;
+  margin: 30px 0 0 0; 
   padding: 0;
   list-style: none;
   position: relative;

@@ -2,7 +2,7 @@
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/jquery.query-builder/2.3.3/css/query-builder.default.min.css">
 <link href="https://cdn.rawgit.com/harvesthq/chosen/gh-pages/chosen.min.css" rel="stylesheet"/>
 <script src="https://cdn.rawgit.com/harvesthq/chosen/gh-pages/chosen.jquery.min.js"></script>
-
+ 
 <div class="row">
     <!--  form area -->
     <div class="col-sm-12">
@@ -340,7 +340,7 @@
       </div>
       <div class="modal-body modal-body1">         
                                                 
-      </div>      
+      </div>       
     </div>
   </div>
 </div>

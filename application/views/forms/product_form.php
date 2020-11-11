@@ -3,7 +3,7 @@
 <script src="<?=base_url().'assets/js/RowSorter.js'?>"></script>
 <style type="text/css">
   /*#fields_table>tbody>tr{
-    cursor: move;
+    cursor: move; 
   }*/
 </style>
         <div class="text-center">

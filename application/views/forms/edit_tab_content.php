@@ -7,16 +7,27 @@ if(!empty($comp)) {
 ?>
 <input type="hidden" name="tab_id" value="<?=$tab_row['id']?>">
 <div class="row">
+    <div class="form-group">
+        <div class="col-md-12">
+            <input type="radio" name="tab_type" value="0" <?=($tab_row['form_for']?'':'checked')?>>
+            &nbsp; Sales
+            &nbsp;
+              <input type="radio" name="tab_type" value="2" <?=($tab_row['form_for']?'checked':'')?>>
+            &nbsp; Support
+        </div>
+        
+    </div>
+    <br>
     <div class="form-group col-md-12">
         <label>Tab Name</label>
         <input class="form-control" name="tab_name" placeholder="Tab name" type="text" value="<?=$tab_row['title']?>" required>
     </div>
     <div class="form-group col-md-12">
-        <input type="checkbox" name="isqueryform" class="form-control" value="1" <?php if($tab_row['is_query_type'] == 1) { echo "checked";}?> >Is Query Type Form
+        <input type="checkbox" name="isqueryform" class="" value="1" <?php if($tab_row['form_type'] == 1) { echo "checked";}?> >Is Query Type Form
 
     </div>
 
-    <div class="form-group col-md-12 rights" style="display:<?php if($tab_row['is_query_type'] == 1){echo "block"; }else { echo "none"; }?> ">
+    <div class="form-group col-md-12 rights" style="display:<?php if($tab_row['form_type'] == 1){echo "block"; }else { echo "none"; }?> ">
         <label>Rights</label>
         <input type="checkbox" name="edit" value="1" <?php if($tab_row['is_edit'] == 1) { echo "checked";}?> >Edit
         <input type="checkbox" name="delete" value="1" <?php if($tab_row['is_delete'] == 1) { echo "checked";}?> >Delete

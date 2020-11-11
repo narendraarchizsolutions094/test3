@@ -8,7 +8,7 @@ class Ticket extends CI_Controller
 {
 
 
-	public function __construct()
+	public function __construct() 
 
 	{
 
@@ -93,6 +93,7 @@ class Ticket extends CI_Controller
 		$this->load->model('report_model');
 		$this->load->model('Leads_Model');
 
+
 		if (isset($_SESSION['ticket_filters_sess']))
 			unset($_SESSION['ticket_filters_sess']);
 
@@ -112,6 +113,7 @@ class Ticket extends CI_Controller
 
 		$data['ticket_status'] = $this->Ticket_Model->ticket_status()->result();
 		
+		$data['dfields'] = $this->enquiry_model->getformfield(2);
 		
 		//print_r($data["tickets"]);die;
 		$data['issues'] = $this->Ticket_Model->get_issue_list();
@@ -197,10 +199,13 @@ class Ticket extends CI_Controller
 	{
 		// $_POST = array('search'=>array('value'=>''),'length'=>10,'start'=>0);
 		$this->load->model('Ticket_datatable_model');
+		$this->load->model('enquiry_model');
 
 		$res = $this->Ticket_datatable_model->getRows($_POST);
 		//print_r($res); exit();
 		$data  = array();
+
+		$dfields = $this->enquiry_model->getformfield(2);
 
 		$acolarr = array();
 		$dacolarr = array();
@@ -216,6 +221,8 @@ class Ticket extends CI_Controller
 		} else {
 			$dshowall = false;
 		}
+
+		$fieldval =  $this->enquiry_model->getfieldvalue(0,2); //2 for ticket
 
 		foreach ($res as $point) {
 			$sub = array();
@@ -287,6 +294,34 @@ class Ticket extends CI_Controller
 			if ($showall or in_array(16, $acolarr)) {
 				$sub[] = $point->status_name == '' ? 'NA' : $point->status_name;
 			}
+
+
+			//dynamic fields
+			$enqid = $point->id;
+			if (!empty($dacolarr) and !empty($dfields)) {
+				foreach ($dfields as $ind => $flds) {
+					if (in_array($flds->input_id, $dacolarr)) {
+						if($flds->input_type==8)
+						{	
+							if(!empty($fieldval[$enqid][$flds->input_id]->fvalue))
+							{
+								$x =explode('/', $fieldval[$enqid][$flds->input_id]->fvalue);
+								$filename = !empty(end($x))?end($x):'NA';
+								$sub[] = '<a href="'.$fieldval[$enqid][$flds->input_id]->fvalue.'" target="_blank">'.$filename.'</a>';
+							}else
+							{
+								$sub[] = "NA";
+							}
+							
+							
+						}else
+						{
+						$sub[] = (!empty($fieldval[$enqid][$flds->input_id])) ? $fieldval[$enqid][$flds->input_id]->fvalue : "NA";
+						}
+					}
+				}
+			}
+
 
 			$data[] = $sub;
 		}
@@ -419,7 +454,7 @@ class Ticket extends CI_Controller
 	{
 
 		$this->load->model('enquiry_model');
-
+		$this->load->model('form_model');
 		$data = array();
 		$data["ticket"] = $this->Ticket_Model->get($tckt);
 		//print_r($data['ticket']); exit();
@@ -455,6 +490,9 @@ class Ticket extends CI_Controller
 		$data['issues'] = $this->Ticket_Model->get_issue_list();
 		//$data['data'] = $data;
 		//echo $data["ticket"]->client;
+		// $data['details'] = $this->Leads_Model->get_leadListDetailsby_id($data["ticket"]->client);
+		//print_r($data['details']); exit();
+
 		if (!$data["ticket"]->client)
 			show_404();
 		$this->load->model('enquiry_model');
@@ -467,7 +505,9 @@ class Ticket extends CI_Controller
 		$this->load->model(array('form_model', 'dash_model', 'location_model'));
 		$this->load->helper('custom_form_helper');
 
-		$data['tab_list'] = $this->form_model->get_tabs_list($this->session->companey_id, 0, 2);
+		$data['tab_list'] = $this->form_model->get_tabs_list($this->session->companey_id,0,2); //2 for Ticket Tab 
+       // print_r($data['tab_list']); exit;
+
 
 		$content	 =	$this->load->view('ticket/ticket_disposition', $data, true);
 		$content    .=  $this->load->view('ticket/ticket_details', $data, true);
@@ -487,6 +527,150 @@ class Ticket extends CI_Controller
 			}
 		}
 	}
+
+	public function update_ticket_tab($tck_id)
+	{
+		$this->load->library('user_agent');
+		
+		$tid    =   $this->input->post('tid');
+        $form_type    =   $this->input->post('form_type');
+        $enqarr = $this->db->select('*')->where('id',$tck_id)->get('tbl_ticket')->row();
+        $en_comments = $enqarr->ticketno;
+
+        $type = $enqarr->status;
+
+        // if($type == 1){                 
+        //     $comment_id = $this->Leads_Model->add_comment_for_events($this->lang->line('enquery_updated'), $en_comments);                    
+        // }else if($type == 2){                   
+        //      $comment_id = $this->Leads_Model->add_comment_for_events($this->lang->line('lead_updated'), $en_comments);                   
+        // }else if($type == 3){
+        //      $comment_id = $this->Leads_Model->add_comment_for_events($this->lang->line('client_updated'), $en_comments);
+        // }	
+        
+
+       $comment_id = $this->Ticket_Model->saveconv($tck_id,'Details Updated','', $enqarr->client,$this->session->user_id);
+
+        if(!empty($enqarr)){        
+            if(isset($_POST['inputfieldno'])) {                    
+                $inputno   = $this->input->post("inputfieldno", true);
+                $enqinfo   = $this->input->post("enqueryfield", true);
+                $inputtype = $this->input->post("inputtype", true);                
+                $file_count = 0;                
+                $file = !empty($_FILES['enqueryfiles'])?$_FILES['enqueryfiles']:'';                
+                foreach($inputno as $ind => $val){
+	
+
+                 if ($inputtype[$ind] == 8) {                                                
+                        $file_data    =   $this->doupload($file,$file_count);
+
+                        if (!empty($file_data['imageDetailArray']['file_name'])) {
+                            $file_path = base_url().'uploads/ticket_documents/'.$this->session->companey_id.'/'.$file_data['imageDetailArray']['file_name'];
+                            $biarr = array( 
+                                            "enq_no"  => $en_comments,
+                                            "input"   => $val,
+                                            "parent"  => $tck_id, 
+                                            "fvalue"  => $file_path,
+                                            "cmp_no"  => $this->session->companey_id,
+                                            "comment_id" => $comment_id
+                                        );
+
+                            $this->db->where('enq_no',$en_comments);        
+                            $this->db->where('input',$val);        
+                            $this->db->where('parent',$tck_id);
+                            if($this->db->get('ticket_dynamic_data')->num_rows()){
+                                if ($form_type == 1) {
+                                    $this->db->insert('ticket_dynamic_data',$biarr);                                       
+                                }else{                                    
+                                    $this->db->where('enq_no',$en_comments);        
+                                    $this->db->where('input',$val);        
+                                    $this->db->where('parent',$tck_id);
+                                    $this->db->set('fvalue',$file_path);
+                                    $this->db->set('comment_id',$comment_id);
+                                    $this->db->update('ticket_dynamic_data');
+                                }
+                            }else{
+                                $this->db->insert('ticket_dynamic_data',$biarr);
+                            }         
+                        }
+                        $file_count++;          
+                    }else{
+                        $biarr = array( "enq_no"  => $en_comments,
+                                      "input"   => $val,
+                                      "parent"  => $tck_id, 
+                                      "fvalue"  => $enqinfo[$val],
+                                      "cmp_no"  => $this->session->companey_id,
+                                      "comment_id" => $comment_id
+                                     );                                 
+                        $this->db->where('enq_no',$en_comments);        
+                        $this->db->where('input',$val);        
+                        $this->db->where('parent',$tck_id);
+                        if($this->db->get('ticket_dynamic_data')->num_rows()){  
+                            if ($form_type == 1) {
+                                $this->db->insert('ticket_dynamic_data',$biarr);                                       
+                            }else{                                                              
+                                $this->db->where('enq_no',$en_comments);        
+                                $this->db->where('input',$val);        
+                                $this->db->where('parent',$tck_id);
+                                $this->db->set('fvalue',$enqinfo[$val]);
+                                $this->db->set('comment_id',$comment_id);
+                                $this->db->update('ticket_dynamic_data');
+                            }
+                        }else{
+                            $this->db->insert('ticket_dynamic_data',$biarr);
+                        }
+                    }                                      
+                } //foreach loop end               
+            }            
+             
+        }
+        if (!$this->input->is_ajax_request()) {           
+            $this->session->set_flashdata('message', 'Save successfully');
+            redirect($this->agent->referrer()); //updateclient
+        }else{
+            echo json_encode(array('msg'=>'Saved Successfully','status'=>1));
+        }
+	}
+
+	public function doupload($file,$key){        
+        $upload_path    =   "./uploads/ticket_documents/";
+        $comp_id        =   $this->session->companey_id; //creare seperate folder for each company
+        $upPath         =   $upload_path.$comp_id;
+        
+        if(!file_exists($upPath)){
+            mkdir($upPath, 0777, true);
+        }        
+        $config = array(
+            'upload_path'   => $upPath,            
+            'overwrite'     => TRUE,
+            'max_size'      => "2048000",
+            'overwrite'    => false
+
+        );
+        $config['allowed_types'] = '*';
+
+
+        $this->load->library('upload');
+        $this->upload->initialize($config);
+
+        $_FILES['enqueryfiles']['name']      = $file['name'][$key];
+        $_FILES['enqueryfiles']['type']      = $file['type'][$key];
+        $_FILES['enqueryfiles']['tmp_name']  = $file['tmp_name'][$key];
+        $_FILES['enqueryfiles']['error']     = $file['error'][$key];
+        $_FILES['enqueryfiles']['size']      = $file['size'][$key];        
+        
+        if(!$this->upload->do_upload('enqueryfiles')){             
+            $data['imageError'] =  $this->upload->display_errors();
+        }else{
+            $data['imageDetailArray'] = $this->upload->data();        
+        }
+        return $data;
+    }
+
+    public function deleteQueryData($cmnt_id,$tckno)
+    {
+    	$this->db->where(array('comment_id'=>$cmnt_id,'enq_no'=>$tckno))->delete('ticket_dynamic_data');
+    }
+
 	public function get_enquery_code()
 	{
 
