@@ -1246,54 +1246,60 @@ class Ticket extends CI_Controller
 
 		public function tat_run(){
 			$fetchrules = $this->db->where(array('comp_id' => $this->session->companey_id, 'type' => 5))->order_by("id", "ASC")->get('leadrules')->result();
-			foreach ($fetchrules as $key => $value) {
-				$rule_action = json_decode($value->rule_action);
-				$esc_hr = $rule_action->esc_hr;
-				$assign_to = $rule_action->assign_to;
-				$leadtitle = $value->title;
-				$lid = $value->id;
-
-				$this->db->where($value->rule_sql);
-				$tickets	=	$this->db->get('tbl_ticket')->result_array();
-
-				if(!empty($tickets)){
-					foreach($tickets as $tck){
-						$d = $tck['coml_date'];
-						 $currentDate = date('Y-m-d H:i:s');
-						
-						// $time1 = strtotime($created_date);
-						//$time2 = strtotime($currentDate);
-						// $hourTime = round(($time2 - $time1) / 60, 1);
-
-						if($this->isBusinessHr()){
-							$created_date	=	$this->currect_created_date($d,$uid);
-							$working_hrs	=	$this->get_working_hours($created_date,$currentDate);
-							echo $working_hrs;
+			if(!empty($fetchrules)){
+				foreach ($fetchrules as $key => $value) {
+					$rule_action = json_decode($value->rule_action);
+					$esc_hr = $rule_action->esc_hr;
+					$assign_to = $rule_action->assign_to;
+					$leadtitle = $value->title;
+					$lid = $value->id;
+					
+					$this->db->where($value->rule_sql);
+					$tickets	=	$this->db->get('tbl_ticket')->result_array();
+					echo "<pre>";
+					print_r($tickets);
+					echo "</pre>";
+					if(!empty($tickets)){
+						foreach($tickets as $tck){
+							$d = $tck['coml_date'];
+							$currentDate = date('Y-m-d H:i:s');
+							$bh	=	$this->isBusinessHr(new DateTime($currentDate));	
+							if($bh){
+								$created_date	=	$this->currect_created_date($d,$assign_to);
+								 echo $created_date.'-';
+								 echo $currentDate.'hi';
+								$working_hrs	=	$this->get_working_hours($created_date,$currentDate,$assign_to);
+								//echo $working_hrs;
+							}
 						}
 					}
-				}
 
+				}
 			}
 		}
 	
 		function currect_created_date($d,$uid){
-			if($this->isBusinessHr(new DateTime($d))){
+			$is_bus_hr	=	$this->isBusinessHr(new DateTime($d));			
+			if($is_bus_hr){
 				$timeObject = new DateTime($d);
 				$timestamp = $timeObject->getTimeStamp();
-				$date1 = date('Y-m-d', $timestamp);	
-				if($this->is_woking_day($date1,$uid)){
+				$date1 = date('Y-m-d', $timestamp);					
+				$time1 = date('H:i:s', $timestamp);								
+				$is_working_day	=	$this->is_working_day($date1,$uid);				
+				if($is_working_day){
 					return $d;
 				}else{
-					$next_date = date('Y-m-d H:i:s', strtotime($d .' +1 day'));
-					$this->currect_created_date($next_date,$uid);					
+					$next_date = date('Y-m-d', strtotime($date1 .' +1 day'));					
+					$next_date = $next_date.' 10:00:00';
+					return $this->currect_created_date($next_date,$uid);					
 				}
 			}else{
 				$wdate =	$this->get_working_date($d);			
-				$this->currect_created_date($wdate,$uid);				
+				return $this->currect_created_date($wdate,$uid);				
 			}
 		}
 		function is_working_day($d,$user){
-			$hlist	=	$this->ticket_Model->get_user_holidays($uid);
+			$hlist	=	$this->Ticket_Model->get_user_holidays($user);
 			if(in_array($d,$hlist)){
 				return false;
 			}else{
@@ -1326,7 +1332,7 @@ class Ticket extends CI_Controller
 			$status = FALSE;
 			$storeSchedule = [
 				'Mon' => ['10:00 AM' => '06:00 PM'],				
-				'Tue' => ['10:00 AM' => '10:00 PM'],
+				'Tue' => ['10:00 AM' => '06:00 PM'],
 				'Wed' => ['10:00 AM' => '06:00 PM'],
 				'Thu' => ['10:00 AM' => '06:00 PM'],
 				'Fri' => ['10:00 AM' => '06:00 PM']
@@ -1340,9 +1346,9 @@ class Ticket extends CI_Controller
 				$timestamp = $timeObject->getTimeStamp();
 				$currentTime = $timeObject->setTimestamp($timestamp)->format('H:i A');
 			}
-
+			
 			// echo $currentTime.'<br>';
-			// echo date('D', $timestamp);
+			 //echo date('D', $timestamp);
 			// loop through time ranges for current day
 			if(!empty($storeSchedule[date('D', $timestamp)])){				
 				foreach ($storeSchedule[date('D', $timestamp)] as $startTime => $endTime) {		
@@ -1350,7 +1356,7 @@ class Ticket extends CI_Controller
 					$startTime = DateTime::createFromFormat('h:i A', $startTime)->format('H:i A');
 					$endTime = DateTime::createFromFormat('h:i A', $endTime)->format('H:i A');		
 					// check if current time is within the range
-					if (($startTime < $currentTime) && ($currentTime < $endTime)) {
+					if (($startTime <= $currentTime) && ($currentTime <= $endTime)) {
 						$status = TRUE;
 						break;
 					}
@@ -1360,7 +1366,7 @@ class Ticket extends CI_Controller
 		}
 
 
-		function get_working_hours($from='2020-11-12 09:00:00',$to='2020-11-12 17:00:00')
+		function get_working_hours($from,$to,$uid)
 		{
 			// timestamps
 			$from_timestamp = strtotime($from);
@@ -1374,7 +1380,7 @@ class Ticket extends CI_Controller
 			// work days beetwen dates, minus 1 day
 			$from_date = date('Y-m-d',$from_timestamp);
 			$to_date = date('Y-m-d',$to_timestamp);
-			$workdays_number = count($this->get_workdays($from_date,$to_date))-1;
+			$workdays_number = count($this->get_workdays($from_date,$to_date,$uid))-1;
 			$workdays_number = $workdays_number<0 ? 0 : $workdays_number;
 			
 			echo $workdays_number.'<br>';
@@ -1389,12 +1395,12 @@ class Ticket extends CI_Controller
 			echo $working_hours;
 		}
 
-		function get_workdays($from,$to) 
+		function get_workdays($from,$to,$uid) 
 		{
 			// arrays
 			$days_array = array();
 			$skipdays = array("Saturday", "Sunday");
-			$skipdates = $this->get_holidays();
+			$skipdates = $this->get_holidays($uid);
 
 			// other variables
 			$i = 0;
@@ -1422,10 +1428,10 @@ class Ticket extends CI_Controller
 			return $days_array;
 		}
 
-		function get_holidays() 
+		function get_holidays($uid) 
 		{
 			// arrays			
-			$days_array = $this->ticket_Model->get_user_holidays($uid);;
+			$days_array = $this->Ticket_Model->get_user_holidays($uid);;
 
 			// You have to put there your source of holidays and make them as array...
 			// For example, database in Codeigniter:
