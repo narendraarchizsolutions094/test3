@@ -336,9 +336,9 @@
 							</div-->
 
 <?php
-echo "<pre>";
-print_r($product);
-echo "</pre>";
+// echo "<pre>";
+// print_r($product);
+// echo "</pre>";
 ?>
 
 						 	<div class="col-md-6">
