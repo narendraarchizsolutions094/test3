@@ -616,7 +616,7 @@ class Ticket_Model extends CI_Model
 	public function is_tat_rule_executed($tid,$lid){
 		$this->db->where('tbl_ticket_conv.tck_id',$tid);
 		$this->db->where('tbl_ticket_conv.lid',$lid);
-		if($this->db->get('tbl_ticket_conv')->num_row()){
+		if($this->db->get('tbl_ticket_conv')->num_rows()){
 			return true;
 		}else{
 			return false;
