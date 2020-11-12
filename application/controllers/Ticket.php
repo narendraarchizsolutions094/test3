@@ -1280,7 +1280,7 @@ class Ticket extends CI_Controller
 			$end   = new DateTime($date2);
 			for ($i = $begin; $i <= $end; $i->modify('+1 day')) {
 				$idate = $i->format("Y-m-d");
-				$isdate = strtotime($i->format("Y-m-d"));
+				$isdate = strtotime($i->format("Y-m-d")).'000';
 				$count = $this->Ticket_Model->createddatewise($idate);				
 				$data[] = [(int)$isdate, $count];
 			}
