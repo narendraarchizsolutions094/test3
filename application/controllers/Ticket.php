@@ -1269,23 +1269,26 @@ class Ticket extends CI_Controller
 			redirect('dashboard');
 		}
 	}
-	public function createddatewise()
-	{
+	public function createddatewise(){
 		$get = $this->Ticket_Model->getfistDate();
 		$data = [];
 		if (!empty($get)) {
 			$date = date('Y-m-d', strtotime($get));
-			$date2 = date('Y-m-d'); 
+			$date2 = date('Y-m-d H:i:s'); 
 			$begin = new DateTime($date);
 			$end   = new DateTime($date2);
 			for ($i = $begin; $i <= $end; $i->modify('+1 day')) {
-				$idate = $i->format("Y-m-d");
-				$isdate = strtotime($idate) . '000';
-				$count = $this->Ticket_Model->createddatewise($idate);
+				
+				$d = $i->format("Y-m-d");
+				
+				$idate = $i->format("Y-m-d H:i:s");
+
+				$isdate = strtotime($idate);
+				
+				$count = $this->Ticket_Model->createddatewise($d);
 				$data[] = [(int)$isdate, $count];
 			}
 		}
-		// print_r($data);
 		echo json_encode($data);
 	}
 	public function createddatewise1()
