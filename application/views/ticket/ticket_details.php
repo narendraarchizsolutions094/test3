@@ -1,6 +1,9 @@
 <div class="col-md-6 col-sm-12 card card-body col-height details-column" style="border: 1px solid #c8ced3;padding: 15px;border-top: none;">
 <div class="exTab3">
 	<ul  class="nav nav-tabs" role="tablist"> 
+
+		<span class="scrollTab" style="position: absolute; left: 0; font-size: 22px; line-height: 40px; z-index: 999"><i class="fa fa-caret-left" onclick="tabScroll('left')"></i></span>    
+
 		<li class="active"><a  href="#basic" data-toggle="tab" style="padding: 10px 10px; ">Basic</a></li> 
 		<li class=""><a  href="#related_tickets" data-toggle="tab" style="padding: 10px 10px; ">Related Tickets</a></li>   
 
@@ -19,6 +22,8 @@
             }
 
           ?>
+
+           <span class="scrollTab" style="position: absolute; right: 0; font-size: 22px; line-height: 40px; z-index: 999"><i class="fa fa-caret-right"  onclick="tabScroll('right')"></i></span>
 
 	</ul>
 	<div class="tab-content clearfix">
@@ -363,6 +368,12 @@
 </div>
 </div>
  <style>
+ 	 .col-height{
+    min-height: 700px;
+    max-height: 700px;
+    overflow-y: auto;
+    border-bottom: solid #c8ced3 1px;
+  }
 		.nav-tabs
         {
          overflow-x: hidden;
@@ -446,6 +457,45 @@
          }
          .active .badge{color: white!important;}
       </style>
+<script>
+	 manageScroll();
+function manageScroll()
+{
+  if($(".nav-tabs")[0].scrollWidth > $(".nav-tabs")[0].clientWidth)
+            {
+              $(".scrollTab").show();
+            }
+            else
+            {
+               $(".scrollTab").hide();
+            }
+}
+
+$(window).resize(function(){
+  manageScroll();
+});
+
+  function tabScroll(side)
+  {
+    if(side=='left')
+    {
+      var leftPos = $('.nav-tabs').scrollLeft();
+     
+        $(".nav-tabs").animate({
+            scrollLeft: leftPos - 200
+        }, 100);
+    }
+    else if (side=='right')
+    {   
+        var leftPos = $('.nav-tabs').scrollLeft();
+      
+        $(".nav-tabs").animate({
+            scrollLeft: leftPos + 200
+        }, 100);
+    }
+  }
+</script>
+
 <!-- jquery-ui js -->
 <script src="<?php echo base_url('assets/js/jquery-ui.min.js') ?>" type="text/javascript"></script>      
 <!-- DataTables JavaScript -->

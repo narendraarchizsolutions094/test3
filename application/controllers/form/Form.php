@@ -338,7 +338,7 @@ class Form extends CI_Controller {
 		$isqueryform 	= 0;
 		$edit 			= 0;
 		$delete 		= 0;
-		$isqueryform 	= $this->input->post('isqueryform');
+		$isqueryform 	= $this->input->post('isqueryform')??0;
 		if($isqueryform == 1)
 		{
 			$edit 	= $this->input->post('edit')??0;
