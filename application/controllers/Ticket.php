@@ -1271,8 +1271,6 @@ class Ticket extends CI_Controller
 	}
 	public function createddatewise()
 	{
-
-		date_default_timezone_set('Asia/Kolkata'); 
 		$get = $this->Ticket_Model->getfistDate();
 		$data = [];
 		if (!empty($get)) {
@@ -1282,7 +1280,7 @@ class Ticket extends CI_Controller
 			$end   = new DateTime($date2);
 			for ($i = $begin; $i <= $end; $i->modify('+1 day')) {
 				$idate = $i->format("Y-m-d");
-				$isdate = strtotime($i->format("Y-m-d")) . '000';
+				$isdate = strtotime($idate) . '000';
 				$count = $this->Ticket_Model->createddatewise($idate);
 				$data[] = [(int)$isdate, $count];
 			}
