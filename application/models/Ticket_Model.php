@@ -535,7 +535,7 @@ class Ticket_Model extends CI_Model
 	public function createddatewise($idate)
 	{
 		$all_reporting_ids    =   $this->common_model->get_categories($this->session->user_id);
-		$where = 'company=$this->session->companey_id AND ';
+		$where = 'company='.$this->session->companey_id.' AND ';
 		$where .= "(added_by IN (" . implode(',', $all_reporting_ids) . ')';
 		$where .= " OR assign_to IN (" . implode(',', $all_reporting_ids) . '))';
 
