@@ -1288,6 +1288,24 @@ class Ticket extends CI_Controller
 		// print_r($data);
 		echo json_encode($data);
 	}
+
+	public function createddatewise1()
+	{
+		$get = $this->Ticket_Model->getfistDate();
+		$data = [];
+		if (!empty($get)) {
+			$date = date('Y-m-d', strtotime($get));
+			$date2 = date('Y-m-d');
+			$begin = new DateTime($date);
+			$end   = new DateTime($date2);
+			for ($i = $begin; $i <= $end; $i->modify('+1 day')) {
+				$idate = $i->format("Y-m-d");
+			 echo $idate;
+			}
+		}
+		// print_r($data);
+		echo json_encode($data);
+	}
 	public function referred_byJson()
 	{
 		$data = [];
