@@ -262,6 +262,7 @@ class Dashboard extends CI_Controller {
         
         if ($sessionId && $campaignId && $userCrtObjectId && $userId) {            
             print_r($_GET);
+            exit();
             $user_data    =   $this->user_model->get_user_by_email($userId);
             if (!empty($user_data) && ($user_data->companey_id == 79 || $user_data->companey_id == 82)) {
 
