@@ -534,7 +534,12 @@ class Ticket_Model extends CI_Model
 	}
 	public function createddatewise($idate)
 	{
-		$count = $this->db->where('company', $this->session->companey_id)->like('coml_date', $idate)->count_all_results('tbl_ticket');
+		$all_reporting_ids    =   $this->common_model->get_categories($this->session->user_id);
+		$where = 'company='.$this->session->companey_id.' AND ';
+		$where .= "(added_by IN (" . implode(',', $all_reporting_ids) . ')';
+		$where .= " OR assign_to IN (" . implode(',', $all_reporting_ids) . '))';
+
+		$count = $this->db->where($where)->like('coml_date', $idate)->count_all_results('tbl_ticket');
 		return $count;
 	}
 	public function getfistDate()

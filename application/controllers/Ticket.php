@@ -1270,19 +1270,38 @@ class Ticket extends CI_Controller
 	}
 	public function createddatewise()
 	{
+		$get = $this->Ticket_Model->getfistDate();
+		$data = [];
+		if (!empty($get)) {
+			$date = date('Y-m-d', strtotime($get));
+			$date2 = date('Y-m-d'); 
+			$begin = new DateTime($date);
+			$end   = new DateTime($date2);
+			for ($i = $begin; $i <= $end; $i->modify('+1 day')) {
+				$idate = $i->format("Y-m-d");
+				$isdate = strtotime($idate) . '000';
+				$count = $this->Ticket_Model->createddatewise($idate);
+				$data[] = [(int)$isdate, $count];
+			}
+		}
+		// print_r($data);
+		echo json_encode($data);
+	}
+	public function createddatewise1()
+	{
 
 		$get = $this->Ticket_Model->getfistDate();
 		$data = [];
 		if (!empty($get)) {
 			$date = date('Y-m-d', strtotime($get));
-			$date2 = date('Y-m-d');
+			$date2 = date('Y-m-d'); 
 			$begin = new DateTime($date);
 			$end   = new DateTime($date2);
 			for ($i = $begin; $i <= $end; $i->modify('+1 day')) {
 				$idate = $i->format("Y-m-d");
 				$isdate = strtotime($i->format("Y-m-d")) . '000';
 				$count = $this->Ticket_Model->createddatewise($idate);
-				$data[] = [(int)$isdate, $count];
+				$data[] = [$idate, $count];
 			}
 		}
 		// print_r($data);
