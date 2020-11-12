@@ -1272,6 +1272,7 @@ class Ticket extends CI_Controller
 	public function createddatewise()
 	{
 
+		date_default_timezone_set('Asia/Kolkata'); 
 		$get = $this->Ticket_Model->getfistDate();
 		$data = [];
 		if (!empty($get)) {
