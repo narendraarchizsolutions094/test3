@@ -1281,9 +1281,8 @@ class Ticket extends CI_Controller
 			for ($i = $begin; $i <= $end; $i->modify('+1 day')) {
 				$idate = $i->format("Y-m-d");
 				$isdate = strtotime($i->format("Y-m-d")) . '000';
-				$count = $this->Ticket_Model->createddatewise($idate);
-				$isdate += 12*3600;
-				$data[] = [(int)$isdate, $count];
+				$count = $this->Ticket_Model->createddatewise($idate);				
+				$data[] = [(int)$isdate+43200, $count];
 			}
 		}
 		// print_r($data);
