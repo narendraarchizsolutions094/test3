@@ -1271,7 +1271,6 @@ class Ticket extends CI_Controller
 	}
 	public function createddatewise()
 	{
-
 		$get = $this->Ticket_Model->getfistDate();
 		$data = [];
 		if (!empty($get)) {
@@ -1283,6 +1282,7 @@ class Ticket extends CI_Controller
 				$idate = $i->format("Y-m-d");
 				$isdate = strtotime($i->format("Y-m-d")) . '000';
 				$count = $this->Ticket_Model->createddatewise($idate);
+				$isdate += 6*3600;
 				$data[] = [(int)$isdate, $count];
 			}
 		}
