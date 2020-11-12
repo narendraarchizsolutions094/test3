@@ -251,7 +251,7 @@ class Dashboard extends CI_Controller {
                 }
      }
     public function index() { 
-        
+       
         $sessionId      =   $this->input->get('sessionId');
         $campaignId     =   $this->input->get('campaignId');
         $crtObjectId    =   $this->input->get('crtObjectId');
@@ -259,10 +259,8 @@ class Dashboard extends CI_Controller {
         $userId         =   $this->input->get('userId');
         $customerId     =   $this->input->get('customerId');
         $phone          =   $this->input->get('phone');
-        
+ 
         if ($sessionId && $campaignId && $userCrtObjectId && $userId) {            
-            print_r($_GET);
-            exit();
             $user_data    =   $this->user_model->get_user_by_email($userId);
             if (!empty($user_data) && ($user_data->companey_id == 79 || $user_data->companey_id == 82)) {
 
