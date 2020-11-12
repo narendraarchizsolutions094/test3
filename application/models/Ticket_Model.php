@@ -141,7 +141,9 @@ class Ticket_Model extends CI_Model
 			"referred_by"   => ($this->input->post("referred_by", true)) ? $this->input->post("referred_by", true) : "",
 
 		);
-		if (empty($_FILES["attachment"]["name"]) && $_FILES["attachment"]["size"][0]>0) {	
+		
+		if (!empty($_FILES["attachment"]["name"]) && $_FILES["attachment"]["size"][0]>0) {	
+			//print_r($_FILES['attachment']); exit();
 			$retdata =  $this->do_upload();
 			//print_r($retdata);			
 			if (!empty($retdata))
@@ -241,6 +243,7 @@ class Ticket_Model extends CI_Model
 			
 			if (!$this->upload->do_upload('img'))
 			{
+				print_r($this->upload->display_errors());
 				$this->session->set_flashdata('error',$this->upload->display_errors());
 			} 
 			else 
