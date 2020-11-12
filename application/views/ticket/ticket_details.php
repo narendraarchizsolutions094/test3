@@ -350,8 +350,10 @@
 	</div>
 
 	 <?php
-	   if(!empty($tab_list)){
-	    foreach ($tab_list as $key => $value) { ?>
+	   if(!empty($tab_list))
+	   {
+	    
+	   	 foreach ($tab_list as $key => $value) { ?>
 	      <div class="tab-pane" id="<?=str_replace(' ', '_', $value['title'])?>">
 	      <?php
 	      if ($value['id'] != 1) {
@@ -361,6 +363,45 @@
 	      </div>
 	      <?php
 	    }
+	    ?>
+	    <script type="text/javascript">
+      		function edit_dynamic_query(t)
+      		{
+      			var tab_id = $(t).data('tab-id');
+      			var cmnt_id = $(t).data('cmnt');
+      			var ticket = $(t).data('ticket');
+      			var comp_id = $(t).data('comp-id');
+      			var tabname = $(t).data('tab-name')
+      			if(cmnt_id!='')
+      			{
+      				$.ajax({
+      					url:'<?=base_url('ticket/edit_query_data')?>',
+      					data:{cmnt_id:cmnt_id,tab_id:tab_id,ticket:ticket,comp_id:comp_id,tabname:tabname,task:'view'},
+      					type:'post',
+      					success:function(res)
+      					{
+      						Swal.fire({
+      							title:'Edit '+tabname,
+      							html:res,
+      							with:'100%',
+      							showConfirmButton:false,
+      							showCancelButton:true,
+      							cancelButtonText:'Close',
+      							cancelButtonColor:'#E5343D'
+      						});
+      					},
+      					error:function(u,v,w)
+      					{
+      						alert(w);
+      					}
+      				});
+      			}
+      			
+      		}
+      	</script>
+
+
+	    <?php
 	  }
 	  ?>
 	
