@@ -254,7 +254,9 @@ class Ticket extends CI_Controller
 			}
 
 			if ($showall or in_array(6, $acolarr)) {
-				$sub[] = $point->assign_to_name ?? "NA";
+				$assign_to = $point->assign_to_name ?? "NA";
+				$assign_to .=	!empty($point->last_esc)?' (<small style="color:red;">'.$point->last_esc.'</small>)':"";
+				$sub[] = $assign_to;
 			}
 
 			if ($showall or in_array(17, $acolarr)) {
@@ -483,7 +485,7 @@ class Ticket extends CI_Controller
 		$data["product"] = $this->Ticket_Model->getproduct();
 		//print_r($data['product']); exit();
 		$data["conversion"] = $this->Ticket_Model->getconv($data["ticket"]->id);
-		//print_r($data['conversion']); exit(); 
+		// print_r($data['conversion']); exit(); 
 		$data['problem'] = $this->Ticket_Model->get_sub_list();
 
 		$data['prodcntry_list'] = $this->enquiry_model->get_user_productcntry_list();
@@ -669,7 +671,6 @@ class Ticket extends CI_Controller
     public function deleteQueryData($cmnt_id,$tckno)
     {
     	$this->db->where(array('comment_id'=>$cmnt_id,'enq_no'=>$tckno))->delete('ticket_dynamic_data');
-    	
     }
 
 	public function get_enquery_code()
@@ -1274,34 +1275,33 @@ class Ticket extends CI_Controller
 		$data = [];
 		if (!empty($get)) {
 			$date = date('Y-m-d', strtotime($get));
-			$date2 = date('Y-m-d'); 
+			$date2 = date('Y-m-d');
 			$begin = new DateTime($date);
 			$end   = new DateTime($date2);
 			for ($i = $begin; $i <= $end; $i->modify('+1 day')) {
 				$idate = $i->format("Y-m-d");
-				$isdate = strtotime($idate) . '000';
-				$count = $this->Ticket_Model->createddatewise($idate);
+				$isdate = strtotime($i->format("Y-m-d")).'000';
+				$isdate = strtotime('+24 hours',$isdate);
+				$count = $this->Ticket_Model->createddatewise($idate);				
 				$data[] = [(int)$isdate, $count];
 			}
 		}
 		// print_r($data);
 		echo json_encode($data);
 	}
+
 	public function createddatewise1()
 	{
-
 		$get = $this->Ticket_Model->getfistDate();
 		$data = [];
 		if (!empty($get)) {
 			$date = date('Y-m-d', strtotime($get));
-			$date2 = date('Y-m-d'); 
+			$date2 = date('Y-m-d');
 			$begin = new DateTime($date);
 			$end   = new DateTime($date2);
 			for ($i = $begin; $i <= $end; $i->modify('+1 day')) {
 				$idate = $i->format("Y-m-d");
-				$isdate = strtotime($i->format("Y-m-d")) . '000';
-				$count = $this->Ticket_Model->createddatewise($idate);
-				$data[] = [$idate, $count];
+			 echo $idate;
 			}
 		}
 		// print_r($data);
@@ -1395,10 +1395,12 @@ class Ticket extends CI_Controller
 						if ($hourTime >= $esc_hr) {
 							// user check
 							// check office time
+							
 							$inTime='10:00';
 							$outTime='18:00';
 							$currentTime = date('H:i');
 							$todayIntime=date('Y-m-d '.$inTime);
+
 							$nextAssignment = date('Y-m-d H:i',strtotime($todayIntime . "+1 days"));
 							if ($nextAssignTimeF <= $currentD OR $nextAssignTimeF!=NULL) {
 								if ($currentTime >= $outTime ) {
@@ -1445,5 +1447,199 @@ class Ticket extends CI_Controller
 			}
 			//subsatge
 		}
-	
+		// tat rule code start
+		public function tat_run($comp_id){			
+			$fetchrules = $this->db->where(array('comp_id' => $comp_id, 'type' => 5))->order_by("id", "ASC")->get('leadrules')->result();
+			if(!empty($fetchrules)){
+				foreach ($fetchrules as $key => $value) {
+					$rule_action = json_decode($value->rule_action);
+					$esc_hr = $rule_action->esc_hr;
+					$assign_to = $rule_action->assign_to;
+					$rule_title = $value->title;
+					$lid = $value->id;					
+					$this->db->where($value->rule_sql);					
+					$tickets	=	$this->db->get('tbl_ticket')->result_array();					
+					if(!empty($tickets)){
+						foreach($tickets as $tck){
+							if(!$this->Ticket_Model->is_tat_rule_executed($tck['id'],$lid)){
+								$d = $tck['coml_date'];
+								$currentDate = date('Y-m-d H:i:s');
+								$bh	=	$this->isBusinessHr(new DateTime($currentDate));	
+								if($bh){
+									$created_date	=	$this->currect_created_date($d,$assign_to);								
+									$working_hrs	=	$this->get_working_hours($created_date,$currentDate,$assign_to);
+									if($working_hrs >= $esc_hr){
+										$this->Ticket_Model->insertData($assign_to,$tck['id'],$lid,$rule_title,$comp_id,286);
+										// 286 is bhavan user id
+									}
+								}
+							}
+						}
+					}
+
+				}
+			}
+		}
+		public function currect_created_date($d,$uid){
+			$is_bus_hr	=	$this->isBusinessHr(new DateTime($d));			
+			if($is_bus_hr){
+				$timeObject = new DateTime($d);
+				$timestamp = $timeObject->getTimeStamp();
+				$date1 = date('Y-m-d', $timestamp);					
+				$time1 = date('H:i:s', $timestamp);								
+				$is_working_day	=	$this->is_working_day($date1,$uid);				
+				if($is_working_day){
+					return $d;
+				}else{
+					$next_date = date('Y-m-d', strtotime($date1 .' +1 day'));					
+					$next_date = $next_date.' 10:00:00';
+					return $this->currect_created_date($next_date,$uid);					
+				}
+			}else{
+				$wdate =	$this->get_working_date($d);			
+				return $this->currect_created_date($wdate,$uid);				
+			}
+		}
+		function is_working_day($d,$user){
+			$hlist	=	$this->Ticket_Model->get_user_holidays($user);
+			if(in_array($d,$hlist)){
+				return false;
+			}else{
+				return true;
+			}
+		}
+		
+
+		function get_working_date($d){
+						
+			$timeObject = new DateTime($d);
+			$timestamp = $timeObject->getTimeStamp();
+			$act_time = date('H:i', $timestamp);			
+			$act_date = date('Y-m-d', $timestamp);			
+			if($act_time < '10:00'){
+				$next_time = $act_date.' 10:00:00';
+				
+			}else if($act_time > '06:00') {
+				$next_time = '';
+				$next_date = date('Y-m-d', strtotime($act_date .' +1 day'));
+				$next_time .= $next_date.' 10:00:00';
+			}
+			
+			return $next_time;
+
+		}
+
+		function isBusinessHr($timeObject=0) {		
+
+			$status = FALSE;
+			$storeSchedule = [
+				'Mon' => ['10:00 AM' => '06:00 PM'],				
+				'Tue' => ['10:00 AM' => '06:00 PM'],
+				'Wed' => ['10:00 AM' => '06:00 PM'],
+				'Thu' => ['10:00 AM' => '06:00 PM'],
+				'Fri' => ['10:00 AM' => '06:00 PM']
+			];
+		
+			if(empty($timeObject)){
+				$timeObject = new DateTime();
+				$timestamp = $timeObject->getTimeStamp();
+				$currentTime = $timeObject->setTimestamp($timestamp)->format('H:i A');
+			}else{
+				$timestamp = $timeObject->getTimeStamp();
+				$currentTime = $timeObject->setTimestamp($timestamp)->format('H:i A');
+			}
+			
+			// echo $currentTime.'<br>';
+			 //echo date('D', $timestamp);
+			// loop through time ranges for current day
+			if(!empty($storeSchedule[date('D', $timestamp)])){				
+				foreach ($storeSchedule[date('D', $timestamp)] as $startTime => $endTime) {		
+					// create time objects from start/end times and format as string (24hr AM/PM)
+					$startTime = DateTime::createFromFormat('h:i A', $startTime)->format('H:i A');
+					$endTime = DateTime::createFromFormat('h:i A', $endTime)->format('H:i A');		
+					// check if current time is within the range
+					if (($startTime <= $currentTime) && ($currentTime <= $endTime)) {
+						$status = TRUE;
+						break;
+					}
+				}
+			}
+			return $status;
+		}
+
+
+		function get_working_hours($from,$to,$uid)
+		{
+			// timestamps
+			$from_timestamp = strtotime($from);
+			$to_timestamp = strtotime($to);
+
+			// work day seconds
+			$workday_start_hour = 10;
+			$workday_end_hour = 18;
+			$workday_seconds = ($workday_end_hour - $workday_start_hour)*3600;
+
+			// work days beetwen dates, minus 1 day
+			$from_date = date('Y-m-d',$from_timestamp);
+			$to_date = date('Y-m-d',$to_timestamp);
+			$workdays_number = count($this->get_workdays($from_date,$to_date,$uid))-1;
+			$workdays_number = $workdays_number<0 ? 0 : $workdays_number;
+			
+			// echo $workdays_number.'<br>';
+
+			// start and end time
+			$start_time_in_seconds = date("H",$from_timestamp)*3600+date("i",$from_timestamp)*60;
+			$end_time_in_seconds = date("H",$to_timestamp)*3600+date("i",$to_timestamp)*60;
+
+			// final calculations
+			$working_hours = ($workdays_number * $workday_seconds + $end_time_in_seconds - $start_time_in_seconds) / 86400 * 24;
+
+			return $working_hours;
+		}
+
+		function get_workdays($from,$to,$uid) 
+		{
+			// arrays
+			$days_array = array();
+			$skipdays = array("Saturday", "Sunday");
+			$skipdates = $this->get_holidays($uid);
+
+			// other variables
+			$i = 0;
+			$current = $from;
+
+			if($current == $to) // same dates
+			{
+				$timestamp = strtotime($from);
+				if (!in_array(date("l", $timestamp), $skipdays)&&!in_array(date("Y-m-d", $timestamp), $skipdates)) {
+					$days_array[] = date("Y-m-d",$timestamp);
+				}
+			}
+			elseif($current < $to) // different dates
+			{
+				while ($current < $to) {
+					$timestamp = strtotime($from." +".$i." day");
+					if (!in_array(date("l", $timestamp), $skipdays)&&!in_array(date("Y-m-d", $timestamp), $skipdates)) {
+						$days_array[] = date("Y-m-d",$timestamp);
+					}
+					$current = date("Y-m-d",$timestamp);
+					$i++;
+				}
+			}
+
+			return $days_array;
+		}
+
+		function get_holidays($uid) 
+		{
+			// arrays			
+			$days_array = $this->Ticket_Model->get_user_holidays($uid);;
+
+			// You have to put there your source of holidays and make them as array...
+			// For example, database in Codeigniter:
+			// $days_array = $this->my_model->get_holidays_array();
+
+			return $days_array;
+		}
+		// tat code end
 }
