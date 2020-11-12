@@ -1,6 +1,8 @@
 <link rel="stylesheet" type="text/css" href="<?=base_url().'assets/css/activity_timeline.css'?>">
-<div class="col-md-3 col-height">
-	<h3 class="text-center">Activity Timeline</h3><hr>
+<span class="toogle-timeline badge badge-danger pull-right" data-vis="1"><i class="fa fa-caret-right"></i></span>
+<div class="timeline col-md-3 col-height">
+	<h3 class="text-center">Activity Timeline</h3>
+  <hr>
   	<ul class="cbp_tmtimeline" style="margin-left:-30px;">
       <?php
       
@@ -230,5 +232,34 @@
          }               
      });        
     }     
+
+$(".toogle-timeline").click(function(){
+    if($(this).data('vis')=='1')
+      { 
+        $(".timeline").hide(500,function(){
+            $(".details-column").removeClass('col-md-6');
+            $(".details-column").addClass('col-md-9');
+        });
+        $(this).data('vis','0');
+        $(this).find('i').removeClass('fa-caret-right');
+        $(this).find('i').addClass('fa-caret-left');
+      }
+    else
+    {
+        $(".timeline").show(500);
+        $(this).data('vis','1');
+        $(".details-column").addClass('col-md-6');
+        $(".details-column").removeClass('col-md-9');
+        $(this).find('i').addClass('fa-caret-right');
+        $(this).find('i').removeClass('fa-caret-left');
+    }
+    //setTimeout(manageScroll,1000);
+});
 </script>
 
+<style type="text/css">
+  .toogle-timeline{
+    position: absolute;
+    right: 5px;
+  }
+</style>
