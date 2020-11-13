@@ -327,6 +327,7 @@
 			<th>Ticket Number</th>
 			<th>Name</th>
 			<th>Type</th>
+			<th>Status</th>
 			<th>Action</th>
 			</tr>';
 				foreach ($related_tickets as $row)
@@ -337,6 +338,7 @@
 					<td>'.$row->ticketno.'</td>
 					<td>'.$row->name.'</td>
 					<td>'.($ticket->complaint_type=='1'?'Compaint':($ticket->complaint_type=='2'?'Query':'NA')).'</td>
+					<td>'.$ticket->ticket_status_name??'Open'.'</td>
 					<th><a href="'.base_url('ticket/view/'.$row->ticketno).'"><button class="btn btn-small btn-primary">View</button></a></th>
 					</tr>';
 				}	
