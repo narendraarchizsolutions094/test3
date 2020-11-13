@@ -5,6 +5,10 @@
 		{
 			line-height:40px;
 		}
+		.old_ticket_data{
+			overflow-y: scroll;
+    		max-height: 600px;
+		}
 	</style>	
        	<div class="row">
 				 <div class="panel panel-default pt-2"> 
