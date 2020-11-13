@@ -339,7 +339,7 @@
 					<td>'.$row->name.'</td>
 					<td>'.($row->complaint_type=='1'?'Compaint':($row->complaint_type=='2'?'Query':'NA')).'</td>
 					<td>'.$row->ticket_status_name??'Open'.'</td>
-					<th><a href="'.base_url('ticket/view/'.$row->ticketno).'"><button class="btn btn-small btn-primary">View</button></a></th>
+					<td><a href="'.base_url('ticket/view/'.$row->ticketno).'"><button class="btn btn-small btn-primary">View</button></a></td>
 					</tr>';
 				}	
 			echo'</table>';
