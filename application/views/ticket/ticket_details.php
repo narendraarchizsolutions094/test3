@@ -337,8 +337,8 @@
 					'.($this->session->companey_id==65?('<td>'.($row->tracking_no==''?'NA':$row->tracking_no).'</td>'):'').'
 					<td>'.$row->ticketno.'</td>
 					<td>'.$row->name.'</td>
-					<td>'.($ticket->complaint_type=='1'?'Compaint':($ticket->complaint_type=='2'?'Query':'NA')).'</td>
-					<td>'.$ticket->ticket_status_name??'Open'.'</td>
+					<td>'.($row->complaint_type=='1'?'Compaint':($row->complaint_type=='2'?'Query':'NA')).'</td>
+					<td>'.$row->ticket_status_name??'Open'.'</td>
 					<th><a href="'.base_url('ticket/view/'.$row->ticketno).'"><button class="btn btn-small btn-primary">View</button></a></th>
 					</tr>';
 				}	
