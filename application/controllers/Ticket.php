@@ -473,14 +473,14 @@ class Ticket extends CI_Controller
 			'ticket_no' => $data['ticket']->ticketno,
 			'tck.client' => $data['ticket']->client,
 			'tck.tracking_no' => $data['ticket']->tracking_no,
-			'tck.phone' => $data['ticket']->phone,
+			'tck.phone' => $data['ticket']->phone, 
 		);
 		$data['related_tickets'] = $this->Ticket_Model->all_related_tickets($match);
 		//print_r($data['related_tickets']); exit();
 		$data["referred_type"] = $this->Leads_Model->get_referred_by();
 		$data['all_description_lists']    =   $this->Leads_Model->find_description();
 
-		$data["clients"] = $this->Ticket_Model->getallclient();
+		//$data["clients"] = $this->Ticket_Model->getallclient();
 
 		$data["problem_for"] = $this->Ticket_Model->getclient($data['ticket']->client);
 		//print_r($data['problem_for']); exit();
@@ -501,11 +501,11 @@ class Ticket extends CI_Controller
 		//print_r($data['details']); exit();
 
 		if (!$data["ticket"]->client)
-			show_404();
+			//show_404();
 		$this->load->model('enquiry_model');
-		$data['enquiry'] = $this->enquiry_model->enquiry_by_id($data["ticket"]->client);
+		//$data['enquiry'] = $this->enquiry_model->enquiry_by_id($data["ticket"]->client);
 
-		$data['ticket_stages'] = $this->Leads_Model->find_estage($data['enquiry']->product_id, 4);
+		$data['ticket_stages'] = $this->Leads_Model->stage_by_type(4); // 4 = ticket
 		$data['leadsource'] = $this->Leads_Model->get_leadsource_list();
 		//print_r($data['leadsource']);	
 		//print_r($data['ticket_stages']); exit();
@@ -1112,7 +1112,12 @@ class Ticket extends CI_Controller
 	public function add()
 	{
 		$this->load->model('Enquiry_model');
-		if (isset($_POST["client"])) {
+
+		$this->form_validation->set_rules('name','Name','required');
+		$this->form_validation->set_rules('phone','Mobile No','required');
+		$this->form_validation->set_rules('email','Email','required');
+
+		if ($this->form_validation->run()==TRUE) {
 			$res = $this->Ticket_Model->save($this->session->companey_id, $this->session->user_id);
 			if ($res) {
 				$this->load->model('rule_model');
