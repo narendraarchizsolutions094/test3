@@ -12,11 +12,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  		$ci->db->where('tbl_input.company_id',$comp_id);  			
  		$ci->db->join('input_types','input_types.id=tbl_input.input_type');  			
  		$data['form_fields']	= $ci->db->get('tbl_input')->result_array();
+
+        $ci->load->model('enquiry_model');
+        $ci->load->model('location_model');
         //Fetching Details for Tickets
         if($form_for==2)
         {  
              $ci->load->model('Ticket_Model');
-             
              $ticketno = $enquiry_id;
 
              $data['basic_fields'] =array();

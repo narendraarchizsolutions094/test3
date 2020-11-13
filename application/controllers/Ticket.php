@@ -579,7 +579,8 @@ class Ticket extends CI_Controller
                             $this->db->where('enq_no',$en_comments);        
                             $this->db->where('input',$val);        
                             $this->db->where('parent',$tck_id);
-                            if($this->db->get('ticket_dynamic_data')->num_rows()){
+                            if($this->db->get('ticket_dynamic_data')->num_rows())
+                            {
                                 if ($form_type == 1) {
                                     $this->db->insert('ticket_dynamic_data',$biarr);                                       
                                 }else{                                    
@@ -633,6 +634,78 @@ class Ticket extends CI_Controller
         }
 	}
 
+	public function update_dynamic_query($tck_id)
+	{
+		$this->load->library('user_agent');
+		$cmnt_id = $this->input->post('cmnt_id');
+		$tid    =   $this->input->post('tid');
+        $form_type    =   $this->input->post('form_type');
+        $enqarr = $this->db->select('*')->where('id',$tck_id)->get('tbl_ticket')->row();
+        $en_comments = $enqarr->ticketno;
+
+        $type = $enqarr->status;
+
+        // if($type == 1){                 
+        //     $comment_id = $this->Leads_Model->add_comment_for_events($this->lang->line('enquery_updated'), $en_comments);                    
+        // }else if($type == 2){                   
+        //      $comment_id = $this->Leads_Model->add_comment_for_events($this->lang->line('lead_updated'), $en_comments);                   
+        // }else if($type == 3){
+        //      $comment_id = $this->Leads_Model->add_comment_for_events($this->lang->line('client_updated'), $en_comments);
+        // }	
+        
+
+       $comment_id = $this->Ticket_Model->saveconv($tck_id,'Details Updated','', $enqarr->client,$this->session->user_id);
+
+        if(!empty($enqarr)){        
+            if(isset($_POST['inputfieldno'])) {                    
+                $inputno   = $this->input->post("inputfieldno", true);
+                $enqinfo   = $this->input->post("enqueryfield", true);
+                $inputtype = $this->input->post("inputtype", true);                
+                $file_count = 0;                
+                $file = !empty($_FILES['enqueryfiles'])?$_FILES['enqueryfiles']:'';                
+                foreach($inputno as $ind => $val){
+	
+
+                 if ($inputtype[$ind] == 8) {                                                
+                        $file_data    =   $this->doupload($file,$file_count);
+
+                        if (!empty($file_data['imageDetailArray']['file_name'])) {
+                            $file_path = base_url().'uploads/ticket_documents/'.$this->session->companey_id.'/'.$file_data['imageDetailArray']['file_name'];
+                                                
+                                    $this->db->where('enq_no',$en_comments);    
+                                    $this->db->where('comment_id',$cmnt_id);    
+                                    $this->db->where('input',$val);        
+                                    $this->db->where('parent',$tck_id);
+                                    $this->db->set('fvalue',$file_path);
+                                    $this->db->update('ticket_dynamic_data');
+                             
+                        }
+                        $file_count++;          
+                    }
+                    else
+                    {
+                        
+                                $this->db->where('enq_no',$en_comments);        
+                                $this->db->where('input',$val);        
+                                $this->db->where('parent',$tck_id);
+                                $this->db->where('comment_id',$cmnt_id); 
+                                $this->db->set('fvalue',$enqinfo[$val]);
+                                $this->db->update('ticket_dynamic_data');
+                          
+                    }                                      
+                } //foreach loop end               
+            }            
+             
+        }
+        if (!$this->input->is_ajax_request()) {           
+            $this->session->set_flashdata('message', 'Save successfully');
+            redirect($this->agent->referrer()); //updateclient
+        }else{
+            echo json_encode(array('msg'=>'Saved Successfully','status'=>1));
+        }
+	}
+
+
 	public function doupload($file,$key){        
         $upload_path    =   "./uploads/ticket_documents/";
         $comp_id        =   $this->session->companey_id; //creare seperate folder for each company
@@ -668,9 +741,72 @@ class Ticket extends CI_Controller
         return $data;
     }
 
-    public function deleteQueryData($cmnt_id,$tckno)
+    public function delete_query_data($cmnt_id,$tckno)
     {
     	$this->db->where(array('comment_id'=>$cmnt_id,'enq_no'=>$tckno))->delete('ticket_dynamic_data');
+    }
+
+    public function edit_query_data()
+    {
+    	if($post = $this->input->post())
+    	{
+    		if($post['task']=='view')
+    		{
+    			$ci =& get_instance();
+    			$tid = $post['tab_id'];
+    			$comp_id = $post['comp_id'];
+    			$enquiry_id = $post['ticket'];
+    			$tabname= $post['tabname'];
+    			$cmnt_id = $post['cmnt_id'];
+
+    			$ci->load->model('enquiry_model');
+        		$ci->load->model('Ticket_Model');
+        		$ci->load->model('location_model');
+
+    			
+		        $data['tid'] = $tid;
+				$data['comp_id'] = $comp_id;
+				$data['cmnt_id'] = $cmnt_id;
+		 		$ci->db->select('*,input_types.title as input_type_title'); 		
+		 		$ci->db->where('tbl_input.form_id',$tid);  			
+		 		$ci->db->where('tbl_input.company_id',$comp_id);  			
+		 		$ci->db->join('input_types','input_types.id=tbl_input.input_type');  			
+		 		$data['form_fields']	= $ci->db->get('tbl_input')->result_array();
+		 		$ticketno = $enquiry_id;
+
+	             $data['basic_fields'] =array();
+	             $data['details']=$ci->Ticket_Model->get($ticketno);
+	             //print_r($data['details']); exit();
+	             //1 for ticket form
+	            $data['dynamic_field']=$ci->enquiry_model->get_dyn_fld_by_query($cmnt_id,$ticketno,$tid,2);
+	             //print_r($data['dynamic_field']); exit();
+	             $data['products'] =array();
+	             $data['product_contry']=array();
+	             $data['leadsource']=array();
+
+	            $ci->db->select('form_type,form_for,is_delete,is_edit');
+		        $ci->db->where('id',$tid);        
+		        $r    =      $ci->db->get('forms')->row_array();
+
+		        $data['form_type'] = $r['form_type'];
+		    	
+		        $data['form_for'] = $r['form_for'];
+		        $data['action'] = array('delete'=>$r['is_delete'],'edit'=>$r['is_edit']);
+
+		        $data['state_list'] 	= $ci->location_model->estate_list();
+		        $data['city_list'] 			= $ci->location_model->ecity_list();
+		        $data['all_country_list'] 	= $ci->location_model->country();
+		        $data['name_prefix'] 		= $ci->enquiry_model->name_prefix_list();
+		        $data['tabname'] = $tabname;       
+        	
+        		$ci->load->view('ticket/edit_dynamic_query_data',$data);
+
+    		}
+    		else if($post['task']=='save')
+    		{
+
+    		}
+    	}
     }
 
 	public function get_enquery_code()
