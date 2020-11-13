@@ -107,8 +107,9 @@ class Ticket extends CI_Controller
 		$data['prodcntry_list'] = $this->enquiry_model->get_user_productcntry_list();
 		$data['problem'] = $this->Ticket_Model->get_sub_list();
 
-		if(count($this->session->process)==1)
-			$data['stage'] =  $this->Leads_Model->find_estage($this->session->process[0],4);
+		
+		$data['stage'] =  $this->Leads_Model->stage_by_type(4);
+
 		$data['sub_stage'] = $this->Leads_Model->find_description();
 
 		$data['ticket_status'] = $this->Ticket_Model->ticket_status()->result();
