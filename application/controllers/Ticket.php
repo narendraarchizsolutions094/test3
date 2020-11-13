@@ -231,6 +231,17 @@ class Ticket extends CI_Controller
 			if ($showall or in_array(1, $acolarr)) {
 				$sub[] = '<a href="' . base_url('ticket/view/' . $point->ticketno) . '">' . $point->ticketno . '</a>';
 			}
+			if ($this->session->companey_id == 65 && ($showall or in_array(15, $acolarr))) {
+				$sub[] = $point->tracking_no == '' ? 'NA' : $point->tracking_no;
+			}
+
+			if ($showall or in_array(7, $acolarr)) {
+				$sub[] = $point->created_by_name ?? "NA";
+			}
+
+			if ($showall or in_array(9, $acolarr)) {
+				$sub[] = $point->coml_date ?? 'NA';
+			}
 
 			if ($showall or in_array(2, $acolarr)) {
 				$sub[] = $point->clientname ?? "NA";
@@ -263,15 +274,11 @@ class Ticket extends CI_Controller
 				$sub[] = $point->assigned_by_name ?? "NA";
 			}
 
-			if ($showall or in_array(7, $acolarr)) {
-				$sub[] = $point->created_by_name ?? "NA";
-			}
+			
 			if ($showall or in_array(8, $acolarr)) {
 				$sub[] = '<span class="label label-' . ($point->priority == 1 ? 'success">Low' : ($point->priority == 2 ? 'warning">Medium' : 'danger">High')) . '</span>';
 			}
-			if ($showall or in_array(9, $acolarr)) {
-				$sub[] = $point->coml_date ?? 'NA';
-			}
+			
 			if ($showall or in_array(10, $acolarr)) {
 				$sub[] = $point->referred_name ?? 'NA';
 			}
@@ -289,9 +296,7 @@ class Ticket extends CI_Controller
 				$sub[] = $point->message == '' ? 'NA' : $point->message;
 			}
 
-			if ($this->session->companey_id == 65 && ($showall or in_array(15, $acolarr))) {
-				$sub[] = $point->tracking_no == '' ? 'NA' : $point->tracking_no;
-			}
+			
 
 			if ($showall or in_array(16, $acolarr)) {
 				$sub[] = $point->status_name == '' ? 'NA' : $point->status_name;
