@@ -23,6 +23,7 @@
 				<div class="panel-body">
 				<div class="col-md-2"></div>
 				<div class="col-md-8 panel-default panel-body" style ="border:1px solid #f7f7f7">
+				
 				<?php echo form_open_multipart(base_url("ticket/add")); ?>
 			<div class="row ">
 
@@ -71,15 +72,14 @@
 
 				<div class="col-md-6">
 					<div class="form-group">
-						<label>Tracking Number <i class="text-danger opt">*</i></label>
-						<input type="text" name="tracking_no" class="form-control" onblur="loadTracking(this),match_previous(this.value)" required>
-						<?php
+						<label>Tracking Number <i class="text-danger opt">*</i> <?php
 						if($this->session->companey_id==65){
 							?>
-							<a href='http://203.112.143.175/ecargont/' target="_blank">Go To Ecargo</a>
+							 <a href='http://203.112.143.175/ecargont/' target="_blank" class='float-right'> Go To Ecargo</a>
 							<?php
 						}
-						?>
+						?></label>
+						<input type="text" name="tracking_no" class="form-control" onblur="loadTracking(this),match_previous(this.value)" required>						
 					</div>
 				</div>
 			<?php } ?>
