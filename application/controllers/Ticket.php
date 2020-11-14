@@ -1110,6 +1110,17 @@ class Ticket extends CI_Controller
 		imap_close($inbox);
 	}
 
+	public function tracking_no_check($tn){
+		$this->db->where('company',$this->session->companey_id);
+		$this->db->where('tracking_no',$tn);
+		$this->db->where('ticket_status!=',3);
+		if($this->db->get('tbl_ticket')->num_rows()){
+			$this->form_validation->set_message('tracking_no_check', 'Ticket with this tracking no is already open.');
+			return false;
+		}else{
+			return true;
+		}
+	}
 	public function add()
 	{
 		$this->load->model('Enquiry_model');
@@ -1118,6 +1129,9 @@ class Ticket extends CI_Controller
 		$this->form_validation->set_rules('phone','Mobile No','required');
 		$this->form_validation->set_rules('email','Email','required');
 
+		if($this->session->companey_id == 65 && ($this->input->post('complaint_type') == 1)){
+			$this->form_validation->set_rules('tracking_no', 'Tracking No', 'required|callback_tracking_no_check', array('tracking_no_check' => 'Ticket with this tracking no is already open.'));
+		}
 		if ($this->form_validation->run()==TRUE) {
 			$res = $this->Ticket_Model->save($this->session->companey_id, $this->session->user_id);
 			if ($res) {
