@@ -485,7 +485,7 @@ class Ticket extends CI_Controller
 			foreach($ticket_status as $status)
 			{ ?>
 				<option value="<?=$status->id?>" <?=($status->id==$rule_ticket_status)?'selected':''?>><?php echo $status->status_name; ?></option>
-			<?php
+			<?php 
 			}
 		}
 	}
@@ -548,7 +548,7 @@ class Ticket extends CI_Controller
 		$this->Leads_Model->add_comment_for_events_popup($stage_remark, $stage_date, $contact_person, $mobileno, $email, $designation, $stage_time, $enq_code, $notification_id, $dis_subject, 17);
 		$ticketno	=	$this->input->post('ticketno');
 		$this->load->model('rule_model');
-		$this->rule_model->execute_rules($ticketno, array(8));
+		$this->rule_model->execute_rules($ticketno, array(8,10));
 		redirect('ticket/view/' . $ticketno);
 	}
 
@@ -1085,6 +1085,7 @@ class Ticket extends CI_Controller
 			redirect('dashboard');
 		}
 	}
+
 	public function createddatewise()
 	{
 
@@ -1440,4 +1441,8 @@ class Ticket extends CI_Controller
 			return $days_array;
 		}
 		// tat code end
+
+
+
+
 }

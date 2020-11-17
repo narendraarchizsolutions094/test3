@@ -1067,8 +1067,6 @@ class Dashboard_model extends CI_Model {
                         ->row();
 
     }
-
-
     public function countLead($type){
     
 		return $this->db->where(array('comp_id' => $this->session->userdata('companey_id'),'type'=>$type))->count_all_results('tbl_followupAvgtime');
@@ -1078,7 +1076,39 @@ class Dashboard_model extends CI_Model {
 		return $this->db->select_sum('time')->where(array('comp_id' => $this->session->userdata('companey_id'),'type'=>$type))->get('tbl_followupAvgtime');
 		
 
-    }
+	}
+	public function getfistMonth($type,$msgType)
+	{
+		// $type= 1 =>(ticket), $type =2=>enquiry 
+		// $userType=>1 (user wise), 2=>all 
+		// 0=>mail,1=>sms,2=>whatsapp
+		//ticket
+				$data= $this->db->where(array('comp_id'=> $this->session->companey_id,'type'=>$type,'msg_type'=>$msgType))
+							->limit(1)->get('msg_logs');
+							if($data->num_rows()==1){
+								return $data->row()->created_at;
+							}else{
+								return false;
+							}
+	}
+	public function getMsgLogUsers($type)
+	{
+		// $type= 1 =>(ticket), $type =2=>enquiry 
+		// $userType=>1 (user wise), 2=>all 
+		// 0=>mail,1=>sms,2=>whatsapp
+		//ticket
+		$users= $this->db->select('tbl_admin.picture,msg_logs.created_by,msg_logs.comp_id,msg_logs.type,msg_logs.created_by,msg_logs.msg_type,tbl_admin.pk_i_admin_id,tbl_admin.last_name,tbl_admin.s_display_name')->distinct('created_by')
+		->where(array('comp_id'=> $this->session->companey_id,'type'=>$type))
+		->join('tbl_admin','tbl_admin.pk_i_admin_id=msg_logs.created_by')
+		->get('msg_logs');
+		return $users;	
+	}
+	public function getdataFromdate($idate,$type,$msgType)
+	{
+		 $idate;
+		$count = $this->db->where(array('comp_id'=>$this->session->companey_id,'type'=>$type,'msg_type'=>$msgType))->like('created_at', $idate)->count_all_results('msg_logs');
+		return $count;
+	}
 
 }
 

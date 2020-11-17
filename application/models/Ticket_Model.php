@@ -642,6 +642,75 @@ class Ticket_Model extends CI_Model
 		$ticket_update = ['nextAssignTime' => $nextAssignment];
 		$this->db->where(array('id' => $tid))->update('tbl_ticket', $ticket_update);
 	}
+	public function moveTicketToEnq($id,$enqStatus,$rule_title,$rule_status,$user_id,$stage,$assignto,$process)
+{
+	$fetchticket=$this->db->where('id',$id)->get('tbl_ticket');
+	
+	if($fetchticket->num_rows()==1){
+	foreach ($fetchticket->result() as $key => $value) {
+		if(empty($value->Enquiry_id)){
+		$encode = $this->get_enquery_code();
+		$postData = [
+			'Enquery_id' => $encode,
+			'comp_id' => $this->session->userdata('companey_id'),
+			'user_role' => $this->session->user_role,
+			'email' => $value->email,
+			'phone' => $value->phone,
+			'name' => $value->name,
+			'enquiry' => $value->title,
+			'checked' => 0,
+			'ip_address' => $this->input->ip_address(),
+			'created_by' => $this->session->user_id,
+			'status' =>$stage,
+			'aasign_to'=>$assignto,
+			'assign_by'=>0,
+			'rule_executed'=>$rule_title,
+			'product_id'=>$process
+		];
+		//
+		$this->db->insert('enquiry',$postData);
+		$insert_id = $this->db->insert_id(); 
+		// add model here
+		$this->Leads_Model->add_comment_for_events_stage('Enquiry Created', $encode, $stage, 'Stage Updated','',1);
+		// add timeline
+		// update @ ticket model
+		$ticketData=['client'=>$insert_id];
+		$this->db->where('id',$id)->update('tbl_ticket',$ticketData);
+}
+	}
+	}
+}
+
+public function get_enquery_code()
+{
+	$this->load->model('enquiry_model');
+
+	$code = $this->genret_code();
+	$code2 = 'ENQ' . $code;
+	$response = $this->enquiry_model->check_existance($code2);
+
+	if ($response) {
+
+		$this->get_enquery_code();
+	} else {
+
+		return $code2;
+
+		//exit;
+	}
+	//exit;
+}
+
+function genret_code()
+{
+	$pass = "";
+	$chars = array("0", "1", "2", "3", "4", "5", "6", "7", "8", "9");
+
+	for ($i = 0; $i < 12; $i++) {
+		$pass .= $chars[mt_rand(0, count($chars) - 1)];
+	}
+	return $pass;
+}
 
 }
 
