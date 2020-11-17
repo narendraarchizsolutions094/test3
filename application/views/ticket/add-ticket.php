@@ -5,7 +5,12 @@
 		{
 			line-height:40px;
 		}
-	</style>	
+	</style>
+
+	<?php
+	if(!$invalid_process)
+	{	
+	?>
        	<div class="row">
 				 <div class="panel panel-default pt-2"> 
 				<div class="panel-heading no-print" style ="background-color: #fff;padding:7px;border-bottom: 1px solid #C8CED3;">
@@ -18,194 +23,19 @@
 				</div>
 				<div class="panel-body">
 				<div class="col-md-2"></div>
+
 				<div class="col-md-8 panel-default panel-body" style ="border:1px solid #f7f7f7">
 				<?php echo form_open_multipart(base_url("ticket/add")); ?>
-			<div class="row ">
+			<div class="row">
 
-				<div class="col-md-6">
-					<div class="form-group">
-						<label>Complaint Type</label>
-						<div>							
-							<input type="radio" name="complaint_type" value="1" checked> <label>Is Complaint</label>
-							<input type="radio" name="complaint_type" value="2"> <label>Is Query</label>
-						</div>
-					</div>
-				</div>
-				<div class="col-md-6">
-					<div class="form-group">
-						<label>Referred By</label>
-						<select class="form-control" name="referred_by">
-							<?php
-							if(!empty($referred_type))
-							{
-								foreach ($referred_type as $res)
-								{
-									echo'<option value="'.$res->id.'">'.$res->name.'</option>';
-								}
-							}
-							?>
-						</select>
-					</div>
-				</div>
-				<?php if($this->session->companey_id==65){ ?>
-					<script type="text/javascript">
-					$("input[name=complaint_type]").on('change',function(){
-							var x = $("input[name=complaint_type]:checked").val();
-							if(x=='1')
-							{
-								$('input[name=tracking_no]').attr("required","required");
-								$(".opt").show();
-							}
-							else if(x=='2')
-							{
-								$('input[name=tracking_no]').removeAttr("required");
-								$(".opt").hide();
-							}
-					});
-				</script>
-					<div class="trackingDetails"></div>
+				<div id="process_basic_fields">
 
-				<div class="col-md-6">
-					<div class="form-group">
-						<label>Tracking Number <i class="text-danger opt">*</i></label>
-						<input type="text" name="tracking_no" class="form-control" onblur="loadTracking(this),match_previous(this.value)" required>
-					</div>
-				</div>
-			<?php } ?>
-				<div class="col-md-6">
-					<div class="form-group">
-						<label>Problem For </label>
-						<select class="form-control add-select2 choose-client" name = "client" >
-							<option value = "" style ="display:none;">---Select---</option>
-							<?php if(!empty($clients)){
-								foreach($clients as $ind => $clt){
-									?><option value ="<?php echo $clt->enquiry_id ?>"><?php echo $clt->name." ".$clt->lastname; ?> </option><?php
-								}
-							} ?>
-						</select>
-					</div>
-				</div>
-				<div class="col-md-6">
-					<div class="form-group">
-						<label>Name <i class="text-danger">*</i></label>
-						<input type = "text" class="form-control" name = "name" required>
-					</div>
-				</div>
-				<div class="col-md-6">
-					<div class="form-group">
-						<label>Phone <i class="text-danger">*</i></label>
-						<input type = "text" class="form-control" name = "phone" required value="<?=!empty($_GET['phone'])?$_GET['phone']:''?>" onkeyup="autoFill('phone',this.value)"> 
-					</div>
-				</div>
-				<div class="col-md-6">
-					<div class="form-group">
-						<label>Email <i class="text-danger">*</i></label>
-						<input type = "text" class="form-control" name = "email" onblur="autoFill('email',this.value)" required>
-					</div>
-				</div>
-	
-				<!-- <div class="col-md-6" style="display: none;">
-					<div class="form-group">
-						<label>Complaint Date</label>
-						<input type="text" class="form-control add-date-picker" name = "complaindate" value="<?php echo date('m/d/Y') ?>">
-					</div>
-				</div> -->
-				<?php if($this->session->companey_id!=83){ ?>
-				<div class="col-md-6">
-					<div class="form-group">
-						<label>Product</label>
-						<select class="form-control add-select2 chg-product" name = "product">
-							<?php if(!empty($product)) {
-								foreach($product as $ind => $prd){
-									?><option value ="<?php echo $prd->id ?>"><?php echo ucfirst($prd->country_name); ?> </option><?php
-								}
-							} ?>
-						</select>
-					</div>
-				</div>
-				<?php } ?>
-
-				<div class="col-md-6">
-					<div class="form-group">
-						<label><?=display('ticket_problem')?></label>
-						<select class="form-control add-select2" name = "relatedto">
-						<option value = "">Select Subject</option>
-					<?php  if(!empty($problem)) {
-								foreach($problem as $ind => $prblm){
-									?><option value = "<?php echo $prblm->id ?>"><?php echo ucfirst($prblm->subject_title) ?> </option><?php
-								}	
-							} ?>
-						</select>
-					</div>
 				</div>
 
-				<?php
-				if($this->session->companey_id!=65)
-				{
-				?>
-				<div class="col-md-6">
-					<div class="form-group">
-						<label>Nature of Complaint</label>
-						<select class="form-control add-select2" name = "issue">
-						<option value = ""> -- Select --</option>
-					<?php  if(!empty($issues)) {
-								foreach($issues as $ind => $issue){
-									?><option value = "<?php echo $issue->id ?>"><?php echo ucfirst($issue->title) ?> </option><?php
-								}	
-							} ?>
-						</select>
-					</div>
-				</div>
-				<?php
-				}
-				?>
-				<div class = "col-md-6" id = "waranty-start">
-				</div>
-				<div class = "col-md-6" id = "waranty-end">
-				</div>
-				<?php if($this->session->user_right!=214){ ?>
-					
-				<div class="col-md-6">
-					<div class="form-group">
-						<label>Priority</label>
-						<select class="form-control add-select2" name = "priority">
-							<option value = "1">Low</option>
-							<option value = "2">Medium</option>
-							<option value = "3">High</option>
-						</select>
-					</div>
-				</div>
-
-				<div class="col-md-6">
-					<div class="form-group">
-						<label>Source</label>
-						<select class="form-control add-select2" name = "source">
-							<?php  if(!empty($source)) {
-								foreach($source as $ind => $prblm){
-									?><option value = "<?php echo $prblm->lsid ?>"><?php echo $prblm->lead_name ?> </option><?php
-								}	
-							} ?>
-						</select>
-					</div>
-				</div>
-				<?php } ?>
-				<div class="col-md-6">
-					<div class="form-group">
-						<label>Attachment</label>
-						<input type="file" name="attachment[]" class="form-control" accept=".jpg,.jpeg,.png,.pdf" multiple>
-					</div>
-				</div>
-				<div class="col-md-12">
-					<div class="form-group">
-						<label>Description</label>
-						<textarea name="remark" class="form-control"></textarea>
-					</div>
-				</div>
-				
 				<div class = "col-md-12 text-center">
 					<button class="btn btn-success" type="submit">Save</button>
 				</div>
-				</div>
+			</div>
 				<?php echo form_close(); ?>
 				<div class = "row">
 					<div class = "col-md-12" id = "oldticket">
@@ -215,8 +45,18 @@
 			</div>
 			</div>
         </div>
-
-
+    <?php
+    }
+    else
+    {
+    	echo'<br><br>
+    	<div class="container">
+            <div class="alert alert-danger">
+              <strong>Please Select one process in which you want to create Ticket</strong>
+            </div>
+          </div>';
+    }
+    ?>
 
 
 <div id="old_ticket" class="modal" role="dialog" style="display:none;">
@@ -269,6 +109,43 @@
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/3.1.3/js/bootstrap-datetimepicker.min.js"></script>  
 <script src="<?php echo base_url() ?>assets/js/custom.js" type="text/javascript"></script>
 <script>
+ $(function() {
+    var process_id = "<?= $process_id ?>";
+    if (process_id) {
+      get_basic_field();
+    }
+  });
+
+  function get_basic_field() {
+    var process_id = "<?= $process_id ?>";
+    var para = '';
+    if ("<?= !empty($_GET['phone']) ? $_GET['phone'] : '' ?>" != "") {
+      para = "?phone=<?= !empty($_GET['phone']) ? $_GET['phone'] : '' ?>";
+    }
+    var url = "<?= base_url() . 'form/form/get_basic_field_by_process' ?>" + para;
+    $.ajax({
+      type: "POST",
+      url: url,
+      data: {
+        'process_id': process_id,
+        field_for:'2'
+      },
+      success: function(data) {
+
+        $("#process_basic_fields").html(data);
+        // $("#fcity").select2();
+        // $("#fstate").select2();
+        // get_custom_field();
+      },
+     error:function(u,v,w)
+     {
+     	alert(w);
+     }
+    });
+  }
+
+
+
 	$(document).on("change", ".choose-client", function(){		
 		$.ajax({
 			url     : "<?php echo base_url('ticket/loadinfo'); ?>",
@@ -302,7 +179,6 @@
 		$("#oldticket").load("<?php echo base_url('ticket/loadoldticket') ?>/"+$(this).val())
 	});
 </script>
-
 <script>
 	$(document).ready(function(){
 		

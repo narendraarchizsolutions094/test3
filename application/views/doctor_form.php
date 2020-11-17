@@ -32,7 +32,8 @@
 									  
                                       <li><a data-toggle="tab" href="#cmp-right"><?php echo display('company_right'); ?> </a></li>
 									  
-                                      <li><a data-toggle="tab" href="#cmp-custom_form"><?php echo display('custom_form_company'); ?> </a></li>
+                                      <li><a onclick="enquiry_load()" data-toggle="tab" href="#cmp-custom_form"><?php echo display('custom_form_company'); ?> </a></li>
+                                      <li><a onclick="ticket_load()" data-toggle="tab" href="#cmp-custom_ticket"><?php echo 'Custom Ticket Form'; ?> </a></li>
                                       <li><a data-toggle="tab" href="#cmp-user_list"> User List</a></li>
 
 									</ul>
@@ -253,6 +254,12 @@
                                             </div>
                                       </div>
 
+                                      <div id="cmp-custom_ticket" class="tab-pane fade">
+                                            <div class="row">
+                                                
+                                            </div>
+                                      </div>
+
                                       <div id="cmp-user_list" class="tab-pane fade">
                                       <table class="datatable table table-striped table-bordered" cellspacing="0" width="100%">
                     <thead>
@@ -345,16 +352,44 @@
   </div>
 </div>
 <script type="text/javascript"> 
-    $(function(){
-        url = "<?=base_url().'form/form/enquiry_extra_field/'?>"+"<?=$doctor->user_id?>";     
+
+function enquiry_load()
+{
+     url = "<?=base_url().'form/form/enquiry_extra_field/'?>"+"<?=$doctor->user_id?>/1/0";     
         $.ajax({
           type: "POST",
           url: url,      
           success: function(data){                
             $("#cmp-custom_form").html(data);
+            $("#cmp-custom_ticket").html('');
           }
         });
-    }); 
+}
+
+
+function ticket_load()
+{
+    url = "<?=base_url().'form/form/enquiry_extra_field/'?>"+"<?=$doctor->user_id?>/1/2";     
+        $.ajax({
+          type: "POST",
+          url: url,      
+          success: function(data){                
+            $("#cmp-custom_ticket").html(data);
+            $("#cmp-custom_form").html('');
+          }
+        });
+}
+$("a[data-toggle='tab']").click(function(){
+          var a    =   $(this).attr('href');
+          if(a == "#cmp-custom_form" || a=="#cmp-custom_ticket"){            
+              $(".comp-status").hide();
+              $(".form-btns").hide();
+          }else{
+              $(".comp-status").show();
+              $(".form-btns").show();
+          }
+      });
+
     $(function(){
           var comp_id = "<?=$doctor->user_id?>";
           url = "<?=base_url().'customer/displayusers/'?>"+comp_id;     

@@ -422,7 +422,7 @@ echo "</pre>";*/
         });
         //alert(comp_id);
     });
-    $('.basic_fields_status').on('change', function() {
+    $('.basic_fields_status').on('change', function() { 
         id = $(this).data('field');
         if ($(this).is(':checked')) {
             status = 1;
@@ -436,7 +436,8 @@ echo "</pre>";*/
             data: {
                 id: id,
                 status: status,
-                comp_id: "<?=$comp_id?>"
+                comp_id: "<?=$comp_id?>",
+                field_for:"<?=$field_for?>"
             },
             success: function(data) {
                 if (data == 1) {

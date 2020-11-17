@@ -1107,15 +1107,33 @@ class Ticket extends CI_Controller
 	public function add()
 	{
 		$this->load->model('Enquiry_model');
-		if (isset($_POST["client"])) {
+
+		if (isset($_POST["client"])) 
+		{
 			$res = $this->Ticket_Model->save($this->session->companey_id, $this->session->user_id);
-			if ($res) {
+			if ($res) 
+			{
 				$this->load->model('rule_model');
 				$this->rule_model->execute_rules($res, array(9));
 				$this->session->set_flashdata('message', 'Successfully added ticket');
 				redirect(base_url('ticket/view/' . $res));
 			}
 		}
+
+		$process = $this->session->userdata('process');
+
+		 $data['process_id'] = 0;
+		 
+            if (is_array($process)) {
+                if (count($process) == 1) {
+                    $data['invalid_process'] = 0;
+                    $data['process_id'] = $process[0];
+                } else {
+                    $data['invalid_process'] = 1;
+                }
+            } else {
+                $data['invalid_process'] = 1;
+            }
 
 		$data['title'] = "Add Ticket";
 		$data['source'] = $this->Leads_Model->get_leadsource_list();
