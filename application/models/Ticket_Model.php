@@ -639,16 +639,16 @@ class Ticket_Model extends CI_Model
 
 	public function insertData($uid,$tid,$lid,$esc_level,$comp_id,$added_by)
 	{
-		
-			//move to user
-			$ticket_update = ['assign_to' => $uid,'assigned_by'=>$added_by,'last_esc'=>$esc_level];
-			$this->db->where(array('id' => $tid))->update('tbl_ticket', $ticket_update);
-			$counta = $this->db->where(array('tck_id' => $tid, 'lid' => $lid))->count_all_results('tbl_ticket_conv');
-			if ($counta == 0) {
-				//save to assignid 	
-				$data_msg = ['comp_id' => $comp_id, 'tck_id' => $tid, 'subj' => 'Ticked Assigned','msg'=>$esc_level, 'lid' => $lid, 'assignedTo' => $uid,'added_by'=>$added_by];
-				$this->db->insert('tbl_ticket_conv', $data_msg);
-			}
+		$assign_to_date = date('Y-m-d H:i:s');
+		//move to user
+		$ticket_update = ['assign_to' => $uid,'assigned_by'=>$added_by,'last_esc'=>$esc_level,'assigned_to_date'=>$assign_to_date];
+		$this->db->where(array('id' => $tid))->update('tbl_ticket', $ticket_update);
+		$counta = $this->db->where(array('tck_id' => $tid, 'lid' => $lid))->count_all_results('tbl_ticket_conv');
+		if ($counta == 0) {
+			//save to assignid 	
+			$data_msg = ['comp_id' => $comp_id, 'tck_id' => $tid, 'subj' => 'Ticked Assigned','msg'=>$esc_level, 'lid' => $lid, 'assignedTo' => $uid,'added_by'=>$added_by];
+			$this->db->insert('tbl_ticket_conv', $data_msg);
+		}
 	}
 	public function insertNextAssignTime($nextAssignment,$tid)
 	{
