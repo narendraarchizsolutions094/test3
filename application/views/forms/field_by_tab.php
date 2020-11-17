@@ -531,13 +531,20 @@ $("select[name='tab_process[]']").on('change', function() {
 function gebi(id){
   return document.getElementById(id);
 }
+
 RowSorter(gebi('fields_table'), {    
-  onDrop: function(tbody, row, new_index, old_index) {
+  onDrop: function(tbody, row, new_index, old_index) { 
       var fld_type  = row.getAttribute('data-fldtype');      
       var comp_id = "<?=$comp_id?>";
       var url = "<?=base_url().'form/form/reorder_field/'?>";
-      
-      if (fld_type == 'basic' && new_index > 10) {
+      var field_for = "<?=$field_for?>";
+      var max =10;
+
+      if(field_for == '2')
+        max = 13;
+
+      if (fld_type == 'basic' && new_index > max) 
+      {
         Swal.fire({
           icon: 'error',
           title: 'Oops...',
@@ -551,7 +558,8 @@ RowSorter(gebi('fields_table'), {
               comp_id: comp_id,
               fid: row.id,
               type: fld_type,
-              fld_order: new_index
+              fld_order: new_index,
+              field_for:field_for,
           },
           success: function(data) {
             console.log(data);

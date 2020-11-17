@@ -482,18 +482,26 @@ class Form extends CI_Controller {
 		$fid		=	$this->input->post('fid');
 		$type	 	= 	$this->input->post('type');
 		$fld_order 	=  	$this->input->post('fld_order');
+		$field_for  =   $this->input->post('field_for');
+
+		echo $field_for;
 
 		if ($type == 'extra') {
 			$this->db->where('input_id',$fid);
 			$this->db->set('fld_order',$fld_order);
 			$this->db->update('tbl_input');
 		}else if ($type == 'basic') {
+
 			$this->db->where('field_id',$fid);
 			$this->db->where('comp_id',$comp_id);
 			$this->db->set('fld_order',$fld_order);
-			$this->db->update('enquiry_fileds_basic');
-		}
 
+			if($field_for=='2')
+				$this->db->update('ticket_fileds_basic');
+			else
+				$this->db->update('enquiry_fileds_basic');
+		}
+		echo $this->db->last_query();
 	}
 	public function product_form(){		
 		$data['title'] = 'Product Fields';

@@ -218,8 +218,11 @@ function get_leadstage_name($id) {
         return $res;
     }
     function stage_by_type($stage_for){        
+        $comp_id = $this->session->companey_id;
+
         $this->db->select("*");
         $this->db->from('lead_stage'); 
+        $this->db->where('lead_stage.comp_id',$comp_id);
         $this->db->where("FIND_IN_SET($stage_for,lead_stage.stage_for)>",0);                
         $query = $this->db->get();            
         $res = $query->result();        
