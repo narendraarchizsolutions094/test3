@@ -232,7 +232,7 @@ class Ticket extends CI_Controller
 			if ($showall or in_array(1, $acolarr)) {
 				$sub[] = '<a href="' . base_url('ticket/view/' . $point->ticketno) . '">' . $point->ticketno . '</a>';
 			}
-			if ($this->session->companey_id == 65 && ($showall or in_array(15, $acolarr))) {
+			if ($showall or in_array(15, $acolarr)) {
 				$sub[] = $point->tracking_no == '' ? 'NA' : $point->tracking_no;
 			}
 

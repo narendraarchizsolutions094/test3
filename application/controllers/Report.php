@@ -712,4 +712,39 @@ class Report extends CI_Controller {
     public function funnel_reports() {
         echo json_encode($this->report_model->funnel_report());
     }
+
+    public function ticket_report()
+    {
+        $this->load->model(array('Ticket_Model','Datasource_model','dash_model','enquiry_model','report_model','Leads_Model','User_model'));
+    
+
+        if (isset($_SESSION['ticket_filters_sess']))
+          unset($_SESSION['ticket_filters_sess']);
+
+        $data['sourse'] = $this->report_model->all_source();
+        $data['title'] = "Ticket Report";
+
+        $data["tickets"] = $this->Ticket_Model->getall();
+        //print_r($data['tickets']); exit();
+        $data['created_bylist'] = $this->User_model->read();
+        $data['products'] = $this->dash_model->get_user_product_list();
+        $data['prodcntry_list'] = $this->enquiry_model->get_user_productcntry_list();
+        $data['problem'] = $this->Ticket_Model->get_sub_list();
+
+        
+        $data['stage'] =  $this->Leads_Model->stage_by_type(4);
+
+        $data['sub_stage'] = $this->Leads_Model->find_description();
+
+        $data['ticket_status'] = $this->Ticket_Model->ticket_status()->result();
+        
+        $data['dfields'] = $this->enquiry_model->getformfield(2);
+        
+        //print_r($data["tickets"]);die;
+        $data['issues'] = $this->Ticket_Model->get_issue_list();
+        $data['user_list'] = $this->User_model->companey_users();
+        $data['content'] = $this->load->view('reports/ticket_report', $data, true);
+        $this->load->view('layout/main_wrapper', $data);
+    }
+
 }

@@ -67,12 +67,10 @@ class Ticket_datatable_model extends CI_Model{
         {
             $search_string[] = "tck.message";    
         }
-        if($this->session->companey_id==65)
+    
+        if($showall or in_array(15,$acolarr))
         {
-            if($showall or in_array(15,$acolarr))
-            {
-                $search_string[] = "tck.tracking_no";    
-            }
+            $search_string[] = "tck.tracking_no";    
         }
 
         if($showall or in_array(16,$acolarr))
