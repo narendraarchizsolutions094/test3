@@ -89,8 +89,8 @@
             <input type="hidden"  id="mesge_type" name="mesge_type">
             <input type="hidden" name="ticketId" value="<?= $ticketId ?>">
             <input type="hidden"  name="msg_from"  value="ticket">
-            <input type="hidden" id="mobile" name="mobile" value="<?php if(!empty($ticket->phone)){echo $enquiry->phone;} ?>">
-            <input type="hidden" id="mail" name="mail" value="<?php if(!empty($ticket->email)){echo $enquiry->email;} ?>">
+            <input type="hidden" id="mobile" name="mobile" value="<?php if(!empty($ticket->phone)){echo $ticket->phone;} ?>">
+            <input type="hidden" id="mail" name="mail" value="<?php if(!empty($ticket->email)){echo $ticket->email;} ?>">
             <button class="btn btn-primary" onclick="send_sms()" type="button">Send</button>            
          </div>
          <div class="modal-footer">

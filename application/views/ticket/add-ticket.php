@@ -5,12 +5,16 @@
 		{
 			line-height:40px;
 		}
+		.old_ticket_data{
+			overflow-y: scroll;
+    		max-height: 600px;
+		}
 	</style>
 
 	<?php
 	if(!$invalid_process)
 	{	
-	?>
+	?>	
        	<div class="row">
 				 <div class="panel panel-default pt-2"> 
 				<div class="panel-heading no-print" style ="background-color: #fff;padding:7px;border-bottom: 1px solid #C8CED3;">
@@ -25,6 +29,7 @@
 				<div class="col-md-2"></div>
 
 				<div class="col-md-8 panel-default panel-body" style ="border:1px solid #f7f7f7">
+				
 				<?php echo form_open_multipart(base_url("ticket/add")); ?>
 			<div class="row">
 

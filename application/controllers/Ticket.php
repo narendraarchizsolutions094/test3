@@ -107,8 +107,9 @@ class Ticket extends CI_Controller
 		$data['prodcntry_list'] = $this->enquiry_model->get_user_productcntry_list();
 		$data['problem'] = $this->Ticket_Model->get_sub_list();
 
-		if(count($this->session->process)==1)
-			$data['stage'] =  $this->Leads_Model->find_estage($this->session->process[0],4);
+		
+		$data['stage'] =  $this->Leads_Model->stage_by_type(4);
+
 		$data['sub_stage'] = $this->Leads_Model->find_description();
 
 		$data['ticket_status'] = $this->Ticket_Model->ticket_status()->result();
@@ -231,6 +232,17 @@ class Ticket extends CI_Controller
 			if ($showall or in_array(1, $acolarr)) {
 				$sub[] = '<a href="' . base_url('ticket/view/' . $point->ticketno) . '">' . $point->ticketno . '</a>';
 			}
+			if ($this->session->companey_id == 65 && ($showall or in_array(15, $acolarr))) {
+				$sub[] = $point->tracking_no == '' ? 'NA' : $point->tracking_no;
+			}
+
+			if ($showall or in_array(7, $acolarr)) {
+				$sub[] = $point->created_by_name ?? "NA";
+			}
+
+			if ($showall or in_array(9, $acolarr)) {
+				$sub[] = $point->coml_date ?? 'NA';
+			}
 
 			if ($showall or in_array(2, $acolarr)) {
 				$sub[] = $point->clientname ?? "NA";
@@ -263,15 +275,11 @@ class Ticket extends CI_Controller
 				$sub[] = $point->assigned_by_name ?? "NA";
 			}
 
-			if ($showall or in_array(7, $acolarr)) {
-				$sub[] = $point->created_by_name ?? "NA";
-			}
+			
 			if ($showall or in_array(8, $acolarr)) {
 				$sub[] = '<span class="label label-' . ($point->priority == 1 ? 'success">Low' : ($point->priority == 2 ? 'warning">Medium' : 'danger">High')) . '</span>';
 			}
-			if ($showall or in_array(9, $acolarr)) {
-				$sub[] = $point->coml_date ?? 'NA';
-			}
+			
 			if ($showall or in_array(10, $acolarr)) {
 				$sub[] = $point->referred_name ?? 'NA';
 			}
@@ -289,9 +297,7 @@ class Ticket extends CI_Controller
 				$sub[] = $point->message == '' ? 'NA' : $point->message;
 			}
 
-			if ($this->session->companey_id == 65 && ($showall or in_array(15, $acolarr))) {
-				$sub[] = $point->tracking_no == '' ? 'NA' : $point->tracking_no;
-			}
+			
 
 			if ($showall or in_array(16, $acolarr)) {
 				$sub[] = $point->status_name == '' ? 'NA' : $point->status_name;
@@ -406,7 +412,7 @@ class Ticket extends CI_Controller
 
 				if (isset($a->Table3) && sizeof($table3) > 0) {
 					echo '<table class="table table-bordered">
-	        	<tr><th colspan="5" style="text-align:center;">Timeline</th></tr>
+	        	<tr><th colspan="5" style="text-align:center;">Status</th></tr>
 	        	<tr><th>From</th><th>To</th><th>Dep. Date</th><th>Arr. Date</th><th>Status</th></tr>
 	        	';
 
@@ -473,14 +479,14 @@ class Ticket extends CI_Controller
 			'ticket_no' => $data['ticket']->ticketno,
 			'tck.client' => $data['ticket']->client,
 			'tck.tracking_no' => $data['ticket']->tracking_no,
-			'tck.phone' => $data['ticket']->phone,
+			'tck.phone' => $data['ticket']->phone, 
 		);
 		$data['related_tickets'] = $this->Ticket_Model->all_related_tickets($match);
 		//print_r($data['related_tickets']); exit();
 		$data["referred_type"] = $this->Leads_Model->get_referred_by();
 		$data['all_description_lists']    =   $this->Leads_Model->find_description();
 
-		$data["clients"] = $this->Ticket_Model->getallclient();
+		//$data["clients"] = $this->Ticket_Model->getallclient();
 
 		$data["problem_for"] = $this->Ticket_Model->getclient($data['ticket']->client);
 		//print_r($data['problem_for']); exit();
@@ -499,11 +505,11 @@ class Ticket extends CI_Controller
 
 
 		if (!$data["ticket"]->client)
-			show_404();
+			//show_404();
 		$this->load->model('enquiry_model');
-		$data['enquiry'] = $this->enquiry_model->enquiry_by_id($data["ticket"]->client);
+		//$data['enquiry'] = $this->enquiry_model->enquiry_by_id($data["ticket"]->client);
 
-		$data['ticket_stages'] = $this->Leads_Model->find_estage($data['enquiry']->product_id, 4);
+		$data['ticket_stages'] = $this->Leads_Model->stage_by_type(4); // 4 = ticket
 		$data['leadsource'] = $this->Leads_Model->get_leadsource_list();
 		//print_r($data['leadsource']);	
 		//print_r($data['ticket_stages']); exit();
@@ -1127,12 +1133,29 @@ class Ticket extends CI_Controller
 		imap_close($inbox);
 	}
 
+	public function tracking_no_check($tn){
+		$this->db->where('company',$this->session->companey_id);
+		$this->db->where('tracking_no',$tn);
+		$this->db->where('ticket_status!=',3);
+		if($this->db->get('tbl_ticket')->num_rows()){
+			$this->form_validation->set_message('tracking_no_check', 'Ticket with this tracking no is already open.');
+			return false;
+		}else{
+			return true;
+		}
+	}
 	public function add()
 	{
 		$this->load->model('Enquiry_model');
 
-		if($this->input->post()) 
-		{
+		$this->form_validation->set_rules('name','Name','required');
+		$this->form_validation->set_rules('phone','Mobile No','required');
+		$this->form_validation->set_rules('email','Email','required');
+
+		if($this->session->companey_id == 65 && ($this->input->post('complaint_type') == 1)){
+			$this->form_validation->set_rules('tracking_no', 'Tracking No', 'required|callback_tracking_no_check', array('tracking_no_check' => 'Ticket with this tracking no is already open.'));
+		}
+		if ($this->form_validation->run()==TRUE) {
 			$res = $this->Ticket_Model->save($this->session->companey_id, $this->session->user_id);
 
 			if ($res) 

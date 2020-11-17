@@ -252,13 +252,13 @@ class Dashboard extends CI_Controller {
      }
     public function index() { 
        
-        $sessionId      =   $this->input->get('sessionId');
-        $campaignId     =   $this->input->get('campaignId');
-        $crtObjectId    =   $this->input->get('crtObjectId');
-        $userCrtObjectId=   $this->input->get('userCrtObjectIds');
-        $userId         =   $this->input->get('userId');
-        $customerId     =   $this->input->get('customerId');
-        $phone          =   $this->input->get('phone');
+        $sessionId      =   isset($_GET['sessionId'])?$_GET['sessionId']:'';
+        $campaignId     =   isset($_GET['campaignId'])?$_GET['campaignId']:'';
+        $crtObjectId    =   isset($_GET['crtObjectId'])?$_GET['crtObjectId']:'';
+        $userCrtObjectId=   isset($_GET['userCrtObjectIds'])?$_GET['userCrtObjectIds']:'';
+        $userId         =   isset($_GET['userId'])?$_GET['userId']:'';
+        $customerId     =   isset($_GET['customerId'])?$_GET['customerId']:'';
+        $phone          =   isset($_GET['phone'])?$_GET['phone']:'';
  
         if ($sessionId && $campaignId && $userCrtObjectId && $userId) {            
             $user_data    =   $this->user_model->get_user_by_email($userId);

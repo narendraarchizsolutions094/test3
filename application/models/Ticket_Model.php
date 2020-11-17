@@ -94,9 +94,11 @@ class Ticket_Model extends CI_Model
 
 	public function save($companey_id = '', $user_id = '')
 	{
+		
+		
 		$cid = '';
 		//print_r($_POST); 
-		if (!empty($companey_id) && !empty($user_id)) {
+		if (!empty($companey_id) && !empty($user_id) && !empty($_POST['client']) && 0) {
 			if (isset($_SESSION['process']) && count($_SESSION['process']) == 1) {
 				$encode = get_enquery_code();
 				$postData = array(
@@ -434,12 +436,13 @@ class Ticket_Model extends CI_Model
 	public function all_related_tickets($where)
 	{
 
-		$this->db->select("tck.*,enq.gender,prd.product_name, concat(enq.name_prefix,' ' , enq.name,' ', enq.lastname) as clientname , COUNT(cnv.id) as tconv, cnv.msg");
+		$this->db->select("tck.*,tbl_ticket_status.status_name as ticket_status_name,enq.gender,prd.product_name, concat(enq.name_prefix,' ' , enq.name,' ', enq.lastname) as clientname , COUNT(cnv.id) as tconv, cnv.msg");
 		$this->db->where("tck.company", $this->session->companey_id);
 
 		$this->db->from("tbl_ticket tck");
 		$this->db->join("tbl_ticket_conv cnv", "cnv.tck_id = tck.id", "LEFT");
 		$this->db->join("enquiry enq", "enq.enquiry_id = tck.client", "LEFT");
+		$this->db->join("tbl_ticket_status", "tbl_ticket_status.id = tck.ticket_status", "LEFT");
 		$this->db->join("tbl_product prd", "prd.sb_id = tck.product", "LEFT");
 		$ticketno = $where['ticket_no'];
 		unset($where['ticket_no']);
