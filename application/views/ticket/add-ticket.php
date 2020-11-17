@@ -135,7 +135,7 @@
         $("#process_basic_fields").html(data);
         // $("#fcity").select2();
         // $("#fstate").select2();
-        // get_custom_field();
+         get_custom_field();
       },
      error:function(u,v,w)
      {
@@ -144,6 +144,23 @@
     });
   }
 
+ function get_custom_field() { 
+    var process_id = "<?= $process_id ?>";
+    var url = "<?= base_url() . 'form/form/get_custom_field_by_process' ?>";
+    $.ajax({
+      type: "POST",
+      url: url,
+      data: {
+        'process_id': process_id,
+        'field_for': 2,
+        'primary_tab': <?=$primary_tab?>
+      },
+      success: function(data) {
+        $("#process_basic_fields").append(data);
+        //hide_all_dependent_field();
+      }
+    });
+  }
 
 
 	$(document).on("change", ".choose-client", function(){		
@@ -239,79 +256,5 @@ if(!empty($_GET['phone']))
 	';
 }	
 
-if($this->session->companey_id==65)
-{
 ?>
-	function loadTracking(that)
-	{	//alert(key);
-		if(that.value=='')
-		{
-
-		}else{
-			
-			$.ajax({
-				url:'<?=base_url('ticket/view_tracking')?>',
-				type:'post',
-				data:{trackingno:that.value},
-				beforeSend:function(){
-
-					$(that).parents('form').find('input,select,button').attr('disabled','disabled');
-				},
-				success:function(q)
-				{	$(that).parents('form').find('input,select,button').removeAttr('disabled');
-					if(q!='0')
-						$(".trackingDetails").html(q);
-					else
-					{
-						Swal.fire({
-		                    title: 'GC. No. Not Found!',
-		                    cancelButtonText: 'Ok!'
-                  			});
-					}
-				},
-				error:function(u,v,w)
-				{
-					console.info(w);
-				}
-			});
-		}
-	}
-
-	function match_previous(tracking_no)
-	{ 
-		if(tracking_no=='')
-		{
-
-		}else{
-			
-			$.ajax({
-				url:'<?=base_url('ticket/view_previous_ticket')?>',
-				type:'post',
-				data:{tracking_no:tracking_no},
-				beforeSend:function(){
-
-					
-				},
-				success:function(q)
-				{ 
-					if(q!='0')
-					{
-						$("#old_ticket").show(500);
-						$(".old_ticket_data").html(q);
-					}
-					
-					//	$(that).parents('form').find('input,select,button').removeAttr('disabled');
-					//$(".trackingDetails").html(q);
-				},
-				error:function(u,v,w)
-				{
-					console.info(w);
-				}
-			});
-		}
-	}
-<?php 
-}
-?>
-
 </script>

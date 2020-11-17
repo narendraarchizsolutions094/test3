@@ -120,7 +120,9 @@
       type: "POST",
       url: url,
       data: {
-        'process_id': process_id
+        'process_id': process_id,
+        'field_for': 0,
+        'primary_tab':<?=$primary_tab?>,
       },
       success: function(data) {
         $("#process_basic_fields").append(data);

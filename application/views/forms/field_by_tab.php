@@ -66,10 +66,10 @@ if ($tab_details['primary_tab']) {
                     <td>
                       <?php 
                       if($value['status']==1){ ?>                          
-                          <input type="checkbox" name="basic_fields_status[<?=$value['id']?>]" checked data-toggle="toggle" data-field="<?=$value['id']?>" class='basic_fields_status'   data-onstyle="success" data-offstyle="danger" data-size="small">
+                          <input type="checkbox" name="basic_fields_status[<?=$value['id']?>]" checked data-toggle="toggle" data-field="<?=$value['id']?>" class='basic_fields_status' data-field_for="<?=$field_for?>"   data-onstyle="success" data-offstyle="danger" data-size="small">
                           <?php
                       }else {  ?>
-                          <input type="checkbox" name="basic_fields_status[<?=$value['id']?>]" data-toggle="toggle" data-field="<?=$value['id']?>" class='basic_fields_status'   data-onstyle="success" data-offstyle="danger" data-size="small">
+                          <input type="checkbox" name="basic_fields_status[<?=$value['id']?>]" data-toggle="toggle" data-field="<?=$value['id']?>" class='basic_fields_status' data-field_for="<?=$field_for?>"  data-onstyle="success" data-offstyle="danger" data-size="small">
                       <?php
                       }                            
                       ?>
@@ -83,7 +83,7 @@ if ($tab_details['primary_tab']) {
                     </td>
                     <td>                                     
                       <!-- <a href="javascript:void(0)" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i></a>                       -->
-                      <a href="javascript:void(0)" class="btn btn-success btn-sm" onclick="save_form_row(<?=$value['id']?>)"><i class="fa fa-save"></i></a>
+                      <a href="javascript:void(0)" class="btn btn-success btn-sm" onclick="save_form_row(<?=$value['id']?>,<?=$field_for?>)"><i class="fa fa-save"></i></a>
                     </td>                    
                     <?php
                     $i++;
@@ -111,10 +111,10 @@ if ($tab_details['primary_tab']) {
                     <td>
                       <?php 
                       if($value['status']==1){ ?>
-                          <input type="checkbox" checked name="extra_fields_status[<?=$value['input_id']?>]" data-toggle="toggle" data-field="<?=$value['input_id']?>" class='extra_fields_status' data-onstyle="success" data-offstyle="danger" data-size="small">
+                          <input type="checkbox" checked name="extra_fields_status[<?=$value['input_id']?>]" data-toggle="toggle" data-field="<?=$value['input_id']?>" data-field_for="<?=$field_for?>" class='extra_fields_status' data-onstyle="success" data-offstyle="danger" data-size="small">
                           <?php
                       }else {  ?>
-                        <input type="checkbox" name="extra_fields_status[<?=$value['input_id']?>]" data-toggle="toggle" data-field="<?=$value['input_id']?>" class='extra_fields_status' data-onstyle="success" data-offstyle="danger" data-size="small">
+                        <input type="checkbox" name="extra_fields_status[<?=$value['input_id']?>]" data-toggle="toggle" data-field="<?=$value['input_id']?>" data-field_for="<?=$field_for?>" class='extra_fields_status' data-onstyle="success" data-offstyle="danger" data-size="small">
                       <?php
                       }      
                       ?>
@@ -128,7 +128,7 @@ if ($tab_details['primary_tab']) {
                     </td>
                     <td>                     
                       <a class="btn btn-primary btn-sm" data-toggle="modal" data-target="#edit_tab_field" onclick="edit_form_row(<?=$value['input_id']?>)"><i class="fa fa-edit"></i></a>                      
-                      <a href="javascript:void(0)" class="btn btn-success btn-sm" onclick="save_form_row(<?=$value['input_id']?>,false)" ><i class="fa fa-save"></i></a>                      
+                      <a href="javascript:void(0)" class="btn btn-success btn-sm" onclick="save_form_row(<?=$value['input_id']?>,<?=$field_for?>,false)" ><i class="fa fa-save"></i></a>                      
                     </td>                    
                     <?php
                 $i++;
@@ -328,8 +328,8 @@ echo "</pre>";*/
   </div>
 </div>
 <!-- edit tab field end -->
-
 <script type="text/javascript">  
+
     $("#check_process_right").on('click', function() {
         var comp_id = "<?=$comp_id?>";
         url = "<?=base_url().'form/is_process_right/'?>" + comp_id;
@@ -347,7 +347,7 @@ echo "</pre>";*/
                 }
             }
         });
-        //alert(comp_id);
+        alert(comp_id);
     })
 
     $("#label_type").on('change', function() {
@@ -422,65 +422,8 @@ echo "</pre>";*/
         });
         //alert(comp_id);
     });
-    $('.basic_fields_status').on('change', function() { 
-        id = $(this).data('field');
-        if ($(this).is(':checked')) {
-            status = 1;
-        } else {
-            status = 0;
-        }
-        var url = "<?=base_url()?>form/form/change_basic_enquiry_field_status"
-        $.ajax({
-            type: "POST",
-            url: url,
-            data: {
-                id: id,
-                status: status,
-                comp_id: "<?=$comp_id?>",
-                field_for:"<?=$field_for?>"
-            },
-            success: function(data) {
-                if (data == 1) {
-                    Swal.fire(
-                        'Status Changed Successfully!',
-                        '',
-                        'success'
-                    )
-                }
-            }
-        });
-    });
-
-
-    $('.extra_fields_status').on('change', function() {
-        id = $(this).data('field');
-        if ($(this).is(':checked')) {
-            status = 1;
-        } else {
-            status = 0;
-        }
-        var url = "<?=base_url()?>form/form/change_extra_enquiry_field_status"
-        $.ajax({
-            type: "POST",
-            url: url,
-            data: {
-                id: id,
-                status: status,
-                comp_id: "<?=$comp_id?>"
-            },
-            //beforeSend:function(){ alert(status+" "+id);},
-            success: function(data) {
-                if (data == 1) {
-                    Swal.fire(
-                        'Status Changed Successfully!',
-                        '',
-                        'success'
-                    )
-                }
-            }
-        });
-    });
-
+   
+   
 
   function query_builder(){
     var rules_basic = {
@@ -548,32 +491,6 @@ echo "</pre>";*/
 
 
 
-function save_form_row(id, basic = true) {
-    var comp_id = "<?=$comp_id?>";
-    var process_ids = $("select[name='product_id[" + id + "][]']").val();
-
-    var url = "<?=base_url()?>form/form/save_form_row";
-    $.ajax({
-        type: "POST",
-        url: url,
-        data: {
-            id: id,
-            comp_id: "<?=$comp_id?>",
-            process_ids: process_ids,
-            basic: basic
-        },
-        success: function(data) {
-            if (data) {
-                Swal.fire(
-                    'Saved Successfully!',
-                    '',
-                    'success'
-                )
-            }
-        }
-    });
-
-}
 
 function edit_form_row(id) {    
     var url = "<?=base_url()?>form/form/edit_tab_field";

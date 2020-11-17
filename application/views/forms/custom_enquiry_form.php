@@ -192,11 +192,17 @@
            <li class="sidebar-brand"><a id="menu-toggle" href="#">Tabs<span id="main_icon" class="glyphicon glyphicon-align-justify"></span></a></li>
         </ul>
         <ul class="sidebar-nav" id="sidebar" style="overflow-y: scroll;">
-            <?php            
+            <?php   
+            $default_tab =0;         
             if (!empty($tab_list)) {
-                foreach ($tab_list as $key => $value) { ?>
+                foreach ($tab_list as $key => $value) { 
+
+                  if($value['primary_tab']=='1')
+                    $default_tab = $value['id'];
+
+                  ?>
                     <li> 
-                      <a onclick="get_tab_fields(<?=$value['id']?>)"> 
+                      <a onclick="get_tab_fields(<?=$value['id']?>,<?=$field_for?>)"> 
                     
                       <?=$value['title']?><!--span class="sub_icon glyphicon glyphicon-link"></span--></a></li>                               
                     <?php
@@ -224,34 +230,5 @@
 <br>
 <br>
 <script type="text/javascript">
-    
-      function get_tab_fields(tab_id){
-          var comp_id = "<?=$comp_id?>";
-          url = "<?=base_url().'form/form/get_tab_fields/'?>"+tab_id+'/'+comp_id;     
-          $.ajax({
-            type: "POST",
-            url: url,
-            beforeSend: function(){
-              $("#form_content").html("<div class='lds-hourglass text-center'></div>");            
-            },      
-            success: function(data){                
-              $("#form_content").html(data);              
-            },
-            complete: function (data) {
-              query_builder();
-              do_chosen();
-             }
-          });
-      }
-    $(function(){
-      get_tab_fields(1);       
-    });    
-      function do_chosen(){
-        $(".chosen-select").chosen({
-          width: "100%"
-        });
-        $(".tab-process-chosen-select").chosen({
-            width: "50%"
-        });
-      }     
-    </script>
+      get_tab_fields(<?=$default_tab?>,0);       
+</script>

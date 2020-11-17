@@ -195,12 +195,13 @@
             <?php     
             $default_tab=0;       
             if (!empty($tab_list)) {
-                foreach ($tab_list as $key => $value) { 
-                  if(!$default_tab)
-                    $default_tab = $value['id'];
+                foreach ($tab_list as $key => $value)
+                { 
+                  if($value['primary_tab']=='1')
+                      $default_tab = $value['id'];
                   ?>
                     <li> 
-                      <a onclick="get_tab_fields(<?=$value['id']?>)"> 
+                      <a onclick="get_tab_fields(<?=$value['id']?>,<?=$field_for?>)"> 
                     
                       <?=$value['title']?><!--span class="sub_icon glyphicon glyphicon-link"></span--></a></li>                               
                     <?php
@@ -228,44 +229,5 @@
 <br>
 <br>
 <script type="text/javascript">
-      $("a[data-toggle='tab']").click(function(){
-          var a    =   $(this).attr('href');
-          if(a == "#cmp-custom_ticket"){            
-              $(".comp-status").hide();
-              $(".form-btns").hide();
-          }else{
-              $(".comp-status").show();
-              $(".form-btns").show();
-          }
-      });
-      function get_tab_fields(tab_id){
-          var comp_id = "<?=$comp_id?>";
-          url = "<?=base_url().'form/form/get_tab_fields/'?>"+tab_id+'/'+comp_id+'/2';     
-          $.ajax({
-            type: "POST",
-            url: url,
-            beforeSend: function(){
-              $("#form_content").html("<div class='lds-hourglass text-center'></div>");            
-            },      
-            success: function(data){  
-              $(".basic_fields_status").off('change');              
-              $("#form_content").html(data);              
-            },
-            complete: function (data) {
-              query_builder();
-              do_chosen();
-             }
-          });
-      }
-    $(function(){
-      get_tab_fields(<?=$default_tab?>);       
-    });    
-      function do_chosen(){
-        $(".chosen-select").chosen({
-          width: "100%"
-        });
-        $(".tab-process-chosen-select").chosen({
-            width: "50%"
-        });
-      }     
-    </script>
+       get_tab_fields(<?=$default_tab?>,2);       
+</script>

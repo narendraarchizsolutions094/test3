@@ -494,7 +494,9 @@ class Customer extends CI_Controller
              exit();*/
             $data['user_role'] = $this->User_model->get_user_role($user_row[0]['user_permissions']);
             $data['user_right_content'] = $this->load->view('company_right', $data, true);
+            $data['comp_id'] = $user_id;
             $data['content'] = $this->load->view('doctor_form', $data, true);
+            $data['content'].= $this->load->view('forms/doctor_form_javascript', $data, true);
             $this->load->view('layout/main_wrapper', $data);
         } else {
             $this->session->set_flashdata('exception', display('please_try_again'));

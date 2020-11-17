@@ -15,22 +15,27 @@
   define('TRACKING_NUMBER',28);
   // define('PIN_CODE',14); 
   // define('SUB_SOURCE',15);  
-echo'<div class="trackingDetails"></div>';
+echo'
+ <div class="trackingDetails"></div>
+<div class="col-md-6" style="display: none;">
+      <div class="form-group">
+        <label>Complain Date</label>
+        <input type = "text" class="form-control add-date-picker" name = "complaindate" value= "<?php echo date("m/d/Y", strtotime($ticket->coml_date)) ?>">
+      </div>
+    </div>';
+
+
         if(!empty($company_list)){
           foreach($company_list as $companylist)
           {
 
                 if($companylist['field_id']==COMPLAINT_TYPE){?>
                     
-                    <div class="col-md-6">
-                      <div class="form-group">
-                        <label>Complaint Type</label>
-                        <div>             
-                          <input type="radio" name="complaint_type" value="1" checked> <label>Is Complaint</label>
-                          <input type="radio" name="complaint_type" value="2"> <label>Is Query</label>
-                        </div>
-                      </div>
-                    </div>
+                  <input type="hidden" name="complaint_type" value="<?=$ticket->complaint_type?>">
+                  <div class="form-group">
+                  <label>Ticket Type : </label> 
+                  <span class='badge badge-info'><?=$ticket->complaint_type=='1'?'Compaint':($ticket->complaint_type=='2'?'Query':'NA')?></span>
+                </div>
                       
                      <?php
                    }
@@ -38,23 +43,27 @@ echo'<div class="trackingDetails"></div>';
                     <?php
                     if($companylist['field_id']==REFERRED_BY){
                     ?>
+                   
+
                     <div class="col-md-6">
-                          <div class="form-group">
-                            <label>Referred By</label>
-                            <select class="form-control" name="referred_by">
-                              <?php
-                              if(!empty($referred_type))
-                              {
-                                foreach ($referred_type as $res)
-                                {
-                                  echo'<option value="'.$res->id.'">'.$res->name.'</option>';
-                                }
-                              }
-                              ?>
-                            </select>
-                          </div>
-                        </div>
-                     <?php
+                    <div class="form-group">
+                      <label>Referred By</label>
+                      <select class="form-control add-select2 choose-client" name = "referred_by" required>
+                        <?php 
+                        if(!empty($referred_type))
+                        {
+                          foreach($referred_type as $ref)
+                          {
+                      echo "<option value =".$ref->id." ".($ref->id==$ticket->referred_by?'selected':'').">".$ref->name."</option>";
+
+                          }
+                        } 
+                        ?>
+                      </select>
+                    </div>
+                  </div>
+
+                   <?php
                    }
                    ?>
                     <?php
@@ -62,21 +71,7 @@ echo'<div class="trackingDetails"></div>';
                     ?>
                    
                    <script type="text/javascript">
-                    $("input[name=complaint_type]").on('change',function(){
-                        var x = $("input[name=complaint_type]:checked").val();
-                        if(x=='1')
-                        {
-                          $('input[name=tracking_no]').attr("required","required");
-                          $(".opt").show();
-                        }
-                        else if(x=='2')
-                        {
-                          $('input[name=tracking_no]').removeAttr("required");
-                          $(".opt").hide();
-                        }
-                    });
-
-                    
+                                        
                     function loadTracking(that)
                       { //alert(key);
                         if(that.value=='')
@@ -149,30 +144,47 @@ echo'<div class="trackingDetails"></div>';
 
                   </script>
           
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label>Tracking Number <i class="text-danger opt" style="display: none;">*</i></label>
+                  <input type="text" name="tracking_no" class="form-control" onblur="loadTracking(this)" value="<?php if(!empty($ticket->tracking_no)){ echo $ticket->tracking_no;} ?>">
+                </div>
+              </div>
+              <script type="text/javascript">
 
-                    <div class="col-md-6">
-                      <div class="form-group">
-                        <label>Tracking Number <i class="text-danger opt">*</i></label>
-                        <input type="text" name="tracking_no" class="form-control" onblur="loadTracking(this),match_previous(this.value)" required>
-                      </div>
-                    </div>
+                $(document).ready(function(){
+                  loadTracking($("input[name=tracking_no]").get(0));
+                });
+              </script>
+
+              <?php if($ticket->complaint_type=='1'){
+                  echo'<script type="text/javascript">
+                  $(".opt").show();
+                  $("input[name=tracking_no]").attr("required","required");
+                  </script>';
+                          }?>
 
                    <?php
                    }
                    ?>
+
                    <?php
                     if($companylist['field_id']==PROBLEM_FOR){
                     ?>
-                     <div class="col-md-6">
+                    <div class="col-md-6">
                       <div class="form-group">
-                        <label>Problem For </label>
-                        <select class="form-control add-select2 choose-client" name = "client" >
-                          <option value = "" style ="display:none;">---Select---</option>
-                          <?php if(!empty($clients)){
-                            foreach($clients as $ind => $clt){
-                              ?><option value ="<?php echo $clt->enquiry_id ?>"><?php echo $clt->name." ".$clt->lastname; ?> </option><?php
+                        <label>Problem For</label>
+                        <select class="form-control add-select2 choose-client" name = "client" required readonly>
+                          <?php 
+                          if(!empty($problem_for))
+                          {
+                            foreach($problem_for as $ind => $clt)
+                            {
+                        echo "<option value =".$clt->enquiry_id." selected>".$clt->name."</option>";
+
                             }
-                          } ?>
+                          } 
+                          ?>
                         </select>
                       </div>
                     </div>
@@ -185,8 +197,8 @@ echo'<div class="trackingDetails"></div>';
                     ?>
                     <div class="col-md-6">
                       <div class="form-group">
-                        <label>Name <i class="text-danger">*</i></label>
-                        <input type = "text" class="form-control" name = "name" required>
+                        <label>Name<span class="text-danger">*</span></label> 
+                        <input type="text" name="name" id="ticket_holder" class="form-control" value="<?php if(!empty($ticket->name)){ echo $ticket->name;} ?>" required>
                       </div>
                     </div>
                    
@@ -197,11 +209,13 @@ echo'<div class="trackingDetails"></div>';
                     if($companylist['field_id']==PHONE){
                     ?>
                     <div class="col-md-6">
-                        <div class="form-group">
-                          <label>Phone <i class="text-danger">*</i></label>
-                          <input type = "text" class="form-control" name = "phone" required value="<?=!empty($_GET['phone'])?$_GET['phone']:''?>" onkeyup="autoFill('phone',this.value)"> 
-                        </div>
-                    </div>                   
+                      <div class="form-group">
+                        <label>Phone<span class="text-danger">*</span></label>
+                        <input type="text" name="phone" class="form-control" value="<?php  if(!empty($ticket->phone)){ echo $ticket->phone; } ?>" required>
+                      </div>
+                    </div>
+
+
                      <?php
                    }
                    ?>
@@ -209,12 +223,12 @@ echo'<div class="trackingDetails"></div>';
                     if($companylist['field_id']==EMAIL){
                     ?>
                     
-                    <div class="col-md-6">
-                      <div class="form-group">
-                        <label>Email <i class="text-danger">*</i></label>
-                        <input type = "text" class="form-control" name = "email" onblur="autoFill('email',this.value)" required>
-                      </div>
+                   <div class="col-md-6">
+                    <div class="form-group">
+                      <label>Email<span class="text-danger">*</span></label>
+                      <input type="email" class="form-control" name="email" value="<?php if(!empty($ticket->tck_email)){ echo $ticket->tck_email;} ?>" required>
                     </div>
+                  </div>
                    
                      <?php
                    }
@@ -223,20 +237,20 @@ echo'<div class="trackingDetails"></div>';
                     if($companylist['field_id']==PRODUCT){
                     ?>      
                     
-                    <?php if($this->session->companey_id!=83){ ?>
-                        <div class="col-md-6">
-                          <div class="form-group">
-                            <label>Product</label>
-                            <select class="form-control add-select2 chg-product" name = "product">
-                              <?php if(!empty($product)) {
-                                foreach($product as $ind => $prd){
-                                  ?><option value ="<?php echo $prd->id ?>"><?php echo ucfirst($prd->country_name); ?> </option><?php
-                                }
-                              } ?>
-                            </select>
-                          </div>
-                        </div>
-                        <?php } ?>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label>Product</label>
+                        <select name="product" class="form-control">
+                        <?php
+                        foreach ($product as $prd)
+                        {
+                          echo'<option value="'.$prd->id.'" '.($prd->id==$ticket->product?'selected':'').'>'.$prd->country_name.'</option>';
+                        }
+                        ?>
+                        </select>
+                        <!-- <input type="text" class="form-control" value="<?php if(!empty($ticket->country_name)){ echo $ticket->country_name;} ?>" > -->
+                      </div>
+                    </div>
 
                     <?php
                    }
@@ -252,7 +266,7 @@ echo'<div class="trackingDetails"></div>';
                           <option value = "">Select Subject</option>
                         <?php  if(!empty($problem)) {
                               foreach($problem as $ind => $prblm){
-                                ?><option value = "<?php echo $prblm->id ?>"><?php echo ucfirst($prblm->subject_title) ?> </option><?php
+                                ?><option value = "<?php echo $prblm->id ?>" <?=$prblm->id==$ticket->category? 'selected':''?>><?php echo ucfirst($prblm->subject_title) ?> </option><?php
                               } 
                             } ?>
                           </select>
@@ -266,43 +280,39 @@ echo'<div class="trackingDetails"></div>';
                     <?php
                     if($companylist['field_id']==NATURE_OF_COMPLAINT){
                     ?>                
-                    <?php
-                      if($this->session->companey_id!=65)
-                      {
-                      ?>
-                      <div class="col-md-6">
-                        <div class="form-group">
-                          <label>Nature of Complaint</label>
-                          <select class="form-control add-select2" name = "issue">
-                          <option value = ""> -- Select --</option>
+                   
+                     <div class="col-md-6">
+                      <div class="form-group">
+                        <label>Nature of Complaint</label>
+                        <select class="form-control add-select2" name = "issue">
+                        <option value = ""> -- Select --</option>
                         <?php  if(!empty($issues)) {
-                              foreach($issues as $ind => $issue){
-                                ?><option value = "<?php echo $issue->id ?>"><?php echo ucfirst($issue->title) ?> </option><?php
-                              } 
-                            } ?>
-                          </select>
-                        </div>
+                            foreach($issues as $ind => $issue){
+                              ?><option value = "<?php echo $issue->id ?>" <?php echo ($issue->id == $ticket->issue) ? "selected" : ""; ?> ><?php echo ucfirst($issue->title) ?> </option><?php
+                            } 
+                          } ?>
+                        </select>
                       </div>
-                      <?php
-                      }
-                      ?>
-                      <?php
+                    </div>
+                     
+                  <?php
                    }                   
                   if($companylist['field_id']==PRIORITY){
                     ?>                                     
                     
                     <?php if($this->session->user_right!=214){ ?>
-          
                     <div class="col-md-6">
-                      <div class="form-group">
-                        <label>Priority</label>
-                        <select class="form-control add-select2" name = "priority">
-                          <option value = "1">Low</option>
-                          <option value = "2">Medium</option>
-                          <option value = "3">High</option>
-                        </select>
-                      </div>
+                    <div class="form-group">
+                      <label>Priority</label>
+                      <select class="form-control add-select2" name = "priority">
+
+                        <option value = "1" <?php echo (1 == $ticket->priority) ? "selected" : ""; ?>>Low</option>
+                    
+                        <option value = "2" <?php echo (2 == $ticket->priority) ? "selected" : ""; ?>>Medium</option>
+                        <option value = "3" <?php echo (3 == $ticket->priority) ? "selected" : ""; ?>>High</option>
+                      </select>
                     </div>
+                  </div>
                    
                      <?php 
                       }
@@ -317,14 +327,15 @@ echo'<div class="trackingDetails"></div>';
                     <div class="col-md-6">
                       <div class="form-group">
                         <label>Source</label>
-                        <select class="form-control add-select2" name = "source">
-                          <?php
-                           if(!empty($source)) {
-                            foreach($source as $ind => $prblm){
-                              ?><option value = "<?php echo $prblm->lsid ?>"><?php echo $prblm->lead_name ?> </option><?php
-                            } 
-                          } ?>
+                        <select name="source" class="form-control">
+                        <?php
+                        foreach ($source as $sor)
+                        {
+                          echo'<option value="'.$sor->lsid.'" '.($sor->lsid==$ticket->sourse?'selected':'').'>'.$sor->lead_name.'</option>';
+                        }
+                        ?>
                         </select>
+                        <!-- <input type="text" class="form-control" value="<?php if(!empty($ticket->ticket_source)){ echo ucwords($ticket->ticket_source);} ?>" > -->
                       </div>
                     </div>
 
@@ -335,25 +346,54 @@ echo'<div class="trackingDetails"></div>';
                   {
                    ?>
 
-                   <div class="col-md-6">
-                    <div class="form-group">
-                      <label>Attachment</label>
-                      <input type="file" name="attachment[]" class="form-control" accept=".jpg,.jpeg,.png,.pdf" multiple>
+                   <div class="col-md-12">
+      
+                    <div class="form-group" >     
+                      <label>Attachment <small> ( Only Image/PDF ) </small>:</label>
+                      <?php
+                      //$error="This file is not availible";
+                      if($error =$this->session->flashdata('error'))
+                      {
+                        echo'<div class="alert alert-danger">'.$error.'</div>';
+                      }
+                      ?>
+                      <?php
+                      if($ticket->attachment)
+                      {
+                        $attachment  = json_decode($ticket->attachment);
+                        echo'<ul class="list-group">';
+                        $i=0;
+                        if(!empty($attachment)){
+                          foreach ($attachment as $at)
+                          {
+                            echo '<li class="list-group-item">'.$at.'
+                            <div class="btn-group pull-right">
+                            <a href="'.base_url('uploads/ticket/'.$at).'" target="_blank"><span class="btn btn-primary  btn-xs">View</span></a>
+                            <a href="'.base_url('ticket/remove_attachment/'.$ticket->ticketno.'/'.$i).'"><span class="btn btn-danger  btn-xs">Delete</span></a>
+                            </div>
+                            </li>';
+                            $i++;
+                          }
+                        }
+                        echo'</ul><br>';
+                      }
+                      ?>
+                      <input type="file" name="attachment[]" class="attachFiles" accept=".jpg,.jpeg,.png,.pdf" multiple>
                     </div>
-                  </div>
 
+                  </div>
                   <?php
                   }
                   if($companylist['field_id']==DESCRIPTION)
                   {
                   ?>
 
-                  <div class="col-md-12">
-                    <div class="form-group">
-                      <label>Description</label>
-                      <textarea name="remark" class="form-control"></textarea>
-                    </div>
-                  </div>  
+                  
+              <div class="col-md-12">
+                <label>Remark</label>
+                <!-- <div style = "padding: 10px;border: 1px solid #e5e1e1;margin-right:25px;border-radius: 10px;font-size:16px;margin-bottom:10px;"><?php if(!empty($ticket->message)){ echo $ticket->message;} ?></div> -->
+                <textarea name="remark" class="form-control"><?=$ticket->message?></textarea>
+              </div>
 
                   <?php
                   }

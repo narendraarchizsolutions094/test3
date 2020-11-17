@@ -695,7 +695,14 @@ class Enquiry extends CI_Controller
             if (!(user_access(230) || user_access(231) || user_access(232) || user_access(233) || user_access(234) || user_access(235) || user_access(236))) {
                 $data['invalid_process'] = 0;
             }
- 
+            $primary_tab =0;
+            $tabs = $this->db->select('id')
+                            ->where(array('form_for'=>0,'primary_tab'=>1))
+                            ->get('forms')
+                            ->row();
+            if($tabs)
+                $primary_tab = $tabs->id;
+            $data['primary_tab']= $primary_tab;
             $data['content'] = $this->load->view('add-equiry1', $data, true);
             $this->load->view('layout/main_wrapper', $data);
         }

@@ -238,8 +238,13 @@ if($form_type == 1)
 else
 {
 ?>
-<hr>
- <?php echo form_open_multipart('ticket/update_ticket_tab/'.$details->id,'class="form-inner tabbed_form"') ?>           
+<hr>  
+ <?php
+   if($is_primary != '1')
+   {
+  echo form_open_multipart('ticket/update_ticket_tab/'.$details->id,'class="form-inner tabbed_form"');
+    }
+  ?>           
          <input name="en_comments" type="hidden" value="<?=$details->ticketno?>" >    
          <div class="row">
          <?php
@@ -374,6 +379,11 @@ else
       <?php  }
          } ?>
          </div>
+
+         <?php
+         if($is_primary != '1')
+         {
+        ?>
          <div class="row" id="save_button">
             <div class="col-md-12 text-center">                                                               
                <input type="submit" name="submit_only" class="btn btn-primary" value="Save" >
@@ -381,7 +391,12 @@ else
                <input type="hidden" name="go_new_tab">
             </div>
          </div>
+         <?php
+
+         echo form_close(); 
+
+       }
+       ?>
    <?php
-   echo form_close(); 
 }
 ?>

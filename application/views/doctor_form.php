@@ -249,13 +249,13 @@
 
 
                                       <div id="cmp-custom_form" class="tab-pane fade">
-                                            <div class="row">
+                                            <div class="row" id="enquiry_view">
                                                 
                                             </div>
                                       </div>
 
                                       <div id="cmp-custom_ticket" class="tab-pane fade">
-                                            <div class="row">
+                                            <div class="row" id="ticket_view">
                                                 
                                             </div>
                                       </div>
@@ -351,6 +351,49 @@
     </div>
   </div>
 </div>
+
+<script type="text/javascript">
+      // $("a[data-toggle='tab']").click(function(){
+      //     var a    =   $(this).attr('href');
+      //     if(a == "#cmp-custom_ticket"){            
+      //         $(".comp-status").hide();
+      //         $(".form-btns").hide();
+      //     }else{
+      //         $(".comp-status").show();
+      //         $(".form-btns").show();
+      //     }
+      // });
+      function get_tab_fields(tab_id,field_for){
+       // alert(field_for);
+          var comp_id = "<?=$doctor->user_id?>";
+          url = "<?=base_url().'form/form/get_tab_fields/'?>"+tab_id+'/'+comp_id+'/'+field_for;     
+          $.ajax({
+            type: "POST",
+            url: url,
+            beforeSend: function(){
+              $("#form_content").html("<div class='lds-hourglass text-center'></div>");            
+            },      
+            success: function(data){  
+              $(".basic_fields_status").off('change');              
+              $("#form_content").html(data);              
+            },
+            complete: function (data) {
+              query_builder();
+              do_chosen();
+             }
+          });
+      }
+       
+      function do_chosen(){
+        $(".chosen-select").chosen({
+          width: "100%"
+        });
+        $(".tab-process-chosen-select").chosen({
+            width: "50%"
+        });
+      }     
+    </script>
+
 <script type="text/javascript"> 
 
 function enquiry_load()
@@ -360,8 +403,10 @@ function enquiry_load()
           type: "POST",
           url: url,      
           success: function(data){                
-            $("#cmp-custom_form").html(data);
-            $("#cmp-custom_ticket").html('');
+        //try{
+            $("#enquiry_view").html(data);
+            $("#ticket_view").html('');
+           // }catch(e){alert(e);}
           }
         });
 }
@@ -374,10 +419,11 @@ function ticket_load()
           type: "POST",
           url: url,      
           success: function(data){                
-            $("#cmp-custom_ticket").html(data);
-            $("#cmp-custom_form").html('');
+            $("#ticket_view").html(data);
+            $("#enquiry_view").html('');
           }
         });
+         return setMyEvent();
 }
 $("a[data-toggle='tab']").click(function(){
           var a    =   $(this).attr('href');
