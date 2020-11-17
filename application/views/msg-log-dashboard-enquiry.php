@@ -55,7 +55,7 @@
 }
 
 </style>
-<?php  if(user_access(230)){  ?>
+<?php  if(user_access(60)){  ?>
 <center>
 <h3>Enquiry Dashboard</h3></center>
 <!-- //show dropdown -->
@@ -219,7 +219,7 @@ $("#all_users").change(function(){
 
 </script>
 <hr>
-<?php } if(user_access(230)){  ?>
+<?php } if(user_access(231)){  ?>
 
 <center>
 

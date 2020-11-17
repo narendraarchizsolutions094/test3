@@ -221,7 +221,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 									$pdata='"defaultProcess":"'.$key.'"';
 									
 									?>
-									 <option value="<?= $key ?>" <?php if( in_array($key, $assignment_action_data) ){ echo'selected'; } ?>><?= $value ?></option>
+									 <option value="<?= $key ?>" <?php if(!empty($rule_data['rule_action']) AND in_array($key, $assignment_action_data) ){ echo'selected'; } ?>><?= $value ?></option>
 								<?php } ?>		
 			        			</select>
 		        			</div>

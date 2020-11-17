@@ -1621,7 +1621,7 @@ class Enquiry extends CI_Controller
                 if ($assigned_user != NULL) {
                     if($countdassigned==1){
                     if ($comments->comment_msg == 'Enquiry Assigned' OR $comments->comment_msg == 'Assign Leads' OR $comments->comment_msg == 'Client Assigned' ) {
-                    $html .= 'Assigned To: <strong>'.$userFName.' '.$userlName.' </strong>';
+                    $html .= '<br>Assigned To: <strong>'.$userFName.' '.$userlName.' </strong>';
                     }
                 }
                 }
