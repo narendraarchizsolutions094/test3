@@ -23,9 +23,6 @@ class User_model extends CI_Model {
         }
         return $insert_id;
     }
-
-
-
     public function add_login_history(){
         $arr    =   array( 
                     "uid"   => $this->session->user_id,                    

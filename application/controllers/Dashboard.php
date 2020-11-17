@@ -2748,4 +2748,111 @@ public function set_layout_to_session() {
                     }
                     //end for loop
                 }
+
+
+                public function support_dash()
+                {
+                    if (user_access(310)) {
+                        $data['title'] = ' Support Dashboard';
+                        $data['userId']=$this->session->userdata('user_id');
+    	                $data['compId']=$this->session->userdata('companey_id');
+                        $data['content'] = $this->load->view('msg-log-dashboard', $data, true);
+                        $this->load->view('layout/main_wrapper', $data);
+                    } else {
+                        redirect('dashboard');
+                    }
+                }
+                public function enquiry_dash()
+                {
+                    if (user_access(310)) {
+                        $data['title'] = 'Sales Dashboard';
+                        $data['userId']=$this->session->userdata('user_id');
+    	                $data['compId']=$this->session->userdata('companey_id');
+                        $data['content'] = $this->load->view('msg-log-dashboard-enquiry', $data, true);
+                        $this->load->view('layout/main_wrapper', $data);
+                    } else {
+                        redirect('dashboard');
+                    }
+                }
+
+                public function datewiseSupportData()
+                {
+                     $userId=$this->session->userdata('user_id');
+                     $type=$this->uri->segment('3');
+                     $msgType=$this->uri->segment('4');
+	              // $type= 1 =>(ticket), $type =2=>enquiry 
+	            	// $userType=>1 (user wise), 2=>all 
+	            	//$msgType= 0=>mail,1=>sms,2=>whatsapp
+                    // month start from
+                    $userType=1;
+                    $get = $this->dashboard_model->getfistMonth($type,$msgType);
+                    $data = [];
+                    if (!empty($get)) {
+                        $date = date('Y-m-d', strtotime($get));
+                        $date2 = date('Y-m-d');
+                        $begin = new DateTime($date);
+                        $end   = new DateTime($date2);
+                        for ($i = $begin; $i <= $end; $i->modify('+1 day')) {
+                            $idate = $i->format("Y-m-d");
+                            $isdate = strtotime($i->format("Y-m-d")).'000';
+                            $count = $this->dashboard_model->getdataFromdate($idate,$type,$msgType);
+                            $data[] = [(int)$isdate, $count];
+                        }
+                    }
+                    // print_r($data);
+                    echo json_encode($data);
+                }
+                
+            
+                public function userWiseSupportData1()
+                {
+                    $userId=$this->session->userdata('user_id');
+	              // $type= 1 =>(ticket), $type =2=>enquiry 
+	            	// $userType=>1 (user wise), 2=>all 
+	            	//$msgType= 0=>mail,1=>sms,2=>whatsapp
+                    // month start from
+                    $type=1;
+                    $users = $this->dashboard_model->getMsgLogUsers($type);
+                    $data = [];
+                    if ($users->num_rows()!=0) {
+                    foreach ($users->result() as $key => $value) {
+                    $user_id=   $value->created_by;
+                    $name=   $value->s_display_name.' '.$value->last_name;
+                    $profile= $value->picture;
+                    if(empty($value->picture)){  
+                    $mail_count= $this->db->where(array('created_by'=> $user_id,'type'=>$type,'msg_type'=>0))->count_all_results('msg_logs');
+                    $sms_count= $this->db->where(array('created_by'=> $user_id,'type'=>$type,'msg_type'=>1))->count_all_results('msg_logs');
+                    $whatsapp_count= $this->db->where(array('created_by'=> $user_id,'type'=>$type,'msg_type'=>2))->count_all_results('msg_logs');
+                    $data[]=['category'=>$name,'value1'=>$mail_count,'value2'=>$sms_count,'value3'=>$whatsapp_count];
+                    }
+                    }
+                }
+            }
+
+                public function getuserWiseSupportData()
+                {
+                    $id=$this->input->post('id');
+                    $data['title']='';
+                    $data['url']= '';
+                    if($id=='1'){
+                        $data['title']='Email';
+                        $data['url']= base_url('dashboard/datewiseSupportData/1/0');
+                    }elseif($id=='2'){
+                        $data['title']='SMS';
+                        $data['url']= base_url('dashboard/datewiseSupportData/1/1');
+                    }elseif($id=='3'){
+                        $data['title']='Whatsapp';
+                        $data['url']= base_url('dashboard/datewiseSupportData/1/2');
+                    }elseif($id=='11'){
+                        $data['title']='Email';
+                        $data['url']= base_url('dashboard/datewiseSupportData/2/0');
+                    }elseif($id=='12'){
+                        $data['title']='SMS';
+                        $data['url']= base_url('dashboard/datewiseSupportData/2/1');
+                    }elseif($id=='13'){
+                         $data['title']='Whatsapp';
+                        $data['url']= base_url('dashboard/datewiseSupportData/2/2');
+                    }
+                    $this->load->view('graph',$data);
+                    }
 }

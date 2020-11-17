@@ -176,6 +176,19 @@ class Rule_model extends CI_Model {
                             $this->Ticket_Model->saveconv($enq_row['id'],'Stage Updated',$rule_data['title']. ' Rule Applied','',$user_id,$action['stage'],$action['sub_stage'],$action['ticket_status']);
                         }
                     }
+                }else if($rule_data['type'] == 10){                                        
+                    if(!empty($rule_data['rule_action'])){
+                        $action = json_decode($rule_data['rule_action'],true);                        
+                    }
+                    if(!empty($action)){
+                        $this->db->where('('.$rule_data['rule_sql'].')');
+                        $this->db->where('company',$comp_id);                                           
+                        $enq_row = $this->db->get('tbl_ticket')->row_array();                    
+                        if (!empty($rule_data['rule_action']) && !empty($enq_row)) {                            
+                            $this->load->model('Ticket_Model');
+                            $this->Ticket_Model->moveTicketToEnq($enq_row['id'],'Stage Updated',$rule_data['title'],'Rule Applied',$user_id,$action['stage'],$action['assignto'],$action['defaultProcess']);
+                        }
+                    }
                 }
             }
         }

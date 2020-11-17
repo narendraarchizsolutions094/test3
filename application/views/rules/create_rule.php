@@ -28,6 +28,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 					   			<option value="7" <?=(!empty($rule_data['type']) && $rule_data['type']==7)?'selected':''?>>Send WhatsApp</option>
 					   			<option value="8" <?=(!empty($rule_data['type']) && $rule_data['type']==8)?'selected':''?>>Auto Ticket Priority</option>
 					   			<option value="9" <?=(!empty($rule_data['type']) && $rule_data['type']==9)?'selected':''?>>Default Ticket Disposition</option>
+					   			<option value="10" <?=(!empty($rule_data['type']) && $rule_data['type']==10)?'selected':''?>>Move to Sales</option>
 					   		</select>
 					   	</div>
 					   	<div class="col-sm-3">
@@ -175,6 +176,55 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 			        			<label>Ticket Status<i style="color: red;">*</i></label>
 			        			<select class="form-control text-center" name="ticket_status"></select>
 		        			</div>
+						</div>
+						<div id="disposition_actionOnly" class="action-section text-center row">
+		        				<h3>Action</h3>
+		        			<div class="col-md-3">
+			        			<label>Select Status<i style="color: red;">*</i></label>		        		
+		        				<select class="form-control" name="stage_only">
+									<?php foreach (json_decode($rule_enquiry_status) as $key => $rule_enquiry) { ?>
+										<option value="<?= $key?>"><?= $rule_enquiry ?></option>
+										<?php  	} ?>
+								</select>
+
+		        			</div>
+							<div class="col-md-4">		        				
+			        			<label>Assign To<i style="color: red;">*</i></label>
+			        			<select class="form-control text-center" name="assignto">			    
+			        				<?php
+									$assignment_action_data = array();
+								
+			        				if(!empty($rule_data['rule_action']))
+			        					$assignment_action_data = explode(',', $rule_data['rule_action']);
+
+			        				if (!empty($user_list)) {
+			        					foreach ($user_list as $key => $value) {
+											$sdata='"assignto":"'.$value->pk_i_admin_id.'"';
+			        						?>
+			        						<option value="<?=$value->pk_i_admin_id?>" <?=(	!empty($rule_data['rule_action']) && in_array($sdata, $assignment_action_data) )?'selected':''?>>
+			        							<?=$value->s_user_email?>
+			        						</option>
+			        						<?php
+			        					}
+			        				}
+			        				?>    			
+			        			</select>
+							</div>
+							<div class="col-md-4">		        				
+			        			<label>Default Process<i style="color: red;">*</i></label>
+			        			<select class="form-control text-center" name="defaultProcess">			    
+								<?php 
+								if(!empty($rule_data['rule_action'])){
+								$assignment_action_data = explode(',', $rule_data['rule_action']);
+								}
+								foreach (json_decode($rule_process) as $key => $value) {
+									$pdata='"defaultProcess":"'.$key.'"';
+									
+									?>
+									 <option value="<?= $key ?>" <?php if(!empty($rule_data['rule_action']) AND in_array($key, $assignment_action_data) ){ echo'selected'; } ?>><?= $value ?></option>
+								<?php } ?>		
+			        			</select>
+		        			</div>
 		        		</div>		        		
 					   <button class="btn btn-success" id="btn-set"><?=!empty($id)?'Update Rule':'Set Rules'?></button>		
 					   <button class="btn btn-warning" id="btn-reset">Reset</button>
@@ -184,10 +234,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	 	</div>
  	</div>
  </div>
-
+	
 <script type="text/javascript">
 	$(document).ready(function(){
-		var rules_basic = <?=!empty($rule_data['rule_json'])?$rule_data['rule_json']:"{				  
+		// $rule_data['rule_json']
+	var rules_basic = <?=!empty($rule_data['rule_json'])?$rule_data['rule_json']:"{				  
 		    condition: 'OR',
 		    rules: [{
 		      id: 'country_id'		      
@@ -332,6 +383,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		  		var sub_stage	=	$("select[name='sub_stage']").val();
 		  		var ticket_status =	$("select[name='ticket_status']").val();
 		  		var	action_value =	JSON.stringify({'stage':stage,'sub_stage':sub_stage,'ticket_status':ticket_status});
+		  	}else if (rule_type==10){
+		  		var assignto		=	$("select[name='assignto']").val();
+		  		var stage_only	=	$("select[name='stage_only']").val();
+		  		var defaultProcess	=	$("select[name='defaultProcess']").val();
+		  		var	action_value =	JSON.stringify({'stage':stage_only,'assignto':assignto,'defaultProcess':defaultProcess});
 		  	}
 		  	console.info(action_value);
 		  	if (action_value && title) {
@@ -404,6 +460,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 					echo'$("select[name=ticket_status]").load("'.base_url().'ticket/ticket_status");';
 				}
 				?>
+			}else if (rule == 10) {				
+				$("#disposition_actionOnly").show(1000);
+				
 			}
 		}
 		$("#email_template").load("<?=base_url().'message/get_templates/3'?>");
@@ -427,10 +486,16 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	if( !empty($rule_data['rule_action']) && $rule_data['type']==9)
 	{
 		$res = json_decode($rule_data['rule_action']);
-		echo'$("select[name=stage]").load("'.base_url('message/all_stages/4/').$res->stage.'");
-		';
+		echo'$("select[name=stage]").load("'.base_url('message/all_stages/4/').$res->stage.'");';
 		echo'$("select[name=sub_stage]").load("'.base_url('message/find_substage/').$res->stage.'/'.$res->sub_stage.'");';
 		echo'$("select[name=ticket_status]").load("'.base_url().'ticket/ticket_status/'.$res->ticket_status.'");';
+
+	}
+	if( !empty($rule_data['rule_action']) && $rule_data['type']==10)
+	{
+		$res = json_decode($rule_data['rule_action']);
+		// echo'$("select[name=stage_only]").load("'.base_url('message/all_stages/4/').$res->stage.'");';
+	
 
 	}
 	?>

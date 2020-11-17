@@ -163,6 +163,8 @@ class LeadRules extends CI_Controller {
         if ($id) { 
             $data['rule_data']    =   $this->rule_model->get_rule($id);            
         }
+        // print_r($data);
+        // die();
         $source    =   $this->Leads_Model->get_leadsource_list();
         $country   =   $this->location_model->country();
         $state     =   $this->location_model->estate_list();
@@ -241,11 +243,15 @@ class LeadRules extends CI_Controller {
         $data['state']       = json_encode($rule_state);
         $data['city']        = json_encode($rule_city);
         $data['lead_stages'] = json_encode($rule_lead_stage);
+        //   print_r($data);
+        // die();
+        // die();
         $data['lead_description'] = json_encode($rule_lead_description);
         $data['rule_process']   = json_encode($rule_process);
         $data['user_list']   = $this->user_model->companey_users();
         $data['products']   = json_encode($rule_product);
         $data['sub_source']   = json_encode($rule_subsource);
+        
         $data['content'] = $this->load->view('rules/create_rule', $data, true);
         $this->load->view('layout/main_wrapper', $data);       
     }

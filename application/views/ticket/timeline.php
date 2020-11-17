@@ -32,7 +32,7 @@
               <?php
             }
             if (!empty($cnv->msg)) { ?>
-            <span style="font-weight:900;font-size:12px;">Remark - </span><span style="font-weight:900;font-size:12px;"><?php echo $cnv->msg; ?></span>               
+            <br><span style="font-weight:900;font-size:12px;">Remark - </span><span style="font-weight:900;font-size:12px;"><?php echo $cnv->msg; ?></span>               
               <?php
             }
 

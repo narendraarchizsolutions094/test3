@@ -550,7 +550,7 @@ class Ticket extends CI_Controller
 			foreach($ticket_status as $status)
 			{ ?>
 				<option value="<?=$status->id?>" <?=($status->id==$rule_ticket_status)?'selected':''?>><?php echo $status->status_name; ?></option>
-			<?php
+			<?php 
 			}
 		}
 	}
@@ -893,13 +893,13 @@ class Ticket extends CI_Controller
 		$this->Leads_Model->add_comment_for_events_popup($stage_remark, $stage_date, $contact_person, $mobileno, $email, $designation, $stage_time, $enq_code, $notification_id, $dis_subject, 17);
 		$ticketno	=	$this->input->post('ticketno');
 		$this->load->model('rule_model');
-		$this->rule_model->execute_rules($ticketno, array(8));
+		$this->rule_model->execute_rules($ticketno, array(8,10));
 		redirect('ticket/view/' . $ticketno);
 	}
 
 	public function assign_tickets()
 	{
-
+		$assign_to_date = date('Y-m-d H:i:s');
 		if (!empty($_POST))
 		{
 			$move_enquiry = $this->input->post('tickets');
@@ -913,6 +913,7 @@ class Ticket extends CI_Controller
 				{
 					$this->db->set('assign_to', $assign_employee);
 					$this->db->set('assigned_by', $this->session->user_id);
+					$this->db->set('assigned_to_date', $assign_to_date);
 					$this->db->where('id', $key);
 					$this->db->update('tbl_ticket');
 				}
@@ -1522,6 +1523,7 @@ class Ticket extends CI_Controller
 			redirect('dashboard');
 		}
 	}
+
 	public function createddatewise()
 	{
 		$get = $this->Ticket_Model->getfistDate();
@@ -1715,7 +1717,7 @@ class Ticket extends CI_Controller
 					if(!empty($tickets)){
 						foreach($tickets as $tck){
 							if(!$this->Ticket_Model->is_tat_rule_executed($tck['id'],$lid)){
-								$d = $tck['coml_date'];
+								$d = $tck['assigned_to_date']??$tck['coml_date'];
 								$currentDate = date('Y-m-d H:i:s');
 								$bh	=	$this->isBusinessHr(new DateTime($currentDate));	
 								if($bh){
@@ -1895,4 +1897,8 @@ class Ticket extends CI_Controller
 			return $days_array;
 		}
 		// tat code end
+
+
+
+
 }
