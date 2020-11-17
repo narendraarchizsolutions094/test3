@@ -396,7 +396,7 @@ $company=$this->session->userdata('companey_id');
     
     public function get_user_by_email($email){
         if(!empty($email)){
-            $where = "s_user_email=".$email." OR s_phoneno=".$email;
+            $where = "s_user_email='".$email."' OR s_phoneno='".$email.'\'';
             return $this->db->where($where)->get('tbl_admin')->row();            
         }else{
             return false;
