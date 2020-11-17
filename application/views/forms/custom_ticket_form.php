@@ -192,14 +192,13 @@
            <li class="sidebar-brand"><a id="menu-toggle" href="#">Tabs<span id="main_icon" class="glyphicon glyphicon-align-justify"></span></a></li>
         </ul>
         <ul class="sidebar-nav" id="sidebar" style="overflow-y: scroll;">
-            <?php   
-            $default_tab =0;         
+            <?php     
+            $default_tab=0;       
             if (!empty($tab_list)) {
-                foreach ($tab_list as $key => $value) { 
-
+                foreach ($tab_list as $key => $value)
+                { 
                   if($value['primary_tab']=='1')
-                    $default_tab = $value['id'];
-
+                      $default_tab = $value['id'];
                   ?>
                     <li> 
                       <a onclick="get_tab_fields(<?=$value['id']?>,<?=$field_for?>)"> 
@@ -230,5 +229,5 @@
 <br>
 <br>
 <script type="text/javascript">
-      get_tab_fields(<?=$default_tab?>,0);       
+       get_tab_fields(<?=$default_tab?>,2);       
 </script>

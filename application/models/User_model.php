@@ -323,16 +323,36 @@ $company=$this->session->userdata('companey_id');
     }
 
 
-    public function get_input_basic_fields($comp_id){
-      return $this->db->select('basic_fields.id,basic_fields.type,basic_fields.title,enquiry_fileds_basic.status,enquiry_fileds_basic.process_id,input_types.title as type_title')
+    public function get_input_basic_fields($comp_id,$field_for=0){
+        if($field_for==2)
+        {
+
+            return $this->db->select('basic_fields.id,basic_fields.type,basic_fields.title,ticket_fileds_basic.status,ticket_fileds_basic.process_id,input_types.title as type_title')
+                        ->from('basic_fields')
+                        ->join('ticket_fileds_basic','ticket_fileds_basic.field_id=basic_fields.id','left')
+                        ->join('input_types','input_types.id=basic_fields.type','inner')
+                        ->where('basic_fields.field_for',$field_for)
+                        ->group_by('basic_fields.id')
+
+                        ->where('ticket_fileds_basic.comp_id',$comp_id)
+                        ->order_by('ticket_fileds_basic.fld_order','ASC')
+                        ->get()                        
+                        ->result_array();
+        }
+        else
+        {
+            return $this->db->select('basic_fields.id,basic_fields.type,basic_fields.title,enquiry_fileds_basic.status,enquiry_fileds_basic.process_id,input_types.title as type_title')
                         ->from('basic_fields')
                         ->join('enquiry_fileds_basic','enquiry_fileds_basic.field_id=basic_fields.id','left')
                         ->join('input_types','input_types.id=basic_fields.type','inner')
+                        ->where('basic_fields.field_for',$field_for)
                         ->group_by('basic_fields.id')
+
                         ->where('enquiry_fileds_basic.comp_id',$comp_id)
                         ->order_by('enquiry_fileds_basic.fld_order','ASC')
                         ->get()                        
                         ->result_array();
+        }
     }
 
     /**

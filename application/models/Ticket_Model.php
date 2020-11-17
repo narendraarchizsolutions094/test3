@@ -96,7 +96,7 @@ class Ticket_Model extends CI_Model
 	{
 		$cid = '';
 		//print_r($_POST); 
-		if (!empty($companey_id) && !empty($user_id) && $_POST['client'] == '') {
+		if (!empty($companey_id) && !empty($user_id) && !empty($_POST['client']) && 0) {
 			if (isset($_SESSION['process']) && count($_SESSION['process']) == 1) {
 				$encode = get_enquery_code();
 				$postData = array(

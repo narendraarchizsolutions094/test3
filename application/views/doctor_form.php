@@ -32,7 +32,8 @@
 									  
                                       <li><a data-toggle="tab" href="#cmp-right"><?php echo display('company_right'); ?> </a></li>
 									  
-                                      <li><a data-toggle="tab" href="#cmp-custom_form"><?php echo display('custom_form_company'); ?> </a></li>
+                                      <li><a onclick="enquiry_load()" data-toggle="tab" href="#cmp-custom_form"><?php echo display('custom_form_company'); ?> </a></li>
+                                      <li><a onclick="ticket_load()" data-toggle="tab" href="#cmp-custom_ticket"><?php echo 'Custom Ticket Form'; ?> </a></li>
                                       <li><a data-toggle="tab" href="#cmp-user_list"> User List</a></li>
 
 									</ul>
@@ -248,7 +249,13 @@
 
 
                                       <div id="cmp-custom_form" class="tab-pane fade">
-                                            <div class="row">
+                                            <div class="row" id="enquiry_view">
+                                                
+                                            </div>
+                                      </div>
+
+                                      <div id="cmp-custom_ticket" class="tab-pane fade">
+                                            <div class="row" id="ticket_view">
                                                 
                                             </div>
                                       </div>
@@ -344,17 +351,91 @@
     </div>
   </div>
 </div>
+
+<script type="text/javascript">
+      // $("a[data-toggle='tab']").click(function(){
+      //     var a    =   $(this).attr('href');
+      //     if(a == "#cmp-custom_ticket"){            
+      //         $(".comp-status").hide();
+      //         $(".form-btns").hide();
+      //     }else{
+      //         $(".comp-status").show();
+      //         $(".form-btns").show();
+      //     }
+      // });
+      function get_tab_fields(tab_id,field_for){
+       // alert(field_for);
+          var comp_id = "<?=$doctor->user_id?>";
+          url = "<?=base_url().'form/form/get_tab_fields/'?>"+tab_id+'/'+comp_id+'/'+field_for;     
+          $.ajax({
+            type: "POST",
+            url: url,
+            beforeSend: function(){
+              $("#form_content").html("<div class='lds-hourglass text-center'></div>");            
+            },      
+            success: function(data){  
+              $(".basic_fields_status").off('change');              
+              $("#form_content").html(data);              
+            },
+            complete: function (data) {
+              query_builder();
+              do_chosen();
+             }
+          });
+      }
+       
+      function do_chosen(){
+        $(".chosen-select").chosen({
+          width: "100%"
+        });
+        $(".tab-process-chosen-select").chosen({
+            width: "50%"
+        });
+      }     
+    </script>
+
 <script type="text/javascript"> 
-    $(function(){
-        url = "<?=base_url().'form/form/enquiry_extra_field/'?>"+"<?=$doctor->user_id?>";     
+
+function enquiry_load()
+{
+     url = "<?=base_url().'form/form/enquiry_extra_field/'?>"+"<?=$doctor->user_id?>/1/0";     
         $.ajax({
           type: "POST",
           url: url,      
           success: function(data){                
-            $("#cmp-custom_form").html(data);
+        //try{
+            $("#enquiry_view").html(data);
+            $("#ticket_view").html('');
+           // }catch(e){alert(e);}
           }
         });
-    }); 
+}
+
+
+function ticket_load()
+{
+    url = "<?=base_url().'form/form/enquiry_extra_field/'?>"+"<?=$doctor->user_id?>/1/2";     
+        $.ajax({
+          type: "POST",
+          url: url,      
+          success: function(data){                
+            $("#ticket_view").html(data);
+            $("#enquiry_view").html('');
+          }
+        });
+         return setMyEvent();
+}
+$("a[data-toggle='tab']").click(function(){
+          var a    =   $(this).attr('href');
+          if(a == "#cmp-custom_form" || a=="#cmp-custom_ticket"){            
+              $(".comp-status").hide();
+              $(".form-btns").hide();
+          }else{
+              $(".comp-status").show();
+              $(".form-btns").show();
+          }
+      });
+
     $(function(){
           var comp_id = "<?=$doctor->user_id?>";
           url = "<?=base_url().'customer/displayusers/'?>"+comp_id;     
