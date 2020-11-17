@@ -895,7 +895,7 @@ class Ticket extends CI_Controller
 
 	public function assign_tickets()
 	{
-
+		$assign_to_date = date('Y-m-d H:i:s');
 		if (!empty($_POST))
 		{
 			$move_enquiry = $this->input->post('tickets');
@@ -909,6 +909,7 @@ class Ticket extends CI_Controller
 				{
 					$this->db->set('assign_to', $assign_employee);
 					$this->db->set('assigned_by', $this->session->user_id);
+					$this->db->set('assigned_to_date', $assign_to_date);
 					$this->db->where('id', $key);
 					$this->db->update('tbl_ticket');
 				}
@@ -1712,7 +1713,7 @@ class Ticket extends CI_Controller
 					if(!empty($tickets)){
 						foreach($tickets as $tck){
 							if(!$this->Ticket_Model->is_tat_rule_executed($tck['id'],$lid)){
-								$d = $tck['coml_date'];
+								$d = $tck['assigned_to_date']??$tck['coml_date'];
 								$currentDate = date('Y-m-d H:i:s');
 								$bh	=	$this->isBusinessHr(new DateTime($currentDate));	
 								if($bh){

@@ -2804,42 +2804,6 @@ public function set_layout_to_session() {
                 }
                 
             
-                // public function userWiseSupportData()
-                // {
-                //     $userId=$this->session->userdata('user_id');
-	            //   // $type= 1 =>(ticket), $type =2=>enquiry 
-	            // 	// $userType=>1 (user wise), 2=>all 
-	            // 	//$msgType= 0=>mail,1=>sms,2=>whatsapp
-                //     // month start from
-                //     $type=1;$userType=1;$msgType=0;
-                //     // $get = $this->dashboard_model->getfistMonth($type,$userType,$userId,$msg_type);
-                //     $users= $this->db->select('tbl_admin.picture,msg_logs.created_by,msg_logs.comp_id,msg_logs.type,msg_logs.created_by,msg_logs.msg_type,tbl_admin.pk_i_admin_id,tbl_admin.last_name,tbl_admin.s_display_name')->distinct('created_by')
-                //                      ->where(array('comp_id'=> $this->session->companey_id,'type'=>$type))
-                //                      ->join('tbl_admin','tbl_admin.pk_i_admin_id=msg_logs.created_by')
-                //                      ->get('msg_logs');
-                    
-                //     $data = [];
-                //     if ($users->num_rows()!=0) {
-                //     foreach ($users->result() as $key => $value) {
-                //     $user_id=   $value->created_by;
-                //     $name=   $value->s_display_name.' '.$value->last_name;
-                //     $profile= $value->picture;
-                //     if(empty($value->picture)){
-                //         $profile=base_url('assets/images/no-img.png');
-                //     }
-                //     $mail_count= $this->db->where(array('created_by'=> $user_id,'type'=>$type,'msg_type'=>0,'user_id'))->count_all_results('msg_logs');
-                //     $sms_count= $this->db->where(array('created_by'=> $user_id,'type'=>$type,'msg_type'=>1))->count_all_results('msg_logs');
-                //     $whatsapp_count= $this->db->where(array('created_by'=> $user_id,'type'=>$type,'msg_type'=>2))->count_all_results('msg_logs');
-                //     $data[$name]=['email'=>$mail_count,'sms'=>$sms_count,'whatsapp'=>$whatsapp_count];
-
-                //     }
-                          
-                                
-                        
-                //     }
-                //     // print_r($data);
-                //     echo json_encode($data);
-                // }
                 public function userWiseSupportData1()
                 {
                     $userId=$this->session->userdata('user_id');
@@ -2855,22 +2819,19 @@ public function set_layout_to_session() {
                     $user_id=   $value->created_by;
                     $name=   $value->s_display_name.' '.$value->last_name;
                     $profile= $value->picture;
-                    if(empty($value->picture)){  $profile=base_url('assets/images/no-img.png'); }
+                    if(empty($value->picture)){  
                     $mail_count= $this->db->where(array('created_by'=> $user_id,'type'=>$type,'msg_type'=>0))->count_all_results('msg_logs');
                     $sms_count= $this->db->where(array('created_by'=> $user_id,'type'=>$type,'msg_type'=>1))->count_all_results('msg_logs');
                     $whatsapp_count= $this->db->where(array('created_by'=> $user_id,'type'=>$type,'msg_type'=>2))->count_all_results('msg_logs');
                     $data[]=['category'=>$name,'value1'=>$mail_count,'value2'=>$sms_count,'value3'=>$whatsapp_count];
                     }
                     }
-                    // print_r($data);
-                    echo json_encode($data);
                 }
+            }
 
                 public function getuserWiseSupportData()
                 {
                     $id=$this->input->post('id');
-                    // print_r($id);
-                    // $data=[];
                     $data['title']='';
                     $data['url']= '';
                     if($id=='1'){
@@ -2889,11 +2850,9 @@ public function set_layout_to_session() {
                         $data['title']='SMS';
                         $data['url']= base_url('dashboard/datewiseSupportData/2/1');
                     }elseif($id=='13'){
-                        echo $data['title']='Whatsapp';
+                         $data['title']='Whatsapp';
                         $data['url']= base_url('dashboard/datewiseSupportData/2/2');
                     }
-                    // die();
-
                     $this->load->view('graph',$data);
                     }
 }
