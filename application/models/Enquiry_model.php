@@ -105,15 +105,16 @@ class Enquiry_model extends CI_Model {
     }
 /****************************************csv work end*********************************/
 	
-	public function getformfield(){
+	public function getformfield($for=0){//for meanas 0=Enquiry , 1= product, 2= ticket
 	
 		$this->db->select('*');
+		$this->db->where('page_id',$for);
 		$this->db->where(array("company_id"=> $this->session->companey_id, "status" => 1));
 		return $this->db->get("tbl_input")->result();
 		
 		
 	}
-	public function getfieldvalue($enqnos = array()){	
+	public function getfieldvalue($enqnos = array(),$for=0){ //for means 0=enquiry,1=product,2=ticket	
 	
 		$this->db->select('*');
 			$this->db->where(array("cmp_no"=> $this->session->companey_id));				
@@ -121,14 +122,15 @@ class Enquiry_model extends CI_Model {
 			$enqnos = trim($enqnos, ",");	
 			$this->db->where_in("parent", $enqnos);
 		}
+
+	if($for==0)
+	{
 		if(isset($_COOKIE["dallowcols"])) {
 			
 			$dshowall = false;
 			$dacolarr  = explode(",", trim($_COOKIE["dallowcols"], ","));
-		
 		}
-		
-		
+
 		$resarr = $this->db->get("extra_enquery")->result();		
 		$newarr = array();
 		if(!empty($resarr)){
@@ -137,6 +139,29 @@ class Enquiry_model extends CI_Model {
 				$newarr[$prnt][$res->input] = $res;	
 			}
 		}		
+	}
+	else if($for==1)
+	{
+
+	}
+	else if($for==2)
+	{
+		if(isset($_COOKIE["ticket_dallowcols"])) {
+			
+			$dshowall = false;
+			$dacolarr  = explode(",", trim($_COOKIE["ticket_dallowcols"], ","));
+		}
+
+		$resarr = $this->db->get("ticket_dynamic_data")->result();		
+		$newarr = array();
+		if(!empty($resarr)){
+			foreach($resarr as $ind => $res){				
+				$prnt = $res->parent;
+				$newarr[$prnt][$res->input] = $res;	
+			}
+		}		
+	}
+
 		return $newarr;
 	}
 
@@ -148,12 +173,31 @@ class Enquiry_model extends CI_Model {
       return $this->db->get()->row();
 	}
 	
-	public function get_dyn_fld($enqno = "",$tid=0){
+	public function get_dyn_fld($enqno = "",$tid=0,$form_for=0){
+
+		$ticketno=0;
+		$tckid = 0;
+		if($form_for==2)
+		{	$ticketno = $enqno;
+			$ticket = $this->db->select('id,client')
+					->where('ticketno',$enqno)
+					->get('tbl_ticket');
+
+			if($ticket->num_rows())
+			{
+				$ticket_row = $ticket->row();
+				$enqno = $ticket_row->client;
+				$tckid = $ticket_row->id;
+			}
+		}
+		
 	     $this->db->select('product_id,Enquery_id');
 	     $this->db->from('enquiry');
 	     $this->db->where('enquiry_id',$enqno);
 	     $res_id = $this->db->get()->row_array();
 	     $process = $res_id['product_id'];
+	  
+
      	// echo $enqno;exit();
         // $process = $this->session->userdata('process');
         // print_r($process);exit();
@@ -162,7 +206,8 @@ class Enquiry_model extends CI_Model {
         // $id = implode(",", $process);
         // $proc_id = explode(",", $id);
         // // print_r($id);exit();
-        $where ='';      
+        $where ='';    
+
 		$this->db->select('othr.*,fld.fld_attributes,fld.input_id,fld.input_type,fld.input_values,fld.input_place,fld.input_label,fld.input_name');
 		$this->db->from('tbl_input fld');
     	$where .= " FIND_IN_SET('".$process."',fld.process_id) AND fld.company_id = {$compid} AND fld.status=1 AND fld.form_id=$tid";
@@ -170,7 +215,81 @@ class Enquiry_model extends CI_Model {
 		/*$enquiry_code = $res_id['Enquery_id'];*/
 		//$this->db->where(array('othr.parent' => $enqno));
 		//$this->db->join('extra_enquery othr', 'fld.input_id = othr.input', 'left');
+		if($form_for==2)
+		{
+			$this->db->join("( select * from ticket_dynamic_data where parent=$tckid group by ticket_dynamic_data.input) othr", 'fld.input_id = othr.input', 'left');
+		}
+		else
+		{
 		$this->db->join("( select * from extra_enquery where parent=$enqno group by extra_enquery.input) othr", 'fld.input_id = othr.input', 'left');
+		}
+		// $this->db->join('tbl_feedback fdb','fld.input_id = fdb.input','left');
+		// $this->db->or_where('fdb.user_id',$userid);
+		$this->db->order_by('fld.fld_order','ASC');
+		$resarr =  $this->db->get()->result_array();
+	    // print_r($resarr);exit();		
+		if(empty($resarr)){			
+			$this->db->select('*');
+			$this->db->from('tbl_input');
+			$where = " FIND_IN_SET('".$process."',process_id) AND company_id = {$compid} AND status=1 AND tbl_input.form_id=$tid";
+		    $this->db->where($where);
+			$this->db->order_by('tbl_input.input_id','ASC');
+			$resarr=  $this->db->get()->result_array();
+			// print_r($resarr);exit();
+		}
+		return $resarr;
+	}	
+
+	public function get_dyn_fld_by_query($cmnt_id,$enqno = "",$tid=0,$form_for=0){
+
+		$ticketno=0;
+		$tckid = 0;
+		if($form_for==2)
+		{	$ticketno = $enqno;
+			$ticket = $this->db->select('id,client')
+					->where('ticketno',$enqno)
+					->get('tbl_ticket');
+
+			if($ticket->num_rows())
+			{
+				$ticket_row = $ticket->row();
+				$enqno = $ticket_row->client;
+				$tckid = $ticket_row->id;
+			}
+		}
+		
+	     $this->db->select('product_id,Enquery_id');
+	     $this->db->from('enquiry');
+	     $this->db->where('enquiry_id',$enqno);
+	     $res_id = $this->db->get()->row_array();
+	     $process = $res_id['product_id'];
+	  
+
+     	// echo $enqno;exit();
+        // $process = $this->session->userdata('process');
+        // print_r($process);exit();
+        $compid = $this->session->userdata('companey_id');
+        // $userid = $this->session->userdata('user_id');
+        // $id = implode(",", $process);
+        // $proc_id = explode(",", $id);
+        // // print_r($id);exit();
+        $where ='';    
+
+		$this->db->select('othr.*,fld.fld_attributes,fld.input_id,fld.input_type,fld.input_values,fld.input_place,fld.input_label,fld.input_name');
+		$this->db->from('tbl_input fld');
+    	$where .= " FIND_IN_SET('".$process."',fld.process_id) AND fld.company_id = {$compid} AND fld.status=1 AND fld.form_id=$tid";
+		$this->db->where($where);
+		/*$enquiry_code = $res_id['Enquery_id'];*/
+		//$this->db->where(array('othr.parent' => $enqno));
+		//$this->db->join('extra_enquery othr', 'fld.input_id = othr.input', 'left');
+		if($form_for==2)
+		{
+			$this->db->join("( select * from ticket_dynamic_data where parent=$tckid and comment_id=$cmnt_id group by ticket_dynamic_data.input) othr", 'fld.input_id = othr.input', 'left');
+		}
+		else
+		{
+		$this->db->join("( select * from extra_enquery where parent=$enqno and comment_id=$cmnt_id group by extra_enquery.input) othr", 'fld.input_id = othr.input', 'left');
+		}
 		// $this->db->join('tbl_feedback fdb','fld.input_id = fdb.input','left');
 		// $this->db->or_where('fdb.user_id',$userid);
 		$this->db->order_by('fld.fld_order','ASC');

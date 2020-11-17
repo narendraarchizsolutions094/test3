@@ -1051,10 +1051,11 @@ class Report_model extends CI_Model {
         return $this->db->get('reports')->result_array();
     }
 	
-	public function get_dynfields($pross = ""){
+	public function get_dynfields($pross = "",$for=0){
 		
 		$this->db->select("*");
         $this->db->where('company_id',$this->session->companey_id);
+        $this->db->where('page_id',$for);
 		$this->db->where("tbl_input.status", 1);
 		$this->db->where("tbl_input.input_type!=", 19);
         /*if(!empty($pross)){

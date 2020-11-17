@@ -5,7 +5,7 @@ class Enq extends CI_Controller
 	public function __construct()
 	{
 		parent::__construct();
-
+ 
 		$this->load->model(
 			array('enquiry_model', 'User_model', 'dash_model', 'common_model', 'report_model', 'Leads_Model')
 		);
@@ -220,7 +220,7 @@ class Enq extends CI_Controller
         print_r($list);
         echo "</pre>";*/
 
-		$dfields = $this->enquiry_model->getformfield();
+		$dfields = $this->enquiry_model->getformfield(0); //0 for enquiry
 		$data = array();
 		$no = $_POST['start'];
 		$acolarr = $dacolarr = array();
@@ -236,7 +236,7 @@ class Enq extends CI_Controller
 		}
 		if (!empty($enqarr) and !empty($dacolarr)) {
 		}
-		$fieldval =  $this->enquiry_model->getfieldvalue();
+		$fieldval =  $this->enquiry_model->getfieldvalue(); 
 		foreach ($list as $each) {
 			$no++;
 			$row = array();

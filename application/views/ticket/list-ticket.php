@@ -299,30 +299,44 @@
                      </th>
 											<th>S.No.</th>
                       <?=($showall or in_array(1,$acolarr))?'<th>Ticket</th>':''?>
+
+                      <?php
+                      if($this->session->companey_id==65)
+                      {
+                      ?>
+                        <?=($showall or in_array(15,$acolarr))?'<th>Tracking No</th>':''?>
+                      <?php
+                      }
+                      ?>
+                      <?=($showall or in_array(7,$acolarr))?'<th>Created By</th>':''?>
+                      <?=($showall or in_array(9,$acolarr))?'<th>Date</th>':''?>
+
 											<?=($showall or in_array(2,$acolarr))?'<th>Client</th>':''?>
 										  <?=($showall or in_array(3,$acolarr))?'<th>Email</th>':''?>
 											<?=($showall or in_array(4,$acolarr))?'<th>Phone</th>':''?>
 											<?=($showall or in_array(5,$acolarr))?'<th>Product</th>':''?>
 											<?=($showall or in_array(6,$acolarr))?'<th>Assign To</th>':''?>
                       <?=($showall or in_array(17,$acolarr))?'<th>Assign By</th>':''?>
-                      <?=($showall or in_array(7,$acolarr))?'<th>Created By</th>':''?>
                       <?=($showall or in_array(8,$acolarr))?'<th>Priority</th>':''?>
-                      <?=($showall or in_array(9,$acolarr))?'<th>Date</th>':''?>
 										  <?=($showall or in_array(10,$acolarr))?'<th>Referred By</th>':''?>
                       <?=($showall or in_array(11,$acolarr))?'<th>'.display('data_source').'</th>':''?>
                       <?=($showall or in_array(12,$acolarr))?'<th>'.display('stage').'</th>':''?>
                       <?=($showall or in_array(13,$acolarr))?'<th>Sub Stage</th>':''?>
                       <?=($showall or in_array(14,$acolarr))?'<th>Review</th>':''?>
-
-                      <?php
-                      if($this->session->companey_id==65)
-                      {
-                      ?>
-                         <?=($showall or in_array(15,$acolarr))?'<th>Tracking No</th>':''?>
-                      <?php
-                      }
-                      ?>
                       <?=($showall or in_array(16,$acolarr))?'<th>Status</th>':''?>
+
+
+                      <?php 
+                      if(!empty($dacolarr) and !empty($dfields))
+                      {
+                        foreach($dfields as $ind => $flds)
+                        {                
+                          if(!empty(in_array($flds->input_id, $dacolarr )))
+                          {            
+                          ?><th><?php echo $flds->input_label; ?></th><?php 
+                          }
+                        }
+                       } ?>
 
 										</thead>
 										<tbody>
@@ -874,20 +888,18 @@ function delete_recorde(){
             <label class=""><input type="checkbox" class="choose-col"  value = "16"  <?php echo ($showall == true or in_array(16, $acolarr)) ? "checked" : ""; ?>>Ticket Status</label>  &nbsp;
           </div>
            
-          <!-- 
-          <?php
-        
-          // if(!empty($dfields)) {          
-          //   foreach($dfields as $ind => $fld){              
+        <?php   
+        if(!empty($dfields)) {           
+            foreach($dfields as $ind => $fld){              
             ?>
             <div class = "col-md-4">  
-          <label class=""><input type="checkbox" class="dchoose-col choose-col"  value = " <?php //echo $fld->input_id; ?>"  <?php// echo (in_array($fld->input_id, $dacolarr)) ? "checked" : ""; ?>>   <?php //echo ucwords($fld->input_label); ?></label>  &nbsp;
+          <label class=""><input type="checkbox" class="dchoose-col"  value = "<?php echo $fld->input_id; ?>"  <?php echo (in_array($fld->input_id, $dacolarr)) ? "checked" : ""; ?>>   <?php echo ucwords($fld->input_label); ?></label>  &nbsp;
           </div>
             <?php   
               
-            //}?>
+            }?>
              </div>
-          <?php //} ?>-->
+          <?php } ?>
                 
               <div class="col-12" style="padding: 0px;">
                 <div class="row">              

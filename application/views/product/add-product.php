@@ -335,6 +335,11 @@
 								</div>
 							</div-->
 
+<?php
+// echo "<pre>";
+// print_r($product);
+// echo "</pre>";
+?>
 
 						 	<div class="col-md-6">
 								<label>Status</label>
@@ -343,7 +348,7 @@
 								<span>Active</span>
 
 								
-								<input type="radio" name="status" value="2" <?=($isedit==1)?(($product->status==0)?'checked':''):'' ?>>
+								<input type="radio" name="status" value="2" <?=($isedit==1)?(($product->status==2)?'checked':''):'' ?>>
 								<span>Inactive</span>
 								
 							</div> 

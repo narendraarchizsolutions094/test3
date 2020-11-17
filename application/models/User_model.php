@@ -23,9 +23,6 @@ class User_model extends CI_Model {
         }
         return $insert_id;
     }
-
-
-
     public function add_login_history(){
         $arr    =   array( 
                     "uid"   => $this->session->user_id,                    
@@ -395,7 +392,12 @@ $company=$this->session->userdata('companey_id');
     
     
     public function get_user_by_email($email){
-        return $this->db->where('s_user_email',$email)->get('tbl_admin')->row();
+        if(!empty($email)){
+            $where = "s_user_email='".$email."' OR s_phoneno='".$email.'\'';
+            return $this->db->where($where)->get('tbl_admin')->row();            
+        }else{
+            return false;
+        }
     }
     public function get_user_by_phone($phone){
         return $this->db->where('s_phoneno',$phone)->get('tbl_admin')->row();

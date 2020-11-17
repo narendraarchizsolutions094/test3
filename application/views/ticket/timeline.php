@@ -1,6 +1,8 @@
 <link rel="stylesheet" type="text/css" href="<?=base_url().'assets/css/activity_timeline.css'?>">
-<div class="col-md-3 col-height">
-	<h3 class="text-center">Activity Timeline</h3><hr>
+<span class="toogle-timeline badge badge-danger pull-right" data-vis="1"><i class="fa fa-caret-right"></i></span>
+<div class="timeline col-md-3 col-height">
+	<h3 class="text-center">Activity Timeline</h3>
+  <hr>
   	<ul class="cbp_tmtimeline" style="margin-left:-30px;">
       <?php
       
@@ -30,7 +32,7 @@
               <?php
             }
             if (!empty($cnv->msg)) { ?>
-            <span style="font-weight:900;font-size:12px;">Remark - </span><span style="font-weight:900;font-size:12px;"><?php echo $cnv->msg; ?></span>               
+            <br><span style="font-weight:900;font-size:12px;">Remark - </span><span style="font-weight:900;font-size:12px;"><?php echo $cnv->msg; ?></span>               
               <?php
             }
 
@@ -87,8 +89,8 @@
             <input type="hidden"  id="mesge_type" name="mesge_type">
             <input type="hidden" name="ticketId" value="<?= $ticketId ?>">
             <input type="hidden"  name="msg_from"  value="ticket">
-            <input type="hidden" id="mobile" name="mobile" value="<?php if(!empty($ticket->phone)){echo $enquiry->phone;} ?>">
-            <input type="hidden" id="mail" name="mail" value="<?php if(!empty($ticket->email)){echo $enquiry->email;} ?>">
+            <input type="hidden" id="mobile" name="mobile" value="<?php if(!empty($ticket->phone)){echo $ticket->phone;} ?>">
+            <input type="hidden" id="mail" name="mail" value="<?php if(!empty($ticket->email)){echo $ticket->email;} ?>">
             <button class="btn btn-primary" onclick="send_sms()" type="button">Send</button>            
          </div>
          <div class="modal-footer">
@@ -230,5 +232,34 @@
          }               
      });        
     }     
+
+$(".toogle-timeline").click(function(){
+    if($(this).data('vis')=='1')
+      { 
+        $(".timeline").hide(500,function(){
+            $(".details-column").removeClass('col-md-6');
+            $(".details-column").addClass('col-md-9');
+        });
+        $(this).data('vis','0');
+        $(this).find('i').removeClass('fa-caret-right');
+        $(this).find('i').addClass('fa-caret-left');
+      }
+    else
+    {
+        $(".timeline").show(500);
+        $(this).data('vis','1');
+        $(".details-column").addClass('col-md-6');
+        $(".details-column").removeClass('col-md-9');
+        $(this).find('i').addClass('fa-caret-right');
+        $(this).find('i').removeClass('fa-caret-left');
+    }
+    //setTimeout(manageScroll,1000);
+});
 </script>
 
+<style type="text/css">
+  .toogle-timeline{
+    position: absolute;
+    right: 5px;
+  }
+</style>

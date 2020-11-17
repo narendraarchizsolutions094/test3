@@ -942,7 +942,7 @@ input[name=lead_stages]{
            
           <?php
         
-          if(!empty($dfields)) {          
+          if(!empty($dfields)) {           
             foreach($dfields as $ind => $fld){              
             ?>
             <div class = "col-md-4">  

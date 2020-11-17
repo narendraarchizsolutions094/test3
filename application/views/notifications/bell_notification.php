@@ -31,11 +31,14 @@
                    $url  = base_url().'ticket/view/'.$value['query_id'];
                    $CI = & get_instance();
 
-                   $CI->load->model('Ticket_Model');
+                  $CI->load->model('Ticket_Model'); 
                   $ticket =  $CI->Ticket_Model->get($value['query_id']);
-                  //print_r($tic);
-                  $value['subject'] = $ticket->name;
-                  $value['user_name'] = $ticket->clientname;
+                 if(!$ticket){
+                  continue;
+                 }
+                  //print_r($ticket)
+                  $value['subject'] = !empty($ticket->name)?$ticket->name:'<i>Deleted</i>';
+                  $value['user_name'] = !empty($ticket->clientname)?$ticket->clientname:'<i>Deleted</i>';
               }
 
               if ($value['noti_read']) {

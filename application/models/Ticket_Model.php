@@ -141,19 +141,16 @@ class Ticket_Model extends CI_Model
 			"referred_by"   => ($this->input->post("referred_by", true)) ? $this->input->post("referred_by", true) : "",
 
 		);
-		if (empty($_FILES["attachment"]["name"]) && $_FILES["attachment"]["size"][0]>0) {	
+		if (empty($_FILES["attachment"]["name"]) && $_FILES["attachment"]["size"][0] > 0) {
 			$retdata =  $this->do_upload();
 			//print_r($retdata);			
-			if (!empty($retdata))
-			{	
-				if(isset($_POST["ticketno"]))
-				{	
-					$old_ticket =  $this->db->where(array('id'=>$_POST['ticketno']))->get('tbl_ticket')->row();
-	
-					if(!empty($old_ticket->attachment))
-					{	//echo'sdf';
+			if (!empty($retdata)) {
+				if (isset($_POST["ticketno"])) {
+					$old_ticket =  $this->db->where(array('id' => $_POST['ticketno']))->get('tbl_ticket')->row();
+
+					if (!empty($old_ticket->attachment)) {	//echo'sdf';
 						$new_res = json_decode($old_ticket->attachment);
-						$retdata = array_merge($new_res,$retdata);
+						$retdata = array_merge($new_res, $retdata);
 					}
 				}
 				//print_r($retdata); exit();
@@ -225,26 +222,22 @@ class Ticket_Model extends CI_Model
 		$config['max_size']             = 5000;
 
 		$this->load->library('upload', $config);
-		
+
 		$files = $_FILES;
 		unset($_FILES);
 
 		$done  = array();
 
-		for( $i=0; $i< sizeof($files['attachment']['name']); $i++ )
-		{
+		for ($i = 0; $i < sizeof($files['attachment']['name']); $i++) {
 			$_FILES['img']['name'] = $files['attachment']['name'][$i];
 			$_FILES['img']['type'] = $files['attachment']['type'][$i];
 			$_FILES['img']['tmp_name'] = $files['attachment']['tmp_name'][$i];
 			$_FILES['img']['error'] = $files['attachment']['error'][$i];
 			$_FILES['img']['size'] = $files['attachment']['size'][$i];
-			
-			if (!$this->upload->do_upload('img'))
-			{
-				$this->session->set_flashdata('error',$this->upload->display_errors());
-			} 
-			else 
-			{
+
+			if (!$this->upload->do_upload('img')) {
+				$this->session->set_flashdata('error', $this->upload->display_errors());
+			} else {
 				$done[] = $this->upload->data()['file_name'];
 			}
 		}
@@ -252,16 +245,16 @@ class Ticket_Model extends CI_Model
 	}
 
 
-	public function ticket_status($where= 0)
+	public function ticket_status($where = 0)
 	{
-		if($where)
+		if ($where)
 			$this->db->where($where);
 		return $this->db->get('tbl_ticket_status');
 	}
 
-	public function saveconv($tckno, $subjects, $msg, $client, $user_id, $stage = 0, $sub_stage = 0,$ticket_status=0)
+	public function saveconv($tckno, $subjects, $msg, $client, $user_id, $stage = 0, $sub_stage = 0, $ticket_status = 0)
 	{
-		$ticket_status = $this->input->post('ticket_status')??$ticket_status;
+		$ticket_status = $this->input->post('ticket_status') ?? $ticket_status;
 		//echo $ticket_status; exit();
 		$insarr = array(
 			"tck_id" => $tckno,
@@ -271,7 +264,7 @@ class Ticket_Model extends CI_Model
 			"msg"    => $msg,
 			"attacment" => "",
 			"status"  => 0,
-			"ticket_status"=>$ticket_status,
+			"ticket_status" => $ticket_status,
 			"stage"  => $stage,
 			"sub_stage"  => $sub_stage,
 			"client"   => $client,
@@ -286,9 +279,8 @@ class Ticket_Model extends CI_Model
 			if ($sub_stage) {
 				$this->db->set('tbl_ticket.ticket_substage', $sub_stage);
 			}
-			if($this->input->post('ticket_status'))
-			{
-				$this->db->set('tbl_ticket.ticket_status',$ticket_status);
+			if ($this->input->post('ticket_status')) {
+				$this->db->set('tbl_ticket.ticket_status', $ticket_status);
 			}
 			if ($stage || $sub_stage || $ticket_status) {
 				$this->db->where('tbl_ticket.company', $this->session->companey_id);
@@ -351,9 +343,9 @@ class Ticket_Model extends CI_Model
 			->from("tbl_ticket_conv cnv")
 			->join("lead_stage", 'lead_stage.stg_id=cnv.stage', 'left')
 			->join("lead_description", 'lead_description.id=cnv.sub_stage', 'left')
-			->join("tbl_admin as admin","admin.pk_i_admin_id=cnv.added_by")
-			->join("tbl_admin as user","user.pk_i_admin_id=cnv.assignedTo",'left')
-			->join("tbl_ticket_status status","cnv.ticket_status = status.id","LEFT")
+			->join("tbl_admin as admin", "admin.pk_i_admin_id=cnv.added_by")
+			->join("tbl_admin as user", "user.pk_i_admin_id=cnv.assignedTo", 'left')
+			->join("tbl_ticket_status status", "cnv.ticket_status = status.id", "LEFT")
 			->order_by("cnv.id DESC")
 			->get()
 			->result();
@@ -377,7 +369,7 @@ class Ticket_Model extends CI_Model
 			->group_by("tck.id")
 			->get()
 			->result();
-			//echo $this->db->last_query(); exit();
+		//echo $this->db->last_query(); exit();
 	}
 
 	public function getTicketListByCompnyID($companyid, $userid)
@@ -589,18 +581,19 @@ class Ticket_Model extends CI_Model
 		return $count;
 	}
 	// tat rule holiday list
-	public function get_user_holidays($uid){
+	public function get_user_holidays($uid)
+	{
 		$holidays = array();
-		$this->db->where('pk_i_admin_id',$uid);
-		$userData=$this->db->get('tbl_admin')->row();
-		$state_id=$userData->state_id;
-		$city_id =$userData->city_id;
-		if($state_id!=0 OR $city_id!=0){
-			$holidays = $this->db->where(array('state'=>$state_id,'city'=>$city_id,'status'=>1))->get('holidays')->result_array();
-		}		
+		$this->db->where('pk_i_admin_id', $uid);
+		$userData = $this->db->get('tbl_admin')->row();
+		$state_id = $userData->state_id;
+		$city_id = $userData->city_id;
+		if ($state_id != 0 or $city_id != 0) {
+			$holidays = $this->db->where(array('state' => $state_id, 'city' => $city_id, 'status' => 1))->get('holidays')->result_array();
+		}
 		$list = array();
-		if(!empty($holidays)){
-			foreach($holidays as $key=>$value){
+		if (!empty($holidays)) {
+			foreach ($holidays as $key => $value) {
 				$period = new DatePeriod(
 					new DateTime($value['datefrom']),
 					new DateInterval('P1D'),
@@ -613,104 +606,111 @@ class Ticket_Model extends CI_Model
 		}
 		return $list;
 	}
-	
-	public function is_tat_rule_executed($tid,$lid){
-		$this->db->where('tbl_ticket_conv.tck_id',$tid);
-		$this->db->where('tbl_ticket_conv.lid',$lid);
-		if($this->db->get('tbl_ticket_conv')->num_rows()){
+
+	public function is_tat_rule_executed($tid, $lid)
+	{
+		$this->db->where('tbl_ticket_conv.tck_id', $tid);
+		$this->db->where('tbl_ticket_conv.lid', $lid);
+		if ($this->db->get('tbl_ticket_conv')->num_rows()) {
 			return true;
-		}else{
+		} else {
 			return false;
 		}
 	}
 
-	public function insertData($uid,$tid,$lid,$esc_level,$comp_id,$added_by)
+	public function insertData($uid, $tid, $lid, $esc_level, $comp_id, $added_by)
 	{
-		
-			//move to user
-			$ticket_update = ['assign_to' => $uid,'assigned_by'=>$added_by,'last_esc'=>$esc_level];
-			$this->db->where(array('id' => $tid))->update('tbl_ticket', $ticket_update);
-			$counta = $this->db->where(array('tck_id' => $tid, 'lid' => $lid))->count_all_results('tbl_ticket_conv');
-			if ($counta == 0) {
-				//save to assignid 	
-				$data_msg = ['comp_id' => $comp_id, 'tck_id' => $tid, 'subj' => 'Ticked Assigned','msg'=>$esc_level, 'lid' => $lid, 'assignedTo' => $uid,'added_by'=>$added_by];
-				$this->db->insert('tbl_ticket_conv', $data_msg);
-			}
+
+		//move to user
+		$ticket_update = ['assign_to' => $uid, 'assigned_by' => $added_by, 'last_esc' => $esc_level];
+		$this->db->where(array('id' => $tid))->update('tbl_ticket', $ticket_update);
+		$counta = $this->db->where(array('tck_id' => $tid, 'lid' => $lid))->count_all_results('tbl_ticket_conv');
+		if ($counta == 0) {
+			//save to assignid 	
+			$data_msg = ['comp_id' => $comp_id, 'tck_id' => $tid, 'subj' => 'Ticked Assigned', 'msg' => $esc_level, 'lid' => $lid, 'assignedTo' => $uid, 'added_by' => $added_by];
+			$this->db->insert('tbl_ticket_conv', $data_msg);
+		}
 	}
-	public function insertNextAssignTime($nextAssignment,$tid)
+	public function insertNextAssignTime($nextAssignment, $tid)
 	{
 		$ticket_update = ['nextAssignTime' => $nextAssignment];
 		$this->db->where(array('id' => $tid))->update('tbl_ticket', $ticket_update);
 	}
-	public function moveTicketToEnq($id,$enqStatus,$rule_title,$rule_status,$user_id,$stage,$assignto,$process)
-{
-	$fetchticket=$this->db->where('id',$id)->get('tbl_ticket');
-	
-	if($fetchticket->num_rows()==1){
-	foreach ($fetchticket->result() as $key => $value) {
-		if(empty($value->Enquiry_id)){
-		$encode = $this->get_enquery_code();
-		$postData = [
-			'Enquery_id' => $encode,
-			'comp_id' => $this->session->userdata('companey_id'),
-			'user_role' => $this->session->user_role,
-			'email' => $value->email,
-			'phone' => $value->phone,
-			'name' => $value->name,
-			'enquiry' => $value->title,
-			'checked' => 0,
-			'ip_address' => $this->input->ip_address(),
-			'created_by' => $this->session->user_id,
-			'status' =>$stage,
-			'aasign_to'=>$assignto,
-			'assign_by'=>0,
-			'rule_executed'=>$rule_title,
-			'product_id'=>$process
-		];
-		//
-		$this->db->insert('enquiry',$postData);
-		$insert_id = $this->db->insert_id(); 
-		// add model here
-		$this->Leads_Model->add_comment_for_events_stage('Enquiry Created', $encode, $stage, 'Stage Updated','',1);
-		// add timeline
-		// update @ ticket model
-		$ticketData=['client'=>$insert_id];
-		$this->db->where('id',$id)->update('tbl_ticket',$ticketData);
-}
+	public function moveTicketToEnq($id, $enqStatus, $rule_title, $rule_status, $user_id, $stage, $assignto, $process)
+	{
+		$fetchticket = $this->db->where('id', $id)->get('tbl_ticket');
+		if ($fetchticket->num_rows() == 1) {
+			foreach ($fetchticket->result() as $key => $value) {
+				if ($value->client == 0) {	
+					$encode = $this->get_enquery_code();
+					$postData = [
+						'Enquery_id' => $encode,
+						'comp_id' => $this->session->userdata('companey_id'),
+						'user_role' => $this->session->user_role,
+						'email' => $value->email,
+						'phone' => $value->phone,
+						'name' => $value->name,
+						'enquiry' => 'Enquiry Created by Rule',
+						'checked' => 0,
+						'ip_address' => $this->input->ip_address(),
+						'created_by' => $this->session->user_id,
+						'status' => $stage,
+						'aasign_to' => $assignto,
+						'assign_by' => $user_id,
+						'rule_executed' => $rule_title,
+						'product_id' => $process,
+					];
+					//
+					$this->db->insert('enquiry', $postData);
+					echo $insert_id = $this->db->insert_id();
+					// add model here
+					$this->Leads_Model->add_comment_for_events_stage('Enquiry Created', $encode, $stage, 'Enquiry Created by ' . $rule_title . ' Rule', '', 1);
+					// add timeline
+					$assign_comment = [
+						'lead_id' => $encode,
+						'comp_id' => $this->session->userdata('companey_id'),
+						'comment_msg' => 'Enquiry Assigned',
+						'created_by' => $user_id,
+						'coment_type' => 0,
+						'remark' => 'Enquiry Assigned by ' . $rule_title . ' Rule',
+						'assigned_user' => $assignto
+					];
+					$this->db->insert('tbl_comment', $assign_comment);
+					// update @ ticket model
+					$this->db->where('id', $id)->set('client', $insert_id)->update('tbl_ticket', $ticketData);
+				}
+			}
+		}
 	}
-	}
-}
 
-public function get_enquery_code()
-{
-	$this->load->model('enquiry_model');
+	public function get_enquery_code()
+	{
+		$this->load->model('enquiry_model');
 
-	$code = $this->genret_code();
-	$code2 = 'ENQ' . $code;
-	$response = $this->enquiry_model->check_existance($code2);
+		$code = $this->genret_code();
+		$code2 = 'ENQ' . $code;
+		$response = $this->enquiry_model->check_existance($code2);
 
-	if ($response) {
+		if ($response) {
 
-		$this->get_enquery_code();
-	} else {
+			$this->get_enquery_code();
+		} else {
 
-		return $code2;
+			return $code2;
 
+			//exit;
+		}
 		//exit;
 	}
-	//exit;
-}
 
-function genret_code()
-{
-	$pass = "";
-	$chars = array("0", "1", "2", "3", "4", "5", "6", "7", "8", "9");
+	function genret_code()
+	{
+		$pass = "";
+		$chars = array("0", "1", "2", "3", "4", "5", "6", "7", "8", "9");
 
-	for ($i = 0; $i < 12; $i++) {
-		$pass .= $chars[mt_rand(0, count($chars) - 1)];
+		for ($i = 0; $i < 12; $i++) {
+			$pass .= $chars[mt_rand(0, count($chars) - 1)];
+		}
+		return $pass;
 	}
-	return $pass;
 }
-
-}
-

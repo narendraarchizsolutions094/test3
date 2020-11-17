@@ -217,6 +217,14 @@ function get_leadstage_name($id) {
         }
         return $res;
     }
+    function stage_by_type($stage_for){        
+        $this->db->select("*");
+        $this->db->from('lead_stage'); 
+        $this->db->where("FIND_IN_SET($stage_for,lead_stage.stage_for)>",0);                
+        $query = $this->db->get();            
+        $res = $query->result();        
+        return $res;
+    }
 
     function find_estage1() {
         $this->db->select("*");

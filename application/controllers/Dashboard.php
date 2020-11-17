@@ -251,18 +251,18 @@ class Dashboard extends CI_Controller {
                 }
      }
     public function index() { 
-
-        $sessionId      =   $this->input->get('sessionId');
-        $campaignId     =   $this->input->get('campaignId');
-        $crtObjectId    =   $this->input->get('crtObjectId');
-        $userCrtObjectId=   $this->input->get('userCrtObjectIds');
-        $userId         =   $this->input->get('userId');
-        $customerId     =   $this->input->get('customerId');
-        $phone          =   $this->input->get('phone');
-
+       
+        $sessionId      =   isset($_GET['sessionId'])?$_GET['sessionId']:'';
+        $campaignId     =   isset($_GET['campaignId'])?$_GET['campaignId']:'';
+        $crtObjectId    =   isset($_GET['crtObjectId'])?$_GET['crtObjectId']:'';
+        $userCrtObjectId=   isset($_GET['userCrtObjectIds'])?$_GET['userCrtObjectIds']:'';
+        $userId         =   isset($_GET['userId'])?$_GET['userId']:'';
+        $customerId     =   isset($_GET['customerId'])?$_GET['customerId']:'';
+        $phone          =   isset($_GET['phone'])?$_GET['phone']:'';
+ 
         if ($sessionId && $campaignId && $userCrtObjectId && $userId) {            
             $user_data    =   $this->user_model->get_user_by_email($userId);
-            if (!empty($user_data) && $user_data->companey_id == 79) {
+            if (!empty($user_data) && ($user_data->companey_id == 79 || $user_data->companey_id == 82)) {
 
                 $this->session->set_userdata('user_id',$user_data->pk_i_admin_id);     
 
@@ -315,7 +315,7 @@ class Dashboard extends CI_Controller {
                 'state_id'       => !empty($location_arr)?$location_arr['state_id']:'',
                 'city_id'        => $user_data->city_id,                   
                 'user_right'     => $user_data->user_permissions,
-                'picture'        => $user_data->picture,
+                'picture'        => $user_data->picture, 
                 'modules'        => $user_data->modules,
                 'title'          => (!empty($setting->title) ? $setting->title : null),
                 'address'        => (!empty($setting->description) ? $setting->description : null),

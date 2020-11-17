@@ -23,7 +23,7 @@ class Enquiry extends CI_Controller
         }
     }
 
-    public function add_enquery_comission($enq_code)
+    public function add_enquery_comission($enq_code) 
     {
 
         $enq_code = base64_decode($enq_code);
@@ -438,7 +438,7 @@ class Enquiry extends CI_Controller
         //$data['customer_types'] = $this->enquiry_model->customers_types();
 
         // $data['channel_p_type'] = $this->enquiry_model->channel_partner_type_list();
-
+ 
         $data['content'] = $this->load->view('enquiry', $data, true);
 
         $this->load->view('layout/main_wrapper', $data);
@@ -1351,7 +1351,6 @@ class Enquiry extends CI_Controller
 
     public function view($enquiry_id = null)
     {
-
         $compid = $this->session->userdata('companey_id');
 
         if (user_role('63') == true) {
@@ -1392,16 +1391,12 @@ class Enquiry extends CI_Controller
             redirect('enquiry/view/' . $enquiry_id);
         }
 
-
-
-
+        
 
         $data['details'] = $this->Leads_Model->get_leadListDetailsby_id($enquiry_id);
 
         //$data['state_city_list'] = $this->location_model->get_city_by_state_id($data['details']->enquiry_state_id);
         //$data['state_city_list'] = $this->location_model->ecity_list();
-
-
 
         $data['allleads'] = $this->Leads_Model->get_leadList();
         if (!empty($data['details'])) {
@@ -1463,7 +1458,8 @@ class Enquiry extends CI_Controller
         $data['dynamic_field']  = $this->enquiry_model->get_dyn_fld($enquiry_id);
         $data['ins_list'] = $this->location_model->get_ins_list($data['details']->Enquery_id);
         $data['aggrement_list'] = $this->location_model->get_agg_list($data['details']->Enquery_id);
-        $data['tab_list'] = $this->form_model->get_tabs_list($this->session->companey_id, $data['details']->product_id);
+        $data['tab_list'] = $this->form_model->get_tabs_list($this->session->companey_id, $data['details']->product_id,0); //0 for Sales Tab 
+        //print_r($data['tab_list']); exit;
         $this->load->helper('custom_form_helper');
         $data['leadid']     = $data['details']->Enquery_id;
         $data['enquiry_id'] = $enquiry_id;

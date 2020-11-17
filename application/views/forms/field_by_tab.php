@@ -241,7 +241,7 @@ echo "</pre>";*/
       <div class="modal-body">         
          <form role="form" method="post" id="custom_field_form" action="<?=base_url().'form/form/enquiry_save_custom_field/'.$comp_id?>">
           <input type="hidden" name="form_id" value="<?=$tid?>">
-          <input type="hidden" name="page_id" value="0">
+          <input type="hidden" name="page_id" value="<?=$tab_details['form_for']?>">
              <div class="form-row">                
                 <div class="form-group col-md-6">
                     <label for="label_name"> Label Name <i class="text-danger">*</i></label>
@@ -467,6 +467,7 @@ echo "</pre>";*/
                 status: status,
                 comp_id: "<?=$comp_id?>"
             },
+            //beforeSend:function(){ alert(status+" "+id);},
             success: function(data) {
                 if (data == 1) {
                     Swal.fire(

@@ -5,7 +5,7 @@ class Report extends CI_Controller {
         parent::__construct();
         $this->load->model(array(
             'report_model',
-            'doctor_model',
+            'doctor_model', 
             'representative_model',
             'user_model',
             'Leads_Model',
@@ -481,7 +481,7 @@ class Report extends CI_Controller {
         $data['employee'] = $this->User_model->read();
 
         $data['process'] = $this->dash_model->product_list();
-        $data["dfields"] = $this->report_model->get_dynfields();
+        $data["dfields"] = $this->report_model->get_dynfields(); 
       
         $data["fieldsval"]        = $this->report_model->getdynfielsval();  
         $data['products'] = $this->location_model->productcountry();

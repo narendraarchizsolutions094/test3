@@ -4,7 +4,7 @@
 
 /* Loader start */
     
-.lds-hourglass {
+.lds-hourglass { 
   display: inline-block;
   position: relative;
   width: 80px;
@@ -187,15 +187,18 @@
 <div id="wrapper" class="active">  
     <!-- Sidebar -->
             <!-- Sidebar -->
-    <div id="sidebar-wrapper" style="width: 15%;min-height: 566px;max-height: 566px; float: left;background: #2c3136;">
+    <div id="sidebar-wrapper" style="width: 15%;min-height: 566px;max-height: 566px; float: left;background: #2c3136; overflow-y: auto; overflow-x: auto;">
         <ul id="sidebar_menu" class="sidebar-nav">
            <li class="sidebar-brand"><a id="menu-toggle" href="#">Tabs<span id="main_icon" class="glyphicon glyphicon-align-justify"></span></a></li>
         </ul>
-        <ul class="sidebar-nav" id="sidebar">
+        <ul class="sidebar-nav" id="sidebar" style="overflow-y: scroll;">
             <?php            
             if (!empty($tab_list)) {
                 foreach ($tab_list as $key => $value) { ?>
-                    <li><a onclick="get_tab_fields(<?=$value['id']?>)"><?=$value['title']?><!--span class="sub_icon glyphicon glyphicon-link"></span--></a></li>                               
+                    <li> 
+                      <a onclick="get_tab_fields(<?=$value['id']?>)"> 
+                    
+                      <?=$value['title']?><!--span class="sub_icon glyphicon glyphicon-link"></span--></a></li>                               
                     <?php
                 }
             }

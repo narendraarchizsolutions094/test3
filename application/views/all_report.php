@@ -13,7 +13,7 @@
                         style="margin-left: 5 px !important ;"> <i class="fa fa-list"></i>
                         <?php echo display('telephone_call_reports') ?> </a>
                     <?php } }?>
-                </div>
+                </div> 
             </div>
             <div class="panel-body">
                 <div class="widget-title">
@@ -183,8 +183,8 @@
 
                             <label for="enq_product"><?php echo display("report_columns"); ?><label class="required"
                                     style="color:red">*</label></label>
-                            <select data-placeholder="Begin typing a name to filter..." multiple class="form-control"
-                                name="report_columns[]" required id="selected-col">
+                            <select data-placeholder="Begin typing a name to filter..." multiple class="form-control chosen-select"
+                                name="report_columns[]"  >
 
                                 <option
                                     <?php if(!empty(set_value('report_columns'))){ if (in_array('S.No',set_value('report_columns'))) {echo 'selected';}}?>
@@ -285,7 +285,7 @@
                         <div class="form-group col-md-3">
                             <label>Dropped</label>
                             <select data-placeholder="Begin typing a name to filter..." multiple
-                                class="form-control chosen-select" name="drop_status[]" id="selected-col">
+                                class="form-control chosen-select" name="drop_status[]">
 
                                 <option value="dropped"
                                     <?php if(!empty(set_value('drop_status'))){ if (in_array('dropped',set_value('drop_status'))) {echo 'selected';}}?>>
@@ -379,7 +379,7 @@ $("#filter_and_save_form").on('submit', function(e) {
 });
 
 $(document).ready(function() {
-    $("#selected-col").select2();
+    //$("#selected-col").select2();
     $(".chosen-select").select2();
 });
 

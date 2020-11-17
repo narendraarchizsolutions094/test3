@@ -17,8 +17,8 @@ class Form extends CI_Controller {
  		$data['title'] = 'Enquiry Form'; 		
  		$data['comp_id'] = $comp_id;
  		$data['tab_id'] = $tab_id; 		
- 		$data['tab_list'] = $this->form_model->get_tabs_list($comp_id); 						
- 		
+ 		$data['tab_list'] = $this->form_model->get_tabs_list($comp_id,0);  						
+ 		//echo $data['tab_list']; exit();
  		echo $this->load->view('forms/custom_enquiry_form',$data,true);				
 	}
 
@@ -27,7 +27,7 @@ class Form extends CI_Controller {
 		$data['comp_id'] = $comp_id;
  		$this->db->select('*,input_types.title as input_type_title'); 		
  		$this->db->where('tbl_input.form_id',$tid);  			
- 		$this->db->where('tbl_input.page_id',0);  			
+ 		//$this->db->where('tbl_input.page_id',0); 			
  		$this->db->where('tbl_input.company_id',$comp_id);  			
  		$this->db->order_by('tbl_input.fld_order','ASC');  			
  		$this->db->join('input_types','input_types.id=tbl_input.input_type');  			
@@ -324,24 +324,31 @@ class Form extends CI_Controller {
 		$data['content'] = $this->load->view('forms/tab_list', $data, true);
         $this->load->view('layout/main_wrapper', $data);
 	}
+	public function delete_tab($tab_id)
+	{	
+		$this->db->where('id',$tab_id)->delete('forms');
+		$this->session->set_flashdata('SUCCESSMSG','Delete Successfully');
+		redirect(base_url('form/form/tabs'));
+	}
 	public function create_tab(){
 		//print_r($_POST);die;
 		$tab_name		= $this->input->post('tab_name');
+		$tab_type       = $this->input->post('tab_type');
 		$comp_ids 		= $this->input->post('comp_ids');
 		$isqueryform 	= 0;
 		$edit 			= 0;
 		$delete 		= 0;
-		$isqueryform 	= $this->input->post('isqueryform');
+		$isqueryform 	= $this->input->post('isqueryform')??0;
 		if($isqueryform == 1)
 		{
-			$edit 	= $this->input->post('edit');
-			$delete = $this->input->post('delete');
+			$edit 	= $this->input->post('edit')??0;
+			$delete = $this->input->post('delete')??0;
 		}
 
 		if (!empty($comp_ids)) {
 			$comp_ids = implode(',', $comp_ids);
 		}
-		$data = array('title'=>$tab_name,'comp_id'=>$comp_ids,'is_query_type'=>$isqueryform,'is_edit'=>$edit,'is_delete'=>$delete);
+		$data = array('title'=>$tab_name,'comp_id'=>$comp_ids,'form_type'=>$isqueryform,'is_edit'=>$edit,'is_delete'=>$delete,'form_for'=>$tab_type);
 		
 		if ($this->input->post('tab_id')) {
 			$this->db->where('id',$this->input->post('tab_id'));
@@ -396,7 +403,7 @@ class Form extends CI_Controller {
 		$data['title'] = 'Product Fields';
 		$data['comp_id'] = $this->session->companey_id; 		
  		$this->db->select('*,input_types.title as input_type_title'); 		
- 		$this->db->where('tbl_input.page_id',1);  			
+ 		$this->db->where('tbl_input.page_id',1);  			 
  		$this->db->where('tbl_input.company_id',$data['comp_id']);  			
  		$this->db->order_by('tbl_input.fld_order','ASC');  			
  		$this->db->join('input_types','input_types.id=tbl_input.input_type');  			
@@ -405,7 +412,7 @@ class Form extends CI_Controller {
  		$data['category'] = $this->db->get_where('tbl_category',array('comp_id'=>$data['comp_id']))->result();
  		$data['input_types'] = $this->form_model->get_input_types();
 
- 		$data['tab_details'] = array(); 		
+ 		$data['tab_details'] = array(); 		 
  		$data['content']	=	$this->load->view('forms/product_form',$data,true);		
  		$this->load->view('layout/main_wrapper',$data);
 	}

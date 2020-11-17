@@ -69,11 +69,12 @@ Ticket Dashboard
                 <?php
 
                 if(!empty($products)){
+                $process_list  = $this->session->process??array();
           if(user_access(270)){
                   foreach ($products as $product) { ?>                                                             
                     <li>
                       <label>
-                        <input type="checkbox" name='product_filter[]' value="<?=$product->sb_id ?>" <?php if (in_array($product->sb_id, $this->session->process)) { echo "checked";                         
+                        <input type="checkbox" name='product_filter[]' value="<?=$product->sb_id ?>" <?php if (in_array($product->sb_id, $process_list)) { echo "checked";                         
                         }?>>   <?=$product->product_name ?>
                       </label>
                     </li>                
@@ -83,7 +84,7 @@ Ticket Dashboard
         foreach ($products as $product) { ?>                                                             
                     <li>
                       <label>
-                        <input type="radio" name='product_filter[]' value="<?=$product->sb_id ?>" <?php if (in_array($product->sb_id, $this->session->process)) { echo "checked";                         
+                        <input type="radio" name='product_filter[]' value="<?=$product->sb_id ?>" <?php if (in_array($product->sb_id, $process_list)) { echo "checked";                         
                         }?>>   <?=$product->product_name ?>
                       </label>
                     </li>                
