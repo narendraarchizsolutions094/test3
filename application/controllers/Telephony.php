@@ -452,8 +452,7 @@ class Telephony extends CI_Controller {
             curl_close($curl);
             echo $response;
         }else{        
-            $curl = curl_init();            
-            
+            $curl = curl_init();
             curl_setopt_array($curl, array(
             CURLOPT_URL => "https://app.ameyoemerge.in:8887/ameyowebaccess/command/?command=clickToDialWithToken",
             CURLOPT_RETURNTRANSFER => true,
@@ -472,13 +471,10 @@ class Telephony extends CI_Controller {
                 "Cookie: JSESSIONID=CD6B2C8814410AC04966D61D885E4B61; __METADATA__=a16e9790-cd73-42b8-863e-77764c6b33e1"
             ),
             ));
-
             $response = curl_exec($curl);
-
             curl_close($curl);
             echo $response;
         }
-
     }
 
 }
