@@ -302,9 +302,14 @@
 											<th>S.No.</th>
                       <?=($showall or in_array(1,$acolarr))?'<th>Ticket</th>':''?>
 
-                    
-                      <?=($showall or in_array(15,$acolarr))?'<th>Tracking No</th>':''?>
-
+                      <?php
+                      if($this->session->companey_id==65)
+                      {
+                      ?>
+                        <?=($showall or in_array(15,$acolarr))?'<th>Tracking No</th>':''?>
+                      <?php
+                      }
+                      ?>
                       <?=($showall or in_array(7,$acolarr))?'<th>Created By</th>':''?>
                       <?=($showall or in_array(9,$acolarr))?'<th>Created Date</th>':''?>
 
@@ -856,11 +861,16 @@ function table_filter()
             <label class=""><input type="checkbox" class="choose-col"  value = "14"  <?php echo ($showall == true or in_array(14, $acolarr)) ? "checked" : ""; ?>>  Review</label>  &nbsp;
           </div>
 
-        
+        <?php
+        if($this->session->companey_id==65)
+        {
+        ?>
            <div class = "col-md-4">  
             <label class=""><input type="checkbox" class="choose-col"  value = "15"  <?php echo ($showall == true or in_array(15, $acolarr)) ? "checked" : ""; ?>>  Tracking No</label>  &nbsp;
           </div>
-
+        <?php
+      }
+      ?>
          <div class = "col-md-4">  
             <label class=""><input type="checkbox" class="choose-col"  value = "16"  <?php echo ($showall == true or in_array(16, $acolarr)) ? "checked" : ""; ?>>Ticket Status</label>  &nbsp;
           </div>
