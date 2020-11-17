@@ -13,16 +13,21 @@ class Form extends CI_Controller {
 		}
 	} 	
  	
- 	public function enquiry_extra_field($comp_id,$tab_id=1){ // add extra fileds to enquiry form 		
+ 	public function enquiry_extra_field($comp_id,$tab_id=1,$form_for=0){ // add extra fileds to enquiry form 		
  		$data['title'] = 'Enquiry Form'; 		
  		$data['comp_id'] = $comp_id;
  		$data['tab_id'] = $tab_id; 		
- 		$data['tab_list'] = $this->form_model->get_tabs_list($comp_id,0);  						
+ 		//echo $form_for;
+ 		$data['tab_list'] = $this->form_model->get_tabs_list($comp_id,0,$form_for);  
+ 		$data['field_for']  = $form_for;					
  		//echo $data['tab_list']; exit();
- 		echo $this->load->view('forms/custom_enquiry_form',$data,true);				
+ 		if($form_for==2)
+ 			echo $this->load->view('forms/custom_ticket_form',$data,true);
+ 		else
+ 			echo $this->load->view('forms/custom_enquiry_form',$data,true);				
 	}
 
-	public function get_tab_fields($tid,$comp_id){		 		
+	public function get_tab_fields($tid,$comp_id,$for=0){		 		
 		$data['tid'] = $tid;
 		$data['comp_id'] = $comp_id;
  		$this->db->select('*,input_types.title as input_type_title'); 		
@@ -32,13 +37,23 @@ class Form extends CI_Controller {
  		$this->db->order_by('tbl_input.fld_order','ASC');  			
  		$this->db->join('input_types','input_types.id=tbl_input.input_type');  			
  		$data['form_fields']	=	$this->db->get('tbl_input')->result_array(); 
- 		$data['basic_fields']	= $this->User_model->get_input_basic_fields($comp_id);
- 		if(empty($data['basic_fields'])){
- 			$this->db->select('id');
- 			$basic_fields	=	$this->db->get('basic_fields')->result_array();
- 			foreach ($basic_fields as $key => $value) {
- 				$this->db->insert('enquiry_fileds_basic',array('comp_id'=>$comp_id,'field_id'=>$value['id'])); 				
- 			}
+ 		$data['basic_fields']	= $this->User_model->get_input_basic_fields($comp_id,$for); 
+ 		//print_r($data['basic_fields']); exit();
+ 		if(empty($data['basic_fields']))
+ 		{
+ 	 			$this->db->select('id');
+	 			$basic_fields	=	$this->db->where('field_for',$for)->get('basic_fields')->result_array();
+	 			foreach ($basic_fields as $key => $value)
+				{
+					if($for==2)
+					{
+						$this->db->insert('ticket_fileds_basic',array('comp_id'=>$comp_id,'field_id'=>$value['id'])); 
+					}else
+					{
+						$this->db->insert('enquiry_fileds_basic',array('comp_id'=>$comp_id,'field_id'=>$value['id'])); 
+					}
+	 								
+	 			}
  		}
  		$this->db->where('comp_id',$comp_id);
 		$this->db->where('form_id',$tid);
@@ -48,6 +63,7 @@ class Form extends CI_Controller {
  		$data['input_types'] = $this->form_model->get_input_types();
 
  		$data['tab_details'] = $this->db->get_where('forms',array('id'=>$tid))->row_array();
+ 		$data['field_for']  = $for;
  		echo $this->load->view('forms/field_by_tab',$data,true);		
 	}
 
@@ -164,14 +180,18 @@ class Form extends CI_Controller {
 		redirect('customer/edit/'.$comp_id,'refresh');								
 	}
 
-	public function get_custom_field_by_process(){		
-		$process_id	=	$this->input->post('process_id');
-		$tid = 1;
+	public function get_custom_field_by_process(){
+
+		$process_id	= 	$this->input->post('process_id');
+		$field_for  = 	$this->input->post('field_for')??0;
+
+		$tid = $this->input->post('primary_tab')??0;
+
+
 		$data['company_list'] = $this->location_model->get_company_list($process_id,$tid);
+
 		echo $this->load->view('forms/custom_field_by_process',$data,true);
 	}
-
-
 	
 	public function get_basic_field_by_process(){		
 		/*print_r($_SESSION);
@@ -182,24 +202,87 @@ class Form extends CI_Controller {
 		}
 
 		
-		$this->load->model('location_model');
-
-	    $data['leadsource'] = $this->Leads_Model->get_leadsource_list();
-        $data['lead_score'] = $this->Leads_Model->get_leadscore_list();            
-        $data['product_contry'] = $this->location_model->productcountry();
-        $data['institute_list'] = $this->Institute_model->institutelist();
-        $data['datasource_list'] = $this->Datasource_model->datasourcelist();
-        $data['datasource_lists'] = $this->Datasource_model->datasourcelist2();
-        $data['subsource_list'] = $this->Datasource_model->subsourcelist();
-        $data['center_list'] = $this->Center_model->all_center();
-        $data['state_list'] = $this->location_model->estate_list();
-        $data['city_list'] = $this->location_model->ecity_list();
-        $data['country_list'] = $this->location_model->ecountry_list();
+		$this->load->model(
+					array('location_model',
+							'Enquiry_model',
+							'Ticket_Model',
+							'Leads_Model'
+					));
+	   
         
-	    $data['name_prefix'] = $this->enquiry_model->name_prefix_list();
-	    $data['company_list'] = $this->location_model->get_company_list1($process_id);
+	    $data['name_prefix'] = $this->Enquiry_model->name_prefix_list();
+	    
+
+	    if($this->input->post('field_for')==2)
+	    {
+
+    		$data['source'] = $this->Leads_Model->get_leadsource_list();
+			$data["clients"] = $this->Enquiry_model->getEnquiry()->result();
+			$data["product"] = $this->Ticket_Model->getproduct();
+			$data["referred_type"] = $this->Leads_Model->get_referred_by();
+			$data['problem'] = $this->Ticket_Model->get_sub_list();
+			$data['issues'] = $this->Ticket_Model->get_issue_list();
+
+	    	$data['company_list'] = $this->location_model->get_company_list1_ticket($process_id);
+	    	echo $this->load->view('forms/ticket_basic_form_fields',$data,true);
+	    }
+	    else
+	    {
+
+			$data['leadsource'] = $this->Leads_Model->get_leadsource_list();
+	        $data['lead_score'] = $this->Leads_Model->get_leadscore_list();            
+	        $data['product_contry'] = $this->location_model->productcountry();
+	        $data['institute_list'] = $this->Institute_model->institutelist();
+	        $data['datasource_list'] = $this->Datasource_model->datasourcelist();
+	        $data['datasource_lists'] = $this->Datasource_model->datasourcelist2();
+	        $data['subsource_list'] = $this->Datasource_model->subsourcelist();
+	        $data['center_list'] = $this->Center_model->all_center();
+	        $data['state_list'] = $this->location_model->estate_list();
+	        $data['city_list'] = $this->location_model->ecity_list();
+	        $data['country_list'] = $this->location_model->ecountry_list();
+
+	    	$data['company_list'] = $this->location_model->get_company_list1($process_id);
+
+	    	echo $this->load->view('forms/basic_form_fields',$data,true);
+	    }
 		
-		echo $this->load->view('forms/basic_form_fields',$data,true);
+	
+	}
+
+	public function get_custom_field_in_basic()
+	{
+		$this->load->helper('custom_form_helper');
+		$tid = $this->input->post('primary_tab');
+		$comp_id = $this->session->companey_id;
+		$ticketno = $this->input->post('ticketno');
+		$tabname = '';
+		$form_for = 2;
+		echo tab_content($tid,$comp_id,$ticketno,$tabname,$form_for);
+	}
+
+	public function get_basic_field_by_process_update($tckt)
+	{
+		$this->load->model(
+					array('location_model',
+							'Enquiry_model',
+							'Ticket_Model',
+							'Leads_Model'
+					));
+
+		$process_id = $this->input->post('process_id');
+
+		$data["ticket"] = $this->Ticket_Model->get($tckt);
+		//print_r($data['ticket']); exit();
+		$data['source'] = $this->Leads_Model->get_leadsource_list();
+		$data["clients"] = $this->Enquiry_model->getEnquiry()->result();
+		$data["product"] = $this->Ticket_Model->getproduct();
+		$data["referred_type"] = $this->Leads_Model->get_referred_by();
+		$data['problem'] = $this->Ticket_Model->get_sub_list();
+		$data['issues'] = $this->Ticket_Model->get_issue_list();
+
+    	$data['company_list'] = $this->location_model->get_company_list1_ticket($process_id);
+    	echo $this->load->view('forms/ticket_basic_form_fields_update',$data,true);
+		
 	}
 
 
@@ -233,11 +316,20 @@ class Form extends CI_Controller {
 		$field_id = $this->input->post('id');		
 		$status = $this->input->post('status');
 		$comp_id = $this->input->post('comp_id');
-
+		$for = $this->input->post('field_for')??0;
 		$this->db->where('field_id',$field_id);
 	    $this->db->where('comp_id',$comp_id);
 	    $arr = array('status'=>$status);
-	    $res = $this->db->update('enquiry_fileds_basic',$arr);	
+
+	    if($for==2)
+	    {
+			$res = $this->db->update('ticket_fileds_basic',$arr);	
+	    }
+	    else
+	    {
+	    	$res = $this->db->update('enquiry_fileds_basic',$arr);	
+	    }
+
 	    if($res){
         	echo 1;
 	    }
@@ -273,7 +365,11 @@ class Form extends CI_Controller {
 				$process_ids = implode(',', $process_ids);
 			}
 			$this->db->set('process_id',$process_ids);
-			$res	=	$this->db->update('enquiry_fileds_basic');
+			if($this->input->post('field_for')==0)
+				$res	=	$this->db->update('enquiry_fileds_basic');
+			else if($this->input->post('field_for')==2)
+				$res	=	$this->db->update('ticket_fileds_basic');
+
 		}else{
 			$this->db->where('company_id',$this->input->post('comp_id'));
 			$this->db->where('input_id',$this->input->post('id'));

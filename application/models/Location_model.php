@@ -103,6 +103,24 @@ class Location_model extends CI_Model {
         return $this->db->get()->result_array();
    }
 
+    public function get_company_list1_ticket($process_id = ""){ // get basic field by process
+        // print_r($process_id);
+        $compid=$this->session->companey_id;
+        $this->db->select("*");
+        $this->db->from('ticket_fileds_basic');
+        $where = '';
+        if($process_id){
+            $where .= " FIND_IN_SET($process_id,process_id) AND";
+        }
+        $where .= "  comp_id = {$compid} AND status=1";
+        // $this->db->where('FIND_IN_SET(process_id)',$process_id);
+        // $this->db->where('comp_id',);
+        $this->db->where($where);
+        $this->db->order_by('ticket_fileds_basic.fld_order','ASC');
+
+        return $this->db->get()->result_array();
+   }
+
 
    public function get_company_list_api($proccessno, $compno = ""){	
          

@@ -461,6 +461,11 @@ class Ticket extends CI_Controller
 	function view($tckt = "")
 	{
 
+		$process_id = 0;
+		if($this->session->process && count($this->session->process) == 1){
+			$process_id = $this->session->process[0];
+		}
+
 		$this->load->model('enquiry_model');
 		$this->load->model('form_model');
 		$data = array();
@@ -495,11 +500,9 @@ class Ticket extends CI_Controller
 		$data['problem'] = $this->Ticket_Model->get_sub_list();
 
 		$data['prodcntry_list'] = $this->enquiry_model->get_user_productcntry_list();
+		//print_r($data['prodcntry_list']); exit();
 		$data['issues'] = $this->Ticket_Model->get_issue_list();
-		//$data['data'] = $data;
-		//echo $data["ticket"]->client;
-		// $data['details'] = $this->Leads_Model->get_leadListDetailsby_id($data["ticket"]->client);
-		//print_r($data['details']); exit();
+
 
 		if (!$data["ticket"]->client)
 			//show_404();
@@ -516,6 +519,18 @@ class Ticket extends CI_Controller
 		$data['tab_list'] = $this->form_model->get_tabs_list($this->session->companey_id,0,2); //2 for Ticket Tab 
        // print_r($data['tab_list']); exit;
 
+		
+		$primary_tab=0;
+		$tabs = $this->db->select('id')
+						->where(array('form_for'=>2,'primary_tab'=>1))
+						->get('forms')
+						->row();
+        if($tabs)
+            $primary_tab = $tabs->id;
+        $data['primary_tab'] = $primary_tab;
+
+
+		$data['process_id'] =$process_id;
 
 		$content	 =	$this->load->view('ticket/ticket_disposition', $data, true);
 		$content    .=  $this->load->view('ticket/ticket_details', $data, true);
@@ -598,7 +613,7 @@ class Ticket extends CI_Controller
                                     $this->db->update('ticket_dynamic_data');
                                 }
                             }else{
-                                $this->db->insert('ticket_dynamic_data',$biarr);
+                                $this->db->insert('ticket_dynamic_data',$biarr);	
                             }         
                         }
                         $file_count++;          
@@ -917,12 +932,20 @@ class Ticket extends CI_Controller
 			//redirect(base_url("ticket/view/".$tckt), "refresh");
 
 			$res = $this->Ticket_Model->save($this->session->companey_id, $this->session->user_id);
+	
+		if(isset($_POST['inputfieldno']))
+		{	//echo 'text'; exit();
+			$tic = $this->db->select('id')->where('ticketno',$tckt)->get('tbl_ticket')->row();
+			$this->update_ticket_tab($tic->id);
+		}
+		
+	
+		if ($res) {
+			$this->session->set_flashdata('message', 'Successfully Updated ticket');
+			redirect(base_url('ticket/view/' . $tckt), "refresh");
+			//echo'in';
+		}
 
-			if ($res) {
-				$this->session->set_flashdata('message', 'Successfully Updated ticket');
-				redirect(base_url('ticket/view/' . $tckt), "refresh");
-				//echo'in';
-			}
 		}
 		echo 'out';
 	}
@@ -1135,7 +1158,55 @@ class Ticket extends CI_Controller
 		}
 		if ($this->form_validation->run()==TRUE) {
 			$res = $this->Ticket_Model->save($this->session->companey_id, $this->session->user_id);
-			if ($res) {
+
+			if ($res) 
+			{
+				$tck_id =  $this->db->select('id')
+								->where('ticketno',$res)
+								->get('tbl_ticket')->row()->id;
+				
+				$comment_id = $this->db->select('id')
+								->where('tck_id',$tck_id)
+								->get('tbl_ticket_conv')->row()->id;
+
+				if(isset($_POST['inputfieldno'])) {                    
+                $inputno   = $this->input->post("inputfieldno", true);
+                $enqinfo   = $this->input->post("enqueryfield", true);
+                $inputtype = $this->input->post("inputtype", true);                
+                $file_count = 0;                
+                $file = !empty($_FILES['enqueryfiles'])?$_FILES['enqueryfiles']:'';                
+                foreach($inputno as $ind => $val){
+	
+
+                 if ($inputtype[$ind] == 8) {                                                
+                        $file_data    =   $this->doupload($file,$file_count);
+
+                        if (!empty($file_data['imageDetailArray']['file_name'])) {
+                            $file_path = base_url().'uploads/ticket_documents/'.$this->session->companey_id.'/'.$file_data['imageDetailArray']['file_name'];
+                            $biarr = array( 
+                                            "enq_no"  => $res,
+                                            "input"   => $val,
+                                            "parent"  => $tck_id, 
+                                            "fvalue"  => $file_path,
+                                            "cmp_no"  => $this->session->companey_id,
+                                            "comment_id" => $comment_id
+                                        );         
+                                $this->db->insert('ticket_dynamic_data',$biarr);	        
+                        }
+                        $file_count++;          
+                    }else{
+                        $biarr = array( "enq_no"  => $res,
+                                      "input"   => $val,
+                                      "parent"  => $tck_id, 
+                                      "fvalue"  => $enqinfo[$ind],
+                                      "cmp_no"  => $this->session->companey_id,
+                                      "comment_id" => $comment_id
+                                     );                                 
+                       
+                            $this->db->insert('ticket_dynamic_data',$biarr);
+                    }                                      
+                } //foreach loop end               
+            }    
 				$this->load->model('rule_model');
 				$this->rule_model->execute_rules($res, array(9));
 				$this->session->set_flashdata('message', 'Successfully added ticket');
@@ -1143,13 +1214,30 @@ class Ticket extends CI_Controller
 			}
 		}
 
+		$process = $this->session->userdata('process');
+
+		 $data['process_id'] = 0;
+		 
+            if (is_array($process)) {
+                if (count($process) == 1) {
+                    $data['invalid_process'] = 0;
+                    $data['process_id'] = $process[0];
+                } else {
+                    $data['invalid_process'] = 1;
+                }
+            } else {
+                $data['invalid_process'] = 1;
+            }
+
 		$data['title'] = "Add Ticket";
-		$data['source'] = $this->Leads_Model->get_leadsource_list();
-		$data["clients"] = $this->Enquiry_model->getEnquiry()->result();
-		$data["product"] = $this->Ticket_Model->getproduct();
-		$data["referred_type"] = $this->Leads_Model->get_referred_by();
-		$data['problem'] = $this->Ticket_Model->get_sub_list();
-		$data['issues'] = $this->Ticket_Model->get_issue_list();
+		$primary_tab=0;
+		$tabs = $this->db->select('id')
+						->where(array('form_for'=>2,'primary_tab'=>1))
+						->get('forms')
+						->row();
+        if($tabs)
+            $primary_tab = $tabs->id;
+        $data['primary_tab'] = $primary_tab;
 		//$data["source"] = $this->Ticket_Model->getSource($this->session->companey_id);//getting ticket source list
 		$data['content'] = $this->load->view('ticket/add-ticket', $data, true);
 		$this->load->view('layout/main_wrapper', $data);

@@ -6,6 +6,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     	
     	$ci =& get_instance();
         $data['tid'] = $tid;
+
 		$data['comp_id'] = $comp_id;
  		$ci->db->select('*,input_types.title as input_type_title'); 		
  		$ci->db->where('tbl_input.form_id',$tid);  			
@@ -43,12 +44,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             $data['leadsource']     = $ci->Leads_Model->get_leadsource_list();
         }
    	
-        $ci->db->select('form_type,form_for,is_delete,is_edit');
+        $ci->db->select('form_type,form_for,is_delete,is_edit,primary_tab');
         $ci->db->where('id',$tid);        
         $r    =      $ci->db->get('forms')->row_array();
 
         $data['form_type'] = $r['form_type'];
-    	
+    	$data['is_primary'] = $r['primary_tab'];
         $data['form_for'] = $r['form_for'];
         $data['action'] = array('delete'=>$r['is_delete'],'edit'=>$r['is_edit']);
 

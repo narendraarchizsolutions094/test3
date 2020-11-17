@@ -13,7 +13,7 @@
                 //print_r($tab_list);die;
                 foreach ($tab_list as $key => $value) 
                 { 
-                  if ($value['id'] != 1) 
+                  if ($value['primary_tab'] != 1) 
                   	{ ?>
                     <li><a href="#<?=str_replace(' ', '_', $value['title'])?>" data-toggle="tab" style="padding: 10px 10px;"><?=$value['title']?></a></li>
                    <?php
@@ -28,239 +28,11 @@
 	</ul>
 	<div class="tab-content clearfix">
         <div class="tab-pane active" id="basic">
+       <?php echo form_open_multipart(base_url("ticket/update_ticket/".$ticket->ticketno)); ?>
 			<div class="row">
-<?php echo form_open_multipart(base_url("ticket/update_ticket/".$ticket->ticketno)); ?>
-	
-			<input type="hidden" name="complaint_type" value="<?=$ticket->complaint_type?>">
 
-		<?php if($this->session->companey_id==65){ ?>
+				<div id="basic_field_data"></div>
 
-					<div class="trackingDetails"></div>
-					
-				<div class="col-md-6">
-					<div class="form-group">
-						<label>Tracking Number <i class="text-danger opt" style="display: none;">*</i><?php
-						if($this->session->companey_id==65){
-							?>
-							 <a href='http://203.112.143.175/ecargont/' target="_blank" class='float-right'> Go To Ecargo</a>
-							<?php
-						}
-						?></label>
-						<input type="text" name="tracking_no" class="form-control" onblur="loadTracking(this)" value="<?php if(!empty($ticket->tracking_no)){ echo $ticket->tracking_no;} ?>">
-					</div>
-				</div>
-				<script type="text/javascript">
-
-					$(document).ready(function(){
-						loadTracking($("input[name=tracking_no]").get(0));
-					});
-				</script>
-
-				<?php if($ticket->complaint_type=='1'){
-						echo'<script type="text/javascript">
-						$(".opt").show();
-						$("input[name=tracking_no]").attr("required","required");
-						</script>';
-					}?>
-					
-
-		<?php } ?>
-
-		<div class="col-md-6">
-			<div class="form-group">
-				<label>Referred By</label>
-				<select class="form-control add-select2 choose-client" name = "referred_by" required>
-					<?php 
-					if(!empty($referred_type))
-					{
-						foreach($referred_type as $ref)
-						{
-				echo "<option value =".$ref->id." ".($ref->id==$ticket->referred_by?'selected':'').">".$ref->name."</option>";
-
-						}
-					} 
-					?>
-				</select>
-			</div>
-		</div>
-
-		<div class="col-md-6">
-			<div class="form-group">
-				<label>Problem For</label>
-				<select class="form-control add-select2 choose-client" name = "client" required readonly>
-					<?php 
-					if(!empty($problem_for))
-					{
-						foreach($problem_for as $ind => $clt)
-						{
-				echo "<option value =".$clt->enquiry_id." selected>".$clt->name."</option>";
-
-						}
-					} 
-					?>
-				</select>
-			</div>
-		</div>
-		<div class="col-md-6">
-			<div class="form-group">
-				<label>Name<span class="text-danger">*</span></label> 
-				<input type="text" name="name" id="ticket_holder" class="form-control" value="<?php if(!empty($ticket->name)){ echo $ticket->name;} ?>" required>
-			</div>
-		</div>
-		<div class="col-md-6">
-			<div class="form-group">
-				<label>Email<span class="text-danger">*</span></label>
-				<input type="email" class="form-control" name="email" value="<?php if(!empty($ticket->tck_email)){ echo $ticket->tck_email;} ?>" required>
-			</div>
-		</div>
-		<div class="col-md-6">
-			<div class="form-group">
-				<label>Phone<span class="text-danger">*</span></label>
-				<input type="text" name="phone" class="form-control" value="<?php  if(!empty($ticket->phone)){ echo $ticket->phone; } ?>" required>
-			</div>
-		</div>
-		<div class="col-md-6" style="display: none;">
-			<div class="form-group">
-				<label>Complain Date</label>
-				<input type = "text" class="form-control add-date-picker" name = "complaindate" value= "<?php echo date("m/d/Y", strtotime($ticket->coml_date)) ?>">
-			</div>
-		</div>
-		<?php if($this->session->companey_id!=83){ ?>
-		<div class="col-md-6">
-			<div class="form-group">
-				<label>Product</label>
-				<select name="product" class="form-control">
-				<?php
-				foreach ($product as $prd)
-				{
-					echo'<option value="'.$prd->id.'" '.($prd->id==$ticket->product?'selected':'').'>'.$prd->country_name.'</option>';
-				}
-				?>
-				</select>
-				<!-- <input type="text" class="form-control" value="<?php if(!empty($ticket->country_name)){ echo $ticket->country_name;} ?>" > -->
-			</div>
-		</div>
-		<?php } ?>
-		
-		<?php if($this->session->user_right!=214 && 0){ 
-			?>
-				<div class="col-md-6">
-					<div class="form-group">
-						<label>Nature of Complaint</label>
-						<select class="form-control add-select2" name = "issue">
-						<option value = ""> -- Select --</option>
-						<?php  if(!empty($issues)) {
-								foreach($issues as $ind => $issue){
-									?><option value = "<?php echo $issue->id ?>" <?php echo ($issue->id == $ticket->issue) ? "selected" : ""; ?> ><?php echo ucfirst($issue->title) ?> </option><?php
-								}	
-							} ?>
-						</select>
-					</div>
-				</div>
-		<div class="col-md-6">
-			<div class="form-group">
-				<label>Source</label>
-				<select name="source" class="form-control">
-				<?php
-				foreach ($leadsource as $sor)
-				{
-					echo'<option value="'.$sor->lsid.'" '.($sor->lsid==$ticket->sourse?'selected':'').'>'.$sor->lead_name.'</option>';
-				}
-				?>
-				</select>
-				<!-- <input type="text" class="form-control" value="<?php if(!empty($ticket->ticket_source)){ echo ucwords($ticket->ticket_source);} ?>" > -->
-			</div>
-		</div>
-		<?php
-		}
-		?>
-		
-		<div class="col-md-6">
-					<div class="form-group">
-						<label>Priority</label>
-						<select class="form-control add-select2" name = "priority">
-
-							<option value = "1" <?php echo (1 == $ticket->priority) ? "selected" : ""; ?>>Low</option>
-					
-							<option value = "2" <?php echo (2 == $ticket->priority) ? "selected" : ""; ?>>Medium</option>
-							<option value = "3" <?php echo (3 == $ticket->priority) ? "selected" : ""; ?>>High</option>
-						</select>
-					</div>
-				</div>
-
-		<div class="col-md-12">
-			<label>Remark</label>
-			<!-- <div style = "padding: 10px;border: 1px solid #e5e1e1;margin-right:25px;border-radius: 10px;font-size:16px;margin-bottom:10px;"><?php if(!empty($ticket->message)){ echo $ticket->message;} ?></div> -->
-			<textarea name="remark" class="form-control"><?=$ticket->message?></textarea>
-		</div>
-		
-		<div class="col-md-12">
-			
-			<div class="form-group" >			
-				<label>Attachment <small> ( Only Image/PDF ) </small>:</label>
-				<?php
-				//$error="This file is not availible";
-				if($error =$this->session->flashdata('error'))
-				{
-					echo'<div class="alert alert-danger">'.$error.'</div>';
-				}
-				?>
-				<?php
-				if($ticket->attachment)
-				{
-					$attachment  = json_decode($ticket->attachment);
-					echo'<ul class="list-group">';
-					$i=0;
-					if(!empty($attachment)){
-						foreach ($attachment as $at)
-						{
-							echo '<li class="list-group-item">'.$at.'
-							<div class="btn-group pull-right">
-							<a href="'.base_url('uploads/ticket/'.$at).'" target="_blank"><span class="btn btn-primary  btn-xs">View</span></a>
-							<a href="'.base_url('ticket/remove_attachment/'.$ticket->ticketno.'/'.$i).'"><span class="btn btn-danger  btn-xs">Delete</span></a>
-							</div>
-							</li>';
-							$i++;
-						}
-					}
-					echo'</ul><br>';
-				}
-				?>
-				<input type="file" name="attachment[]" class="attachFiles" accept=".jpg,.jpeg,.png,.pdf" multiple>
-			</div>
-			<div class="form-group">
-				<label>Ticket Type : </label> 
-				<span class='badge badge-info'><?=$ticket->complaint_type=='1'?'Compaint':($ticket->complaint_type=='2'?'Query':'NA')?></span>
-			</div>
-		</div>
-		<!-- <div class="col-md-6">
-			<div class="form-group">			
-				<label>Complaint Type : </label>
-					<span class='badge badge-danger'>
-					<?php
-						if ($ticket->complaint_type==1) {
-							echo "Complaint";
-						}else if ($ticket->complaint_type==2) {
-							echo "Query";
-						}
-					?>
-					</span>
-			</div>
-		</div> -->
-		<!-- <div class="col-md-6">
-			<div class="form-group">
-				<label>Priority</label>
-			<?php
-				if($ticket->priority == 1){
-					?><span class="badge badge-info">Low</span><?php
-				}else if($ticket->priority == 2){
-					?><span class="badge badge-warning">Medium</span><?php
-				}else if($ticket->priority == 3){
-					?><span class="badge badge-danger">High</span><?php
-				}
-				?>
-			</div>
-		</div> -->
 		<div class="col-md-12">
 			<div class="row">
 				<div class="col-md-12" style ="background: #f7f7f7;border: 1px solid #ccc;padding: 15px;border-radius: 10px;margin-bottom:25px; display: none;">
@@ -318,9 +90,9 @@
 				</div>
 				<center><button type = "submit" class="btn btn-success">Update</button></center>
 			</div>	
-		</div>
-		<?=form_close()?>
+		</div>	
 	  </div>
+	  <?=form_close()?>
 	</div>
 	<div class="tab-pane" id="related_tickets">
 		<div class="row">
@@ -552,30 +324,54 @@ $(window).resize(function(){
 <script src="<?php echo base_url() ?>assets/js/custom.js" type="text/javascript"></script>
 <script>
 
+function get_basic_field() {
+	//alert("c");
+    var process_id = "<?= $process_id ?>";
+   
+    var url = "<?= base_url() . 'form/form/get_basic_field_by_process_update/'.$ticket->ticketno ?>";
+    $.ajax({
+      type: "POST",
+      url: url,
+      data: {
+        'process_id': process_id,
+        field_for:'2'
+      },
+      success: function(data) {
+      	//alert(data);
+        $("#basic_field_data").html(data);
+        // $("#fcity").select2();
+        // $("#fstate").select2();
+        get_custom_field();
+      },
+     error:function(u,v,w)
+     {
+     	alert(w);
+     }
+    });
+  }
 
-	// $(".attachFiles").on('change',function(e){
-			
-	// 	 var myform = new FormData();
+function get_custom_field() { 
+    var process_id = "<?= $process_id ?>"; 
+    var url = "<?= base_url() . 'form/form/get_custom_field_in_basic' ?>";
+    $.ajax({
+      type: "POST",
+      url: url,
+      data: {
+        'process_id': process_id,
+        'field_for': 2,
+        'primary_tab': <?=$primary_tab?>,
+        'ticketno': "<?=$ticket->ticketno?>"
+      },
+      success: function(data) 
+      {
+      	//alert(data);
+        $("#basic_field_data").append(data);
+        //hide_all_dependent_field();
+      }
+    });
+  }
 
-	// 	myform.append('attachment[]',this.files);
-
-	// 		$.ajax({
-	// 				url:"<?php //base_url('ticket/add_attachment')?>",
-	// 				type:"post",
-	// 				data:myform,
-	// 				contentType: false,
- //    				processData: false,
-
-	// 				success:function (res)
-	// 				{
-	// 					document.write(res);
-	// 				},
-	// 				error:function(u,v,w)
-	// 				{
-	// 					alert(w);
-	// 				}
-	// 		});
-	// });
+get_basic_field();
 
 	$(document).ready(function(){
 		
@@ -597,41 +393,6 @@ $(window).resize(function(){
 			}
 		})
 	});
-
-<?php
-if($this->session->companey_id==65)
-{
-?>
-	function loadTracking(that)
-	{	//alert(key);
-		//alert(that.value);
-		if(that.value=='')
-		{
-
-		}else{
-			
-			$.ajax({
-				url:'<?=base_url('ticket/view_tracking')?>',
-				type:'post',
-				data:{trackingno:that.value},
-				beforeSend:function(){
-
-					$(that).parents('form').find('input,select,button').attr('disabled','disabled');
-				},
-				success:function(q)
-				{	$(that).parents('form').find('input,select,button').removeAttr('disabled');
-					$(".trackingDetails").html(q);
-				},
-				error:function(u,v,w)
-				{
-					alert(w);
-				}
-			});
-		}
-	}
-<?php
-}
-?>
 function tabchange(t,key)
 {
 	$(".btn").removeClass("active");
