@@ -3,8 +3,15 @@
 					<div class="panel-heading no-print" style ="background-color: #fff;padding:7px;border-bottom: 1px solid #C8CED3;">
 						<div class="row">
 							<div class="btn-group"> 
-				                <a class="pull-left fa fa-arrow-left btn btn-circle btn-default btn-sm" onclick="history.back(-1)" title="Back"></a>        
-				               <!--  <a class="dropdown-toggle btn btn-danger btn-circle btn-sm fa fa-plus" href="<?=base_url().'ticket/add'?>" title="New Ticket"></a> -->                       
+                  <a class="btn btn-primary" href="<?php echo base_url("report/index") ?>"> <i class="fa fa-list"></i>
+                        <?php echo display('reports_list') ?> </a>
+
+                    <?php if(user_access(220)) { if(!empty($this->session->telephony_token)){  ?>
+                    <a class="btn btn-success" href="<?php echo base_url("call_report/index") ?>"
+                        style="margin-left: 5 px !important ;"> <i class="fa fa-list"></i>
+                        <?php echo display('telephone_call_reports') ?> </a>
+                    <?php } }?>
+                
 				            </div>
 							<div class="col-md-4 col-sm-4 col-xs-4 pull-right" >  
 					          <div style="float: right;">   
@@ -759,7 +766,7 @@ function table_filter()
                 alert(w);
               }
               },
-              <?php if(user_access(317)) { ?>
+              <?php // if(user_access(317)) { ?>
         // "lengthMenu": [[30, 60, 90, -1], [30, 60, 90, "All"]], 
         buttons: [  
             {extend: 'copy', className: 'btn-xs btn',exportOptions: {
@@ -777,7 +784,7 @@ function table_filter()
             {extend: 'print', className: 'btn-xs btn',exportOptions: {
                         columns: "thead th:not(.noExport)"
                     }} 
-             ] ,  <?php  } ?>  });
+             ] ,  <?php  // } ?>  });
   run=1;
 }
 

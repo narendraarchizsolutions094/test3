@@ -715,37 +715,29 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                   <?php } ?>
                   <!-- </div> -->
                 <?php  if($this->session->userdata('companey_id')==65 ){?>
-                  <!-- <style>
+                   <style>
                       #center_logoimg {
-    /* visibility: hidden; */
-    display: block;
-    height:70px;width:200px; margin-left:50px;
-                  }
+                          position: absolute;
+                          top: -100px;
+                          right: -440px; 
+                          width: 200px;
+                      }
                     
                       @media screen and (max-width: 786px) {
-  #center_logo {
-    visibility: hidden;
-    display: none;
-    
-                  }
+                        #center_logo {
+                          visibility: hidden;
+                          display: none;    
+                        }
+                      }
+                    @media screen and (max-width: 1024px) {
+                      #center_logo {
+                        display: block;                        
+                    }                  
                 }
-                @media screen and (max-width: 1024px) {
-  #center_logo {
-    display: block;
-    
-                  }
-                  #center_logoimg {
-    /* visibility: hidden; */
-    display: block;
-    height:70px;width:200px; margin-left: -38px;
-                  }
-                }
-                      </style> -->
-                  <!-- <div class="col-md-6" id="center_logo">
-
-  <img id="center_logoimg"  src="<?php echo base_url("assets/images/new_logo.png") ?>" alt="">
-
-                  </div> -->
+                      </style> 
+                   <div class="col-md-6" id="center_logo">
+                    <img id="center_logoimg"  src="<?php echo base_url("assets/images/vtrans_logo.png") ?>" alt="">
+                  </div> 
               <?php }?>
                   <!-- </div> -->
                </div>

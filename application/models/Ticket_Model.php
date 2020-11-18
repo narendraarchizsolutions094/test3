@@ -678,7 +678,7 @@ class Ticket_Model extends CI_Model
 					];
 					$this->db->insert('tbl_comment', $assign_comment);
 					// update @ ticket model
-					$this->db->where('id', $id)->set('client', $insert_id)->update('tbl_ticket', $ticketData);
+					$this->db->where('id', $id)->set('client', $insert_id)->update('tbl_ticket');
 				}
 			}
 		}
