@@ -17,7 +17,7 @@
                     <?php if(user_access(310)) { ?>
                     <a class="btn btn-success" href="<?php echo base_url("report/ticket_report") ?>"
                         style="margin-left: 5 px !important ;"> <i class="fa fa-list"></i>
-                        <?php echo display('Ticket Report') ?> </a>
+                        <?php echo 'Ticket Report' ?> </a>
                     <?php }?>
                 </div> 
             </div>

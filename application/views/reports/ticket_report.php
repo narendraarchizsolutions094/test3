@@ -3,8 +3,19 @@
 					<div class="panel-heading no-print" style ="background-color: #fff;padding:7px;border-bottom: 1px solid #C8CED3;">
 						<div class="row">
 							<div class="btn-group"> 
-				                <a class="pull-left fa fa-arrow-left btn btn-circle btn-default btn-sm" onclick="history.back(-1)" title="Back"></a>        
-				                <a class="btn btn-primary" href="<?=base_url().'report/ticket_report'?>" title="Ticket Report"> Sales Report</a>
+                  <a class="btn btn-primary" href="<?php echo base_url("report/index") ?>"> <i class="fa fa-list"></i>
+                        <?php echo display('reports_list') ?> </a>
+
+                    <?php if(user_access(220)) { if(!empty($this->session->telephony_token)){  ?>
+                    <a class="btn btn-success" href="<?php echo base_url("call_report/index") ?>"
+                        style="margin-left: 5 px !important ;"> <i class="fa fa-list"></i>
+                        <?php echo display('telephone_call_reports') ?> </a>
+                    <?php } }?>
+                    <?php if(user_access(310)) { ?>
+                    <a class="btn btn-success" href="<?php echo base_url("report/ticket_report") ?>"
+                        style="margin-left: 5 px !important ;"> <i class="fa fa-list"></i>
+                        <?php echo 'Ticket Report' ?> </a>
+                    <?php }?>
 				            </div>
 							<div class="col-md-4 col-sm-4 col-xs-4 pull-right" >  
 					          <div style="float: right;">   
