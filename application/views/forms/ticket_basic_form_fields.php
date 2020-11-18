@@ -152,7 +152,15 @@ echo'<div class="trackingDetails"></div>';
 
                     <div class="col-md-6">
                       <div class="form-group">
-                        <label>Tracking Number <i class="text-danger opt">*</i></label>
+                        <label>Tracking Number <i class="text-danger opt">*</i>
+                        <?php
+                        if($this->session->companey_id==65){
+                            ?>                            
+                             <a href='http://203.112.143.175/ecargont/' target="_blank" class='float-right'> Go To Ecargo</a>
+                            <?php
+                        }
+                        ?>
+                        </label>
                         <input type="text" name="tracking_no" class="form-control" onblur="loadTracking(this),match_previous(this.value)" required>
                       </div>
                     </div>
