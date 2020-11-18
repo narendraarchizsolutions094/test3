@@ -421,7 +421,7 @@ class Ticket_Model extends CI_Model
 	public function all_related_tickets($where)
 	{
 
-		$this->db->select("tck.*,enq.gender,prd.product_name, concat(enq.name_prefix,' ' , enq.name,' ', enq.lastname) as clientname , COUNT(cnv.id) as tconv, cnv.msg, as all_related_tickets");
+		$this->db->select("tck.*,enq.gender,prd.product_name, concat(enq.name_prefix,' ' , enq.name,' ', enq.lastname) as clientname , COUNT(cnv.id) as tconv, cnv.msg,tbl_ticket_status.status_name as ticket_status_name");
 		$this->db->where("tck.company", $this->session->companey_id);
 
 		$this->db->from("tbl_ticket tck");
