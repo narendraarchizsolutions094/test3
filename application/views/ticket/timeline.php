@@ -45,7 +45,7 @@
               <br><span style="font-weight:100;font-size:12px;">To - </span><span style="font-weight:100;font-size:12px;"><?php echo $cnv->assignedTo; ?></span><br>
               <?php
             } ?>
-            <p style="font-size: 13px;"> <?php echo date("j-M-Y h:i:s A",strtotime($cnv->send_date)); ?><br>
+            <p style="font-size: 13px;"> Updated: <?php echo date("j-M-Y h:i:s A",strtotime($cnv->send_date)); ?><br>
            </p>
           </div>
         </li>
@@ -139,7 +139,17 @@
     if(type != 'Send Email'){
       $("#email_subject").hide();
       $("#email_subject").prev().hide();
+      $("#template_message").summernote('code','');
+      $("#template_message").summernote('destroy');
+      //alert("empt");
     }else{
+      $("#template_message").html('');
+      $("#template_message").summernote({
+        height: 200,                 // set editor height
+        minHeight: null,             // set minimum height of editor
+        maxHeight: null,             // set maximum height of editor
+        focus: false                 // set focus to editable area after initializing summernote
+      });
       $("#email_subject").show();
       $("#email_subject").prev().show();
     }
@@ -186,9 +196,25 @@
          data: {tmpl_id:tmpl_id},
          success:function(data){
              var obj = JSON.parse(data);
-              $('#templates option[value='+tmpl_id+']').attr("selected", "selected");
-              $(".summernote").summernote("code", obj.template_content);
-              $("#email_subject").val(obj.mail_subject);
+
+              // $('#templates option[value='+tmpl_id+']').attr("selected", "selected");
+              // $(".summernote").summernote("code", obj.template_content);
+              // $("#email_subject").val(obj.mail_subject);
+
+
+               $("#template_message").summernote('destroy');
+                
+              if($("#email_subject").is(':visible'))
+              {
+                   $("#template_message").summernote("code", obj.template_content);
+                   $("#email_subject").val(obj.mail_subject);
+              }
+              else
+              {
+                $("#template_message").html(obj.template_content);
+              }
+              
+
              //$("#template_message").html(obj.template_content);
          }               
      });        

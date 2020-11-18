@@ -59,7 +59,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         $data['name_prefix'] 		= $ci->enquiry_model->name_prefix_list();
         $data['tabname'] = $tabname;       
         
-        if($form_for==2)
+        if($form_for==2) 
         {
             return $ci->load->view('ticket/ticket_tab_content',$data,true);
         }
