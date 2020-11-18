@@ -17,7 +17,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		        	<div class="row">					   		   	
 					   	<div class="col-sm-3">					   	
 					   		<label>Rule For<i style="color: red;">*</i></label>
-					   		<select class="form-control" id="rule">
+					   		<select class="form-control" id="rule" onchange="builder_fun(this.value)">
 					   			<option value="">Choose Rule</option>
 					   			<option value="1" <?=(!empty($rule_data['type']) && $rule_data['type']==1)?'selected':''?> >Lead Score</option>
 					   			<option value="2" <?=(!empty($rule_data['type']) && $rule_data['type']==2)?'selected':''?>>Lead Assignment</option>
@@ -251,117 +251,179 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  </div>
 	
 <script type="text/javascript">
-	$(document).ready(function(){
-		// $rule_data['rule_json']
-	var rules_basic = <?=!empty($rule_data['rule_json'])?$rule_data['rule_json']:"{				  
+
+var leadSource = <?=$lead_source?>;
+var subSource = <?=$sub_source?>;
+var Products = <?=$products?>;
+var Country  =  <?=$country?>;
+var State = <?=$state?>;
+var City  = <?=$city?>;
+var LeadStage = <?=$lead_stages?>;
+var SubDisposition = <?=$lead_description?>;
+var Process = <?=$rule_process?>;
+var EnquiryStage = <?=$rule_enquiry_status?>;
+var TicketStatus = <?=$rule_ticket_status?>;
+var TicketDisposition = <?=$lead_stages?>;
+var TicketSubDisposition  = <?=$lead_description?>;
+
+
+var rules_basic = <?=!empty($rule_data['rule_json'])?$rule_data['rule_json']:"{				  
 		    condition: 'OR',
 		    rules: [{
 		      id: 'country_id'		      
 		    }]	  
 		}"?>;
-	    $('#builder').queryBuilder({
-		  plugins: ['bt-tooltip-errors'],		  
-		  filters: [{
-		    id: 'enquiry_source',
-		    label: 'Lead Source',
-		    type: 'integer',
-		    input: 'select',
-		    values: <?=$lead_source?>,
-		    operators: ['equal', 'not_equal','is_null', 'is_not_null']
-		  },{
-		    id: 'sub_source',
-		    label: 'Lead Sub Source',
-		    type: 'integer',
-		    input: 'select',
-		    values: <?=$sub_source?>,
-		    operators: ['equal', 'not_equal','is_null', 'is_not_null']
-		  },{
-		    id: 'enquiry_subsource',
-		    label: 'Product',
-		    type: 'integer',
-		    input: 'select',
-		    values: <?=$products?>,
-		    operators: ['equal', 'not_equal','is_null', 'is_not_null']
-		  },{
-		    id: 'country_id',
-		    label: 'Country',
-		    type: 'integer',
-		    input: 'select',
-		    values: <?=$country?>,
-		    operators: ['equal', 'not_equal','is_null', 'is_not_null']
-		  },{
-		    id: 'state_id',
-		    label: 'State',
-		    type: 'integer',
-		    input: 'select',
-		    values: <?=$state?>,
-		    operators: ['equal', 'not_equal','is_null', 'is_not_null']
-		  },{
-		    id: 'city_id',
-		    label: 'City',
-		    type: 'integer',
-		    input: 'select',
-		    values: <?=$city?>,
-		    operators: ['equal', 'not_equal','is_null', 'is_not_null']
-		  },{
-		    id: 'lead_stage',
-		    label: 'Disposition',
-		    type: 'integer',
-		    input: 'select',
-		    values: <?=$lead_stages?>,
-		    operators: ['equal', 'not_equal','is_null', 'is_not_null']
-		  },{
-		    id: 'lead_discription',
-		    label: 'Sub Disposition',
-		    type: 'integer',
-		    input: 'select',
-		    values: <?=$lead_description?>,
-		    operators: ['equal', 'not_equal','is_null', 'is_not_null']
-		  },{
-		    id: 'product_id',
-		    label: 'Process',
-		    type: 'integer',
-		    input: 'select',
-		    values: <?=$rule_process?>,
-		    operators: ['equal', 'not_equal','is_null', 'is_not_null']
-		  },{
-		    id: 'status',
-		    label: 'Enquiry Stage',
-		    type: 'integer',
-		    input: 'select',
-		    values: <?=$rule_enquiry_status?>,
-		    operators: ['equal', 'not_equal','is_null', 'is_not_null']
-		  },{
-		    id: 'tbl_ticket.ticket_status',
-		    label: 'Ticket Status',
-		    type: 'integer',
-		    input: 'select',
-		    values: <?=$rule_ticket_status?>,
-		    operators: ['equal', 'not_equal','is_null', 'is_not_null']
-		  },{
-		    id: 'tbl_ticket.complaint_type',
-		    label: 'Ticket Type',
-		    type: 'integer',
-		    input: 'select',
-		    values: {"1":"Complaint","2":"Query"},
-		    operators: ['equal', 'not_equal','is_null', 'is_not_null']
-		  },{
-		    id: 'ticket_stage',
-		    label: 'Ticket Disposition',
-		    type: 'integer',
-		    input: 'select',
-		    values: <?=$lead_stages?>,
-		    operators: ['equal', 'not_equal','is_null', 'is_not_null']
-		  },{
-		    id: 'ticket_substage',
-		    label: 'Ticket Sub Disposition',
-		    type: 'integer',
-		    input: 'select',
-		    values: <?=$lead_description?>,
-		    operators: ['equal', 'not_equal','is_null', 'is_not_null']
-		  }],
-		  rules: rules_basic
-		});
+function builder_fun(rule_type)
+				{	//alert(rule_type);
+					var filterArray = new Array();
+
+				if((['1','2','3','4','5','6','7','10']).includes(rule_type))
+				{
+					filterArray.push({
+						    id: 'enquiry_source',
+						    label: 'Lead Source',
+						    type: 'integer',
+						    input: 'select',
+						    values: leadSource,
+						    operators: ['equal', 'not_equal','is_null', 'is_not_null']
+						  });
+					filterArray.push({
+						    id: 'sub_source',
+						    label: 'Lead Sub Source',
+						    type: 'integer',
+						    input: 'select',
+						    values: subSource,
+						    operators: ['equal', 'not_equal','is_null', 'is_not_null']
+						  });
+			
+					filterArray.push({
+						    id: 'enquiry_subsource',
+						    label: 'Product',
+						    type: 'integer',
+						    input: 'select',
+						    values: Products,
+						    operators: ['equal', 'not_equal','is_null', 'is_not_null']
+						  });
+					filterArray.push({
+						    id: 'state_id',
+						    label: 'State',
+						    type: 'integer',
+						    input: 'select',
+						    values: State,
+						    operators: ['equal', 'not_equal','is_null', 'is_not_null']
+						  });
+					filterArray.push({
+						    id: 'city_id',
+						    label: 'City',
+						    type: 'integer',
+						    input: 'select',
+						    values: City,
+						    operators: ['equal', 'not_equal','is_null', 'is_not_null']
+						  });
+					filterArray.push({
+						    id: 'lead_stage',
+						    label: 'Disposition',
+						    type: 'integer',
+						    input: 'select',
+						    values: LeadStage,
+						    operators: ['equal', 'not_equal','is_null', 'is_not_null']
+						  });
+					filterArray.push({
+						    id: 'lead_discription',
+						    label: 'Sub Disposition',
+						    type: 'integer',
+						    input: 'select',
+						    values: SubDisposition,
+						    operators: ['equal', 'not_equal','is_null', 'is_not_null']
+						  });
+					filterArray.push({
+						    id: 'product_id',
+						    label: 'Process',
+						    type: 'integer',
+						    input: 'select',
+						    values: Process,
+						    operators: ['equal', 'not_equal','is_null', 'is_not_null']
+						  });
+					filterArray.push({
+						    id: 'status',
+						    label: 'Enquiry Stage',
+						    type: 'integer',
+						    input: 'select',
+						    values: EnquiryStage,
+						    operators: ['equal', 'not_equal','is_null', 'is_not_null']
+						  });
+					}
+
+					filterArray.push({
+						    id: 'country_id',
+						    label: 'Country',
+						    type: 'integer',
+						    input: 'select',
+						    values: Country,
+						    operators: ['equal', 'not_equal','is_null', 'is_not_null']
+						  });
+
+
+					if(['8','9'].includes(rule_type))
+					{
+
+					filterArray.push({
+						    id: 'tbl_ticket.ticket_status',
+						    label: 'Ticket Status',
+						    type: 'integer',
+						    input: 'select',
+						    values: TicketStatus,
+						    operators: ['equal', 'not_equal','is_null', 'is_not_null']
+						  });
+					filterArray.push({
+						    id: 'tbl_ticket.complaint_type',
+						    label: 'Ticket Type',
+						    type: 'integer',
+						    input: 'select',
+						    values: {"1":"Complaint","2":"Query"},
+						    operators: ['equal', 'not_equal','is_null', 'is_not_null']
+						  });
+					filterArray.push({
+						    id: 'ticket_stage',
+						    label: 'Ticket Disposition',
+						    type: 'integer',
+						    input: 'select',
+						    values: TicketDisposition,
+						    operators: ['equal', 'not_equal','is_null', 'is_not_null']
+						  });
+					filterArray.push({
+						    id: 'ticket_substage',
+						    label: 'Ticket Sub Disposition',
+						    type: 'integer',
+						    input: 'select',
+						    values: TicketSubDisposition,
+						    operators: ['equal', 'not_equal','is_null', 'is_not_null']
+						  });
+					}
+					try{
+					 $('#builder').queryBuilder({
+						  plugins: ['bt-tooltip-errors'],		  
+						  filters: filterArray,
+						  rules: rules_basic
+						});
+					}catch(e){alert(e);}finally{
+						//alert("buider created");
+					}
+				}
+
+	$(document).ready(function(){
+		// $rule_data['rule_json']
+		var run = $("#rule").val();
+		//alert(run);
+		if(run!='')
+			builder_fun(run);
+
+				$("#rule").change(function(){
+					var myid = $(this).val();
+					$("#builder").queryBuilder('destroy');
+					if(myid!='')
+					builder_fun(myid);
+				});
 	    /*********	Triggers and Changers QueryBuilder   ********************/		
 
 		$('#btn-reset').on('click', function() {
@@ -503,6 +565,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	if( !empty($rule_data['rule_action']) && $rule_data['type']==9)
 	{
 		$res = json_decode($rule_data['rule_action']);
+
 		echo'$("select[name=stage]").load("'.base_url('message/all_stages/4/').$res->stage.'");';
 		echo'$("select[name=sub_stage]").load("'.base_url('message/find_substage/').$res->stage.'/'.$res->sub_stage.'");';
 		echo'$("select[name=ticket_status]").load("'.base_url().'ticket/ticket_status/'.$res->ticket_status.'");';

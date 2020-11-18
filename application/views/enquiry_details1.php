@@ -3171,7 +3171,9 @@ $(window).resize(function(){
                 </div>
                 <div class="panel-body msg_container_base" id="chat_window">
 				<?php
-               				
+        if($get_message!='ERROR')
+        {    	
+        //echo $get_message; exit();			
 				foreach(json_decode($get_message) as $msg){
 				if($msg->type!='OUT'){?>
 				<div class="row msg_container base_sent">
@@ -3199,7 +3201,9 @@ $(window).resize(function(){
                         </div>
                     </div>
 				
-				<?php } }?>
+				<?php } }
+
+      }?>
                     
 
                  </div>
