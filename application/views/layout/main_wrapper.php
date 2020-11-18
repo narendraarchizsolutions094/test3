@@ -715,11 +715,14 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                   <?php } ?>
                   <!-- </div> -->
                 <?php  if($this->session->userdata('companey_id')==65 ){?>
-                  <!-- <style>
+                   <style>
                       #center_logoimg {
     /* visibility: hidden; */
-    display: block;
-    height:70px;width:200px; margin-left:50px;
+    /* display: block;
+    height:70px;width:200px; margin-left:50px; */
+    position: absolute;
+    top: 0px;
+    right: 40%;
                   }
                     
                       @media screen and (max-width: 786px) {
@@ -736,16 +739,16 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                   }
                   #center_logoimg {
     /* visibility: hidden; */
-    display: block;
-    height:70px;width:200px; margin-left: -38px;
+    /* display: block;
+    height:70px;width:200px; margin-left: -38px; */
                   }
                 }
-                      </style> -->
-                  <!-- <div class="col-md-6" id="center_logo">
+                      </style> 
+                   <div class="col-md-6" id="center_logo">
 
-  <img id="center_logoimg"  src="<?php echo base_url("assets/images/new_logo.png") ?>" alt="">
+  <img id="center_logoimg"  src="<?php echo base_url("assets/images/vtrans_logo.png") ?>" alt="">
 
-                  </div> -->
+                  </div> 
               <?php }?>
                   <!-- </div> -->
                </div>
