@@ -1497,7 +1497,7 @@ class Enquiry extends CI_Controller
 
         $comment_details = $this->Leads_Model->comment_byId($enquiry_code);
         $countdassigned=0;
-        $html = '<br><br><ul class="cbp_tmtimeline" >';
+        $html = '<ul class="cbp_tmtimeline" >';
         foreach ($comment_details as $comments) {
             //fetching assigned user start
             $assigned_user = $comments->assigned_user;

@@ -8,11 +8,17 @@
                 <div class="btn-group">
                     <a class="btn btn-primary" href="<?php echo base_url("report/index") ?>"> <i class="fa fa-list"></i>
                         <?php echo display('reports_list') ?> </a>
+
                     <?php if(user_access(220)) { if(!empty($this->session->telephony_token)){  ?>
                     <a class="btn btn-success" href="<?php echo base_url("call_report/index") ?>"
                         style="margin-left: 5 px !important ;"> <i class="fa fa-list"></i>
                         <?php echo display('telephone_call_reports') ?> </a>
                     <?php } }?>
+                    <?php if(user_access(310)) { ?>
+                    <a class="btn btn-success" href="<?php echo base_url("report/ticket_report") ?>"
+                        style="margin-left: 5 px !important ;"> <i class="fa fa-list"></i>
+                        <?php echo 'Ticket Report' ?> </a>
+                    <?php }?>
                 </div> 
             </div>
             <div class="panel-body">
