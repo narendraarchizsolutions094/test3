@@ -4,7 +4,7 @@
 						<div class="row">
 							<div class="btn-group"> 
 				                <a class="pull-left fa fa-arrow-left btn btn-circle btn-default btn-sm" onclick="history.back(-1)" title="Back"></a>        
-				               <!--  <a class="dropdown-toggle btn btn-danger btn-circle btn-sm fa fa-plus" href="<?=base_url().'ticket/add'?>" title="New Ticket"></a> -->                       
+				                <a class="btn btn-primary" href="<?=base_url().'report/ticket_report'?>" title="Ticket Report"> Sales Report</a>
 				            </div>
 							<div class="col-md-4 col-sm-4 col-xs-4 pull-right" >  
 					          <div style="float: right;">   
