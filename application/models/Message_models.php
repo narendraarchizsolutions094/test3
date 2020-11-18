@@ -114,7 +114,7 @@ class Message_models extends CI_Model
     $usermeta = $this->user_model->get_user_meta($this->session->user_id, array('api_name', 'api_url'));
     
     if (strlen($phone) < 12) {
-      $phone = substr($phone, 2, 10);
+      $phone = '91'.$phone;
     }
 
     $destination = $number;
