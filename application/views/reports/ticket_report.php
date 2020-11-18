@@ -11,11 +11,7 @@
                         style="margin-left: 5 px !important ;"> <i class="fa fa-list"></i>
                         <?php echo display('telephone_call_reports') ?> </a>
                     <?php } }?>
-                    <?php if(user_access(310)) { ?>
-                    <a class="btn btn-success" href="<?php echo base_url("report/ticket_report") ?>"
-                        style="margin-left: 5 px !important ;"> <i class="fa fa-list"></i>
-                        <?php echo 'Ticket Report' ?> </a>
-                    <?php }?>
+                
 				            </div>
 							<div class="col-md-4 col-sm-4 col-xs-4 pull-right" >  
 					          <div style="float: right;">   
