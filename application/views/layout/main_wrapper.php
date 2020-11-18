@@ -719,8 +719,8 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                       #center_logoimg {
                           position: absolute;
                           top: -100px;
-                          right: -326px; 
-                          width: 440px;
+                          right: -440px; 
+                          width: 200px;
                       }
                     
                       @media screen and (max-width: 786px) {
