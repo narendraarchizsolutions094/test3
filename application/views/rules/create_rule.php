@@ -28,7 +28,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 					   			<option value="7" <?=(!empty($rule_data['type']) && $rule_data['type']==7)?'selected':''?>>Send WhatsApp</option>
 					   			<option value="8" <?=(!empty($rule_data['type']) && $rule_data['type']==8)?'selected':''?>>Auto Ticket Priority</option>
 					   			<option value="9" <?=(!empty($rule_data['type']) && $rule_data['type']==9)?'selected':''?>>Default Ticket Disposition</option>
-					   			<option value="10" <?=(!empty($rule_data['type']) && $rule_data['type']==10)?'selected':''?>>Move to Sales</option>
+					   			<option value="10" <?=(!empty($rule_data['type']) && $rule_data['type']==10)?'selected':''?>>Ticket move to Sales</option>
 					   		</select>
 					   	</div>
 					   	<div class="col-sm-3">
@@ -187,8 +187,21 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 										<?php  	} ?>
 								</select>
 
+							</div>
+							<div class="col-md-3">
+			        			<label>Select Source<i style="color: red;">*</i></label>		        		
+		        				<select class="form-control" name="defaultsource">
+									<?php
+									
+			        					$assignment_action_data = explode(',', $rule_data['rule_action']);
+										print_r($assignment_action_data);
+									foreach (json_decode($lead_source) as $key => $lead_sources) { ?>
+										<option value="<?= $key?>"><?= $lead_sources ?></option>
+										<?php  	} ?>
+								</select>
+
 		        			</div>
-							<div class="col-md-4">		        				
+							<div class="col-md-3">		        				
 			        			<label>Assign To<i style="color: red;">*</i></label>
 			        			<select class="form-control text-center" name="assignto">			    
 			        				<?php
@@ -210,7 +223,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 			        				?>    			
 			        			</select>
 							</div>
-							<div class="col-md-4">		        				
+							<div class="col-md-3">		        				
 			        			<label>Default Process<i style="color: red;">*</i></label>
 			        			<select class="form-control text-center" name="defaultProcess">			    
 								<?php 
@@ -224,8 +237,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 									 <option value="<?= $key ?>" <?php if(!empty($rule_data['rule_action']) AND in_array($key, $assignment_action_data) ){ echo'selected'; } ?>><?= $value ?></option>
 								<?php } ?>		
 			        			</select>
-		        			</div>
-		        		</div>		        		
+							</div>
+						</div>	
+						<br>
+							        		
 					   <button class="btn btn-success" id="btn-set"><?=!empty($id)?'Update Rule':'Set Rules'?></button>		
 					   <button class="btn btn-warning" id="btn-reset">Reset</button>
 					</div>
@@ -447,9 +462,11 @@ function builder_fun(rule_type)
 		  		var	action_value =	JSON.stringify({'stage':stage,'sub_stage':sub_stage,'ticket_status':ticket_status});
 		  	}else if (rule_type==10){
 		  		var assignto		=	$("select[name='assignto']").val();
-		  		var stage_only	=	$("select[name='stage_only']").val();
-		  		var defaultProcess	=	$("select[name='defaultProcess']").val();
-		  		var	action_value =	JSON.stringify({'stage':stage_only,'assignto':assignto,'defaultProcess':defaultProcess});
+				  var stage_only	=	$("select[name='stage_only']").val();
+				  var defaultsource	=	$("select[name='defaultsource']").val();
+				  var defaultProcess	=	$("select[name='defaultProcess']").val();
+				  
+		  		var	action_value =	JSON.stringify({'stage':stage_only,'assignto':assignto,'defaultProcess':defaultProcess,'source':defaultsource});
 		  	}
 		  	console.info(action_value);
 		  	if (action_value && title) {

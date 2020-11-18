@@ -74,7 +74,6 @@ class LeadRules extends CI_Controller {
         $rule_action    =   $this->input->post('rule_action');
         $title          =   $this->input->post('rule_title');
         $rule_status    =   $this->input->post('rule_status');
-        
         $this->form_validation->set_rules('type','Rule For','required');        
         $this->form_validation->set_rules('rule_action','Rule Action','required');        
         $this->form_validation->set_rules('rule_title','Rule Title','required');                
@@ -174,6 +173,7 @@ class LeadRules extends CI_Controller {
         $all_description   =   $this->Leads_Model->find_description();        
         $sub_source = $this->Datasource_model->subsourcelist();             
         $products = $this->enquiry_model->get_user_productcntry_list();
+        
         $this->load->model('ticket_Model');
         $ticket_status = $this->ticket_Model->get_ticket_status();
         $rule_source = array();
@@ -251,7 +251,8 @@ class LeadRules extends CI_Controller {
         $data['user_list']   = $this->user_model->companey_users();
         $data['products']   = json_encode($rule_product);
         $data['sub_source']   = json_encode($rule_subsource);
-        
+
+       
         $data['content'] = $this->load->view('rules/create_rule', $data, true);
         $this->load->view('layout/main_wrapper', $data);       
     }
