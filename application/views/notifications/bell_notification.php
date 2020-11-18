@@ -36,9 +36,19 @@
                  if(!$ticket){
                   continue;
                  }
-                  //print_r($ticket)
-                  $value['subject'] = !empty($ticket->name)?$ticket->name:'<i>Deleted</i>';
+                 // print_r($ticket);
+                 // $value['subject'] = !empty($ticket->name)?$ticket->name:'<i>Deleted</i>';
+
+                 if($value['notification_id']=='')
+                 {
+                    $value['user_name'] = $value['ticket_name'];
+                    //print_r($value);
+                 }
+                 else
+                 {
                   $value['user_name'] = !empty($ticket->clientname)?$ticket->clientname:'<i>Deleted</i>';
+                 }
+                  
               }
 
               if ($value['noti_read']) {

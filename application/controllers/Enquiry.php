@@ -1149,6 +1149,21 @@ class Enquiry extends CI_Controller
                         'assign_status' => 0
                     );
                     $this->Leads_Model->add_comment_for_events($this->lang->line("enquery_assign"), $enquiry_code);
+
+
+                    $this->db->set('comp_id',$this->session->companey_id);
+                    $this->db->set('query_id',$enquiry_code);
+                    $this->db->set('noti_read',0);
+                    $this->db->set('contact_person',$data['enquiry']->name.' '.$data['enquiry']->lastname);
+                    $this->db->set('mobile',$data['enquiry']->phone);
+                    $this->db->set('email',$data['enquiry']->email); 
+                    $this->db->set('task_date',date('d-m-Y'));
+                    $this->db->set('task_time',date('H:i:s'));
+                    $this->db->set('create_by',$this->session->user_id);
+                    $this->db->set('task_type','0');
+                    $this->db->set('subject','Enquiry Assigned');
+                    $this->db->insert('query_response');
+
                 }
                 $this->db->update_batch('enquiry', $assign_data, 'enquiry_id');
                 $this->db->insert_batch('tbl_assign_notification', $notification_data);

@@ -177,9 +177,10 @@ class Enquiry_model extends CI_Model {
 
 		$ticketno=0;
 		$tckid = 0;
+		$process =0;
 		if($form_for==2)
 		{	$ticketno = $enqno;
-			$ticket = $this->db->select('id,client')
+			$ticket = $this->db->select('id,client,process_id')
 					->where('ticketno',$enqno)
 					->get('tbl_ticket');
 
@@ -188,16 +189,19 @@ class Enquiry_model extends CI_Model {
 				$ticket_row = $ticket->row();
 				$enqno = $ticket_row->client;
 				$tckid = $ticket_row->id;
-			}
-		}
-		
-	     $this->db->select('product_id,Enquery_id');
-	     $this->db->from('enquiry');
-	     $this->db->where('enquiry_id',$enqno);
-	     $res_id = $this->db->get()->row_array();
-	     $process = $res_id['product_id'];
-	  
+				$process = $ticket_row->process_id;
 
+			}
+		}  
+		
+			$this->db->select('product_id,Enquery_id');
+		     $this->db->from('enquiry');
+		     $this->db->where('enquiry_id',$enqno);
+		     $res_id = $this->db->get()->row_array();
+
+		if($form_for==0 or $process==0)
+		     $process = $res_id['product_id'];
+		
      	// echo $enqno;exit();
         // $process = $this->session->userdata('process');
         // print_r($process);exit();
@@ -244,6 +248,7 @@ class Enquiry_model extends CI_Model {
 
 		$ticketno=0;
 		$tckid = 0;
+		$process = 0;
 		if($form_for==2)
 		{	$ticketno = $enqno;
 			$ticket = $this->db->select('id,client')
@@ -255,6 +260,7 @@ class Enquiry_model extends CI_Model {
 				$ticket_row = $ticket->row();
 				$enqno = $ticket_row->client;
 				$tckid = $ticket_row->id;
+				$process = $ticket_row->process_id;
 			}
 		}
 		
@@ -262,6 +268,8 @@ class Enquiry_model extends CI_Model {
 	     $this->db->from('enquiry');
 	     $this->db->where('enquiry_id',$enqno);
 	     $res_id = $this->db->get()->row_array();
+
+	     if($form_for==0 or $enqno==0)
 	     $process = $res_id['product_id'];
 	  
 

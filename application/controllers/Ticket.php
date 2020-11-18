@@ -916,6 +916,24 @@ class Ticket extends CI_Controller
 					$this->db->set('assigned_to_date', $assign_to_date);
 					$this->db->where('id', $key);
 					$this->db->update('tbl_ticket');
+
+				$ticket = 	$this->db->select('*')
+											->where('id',$key)
+											->get('tbl_ticket')
+											->row();
+
+					$this->db->set('comp_id',$this->session->companey_id);
+					$this->db->set('query_id',$ticket->ticketno);
+					$this->db->set('noti_read',0);
+					$this->db->set('contact_person',$ticket->name);
+					$this->db->set('mobile',$ticket->phone);
+					$this->db->set('email',$ticket->email);	
+					$this->db->set('task_date',date('d-m-Y'));
+					$this->db->set('task_time',date('H:i:s'));
+					$this->db->set('create_by',$this->session->user_id);
+					$this->db->set('task_type','17');
+					$this->db->set('subject','Ticket Assigned');
+					$this->db->insert('query_response');
 				}
 				echo display('save_successfully');
 			} 
