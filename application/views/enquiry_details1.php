@@ -2065,12 +2065,16 @@ $(window).resize(function(){
             </div>
       </div>
       </div>
-      <div class="col-md-3 col-xs-12 col-sm-12 col-height activitytimelinediv">        
-         <h3 class="text-center">Activity Timeline</h3><hr>
-         <div class="activitytimelinediv"></div>
-          
-      </div>
-      <i class="fa fa-angle-right btn btn-secondary btn-sm" id="toggle_timeline"></i>      
+      <div>
+         <span class="toogle-timeline badge badge-danger pull-right" data-vis="1"><i class="fa fa-caret-right"></i></span>
+        <div class="col-md-3 col-xs-12 col-sm-12 col-height timeline"> 
+
+           <h3 class="text-center">Activity Timeline</h3>
+           <hr>
+           <div class="activitytimelinediv"></div>
+            
+        </div>
+      </div> 
       <style>
          #exTab3 .nav-tabs > li > a {
          border-radius: 4px 4px 0 0 ;
@@ -3256,7 +3260,39 @@ $(window).resize(function(){
       </div>
    </div>
 </div>
+<style type="text/css">
+  .toogle-timeline{
+    position: absolute;
+    top:70px;
+   z-index: 9090;
+    right: 5px;
+  }
+</style>
 <script type="text/javascript">
+
+$(".toogle-timeline").click(function(){
+    if($(this).data('vis')=='1')
+      { 
+        $(".timeline").hide(500,function(){
+            $(".details-column").removeClass('col-md-6');
+            $(".details-column").addClass('col-md-9');
+        });
+        $(this).data('vis','0');
+        $(this).find('i').removeClass('fa-caret-right');
+        $(this).find('i').addClass('fa-caret-left');
+      }
+    else
+    {
+        $(".timeline").show(500);
+        $(this).data('vis','1');
+        $(".details-column").addClass('col-md-6');
+        $(".details-column").removeClass('col-md-9');
+        $(this).find('i').addClass('fa-caret-right');
+        $(this).find('i').removeClass('fa-caret-left');
+    }
+    //setTimeout(manageScroll,1000);
+});
+
   $(document).ready(function()
   {
     $.ajax({
@@ -3265,7 +3301,8 @@ $(window).resize(function(){
           data: {
               'id':<?=$enquiry_id?>
           },
-          success: function(content) {                       
+          success: function(content) {     
+          //alert(content);                  
             $(".activitytimelinediv").html(content);
            // $("#task_edit").modal('show');
           }
@@ -4422,21 +4459,23 @@ $("a[href$='#related_enquiry']").on('click',function(){
     }
   });
 });
-$("#toggle_timeline").on('click',function(){
-  $(".activitytimelinediv").toggleClass('hide-timeline');
-  if ($(".activitytimelinediv ").hasClass('hide-timeline')) {
-    $("#toggle_timeline").removeClass('fa-angle-right');
-    $("#toggle_timeline").addClass('fa-angle-left');
-    $(".details-column").removeClass('col-md-6');
-    $(".details-column").addClass('col-md-9');
-  }else{
-    $("#toggle_timeline").removeClass('fa-angle-left');
-    $("#toggle_timeline").addClass('fa-angle-right');
-    $(".details-column").removeClass('col-md-9');
-    $(".details-column").addClass('col-md-6');
-  }
 
-});
+// $("#toggle_timeline").on('click',function(){
+//   $(".activitytimelinediv").toggleClass('hide-timeline');
+//   if ($(".activitytimelinediv ").hasClass('hide-timeline')) {
+//     $("#toggle_timeline").removeClass('fa-angle-right');
+//     $("#toggle_timeline").addClass('fa-angle-left');
+//     $(".details-column").removeClass('col-md-6');
+//     $(".details-column").addClass('col-md-9');
+//   }else{
+//     $("#toggle_timeline").removeClass('fa-angle-left');
+//     $("#toggle_timeline").addClass('fa-angle-right');
+//     $(".details-column").removeClass('col-md-9');
+//     $(".details-column").addClass('col-md-6');
+//   }
+
+// });
+
   $("input[name='submit_and_next']").on('click',function(){
     $(this).next().val('save_and_new');
   });
@@ -4492,6 +4531,7 @@ $("#toggle_timeline").on('click',function(){
     h  = $("#disposition-section").html();
     $("#dispo_modal .modal-body").html(h);
   }
+  
   function show_timeline(){
     h  = $(".activitytimelinediv").html();    
     $("#timeline_modal .modal-body").html(h);    
