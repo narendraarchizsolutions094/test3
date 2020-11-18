@@ -643,7 +643,7 @@ class Ticket_Model extends CI_Model
 		$fetchticket = $this->db->where('id', $id)->get('tbl_ticket');
 		if ($fetchticket->num_rows() == 1) {
 			foreach ($fetchticket->result() as $key => $value) {
-				if ($value->client == 0) {	
+				// if ($value->client == 0) {	
 					$encode = $this->get_enquery_code();
 					$postData = [
 						'Enquery_id' => $encode,
@@ -663,7 +663,8 @@ class Ticket_Model extends CI_Model
 						'product_id' => $process,
 						'enquiry_source'=>$source
 					];
-					// print_r($postData);
+					print_r($postData);
+
 					//
 					$this->db->insert('enquiry', $postData);
 					echo $insert_id = $this->db->insert_id();
@@ -679,10 +680,13 @@ class Ticket_Model extends CI_Model
 						'remark' => 'Enquiry Assigned by ' . $rule_title . ' Rule',
 						'assigned_user' => $assignto
 					];
+					print_r($assign_comment);
 					$this->db->insert('tbl_comment', $assign_comment);
 					// update @ ticket model
 					$this->db->where('id', $id)->set('client', $insert_id)->update('tbl_ticket');
-				}
+					echo'success'; 
+					die();
+				// }
 			}
 		}
 	}
