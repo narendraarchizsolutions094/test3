@@ -267,18 +267,42 @@ var TicketDisposition = <?=$lead_stages?>;
 var TicketSubDisposition  = <?=$lead_description?>;
 
 
-var rules_basic = <?=!empty($rule_data['rule_json'])?$rule_data['rule_json']:"{				  
-		    condition: 'OR',
-		    rules: [{
-		      id: 'country_id'		      
-		    }]	  
-		}"?>;
+function manageValues(key)
+{
+	if((['1','2','4','5']).includes(key))
+	{
+		var ruleType = 'sales';
+		
+	}
+	else if((['3','6','7']).includes(key))
+	{
+		var ruleType  = 'both';
+	}
+	else if((['8','9','10']).includes(key))
+	{
+		var ruleType = 'support';
+	}
+}
+
+
+var rules_basic = <?=!empty($rule_data['rule_json'])?$rule_data['rule_json']:"''"?>;
+
 function builder_fun(rule_type)
 				{	//alert(rule_type);
 					var filterArray = new Array();
 
-				if((['1','2','3','4','5','6','7','10']).includes(rule_type))
+				if((['1','2','3','4','5','6','7']).includes(rule_type))
 				{
+					if(rules_basic=='')
+					{
+						rules_basic = {				  
+								    condition: 'OR',
+								    rules: [{
+								      id: 'country_id'		      
+								    }]	  
+								}
+					}
+
 					filterArray.push({
 						    id: 'enquiry_source',
 						    label: 'Lead Source',
@@ -352,7 +376,7 @@ function builder_fun(rule_type)
 						    values: EnquiryStage,
 						    operators: ['equal', 'not_equal','is_null', 'is_not_null']
 						  });
-					}
+					
 
 					filterArray.push({
 						    id: 'country_id',
@@ -362,10 +386,20 @@ function builder_fun(rule_type)
 						    values: Country,
 						    operators: ['equal', 'not_equal','is_null', 'is_not_null']
 						  });
+				}
 
-
-					if(['8','9'].includes(rule_type))
+					if(['3','6','7','8','9','10'].includes(rule_type))
 					{
+
+						if(rules_basic=='')
+						{
+							rules_basic = {				  
+									    condition: 'OR',
+									    rules: [{
+									      id: 'tbl_ticket.ticket_status'		      
+									    }]	  
+									}
+						}
 
 					filterArray.push({
 						    id: 'tbl_ticket.ticket_status',
@@ -401,6 +435,7 @@ function builder_fun(rule_type)
 						  });
 					}
 					try{
+
 					 $('#builder').queryBuilder({
 						  plugins: ['bt-tooltip-errors'],		  
 						  filters: filterArray,
@@ -419,10 +454,17 @@ function builder_fun(rule_type)
 			builder_fun(run);
 
 				$("#rule").change(function(){
-					var myid = $(this).val();
+
+					var rule_key = $(this).val();
+
 					$("#builder").queryBuilder('destroy');
-					if(myid!='')
-					builder_fun(myid);
+					rules_basic='';
+
+					manageValues(rule_key);
+
+					if(rule_key!='')
+					builder_fun(rule_key);
+
 				});
 	    /*********	Triggers and Changers QueryBuilder   ********************/		
 
