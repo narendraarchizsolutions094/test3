@@ -720,7 +720,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                           position: absolute;
                           top: -100px;
                           right: -326px; 
-                          width: 200px;
+                          width: 440px;
                       }
                     
                       @media screen and (max-width: 786px) {
