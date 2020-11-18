@@ -639,7 +639,7 @@ class Ticket_Model extends CI_Model
 		$ticket_update = ['nextAssignTime' => $nextAssignment];
 		$this->db->where(array('id' => $tid))->update('tbl_ticket', $ticket_update);
 	}
-	public function moveTicketToEnq($id, $enqStatus, $rule_title, $rule_status, $user_id, $stage, $assignto, $process,$source)
+	public function moveTicketToEnq($id, $enqStatus, $rule_title, $rule_status, $user_id, $stage, $assignto, $process)
 	{
 		$fetchticket = $this->db->where('id', $id)->get('tbl_ticket');
 		if ($fetchticket->num_rows() == 1) {
@@ -662,7 +662,7 @@ class Ticket_Model extends CI_Model
 						'assign_by' => $user_id,
 						'rule_executed' => $rule_title,
 						'product_id' => $process,
-						'enquiry_source'=>$source
+						// 'enquiry_source'=>$source
 					];
 					print_r($postData);
 

@@ -28,7 +28,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 					   			<option value="7" <?=(!empty($rule_data['type']) && $rule_data['type']==7)?'selected':''?>>Send WhatsApp</option>
 					   			<option value="8" <?=(!empty($rule_data['type']) && $rule_data['type']==8)?'selected':''?>>Auto Ticket Priority</option>
 					   			<option value="9" <?=(!empty($rule_data['type']) && $rule_data['type']==9)?'selected':''?>>Default Ticket Disposition</option>
-					   			<option value="10" <?=(!empty($rule_data['type']) && $rule_data['type']==10)?'selected':''?>>Ticket move to Sales</option>
+					   			<option value="10" <?=(!empty($rule_data['type']) && $rule_data['type']==10)?'selected':''?>>Ticket move to sales</option>
 					   		</select>
 					   	</div>
 					   	<div class="col-sm-3">
