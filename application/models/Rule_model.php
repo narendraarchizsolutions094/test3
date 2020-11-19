@@ -185,11 +185,12 @@ class Rule_model extends CI_Model {
                         $this->db->where('ticketno',$enquiry_code);                                        
                         $this->db->where('company',$comp_id);                                           
                         $enq_row = $this->db->get('tbl_ticket')->row_array();                    
-                        if (!empty($rule_data['rule_action']) && !empty($enq_row)) {   
-                            print_r($rule_data['rule_action']);
-                            echo'<hr>';                         
+                        if (!empty($rule_data['rule_action']) && !empty($enq_row)) {  
+                            if(empty($action['source'])){
+                                $action['source']=0;
+                            } 
                             $this->load->model('Ticket_Model');
-                            $this->Ticket_Model->moveTicketToEnq($enq_row['id'],'Stage Updated',$rule_data['title'],'Rule Applied',$user_id,$action['stage'],$action['assignto'],$action['defaultProcess']);
+                            $this->Ticket_Model->moveTicketToEnq($enq_row['id'],'Stage Updated',$rule_data['title'],'Rule Applied',$user_id,$action['stage'],$action['assignto'],$action['defaultProcess'],$action['source']);
                         
                         }
                     }
