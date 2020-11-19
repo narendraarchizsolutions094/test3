@@ -291,7 +291,7 @@ function builder_fun(rule_type)
 				{	//alert(rule_type);
 					var filterArray = new Array();
 
-				if((['1','2','3','4','5','6','7']).includes(rule_type))
+				if((['1','2','3','4','6','7']).includes(rule_type))
 				{
 					if(rules_basic=='')
 					{
@@ -388,7 +388,7 @@ function builder_fun(rule_type)
 						  });
 				}
 
-					if(['3','6','7','8','9','10'].includes(rule_type))
+					if(['3','5','6','7','8','9','10'].includes(rule_type))
 					{
 
 						if(rules_basic=='')
@@ -436,12 +436,14 @@ function builder_fun(rule_type)
 					}
 					try{
 
-					 $('#builder').queryBuilder({
+					 	$('#builder').queryBuilder({
 						  plugins: ['bt-tooltip-errors'],		  
 						  filters: filterArray,
 						  rules: rules_basic
 						});
-					}catch(e){alert(e);}finally{
+					}catch(e){
+						alert(e);
+						}finally{
 						//alert("buider created");
 					}
 				}
