@@ -269,7 +269,7 @@ var TicketSubDisposition  = <?=$lead_description?>;
 
 function manageValues(key)
 {
-	if((['1','2','4','5']).includes(key))
+	if((['1','2','4']).includes(key))
 	{
 		var ruleType = 'sales';
 		
