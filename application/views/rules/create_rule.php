@@ -182,8 +182,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		        			<div class="col-md-3">
 			        			<label>Select Status<i style="color: red;">*</i></label>		        		
 		        				<select class="form-control" name="stage_only">
-									<?php foreach (json_decode($rule_enquiry_status) as $key => $rule_enquiry) { ?>
-										<option value="<?= $key?>"><?= $rule_enquiry ?></option>
+									<?php foreach (json_decode($rule_enquiry_status) as $key => $rule_enquiry) {
+										$assignment_action_data = explode(',', $rule_data['rule_action']);
+										$stdata='{"stage":"'.$key.'"';
+										
+										?>
+										<option value="<?= $key?>" <?=(	!empty($rule_data['rule_action']) && in_array($stdata, $assignment_action_data) )?'selected':''?>><?= $rule_enquiry ?></option>
 										<?php  	} ?>
 								</select>
 
@@ -192,11 +196,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 			        			<label>Select Source<i style="color: red;">*</i></label>		        		
 		        				<select class="form-control" name="defaultsource">
 									<?php
-									
 			        					$assignment_action_data = explode(',', $rule_data['rule_action']);
-										print_r($assignment_action_data);
-									foreach (json_decode($lead_source) as $key => $lead_sources) { ?>
-										<option value="<?= $key?>"><?= $lead_sources ?></option>
+									foreach (json_decode($lead_source) as $key => $lead_sources) {
+										$srdata='"source":"'.$key.'"}'; ?>
+
+										<option value="<?= $key?>" <?=(	!empty($rule_data['rule_action']) && in_array($srdata, $assignment_action_data) )?'selected':''?>><?= $lead_sources ?></option>
 										<?php  	} ?>
 								</select>
 
@@ -231,10 +235,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 								$assignment_action_data = explode(',', $rule_data['rule_action']);
 								}
 								foreach (json_decode($rule_process) as $key => $value) {
-									$pdata='"defaultProcess":"'.$key.'"';
+									 $pdata='"defaultProcess":"'.$key.'"';
 									
 									?>
-									 <option value="<?= $key ?>" <?php if(!empty($rule_data['rule_action']) AND in_array($key, $assignment_action_data) ){ echo'selected'; } ?>><?= $value ?></option>
+									 <option value="<?= $key ?>" <?php if(!empty($rule_data['rule_action']) AND in_array($pdata, $assignment_action_data) ){ echo'selected'; } ?>><?= $value ?></option>
 								<?php } ?>		
 			        			</select>
 							</div>
