@@ -423,7 +423,7 @@ class Telephony extends CI_Controller {
     }*/
     
     public function ameyo_api(){
-        $user_id = $this->session->email;        
+        $user_id = $this->session->email??$this->session->phone;        
         $campaign_id = $this->input->post('campaignId');
         $phone = $this->input->post('phone');
         
