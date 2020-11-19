@@ -451,6 +451,7 @@ class Telephony extends CI_Controller {
             ));
             $response = curl_exec($curl);
             curl_close($curl);
+            print_r($_SESSION);
             echo $response;
         }else{        
             $curl = curl_init();
