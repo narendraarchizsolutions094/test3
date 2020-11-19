@@ -423,11 +423,12 @@ class Telephony extends CI_Controller {
     }*/
     
     public function ameyo_api(){
-        $user_id = $this->session->email??$this->session->phone;        
+        $user_id = $this->session->email;        
         $campaign_id = $this->input->post('campaignId');
         $phone = $this->input->post('phone');
         
         if($this->session->companey_id == 82){
+            $user_id = $this->session->phone;        
             $curl = curl_init();
             curl_setopt_array($curl, array(
             CURLOPT_URL => "https://emergems.ameyo.net:8443/ameyowebaccess/command/?command=clickToDialWithToken",
