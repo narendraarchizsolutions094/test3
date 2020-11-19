@@ -117,8 +117,8 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                     data = JSON.parse(data);
                     if(data.status != 'error'){
                       Swal.fire({     
-                      title:'<strong>Dailing <blink>..</blink></strong>',
-                      html:'',
+                      title:'',
+                      html:'<strong>Dailing <blink>..</blink></strong>',
                       showCancelButton: false,
                       confirmButtonColor: '#3085d6',
                       cancelButtonColor: '#d33',
