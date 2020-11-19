@@ -116,8 +116,9 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                   if(data){
                     data = JSON.parse(data);
                     if(data.status != 'error'){
-                      Swal.fire({            
-                      html:'<strong>Dailing <blink>..</blink></strong>',
+                      Swal.fire({     
+                      title:'<strong>Dailing <blink>..</blink></strong>',
+                      html:'',
                       showCancelButton: false,
                       confirmButtonColor: '#3085d6',
                       cancelButtonColor: '#d33',
@@ -128,7 +129,8 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                       });
                     }else{
                       Swal.fire({            
-                        html:'<strong>Error <blink>..</blink></strong>',
+                        title:'<strong>Dailing <blink>..</blink></strong>',
+                        html:data.reason,
                         showCancelButton: false,
                         confirmButtonColor: '#3085d6',
                         cancelButtonColor: '#d33',
