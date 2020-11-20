@@ -426,7 +426,7 @@ function builder_fun(rule_type)
 						    operators: ['equal', 'not_equal','is_null', 'is_not_null']
 						  });
 					filterArray.push({
-						    id: 'ticket_substage',
+						    id: 'lead_discription',
 						    label: 'Ticket Sub Disposition',
 						    type: 'integer',
 						    input: 'select',
