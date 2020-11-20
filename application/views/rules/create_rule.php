@@ -259,7 +259,7 @@ var Country  =  <?=$country?>;
 var State = <?=$state?>;
 var City  = <?=$city?>;
 var LeadStage = <?=$lead_stages?>;
-var SubDisposition = <?=$lead_description?>;
+var SubDisposition = <?=$lead_description??array()?>;
 var Process = <?=$rule_process?>;
 var EnquiryStage = <?=$rule_enquiry_status?>;
 var TicketStatus = <?=$rule_ticket_status?>;
