@@ -1285,12 +1285,13 @@ class Ticket extends CI_Controller
 				</tr>';
 				foreach ($res as $row)
 				{
+					$status =	$row->ticket_status_name??'Open';
 				echo'<tr>
 					'.($this->session->companey_id==65?'<td>'.(empty($row->tracking_no)?'NA':$row->tracking_no).'</td>':'').'
 					<td>'.$row->ticketno.'</td>
 					<td>'.$row->name.'</td>
 					<td>'.(!empty($row->lead_stage_name)?$row->lead_stage_name:'NA').' <small>'.(!empty($row->description)?'<br>'.$row->description:'').'</small></td>
-					<td>'.$row->ticket_status_name??'Open'.'</td>
+					<td>'.$status.'</td>
 					<td>'.date('d-m-Y <br> h:i A',strtotime($row->coml_date)).'</td>
 					<th><a href="'.base_url('ticket/view/'.$row->ticketno).'"><button class="btn btn-small btn-primary">View</button></a></th>
 					</tr>';
