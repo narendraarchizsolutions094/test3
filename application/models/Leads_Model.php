@@ -314,6 +314,76 @@ public function all_description($diesc) {
         return $query->result();
     }
 	
+    public function getStageJson($for)
+    {
+
+        if(sizeof($this->session->process)==1)
+        {
+
+            $data = array();
+
+            if(is_array($for))
+            {
+                foreach ($for as $stage_for)
+                {
+                    $res = $this->find_estage($this->session->process[0],$stage_for);
+
+                    foreach ($res as $row)
+                    {
+                        $data[$row->stg_id]=$row->lead_stage_name;  
+                    }
+                    
+                }
+            }
+
+            return json_encode($data);
+        }
+        else
+        {   
+            return  json_encode(array());
+        }
+    }
+
+
+    public function getSubStageJson($for)
+    {
+
+        if(sizeof($this->session->process)==1)
+        {
+            $process=  $this->session->process[0];
+
+            $data = array();
+
+            if(is_array($for))
+            {
+                foreach ($for as $stage_for)
+                {
+                    $this->db->select('des.id,des.description,stg.stage_for,stg.process_id')
+                                ->from('lead_description des')
+                                ->join('lead_stage stg','FIND_IN_SET(stg.stg_id,des.lead_stage_id) > 0')
+                                ->having('FIND_IN_SET('.$stage_for.',stg.stage_for) > 0 ')
+                                ->having('FIND_IN_SET('.$process.',stg.process_id) > 0');
+
+                  $res = $this->db->get()->result();
+                     if($res)
+                     {
+                        foreach ($res as $row)
+                        {
+                            $data[$row->id]=$row->description;  
+                        }
+                    }
+                    
+                }
+            }
+
+            return json_encode($data);
+        }
+        else
+        {   
+            return  json_encode(array());
+        }
+    }
+
 	public function get_course_list() {
         $this->db->select('*');
         $this->db->order_by("tbl_course.crs_id", "asc");
