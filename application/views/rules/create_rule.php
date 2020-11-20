@@ -442,6 +442,7 @@ function builder_fun(rule_type)
 						  rules: rules_basic
 						});
 					}catch(e){
+						console.log(filterArray);
 						alert(e);
 						}finally{
 						//alert("buider created");
