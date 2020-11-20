@@ -258,7 +258,7 @@ class Ticket extends CI_Controller
 
 			if ($showall or in_array(4, $acolarr)) {
 				if (user_access(220) && !empty($point->phone)) {
-					$sub[] = "<a href='javascript:void(0)' onclick='send_parameters(" . $point->phone . ")'>" . $point->phone . "</a>";
+					$sub[] = "<a href='javascript:void(0)' onclick='send_parameters(".$point->phone.")'>" . $point->phone . "</a>";
 				} else {
 					$sub[] = $point->phone ?? "NA";
 				}
@@ -1279,16 +1279,19 @@ class Ticket extends CI_Controller
 				<th>Ticket Number</th>
 				<th>Name</th>
 				<th>Ticket Stage</th>
+				<th>Status</th>
 				<th>Created At</th>
 				<th>Action</th>
 				</tr>';
 				foreach ($res as $row)
 				{
+					$status =	$row->ticket_status_name??'Open';
 				echo'<tr>
 					'.($this->session->companey_id==65?'<td>'.(empty($row->tracking_no)?'NA':$row->tracking_no).'</td>':'').'
 					<td>'.$row->ticketno.'</td>
 					<td>'.$row->name.'</td>
 					<td>'.(!empty($row->lead_stage_name)?$row->lead_stage_name:'NA').' <small>'.(!empty($row->description)?'<br>'.$row->description:'').'</small></td>
+					<td>'.$status.'</td>
 					<td>'.date('d-m-Y <br> h:i A',strtotime($row->coml_date)).'</td>
 					<th><a href="'.base_url('ticket/view/'.$row->ticketno).'"><button class="btn btn-small btn-primary">View</button></a></th>
 					</tr>';

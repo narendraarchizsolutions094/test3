@@ -182,6 +182,7 @@ class Rule_model extends CI_Model {
                     }
                     if(!empty($action)){
                         $this->db->where('('.$rule_data['rule_sql'].')');
+                        $this->db->where('ticketno',$enquiry_code);                                        
                         $this->db->where('company',$comp_id);                                           
                         $enq_row = $this->db->get('tbl_ticket')->row_array();                    
                         if (!empty($rule_data['rule_action']) && !empty($enq_row)) {   

@@ -113,7 +113,31 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                   'campaignId':campaignId,
                 },
                 success: function (data) {
-                  console.info(data);
+                  if(data){
+                    data = JSON.parse(data);
+                    if(data.status != 'error'){
+                      Swal.fire({     
+                      title:'',
+                      html:'<strong>Dailing <blink>..</blink></strong>',
+                      showCancelButton: false,
+                      confirmButtonColor: '#3085d6',
+                      cancelButtonColor: '#d33',
+                      confirmButtonText: 'ok'              
+                      }).then((result) => {
+                        if (result.value) {                                 
+                        }
+                      });
+                    }else{
+                      Swal.fire({            
+                        title:'<strong>Dailing <blink>..</blink></strong>',
+                        html:data.reason,
+                        showCancelButton: false,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'ok'              
+                      });
+                    }
+                  }
                 }
               });
           }
@@ -124,9 +148,9 @@ if($root=='https://student.spaceinternationals.com'){  ?>
           if(empty($this->session->telephony_token)){  
             if(!empty($this->session->telephony_agent_id)){?>      
       <script>
-        function send_parameters(phn){   
+        function send_parameters(phn){
           phn  = phn.toString();
-         phn = phn.substring(phn.length-10, phn.length);   
+          phn = phn.substring(phn.length-10, phn.length);   
             console.info(phn);
 
           var agent_id = "<?=$this->session->telephony_agent_id?>";

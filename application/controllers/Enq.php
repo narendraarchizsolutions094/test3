@@ -120,7 +120,7 @@ class Enq extends CI_Controller
 			}
 			if ($showall == true or in_array(5, $acolarr)) {
 				if (user_access(220)) {
-					$row[] = "<a href='javascript:void(0)' onclick='send_parameters(" . $each->phone . ")'>" . $each->phone . "</a>";
+					$row[] = "<a href='javascript:void(0)' onclick='send_parameters(".$each->phone.")'>" . $each->phone . "</a>";
 				} else {
 					$row[] = $each->phone;
 				}
@@ -273,7 +273,7 @@ class Enq extends CI_Controller
 					$p = '##########';
 				}
 				if (user_access(220)) {
-					$row[] = "<a href='javascript:void(0)' onclick='send_parameters(" . $each->phone . ")'>" . $p . " <button class='fa fa-phone btn btn-xs btn-success'></button></a>";
+					$row[] = "<a href='javascript:void(0)' onclick='send_parameters(".$each->phone.")'>" . $p . " <button class='fa fa-phone btn btn-xs btn-success'></button></a>";
 				} else {
 					$row[] = (!empty($each->phone)) ? '<a  href="tel:' . $p . '">' . $p . '</a>' : "NA";
 				}
