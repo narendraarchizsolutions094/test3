@@ -93,7 +93,6 @@ class Ticket extends CI_Controller
 		$this->load->model('report_model');
 		$this->load->model('Leads_Model');
 
-
 		if (isset($_SESSION['ticket_filters_sess']))
 			unset($_SESSION['ticket_filters_sess']);
 
@@ -1562,7 +1561,6 @@ class Ticket extends CI_Controller
 				$data[] = [(int)$isdate, $count];
 			}
 		}
-		// print_r($data);
 		echo json_encode($data);
 	}
 

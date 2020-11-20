@@ -393,6 +393,14 @@ class Ticket_Model extends CI_Model
 			->result();
 	}
 
+	public function getPrimaryTab()
+	{
+		 return  $this->db->select('id')
+            ->where(array('form_for'=>2,'primary_tab'=>1))
+            ->get('forms')
+            ->row();
+	}
+
 	public function filterticket($where)
 	{
 

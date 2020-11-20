@@ -10,7 +10,7 @@ class Ticket extends REST_Controller {
   {
       parent::__construct();
       $this->load->library('form_validation');
-	
+	   $this->load->model(array('location_model','Ticket_Model'));
   }
 
   //api for providing ticket source Company Wise
@@ -64,8 +64,8 @@ class Ticket extends REST_Controller {
   {      
     $company_id   = $this->input->post('company_id');
     $user_id      = $this->input->post('user_id');
-    $this->form_validation->set_rules('company_id','Company','trim|required');
-    $this->form_validation->set_rules('user_id','User ID','trim|required');
+    $this->form_validation->set_rules('company_id','Company ID','trim|required',array('required'=>'You have note provided %s'));
+    $this->form_validation->set_rules('user_id','User ID','trim|required',array('required'=>'You have note provided %s'));
     if($this->form_validation->run() == true)
     {
       $this->load->model('Ticket_Model');
@@ -88,9 +88,61 @@ class Ticket extends REST_Controller {
     }
     else
     {
+      $msg = strip_tags(validation_errors());
       $this->set_response([
         'status'  => false,
-        'msg'     => "Please provide a company id"
+        'msg'     => $msg,//"Please provide a company id"
+      ],REST_Controller::HTTP_OK);
+    } 
+  }
+
+  public function createTicketForm_post()
+  {
+    $company_id   = $this->input->post('company_id');
+    $process_id   = $this->input->post('process_id');
+// $user_id      = $this->input->post('user_id');
+
+    $this->session->companey_id = $company_id;
+
+    $this->form_validation->set_rules('company_id','Company ID','trim|required',array('required'=>'You have note provided %s'));
+    $this->form_validation->set_rules('process_id','Process ID','trim|required',array('required'=>'You have note provided %s'));
+
+
+    if($this->form_validation->run() == true)
+    {
+
+      $primary_tab= $this->Ticket_Model->getPrimaryTab()->id;
+     
+
+      $basic= $this->location_model->get_company_list1_ticket($process_id);
+
+      $dynamic = $this->location_model->get_company_list($process_id,$primary_tab);
+
+      $data = array_merge($basic,$dynamic);      
+
+      session_destroy();
+
+      if(!empty($data))
+      {
+        $this->set_response([
+        'status'      => TRUE,          
+        'data'  => $data,
+        ], REST_Controller::HTTP_OK);   
+      }
+      else
+      {
+        $this->set_response([
+        'status'  => false,           
+        'msg'     => "something went wrong"
+        ], REST_Controller::HTTP_OK); 
+      }
+    }
+    else
+    {
+      $msg = strip_tags(validation_errors());
+      $this->set_response([
+        'status'  => false,
+        'msg'     => $msg,//"Please provide a company id"
       ],REST_Controller::HTTP_OK);
     } 
   }
