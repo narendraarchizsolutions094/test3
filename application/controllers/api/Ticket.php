@@ -95,9 +95,11 @@ class Ticket extends REST_Controller {
       ],REST_Controller::HTTP_OK);
     } 
   }
-
+//api for view of create ticket form
   public function createTicketForm_post()
   {
+    $this->load->model(array('Enquiry_model','Leads_Model'));
+
     $company_id   = $this->input->post('company_id');
     $process_id   = $this->input->post('process_id');
 // $user_id      = $this->input->post('user_id');
@@ -116,6 +118,83 @@ class Ticket extends REST_Controller {
 
       $basic= $this->location_model->get_company_list1_ticket($process_id);
 
+      foreach ($basic as $key => $input)
+      {
+          switch($input['field_id'])
+          { 
+            case 15:
+            $basic[$key]['input_values'] = array(1=>'Is Complaint',2=>'Is Query');
+            break;
+
+            case 16:
+            $referred_by = $this->Ticket_Model->refferedBy();
+            $values = array();
+            foreach ($referred_by as $res)
+            {
+              $values[$res->id] = $res->name;
+            }
+            $basic[$key]['input_values'] = $values;
+            break;
+
+            case 17:
+            $clients = $this->Enquiry_model->getEnquiry()->result();
+            $values = array();
+            foreach ($clients as $res)
+            {
+              $values[$res->enquiry_id] = $res->name." ".$res->lastname;
+            }
+            $basic[$key]['input_values'] = $values;
+            break;
+
+            case 21:
+            $products = $this->Ticket_Model->getproduct();
+            $values = array();
+            foreach ($products as $res)
+            {
+              $values[$res->id] = $res->country_name;
+            }
+            $basic[$key]['input_values'] = $values;
+            break;
+
+            case 22:
+            $problems = $this->Ticket_Model->get_sub_list();
+            $values = array();
+            foreach ($problems as $res)
+            {
+              $values[$res->id] = $res->subject_title;
+            }
+            $basic[$key]['input_values'] = $values;
+            break;
+
+            case 23:
+            $natures = $this->Ticket_Model->get_issue_list();
+            $values = array();
+            foreach ($natures as $res)
+            {
+              $values[$res->id] = $res->title;
+            }
+            $basic[$key]['input_values'] = $values;
+            break;
+
+            case 24:
+            $values = array(1=>'Low',2=>'Medium',3=>'High');
+            $basic[$key]['input_values'] = $values;
+            break;
+
+            case 25:
+            $source = $this->Leads_Model->get_leadsource_list();
+            $values = array();
+            foreach ($source as $res)
+            {
+              $values[$res->lsid] = $res->lead_name;
+            }
+            $basic[$key]['input_values'] = $values;
+            break;
+
+          }
+
+      }
+
       $dynamic = $this->location_model->get_company_list($process_id,$primary_tab);
 
       $data = array_merge($basic,$dynamic);      
@@ -126,14 +205,15 @@ class Ticket extends REST_Controller {
       {
         $this->set_response([
         'status'      => TRUE,          
-        'data'  => $data,
+        'data'  => $data, 
+        
         ], REST_Controller::HTTP_OK);   
       }
       else
       {
         $this->set_response([
         'status'  => false,           
-        'msg'     => "something went wrong"
+        'msg'     => "No Data Found"
         ], REST_Controller::HTTP_OK); 
       }
     }
@@ -330,6 +410,45 @@ class Ticket extends REST_Controller {
       $this->set_response([
         'status'  => false,
         'msg'     => "Please provide a valid id"
+      ],REST_Controller::HTTP_OK);
+    } 
+  }
+
+
+ public function getTicketTabs_post()
+  {      
+    $company_id   = $this->input->post('company_id');
+    $ticketno      = $this->input->post('ticketno');
+
+    $this->form_validation->set_rules('company_id','company_id','trim|required',array('required'=>'You have note provided %s'));
+    $this->form_validation->set_rules('ticketno','ticketno','trim|required',array('required'=>'You have note provided %s'));
+
+    if($this->form_validation->run() == true)
+    {
+
+      $data  = $this->Ticket_Model->ticket_all_tab_api($company_id,$ticketno);
+
+      if(1)
+      {
+        $this->set_response([
+        'status'      => TRUE,           
+        'data'  => $data,
+        ], REST_Controller::HTTP_OK);   
+      }
+      else
+      {
+        $this->set_response([
+        'status'  => false,           
+        'msg'     => "No Data found"
+        ], REST_Controller::HTTP_OK); 
+      }
+    }
+    else
+    {
+      $msg = strip_tags(validation_errors());
+      $this->set_response([
+        'status'  => false,
+        'msg'     => $msg,//"Please provide a company id"
       ],REST_Controller::HTTP_OK);
     } 
   }

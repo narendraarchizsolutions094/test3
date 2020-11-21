@@ -395,7 +395,7 @@ class Ticket_Model extends CI_Model
 
 	public function getPrimaryTab()
 	{
-		 return  $this->db->select('id')
+		 return  $this->db->select('*')
             ->where(array('form_for'=>2,'primary_tab'=>1))
             ->get('forms')
             ->row();
@@ -729,5 +729,197 @@ class Ticket_Model extends CI_Model
 			$pass .= $chars[mt_rand(0, count($chars) - 1)];
 		}
 		return $pass;
+	}
+
+
+	public function ticket_all_tab_api($companey_id,$ticketno)
+	{
+		//return array($company_id,$ticketno);
+		$this->load->model(array('form_model','Enquiry_model','Leads_Model'));
+		$this->session->companey_id = $companey_id;
+		
+		//2 for Ticket Tab 
+		$ticket = $this->get($ticketno);
+		//return $ticket;
+		$process_id = 0;
+		if(!empty($ticket))
+		{	
+			
+
+			if($ticket->client==0)
+				$process_id = $ticket->process_id;
+			else
+			{
+				$enq=$this->Enquiry_model->getEnquiry(array('enquiry_id'=>$ticket->client));
+				if($enq->num_rows())
+				{
+					$process_id = $enq->row()->product_id; // Process id
+				}
+			}
+
+
+		$tab_list = $this->form_model->get_tabs_list($companey_id,$process_id,2);
+
+		$tabs = array();
+
+		$primary_tab=0;
+		$primary = $this->getPrimaryTab();
+
+        if($primary)
+            $primary_tab = $primary->id;
+
+       	$basic= $this->location_model->get_company_list1_ticket($process_id);
+
+      foreach ($basic as $key => $input)
+      {
+          switch($input['field_id'])
+          { 
+            case 15:
+            $basic[$key]['input_values'] = array(1=>'Is Complaint',2=>'Is Query');
+            $basic[$key]['current_value'] = $ticket->complaint_type;
+            break;
+
+            case 16:
+            $referred_by = $this->Ticket_Model->refferedBy();
+            $values = array();
+            foreach ($referred_by as $res)
+            {
+              $values[$res->id] = $res->name;
+            }
+            $basic[$key]['input_values'] = $values;
+            $basic[$key]['current_value'] = $ticket->referred_by;
+            break;
+
+            case 17:
+            $clients = $this->Enquiry_model->getEnquiry()->result();
+            $values = array();
+            foreach ($clients as $res)
+            {
+              $values[$res->enquiry_id] = $res->name." ".$res->lastname;
+            }
+            $basic[$key]['input_values'] = $values;
+            $basic[$key]['current_value'] = $ticket->client;
+            break;
+
+            case 18:
+            $basic[$key]['input_values'] = '';
+            $basic[$key]['current_value'] = $ticket->name;
+            break;
+
+            case 19:
+           
+            $basic[$key]['input_values'] = '';
+            $basic[$key]['current_value'] = $ticket->phone;
+            break;
+
+            case 20:
+           
+            $basic[$key]['input_values'] = '';
+            $basic[$key]['current_value'] = $ticket->email;
+            break;
+
+            case 21:
+            $products = $this->Ticket_Model->getproduct();
+            $values = array();
+            foreach ($products as $res)
+            {
+              $values[$res->id] = $res->country_name;
+            }
+            $basic[$key]['input_values'] = $values;
+            $basic[$key]['current_value'] = $ticket->product;
+            break;
+
+            case 22:
+            $problems = $this->Ticket_Model->get_sub_list();
+            $values = array();
+            foreach ($problems as $res)
+            {
+              $values[$res->id] = $res->subject_title;
+            }
+            $basic[$key]['input_values'] = $values;
+            $basic[$key]['current_value'] = $ticket->category;
+            break;
+
+            case 23:
+            $natures = $this->Ticket_Model->get_issue_list();
+            $values = array();
+            foreach ($natures as $res)
+            {
+              $values[$res->id] = $res->title;
+            }
+            $basic[$key]['input_values'] = $values;
+            $basic[$key]['current_value'] = $ticket->issue;
+            break;
+
+            case 24:
+            $values = array(1=>'Low',2=>'Medium',3=>'High');
+            $basic[$key]['input_values'] = $values;
+            $basic[$key]['current_value'] = $ticket->priority;
+            break;
+
+            case 25:
+            $source = $this->Leads_Model->get_leadsource_list();
+            $values = array();
+            foreach ($source as $res)
+            {
+              $values[$res->lsid] = $res->lead_name;
+            }
+            $basic[$key]['input_values'] = $values;
+            $basic[$key]['current_value'] = $ticket->sourse;
+            break;
+
+            case 26:
+            $basic[$key]['input_values'] = '';
+            $basic[$key]['current_value'] = $ticket->attachment;
+            break;
+
+            case 27:
+            $basic[$key]['input_values'] = '';
+            $basic[$key]['current_value'] = $ticket->message;
+            break;
+
+            case 28:
+            $basic[$key]['input_values'] = '';
+            $basic[$key]['current_value'] = $ticket->tracking_no;
+            break;
+
+          }
+
+      }
+
+      $dynamic = $this->Enquiry_model->get_dyn_fld($ticketno,$primary_tab,2);
+
+
+        $tabs[]  = array('tab_id'=>$primary->id,
+        					'title'=>$primary->title,
+        					'is_query_type'=>$primary->is_query_type,
+        					'is_delete'=>$primary->is_delete,
+        					'is_edit'=>$primary->is_edit,
+        					'field_list'=>array_merge($basic,$dynamic),
+    						);
+
+
+
+        foreach ($tab_list as $res)
+        {
+        	if($res['primary_tab']!='1')
+        	{
+        		$dynamic = $this->Enquiry_model->get_dyn_fld($ticketno,$res['id'],2);
+
+        		$tabs[] = array('tab_id'=>$res['id'],
+        					'title'=>$res['title'],
+        					'is_query_type'=>$res['is_query_type'],
+        					'is_delete'=>$res['is_delete'],
+        					'is_edit'=>$res['is_edit'],
+        					'field_list'=>$dynamic,
+    						);
+        	}
+        }
+
+		session_destroy();
+		return $tabs;
+		}
+		else
+			return false;
 	}
 }

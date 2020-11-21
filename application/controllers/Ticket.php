@@ -463,20 +463,18 @@ class Ticket extends CI_Controller
 	}
 	function view($tckt = "")
 	{
-
 		$process_id = 0;
-		if($this->session->process && count($this->session->process) == 1){
-			$process_id = $this->session->process[0];
-		}
-
+		
 		$this->load->model('enquiry_model');
 		$this->load->model('form_model');
 		$data = array();
 		$data["ticket"] = $this->Ticket_Model->get($tckt);
 		//print_r($data['ticket']); exit();
+
 		if (empty($data['ticket'])) {
 			show_404();
 		}
+
 		//print_r($data['ticket']);exit();	
 		$match = array(
 			'ticket_no' => $data['ticket']->ticketno,
@@ -519,7 +517,21 @@ class Ticket extends CI_Controller
 		$this->load->model(array('form_model', 'dash_model', 'location_model'));
 		$this->load->helper('custom_form_helper');
 
-		$data['tab_list'] = $this->form_model->get_tabs_list($this->session->companey_id,0,2); //2 for Ticket Tab 
+		$process_id = 0;
+
+		if($data['ticket']->client==0)
+			$process_id = $data['ticket']->process_id;
+		else
+		{
+			$enq=$this->Enquiry_model->getEnquiry(array('enquiry_id'=>$data['ticket']->client));
+			if($enq->num_rows())
+			{
+				$process_id = $enq->row()->product_id; // Process id
+			}
+		}
+
+
+		$data['tab_list'] = $this->form_model->get_tabs_list($this->session->companey_id,$process_id,2); //2 for Ticket Tab 
        // print_r($data['tab_list']); exit;
 
 		
@@ -947,7 +959,8 @@ class Ticket extends CI_Controller
 	{
 		//print_r($_POST); exit();
 		if (isset($_POST["ticketno"])) {
-			$_POST['relatedto'] = $_POST['issue'];
+			//echo $_POST['']
+			//$_POST['relatedto'] = $_POST['issue'];
 			$this->Ticket_Model->updatestatus();
 			//echo $this->session->flashdata('message'); exit();
 			//redirect(base_url("ticket/view/".$tckt), "refresh");
