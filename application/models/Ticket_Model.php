@@ -166,6 +166,7 @@ class Ticket_Model extends CI_Model
 			$this->db->where("id", $this->input->post("ticketno", true));
 			$this->db->update("tbl_ticket", $arr);
 			if ($this->db->affected_rows()) {
+				$this->saveconv($_POST["ticketno"],'Ticket Updated', '',$arr["client"],$user_id);
 				return $_POST["ticketno"];
 			} else {
 				return false;
