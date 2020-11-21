@@ -728,9 +728,6 @@ class Ticket_Model extends CI_Model
 		return $pass;
 	}
 
-<<<<<<< HEAD
-	
-=======
 
 	public function ticket_all_tab_api($companey_id,$ticketno)
 	{
@@ -922,5 +919,4 @@ class Ticket_Model extends CI_Model
 		else
 			return false;
 	}
->>>>>>> 3a6533a77ebda94aff2a3b84cb323cba34fc6ac4
 }
