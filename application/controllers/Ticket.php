@@ -149,7 +149,7 @@ class Ticket extends CI_Controller
 				{
 					$html .= '<table class="table table-bordered">
 					<tr>
-					' . ($this->session->companey_id == 65 ? '<th>Tracking No</th>' : '') . '
+					' . ($this->session->companey_id == 65 ? '<th>'.display('tracking_no').'</th>' : '') . '
 					<th>Ticket Number</th>
 					<th>Name</th>
 					<th>Ticket Stage</th>
@@ -375,7 +375,7 @@ class Ticket extends CI_Controller
 
 				if (isset($a->Table)) {
 					echo '<table class="table table-bordered">
-		        <tr><th colspan="4" style="text-align:center;">Tracking Number: ' . (empty($table->GCNO) ? '' : $table->GCNO) . '</td></tr>
+		        <tr><th colspan="4" style="text-align:center;">'.display('tracking_no').': ' . (empty($table->GCNO) ? '' : $table->GCNO) . '</td></tr>
 		        <tr><th>Date:</th><td>' . (empty($table->GC_Date) ? '' : $table->GC_Date) . '</td><th>Status:</th><td>' . (empty($table->status) ? '' : $table->status) . '</td></tr>
 		         <tr><th>Delivery Location:</th><td  colspan="3">' . (empty($table->DeliveryLocation) ? '' : $table->DeliveryLocation) . '</td></tr>
 		         <tr><th>Delivery Branch:</th><td>' . (empty($table->DeliveryBranch) ? '' : $table->DeliveryBranch) . '</td><th>Booking Branch:</th><td>' . (empty($table->BookingBranch) ? '' : $table->BookingBranch) . '</td></tr>';
@@ -1160,7 +1160,7 @@ class Ticket extends CI_Controller
 		$this->db->where('tracking_no',$tn);
 		$this->db->where('ticket_status!=',3);
 		if($this->db->get('tbl_ticket')->num_rows()){
-			$this->form_validation->set_message('tracking_no_check', 'Ticket with this tracking no is already open.');
+			$this->form_validation->set_message('tracking_no_check', 'Ticket with this '.display('tracking_no').' is already open.');
 			return false;
 		}else{
 			return true;
@@ -1175,7 +1175,7 @@ class Ticket extends CI_Controller
 		$this->form_validation->set_rules('email','Email','required');
 
 		if($this->session->companey_id == 65 && ($this->input->post('complaint_type') == 1)){
-			$this->form_validation->set_rules('tracking_no', 'Tracking No', 'required|callback_tracking_no_check', array('tracking_no_check' => 'Ticket with this tracking no is already open.'));
+			$this->form_validation->set_rules('tracking_no', display('tracking_no'), 'required|callback_tracking_no_check', array('tracking_no_check' => 'Ticket with this '.display('tracking_no').' is already open.'));
 		}
 		if ($this->form_validation->run()==TRUE) {
 			$res = $this->Ticket_Model->save($this->session->companey_id, $this->session->user_id);
@@ -1274,7 +1274,7 @@ class Ticket extends CI_Controller
 			if ($res) {
 				echo '<table class="table table-bordered">
 				<tr>
-				' . ($this->session->companey_id == 65 ? '<th>Tracking No</th>' : '') . '
+				' . ($this->session->companey_id == 65 ? '<th>'.display('tracking_no').'</th>' : '') . '
 				<th>Ticket Number</th>
 				<th>Name</th>
 				<th>Ticket Stage</th>
