@@ -212,8 +212,9 @@ class Enquiry_model extends CI_Model {
         // // print_r($id);exit();
         $where ='';    
 
-		$this->db->select('othr.*,fld.fld_attributes,fld.input_id,fld.input_type,fld.input_values,fld.input_place,fld.input_label,fld.input_name');
+		$this->db->select('othr.*,fld.fld_attributes,fld.input_id,fld.input_type,fld.input_values,fld.input_place,fld.input_label,fld.input_name,input_types.title as type');
 		$this->db->from('tbl_input fld');
+		$this->db->join('input_types','fld.input_type=input_types.id','LEFT');
     	$where .= " FIND_IN_SET('".$process."',fld.process_id) AND fld.company_id = {$compid} AND fld.status=1 AND fld.form_id=$tid";
 		$this->db->where($where);
 		/*$enquiry_code = $res_id['Enquery_id'];*/
