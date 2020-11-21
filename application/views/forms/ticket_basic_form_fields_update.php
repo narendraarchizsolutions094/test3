@@ -146,7 +146,7 @@ echo'
           
               <div class="col-md-6">
                 <div class="form-group">
-                  <label>Tracking Number <i class="text-danger opt" style="display: none;">*</i>
+                  <label><?=display('tracking_no')?> <i class="text-danger opt" style="display: none;">*</i>
                         <?php
                         if($this->session->companey_id==65){
                             ?>                            

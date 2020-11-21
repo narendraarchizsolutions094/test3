@@ -304,7 +304,7 @@
                       if($this->session->companey_id==65)
                       {
                       ?>
-                        <?=($showall or in_array(15,$acolarr))?'<th>Tracking No</th>':''?>
+                        <?=($showall or in_array(15,$acolarr))?'<th>'.display('tracking_no').'</th>':''?>
                       <?php
                       }
                       ?>
@@ -878,7 +878,7 @@ function delete_recorde(){
           {
           ?>
            <div class = "col-md-4">  
-            <label class=""><input type="checkbox" class="choose-col"  value = "15"  <?php echo ($showall == true or in_array(15, $acolarr)) ? "checked" : ""; ?>>  Tracking No</label>  &nbsp;
+            <label class=""><input type="checkbox" class="choose-col"  value = "15"  <?php echo ($showall == true or in_array(15, $acolarr)) ? "checked" : ""; ?>>  <?=display('tracking_no')?></label>  &nbsp;
           </div>
 
           <?php
