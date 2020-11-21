@@ -774,7 +774,7 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
             <?php if($this->session->companey_id=='83'){ ?>
             <li><a href="#login-tab" data-toggle="tab" style="padding: 10px 10px;">Login Trail</a></li>
             <?php } ?>
-            <?php if($this->session->companey_id=='65'){ ?>
+            <?php if($this->session->companey_id==65){ ?>
             <li><a href="#COMMERCIAL_INFORMATION" data-toggle="tab" style="padding: 10px 10px;">Commercial Information</a></li>
             <?php } ?>
             
@@ -1668,13 +1668,95 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                      </div>
                   </form>
                </div>
-               <?php if($this->session->companey_id=='65'){ ?>
+               <?php if($this->session->companey_id==65){ ?>
 
-              <div class="tab-pane" id="COMMERCIAL_INFORMATION">
-                 <div class="row">
-                    <div class="col-md-4">
-                       <!-- <a data-toggle="modal" data-target="#CommercialInfo_modal" class="btn btn-primary" >View </a> -->
-                    </div>
+              <div class="tab-pane" id="COMMERCIAL_INFORMATION" >
+                 <div  style="overflow-x:auto;">
+               
+        
+        <table class="table table-responsive-sm table-responsive table-hover" >
+                        <thead class="thead-light">
+                           <tr>                              
+                              <th>S.N.</th>
+                              <th>Branch Type</th>
+                              <th>Business Type</th>
+                              <th>Booking Type</th>
+                              <th>Booking Branch</th>
+                              <th>Delivery Branch</th>
+                              <th>Rate</th>
+                              <th>Discount</th>
+                              <th>Insurance</th>
+                              <th>Paymode</th>
+                              <th>Potential Tonnage</th>
+                              <th>Potential Amount</th>
+                              <th>Expected  Tonnage</th>
+                              <th>Expected  Amount</th>
+                              <th>Vehicle Type</th>
+                              <th>Vehicle Carrying Capacity</th>
+                              <th>Invoice Value</th>
+                              <th>Create Date</th>
+                           </tr>
+                        </thead>
+                        <tbody>
+                           <?php 
+                              $sl = 1;
+                              if(!empty($CommercialInfo)){ 
+                                foreach ($CommercialInfo as $value) {
+                                   if($value->branch_type==1){
+                                    $branch_type='Branch';
+                                   }elseif($value->branch_type==2){
+                                    $branch_type='Zone';
+                                   }elseif($value->branch_type==3){
+                                    $branch_type='Area wise';
+                                   }
+                                   if($value->business_type==0){
+                                    $business_type='Inward';
+                                   }elseif($value->business_type==1){
+                                    $business_type='Outword';
+                                   }
+                                   if($value->insurance==0){
+                                    $insurance='Carrier';
+                                   }elseif($value->insurance==1){
+                                    $insurance='Owner Risk';
+                                   }
+                                   if($value->booking_type==0){
+                                    $booking_type='Sundy';
+                                   }elseif($value->booking_type==1){
+                                    $booking_type='FTL';
+                                   }
+                                   
+                                   if($value->paymode==1){
+                                    $paymode='Paid';
+                                   }elseif($value->paymode==2){
+                                    $paymode='To-Pay';
+                                   }elseif($value->paymode==3){
+                                    $paymode='Tbb';
+                                   }
+                                   ?>
+                        <tr>
+                              <td><?= $sl++ ?></td>
+                              <td><?= $branch_type ?></td>
+                              <td><?=$business_type ?> </td>
+                              <td><?=$booking_type ?> </td>
+                              <td><?=$value->branch_name ?></td>
+                              <td><?=$value->bn ?></td>
+                              <td><?=$value->rate ?></td>
+                              <td><?=$value->discount ?></td>
+                              <td><?=$insurance ?></td>
+                              <td><?=$paymode ?></td>
+                              <td><?=$value->potential_tonnage ?></td>
+                              <td><?=$value->potential_amount ?></td>
+                              <td><?=$value->expected_tonnage ?></td>
+                              <td><?=$value->expected_amount ?></td>
+                              <td><?=$value->vehicle_type ?></td>
+                              <td><?=$value->carrying_capacity ?></td>
+                              <td><?=$value->invoice_value ?></td>
+                              <td><?=$value->creation_date ?></td>
+                              
+                           </tr> 
+                           <?php  } }  ?>
+                            </tbody>
+                                             </table>
                  </div>
                   <hr>
                   <form class="form-inner" action="<?=  base_url('enquiry/insertCommercialInfo/') ?>" method="POST">
@@ -1684,18 +1766,18 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                     <div class="form-group col-sm-6"> 
                         <label>Info Type</label>
                         <select class="form-control" name="type" id="type">
-                            <option value="">-Select Type-</option>
+                            <option value="">-Select-</option>
                             <option value="1">Branch</option>
                             <option value="2">Zone</option>
                             <option value="3">Areawise</option>
                         </select>
                      </div>
                     </div>
-                     <center><h2>DISPTACH LOCATION</h2></center>
+                     <center><h3>DISPTACH LOCATION</h3></center>
                      <div class="form-group col-sm-6"> 
                         <label>Booking Type</label>
                         <select class="form-control" name="booking_type" id="booking_type">
-                            <option value="">-Select Booking Type-</option>
+                            <option value="">-Select-</option>
                             <option value="0">Sundry</option>
                             <option value="1">FTL</option>
                         </select>
@@ -1703,7 +1785,7 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                      <div class="form-group col-sm-6"> 
                         <label>Business Type</label>
                         <select class="form-control" name="business_type" id="business_type">
-                            <option value="">-Select Business Type-</option>
+                            <option value="">-Select-</option>
                             <option value="0">Inward</option>
                             <option value="1">outward</option>
                         </select>
@@ -1711,23 +1793,27 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                         <div class="form-group col-sm-6"> 
                            <label>Booking Branch</label>
                            <select class="form-control" name="booking_branch" id="booking_branch">
-                              <option value="">-Select Branch </option>
-                              <option value="1">Noida</option>
-                              <option value="2">Delhi</option>
+                              <option value="">-Select-</option>
+                            <?php 
+                            foreach($branch as $dbranch){ ?>
+                                  <option value="<?= $dbranch->branch_id ?>"><?= $dbranch->branch_name ?></option>
+                                 <?php }  ?>
                            </select>
                         </div>
                         <div class="form-group col-sm-6"> 
                            <label>Delivery Branch</label>
                            <select class="form-control" name="delivery_branch" id="delivery_branch">
-                              <option value="">-Select Branch </option>
-                              <option value="3">Kanpur</option>
-                              <option value="4">Hapur</option>
+                              <option value="">-Select-</option>
+                              <?php  
+                              foreach($branch as $dbranch){ ?>
+                                  <option value="<?= $dbranch->branch_id ?>"><?= $dbranch->branch_name ?></option>
+                                 <?php }  ?>
                            </select>
                         </div>
                               <div class="form-group col-sm-6"> 
                                  <label>Insurance</label>
                                  <select class="form-control" name="insurance" id="insurance">
-                                    <option value="">-Select Insurance </option>
+                                    <option value="">-Select-</option>
                                     <option value="0">Carrier</option>
                                     <option value="1">Owner risk</option>
                                  </select>
@@ -1814,91 +1900,6 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                   </form>
                </div>
 
-<div id="CommercialInfo_modal" class="modal fade bd-example-modal-lg" role="dialog">
-   <div class="modal-dialog ">
-      <div class="modal-content">
-         <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <h4 class="modal-title">Informations</h4>
-         </div>
-         <div class="modal-body"  style="overflow-x:auto;">
-       <?php 
-    $CommercialInfo=$this->db->select('bb.*,bs.branch_name as bn,commercial_info.*')->where('enquiry_id',$enquiry_id)
-                           ->join('branch bb','bb.branch_id=commercial_info.booking_branch')
-                           ->join('branch bs','bs.branch_id=commercial_info.delivery_branch')
-                           ->get('commercial_info')->result();
-                                 ?>
-        
-        <table class="table table-responsive-sm table-responsive table-hover" >
-                        <thead class="thead-light">
-                           <tr>                              
-                              <th>S.N.</th>
-                              <th>Branch Type</th>
-                              <th>Business Type</th>
-                              <th>Booking Type</th>
-                              <th>Booking Branch</th>
-                              <th>Delivery Branch</th>
-                              <th>Rate</th>
-                              <th>Discount</th>
-                              <th>Insurance</th>
-                              <th>Paymode</th>
-                              <th>Potential Tonnage</th>
-                              <th>Potential Amount</th>
-                              <th>Expected  Tonnage</th>
-                              <th>Expected  Amount</th>
-                              <th>Vehicle Type</th>
-                           </tr>
-                        </thead>
-                        <tbody>
-                           <?php 
-                              $sl = 1;
-                              if(!empty($CommercialInfo)){ 
-                                foreach ($CommercialInfo as $value) {
-                                   if($value->branch_type==1){
-                                    $branch_type='Branch';
-                                   }elseif($value->branch_type==2){
-                                    $branch_type='Zone';
-                                   }elseif($value->branch_type==3){
-                                    $branch_type='Area wise';
-                                   }
-                                   if($value->business_type==0){
-                                    $business_type='Inward';
-                                   }elseif($value->business_type==1){
-                                    $business_type='Outword';
-                                   }
-                                   if($value->insurance==0){
-                                    $insurance='Carrier';
-                                   }elseif($value->insurance==1){
-                                    $insurance='Owner Risk';
-                                   }
-                                   if($value->booking_type==0){
-                                    $booking_type='Sundy';
-                                   }elseif($value->booking_type==1){
-                                    $booking_type='FTL';
-                                   }
-                                   ?>
-                        <tr>
-                              <td><?= $sl++ ?></td>
-                              <td><?= $branch_type ?></td>
-                              <td><?=$business_type ?> </td>
-                              <td><?=$booking_type ?> </td>
-                              <td><?=$value->branch_name ?></td>
-                              <td><?=$value->bn ?></td>
-                              <td><?=$value->rate ?></td>
-                              <td><?=$value->discount ?></td>
-                              <td><?=$insurance ?></td>
-                              <td><?=$insurance ?></td>
-                              <td><?=$insurance ?></td>
-                              <td><?=$insurance ?></td>
-                           </tr> 
-                           <?php  } }  ?>
-                            </tbody>
-                                             </table>
-                                             
-         </div>
-      </div>
-   </div>
-</div>
                                  <?php } ?>
 
                <div class="tab-pane" id="kyctab">

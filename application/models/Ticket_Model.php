@@ -725,4 +725,6 @@ class Ticket_Model extends CI_Model
 		}
 		return $pass;
 	}
+
+	
 }

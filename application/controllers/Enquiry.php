@@ -1492,6 +1492,11 @@ class Enquiry extends CI_Controller
             $data['level'] = $this->location_model->find_level();
             $data['length'] = $this->location_model->find_length();
         } 
+        if ($this->session->companey_id == '1') {
+            $data['branch']=$this->db->where('comp_id',65)->get('branch')->result();
+            $data['CommercialInfo'] = $this->enquiry_model->getComInfo($enquiry_id);
+        } 
+                            
         $this->enquiry_model->make_enquiry_read($data['details']->Enquery_id);
         //echo"<pre>";print_r($data);die;
         $data['content'] = $this->load->view('enquiry_details1', $data, true);
@@ -3447,7 +3452,7 @@ public function timelinePopup()
     $ftlexpected_amount=$this->input->post('ftlexpected_amount');
     $invoice_value=$this->input->post('invoice_value');
     $url=base_url('enquiry/view/'.$enquiry_id.'');
-    if($booking_type==1){
+    if($booking_type==0){
      $data=[ 'enquiry_id'=>$enquiry_id,
             'branch_type'=>$type,
             'booking_type'=>$booking_type,
@@ -3465,7 +3470,7 @@ public function timelinePopup()
             'createdby'=>$this->session->userdata('user_id'),
             'comp_id'=>$comp_id
           ];
-        }else{
+        }elseif($booking_type==1){
             $data=[ 'enquiry_id'=>$enquiry_id,
             'branch_type'=>$type,
             'booking_type'=>$booking_type,
@@ -3483,17 +3488,13 @@ public function timelinePopup()
             'comp_id'=>$comp_id
           ]; 
         }
-          $insert=$this->db->insert('commercial_info',$data);
+          $insert=$this->enquiry_model->insertComInfo($data);
         if($insert){
         $this->session->set_flashdata('message', 'Commercial information inserted successfully');
-
-        redirect($url, 'refresh');
-
+        redirect($url);
         }else{
-        $this->session->set_flashdata('message', 'Commercial information inserted successfully');
-
-        redirect($url, 'refresh');
-
+        $this->session->set_flashdata('error', 'Error while submiting data ');
+        redirect($url);
         }
 
  }
