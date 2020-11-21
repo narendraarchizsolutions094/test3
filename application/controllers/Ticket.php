@@ -158,7 +158,7 @@ class Ticket extends CI_Controller
 					<th>Action</th>
 					</tr>';
 					foreach ($res as $row) {
-						$status	=	$row->ticket_status_name??'NA';
+						$status	=	$row->ticket_status_name??'Open';
 						$html .= '<tr>
 						' . ($this->session->companey_id == 65 ? '<td>' . $row->tracking_no . '</td>' : '') . '
 						<td>' . $row->ticketno . '</td>
