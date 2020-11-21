@@ -146,11 +146,11 @@ echo'
           
               <div class="col-md-6">
                 <div class="form-group">
-                  <label>Tracking Number <i class="text-danger opt" style="display: none;">*</i>
+                  <label><?=display('tracking_no')?> <i class="text-danger opt" style="display: none;">*</i>
                         <?php
                         if($this->session->companey_id==65){
                             ?>                            
-                             <a href='http://203.112.143.175/ecargont/' target="_blank" class='float-right'> Go To Ecargo</a>
+                             <a href='http://203.112.143.175/ecargont/' target="_blank" class='float-right'> <u> Go To Ecargo </u> </a>
                             <?php
                         }
                         ?></label>

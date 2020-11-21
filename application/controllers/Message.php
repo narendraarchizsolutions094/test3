@@ -56,7 +56,7 @@ class Message extends CI_Controller {
 	   
 	}
 	
-	public function find_substage($id=0,$selected=0)
+	public function find_substage($id=0,$selected=0) 
 	{
 		$this->load->model('Leads_Model');
 		
@@ -81,6 +81,7 @@ class Message extends CI_Controller {
 	public function all_stages($id,$selected=0)
 	{
 		$this->load->model('Leads_Model');
+
 		if(sizeof($this->session->process)==1)
 		{
 			$res = $this->Leads_Model->find_estage($this->session->process[0],$id);
@@ -94,8 +95,6 @@ class Message extends CI_Controller {
 		{
 			echo'<option value="">First Please Select only One Process</option>';
 		}
-		
-
 	}
 
 	public function send_sms_career_ex(){

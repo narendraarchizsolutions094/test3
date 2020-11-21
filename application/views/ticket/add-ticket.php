@@ -237,7 +237,7 @@ function autoFill(find_by,key)
 				if(res.html!='0')
 				{
 					Swal.fire({
-						title:'Previous Tickets',
+						title:'Old Tickets',
 						html:res.html,
 						customClass:'swal-width-custom',
 						//showCancelButton: true,

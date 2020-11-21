@@ -168,11 +168,13 @@ class LeadRules extends CI_Controller {
         $country   =   $this->location_model->country();
         $state     =   $this->location_model->estate_list();
         $city      =   $this->location_model->ecity_list();
-        $lead_stages = $this->Leads_Model->get_leadstage_list();
+
+        
+
         $process_list = $this->dash_model->get_user_product_list();        
-        $all_description   =   $this->Leads_Model->find_description();        
         $sub_source = $this->Datasource_model->subsourcelist();             
         $products = $this->enquiry_model->get_user_productcntry_list();
+
         
         $this->load->model('ticket_Model');
         $ticket_status = $this->ticket_Model->get_ticket_status();
@@ -218,12 +220,18 @@ class LeadRules extends CI_Controller {
                 $rule_lead_stage[$value->stg_id]  = $value->lead_stage_name;
             }
         }
-        $rule_lead_description = array();
-        if (!empty($all_description)) {
-            foreach ($all_description as $key => $value) {
-                $rule_lead_description[$value->id]  = $value->description;
-            }
-        }
+        // $rule_lead_description = array();
+        // if (!empty($all_description)) {
+        //     foreach ($all_description as $key => $value) {
+        //         $rule_lead_description[$value->id]  = $value->description;
+        //     }
+        // }
+        // $rule_ticket_description = array();
+        // if (!empty($ticket_description)) {
+        //     foreach ($ticket_description as $key => $value) {
+        //         $rule_ticket_description[$value->id]  = $value->description;
+        //     }
+        // }
         $rule_process = array();
         if (!empty($process_list)) {
             foreach ($process_list as $key => $value) {
@@ -236,17 +244,27 @@ class LeadRules extends CI_Controller {
                 $rule_ticket_status[$value->id] = $value->status_name;
             }
         }  
+
+
+        $data['lead_stages'] = $this->Leads_Model->getStageJson(array(1,2,3));
+        $data['ticket_stages'] = $this->Leads_Model->getStageJson(array(4));
+        $data['lead_description'] = $this->Leads_Model->getSubStageJson(array(1,2,3));
+        $data['ticket_description'] = $this->Leads_Model->getSubStageJson(array(4));
+
         $data['rule_ticket_status'] = json_encode($rule_ticket_status);
         $data['rule_enquiry_status'] = json_encode(array(1=>'Enquiry',2=>'Lead',3=>'Client'));
         $data['lead_source'] = json_encode($rule_source);
         $data['country']     = json_encode($rule_country);
         $data['state']       = json_encode($rule_state);
         $data['city']        = json_encode($rule_city);
-        $data['lead_stages'] = json_encode($rule_lead_stage);
-        //   print_r($data);
-        // die();
-        // die();
-        $data['lead_description'] = json_encode($rule_lead_description);
+        // $data['lead_stages'] = json_encode($rule_lead_stage);
+        
+
+
+        $all_description  = $this->Leads_Model->getSubStageJson(array(1,2,3));  
+
+        $ticket_description  = $this->Leads_Model->getSubStageJson(array(4)); 
+
         $data['rule_process']   = json_encode($rule_process);
         $data['user_list']   = $this->user_model->companey_users();
         $data['products']   = json_encode($rule_product);

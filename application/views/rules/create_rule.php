@@ -267,26 +267,64 @@ var SubDisposition = <?=$lead_description?>;
 var Process = <?=$rule_process?>;
 var EnquiryStage = <?=$rule_enquiry_status?>;
 var TicketStatus = <?=$rule_ticket_status?>;
-var TicketDisposition = <?=$lead_stages?>;
-var TicketSubDisposition  = <?=$lead_description?>;
+var TicketDisposition = <?=$ticket_stages?>;
+var TicketSubDisposition  = <?=$ticket_description?>;
 
 
-function manageValues(key)
-{
-	if((['1','2','4','5']).includes(key))
-	{
-		var ruleType = 'sales';
-		
-	}
-	else if((['3','6','7']).includes(key))
-	{
-		var ruleType  = 'both';
-	}
-	else if((['8','9','10']).includes(key))
-	{
-		var ruleType = 'support';
-	}
-}
+// function manageValues(key)
+// {
+
+// 	if((['1','2','4',]).includes(key))
+// 	{
+// 		var ruleType = 'sales';
+
+// 		$.ajax({
+// 			url:"<?=base_url('message/all_stages_json')?>",
+// 			type:'post',
+// 			data:{for:[1,2,3]},
+// 			dataType:'JSON',
+// 			success:function(res)
+// 			{	//alert(res);
+// 				LeadStage = res;
+// 				//alert(JSON.stringify(TicketDisposition));
+// 				builder_fun(key);
+// 			}
+// 		});
+// 	}
+// 	else if((['3','6','7']).includes(key))
+// 	{
+// 		var ruleType  = 'both';
+
+// 		$.ajax({
+// 			url:"<?=base_url('message/all_stages_json')?>",
+// 			type:'post',
+// 			data:{for:[1,2,3,4]},
+// 			success:function(res)
+// 			{	//alert(res);
+// 				TicketDisposition = JSON.parse(res);
+// 				alert(JSON.stringify(TicketDisposition));
+// 				builder_fun(key);
+// 			}
+// 		});
+
+// 	}
+// 	else if((['5','8','9','10']).includes(key))
+// 	{
+// 		var ruleType = 'support';
+
+// 		$.ajax({
+// 			url:"<?=base_url('message/all_stages_json')?>",
+// 			type:'post',
+// 			data:{for:[4]},
+// 			success:function(res)
+// 			{	//alert(res);
+// 				TicketDisposition = JSON.parse(res);
+// 				alert(JSON.stringify(TicketDisposition));
+// 				builder_fun(key);
+// 			}
+// 		});
+// 	}
+// }
 
 
 var rules_basic = <?=!empty($rule_data['rule_json'])?$rule_data['rule_json']:"''"?>;
@@ -295,7 +333,7 @@ function builder_fun(rule_type)
 				{	//alert(rule_type);
 					var filterArray = new Array();
 
-				if((['1','2','3','4','5','6','7']).includes(rule_type))
+				if((['1','2','3','4','6','7']).includes(rule_type))
 				{
 					if(rules_basic=='')
 					{
@@ -392,7 +430,7 @@ function builder_fun(rule_type)
 						  });
 				}
 
-					if(['3','6','7','8','9','10'].includes(rule_type))
+					if(['3','5','6','7','8','9','10'].includes(rule_type))
 					{
 
 						if(rules_basic=='')
@@ -440,13 +478,13 @@ function builder_fun(rule_type)
 					}
 					try{
 
-					 $('#builder').queryBuilder({
+					 	$('#builder').queryBuilder({
 						  plugins: ['bt-tooltip-errors'],		  
 						  filters: filterArray,
 						  rules: rules_basic
 						});
 					}catch(e){alert(e);}finally{
-						//alert("buider created");
+						//alert(JSON.stringify(TicketDisposition));
 					}
 				}
 
@@ -464,11 +502,9 @@ function builder_fun(rule_type)
 					$("#builder").queryBuilder('destroy');
 					rules_basic='';
 
-					manageValues(rule_key);
+					//manageValues(rule_key);
 
-					if(rule_key!='')
 					builder_fun(rule_key);
-
 				});
 	    /*********	Triggers and Changers QueryBuilder   ********************/		
 
@@ -621,8 +657,6 @@ function builder_fun(rule_type)
 	{
 		$res = json_decode($rule_data['rule_action']);
 		// echo'$("select[name=stage_only]").load("'.base_url('message/all_stages/4/').$res->stage.'");';
-	
-
 	}
 	?>
 

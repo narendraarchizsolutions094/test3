@@ -313,7 +313,7 @@
                       if($this->session->companey_id==65)
                       {
                       ?>
-                        <?=($showall or in_array(15,$acolarr))?'<th>Tracking No</th>':''?>
+                        <?=($showall or in_array(15,$acolarr))?'<th>'.display('tracking_no').'</th>':''?>
                       <?php
                       }
                       ?>

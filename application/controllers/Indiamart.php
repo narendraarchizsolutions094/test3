@@ -52,6 +52,7 @@ class Indiamart extends CI_Controller {
 							$created_by = 537;
 							$product_id = 186;
 						}
+
 						$enq_arr[] = array(
                             'Enquery_id' => $encode,							
 							'comp_id'=>$comp_id,
@@ -66,12 +67,48 @@ class Indiamart extends CI_Controller {
 							'created_by'=>$created_by,
 							'product_id'=>$product_id	
 						);
+
+
+						$curl = curl_init();						
+						$api_url = base_url()."api/enquiry/create";
+						curl_setopt_array($curl, array(
+							CURLOPT_URL => $api_url,
+							CURLOPT_RETURNTRANSFER => true,
+							CURLOPT_ENCODING => "",
+							CURLOPT_MAXREDIRS => 10,
+							CURLOPT_TIMEOUT => 0,
+							CURLOPT_FOLLOWLOCATION => true,
+							CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+							CURLOPT_SSL_VERIFYPEER =>false, // line added beacuse of SSL Error 60
+							CURLOPT_CUSTOMREQUEST => "POST",
+							CURLOPT_POSTFIELDS => array(
+								'fname' => $name,
+								'lastname' => '',
+								'email' => $email,
+								'mobileno' => $mob,
+								'other_phone'=>$other_phone,
+								'company_id' => $comp_id,
+								'org_name'=>$company,
+								'address'=>$address,
+								'enquiry'=>$remark,
+								'enquiry_source'=>$enquiry_source,
+								'process_id' => $product_id,
+								'user_id' => $created_by
+							),
+							CURLOPT_HTTPHEADER => array(
+								"Cookie: ci_session=3ba7d4lq4alv2pgpq3sc8t2ojrh41s04"
+							),
+						));
+						$response = curl_exec($curl);
+						if(curl_error($curl))
+							echo curl_error($curl);
+						curl_close($curl);	
 					}
 										
 				}
 			
 				if (!empty($enq_arr)) {
-					$this->db->insert_batch('enquiry', $enq_arr); 
+					//$this->db->insert_batch('enquiry', $enq_arr); 
 				}			
 			}
 		}

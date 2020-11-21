@@ -428,6 +428,7 @@ class Telephony extends CI_Controller {
         $phone = $this->input->post('phone');
         
         if($this->session->companey_id == 82){
+            $user_id = $this->session->phone;        
             $curl = curl_init();
             curl_setopt_array($curl, array(
             CURLOPT_URL => "https://emergems.ameyo.net:8443/ameyowebaccess/command/?command=clickToDialWithToken",
@@ -438,7 +439,8 @@ class Telephony extends CI_Controller {
             CURLOPT_FOLLOWLOCATION => true,
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => "POST",
-            CURLOPT_POSTFIELDS => "data=%7B%22userId%22%3A%22".$user_id."%22%2C%22campaignId%22%3A%22".$campaign_id."%22%2C%22phone%22%3A%22".$phone."%22%2C%22shouldAddCustomer%22%3Afalse%7D",
+            //CURLOPT_POSTFIELDS => "data=%7B%22userId%22%3A%22".$user_id."%22%2C%22campaignId%22%3A%22".$campaign_id."%22%2C%22phone%22%3A%22".$phone."%22%2C%22shouldAddCustomer%22%3Afalse%7D",
+            CURLOPT_POSTFIELDS => "data=%7B%22userId%22%3A%22".$user_id."%22%2C%22campaignId%22%3A%22".$campaign_id."%22%2C%22phone%22%3A%22".$phone."%22%2C%22shouldAddCustomer%22%3A%22false%22%7D",
             CURLOPT_HTTPHEADER => array(
                 "content-type: application/x-www-form-urlencoded",
                 "hash-key:  fecace70bf6ea0c450c5b2071cbabc9",
@@ -450,6 +452,7 @@ class Telephony extends CI_Controller {
             ));
             $response = curl_exec($curl);
             curl_close($curl);
+            //print_r($_SESSION);
             echo $response;
         }else{        
             $curl = curl_init();
