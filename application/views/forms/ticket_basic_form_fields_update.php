@@ -150,7 +150,7 @@ echo'
                         <?php
                         if($this->session->companey_id==65){
                             ?>                            
-                             <a href='http://203.112.143.175/ecargont/' target="_blank" class='float-right'> <u> <Go To Ecargo </u> </a>
+                             <a href='http://203.112.143.175/ecargont/' target="_blank" class='float-right'> <u> Go To Ecargo </u> </a>
                             <?php
                         }
                         ?></label>
