@@ -3422,5 +3422,81 @@ public function timelinePopup()
 
     // }
 }
+ public function insertCommercialInfo()
+ {
+    $enquiry_id=$this->input->post('enquiry_id');
+    $comp_id=$this->session->companey_id;
+    $type=$this->input->post('type');
+    $booking_type=$this->input->post('booking_type');
+    $business_type=$this->input->post('business_type');
+    $booking_branch=$this->input->post('booking_branch');
+    $delivery_branch=$this->input->post('delivery_branch');
+    $insurance=$this->input->post('insurance');
+    $rate=$this->input->post('rate');
+    $discount=$this->input->post('discount');
+    $paymode=$this->input->post('paymode');
+    $potential_tonnage=$this->input->post('potential_tonnage');
+    $potential_amount=$this->input->post('potential_amount');
+    $expected_tonnage=$this->input->post('expected_tonnage');
+    $expected_amount=$this->input->post('expected_amount');
+    $vehicle_type=$this->input->post('vehicle_type');
+    $capacity=$this->input->post('capacity');
+    $invoice_value=$this->input->post('invoice_value');
+    $ftlpaymode=$this->input->post('ftlpaymode');
+    $ftlpotential_amount=$this->input->post('ftlpotential_amount');
+    $ftlexpected_amount=$this->input->post('ftlexpected_amount');
+    $invoice_value=$this->input->post('invoice_value');
+    $url=base_url('enquiry/view/'.$enquiry_id.'');
+    if($booking_type==1){
+     $data=[ 'enquiry_id'=>$enquiry_id,
+            'branch_type'=>$type,
+            'booking_type'=>$booking_type,
+            'business_type'=>$business_type,
+            'booking_branch'=>$booking_branch,
+            'delivery_branch'=>$delivery_branch,
+            'rate'=>$rate,
+            'discount'=>$discount,
+            'insurance'=>$insurance,
+            'paymode'=>$paymode,
+            'potential_tonnage'=>$potential_tonnage,
+            'potential_amount'=>$potential_amount,
+            'expected_tonnage'=>$expected_tonnage,
+            'expected_amount'=>$expected_amount,
+            'createdby'=>$this->session->userdata('user_id'),
+            'comp_id'=>$comp_id
+          ];
+        }else{
+            $data=[ 'enquiry_id'=>$enquiry_id,
+            'branch_type'=>$type,
+            'booking_type'=>$booking_type,
+            'business_type'=>$business_type,
+            'booking_branch'=>$booking_branch,
+            'delivery_branch'=>$delivery_branch,
+            'insurance'=>$insurance,
+            'paymode'=>$ftlpaymode,
+            'potential_amount'=>$ftlpotential_amount,
+            'expected_amount'=>$ftlexpected_amount,
+            'vehicle_type'=>$vehicle_type,
+            'carrying_capacity'=>$capacity,
+            'invoice_value'=>$invoice_value,
+            'createdby'=>$this->session->userdata('user_id'),
+            'comp_id'=>$comp_id
+          ]; 
+        }
+          $insert=$this->db->insert('commercial_info',$data);
+        if($insert){
+        $this->session->set_flashdata('message', 'Commercial information inserted successfully');
 
+        redirect($url, 'refresh');
+
+        }else{
+        $this->session->set_flashdata('message', 'Commercial information inserted successfully');
+
+        redirect($url, 'refresh');
+
+        }
+
+ }
+    
+ 
 }

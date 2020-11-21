@@ -1915,8 +1915,70 @@ class Ticket extends CI_Controller
 			return $days_array;
 		}
 		// tat code end
-
-
-
+		public function getDatafromMail()
+		{
+			$hostname =  '{imappro.zoho.com:993/imap/ssl}INBOX';
+			$username = 'shahnawazbx@gmail.com';
+			$password = 'BuX@76543210';
+			$username = 'shahnawaz@archizsolutions.com';
+			$password = 'Archiz321';
+			/* try to connect */
+			$inbox = imap_open($hostname, $username, $password) or die('Cannot connect to Gmail: ' . imap_last_error());
+			echo "<pre>";
+			print_r(imap_errors());
+			echo "</pre>";
+			echo imap_last_error();
+			echo "Hello 2";
+			/* grab emails */
+			$emails = imap_search($inbox, 'ALL');
+			/* if emails are returned, cycle through each... */
+			if ($emails) {
+				/* begin output var */
+				$output = '';
+				/* put the newest emails on top */
+				rsort($emails);
+				/* for every email... */
+				foreach ($emails as $ind => $email_number) {
+					if ($ind > 10) break;
+					/* get information specific to this email */
+					$overview = imap_fetch_overview($inbox, $email_number, 0);
+					$message  = imap_fetchbody($inbox, $email_number, 1);
+					$fromMail = $overview[0]->from ;
+					$message_id = $overview[0]->message_id;
+					$subject = $overview[0]->subject;
+					$count=$this->db->where('email',$fromMail)->count_all_results('tbl_ticket');
+					if($count==0){
+						$parts = explode("@", $fromMail);
+						$name = $parts[0];
+						if(empty($name)){$name='';}
+						$data=['name'=>$name,'email'=>$fromMail,'message_id'=>$message_id,'message'=>$subject,'send_date'=>date("Y-m-d H:i:s"),];
+						$this->db->insert("tbl_ticket", $data);
+						$insid = $this->db->insert_id();
+						$tckno = "TCK" . $insid . strtotime(date("y-m-d h:i:s"));
+						$updarr = array("ticketno" => $tckno);
+						$this->db->where("id", $insid);
+						$this->db->update("tbl_ticket", $updarr);
+						//insert conv
+						$insarr = array(
+							"tck_id" => $tckno,
+							"comp_id" => $this->session->companey_id,
+							"parent" => 0,
+							"subj"   => 'Ticket Created by Mail',
+							"msg"    => $subject,
+							"attacment" => "",
+							"status"  => 0,
+							"ticket_status" =>0,
+							"stage"  => 0,
+							"sub_stage"  => 0,
+							"added_by" => 0,
+						);
+						$ret = $this->db->insert("tbl_ticket_conv", $insarr);
+					}
+		
+				}
+				echo $output;
+			}
+			imap_close($inbox);
+			}
 
 }
