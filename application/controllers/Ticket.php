@@ -153,6 +153,7 @@ class Ticket extends CI_Controller
 					<th>Ticket Number</th>
 					<th>Name</th>
 					<th>Ticket Stage</th>
+					<th>Status</th>
 					<th>Created At</th>
 					<th>Action</th>
 					</tr>';
@@ -162,6 +163,7 @@ class Ticket extends CI_Controller
 						<td>' . $row->ticketno . '</td>
 						<td>' . $row->name . '</td>
 						<td>' . (!empty($row->lead_stage_name) ? $row->lead_stage_name : 'NA') . ' <small>' . (!empty($row->description) ? '<br>' . $row->description : '') . '</small></td>
+						<td>' . $row->ticket_status_name . '</td>
 						<td>' . date('d-m-Y <br> h:i A', strtotime($row->coml_date)) . '</td>
 						<th><a href="' . base_url('ticket/view/' . $row->ticketno) . '"><button class="btn btn-small btn-primary">View</button></a></th>
 						</tr>';
