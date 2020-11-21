@@ -526,7 +526,7 @@ class Ticket extends CI_Controller
 			$process_id = $data['ticket']->process_id;
 		else
 		{
-			$enq=$this->Enquiry_model->getEnquiry(array('enquiry_id'=>$data['ticket']->client));
+			$enq=$this->enquiry_model->getEnquiry(array('enquiry_id'=>$data['ticket']->client));
 			if($enq->num_rows())
 			{
 				$process_id = $enq->row()->product_id; // Process id
