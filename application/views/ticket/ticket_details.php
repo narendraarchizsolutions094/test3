@@ -101,7 +101,7 @@
 		{
 			echo'<table class="table table-bordered">
 			<tr>
-			'.($this->session->companey_id==65?'<th>Tracking No</th>':'').'
+			'.($this->session->companey_id==65?'<th>'.display('tracking_no').'</th>':'').'
 			<th>Ticket Number</th>
 			<th>Name</th>
 			<th>Type</th>

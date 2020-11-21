@@ -149,19 +149,22 @@ class Ticket extends CI_Controller
 				{
 					$html .= '<table class="table table-bordered">
 					<tr>
-					' . ($this->session->companey_id == 65 ? '<th>Tracking No</th>' : '') . '
+					' . ($this->session->companey_id == 65 ? '<th>'.display('tracking_no').'</th>' : '') . '
 					<th>Ticket Number</th>
 					<th>Name</th>
 					<th>Ticket Stage</th>
+					<th>Status</th>
 					<th>Created At</th>
 					<th>Action</th>
 					</tr>';
 					foreach ($res as $row) {
+						$status	=	$row->ticket_status_name??'Open';
 						$html .= '<tr>
 						' . ($this->session->companey_id == 65 ? '<td>' . $row->tracking_no . '</td>' : '') . '
 						<td>' . $row->ticketno . '</td>
 						<td>' . $row->name . '</td>
 						<td>' . (!empty($row->lead_stage_name) ? $row->lead_stage_name : 'NA') . ' <small>' . (!empty($row->description) ? '<br>' . $row->description : '') . '</small></td>
+						<td>' . $status . '</td>
 						<td>' . date('d-m-Y <br> h:i A', strtotime($row->coml_date)) . '</td>
 						<th><a href="' . base_url('ticket/view/' . $row->ticketno) . '"><button class="btn btn-small btn-primary">View</button></a></th>
 						</tr>';
@@ -375,7 +378,7 @@ class Ticket extends CI_Controller
 
 				if (isset($a->Table)) {
 					echo '<table class="table table-bordered">
-		        <tr><th colspan="4" style="text-align:center;">Tracking Number: ' . (empty($table->GCNO) ? '' : $table->GCNO) . '</td></tr>
+		        <tr><th colspan="4" style="text-align:center;">'.display('tracking_no').': ' . (empty($table->GCNO) ? '' : $table->GCNO) . '</td></tr>
 		        <tr><th>Date:</th><td>' . (empty($table->GC_Date) ? '' : $table->GC_Date) . '</td><th>Status:</th><td>' . (empty($table->status) ? '' : $table->status) . '</td></tr>
 		         <tr><th>Delivery Location:</th><td  colspan="3">' . (empty($table->DeliveryLocation) ? '' : $table->DeliveryLocation) . '</td></tr>
 		         <tr><th>Delivery Branch:</th><td>' . (empty($table->DeliveryBranch) ? '' : $table->DeliveryBranch) . '</td><th>Booking Branch:</th><td>' . (empty($table->BookingBranch) ? '' : $table->BookingBranch) . '</td></tr>';
@@ -1173,7 +1176,7 @@ class Ticket extends CI_Controller
 		$this->db->where('tracking_no',$tn);
 		$this->db->where('ticket_status!=',3);
 		if($this->db->get('tbl_ticket')->num_rows()){
-			$this->form_validation->set_message('tracking_no_check', 'Ticket with this tracking no is already open.');
+			$this->form_validation->set_message('tracking_no_check', 'Ticket with this '.display('tracking_no').' is already open.');
 			return false;
 		}else{
 			return true;
@@ -1188,7 +1191,7 @@ class Ticket extends CI_Controller
 		$this->form_validation->set_rules('email','Email','required');
 
 		if($this->session->companey_id == 65 && ($this->input->post('complaint_type') == 1)){
-			$this->form_validation->set_rules('tracking_no', 'Tracking No', 'required|callback_tracking_no_check', array('tracking_no_check' => 'Ticket with this tracking no is already open.'));
+			$this->form_validation->set_rules('tracking_no', display('tracking_no'), 'required|callback_tracking_no_check', array('tracking_no_check' => 'Ticket with this '.display('tracking_no').' is already open.'));
 		}
 		if ($this->form_validation->run()==TRUE) {
 			$res = $this->Ticket_Model->save($this->session->companey_id, $this->session->user_id);
@@ -1287,7 +1290,7 @@ class Ticket extends CI_Controller
 			if ($res) {
 				echo '<table class="table table-bordered">
 				<tr>
-				' . ($this->session->companey_id == 65 ? '<th>Tracking No</th>' : '') . '
+				' . ($this->session->companey_id == 65 ? '<th>'.display('tracking_no').'</th>' : '') . '
 				<th>Ticket Number</th>
 				<th>Name</th>
 				<th>Ticket Stage</th>
@@ -1929,8 +1932,70 @@ class Ticket extends CI_Controller
 			return $days_array;
 		}
 		// tat code end
-
-
-
+		public function getDatafromMail()
+		{
+			$hostname =  '{imappro.zoho.com:993/imap/ssl}INBOX';
+			$username = 'shahnawazbx@gmail.com';
+			$password = 'BuX@76543210';
+			$username = 'shahnawaz@archizsolutions.com';
+			$password = 'Archiz321';
+			/* try to connect */
+			$inbox = imap_open($hostname, $username, $password) or die('Cannot connect to Gmail: ' . imap_last_error());
+			echo "<pre>";
+			print_r(imap_errors());
+			echo "</pre>";
+			echo imap_last_error();
+			echo "Hello 2";
+			/* grab emails */
+			$emails = imap_search($inbox, 'ALL');
+			/* if emails are returned, cycle through each... */
+			if ($emails) {
+				/* begin output var */
+				$output = '';
+				/* put the newest emails on top */
+				rsort($emails);
+				/* for every email... */
+				foreach ($emails as $ind => $email_number) {
+					if ($ind > 10) break;
+					/* get information specific to this email */
+					$overview = imap_fetch_overview($inbox, $email_number, 0);
+					$message  = imap_fetchbody($inbox, $email_number, 1);
+					$fromMail = $overview[0]->from ;
+					$message_id = $overview[0]->message_id;
+					$subject = $overview[0]->subject;
+					$count=$this->db->where('email',$fromMail)->count_all_results('tbl_ticket');
+					if($count==0){
+						$parts = explode("@", $fromMail);
+						$name = $parts[0];
+						if(empty($name)){$name='';}
+						$data=['name'=>$name,'email'=>$fromMail,'message_id'=>$message_id,'message'=>$subject,'send_date'=>date("Y-m-d H:i:s"),];
+						$this->db->insert("tbl_ticket", $data);
+						$insid = $this->db->insert_id();
+						$tckno = "TCK" . $insid . strtotime(date("y-m-d h:i:s"));
+						$updarr = array("ticketno" => $tckno);
+						$this->db->where("id", $insid);
+						$this->db->update("tbl_ticket", $updarr);
+						//insert conv
+						$insarr = array(
+							"tck_id" => $tckno,
+							"comp_id" => $this->session->companey_id,
+							"parent" => 0,
+							"subj"   => 'Ticket Created by Mail',
+							"msg"    => $subject,
+							"attacment" => "",
+							"status"  => 0,
+							"ticket_status" =>0,
+							"stage"  => 0,
+							"sub_stage"  => 0,
+							"added_by" => 0,
+						);
+						$ret = $this->db->insert("tbl_ticket_conv", $insarr);
+					}
+		
+				}
+				echo $output;
+			}
+			imap_close($inbox);
+			}
 
 }

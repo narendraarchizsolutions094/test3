@@ -2095,7 +2095,7 @@ starCountRef1.on('value',function(res){
                     if(data==1){ 
                    Swal.fire({            
                    icon: 'info',
-                   html:'<strong>Inbound call with this number.<a href="https://thecrm360.com/new_crm/telephony/forword_to/'+phone_n+'">'+phone_n+'</a></strong><br><a class="btn btn-info" href="https://thecrm360.com/new_crm/telephony/forword_to/'+phone_n+'">Go</a>',
+                   html:'<strong>Inbound call with this number.<a href="<?=base_url()?>telephony/forword_to/'+phone_n+'">'+phone_n+'</a></strong><br><a class="btn btn-info" href="<?=base_url()?>telephony/forword_to/'+phone_n+'">Go</a>',
                    showCancelButton: false,
                    showConfirmButton: false,
                    confirmButtonColor: '#3085d6',

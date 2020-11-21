@@ -647,12 +647,12 @@ class Ticket_Model extends CI_Model
 		$ticket_update = ['nextAssignTime' => $nextAssignment];
 		$this->db->where(array('id' => $tid))->update('tbl_ticket', $ticket_update);
 	}
-	public function moveTicketToEnq($id, $enqStatus, $rule_title, $rule_status, $user_id, $stage, $assignto, $process)
+	public function moveTicketToEnq($id, $enqStatus, $rule_title, $rule_status, $user_id, $stage, $assignto, $process,$source)
 	{
 		$fetchticket = $this->db->where('id', $id)->get('tbl_ticket');
 		if ($fetchticket->num_rows() == 1) {
 			foreach ($fetchticket->result() as $key => $value) {
-				// if ($value->client == 0) {	
+				if ($value->client == 0) {	
 					$encode = $this->get_enquery_code();
 					$postData = [
 						'Enquery_id' => $encode,
@@ -670,13 +670,11 @@ class Ticket_Model extends CI_Model
 						'assign_by' => $user_id,
 						'rule_executed' => $rule_title,
 						'product_id' => $process,
-						// 'enquiry_source'=>$source
+						'enquiry_source'=>$source
 					];
-					print_r($postData);
-
 					//
 					$this->db->insert('enquiry', $postData);
-					echo $insert_id = $this->db->insert_id();
+					 $insert_id = $this->db->insert_id();
 					// add model here
 					$this->Leads_Model->add_comment_for_events_stage('Enquiry Created', $encode, $stage, 'Enquiry Created by ' . $rule_title . ' Rule', '', 1);
 					// add timeline
@@ -688,14 +686,11 @@ class Ticket_Model extends CI_Model
 						'coment_type' => 0,
 						'remark' => 'Enquiry Assigned by ' . $rule_title . ' Rule',
 						'assigned_user' => $assignto
-					];
-					print_r($assign_comment);
+					                   ];
 					$this->db->insert('tbl_comment', $assign_comment);
 					// update @ ticket model
 					$this->db->where('id', $id)->set('client', $insert_id)->update('tbl_ticket');
-					echo'success'; 
-					die();
-				// }
+				}
 			}
 		}
 	}

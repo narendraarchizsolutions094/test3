@@ -774,50 +774,54 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
             <?php if($this->session->companey_id=='83'){ ?>
             <li><a href="#login-tab" data-toggle="tab" style="padding: 10px 10px;">Login Trail</a></li>
             <?php } ?>
+            <?php if($this->session->companey_id=='65'){ ?>
+            <li><a href="#COMMERCIAL_INFORMATION" data-toggle="tab" style="padding: 10px 10px;">Commercial Information</a></li>
+            <?php } ?>
+            
             <span class="scrollTab" style="position: absolute; right: 0; font-size: 22px; line-height: 40px; z-index: 999"><i class="fa fa-caret-right"  onclick="tabScroll('right')"></i></span>
             </ul>
             <div class="tab-content clearfix">
                 <div class="tab-pane active" id="basic">
                   <?php echo tab_content(1,$this->session->companey_id,$enquiry_id); ?>
                </div>
-<script type="text/javascript">
-  manageScroll();
-function manageScroll()
-{
-  if($(".nav-tabs")[0].scrollWidth > $(".nav-tabs")[0].clientWidth)
-            {
-              $(".scrollTab").show();
-            }
-            else
-            {
-               $(".scrollTab").hide();
-            }
-}
+            <script type="text/javascript">
+            manageScroll();
+               function manageScroll()
+               {
+               if($(".nav-tabs")[0].scrollWidth > $(".nav-tabs")[0].clientWidth)
+                           {
+               $(".scrollTab").show();
+               }
+               else
+               {
+                  $(".scrollTab").hide();
+               }
+                  }
 
-$(window).resize(function(){
-  manageScroll();
-});
+               $(window).resize(function(){
+               manageScroll();
+               });
 
-  function tabScroll(side)
-  {
-    if(side=='left')
-    {
-      var leftPos = $('.nav-tabs').scrollLeft();
-     
-        $(".nav-tabs").animate({
-            scrollLeft: leftPos - 200
-        }, 100);
-    }
-    else if (side=='right')
-    {   
-        var leftPos = $('.nav-tabs').scrollLeft();
-      
-        $(".nav-tabs").animate({
-            scrollLeft: leftPos + 200
-        }, 100);
-    }
-  }
-</script>
+               function tabScroll(side)
+               {
+                  if(side=='left')
+                  {
+                     var leftPos = $('.nav-tabs').scrollLeft();
+                  
+                     $(".nav-tabs").animate({
+                           scrollLeft: leftPos - 200
+                     }, 100);
+                  }
+                  else if (side=='right')
+                  {   
+                     var leftPos = $('.nav-tabs').scrollLeft();
+                     
+                     $(".nav-tabs").animate({
+                           scrollLeft: leftPos + 200
+                     }, 100);
+                  }
+               }
+               </script>
 
                
                <div class="tab-pane" id="order">
@@ -1381,7 +1385,7 @@ $(window).resize(function(){
                     </div>                                                
                </div>
 
-              <div class="tab-pane" id="personaltab">
+               <div class="tab-pane" id="personaltab">
                   <hr>
                   <?php echo form_open_multipart('client/updateclientpersonel/'.$details->enquiry_id,'class="form-inner"') ?>  
                   <input type="hidden" name="form" value="client">
@@ -1664,6 +1668,239 @@ $(window).resize(function(){
                      </div>
                   </form>
                </div>
+               <?php if($this->session->companey_id=='65'){ ?>
+
+              <div class="tab-pane" id="COMMERCIAL_INFORMATION">
+                 <div class="row">
+                    <div class="col-md-4">
+                       <!-- <a data-toggle="modal" data-target="#CommercialInfo_modal" class="btn btn-primary" >View </a> -->
+                    </div>
+                 </div>
+                  <hr>
+                  <form class="form-inner" action="<?=  base_url('enquiry/insertCommercialInfo/') ?>" method="POST">
+                  <input type="hidden" name="enquiry_id" value="<?= $details->enquiry_id ?>">
+                    <!--------------------------------------------------start----------------------------->
+                    <div class="col-md-12"> 
+                    <div class="form-group col-sm-6"> 
+                        <label>Info Type</label>
+                        <select class="form-control" name="type" id="type">
+                            <option value="">-Select Type-</option>
+                            <option value="1">Branch</option>
+                            <option value="2">Zone</option>
+                            <option value="3">Areawise</option>
+                        </select>
+                     </div>
+                    </div>
+                     <center><h2>DISPTACH LOCATION</h2></center>
+                     <div class="form-group col-sm-6"> 
+                        <label>Booking Type</label>
+                        <select class="form-control" name="booking_type" id="booking_type">
+                            <option value="">-Select Booking Type-</option>
+                            <option value="0">Sundry</option>
+                            <option value="1">FTL</option>
+                        </select>
+                     </div>
+                     <div class="form-group col-sm-6"> 
+                        <label>Business Type</label>
+                        <select class="form-control" name="business_type" id="business_type">
+                            <option value="">-Select Business Type-</option>
+                            <option value="0">Inward</option>
+                            <option value="1">outward</option>
+                        </select>
+                     </div>
+                        <div class="form-group col-sm-6"> 
+                           <label>Booking Branch</label>
+                           <select class="form-control" name="booking_branch" id="booking_branch">
+                              <option value="">-Select Branch </option>
+                              <option value="1">Noida</option>
+                              <option value="2">Delhi</option>
+                           </select>
+                        </div>
+                        <div class="form-group col-sm-6"> 
+                           <label>Delivery Branch</label>
+                           <select class="form-control" name="delivery_branch" id="delivery_branch">
+                              <option value="">-Select Branch </option>
+                              <option value="3">Kanpur</option>
+                              <option value="4">Hapur</option>
+                           </select>
+                        </div>
+                              <div class="form-group col-sm-6"> 
+                                 <label>Insurance</label>
+                                 <select class="form-control" name="insurance" id="insurance">
+                                    <option value="">-Select Insurance </option>
+                                    <option value="0">Carrier</option>
+                                    <option value="1">Owner risk</option>
+                                 </select>
+                              </div>
+                              <div class="sundry" id="sundry" style="display:none">
+                              <div class="form-group col-sm-6"> 
+                                 <label>Rate</label>
+                                 <input class="form-control" name="rate" id="rate" type="text"  style="padding:0px !important;">  
+                              </div>
+                              <div class="form-group col-sm-6"> 
+                                 <label>Discount</label>
+                                 <input class="form-control" name="discount" id="discount" type="text"  style="padding:0px !important;">  
+                              </div>
+                              <div class="form-group col-sm-6"> 
+                              <label>Pay Mode</label>
+                              <select class="form-control" name="paymode" id="paymode">
+                                 <option value="">Select Mode </option>
+                                 <option value="1">paid</option>
+                                 <option value="2">To-Pay</option>
+                                 <option value="3">Tbb</option>
+                              </select>
+                           </div>
+                           <div class="form-group col-sm-6"> 
+                                 <label>Potential Tonnage</label>
+                                 <input class="form-control" name="potential_tonnage" id="potential_tonnage" type="text"  style="padding:0px !important;">  
+                              </div>
+                              <div class="form-group col-sm-6"> 
+                                 <label>Potential Amount</label>
+                                 <input class="form-control" name="potential_amount" id="potential_amount" type="text"  style="padding:0px !important;">  
+                              </div>
+                              <div class="form-group col-sm-6"> 
+                                 <label>Expected Tonnage</label>
+                                 <input class="form-control" name="expected_tonnage" id="expected_tonnage" type="text"  style="padding:0px !important;">  
+                              </div>
+                              <div class="form-group col-sm-6"> 
+                                 <label>Expected Amount</label>
+                                 <input class="form-control" name="expected_amount" id="expected_amount" type="text"  style="padding:0px !important;">  
+                              </div>
+
+
+                              </div>
+                              
+                              <div class="ftl" id="ftl" style="display:none">
+                                 <div class="form-group col-sm-6"> 
+                                    <label>Vehicle type</label>
+                                    <input class="form-control" name="vehicle_type" id="Vehicle_type" type="text"  style="padding:0px !important;">  
+                                 </div>
+                                 <div class="form-group col-sm-6"> 
+                                    <label>Vehicle Carrying Capacity</label>
+                                    <input class="form-control" name="capacity" id="capacity" type="text"  style="padding:0px !important;">  
+                                 </div>
+                              
+                                 <div class="form-group col-sm-6"> 
+                                    <label>Invoice Value</label>
+                                    <input class="form-control" name="invoice_value" id="invoice_value" type="text"  style="padding:0px !important;">  
+                                 </div>
+                                 <div class="form-group col-sm-6"> 
+                                    <label>Pay Mode</label>
+                                    <select class="form-control" name="ftlpaymode" id="ftlpaymode">
+                                       <option value="">Select Mode </option>
+                                       <option value="1">paid</option>
+                                       <option value="2">To-Pay</option>
+                                       <option value="3">Tbb</option>
+                                    </select>
+                                </div>
+                                 <div class="form-group col-sm-6"> 
+                                    <label>Potential Amount</label>
+                                    <input class="form-control" name="ftlpotential_amount" id="potential_amount" type="text"  style="padding:0px !important;">  
+                                 </div>
+                                 <div class="form-group col-sm-6"> 
+                                    <label>Expected Amount</label>
+                                    <input class="form-control" name="ftlexpected_amount" id="expected_amount" type="text"  style="padding:0px !important;">  
+                                 </div>
+
+                              </div>
+
+                     <div class="col-md-12" >
+                        <div class="row">
+                           <center>
+                              <button class="btn btn-primary" type="submit" name="save_com_info">Save</button>   
+                           </center>         
+                        </div>
+                     </div>
+                  </form>
+               </div>
+
+<div id="CommercialInfo_modal" class="modal fade bd-example-modal-lg" role="dialog">
+   <div class="modal-dialog ">
+      <div class="modal-content">
+         <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Informations</h4>
+         </div>
+         <div class="modal-body"  style="overflow-x:auto;">
+       <?php 
+    $CommercialInfo=$this->db->select('bb.*,bs.branch_name as bn,commercial_info.*')->where('enquiry_id',$enquiry_id)
+                           ->join('branch bb','bb.branch_id=commercial_info.booking_branch')
+                           ->join('branch bs','bs.branch_id=commercial_info.delivery_branch')
+                           ->get('commercial_info')->result();
+                                 ?>
+        
+        <table class="table table-responsive-sm table-responsive table-hover" >
+                        <thead class="thead-light">
+                           <tr>                              
+                              <th>S.N.</th>
+                              <th>Branch Type</th>
+                              <th>Business Type</th>
+                              <th>Booking Type</th>
+                              <th>Booking Branch</th>
+                              <th>Delivery Branch</th>
+                              <th>Rate</th>
+                              <th>Discount</th>
+                              <th>Insurance</th>
+                              <th>Paymode</th>
+                              <th>Potential Tonnage</th>
+                              <th>Potential Amount</th>
+                              <th>Expected  Tonnage</th>
+                              <th>Expected  Amount</th>
+                              <th>Vehicle Type</th>
+                           </tr>
+                        </thead>
+                        <tbody>
+                           <?php 
+                              $sl = 1;
+                              if(!empty($CommercialInfo)){ 
+                                foreach ($CommercialInfo as $value) {
+                                   if($value->branch_type==1){
+                                    $branch_type='Branch';
+                                   }elseif($value->branch_type==2){
+                                    $branch_type='Zone';
+                                   }elseif($value->branch_type==3){
+                                    $branch_type='Area wise';
+                                   }
+                                   if($value->business_type==0){
+                                    $business_type='Inward';
+                                   }elseif($value->business_type==1){
+                                    $business_type='Outword';
+                                   }
+                                   if($value->insurance==0){
+                                    $insurance='Carrier';
+                                   }elseif($value->insurance==1){
+                                    $insurance='Owner Risk';
+                                   }
+                                   if($value->booking_type==0){
+                                    $booking_type='Sundy';
+                                   }elseif($value->booking_type==1){
+                                    $booking_type='FTL';
+                                   }
+                                   ?>
+                        <tr>
+                              <td><?= $sl++ ?></td>
+                              <td><?= $branch_type ?></td>
+                              <td><?=$business_type ?> </td>
+                              <td><?=$booking_type ?> </td>
+                              <td><?=$value->branch_name ?></td>
+                              <td><?=$value->bn ?></td>
+                              <td><?=$value->rate ?></td>
+                              <td><?=$value->discount ?></td>
+                              <td><?=$insurance ?></td>
+                              <td><?=$insurance ?></td>
+                              <td><?=$insurance ?></td>
+                              <td><?=$insurance ?></td>
+                           </tr> 
+                           <?php  } }  ?>
+                            </tbody>
+                                             </table>
+                                             
+         </div>
+      </div>
+   </div>
+</div>
+                                 <?php } ?>
+
                <div class="tab-pane" id="kyctab">
                   <hr>
                   <div class="row">
@@ -3264,6 +3501,7 @@ $(window).resize(function(){
       </div>
    </div>
 </div>
+
 <style type="text/css">
   .toogle-timeline{
     position: absolute;
@@ -4645,3 +4883,17 @@ $("a[href$='#related_enquiry']").on('click',function(){
 <?php
 }
 ?>
+<script>
+   $(document).ready(function(){
+    $('#booking_type').on('change', function() {
+      if ( this.value == '1')
+      {
+        $("#ftl").show();
+        $("#sundry").hide();
+      }  else {
+        $("#sundry").show();
+        $("#ftl").hide();
+      }
+    });
+});
+</script>
