@@ -73,7 +73,7 @@
                 zoomType: 'x'
             },
             title: {
-                text: 'Datewise ticket Graph'
+                text: 'Datewise Ticket Graph'
             },
             subtitle: {
                 text: document.ontouchstart === undefined ?
@@ -89,7 +89,7 @@
             },
             yAxis: {
                 title: {
-                    text: 'Ticket Generation rate'
+                    text: 'Ticket Generation Rate'
                 }
             },
             legend: {
@@ -124,7 +124,7 @@
 
             series: [{
                 type: 'area',
-                name: 'Number of Tickets',
+                name: 'Number Of Tickets',
                 data: data
             }]
         });
@@ -138,12 +138,12 @@
 
 <div class="row">
     <div class="col-md-6">
-    <center><h3>PriorityWise</h3></center>
+    <center><h3>Priority Wise</h3></center>
     <div id="chartdiv"></div>
 
     </div>
     <div class="col-md-6">
-<center><h3>Complaint or Query </h3></center>
+<center><h3>Complaint Or Query </h3></center>
 <div id="chartdiv2"></div>
 
 </div>
