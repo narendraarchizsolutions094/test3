@@ -73,7 +73,7 @@
                 zoomType: 'x'
             },
             title: {
-                text: 'Created Datewise ticket Graph'
+                text: 'Datewise ticket Graph'
             },
             subtitle: {
                 text: document.ontouchstart === undefined ?
