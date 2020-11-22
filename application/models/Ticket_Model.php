@@ -141,10 +141,10 @@ class Ticket_Model extends CI_Model
 			"referred_by"   => ($this->input->post("referred_by", true)) ? $this->input->post("referred_by", true) : "",
 
 		);
-		if (empty($_FILES["attachment"]["name"]) && $_FILES["attachment"]["size"][0] > 0) {
+		if (!empty($_FILES["attachment"]["name"]) && $_FILES["attachment"]["size"][0] > 0) {
 			$retdata =  $this->do_upload();
-			print_r($retdata);			
-			exit();
+			// print_r($retdata);			
+			// exit();
 			if (!empty($retdata)) {
 				if (isset($_POST["ticketno"])) {
 					$old_ticket =  $this->db->where(array('id' => $_POST['ticketno']))->get('tbl_ticket')->row();
