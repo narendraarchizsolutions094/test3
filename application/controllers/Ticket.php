@@ -416,7 +416,7 @@ class Ticket extends CI_Controller
 	        	</table>';
 				}
 
-				if (!empty($a->Table3)) {
+				if (!empty($table3)) {
 					echo '<table class="table table-bordered">
 	        	<tr><th colspan="5" style="text-align:center;">Status</th></tr>
 	        	<tr><th>From</th><th>To</th><th>Dep. Date</th><th>Arr. Date</th><th>Status</th></tr>
