@@ -416,7 +416,7 @@ class Ticket extends CI_Controller
 	        	</table>';
 				}
 
-				if (isset($a->Table3) && sizeof($table3) > 0) {
+				if (!empty($a->Table3) && sizeof($table3) > 0) {
 					echo '<table class="table table-bordered">
 	        	<tr><th colspan="5" style="text-align:center;">Status</th></tr>
 	        	<tr><th>From</th><th>To</th><th>Dep. Date</th><th>Arr. Date</th><th>Status</th></tr>
