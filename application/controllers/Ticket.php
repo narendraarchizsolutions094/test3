@@ -425,7 +425,7 @@ class Ticket extends CI_Controller
 					foreach ($table3 as $res) {
 						echo '<tr>
 	        				<td>' . (!empty($res->From_Station) ? $res->From_Station : '') . '</td>
-	        				<td>' . (!empty($res->To_Station ? $res->To_Station : '')) . '</td>
+	        				<td>' . (!empty($res->To_Station) ? $res->To_Station : '') . '</td>
 	        				<td>' . (!empty($res->Depature_Date) ? $res->Depature_Date : '') . '</td>
 	        				<td>' . (!empty($res->Arrival_Date) ? $res->Arrival_Date : '') . '</td>
 	        				<td>' . (!empty($res->Status_Name) ? $res->Status_Name : '') . '</td>
