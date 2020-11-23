@@ -296,7 +296,7 @@ echo'<div class="trackingDetails"></div>';
                       ?>
                       <?php
                    }                   
-                  if($companylist['field_id']==PRIORITY){
+                  if($companylist['field_id']==PRIORITY && $this->session->companey_id !=65){
                     ?>                                     
                     
                     <?php if($this->session->user_right!=214){ ?>
