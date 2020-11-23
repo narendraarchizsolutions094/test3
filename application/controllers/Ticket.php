@@ -421,7 +421,7 @@ class Ticket extends CI_Controller
 	        	<tr><th colspan="5" style="text-align:center;">Status</th></tr>
 	        	<tr><th>From</th><th>To</th><th>Dep. Date</th><th>Arr. Date</th><th>Status</th></tr>
 	        	';
-
+					print_r($table3);
 					foreach ($table3 as $res) {
 						echo '<tr>
 	        				<td>' . (!empty($res->From_Station) ? $res->From_Station : '') . '</td>
