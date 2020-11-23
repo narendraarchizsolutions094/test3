@@ -272,6 +272,7 @@ class Ticket_Model extends CI_Model
 			"added_by" => $user_id,
 		);
 		$ret = $this->db->insert("tbl_ticket_conv", $insarr);
+		$last_id = $this->db->insert_id();
 		if ($ret) {
 			$this->session->set_flashdata('message', 'Successfully saved');
 			if ($stage) {
@@ -288,6 +289,7 @@ class Ticket_Model extends CI_Model
 				$this->db->where('tbl_ticket.id', $tckno);
 				$this->db->update('tbl_ticket');
 			}
+			return $last_id;
 		} else {
 			$this->session->set_flashdata('message', 'Failed to save');
 		}
@@ -338,6 +340,7 @@ class Ticket_Model extends CI_Model
 	function getconv($conv)
 	{
 		$compid = $this->session->companey_id;
+
 		return $this->db->select("cnv.*,lead_stage.lead_stage_name,lead_description.description as sub_stage,concat(admin.s_display_name,' ',admin.last_name) as updated_by,status.status_name,concat(user.s_display_name,' ',user.last_name) as assignedTo")
 			->where("cnv.tck_id", $conv)
 			->where("cnv.comp_id", $compid)
@@ -350,6 +353,7 @@ class Ticket_Model extends CI_Model
 			->order_by("cnv.id DESC")
 			->get()
 			->result();
+			//echo $this->db->last_query(); exit();
 	}
 	public function getall()
 	{
@@ -770,16 +774,22 @@ class Ticket_Model extends CI_Model
           switch($input['field_id'])
           { 
             case 15:
-            $basic[$key]['input_values'] = array(1=>'Is Complaint',2=>'Is Query');
+            $basic[$key]['input_values'] = array(
+                                              array('key'=>'1',
+                                                    'value'=>'Is Complaint'),
+                                              array('key'=>'2',
+                                                    'value'=>'Is Query'),
+                                            );
             $basic[$key]['current_value'] = $ticket->complaint_type;
             break;
 
             case 16:
             $referred_by = $this->Ticket_Model->refferedBy();
-            $values = array();
+           	$values = array();
             foreach ($referred_by as $res)
             {
-              $values[$res->id] = $res->name;
+              $values[] = array('key'=>$res->id,
+                                'value'=>$res->name);
             }
             $basic[$key]['input_values'] = $values;
             $basic[$key]['current_value'] = $ticket->referred_by;
@@ -790,7 +800,10 @@ class Ticket_Model extends CI_Model
             $values = array();
             foreach ($clients as $res)
             {
-              $values[$res->enquiry_id] = $res->name." ".$res->lastname;
+             
+              $values[] =  array('key'=>$res->enquiry_id,
+                                'value'=> $res->name." ".$res->lastname
+                              );
             }
             $basic[$key]['input_values'] = $values;
             $basic[$key]['current_value'] = $ticket->client;
@@ -818,7 +831,9 @@ class Ticket_Model extends CI_Model
             $values = array();
             foreach ($products as $res)
             {
-              $values[$res->id] = $res->country_name;
+              $values[] =  array('key'=>$res->id,
+                                'value'=> $res->country_name
+                              );
             }
             $basic[$key]['input_values'] = $values;
             $basic[$key]['current_value'] = $ticket->product;
@@ -829,7 +844,9 @@ class Ticket_Model extends CI_Model
             $values = array();
             foreach ($problems as $res)
             {
-              $values[$res->id] = $res->subject_title;
+              $values[] = array('key'=>$res->id,
+                                'value'=> $res->subject_title
+                              );
             }
             $basic[$key]['input_values'] = $values;
             $basic[$key]['current_value'] = $ticket->category;
@@ -837,17 +854,27 @@ class Ticket_Model extends CI_Model
 
             case 23:
             $natures = $this->Ticket_Model->get_issue_list();
-            $values = array();
+             $values = array();
             foreach ($natures as $res)
             {
-              $values[$res->id] = $res->title;
+              $values[] = array('key'=>$res->id,
+                                'value'=> $res->title
+                              );
             }
             $basic[$key]['input_values'] = $values;
             $basic[$key]['current_value'] = $ticket->issue;
             break;
 
             case 24:
-            $values = array(1=>'Low',2=>'Medium',3=>'High');
+             $values = array(
+                              array('key'=>'1',
+                                    'value'=>'Low'),
+
+                              array('key'=>'2',
+                                    'value'=>'Medium'),
+                              array('key'=>'3',
+                                    'value'=>'High')
+                            );
             $basic[$key]['input_values'] = $values;
             $basic[$key]['current_value'] = $ticket->priority;
             break;
@@ -857,15 +884,27 @@ class Ticket_Model extends CI_Model
             $values = array();
             foreach ($source as $res)
             {
-              $values[$res->lsid] = $res->lead_name;
+              $values[] = array('key'=>$res->lsid,
+                                  'value'=>$res->lead_name
+                                );
             }
             $basic[$key]['input_values'] = $values;
             $basic[$key]['current_value'] = $ticket->sourse;
             break;
 
             case 26:
-            $basic[$key]['input_values'] = '';
-            $basic[$key]['current_value'] = $ticket->attachment;
+            $reshape = array();
+            if($ticket->attachment!='')
+            {
+            	foreach (json_decode($ticket->attachment) as $key2 => $file)
+            	{
+            		$reshape[] = array('key'=>null,
+            							'value'=>$file,
+            						);
+            	}
+            }
+            $basic[$key]['input_values'] = $reshape;
+            $basic[$key]['current_value'] = null;
             break;
 
             case 27:
@@ -884,6 +923,23 @@ class Ticket_Model extends CI_Model
 
       $dynamic = $this->Enquiry_model->get_dyn_fld($ticketno,$primary_tab,2);
 
+      foreach ($dynamic as $key => $value)
+      {
+          if(in_array($value['input_type'],array('2')))
+          {
+             
+              $temp  = explode(',', $value['input_values']);
+              if(!empty($temp))
+              {   $reshape = array();
+                  foreach ($temp as $k => $v)
+                  {
+                    $reshape[] = array('key'=>null,
+                                      'value'=>$v);
+                  }
+                  $dynamic[$key]['input_values'] = $reshape;
+              }
+          }
+      }
 
         $tabs[]  = array('tab_id'=>$primary->id,
         					'title'=>$primary->title,
@@ -893,6 +949,19 @@ class Ticket_Model extends CI_Model
         					'field_list'=>array_merge($basic,$dynamic),
     						);
 
+        $match = array(
+			'ticket_no' => $ticket->ticketno,
+			'tck.client' => $ticket->client,
+			'tck.tracking_no' => $ticket->tracking_no,
+			'tck.phone' => $ticket->phone, 
+		);
+
+		$related_tickets = $this->Ticket_Model->all_related_tickets($match);
+
+		$tabs[]  = array('tab_id'=>null,
+        					'title'=>'Related Tickets',
+        					'table'=>$related_tickets??array(),
+    						);
 
 
         foreach ($tab_list as $res)
@@ -901,13 +970,66 @@ class Ticket_Model extends CI_Model
         	{
         		$dynamic = $this->Enquiry_model->get_dyn_fld($ticketno,$res['id'],2);
 
-        		$tabs[] = array('tab_id'=>$res['id'],
+        		foreach ($dynamic as $key => $value)
+			      {
+			          if(in_array($value['input_type'],array('2')))
+			          {
+			             
+			              $temp  = explode(',', $value['input_values']);
+			              if(!empty($temp))
+			              {   $reshape = array();
+			                  foreach ($temp as $k => $v)
+			                  {
+			                    $reshape[] = array('key'=>null,
+			                                      'value'=>$v);
+			                  }
+			                  $dynamic[$key]['input_values'] = $reshape;
+			              }
+			          }
+			      }
+
+
+        		$part = array('tab_id'=>$res['id'],
         					'title'=>$res['title'],
         					'is_query_type'=>$res['is_query_type'],
         					'is_delete'=>$res['is_delete'],
         					'is_edit'=>$res['is_edit'],
         					'field_list'=>$dynamic,
     						);
+
+        		if($res['is_query_type']==1)
+        		{
+        			$tid = $res['id'];
+					$comp_id = $companey_id;
+					$ticketno = $ticketno;
+
+					$sql  = "SELECT GROUP_CONCAT(concat(`ticket_dynamic_data`.`input`,'#',`ticket_dynamic_data`.`fvalue`,'#',`ticket_dynamic_data`.`created_date`,'#',`ticket_dynamic_data`.`comment_id`) separator ',') as d FROM `ticket_dynamic_data` INNER JOIN (select * from tbl_input where form_id=$tid) as tbl_input ON `tbl_input`.`input_id`=`ticket_dynamic_data`.`input` where `ticket_dynamic_data`.`cmp_no`=$comp_id and `ticket_dynamic_data`.`enq_no`='$ticketno' GROUP BY `ticket_dynamic_data`.`comment_id` ORDER BY `ticket_dynamic_data`.`comment_id` DESC";
+
+			             $sql_res = $this->db->query($sql)->result_array(); 
+						$data =array();
+			             if(!empty($sql_res))
+			             {	
+			             	
+			             	foreach ($sql_res as $key => $value) 
+			             	{
+			             		$abc = explode(',',$value['d']);
+			             		
+			             		if(!empty($abc))
+			             		{	$sub = array();
+			             			foreach ($abc as $k => $v)
+			             			{
+			             				$x = explode('#', $v);
+			             				$sub[] = $x[1];
+			             			}
+			             			$sub[]=$x[2];
+			             		}
+			             		$data[] = $sub;
+			             	}
+			             }
+			        $part['table']=$data;
+        		}
+        		
+        		$tabs[] = $part;
         	}
         }
 

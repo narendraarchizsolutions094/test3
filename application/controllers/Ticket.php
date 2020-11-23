@@ -473,7 +473,7 @@ class Ticket extends CI_Controller
 		$data = array();
 		$data["ticket"] = $this->Ticket_Model->get($tckt);
 		//print_r($data['ticket']); exit();
-
+    
 		if (empty($data['ticket'])) {
 			show_404();
 		}
@@ -522,11 +522,11 @@ class Ticket extends CI_Controller
 
 		$process_id = 0;
 
-		if($data['ticket']->client==0)
+		if($data['ticket']->process_id!=0)
 			$process_id = $data['ticket']->process_id;
 		else
 		{
-			$enq=$this->Enquiry_model->getEnquiry(array('enquiry_id'=>$data['ticket']->client));
+			$enq=$this->enquiry_model->getEnquiry(array('enquiry_id'=>$data['ticket']->client));
 			if($enq->num_rows())
 			{
 				$process_id = $enq->row()->product_id; // Process id
@@ -590,7 +590,7 @@ class Ticket extends CI_Controller
         
 
        $comment_id = $this->Ticket_Model->saveconv($tck_id,'Details Updated','', $enqarr->client,$this->session->user_id);
-
+       //echo $comment_id; exit();
         if(!empty($enqarr)){        
             if(isset($_POST['inputfieldno'])) {                    
                 $inputno   = $this->input->post("inputfieldno", true);
