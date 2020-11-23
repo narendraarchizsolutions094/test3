@@ -358,7 +358,7 @@ echo'<div class="trackingDetails"></div>';
 
                   <div class="col-md-12">
                     <div class="form-group">
-                      <label>Description</label>
+                      <label><?=display('ticket_remark')?></label>
                       <textarea name="remark" class="form-control"></textarea>
                     </div>
                   </div>  

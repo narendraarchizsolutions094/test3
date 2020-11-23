@@ -326,7 +326,7 @@
                       <?=($showall or in_array(11,$acolarr))?'<th>'.display('data_source').'</th>':''?>
                       <?=($showall or in_array(12,$acolarr))?'<th>'.display('stage').'</th>':''?>
                       <?=($showall or in_array(13,$acolarr))?'<th>Sub Stage</th>':''?>
-                      <?=($showall or in_array(14,$acolarr))?'<th>Review</th>':''?>
+                      <?=($showall or in_array(14,$acolarr))?'<th>'.display('ticket_remark').'</th>':''?>
                       <?=($showall or in_array(16,$acolarr))?'<th>Status</th>':''?>
 
 
@@ -874,7 +874,7 @@ function delete_recorde(){
           </div>
 
            <div class = "col-md-4">  
-            <label class=""><input type="checkbox" class="choose-col"  value = "14"  <?php echo ($showall == true or in_array(14, $acolarr)) ? "checked" : ""; ?>>  Review</label>  &nbsp;
+            <label class=""><input type="checkbox" class="choose-col"  value = "14"  <?php echo ($showall == true or in_array(14, $acolarr)) ? "checked" : ""; ?>>  <?=display('ticket_remark')?></label>  &nbsp;
           </div>
 
           <?php

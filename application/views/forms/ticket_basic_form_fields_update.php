@@ -398,7 +398,7 @@ echo'
 
                   
               <div class="col-md-12">
-                <label>Remark</label>
+                <label><?=display('ticket_remark')?></label>
                 <!-- <div style = "padding: 10px;border: 1px solid #e5e1e1;margin-right:25px;border-radius: 10px;font-size:16px;margin-bottom:10px;"><?php if(!empty($ticket->message)){ echo $ticket->message;} ?></div> -->
                 <textarea name="remark" class="form-control"><?=$ticket->message?></textarea>
               </div>
