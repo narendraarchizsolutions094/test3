@@ -1599,7 +1599,7 @@ class Ticket extends CI_Controller
 	}
 	public function referred_byJson()
 	{
-		$data = [];
+		$data[] = '';
 		$refData = $this->Ticket_Model->refferedBy();
 		foreach ($refData as $key => $value) {
 			$count = $this->Ticket_Model->countrefferedBy($value->id);
@@ -1630,6 +1630,8 @@ class Ticket extends CI_Controller
 	{
 
 		$getSourse = $this->Ticket_Model->getSourse(1);
+		$data[]='';
+
 
 		foreach ($getSourse as $key => $value) {
 			$count = $this->Ticket_Model->countTSourse($value->lsid);
@@ -1640,6 +1642,9 @@ class Ticket extends CI_Controller
 	}
 	public function stage_typeJson()
 	{
+		$data[]='';
+
+
 		$getSourse = $this->Ticket_Model->getSourse(4);
 		foreach ($getSourse as $key => $value) {
 			$count = $this->Ticket_Model->countTstage($value->stg_id);
@@ -1649,6 +1654,8 @@ class Ticket extends CI_Controller
 	}
 	public function subsource_typeJson()
 	{
+		$data[]='';
+
 		$subsource = $this->Ticket_Model->Subsource();
 		foreach ($subsource as $key => $value) {
 			$count = $this->Ticket_Model->countSubsource($value->id);
@@ -1656,7 +1663,18 @@ class Ticket extends CI_Controller
 		}
 		echo json_encode($data);
 	}
+	public function product_ticketJson()
+	{
+		$data[]='';
 
+		//fetch products
+		$products=$this->db->get('tbl_product_country')->result();
+		foreach ($products as $key => $value) {
+		$count = $this->Ticket_Model->countproduct_ticket($value->id);
+		$data[] = ['name' => $value->country_name, 'value' => $count];
+		}
+		echo json_encode($data);
+	}
 	public function autoticketAssign()
 	{
 		$fetchrules = $this->db->where(array('comp_id' => $this->session->companey_id, 'type' => 5))->order_by("id", "ASC")->get('leadrules')->result();

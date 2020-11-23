@@ -1041,4 +1041,12 @@ class Ticket_Model extends CI_Model
 		else
 			return false;
 	}
+<<<<<<< HEAD
+	public function countproduct_ticket($id)
+	{
+		return $this->db->where('product',$id)->count_all_results('tbl_ticket');
+
+	}
+=======
+>>>>>>> 1d7e061c69e70fcc31cee340697b7a81cf2001d3
 }
