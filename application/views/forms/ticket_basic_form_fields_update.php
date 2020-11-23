@@ -34,7 +34,7 @@ echo'
                   <input type="hidden" name="complaint_type" value="<?=$ticket->complaint_type?>">
                   <div class="form-group">
                   <label>Ticket Type : </label> 
-                  <span class='badge badge-info'><?=$ticket->complaint_type=='1'?'Compaint':($ticket->complaint_type=='2'?'Query':'NA')?></span>
+                  <span class='badge badge-info'><?=$ticket->complaint_type=='1'?'Complaint':($ticket->complaint_type=='2'?'Query':'NA')?></span>
                 </div>
                       
                      <?php
