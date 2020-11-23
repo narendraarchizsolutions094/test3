@@ -21,6 +21,11 @@
   width: 100%;
   height: 500px;
 }
+#product_Ticket {
+  width: 100%;
+  height: 500px;
+}
+
 .highcharts-data-table table {
 	font-family: Verdana, sans-serif;
 	border-collapse: collapse;
@@ -425,14 +430,20 @@ chart.cursor.lineY.strokeOpacity = 0;
 <!-- HTML -->
 <div id="chartdiv4"></div>
 <center><h3>Substage Vs Ticket</h3></center>
-
 <!-- HTML -->
 <div id="chartdiv5"></div>
-<center><h3>Source Vs Ticket</h3></center>
-
 <!-- HTML -->
-<div id="chartdiv6"></div>
+<div class="row">
+    <div class="col-md-6">
+    <center><h3>Source Vs Ticket</h3></center>
+    <div id="chartdiv6"></div>
+    </div>
+    <div class="col-md-6">
+<center><h3>Product/Dervice Vs Ticket </h3></center>
+<div id="product_Ticket"></div>
 
+</div>
+</div>
 <!-- Chart code -->
 <script>
           $(document).ready(function(){
@@ -540,4 +551,58 @@ chart.cursor.lineY.strokeOpacity = 0;
       }
     });
     });
+</script>
+
+
+
+
+<!-- Chart code -->
+<script>
+      $(document).ready(function(){
+    $.ajax({
+      url : "<?=base_url('ticket/product_ticketJson')?>",
+      type: "post",
+      dataType : "json",
+      processData: false,
+      contentType: false,
+      success : function(response)
+      {
+am4core.ready(function() {
+
+// Themes begin
+am4core.useTheme(am4themes_animated);
+// Themes end
+
+// Create chart instance
+var chart = am4core.create("product_Ticket", am4charts.PieChart);
+
+// Add data
+chart.data = response
+
+// Set inner radius
+chart.innerRadius = am4core.percent(50);
+
+// Add and configure Series
+var pieSeries = chart.series.push(new am4charts.PieSeries());
+pieSeries.dataFields.value = "value";
+pieSeries.dataFields.category = "name";
+pieSeries.slices.template.stroke = am4core.color("#fff");
+pieSeries.slices.template.strokeWidth = 2;
+pieSeries.slices.template.strokeOpacity = 1;
+
+// This creates initial animation
+pieSeries.hiddenState.properties.opacity = 1;
+pieSeries.hiddenState.properties.endAngle = -90;
+pieSeries.hiddenState.properties.startAngle = -90;
+
+pieSeries.colors.list = [
+    new am4core.color('#b8182b'),
+    new am4core.color('#FBC02D'),
+    new am4core.color('#388E3C'),
+]
+});
+      }
+});
+    
+});
 </script>

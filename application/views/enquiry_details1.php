@@ -1698,6 +1698,7 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                            </tr>
                         </thead>
                         <tbody>
+
                            <?php 
                               $sl = 1;
                               if(!empty($CommercialInfo)){ 
@@ -1802,7 +1803,7 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                         </div>
                         <div class="form-group col-sm-6"> 
                            <label>Delivery Branch</label>
-                           <select class="form-control" name="delivery_branch" id="delivery_branch">
+                           <select class="form-control" name="delivery_branch" id="delivery_branch" >
                               <option value="">-Select-</option>
                               <?php  
                               foreach($branch as $dbranch){ ?>
@@ -1813,7 +1814,6 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                               <div class="form-group col-sm-6"> 
                                  <label>Insurance</label>
                                  <select class="form-control" name="insurance" id="insurance">
-                                    <option value="">-Select-</option>
                                     <option value="0">Carrier</option>
                                     <option value="1">Owner risk</option>
                                  </select>
@@ -1821,7 +1821,7 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                               <div class="sundry" id="sundry" style="display:none">
                               <div class="form-group col-sm-6"> 
                                  <label>Rate</label>
-                                 <input class="form-control" name="rate" id="rate" type="text"  style="padding:0px !important;">  
+                                 <input class="form-control rate" name="rate" id="rate" type="text"  style="padding:0px !important;">  
                               </div>
                               <div class="form-group col-sm-6"> 
                                  <label>Discount</label>
@@ -1830,7 +1830,6 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                               <div class="form-group col-sm-6"> 
                               <label>Pay Mode</label>
                               <select class="form-control" name="paymode" id="paymode">
-                                 <option value="">Select Mode </option>
                                  <option value="1">paid</option>
                                  <option value="2">To-Pay</option>
                                  <option value="3">Tbb</option>
@@ -1873,7 +1872,6 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                                  <div class="form-group col-sm-6"> 
                                     <label>Pay Mode</label>
                                     <select class="form-control" name="ftlpaymode" id="ftlpaymode">
-                                       <option value="">Select Mode </option>
                                        <option value="1">paid</option>
                                        <option value="2">To-Pay</option>
                                        <option value="3">Tbb</option>
@@ -1881,11 +1879,11 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                                 </div>
                                  <div class="form-group col-sm-6"> 
                                     <label>Potential Amount</label>
-                                    <input class="form-control" name="ftlpotential_amount" id="potential_amount" type="text"  style="padding:0px !important;">  
+                                    <input class="form-control" name="ftlpotential_amount" id="ftlpotential_amount" type="text"  style="padding:0px !important;">  
                                  </div>
                                  <div class="form-group col-sm-6"> 
                                     <label>Expected Amount</label>
-                                    <input class="form-control" name="ftlexpected_amount" id="expected_amount" type="text"  style="padding:0px !important;">  
+                                    <input class="form-control" name="ftlexpected_amount" id="ftlexpected_amount" type="text"  style="padding:0px !important;">  
                                  </div>
 
                               </div>
@@ -1899,6 +1897,40 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                      </div>
                   </form>
                </div>
+               <script>
+
+$('#delivery_branch').on('change', function() {
+            var delivery_branch = $("select[name='delivery_branch']").val();
+            var booking_branch = $("select[name='booking_branch']").val();
+            // alert(booking_branch);
+            $.ajax({
+            type: 'POST',
+            url: '<?php echo base_url();?>enquiry/get_rate',
+            data: {delivery_branch:delivery_branch,booking_branch:booking_branch},
+            success:function(data){
+                var obj = JSON.parse(data);
+                $("#rate").val(obj.rate);
+            }
+            });
+            });
+
+$('#potential_tonnage').on('change', function() {
+                var rate = document.getElementById('rate').value;           
+                var potential_tonnage = document.getElementById('potential_tonnage').value;    
+                var weightinKg= potential_tonnage*1000;       
+               var total_ptAmount=weightinKg*rate;
+               // alert(total_ptAmount);
+                        $("#potential_amount").val(total_ptAmount);
+                    });
+                    $('#expected_tonnage').on('change', function() {
+                var rate = document.getElementById('rate').value;           
+                var expected_tonnage = document.getElementById('expected_tonnage').value;    
+                var weightinKg= expected_tonnage*1000;       
+               var total_extAmount=weightinKg*rate;
+               // alert(total_ptAmount);
+                        $("#expected_amount").val(total_extAmount);
+                    });
+               </script>
 
                                  <?php } ?>
 
