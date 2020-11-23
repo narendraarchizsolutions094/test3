@@ -181,7 +181,7 @@
 			}
 		})
 	});
-	$(document).on("change", ".chg-product", function(){
+	$(document).on("change", ".chg-productt", function(){
 		$.ajax({
 				url     : "<?php echo base_url('ticket/loadamc') ?>",
 				type    : "post",

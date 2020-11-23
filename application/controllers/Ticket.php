@@ -1827,7 +1827,8 @@ class Ticket extends CI_Controller
 				'Tue' => ['10:00 AM' => '06:00 PM'],
 				'Wed' => ['10:00 AM' => '06:00 PM'],
 				'Thu' => ['10:00 AM' => '06:00 PM'],
-				'Fri' => ['10:00 AM' => '06:00 PM']
+				'Fri' => ['10:00 AM' => '06:00 PM'],
+				'Sat' => ['10:00 AM' => '06:00 PM']				
 			];
 		
 			if(empty($timeObject)){
@@ -1891,7 +1892,7 @@ class Ticket extends CI_Controller
 		{
 			// arrays
 			$days_array = array();
-			$skipdays = array("Saturday", "Sunday");
+			$skipdays = array("Sunday");
 			$skipdates = $this->get_holidays($uid);
 
 			// other variables

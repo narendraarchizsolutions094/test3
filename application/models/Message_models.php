@@ -282,7 +282,11 @@ class Message_models extends CI_Model
     ->where('temp_id',$temp_id)                        
     ->get()
     ->row();
-    return $rows->template_name;
+    if(!empty($rows->template_name)){
+      return $rows->template_name;
+    }else{
+      return false;
+    }
   }
   public function fetchenqById($type,$ID)
   {

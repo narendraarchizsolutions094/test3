@@ -115,9 +115,9 @@ class User extends CI_Controller
             }
             if($department->b_status == 1){ 
                 $status= display('active');
-                }elseif($department->b_status == 0){
+            }elseif($department->b_status == 0){
                 $status='<a style="color:red">Inactive</a>';
-                }
+            }
 
                 
             $sub = array();

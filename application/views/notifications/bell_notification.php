@@ -46,7 +46,7 @@
                  }
                  else
                  {
-                  $value['user_name'] = !empty($ticket->clientname)?$ticket->clientname:'<i>Deleted</i>';
+                  $value['user_name'] = !empty($ticket->name)?$ticket->name:'<i>Deleted</i>';
                  }
                   
               }
