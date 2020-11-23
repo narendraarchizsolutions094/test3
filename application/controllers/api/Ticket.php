@@ -123,7 +123,12 @@ class Ticket extends REST_Controller {
           switch($input['field_id'])
           { 
             case 15:
-            $basic[$key]['input_values'] = array(1=>'Is Complaint',2=>'Is Query');
+            $basic[$key]['input_values'] = array(
+                                              array('key'=>'1',
+                                                    'value'=>'Is Complaint'),
+                                              array('key'=>'2',
+                                                    'value'=>'Is Query'),
+                                            );
             break;
 
             case 16:
@@ -131,7 +136,8 @@ class Ticket extends REST_Controller {
             $values = array();
             foreach ($referred_by as $res)
             {
-              $values[$res->id] = $res->name;
+              $values[] = array('key'=>$res->id,
+                                'value'=>$res->name);
             }
             $basic[$key]['input_values'] = $values;
             break;
@@ -141,7 +147,10 @@ class Ticket extends REST_Controller {
             $values = array();
             foreach ($clients as $res)
             {
-              $values[$res->enquiry_id] = $res->name." ".$res->lastname;
+             
+              $values[] =  array('key'=>$res->enquiry_id,
+                                'value'=> $res->name." ".$res->lastname
+                              );
             }
             $basic[$key]['input_values'] = $values;
             break;
@@ -151,7 +160,9 @@ class Ticket extends REST_Controller {
             $values = array();
             foreach ($products as $res)
             {
-              $values[$res->id] = $res->country_name;
+              $values[] =  array('key'=>$res->id,
+                                'value'=> $res->country_name
+                              );
             }
             $basic[$key]['input_values'] = $values;
             break;
@@ -161,7 +172,9 @@ class Ticket extends REST_Controller {
             $values = array();
             foreach ($problems as $res)
             {
-              $values[$res->id] = $res->subject_title;
+              $values[] = array('key'=>$res->id,
+                                'value'=> $res->subject_title
+                              );
             }
             $basic[$key]['input_values'] = $values;
             break;
@@ -171,13 +184,23 @@ class Ticket extends REST_Controller {
             $values = array();
             foreach ($natures as $res)
             {
-              $values[$res->id] = $res->title;
+              $values[] = array('key'=>$res->id,
+                                'value'=> $res->title
+                              );
             }
             $basic[$key]['input_values'] = $values;
             break;
 
             case 24:
-            $values = array(1=>'Low',2=>'Medium',3=>'High');
+            $values = array(
+                              array('key'=>'1',
+                                    'value'=>'Low'),
+
+                              array('key'=>'2',
+                                    'value'=>'Medium'),
+                              array('key'=>'3',
+                                    'value'=>'High')
+                            );
             $basic[$key]['input_values'] = $values;
             break;
 
@@ -186,7 +209,9 @@ class Ticket extends REST_Controller {
             $values = array();
             foreach ($source as $res)
             {
-              $values[$res->lsid] = $res->lead_name;
+              $values[] = array('key'=>$res->lsid,
+                                  'value'=>$res->lead_name
+                                );
             }
             $basic[$key]['input_values'] = $values;
             break;
@@ -196,6 +221,24 @@ class Ticket extends REST_Controller {
       }
 
       $dynamic = $this->location_model->get_company_list($process_id,$primary_tab);
+
+      foreach ($dynamic as $key => $value)
+      {
+          if(in_array($value['input_type'],array('2')))
+          {
+             
+              $temp  = explode(',', $value['input_values']);
+              if(!empty($temp))
+              {   $reshape = array();
+                  foreach ($temp as $k => $v)
+                  {
+                    $reshape[] = array('key'=>null,
+                                      'value'=>$v);
+                  }
+                  $dynamic[$key]['input_values'] = $reshape;
+              }
+          }
+      }
 
       $data = array_merge($basic,$dynamic);      
 
@@ -428,7 +471,7 @@ class Ticket extends REST_Controller {
 
       $data  = $this->Ticket_Model->ticket_all_tab_api($company_id,$ticketno);
 
-      if(1)
+      if(!empty($data))
       {
         $this->set_response([
         'status'      => TRUE,           
@@ -453,5 +496,105 @@ class Ticket extends REST_Controller {
     } 
   }
 
+  public function getTicketTimeline_post()
+  {
+    $company_id   = $this->input->post('company_id');
+    $ticketno      = $this->input->post('ticketno');
+
+    $this->form_validation->set_rules('company_id','company_id','trim|required',array('required'=>'You have note provided %s'));
+    $this->form_validation->set_rules('ticketno','ticketno','trim|required',array('required'=>'You have note provided %s'));
+
+    if($this->form_validation->run() == true)
+    {
+      $this->session->companey_id = $company_id;
+     $res= $this->db->select('id')->where(array('ticketno'=>$ticketno))->get('tbl_ticket')->row();
+      if(!empty($res))
+        $data  = $this->Ticket_Model->getconv($res->id);
+    // print_r( $data); exit();
+      if(!empty($res) && !empty($data))
+      {
+        $this->set_response([
+        'status'      => TRUE,           
+        'data'  => $data,
+        ], REST_Controller::HTTP_OK);   
+      }
+      else
+      {
+        $this->set_response([
+        'status'  => false,           
+        'msg'     => "No Data found"
+        ], REST_Controller::HTTP_OK); 
+      }
+    }
+    else
+    {
+      $msg = strip_tags(validation_errors());
+      $this->set_response([
+        'status'  => false,
+        'msg'     => $msg,//"Please provide a company id"
+      ],REST_Controller::HTTP_OK);
+    }
+
+  }
+
+  public function getTicketDisposition_post()
+  {
+    $this->load->model(array('Leads_Model'));
+
+    $company_id   = $this->input->post('company_id');
+    $ticketno      = $this->input->post('ticketno');
+
+    $this->form_validation->set_rules('company_id','company_id','trim|required',array('required'=>'You have note provided %s'));
+    $this->form_validation->set_rules('ticketno','ticketno','trim|required',array('required'=>'You have note provided %s'));
+
+    if($this->form_validation->run() == true)
+    {
+      $this->session->companey_id = $company_id;
+
+      $ticket= $this->db->select('*')->where(array('ticketno'=>$ticketno))->get('tbl_ticket')->row();
+
+      $stage = $this->Leads_Model->stage_by_type(4);
+      $data =array();
+
+      foreach ($stage as $key => $val)
+      {
+         $sub_stage =  $this->Leads_Model->all_description($val->stg_id);
+         $val->sub_stage = $sub_stage;
+         $data['available']['stage'][] = $val;
+      }
+      $data['available']['status'] = $this->Ticket_Model->ticket_status()->result();
+      if(!empty($ticket))
+      $data['selected'] =array(
+                          'stage'=>$ticket->ticket_stage,
+                          'sub_stage'=>$ticket->ticket_substage,
+                          'status'=>$ticket->ticket_status,
+                            );
+     
+    // print_r( $data); exit();
+      if(!empty($data))
+      {
+        $this->set_response([
+        'status'      => TRUE,           
+        'data'  => $data,
+        ], REST_Controller::HTTP_OK);   
+      }
+      else
+      {
+        $this->set_response([
+        'status'  => false,           
+        'msg'     => "No Data found"
+        ], REST_Controller::HTTP_OK); 
+      }
+    }
+    else
+    {
+      $msg = strip_tags(validation_errors());
+      $this->set_response([
+        'status'  => false,
+        'msg'     => $msg,//"Please provide a company id"
+      ],REST_Controller::HTTP_OK);
+    }
+
+  }
 
 }

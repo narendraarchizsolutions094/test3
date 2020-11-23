@@ -1567,7 +1567,7 @@ if($this->session->companey_id==65)
  ?>
 
 <?php }else{ ?>				
-		<li class="treeview <?php echo (($segment1 == "ticket" || $segment1 == "smsapi") ? "active" : null) ?>"  style="<?php if(in_array(310,$module) || in_array(311,$module) || in_array(312,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
+		<li class="treeview <?php echo (($segment1 == "ticket") ? "active" : null) ?>"  style="<?php if(in_array(310,$module) || in_array(311,$module) || in_array(312,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
                      <a href="#">
                       <i class="fa fa-tasks" style="color:#fff;font-size:20px;background:#8164f9;padding:7px;border-radius:4px;width:30px;"></i> &nbsp;<?php echo display('ticketing') ?>
                       <span class="pull-right-container">
@@ -1577,11 +1577,15 @@ if($this->session->companey_id==65)
                      </a>
                      
                      <ul class="treeview-menu">
-                         
+                         <?php
+                         if(user_access(520)){
+                         ?>
 						 <li class="<?php echo (($segment1 == "ticket" && $segment2 == "add_subject") ? "active" : null) ?>">
                           <a href="<?php echo base_url("ticket/add_subject") ?>"><?php echo display('ticket_problem_master') ?></a>
                         </li>
-						
+						<?php
+                         }
+                         ?>
                         <li class="<?php echo (($segment1 == "ticket" && $segment2 == "index") ? "active" : null) ?>">
                           <a href="<?php echo base_url("ticket/index") ?>"><?php echo display('ticketing') ?></a>
                         </li>

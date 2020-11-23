@@ -37,10 +37,10 @@
     <div class="form-group col-md-6">
         <label>Stage For</label>
       <select  class="form-control process" name="stage_for[]" multiple required>        
-         <option value="1">Enquiry</option>
-         <option value="2">Lead</option>
-         <option value="3">Client</option>
-         <option value="4">Ticket</option>
+         <option value="1"><?=display('enquiry')?></option>
+         <option value="2"><?=display('lead')?></option>
+         <option value="3"><?=display('client')?></option>
+         <option value="4"><?=display('ticket')?></option>
       </select>
     </div>
     
@@ -150,15 +150,15 @@
         }
         ?>
       <select  class="form-control process" name="stage_for[]" multiple>        
-         <option value="1" <?php if(!empty($stage_for) && in_array(1, $stage_for)){?>selected <?php }?>>Enquiry</option>
-         <option value="2" <?php if(!empty($stage_for) && in_array(2, $stage_for)){?>selected <?php }?>>Lead</option>
-         <option value="3" <?php if(!empty($stage_for) && in_array(3, $stage_for)){?>selected <?php }?>>Client</option>
-         <option value="4" <?php if(!empty($stage_for) && in_array(4, $stage_for)){?>selected <?php }?>>Ticket</option>
+         <option value="1" <?php if(!empty($stage_for) && in_array(1, $stage_for)){?>selected <?php }?>><?=display('enquiry')?></option>
+         <option value="2" <?php if(!empty($stage_for) && in_array(2, $stage_for)){?>selected <?php }?>><?=display('lead')?></option>
+         <option value="3" <?php if(!empty($stage_for) && in_array(3, $stage_for)){?>selected <?php }?>><?=display('client')?></option>
+         <option value="4" <?php if(!empty($stage_for) && in_array(4, $stage_for)){?>selected <?php }?>><?=display('ticket')?></option>
       </select>
     </div>
 
         
-        
+         
         
         <div class="sgnbtnmn form-group col-md-12">
         <div class="sgnbtn">

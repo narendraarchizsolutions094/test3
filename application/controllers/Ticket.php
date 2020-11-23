@@ -473,7 +473,7 @@ class Ticket extends CI_Controller
 		$data = array();
 		$data["ticket"] = $this->Ticket_Model->get($tckt);
 		//print_r($data['ticket']); exit();
-
+    
 		if (empty($data['ticket'])) {
 			show_404();
 		}
@@ -522,7 +522,7 @@ class Ticket extends CI_Controller
 
 		$process_id = 0;
 
-		if($data['ticket']->client==0)
+		if($data['ticket']->process_id!=0)
 			$process_id = $data['ticket']->process_id;
 		else
 		{
@@ -590,7 +590,7 @@ class Ticket extends CI_Controller
         
 
        $comment_id = $this->Ticket_Model->saveconv($tck_id,'Details Updated','', $enqarr->client,$this->session->user_id);
-
+       //echo $comment_id; exit();
         if(!empty($enqarr)){        
             if(isset($_POST['inputfieldno'])) {                    
                 $inputno   = $this->input->post("inputfieldno", true);
@@ -1845,7 +1845,8 @@ class Ticket extends CI_Controller
 				'Tue' => ['10:00 AM' => '06:00 PM'],
 				'Wed' => ['10:00 AM' => '06:00 PM'],
 				'Thu' => ['10:00 AM' => '06:00 PM'],
-				'Fri' => ['10:00 AM' => '06:00 PM']
+				'Fri' => ['10:00 AM' => '06:00 PM'],
+				'Sat' => ['10:00 AM' => '06:00 PM']				
 			];
 		
 			if(empty($timeObject)){
@@ -1909,7 +1910,7 @@ class Ticket extends CI_Controller
 		{
 			// arrays
 			$days_array = array();
-			$skipdays = array("Saturday", "Sunday");
+			$skipdays = array("Sunday");
 			$skipdates = $this->get_holidays($uid);
 
 			// other variables

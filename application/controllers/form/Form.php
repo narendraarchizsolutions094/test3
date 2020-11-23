@@ -279,7 +279,6 @@ class Form extends CI_Controller {
 		$data["referred_type"] = $this->Leads_Model->get_referred_by();
 		$data['problem'] = $this->Ticket_Model->get_sub_list();
 		$data['issues'] = $this->Ticket_Model->get_issue_list();
-
     	$data['company_list'] = $this->location_model->get_company_list1_ticket($process_id);
     	echo $this->load->view('forms/ticket_basic_form_fields_update',$data,true);
 		
