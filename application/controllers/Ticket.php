@@ -306,7 +306,7 @@ class Ticket extends CI_Controller
 			
 
 			if ($showall or in_array(16, $acolarr)) {
-				$sub[] = $point->status_name == '' ? 'NA' : $point->status_name;
+				$sub[] = $point->status_name == '' ? 'Open' : $point->status_name;
 			}
 
 
