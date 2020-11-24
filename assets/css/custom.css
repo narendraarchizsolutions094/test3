@@ -6200,3 +6200,6 @@ a:hover{
     outline: none !important;
     border: none !important;
 }
+*:focus {
+    outline: none !important;
+}
