@@ -107,12 +107,7 @@
   		overflow: auto;
   	}
   </style>     
-<!-- jquery-ui js -->
-<script src="<?php echo base_url('assets/js/jquery-ui.min.js') ?>" type="text/javascript"></script>      
-<!-- DataTables JavaScript -->
-<script src="<?php echo base_url("assets/datatables/js/dataTables.min.js") ?>"></script>
-<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/3.1.3/js/bootstrap-datetimepicker.min.js"></script>  
-<script src="<?php echo base_url() ?>assets/js/custom.js" type="text/javascript"></script>
+
 <script>
  $(function() {
     var process_id = "<?= $process_id ?>";
