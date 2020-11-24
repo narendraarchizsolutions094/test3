@@ -180,7 +180,7 @@ echo'
                     ?>
                     <div class="col-md-6">
                       <div class="form-group">
-                        <label>Problem For</label>
+                        <label><?=display('problem_for')?></label>
                         <select class="form-control add-select2 choose-client" name = "client" required readonly>
                           <?php 
                           if(!empty($clients))
@@ -408,3 +408,6 @@ echo'
            }
           }
           ?> 
+<script>
+  $('select').select2();
+</script>

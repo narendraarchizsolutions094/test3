@@ -173,7 +173,7 @@ echo'<div class="trackingDetails"></div>';
                     ?>
                      <div class="col-md-6">
                       <div class="form-group">
-                        <label>Problem For </label>
+                        <label><?=display('problem_for')?> </label>
                         <select class="form-control  choose-client" name = "client" >
                           <option value = "" style ="display:none;">---Select---</option>
                           <?php if(!empty($clients)){

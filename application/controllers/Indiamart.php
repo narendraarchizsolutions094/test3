@@ -68,7 +68,7 @@ class Indiamart extends CI_Controller {
 							'product_id'=>$product_id	
 						);
 
-
+						$mob = substr($mob,-10);
 						$curl = curl_init();						
 						$api_url = base_url()."api/enquiry/create";
 						curl_setopt_array($curl, array(
