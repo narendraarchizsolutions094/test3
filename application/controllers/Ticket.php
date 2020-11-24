@@ -260,7 +260,7 @@ class Ticket extends CI_Controller
 
 			if ($showall or in_array(4, $acolarr)) {
 				if (user_access(220) && !empty($point->phone)) {
-					$sub[] = "<a href='javascript:void(0)' onclick='send_parameters(".$point->phone.")'>" . $point->phone . " <i class='fa fa-phone' aria-hidden='true'></i></a>";
+					$sub[] = "<a href='javascript:void(0)' onclick='send_parameters(".$point->phone.")'>" . $point->phone . " <button class='btn btn-xs btn-success'><i class='fa fa-phone' aria-hidden='true'></i></button></a>";
 				} else {
 					$sub[] = $point->phone ?? "NA";
 				}
