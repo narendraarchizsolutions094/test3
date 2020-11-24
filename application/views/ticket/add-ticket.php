@@ -217,7 +217,12 @@ function autoFill(find_by,key)
 	if(key=='') return;
 
 	if(find_by == 'phone'){
-		$("#is-avl-mobile").html('<span class="badge badge-success" style="background:green;"><i class="fa fa-check"></i> Use Phone number <a class="btn btn-sm btn-success" id="click_to_call" type="button" title="Call" onclick="send_parameters('+key+')" href="javascript:void(0)"><i class="fa fa-phone" aria-hidden="true"></i></a> </span>');
+		var phoneno = /^\d{10}$/;
+		if(key.match(phoneno)){
+			$("#is-avl-mobile").html('<span class="badge badge-success" style="background:green;"><i class="fa fa-check"></i> Use Phone number <a class="btn btn-sm btn-success" id="click_to_call" type="button" title="Call" onclick="send_parameters('+key+')" href="javascript:void(0)"><i class="fa fa-phone" aria-hidden="true"></i></a> </span>');
+		}else{
+			$("#is-avl-mobile").html('<span class="badge badge-danger" style="background:red;">Invalid mobile no!</span>');
+		}
 	}
 	$.ajax({
 		url:'<?= base_url('ticket/autofill')?>',
