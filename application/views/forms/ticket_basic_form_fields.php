@@ -174,7 +174,7 @@ echo'<div class="trackingDetails"></div>';
                      <div class="col-md-6">
                       <div class="form-group">
                         <label>Problem For </label>
-                        <select class="form-control add-select2 choose-client" name = "client" >
+                        <select class="form-control  choose-client" name = "client" >
                           <option value = "" style ="display:none;">---Select---</option>
                           <?php if(!empty($clients)){
                             foreach($clients as $ind => $clt){
@@ -236,7 +236,7 @@ echo'<div class="trackingDetails"></div>';
                         <div class="col-md-6">
                           <div class="form-group">
                             <label>Product</label>
-                            <select class="form-control add-select2 chg-product" name = "product">
+                            <select class="form-control  chg-product" name = "product">
                               <?php if(!empty($product)) {
                                 foreach($product as $ind => $prd){
                                   ?><option value ="<?php echo $prd->id ?>"><?php echo ucfirst($prd->country_name); ?> </option><?php
@@ -257,7 +257,7 @@ echo'<div class="trackingDetails"></div>';
                     <div class="col-md-6">
                         <div class="form-group">
                           <label><?=display('ticket_problem')?></label>
-                          <select class="form-control add-select2" name = "relatedto">
+                          <select class="form-control " name = "relatedto">
                           <option value = "">Select Subject</option>
                         <?php  if(!empty($problem)) {
                               foreach($problem as $ind => $prblm){
@@ -282,7 +282,7 @@ echo'<div class="trackingDetails"></div>';
                       <div class="col-md-6">
                         <div class="form-group">
                           <label>Nature of Complaint</label>
-                          <select class="form-control add-select2" name = "issue">
+                          <select class="form-control" name = "issue">
                           <option value = ""> -- Select --</option>
                         <?php  if(!empty($issues)) {
                               foreach($issues as $ind => $issue){
@@ -305,7 +305,7 @@ echo'<div class="trackingDetails"></div>';
                     <div class="col-md-6">
                       <div class="form-group">
                         <label>Priority</label>
-                        <select class="form-control add-select2" name = "priority">
+                        <select class="form-control " name = "priority">
                           <option value = "1">Low</option>
                           <option value = "2">Medium</option>
                           <option value = "3">High</option>
@@ -326,7 +326,7 @@ echo'<div class="trackingDetails"></div>';
                     <div class="col-md-6">
                       <div class="form-group">
                         <label>Source</label>
-                        <select class="form-control add-select2" name = "source">
+                        <select class="form-control " name = "source">
                           <?php
                            if(!empty($source)) {
                             foreach($source as $ind => $prblm){
@@ -369,3 +369,6 @@ echo'<div class="trackingDetails"></div>';
            }
           }
           ?> 
+          <script>
+            $('select').select2();
+            </script>

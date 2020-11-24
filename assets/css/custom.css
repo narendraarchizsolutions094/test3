@@ -6196,3 +6196,10 @@ a:hover{
     border-radius:15px !important;
     border:1px solid #e4e5e7;
 }
+.select2-container--above select2-container--focus:focus{
+    outline: none !important;
+    border: none !important;
+}
+*:focus {
+    outline: none !important;
+}
