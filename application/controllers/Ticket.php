@@ -127,6 +127,7 @@ class Ticket extends CI_Controller
 		$comp_id = $this->session->companey_id;
 		$this->db->where('tbl_ticket.ticket_status!=',3);
 		$this->db->where('tbl_ticket.company!=',$comp_id);
+		$this->db->where('tbl_ticket.tracking_no',$tracking_no);
 		echo $this->db->get('tbl_ticket')->num_rows();
 	}
 	public function ticket_set_filters_session()
