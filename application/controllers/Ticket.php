@@ -126,7 +126,7 @@ class Ticket extends CI_Controller
 	public function is_open_ticket($tracking_no){
 		$comp_id = $this->session->companey_id;
 		$this->db->where('tbl_ticket.ticket_status!=',3);
-		$this->db->where('tbl_ticket.company!=',$comp_id);
+		$this->db->where('tbl_ticket.company',$comp_id);
 		$this->db->where('tbl_ticket.tracking_no',$tracking_no);
 		echo $this->db->get('tbl_ticket')->num_rows();
 	}
@@ -1180,7 +1180,8 @@ class Ticket extends CI_Controller
 	}
 
 	public function tracking_no_check($tn){
-		$this->db->where('company',$this->session->companey_id);
+		$comp_id = $this->session->companey_id;
+		$this->db->where('company',$comp_id);
 		$this->db->where('tracking_no',$tn);
 		$this->db->where('ticket_status!=',3);
 		if($this->db->get('tbl_ticket')->num_rows()){
