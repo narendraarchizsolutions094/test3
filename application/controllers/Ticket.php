@@ -123,7 +123,13 @@ class Ticket extends CI_Controller
 	}
 
 
-
+	public function is_open_ticket($tracking_no){
+		$comp_id = $this->session->companey_id;
+		$this->db->where('tbl_ticket.ticket_status!=',3);
+		$this->db->where('tbl_ticket.company',$comp_id);
+		$this->db->where('tbl_ticket.tracking_no',$tracking_no);
+		echo $this->db->get('tbl_ticket')->num_rows();
+	}
 	public function ticket_set_filters_session()
 	{
 		$this->session->set_userdata('ticket_filters_sess', $_POST);
@@ -260,7 +266,7 @@ class Ticket extends CI_Controller
 
 			if ($showall or in_array(4, $acolarr)) {
 				if (user_access(220) && !empty($point->phone)) {
-					$sub[] = "<a href='javascript:void(0)' onclick='send_parameters(".$point->phone.")'>" . $point->phone . "</a>";
+					$sub[] = "<a href='javascript:void(0)' onclick='send_parameters(".$point->phone.")'>" . $point->phone . " <button class='btn btn-xs btn-success'><i class='fa fa-phone' aria-hidden='true'></i></button></a>";
 				} else {
 					$sub[] = $point->phone ?? "NA";
 				}
@@ -306,7 +312,7 @@ class Ticket extends CI_Controller
 			
 
 			if ($showall or in_array(16, $acolarr)) {
-				$sub[] = $point->status_name == '' ? 'NA' : $point->status_name;
+				$sub[] = $point->status_name == '' ? 'Open' : $point->status_name;
 			}
 
 
@@ -416,19 +422,21 @@ class Ticket extends CI_Controller
 	        	</table>';
 				}
 
-				if (isset($a->Table3) && sizeof($table3) > 0) {
+				if (!empty($table3)) {
 					echo '<table class="table table-bordered">
 	        	<tr><th colspan="5" style="text-align:center;">Status</th></tr>
 	        	<tr><th>From</th><th>To</th><th>Dep. Date</th><th>Arr. Date</th><th>Status</th></tr>
 	        	';
-
+					if(!empty($table3->From_Station) || !empty($table3->From_Station) || !empty($table3->From_Station) || !empty($table3->From_Station)){
+						$table3 = array($table3);						
+					}
 					foreach ($table3 as $res) {
 						echo '<tr>
-	        				<td>' . (empty($res->From_Station) ? '' : $res->From_Station) . '</td>
-	        				<td>' . (empty($res->To_Station ? '' : $res->To_Station)) . '</td>
-	        				<td>' . (empty($res->Depature_Date) ? '' : $res->Depature_Date) . '</td>
-	        				<td>' . (empty($res->Arrival_Date) ? '' : $res->Arrival_Date) . '</td>
-	        				<td>' . (empty($res->Status_Name) ? '' : $res->Status_Name) . '</td>
+	        				<td>' . (!empty($res->From_Station) ? $res->From_Station : '') . '</td>
+	        				<td>' . (!empty($res->To_Station) ? $res->To_Station : '') . '</td>
+	        				<td>' . (!empty($res->Depature_Date) ? $res->Depature_Date : '') . '</td>
+	        				<td>' . (!empty($res->Arrival_Date) ? $res->Arrival_Date : '') . '</td>
+	        				<td>' . (!empty($res->Status_Name) ? $res->Status_Name : '') . '</td>
 	        			</tr>';
 					}
 					echo '</table>';
@@ -1172,7 +1180,8 @@ class Ticket extends CI_Controller
 	}
 
 	public function tracking_no_check($tn){
-		$this->db->where('company',$this->session->companey_id);
+		$comp_id = $this->session->companey_id;
+		$this->db->where('company',$comp_id);
 		$this->db->where('tracking_no',$tn);
 		$this->db->where('ticket_status!=',3);
 		if($this->db->get('tbl_ticket')->num_rows()){
@@ -1599,7 +1608,7 @@ class Ticket extends CI_Controller
 	}
 	public function referred_byJson()
 	{
-		$data = [];
+		$data[] = '';
 		$refData = $this->Ticket_Model->refferedBy();
 		foreach ($refData as $key => $value) {
 			$count = $this->Ticket_Model->countrefferedBy($value->id);
@@ -1630,6 +1639,8 @@ class Ticket extends CI_Controller
 	{
 
 		$getSourse = $this->Ticket_Model->getSourse(1);
+		$data[]='';
+
 
 		foreach ($getSourse as $key => $value) {
 			$count = $this->Ticket_Model->countTSourse($value->lsid);
@@ -1640,6 +1651,9 @@ class Ticket extends CI_Controller
 	}
 	public function stage_typeJson()
 	{
+		$data[]='';
+
+
 		$getSourse = $this->Ticket_Model->getSourse(4);
 		foreach ($getSourse as $key => $value) {
 			$count = $this->Ticket_Model->countTstage($value->stg_id);
@@ -1649,6 +1663,8 @@ class Ticket extends CI_Controller
 	}
 	public function subsource_typeJson()
 	{
+		$data[]='';
+
 		$subsource = $this->Ticket_Model->Subsource();
 		foreach ($subsource as $key => $value) {
 			$count = $this->Ticket_Model->countSubsource($value->id);
@@ -1656,7 +1672,18 @@ class Ticket extends CI_Controller
 		}
 		echo json_encode($data);
 	}
+	public function product_ticketJson()
+	{
+		$data[]='';
 
+		//fetch products
+		$products=$this->db->get('tbl_product_country')->result();
+		foreach ($products as $key => $value) {
+		$count = $this->Ticket_Model->countproduct_ticket($value->id);
+		$data[] = ['name' => $value->country_name, 'value' => $count];
+		}
+		echo json_encode($data);
+	}
 	public function autoticketAssign()
 	{
 		$fetchrules = $this->db->where(array('comp_id' => $this->session->companey_id, 'type' => 5))->order_by("id", "ASC")->get('leadrules')->result();

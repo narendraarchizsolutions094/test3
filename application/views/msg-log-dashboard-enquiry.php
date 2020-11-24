@@ -63,7 +63,6 @@
     <div class="col-md-4">
         <label>Select Graph Type</label>
         <select name="graphType" class="form-control" id="all_users" >
-            <option >Select Type</option>
             <option value="1">Email</option>
             <option value="2">SMS</option>
             <option value="3">Whatsapp</option>
@@ -216,7 +215,18 @@ $("#all_users").change(function(){
     }
     });
 });
-
+var data =document.getElementById("all_users").value // 1st
+    // alert(data);
+    $.ajax({
+    type:"POST",
+    url: '<?=base_url('dashboard/getuserWiseSupportData')?>',
+    data: "id=" + data,
+    success: function(result){
+        $("#ticketData").empty();
+        $("#Mehdi_ajax").html(result);
+// alert(result);
+    }
+    });
 </script>
 <hr>
 <?php } if(user_access(231)){  ?>
@@ -229,8 +239,6 @@ $("#all_users").change(function(){
     <div class="col-md-4">
         <label>Select Graph Type</label>
         <select name="all_users_ticket" class="form-control all_users_ticket" id="all_users_ticket" >
-        <option >Select Type</option>
-
             <option value="11">Email</option>
             <option value="12">SMS</option>
             <option value="13">Whatsapp</option>
@@ -372,5 +380,16 @@ $("#all_users_ticket").change(function(){
     }
     });
 });
+var data =document.getElementById("all_users_ticket").value // 1st
+    // alert(data);
+    $.ajax({
+    type:"POST",
+    url: '<?=base_url('dashboard/getuserWiseSupportData')?>',
+    data: "id=" + data,
+    success: function(result){
+        $("#Mehdi_ajax").empty();
+        $("#ticketData").html(result);
+    }
+    });
 </script>
 <?php } ?>

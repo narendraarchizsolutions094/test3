@@ -1492,7 +1492,7 @@ class Enquiry extends CI_Controller
             $data['level'] = $this->location_model->find_level();
             $data['length'] = $this->location_model->find_length();
         } 
-        if ($this->session->companey_id == '1') {
+        if ($this->session->companey_id == 65) {
             $data['branch']=$this->db->where('comp_id',65)->get('branch')->result();
             $data['CommercialInfo'] = $this->enquiry_model->getComInfo($enquiry_id);
         } 
@@ -3439,7 +3439,7 @@ public function timelinePopup()
     $insurance=$this->input->post('insurance');
     $rate=$this->input->post('rate');
     $discount=$this->input->post('discount');
-    $paymode=$this->input->post('paymode');
+  echo  $paymode=$this->input->post('paymode');
     $potential_tonnage=$this->input->post('potential_tonnage');
     $potential_amount=$this->input->post('potential_amount');
     $expected_tonnage=$this->input->post('expected_tonnage');
@@ -3487,6 +3487,7 @@ public function timelinePopup()
             'createdby'=>$this->session->userdata('user_id'),
             'comp_id'=>$comp_id
           ]; 
+         
         }
           $insert=$this->enquiry_model->insertComInfo($data);
         if($insert){
@@ -3498,6 +3499,17 @@ public function timelinePopup()
         }
 
  }
-    
+    public function get_rate()
+    {
+      $bbranch=$this->input->post('booking_branch');
+      $dbranch=$this->input->post('delivery_branch');
+      $data=['rate'=>0];
+     $getrate= $this->db->where(array('booking_branch'=>$bbranch,'delivery_branch'=>$dbranch))->get('branchwise_rate');
+     if($getrate->num_rows()==1){
+         $rates=$getrate->row();
+        $data=['rate'=>(int)$rates->rate];
+     }
+     echo json_encode($data);
+    }
  
 }

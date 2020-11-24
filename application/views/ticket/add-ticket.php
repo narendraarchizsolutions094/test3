@@ -38,7 +38,7 @@
 				</div>
 
 				<div class = "col-md-12 text-center">
-					<button class="btn btn-success" type="submit">Save</button>
+					<button class="btn btn-success" type="submit" id='save_ticket'>Save</button>
 				</div>
 			</div>
 				<?php echo form_close(); ?>
@@ -209,12 +209,32 @@
 			 startDate: '-7d'
 		});	
 
-	});
-
-
+	});	
+	function tracking_no_check(tracking_no){
+		$.ajax({
+			url:'<?= base_url('ticket/is_open_ticket/')?>'+tracking_no,
+			type:'post',						
+			success:function(res) {	
+				if(res>0){
+					$("#save_ticket").attr('disabled',true);
+				}else{
+					$("#save_ticket").attr('disabled',false);
+				}
+			}
+		});
+	}
 function autoFill(find_by,key)
-{ //alert(find_by);
+{ 
 	if(key=='') return;
+
+	if(find_by == 'phone'){
+		var phoneno = /^\d{10}$/;
+		if(key.match(phoneno)){
+			$("#is-avl-mobile").html('<span class="badge badge-success" style="background:green;"><i class="fa fa-check"></i> Use Phone number <a class="btn btn-xs btn-success" id="click_to_call" type="button" title="Call" onclick="send_parameters('+key+')" href="javascript:void(0)"><i class="fa fa-phone" aria-hidden="true"></i></a> </span>');
+		}else{
+			$("#is-avl-mobile").html('<span class="badge badge-danger" style="background:red;">Invalid mobile no!</span>');
+		}
+	}
 	$.ajax({
 		url:'<?= base_url('ticket/autofill')?>',
 		type:'post',
@@ -223,8 +243,7 @@ function autoFill(find_by,key)
 		success:function(res) 
 		{	
 			if(res.status=='1')
-			{	//alert(JSON.stringify(res));
-				//alert(find_by);
+			{					
 				if(find_by!='email')
 					$("input[name=email").val(res.email);
 				if(find_by!='phone')	

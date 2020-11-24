@@ -34,7 +34,7 @@ echo'
                   <input type="hidden" name="complaint_type" value="<?=$ticket->complaint_type?>">
                   <div class="form-group">
                   <label>Ticket Type : </label> 
-                  <span class='badge badge-info'><?=$ticket->complaint_type=='1'?'Compaint':($ticket->complaint_type=='2'?'Query':'NA')?></span>
+                  <span class='badge badge-info'><?=$ticket->complaint_type=='1'?'Complaint':($ticket->complaint_type=='2'?'Query':'NA')?></span>
                 </div>
                       
                      <?php
@@ -219,7 +219,7 @@ echo'
                     <div class="col-md-6">
                       <div class="form-group">
                         <label>Phone<span class="text-danger">*</span></label>
-                        <input type="text" name="phone" class="form-control" value="<?php  if(!empty($ticket->phone)){ echo $ticket->phone; } ?>" required>
+                        <input type="text" name="phone" class="form-control" value="<?php  if(!empty($ticket->phone)){ echo $ticket->phone; } ?>" required>                        
                       </div>
                     </div>
 
@@ -398,7 +398,7 @@ echo'
 
                   
               <div class="col-md-12">
-                <label>Remark</label>
+                <label><?=display('ticket_remark')?></label>
                 <!-- <div style = "padding: 10px;border: 1px solid #e5e1e1;margin-right:25px;border-radius: 10px;font-size:16px;margin-bottom:10px;"><?php if(!empty($ticket->message)){ echo $ticket->message;} ?></div> -->
                 <textarea name="remark" class="form-control"><?=$ticket->message?></textarea>
               </div>

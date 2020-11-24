@@ -473,8 +473,61 @@ class Setting extends CI_Controller {
     }
 
 
+public function addbranch()
+{
+$branch=$this->input->post('branch');
+$status=$this->input->post('status');
+$count=$this->db->where('branch_name',$branch)->count_all_results('branch');
+if($count==0){
+$data=['branch_name'=>$branch,'branch_status'=>$status,'created_by'=>$this->session->user_id,'comp_id'=>$this->session->companey_id];
+$insert=$this->db->insert('branch',$data);
+	$this->session->set_flashdata('success','Branch Added');
+	redirect('setting/branchList');
+}else{
+	$this->session->set_flashdata('error','Branch Already Added');
+	redirect('setting/branchList');
+}
+}
+public function branchList()
+{
+	$data['page_title'] = 'Branch List';
+	$data['branch_list']=$this->db->where('comp_id',65)->get('branch')->result();
+	$data['content'] = $this->load->view('branch/list',$data,true);
+	$this->load->view('layout/main_wrapper',$data);
+}
 
-
+public function branch_rateList()
+{
+	$data['page_title'] = 'Branch Rate List';
+	
+	$data['branch_list']=$this->db->select('bb.*,bs.branch_name as bn,branchwise_rate.*')
+	->join('branch bb','bb.branch_id=branchwise_rate.booking_branch')
+	->join('branch bs','bs.branch_id=branchwise_rate.delivery_branch')
+	->get('branchwise_rate')->result();
+	$data['content'] = $this->load->view('branch/rate-list',$data,true);
+	$this->load->view('layout/main_wrapper',$data);
+}
+public function addbranch_rate()
+{
+$bbranch=$this->input->post('bbranch');
+$dbranch=$this->input->post('dbranch');
+if ($dbranch==$bbranch) {
+	$this->session->set_flashdata('error','Select Different Delivery Branch');
+	redirect('setting/branch_rateList');
+}
+$rate=$this->input->post('rate');
+$status=$this->input->post('status');
+$count=$this->db->where(array('booking_branch'=>$bbranch,'delivery_branch'=>$dbranch))->count_all_results('branchwise_rate');
+if($count==0){
+$data=['booking_branch'=>$bbranch,'rate'=>$rate,'delivery_branch'=>$dbranch,'rate_status'=>$status,'created_by'=>$this->session->user_id,'comp_id'=>$this->session->companey_id];
+$insert=$this->db->insert('branchwise_rate',$data);
+	$this->session->set_flashdata('success','Branch rate Added');
+	redirect('setting/branch_rateList');
+}else{
+	$this->session->set_flashdata('error','Rate Already Added');
+	redirect('setting/branch_rateList');
+}
+}
 
 }
 

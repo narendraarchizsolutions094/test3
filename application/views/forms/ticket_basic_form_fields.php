@@ -83,7 +83,6 @@ echo'<div class="trackingDetails"></div>';
                         {
 
                         }else{
-                          
                           $.ajax({
                             url:'<?=base_url('ticket/view_tracking')?>',
                             type:'post',
@@ -109,6 +108,7 @@ echo'<div class="trackingDetails"></div>';
                               console.info(w);
                             }
                           });
+                          tracking_no_check(that.value);
                         }
                       }
 
@@ -208,6 +208,7 @@ echo'<div class="trackingDetails"></div>';
                         <div class="form-group">
                           <label>Phone <i class="text-danger">*</i></label>
                           <input type = "text" class="form-control" name = "phone" required value="<?=!empty($_GET['phone'])?$_GET['phone']:''?>" onkeyup="autoFill('phone',this.value)"> 
+                          <div id="is-avl-mobile"></div>
                         </div>
                     </div>                   
                      <?php
@@ -358,7 +359,7 @@ echo'<div class="trackingDetails"></div>';
 
                   <div class="col-md-12">
                     <div class="form-group">
-                      <label>Description</label>
+                      <label><?=display('ticket_remark')?></label>
                       <textarea name="remark" class="form-control"></textarea>
                     </div>
                   </div>  
@@ -368,203 +369,3 @@ echo'<div class="trackingDetails"></div>';
            }
           }
           ?> 
-
-
-
-<?php
-  if ($this->session->companey_id==51) {
-  ?>
-
-<script type="text/javascript">
-    function hide_all_dependent_field(){
-      $(".service_related_issue_type").hide();                       
-      $(".service_related_issue_sub_type").hide();                       
-      $(".detail_of_issue").hide();                       
-      $(".error_coming").hide();                       
-      $(".dnd_sender_id").hide();                       
-      $(".issue_date").hide();                       
-      $(".promotional_sms_call_date_for_dnd").hide(); 
-
-      $(".balace_deduction_issue_type").hide();            
-      $(".balance_deduction_issue_sub_type").hide();            
-      $(".amount_deducted").hide();            
-      $(".date_of_deduction").hide();            
-      $(".waiver_required").hide();            
-      $(".blacklist_consent").hide(); 
-
-      $(".recharge_issue_type").hide();
-      $(".recharge_issue_sub_type").hide();
-      $(".recharge_denomination").hide();
-      $(".mode_of_recharge").hide();
-      $(".date_of_recharge").hide(); 
-
-
-      $(".network_issue_type").hide();
-      $(".network_issue_sub_type").hide();
-      $(".technology").hide();     
-
-      $(".alt_number").hide();            
-      $(".sim_service_issue_type").hide();            
-      $(".sim_service_issue_sub_type").hide();            
-      $(".date_of_simex").hide();            
-      $(".vms_name").hide();     
-
-      
-      $(".self_help_issue_type").hide();            
-      $(".self_help_issue_sub_type").hide();            
-      $(".date_of_problem").hide();
-
-      $(".other-issue-type").hide();
-      $(".voc").hide();
-    }
-
-    function show_dependent_field(service){
-      
-      hide_all_dependent_field();
-
-      if (service==103) {
-        $(".network_issue_type").show();
-        $(".network_issue_sub_type").show();
-        $(".technology").show();
-
-
-      }else if (service==104) {
-        $(".recharge_issue_type").show();
-        $(".recharge_issue_sub_type").show();
-        $(".recharge_denomination").show();
-        $(".mode_of_recharge").show();
-        $(".date_of_recharge").show(); 
-
-       
-      }else if (service==105) {
-        $(".balace_deduction_issue_type").show();            
-        $(".balance_deduction_issue_sub_type").show();            
-        $(".amount_deducted").show();            
-        $(".date_of_deduction").show();            
-        $(".waiver_required").show();            
-        $(".blacklist_consent").show(); 
-        
-      }else if (service==106) {
-        $(".alt_number").show();            
-        $(".sim_service_issue_type").show();            
-        $(".sim_service_issue_sub_type").show();            
-        $(".date_of_simex").show();            
-        $(".vms_name").show();   
-
-
-      }else if (service==107) {
-        $(".self_help_issue_type").show();            
-        $(".self_help_issue_sub_type").show();            
-        $(".date_of_problem").show(); 
-
-      }else if (service==108) {
-        $(".service_related_issue_type").show();                       
-        $(".service_related_issue_sub_type").show();                       
-        $(".detail_of_issue").show();                       
-        $(".error_coming").show();                       
-        $(".dnd_sender_id").show();                       
-        $(".issue_date").show();                       
-        $(".promotional_sms_call_date_for_dnd").show(); 
-      }
-      else if (service==110) {
-        $(".other-issue-type").show();
-        $(".voc").show();
-      }
-
-    }
-      
-  $("#sub_source").on('change',function(){
-    var service  = $("#sub_source").val();
-    show_dependent_field(service);
-  });
-
-</script>
-<?php
-}else if($this->session->companey_id == 29){ ?>
-  <script type="text/javascript">
-      function hide_all_dependent_field(){
-        $(".desired-loan-amount").hide();
-        $(".net-monthly-income").hide();
-        $(".bank-name").hide();
-        $(".personal-details").hide();
-        
-
-        $(".gross-annual-turnover").hide();
-        $(".net-profit-after-tax").hide();
-        
-        $(".company-name").hide();
-        $(".company-type").hide();
-        $(".occupation-type").hide();
-        $(".credit-card-name").hide();
-        
-
-        $(".profession").hide();
-        $(".years-in-occupation").hide();
-        $(".years-in-occupation").hide();
-        $(".annual-income").hide();
-
-      }
-
-      function show_dependent_field(service){        
-        hide_all_dependent_field();
-        if (service == 83) {
-          $(".desired-loan-amount").show();
-          $(".net-monthly-income").show();
-          $(".bank-name").show();
-          $(".personal-details").show();
-        
-        }else if (service == 84) {
-          $(".desired-loan-amount").show();          
-          $(".gross-annual-turnover").show();
-          $(".net-profit-after-tax").show();
-          $(".company-name").show();
-          $(".company-type").show();
-          $(".bank-name").show();
-
-        }else if (service == 111) {
-          $(".occupation-type").show();
-          $(".net-monthly-income").show();          
-          $(".bank-name").show();
-          $(".credit-card-name").show();
-
-        }else if (service == 112) {
-          $(".desired-loan-amount").show();          
-          $(".profession").show();
-          $(".years-in-occupation").show();
-          $(".bank-name").show();   
-          $(".annual-income").show();
-        }        
-      }
-        
-    $("#sub_source").on('change',function(){
-      var service  = $("#sub_source").val();
-      show_dependent_field(service);
-    });  
-  </script>
-<?php
-}
-?>
-
-<script>
-  
-  function find_sub(){
-
-    // alert('dadad');
-
-    var src_id = $('#lead_source').val();
-
-    // alert(src_id);
-
-
-        $.ajax({
-        type: 'POST',
-        url: '<?php echo base_url();?>lead/get_subsource_by_source',
-        data: {src_id:src_id},
-
-        success:function(data){
-        
-          $("#subsource").html(data);
-        }    
-    });
-  }
-</script>
