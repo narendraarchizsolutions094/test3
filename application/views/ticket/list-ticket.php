@@ -315,7 +315,7 @@
                       <?=($showall or in_array(7,$acolarr))?'<th>Created By</th>':''?>
                       <?=($showall or in_array(9,$acolarr))?'<th>Date</th>':''?>
 
-											<?=($showall or in_array(2,$acolarr))?'<th>Client</th>':''?>
+											<?=($showall or in_array(2,$acolarr))?'<th>'.display('problem_for').'</th>':''?>
 										  <?=($showall or in_array(3,$acolarr))?'<th>Email</th>':''?>
 											<?=($showall or in_array(4,$acolarr))?'<th>Phone</th>':''?>
 											<?=($showall or in_array(5,$acolarr))?'<th>Product</th>':''?>
@@ -822,7 +822,7 @@ function delete_recorde(){
           <label class=""><input type="checkbox" class="choose-col" id="choose-col" value = "1" <?php echo ($showall == true or in_array(1, $acolarr)) ? "checked" : ""; ?>> Ticket</label>
           </div>
           <div class = "col-md-4">  
-          <label class=""><input type="checkbox" class="choose-col"  value = "2"  <?php echo ($showall == true or in_array(2, $acolarr)) ? "checked" : ""; ?>>  Client</label> 
+          <label class=""><input type="checkbox" class="choose-col"  value = "2"  <?php echo ($showall == true or in_array(2, $acolarr)) ? "checked" : ""; ?>>  <?=display('problem_for')?></label> 
           </div>
           <div class = "col-md-4">  
           <label  class=""><input type="checkbox" class="choose-col"  value = "3"  <?php echo ($showall == true or in_array(3, $acolarr)) ? "checked" : ""; ?>> Email</label>
