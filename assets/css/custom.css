@@ -5176,7 +5176,7 @@ pre .arg {
 .select2-container--default .select2-selection--single:hover, 
 .select2-container--default .select2-selection--multiple:focus,
 .select2-container--default .select2-selection--multiple:hover {
-    box-shadow: 0 0 2px #7799D0;
+    box-shadow: none;
     border-color: #37a000;
 }
 .select2-dropdown{
