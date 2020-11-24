@@ -123,7 +123,12 @@ class Ticket extends CI_Controller
 	}
 
 
-
+	public function is_open_ticket($tracking_no){
+		$comp_id = $this->session->companey_id;
+		$this->db->where('tbl_ticket.ticket_status!=',3);
+		$this->db->where('tbl_ticket.company!=',$comp_id);
+		echo $this->db->get('tbl_ticket')->num_rows();
+	}
 	public function ticket_set_filters_session()
 	{
 		$this->session->set_userdata('ticket_filters_sess', $_POST);

@@ -38,7 +38,7 @@
 				</div>
 
 				<div class = "col-md-12 text-center">
-					<button class="btn btn-success" type="submit">Save</button>
+					<button class="btn btn-success" type="submit" id='save_ticket'>Save</button>
 				</div>
 			</div>
 				<?php echo form_close(); ?>
@@ -209,11 +209,22 @@
 			 startDate: '-7d'
 		});	
 
-	});
-
-
+	});	
+	function tracking_no_check(tracking_no){
+		$.ajax({
+			url:'<?= base_url('ticket/is_open_ticket')?>'+tracking_no,
+			type:'post',						
+			success:function(res) {	
+				if(res){
+					$("#save_ticket").attr('disabled',true);
+				}else{
+					$("#save_ticket").attr('disabled',false);
+				}
+			}
+		});
+	}
 function autoFill(find_by,key)
-{ //alert(find_by);
+{ 
 	if(key=='') return;
 
 	if(find_by == 'phone'){

@@ -83,7 +83,7 @@ echo'<div class="trackingDetails"></div>';
                         {
 
                         }else{
-                          
+                          tracking_no_check(that.value);
                           $.ajax({
                             url:'<?=base_url('ticket/view_tracking')?>',
                             type:'post',
