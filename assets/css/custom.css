@@ -2169,8 +2169,11 @@ table.text-center th {
     border: 1px solid #e4e5e7;
 }
 .form-control:focus {
-    border-color: #37a000;
+    border-color: #37a000 !important;
     box-shadow: none;
+}
+.form-control:hover{
+    border-color: #37a000 !important;
 }
 .note-editor.note-frame {
     border: 1px solid #e4e5e7;
@@ -6189,5 +6192,7 @@ a:hover{
     padding: 4px;
   }
 }
-
-
+.select2-container--default .select2-selection--single{
+    border-radius:15px !important;
+    border:1px solid #e4e5e7;
+}
