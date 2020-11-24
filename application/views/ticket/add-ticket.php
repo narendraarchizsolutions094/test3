@@ -215,7 +215,7 @@
 			url:'<?= base_url('ticket/is_open_ticket/')?>'+tracking_no,
 			type:'post',						
 			success:function(res) {	
-				if(res){
+				if(res>0){
 					$("#save_ticket").attr('disabled',true);
 				}else{
 					$("#save_ticket").attr('disabled',false);
