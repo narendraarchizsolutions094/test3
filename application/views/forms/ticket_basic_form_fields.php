@@ -369,3 +369,6 @@ echo'<div class="trackingDetails"></div>';
            }
           }
           ?> 
+          <script>
+            $('select').select2();
+            </script>
