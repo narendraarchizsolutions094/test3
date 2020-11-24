@@ -994,7 +994,7 @@ class Ticket_Model extends CI_Model
         	if($res['primary_tab']!='1')
         	{
         		$dynamic = $this->Enquiry_model->get_dyn_fld($ticketno,$res['id'],2);
-
+        		$heading = array();
         		foreach ($dynamic as $key => $value)
 			      {
 			          if(in_array($value['input_type'],array('2')))
@@ -1011,6 +1011,7 @@ class Ticket_Model extends CI_Model
 			                  $dynamic[$key]['input_values'] = $reshape;
 			              }
 			          }
+			          $heading[] = $value['input_label'];
 			      }
 
 
@@ -1051,7 +1052,8 @@ class Ticket_Model extends CI_Model
 			             		$data[] = $sub;
 			             	}
 			             }
-			        $part['table']=$data;
+			        $part['table']=array('heading'=>$heading,
+			        					'data'=>$data);
         		}
         		
         		$tabs[] = $part;
