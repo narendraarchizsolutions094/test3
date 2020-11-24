@@ -83,7 +83,6 @@ echo'<div class="trackingDetails"></div>';
                         {
 
                         }else{
-                          tracking_no_check(that.value);
                           $.ajax({
                             url:'<?=base_url('ticket/view_tracking')?>',
                             type:'post',
@@ -109,6 +108,7 @@ echo'<div class="trackingDetails"></div>';
                               console.info(w);
                             }
                           });
+                          tracking_no_check(that.value);
                         }
                       }
 
