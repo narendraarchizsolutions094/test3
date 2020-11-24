@@ -34,6 +34,16 @@ class Enquiry_model extends CI_Model {
 		return $insid;
     }
 
+
+    public function getPrimaryTab()
+	{
+		 return  $this->db->select('*')
+            ->where(array('form_for'=>0,'primary_tab'=>1))
+            ->get('forms')
+            ->row();
+	}
+
+
     public function comission_data($enq_code){
 	 	$this->db->select('*');
 	 	$this->db->where('tbl_comission.Enquiry_code',$enq_code);

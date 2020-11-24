@@ -502,6 +502,13 @@ class Enquiry extends CI_Controller
         }
     }
 
+    public function test()
+    {$this->load->model('Enquiry_model');
+       $prefix=  $this->Leads_Model->get_leadsource_list();
+        //$basic= $this->location_model->get_company_list1(197);
+        print_r($prefix);
+    }
+
 
     public function create()
     {

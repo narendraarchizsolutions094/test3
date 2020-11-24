@@ -107,7 +107,7 @@
       success: function(data) {
         $("#process_basic_fields").html(data);
         $("#fcity").select2();
-        $("#fstate").select2();
+        $("#fstate").select2();``
         get_custom_field();
       }
     });

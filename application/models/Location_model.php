@@ -89,7 +89,7 @@ class Location_model extends CI_Model {
     public function get_company_list1($process_id = ""){ // get basic field by process
         // print_r($process_id);
         $compid=$this->session->companey_id;
-        $this->db->select("*");
+        $this->db->select("enquiry_fileds_basic.*,basic_fields.title,input_types.title as type");
         $this->db->from('enquiry_fileds_basic');
         $where = '';
         if($process_id){
@@ -99,6 +99,8 @@ class Location_model extends CI_Model {
         // $this->db->where('FIND_IN_SET(process_id)',$process_id);
         // $this->db->where('comp_id',);
         $this->db->where($where);
+        $this->db->join('basic_fields','enquiry_fileds_basic.field_id=basic_fields.id','LEFT');
+        $this->db->join('input_types','basic_fields.type=input_types.id','LEFT');
         $this->db->order_by('enquiry_fileds_basic.fld_order','ASC');
 
         return $this->db->get()->result_array();
