@@ -318,7 +318,7 @@ class Ticket extends REST_Controller {
 
     $this->form_validation->set_rules('company_id','Company','trim|required');
     $this->form_validation->set_rules('user_id','User','trim|required');
-    
+    $this->form_validation->set_rules('process_id','Process','trim|required');
     if($this->form_validation->run() == true)
     {
       $session_backup = $this->session->userdata()??'';

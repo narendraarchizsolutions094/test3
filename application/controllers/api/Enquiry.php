@@ -4,7 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 require APPPATH . 'libraries/REST_Controller.php';
 require APPPATH . 'libraries/Format.php';
 class Enquiry extends REST_Controller {
-    function __construct()
+    function __construct() 
     {
         parent::__construct();
            $this->load->database();
@@ -35,7 +35,7 @@ class Enquiry extends REST_Controller {
                 $this->form_validation->set_message('phone_check', 'The Mobile no field can not be dublicate in current process');
                 return false;
             }else{
-                return TRUE;
+                return TRUE; 
             }
         }    
     }
@@ -177,6 +177,195 @@ class Enquiry extends REST_Controller {
 		}
 	}
 	
+
+	public function createEnquiryForm_post()
+  	{
+    $this->load->model(array('Enquiry_model','Leads_Model'));
+
+    $company_id   = $this->input->post('company_id');
+    $process_id   = $this->input->post('process_id');
+// $user_id      = $this->input->post('user_id');
+
+    $this->session->companey_id = $company_id;
+
+    $this->form_validation->set_rules('company_id','Company ID','trim|required',array('required'=>'You have note provided %s'));
+    $this->form_validation->set_rules('process_id','Process ID','trim|required',array('required'=>'You have note provided %s'));
+
+
+    if($this->form_validation->run() == true)
+    {
+
+      $primary_tab= $this->Enquiry_model->getPrimaryTab()->id;
+     
+
+      $basic= $this->location_model->get_company_list1($process_id);
+
+      foreach ($basic as $key => $input)
+      {
+          switch($input['field_id'])
+          { 
+            case 1:
+            $prefixList = $this->Enquiry_model->name_prefix_list();
+            $prefix = array();
+            if(!empty($prefixList))
+            {
+            	foreach ($prefixList as $res)
+            	{
+            		$prefix[]  = $res->prefix;
+            	}
+            }
+            $basic[$key]['extra_field'][] =array('input_values'=>$prefix,
+            									'parameter_name'=>'name_prefix');
+
+            $basic[$key]['parameter_name'] = 'enquirername';
+            break;
+
+            case 2:
+            $basic[$key]['parameter_name'] = 'lastname';
+            break;
+
+            case 4:
+            $basic[$key]['parameter_name'] = 'mobileno';
+            break;
+            case 5:
+            $basic[$key]['parameter_name'] = 'email';
+            break;
+            case 6:
+            $basic[$key]['parameter_name'] = 'company';
+            break;
+            case 7:
+            $leadsource = $this->Leads_Model->get_leadsource_list();
+            $values = array();
+            foreach ($leadsource as $res)
+            {
+              $values[] =  array('key'=>$res->lsid,
+                                'value'=> $res->lead_name
+                              );
+            }
+            $basic[$key]['input_values'] = $values;
+            $basic[$key]['parameter_name'] = 'lead_source';
+            break;
+            case 8:
+            $subsource = $this->location_model->productcountry();
+            $values = array();
+            foreach ($subsource as $res)
+            {
+              $values[] =  array('key'=>$res->id,
+                                'value'=> $res->country_name
+                              );
+            }
+            $basic[$key]['input_values'] = $values;
+            $basic[$key]['parameter_name'] = 'sub_source';
+            break;
+
+            case 9:
+            $state_list = $this->location_model->estate_list();
+            $values = array();
+            foreach ($state_list as $res)
+            {
+              $values[] = array('key'=>$res->id,
+                                'value'=> $res->state
+                              );
+            }
+            $basic[$key]['input_values'] = $values;
+            $basic[$key]['parameter_name'] = 'state_id';
+            break;
+
+            case 10:
+            $city_list = $this->location_model->ecity_list();
+            $values = array();
+            foreach ($city_list as $res)
+            {
+              $values[] = array('key'=>$res->id,
+              					'state_id'=>$res->state_id,
+                                'value'=> $res->city
+                              );
+            }
+            $basic[$key]['input_values'] = $values;
+            $basic[$key]['parameter_name'] = 'city_id';
+            break;
+
+            case 11:
+            $basic[$key]['parameter_name'] = 'address';
+            break;
+
+            case 12:
+            $basic[$key]['parameter_name'] = 'enquiry';
+            break;
+
+            case 14: 
+            $basic[$key]['parameter_name'] = 'pin_code';
+            break;
+
+            // case 27:
+            // $basic[$key]['parameter_name'] = 'remark';
+            // break;
+
+            // case 28:
+            // $basic[$key]['parameter_name'] = 'tracking_no';
+            // break;
+          }
+
+      }
+
+      $dynamic = $this->location_model->get_company_list($process_id,$primary_tab);
+      $i=0;
+      foreach ($dynamic as $key => $value)
+      {
+          if(in_array($value['input_type'],array('2')))
+          {
+              $temp  = explode(',', $value['input_values']);
+              if(!empty($temp))
+              {   $reshape = array();
+                  foreach ($temp as $k => $v)
+                  {
+                    $reshape[] = array('key'=>null,
+                                      'value'=>$v);
+                  }
+                  $dynamic[$key]['input_values'] = $reshape;
+              }
+          }
+          $dynamic[$key]['parameter_name'] = array(
+                                              array('key'=>($value['input_type']=='8'?'enqueryfiles['.$i.']':'enqueryfield['.$i.']'),
+                                                    'value'=>''),
+                                              array('key'=>'inputfieldno['.$i.']',
+                                                    'value'=>$value['input_id']),
+                                              array('key'=>'inputtype['.$i.']',
+                                                    'value'=>$value['input_type']),
+                                              );
+          $i++;
+      }
+
+      $data = array_merge($basic,$dynamic);      
+
+      session_destroy();
+
+      if(!empty($data))
+      {
+        $this->set_response([
+        'status'      => TRUE,          
+        'data'  => $data, 
+        
+        ], REST_Controller::HTTP_OK);   
+      }
+      else
+      {
+        $this->set_response([
+        'status'  => false,           
+        'msg'     => "No Data Found"
+        ], REST_Controller::HTTP_OK); 
+      }
+    }
+    else
+    {
+      $msg = strip_tags(validation_errors());
+      $this->set_response([
+        'status'  => false,
+        'msg'     => $msg,//"Please provide a company id"
+      ],REST_Controller::HTTP_OK);
+    } 
+  }
+
   public function send_message_post(){
     
     $Enquery_id = $this->input->post('enquery_code');
@@ -568,8 +757,7 @@ class Enquiry extends REST_Controller {
 			$this->set_response(["status"     => false,
 					 "message"   => "key not matched"], REST_Controller::HTTP_OK);
 		}
-		
-		
+				
 		if($this->form_validation->run()) {
 		
 			$label  = $this->input->post("label", true);
