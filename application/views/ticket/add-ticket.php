@@ -212,7 +212,7 @@
 	});	
 	function tracking_no_check(tracking_no){
 		$.ajax({
-			url:'<?= base_url('ticket/is_open_ticket')?>'+tracking_no,
+			url:'<?= base_url('ticket/is_open_ticket/')?>'+tracking_no,
 			type:'post',						
 			success:function(res) {	
 				if(res){
