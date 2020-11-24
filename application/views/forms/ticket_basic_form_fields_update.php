@@ -219,7 +219,7 @@ echo'
                     <div class="col-md-6">
                       <div class="form-group">
                         <label>Phone<span class="text-danger">*</span></label>
-                        <input type="text" name="phone" class="form-control" value="<?php  if(!empty($ticket->phone)){ echo $ticket->phone; } ?>" required>
+                        <input type="text" name="phone" class="form-control" value="<?php  if(!empty($ticket->phone)){ echo $ticket->phone; } ?>" required>                        
                       </div>
                     </div>
 

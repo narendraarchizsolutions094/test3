@@ -211,13 +211,11 @@
 
 	});
 
-function phone_valid(phone){
-	= '<div id="is-avl-mobile"><span class="badge badge-success" style="background:green;"><i class="fa fa-check"></i> Use Phone number <a class="btn btn-sm btn-success" id="click_to_call" type="button" title="Call" onclick="send_parameters("'+phone+'",0)" href="javascript:void(0)"><i class="fa fa-phone" aria-hidden="true"></i></a> </span></div>';
 
-}
 function autoFill(find_by,key)
 { //alert(find_by);
 	if(key=='') return;
+
 	if(find_by == 'phone'){
 		$("#is-avl-mobile").html('<span class="badge badge-success" style="background:green;"><i class="fa fa-check"></i> Use Phone number <a class="btn btn-sm btn-success" id="click_to_call" type="button" title="Call" onclick="send_parameters('+key+')" href="javascript:void(0)"><i class="fa fa-phone" aria-hidden="true"></i></a> </span>');
 	}
