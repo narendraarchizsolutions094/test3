@@ -129,6 +129,7 @@ class Ticket extends REST_Controller {
                                               array('key'=>'2',
                                                     'value'=>'Is Query'),
                                             );
+            $basic[$key]['parameter_name'] = 'complaint_type';
             break;
 
             case 16:
@@ -140,6 +141,7 @@ class Ticket extends REST_Controller {
                                 'value'=>$res->name);
             }
             $basic[$key]['input_values'] = $values;
+            $basic[$key]['parameter_name'] = 'referred_by';
             break;
 
             case 17:
@@ -153,8 +155,17 @@ class Ticket extends REST_Controller {
                               );
             }
             $basic[$key]['input_values'] = $values;
+            $basic[$key]['parameter_name'] = 'client';
             break;
-
+            case 18:
+            $basic[$key]['parameter_name'] = 'name';
+            break;
+            case 19:
+            $basic[$key]['parameter_name'] = 'phone';
+            break;
+            case 20:
+            $basic[$key]['parameter_name'] = 'email';
+            break;
             case 21:
             $products = $this->Ticket_Model->getproduct();
             $values = array();
@@ -165,6 +176,7 @@ class Ticket extends REST_Controller {
                               );
             }
             $basic[$key]['input_values'] = $values;
+            $basic[$key]['parameter_name'] = 'product';
             break;
 
             case 22:
@@ -177,6 +189,7 @@ class Ticket extends REST_Controller {
                               );
             }
             $basic[$key]['input_values'] = $values;
+            $basic[$key]['parameter_name'] = 'relatedto';
             break;
 
             case 23:
@@ -189,6 +202,7 @@ class Ticket extends REST_Controller {
                               );
             }
             $basic[$key]['input_values'] = $values;
+            $basic[$key]['parameter_name'] = 'issue';
             break;
 
             case 24:
@@ -202,6 +216,7 @@ class Ticket extends REST_Controller {
                                     'value'=>'High')
                             );
             $basic[$key]['input_values'] = $values;
+            $basic[$key]['parameter_name'] = 'priority';
             break;
 
             case 25:
@@ -214,14 +229,28 @@ class Ticket extends REST_Controller {
                                 );
             }
             $basic[$key]['input_values'] = $values;
+            $basic[$key]['parameter_name'] = 'source';
             break;
+
+            case 26: 
+            $basic[$key]['parameter_name'] = 'attachment[]';
+            break;
+
+            case 27:
+            $basic[$key]['parameter_name'] = 'remark';
+            break;
+
+            case 28:
+            $basic[$key]['parameter_name'] = 'tracking_no';
+            break;
+
 
           }
 
       }
 
       $dynamic = $this->location_model->get_company_list($process_id,$primary_tab);
-
+      $i=0;
       foreach ($dynamic as $key => $value)
       {
           if(in_array($value['input_type'],array('2')))
@@ -238,6 +267,15 @@ class Ticket extends REST_Controller {
                   $dynamic[$key]['input_values'] = $reshape;
               }
           }
+          $dynamic[$key]['parameter_name'] = array(
+                                              array('key'=>($value['input_type']=='8'?'enqueryfiles['.$i.']':'enqueryfield['.$i.']'),
+                                                    'value'=>''),
+                                              array('key'=>'inputfieldno['.$i.']',
+                                                    'value'=>$value['input_id']),
+                                              array('key'=>'inputtype['.$i.']',
+                                                    'value'=>$value['input_type']),
+                                              );
+          $i++;
       }
 
       $data = array_merge($basic,$dynamic);      
@@ -274,17 +312,79 @@ class Ticket extends REST_Controller {
 //api for creating new ticket
   public function createTicket_post()
   {      
-    $company_id   = $this->input->post('company_id'); // mandatory to pass
-    $user_id      = $this->input->post('user_id'); // mandatory to pass
+    $company_id   = $this->input->post('company_id'); //mandatory to pass
+    $user_id      = $this->input->post('user_id');    //mandatory to pass
+    $process_id   = $this->input->post('process_id');
+
     $this->form_validation->set_rules('company_id','Company','trim|required');
     $this->form_validation->set_rules('user_id','User','trim|required');
+    
     if($this->form_validation->run() == true)
     {
+      $session_backup = $this->session->userdata()??'';
+
+      $this->session->process = array($process_id);
+      $this->session->companey_id = $company_id;
+
       $this->load->model('Ticket_Model');
       $inserted  = $this->Ticket_Model->save($company_id,$user_id);
-      //echo "string".$inserted;die;
+
+      //for dynamic fields update
+      if($res=$inserted) 
+      {
+        $tck_id =  $this->db->select('id')
+                ->where('ticketno',$res)
+                ->get('tbl_ticket')->row()->id;
+        
+        $comment_id = $this->db->select('id')
+                ->where('tck_id',$tck_id)
+                ->get('tbl_ticket_conv')->row()->id;
+
+        if(isset($_POST['inputfieldno'])) {                    
+                $inputno   = $this->input->post("inputfieldno", true);
+                $enqinfo   = $this->input->post("enqueryfield", true);
+                $inputtype = $this->input->post("inputtype", true);                
+                $file_count = 0;
+                $file = !empty($_FILES['enqueryfiles'])?$_FILES['enqueryfiles']:'';                
+                foreach($inputno as $ind => $val){
+  
+
+                 if ($inputtype[$ind] == 8) {                                                
+                        $file_data    =   $this->doupload($file,$file_count);
+
+                        if (!empty($file_data['imageDetailArray']['file_name'])) {
+                            $file_path = base_url().'uploads/ticket_documents/'.$this->session->companey_id.'/'.$file_data['imageDetailArray']['file_name'];
+                            $biarr = array( 
+                                            "enq_no"  => $res,
+                                            "input"   => $val,
+                                            "parent"  => $tck_id, 
+                                            "fvalue"  => $file_path,
+                                            "cmp_no"  => $company_id,
+                                            "comment_id" => $comment_id
+                                        );         
+                                $this->db->insert('ticket_dynamic_data',$biarr);          
+                        }
+                        $file_count++;          
+                    }else{
+                        $biarr = array( "enq_no"  => $res,
+                                      "input"   => $val,
+                                      "parent"  => $tck_id, 
+                                      "fvalue"  => $enqinfo[$ind]??'',
+                                      "cmp_no"  => $company_id,
+                                      "comment_id" => $comment_id
+                                     );                                 
+                       
+                            $this->db->insert('ticket_dynamic_data',$biarr);
+                    }                                      
+                } //foreach loop end               
+            }    
+            //dynamic end
+        }
+    //echo "string".$inserted;die;
+
       if(!empty($inserted))
       {
+        $this->session->set_userdata($session_backup);
         $this->set_response([
         'status'   => TRUE,            
         'insertId' => $inserted,

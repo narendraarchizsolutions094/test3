@@ -1195,7 +1195,7 @@ class Ticket extends CI_Controller
 		}
 		if ($this->form_validation->run()==TRUE) {
 			$res = $this->Ticket_Model->save($this->session->companey_id, $this->session->user_id);
-
+			
 			if ($res) 
 			{
 				$tck_id =  $this->db->select('id')
@@ -1210,7 +1210,7 @@ class Ticket extends CI_Controller
                 $inputno   = $this->input->post("inputfieldno", true);
                 $enqinfo   = $this->input->post("enqueryfield", true);
                 $inputtype = $this->input->post("inputtype", true);                
-                $file_count = 0;                
+                $file_count = 0;
                 $file = !empty($_FILES['enqueryfiles'])?$_FILES['enqueryfiles']:'';                
                 foreach($inputno as $ind => $val){
 	
@@ -1235,7 +1235,7 @@ class Ticket extends CI_Controller
                         $biarr = array( "enq_no"  => $res,
                                       "input"   => $val,
                                       "parent"  => $tck_id, 
-                                      "fvalue"  => $enqinfo[$ind],
+                                      "fvalue"  => $enqinfo[$ind]??'',
                                       "cmp_no"  => $this->session->companey_id,
                                       "comment_id" => $comment_id
                                      );                                 

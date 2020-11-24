@@ -783,6 +783,7 @@ class Ticket_Model extends CI_Model
                                                     'value'=>'Is Query'),
                                             );
             $basic[$key]['current_value'] = $ticket->complaint_type;
+
             break;
 
             case 16:
@@ -924,7 +925,7 @@ class Ticket_Model extends CI_Model
       }
 
       $dynamic = $this->Enquiry_model->get_dyn_fld($ticketno,$primary_tab,2);
-
+      $i=0;
       foreach ($dynamic as $key => $value)
       {
           if(in_array($value['input_type'],array('2')))
@@ -941,6 +942,15 @@ class Ticket_Model extends CI_Model
                   $dynamic[$key]['input_values'] = $reshape;
               }
           }
+         $dynamic[$key]['parameter_name'] = array(
+                                              array('key'=>'enqueryfield['.$i.']',
+                                                    'value'=>''),
+                                              array('key'=>'inputfieldno['.$i.']',
+                                                    'value'=>$value['input_id']),
+                                              array('key'=>'inputtype['.$i.']',
+                                                    'value'=>$value['input_type']),
+                                              );
+          $i++;
       }
 
         $tabs[]  = array('tab_id'=>$primary->id,
