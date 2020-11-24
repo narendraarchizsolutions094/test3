@@ -211,10 +211,16 @@
 
 	});
 
+function phone_valid(phone){
+	= '<div id="is-avl-mobile"><span class="badge badge-success" style="background:green;"><i class="fa fa-check"></i> Use Phone number <a class="btn btn-sm btn-success" id="click_to_call" type="button" title="Call" onclick="send_parameters("'+phone+'",0)" href="javascript:void(0)"><i class="fa fa-phone" aria-hidden="true"></i></a> </span></div>';
 
+}
 function autoFill(find_by,key)
 { //alert(find_by);
 	if(key=='') return;
+	if(find_by == 'phone'){
+		$("#is-avl-mobile").html('<span class="badge badge-success" style="background:green;"><i class="fa fa-check"></i> Use Phone number <a class="btn btn-sm btn-success" id="click_to_call" type="button" title="Call" onclick="send_parameters('+key+')" href="javascript:void(0)"><i class="fa fa-phone" aria-hidden="true"></i></a> </span>');
+	}
 	$.ajax({
 		url:'<?= base_url('ticket/autofill')?>',
 		type:'post',
@@ -223,8 +229,7 @@ function autoFill(find_by,key)
 		success:function(res) 
 		{	
 			if(res.status=='1')
-			{	//alert(JSON.stringify(res));
-				//alert(find_by);
+			{					
 				if(find_by!='email')
 					$("input[name=email").val(res.email);
 				if(find_by!='phone')	
