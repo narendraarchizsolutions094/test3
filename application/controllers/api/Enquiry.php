@@ -111,6 +111,8 @@ class Enquiry extends REST_Controller {
 			    $msg	=	'Enquiry successfully updated';
 
 			    $this->Leads_Model->add_comment_for_events($this->lang->line("information_updated"), $this->input->post('update'),'',$this->input->post('user_id'));
+
+
 			
             }else{
             	$postData['Enquery_id'] = $encode;
@@ -365,6 +367,49 @@ class Enquiry extends REST_Controller {
       ],REST_Controller::HTTP_OK);
     } 
   }
+
+
+  public function getEnquiryTabs_post()
+  {      
+  	$this->load->model('Enquiry_model');
+    $company_id   = $this->input->post('company_id');
+    $enquiry_id      = $this->input->post('enquiry_id');
+
+    $this->form_validation->set_rules('company_id','company_id','trim|required',array('required'=>'You have note provided %s'));
+    $this->form_validation->set_rules('enquiry_id','enquiry_id','trim|required',array('required'=>'You have note provided %s'));
+
+    if($this->form_validation->run() == true)
+    {
+
+      $data  = $this->Enquiry_model->enquiry_all_tab_api($company_id,$enquiry_id);
+
+      if(!empty($data))
+      {
+        $this->set_response([
+        'status'      => TRUE,           
+        'data'  => $data,
+        ], REST_Controller::HTTP_OK);   
+      }
+      else
+      {
+        $this->set_response([
+        'status'  => false,           
+        'msg'     => "No Data found"
+        ], REST_Controller::HTTP_OK); 
+      }
+    }
+    else
+    {
+      $msg = strip_tags(validation_errors());
+      $this->set_response([
+        'status'  => false,
+        'msg'     => $msg,//"Please provide a company id"
+      ],REST_Controller::HTTP_OK);
+    } 
+  }
+
+
+
 
   public function send_message_post(){
     
