@@ -148,7 +148,7 @@ if($form_type == 1)
                </select>
                <?php }
 
-                if($fld['input_type']==20){?>
+                if($fld['input_type']==21){?>
                   <label><?php echo(!empty($fld["input_label"])) ?  ucwords($fld["input_label"]) : ""; ?></label>
                   <?php $optarr = (!empty($fld['input_values'])) ? explode(",",$fld['input_values']) : array(); 
                   ?>
