@@ -1843,7 +1843,8 @@ public function sync_enquiry_data_post(){
 		}
 	}
 }
-	public function enquiry_data_list_post(){
+	public function enquiry_data_list_post()
+	{
 	    $res= array();
 	    $user_id= $this->input->post('user_id');
 		if(!empty($user_id)){
@@ -2155,4 +2156,111 @@ public function get_enq_list_post(){
 				'message' =>$msg
 				], REST_Controller::HTTP_OK);	
 	}	
+
+
+	public function getEnquiryTimeline_post()
+  	{
+    $company_id   = $this->input->post('company_id');
+    $enquiry_id      = $this->input->post('enquiry_id');
+
+    $this->form_validation->set_rules('company_id','company_id','trim|required',array('required'=>'You have note provided %s'));
+    $this->form_validation->set_rules('enquiry_id','enquiry_id','trim|required',array('required'=>'You have note provided %s'));
+
+    if($this->form_validation->run() == true)
+    {
+      $this->session->companey_id = $company_id;
+     $res= $this->db->select('Enquery_id')->where(array('enquiry_id'=>$enquiry_id))->get('enquiry')->row();
+   
+      if(!empty($res))
+      {
+      	 $data = $this->Leads_Model->comment_byId($res->Enquery_id);
+      }
+      
+    
+      if(!empty($res) && !empty($data))
+      {
+        $this->set_response([
+        'status'      => TRUE,           
+        'data'  => $data,
+        ], REST_Controller::HTTP_OK);   
+      }
+      else
+      {
+        $this->set_response([
+        'status'  => false,           
+        'msg'     => "No Data found"
+        ], REST_Controller::HTTP_OK); 
+      }
+    }
+    else
+    {
+      $msg = strip_tags(validation_errors());
+      $this->set_response([
+        'status'  => false,
+        'msg'     => $msg,//"Please provide a company id"
+      ],REST_Controller::HTTP_OK);
+    }
+
+  }
+
+  // public function getEnquiryDisposition_post()
+  // {
+  //   $this->load->model(array('Leads_Model'));
+
+  //   $company_id   = $this->input->post('company_id');
+  //   $enquiry_id      = $this->input->post('enquiry_id');
+
+  //   $this->form_validation->set_rules('company_id','company_id','trim|required',array('required'=>'You have note provided %s'));
+  //   $this->form_validation->set_rules('enquiry_id','enquiry_id','trim|required',array('required'=>'You have note provided %s'));
+
+  //   if($this->form_validation->run() == true)
+  //   {
+  //     $this->session->companey_id = $company_id;
+
+  //      $res= $this->enquiry_model->enquiry_by_id($enquiry_id);
+ 
+  //     $stage = $this->Leads_Model->stage_by_type();
+  //     $data =array();
+
+  //     foreach ($stage as $key => $val)
+  //     {
+  //        $sub_stage =  $this->Leads_Model->all_description($val->stg_id);
+  //        $val->sub_stage = $sub_stage;
+  //        $data['available']['stage'][] = $val;
+  //     }
+  //     $data['available']['status'] = $this->Ticket_Model->ticket_status()->result();
+  //     if(!empty($ticket))
+  //     $data['selected'] =array(
+  //                         'stage'=>$ticket->ticket_stage,
+  //                         'sub_stage'=>$ticket->ticket_substage,
+  //                         'status'=>$ticket->ticket_status,
+  //                           );
+     
+  //   // print_r( $data); exit();
+  //     if(!empty($data))
+  //     {
+  //       $this->set_response([
+  //       'status'      => TRUE,           
+  //       'data'  => $data,
+  //       ], REST_Controller::HTTP_OK);   
+  //     }
+  //     else
+  //     {
+  //       $this->set_response([
+  //       'status'  => false,           
+  //       'msg'     => "No Data found"
+  //       ], REST_Controller::HTTP_OK); 
+  //     }
+  //   }
+  //   else
+  //   {
+  //     $msg = strip_tags(validation_errors());
+  //     $this->set_response([
+  //       'status'  => false,
+  //       'msg'     => $msg,//"Please provide a company id"
+  //     ],REST_Controller::HTTP_OK);
+  //   }
+
+  // }
+
 }
