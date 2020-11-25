@@ -2861,6 +2861,8 @@ $cpny_id=$this->session->companey_id;
     }
     public function dy2despositionDataChart($userid,$companyid,$status)
     {	
+        $data=[];
+
         // not in use
     	$all_reporting_ids    =   $this->common_model->get_categories($userid);
         $cpny_id=$companyid;
@@ -2882,9 +2884,43 @@ $cpny_id=$this->session->companey_id;
         }
         return $data;
     }
+    public function DydropDataChart($userid,$companyid,$status)
+    {	
+        $data=[];
+
+    	$all_reporting_ids    =   $this->common_model->get_categories($userid);
+        $cpny_id=$companyid;
+    	$where = "( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
+    	$where .= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';
+        $where.=" AND enquiry.comp_id=$cpny_id";
+
+    	$enquiry_drop = $this->db->query("SELECT count(enquiry.enquiry_id)counter,tp.drop_reason FROM enquiry  right JOIN tbl_drop as tp ON tp.d_id = enquiry.drop_status WHERE $where AND enquiry.status = $status  AND tp.drop_reason IS NOT NULL GROUP BY tp.drop_reason");
+        $enquiry_dropWise = $enquiry_drop->result_array();
+        foreach ($enquiry_dropWise as $key => $value) {
+          $data[]=$value['counternow'];
+    }
+    return $data;
+    }
+
+    public function DYprocessWiseChart($userid,$companyid,$process,$status)
+    {	
+        $data=[];
+    	$all_reporting_ids    =   $this->common_model->get_categories($userid);
+        $cpny_id=$companyid;
+    	$where = "( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
+    	$where .= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';
+        $where.=" AND enquiry.comp_id=$cpny_id";
+
+    	$enquiry_process = $this->db->query("SELECT count(enquiry.enquiry_id)counter,tp.product_name FROM enquiry  LEFT JOIN tbl_product as tp ON tp.sb_id = enquiry.product_id WHERE $where AND enquiry.status = $status AND tp.sb_id In ($process) GROUP BY tp.sb_id");
+        $enquiry_processWise = $enquiry_process->result();
+       
+      return $enquiry_processWise;
+    }
 
     public function dysourceDataChart($userid,$companyid,$status)
     {	
+        $data=[];
+
     	$all_reporting_ids    =   $this->common_model->get_categories($userid);
         $cpny_id=$companyid;
     	$where = "( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';

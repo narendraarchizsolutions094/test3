@@ -941,15 +941,15 @@ $(document).ready(function(){
               labels: ["JUN", "FEB", "MAR", "APR","MAY","JUNE","JULY","AUG","SEP","OCT","NOV","DEC"],
               datasets: [
                   {
-                  label: <?=display("enquiry") ?>,
+                  label: "<?=display("enquiry") ?>",
                   backgroundColor: "#3e95cd",
                   data: [ parseInt(data.data.ejan), parseInt(data.data.efeb), parseInt(data.data.emar), parseInt(data.data.eapr), parseInt(data.data.emay), parseInt(data.data.ejun), parseInt(data.data.ejuly), parseInt(data.data.eaug), parseInt(data.data.esep), parseInt(data.data.eoct), parseInt(data.data.enov), parseInt(data.data.edec)]
                 }, {
-                  label: <?=display("lead") ?>,
+                  label: "<?=display("lead") ?>",
                   backgroundColor: "#8e5ea2",
                   data: [ parseInt(data.data.ljan), parseInt(data.data.lfeb), parseInt(data.data.lmar), parseInt(data.data.lapr), parseInt(data.data.lmay), parseInt(data.data.ljun), parseInt(data.datajuly), parseInt(data.data.laug), parseInt(data.data.lsep), parseInt(data.data.loct), parseInt(data.data.lnov), parseInt(data.data.ldec)]
                 }, {
-                  label: <?=display("client") ?>,
+                  label: "<?=display("client") ?>",
                   backgroundColor: "#c45850",
                   data: [ parseInt(data.data.cjan), parseInt(data.data.cfeb), parseInt(data.data.cmar), parseInt(data.data.capr), parseInt(data.data.cmay), parseInt(data.data.cjun), parseInt(data.data.cjuly), parseInt(data.data.caug), parseInt(data.data.csep), parseInt(data.data.coct), parseInt(data.data.cnov), parseInt(data.data.cdec)]
                 },
@@ -966,7 +966,7 @@ $(document).ready(function(){
                             {
                   label: "<?= $ctitle ?>",
                   backgroundColor: "<?=  sprintf('#%06X', mt_rand(0, 0xFFFFFF)); ?>",
-                   data: [ <?= $count['ejan']?>,<?= $count['efeb']?>,<?= $count['emar']?>,<?= $count['eapr']?>,<?= $count['emay']?>,<?= $count['ejun']?>,<?= $count['ejuly']?>,<?= $count['eaug']?>,<?= $count['esep']?>,<?= $count['eoct']?>,<?= $count['enov']?>,<?= $count['edec']?>]
+                   data: [<?= $count['ejan']?>,<?= $count['efeb']?>,<?= $count['emar']?>,<?= $count['eapr']?>,<?= $count['emay']?>,<?= $count['ejun']?>,<?= $count['ejuly']?>,<?= $count['eaug']?>,<?= $count['esep']?>,<?= $count['eoct']?>,<?= $count['enov']?>,<?= $count['edec']?>,],
                               },
 
                             <?php 
@@ -1080,7 +1080,20 @@ $(document).ready(function(){
         }, {
           name: '<?php echo display("Client"); ?>',
           data: data3,
-        }]
+        },
+        <?php   $enquiry_separation  = get_sys_parameter('enquiry_separation', 'COMPANY_SETTING');
+                 if (!empty($enquiry_separation)) {
+                  $enquiry_separation = json_decode($enquiry_separation, true);
+                      foreach ($enquiry_separation as $key => $value) {
+                               $ctitle = $enquiry_separation[$key]['title']; 
+                               $count = $this->enquiry_model->DydropDataChart($this->session->user_id,$this->session->companey_id,$key);
+                         ?>  {
+                   name: "<?= $ctitle ?>",
+                   data: [<?= implode(',',$count); ?> ]
+                     },
+        <?php } }  ?>
+        
+        ]
       });
       }
     }
@@ -1265,7 +1278,15 @@ function updateHands() {
             categories: [
               '<?php echo display("enquiry"); ?>',
               '<?php echo display("lead"); ?>',
-              '<?php echo display("Client"); ?>'
+              '<?php echo display("Client"); ?>',
+              <?php   $enquiry_separation  = get_sys_parameter('enquiry_separation', 'COMPANY_SETTING');
+                 if (!empty($enquiry_separation)) {
+                  $enquiry_separation = json_decode($enquiry_separation, true);
+                      foreach ($enquiry_separation as $key => $value) {
+                               $ctitle = $enquiry_separation[$key]['title']; 
+                         ?>
+                   "<?= $ctitle ?>",
+        <?php } }  ?>
             ],
             crosshair: true
           },
@@ -1298,7 +1319,20 @@ function updateHands() {
             },
             { name:data.data['enquiry_processWise'][2]['product_name'],
               data:[parseInt(data.data['enquiry_processWise'][2]['counter']),parseInt(data.data['lead_processWise'][2]['counter']),parseInt(data.data['client_processWise'][2]['counter'])],
-            }
+            },
+            <?php   $enquiry_separation  = get_sys_parameter('enquiry_separation', 'COMPANY_SETTING');
+                 if (!empty($enquiry_separation)) {
+        $process = implode(',',$this->session->process);
+                  $enquiry_separation = json_decode($enquiry_separation, true);
+                      foreach ($enquiry_separation as $key => $value) {
+                               $count = $this->enquiry_model->DYprocessWiseChart($this->session->user_id,$this->session->companey_id,$process,$key);
+                        ?>  {
+                   name: "<?= $count[0]->product_name ?>",
+                   data: [<?= $count[0]->counter ?>],
+                     },
+        <?php } }  ?>
+
+
             ]
           });
         

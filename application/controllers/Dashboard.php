@@ -976,7 +976,7 @@ if (!empty($enquiry_separation)) {
             echo json_encode(array('status'=>'fail'));
         }
     }
-
+    
     public function despositionDataChart()
     {   
        // echo "string";die;
