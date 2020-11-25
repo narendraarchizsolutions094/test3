@@ -2742,9 +2742,96 @@ $cpny_id=$this->session->companey_id;
 
         return $dataAry;
     }
+    public function Dy_enquiryLeadClientCount($userid,$companyid,$status)
+    {	
+    	$all_reporting_ids    =   $this->common_model->get_categories($userid);
+        $cpny_id=$companyid;
+    	$where = "( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
+    	$where .= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';
+        $where.=" AND enquiry.comp_id=$cpny_id";
 
+        $enquiry = $lead = $client = $enq_ct = $lead_ct = $client_ct = $enq_ut = $lead_ut = $client_ut = $enq_drp = $lead_drp = $client_drp = $enq_active = $lead_active = $client_active = $enq_assign = $lead_assign = $client_assign = 0;
+
+        $query = $this->db->query("SELECT count(enquiry.enquiry_id)counter,enquiry.status FROM enquiry WHERE $where GROUP BY enquiry.status");
+        $result = $query->result();
+        
+        foreach($result as $r)
+        {
+            if($r->status == $status)
+            {
+                $enquiry = (!empty($r->counter)) ? $r->counter : 0;
+            }
+          
+        }
+
+        $query2 = $this->db->query("SELECT count(enquiry_id)counter,enquiry.status FROM `enquiry` WHERE $where AND DATE(created_date) = CURRENT_DATE GROUP BY enquiry.status");
+
+        $result2 = $query2->result();
+
+        foreach($result2 as $r)
+        {
+            if($r->status == $status)
+            {
+                $enq_ct = (!empty($r->counter)) ? $r->counter : 0;
+            }
+          
+        }
+
+        $query3 = $this->db->query("SELECT count(enquiry_id)counter,enquiry.status FROM `enquiry` WHERE $where AND DATE(update_date) = CURRENT_DATE GROUP BY enquiry.status");
+
+        $result3 = $query2->result();
+
+        foreach($result3 as $r)
+        {
+            if($r->status == $status)
+            {
+                $enq_ut = (!empty($r->counter)) ? $r->counter : 0;
+            }
+           
+        }
+
+        $query4 = $this->db->query("SELECT count(enquiry_id) counter,enquiry.status FROM `enquiry` WHERE $where AND drop_status > 0 GROUP BY enquiry.status");
+        $result4 = $query4->result();
+        foreach($result4 as $r)
+        {
+            if($r->status == $status)
+            {
+                $enq_drp = (!empty($r->counter)) ? $r->counter : 0;
+            }
+           
+        }
+
+        $query5 = $this->db->query("SELECT count(enquiry_id) counter,enquiry.status FROM `enquiry` WHERE $where AND drop_status = 1 GROUP BY enquiry.status");
+
+        $result5 = $query5->result();
+        foreach($result5 as $r)
+        {
+            if($r->status == $status)
+            {
+                $enq_active = (!empty($r->counter)) ? $r->counter : 0;
+            }
+           
+        }
+
+        $query6 = $this->db->query("SELECT count(enquiry_id) counter,enquiry.status FROM `enquiry` WHERE $where AND aasign_to IS NULL GROUP BY enquiry.status");
+
+        $result6 = $query6->result();
+        foreach($result6 as $r)
+        {
+            if($r->status == $status)
+            {
+                $enq_assign = (!empty($r->counter)) ? $r->counter : 0;
+            }
+          
+        }
+
+        $dataAry = array('enquiry'=>$enquiry,'enq_ct'=>$enq_ct,'enq_ut'=>$enq_ut,'enq_drp'=>$enq_drp,'enq_active'=>$enq_active,'enq_assign'=>$enq_assign);
+
+        return $dataAry;
+    }
     public function despositionDataChart($userid,$companyid)
     {	
+        // not in use
     	$all_reporting_ids    =   $this->common_model->get_categories($userid);
         $cpny_id=$companyid;
     	
@@ -2772,7 +2859,86 @@ $cpny_id=$this->session->companey_id;
 
         return $dataAry;
     }
+    public function dy2despositionDataChart($userid,$companyid,$status)
+    {	
+        $data=[];
 
+        // not in use
+    	$all_reporting_ids    =   $this->common_model->get_categories($userid);
+        $cpny_id=$companyid;
+    	
+    	$where = "( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
+    	$where .= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';        
+        $where.=" AND enquiry.comp_id=$cpny_id";
+
+        $enqAyr = array(); 
+       
+      
+    	$despenqqry = $this->db->query("SELECT (SELECT COUNT(enquiry_id) FROM enquiry WHERE $where AND enquiry.lead_stage =  lead_stage.stg_id AND enquiry.status = $status)counternow FROM lead_stage WHERE lead_stage.comp_id = $cpny_id");
+
+        $despenq = $despenqqry->result_array();
+
+        // $dataAry = array($despenq);
+        foreach ($despenq as $key => $value) {
+              $data[]=$value['counternow'];
+        }
+        return $data;
+    }
+    public function DydropDataChart($userid,$companyid,$status)
+    {	
+        $data=[];
+
+    	$all_reporting_ids    =   $this->common_model->get_categories($userid);
+        $cpny_id=$companyid;
+    	$where = "( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
+    	$where .= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';
+        $where.=" AND enquiry.comp_id=$cpny_id";
+
+    	$enquiry_drop = $this->db->query("SELECT count(enquiry.enquiry_id)counter,tp.drop_reason FROM enquiry  right JOIN tbl_drop as tp ON tp.d_id = enquiry.drop_status WHERE $where AND enquiry.status = $status  AND tp.drop_reason IS NOT NULL GROUP BY tp.drop_reason");
+        $enquiry_dropWise = $enquiry_drop->result_array();
+        foreach ($enquiry_dropWise as $key => $value) {
+          $data[]=$value['counternow'];
+    }
+    return $data;
+    }
+
+    public function DYprocessWiseChart($userid,$companyid,$process,$status)
+    {	
+        $data=[];
+    	$all_reporting_ids    =   $this->common_model->get_categories($userid);
+        $cpny_id=$companyid;
+    	$where = "( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
+    	$where .= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';
+        $where.=" AND enquiry.comp_id=$cpny_id";
+
+    	$enquiry_process = $this->db->query("SELECT count(enquiry.enquiry_id)counter,tp.product_name FROM enquiry  LEFT JOIN tbl_product as tp ON tp.sb_id = enquiry.product_id WHERE $where AND enquiry.status = $status AND tp.sb_id In ($process) GROUP BY tp.sb_id");
+        $enquiry_processWise = $enquiry_process->result();
+       
+      return $enquiry_processWise;
+    }
+
+    public function dysourceDataChart($userid,$companyid,$status)
+    {	
+        $data=[];
+
+    	$all_reporting_ids    =   $this->common_model->get_categories($userid);
+        $cpny_id=$companyid;
+    	$where = "( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
+    	$where .= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';
+        $where.=" AND enquiry.comp_id=$cpny_id";
+
+        $enqAyr = array(); 
+        
+    	$enquiry_src_qry = $this->db->query("SELECT lead_name,(SELECT COUNT(enquiry_id) FROM enquiry WHERE $where AND enquiry.enquiry_source =  lead_source.lsid AND enquiry.status = 1)counternow FROM lead_source WHERE lead_source.comp_id = $cpny_id");
+        $EnquirySrc = $enquiry_src_qry->result_array();
+          foreach ($EnquirySrc as $key => $value) {
+            $data[]=$value['counternow'];
+      }
+      return $data;
+
+
+    }
+   
     public function monthWiseChart($userid,$companyid)
     {	
     	$all_reporting_ids    =   $this->common_model->get_categories($userid);
@@ -2956,6 +3122,79 @@ $cpny_id=$this->session->companey_id;
         return $dataAry;
     }
 
+    public function DYmonthWiseChart($userid,$companyid,$status)
+    {	
+    	$all_reporting_ids    =   $this->common_model->get_categories($userid);
+        $cpny_id=$companyid;
+    	$where = "( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
+    	$where .= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';
+        $where.=" AND enquiry.comp_id=$cpny_id";
+        $ejan = $ljan = $cjan = $efeb = $lfeb = $cfeb = $emar = $lmar = $cmar = $eapr = $lapr = $capr = $emay = $lmay = $cmay = $ejun = $ljun = $cjun = $ejuly = $ljuly = $cjuly = $eaug = $laug = $caug = $esep = $lsep = $csep = $eoct = $loct = $coct = $enov = $lnov = $cnov = $edec = $ldec = $cdec = 0;
+
+        $query8 = $this->db->query("SELECT count(enquiry_id) counter,month(DATE(created_date)) month  FROM `enquiry` WHERE $where AND status = $status GROUP BY month(DATE(created_date))");
+
+        $result8 = $query8->result();
+        //print_r($result8);die;
+
+        foreach($result8 as $r)
+        {
+            if($r->month == 1 )
+            {
+                
+                $ejan = $r->counter;
+            }
+            if($r->month == 2 )
+            {
+                $efeb = $r->counter;
+            }
+            if($r->month == 3 )
+            {
+                $emar = $r->counter;
+            }
+            if($r->month == 4 )
+            {
+                $eapr = $r->counter;
+            }
+            if($r->month == 5 )
+            {
+                $emay = $r->counter;
+            }
+            if($r->month == 6 )
+            {
+                $ejun = $r->counter;
+            }
+            if($r->month == 7 )
+            {
+                $ejuly = $r->counter;
+            }
+            if($r->month == 8 )
+            {
+                $eaug = $r->counter;
+            }
+            if($r->month == 9 )
+            {
+                $esep = $r->counter;
+            }
+            if($r->month == 10 )
+            {
+                $eoct = $r->counter;
+            }
+            if($r->month == 11 )
+            {
+                $enov = $r->counter;
+            }
+            if($r->month == 12 )
+            {
+                $edec = $r->counter;
+            }
+        }
+        //echo "string";die;
+
+        $dataAry = array('ejan'=>intval($ejan),'efeb'=>intval($efeb),'emar'=>intval($emar),'eapr'=>intval($eapr),'emay'=>intval($emay),'ejun'=>intval($ejun),'ejuly'=>intval($ejuly),'eaug'=>intval($eaug),'esep'=>intval($esep),'eoct'=>intval($eoct),'enov'=>intval($enov),'edec'=>$edec);
+        //print_r($dataAry);die;
+        return $dataAry;
+    }
+
     
 
 
@@ -2987,6 +3226,7 @@ $cpny_id=$this->session->companey_id;
 
     public function conversionProbabilityChart($userid,$companyid)
     {	
+        // not in use
     	$all_reporting_ids    =   $this->common_model->get_categories($userid);
         $cpny_id=$companyid;
     	$where = "( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
@@ -3015,7 +3255,7 @@ $cpny_id=$this->session->companey_id;
         $dataAry = array('hot'=>$hot,'warm'=>$warm,'cold'=>$cold);
         return $dataAry;
     }
-
+   
     public function processWiseChart($userid,$companyid,$process)
     {	
     	$all_reporting_ids    =   $this->common_model->get_categories($userid);
@@ -3063,9 +3303,32 @@ $cpny_id=$this->session->companey_id;
             {
                 $client = (!empty($r->counter)) ? $r->counter : 0;
             }
+            
+
         }
         $dataAry = array('enquiry'=>$enquiry,'lead'=>$lead,'client'=>$client);
         return $dataAry;
+    }
+    public function DyenquiryLeadClientChart($userid,$companyid,$status)
+    {	
+    	$all_reporting_ids    =   $this->common_model->get_categories($userid);
+        $cpny_id=$companyid;
+    	$where = "( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
+    	$where .= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';
+        $where.=" AND enquiry.comp_id=$cpny_id";
+
+    	$query = $this->db->query("SELECT count(enquiry.enquiry_id)counter,enquiry.status FROM enquiry WHERE $where GROUP BY enquiry.status");
+        $result = $query->result();
+        $enquiry =0;
+        foreach($result as $r)
+        { 
+            if($r->status == $status)
+            {
+                $enquiry = (!empty($r->counter)) ? $r->counter : 0;
+            }
+        }
+       
+        return $enquiry;
     }
 
     public function make_enquiry_read($enq_code){

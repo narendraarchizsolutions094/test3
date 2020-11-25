@@ -1674,7 +1674,7 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                  <div  style="overflow-x:auto;">
                
         
-        <table class="table table-responsive-sm table-responsive table-hover" >
+        <table class="table table-responsive-sm table-responsive table-hover table-bordered" >
                         <thead class="thead-light">
                            <tr>                              
                               <th>S.N.</th>
@@ -1695,6 +1695,7 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                               <th>Vehicle Carrying Capacity</th>
                               <th>Invoice Value</th>
                               <th>Create Date</th>
+                              <th>Action</th>
                            </tr>
                         </thead>
                         <tbody>
@@ -1753,7 +1754,10 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                               <td><?=$value->carrying_capacity ?></td>
                               <td><?=$value->invoice_value ?></td>
                               <td><?=$value->creation_date ?></td>
-                              
+                              <td class="center">
+                  <a href="<?= base_url('enquiry/editinfo/' . $value->id . '')?>" class="btn btn-xs  btn-primary view_data"><i class="fa fa-edit"></i></a>
+                  <a href="<?= base_url('enquiry/deleteInfo/' . $value->id . '/'.$value->enquiry_id.'/') ?>" onclick="return confirm('Are You Sure ? ')" class="btn btn-xs  btn-danger"><i class="fa fa-trash"></i></a>
+                </td>
                            </tr> 
                            <?php  } }  ?>
                             </tbody>
@@ -1763,10 +1767,13 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                   <form class="form-inner" action="<?=  base_url('enquiry/insertCommercialInfo/') ?>" method="POST">
                   <input type="hidden" name="enquiry_id" value="<?= $details->enquiry_id ?>">
                     <!--------------------------------------------------start----------------------------->
-                    <div class="col-md-12"> 
+                    
+                    <div class="col-md-12">
+
                     <div class="form-group col-sm-6"> 
+                       
                         <label>Info Type</label>
-                        <select class="form-control" name="type" id="type">
+                        <select class="form-control" name="type" id="infotype">
                             <option value="">-Select-</option>
                             <option value="1">Branch</option>
                             <option value="2">Zone</option>
@@ -1774,7 +1781,9 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                         </select>
                      </div>
                     </div>
+                                 </>
                      <center><h3>DISPTACH LOCATION</h3></center>
+                     <br>
                      <div class="form-group col-sm-6"> 
                         <label>Booking Type</label>
                         <select class="form-control" name="booking_type" id="booking_type">
@@ -1792,7 +1801,7 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                         </select>
                      </div>
                         <div class="form-group col-sm-6"> 
-                           <label>Booking Branch</label>
+                           <label id="textdisplay">Booking Branch</label>
                            <select class="form-control" name="booking_branch" id="booking_branch">
                               <option value="">-Select-</option>
                             <?php 
@@ -1802,7 +1811,7 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                            </select>
                         </div>
                         <div class="form-group col-sm-6"> 
-                           <label>Delivery Branch</label>
+                           <label id="textdisplay2">Delivery Branch</label>
                            <select class="form-control" name="delivery_branch" id="delivery_branch" >
                               <option value="">-Select-</option>
                               <?php  
@@ -1902,7 +1911,6 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
 $('#delivery_branch').on('change', function() {
             var delivery_branch = $("select[name='delivery_branch']").val();
             var booking_branch = $("select[name='booking_branch']").val();
-            // alert(booking_branch);
             $.ajax({
             type: 'POST',
             url: '<?php echo base_url();?>enquiry/get_rate',
@@ -1930,8 +1938,41 @@ $('#potential_tonnage').on('change', function() {
                // alert(total_ptAmount);
                         $("#expected_amount").val(total_extAmount);
                     });
-               </script>
 
+$('#infotype').on('change', function() {
+            var infotype = $("select[name='type']").val();
+            if(infotype==1){
+               $("#textdisplay").html('Booking Branch');
+               $("#textdisplay2").html('Delivery Branch');
+            }else if(infotype==2){
+               $("#textdisplay").html('Booking Zone');
+               $("#textdisplay2").html('Delivery Zone');
+
+            }else if(infotype==3){
+               $("#textdisplay").html('Booking Area');
+               $("#textdisplay2").html('Delivery Area');
+
+            }else{
+               $("#textdisplay").html('Booking Branch');
+               $("#textdisplay2").html('Delivery Branch');
+
+            }
+});
+               </script>
+<script>
+   $(document).ready(function(){
+    $('#booking_type').on('change', function() {
+      if ( this.value == '1')
+      {
+        $("#ftl").show();
+        $("#sundry").hide();
+      }  else {
+        $("#sundry").show();
+        $("#ftl").hide();
+      }
+    });
+});
+</script>
                                  <?php } ?>
 
                <div class="tab-pane" id="kyctab">
@@ -4916,17 +4957,3 @@ $("a[href$='#related_enquiry']").on('click',function(){
 <?php
 }
 ?>
-<script>
-   $(document).ready(function(){
-    $('#booking_type').on('change', function() {
-      if ( this.value == '1')
-      {
-        $("#ftl").show();
-        $("#sundry").hide();
-      }  else {
-        $("#sundry").show();
-        $("#ftl").hide();
-      }
-    });
-});
-</script>

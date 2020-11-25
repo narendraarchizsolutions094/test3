@@ -794,13 +794,14 @@ public function login_in_process(){
         else
         {
             $data['counts'] = $this->enquiry_model->enquiryLeadClientCount($this->session->user_id,$this->session->companey_id);
-            // print_r($_SESSION);die;
+            // print_r($data);die;
             $data['msg']='';
             $data['state']   = $this->enquiry_model->get_state();
             $data['products'] = $this->dash_model->product_list_graph();
             $data['taskdata'] = $this->dash_model->task_list();
             $data['cmtdata'] = $this->dash_model->all_comments();
         }
+
 
 //lead
 $data['leadCount']=$this->dashboard_model->countLead(2);
@@ -814,6 +815,7 @@ $data['clientsum']=$this->dashboard_model->dataLead(3);
     $data['enquiry_separation']  = get_sys_parameter('enquiry_separation', 'COMPANY_SETTING');
 
         $data['lead_score'] = $this->db->query('select * from lead_score limit 3')->result();
+        // $data['content'] = $this->load->view('msg-log-dashboard-enquiry', $data, true);
         $data['content'] = $this->load->view('home', $data, true);	     
         $this->load->view('layout/main_wrapper', $data);
     }
@@ -836,21 +838,48 @@ $data['clientsum']=$this->dashboard_model->dataLead(3);
 
     public function enquiryLeadClientChart()
     {   
-       // echo "string";die;
-        $chartData = $this->enquiry_model->enquiryLeadClientChart($this->session->user_id,$this->session->companey_id);
-        //print_r($chartData);die;
-        if(!empty($chartData))
-        {
-            echo json_encode(array('data'=>$chartData,'status'=>'success'));
+
+    //    // echo "string";die;
+    //     $chartData = $this->enquiry_model->enquiryLeadClientChart($this->session->user_id,$this->session->companey_id);
+    //     //print_r($chartData);die;
+    //     if(!empty($chartData))
+    //     {
+            
+    //         echo json_encode(array('data'=>$chartData,'status'=>'success'));
+    //     }
+    //     else
+    //     {
+    //         echo json_encode(array('status'=>'fail'));
+    //     }
+    $enquiry_separation  = get_sys_parameter('enquiry_separation', 'COMPANY_SETTING');
+
+ $data=[];
+
+ $count1 = $this->enquiry_model->DyenquiryLeadClientChart($this->session->user_id,$this->session->companey_id,1);
+ $enq=display("enquiry");
+ $data[]=['name'=>$enq,'value'=>$count1];
+ $count2 = $this->enquiry_model->DyenquiryLeadClientChart($this->session->user_id,$this->session->companey_id,2);
+ $lead=display("lead");
+ $data[]=['name'=>$lead,'value'=>$count2];
+ $count3 = $this->enquiry_model->DyenquiryLeadClientChart($this->session->user_id,$this->session->companey_id,3);
+ $client=display("client");
+ $data[]=['name'=>$client,'value'=>$count3];
+if (!empty($enquiry_separation)) {
+    $enquiry_separation = json_decode($enquiry_separation, true);
+        foreach ($enquiry_separation as $key => $value) {
+                $ctitle = $enquiry_separation[$key]['title']; 
+                $count = $this->enquiry_model->DyenquiryLeadClientChart($this->session->user_id,$this->session->companey_id,$key);
+            $data[]=['name'=>$ctitle,'value'=>$count];
+
         }
-        else
-        {
-            echo json_encode(array('status'=>'fail'));
-        }
+    }
+            echo json_encode(array('data'=>$data,'status'=>'success'));
+
     }
 
     public function conversionProbabilityChart()
     {   
+        // function not in use
        // echo "string";die;
         $chartData = $this->enquiry_model->conversionProbabilityChart($this->session->user_id,$this->session->companey_id);
         //print_r($chartData);die;
@@ -864,6 +893,7 @@ $data['clientsum']=$this->dashboard_model->dataLead(3);
         }
     }
 
+    
     public function dropDataChart()
     {   
        // echo "string";die;
@@ -946,7 +976,7 @@ $data['clientsum']=$this->dashboard_model->dataLead(3);
             echo json_encode(array('status'=>'fail'));
         }
     }
-
+    
     public function despositionDataChart()
     {   
        // echo "string";die;
@@ -1022,6 +1052,7 @@ $data['clientsum']=$this->dashboard_model->dataLead(3);
             {
                 array_push($clientChartData, 0);
             }
+          
 
         }
         
@@ -1119,7 +1150,9 @@ $data['clientsum']=$this->dashboard_model->dataLead(3);
     }
 
     public function monthWiseChart()
-    {   
+    {    
+        // function not in use
+
        // echo "string";die;
         $chartData = $this->enquiry_model->monthWiseChart($this->session->user_id,$this->session->companey_id);
         //print_r($chartData);die;
@@ -1132,6 +1165,7 @@ $data['clientsum']=$this->dashboard_model->dataLead(3);
             echo json_encode(array('status'=>'fail'));
         }
     }
+   
 
 
     public function home2() {
@@ -2750,18 +2784,6 @@ public function set_layout_to_session() {
                 }
 
 
-                public function support_dash()
-                {
-                    if (user_access(310)) {
-                        $data['title'] = ' Support Dashboard';
-                        $data['userId']=$this->session->userdata('user_id');
-    	                $data['compId']=$this->session->userdata('companey_id');
-                        $data['content'] = $this->load->view('msg-log-dashboard', $data, true);
-                        $this->load->view('layout/main_wrapper', $data);
-                    } else {
-                        redirect('dashboard');
-                    }
-                }
                 public function enquiry_dash()
                 {
                     if (user_access(310)) {
@@ -2827,6 +2849,7 @@ public function set_layout_to_session() {
                     }
                     }
                 }
+                echo json_encode($data);
             }
 
                 public function getuserWiseSupportData()

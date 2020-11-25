@@ -477,6 +477,21 @@ public function addbranch()
 {
 $branch=$this->input->post('branch');
 $status=$this->input->post('status');
+$branch_id=$this->input->post('branch_id');
+if (!empty($branch_id)) {
+$count=$this->db->where('branch_name',$branch)->where_not_in('branch_id',$branch_id)->count_all_results('branch');
+
+    if($count==0){
+		$data=['branch_name'=>$branch,'branch_status'=>$status,'updated_at'=>date('Y-m-d H:i:s')];
+		$insert=$this->db->where('branch_id',$branch_id)->update('branch',$data);
+			$this->session->set_flashdata('success','Branch Added');
+			redirect('setting/branchList');
+		}else{
+			$this->session->set_flashdata('error','Branch Already Added');
+			redirect('setting/branchList');
+		}
+}else{
+	
 $count=$this->db->where('branch_name',$branch)->count_all_results('branch');
 if($count==0){
 $data=['branch_name'=>$branch,'branch_status'=>$status,'created_by'=>$this->session->user_id,'comp_id'=>$this->session->companey_id];
@@ -486,6 +501,7 @@ $insert=$this->db->insert('branch',$data);
 }else{
 	$this->session->set_flashdata('error','Branch Already Added');
 	redirect('setting/branchList');
+}
 }
 }
 public function branchList()
@@ -499,7 +515,6 @@ public function branchList()
 public function branch_rateList()
 {
 	$data['page_title'] = 'Branch Rate List';
-	
 	$data['branch_list']=$this->db->select('bb.*,bs.branch_name as bn,branchwise_rate.*')
 	->join('branch bb','bb.branch_id=branchwise_rate.booking_branch')
 	->join('branch bs','bs.branch_id=branchwise_rate.delivery_branch')
@@ -511,22 +526,104 @@ public function addbranch_rate()
 {
 $bbranch=$this->input->post('bbranch');
 $dbranch=$this->input->post('dbranch');
+$rate=$this->input->post('rate');
+$status=$this->input->post('status');
+$id=$this->input->post('rateid');
 if ($dbranch==$bbranch) {
 	$this->session->set_flashdata('error','Select Different Delivery Branch');
 	redirect('setting/branch_rateList');
 }
-$rate=$this->input->post('rate');
-$status=$this->input->post('status');
+if(empty($id)){
+
 $count=$this->db->where(array('booking_branch'=>$bbranch,'delivery_branch'=>$dbranch))->count_all_results('branchwise_rate');
 if($count==0){
-$data=['booking_branch'=>$bbranch,'rate'=>$rate,'delivery_branch'=>$dbranch,'rate_status'=>$status,'created_by'=>$this->session->user_id,'comp_id'=>$this->session->companey_id];
-$insert=$this->db->insert('branchwise_rate',$data);
+    $data=['booking_branch'=>$bbranch,'rate'=>$rate,'delivery_branch'=>$dbranch,'rate_status'=>$status,'created_by'=>$this->session->user_id,'comp_id'=>$this->session->companey_id];
+    $this->db->insert('branchwise_rate',$data);
 	$this->session->set_flashdata('success','Branch rate Added');
 	redirect('setting/branch_rateList');
 }else{
 	$this->session->set_flashdata('error','Rate Already Added');
 	redirect('setting/branch_rateList');
 }
+}else{
+	
+		$data=['booking_branch'=>$bbranch,'rate'=>$rate,'delivery_branch'=>$dbranch,'rate_status'=>$status];
+    	$this->db->where(array('comp_id'=>$this->session->companey_id,'id'=>$id))->update('branchwise_rate',$data);
+		$this->session->set_flashdata('success','Branch rate updated');
+		redirect('setting/branch_rateList');
+}
+}
+
+public function editbranch()
+{
+	$branch_id=$this->input->post('branch_id');
+	
+	$get=$this->db->where('branch_id',$branch_id)->get('branch');
+	if($get->num_rows()==1){
+		foreach ($get->result() as $key => $value) {
+			$status=$value->branch_status;
+	
+			echo'<div class="col-md-12">
+			<label>Branch Name </label>
+			<input type="text" value="'.$value->branch_name.'" name="branch" class="form-control" id="branch">  
+		</div> 
+		<input name="branch_id" value="'.$branch_id.'"  type="hidden" >
+		<div class="col-md-12">
+			<label>Status </label>
+			<div class="form-check">
+            <label class="radio-inline">
+			<input type="radio" name="status" value="0" ';if($status==0){echo'checked';}
+			echo '>Active</label>
+            <label class="radio-inline">
+            <input type="radio" name="status" value="1" ';if($status==1){echo'checked';}
+			echo '>Inactive</label>
+            </div>
+		</div> ';
+		}
+	}
+	
+}
+public function editbranchrate()
+{
+	$id=$this->uri->segment(3);
+	$get=$this->db->where('id',$id)->get('branchwise_rate');
+	if($get->num_rows()==1){
+        
+        $data['page_title'] = 'Edit Branch Rate';
+        $data['rate'] = $get->result();
+		$data['content'] = $this->load->view('branch/edit-rate',$data,true);
+		$this->load->view('layout/main_wrapper',$data);
+	}
+	
+}
+public function branch_delete()
+{
+	$branch_id=$this->uri->segment(3);
+	$get=$this->db->where(array('branch_id'=>$branch_id,'comp_id'=>$this->session->companey_id))->get('branch');
+	if($get->num_rows()==1){
+		$this->db->where('branch_id',$branch_id)->delete('branch');
+		$this->session->set_flashdata('success','Branch Deleted');
+	    redirect('setting/branchList');
+	}else{
+		$this->session->set_flashdata('error','Branch  not found');
+	    redirect('setting/branchList');
+	}
+	
+}
+
+public function branchrate_delete()
+{
+	$id=$this->uri->segment(3);
+	$get=$this->db->where(array('id'=>$id,'comp_id'=>$this->session->companey_id))->get('branchwise_rate');
+	if($get->num_rows()==1){
+		$this->db->where(array('id'=>$id,'comp_id'=>$this->session->companey_id))->delete('branchwise_rate');
+		$this->session->set_flashdata('success','Rate Deleted');
+	    redirect('setting/branch_rateList');
+	}else{
+		$this->session->set_flashdata('error','Rate  not found');
+	    redirect('setting/branch_rateList');
+	}
+	
 }
 
 }

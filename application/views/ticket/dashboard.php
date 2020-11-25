@@ -86,12 +86,7 @@
             },
             xAxis: {
                 type: 'datetime',
-                labels: {
-        formatter: function() {
-          return Highcharts.dateFormat('%b/%e/%Y', this.value);
-        }
-            }
-            },
+                    },
             yAxis: {
                 title: {
                     text: 'Ticket Generation Rate'
@@ -120,7 +115,7 @@
                     lineWidth: 1,
                     states: {
                         hover: {
-                            lineWidth: 1
+                            lineWidth: 2
                         }
                     },
                     threshold: null
@@ -425,7 +420,7 @@ chart.cursor.lineY.strokeOpacity = 0;
     });
     });
 </script>
-<center><h3>Stage Vs Ticket</h3></center>
+<!-- <center><h3>Stage Vs Ticket</h3></center> -->
 
 <!-- HTML -->
 <div id="chartdiv4"></div>
@@ -439,7 +434,7 @@ chart.cursor.lineY.strokeOpacity = 0;
     <div id="chartdiv6"></div>
     </div>
     <div class="col-md-6">
-<center><h3>Product/Dervice Vs Ticket </h3></center>
+<center><h3>Product/Service Vs Ticket </h3></center>
 <div id="product_Ticket"></div>
 
 </div>

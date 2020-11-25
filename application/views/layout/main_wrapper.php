@@ -1110,12 +1110,12 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                           <?php
                         if ($this->session->companey_id == 65) {
                         ?>
-                        <li class="<?php echo (in_array($segment2,array('vidlist','add_video','edit_video')) ?"active":'') ?>">
+                        <li class="<?php echo (in_array($segment2,array('branchList')) ?"active":'') ?>">
                           <a href="<?php echo base_url() ?>setting/branchList">
                           Branch List                           
                           </a>
                         </li>
-                        <li class="<?php echo (in_array($segment2,array('vidlist','add_video','edit_video')) ?"active":'') ?>">
+                        <li class="<?php echo (in_array($segment2,array('branch_ratelist','editbranchrate')) ?"active":'') ?>">
                           <a href="<?php echo base_url() ?>setting/branch_ratelist">
                           Branch Rate List                            
                           </a>
