@@ -540,7 +540,7 @@ class Enquiry_model extends CI_Model {
 		$process = 0;
 		if($form_for==2)
 		{	$ticketno = $enqno;
-			$ticket = $this->db->select('id,client')
+			$ticket = $this->db->select('id,client,process_id')
 					->where('ticketno',$enqno)
 					->get('tbl_ticket');
 

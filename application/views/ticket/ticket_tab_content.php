@@ -1,3 +1,6 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-bar-rating/1.2.1/themes/fontawesome-stars.min.css">        
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-bar-rating/1.2.1/jquery.barrating.min.js"></script>        
 <?php
 //echo $tid; exit();
 if($form_type == 1)
@@ -6,7 +9,7 @@ if($form_type == 1)
           
           <hr>
           <?php
-          if ($tid == 48 || $tid==49) { 
+          if ($tid == 51) { 
             $form_id = base64_encode($tid);
             $ucomp_id = base64_encode($this->session->companey_id);
             $uenquiry_code = base64_encode($details->ticketno);
@@ -87,9 +90,9 @@ if($form_type == 1)
 
                      ?>
                       <td>
-                      	<?=$action['edit']? "<a data-cmnt='".$arr1[3]."' data-tab-id='".$tid."' data-ticket='".$details->ticketno."' data-comp-id='".$comp_id."' data-tab-name='".$tabname."' class='btn btn-primary btn-sm' onclick='edit_dynamic_query(this)'><i class='fa fa-edit'></i></a> " :''?>
+                      	<?=$action['edit']? "<a data-cmnt='".$arr1[3]."' data-tab-id='".$tid."' data-ticket='".$details->ticketno."' data-comp-id='".$comp_id."' data-tab-name='".$tabname."' class='btn btn-primary btn-xs' onclick='edit_dynamic_query(this)'><i class='fa fa-edit'></i></a> " :''?>
 
-                      	<?=$action['delete']? "<a class='btn btn-danger btn-sm' href='".base_url("ticket/delete_query_data/$arr1[3]/$details->ticketno")."' onclick='return alert(\'are you sure\')'><i class='fa fa-trash'></i></a> " :''?>
+                      	<?=$action['delete']? "<a class='btn btn-danger btn-xs' href='".base_url("ticket/delete_query_data/$arr1[3]/$details->ticketno")."' onclick='return alert(\'are you sure\')'><i class='fa fa-trash'></i></a> " :''?>
                       	
                       </td>                                                  
                       <?php
@@ -130,12 +133,13 @@ if($form_type == 1)
                <?php if($fld['input_type']==1){?>
                <label><?php echo(!empty($fld["input_label"])) ?  ucwords($fld["input_label"]) : ""; ?></label>
                <input type="text" name="enqueryfield[<?=$fld_id?>]" class="form-control">
-               <?php }if($fld['input_type']==2){?>
+               <?php }
+               if($fld['input_type']==2){?>
                <label><?php echo(!empty($fld["input_label"])) ?  ucwords($fld["input_label"]) : ""; ?></label>
                <?php $optarr = (!empty($fld['input_values'])) ? explode(",",$fld['input_values']) : array(); 
                ?>
                <select class="form-control"  name="enqueryfield[<?=$fld_id?>]" >
-                  <option>Select</option>
+                  <option value=''>Select</option>
                   <?php  foreach($optarr as $key => $val){
                   ?>
                   <option value = "<?php echo $val; ?>"><?php echo $val; ?></option>
@@ -143,7 +147,25 @@ if($form_type == 1)
                      } 
                   ?>
                </select>
-               <?php }if($fld['input_type']==3){?>
+               <?php }
+
+                if($fld['input_type']==21){?>
+                  <label><?php echo(!empty($fld["input_label"])) ?  ucwords($fld["input_label"]) : ""; ?></label>
+                  <?php $optarr = (!empty($fld['input_values'])) ? explode(",",$fld['input_values']) : array(); 
+                  ?>
+                  <select class="star-rating"  name="enqueryfield[<?=$fld_id?>]" >
+                    <option value=''>Select</option>
+                    <?php  foreach($optarr as $key => $val){
+                    ?>
+                    <option value = "<?php echo $val; ?>"><?php echo $val; ?></option>
+                    <?php
+                        } 
+                    ?>
+                  </select>
+                  <?php }
+
+
+               if($fld['input_type']==3){?>
                <label><?php echo(!empty($fld["input_label"])) ?  ucwords($fld["input_label"]) : ""; ?></label>
                <input type="hidden"  name="enqueryfield[<?=$fld_id?>]" class="form-control">                         
                <?php 
@@ -401,3 +423,10 @@ else
    <?php
 }
 ?>
+<script>
+   $(function() {
+    $('.star-rating').barrating({
+      theme: 'fontawesome-stars'
+    });  
+  });
+</script>
