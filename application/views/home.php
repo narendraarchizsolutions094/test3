@@ -1,4 +1,4 @@
-
+<?php         $enquiry_separation  = get_sys_parameter('enquiry_separation', 'COMPANY_SETTING');  ?>
 <!-- <link rel="stylesheet" href="<?php echo base_url()?>custom_dashboard/assets/css/dashforge.css"> -->
 <link rel="stylesheet" href="<?php echo base_url()?>custom_dashboard/assets/css/dashforge.dashboard.css">
 <link href="<?php echo base_url()?>custom_dashboard/lib/morris.js/morris.css" rel="stylesheet">
@@ -193,8 +193,8 @@ Ticket Dashboard
                 <li><a href="#"><?php echo display("created_today"); ?> <span class="pull-right badge bg-aqua"><?php if(!empty($counts['client_ct'])){ echo $counts['client_ct'];}else{ echo '0';}; ?></span></a></li>
                 <li><a href="#"><?php echo display("updated_today"); ?> <span class="pull-right badge bg-green"><?php if(!empty($counts['client_ut'])){ echo $counts['client_ut'];}else{ echo '0';}; ?></span></a></li>
                 <li><a href="#"><?php echo display("active"); ?> <span class="pull-right badge bg-red"><?php if(!empty($counts['client'])){ echo ($counts['client']-$counts['client_drp']);}else{ echo '0';}; ?></span></a></li>
-        <li><a href="#"><?php echo display("droped"); ?> <span class="pull-right badge bg-purple"><?php if(!empty($counts['client_drp'])){ echo $counts['client_drp'];}else{ echo '0';}; ?></span></a></li>
-        <li><a href="#"><?php echo display("unassigned"); ?> <span class="pull-right badge bg-maroon"><?php if(!empty($counts['client_assign'])){ echo $counts['client_assign'];}else{ echo '0';}; ?></span></a></li>
+                <li><a href="#"><?php echo display("droped"); ?> <span class="pull-right badge bg-purple"><?php if(!empty($counts['client_drp'])){ echo $counts['client_drp'];}else{ echo '0';}; ?></span></a></li>
+                <li><a href="#"><?php echo display("unassigned"); ?> <span class="pull-right badge bg-maroon"><?php if(!empty($counts['client_assign'])){ echo $counts['client_assign'];}else{ echo '0';}; ?></span></a></li>
               </ul>
             </div>
           </div>
@@ -205,16 +205,38 @@ Ticket Dashboard
         </div>
 
 
+  <?php
 
+if (!empty($enquiry_separation)) {
+  $enquiry_separation = json_decode($enquiry_separation, true);
+      foreach ($enquiry_separation as $key => $value) {
+              $ctitle = $enquiry_separation[$key]['title']; 
+              $data_s = $this->enquiry_model->Dy_enquiryLeadClientCount($this->session->user_id,$this->session->companey_id,$key);
+                   ?>
 
+<div class="col-md-4 col-sm-6 col-xs-12">
+          <div class="info-box bg-aqua">
+            <span class="info-box-icon"><i class="fa fa-user-circle-o" style="color:#fff;"></i></span>
+            <div class="info-box-content1">
+              <div class="box box-widget widget-user-2">
+            <div class="box-footer no-padding">
 
-
-
-
-
-
-
-
+              <ul class="nav nav-stacked">
+                <li><a href="#">All <?php echo $ctitle ?> <span class="pull-right badge bg-blue"><?= $data_s['enquiry'] ?></span></a></li>
+                <li><a href="#"><?php echo display("created_today"); ?> <span class="pull-right badge bg-aqua"><?= $data_s['enq_ct'] ?></span></a></li>
+                <li><a href="#"><?php echo display("updated_today"); ?> <span class="pull-right badge bg-green"><?= $data_s['enq_ut'] ?></span></a></li>
+                <li><a href="#"><?php echo display("active"); ?> <span class="pull-right badge bg-red"><?php if(!empty($counts['enquiry'])){ echo $data_s['enquiry']-$data_s['enq_drp']; }else{echo '0';} ?> </span></a></li>
+                <li><a href="#"><?php echo display("droped"); ?> <span class="pull-right badge bg-purple"><?= $data_s['enq_drp'] ?> </span></a></li>
+                <li><a href="#"><?php echo display("unassigned"); ?> <span class="pull-right badge bg-maroon"><?= $data_s['enq_assign'] ?></span></a></li>
+              </ul>
+            </div>
+          </div>
+            </div>
+            <!-- /.info-box-content -->
+          </div>
+          <!-- /.info-box -->
+        </div>
+      <?php } } ?>
       </div>
     
 <!------------------------------------------------------------------html widget End-------------------------------------------->
@@ -228,36 +250,18 @@ Ticket Dashboard
 
 
 
-           <div class="col-lg-8 col-xl-8 mg-t-10">
+           <div class="col-lg-12 col-xl-12 mg-t-10">
              <div class="card">
-<style>
-#chartdiv {
-  width: 100%;
-  height: 510px;
-}
+              <style>
+              #chartdiv {
+                width: 100%;
+                height: 510px;
+              }
 
-</style>
-<div id="chartdiv"></div>
+              </style>
+              <div id="chartdiv"></div>
              </div>
            </div>
-
-
-            <div class="col-lg-4 col-xl-4 mg-t-10">
-            <div class="card" style="height:95%;">
-              <div class="card-header pd-y-20 d-md-flex align-items-center">
-                <h3  class="tx-uppercase tx-11 tx-spacing-1 tx-color-02 tx-semibold mg-b-8" style="font-size:14px"><?php echo display("dashclock"); ?></h3>
-              </div>
-<style>
-#chartdiv3 {
-  width: 100%;
-  height: 458px;
-}
-
-</style>
-<div id="chartdiv3"></div>
-              </div> 
-            </div>
-
 
            <div class="col-lg-12 col-xl-12 mg-t-10">
             <hr style="border: 1px solid #3a95e4 !important">
@@ -445,6 +449,8 @@ Ticket Dashboard
             </li>
 <!-- //dynamic case -->
 <?php
+        $enquiry_separation  = get_sys_parameter('enquiry_separation', 'COMPANY_SETTING');
+
     if (!empty($enquiry_separation)) {
 $enquiry_separation = json_decode($enquiry_separation, true);
     foreach ($enquiry_separation as $key => $value) {
@@ -887,16 +893,7 @@ $(document).ready(function(){
         var chart = am4core.create("chartdiv", am4charts.SlicedChart);
         chart.hiddenState.properties.opacity = 0; // this makes initial fade in effect
 
-        chart.data = [{
-            "name": "<?php echo display("enquiry"); ?>",
-            "value": parseInt(data.data.enquiry),
-        }, {
-            "name": "<?php echo display("lead"); ?>",
-            "value": parseInt(data.data.lead),
-        }, {
-            "name": "<?php echo display("Client"); ?>",
-            "value": parseInt(data.data.client),
-        }];
+        chart.data =   data.data;
 
         var series = chart.series.push(new am4charts.FunnelSeries());
         series.colors.step = 2;
@@ -952,7 +949,29 @@ $(document).ready(function(){
                   label: "Client",
                   backgroundColor: "#c45850",
                   data: [ parseInt(data.data.cjan), parseInt(data.data.cfeb), parseInt(data.data.cmar), parseInt(data.data.capr), parseInt(data.data.cmay), parseInt(data.data.cjun), parseInt(data.data.cjuly), parseInt(data.data.caug), parseInt(data.data.csep), parseInt(data.data.coct), parseInt(data.data.cnov), parseInt(data.data.cdec)]
-                }
+                },
+                <?php 
+        $enquiry_separation  = get_sys_parameter('enquiry_separation', 'COMPANY_SETTING');
+
+                 if (!empty($enquiry_separation)) {
+                  $enquiry_separation = json_decode($enquiry_separation, true);
+
+                      foreach ($enquiry_separation as $key => $value) {
+                              $ctitle = $enquiry_separation[$key]['title']; 
+                        $count = $this->enquiry_model->DYmonthWiseChart($this->session->user_id,$this->session->companey_id,$key);
+                            ?>
+                            {
+                  label: "<?= $ctitle ?>",
+                  backgroundColor: "<?=  sprintf('#%06X', mt_rand(0, 0xFFFFFF)); ?>",
+                   data: [ <?= $count['ejan']?>,<?= $count['efeb']?>,<?= $count['emar']?>,<?= $count['eapr']?>,<?= $count['emay']?>,<?= $count['ejun']?>,<?= $count['ejuly']?>,<?= $count['eaug']?>,<?= $count['esep']?>,<?= $count['eoct']?>,<?= $count['enov']?>,<?= $count['edec']?>]
+                              },
+
+                            <?php 
+
+                      }
+
+                    }
+                ?>
               ]
             },
             options: {
@@ -1050,7 +1069,7 @@ $(document).ready(function(){
           }
         },
         series: [{
-          name: '<?php echo display("enquiry"); ?>',
+          name: '<?php  echo display("enquiry"); ?>',
           data: data1,
         }, {
           name: '<?php echo display("lead"); ?>',
@@ -1547,16 +1566,25 @@ $(document).ready(function(){
         series: [{
           name: '<?php echo display("enquiry"); ?>',
           data: data1,
-
-        }, {
+        },{
           name: '<?php echo display("lead"); ?>',
           data: data2,
-
         },{
           name: '<?php echo display("Client"); ?>',
           data: data3,
-
-        }]
+        },
+        <?php   $enquiry_separation  = get_sys_parameter('enquiry_separation', 'COMPANY_SETTING');
+                 if (!empty($enquiry_separation)) {
+                  $enquiry_separation = json_decode($enquiry_separation, true);
+                      foreach ($enquiry_separation as $key => $value) {
+                               $ctitle = $enquiry_separation[$key]['title']; 
+                               $count = $this->enquiry_model->dy2despositionDataChart($this->session->user_id,$this->session->companey_id,$key);
+                         ?>  {
+                   name: "<?= $ctitle ?>",
+                   data: [<?= implode(',',$count); ?> ]
+                     },
+        <?php } }  ?>
+        ]
       });
       }
     }
@@ -1636,12 +1664,22 @@ $(document).ready(function(){
         }, {
           name: '<?php echo display("lead"); ?>',
           data: data2,
-
         },{
           name: '<?php echo display("Client"); ?>',
           data: data3,
-
-        }]
+        },
+        <?php   $enquiry_separation  = get_sys_parameter('enquiry_separation', 'COMPANY_SETTING');
+                 if (!empty($enquiry_separation)) {
+                  $enquiry_separation = json_decode($enquiry_separation, true);
+                      foreach ($enquiry_separation as $key => $value) {
+                               $ctitle = $enquiry_separation[$key]['title']; 
+                               $count = $this->enquiry_model->dysourceDataChart($this->session->user_id,$this->session->companey_id,$key);
+                         ?>  {
+                   name: "<?= $ctitle ?>",
+                   data: [<?= implode(',',$count); ?> ]
+                     },
+        <?php } }  ?>
+        ]
       });
       }
     }
@@ -1742,6 +1780,8 @@ Highcharts.mapChart('container12', {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
 <script src="<?php echo base_url(); ?>assets/js/knob.js"></script>
 <?php } ?>
+
+
 
 
   </body>

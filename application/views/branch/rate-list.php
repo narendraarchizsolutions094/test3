@@ -26,7 +26,7 @@ a:hover, a:focus {
 
                 <div class="btn-group"> 
 
-                    <a class="btn btn-primary btn-sm" data-toggle="modal" data-target="#AddBranch" href="javascript:void(0)"> <i class="fa fa-upload"></i> Add Branch</a>  
+                    <a class="btn btn-success btn-sm" data-toggle="modal" data-target="#AddBranch" href="javascript:void(0)"> <i class="fa fa-plus"></i> Add Rate</a>  
                     
 
                 </div>
@@ -42,7 +42,8 @@ a:hover, a:focus {
                     <th>Delivery Branch</th>
                     <th>Rate</th>
                     <th>Status</th>
-                    <th>Created At.</th>
+                    <th>Created At</th>
+                    <th>Action</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -55,7 +56,11 @@ a:hover, a:focus {
                             
                             <td><?php echo (($branch->rate_status==0)?display('active'):display('inactive')); ?></td>
 
-							<td width=""><?= $branch->created_at?></td>
+              <td width=""><?= $branch->created_at?></td>
+              <td class="center">
+                  <a href="<?= base_url('setting/editbranchrate/' . $branch->id . '')?>" class="btn btn-xs  btn-primary view_data"><i class="fa fa-edit"></i></a>
+                  <a href="<?= base_url('setting/branchrate_delete/' . $branch->id . '') ?>" onclick="return confirm('Are You Sure ? ')" class="btn btn-xs  btn-danger"><i class="fa fa-trash"></i></a>
+                </td>
                         </tr>
 
                         <?php $sl++; ?>
@@ -91,6 +96,7 @@ a:hover, a:focus {
       </div>
         <form action="<?=base_url().'setting/addbranch_rate'?>" enctype="multipart/form-data" method='post'>
           <div class="modal-body">
+                <div class="row">
                 <div class="col-md-12">
                 <label>Booking Branch </label>
                 <select name="bbranch" class="form-control">
@@ -102,6 +108,8 @@ a:hover, a:focus {
                  } ?>
                  </select>
             </div> 
+            <input name="rateid" class="form-control" hidden>
+
             <div class="col-md-12">
                 <label>Delivery Branch </label>
              <select name="dbranch" class="form-control">
@@ -117,21 +125,24 @@ a:hover, a:focus {
             </div>  
             <div class="col-md-12">
                 <label>Status </label>
-                <select class="form-control" name="status">
-                    <option value="0">Active</option>
-                    <option value="1">InActive</option>
-                </select>
+                <div class="form-check">
+                <label class="radio-inline">
+                  <input type="radio" name="status" value="0" checked="checked">Active</label>
+                <label class="radio-inline">
+                  <input type="radio" name="status" value="1">Inactive</label>
+              </div>
             </div>          
           </div>
-          <div class="modal-footer" style="text-align: center;border-top: 1px solid white;">                
-          <b> 
-          <button type="submit" class="btn btn-secondary">Save</button>
+          </div>
+          <div class="modal-footer" >    
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+
+          <button type="submit" class="btn btn-success">Save</button>
           </div>
         </form>
     </div>
   </div>
 </div>
-
 
 <script>
 $(document).ready(function() {
