@@ -848,7 +848,7 @@ class Ticket extends REST_Controller {
       $ret = 0 ;
       foreach ($tickets as $key => $value) 
       {
-        $this->db->where('id', $value);
+        $this->db->where('id', (int)$value);
         $this->db->delete('tbl_ticket');
         $ret = $this->db->affected_rows();
         $this->db->where('tck_id', $value);
@@ -880,5 +880,65 @@ class Ticket extends REST_Controller {
 
   }
 
+
+  public function sendMessage_post()
+  {
+    $this->load->model('Message_models'); 
+    $ticketno = $this->input->post('ticketno');
+    $template_id = $this->input->post('template_id');
+    
+    $user_id = $this->input->post('user_id');
+
+    $this->form_validation->set_rules('ticketno','Ticket No','required');
+    $this->form_validation->set_rules('template_id','Template ID','required');
+    $this->form_validation->set_rules('user_id','User ID','required');
+    if($this->form_validation->run() == true){
+    
+    $this->db->where('pk_i_admin_id',$user_id);
+    $user_row  = $this->db->get('tbl_admin')->row_array();
+    $this->db->where('temp_id',$template_id);
+    $template_row = $this->db->get('api_templates')->row();
+    $Templat_subject = $template_row->mail_subject;
+    $message_name = $template_row->template_content;
+      
+          $ticket = $this->db->select('*')->where('ticketno',$ticketno)->get('tbl_ticket')->row();
+          //echo $ticketno;
+       //print_r($user_row); exit();
+          //echo $enq->email;
+          if(!empty($ticket->email)){
+              $to = $ticket->email;
+              $name1 = $ticket->name ;
+              $msg = str_replace('@name',$name1,str_replace('@org',$user_row['orgisation_name'],str_replace('@web',$user_row['website'],str_replace('@desg',$user_row['designation'],str_replace('@phone',$user_row['contact_phone'],str_replace('@desg',$user_row['designation'],str_replace('@user',$user_row['s_display_name'].' '.$user_row['last_name'],$message_name)))))));
+                     
+              if($this->Message_models->send_mail($to,$msg,$Templat_subject,'')){
+               $msg= 'Email sent successfully';
+               $this->set_response([
+                      'status' => true,
+                      'message' =>$msg
+                   ], REST_Controller::HTTP_OK);
+             }else{
+               $msg= 'Something went wrong!';
+               $this->set_response([
+                      'status' => false,
+                      'message' =>$msg
+                   ], REST_Controller::HTTP_OK);
+             }
+          }else{
+               $msg= 'Email does not exist for this Ticket';
+               $this->set_response([
+                      'status' => false,
+                      'message' =>$msg
+                   ], REST_Controller::HTTP_OK);
+          }
+         
+      
+    }else{
+          $error= strip_tags(validation_errors());
+         $this->set_response([
+                'status' => false,
+                'message' =>$error
+             ], REST_Controller::HTTP_OK);
+    }
+  }
 
 }
