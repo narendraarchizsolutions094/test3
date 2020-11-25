@@ -1,12 +1,7 @@
 "use strict";
 $(document).ready(function () {
-    
-    $('.star-rating').barrating({
-        theme: 'fontawesome-stars'
-    });
-
     $('form').attr('autocomplete','off');
-    //$('select').select2();
+    $('select').select2();
         
     $('[data-toggle="tooltip"]').tooltip();
     tinymce.init({

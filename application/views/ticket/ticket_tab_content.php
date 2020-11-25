@@ -422,3 +422,8 @@ else
    <?php
 }
 ?>
+<script>
+    $('.star-rating').barrating({
+      theme: 'fontawesome-stars'
+    });
+</script>
