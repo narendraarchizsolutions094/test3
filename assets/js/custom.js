@@ -1,5 +1,10 @@
 "use strict";
 $(document).ready(function () {
+    
+    $('.star-rating').barrating({
+        theme: 'fontawesome-stars'
+    });
+
     $('form').attr('autocomplete','off');
     $('select').select2();
         

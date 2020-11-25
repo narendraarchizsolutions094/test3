@@ -1,3 +1,5 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-bar-rating/1.2.1/themes/fontawesome-stars.min.css">                
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-bar-rating/1.2.1/jquery.barrating.min.js"></script>        
 <?php
 //echo $tid; exit();
 if($form_type == 1)
@@ -6,7 +8,7 @@ if($form_type == 1)
           
           <hr>
           <?php
-          if ($tid == 48 || $tid==49) { 
+          if ($tid == 52) { 
             $form_id = base64_encode($tid);
             $ucomp_id = base64_encode($this->session->companey_id);
             $uenquiry_code = base64_encode($details->ticketno);
@@ -130,7 +132,8 @@ if($form_type == 1)
                <?php if($fld['input_type']==1){?>
                <label><?php echo(!empty($fld["input_label"])) ?  ucwords($fld["input_label"]) : ""; ?></label>
                <input type="text" name="enqueryfield[<?=$fld_id?>]" class="form-control">
-               <?php }if($fld['input_type']==2){?>
+               <?php }
+               if($fld['input_type']==2){?>
                <label><?php echo(!empty($fld["input_label"])) ?  ucwords($fld["input_label"]) : ""; ?></label>
                <?php $optarr = (!empty($fld['input_values'])) ? explode(",",$fld['input_values']) : array(); 
                ?>
@@ -143,7 +146,25 @@ if($form_type == 1)
                      } 
                   ?>
                </select>
-               <?php }if($fld['input_type']==3){?>
+               <?php }
+
+                if($fld['input_type']==20){?>
+                  <label><?php echo(!empty($fld["input_label"])) ?  ucwords($fld["input_label"]) : ""; ?></label>
+                  <?php $optarr = (!empty($fld['input_values'])) ? explode(",",$fld['input_values']) : array(); 
+                  ?>
+                  <select class="start-rating"  name="enqueryfield[<?=$fld_id?>]" >
+                    <option>Select</option>
+                    <?php  foreach($optarr as $key => $val){
+                    ?>
+                    <option value = "<?php echo $val; ?>"><?php echo $val; ?></option>
+                    <?php
+                        } 
+                    ?>
+                  </select>
+                  <?php }
+
+
+               if($fld['input_type']==3){?>
                <label><?php echo(!empty($fld["input_label"])) ?  ucwords($fld["input_label"]) : ""; ?></label>
                <input type="hidden"  name="enqueryfield[<?=$fld_id?>]" class="form-control">                         
                <?php 
