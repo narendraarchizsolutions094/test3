@@ -3437,6 +3437,8 @@ public function timelinePopup()
  public function insertCommercialInfo()
  {
     $enquiry_id=$this->input->post('enquiry_id');
+    $infoid=$this->input->post('infoid');
+    if(empty($infoid)){
     $comp_id=$this->session->companey_id;
     $type=$this->input->post('type');
     $booking_type=$this->input->post('booking_type');
@@ -3446,7 +3448,7 @@ public function timelinePopup()
     $insurance=$this->input->post('insurance');
     $rate=$this->input->post('rate');
     $discount=$this->input->post('discount');
-  echo  $paymode=$this->input->post('paymode');
+    $paymode=$this->input->post('paymode');
     $potential_tonnage=$this->input->post('potential_tonnage');
     $potential_amount=$this->input->post('potential_amount');
     $expected_tonnage=$this->input->post('expected_tonnage');
@@ -3504,6 +3506,71 @@ public function timelinePopup()
         $this->session->set_flashdata('error', 'Error while submiting data ');
         redirect($url);
         }
+    }else{
+        $comp_id=$this->session->companey_id;
+        $type=$this->input->post('type');
+        $booking_type=$this->input->post('booking_type');
+        $business_type=$this->input->post('business_type');
+        $booking_branch=$this->input->post('booking_branch');
+        $delivery_branch=$this->input->post('delivery_branch');
+        $insurance=$this->input->post('insurance');
+        $rate=$this->input->post('rate');
+        $discount=$this->input->post('discount');
+        $paymode=$this->input->post('paymode');
+        $potential_tonnage=$this->input->post('potential_tonnage');
+        $potential_amount=$this->input->post('potential_amount');
+        $expected_tonnage=$this->input->post('expected_tonnage');
+        $expected_amount=$this->input->post('expected_amount');
+        $vehicle_type=$this->input->post('vehicle_type');
+        $capacity=$this->input->post('capacity');
+        $invoice_value=$this->input->post('invoice_value');
+        $ftlpaymode=$this->input->post('ftlpaymode');
+        $ftlpotential_amount=$this->input->post('ftlpotential_amount');
+        $ftlexpected_amount=$this->input->post('ftlexpected_amount');
+        $invoice_value=$this->input->post('invoice_value');
+        $url=base_url('enquiry/view/'.$enquiry_id.'');
+        if($booking_type==0){
+         $data=[ 
+                'branch_type'=>$type,
+                'booking_type'=>$booking_type,
+                'business_type'=>$business_type,
+                'booking_branch'=>$booking_branch,
+                'delivery_branch'=>$delivery_branch,
+                'rate'=>$rate,
+                'discount'=>$discount,
+                'insurance'=>$insurance,
+                'paymode'=>$paymode,
+                'potential_tonnage'=>$potential_tonnage,
+                'potential_amount'=>$potential_amount,
+                'expected_tonnage'=>$expected_tonnage,
+                'expected_amount'=>$expected_amount,
+              ];
+            }elseif($booking_type==1){
+                $data=[
+                'branch_type'=>$type,
+                'booking_type'=>$booking_type,
+                'business_type'=>$business_type,
+                'booking_branch'=>$booking_branch,
+                'delivery_branch'=>$delivery_branch,
+                'insurance'=>$insurance,
+                'paymode'=>$ftlpaymode,
+                'potential_amount'=>$ftlpotential_amount,
+                'expected_amount'=>$ftlexpected_amount,
+                'vehicle_type'=>$vehicle_type,
+                'carrying_capacity'=>$capacity,
+                'invoice_value'=>$invoice_value,
+              ]; 
+             
+            }
+              $insert=$this->db->where(array('comp_id'=>$comp_id,'id'=>$infoid))->update('commercial_info',$data);
+            if($insert){
+            $this->session->set_flashdata('message', 'Commercial information Updated successfully');
+            redirect($url);
+            }else{
+            $this->session->set_flashdata('error', 'Error while submiting data ');
+            redirect($url);
+            } 
+    }
 
  }
     public function get_rate()
@@ -3518,5 +3585,42 @@ public function timelinePopup()
      }
      echo json_encode($data);
     }
+    public function editinfo()
+    {
+      $id=$this->uri->segment('3');
+    $comp_id=$this->session->companey_id;
+   
+      $count=$this->db->where(array('id'=>$id,'comp_id'=>$comp_id))->get('commercial_info');
+      //check exist of not
+      if($count->num_rows()==1){
+        $data['page_title'] = 'Edit Commercial Info';
+        $data['info'] = $count->result();
+        if ($this->session->companey_id == 65) {
+            $data['branch']=$this->db->where('comp_id',65)->get('branch')->result();
+        } 
+		$data['content'] = $this->load->view('enquiry/edit-info',$data,true);
+        $this->load->view('layout/main_wrapper', $data);
+    }
+       }
+       public function deleteInfo()
+       {
+        $id=$this->uri->segment('3');
+        $enquiry_id=$this->uri->segment(4);
+        $comp_id=$this->session->companey_id;
+          $count=$this->db->where(array('id'=>$id,'comp_id'=>$comp_id))->get('commercial_info');
+          $url=base_url('enquiry/view/'.$enquiry_id.'');
+
+          //check exist of not
+          if($count->num_rows()==1){
+         $insert= $this->db->where(array('id'=>$id,'comp_id'=>$comp_id))->delete('commercial_info');
+          if($insert){
+            $this->session->set_flashdata('message', 'Commercial information Deleted successfully');
+            redirect($url);
+            }else{
+            $this->session->set_flashdata('error', 'Error while submiting data ');
+            redirect($url);
+            } 
+        }
+       }
  
 }

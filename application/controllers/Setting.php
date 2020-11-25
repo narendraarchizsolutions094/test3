@@ -535,8 +535,6 @@ if ($dbranch==$bbranch) {
 }
 if(empty($id)){
 
-
-
 $count=$this->db->where(array('booking_branch'=>$bbranch,'delivery_branch'=>$dbranch))->count_all_results('branchwise_rate');
 if($count==0){
     $data=['booking_branch'=>$bbranch,'rate'=>$rate,'delivery_branch'=>$dbranch,'rate_status'=>$status,'created_by'=>$this->session->user_id,'comp_id'=>$this->session->companey_id];
@@ -591,7 +589,7 @@ public function editbranchrate()
 	$get=$this->db->where('id',$id)->get('branchwise_rate');
 	if($get->num_rows()==1){
         
-        $data['page_title'] = 'Change password';
+        $data['page_title'] = 'Edit Branch Rate';
         $data['rate'] = $get->result();
 		$data['content'] = $this->load->view('branch/edit-rate',$data,true);
 		$this->load->view('layout/main_wrapper',$data);
