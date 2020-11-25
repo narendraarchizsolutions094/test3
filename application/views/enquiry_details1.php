@@ -1674,7 +1674,7 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                  <div  style="overflow-x:auto;">
                
         
-        <table class="table table-responsive-sm table-responsive table-hover" >
+        <table class="table table-responsive-sm table-responsive table-hover table-bordered" >
                         <thead class="thead-light">
                            <tr>                              
                               <th>S.N.</th>
@@ -1763,8 +1763,11 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                   <form class="form-inner" action="<?=  base_url('enquiry/insertCommercialInfo/') ?>" method="POST">
                   <input type="hidden" name="enquiry_id" value="<?= $details->enquiry_id ?>">
                     <!--------------------------------------------------start----------------------------->
-                    <div class="col-md-12"> 
+                    
+                    <div class="col-md-12">
+
                     <div class="form-group col-sm-6"> 
+                       
                         <label>Info Type</label>
                         <select class="form-control" name="type" id="type">
                             <option value="">-Select-</option>
@@ -1774,7 +1777,9 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                         </select>
                      </div>
                     </div>
+                                 </>
                      <center><h3>DISPTACH LOCATION</h3></center>
+                     <br>
                      <div class="form-group col-sm-6"> 
                         <label>Booking Type</label>
                         <select class="form-control" name="booking_type" id="booking_type">

@@ -12,12 +12,11 @@
   width: 100%;
   height: 300px;
 }
-
 #chartdiv1 {
   width: 100%;
   height: 500px;
 }
-    .highcharts-figure, .highcharts-data-table table {
+  .highcharts-figure, .highcharts-data-table table {
     min-width: 100%; 
     max-width: 800px;
     margin: 1em auto;
@@ -53,12 +52,10 @@
 .highcharts-data-table tr:hover {
     background: #f1f7ff;
 }
-
 </style>
 <?php  if(user_access(60)){  ?>
 <center>
 <h3>Enquiry Dashboard</h3></center>
-<!-- //show dropdown -->
 <div class="row">
     <div class="col-md-4">
         <label>Select Graph Type</label>
@@ -72,26 +69,18 @@
 <div id="Mehdi_ajax"></div>
 <hr>
 <br>
-
 <center><h3>Userwise Graph's</h3></center>
-<!-- Resources -->
 <script src="https://cdn.amcharts.com/lib/4/core.js"></script>
 <script src="https://cdn.amcharts.com/lib/4/charts.js"></script>
 <script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
-
-<!-- Chart code -->
-<!-- Styles -->
 <style>
 #chartdiv {
   width: 100%;
   height: 500px;
 }
 </style>
-
-
-<!-- Chart code -->
 <script>
-          $(document).ready(function(){
+$(document).ready(function(){
     $.ajax({
       url : "<?=base_url('dashboard/userWiseSupportData1')?>",
       type: "post",
@@ -100,14 +89,11 @@
       contentType: false,
       success : function(response)
       {
-
             am4core.ready(function() {
-
 // Themes begin
 am4core.useTheme(am4themes_animated);
 // Themes end
-
-var chart = am4core.create("chartdiv23", am4charts.XYChart);
+var chart = am4core.create("chartdiv231", am4charts.XYChart);
 chart.hiddenState.properties.opacity = 0; // this creates initial fade-in
 
 chart.data = response;
@@ -126,8 +112,6 @@ valueAxis.max = 100;
 valueAxis.strictMinMax = true;
 valueAxis.calculateTotals = true;
 valueAxis.renderer.minWidth = 50;
-
-
 var series1 = chart.series.push(new am4charts.ColumnSeries());
 series1.columns.template.width = am4core.percent(80);
 series1.columns.template.tooltipText =
@@ -182,28 +166,19 @@ bullet3.label.text = "{valueY.totalPercent.formatNumber('#.00')}%";
 bullet3.locationY = 0.5;
 bullet3.label.fill = am4core.color("#ffffff");
 chart.scrollbarX = new am4core.Scrollbar();
-}); // end am4core.ready()
-      }
+});
+ }
 });
     
 });
 </script>
-<!-- HTML -->
-<div id="chartdiv23"></div>
-<!-- Styles -->
+<div id="chartdiv231"></div>
 <style>
-#chartdiv23 {
-  width: 100%;
-  height: 500px;
-}
+#chartdiv231 { width: 100%;  height: 500px; }
 </style>
-
 <script type="text/javascript">
-
-
 $("#all_users").change(function(){  
     var data =document.getElementById("all_users").value // 1st
-    // alert(data);
     $.ajax({
     type:"POST",
     url: '<?=base_url('dashboard/getuserWiseSupportData')?>',
@@ -211,12 +186,10 @@ $("#all_users").change(function(){
     success: function(result){
         $("#ticketData").empty();
         $("#Mehdi_ajax").html(result);
-// alert(result);
     }
     });
 });
 var data =document.getElementById("all_users").value // 1st
-    // alert(data);
     $.ajax({
     type:"POST",
     url: '<?=base_url('dashboard/getuserWiseSupportData')?>',
@@ -224,17 +197,12 @@ var data =document.getElementById("all_users").value // 1st
     success: function(result){
         $("#ticketData").empty();
         $("#Mehdi_ajax").html(result);
-// alert(result);
     }
     });
 </script>
 <hr>
 <?php } if(user_access(231)){  ?>
-
-<center>
-
-<h3>Support Dashboard</h3></center>
-
+<center><h3>Support Dashboard</h3></center>
 <div class="row">
     <div class="col-md-4">
         <label>Select Graph Type</label>
@@ -246,23 +214,15 @@ var data =document.getElementById("all_users").value // 1st
     </div>
 </div>
 <div id="ticketData"></div>
- 
 <hr>
 <br>
-
 <center><h3>Userwise Graph's</h3></center>
-<!-- Resources -->
-<!-- Chart code -->
-<!-- Styles -->
 <style>
-#chartdiv24 {
+#chartdiv241 {
   width: 100%;
   height: 500px;
 }
 </style>
-
-
-<!-- Chart code -->
 <script>
           $(document).ready(function(){
     $.ajax({
@@ -273,18 +233,13 @@ var data =document.getElementById("all_users").value // 1st
       contentType: false,
       success : function(response)
       {
-
             am4core.ready(function() {
-
-// Themes begin
 am4core.useTheme(am4themes_animated);
-// Themes end
 
-var chart = am4core.create("chartdiv24", am4charts.XYChart);
-chart.hiddenState.properties.opacity = 0; // this creates initial fade-in
+var chart = am4core.create("chartdiv241", am4charts.XYChart);
+chart.hiddenState.properties.opacity = 0;
 
 chart.data = response;
-// alert(response);
 chart.colors.step = 2;
 chart.padding(30, 30, 10, 30);
 chart.legend = new am4charts.Legend();
@@ -355,21 +310,16 @@ bullet3.label.text = "{valueY.totalPercent.formatNumber('#.00')}%";
 bullet3.locationY = 0.5;
 bullet3.label.fill = am4core.color("#ffffff");
 chart.scrollbarX = new am4core.Scrollbar();
-}); // end am4core.ready()
+});
       }
 });
     
 });
 </script>
-<!-- HTML -->
-<div id="chartdiv24"></div>
-
+<div id="chartdiv241"></div>
 <script type="text/javascript">
-
-
 $("#all_users_ticket").change(function(){  
     var data =document.getElementById("all_users_ticket").value // 1st
-    // alert(data);
     $.ajax({
     type:"POST",
     url: '<?=base_url('dashboard/getuserWiseSupportData')?>',
@@ -381,7 +331,6 @@ $("#all_users_ticket").change(function(){
     });
 });
 var data =document.getElementById("all_users_ticket").value // 1st
-    // alert(data);
     $.ajax({
     type:"POST",
     url: '<?=base_url('dashboard/getuserWiseSupportData')?>',

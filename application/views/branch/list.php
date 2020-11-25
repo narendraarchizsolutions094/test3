@@ -1,77 +1,80 @@
 <style>
-.morecontent span {
+  .morecontent span {
     display: none;
-}
-.morelink {
+  }
+
+  .morelink {
     display: block;
-}
-a:hover, a:focus {
+  }
+
+  a:hover,
+  a:focus {
     text-decoration: none;
     outline: none;
     color: #37a000;
-	font-weight:900;
-}
+    font-weight: 900;
+  }
 </style>
 <div class="row">
 
-    <!--  table area -->
+  <!--  table area -->
 
-    <div class="col-sm-12">
+  <div class="col-sm-12">
 
-        <div  class="panel panel-default thumbnail">
-
- 
-
-            <div class="panel-heading no-print">
-
-                <div class="btn-group"> 
-
-                    <a class="btn btn-primary btn-sm" data-toggle="modal" data-target="#AddBranch" href="javascript:void(0)"> <i class="fa fa-upload"></i> Add Branch</a>  
-                    
-
-                </div>
-
-            </div>
-
-            <div class="panel-body">
-                <table id="example" class="table table-striped table-bordered" style="width:100%">
-                <thead>
-                <tr>
-                    <th>S No.</th>
-                    <th>Branch</th>
-                    <th>Created At.</th>
-                </tr>
-                </thead>
-                <tbody>
-                <?php $sl=1; foreach ($branch_list as $branch) {?>
-                        <tr >
-                            <td><?php echo $sl; ?></td>
-							<td width=""><?= $branch->branch_name?></td>
-                            <td><?php echo (($branch->branch_status==0)?display('active'):display('inactive')); ?></td>
-							<td width=""><?= $branch->created_at?></td>
-
-                        </tr>
-
-                        <?php $sl++; ?>
-
-                    <?php } ?> 
-
-                </tbody>
-
-              </table>
-            </div>
-
-            <!-- /.card-body -->
-
-          </div>
-
-          <!-- /.card -->
-
+    <div class="panel panel-default thumbnail">
+      <div class="panel-heading no-print">
+        <div class="btn-group">
+          <a class="btn btn-success btn-sm" data-toggle="modal" data-target="#AddBranch" href="javascript:void(0)"> <i class="fa fa-plus"></i> Add Branch</a>
         </div>
-
-        <!-- /.col -->
-
       </div>
+      <div class="panel-body">
+        <table id="example" class="table table-striped table-bordered" style="width:100%">
+          <thead>
+            <tr>
+              <th>S No.</th>
+              <th>Branch</th>
+              <th>Status</th>
+              <th>Created At</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <?php $sl = 1;
+            foreach ($branch_list as $branch) { ?>
+              <tr>
+                <td><?php echo $sl; ?></td>
+                <td width=""><?= $branch->branch_name ?></td>
+                <td><?php echo (($branch->branch_status == 0) ? display('active') : display('inactive')); ?></td>
+                <td width=""><?= $branch->created_at ?></td>
+                <td class="center">
+                  <a data-toggle="modal" data-target="#editBranch" id="<?php echo $branch->branch_id ?>" href="javascript:void(0)" class="btn btn-xs  btn-primary view_data"><i class="fa fa-edit"></i></a>
+                  <a href="<?= base_url('setting/branch_delete/' . $branch->branch_id . '') ?>" onclick="return confirm('Are You Sure ? ')" class="btn btn-xs  btn-danger"><i class="fa fa-trash"></i></a>
+                </td>
+
+                </td>
+
+              </tr>
+
+              <?php $sl++; ?>
+
+            <?php } ?>
+
+          </tbody>
+
+        </table>
+      </div>
+
+      <!-- /.card-body -->
+
+    </div>
+
+    <!-- /.card -->
+
+  </div>
+
+  <!-- /.col -->
+
+</div>
 
 <!-- Course Upload  -->
 <div class="modal fade" id="AddBranch" tabindex="-1" role="dialog" aria-labelledby="course_upload_label" aria-hidden="true">
@@ -83,32 +86,71 @@ a:hover, a:focus {
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-        <form action="<?=base_url().'setting/addbranch'?>" enctype="multipart/form-data" method='post'>
-          <div class="modal-body">
-                <div class="col-md-12">
-                <label>Branch Name </label>
-                <input type="text" name="branch" class="form-control">  
-            </div> 
+      <form action="<?= base_url() . 'setting/addbranch' ?>" enctype="multipart/form-data" method='post'>
+        <div class="modal-body">
+          <div class="row">
             <div class="col-md-12">
-                <label>Status </label>
-                <select class="form-control" name="status">
-                    <option value="0">Active</option>
-                    <option value="1">InActive</option>
-                </select>
-            </div>          
+              <label>Branch Name </label>
+              <input type="text" name="branch" class="form-control">
+            </div>
+            <div class="col-md-12">
+              <label>Status </label>
+              <div class="form-check">
+                <label class="radio-inline">
+                  <input type="radio" name="status" value="0" checked="checked">Active</label>
+                <label class="radio-inline">
+                  <input type="radio" name="status" value="1">Inactive</label>
+              </div>
+            </div>
           </div>
-          <div class="modal-footer" style="text-align: center;  center;border-top: 1px solid white;">                
-          <br>
-          <button type="submit" class="btn btn-secondary">Save</button>
-          </div>
-        </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-success">Submit</button>
+        </div>
+      </form>
     </div>
   </div>
 </div>
-
-
+<div class="modal fade" id="editBranch" tabindex="-1" role="dialog" aria-labelledby="course_upload_label" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">×</button>
+        <h5 class="modal-title" id="">Edit Branch</h5>
+        </button>
+      </div>
+      <form action="<?= base_url() . 'setting/addbranch' ?>" enctype="multipart/form-data" method='post'>
+        <div class="modal-body">
+          <div class="row" id="branch_data">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-success">Submit</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
 <script>
-$(document).ready(function() {
+  $(document).ready(function() {
     $('#example').DataTable();
-} );
+  });
+  $(document).on('click', '.view_data', function() {
+    var branch_id = $(this).attr("id");
+    if (branch_id != '') {
+      $.ajax({
+        url: "<?= base_url('setting/editbranch/') ?>",
+        method: "POST",
+        data: {
+          branch_id: branch_id
+        },
+        success: function(data) {
+          $('#branch_data').html(data);
+
+        }
+      });
+    }
+  });
 </script>
