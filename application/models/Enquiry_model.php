@@ -34,6 +34,294 @@ class Enquiry_model extends CI_Model {
 		return $insid;
     }
 
+
+
+  public function enquiry_all_tab_api($companey_id,$enquiry_id)
+	{
+		//return array($company_id,$ticketno);
+		$this->load->model(array('form_model','Enquiry_model','Leads_Model'));
+		$this->session->companey_id = $companey_id;
+		
+		//2 for Ticket Tab 
+		$enquiry = $this->getEnquiry(array('enquiry_id'=>$enquiry_id))->row();
+		//return $ticket;
+		
+		if(!empty($enquiry))
+		{	
+			$process_id = $enquiry->product_id;
+
+		$tab_list = $this->form_model->get_tabs_list($companey_id,$process_id,0);
+
+		$tabs = array();
+
+		$primary_tab=0;
+		$primary = $this->getPrimaryTab();
+
+        if($primary)
+            $primary_tab = $primary->id;
+
+       	$basic= $this->location_model->get_company_list1($process_id);
+
+      foreach ($basic as $key => $input)
+      {
+          switch($input['field_id'])
+          { 
+            case 1:
+            $prefixList = $this->Enquiry_model->name_prefix_list();
+            $prefix = array();
+            if(!empty($prefixList))
+            {
+            	foreach ($prefixList as $res)
+            	{
+            		$prefix[]  = $res->prefix;
+            	}
+            }
+            $basic[$key]['extra_field'][] =array('input_values'=>$prefix,
+            									'parameter_name'=>'name_prefix',
+            									'current_value'=>$enquiry->name_prefix);
+
+            $basic[$key]['parameter_name'] = 'enquirername';
+            $basic[$key]['current_value'] = $enquiry->name;
+            break;
+
+            case 2:
+            $basic[$key]['parameter_name'] = 'lastname';
+            $basic[$key]['current_value'] = $enquiry->lastname;
+            break;
+
+            case 4:
+            $basic[$key]['parameter_name'] = 'mobileno';
+            $basic[$key]['current_value'] = $enquiry->phone;
+            break;
+            case 5:
+            $basic[$key]['parameter_name'] = 'email';
+            $basic[$key]['current_value'] = $enquiry->email;
+            break;
+            case 6:
+            $basic[$key]['parameter_name'] = 'company';
+            $basic[$key]['current_value'] = $enquiry->company;
+            break;
+            case 7:
+            $leadsource = $this->Leads_Model->get_leadsource_list();
+            $values = array();
+            foreach ($leadsource as $res)
+            {
+              $values[] =  array('key'=>$res->lsid,
+                                'value'=> $res->lead_name
+                              );
+            }
+            $basic[$key]['input_values'] = $values;
+            $basic[$key]['parameter_name'] = 'lead_source';
+            $basic[$key]['current_value'] = $enquiry->enquiry_source;
+            break;
+            case 8:
+            $subsource = $this->location_model->productcountry();
+            $values = array();
+            foreach ($subsource as $res)
+            {
+              $values[] =  array('key'=>$res->id,
+                                'value'=> $res->country_name
+                              );
+            }
+            $basic[$key]['input_values'] = $values;
+            $basic[$key]['parameter_name'] = 'sub_source';
+            $basic[$key]['current_value'] = $enquiry->enquiry_subsource;
+            break;
+
+            case 9:
+            $state_list = $this->location_model->estate_list();
+            $values = array();
+            foreach ($state_list as $res)
+            {
+              $values[] = array('key'=>$res->id,
+                                'value'=> $res->state
+                              );
+            }
+            $basic[$key]['input_values'] = $values;
+            $basic[$key]['parameter_name'] = 'state_id';
+            $basic[$key]['current_value'] = $enquiry->state_id;
+            break;
+
+            case 10:
+            $city_list = $this->location_model->ecity_list();
+            $values = array();
+            foreach ($city_list as $res)
+            {
+              $values[] = array('key'=>$res->id,
+              					'state_id'=>$res->state_id,
+                                'value'=> $res->city
+                              );
+            }
+            $basic[$key]['input_values'] = $values;
+            $basic[$key]['parameter_name'] = 'city_id';
+            $basic[$key]['current_value'] = $enquiry->city_id;
+            break;
+
+            case 11:
+            $basic[$key]['parameter_name'] = 'address';
+            $basic[$key]['current_value'] = $enquiry->address;
+            break;
+
+            case 12:
+            $basic[$key]['parameter_name'] = 'enquiry';
+            $basic[$key]['current_value'] = $enquiry->enquiry;
+            break;
+
+            case 14: 
+            $basic[$key]['parameter_name'] = 'pin_code';
+            $basic[$key]['current_value'] = $enquiry->pin_code;
+            break;
+
+            // case 27:
+            // $basic[$key]['parameter_name'] = 'remark';
+            // break;
+
+            // case 28:
+            // $basic[$key]['parameter_name'] = 'tracking_no';
+            // break;
+          }
+
+      }
+
+      $dynamic = $this->Enquiry_model->get_dyn_fld($enquiry_id,$primary_tab,2);
+      $i=0;
+      foreach ($dynamic as $key => $value)
+      {
+          if(in_array($value['input_type'],array('2','3','4','20')))
+          {
+             
+              $temp  = explode(',', $value['input_values']);
+              if(!empty($temp))
+              {   $reshape = array();
+                  foreach ($temp as $k => $v)
+                  {
+                    $reshape[] = array('key'=>null,
+                                      'value'=>$v);
+                  }
+                  $dynamic[$key]['input_values'] = $reshape;
+              }
+          }
+         $dynamic[$key]['parameter_name'] = array(
+                                              array('key'=>'enqueryfield['.$value['input_id'].']',
+                                                    'value'=>''),
+                                              array('key'=>'inputfieldno['.$i.']',
+                                                    'value'=>$value['input_id']),
+                                              array('key'=>'inputtype['.$i.']',
+                                                    'value'=>$value['input_type']),
+                                              );
+          $i++;
+      }
+
+        $tabs[]  = array('tab_id'=>$primary->id,
+        					'title'=>$primary->title,
+        					'is_query_type'=>$primary->form_type,
+        					'is_delete'=>$primary->is_delete,
+        					'is_edit'=>$primary->is_edit,
+        					'field_list'=>array_merge($basic,$dynamic),
+    						);
+
+  //       $match = array(
+		// 	'ticket_no' => $ticket->ticketno,
+		// 	'tck.client' => $ticket->client,
+		// 	'tck.tracking_no' => $ticket->tracking_no,
+		// 	'tck.phone' => $ticket->phone, 
+		// );
+
+		// $related_tickets = $this->Ticket_Model->all_related_tickets($match);
+
+		// $tabs[]  = array('tab_id'=>null,
+  //       					'title'=>'Related Tickets',
+  //       					'table'=>$related_tickets??array(),
+  //   						);
+
+
+        foreach ($tab_list as $res)
+        {
+        	if($res['primary_tab']!='1')
+        	{
+        		$dynamic = $this->Enquiry_model->get_dyn_fld($enquiry_id,$res['id'],2);
+        		$heading = array();
+        		foreach ($dynamic as $key => $value)
+			      {
+			          if(in_array($value['input_type'],array('2','3','4','20')))
+			          {
+			             
+			              $temp  = explode(',', $value['input_values']);
+			              if(!empty($temp))
+			              {   $reshape = array();
+			                  foreach ($temp as $k => $v)
+			                  {
+			                    $reshape[] = array('key'=>null,
+			                                      'value'=>$v);
+			                  }
+			                  $dynamic[$key]['input_values'] = $reshape;
+			              }
+			          }
+			          $heading[] = $value['input_label'];
+			      }
+
+
+        		$part = array('tab_id'=>$res['id'],
+        					'title'=>$res['title'],
+        					'is_query_type'=>$res['form_type'],
+        					'is_delete'=>$res['is_delete'],
+        					'is_edit'=>$res['is_edit'],
+        					'field_list'=>$dynamic,
+    						);
+
+        		if($res['form_type']==1)
+        		{
+        			$tid = $res['id'];
+					$comp_id = $companey_id;
+					$enquiry_no = $enquiry->Enquery_id;
+
+					$sql  = "SELECT GROUP_CONCAT(concat(`extra_enquery`.`input`,'#',`extra_enquery`.`fvalue`,'#',`extra_enquery`.`created_date`,'#',`extra_enquery`.`comment_id`) separator ',') as d FROM `extra_enquery` INNER JOIN (select * from tbl_input where form_id=$tid) as tbl_input ON `tbl_input`.`input_id`=`extra_enquery`.`input` where `extra_enquery`.`cmp_no`=$comp_id and `extra_enquery`.`enq_no`='$enquiry_no' GROUP BY `extra_enquery`.`comment_id` ORDER BY `extra_enquery`.`comment_id` DESC";
+
+			             $sql_res = $this->db->query($sql)->result_array(); 
+						$data =array();
+			             if(!empty($sql_res))
+			             {	
+			             	
+			             	foreach ($sql_res as $key => $value) 
+			             	{
+			             		$abc = explode(',',$value['d']);
+			             		
+			             		if(!empty($abc))
+			             		{	$sub = array();
+			             			foreach ($abc as $k => $v)
+			             			{
+			             				$x = explode('#', $v);
+			             				$sub[] = $x[1];
+			             			}
+			             			$sub[]=$x[2];
+			             		}
+			             		$data[] = $sub;
+			             	}
+			             }
+			        $part['table']=array('heading'=>$heading,
+			        					'data'=>$data);
+        		}
+        		
+        		$tabs[] = $part;
+        	}
+        }
+
+		session_destroy();
+		return $tabs;
+		}
+		else
+			return false;
+	}
+
+    public function getPrimaryTab()
+	{
+		 return  $this->db->select('*')
+            ->where(array('form_for'=>0,'primary_tab'=>1))
+            ->get('forms')
+            ->row();
+	}
+
+
     public function comission_data($enq_code){
 	 	$this->db->select('*');
 	 	$this->db->where('tbl_comission.Enquiry_code',$enq_code);

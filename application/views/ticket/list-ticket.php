@@ -315,7 +315,7 @@
                       <?=($showall or in_array(7,$acolarr))?'<th>Created By</th>':''?>
                       <?=($showall or in_array(9,$acolarr))?'<th>Date</th>':''?>
 
-											<?=($showall or in_array(2,$acolarr))?'<th>Client</th>':''?>
+											<?=($showall or in_array(2,$acolarr))?'<th>'.display('problem_for').'</th>':''?>
 										  <?=($showall or in_array(3,$acolarr))?'<th>Email</th>':''?>
 											<?=($showall or in_array(4,$acolarr))?'<th>Phone</th>':''?>
 											<?=($showall or in_array(5,$acolarr))?'<th>Product</th>':''?>
@@ -326,7 +326,7 @@
                       <?=($showall or in_array(11,$acolarr))?'<th>'.display('data_source').'</th>':''?>
                       <?=($showall or in_array(12,$acolarr))?'<th>'.display('stage').'</th>':''?>
                       <?=($showall or in_array(13,$acolarr))?'<th>Sub Stage</th>':''?>
-                      <?=($showall or in_array(14,$acolarr))?'<th>Review</th>':''?>
+                      <?=($showall or in_array(14,$acolarr))?'<th>'.display('ticket_remark').'</th>':''?>
                       <?=($showall or in_array(16,$acolarr))?'<th>Status</th>':''?>
 
 
@@ -822,7 +822,7 @@ function delete_recorde(){
           <label class=""><input type="checkbox" class="choose-col" id="choose-col" value = "1" <?php echo ($showall == true or in_array(1, $acolarr)) ? "checked" : ""; ?>> Ticket</label>
           </div>
           <div class = "col-md-4">  
-          <label class=""><input type="checkbox" class="choose-col"  value = "2"  <?php echo ($showall == true or in_array(2, $acolarr)) ? "checked" : ""; ?>>  Client</label> 
+          <label class=""><input type="checkbox" class="choose-col"  value = "2"  <?php echo ($showall == true or in_array(2, $acolarr)) ? "checked" : ""; ?>>  <?=display('problem_for')?></label> 
           </div>
           <div class = "col-md-4">  
           <label  class=""><input type="checkbox" class="choose-col"  value = "3"  <?php echo ($showall == true or in_array(3, $acolarr)) ? "checked" : ""; ?>> Email</label>
@@ -874,7 +874,7 @@ function delete_recorde(){
           </div>
 
            <div class = "col-md-4">  
-            <label class=""><input type="checkbox" class="choose-col"  value = "14"  <?php echo ($showall == true or in_array(14, $acolarr)) ? "checked" : ""; ?>>  Review</label>  &nbsp;
+            <label class=""><input type="checkbox" class="choose-col"  value = "14"  <?php echo ($showall == true or in_array(14, $acolarr)) ? "checked" : ""; ?>>  <?=display('ticket_remark')?></label>  &nbsp;
           </div>
 
           <?php

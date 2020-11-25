@@ -378,7 +378,7 @@
               $("#form_content").html(data);              
             },
             complete: function (data) {
-              query_builder();
+              //query_builder();
               do_chosen();
              }
           });

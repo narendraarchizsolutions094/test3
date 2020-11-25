@@ -307,6 +307,7 @@ else
                <input type="hidden" readonly name="enqueryfield[<?=$fld_id?>]"  class="form-control"  value ="<?php echo  (!empty($fld["fvalue"])) ? $fld["fvalue"] : ""; ?>">               
                <input type="file"  name="enqueryfiles[]"  class="form-control" >
                <?php 
+               //echo $fld["fvalue"];
                if (!empty($fld["fvalue"])) {
                   ?>
                   <a href="<?=$fld['fvalue']?>" target="_blank"><?=basename($fld['fvalue'])?></a>

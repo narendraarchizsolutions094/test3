@@ -72,7 +72,9 @@ class Webhook extends REST_Controller {
 
   public function click_to_dial_post()
   {
-    $phone           = '+91'.$this->input->post("phone_no");
+    $mob  = $this->input->post("phone_no");
+    $mob  = substr($mob,-10);
+    $phone           = '+91'.$mob;
     $token           = $this->input->post("token");
     $support_user_id = $this->input->post("support_user_id");
         $this->db->where('telephony_agent_id',$support_user_id);

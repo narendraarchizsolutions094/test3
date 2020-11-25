@@ -1,6 +1,6 @@
 <script type="text/javascript">
 
-         $(document).on('change','.basic_fields_status', function() { 
+        $(document).on('change','.basic_fields_status', function() { 
             //alert('sdf');
                 id = $(this).data('field');
                 var field_for  = $(this).data('field_for');

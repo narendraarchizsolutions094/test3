@@ -502,6 +502,13 @@ class Enquiry extends CI_Controller
         }
     }
 
+    // public function test()
+    // {$this->load->model('Enquiry_model');
+    //    $prefix=  $this->Enquiry_model->getEnquiry(array('enquiry_id'=>'192874'))->result();
+    //     //$basic= $this->location_model->get_company_list1(197);
+    //     print_r($prefix);
+    // }
+
 
     public function create()
     {

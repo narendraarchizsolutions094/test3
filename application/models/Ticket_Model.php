@@ -783,6 +783,7 @@ class Ticket_Model extends CI_Model
                                                     'value'=>'Is Query'),
                                             );
             $basic[$key]['current_value'] = $ticket->complaint_type;
+			$basic[$key]['parameter_name'] = 'complaint_type';            
             break;
 
             case 16:
@@ -795,6 +796,7 @@ class Ticket_Model extends CI_Model
             }
             $basic[$key]['input_values'] = $values;
             $basic[$key]['current_value'] = $ticket->referred_by;
+            $basic[$key]['parameter_name'] = 'referred_by';
             break;
 
             case 17:
@@ -809,23 +811,27 @@ class Ticket_Model extends CI_Model
             }
             $basic[$key]['input_values'] = $values;
             $basic[$key]['current_value'] = $ticket->client;
+            $basic[$key]['parameter_name'] = 'client';
             break;
 
             case 18:
             $basic[$key]['input_values'] = '';
             $basic[$key]['current_value'] = $ticket->name;
+            $basic[$key]['parameter_name'] = 'name';
             break;
 
             case 19:
            
             $basic[$key]['input_values'] = '';
             $basic[$key]['current_value'] = $ticket->phone;
+            $basic[$key]['parameter_name'] = 'phone';
             break;
 
             case 20:
            
             $basic[$key]['input_values'] = '';
             $basic[$key]['current_value'] = $ticket->email;
+            $basic[$key]['parameter_name'] = 'email';
             break;
 
             case 21:
@@ -839,6 +845,7 @@ class Ticket_Model extends CI_Model
             }
             $basic[$key]['input_values'] = $values;
             $basic[$key]['current_value'] = $ticket->product;
+            $basic[$key]['parameter_name'] = 'product';
             break;
 
             case 22:
@@ -852,6 +859,7 @@ class Ticket_Model extends CI_Model
             }
             $basic[$key]['input_values'] = $values;
             $basic[$key]['current_value'] = $ticket->category;
+            $basic[$key]['parameter_name'] = 'relatedto';
             break;
 
             case 23:
@@ -865,6 +873,7 @@ class Ticket_Model extends CI_Model
             }
             $basic[$key]['input_values'] = $values;
             $basic[$key]['current_value'] = $ticket->issue;
+            $basic[$key]['parameter_name'] = 'issue';
             break;
 
             case 24:
@@ -879,6 +888,7 @@ class Ticket_Model extends CI_Model
                             );
             $basic[$key]['input_values'] = $values;
             $basic[$key]['current_value'] = $ticket->priority;
+            $basic[$key]['parameter_name'] = 'priority';
             break;
 
             case 25:
@@ -892,6 +902,7 @@ class Ticket_Model extends CI_Model
             }
             $basic[$key]['input_values'] = $values;
             $basic[$key]['current_value'] = $ticket->sourse;
+            $basic[$key]['parameter_name'] = 'source';
             break;
 
             case 26:
@@ -907,16 +918,19 @@ class Ticket_Model extends CI_Model
             }
             $basic[$key]['input_values'] = $reshape;
             $basic[$key]['current_value'] = null;
+            $basic[$key]['parameter_name'] = 'attachment[]';
             break;
 
             case 27:
             $basic[$key]['input_values'] = '';
             $basic[$key]['current_value'] = $ticket->message;
+            $basic[$key]['parameter_name'] = 'remark';
             break;
 
             case 28:
             $basic[$key]['input_values'] = '';
             $basic[$key]['current_value'] = $ticket->tracking_no;
+            $basic[$key]['parameter_name'] = 'tracking_no';
             break;
 
           }
@@ -924,7 +938,7 @@ class Ticket_Model extends CI_Model
       }
 
       $dynamic = $this->Enquiry_model->get_dyn_fld($ticketno,$primary_tab,2);
-
+      $i=0;
       foreach ($dynamic as $key => $value)
       {
           if(in_array($value['input_type'],array('2')))
@@ -941,6 +955,15 @@ class Ticket_Model extends CI_Model
                   $dynamic[$key]['input_values'] = $reshape;
               }
           }
+         $dynamic[$key]['parameter_name'] = array(
+                                              array('key'=>'enqueryfield['.$value['input_id'].']',
+                                                    'value'=>''),
+                                              array('key'=>'inputfieldno['.$i.']',
+                                                    'value'=>$value['input_id']),
+                                              array('key'=>'inputtype['.$i.']',
+                                                    'value'=>$value['input_type']),
+                                              );
+          $i++;
       }
 
         $tabs[]  = array('tab_id'=>$primary->id,
@@ -971,7 +994,7 @@ class Ticket_Model extends CI_Model
         	if($res['primary_tab']!='1')
         	{
         		$dynamic = $this->Enquiry_model->get_dyn_fld($ticketno,$res['id'],2);
-
+        		$heading = array();
         		foreach ($dynamic as $key => $value)
 			      {
 			          if(in_array($value['input_type'],array('2')))
@@ -988,18 +1011,19 @@ class Ticket_Model extends CI_Model
 			                  $dynamic[$key]['input_values'] = $reshape;
 			              }
 			          }
+			          $heading[] = $value['input_label'];
 			      }
 
 
         		$part = array('tab_id'=>$res['id'],
         					'title'=>$res['title'],
-        					'is_query_type'=>$res['is_query_type'],
+        					'is_query_type'=>$res['form_type'],
         					'is_delete'=>$res['is_delete'],
         					'is_edit'=>$res['is_edit'],
         					'field_list'=>$dynamic,
     						);
 
-        		if($res['is_query_type']==1)
+        		if($res['form_type']==1)
         		{
         			$tid = $res['id'];
 					$comp_id = $companey_id;
@@ -1028,7 +1052,8 @@ class Ticket_Model extends CI_Model
 			             		$data[] = $sub;
 			             	}
 			             }
-			        $part['table']=$data;
+			        $part['table']=array('heading'=>$heading,
+			        					'data'=>$data);
         		}
         		
         		$tabs[] = $part;

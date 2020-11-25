@@ -355,23 +355,23 @@ echo "</pre>";*/
             //alert('yes');
         }
     });
-    $("#set_rules_form").submit(function(e) {
-        e.preventDefault();
-        var url = "<?=base_url().'form/form/save_form_rules'?>";
-        var actions = $("select[name='actions']").val();
-        var actions_field = $("select[name='actions_field']").val();
-        var rules = $('#builder').queryBuilder('getRules');
-        var form_data = $("#set_rules_form").serialize();
-        $.ajax({
-            type: "POST",
-            url: url,
-            data: {
-                form_data: form_data,
-                rules: rules
-            },
-            success: function(data) {}
-        });
-    });
+    // $("#set_rules_form").submit(function(e) {
+    //     e.preventDefault();
+    //     var url = "<?=base_url().'form/form/save_form_rules'?>";
+    //     var actions = $("select[name='actions']").val();
+    //     var actions_field = $("select[name='actions_field']").val();
+    //     var rules = $('#builder').queryBuilder('getRules');
+    //     var form_data = $("#set_rules_form").serialize();
+    //     $.ajax({
+    //         type: "POST",
+    //         url: url,
+    //         data: {
+    //             form_data: form_data,
+    //             rules: rules
+    //         },
+    //         success: function(data) {}
+    //     });
+    // });
     $('.enquiry_fileds').on('click', function() {
         field_class = $(this).attr('class');
 
@@ -425,35 +425,35 @@ echo "</pre>";*/
    
    
 
-  function query_builder(){
-    var rules_basic = {
-        condition: 'AND',
-        rules: [{
-            id: 'price',
-            operator: 'less',
-            value: 10.25
-        }, {
-            condition: 'OR',
-            rules: [{
-                id: 'category',
-                operator: 'equal',
-                value: 2
-            }, {
-                id: 'category',
-                operator: 'equal',
-                value: 1
-            }]
-        }]
-    };
-    var qf = <?=$query_builder_filter?>;
-    if (qf) {
-        $('#builder').queryBuilder({
-            plugins: ['bt-tooltip-errors'],
-            filters: <?=$query_builder_filter?>,
-            //  rules: rules_basic
-        });
-    }
-  }
+  // function query_builder(){
+  //   var rules_basic = {
+  //       condition: 'AND',
+  //       rules: [{
+  //           id: 'price',
+  //           operator: 'less',
+  //           value: 10.25
+  //       }, {
+  //           condition: 'OR',
+  //           rules: [{
+  //               id: 'category',
+  //               operator: 'equal',
+  //               value: 2
+  //           }, {
+  //               id: 'category',
+  //               operator: 'equal',
+  //               value: 1
+  //           }]
+  //       }]
+  //   };
+  //   var qf = <?=$query_builder_filter?>;
+  //   if (qf) {
+  //       $('#builder').queryBuilder({
+  //           plugins: ['bt-tooltip-errors'],
+  //           filters: <?=$query_builder_filter?>,
+  //           //  rules: rules_basic
+  //       });
+  //   }
+  // }
     /****************************************************************
                     Triggers and Changers QueryBuilder
      *****************************************************************/

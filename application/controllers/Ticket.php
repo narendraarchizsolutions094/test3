@@ -123,7 +123,13 @@ class Ticket extends CI_Controller
 	}
 
 
-
+	public function is_open_ticket($tracking_no){
+		$comp_id = $this->session->companey_id;
+		$this->db->where('tbl_ticket.ticket_status!=',3);
+		$this->db->where('tbl_ticket.company',$comp_id);
+		$this->db->where('tbl_ticket.tracking_no',$tracking_no);
+		echo $this->db->get('tbl_ticket')->num_rows();
+	}
 	public function ticket_set_filters_session()
 	{
 		$this->session->set_userdata('ticket_filters_sess', $_POST);
@@ -140,53 +146,37 @@ class Ticket extends CI_Controller
 
 			$html = "";
 
-			if($res)
+			if($res) 
 			{
-
-				$enq = $this->Enquiry_model->getEnquiry(array('enquiry_id'=>$res[0]->client))->row();
-				
-				if($enq)
-				{
-					$html .= '<table class="table table-bordered">
-					<tr>
-					' . ($this->session->companey_id == 65 ? '<th>'.display('tracking_no').'</th>' : '') . '
-					<th>Ticket Number</th>
-					<th>Name</th>
-					<th>Ticket Stage</th>
-					<th>Status</th>
-					<th>Created At</th>
-					<th>Action</th>
+				$html .= '<table class="table table-bordered">
+				<tr>
+				' . ($this->session->companey_id == 65 ? '<th>'.display('tracking_no').'</th>' : '') . '
+				<th>Ticket Number</th>
+				<th>Name</th>
+				<th>Ticket Stage</th>
+				<th>Status</th>
+				<th>Created At</th>
+				<th>Action</th>
+				</tr>';
+				foreach ($res as $row) {
+					$status	=	$row->ticket_status_name??'Open';
+					$html .= '<tr>
+					' . ($this->session->companey_id == 65 ? '<td>' . $row->tracking_no . '</td>' : '') . '
+					<td>' . $row->ticketno . '</td>
+					<td>' . $row->name . '</td>
+					<td>' . (!empty($row->lead_stage_name) ? $row->lead_stage_name : 'NA') . ' <small>' . (!empty($row->description) ? '<br>' . $row->description : '') . '</small></td>
+					<td>' . $status . '</td>
+					<td>' . date('d-m-Y <br> h:i A', strtotime($row->coml_date)) . '</td>
+					<th><a href="' . base_url('ticket/view/' . $row->ticketno) . '"><button class="btn btn-small btn-primary">View</button></a></th>
 					</tr>';
-					foreach ($res as $row) {
-						$status	=	$row->ticket_status_name??'Open';
-						$html .= '<tr>
-						' . ($this->session->companey_id == 65 ? '<td>' . $row->tracking_no . '</td>' : '') . '
-						<td>' . $row->ticketno . '</td>
-						<td>' . $row->name . '</td>
-						<td>' . (!empty($row->lead_stage_name) ? $row->lead_stage_name : 'NA') . ' <small>' . (!empty($row->description) ? '<br>' . $row->description : '') . '</small></td>
-						<td>' . $status . '</td>
-						<td>' . date('d-m-Y <br> h:i A', strtotime($row->coml_date)) . '</td>
-						<th><a href="' . base_url('ticket/view/' . $row->ticketno) . '"><button class="btn btn-small btn-primary">View</button></a></th>
-						</tr>';
-					}
-					$html .= '</table>';
-
-					$data = array(
-					'status' => '1',
-					'problem_for' => $enq->enquiry_id,
-					'name' => $res[0]->name,
-					'email' => $res[0]->email,
-					'phone' => $res[0]->phone,
-					'html' => $html,
-					);
-
-					echo json_encode($data);
-
 				}
-				else
-				{
-					echo json_encode(array('status' => '0', 'html' => '0'));
-				}
+				$html .= '</table>';
+
+				$data = array(
+				'status' => '1',				
+				'html' => $html,
+				);
+				echo json_encode($data);
 			} 
 			else
 			{
@@ -260,7 +250,7 @@ class Ticket extends CI_Controller
 
 			if ($showall or in_array(4, $acolarr)) {
 				if (user_access(220) && !empty($point->phone)) {
-					$sub[] = "<a href='javascript:void(0)' onclick='send_parameters(".$point->phone.")'>" . $point->phone . "</a>";
+					$sub[] = "<a href='javascript:void(0)' onclick='send_parameters(".$point->phone.")'>" . $point->phone . " <button class='btn btn-xs btn-success'><i class='fa fa-phone' aria-hidden='true'></i></button></a>";
 				} else {
 					$sub[] = $point->phone ?? "NA";
 				}
@@ -306,7 +296,7 @@ class Ticket extends CI_Controller
 			
 
 			if ($showall or in_array(16, $acolarr)) {
-				$sub[] = $point->status_name == '' ? 'NA' : $point->status_name;
+				$sub[] = $point->status_name == '' ? 'Open' : $point->status_name;
 			}
 
 
@@ -416,19 +406,21 @@ class Ticket extends CI_Controller
 	        	</table>';
 				}
 
-				if (isset($a->Table3) && sizeof($table3) > 0) {
+				if (!empty($table3)) {
 					echo '<table class="table table-bordered">
 	        	<tr><th colspan="5" style="text-align:center;">Status</th></tr>
 	        	<tr><th>From</th><th>To</th><th>Dep. Date</th><th>Arr. Date</th><th>Status</th></tr>
 	        	';
-
+					if(!empty($table3->From_Station) || !empty($table3->From_Station) || !empty($table3->From_Station) || !empty($table3->From_Station)){
+						$table3 = array($table3);						
+					}
 					foreach ($table3 as $res) {
 						echo '<tr>
-	        				<td>' . (empty($res->From_Station) ? '' : $res->From_Station) . '</td>
-	        				<td>' . (empty($res->To_Station ? '' : $res->To_Station)) . '</td>
-	        				<td>' . (empty($res->Depature_Date) ? '' : $res->Depature_Date) . '</td>
-	        				<td>' . (empty($res->Arrival_Date) ? '' : $res->Arrival_Date) . '</td>
-	        				<td>' . (empty($res->Status_Name) ? '' : $res->Status_Name) . '</td>
+	        				<td>' . (!empty($res->From_Station) ? $res->From_Station : '') . '</td>
+	        				<td>' . (!empty($res->To_Station) ? $res->To_Station : '') . '</td>
+	        				<td>' . (!empty($res->Depature_Date) ? $res->Depature_Date : '') . '</td>
+	        				<td>' . (!empty($res->Arrival_Date) ? $res->Arrival_Date : '') . '</td>
+	        				<td>' . (!empty($res->Status_Name) ? $res->Status_Name : '') . '</td>
 	        			</tr>';
 					}
 					echo '</table>';
@@ -1172,7 +1164,8 @@ class Ticket extends CI_Controller
 	}
 
 	public function tracking_no_check($tn){
-		$this->db->where('company',$this->session->companey_id);
+		$comp_id = $this->session->companey_id;
+		$this->db->where('company',$comp_id);
 		$this->db->where('tracking_no',$tn);
 		$this->db->where('ticket_status!=',3);
 		if($this->db->get('tbl_ticket')->num_rows()){
@@ -1195,7 +1188,7 @@ class Ticket extends CI_Controller
 		}
 		if ($this->form_validation->run()==TRUE) {
 			$res = $this->Ticket_Model->save($this->session->companey_id, $this->session->user_id);
-
+			
 			if ($res) 
 			{
 				$tck_id =  $this->db->select('id')
@@ -1210,7 +1203,7 @@ class Ticket extends CI_Controller
                 $inputno   = $this->input->post("inputfieldno", true);
                 $enqinfo   = $this->input->post("enqueryfield", true);
                 $inputtype = $this->input->post("inputtype", true);                
-                $file_count = 0;                
+                $file_count = 0;
                 $file = !empty($_FILES['enqueryfiles'])?$_FILES['enqueryfiles']:'';                
                 foreach($inputno as $ind => $val){
 	
@@ -1235,7 +1228,7 @@ class Ticket extends CI_Controller
                         $biarr = array( "enq_no"  => $res,
                                       "input"   => $val,
                                       "parent"  => $tck_id, 
-                                      "fvalue"  => $enqinfo[$ind],
+                                      "fvalue"  => $enqinfo[$ind]??'',
                                       "cmp_no"  => $this->session->companey_id,
                                       "comment_id" => $comment_id
                                      );                                 

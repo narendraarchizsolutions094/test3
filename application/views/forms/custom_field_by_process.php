@@ -68,6 +68,19 @@
                    
                   <?php }
 
+                  if($companylist['input_type']==8){?>
+                    
+                     
+                        <label> <?= ucwords($companylist['input_label'])?> <i class="text-danger"></i> </label>
+                       
+                             <input type="file" name="enqueryfiles[]" id="<?= $companylist['input_name']?>" placeholder="<?= $companylist['input_place']; ?>"  <?php if($companylist['label_required']==1){echo "required";}?> class="form-control">
+                          
+                     
+                   
+                  <?php }
+
+
+
                 if($companylist['input_type']==9){?>
                <label><?php echo(!empty($companylist["input_label"])) ?  ucwords($companylist["input_label"]) : ""; ?></label>
                <input type="password"  name="enqueryfield[]"  class="form-control" id="<?= $companylist['input_name']?>" placeholder="<?= $companylist['input_place']; ?>"  <?php if($companylist['label_required']==1){echo "required";}?>>
