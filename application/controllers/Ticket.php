@@ -1584,7 +1584,7 @@ class Ticket extends CI_Controller
 			$end   = new DateTime($date2);
 			for ($i = $begin; $i <= $end; $i->modify('+1 day')) {
 				$idate = $i->format("Y-m-d");
-			 echo $idate;
+			  $idate;
 			}
 		}
 		// print_r($data);
@@ -1592,7 +1592,7 @@ class Ticket extends CI_Controller
 	}
 	public function referred_byJson()
 	{
-		$data[] = '';
+		$data[] = array();
 		$refData = $this->Ticket_Model->refferedBy();
 		foreach ($refData as $key => $value) {
 			$count = $this->Ticket_Model->countrefferedBy($value->id);
@@ -1621,11 +1621,8 @@ class Ticket extends CI_Controller
 
 	public function source_typeJson()
 	{
-
 		$getSourse = $this->Ticket_Model->getSourse(1);
-		$data[]='';
-
-
+		$data=[];
 		foreach ($getSourse as $key => $value) {
 			$count = $this->Ticket_Model->countTSourse($value->lsid);
 
@@ -1635,11 +1632,12 @@ class Ticket extends CI_Controller
 	}
 	public function stage_typeJson()
 	{
-		$data[]='';
-
-
-		$getSourse = $this->Ticket_Model->getSourse(4);
+		$data=[];
+		$getSourse = $this->Ticket_Model->getstage(4);
+		// print_r($getSourse);
+		// die();
 		foreach ($getSourse as $key => $value) {
+
 			$count = $this->Ticket_Model->countTstage($value->stg_id);
 			$data[] = ['name' => $value->lead_stage_name, 'value' => $count];
 		}
@@ -1647,18 +1645,18 @@ class Ticket extends CI_Controller
 	}
 	public function subsource_typeJson()
 	{
-		$data[]='';
+		$data=[];
 
 		$subsource = $this->Ticket_Model->Subsource();
 		foreach ($subsource as $key => $value) {
 			$count = $this->Ticket_Model->countSubsource($value->id);
-			$data[] = ['name' => $value->description, 'value' => $count];
+			$data[] = ['name' => $value->description, 'value' => 22];
 		}
 		echo json_encode($data);
 	}
 	public function product_ticketJson()
 	{
-		$data[]='';
+		$data=[];
 
 		//fetch products
 		$products=$this->db->get('tbl_product_country')->result();

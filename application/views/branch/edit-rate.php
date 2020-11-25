@@ -9,7 +9,8 @@
                          <div class="col-md-12">  <a class="btn btn-success" href="<?php echo base_url("setting/branch_ratelist") ?>"> <i class="fa fa-list"></i> Branch Rate List </a> </div>
                         <div class="col-lg-10 ">
                         <form action="<?=base_url().'setting/addbranch_rate'?>" enctype="multipart/form-data" method='post'>
-
+<br>
+<br>
                 <div class="row form-group">
                 <div class="col-md-4">
                 <label>Booking Branch </label>

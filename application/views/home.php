@@ -335,6 +335,9 @@ if (!empty($enquiry_separation)) {
 #calendar {
   height: 500px;
 }
+.fc-title{
+  color: black;
+}
 </style>        
 <div id="calendar" class=""></div>
 
@@ -396,7 +399,7 @@ if (!empty($enquiry_separation)) {
 //print_r($eldate);exit;
 ?>
 <div class="col-lg-6 col-xl-12 mg-t-10">
-            <div class="card" style="height:95%;">
+            <div class="card" style="height:100%;">
 
 <div class="container">
         <div class="row">
@@ -938,15 +941,15 @@ $(document).ready(function(){
               labels: ["JUN", "FEB", "MAR", "APR","MAY","JUNE","JULY","AUG","SEP","OCT","NOV","DEC"],
               datasets: [
                   {
-                  label: "Enquiry",
+                  label: <?=display("enquiry") ?>,
                   backgroundColor: "#3e95cd",
                   data: [ parseInt(data.data.ejan), parseInt(data.data.efeb), parseInt(data.data.emar), parseInt(data.data.eapr), parseInt(data.data.emay), parseInt(data.data.ejun), parseInt(data.data.ejuly), parseInt(data.data.eaug), parseInt(data.data.esep), parseInt(data.data.eoct), parseInt(data.data.enov), parseInt(data.data.edec)]
                 }, {
-                  label: "Lead",
+                  label: <?=display("lead") ?>,
                   backgroundColor: "#8e5ea2",
                   data: [ parseInt(data.data.ljan), parseInt(data.data.lfeb), parseInt(data.data.lmar), parseInt(data.data.lapr), parseInt(data.data.lmay), parseInt(data.data.ljun), parseInt(data.datajuly), parseInt(data.data.laug), parseInt(data.data.lsep), parseInt(data.data.loct), parseInt(data.data.lnov), parseInt(data.data.ldec)]
                 }, {
-                  label: "Client",
+                  label: <?=display("client") ?>,
                   backgroundColor: "#c45850",
                   data: [ parseInt(data.data.cjan), parseInt(data.data.cfeb), parseInt(data.data.cmar), parseInt(data.data.capr), parseInt(data.data.cmay), parseInt(data.data.cjun), parseInt(data.data.cjuly), parseInt(data.data.caug), parseInt(data.data.csep), parseInt(data.data.coct), parseInt(data.data.cnov), parseInt(data.data.cdec)]
                 },
@@ -1628,7 +1631,7 @@ $(document).ready(function(){
           type: 'column'
         },
         title: {
-          text: '<?php echo display("lead_source"); ?>'
+          text: 'Source'
         },
         subtitle: {
           //text: 'Source: WorldClimate.com'

@@ -2784,18 +2784,6 @@ public function set_layout_to_session() {
                 }
 
 
-                public function support_dash()
-                {
-                    if (user_access(310)) {
-                        $data['title'] = ' Support Dashboard';
-                        $data['userId']=$this->session->userdata('user_id');
-    	                $data['compId']=$this->session->userdata('companey_id');
-                        $data['content'] = $this->load->view('msg-log-dashboard', $data, true);
-                        $this->load->view('layout/main_wrapper', $data);
-                    } else {
-                        redirect('dashboard');
-                    }
-                }
                 public function enquiry_dash()
                 {
                     if (user_access(310)) {
@@ -2861,6 +2849,7 @@ public function set_layout_to_session() {
                     }
                     }
                 }
+                echo json_encode($data);
             }
 
                 public function getuserWiseSupportData()
