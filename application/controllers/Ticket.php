@@ -1592,7 +1592,7 @@ class Ticket extends CI_Controller
 	}
 	public function referred_byJson()
 	{
-		$data[] = array();
+		$data = array();
 		$refData = $this->Ticket_Model->refferedBy();
 		foreach ($refData as $key => $value) {
 			$count = $this->Ticket_Model->countrefferedBy($value->id);
