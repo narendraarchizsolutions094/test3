@@ -436,6 +436,7 @@ else
     var copyButton = document.getElementById('copy-btn');
     var copyInput = document.getElementById('copy-txt');
     copyButton.addEventListener('click', function(e) {
+      $("#copy-btn").html('<b>Copied</b>');
       e.preventDefault();
       var text = copyInput.select();
       document.execCommand('copy');
