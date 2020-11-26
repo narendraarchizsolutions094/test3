@@ -33,7 +33,7 @@ class Survey extends CI_Controller {
         $this->load->view('forms/public_form',$data);
     }
     public function survery_support_form_submit(){
-        $tid    =   $this->input->post('tid');
+        $tid  = $tck_id =   $this->input->post('tid');
         $user_id    =   $this->input->post('uid');
         $form_type    =   $this->input->post('form_type');
         $comp_id    =   $this->input->post('comp_id');
