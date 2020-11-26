@@ -139,7 +139,7 @@ if($form_type == 1)
                <?php $optarr = (!empty($fld['input_values'])) ? explode(",",$fld['input_values']) : array(); 
                ?>
                <select class="form-control"  name="enqueryfield[<?=$fld_id?>]" >
-                  <option>Select</option>
+                  <option value=''>Select</option>
                   <?php  foreach($optarr as $key => $val){
                   ?>
                   <option value = "<?php echo $val; ?>"><?php echo $val; ?></option>
@@ -154,7 +154,7 @@ if($form_type == 1)
                   <?php $optarr = (!empty($fld['input_values'])) ? explode(",",$fld['input_values']) : array(); 
                   ?>
                   <select class="star-rating"  name="enqueryfield[<?=$fld_id?>]" >
-                    <option>Select</option>
+                    <option value=''>Select</option>
                     <?php  foreach($optarr as $key => $val){
                     ?>
                     <option value = "<?php echo $val; ?>"><?php echo $val; ?></option>
