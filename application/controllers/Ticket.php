@@ -774,7 +774,8 @@ class Ticket extends CI_Controller
 
     public function delete_query_data($cmnt_id,$tckno)
     {
-    	$this->db->where(array('comment_id'=>$cmnt_id,'enq_no'=>$tckno))->delete('ticket_dynamic_data');
+		$this->db->where(array('comment_id'=>$cmnt_id,'enq_no'=>$tckno))->delete('ticket_dynamic_data');
+		redirect($this->agent->referrer());
     }
 
     public function edit_query_data()
