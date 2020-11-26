@@ -625,6 +625,43 @@ public function branchrate_delete()
 	}
 	
 }
+public function document_templates()
+{		
+	$data['page_title'] = 'Template List';
+	$data['list']=$this->db->where('comp_id',65)->get('tbl_docTemplate')->result();
+	$data['content'] = $this->load->view('setting/document-templates',$data,true);
+	$this->load->view('layout/main_wrapper',$data);
+}
+public function createdocument_templates()
+{		
+	$id=$this->uri->segment('3');
+	if(!empty($id)){
+	$data['docList']=$this->db->where(array('comp_id'=>65,'dc_id'=>$id))->get('tbl_docTemplate')->result();
+	$data['page_title'] = 'Branch List';
+	$data['content'] = $this->load->view('setting/create-document-template',$data,true);
+	$this->load->view('layout/main_wrapper',$data);}else{
+		$this->session->set_flashdata('error','Template not found');
+	    redirect('setting/document-templates');
+	}
+
+}
+public function Insert_templates()
+{		
+	$user_id=$this->session->user_id;
+	 $id=$this->input->post('docId');
+	 $title=$this->input->post('title');
+	$content=$this->input->post('content');
+	$count=$this->db->where(array('comp_id'=>65,'dc_id'=>$id))->get('tbl_docTemplate');
+	if($count->num_rows()==1){
+		$data=['title'=>$title,'content'=>$content,'doc_type'=>1,'created_by'=>$user_id,'comp_id'=>65];
+		$this->db->where(array('comp_id'=>65,'dc_id'=>$id))->update('tbl_docTemplate',$data);
+		$this->session->set_flashdata('success','Template updated');
+	    redirect('setting/document-templates');
+	}else{
+		$this->session->set_flashdata('error','Template not found');
+	    redirect('setting/document-templates');
+	}
+}
 
 }
 

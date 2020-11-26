@@ -1502,6 +1502,12 @@ class Enquiry extends CI_Controller
         if ($this->session->companey_id == 65) {
             $data['branch']=$this->db->where('comp_id',65)->get('branch')->result();
             $data['CommercialInfo'] = $this->enquiry_model->getComInfo($enquiry_id);
+            //fetch last entry
+            $comm_data=$this->db->where(array('enquiry_id'=>$enquiry_id))->order_by('id',"desc")
+            ->limit(1)->get('commercial_info');
+            $data['commInfoCount']=$comm_data->num_rows();
+            $data['commInfoData']=$comm_data->row();
+
         } 
                             
         $this->enquiry_model->make_enquiry_read($data['details']->Enquery_id);

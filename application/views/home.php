@@ -210,13 +210,14 @@ Ticket Dashboard
 if (!empty($enquiry_separation)) {
   $enquiry_separation = json_decode($enquiry_separation, true);
       foreach ($enquiry_separation as $key => $value) {
+        
               $ctitle = $enquiry_separation[$key]['title']; 
               $data_s = $this->enquiry_model->Dy_enquiryLeadClientCount($this->session->user_id,$this->session->companey_id,$key);
                    ?>
 
 <div class="col-md-4 col-sm-6 col-xs-12">
           <div class="info-box bg-aqua">
-            <span class="info-box-icon"><i class="fa fa-user-circle-o" style="color:#fff;"></i></span>
+            <span class="info-box-icon"><i class="<?= $enquiry_separation[$key]['icon'] ?>" style="color:#fff;"></i></span>
             <div class="info-box-content1">
               <div class="box box-widget widget-user-2">
             <div class="box-footer no-padding">

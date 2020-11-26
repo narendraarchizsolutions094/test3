@@ -1120,6 +1120,11 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                           Branch Rate List                            
                           </a>
                         </li>
+                        <li class="<?php echo (in_array($segment2,array('branch_ratelist','editbranchrate')) ?"active":'') ?>">
+                          <a href="<?php echo base_url() ?>setting/document-templates">
+                          Branch Rate List                            
+                          </a>
+                        </li>
                         <?php }  ?>
                      </ul>
                   </li>
@@ -2437,7 +2442,7 @@ $('#something').click(function() {
       <!-- DataTables JavaScript -->
       <script src="<?php echo base_url("assets/datatables/js/dataTables.min.js?v=1.0") ?>"></script>
       <!-- <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>     -->
-      <script src="<?=base_url()?>assets/js/tinymce.min.js" referrerpolicy="origin"></script>  
+      <!-- <script src="<?=base_url()?>assets/js/tinymce.min.js" referrerpolicy="origin"></script>   -->
       <script src="<?php echo base_url() ?>assets/js/tableHeadFixer.js?v=1.0" type="text/javascript"></script> 
       <!-- Admin Script -->
       <script src="<?php echo base_url('assets/js/frame.js?v=1.0?v=1.0') ?>" type="text/javascript"></script> 

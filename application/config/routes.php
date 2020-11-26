@@ -285,6 +285,7 @@ $route['edit-userrights/(:any)']   = 'userrights/userrights_edit/$1';
 
 
 // master lead search
+$route['document-templates'] = 'setting/document_templates';
 $route['master_lead_search'] = 'lead/lead_search';
 $route['lead'] = 'led';
 

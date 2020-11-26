@@ -1,5 +1,7 @@
 <?php
 
+use function GuzzleHttp\json_encode;
+
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Dashboard extends CI_Controller {
@@ -2877,5 +2879,53 @@ public function set_layout_to_session() {
                         $data['url']= base_url('dashboard/datewiseSupportData/2/2');
                     }
                     $this->load->view('graph',$data);
+                    }
+
+                    function pdf_gen(){
+                        $this->load->library('pdf');
+                        $id=$this->input->post('idType');
+                        if($id==0){$dc_id=1;}else{ $dc_id=2; }
+
+                        $enquiry_id=$this->input->post('enquiry_id');
+                        $data['enquiry_id']=$enquiry_id;
+                        $data['docTemplate']=$this->db->where(array('comp_id'=>65,'dc_id'=>$dc_id))->get('tbl_docTemplate');
+                        $data['usrarr']= $this->db->select("pk_i_admin_id,s_display_name,last_name,s_phoneno,s_user_email,designation")->where("pk_i_admin_id", $this->session->user_id)
+                        ->from("tbl_admin")->get() ->row();
+                        $this->db->where('comp_id', $this->session->companey_id);
+                        $data['enquiry'] = $this->db->where('enquiry_id',$enquiry_id)->get('enquiry')->result();
+                        $html=   $this->pdf->load_view('gen_pdf',$data);
+                        $this->pdf->createPDF($html, 'mypdf', true);
+                        redirect('enquiry/view/'.$enquiry_id.'/');
+                                          }
+                    function printPdf_gen(){
+                        // $this->load->library('pdf');
+                        $id=$this->input->post('typeId');
+                        if($id==0){$dc_id=1;}else{ $dc_id=2; }
+                        $enquiry_id=$this->input->post('enqid');
+                        $docTemplate=$this->db->where(array('comp_id'=>65,'dc_id'=>$dc_id))->get('tbl_docTemplate')->result();
+                           foreach ($docTemplate as $key => $value) {
+                          $content=  $value->content;
+                          $this->db->where('comp_id',65);
+                          $enquiry = $this->db->where('enquiry_id',$enquiry_id)->get('enquiry')->result();
+
+                          foreach ($enquiry as $key => $evalue) {
+                            $content = str_replace("@{fullname}",$evalue->name, $content);
+                            $content = str_replace("@{mobile}",$evalue->phone, $content);
+                            $content = str_replace("@{email}",$evalue->email, $content);
+                            $content = str_replace("@{address}",$evalue->address, $content);
+                            $content = str_replace("@{creationdate}",$evalue->created_date, $content);
+                        
+                        }
+                            //user
+                        //  $content = str_replace("@{designation}",$evalue->, $content);
+                          	$usrarr = $this->db->select("pk_i_admin_id,s_display_name,last_name,s_phoneno,s_user_email,designation")->where("pk_i_admin_id", $this->session->user_id)
+                                           ->from("tbl_admin")->get() ->row();
+                         $content = str_replace("@{username}",$usrarr->s_display_name.' '.$usrarr->last_name, $content);
+                         $content = str_replace("@{usermobile}",$usrarr->s_phoneno, $content);
+                         $content = str_replace("@{useremail}",$usrarr->s_user_email, $content);
+                         $content = str_replace("@{userdesignation}",$usrarr->designation, $content);
+                         echo'<input name="idType" hidden="" class="idType" id="idType" '.$id.'>';
+                                                  echo $content;
+                                                      }
                     }
 }
