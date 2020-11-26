@@ -5,7 +5,7 @@ class Survey extends CI_Controller {
         parent::__construct();
    }
 	
-	public function form($tid,$comp_id,$enquiry_code,$uid){        
+	public function form($tid,$comp_id,$enquiry_code,$uid,$for=1){    
         $tid            =   base64_decode($tid); 
         $comp_id        =   base64_decode($comp_id); 
         $enquiry_code   =   base64_decode($enquiry_code); 
@@ -14,17 +14,26 @@ class Survey extends CI_Controller {
         $this->db->where('tbl_input.form_id',$tid);           
         $this->db->where('tbl_input.company_id',$comp_id);            
         $this->db->join('input_types','input_types.id=tbl_input.input_type');
-        $data['form_fields']    = $this->db->get('tbl_input')->result_array();
-        
-        $data['form_row']    =   $this->db->where('id',$tid)->get('forms')->row_array();
-        $enquiry_row    =   $this->db->where('Enquery_id',$enquiry_code)->get('enquiry')->row_array();
-        $data['enquiry_id']    =   $enquiry_row['enquiry_id'];
+        $data['form_fields']    = $this->db->get('tbl_input')->result_array();        
+        $data['form_row']    =   $this->db->where('id',$tid)->get('forms')->row_array();        
         //$data['dynamic_field']  = $ci->enquiry_model->get_dyn_fld($enquiry_id,$tid);
         $data['tid']            = $tid;
         $data['comp_id']            = $comp_id;
         $data['enquiry_code']   = $enquiry_code;
         $data['uid']            = $uid;
+        if($for == 1){            
+            $enquiry_row    =   $this->db->where('Enquery_id',$enquiry_code)->get('enquiry')->row_array();
+            $data['enquiry_id']    =   $enquiry_row['enquiry_id'];            
+            $data['url']    = base_url().'public/survey/survery_form_submit/'.$enquiry_id;
+        }else if($for == 2){            
+            $enquiry_row    =   $this->db->where('ticketno',$enquiry_code)->get('tbl_ticket')->row_array();
+            $data['enquiry_id']    =   $enquiry_row['id'];
+            $data['url']    = base_url().'public/survey/survery_support_form_submit/'.$enquiry_id;
+        }
         $this->load->view('forms/public_form',$data);
+    }
+    public function survery_support_form_submit(){
+        
     }
 
     public function survery_form_submit($enquiry_id){  

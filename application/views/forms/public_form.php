@@ -32,7 +32,7 @@
     <div class="col-md-2">     
     </div>
     <div class="col-md-8">      
-      <form class="" method="post" action="<?=base_url().'public/survey/survery_form_submit/'.$enquiry_id?>">
+      <form class="" method="post" action="<?=$url?>">
         <input name="tid" type="hidden" value="<?=$tid?>" >    
         <input name="comp_id" type="hidden" value="<?=$comp_id?>" >    
         <input name="uid" type="hidden" value="<?=$uid?>" >    
