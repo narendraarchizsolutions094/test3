@@ -15,7 +15,7 @@ if($form_type == 1)
             $uuid = base64_encode($this->session->user_id);
             $f_url = base_url().'public/survery/'.$form_id.'/'.$ucomp_id.'/'.$uenquiry_code.'/'.$uuid.'/2';
             ?>
-            <input type="text" value="<?=$f_url?>" id='copy-txt' style="width:80%;">
+            <input type="text" value="<?=$f_url?>" id='copy-txt' style="width:90%;">
             <button type="button" id='copy-btn'>Copy</button>
 
             <!-- <a onclick='share_form("<?=$f_url?>","<?=$details->email?>")' href='javascript:void(0)' class="btn btn-primary btn-sm">Share to user</a> -->
