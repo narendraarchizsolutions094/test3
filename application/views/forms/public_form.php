@@ -24,7 +24,7 @@
   <body class="bg-light">
     <div class="container">
   <div class="py-5 text-center">
-    <img class="d-block mx-auto mb-4" src="/docs/4.3/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
+    <!-- <img class="d-block mx-auto mb-4" src="/docs/4.3/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72"> -->
     <h2><?=$form_row['title']?></h2>
     <!-- <p class="lead">This is description</p> -->
   </div>
