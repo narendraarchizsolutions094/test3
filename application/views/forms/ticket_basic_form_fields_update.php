@@ -408,6 +408,3 @@ echo'
            }
           }
           ?> 
-<script>
-  $('select').select2();
-</script>
