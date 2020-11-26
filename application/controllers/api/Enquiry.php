@@ -42,8 +42,9 @@ class Enquiry extends REST_Controller {
     public function create_post()
     { 	
     	
-    	$upd =$this->input->post('update');		
-		if(!empty($this->input->post('email') && !empty($this->input->post('mobileno')))){
+    	$g =$this->input->post('update');		
+
+		  if(!empty($this->input->post('email') && !empty($this->input->post('mobileno')))){
 		  	$comp_id	=	$this->input->post('company_id');		
         	if (!$upd) {
         		$this->form_validation->set_rules('mobileno', display('mobileno'), 'max_length[20]|callback_phone_check|required', array('is_unique' => 'Duplicate   Entery for phone'));        		
@@ -415,11 +416,15 @@ class Enquiry extends REST_Controller {
     
     $Enquery_id = $this->input->post('enquery_code');
     $template_id = $this->input->post('template_id');
-    
+    $company_id  = $this->input->post('company_id');
+
+
     $user_id = $this->input->post('user_id');
     $this->form_validation->set_rules('enquery_code','Inquiry Code','required');
+    $this->form_validation->set_rules('company_id','Company ID','required');
     $this->form_validation->set_rules('template_id','Template ID','required');
     $this->form_validation->set_rules('user_id','User ID','required');
+
     if($this->form_validation->run() == true){
     
     $this->db->where('pk_i_admin_id',$user_id);
@@ -434,9 +439,9 @@ class Enquiry extends REST_Controller {
           if(!empty($enq->email)){
               $to = $enq->email;
               $name1 = $enq->name_prefix.' '.$enq->name.' '.$enq->lastname;
-              $msg = str_replace('@name',$name1,str_replace('@org',$user_row['orgisation_name'],str_replace('@web',$user_row['website'],str_replace('@desg',$user_row['designation'],str_replace('@phone',$user_row['contact_phone'],str_replace('@desg',$user_row['designation'],str_replace('@user',$user_row['s_display_name'].' '.$user_row['last_name'],$message_name)))))));
-                     
-              if($this->Message_models->send_mail($to,$msg,$Templat_subject,'')){
+              $msg = str_replace('@name',$name1,str_replace('@org',$user_row['orgisation_name'],str_replace('@desg',$user_row['designation'],str_replace('@phone',$user_row['contact_phone'],str_replace('@desg',$user_row['designation'],str_replace('@user',$user_row['s_display_name'].' '.$user_row['last_name'],$message_name))))));
+                     //str_replace('@web',$user_row['website'],
+              if($this->Message_models->send_email($to,$msg,$Templat_subject,$company_id)){
                $msg= 'Email sent successfully';
                $this->set_response([
                       'status' => true,
@@ -904,7 +909,8 @@ class Enquiry extends REST_Controller {
             $this->db->set('lastname', $this->input->post('lastname'));
             $this->db->where('Enquery_id', $enquiry_id);
             $this->db->update('enquiry');			
-            if($this->db->affected_rows()>0){
+            if($this->db->affected_rows()>0)
+            {
            // echo $this->db->last_query();
         /*  $ld_updt_by = $this->input->post('user_id');
           $enquiry_row = $this->enquiry_model->enquiry_by_code($enquiry_id);
@@ -1843,7 +1849,8 @@ public function sync_enquiry_data_post(){
 		}
 	}
 }
-	public function enquiry_data_list_post(){
+	public function enquiry_data_list_post()
+	{
 	    $res= array();
 	    $user_id= $this->input->post('user_id');
 		if(!empty($user_id)){
@@ -2155,4 +2162,119 @@ public function get_enq_list_post(){
 				'message' =>$msg
 				], REST_Controller::HTTP_OK);	
 	}	
+
+
+	public function getEnquiryTimeline_post()
+  	{
+    $company_id   = $this->input->post('company_id');
+    $enquiry_id      = $this->input->post('enquiry_id');
+
+    $this->form_validation->set_rules('company_id','company_id','trim|required',array('required'=>'You have note provided %s'));
+    $this->form_validation->set_rules('enquiry_id','enquiry_id','trim|required',array('required'=>'You have note provided %s'));
+
+    if($this->form_validation->run() == true)
+    {
+      $this->session->companey_id = $company_id;
+     $res= $this->db->select('Enquery_id')->where(array('enquiry_id'=>$enquiry_id))->get('enquiry')->row();
+   
+      if(!empty($res))
+      {
+      	 $data = $this->Leads_Model->comment_byId($res->Enquery_id);
+      }
+      
+    
+      if(!empty($res) && !empty($data))
+      {
+        $this->set_response([
+        'status'      => TRUE,           
+        'data'  => $data,
+        ], REST_Controller::HTTP_OK);   
+      }
+      else
+      {
+        $this->set_response([
+        'status'  => false,           
+        'msg'     => "No Data found"
+        ], REST_Controller::HTTP_OK); 
+      }
+    }
+    else
+    {
+      $msg = strip_tags(validation_errors());
+      $this->set_response([
+        'status'  => false,
+        'msg'     => $msg,//"Please provide a company id"
+      ],REST_Controller::HTTP_OK);
+    }
+
+  }
+
+  public function vtrans_form_api_post()
+  {
+      $name   = $this->input->post('name');
+      $email  = $this->input->post('email');
+      $phone  = $this->input->post('phone');
+      $type   = $this->input->post('type');
+      $message  = $this->input->post('message');
+
+
+
+    $this->form_validation->set_rules('name','name','trim|required',array('required'=>'You have not provided %s'));
+    $this->form_validation->set_rules('email','email','trim|required',array('required'=>'You have not provided %s'));
+    $this->form_validation->set_rules('phone','phone','trim|required',array('required'=>'You have not provided %s'));
+    $this->form_validation->set_rules('type','type','trim|required',array('required'=>'You have not provided %s'));
+
+      if($this->form_validation->run())
+      {
+
+		$b = base_url();
+          $ch = curl_init($b."api/Enquiry/create");
+
+          $params = array('company_id'=>65,
+                            'mobileno'=>$phone,
+                            'email'=>$email,
+                            'enquiry'=> $message.', Type: '.$type,
+                            'process_id'=>141,
+							'user_id'=>286,
+							'enquiry_source'=>129,
+							'fname'=>$name						
+                      );
+
+          curl_setopt($ch, CURLOPT_HEADER, 0);
+          curl_setopt($ch, CURLOPT_POST, true);
+          curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
+          curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+          $res = curl_exec($ch);
+          $error = 0;
+          if(curl_error($ch))
+          {
+            $error = curl_error($ch);
+          }
+          curl_close($ch);
+
+         if(!$error)
+          {
+            $this->set_response([
+            'status'      => TRUE,           
+            'msg'  => 'success',
+            ], REST_Controller::HTTP_OK);   
+          }
+          else
+          {
+            $this->set_response([
+            'status'  => false,           
+            'msg'     => "Error:".$error,
+            ], REST_Controller::HTTP_OK); 
+          }
+      }
+      else
+      {
+        $msg = strip_tags(validation_errors());
+        $this->set_response([
+          'status'  => false,
+          'msg'     => $msg,//"Please provide a company id"
+        ],REST_Controller::HTTP_OK);
+      }
+  }
+
 }

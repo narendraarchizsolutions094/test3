@@ -20,6 +20,7 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
 <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
         
 <!-- Time line css start -->
+
 <style>
   .hide-timeline{
     display: none;
@@ -1813,9 +1814,14 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                      </div>
                      </div>
                     </div>
+<<<<<<< HEAD
                     <br>
 
                      <center><h5><u>DISPTACH LOCATION</u></h5></center>
+=======
+                                 </>
+                     <center><h3>DISPATCH LOCATION</h3></center>
+>>>>>>> 73ba2791b7271e434b436681da2f449342b65af1
                      <br>
                      <div class="form-group col-sm-6"> 
                         <label>Booking Type</label>

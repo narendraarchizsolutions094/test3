@@ -581,7 +581,7 @@ class Ticket extends CI_Controller
         // }	
         
 
-       $comment_id = $this->Ticket_Model->saveconv($tck_id,'Details Updated','', $enqarr->client,$this->session->user_id);
+       $comment_id = $this->Ticket_Model->saveconv($tck_id,'Ticket Updated','', $enqarr->client,$this->session->user_id);
        //echo $comment_id; exit();
         if(!empty($enqarr)){        
             if(isset($_POST['inputfieldno'])) {                    
@@ -774,7 +774,8 @@ class Ticket extends CI_Controller
 
     public function delete_query_data($cmnt_id,$tckno)
     {
-    	$this->db->where(array('comment_id'=>$cmnt_id,'enq_no'=>$tckno))->delete('ticket_dynamic_data');
+		$this->db->where(array('comment_id'=>$cmnt_id,'enq_no'=>$tckno))->delete('ticket_dynamic_data');
+		redirect($this->agent->referrer());
     }
 
     public function edit_query_data()
@@ -909,8 +910,6 @@ class Ticket extends CI_Controller
 		if (!empty($_POST))
 		{
 			$move_enquiry = $this->input->post('tickets');
-			//print_r($move_enquiry); exit();
-			// echo json_encode($move_enquiry);
 			$assign_employee = $this->input->post('epid');
 			$notification_data = array();
 			$assign_data = array();
@@ -940,6 +939,21 @@ class Ticket extends CI_Controller
 					$this->db->set('task_type','17');
 					$this->db->set('subject','Ticket Assigned');
 					$this->db->insert('query_response');
+
+					$insarr = array(
+					"tck_id" 	=> $key,
+					"parent" 	=> 0,
+					'comp_id'	=> $this->session->companey_id,
+					"subj"   	=> "Ticked Assigned",
+					"msg"    	=> '',
+					"attacment" => "",
+					"status"  	=> 0,
+					"send_date" =>	date("Y-m-d H:i:s"),
+					"client"   	=> 0,
+					"added_by" 	=> $this->session->user_id,
+					);
+					$this->db->insert('tbl_ticket_conv',$inserr);
+
 				}
 				echo display('save_successfully');
 			} 

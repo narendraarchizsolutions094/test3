@@ -694,7 +694,253 @@ class Ticket extends REST_Controller {
         'msg'     => $msg,//"Please provide a company id"
       ],REST_Controller::HTTP_OK);
     }
+  }
 
+
+  public function saveTicketDisposition_post()
+  {
+    $company_id   = $this->input->post('company_id');
+    $user_id      =$this->input->post('user_id');
+    $ticketno      = $this->input->post('ticketno');
+    $stage   =$this->input->post('stage')??'';
+    $sub_stage = $this->input->post('sub_stage')??'';
+    $status = $this->input->post('status')??'';
+
+    $message = $this->input->post('conversation')??'';
+
+    $this->form_validation->set_rules('company_id','company_id','trim|required',array('required'=>'You have note provided %s'));
+    $this->form_validation->set_rules('ticketno','ticketno','trim|required',array('required'=>'You have note provided %s'));
+    $this->form_validation->set_rules('user_id','user_id','trim|required',array('required'=>'You have note provided %s'));
+
+    if($this->form_validation->run() == true)
+    {
+      $tck = $this->Ticket_Model->get($ticketno);
+      $res = $this->Ticket_Model->saveconv($tck->id, 'Stage Updated', $message,0, $user_id, $stage,$sub_stage,$status);
+
+      if($res)
+      {
+        $this->set_response([
+        'status'      => TRUE,           
+        'data'  => 'Done',
+        ], REST_Controller::HTTP_OK);   
+      }
+      else
+      {
+        $this->set_response([
+        'status'  => false,           
+        'msg'     => "No Data found"
+        ], REST_Controller::HTTP_OK); 
+      }
+    }
+    else
+    {
+      $msg = strip_tags(validation_errors());
+      $this->set_response([
+        'status'  => false,
+        'msg'     => $msg,//"Please provide a company id"
+      ],REST_Controller::HTTP_OK);
+    }
+
+  }  
+
+ public function assignTickets_post()
+  {
+    $company_id   = $this->input->post('company_id');
+    $user_id      = $this->input->post('user_id');
+    $tickets      = $this->input->post('tickets');
+    $emp_id       = $this->input->post('emp_id');
+
+    $this->form_validation->set_rules('company_id','company_id','trim|required',array('required'=>'You have note provided %s'));
+    $this->form_validation->set_rules('tickets[]','tickets','trim|required',array('required'=>'You have note provided %s'));
+    $this->form_validation->set_rules('user_id','user_id','trim|required',array('required'=>'You have note provided %s'));
+    if($this->form_validation->run() == true)
+    {
+      $assign_to_date = date('Y-m-d H:i:s');
+      $move_enquiry = $tickets;
+      $assign_employee = $emp_id;
+      $notification_data = array();
+      $assign_data = array();
+      $last=0;
+
+        if (!empty($move_enquiry)) {
+          foreach ($move_enquiry as $key)
+          {
+            $this->db->set('assign_to', $assign_employee);
+            $this->db->set('assigned_by', $user_id);
+            $this->db->set('assigned_to_date', $assign_to_date);
+            $this->db->where('id', $key);
+            $this->db->update('tbl_ticket');
+
+          $ticket =   $this->db->select('*')
+                        ->where('id',$key)
+                        ->get('tbl_ticket')
+                        ->row();
+
+            $this->db->set('comp_id',$company_id);
+            $this->db->set('query_id',$ticket->ticketno);
+            $this->db->set('noti_read',0);
+            $this->db->set('contact_person',$ticket->name);
+            $this->db->set('mobile',$ticket->phone);
+            $this->db->set('email',$ticket->email); 
+            $this->db->set('task_date',date('d-m-Y'));
+            $this->db->set('task_time',date('H:i:s'));
+            $this->db->set('create_by',$user_id);
+            $this->db->set('task_type','17');
+            $this->db->set('subject','Ticket Assigned');
+            $this->db->insert('query_response');
+
+
+            $insarr = array(
+          "tck_id"  => $key,
+          "parent"  => 0,
+          'comp_id' => $company_id,
+          "subj"    => "Ticked Assigned",
+          "msg"     => '',
+          "attacment" => "",
+          "status"    => 0,
+          "send_date" =>  date("Y-m-d H:i:s"),
+          "client"    => 0,
+          "added_by"  => $user_id,
+          "assignedTo"=>$emp_id);
+          $this->db->insert('tbl_ticket_conv',$insarr);
+
+
+            $last = $this->db->insert_id();
+          }
+        }
+        
+      if($last)
+      {
+        $this->set_response([
+        'status'      => TRUE,           
+        'data'  => 'Done',
+        ], REST_Controller::HTTP_OK);   
+      }
+      else
+      {
+        $this->set_response([
+        'status'  => false,           
+        'msg'     => "No Data found"
+        ], REST_Controller::HTTP_OK); 
+      }
+    }
+    else
+    {
+      $msg = strip_tags(validation_errors());
+      $this->set_response([
+        'status'  => false,
+        'msg'     => $msg,//"Please provide a company id"
+      ],REST_Controller::HTTP_OK);
+    }
+  }
+
+
+  public function deleteTickets_post()
+  {
+    $company_id   = $this->input->post('company_id');
+    $tickets      = $this->input->post('tickets');
+
+    $this->form_validation->set_rules('company_id','company_id','trim|required',array('required'=>'You have note provided %s'));
+    $this->form_validation->set_rules('tickets[]','tickets','trim|required',array('required'=>'You have note provided %s'));
+
+    if($this->form_validation->run() == true)
+    {
+      $ret = 0 ;
+      foreach ($tickets as $key => $value) 
+      {
+        $this->db->where('id', (int)$value);
+        $this->db->delete('tbl_ticket');
+        $ret = $this->db->affected_rows();
+        $this->db->where('tck_id', $value);
+        $this->db->delete('tbl_ticket_conv');
+      }
+      if($ret)
+      {
+        $this->set_response([
+        'status'      => TRUE,           
+        'data'  => 'Done',
+        ], REST_Controller::HTTP_OK);   
+      }
+      else
+      {
+        $this->set_response([
+        'status'  => false,           
+        'msg'     => "No Data found"
+        ], REST_Controller::HTTP_OK); 
+      }
+    }
+    else
+    {
+      $msg = strip_tags(validation_errors());
+      $this->set_response([
+        'status'  => false,
+        'msg'     => $msg,//"Please provide a company id"
+      ],REST_Controller::HTTP_OK);
+    }
+
+  }
+
+
+  public function sendMessage_post()
+  {
+    $this->load->model('Message_models'); 
+    $ticketno = $this->input->post('ticketno');
+    $template_id = $this->input->post('template_id');
+    $company_id  = $this->input->post('company_id');
+
+    $user_id = $this->input->post('user_id');
+
+    $this->form_validation->set_rules('ticketno','Ticket No','required');
+    $this->form_validation->set_rules('template_id','Template ID','required');
+    $this->form_validation->set_rules('user_id','User ID','required');
+    $this->form_validation->set_rules('company_id','Company ID','required');
+    if($this->form_validation->run() == true){
+    
+    $this->db->where('pk_i_admin_id',$user_id);
+    $user_row  = $this->db->get('tbl_admin')->row_array();
+    $this->db->where('temp_id',$template_id);
+    $template_row = $this->db->get('api_templates')->row();
+    $Templat_subject = $template_row->mail_subject;
+    $message_name = $template_row->template_content;
+      
+          $ticket = $this->db->select('*')->where('ticketno',$ticketno)->get('tbl_ticket')->row();
+          //echo $ticketno;
+       //print_r($user_row); exit();
+          //echo $enq->email;
+          if(!empty($ticket->email)){
+              $to = $ticket->email;
+              $name1 = $ticket->name ;
+              $msg = str_replace('@name',$name1,str_replace('@org',$user_row['orgisation_name'],str_replace('@desg',$user_row['designation'],str_replace('@phone',$user_row['contact_phone'],str_replace('@desg',$user_row['designation'],str_replace('@user',$user_row['s_display_name'].' '.$user_row['last_name'],$message_name))))));
+                     
+              if($this->Message_models->send_email($to,$msg,$Templat_subject,$company_id)){
+               $msg= 'Email sent successfully';
+               $this->set_response([
+                      'status' => true,
+                      'message' =>$msg
+                   ], REST_Controller::HTTP_OK);
+             }else{
+               $msg= 'Something went wrong!';
+               $this->set_response([
+                      'status' => false,
+                      'message' =>$msg
+                   ], REST_Controller::HTTP_OK);
+             }
+          }else{
+               $msg= 'Email does not exist for this Ticket';
+               $this->set_response([
+                      'status' => false,
+                      'message' =>$msg
+                   ], REST_Controller::HTTP_OK);
+          }
+         
+      
+    }else{
+          $error= strip_tags(validation_errors());
+         $this->set_response([
+                'status' => false,
+                'message' =>$error
+             ], REST_Controller::HTTP_OK);
+    }
   }
 
 }

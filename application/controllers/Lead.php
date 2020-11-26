@@ -854,7 +854,7 @@ class Lead extends CI_Controller
                             $ccomment = 'Converted to ' . $ctitle;
                         }
                     }
-                } else {
+                } else  {
                     $ccomment = 'Converted to clients';
                 }
                 // get data from comment and insert into follow up table.
@@ -866,12 +866,12 @@ class Lead extends CI_Controller
                     $this->enquiry_model->insetFollowupTime($enquiry_id, $next_stage, $leadCreatedate, date('Y-m-d H:i:s'));
                 }
                 $title = $enquiry_separation[$next_stage]['title'];
-                $url = 'client/index/?stage=' . $stage;
+                $url = 'client/index/?stage=' . $next_stage;
                 $comment = 'Converted to ' . $title;
                 $this->db->set('status', $next_stage);
             } else {
                 $url = 'led/index';
-                $comment = 'Converted to client';
+                $comment = 'Converted to '.display('Client');
                 //insert follow up counter (3 is for client )
                 $this->enquiry_model->insetFollowupTime($enquiry_id, 3, $lead->lead_created_date, date('Y-m-d H:i:s'));
                 $this->db->set('status', 3);

@@ -73,7 +73,7 @@ class Client extends CI_Controller {
             $data['title'] = $enquiry_separation[$stage]['title'];
             $data['data_type'] = $stage;
         }else{
-            $data['title'] = 'Client';
+            $data['title'] = display('Client');
             $data['data_type'] = 3;
         }
 

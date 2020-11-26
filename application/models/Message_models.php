@@ -199,7 +199,7 @@ class Message_models extends CI_Model
       CURLOPT_CUSTOMREQUEST => "GET",
     ));
 
-    return $response = curl_exec($curl);
+    return $response = curl_exec($curl); 
   }
 
   public function send_email($to, $subject, $message, $companey_id = '')
