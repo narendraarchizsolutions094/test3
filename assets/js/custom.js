@@ -1,7 +1,7 @@
 "use strict";
 $(document).ready(function () {
     $('form').attr('autocomplete','off');
-    $('select').select2();
+    $('select .form-control').select2();
         
     $('[data-toggle="tooltip"]').tooltip();
     tinymce.init({
