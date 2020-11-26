@@ -424,7 +424,9 @@ else
 }
 ?>
 <script>
+   $(function() {
     $('.star-rating').barrating({
       theme: 'fontawesome-stars'
-    });
+    });  
+  });
 </script>
