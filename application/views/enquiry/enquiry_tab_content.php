@@ -60,7 +60,7 @@ $type="text";
       if(is_active_field(LAST_NAME,$process_id)){
       ?>
    <div class="form-group col-sm-6 col-md-6"> 
-      <label><?=display('last_name')?> <i class="text-danger">*</i></label>
+      <label><?=display('last_name')?> <!-- <i class="text-danger">*</i> --></label>
       <input class="form-control" value="<?php echo $details->lastname ?>" name="lastname" type="text" placeholder="Last Name" >  
    </div>
    <?php }?>
