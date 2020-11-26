@@ -153,7 +153,7 @@ if($form_type == 1)
                   <label><?php echo(!empty($fld["input_label"])) ?  ucwords($fld["input_label"]) : ""; ?></label>
                   <?php $optarr = (!empty($fld['input_values'])) ? explode(",",$fld['input_values']) : array(); 
                   ?>
-                  <select class="start-rating"  name="enqueryfield[<?=$fld_id?>]" >
+                  <select class="star-rating"  name="enqueryfield[<?=$fld_id?>]" >
                     <option>Select</option>
                     <?php  foreach($optarr as $key => $val){
                     ?>
