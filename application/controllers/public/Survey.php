@@ -37,6 +37,9 @@ class Survey extends CI_Controller {
             echo '<h4 style="text-align: center;">Thanks for your feedback</h4';
             exit();
         }
+        if(empty($_POST)){
+            exit();
+        }
         $tid   =   $this->input->post('tid');
         $user_id    =   $this->input->post('uid');
         $form_type    =   $this->input->post('form_type');
