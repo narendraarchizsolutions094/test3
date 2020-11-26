@@ -886,12 +886,14 @@ class Ticket extends REST_Controller {
     $this->load->model('Message_models'); 
     $ticketno = $this->input->post('ticketno');
     $template_id = $this->input->post('template_id');
-    
+    $company_id  = $this->input->post('company_id');
+
     $user_id = $this->input->post('user_id');
 
     $this->form_validation->set_rules('ticketno','Ticket No','required');
     $this->form_validation->set_rules('template_id','Template ID','required');
     $this->form_validation->set_rules('user_id','User ID','required');
+    $this->form_validation->set_rules('company_id','Company ID','required');
     if($this->form_validation->run() == true){
     
     $this->db->where('pk_i_admin_id',$user_id);
@@ -908,9 +910,9 @@ class Ticket extends REST_Controller {
           if(!empty($ticket->email)){
               $to = $ticket->email;
               $name1 = $ticket->name ;
-              $msg = str_replace('@name',$name1,str_replace('@org',$user_row['orgisation_name'],str_replace('@web',$user_row['website'],str_replace('@desg',$user_row['designation'],str_replace('@phone',$user_row['contact_phone'],str_replace('@desg',$user_row['designation'],str_replace('@user',$user_row['s_display_name'].' '.$user_row['last_name'],$message_name)))))));
+              $msg = str_replace('@name',$name1,str_replace('@org',$user_row['orgisation_name'],str_replace('@desg',$user_row['designation'],str_replace('@phone',$user_row['contact_phone'],str_replace('@desg',$user_row['designation'],str_replace('@user',$user_row['s_display_name'].' '.$user_row['last_name'],$message_name))))));
                      
-              if($this->Message_models->send_mail($to,$msg,$Templat_subject,'')){
+              if($this->Message_models->send_email($to,$msg,$Templat_subject,$company_id)){
                $msg= 'Email sent successfully';
                $this->set_response([
                       'status' => true,
