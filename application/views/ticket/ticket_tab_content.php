@@ -17,7 +17,7 @@ if($form_type == 1)
             $f_url = base_url().'public/survery/'.$form_id.'/'.$ucomp_id.'/'.$uenquiry_code.'/'.$uuid;
             ?>
             
-            <input type="text" value="<?=$f_url?>">            
+            <input type="text" value="<?=$f_url?>" id='copy-txt'>            
             <button type="button" id='copy-btn'>Copy</button>
 
             <!-- <a onclick='share_form("<?=$f_url?>","<?=$details->email?>")' href='javascript:void(0)' class="btn btn-primary btn-sm">Share to user</a> -->
@@ -435,8 +435,8 @@ else
     });  
   });
   (function() {
-    var copyButton = document.querySelector('#copy-btn');
-    var copyInput = document.querySelector('#copy-btn');
+    var copyButton = document.getElementById('#copy-btn');
+    var copyInput = document.getElementById('#copy-txt');
     copyButton.addEventListener('click', function(e) {
       e.preventDefault();
       var text = copyInput.select();
