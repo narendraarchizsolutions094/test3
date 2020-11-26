@@ -435,8 +435,8 @@ else
     });  
   });
   (function() {
-    var copyButton = document.getElementById('#copy-btn');
-    var copyInput = document.getElementById('#copy-txt');
+    var copyButton = document.getElementById('copy-btn');
+    var copyInput = document.getElementById('copy-txt');
     copyButton.addEventListener('click', function(e) {
       e.preventDefault();
       var text = copyInput.select();
