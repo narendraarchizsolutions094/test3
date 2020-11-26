@@ -340,7 +340,8 @@ class Message extends CI_Controller {
 	                $this->email->subject($email_subject); 
 	                $this->email->message($message); 
 	                //$this->email->set_mailtype('html');
-	                if($rows->files!=null || !empty($rows->files==null)){
+	                if($rows->files!=null || !empty($rows->files==null))
+	                {
 	                    $this->email->attach($rows->files);
 	                }
 	                if($this->email->send()){

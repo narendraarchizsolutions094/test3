@@ -42,8 +42,9 @@ class Enquiry extends REST_Controller {
     public function create_post()
     { 	
     	
-    	$upd =$this->input->post('update');		
-		if(!empty($this->input->post('email') && !empty($this->input->post('mobileno')))){
+    	$g =$this->input->post('update');		
+
+		  if(!empty($this->input->post('email') && !empty($this->input->post('mobileno')))){
 		  	$comp_id	=	$this->input->post('company_id');		
         	if (!$upd) {
         		$this->form_validation->set_rules('mobileno', display('mobileno'), 'max_length[20]|callback_phone_check|required', array('is_unique' => 'Duplicate   Entery for phone'));        		
@@ -908,7 +909,8 @@ class Enquiry extends REST_Controller {
             $this->db->set('lastname', $this->input->post('lastname'));
             $this->db->where('Enquery_id', $enquiry_id);
             $this->db->update('enquiry');			
-            if($this->db->affected_rows()>0){
+            if($this->db->affected_rows()>0)
+            {
            // echo $this->db->last_query();
         /*  $ld_updt_by = $this->input->post('user_id');
           $enquiry_row = $this->enquiry_model->enquiry_by_code($enquiry_id);
@@ -2207,64 +2209,70 @@ public function get_enq_list_post(){
 
   }
 
-  // public function getEnquiryDisposition_post()
-  // {
-  //   $this->load->model(array('Leads_Model'));
+  public function vtrans_form_api_post()
+  {
+      $name   = $this->input->post('name');
+      $email  = $this->input->post('email');
+      $phone  = $this->input->post('phone');
+      $type   = $this->input->post('type');
+      $message  = $this->input->post('message');
 
-  //   $company_id   = $this->input->post('company_id');
-  //   $enquiry_id      = $this->input->post('enquiry_id');
 
-  //   $this->form_validation->set_rules('company_id','company_id','trim|required',array('required'=>'You have note provided %s'));
-  //   $this->form_validation->set_rules('enquiry_id','enquiry_id','trim|required',array('required'=>'You have note provided %s'));
 
-  //   if($this->form_validation->run() == true)
-  //   {
-  //     $this->session->companey_id = $company_id;
+    $this->form_validation->set_rules('name','name','trim|required',array('required'=>'You have note provided %s'));
+    $this->form_validation->set_rules('email','email','trim|required',array('required'=>'You have note provided %s'));
+    $this->form_validation->set_rules('phone','phone','trim|required',array('required'=>'You have note provided %s'));
+    $this->form_validation->set_rules('type','type','trim|required',array('required'=>'You have note provided %s'));
 
-  //      $res= $this->enquiry_model->enquiry_by_id($enquiry_id);
- 
-  //     $stage = $this->Leads_Model->stage_by_type();
-  //     $data =array();
+      if($this->form_validation->run())
+      {
 
-  //     foreach ($stage as $key => $val)
-  //     {
-  //        $sub_stage =  $this->Leads_Model->all_description($val->stg_id);
-  //        $val->sub_stage = $sub_stage;
-  //        $data['available']['stage'][] = $val;
-  //     }
-  //     $data['available']['status'] = $this->Ticket_Model->ticket_status()->result();
-  //     if(!empty($ticket))
-  //     $data['selected'] =array(
-  //                         'stage'=>$ticket->ticket_stage,
-  //                         'sub_stage'=>$ticket->ticket_substage,
-  //                         'status'=>$ticket->ticket_status,
-  //                           );
-     
-  //   // print_r( $data); exit();
-  //     if(!empty($data))
-  //     {
-  //       $this->set_response([
-  //       'status'      => TRUE,           
-  //       'data'  => $data,
-  //       ], REST_Controller::HTTP_OK);   
-  //     }
-  //     else
-  //     {
-  //       $this->set_response([
-  //       'status'  => false,           
-  //       'msg'     => "No Data found"
-  //       ], REST_Controller::HTTP_OK); 
-  //     }
-  //   }
-  //   else
-  //   {
-  //     $msg = strip_tags(validation_errors());
-  //     $this->set_response([
-  //       'status'  => false,
-  //       'msg'     => $msg,//"Please provide a company id"
-  //     ],REST_Controller::HTTP_OK);
-  //   }
 
-  // }
+          $ch = curl_init("https://v-trans.thecrm360.com/new_crm/api/Enquiry/create");
+
+          $params = array('company_id'=>65,
+                            'mobileno'=>$phone,
+                            'email'=>$email,
+                            'enquiry'=> $message.', Type: '.$type,
+                            'process_id'=>141,
+                            'user_id'=>286,
+                      );
+
+          curl_setopt($ch, CURLOPT_HEADER, 0);
+          curl_setopt($ch, CURLOPT_POST, true);
+          curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
+          curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+          $res = curl_exec($ch);
+          $error = 0;
+          if(curl_error($ch))
+          {
+            $error = curl_error($ch);
+          }
+          curl_close($ch);
+
+         if(!$error)
+          {
+            $this->set_response([
+            'status'      => TRUE,           
+            'data'  => json_decode($res),
+            ], REST_Controller::HTTP_OK);   
+          }
+          else
+          {
+            $this->set_response([
+            'status'  => false,           
+            'msg'     => "Error:".$error,
+            ], REST_Controller::HTTP_OK); 
+          }
+      }
+      else
+      {
+        $msg = strip_tags(validation_errors());
+        $this->set_response([
+          'status'  => false,
+          'msg'     => $msg,//"Please provide a company id"
+        ],REST_Controller::HTTP_OK);
+      }
+  }
 
 }
