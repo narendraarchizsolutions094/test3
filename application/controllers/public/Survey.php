@@ -33,7 +33,89 @@ class Survey extends CI_Controller {
         $this->load->view('forms/public_form',$data);
     }
     public function survery_support_form_submit(){
-        
+        $tid    =   $this->input->post('tid');
+        $user_id    =   $this->input->post('uid');
+        $form_type    =   $this->input->post('form_type');
+        $comp_id    =   $this->input->post('comp_id');
+        $enqarr = $this->db->select('*')->where('id',$tck_id)->get('tbl_ticket')->row();
+        $en_comments = $enqarr->ticketno;
+        $type = $enqarr->status;
+       $comment_id = $this->Ticket_Model->saveconv($tck_id,'Ticket Updated','', $enqarr->client,$user_id);       
+        if(!empty($enqarr)){        
+            if(isset($_POST['inputfieldno'])) {                    
+                $inputno   = $this->input->post("inputfieldno", true);
+                $enqinfo   = $this->input->post("enqueryfield", true);
+                $inputtype = $this->input->post("inputtype", true);                
+                $file_count = 0;                
+                $file = !empty($_FILES['enqueryfiles'])?$_FILES['enqueryfiles']:'';                
+                foreach($inputno as $ind => $val){
+	
+
+                 if ($inputtype[$ind] == 8) {                                                
+                        $file_data    =   $this->doupload($file,$file_count);
+
+                        if (!empty($file_data['imageDetailArray']['file_name'])) {
+                            $file_path = base_url().'uploads/ticket_documents/'.$comp_id.'/'.$file_data['imageDetailArray']['file_name'];
+                            $biarr = array( 
+                                            "enq_no"  => $en_comments,
+                                            "input"   => $val,
+                                            "parent"  => $tck_id, 
+                                            "fvalue"  => $file_path,
+                                            "cmp_no"  => $comp_id,
+                                            "comment_id" => $comment_id
+                                        );
+
+                            $this->db->where('enq_no',$en_comments);        
+                            $this->db->where('input',$val);        
+                            $this->db->where('parent',$tck_id);
+                            if($this->db->get('ticket_dynamic_data')->num_rows())
+                            {
+                                if ($form_type == 1) {
+                                    $this->db->insert('ticket_dynamic_data',$biarr);                                       
+                                }else{                                    
+                                    $this->db->where('enq_no',$en_comments);        
+                                    $this->db->where('input',$val);        
+                                    $this->db->where('parent',$tck_id);
+                                    $this->db->set('fvalue',$file_path);
+                                    $this->db->set('comment_id',$comment_id);
+                                    $this->db->update('ticket_dynamic_data');
+                                }
+                            }else{
+                                $this->db->insert('ticket_dynamic_data',$biarr);	
+                            }         
+                        }
+                        $file_count++;          
+                    }else{
+                        $biarr = array( "enq_no"  => $en_comments,
+                                      "input"   => $val,
+                                      "parent"  => $tck_id, 
+                                      "fvalue"  => $enqinfo[$val],
+                                      "cmp_no"  => $comp_id,
+                                      "comment_id" => $comment_id
+                                     );                                 
+                        $this->db->where('enq_no',$en_comments);        
+                        $this->db->where('input',$val);        
+                        $this->db->where('parent',$tck_id);
+                        if($this->db->get('ticket_dynamic_data')->num_rows()){  
+                            if ($form_type == 1) {
+                                $this->db->insert('ticket_dynamic_data',$biarr);                                       
+                            }else{                                                              
+                                $this->db->where('enq_no',$en_comments);        
+                                $this->db->where('input',$val);        
+                                $this->db->where('parent',$tck_id);
+                                $this->db->set('fvalue',$enqinfo[$val]);
+                                $this->db->set('comment_id',$comment_id);
+                                $this->db->update('ticket_dynamic_data');
+                            }
+                        }else{
+                            $this->db->insert('ticket_dynamic_data',$biarr);
+                        }
+                    }                                      
+                } //foreach loop end               
+            }            
+             
+        }
+        echo '<h4 style="text-align: center;">Thanks for your feedback</h4';
     }
 
     public function survery_form_submit($enquiry_id){  
