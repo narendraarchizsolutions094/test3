@@ -23,11 +23,11 @@ class Survey extends CI_Controller {
         $data['uid']            = $uid;
         if($for == 1){            
             $enquiry_row    =   $this->db->where('Enquery_id',$enquiry_code)->get('enquiry')->row_array();
-            $data['enquiry_id']    =   $enquiry_row['enquiry_id'];            
+            $data['enquiry_id']  = $enquiry_id  =   $enquiry_row['enquiry_id'];            
             $data['url']    = base_url().'public/survey/survery_form_submit/'.$enquiry_id;
         }else if($for == 2){            
             $enquiry_row    =   $this->db->where('ticketno',$enquiry_code)->get('tbl_ticket')->row_array();
-            $data['enquiry_id']    =   $enquiry_row['id'];
+            $data['enquiry_id']  = $enquiry_id   =   $enquiry_row['id'];
             $data['url']    = base_url().'public/survey/survery_support_form_submit/'.$enquiry_id;
         }
         $this->load->view('forms/public_form',$data);
