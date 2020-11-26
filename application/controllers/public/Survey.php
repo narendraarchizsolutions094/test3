@@ -40,6 +40,7 @@ class Survey extends CI_Controller {
         $enqarr = $this->db->select('*')->where('id',$tck_id)->get('tbl_ticket')->row();
         $en_comments = $enqarr->ticketno;
         $type = $enqarr->status;
+        $this->load->model('Ticket_Model');
        $comment_id = $this->Ticket_Model->saveconv($tck_id,'Ticket Updated','', $enqarr->client,$user_id);       
         if(!empty($enqarr)){        
             if(isset($_POST['inputfieldno'])) {                    
