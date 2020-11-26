@@ -9,7 +9,7 @@ if($form_type == 1)
           
           <hr>
           <?php
-          if ($tid == 52) { 
+          if ($tid == 51) { 
             $form_id = base64_encode($tid);
             $ucomp_id = base64_encode($this->session->companey_id);
             $uenquiry_code = base64_encode($details->ticketno);
