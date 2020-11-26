@@ -33,6 +33,10 @@ class Survey extends CI_Controller {
         $this->load->view('forms/public_form',$data);
     }
     public function survery_support_form_submit($tck_id){
+        if($this->session->submitted){
+            echo '<h4 style="text-align: center;">Thanks for your feedback</h4';
+            exit();
+        }
         $tid   =   $this->input->post('tid');
         $user_id    =   $this->input->post('uid');
         $form_type    =   $this->input->post('form_type');
@@ -117,6 +121,7 @@ class Survey extends CI_Controller {
              
         }
         echo '<h4 style="text-align: center;">Thanks for your feedback</h4';
+        $this->session->userdata('submitted',true);
     }
 
     public function survery_form_submit($enquiry_id){  
