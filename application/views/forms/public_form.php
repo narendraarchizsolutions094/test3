@@ -71,6 +71,25 @@
                   ?>
                </select>
                <?php }
+
+
+              if($fld['input_type']==21){?>
+                <label><?php echo(!empty($fld["input_label"])) ?  ucwords($fld["input_label"]) : ""; ?></label>
+                <?php $optarr = (!empty($fld['input_values'])) ? explode(",",$fld['input_values']) : array(); 
+                ?>
+                <select class="star-rating"  name="enqueryfield[<?=$fld_id?>]" >
+                  <option value=''>Select</option>
+                  <?php  foreach($optarr as $key => $val){
+                  ?>
+                  <option value = "<?php echo $val; ?>"><?php echo $val; ?></option>
+                  <?php
+                      } 
+                  ?>
+                </select>
+                <?php }
+
+
+
                if($fld['input_type']==3){?>
                <label><?php echo(!empty($fld["input_label"])) ?  ucwords($fld["input_label"]) : ""; ?></label>
                <input type="radio"  name="enqueryfield[<?=$fld_id?>]"  id="<?=$fld['input_name']?>" class="form-control">                         
