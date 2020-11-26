@@ -581,7 +581,7 @@ class Ticket extends CI_Controller
         // }	
         
 
-       $comment_id = $this->Ticket_Model->saveconv($tck_id,'Details Updated','', $enqarr->client,$this->session->user_id);
+       $comment_id = $this->Ticket_Model->saveconv($tck_id,'Ticket Updated','', $enqarr->client,$this->session->user_id);
        //echo $comment_id; exit();
         if(!empty($enqarr)){        
             if(isset($_POST['inputfieldno'])) {                    
