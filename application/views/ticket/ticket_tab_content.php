@@ -2,7 +2,6 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-bar-rating/1.2.1/themes/fontawesome-stars.min.css">        
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-bar-rating/1.2.1/jquery.barrating.min.js"></script>        
 <?php
-//echo $tid; exit();
 if($form_type == 1)
 {
  ?>
@@ -14,9 +13,13 @@ if($form_type == 1)
             $ucomp_id = base64_encode($this->session->companey_id);
             $uenquiry_code = base64_encode($details->ticketno);
             $uuid = base64_encode($this->session->user_id);
-            $f_url = base_url().'public/survery/'.$form_id.'/'.$ucomp_id.'/'.$uenquiry_code.'/'.$uuid;
+            $f_url = base_url().'public/survey/form/'.$form_id.'/'.$ucomp_id.'/'.$uenquiry_code.'/'.$uuid.'/2';
             ?>
-            <a onclick='share_form("<?=$f_url?>","<?=$details->email?>")' href='javascript:void(0)' class="btn btn-primary btn-sm">Share to user</a>
+            <input type="text" value="<?=$f_url?>" id='copy-txt' style="width:85%;">
+            <button type="button" id='copy-btn'>Copy</button>
+
+            <!-- <a onclick='share_form("<?=$f_url?>","<?=$details->email?>")' href='javascript:void(0)' class="btn btn-primary btn-sm">Share to user</a> -->
+
             <br>
             <br>            
           <?php
@@ -429,4 +432,17 @@ else
       theme: 'fontawesome-stars'
     });  
   });
+  (function() {
+    var copyButton = document.getElementById('copy-btn');
+    var copyInput = document.getElementById('copy-txt');
+    copyButton.addEventListener('click', function(e) {
+      $("#copy-btn").html('<b>Copied</b>');
+      e.preventDefault();
+      var text = copyInput.select();
+      document.execCommand('copy');
+    });
+    copyInput.addEventListener('click', function() {
+      this.select();
+    });
+  })();
 </script>
