@@ -2219,23 +2219,24 @@ public function get_enq_list_post(){
 
 
 
-    $this->form_validation->set_rules('name','name','trim|required',array('required'=>'You have note provided %s'));
-    $this->form_validation->set_rules('email','email','trim|required',array('required'=>'You have note provided %s'));
-    $this->form_validation->set_rules('phone','phone','trim|required',array('required'=>'You have note provided %s'));
-    $this->form_validation->set_rules('type','type','trim|required',array('required'=>'You have note provided %s'));
+    $this->form_validation->set_rules('name','name','trim|required',array('required'=>'You have not provided %s'));
+    $this->form_validation->set_rules('email','email','trim|required',array('required'=>'You have not provided %s'));
+    $this->form_validation->set_rules('phone','phone','trim|required',array('required'=>'You have not provided %s'));
+    $this->form_validation->set_rules('type','type','trim|required',array('required'=>'You have not provided %s'));
 
       if($this->form_validation->run())
       {
 
-
-          $ch = curl_init("https://v-trans.thecrm360.com/new_crm/api/Enquiry/create");
+		$b = base_url();
+          $ch = curl_init($b."api/Enquiry/create");
 
           $params = array('company_id'=>65,
                             'mobileno'=>$phone,
                             'email'=>$email,
                             'enquiry'=> $message.', Type: '.$type,
                             'process_id'=>141,
-                            'user_id'=>286,
+							'user_id'=>286,
+							'enquiry_source'=>228							
                       );
 
           curl_setopt($ch, CURLOPT_HEADER, 0);
@@ -2254,7 +2255,7 @@ public function get_enq_list_post(){
           {
             $this->set_response([
             'status'      => TRUE,           
-            'data'  => json_decode($res),
+            'msg'  => 'success',
             ], REST_Controller::HTTP_OK);   
           }
           else
