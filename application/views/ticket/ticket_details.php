@@ -139,7 +139,7 @@
 	      <div class="tab-pane" id="<?=str_replace(' ', '_', $value['title'])?>">
 	      <?php
 	      if ($value['id'] != 1) {
-	        echo tab_content($value['id'],$this->session->companey_id,$ticket->ticketno,str_replace(' ', '_', $value['title']),2); 
+	        echo tab_content($value['id'],$this->session->companey_id,$ticket->ticketno,$value['title'],2); 
 	      }
 	      ?>
 	      </div>
