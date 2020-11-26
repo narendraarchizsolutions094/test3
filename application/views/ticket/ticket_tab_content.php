@@ -90,9 +90,9 @@ if($form_type == 1)
 
                      ?>
                       <td>
-                      	<?=$action['edit']? "<a data-cmnt='".$arr1[3]."' data-tab-id='".$tid."' data-ticket='".$details->ticketno."' data-comp-id='".$comp_id."' data-tab-name='".$tabname."' class='btn btn-primary btn-sm' onclick='edit_dynamic_query(this)'><i class='fa fa-edit'></i></a> " :''?>
+                      	<?=$action['edit']? "<a data-cmnt='".$arr1[3]."' data-tab-id='".$tid."' data-ticket='".$details->ticketno."' data-comp-id='".$comp_id."' data-tab-name='".$tabname."' class='btn btn-primary btn-xs' onclick='edit_dynamic_query(this)'><i class='fa fa-edit'></i></a> " :''?>
 
-                      	<?=$action['delete']? "<a class='btn btn-danger btn-sm' href='".base_url("ticket/delete_query_data/$arr1[3]/$details->ticketno")."' onclick='return alert(\'are you sure\')'><i class='fa fa-trash'></i></a> " :''?>
+                      	<?=$action['delete']? "<a class='btn btn-danger btn-xs' href='".base_url("ticket/delete_query_data/$arr1[3]/$details->ticketno")."' onclick='return alert(\'are you sure\')'><i class='fa fa-trash'></i></a> " :''?>
                       	
                       </td>                                                  
                       <?php
