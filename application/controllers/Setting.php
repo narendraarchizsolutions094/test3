@@ -636,7 +636,7 @@ public function createdocument_templates()
 {		
 	$id=$this->uri->segment('3');
 	if(!empty($id)){
-	$data['docList']=$this->db->where(array('comp_id'=>65,'dc_id'=>$id))->get('tbl_docTemplate')->result();
+	$data['docList']=$this->db->where(array('comp_id'=>65,'id'=>$id))->get('tbl_docTemplate')->result();
 	$data['page_title'] = 'Branch List';
 	$data['content'] = $this->load->view('setting/create-document-template',$data,true);
 	$this->load->view('layout/main_wrapper',$data);}else{
@@ -651,10 +651,10 @@ public function Insert_templates()
 	 $id=$this->input->post('docId');
 	 $title=$this->input->post('title');
 	$content=$this->input->post('content');
-	$count=$this->db->where(array('comp_id'=>65,'dc_id'=>$id))->get('tbl_docTemplate');
+	$count=$this->db->where(array('comp_id'=>65,'id'=>$id))->get('tbl_docTemplate');
 	if($count->num_rows()==1){
 		$data=['title'=>$title,'content'=>$content,'doc_type'=>1,'created_by'=>$user_id,'comp_id'=>65];
-		$this->db->where(array('comp_id'=>65,'dc_id'=>$id))->update('tbl_docTemplate',$data);
+		$this->db->where(array('comp_id'=>65,'id'=>$id))->update('tbl_docTemplate',$data);
 		$this->session->set_flashdata('success','Template updated');
 	    redirect('setting/document-templates');
 	}else{

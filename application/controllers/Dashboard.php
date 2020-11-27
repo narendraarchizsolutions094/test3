@@ -2835,7 +2835,7 @@ public function set_layout_to_session() {
                 public function userWiseSupportData1()
                 {
                     $userId=$this->session->userdata('user_id');
-	              // $type= 1 =>(ticket), $type =2=>enquiry 
+	                // $type= 1 =>(ticket), $type =2=>enquiry 
 	            	// $userType=>1 (user wise), 2=>all 
 	            	//$msgType= 0=>mail,1=>sms,2=>whatsapp
                     // month start from
@@ -2892,7 +2892,7 @@ public function set_layout_to_session() {
 
                         $enquiry_id=$this->input->post('enquiry_id');
                         $data['enquiry_id']=$enquiry_id;
-                        $data['docTemplate']=$this->db->where(array('comp_id'=>65,'dc_id'=>$dc_id))->get('tbl_docTemplate');
+                        $data['docTemplate']=$this->db->where(array('comp_id'=>65,'id'=>$dc_id))->get('tbl_docTemplate');
                         $data['usrarr']= $this->db->select("pk_i_admin_id,s_display_name,last_name,s_phoneno,s_user_email,designation")->where("pk_i_admin_id", $this->session->user_id)
                         ->from("tbl_admin")->get() ->row();
                         $this->db->where('comp_id', $this->session->companey_id);
@@ -2906,7 +2906,7 @@ public function set_layout_to_session() {
                         $id=$this->input->post('typeId');
                         if($id==0){$dc_id=1;}else{ $dc_id=2; }
                         $enquiry_id=$this->input->post('enqid');
-                        $docTemplate=$this->db->where(array('comp_id'=>65,'dc_id'=>$dc_id))->get('tbl_docTemplate')->result();
+                        $docTemplate=$this->db->where(array('comp_id'=>65,'id'=>$dc_id))->get('tbl_docTemplate')->result();
                            foreach ($docTemplate as $key => $value) {
                           $content=  $value->content;
                           $this->db->where('comp_id',65);
@@ -2929,7 +2929,7 @@ public function set_layout_to_session() {
                          $content = str_replace("@{useremail}",$usrarr->s_user_email, $content);
                          $content = str_replace("@{userdesignation}",$usrarr->designation, $content);
                          echo'<input name="idType" hidden="" class="idType" id="idType" '.$id.'>';
-                                                  echo $content;
+                         echo $content;
                                                       }
                     }
 }
