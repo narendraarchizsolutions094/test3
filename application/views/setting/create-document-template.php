@@ -8,7 +8,7 @@
 
                           <div class="row ">
 
-                              <div class="col-md-12">  <a class="btn btn-primary" href=""> <i class="fa fa-list"></i> <?php echo display('function_list'); ?> </a> </div>
+                              <div class="col-md-12">  <a class="btn btn-primary" href="<?php echo base_url() ?>setting/document-templates"> <i class="fa fa-list"></i> Template List</a> </div>
 
                                   <div class="col-md-12 col-sm-12">
 
