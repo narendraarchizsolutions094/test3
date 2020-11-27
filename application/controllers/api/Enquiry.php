@@ -42,7 +42,7 @@ class Enquiry extends REST_Controller {
     public function create_post()
     { 	
     	
-    	$g =$this->input->post('update');		
+    	$upd =$this->input->post('update');		
 
 		  if(!empty($this->input->post('email') && !empty($this->input->post('mobileno')))){
 		  	$comp_id	=	$this->input->post('company_id');		
