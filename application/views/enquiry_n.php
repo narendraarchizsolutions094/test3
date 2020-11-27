@@ -1130,7 +1130,7 @@ for (var i = 0; i < checkboxes.length; i++) {
       
       all_lead_stage_c  = $("input[name='top_filter']:checked").next().next().next().html();
 
-//      console.log(all_lead_stage_c);
+     //console.log(all_lead_stage_c);
       
       $('#lead_stage_-1').text(all_lead_stage_c);     
       }
@@ -1202,6 +1202,7 @@ for (var i = 0; i < checkboxes.length; i++) {
 
 
       $('#enq_filter').change(function() {
+        
         update_top_filter_counter(); 
         var form_data = $("#enq_filter").serialize();       
         $.ajax({

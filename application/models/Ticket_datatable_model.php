@@ -275,10 +275,15 @@ class Ticket_datatable_model extends CI_Model{
          $this->db->group_by("tck.id");
 
 
+
+
     // if(isset($this->session->ticket_filters_sess))
     // {
         $enquiry_filters_sess   =   $this->session->ticket_filters_sess;
             
+        $top_filter             =   !empty($enquiry_filters_sess['top_filter'])?$enquiry_filters_sess['top_filter']:'';
+
+
         $from_created           =   !empty($enquiry_filters_sess['from_created'])?$enquiry_filters_sess['from_created']:'';       
         $to_created             =   !empty($enquiry_filters_sess['to_created'])?$enquiry_filters_sess['to_created']:'';
         $source                 =   !empty($enquiry_filters_sess['source'])?$enquiry_filters_sess['source']:'';
@@ -425,9 +430,33 @@ $CHK = 0;
             $CHK =1;                             
         }
 
+        if($top_filter=='all'){            
+
+        }elseif($top_filter=='created_today'){
+             if($CHK)
+                $where .= 'AND';
+            $date=date('Y-m-d');
+            $where.=" tck.coml_date LIKE '%$date%'";
+            $CHK=1;
+        }elseif($top_filter=='updated_today'){
+             if($CHK)
+                $where .= 'AND';
+            $date=date('Y-m-d');
+            $where.=" tck.last_update LIKE '%$date%'";      
+            $CHK=1;  
+      
+        }elseif($top_filter=='closed'){  
+         if($CHK)
+                $where .= 'AND';          
+            $where.="  tck.status=3";
+            $CHK=1;
+        }
+
         if($CHK){
             $where .= 'AND';
         }
+
+        
 
         $where .= " ( tck.added_by IN (".implode(',', $all_reporting_ids).')';
         $CHK=1;

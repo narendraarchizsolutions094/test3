@@ -240,6 +240,14 @@ input[name=lead_stages]{
 					</div>
 
 
+
+					<div class="row">
+						<div class="">
+							<div class="panel-body">
+							<!-- Filter Panel Start -->
+
+<form id="ticket_filter">
+
 <div class="row"  id="active_class">                   
             <div class="col-xs-12 col-sm-12  col-md-3 col-lg-3" style="">
               <div  class="col-12 border_bottom" >
@@ -260,7 +268,7 @@ input[name=lead_stages]{
             <div class="col-xs-12 col-sm-12  col-md-3 col-lg-3 ">
               <div  class="col-12 border_bottom border_bottom_active" >
                     <p style="margin-top: 2vh;font-weight:bold;"  title="<?php echo display('close'); ?>"> 
-                      <input type="radio" name="top_filter" value="active" checked="checked" class="enq_form_filters" id="active_radio"><i class="fa fa-times" ></i><label for="active_radio">&nbsp;&nbsp;<?php echo display('close'); ?></label><span style="float:right;" class="badge badge-pill badge-primary " id="active_all"><i class="fa fa-spinner fa-spin"></i></span>
+                      <input type="radio" name="top_filter" value="closed_today" checked="checked" class="enq_form_filters" id="active_radio"><i class="fa fa-times" ></i><label for="active_radio">&nbsp;&nbsp;<?php echo display('close'); ?></label><span style="float:right;" class="badge badge-pill badge-primary " id="today_total"><i class="fa fa-spinner fa-spin"></i></span>
                     </p>
                 </div>
             </div>
@@ -268,19 +276,14 @@ input[name=lead_stages]{
             <div class="col-xs-12 col-sm-12  col-md-3 col-lg-3 ">
               <div  class="col-12 border_bottom" >
                   <p style="margin-top: 2vh;font-weight:bold;"   title="<?php echo display('all'); ?>">
-                      <input type="radio" name="top_filter" value="droped" class="enq_form_filters" id="droped_radio">
-                      <i class="fa fa-tasks" ></i><label for="droped_radio">&nbsp;&nbsp;<?php echo display('all'); ?></label><span style="float:right;background:#E5343D" class="badge badge-danger" id="active_drop"><i class="fa fa-spinner fa-spin"></i></span>                   
+                      <input type="radio" name="top_filter" value="all" class="enq_form_filters" id="droped_radio">
+                      <i class="fa fa-tasks" ></i><label for="droped_radio">&nbsp;&nbsp;<?php echo display('all'); ?></label><span style="float:right;background:#E5343D" class="badge badge-danger" id="today_close"><i class="fa fa-spinner fa-spin"></i></span>                   
                   </p>
               </div>
             </div>
 </div>
 
-					<div class="row">
-						<div class="">
-							<div class="panel-body">
-							<!-- Filter Panel Start -->
 
-<form id="ticket_filter">
 	<div class="row" id="filter_pannel">
         <div class="col-lg-12">
             <div class="panel panel-default">
@@ -614,17 +617,17 @@ input[name=lead_stages]{
       type: 'get',
       dataType: 'json',
       success: function(responseData){
-      // $('#today_created').html(responseData.all_creaed_today_num);
-      // $('#active_all').html(responseData.all_active_num);
-      // $('#today_updated').html(responseData.all_today_update_num);
-      // $('#active_drop').html(responseData.all_drop_num);
-      // $('#total_active').html(responseData.all_enquery_num);
+        alert(JSON.stringify(responseData));
+       $('#today_created').html(responseData.created_today);
+      $('#today_updated').html(responseData.updated_today);
+      $('#today_close').html(responseData.closed_today);
+      $('#today_total').html(responseData.all_today);
       
-      all_lead_stage_c  = $("input[name='top_filter']:checked").next().next().next().html();
+     // all_lead_stage_c  = $("input[name='top_filter']:checked").next().next().next().html();
 
 //      console.log(all_lead_stage_c);
       
-      $('#lead_stage_-1').text(all_lead_stage_c);     
+      //$('#lead_stage_-1').text(all_lead_stage_c);     
       }
     });
 

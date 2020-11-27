@@ -1072,13 +1072,86 @@ class Ticket_Model extends CI_Model
 
 	}
 
-	// public function createdTodayCount()
-	// {
-	// 	$all_reporting_ids  = $this->common_model->get_categories($this->session->user_id);
-	// 	//$this->db->where('')
-	// }
-	// public function createdTodayCount(){
+	public function createdTodayCount()
+	{
+		$all_reporting_ids  = $this->common_model->get_categories($this->session->user_id);
+		
+		$where='';
+		$this->db->from("tbl_ticket");
+		$date=date('Y-m-d');
+		$where.=" tbl_ticket.coml_date LIKE '%$date%'";
+        $where .= " AND ( tbl_ticket.added_by IN (".implode(',', $all_reporting_ids).')';
+        $where .= " OR tbl_ticket.assign_to IN (".implode(',', $all_reporting_ids).'))';  
+        $ticekt_filters_sess    =   $this->session->ticket_filters_sess;        
+	    $product_filter = !empty($ticekt_filters_sess['product_filter'])?$ticekt_filters_sess['product_filter']:'';
+        if(!empty($this->session->process) && empty($product_filter)){    
+	        $arr = $this->session->process;   
+	        if (is_array($arr)) {	                 	
+	            $where.=" AND tbl_ticket.process_id IN (".implode(',', $arr).')';
+	        }         
+        }else if (!empty($this->session->process) && !empty($product_filter)) {
+            $where.=" AND tbl_ticket.product_id IN (".implode(',', $product_filter).')';            
+        }
+		$this->db->where($where);
+		return $this->db->count_all_results();
+	}
+	public function updatedTodayCount(){
+		 $all_reporting_ids  = $this->common_model->get_categories($this->session->user_id);
+		
+		$where='';
+		$this->db->from("tbl_ticket");
+		$date=date('Y-m-d');
+		$where.=" tbl_ticket.last_update LIKE '%$date%'";
+        $where .= " AND ( tbl_ticket.added_by IN (".implode(',', $all_reporting_ids).')';
+        $where .= " OR tbl_ticket.assign_to IN (".implode(',', $all_reporting_ids).'))';  
+        $ticekt_filters_sess    =   $this->session->ticket_filters_sess;        
+	    $product_filter = !empty($ticekt_filters_sess['product_filter'])?$ticekt_filters_sess['product_filter']:'';
+        if(!empty($this->session->process) && empty($product_filter)){    
+	        $arr = $this->session->process;   
+	        if (is_array($arr)) {	                 	
+	            $where.=" AND tbl_ticket.process_id IN (".implode(',', $arr).')';
+	        }         
+        }else if (!empty($this->session->process) && !empty($product_filter)) {
+            $where.=" AND tbl_ticket.product_id IN (".implode(',', $product_filter).')';            
+        }
+		$this->db->where($where);
+		return $this->db->count_all_results();
 
-	// }
-	
+	}
+
+	public function closedTodayCount(){
+
+		$all_reporting_ids  = $this->common_model->get_categories($this->session->user_id);
+		
+		$where='';
+		$this->db->from("tbl_ticket");
+		$date=date('Y-m-d');
+		$where.=" tbl_ticket.last_update LIKE '%$date%' and tbl_ticket.status=3";
+        $where .= " AND ( tbl_ticket.added_by IN (".implode(',', $all_reporting_ids).')';
+        $where .= " OR tbl_ticket.assign_to IN (".implode(',', $all_reporting_ids).'))';  
+        $ticekt_filters_sess    =   $this->session->ticket_filters_sess;        
+	    $product_filter = !empty($ticekt_filters_sess['product_filter'])?$ticekt_filters_sess['product_filter']:'';
+        if(!empty($this->session->process) && empty($product_filter)){    
+	        $arr = $this->session->process;   
+	        if (is_array($arr)) {	                 	
+	            $where.=" AND tbl_ticket.process_id IN (".implode(',', $arr).')';
+	        }         
+        }else if (!empty($this->session->process) && !empty($product_filter)) {
+            $where.=" AND tbl_ticket.product_id IN (".implode(',', $product_filter).')';            
+        }
+		$this->db->where($where);
+		return $this->db->count_all_results();
+		return 0;
+	}
+
+	public function allTodayCount(){
+		
+			$a = $this->closedTodayCount();
+			$b = $this->updatedTodayCount();
+			$c = $this->createdTodayCount();
+
+
+		return ($a+$b+$c);
+	}
+
 }

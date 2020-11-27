@@ -2217,8 +2217,6 @@ public function get_enq_list_post(){
       $type   = $this->input->post('type');
       $message  = $this->input->post('message');
 
-
-
     $this->form_validation->set_rules('name','name','trim|required',array('required'=>'You have not provided %s'));
     $this->form_validation->set_rules('email','email','trim|required',array('required'=>'You have not provided %s'));
     $this->form_validation->set_rules('phone','phone','trim|required',array('required'=>'You have not provided %s'));
