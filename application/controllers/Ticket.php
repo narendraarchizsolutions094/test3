@@ -87,6 +87,7 @@ class Ticket extends CI_Controller
 
 	public function index()
 	{
+		
 		$this->load->model('Datasource_model');
 		$this->load->model('dash_model');
 		$this->load->model('enquiry_model');
