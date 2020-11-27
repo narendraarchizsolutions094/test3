@@ -1120,6 +1120,11 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                           Branch Rate List                            
                           </a>
                         </li>
+                        <li class="<?php echo (in_array($segment2,array('document-templates','createdocument_templates')) ?"active":'') ?>">
+                          <a href="<?php echo base_url() ?>setting/document-templates">
+                          Document Templates                            
+                          </a>
+                        </li>
                         <?php }  ?>
                      </ul>
                   </li>

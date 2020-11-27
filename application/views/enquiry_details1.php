@@ -1396,7 +1396,7 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                         <input class="form-control" name="unique_number" type="hidden" value="<?php echo $alldetails->unique_number; ?>">                      
                      <div class="form-group col-sm-4"> 
                         <label>Date of Birth</label>
-                        <input class="form-control" name="date_of_birth" type="date" value="<?php echo $alldetails->date_of_birth; ?>" style="padding:0px !important;">  
+                        <input class="form-control" name="date_of_birth" type="date" value="<?php echo $alldetails->date_of_birth; ?>" >  
                      </div>
                      <div class="form-group col-sm-4"> 
                         <label>Marital status</label>
@@ -1411,7 +1411,7 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                      </div>
                      <div class="form-group col-sm-4"> 
                         <label>Last Communication</label>
-                        <input class="form-control" name="last_comm" type="date" value="<?php echo $alldetails->last_comm; ?>" style="padding:0px !important;">  
+                        <input class="form-control" name="last_comm" type="date" value="<?php echo $alldetails->last_comm; ?>" >  
                      </div>
                      <div class="form-group col-sm-4"> 
                         <label>Mode Of Communication</label>
@@ -1532,7 +1532,7 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                     
                      <div class="form-group col-sm-4"> 
                         <label>Date of Birth</label>
-                        <input class="form-control" name="date_of_birth" type="date" value="" style="padding:0px !important;">  
+                        <input class="form-control" name="date_of_birth" type="date" value="" >  
                      </div>
                      <div class="form-group col-sm-4"> 
                         <label>Marital status</label>
@@ -1547,7 +1547,7 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                      </div>
                      <div class="form-group col-sm-4"> 
                         <label>Last Communication</label>
-                        <input class="form-control" name="last_comm" type="date" value="" style="padding:0px !important;">  
+                        <input class="form-control" name="last_comm" type="date" value="" >  
                      </div>
                      <div class="form-group col-sm-4"> 
                         <label>Mode Of Communication</label>
@@ -1670,11 +1670,9 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                   </form>
                </div>
                <?php if($this->session->companey_id==65){ ?>
-
               <div class="tab-pane" id="COMMERCIAL_INFORMATION" >
+            <!-- <div class="col-md-12"><a class="btn btn-primary" style="cursor: pointer;" data-toggle="modal" data-target="#downloadQuatation">Download Quatation</a></div> -->
                  <div  style="overflow-x:auto;">
-               
-        
         <table class="table table-responsive-sm table-responsive table-hover table-bordered" >
                         <thead class="thead-light">
                            <tr>                              
@@ -1758,6 +1756,7 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                               <td class="center">
                   <a href="<?= base_url('enquiry/editinfo/' . $value->id . '')?>" class="btn btn-xs  btn-primary view_data"><i class="fa fa-edit"></i></a>
                   <a href="<?= base_url('enquiry/deleteInfo/' . $value->id . '/'.$value->enquiry_id.'/') ?>" onclick="return confirm('Are You Sure ? ')" class="btn btn-xs  btn-danger"><i class="fa fa-trash"></i></a>
+                  <a class="btn btn-primary btn-xs view_datas" id="view_sdatas" onclick="myFunction()" style="cursor: pointer;" data-toggle="modal"  data-target="#downloadQuatation" data-id="<?= $value->booking_type ?>" data-equid="<?= $value->enquiry_id ?>"><i class="fa fa-download"></i></a>
                 </td>
                            </tr> 
                            <?php  } }  ?>
@@ -1769,45 +1768,94 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                   <input type="hidden" name="enquiry_id" value="<?= $details->enquiry_id ?>">
                     <!--------------------------------------------------start----------------------------->
                     
-                    <div class="col-md-12">
+                    <div class="row">
 
-                    <div class="form-group col-sm-6"> 
-                       
+                    <div class=" col-sm-3">
+                    </div>
+                       <div class=" col-sm-6">
+                    <div class="form-group"  > 
+
                         <label>Info Type</label>
                         <select class="form-control" name="type" id="infotype">
-                            <option value="">-Select-</option>
-                            <option value="1">Branch</option>
-                            <option value="2">Zone</option>
-                            <option value="3">Areawise</option>
+                        <?php
+                        $branch_type=0;
+                        if($commInfoCount==1){
+                               $branch_type=$commInfoData->branch_type;
+                            }
+                            $booking_type=0;
+                            if($commInfoCount==1){
+                                   $booking_type=$commInfoData->booking_type;
+                                }
+                                $business_type=0;
+                                if($commInfoCount==1){
+                                       $business_type=$commInfoData->business_type;
+                                    }
+                                    $insurance=0;
+                                    if($commInfoCount==1){
+                                           $insurance=$commInfoData->insurance;
+                                        }
+                                        $paymode=0;
+                                        if($commInfoCount==1){
+                                               $paymode=$commInfoData->paymode;
+                                            } 
+                                            $booking_branch=0;
+                                        if($commInfoCount==1){
+                                               $booking_branch=$commInfoData->booking_branch;
+                                            }
+                                            $delivery_branch=0;
+                                            if($commInfoCount==1){
+                                                   $delivery_branch=$commInfoData->delivery_branch;
+                                                } ?>
+                            <option value="">-Select-</option> 
+                            <option value="1" <?php if($branch_type==1){ echo'selected';} ?>>Branch</option>
+                            <option value="2" <?php if($branch_type==2){ echo'selected';} ?>>Zone</option>
+                            <option value="3" <?php if($branch_type==3){ echo'selected';} ?>>Areawise</option>
                         </select>
                      </div>
+                     </div>
                     </div>
-                              
-                     <center><h3>DISPATCH LOCATION</h3></center>
+                    <br>
+                     <center><h5><u>DISPTACH LOCATION</u></h5></center>
                      <br>
                      <div class="form-group col-sm-6"> 
                         <label>Booking Type</label>
+                       
                         <select class="form-control" name="booking_type" id="booking_type">
                             <option value="">-Select-</option>
-                            <option value="0">Sundry</option>
-                            <option value="1">FTL</option>
+                            <option value="0" <?php if($booking_type==0){ echo'selected';} ?>>Sundry</option>
+                            <option value="1" <?php if($booking_type==1){ echo'selected';} ?>>FTL</option>
                         </select>
                      </div>
                      <div class="form-group col-sm-6"> 
                         <label>Business Type</label>
                         <select class="form-control" name="business_type" id="business_type">
                             <option value="">-Select-</option>
-                            <option value="0">Inward</option>
-                            <option value="1">outward</option>
+                            <option value="0" <?php if($business_type==0){ echo'selected';} ?>>Inward</option>
+                            <option value="1" <?php if($business_type==1){ echo'selected';} ?>>outward</option>
                         </select>
                      </div>
+                     <div class="form-group col-sm-6"> 
+                                 <label>Insurance</label>
+                                 <select class="form-control" name="insurance" id="insurance">
+                                    <option value="0" <?php if($insurance==0){ echo'selected';} ?>>Carrier</option>
+                                    <option value="1" <?php if($insurance==0){ echo'selected';} ?>>Owner risk</option>
+                                 </select>
+                              </div>
+                     <div class="form-group col-sm-6"> 
+                              <label>Pay Mode</label>
+                              <select class="form-control" name="paymode" id="paymode">
+                                 <option value="1" <?php if($paymode==1){ echo'selected';} ?>>paid</option>
+                                 <option value="2" <?php if($paymode==2){ echo'selected';} ?>>To-Pay</option>
+                                 <option value="3" <?php if($paymode==3){ echo'selected';} ?>>Tbb</option>
+                              </select>
+                           </div>
                         <div class="form-group col-sm-6"> 
                            <label id="textdisplay">Booking Branch</label>
                            <select class="form-control" name="booking_branch" id="booking_branch">
                               <option value="">-Select-</option>
                             <?php 
                             foreach($branch as $dbranch){ ?>
-                                  <option value="<?= $dbranch->branch_id ?>"><?= $dbranch->branch_name ?></option>
+                                  <option value="<?= $dbranch->branch_id ?>" <?php if($booking_branch==$dbranch->branch_id){ echo'selected';} ?>><?= $dbranch->branch_name ?></option>
                                  <?php }  ?>
                            </select>
                         </div>
@@ -1817,83 +1865,63 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                               <option value="">-Select-</option>
                               <?php  
                               foreach($branch as $dbranch){ ?>
-                                  <option value="<?= $dbranch->branch_id ?>"><?= $dbranch->branch_name ?></option>
+                                  <option value="<?= $dbranch->branch_id ?>" <?php if($delivery_branch==$dbranch->branch_id){ echo'selected';} ?>><?= $dbranch->branch_name ?></option>
                                  <?php }  ?>
                            </select>
                         </div>
-                              <div class="form-group col-sm-6"> 
-                                 <label>Insurance</label>
-                                 <select class="form-control" name="insurance" id="insurance">
-                                    <option value="0">Carrier</option>
-                                    <option value="1">Owner risk</option>
-                                 </select>
-                              </div>
-                              <div class="sundry" id="sundry" style="display:none">
+                            
+                              <div class="sundry" id="sundry" <?php if($booking_type==1){ echo'style="display:none"';} ?>>
                               <div class="form-group col-sm-6"> 
                                  <label>Rate</label>
-                                 <input class="form-control rate" name="rate" id="rate" type="text"  style="padding:0px !important;">  
+                                 <input class="form-control rate" readonly name="rate" id="rate" type="text"  >  
                               </div>
                               <div class="form-group col-sm-6"> 
                                  <label>Discount</label>
-                                 <input class="form-control" name="discount" id="discount" type="text"  style="padding:0px !important;">  
+                                 <input class="form-control" name="discount" id="discount" type="number" step="0.00"  >  
                               </div>
-                              <div class="form-group col-sm-6"> 
-                              <label>Pay Mode</label>
-                              <select class="form-control" name="paymode" id="paymode">
-                                 <option value="1">paid</option>
-                                 <option value="2">To-Pay</option>
-                                 <option value="3">Tbb</option>
-                              </select>
-                           </div>
+                             
                            <div class="form-group col-sm-6"> 
                                  <label>Potential Tonnage</label>
-                                 <input class="form-control" name="potential_tonnage" id="potential_tonnage" type="text"  style="padding:0px !important;">  
+                                 <input class="form-control" name="potential_tonnage" id="potential_tonnage" type="text"  >  
                               </div>
                               <div class="form-group col-sm-6"> 
                                  <label>Potential Amount</label>
-                                 <input class="form-control" name="potential_amount" id="potential_amount" type="text"  style="padding:0px !important;">  
+                                 <input class="form-control" readonly name="potential_amount" id="potential_amount" type="text"  >  
                               </div>
                               <div class="form-group col-sm-6"> 
                                  <label>Expected Tonnage</label>
-                                 <input class="form-control" name="expected_tonnage" id="expected_tonnage" type="text"  style="padding:0px !important;">  
+                                 <input class="form-control" name="expected_tonnage" id="expected_tonnage" type="text"  >  
                               </div>
                               <div class="form-group col-sm-6"> 
                                  <label>Expected Amount</label>
-                                 <input class="form-control" name="expected_amount" id="expected_amount" type="text"  style="padding:0px !important;">  
+                                 <input class="form-control"  name="expected_amount" id="expected_amount" type="text"  >  
                               </div>
 
 
                               </div>
                               
-                              <div class="ftl" id="ftl" style="display:none">
+                              <div class="ftl" id="ftl" <?php if($booking_type==0){ echo'style="display:none"';} ?>>
                                  <div class="form-group col-sm-6"> 
                                     <label>Vehicle type</label>
-                                    <input class="form-control" name="vehicle_type" id="Vehicle_type" type="text"  style="padding:0px !important;">  
+                                    <input class="form-control" name="vehicle_type" id="Vehicle_type" type="text"  >  
                                  </div>
                                  <div class="form-group col-sm-6"> 
                                     <label>Vehicle Carrying Capacity</label>
-                                    <input class="form-control" name="capacity" id="capacity" type="text"  style="padding:0px !important;">  
+                                    <input class="form-control" name="capacity" id="capacity" type="text"  >  
                                  </div>
                               
                                  <div class="form-group col-sm-6"> 
                                     <label>Invoice Value</label>
-                                    <input class="form-control" name="invoice_value" id="invoice_value" type="text"  style="padding:0px !important;">  
+                                    <input class="form-control" name="invoice_value" id="invoice_value" type="text"  >  
                                  </div>
-                                 <div class="form-group col-sm-6"> 
-                                    <label>Pay Mode</label>
-                                    <select class="form-control" name="ftlpaymode" id="ftlpaymode">
-                                       <option value="1">paid</option>
-                                       <option value="2">To-Pay</option>
-                                       <option value="3">Tbb</option>
-                                    </select>
-                                </div>
+                                
                                  <div class="form-group col-sm-6"> 
                                     <label>Potential Amount</label>
-                                    <input class="form-control" name="ftlpotential_amount" id="ftlpotential_amount" type="text"  style="padding:0px !important;">  
+                                    <input class="form-control" name="ftlpotential_amount" id="ftlpotential_amount" type="text"  >  
                                  </div>
                                  <div class="form-group col-sm-6"> 
                                     <label>Expected Amount</label>
-                                    <input class="form-control" name="ftlexpected_amount" id="ftlexpected_amount" type="text"  style="padding:0px !important;">  
+                                    <input class="form-control" name="ftlexpected_amount" id="ftlexpected_amount" type="text"  >  
                                  </div>
 
                               </div>
@@ -1959,6 +1987,8 @@ $('#infotype').on('change', function() {
 
             }
 });
+
+
                </script>
 <script>
    $(document).ready(function(){
@@ -1973,8 +2003,55 @@ $('#infotype').on('change', function() {
       }
     });
 });
+
 </script>
-                                 <?php } ?>
+<div id="downloadQuatation" class="modal fade" role="dialog">
+   <div class="modal-dialog modal-lg">
+      <!-- Modal content-->
+      <div class="modal-content">
+         <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Download</h4>
+         </div>
+         <form action="<?= base_url('dashboard/pdf_gen/') ?>" method="POST">
+
+         <div class="modal-body">
+            <!-- <input name="idType" hidden class="idType" id="idType"> -->
+            <input name="enquiry_id" hidden value="<?= $details->enquiry_id ?>">
+             <div id="data_value" class="data_value" style="padding:10px;"></div>
+         </div>
+         <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary" >Download</button>
+         </div>
+         </form> 
+
+      </div>
+   </div>
+</div>
+<script>
+
+function myFunction() {
+   var elem = document.getElementById('view_sdatas');
+
+var typeId = elem.getAttribute('data-id');
+var enqid   = elem.getAttribute('data-equid');
+
+$.ajax({
+            type: 'POST',
+            url: '<?php echo base_url();?>dashboard/printPdf_gen',
+            data: {typeId:typeId,enqid:enqid},
+            success:function(data){
+               //  var obj = JSON.parse(data);
+               //  alert(data);
+                $(".data_value").html(data);
+                $("#idType").val(typeId);
+            }
+            });
+
+}
+</script>
+     <?php } ?>
 
                <div class="tab-pane" id="kyctab">
                   <hr>
