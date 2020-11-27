@@ -1815,7 +1815,6 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                      </div>
                     </div>
                     <br>
-
                      <center><h5><u>DISPTACH LOCATION</u></h5></center>
                      <br>
                      <div class="form-group col-sm-6"> 

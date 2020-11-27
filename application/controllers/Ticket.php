@@ -2022,4 +2022,11 @@ class Ticket extends CI_Controller
 			imap_close($inbox);
 			}
 
+			public function list_short_details()
+			{
+				// $data['created_today'] = $this->Ticket_Model->createdTodayCount();
+				// $data['updated_today'] = $this->Ticket_Model->updatedTodayCount();
+				// $data['closed_today']   = $this->Ticket_Model->closedTodayCount();
+				// $data['all_today']     = $this->Ticket_Model->allTodayCount();
+			}
 }
