@@ -1071,4 +1071,14 @@ class Ticket_Model extends CI_Model
 		return $this->db->where('product',$id)->count_all_results('tbl_ticket');
 
 	}
+
+	// public function createdTodayCount()
+	// {
+	// 	$all_reporting_ids  = $this->common_model->get_categories($this->session->user_id);
+	// 	//$this->db->where('')
+	// }
+	// public function createdTodayCount(){
+
+	// }
+	
 }

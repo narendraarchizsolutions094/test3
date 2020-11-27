@@ -1782,7 +1782,7 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                         </select>
                      </div>
                     </div>
-                                 </>
+                              
                      <center><h3>DISPATCH LOCATION</h3></center>
                      <br>
                      <div class="form-group col-sm-6"> 

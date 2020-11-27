@@ -1,3 +1,145 @@
+  <style type="text/css">
+  /*TAG STYLE START*/
+.tag {
+  background: #eee;
+  border-radius: 3px 0 0 3px;
+  color: red;
+  display: inline-block;
+  height: 17px;
+  line-height: 17px;
+  padding: 0 10px 0 19px;
+  position: relative;  
+  text-decoration: none;
+  -webkit-transition: color 0.2s;
+  font-size: xx-small !important;  
+}
+
+.tag::before {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: inset 0 1px rgba(0, 0, 0, 0.25);
+  content: '';
+  height: 6px;
+  left: 10px;
+  position: absolute;
+  width: 6px;
+  top: 6px;
+}
+
+.tag::after {
+  background: #fff;
+  border-bottom: 8px solid transparent;
+  border-left: 10px solid #eee;
+  border-top: 9px solid transparent;
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.tag:hover {
+  background-color: crimson;
+  color: white;
+}
+
+.tag:hover::after {
+   border-left-color: crimson; 
+}
+/*TAG STYLE END*/
+
+
+.col-half-offset{
+  margin-left:2.166667%;
+}
+.enq_form_filters{
+  width: 0px;
+}
+#active_class{
+  font-size: 12px;
+  padding: 5px 19px;
+}
+.lead_stage_filter{
+  padding: 6px;
+  background-color: #e6e9ed;
+  cursor: pointer;
+}
+.lead_stage_filter:active{  
+  background-color: #20a8d8;  
+}
+.lead_stage_filter:hover{  
+  background-color: #20a8d8;  
+}
+.border_bottom_active > label{
+  cursor: pointer;
+}
+.nav-pills > li.active > a, .nav-pills > li.active > a:focus, .nav-pills > li.active > a:hover {
+    color: white;
+    background-color: #37a000;
+}
+
+.nav-pills > li > a {
+    border-radius: 5px;
+    padding: 10px;
+    color: #000;
+    font-weight: 600;
+}
+
+.nav-pills > li > a:hover {
+    color: #000;
+    background-color: transparent;
+}
+              .dropdown-header {
+    padding: 8px 20px;
+    background: #e4e7ea;
+    border-bottom: 1px solid #c8ced3;
+}
+
+.dropdown-header {
+    display: block;
+    padding: 0 1.5rem;
+    margin-bottom: 0;
+   
+    color: #73818f;
+    white-space: nowrap;
+}
+input[name=top_filter]{
+  visibility: hidden;
+}
+
+input[name=lead_stages]{
+  visibility: hidden;
+}
+
+.dropdown_css {
+  left:auto!important;
+  right: 0 ! important;
+}
+.dropdown_css a,.dropdown_css a h4{
+  width:100%;text-align:left! important;
+  border-bottom: 1px solid #c8ced3! important;
+}
+
+.border_bottom{
+  border-bottom:2px solid #E4E5E6;min-height: 7vh;margin-bottom: 1vh;cursor:pointer;
+}  
+.border_bottom_active{
+  border-bottom:2px solid #20A8D8;min-height: 7vh;margin-bottom: 1vh;cursor:pointer;
+} 
+
+.filter-dropdown-menu li{
+  padding-left: 6px;
+}
+
+.filter-dropdown-menu li{
+  padding-left: 6px;
+}
+@media screen and (max-width: 900px) {
+  #active_class{
+    display: none;
+  }
+}
+  </style>
+
     <div class="row">
 			<div class="col-md-12"> 
 					<div class="panel-heading no-print" style ="background-color: #fff;padding:7px;border-bottom: 1px solid #C8CED3;">
@@ -96,6 +238,43 @@
 					      </div>
 						</div>
 					</div>
+
+
+<div class="row"  id="active_class">                   
+            <div class="col-xs-12 col-sm-12  col-md-3 col-lg-3" style="">
+              <div  class="col-12 border_bottom" >
+                  <p style="margin-top: 2vh;font-weight:bold;">
+                    <input id='created_today_radio' value="created_today" type="radio" name="top_filter" class="enq_form_filters"><i class="fa fa-edit" ></i><label for="created_today_radio">&nbsp;&nbsp;<?php echo display('created_today'); ?></label>
+                    <span  style="float:right;" class="badge badge-pill badge-primary " id="today_created"><i class="fa fa-spinner fa-spin"></i></span>
+                  </p>
+              </div>
+            </div>
+            <div class="col-xs-12 col-sm-12  col-md-3 col-lg-3">
+              <div class="col-12 border_bottom">
+                  <p style="margin-top: 2vh;font-weight:bold;" >
+                    <input type="radio" name="top_filter" value="updated_today" class="enq_form_filters" id="updated_today_radio"><i class="fa fa-pencil"></i><label for="updated_today_radio">&nbsp;&nbsp;<?php echo display('updated_today'); ?></label><span style="float:right;background:#ffc107" class="badge badge-pill badge-warning badge badge-dark " id="today_updated"><i class="fa fa-spinner fa-spin"></i></span>
+                  </p>
+              </div>
+            </div>
+            
+            <div class="col-xs-12 col-sm-12  col-md-3 col-lg-3 ">
+              <div  class="col-12 border_bottom border_bottom_active" >
+                    <p style="margin-top: 2vh;font-weight:bold;"  title="<?php echo display('close'); ?>"> 
+                      <input type="radio" name="top_filter" value="active" checked="checked" class="enq_form_filters" id="active_radio"><i class="fa fa-times" ></i><label for="active_radio">&nbsp;&nbsp;<?php echo display('close'); ?></label><span style="float:right;" class="badge badge-pill badge-primary " id="active_all"><i class="fa fa-spinner fa-spin"></i></span>
+                    </p>
+                </div>
+            </div>
+                  
+            <div class="col-xs-12 col-sm-12  col-md-3 col-lg-3 ">
+              <div  class="col-12 border_bottom" >
+                  <p style="margin-top: 2vh;font-weight:bold;"   title="<?php echo display('all'); ?>">
+                      <input type="radio" name="top_filter" value="droped" class="enq_form_filters" id="droped_radio">
+                      <i class="fa fa-tasks" ></i><label for="droped_radio">&nbsp;&nbsp;<?php echo display('all'); ?></label><span style="float:right;background:#E5343D" class="badge badge-danger" id="active_drop"><i class="fa fa-spinner fa-spin"></i></span>                   
+                  </p>
+              </div>
+            </div>
+</div>
+
 					<div class="row">
 						<div class="">
 							<div class="panel-body">
@@ -428,6 +607,28 @@
   </div>
 </div>
 
+<script type="text/javascript">
+  
+   $.ajax({
+      url: "<?=base_url().'ticket/list_short_details/'?>",
+      type: 'get',
+      dataType: 'json',
+      success: function(responseData){
+      // $('#today_created').html(responseData.all_creaed_today_num);
+      // $('#active_all').html(responseData.all_active_num);
+      // $('#today_updated').html(responseData.all_today_update_num);
+      // $('#active_drop').html(responseData.all_drop_num);
+      // $('#total_active').html(responseData.all_enquery_num);
+      
+      all_lead_stage_c  = $("input[name='top_filter']:checked").next().next().next().html();
+
+//      console.log(all_lead_stage_c);
+      
+      $('#lead_stage_-1').text(all_lead_stage_c);     
+      }
+    });
+
+</script>
 
 <script>
 	$(document).on("click", ".delete-ticket", function(e){
@@ -491,7 +692,15 @@ function assign_tickets(){
 }
 </script>
 
-
+<script type='text/javascript'>
+$(window).load(function(){
+  //stage_counter();
+$("#active_class p").click(function() {
+    $('.border_bottom_active').removeClass('border_bottom_active');
+    $(this).addClass("border_bottom_active");
+});
+});  
+</script>
 
 <script>
   
