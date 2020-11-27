@@ -2944,20 +2944,16 @@ public function set_layout_to_session() {
                         $this->db->where('comp_id', $this->session->companey_id);
                         $data['enquiry'] = $this->db->where('enquiry_id',$enquiry_id)->get('enquiry')->result();
                         $time = time();
-                      echo  $pdfFilePath1 = 'uploads/quotations/';
+                        //$pdfFilePath1 = base_url('uploads/quotations/')."quotation-".$time.".pdf";
+                        $pdfFilePath1 = $_SERVER['DOCUMENT_ROOT']."/new_crm/uploads/quotations/quotations-".time().".pdf";
                         $pdf=   $this->pdf->load_view('gen_pdf',$data,$pdfFilePath1);
-                        // $pdf= $this->pdf->output($html, 'mypdf', true);
-                        // $output = $dompdf->output();
-                        
                             // Output the generated PDF to Browser
-                        //   echo $output= $dompdf->stream("quotation-". $time);
-
-
+                        // insert data into comm info table
                         //send this output pdf in mail through send sms model
-                        // $dataoutput=file_put_contents("quotation-1606473783.pdf");
-
-                        $message = 'Dear sir/mam,<br> PFA';
-                       echo $email_subject = 'Sending quotation';
+                        $message = 'Dear Sir/mam,
+                        <br> 
+                        Please find attached your Quotation below.';
+                        $email_subject = 'Quotation';
                         $move_enquiry = $this->input->post('enquiry_id');
                         $this->db->where('comp_id',$this->session->companey_id);
                         $this->db->where('status',1);
@@ -2967,21 +2963,6 @@ public function set_layout_to_session() {
                               echo "Email is not configured";
                               die();
                         }else{
-                   
-            
-                            /*
-                            $config['protocol']     = $email_row['protocol'];
-                            $config['smtp_host']    = $email_row['smtp_host'];
-                            $config['smtp_port']    = $email_row['smtp_port'];
-                            $config['smtp_timeout'] = '7';
-                            $config['smtp_user']    = "prokanhaiya@gmail.com";
-                            $config['smtp_pass']    = "oallgykmylkthohu";
-                            $config['charset']      = 'utf-8';
-                            $config['mailtype']     = 'text'; // or html
-                            $config['newline']      = "\r\n";        
-                            */
-            
-            
                             $config['smtp_auth']    = true;
                             $config['protocol']     = $email_row['protocol'];
                             $config['smtp_host']    = $email_row['smtp_host'];
@@ -2995,33 +2976,21 @@ public function set_layout_to_session() {
                             //$config['validation']   = TRUE; // bool whether to validate email or not    
                         }
                         $this->load->library('email');
-            
-                        // if(!empty($move_enquiry)){
                                   $enq = $this->enquiry_model->enquiry_by_id($move_enquiry);
                                 $this->email->initialize($config);
                                 $this->email->from($email_row['smtp_user']);
-                               echo  $to=$enq->email;
+                                $to=$enq->email;
                                 $this->email->to($to);
                                 $this->email->subject($email_subject); 
                                 $this->email->message($message); 
                                 $this->email->set_mailtype('html');
-                                // if($rows->files!=null || !empty($rows->files==null))
-                                // {
-                                    $this->email->attach($pdfFilePath1);
-
-                                    // $this->email->attach('quotation-'.$time.'.pdf');
-                                // }
+                                $this->email->attach($pdfFilePath1);
                                 if($this->email->send()){
                                         echo "Mail sent successfully";
-                                        // $this->email->print_debugger(array("header"));
                                 }else{
-                                        echo "Something went wrong";			                	
+                                    // echo $this->email->print_debugger();
+                                    echo "Something went wrong";			                	
                                 }
-                        // }	
-                        // redirect('enquiry/view/'.$enquiry_id.'/');
-
-
-
-
+                        redirect('enquiry/view/'.$enquiry_id.'/');
                                           }
 }

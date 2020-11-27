@@ -56,11 +56,16 @@ public function load_view($view, $data = array(),$pdfFilePath1)
     $dompdf->render();
   
     // Output the generated PDF to Browser
-    $pdf_string =   $dompdf->output(array("compress" => 0));
+    //$pdf_string =   $dompdf->output($pdfFilePath1, 'F');
+    $pdf = $dompdf->output();
+    $file_location = $pdfFilePath1;
+    file_put_contents($file_location,$pdf); 
+    $dompdf->stream("quotation.pdf");
+    //exit();
+
+    // echo $pdf_string;
     // file_put_contents($pdfFilePath1, $pdf_string ); 
-    file_put_contents($pdfFilePath1.'saasd'.".pdf", $pdf_string);
-    // $buff = file_put_contents($pdfFilePath1,$pdf_string);			
-//    file_put_contents('time.pdf', $output);
+    //file_put_contents('time.pdf', $output);
 
    
 }
