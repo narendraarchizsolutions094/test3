@@ -2944,7 +2944,7 @@ public function set_layout_to_session() {
                         $this->db->where('comp_id', $this->session->companey_id);
                         $data['enquiry'] = $this->db->where('enquiry_id',$enquiry_id)->get('enquiry')->result();
                         $time = time();
-                        $pdfFilePath1 = base_url(). "demo/".$time.".pdf";
+                        $pdfFilePath1 = base_url('new_crm/uploads/quotations/')."quotation-".$time.".pdf";
                         $pdf=   $this->pdf->load_view('gen_pdf',$data,$pdfFilePath1);
                         // $pdf= $this->pdf->output($html, 'mypdf', true);
                         // $output = $dompdf->output();
