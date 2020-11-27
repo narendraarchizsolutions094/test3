@@ -617,7 +617,7 @@ input[name=lead_stages]{
       type: 'get',
       dataType: 'json',
       success: function(responseData){
-        alert(JSON.stringify(responseData));
+        //alert(JSON.stringify(responseData));
        $('#today_created').html(responseData.created_today);
       $('#today_updated').html(responseData.updated_today);
       $('#today_close').html(responseData.closed_today);
