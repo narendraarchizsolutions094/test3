@@ -1987,9 +1987,7 @@ $('#infotype').on('change', function() {
 
             }
 });
-
-
-               </script>
+  </script>
 <script>
    $(document).ready(function(){
     $('#booking_type').on('change', function() {

@@ -56,7 +56,7 @@ public function load_view($view, $data = array(),$pdfFilePath1)
     $dompdf->render();
   
     // Output the generated PDF to Browser
-    $pdf_string =   $dompdf->output('q'.time().'.pdf', 'F');
+    $pdf_string =   $dompdf->output($pdfFilePath1, 'F');
     file_put_contents($pdfFilePath1, $pdf_string ); 
 //    file_put_contents('time.pdf', $output);
 
