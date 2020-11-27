@@ -24,13 +24,15 @@ class Telephony extends CI_Controller {
     }
 
     public function forword_to($phone=''){
+        if(!empty($_GET['phone'])){
+            $phone=$_GET['phone'];
+        }else{
+            $phone=$phone;
+        }
         if($this->session->companey_id == 65 || $this->session->companey_id == 82){
             $url = 'ticket/add?phone='.$phone;
             redirect($url);
         }
-        if(!empty($_GET['phone'])){
-            $phone=$_GET['phone'];
-        }else{$phone=$phone;}
         $this->db->select('enq.enquiry_id,enq.status');
         $this->db->where(array('enq.phone' => $phone,"usr.companey_id" => $this->session->companey_id ) );
         $this->db->from('enquiry enq');
