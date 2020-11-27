@@ -1,6 +1,6 @@
 <?php
 
-use function GuzzleHttp\json_encode;
+// use function GuzzleHttp\json_encode;
 
 defined('BASEPATH') OR exit('No direct script access allowed');
 
@@ -1060,7 +1060,11 @@ if (!empty($enquiry_separation)) {
         
         if(!empty($enquiryChartData))
         {
-            echo json_encode(array('enquiryChartData'=>$enquiryChartData,'leadChartData'=>$leadChartData,'clientChartData'=>$clientChartData,'status'=>'success','desplst'=>$desplst));
+            echo $this->output
+            ->set_content_type('application/json')
+            ->set_status_header(200)
+            ->set_output(json_encode(array('enquiryChartData'=>$enquiryChartData,'leadChartData'=>$leadChartData,'clientChartData'=>$clientChartData,'status'=>'success','desplst'=>$desplst)));
+             
         }
         else
         {
