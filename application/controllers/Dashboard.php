@@ -2881,26 +2881,11 @@ public function set_layout_to_session() {
                     $this->load->view('graph',$data);
                     }
 
-                    function pdf_gen1(){
-                        $this->load->library('pdf');
-                        $id=$this->input->post('idType');
-                        if($id==0){$dc_id=1;}else{ $dc_id=2; }
-
-                        $enquiry_id=$this->input->post('enquiry_id');
-                        $data['enquiry_id']=$enquiry_id;
-                        $data['docTemplate']=$this->db->where(array('comp_id'=>65,'id'=>$dc_id))->get('tbl_docTemplate');
-                        $data['usrarr']= $this->db->select("pk_i_admin_id,s_display_name,last_name,s_phoneno,s_user_email,designation")->where("pk_i_admin_id", $this->session->user_id)
-                        ->from("tbl_admin")->get() ->row();
-                        $this->db->where('comp_id', $this->session->companey_id);
-                        $data['enquiry'] = $this->db->where('enquiry_id',$enquiry_id)->get('enquiry')->result();
-                        $html=   $this->pdf->load_view('gen_pdf',$data);
-                        $this->pdf->createPDF($html, 'mypdf', true);
-                        redirect('enquiry/view/'.$enquiry_id.'/');
-                                          }
                     function printPdf_gen(){
                         // $this->load->library('pdf');
-                        $id=$this->input->post('typeId');
-                        if($id==0){$dc_id=1;}else{ $dc_id=2; }
+                            $id=$this->input->post('typeId');
+                            if($id==0){$dc_id=1;}else{ $dc_id=2; }
+
                         $enquiry_id=$this->input->post('enqid');
                         $docTemplate=$this->db->where(array('comp_id'=>65,'id'=>$dc_id))->get('tbl_docTemplate')->result();
                            foreach ($docTemplate as $key => $value) {
@@ -2924,7 +2909,7 @@ public function set_layout_to_session() {
                          $content = str_replace("@{usermobile}",$usrarr->s_phoneno, $content);
                          $content = str_replace("@{useremail}",$usrarr->s_user_email, $content);
                          $content = str_replace("@{userdesignation}",$usrarr->designation, $content);
-                         echo'<input name="idType" hidden="" class="idType" id="idType" '.$id.'>';
+                         echo'<input name="idType" hidden="" class="idType" id="idType" value="'.$id.'">';
                          echo $content;
                                                       }
                     }
@@ -2934,6 +2919,9 @@ public function set_layout_to_session() {
     public function pdf_gen(){
         $this->load->library('pdf');
         $id=$this->input->post('idType');
+       echo $submitemail=$this->input->post('email');
+        // $download=$this->input->post('download');
+        if(isset($submitemail)){
         if($id==0){$dc_id=1;}else{ $dc_id=2; }
         $enquiry_id=$this->input->post('enquiry_id');
         $data['enquiry_id']=$enquiry_id;
@@ -2982,5 +2970,20 @@ public function set_layout_to_session() {
             echo $this->email->print_debugger();
             echo "Something went wrong";			                	
         }
+    }else{
+        $this->load->library('pdf');
+        if($id==0){$dc_id=1;}else{ $dc_id=2; }
+        $enquiry_id=$this->input->post('enquiry_id');
+        $data['enquiry_id']=$enquiry_id;
+        $data['docTemplate']=$this->db->where(array('comp_id'=>65,'id'=>$dc_id))->get('tbl_docTemplate');
+        $data['usrarr']= $this->db->select("pk_i_admin_id,s_display_name,last_name,s_phoneno,s_user_email,designation")->where("pk_i_admin_id", $this->session->user_id)
+        ->from("tbl_admin")->get() ->row();
+        $this->db->where('comp_id', $this->session->companey_id);
+        $data['enquiry'] = $this->db->where('enquiry_id',$enquiry_id)->get('enquiry')->result();
+        $html=   $this->pdf->load_view('gen_pdf',$data,0);
+        $this->pdf->createPDF($html, 'mypdf', true);
+        // redirect('enquiry/view/'.$enquiry_id.'/');
+        
     }
+}
 }
