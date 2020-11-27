@@ -42,7 +42,7 @@ protected function ci()
  * @param   array   $data The view data
  * @return  void
  */
-public function load_view($view, $data = array())
+public function load_view($view, $data = array(),$pdfFilePath1)
 {
     $dompdf = new Dompdf();
     $html = $this->ci()->load->view($view, $data, TRUE);
@@ -54,9 +54,12 @@ public function load_view($view, $data = array())
 
     // Render the HTML as PDF
     $dompdf->render();
-    $time = time();
-
+  
     // Output the generated PDF to Browser
-    $dompdf->stream("quotation-". $time);
+    $pdf_string =   $dompdf->output($pdfFilePath1, 'F');
+    file_put_contents($pdfFilePath1, $pdf_string ); 
+//    file_put_contents('time.pdf', $output);
+
+   
 }
 }
