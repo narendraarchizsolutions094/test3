@@ -45,7 +45,7 @@
                 <td width=""><?= $docList->title ?></td>
                 <td width=""><?= $docList->created_date ?></td>
                 <td class="center">
-                  <a href="<?= base_url('setting/createdocument_templates/' . $docList->dc_id . '') ?>"  class="btn btn-xs  btn-primary"><i class="fa fa-pencil"></i></a>
+                  <a href="<?= base_url('setting/createdocument_templates/' . $docList->id . '') ?>"  class="btn btn-xs  btn-primary"><i class="fa fa-pencil"></i></a>
                 </td>
 
                 </td>
