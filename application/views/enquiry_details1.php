@@ -1874,7 +1874,7 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                               <div class="sundry" id="sundry" <?php if($booking_type==1){ echo'style="display:none"';} ?>>
                               <div class="form-group col-sm-6"> 
                                  <label>Rate</label>
-                                 <input class="form-control rate" name="rate" id="rate" type="text"  >  
+                                 <input class="form-control rate" readonly name="rate" id="rate" type="text"  >  
                               </div>
                               <div class="form-group col-sm-6"> 
                                  <label>Discount</label>
@@ -1887,7 +1887,7 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                               </div>
                               <div class="form-group col-sm-6"> 
                                  <label>Potential Amount</label>
-                                 <input class="form-control" name="potential_amount" id="potential_amount" type="text"  >  
+                                 <input class="form-control" readonly name="potential_amount" id="potential_amount" type="text"  >  
                               </div>
                               <div class="form-group col-sm-6"> 
                                  <label>Expected Tonnage</label>
@@ -1895,7 +1895,7 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                               </div>
                               <div class="form-group col-sm-6"> 
                                  <label>Expected Amount</label>
-                                 <input class="form-control" name="expected_amount" id="expected_amount" type="text"  >  
+                                 <input class="form-control"  name="expected_amount" id="expected_amount" type="text"  >  
                               </div>
 
 
