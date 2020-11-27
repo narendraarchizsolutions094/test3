@@ -2931,66 +2931,56 @@ public function set_layout_to_session() {
 
                   
 
-                    function pdf_gen(){
-                        $this->load->library('pdf');
-                        $id=$this->input->post('idType');
-                        if($id==0){$dc_id=1;}else{ $dc_id=2; }
-
-                        $enquiry_id=$this->input->post('enquiry_id');
-                        $data['enquiry_id']=$enquiry_id;
-                        $data['docTemplate']=$this->db->where(array('comp_id'=>65,'id'=>$dc_id))->get('tbl_docTemplate');
-                        $data['usrarr']= $this->db->select("pk_i_admin_id,s_display_name,last_name,s_phoneno,s_user_email,designation")->where("pk_i_admin_id", $this->session->user_id)
-                        ->from("tbl_admin")->get() ->row();
-                        $this->db->where('comp_id', $this->session->companey_id);
-                        $data['enquiry'] = $this->db->where('enquiry_id',$enquiry_id)->get('enquiry')->result();
-                        $time = time();
-                        //$pdfFilePath1 = base_url('uploads/quotations/')."quotation-".$time.".pdf";
-                        $pdfFilePath1 = $_SERVER['DOCUMENT_ROOT']."/new_crm/uploads/quotations/quotations-".time().".pdf";
-                        $pdf=   $this->pdf->load_view('gen_pdf',$data,$pdfFilePath1);
-                            // Output the generated PDF to Browser
-                        // insert data into comm info table
-                        //send this output pdf in mail through send sms model
-                        $message = 'Dear Sir/mam,
-                        <br> 
-                        Please find attached your Quotation below.';
-                        $email_subject = 'Quotation';
-                        $move_enquiry = $this->input->post('enquiry_id');
-                        $this->db->where('comp_id',$this->session->companey_id);
-                        $this->db->where('status',1);
-                        $email_row	=	$this->db->get('email_integration')->row_array();
-                        print_r($email_row);
-                        if(empty($email_row)){
-                              echo "Email is not configured";
-                              die();
-                        }else{
-                            $config['smtp_auth']    = true;
-                            $config['protocol']     = $email_row['protocol'];
-                            $config['smtp_host']    = $email_row['smtp_host'];
-                            $config['smtp_port']    = $email_row['smtp_port'];
-                            $config['smtp_timeout'] = '7';
-                            $config['smtp_user']    = $email_row['smtp_user'];
-                            $config['smtp_pass']    = $email_row['smtp_pass'];
-                            $config['charset']      = 'utf-8';
-                            $config['mailtype']     = 'html'; // or html
-                            $config['newline']      = "\r\n";        
-                            //$config['validation']   = TRUE; // bool whether to validate email or not    
-                        }
-                        $this->load->library('email');
-                                  $enq = $this->enquiry_model->enquiry_by_id($move_enquiry);
-                                $this->email->initialize($config);
-                                $this->email->from($email_row['smtp_user']);
-                                $to=$enq->email;
-                                $this->email->to($to);
-                                $this->email->subject($email_subject); 
-                                $this->email->message($message); 
-                                $this->email->set_mailtype('html');
-                                $this->email->attach($pdfFilePath1);
-                                if($this->email->send()){
-                                        echo "Mail sent successfully";
-                                }else{
-                                    // echo $this->email->print_debugger();
-                                    echo "Something went wrong";			                	
-                                }
-                        redirect('enquiry/view/'.$enquiry_id.'/');
-                                          }
+    public function pdf_gen(){
+        $this->load->library('pdf');
+        $id=$this->input->post('idType');
+        if($id==0){$dc_id=1;}else{ $dc_id=2; }
+        $enquiry_id=$this->input->post('enquiry_id');
+        $data['enquiry_id']=$enquiry_id;
+        $data['docTemplate']=$this->db->where(array('comp_id'=>65,'id'=>$dc_id))->get('tbl_docTemplate');
+        $data['usrarr']= $this->db->select("pk_i_admin_id,s_display_name,last_name,s_phoneno,s_user_email,designation")->where("pk_i_admin_id", $this->session->user_id)
+        ->from("tbl_admin")->get() ->row();
+        $this->db->where('comp_id', $this->session->companey_id);
+        $data['enquiry'] = $this->db->where('enquiry_id',$enquiry_id)->get('enquiry')->result();
+        $time = time();
+        $pdfFilePath1 = $_SERVER['DOCUMENT_ROOT']."/new_crm/uploads/quotations/quotations-".time().".pdf";
+        $pdf=   $this->pdf->load_view('gen_pdf',$data,$pdfFilePath1);
+        $message = 'Dear Sir/Madam,<br> Please find the quotation attachment below.';
+        $email_subject = 'V-Trans Quotation';
+        $move_enquiry = $this->input->post('enquiry_id');
+        $this->db->where('comp_id',$this->session->companey_id);
+        $this->db->where('status',1);
+        $email_row	=	$this->db->get('email_integration')->row_array();                        
+        if(empty($email_row)){
+                echo "Email is not configured";
+                die();
+        }else{            
+            $config['smtp_auth']    = true;
+            $config['protocol']     = $email_row['protocol'];
+            $config['smtp_host']    = $email_row['smtp_host'];
+            $config['smtp_port']    = $email_row['smtp_port'];
+            $config['smtp_timeout'] = '7';
+            $config['smtp_user']    = $email_row['smtp_user'];
+            $config['smtp_pass']    = $email_row['smtp_pass'];
+            $config['charset']      = 'utf-8';
+            $config['mailtype']     = 'html'; // or html
+            $config['newline']      = "\r\n";        
+        }
+        $this->load->library('email');
+        $enq = $this->enquiry_model->enquiry_by_id($move_enquiry);
+        $this->email->initialize($config);
+        $this->email->from($email_row['smtp_user']);
+        $to=$enq->email;
+        $this->email->to($to);
+        $this->email->subject($email_subject); 
+        $this->email->message($message); 
+        $this->email->set_mailtype('html');
+        $this->email->attach($pdfFilePath1);
+        if($this->email->send()){
+            echo "Mail sent successfully";
+        }else{
+            echo $this->email->print_debugger();
+            echo "Something went wrong";			                	
+        }
+    }
 }
