@@ -204,7 +204,7 @@ class Message_models extends CI_Model
     return $response = curl_exec($curl); 
   }
 
-  public function send_email($to, $subject, $message, $companey_id = '')
+  public function send_email($to, $subject, $message, $companey_id = '',$cc='')
   {
     $companey_id = ($companey_id == '') ? $this->session->companey_id : $companey_id;
 
@@ -227,6 +227,8 @@ class Message_models extends CI_Model
       $this->email->initialize($config);
       $this->email->from($email_row['smtp_user']);
       $this->email->to($to);
+      if($cc!='')
+        $this->email->cc($cc);
       $this->email->subject($subject);
       $this->email->message($message);
       if ($this->email->send()) {

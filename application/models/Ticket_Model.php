@@ -255,7 +255,7 @@ class Ticket_Model extends CI_Model
 		return $this->db->get('tbl_ticket_status');
 	}
 
-	public function saveconv($tckno, $subjects, $msg, $client, $user_id, $stage = 0, $sub_stage = 0, $ticket_status = 0)
+	public function saveconv($tckno, $subjects, $msg, $client, $user_id, $stage = 0, $sub_stage = 0, $ticket_status = 0,$comp_id=0)
 	{
 		$ticket_status = $this->input->post('ticket_status') ?? $ticket_status;
 		//echo $ticket_status; exit();
@@ -287,7 +287,7 @@ class Ticket_Model extends CI_Model
 				$this->db->set('tbl_ticket.ticket_status', $ticket_status);
 			}
 			if ($stage || $sub_stage || $ticket_status) {
-				$this->db->where('tbl_ticket.company', $this->session->companey_id);
+				$this->db->where('tbl_ticket.company', $comp_id??$this->session->companey_id);
 				$this->db->where('tbl_ticket.id', $tckno);
 				$this->db->update('tbl_ticket');
 			}
