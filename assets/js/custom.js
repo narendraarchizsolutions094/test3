@@ -9,9 +9,9 @@ $(document).ready(function () {
 
     tinymce.init({
     selector: '.tinymce',
-    plugins: 'print preview powerpaste casechange importcss searchreplace autolink autosave save directionality advcode visualblocks visualchars fullscreen image link media mediaembed template codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists checklist wordcount tinymcespellchecker a11ychecker imagetools textpattern noneditable help formatpainter permanentpen pageembed charmap tinycomments  quickbars linkchecker emoticons advtable',
+    plugins: 'print preview   importcss searchreplace autolink autosave save directionality  visualblocks visualchars fullscreen image link media  template codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists  wordcount   imagetools textpattern noneditable help   pageembed charmap tinycomments  quickbars linkchecker emoticons advtable',
     mobile: {
-        plugins: 'print preview powerpaste casechange importcss searchreplace autolink autosave save directionality advcode visualblocks visualchars fullscreen image link media mediaembed template codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists checklist wordcount tinymcespellchecker a11ychecker textpattern noneditable help formatpainter pageembed charmap  quickbars linkchecker emoticons advtable'
+        plugins: 'print preview   importcss searchreplace autolink autosave save directionality  visualblocks visualchars fullscreen image link media  template codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists  wordcount   textpattern noneditable help  pageembed charmap  quickbars linkchecker emoticons advtable'
     },
     menu: {
         tc: {
@@ -20,7 +20,7 @@ $(document).ready(function () {
         }
     },
     menubar: 'file edit view insert format tools table tc help',
-    toolbar: 'undo redo | bold italic underline strikethrough | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist checklist | forecolor backcolor casechange permanentpen formatpainter removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | insertfile image media pageembed template link anchor codesample | a11ycheck ltr rtl | showcomments addcomment',
+    toolbar: 'undo redo | bold italic underline strikethrough | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist  | forecolor backcolor    removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | insertfile image media pageembed template link anchor codesample | a11ycheck ltr rtl | showcomments addcomment',
     autosave_ask_before_unload: true,
     autosave_interval: '30s',
     autosave_prefix: '{path}{query}-{id}-',
@@ -38,7 +38,7 @@ $(document).ready(function () {
     spellchecker_whitelist: ['Ephox', 'Moxiecode'],
     tinycomments_mode: 'embedded',
     content_style: '.mymention{ color: gray; }',
-    contextmenu: 'link image imagetools table configurepermanentpen',
+    contextmenu: 'link image imagetools table ',
     a11y_advanced_options: true,
     skin: useDarkMode ? 'oxide-dark' : 'oxide',
     content_css: useDarkMode ? 'dark' : 'default'
