@@ -3462,7 +3462,6 @@ public function timelinePopup()
     $vehicle_type=$this->input->post('vehicle_type');
     $capacity=$this->input->post('capacity');
     $invoice_value=$this->input->post('invoice_value');
-    $ftlpaymode=$this->input->post('ftlpaymode');
     $ftlpotential_amount=$this->input->post('ftlpotential_amount');
     $ftlexpected_amount=$this->input->post('ftlexpected_amount');
     $invoice_value=$this->input->post('invoice_value');
@@ -3493,7 +3492,7 @@ public function timelinePopup()
             'booking_branch'=>$booking_branch,
             'delivery_branch'=>$delivery_branch,
             'insurance'=>$insurance,
-            'paymode'=>$ftlpaymode,
+            'paymode'=>$paymode,
             'potential_amount'=>$ftlpotential_amount,
             'expected_amount'=>$ftlexpected_amount,
             'vehicle_type'=>$vehicle_type,
