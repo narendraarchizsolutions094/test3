@@ -215,7 +215,16 @@ class Webhook extends REST_Controller {
         $this->db->insert('tbl_col_log');
         $insert_id = $this->db->insert_id();
         if($call_state=3 || $call_state=5){
-        $NODE_PUT ="us/".$insert_id.".json";
+	     $phone_s =preg_replace('/[^0-9]/', '', $users);
+         if(strlen($phone_s) >= 11){$phone_n = substr($phone_s,2,12);}else{$phone_n = $phone_s;}
+		 if(!empty($phone_n)){
+		 $user_comp=$this->db->select("companey_id")
+                        ->from('tbl_admin')
+                        ->where('s_phoneno', $phone_n)
+                        ->get()
+                        ->row();
+		if(!empty($user_comp->companey_id)){				
+        $NODE_PUT =$user_comp->companey_id."/".$insert_id.".json";
         $data = array(
         'user_phone'=>$phone,
         'uid'=>$uid,
@@ -229,7 +238,8 @@ class Webhook extends REST_Controller {
         curl_setopt( $curl, CURLOPT_RETURNTRANSFER, true );
         $response = curl_exec($curl);
         curl_close( $curl );
-        ///
+        }
+		}
         }
     }
     

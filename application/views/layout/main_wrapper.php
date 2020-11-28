@@ -1921,7 +1921,7 @@ master search end
   var uid = "<?=$this->session->user_id?>";
   var today_date = "<?=date('Y-m-d')?>";  
   var starCountRef = firebase.database().ref('reminders/'+uid).orderByChild('rem_date').equalTo(today_date);
-  var starCountRef1 =firebase.database().ref('us/').orderByKey().limitToLast(1);
+  var starCountRef1 =firebase.database().ref('<?php echo $this->session->companey_id; ?>').orderByKey().limitToLast(1);
   //var starCountRef2 =firebase.database().ref('us/').orderByKey().limitToLast(1);
   
   var rem = [];  
