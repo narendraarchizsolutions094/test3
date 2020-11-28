@@ -60,9 +60,8 @@ public function load_view($view, $data = array(),$pdfFilePath1)
     $pdf = $dompdf->output();
     $file_location = $pdfFilePath1;
     file_put_contents($file_location,$pdf); 
-    $dompdf->stream("dompdf_out.pdf", array("Attachment" => false));
-
-    exit();
+    $dompdf->stream("quotation.pdf");
+    //exit();
 
     // echo $pdf_string;
     // file_put_contents($pdfFilePath1, $pdf_string ); 

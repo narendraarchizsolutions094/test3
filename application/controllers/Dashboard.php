@@ -3001,22 +3001,22 @@ public function set_layout_to_session() {
                                   $enq = $this->enquiry_model->enquiry_by_id($move_enquiry);
                                 $this->email->initialize($config);
                                 $this->email->from($email_row['smtp_user']);
-                               echo  $to=$enq->email;
+                                $to=$enq->email;
                                 $this->email->to($to);
                                 $this->email->subject($email_subject); 
                                 $this->email->message($message); 
                                 $this->email->set_mailtype('html');
                                 // if($rows->files!=null || !empty($rows->files==null))
                                 // {
-                                    $this->email->attach($pdfFilePath1);
+                                $this->email->attach($pdfFilePath1);
 
                                     // $this->email->attach('quotation-'.$time.'.pdf');
                                 // }
                                 if($this->email->send()){
                                         echo "Mail sent successfully";
-                                        // $this->email->print_debugger(array("header"));
                                 }else{
-                                        echo "Something went wrong";			                	
+                                    echo $this->email->print_debugger();
+                                    echo "Something went wrong";			                	
                                 }
                         // }	
                         // redirect('enquiry/view/'.$enquiry_id.'/');
