@@ -138,6 +138,10 @@ input[name=lead_stages]{
     display: none;
   }
 }
+
+.short_dashboard button{
+  margin:4px;
+}
   </style>
 
     <div class="row">
@@ -268,7 +272,7 @@ input[name=lead_stages]{
             <div class="col-xs-12 col-sm-12  col-md-3 col-lg-3 ">
               <div  class="col-12 border_bottom border_bottom_active" >
                     <p style="margin-top: 2vh;font-weight:bold;"  title="<?php echo display('close'); ?>"> 
-                      <input type="radio" name="top_filter" value="closed_today" checked="checked" class="enq_form_filters" id="active_radio"><i class="fa fa-times" ></i><label for="active_radio">&nbsp;&nbsp;<?php echo display('close'); ?></label><span style="float:right;" class="badge badge-pill badge-primary " id="today_total"><i class="fa fa-spinner fa-spin"></i></span>
+                      <input type="radio" name="top_filter" value="closed_today" checked="checked" class="enq_form_filters" id="active_radio"><i class="fa fa-times" ></i><label for="active_radio">&nbsp;&nbsp;<?php echo display('closed_today'); ?></label><span style="float:right;" class="badge badge-pill badge-primary " id="today_total"><i class="fa fa-spinner fa-spin"></i></span>
                     </p>
                 </div>
             </div>
@@ -456,6 +460,27 @@ input[name=lead_stages]{
         </div>
     </div> 
 </form>
+
+<div class="row text-center short_dashboard" style="padding-bottom: 15px">
+    <button class="btn btn-primary">Created &nbsp; <span class="badge created_self">8</span></button>
+
+
+    <button class="btn btn-primary">Assigned &nbsp; <span class="badge assigned">8</span></button>
+
+
+    <button class="btn btn-primary">Updated &nbsp; <span class="badge updated">8</span></button>
+
+
+    <button class="btn btn-primary">Total Activities  &nbsp; <span class="badge total_activity">8</span></button>
+
+
+    <button class="btn btn-primary">Closed  &nbsp; <span class="badge closed">8</span></button>
+
+    <button class="btn btn-primary">Pending  &nbsp; <span class="badge pending">8</span></button>
+
+    <button class="btn btn-primary">Total  &nbsp; <span class="badge total">8</span></button>
+
+</div>
 
  <?php 
         $acolarr = array();
@@ -938,7 +963,7 @@ $(document).ready(function() {
           "serverSide": true,          
           "lengthMenu": [ [10,30, 50,100,500,1000, -1], [10,30, 50,100,500,1000, "All"] ],
           "columnDefs": [{ "orderable": false, "targets": 0 }],
-           "order": [[ 1, "desc" ]],
+          "order": [[ 1, "desc" ]],
           "ajax": {
               "url": "<?=base_url().'Ticket/ticket_load_data'?>",
               "type": "POST",
@@ -968,6 +993,8 @@ $(document).ready(function() {
                         columns: "thead th:not(.noExport)"
                     }} 
              ] ,  <?php  } ?>  });
+
+
     $('#ticket_filter').change(function() {
 
         var form_data = $("#ticket_filter").serialize();       
@@ -979,12 +1006,50 @@ $(document).ready(function() {
         success: function(responseData){
          // document.write(responseData);
           $('#ticket_table').DataTable().ajax.reload();
-          //stage_counter();      
+          //stage_counter(); 
+           return update_short_dashboard(); 
            }
         });
     });
+    update_short_dashboard(); 
 });
 
+function update_short_dashboard()
+{  
+   $.ajax({
+      url: "<?=base_url().'ticket/short_dashboard/'?>",
+      type: 'get',
+      dataType: 'json',
+      success: function(responseData){
+     //alert(responseData);
+        $(".created_self").html(responseData.created);
+       
+        $(".assigned").html(responseData.assigned);
+        
+        $(".updated").html(responseData.updated);
+        $(".total_activity").html(responseData.activity);
+       $(".closed").html(responseData.closed);
+       $(".pending").html(responseData.pending);
+       $(".total").html(responseData.total);
+
+        //alert(JSON.stringify(responseData));
+      //  $('#today_created').html(responseData.created_today);
+      // $('#today_updated').html(responseData.updated_today);
+      // $('#today_close').html(responseData.closed_today);
+      // $('#today_total').html(responseData.all_today);
+      
+     // all_lead_stage_c  = $("input[name='top_filter']:checked").next().next().next().html();
+
+//      console.log(all_lead_stage_c);
+      
+      //$('#lead_stage_-1').text(all_lead_stage_c);     
+      },
+      error:function(u,v,w)
+      {
+        alert(w);
+      }
+    });
+}
 
 function delete_recorde(){
   var x = $(".checkbox1:checked");
