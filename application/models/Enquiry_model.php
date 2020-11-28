@@ -6,7 +6,7 @@ class Enquiry_model extends CI_Model {
 
     private $table = "enquiry";
 
-    public function create($data = []) {
+    public function create($data = [],$comp_id =0) {
 		
         $this->db->insert($this->table, $data);
 	
@@ -19,11 +19,13 @@ class Enquiry_model extends CI_Model {
 		
 			foreach($inputno as $ind => $val){
 				
-				$biarr[] = array( "enq_no"  => $data["Enquery_id"],
+				$biarr[] = array( 
+
+								"enq_no"  => $data["Enquery_id"],
 								  "input"   => $val,
 								  "parent"  => $insid, 
 								  "fvalue"  => (!empty($enqinfo[$ind])) ? $enqinfo[$ind] : "",
-								  "cmp_no"  => $this->session->companey_id,
+								  "cmp_no"  => $comp_id??$this->session->companey_id,
 								 ); 	
 			}
 		

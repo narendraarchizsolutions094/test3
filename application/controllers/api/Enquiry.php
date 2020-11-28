@@ -44,7 +44,8 @@ class Enquiry extends REST_Controller {
     	
     	$upd =$this->input->post('update');		
 
-		  if(!empty($this->input->post('email') && !empty($this->input->post('mobileno')))){
+		  if(!empty($this->input->post('email') && !empty($this->input->post('mobileno'))))
+      {
 		  	$comp_id	=	$this->input->post('company_id');		
         	if (!$upd) {
         		$this->form_validation->set_rules('mobileno', display('mobileno'), 'max_length[20]|callback_phone_check|required', array('is_unique' => 'Duplicate   Entery for phone'));        		
@@ -118,7 +119,7 @@ class Enquiry extends REST_Controller {
             }else{
             	$postData['Enquery_id'] = $encode;
             	$postData['status'] = 1;
-            	$this->enquiry_model->create($postData);
+            	$this->enquiry_model->create($postData,$this->input->post('company_id'));
 			    $insert_id = $this->db->insert_id();
 			    $this->db->select('enquiry.Enquery_id,enquiry.enquiry_id');
 			    $this->db->where('enquiry_id',$insert_id);
@@ -126,45 +127,44 @@ class Enquiry extends REST_Controller {
 			    $msg	=	'Enquiry successfully created';
 			    
 			    $this->Leads_Model->add_comment_for_events($this->lang->line("enquery_create"), $encode,'',$this->input->post('user_id'));
-
-
             }
 		    $this->load->model('rule_model');
         	$this->rule_model->execute_rules($encode,array(1,2,3,6,7),$comp_id,$this->input->post('user_id'));  
         	          
-			if ($insert_id) {
-			    foreach($this->input->post() as $ind => $val){         
-			    	if(is_int($ind)){			    	
-						$biarr = array( 
-									  "enq_no"  => $e_row['Enquery_id'],
-						              "input"   => $ind,
-						              "parent"  => $e_row['enquiry_id'], 
-						              "fvalue"  => $val,
-						              "cmp_no"  => $comp_id,
-						             );     
+			// if ($insert_id) {
+			//     foreach($this->input->post() as $ind => $val)
+   //        {         
+			//     	if(is_int($ind)){			    	
+			// 			$biarr = array( 
+			// 						        "enq_no"  => $e_row['Enquery_id'],
+			// 			              "input"   => $ind,
+			// 			              "parent"  => $e_row['enquiry_id'], 
+			// 			              "fvalue"  => $val,
+			// 			              "cmp_no"  => $comp_id,
+			// 			             );     
 						
-						$this->db->where('enq_no',$e_row['Enquery_id']);        
-						$this->db->where('input',$ind);        
-						$this->db->where('parent',$e_row['enquiry_id']);
+			// 			$this->db->where('enq_no',$e_row['Enquery_id']);        
+			// 			$this->db->where('input',$ind);        
+			// 			$this->db->where('parent',$e_row['enquiry_id']);
 						
-						if($this->db->get('extra_enquery')->num_rows()){					    
-						    $this->db->where('enq_no',$e_row['Enquery_id']);        
-						    $this->db->where('input',$ind);        
-						    $this->db->where('parent',$e_row['enquiry_id']);
-						    $this->db->set('fvalue',$val);
-						    $this->db->update('extra_enquery');
-						}else{
-						    $this->db->insert('extra_enquery',$biarr);
-						}
-					}
-				}
+  	// 					if($this->db->get('extra_enquery')->num_rows()){					    
+  	// 					    $this->db->where('enq_no',$e_row['Enquery_id']);        
+  	// 					    $this->db->where('input',$ind);        
+  	// 					    $this->db->where('parent',$e_row['enquiry_id']);
+  	// 					    $this->db->set('fvalue',$val);
+  	// 					    $this->db->update('extra_enquery');
+  	// 					}else{
+  	// 					    $this->db->insert('extra_enquery',$biarr);
+  	// 					}
+			// 		}
 				$this->set_response([
                 'status' => TRUE,
                 'message' => $msg
             ], REST_Controller::HTTP_OK);
 			
 			} 
-		   } else {		     
+		  else 
+          {		     
 		     $this->set_response([
                 'status' => false,
                 'message' =>strip_tags(validation_errors())
