@@ -91,6 +91,7 @@ class Location_model extends CI_Model {
         $compid=$this->session->companey_id;
         $this->db->select("enquiry_fileds_basic.*,basic_fields.title,input_types.title as type");
         $this->db->from('enquiry_fileds_basic');
+        $this->db->where('basic_fields.field_for','0');
         $where = '';
         if($process_id){
             $where .= " FIND_IN_SET($process_id,process_id) AND";
@@ -113,6 +114,7 @@ class Location_model extends CI_Model {
 
         $this->db->select("ticket_fileds_basic.*,basic_fields.title,input_types.title as type");
         $this->db->from('ticket_fileds_basic');
+        $this->db->where('basic_fields.field_for','2');
         $where = '';
         if($process_id){
             $where .= " FIND_IN_SET($process_id,process_id) AND";
