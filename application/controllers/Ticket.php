@@ -2045,6 +2045,8 @@ class Ticket extends CI_Controller
 
 				$data['assigned'] = $this->db->count_all_results();
 
+				//echo $this->db->last_query(); exit();
+
 				$this->common_query_short_dashboard();
 				$this->db->where('tck.last_update!=','tck.coml_date');
 
@@ -2052,20 +2054,24 @@ class Ticket extends CI_Controller
 
 				
 				$this->common_query_short_dashboard();
-				$this->db->where('tck.status','3');
+				$this->db->where('tck.ticket_status','3');
 
 				$data['closed'] = $this->db->count_all_results();
-
+				
 				$this->common_query_short_dashboard();
-				$this->db->where('tck.last_update','tck.coml_date');
+				$this->db->where('tck.last_update = tck.coml_date');
 
 				$data['pending'] = $this->db->count_all_results();
-
+				//echo $this->db->last_query(); exit();
 				$this->common_query_short_dashboard();
 
 				$data['total']  = $this->db->count_all_results();
 
-				$data['activity'] = 0;//$data['total']-$data;
+				$this->common_query_short_dashboard();
+				 $this->db->get();
+				 $res = $this->db->last_query();
+				$num = $this->db->query("SELECT count(*) as num from tbl_ticket_conv inner join ($res) chk on chk.id= tbl_ticket_conv.tck_id");
+				$data['activity'] = $num->row()->num;
 
 				echo json_encode($data);
 			}

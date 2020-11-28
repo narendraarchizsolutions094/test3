@@ -252,7 +252,7 @@ input[name=lead_stages]{
 
 <form id="ticket_filter">
 
-<div class="row"  id="active_class">                   
+<div class="row"  id="active_class" style="display: none;">                   
             <div class="col-xs-12 col-sm-12  col-md-3 col-lg-3" style="">
               <div  class="col-12 border_bottom" >
                   <p style="margin-top: 2vh;font-weight:bold;">
@@ -462,23 +462,23 @@ input[name=lead_stages]{
 </form>
 
 <div class="row text-center short_dashboard" style="padding-bottom: 15px">
-    <button class="btn btn-primary">Created &nbsp; <span class="badge created_self">8</span></button>
+    <button class="btn btn-primary"><?=display('short_dashboard_ticket_created')?> &nbsp; <span class="badge created_self"><i class="fa fa-spinner fa-spin"></i></span></button>
 
 
-    <button class="btn btn-primary">Assigned &nbsp; <span class="badge assigned">8</span></button>
+    <button class="btn btn-primary"><?=display('short_dashboard_ticket_assigned')?> &nbsp; <span class="badge assigned"><i class="fa fa-spinner fa-spin"></i></span></button>
 
 
-    <button class="btn btn-primary">Updated &nbsp; <span class="badge updated">8</span></button>
+    <button class="btn btn-primary"><?=display('short_dashboard_ticket_updated')?> &nbsp; <span class="badge updated"><i class="fa fa-spinner fa-spin"></i></span></button>
 
 
-    <button class="btn btn-primary">Total Activities  &nbsp; <span class="badge total_activity">8</span></button>
+    <button class="btn btn-primary"><?=display('short_dashboard_ticket_followup')?>  &nbsp; <span class="badge total_activity"><i class="fa fa-spinner fa-spin"></i></span></button>
 
 
-    <button class="btn btn-primary">Closed  &nbsp; <span class="badge closed">8</span></button>
+    <button class="btn btn-primary"><?=display('short_dashboard_ticket_closed')?>  &nbsp; <span class="badge closed"><i class="fa fa-spinner fa-spin"></i></span></button>
 
-    <button class="btn btn-primary">Pending  &nbsp; <span class="badge pending">8</span></button>
+    <button class="btn btn-primary"><?=display('short_dashboard_ticket_pending')?>  &nbsp; <span class="badge pending"><i class="fa fa-spinner fa-spin"></i></span></button>
 
-    <button class="btn btn-primary">Total  &nbsp; <span class="badge total">8</span></button>
+    <button class="btn btn-primary"><?=display('short_dashboard_ticket_all')?>  &nbsp; <span class="badge total"><i class="fa fa-spinner fa-spin"></i></span></button>
 
 </div>
 

@@ -313,7 +313,7 @@ $CHK = 0;
          if(!empty($from_created) && !empty($to_created)){
             $from_created = date("Y-m-d",strtotime($from_created));
             $to_created = date("Y-m-d",strtotime($to_created));
-            $where .= " (DATE(tck.coml_date) >= '".$from_created."' AND DATE(tck.coml_date) <= '".$to_created."') OR (DATE(tck.last_update) >= '".$from_created."' AND DATE(tck.last_update) <= '".$to_created."')";
+            $where .= " ( (DATE(tck.coml_date) >= '".$from_created."' AND DATE(tck.coml_date) <= '".$to_created."') OR (DATE(tck.last_update) >= '".$from_created."' AND DATE(tck.last_update) <= '".$to_created."') )";
             $CHK = 1;
         }
 

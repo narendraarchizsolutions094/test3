@@ -227,9 +227,24 @@ class Enquiry extends REST_Controller {
             $basic[$key]['parameter_name'] = 'lastname';
             break;
 
+            case 3:
+            $values = array(
+                            array('key'=>1,
+                                  'value'=>'Male'),
+                            array('key'=>2,
+                                  'value'=>'Female'),
+                            array('key'=>3,
+                                  'value'=>'Other'),
+                          );
+           
+            $basic[$key]['input_values'] = $values;
+            $basic[$key]['parameter_name'] = 'gender';
+            break;
+
             case 4:
             $basic[$key]['parameter_name'] = 'mobileno';
             break;
+
             case 5:
             $basic[$key]['parameter_name'] = 'email';
             break;
