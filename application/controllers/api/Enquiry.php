@@ -63,7 +63,7 @@ class Enquiry extends REST_Controller {
 			->get();
 			
 		if ($this->form_validation->run() === true) {
-             $name = $this->input->post('fname');
+             $name = $this->input->post('enquirername');
             $name_w_prefix = $name;
             $encode = $this->get_enquery_code();
 			$crtdby = $this->input->post('user_id');
@@ -330,7 +330,7 @@ class Enquiry extends REST_Controller {
       $i=0;
       foreach ($dynamic as $key => $value)
       {
-          if(in_array($value['input_type'],array('2')))
+          if(in_array($value['input_type'],array('2','3','4','20')))
           {
               $temp  = explode(',', $value['input_values']);
               if(!empty($temp))

@@ -941,7 +941,7 @@ class Ticket_Model extends CI_Model
       $i=0;
       foreach ($dynamic as $key => $value)
       {
-          if(in_array($value['input_type'],array('2')))
+          if(in_array($value['input_type'],array('2','3','4','20')))
           {
              
               $temp  = explode(',', $value['input_values']);
@@ -997,7 +997,7 @@ class Ticket_Model extends CI_Model
         		$heading = array();
         		foreach ($dynamic as $key => $value)
 			      {
-			          if(in_array($value['input_type'],array('2')))
+			          if(in_array($value['input_type'],array('2','3','4','20')))
 			          {
 			             
 			              $temp  = explode(',', $value['input_values']);
