@@ -778,6 +778,9 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
             <?php if($this->session->companey_id==65){ ?>
             <li><a href="#COMMERCIAL_INFORMATION" data-toggle="tab" style="padding: 10px 10px;">Commercial Information</a></li>
             <?php } ?>
+            <?php if($this->session->companey_id==65){ ?>
+            <!-- <li><a href="#aggrement" data-toggle="tab" style="padding: 10px 10px;">Commercial Information</a></li> -->
+            <?php } ?>
             
             <span class="scrollTab" style="position: absolute; right: 0; font-size: 22px; line-height: 40px; z-index: 999"><i class="fa fa-caret-right"  onclick="tabScroll('right')"></i></span>
             </ul>
@@ -1756,7 +1759,7 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                               <td class="center">
                   <a href="<?= base_url('enquiry/editinfo/' . $value->id . '')?>" class="btn btn-xs  btn-primary view_data"><i class="fa fa-edit"></i></a>
                   <a href="<?= base_url('enquiry/deleteInfo/' . $value->id . '/'.$value->enquiry_id.'/') ?>" onclick="return confirm('Are You Sure ? ')" class="btn btn-xs  btn-danger"><i class="fa fa-trash"></i></a>
-                  <a class="btn btn-primary btn-xs view_datas" id="view_sdatas" onclick="myFunction()" style="cursor: pointer;" data-toggle="modal"  data-target="#downloadQuatation" data-id="<?= $value->booking_type ?>" data-equid="<?= $value->enquiry_id ?>"><i class="fa fa-download"></i></a>
+                  <a class="btn btn-primary btn-xs view_datas" id="view_sdatas" onclick="myFunction(<?= $value->booking_type ?>,<?= $value->enquiry_id ?>)" style="cursor: pointer;" data-toggle="modal"  data-target="#downloadQuatation" data-id="" data-equid=""><i class="fa fa-download"></i></a>
                 </td>
                            </tr> 
                            <?php  } }  ?>
@@ -1987,9 +1990,7 @@ $('#infotype').on('change', function() {
 
             }
 });
-
-
-               </script>
+  </script>
 <script>
    $(document).ready(function(){
     $('#booking_type').on('change', function() {
@@ -2022,7 +2023,8 @@ $('#infotype').on('change', function() {
          </div>
          <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            <button type="submit" class="btn btn-primary" >Download</button>
+            <input type="submit" name="download" class="btn btn-primary" value="Download">
+            <input type="submit" name="email" class="btn btn-primary" value="Email">
          </div>
          </form> 
 
@@ -2031,24 +2033,17 @@ $('#infotype').on('change', function() {
 </div>
 <script>
 
-function myFunction() {
+function myFunction(typeId,enqid) {
+   $(".data_value").empty();
    var elem = document.getElementById('view_sdatas');
-
-var typeId = elem.getAttribute('data-id');
-var enqid   = elem.getAttribute('data-equid');
-
 $.ajax({
             type: 'POST',
             url: '<?php echo base_url();?>dashboard/printPdf_gen',
             data: {typeId:typeId,enqid:enqid},
             success:function(data){
-               //  var obj = JSON.parse(data);
-               //  alert(data);
                 $(".data_value").html(data);
-                $("#idType").val(typeId);
             }
             });
-
 }
 </script>
      <?php } ?>
