@@ -115,6 +115,8 @@ class Message_models extends CI_Model
     
     if (strlen($number) < 12) {
       $number = '91'.$number;
+    }else if(strlen($number) > 12){
+      $number = '91'.substr($phone,-10);      
     }
 
     $destination = $number;
