@@ -3627,5 +3627,58 @@ public function timelinePopup()
             } 
         }
        }
+       public function sendAgreement()
+       {
+           
+       }
+       public function genAgreement()
+       {
+        $this->load->library('pdf');
+        // $download=$this->input->post('download');
+        $enquiry_id=$this->input->post('enquiry_id');
+        $agg_date=$this->input->post('agg_date');
+        $data['enquiry_id']=$enquiry_id;
+        $this->db->where('comp_id', $this->session->companey_id);
+        $data['enquiry'] = $this->db->where('enquiry_id',$enquiry_id)->get('enquiry')->result();
+        $pdfFilePath1 = $_SERVER['DOCUMENT_ROOT']."/uploads/quotations/CAF-FORM.pdf";
+        $message = 'Dear Sir/Madam,<br> Please find the Agreement attachment below.';
+        $email_subject = 'V-Trans Agreement';
+        $move_enquiry = $this->input->post('enquiry_id');
+        $this->db->where('comp_id',$this->session->companey_id);
+        $this->db->where('status',1);
+        $email_row	=	$this->db->get('email_integration')->row_array();                        
+        if(empty($email_row)){
+                echo "Email is not configured";
+                die();
+        }else{            
+            $config['smtp_auth']    = true;
+            $config['protocol']     = $email_row['protocol'];
+            $config['smtp_host']    = $email_row['smtp_host'];
+            $config['smtp_port']    = $email_row['smtp_port'];
+            $config['smtp_timeout'] = '7';
+            $config['smtp_user']    = $email_row['smtp_user'];
+            $config['smtp_pass']    = $email_row['smtp_pass'];
+            $config['charset']      = 'utf-8';
+            $config['mailtype']     = 'html'; // or html
+            $config['newline']      = "\r\n";        
+        }
+        $this->load->library('email');
+        $enq = $this->enquiry_model->enquiry_by_id($move_enquiry);
+        $this->email->initialize($config);
+        $this->email->from($email_row['smtp_user']);
+        $to=$enq->email;
+        $this->email->to($to);
+        $this->email->subject($email_subject); 
+        $this->email->message($message); 
+        $this->email->set_mailtype('html');
+        $this->email->attach($pdfFilePath1);
+        if($this->email->send()){
+            echo "Mail sent successfully";
+            $data=['enq_id'=>$move_enquiry,'comp_id'=>$this->session->companey_id,'agg_date'=>$agg_date,'created_by'=>$this->session->user_id,'created_date'=>date('Y-m-d H:i:s')];
+        }else{
+            echo $this->email->print_debugger();
+            echo "Something went wrong";			                	
+        }
+       }
  
 }
