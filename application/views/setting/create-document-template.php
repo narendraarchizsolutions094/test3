@@ -111,7 +111,6 @@ tinymce.init({
   skin: useDarkMode ? 'oxide-dark' : 'oxide',
   content_css: useDarkMode ? 'dark' : 'default',
   mentions_selector: '.mymention',
-  mentions_fetch: mentions_fetch,
   mentions_menu_hover: mentions_menu_hover,
   mentions_menu_complete: mentions_menu_complete,
   mentions_select: mentions_select
