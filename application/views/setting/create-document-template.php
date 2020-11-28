@@ -1,5 +1,4 @@
 <br>
-<script src="https://cdn.tiny.cloud/1/82ebac134d772tbx3olhim9yme0o5ed3xt3viu42lmgviyu7/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
 <?php foreach ($docList as $key => $value) { ?>
 
 <div  class="panel panel-default thumbnail">
