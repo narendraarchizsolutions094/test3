@@ -63,7 +63,7 @@ class Enquiry extends REST_Controller {
 			->get();
 			
 		if ($this->form_validation->run() === true) {
-             $name = $this->input->post('fname');
+             $name = $this->input->post('enquirername');
             $name_w_prefix = $name;
             $encode = $this->get_enquery_code();
 			$crtdby = $this->input->post('user_id');
