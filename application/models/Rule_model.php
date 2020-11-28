@@ -84,9 +84,6 @@ class Rule_model extends CI_Model {
                             $this->db->where('Enquery_id',$enquiry_code);                
                     }
 
-                    $this->db->where('pk_i_admin_id',$user_id);
-                    $user_row  = $this->db->get('tbl_admin')->row_array();
-
                     $this->db->where('comp_id',$comp_id);                                    
                     //$this->db->where('rule_executed!=',$id);   
                     if($rule_for=='ticket')
@@ -95,6 +92,9 @@ class Rule_model extends CI_Model {
                         $enq_row = $this->db->get('enquiry')->row_array();
 
                     if (!empty($enq_row['email']) && !empty($rule_data['rule_action'])) {
+                        
+                        $this->db->where('pk_i_admin_id',$user_id);
+                        $user_row  = $this->db->get('tbl_admin')->row_array();
                         
                         $row   =   $this->db->select('*')
                                     ->from('api_templates')
@@ -121,7 +121,7 @@ class Rule_model extends CI_Model {
                                                 '@trackingno'
                                             );
                                 $replace = array(
-                                    $enq_row['name_prefix'].' '.$enq_row['name'].' '.$enq_row['last_name'],
+                                    $enq_row['name'],
                                     $user_row['contact_phone'],
                                     $user_row['s_username'],
                                     $enq_row['phone'],
@@ -133,7 +133,7 @@ class Rule_model extends CI_Model {
                             }
                             else
                             {
-                                $name1 = $enq_row['name_prefix'];
+                                $name1 = $enq_row['name_prefix'].' '.$enq_row['name'].' '.$enq_row['lastname'];
 
                                 $message = str_replace('@name',$name1,str_replace('@org',$user_row['orgisation_name'],str_replace('@desg',$user_row['designation'],str_replace('@phone',$user_row['contact_phone'],str_replace('@desg',$user_row['designation'],str_replace('@user',$user_row['s_display_name'].' '.$user_row['last_name'],$message))))));
                             } 
@@ -147,14 +147,31 @@ class Rule_model extends CI_Model {
                     }
                 }else if($rule_data['type'] == 6){
                     $this->db->where('('.$rule_data['rule_sql'].')');
-                    if ($enquiry_code) {
-                        $this->db->where('Enquery_id',$enquiry_code);                
+                     $rule_for = (substr($enquiry_code,0,3)=='TCK')?'ticket':'enquiry';
+                    if ($enquiry_code)
+                    {
+                        if($rule_for == 'ticket')
+                            $this->db->where('ticketno',$enquiry_code); 
+                        else
+                            $this->db->where('Enquery_id',$enquiry_code);                
                     }
+
                     $this->db->where('comp_id',$comp_id);
+
                     //$this->db->where('rule_executed!=',$id);                                    
-                    $enq_row = $this->db->get('enquiry')->row_array();                    
+                     if($rule_for=='ticket')
+                        $enq_row = $this->db->get('tbl_ticket')->row_array();
+                    else                                 
+                        $enq_row = $this->db->get('enquiry')->row_array();
+
+
                     if (!empty($enq_row['phone']) && !empty($rule_data['rule_action'])) {
+
+                        $this->db->where('pk_i_admin_id',$user_id);
+                        $user_row  = $this->db->get('tbl_admin')->row_array();
+
                         $phone    =   $enq_row['phone'];
+
                         $row   =   $this->db->select('*')
                                     ->from('api_templates')                                    
                                     ->where('temp_id',$rule_data['rule_action'])                        
@@ -162,8 +179,41 @@ class Rule_model extends CI_Model {
                                     ->row_array();
                         
                         if (!empty($row)) { 
+                           
                             $this->load->model('Message_models');                            
                             $message = $row['template_content'];
+
+
+                            if($rule_for=='ticket')
+                            {
+
+
+                                $find = array('@name',
+                                                '@phone',
+                                                '@username',
+                                                '@userphone',
+                                                '@designation',
+                                                '@ticketno',
+                                                '@trackingno'
+                                            );
+                                $replace = array(
+                                    $enq_row['name'],
+                                    $user_row['contact_phone'],
+                                    $user_row['s_username'],
+                                    $enq_row['phone'],
+                                    $user_row['designation'],
+                                    $enquiry_code,
+                                    $enq_row['tracking_no'],
+                                    );
+                                $message  =str_replace($find, $replace, $message);
+                            }
+                            else
+                            {
+                                $name1 = $enq_row['name_prefix'].' '.$enq_row['name'].' '.$enq_row['lastname'];
+
+                                $message = str_replace('@name',$name1,str_replace('@org',$user_row['orgisation_name'],str_replace('@desg',$user_row['designation'],str_replace('@phone',$user_row['contact_phone'],str_replace('@desg',$user_row['designation'],str_replace('@user',$user_row['s_display_name'].' '.$user_row['last_name'],$message))))));
+                            } 
+
                             if($this->Message_models->smssend($phone,$message,$comp_id,$user_id)){
                                 //$this->db->where('Enquery_id',$enquiry_code);
                                 //$this->db->update('enquiry',array('rule_executed'=>$id));
@@ -173,13 +223,30 @@ class Rule_model extends CI_Model {
                     }
                 }else if($rule_data['type'] == 7){
                     $this->db->where('('.$rule_data['rule_sql'].')');
-                    if ($enquiry_code) {
-                        $this->db->where('Enquery_id',$enquiry_code);                
+
+
+                    $rule_for = (substr($enquiry_code,0,3)=='TCK')?'ticket':'enquiry';
+                    if ($enquiry_code)
+                    {
+                        if($rule_for == 'ticket')
+                            $this->db->where('ticketno',$enquiry_code); 
+                        else
+                            $this->db->where('Enquery_id',$enquiry_code);                
                     }
+
                     $this->db->where('comp_id',$comp_id);
                     //$this->db->where('rule_executed!=',$id);                                    
-                    $enq_row = $this->db->get('enquiry')->row_array();                    
+                    
+                     if($rule_for=='ticket')
+                        $enq_row = $this->db->get('tbl_ticket')->row_array();
+                    else                                 
+                        $enq_row = $this->db->get('enquiry')->row_array();
+
                     if (!empty($enq_row['phone']) && !empty($rule_data['rule_action'])) {
+
+                         $this->db->where('pk_i_admin_id',$user_id);
+                        $user_row  = $this->db->get('tbl_admin')->row_array();
+
                         $phone    =   $enq_row['phone'];
                         $row   =   $this->db->select('*')
                                     ->from('api_templates')                                    
@@ -190,7 +257,39 @@ class Rule_model extends CI_Model {
                         if (!empty($row)) { 
                             $this->load->model('Message_models');                            
                             $message = $row['template_content'];
-                            if($this->Message_models->sendwhatsapp($phone,$message,$comp_id,$user_id)){
+
+                            if($rule_for=='ticket')
+                            {
+
+
+                                $find = array('@name',
+                                                '@phone',
+                                                '@username',
+                                                '@userphone',
+                                                '@designation',
+                                                '@ticketno',
+                                                '@trackingno'
+                                            );
+                                $replace = array(
+                                    $enq_row['name'],
+                                    $user_row['contact_phone'],
+                                    $user_row['s_username'],
+                                    $enq_row['phone'],
+                                    $user_row['designation'],
+                                    $enquiry_code,
+                                    $enq_row['tracking_no'],
+                                    );
+                                $message  =str_replace($find, $replace, $message);
+                            }
+                            else
+                            {
+                                $name1 = $enq_row['name_prefix'].' '.$enq_row['name'].' '.$enq_row['lastname'];
+
+                                $message = str_replace('@name',$name1,str_replace('@org',$user_row['orgisation_name'],str_replace('@desg',$user_row['designation'],str_replace('@phone',$user_row['contact_phone'],str_replace('@desg',$user_row['designation'],str_replace('@user',$user_row['s_display_name'].' '.$user_row['last_name'],$message))))));
+                            } 
+
+                            if($this->Message_models->sendwhatsapp($phone,$message,$comp_id,$user_id))
+                            {
                                 //$this->db->where('Enquery_id',$enquiry_code);
                                 //$this->db->update('enquiry',array('rule_executed'=>$id));
                             }

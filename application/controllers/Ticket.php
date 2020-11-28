@@ -87,7 +87,7 @@ class Ticket extends CI_Controller
 
 	public function index()
 	{
-		
+
 		$this->load->model('Datasource_model');
 		$this->load->model('dash_model');
 		$this->load->model('enquiry_model');
@@ -2031,4 +2031,376 @@ class Ticket extends CI_Controller
 				$data['all_today']     = $this->Ticket_Model->allTodayCount();
 				echo json_encode($data);
 			}
+
+			public function short_dashboard()
+			{
+				
+				$this->common_query_short_dashboard();
+				$this->db->where('tck.added_by',$this->session->user_id);
+
+        		$data['created'] = $this->db->count_all_results();
+        		
+        		$this->common_query_short_dashboard();
+				$this->db->where('tck.assign_to',$this->session->user_id);
+
+				$data['assigned'] = $this->db->count_all_results();
+
+				$this->common_query_short_dashboard();
+				$this->db->where('tck.last_update!=','tck.coml_date');
+
+				$data['updated'] = $this->db->count_all_results();
+
+				
+				$this->common_query_short_dashboard();
+				$this->db->where('tck.status','3');
+
+				$data['closed'] = $this->db->count_all_results();
+
+				$this->common_query_short_dashboard();
+				$this->db->where('tck.last_update','tck.coml_date');
+
+				$data['pending'] = $this->db->count_all_results();
+
+				$this->common_query_short_dashboard();
+
+				$data['total']  = $this->db->count_all_results();
+
+				$data['activity'] = 0;//$data['total']-$data;
+
+				echo json_encode($data);
+			}
+
+			public function common_query_short_dashboard()
+			{
+
+		$all_reporting_ids    =   $this->common_model->get_categories($this->session->user_id);
+
+        $acolarr = array();
+        $dacolarr = array();
+        if(isset($_COOKIE["ticket_allowcols"])) {
+          $showall = false;
+          $acolarr  = explode(",", trim($_COOKIE["ticket_allowcols"], ","));       
+        }else{          
+          $showall = true;
+        }         
+        if(isset($_COOKIE["ticket_dallowcols"])) {
+          $dshowall = false;
+          $dacolarr  = explode(",", trim($_COOKIE["ticket_dallowcols"], ","));       
+        }else{
+          $dshowall = false;
+        }       
+
+        $sel_string = array();
+        $sel_string[] = "tck.*"; 
+
+        // if($showall or in_array(1,$acolarr))
+        // {
+        //     $sel_string[] = " tck.ticketno ";
+        // }
+        if($showall or in_array(2,$acolarr))
+        {
+            $sel_string[] = " concat(enq.name_prefix,' ' , enq.name,' ', enq.lastname) as clientname ";
+        }
+        // if($showall or in_array(3,$acolarr))
+        // {
+        //     $sel_string[] = " tck.email ";
+        // }
+
+        if($showall or in_array(5,$acolarr))
+        {
+            $sel_string[] = " prd.country_name ";
+        }
+        if($showall or in_array(6,$acolarr))
+        {
+            $sel_string[] = " concat(for_assign.s_display_name,' ',for_assign.last_name) as assign_to_name  ";
+            //$sel_string[] = "tck.last_esc";
+        }
+        if($showall or in_array(7,$acolarr))
+        {
+            $sel_string[] = " concat(for_created.s_display_name,' ',for_created.last_name) as created_by_name ";
+        }
+        // if($showall or in_array(8,$acolarr))
+        // {
+        //     $sel_string[] = " tck.priority ";
+        // }
+        // if($showall or in_array(9,$acolarr))
+        // {
+        //     $sel_string[] = " tck.coml_date ";
+        // }
+        if($showall or in_array(10,$acolarr))
+        {
+            $sel_string[] = " ref.name as referred_name ";
+        }
+        if($showall or in_array(11,$acolarr))
+        {
+            $sel_string[] = " source.lead_name as source_name ";
+        }
+        if($showall or in_array(12,$acolarr))
+        {
+            $sel_string[] = " stage.lead_stage_name ";
+        }
+        if($showall or in_array(13,$acolarr))
+        {
+            $sel_string[] = " sub_stage.description ";
+        }
+        if($showall or in_array(16,$acolarr))
+        {
+            $sel_string[] = " status.status_name ";    
+        }
+
+        if($showall or in_array(17,$acolarr))
+        {
+            $sel_string[] = " concat(assign_by.s_display_name,' ',assign_by.last_name) as assigned_by_name";    
+        }
+        
+        $select = implode(',', $sel_string);
+
+        $this->db->select($select);
+        $this->db->from("tbl_ticket  tck");
+
+        //->join("tbl_ticket_conv cnv", "cnv.tck_id = tck.id", "LEFT")
+        if($showall or count(array_intersect(array(2,4),$acolarr))>0)
+        {
+            $this->db->join("enquiry enq", "enq.enquiry_id = tck.client", "LEFT");
+        }
+        
+        if($showall or in_array(5, $acolarr))
+        {
+            $this->db->join("tbl_product_country prd", "prd.id = tck.product", "LEFT");
+        }
+
+        if($showall or in_array(6,$acolarr))
+        {
+            $this->db->join("tbl_admin as for_assign", "for_assign.pk_i_admin_id = tck.assign_to", "LEFT");
+        }
+         
+        if($showall or in_array(7, $acolarr))
+        {
+            $this->db->join("tbl_admin as for_created", "for_created.pk_i_admin_id = tck.added_by", "LEFT");
+        }
+        
+        if($showall or in_array(10, $acolarr))
+        {
+         $this->db->join("tbl_referred_by ref","tck.referred_by=ref.id","LEFT");
+        }
+
+        if($showall or in_array(11, $acolarr))
+        {
+         $this->db->join("lead_source source","tck.sourse=source.lsid","LEFT");
+        }
+       
+        if($showall or in_array(12, $acolarr))
+        {
+         $this->db->join("lead_stage stage","tck.ticket_stage=stage.stg_id","LEFT");
+        } 
+        
+        if($showall or in_array(13, $acolarr))
+        {
+         $this->db->join("lead_description sub_stage","tck.ticket_substage=sub_stage.id","LEFT");
+        } 
+
+        if($showall or in_array(16, $acolarr))
+        {
+         $this->db->join("tbl_ticket_status status","tck.ticket_status=status.id","LEFT");
+        } 
+
+        // $this->db->join("(select * from tbl_ticket_conv as tck_conv1 group by tck_conv1.tck_id ORDER BY tck_conv1.id DESC) as tck_conv","tck_conv.tck_id=tck.id","LEFT");
+
+        if($showall or in_array(17, $acolarr))
+        {
+         $this->db->join("tbl_admin assign_by","tck.assigned_by=assign_by.pk_i_admin_id","LEFT");
+        } 
+         $this->db->where("tck.company",$this->session->companey_id);
+         $this->db->group_by("tck.id");
+
+
+			$enquiry_filters_sess   =   $this->session->ticket_filters_sess;
+            
+	        $top_filter             =   !empty($enquiry_filters_sess['top_filter'])?$enquiry_filters_sess['top_filter']:'';
+
+
+	        $from_created           =   !empty($enquiry_filters_sess['from_created'])?$enquiry_filters_sess['from_created']:'';       
+	        $to_created             =   !empty($enquiry_filters_sess['to_created'])?$enquiry_filters_sess['to_created']:'';
+	        $source                 =   !empty($enquiry_filters_sess['source'])?$enquiry_filters_sess['source']:'';
+	       
+	        $createdby              =   !empty($enquiry_filters_sess['createdby'])?$enquiry_filters_sess['createdby']:'';
+	        $assign                 =   !empty($enquiry_filters_sess['assign'])?$enquiry_filters_sess['assign']:'';
+	      
+	        $problem                 =   !empty($enquiry_filters_sess['problem'])?$enquiry_filters_sess['problem']:'';
+
+	        $priority                 =   !empty($enquiry_filters_sess['priority'])?$enquiry_filters_sess['priority']:'';
+
+	        $issue                 =   !empty($enquiry_filters_sess['issue'])?$enquiry_filters_sess['issue']:'';
+
+	        $productcntry          =   !empty($enquiry_filters_sess['prodcntry'])?$enquiry_filters_sess['prodcntry']:'';
+
+	        $stage          =   !empty($enquiry_filters_sess['stage'])?$enquiry_filters_sess['stage']:'';
+	        $sub_stage          =   !empty($enquiry_filters_sess['sub_stage'])?$enquiry_filters_sess['sub_stage']:'';
+
+	        $ticket_status          =   !empty($enquiry_filters_sess['ticket_status'])?$enquiry_filters_sess['ticket_status']:'';
+
+	         $assign_by          =   !empty($enquiry_filters_sess['assign_by'])?$enquiry_filters_sess['assign_by']:'';
+
+
+	        $where='';
+			$CHK = 0;
+
+	         if(!empty($from_created) && !empty($to_created)){
+	            $from_created = date("Y-m-d",strtotime($from_created));
+	            $to_created = date("Y-m-d",strtotime($to_created));
+	            $where .= " (DATE(tck.coml_date) >= '".$from_created."' AND DATE(tck.coml_date) <= '".$to_created."') OR (DATE(tck.last_update) >= '".$from_created."' AND DATE(tck.last_update) <= '".$to_created."')";
+	            $CHK = 1;
+	        }
+
+	        if(!empty($from_created) && empty($to_created)){
+	            $from_created = date("Y-m-d",strtotime($from_created));
+	            $where .= " DATE(tck.coml_date) >=  '".$from_created."' OR DATE(tck.last_update) >=  '".$from_created."'  "; 
+	            $CHK = 1;                           
+	        }
+	        if(empty($from_created) && !empty($to_created)){            
+	            $to_created = date("Y-m-d",strtotime($to_created));
+	            $where .= " DATE(tck.coml_date) <=  '".$to_created."' OR DATE(tck.last_update) <=  '".$to_created."'"; 
+	            $CHK = 1;                                  
+	        }
+
+
+	        if(!empty($productcntry)){            
+	           // $to_created = date("Y-m-d",strtotime($to_created));
+	            if($CHK)
+	                $where .= 'AND';
+
+	            $where .= " tck.product =  '".$productcntry."'"; 
+	            $CHK =1;                             
+	        }
+
+	        if(!empty($createdby)){            
+	           // $to_created = date("Y-m-d",strtotime($to_created));
+	            if($CHK)
+	                $where .= 'AND';
+
+	            $where .= " tck.added_by =  '".$createdby."'"; 
+	            $CHK =1;                             
+	        }
+
+	        if(!empty($assign)){            
+	                   // $to_created = date("Y-m-d",strtotime($to_created));
+	            if($CHK)
+	                $where .= 'AND';
+
+	            $where .= " tck.assign_to =  '".$assign."'"; 
+	            $CHK =1;                             
+	        }
+
+	        if(!empty($assign_by)){            
+	                   // $to_created = date("Y-m-d",strtotime($to_created));
+	            if($CHK)
+	                $where .= 'AND';
+
+	            $where .= " tck.assigned_by =  '".$assign_by."'"; 
+	            $CHK =1;                             
+	        }
+
+	        if(!empty($source)){            
+	                   // $to_created = date("Y-m-d",strtotime($to_created));
+	            if($CHK)
+	                $where .= 'AND';
+
+	            $where .= " tck.sourse =  '".$source."'"; 
+	            $CHK =1;                             
+	        }
+
+	        if(!empty($problem)){            
+	                   // $to_created = date("Y-m-d",strtotime($to_created));
+	            if($CHK)
+	                $where .= 'AND';
+
+	            $where .= " tck.category =  '".$problem."'"; 
+	            $CHK =1;                             
+	        }
+
+	        if(!empty($priority)){            
+	                   // $to_created = date("Y-m-d",strtotime($to_created));
+	            if($CHK)
+	                $where .= 'AND';
+
+	            $where .= " tck.priority =  '".$priority."'"; 
+	            $CHK =1;                             
+	        }
+
+	         if(!empty($issue)){            
+	                   // $to_created = date("Y-m-d",strtotime($to_created));
+	            if($CHK)
+	                $where .= 'AND';
+
+	            $where .= " tck.category =  '".$issue."'"; 
+	            $CHK =1;                             
+	        }
+
+
+	        if(!empty($stage)){            
+	                   // $to_created = date("Y-m-d",strtotime($to_created));
+	            if($CHK)
+	                $where .= 'AND';
+
+	            $where .= " tck.ticket_stage =  '".$stage."'"; 
+	            $CHK =1;                             
+	        }
+
+
+	        if(!empty($sub_stage)){            
+	                   // $to_created = date("Y-m-d",strtotime($to_created));
+	            if($CHK)
+	                $where .= 'AND';
+
+	            $where .= " tck.ticket_substage =  '".$sub_stage."'"; 
+	            $CHK =1;                             
+	        }
+
+	        if(!empty($ticket_status)){            
+	                           // $to_created = date("Y-m-d",strtotime($to_created));
+	            if($CHK)
+	                $where .= 'AND';
+
+	            $where .= " tck.ticket_status =  '".$ticket_status."'"; 
+	            $CHK =1;                             
+	        }
+
+	        if($top_filter=='all'){            
+
+	        }elseif($top_filter=='created_today'){
+	             if($CHK)
+	                $where .= 'AND';
+	            $date=date('Y-m-d');
+	            $where.=" tck.coml_date LIKE '%$date%'";
+	            $CHK=1;
+	        }elseif($top_filter=='updated_today'){
+	             if($CHK)
+	                $where .= 'AND';
+	            $date=date('Y-m-d');
+	            $where.=" tck.last_update LIKE '%$date%'";      
+	            $CHK=1;  
+	      
+	        }elseif($top_filter=='closed'){  
+	         if($CHK)
+	                $where .= 'AND';          
+	            $where.="  tck.status=3";
+	            $CHK=1;
+	        }
+
+	        if($CHK){
+	            $where .= 'AND';
+	        }
+
+	        
+
+	        $where .= " ( tck.added_by IN (".implode(',', $all_reporting_ids).')';
+	        $CHK=1;
+
+	        if($CHK){
+	            $where .= ' OR ';
+	            $CHK =1;
+	        }
+	        $where .= " tck.assign_to IN (".implode(',', $all_reporting_ids).'))';
+	        $this->db->where($where);
+		}
 }
