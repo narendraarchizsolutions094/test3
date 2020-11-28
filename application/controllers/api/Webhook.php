@@ -195,18 +195,10 @@ class Webhook extends REST_Controller {
   }
     
     public function in_call_post(){
-      $FIREBASE = "https://new-crm-f6355.firebaseio.com/";
-      $FIREBASE = "https://new-crm-f6355.firebaseio.com/us.json";
-        $curl = curl_init();
-        curl_setopt( $curl, CURLOPT_URL, $FIREBASE );
-        curl_setopt( $curl, CURLOPT_CUSTOMREQUEST, "DELETE" );
-      //  curl_setopt( $curl, CURLOPT_POSTFIELDS, $json );
-        curl_setopt( $curl, CURLOPT_RETURNTRANSFER, true );
-        $response = curl_exec($curl);
-        curl_close( $curl );
         $users='';
         $call_data = $_POST['myoperator'];
         $call_data_array = json_decode($call_data);
+        $FIREBASE = "https://new-crm-f6355.firebaseio.com/";
         $uid=str_replace('.','_',$call_data_array->uid);
         $call_state=$call_data_array->call_state;
         if(!empty($call_data_array->users)){
