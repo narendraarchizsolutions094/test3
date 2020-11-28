@@ -9,18 +9,18 @@ $(document).ready(function () {
 
     tinymce.init({
     selector: '.tinymce',
-    plugins: 'print preview   importcss searchreplace autolink autosave save directionality  visualblocks visualchars fullscreen image link media  template codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists  wordcount   imagetools textpattern noneditable help   pageembed charmap tinycomments  quickbars linkchecker emoticons advtable',
+    plugins: 'print preview   importcss searchreplace autolink autosave save directionality  visualblocks visualchars fullscreen image link media  template codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists  wordcount   imagetools textpattern noneditable help    charmap   quickbars  emoticons ',
     mobile: {
-        plugins: 'print preview   importcss searchreplace autolink autosave save directionality  visualblocks visualchars fullscreen image link media  template codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists  wordcount   textpattern noneditable help  pageembed charmap  quickbars linkchecker emoticons advtable'
+        plugins: 'print preview   importcss searchreplace autolink autosave save directionality  visualblocks visualchars fullscreen image link media  template codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists  wordcount   textpattern noneditable help   charmap  quickbars  emoticons '
     },
     menu: {
         tc: {
-        title: 'TinyComments',
+        title: '',
         items: 'addcomment showcomments deleteallconversations'
         }
     },
     menubar: 'file edit view insert format tools table tc help',
-    toolbar: 'undo redo | bold italic underline strikethrough | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist  | forecolor backcolor    removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | insertfile image media pageembed template link anchor codesample | a11ycheck ltr rtl | showcomments addcomment',
+    toolbar: 'undo redo | bold italic underline strikethrough | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist  | forecolor backcolor    removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | insertfile image media  template link anchor codesample | a11ycheck ltr rtl | showcomments addcomment',
     autosave_ask_before_unload: true,
     autosave_interval: '30s',
     autosave_prefix: '{path}{query}-{id}-',
@@ -36,7 +36,7 @@ $(document).ready(function () {
     noneditable_noneditable_class: 'mceNonEditable',
     toolbar_mode: 'sliding',
     spellchecker_whitelist: ['Ephox', 'Moxiecode'],
-    tinycomments_mode: 'embedded',
+    _mode: 'embedded',
     content_style: '.mymention{ color: gray; }',
     contextmenu: 'link image imagetools table ',
     a11y_advanced_options: true,
