@@ -21,9 +21,6 @@ class Enq extends CI_Controller
 	// public function test(){
 	// 	print_r($this->session->process);
 	// }
-	public function test(){
-		echo $_SERVER["DOCUMENT_ROOT"];
-	}
 	public function index($all = '')
 	{
 		if (user_role('60') == true) {
