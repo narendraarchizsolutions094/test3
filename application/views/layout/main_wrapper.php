@@ -2442,7 +2442,7 @@ $('#something').click(function() {
       <!-- DataTables JavaScript -->
       <script src="<?php echo base_url("assets/datatables/js/dataTables.min.js?v=1.0") ?>"></script>
       <!-- <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>     -->
-      <script src="<?=base_url()?>assets/js/tinymce.min.js" referrerpolicy="origin"></script>  
+      <script src="<?=base_url()?>assets/tinymce/tinymce.min.js" referrerpolicy="origin"></script>  
       <script src="<?php echo base_url() ?>assets/js/tableHeadFixer.js?v=1.0" type="text/javascript"></script> 
       <!-- Admin Script -->
       <script src="<?php echo base_url('assets/js/frame.js?v=1.0?v=1.0') ?>" type="text/javascript"></script> 
