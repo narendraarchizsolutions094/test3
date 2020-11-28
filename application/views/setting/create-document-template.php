@@ -35,7 +35,7 @@
 
                                                            <label for="name" class="col-form-label">Content</label>
                                                            <!-- <textarea name="content" class="form-control" required></textarea> -->
-                                    <textarea name="content" class="tinymce form-control" placeholder="" id="degree" maxlength="140" rows="7"><?= $value->content; ?></textarea>
+                                    <textarea name="content" class="tinymce2 form-control" placeholder="" id="degree" maxlength="140" rows="7"><?= $value->content; ?></textarea>
 
                                                            <!-- <textarea name="content" class="form-control" id="summernote" required><?= $value->content; ?></textarea> -->
 
