@@ -58,10 +58,9 @@ public function load_view($view, $data = array(),$pdfFilePath1)
     // Output the generated PDF to Browser
     //$pdf_string =   $dompdf->output($pdfFilePath1, 'F');
     $pdf = $dompdf->output();
-    $file_location = $_SERVER['DOCUMENT_ROOT']."/new_crm/uploads/quotations/quotations-".time().".pdf";
+    $file_location = $pdfFilePath1;
     file_put_contents($file_location,$pdf); 
-
-    //$dompdf->stream("dompdf_out.pdf", array("Attachment" => false));
+    $dompdf->stream("dompdf_out.pdf", array("Attachment" => false));
 
     exit();
 
