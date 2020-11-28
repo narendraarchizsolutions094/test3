@@ -330,7 +330,7 @@ class Enquiry extends REST_Controller {
       $i=0;
       foreach ($dynamic as $key => $value)
       {
-          if(in_array($value['input_type'],array('2')))
+          if(in_array($value['input_type'],array('2','3','4','20')))
           {
               $temp  = explode(',', $value['input_values']);
               if(!empty($temp))
