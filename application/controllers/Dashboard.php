@@ -2919,7 +2919,7 @@ public function set_layout_to_session() {
     public function pdf_gen(){
         $this->load->library('pdf');
         $id=$this->input->post('idType');
-       echo $submitemail=$this->input->post('email');
+        $submitemail=$this->input->post('email');
         // $download=$this->input->post('download');
         if(isset($submitemail)){
         if($id==0){$dc_id=1;}else{ $dc_id=2; }
@@ -2982,8 +2982,9 @@ public function set_layout_to_session() {
         $data['enquiry'] = $this->db->where('enquiry_id',$enquiry_id)->get('enquiry')->result();
         $html=   $this->pdf->load_view('gen_pdf',$data,0);
         $this->pdf->createPDF($html, 'mypdf', true);
-        // redirect('enquiry/view/'.$enquiry_id.'/');
+        redirect('enquiry/view/'.$enquiry_id.'/');
         
     }
 }
+
 }

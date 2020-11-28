@@ -1434,6 +1434,12 @@ if(!empty($_FILES['file']['name'])){
             $viewfile = $this->load->view('aggrement/Bangalore-Australia-Agreement', $data, TRUE);
             pdf_create($viewfile,'Bangalore-Australia-Agreement'.$this->session->user_id);
             redirect($this->agent->referrer());
+        }elseif($pdf_name=='vtrans'){
+            $data['title'] = 'vtrans-vtrans';
+            $this->load->helpers('dompdf');
+            $viewfile = $this->load->view('aggrement/vtrans-Agreement', $data, TRUE);
+            pdf_create($viewfile,'vtrans-Agreement'.$this->session->user_id);
+            redirect($this->agent->referrer());
         }
     }
     /***********************end Generate aggriment*****************************/
