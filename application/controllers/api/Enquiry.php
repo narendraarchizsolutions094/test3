@@ -2314,4 +2314,48 @@ public function get_enq_list_post(){
       }
   }
 
+  function deleteQueryData_post()
+  {
+
+     $cmnt_id   = $this->input->post('cmnt_id');
+      $enquiry_code  = $this->input->post('enquiry_code');
+      $tabname =$this->input->post('tabname');
+    $this->form_validation->set_rules('cmnt_id','cmnt_id','trim|required',array('required'=>'You have not provided %s'));
+    $this->form_validation->set_rules('enquiry_code','enquiry_code','trim|required',array('required'=>'You have not provided %s'));
+    $this->form_validation->set_rules('tabname','tabname [base64_encode]','trim|required',array('required'=>'You have not provided %s'));
+
+      if($this->form_validation->run()==true)
+      {
+        $tabname = base64_decode($tabname);
+
+        $this->db->where(array('comment_id'=>$cmnt_id,'enq_no'=>$enquiry_code))->delete('extra_enquery');
+        
+
+          $res =$this->db->affected_rows(); 
+          if($res)
+          {
+            $this->Leads_Model->add_comment_for_events("$tabname Deleted  From This Enquiry", $enquiry_code);
+            $this->set_response([
+            'status'      => TRUE,           
+            'msg'  => 'success',
+            ], REST_Controller::HTTP_OK);   
+          }
+          else
+          {
+            $this->set_response([
+            'status'  => false,           
+            'msg'     => "Unable to delete",
+            ], REST_Controller::HTTP_OK); 
+          }
+      }
+      else
+      {
+        $msg = strip_tags(validation_errors());
+        $this->set_response([
+          'status'  => false,
+          'msg'     => $msg,//"Please provide a company id"
+        ],REST_Controller::HTTP_OK);
+      }
+  }
+
 }

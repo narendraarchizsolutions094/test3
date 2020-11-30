@@ -307,13 +307,18 @@ class Enquiry_model extends CI_Model {
 			             			foreach ($abc as $k => $v)
 			             			{
 			             				$x = explode('#', $v);
-			             				$sub[] = $x[1];
+			             				$sub[] = array(
+                                          'input_id'=>$x[0],
+                                          'value'=>$x[1],
+                                          'updated_at'=>$x[2],
+                                          'cmmnt_id'=>$x[3]
+                                        );
 			             			}
-			             			$sub[]=$x[2];
 			             		}
 			             		$data[] = $sub;
 			             	}
 			             }
+              $part['enquiry_code']=$enquiry_no;
 			        $part['table']=array('heading'=>$heading,
 			        					'data'=>$data);
         		}
