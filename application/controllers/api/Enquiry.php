@@ -464,9 +464,9 @@ class Enquiry extends REST_Controller {
             $cc = '';
             if(!empty($cc_row))
             {
-                $this->db->where('pk_i_admin_id',$cc_row['sys_value']);
-               $cc_user =  $this->db->get('tbl_admin')->row_array();
-               if(!empty($cc_user))
+              $this->db->where('pk_i_admin_id',$user_id);
+              $cc_user =  $this->db->get('tbl_admin')->row_array();
+              if(!empty($cc_user))
                     $cc = $cc_user['s_user_email'];
             }
                            
@@ -2317,24 +2317,23 @@ public function get_enq_list_post(){
   function deleteQueryData_post()
   {
 
-     $cmnt_id   = $this->input->post('cmnt_id');
+      $cmnt_id   = $this->input->post('cmnt_id');
       $enquiry_code  = $this->input->post('enquiry_code');
       $tabname =$this->input->post('tabname');
-    $this->form_validation->set_rules('cmnt_id','cmnt_id','trim|required',array('required'=>'You have not provided %s'));
-    $this->form_validation->set_rules('enquiry_code','enquiry_code','trim|required',array('required'=>'You have not provided %s'));
-    $this->form_validation->set_rules('tabname','tabname [base64_encode]','trim|required',array('required'=>'You have not provided %s'));
+
+        $this->form_validation->set_rules('cmnt_id','cmnt_id','trim|required',array('required'=>'You have not provided %s'));
+        $this->form_validation->set_rules('enquiry_code','enquiry_code','trim|required',array('required'=>'You have not provided %s'));
+        $this->form_validation->set_rules('tabname','tabname','trim|required',array('required'=>'You have not provided %s'));
 
       if($this->form_validation->run()==true)
       {
-        $tabname = base64_decode($tabname);
-
         $this->db->where(array('comment_id'=>$cmnt_id,'enq_no'=>$enquiry_code))->delete('extra_enquery');
         
 
           $res =$this->db->affected_rows(); 
           if($res)
           {
-            $this->Leads_Model->add_comment_for_events("$tabname Deleted  From This Enquiry", $enquiry_code);
+            $this->Leads_Model->add_comment_for_events($tabname." Deleted  From This Enquiry", $enquiry_code);
             $this->set_response([
             'status'      => TRUE,           
             'msg'  => 'success',
@@ -2357,5 +2356,109 @@ public function get_enq_list_post(){
         ],REST_Controller::HTTP_OK);
       }
   }
+
+
+  function updateQueryData_post()
+  {
+
+      $cmnt_id   = $this->input->post('cmnt_id');
+      $enquiry_code  = $this->input->post('enquiry_code');
+      $tabname =$this->input->post('tabname');
+
+        $this->form_validation->set_rules('cmnt_id','cmnt_id','trim|required',array('required'=>'You have not provided %s'));
+        $this->form_validation->set_rules('enquiry_code','enquiry_code','trim|required',array('required'=>'You have not provided %s'));
+        $this->form_validation->set_rules('tabname','tabname','trim|required',array('required'=>'You have not provided %s'));
+
+      if($this->form_validation->run()==true)
+      {
+        
+        $this->load->library('user_agent');
+        $cmnt_id = $this->input->post('cmnt_id');
+        $tid    =   $this->input->post('tid');
+        $form_type    =   $this->input->post('form_type');
+        $enqarr = $this->db->select('*')->where('id',$tck_id)->get('tbl_ticket')->row();
+        $en_comments = $enqarr->ticketno;
+
+        $type = $enqarr->status;
+
+        // if($type == 1){                 
+        //     $comment_id = $this->Leads_Model->add_comment_for_events($this->lang->line('enquery_updated'), $en_comments);                    
+        // }else if($type == 2){                   
+        //      $comment_id = $this->Leads_Model->add_comment_for_events($this->lang->line('lead_updated'), $en_comments);                   
+        // }else if($type == 3){
+        //      $comment_id = $this->Leads_Model->add_comment_for_events($this->lang->line('client_updated'), $en_comments);
+        // }  
+        
+
+       $comment_id = $this->Ticket_Model->saveconv($tck_id,'Details Updated','', $enqarr->client,$this->session->user_id);
+
+        if(!empty($enqarr)){        
+            if(isset($_POST['inputfieldno'])) {                    
+                $inputno   = $this->input->post("inputfieldno", true);
+                $enqinfo   = $this->input->post("enqueryfield", true);
+                $inputtype = $this->input->post("inputtype", true);                
+                $file_count = 0;                
+                $file = !empty($_FILES['enqueryfiles'])?$_FILES['enqueryfiles']:'';                
+                foreach($inputno as $ind => $val){
+  
+
+                 if ($inputtype[$ind] == 8) {                                                
+                        $file_data    =   $this->doupload($file,$file_count);
+
+                        if (!empty($file_data['imageDetailArray']['file_name'])) {
+                            $file_path = base_url().'uploads/ticket_documents/'.$this->session->companey_id.'/'.$file_data['imageDetailArray']['file_name'];
+                                                
+                                    $this->db->where('enq_no',$en_comments);    
+                                    $this->db->where('comment_id',$cmnt_id);    
+                                    $this->db->where('input',$val);        
+                                    $this->db->where('parent',$tck_id);
+                                    $this->db->set('fvalue',$file_path);
+                                    $this->db->update('ticket_dynamic_data');
+                             
+                        }
+                        $file_count++;          
+                    }
+                    else
+                    {
+                        
+                                $this->db->where('enq_no',$en_comments);        
+                                $this->db->where('input',$val);        
+                                $this->db->where('parent',$tck_id);
+                                $this->db->where('comment_id',$cmnt_id); 
+                                $this->db->set('fvalue',$enqinfo[$val]);
+                                $this->db->update('ticket_dynamic_data');
+                          
+                    }                                      
+                } //foreach loop end               
+            }            
+             
+        }
+        $res = $this->db->get_affected_rows();
+          if($res)
+          {
+            $this->set_response([
+            'status'      => TRUE,           
+            'msg'  => 'success',
+            ], REST_Controller::HTTP_OK);   
+          }
+          else
+          {
+            $this->set_response([
+            'status'  => false,           
+            'msg'     => "Unable to Update",
+            ], REST_Controller::HTTP_OK); 
+          }
+      }
+      else
+      {
+        $msg = strip_tags(validation_errors());
+        $this->set_response([
+          'status'  => false,
+          'msg'     => $msg,//"Please provide a company id"
+        ],REST_Controller::HTTP_OK);
+      }
+  }
+
+
 
 }

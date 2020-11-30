@@ -234,12 +234,30 @@ class Message extends CI_Controller {
 				$replacePhone=	$enqData->phone;
 		  }
 		  // Word to be replaced 
-			$w1 = array('@name','@phone','@username','@userphone','@designation'); 
-			//  Replaced by 
-			$w2 = array($replaceName,$replacePhone,$username,$userphone,$designation); 
+			$find = array('@name',
+                    '@phone',
+                    '@username',
+                    '@userphone',
+                    '@designation',
+                    '@ticketno',
+                    '@trackingno'
+                );
+            $replace = array(
+                $enq_row['name'],
+                $user_row['contact_phone'],
+                $user_row['s_username'],
+                $enq_row['phone'],
+                $user_row['designation'],
+                $enquiry_code,
+                $enq_row['tracking_no'],
+                );
+			// $w1 = array('@name','@phone','@username','@userphone','@designation'); 
+			// //  Replaced by 
+			// $w2 = array($replaceName,$replacePhone,$username,$userphone,$designation); 
 			// Using str_replace() function  
 			// to replace the word  
-			$message = str_replace($w1, $w2, $message); 
+			$message = str_replace($find, $replace, $message); 
+
 		}
         if($this->input->post('mesge_type')== 1){
 	      	$templates_id	=	$this->input->post('templates');
@@ -291,7 +309,30 @@ class Message extends CI_Controller {
                         ->get()
                         ->row();
             // $message = $this->input->post('message_name');
+
             $email_subject = $this->input->post('email_subject');
+
+            
+            $find = array('@name',
+		                        '@phone',
+		                        '@username',
+		                        '@userphone',
+		                        '@designation',
+		                        '@ticketno',
+		                        '@trackingno'
+                    );
+			        $replace = array(
+			            $enq_row['name'],
+			            $user_row['contact_phone'],
+			            $user_row['s_username'],
+			            $enq_row['phone'],
+			            $user_row['designation'],
+			            $enquiry_code,
+			            $enq_row['tracking_no'],
+			            );
+
+			$email_subject = str_replace($find, $replace, $email_subject);
+
 	        $to = $this->input->post('mail');
 	        $move_enquiry = $this->input->post('enquiry_id');
         	$this->db->where('comp_id',$this->session->companey_id);
@@ -301,20 +342,6 @@ class Message extends CI_Controller {
   				echo "Email is not configured";
   				exit();
         	}else{
-
-
-        		/*
-        		$config['protocol']     = $email_row['protocol'];
-		        $config['smtp_host']    = $email_row['smtp_host'];
-		        $config['smtp_port']    = $email_row['smtp_port'];
-		        $config['smtp_timeout'] = '7';
-		        $config['smtp_user']    = "prokanhaiya@gmail.com";
-		        $config['smtp_pass']    = "oallgykmylkthohu";
-		        $config['charset']      = 'utf-8';
-        		$config['mailtype']     = 'text'; // or html
-		        $config['newline']      = "\r\n";        
-		        */
-
 
 		        $config['smtp_auth']    = true;
         		$config['protocol']     = $email_row['protocol'];
@@ -330,25 +357,26 @@ class Message extends CI_Controller {
         	}
         	$this->load->library('email');
 
+			$this->db->where('comp_id',$this->session->companey_id);
+            $this->db->where('sys_para','usermail_in_cc');
+            $this->db->where('type','COMPANY_SETTING');
+            $cc_row = $ci->db->get('sys_parameters')->row_array(); 
+            $cc = '';
+            if(!empty($cc_row))
+            {
+               $this->db->where('pk_i_admin_id',$this->session->user_id);
+               $cc_user =  $this->db->get('tbl_admin')->row_array();
+               if(!empty($cc_user))
+                    $cc = $cc_user['s_user_email'];
+            }
+
             if(!empty($move_enquiry)){
 	      	    foreach($move_enquiry as $key){
 
 
 	      	        $enq = $this->enquiry_model->enquiry_by_id($key);
 
-	      	        $this->db->where('comp_id',$this->session->companey_id);
-	                $this->db->where('sys_para','usermail_in_cc');
-	                $this->db->where('type','COMPANY_SETTING');
-	                $cc_row = $ci->db->get('sys_parameters')->row_array(); 
-	                $cc = '';
-	                if(!empty($cc_row))
-	                {
-	                    $this->db->where('pk_i_admin_id',$cc_row['sys_value']);
-	                   $cc_user =  $this->db->get('tbl_admin')->row_array();
-	                   if(!empty($cc_user))
-	                        $cc = $cc_user['s_user_email'];
-	                }
-
+	      	        
 
 			        $this->email->initialize($config);
 			        $this->email->from($email_row['smtp_user']);
@@ -356,6 +384,7 @@ class Message extends CI_Controller {
 	                $this->email->to($to);
 	                if($cc!='')
 	                	$this->email->cc($cc);
+
 	                $this->email->subject($email_subject); 
 	                $this->email->message($message); 
 	                //$this->email->set_mailtype('html');
@@ -373,6 +402,8 @@ class Message extends CI_Controller {
 		        $this->email->initialize($config);
 		        $this->email->from($email_row['smtp_user']);		                
 	            $this->email->to($to);
+	            if($cc!='')
+	                $this->email->cc($cc);
 	            $this->email->subject($email_subject); 
 	            $this->email->message($message); 
 	            //$this->email->set_mailtype('html');

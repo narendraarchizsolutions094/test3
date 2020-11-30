@@ -112,7 +112,7 @@ class Rule_model extends CI_Model {
                             $cc = '';
                             if(!empty($cc_row))
                             {
-                                $this->db->where('pk_i_admin_id',$cc_row['sys_value']);
+                                $this->db->where('pk_i_admin_id',$user_id);
                                $cc_user =  $this->db->get('tbl_admin')->row_array();
                                if(!empty($cc_user))
                                     $cc = $cc_user['s_user_email'];
