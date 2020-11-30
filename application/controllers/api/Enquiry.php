@@ -251,6 +251,7 @@ class Enquiry extends REST_Controller {
             case 6:
             $basic[$key]['parameter_name'] = 'company';
             break;
+            
             case 7:
             $leadsource = $this->Leads_Model->get_leadsource_list();
             $values = array();

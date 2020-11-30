@@ -91,6 +91,20 @@ class Enquiry_model extends CI_Model {
             $basic[$key]['current_value'] = $enquiry->lastname;
             break;
 
+            case 3:
+            $values = array(
+                            array('key'=>1,
+                                  'value'=>'Male'),
+                            array('key'=>2,
+                                  'value'=>'Female'),
+                            array('key'=>3,
+                                  'value'=>'Other'),
+                          );
+           
+            $basic[$key]['input_values'] = $values;
+            $basic[$key]['parameter_name'] = 'gender';
+            break;
+
             case 4:
             $basic[$key]['parameter_name'] = 'mobileno';
             $basic[$key]['current_value'] = $enquiry->phone;
