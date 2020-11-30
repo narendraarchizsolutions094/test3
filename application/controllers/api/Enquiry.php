@@ -460,7 +460,7 @@ class Enquiry extends REST_Controller {
             $this->db->where('comp_id',$company_id);
             $this->db->where('sys_para','usermail_in_cc');
             $this->db->where('type','COMPANY_SETTING');
-            $cc_row = $ci->db->get('sys_parameters')->row_array(); 
+            $cc_row = $this->db->get('sys_parameters')->row_array(); 
             $cc = '';
             if(!empty($cc_row))
             {
