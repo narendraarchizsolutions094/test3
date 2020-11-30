@@ -64,8 +64,8 @@ class Enquiry extends REST_Controller {
 			->get();
 			
 		if ($this->form_validation->run() === true) {
-             $name = $this->input->post('enquirername');
-            $name_w_prefix = $name;
+            //  $name = $this->input->post('enquirername');
+            // $name_w_prefix = $name;
             $encode = $this->get_enquery_code();
 			$crtdby = $this->input->post('user_id');
 			$user =$this->User_model->read_by_id($crtdby);
@@ -76,7 +76,7 @@ class Enquiry extends REST_Controller {
 				'phone' => $this->input->post('mobileno', true),
 				'other_phone' => $this->input->post('other_phone', true),				
                 'name_prefix' => $this->input->post('name_prefix', true),
-                'name' => $name_w_prefix,
+                'name' => $this->input->post('enquirername'),
                 'lastname' => $this->input->post('lastname'),
                 'gender' => $this->input->post('gender'),
                 'reference_type' => $this->input->post('reference_type'),
@@ -251,6 +251,7 @@ class Enquiry extends REST_Controller {
             case 6:
             $basic[$key]['parameter_name'] = 'company';
             break;
+            
             case 7:
             $leadsource = $this->Leads_Model->get_leadsource_list();
             $values = array();
@@ -452,11 +453,26 @@ class Enquiry extends REST_Controller {
           $enq = $this->enquiry_model->enquiry_by_code($Enquery_id);
           //echo $enq->email;
           if(!empty($enq->email)){
+
+            $this->db->where('comp_id',$company_id);
+            $this->db->where('sys_para','usermail_in_cc');
+            $this->db->where('type','COMPANY_SETTING');
+            $cc_row = $ci->db->get('sys_parameters')->row_array(); 
+            $cc = '';
+            if(!empty($cc_row))
+            {
+                $this->db->where('pk_i_admin_id',$cc_row['sys_value']);
+               $cc_user =  $this->db->get('tbl_admin')->row_array();
+               if(!empty($cc_user))
+                    $cc = $cc_user['s_user_email'];
+            }
+                           
+
               $to = $enq->email;
               $name1 = $enq->name_prefix.' '.$enq->name.' '.$enq->lastname;
               $msg = str_replace('@name',$name1,str_replace('@org',$user_row['orgisation_name'],str_replace('@desg',$user_row['designation'],str_replace('@phone',$user_row['contact_phone'],str_replace('@desg',$user_row['designation'],str_replace('@user',$user_row['s_display_name'].' '.$user_row['last_name'],$message_name))))));
                      //str_replace('@web',$user_row['website'],
-              if($this->Message_models->send_email($to,$msg,$Templat_subject,$company_id)){
+              if($this->Message_models->send_email($to,$msg,$Templat_subject,$company_id,$cc)){
                $msg= 'Email sent successfully';
                $this->set_response([
                       'status' => true,

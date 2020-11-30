@@ -908,11 +908,25 @@ class Ticket extends REST_Controller {
        //print_r($user_row); exit();
           //echo $enq->email;
           if(!empty($ticket->email)){
+
+            $this->db->where('comp_id',$company_id);
+            $this->db->where('sys_para','usermail_in_cc');
+            $this->db->where('type','COMPANY_SETTING');
+            $cc_row = $ci->db->get('sys_parameters')->row_array(); 
+            $cc = '';
+            if(!empty($cc_row))
+            {
+                $this->db->where('pk_i_admin_id',$cc_row['sys_value']);
+               $cc_user =  $this->db->get('tbl_admin')->row_array();
+               if(!empty($cc_user))
+                    $cc = $cc_user['s_user_email'];
+            }
+
               $to = $ticket->email;
               $name1 = $ticket->name ;
               $msg = str_replace('@name',$name1,str_replace('@org',$user_row['orgisation_name'],str_replace('@desg',$user_row['designation'],str_replace('@phone',$user_row['contact_phone'],str_replace('@desg',$user_row['designation'],str_replace('@user',$user_row['s_display_name'].' '.$user_row['last_name'],$message_name))))));
                      
-              if($this->Message_models->send_email($to,$msg,$Templat_subject,$company_id)){
+              if($this->Message_models->send_email($to,$msg,$Templat_subject,$company_id,$cc)){
                $msg= 'Email sent successfully';
                $this->set_response([
                       'status' => true,

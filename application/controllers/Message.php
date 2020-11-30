@@ -332,11 +332,30 @@ class Message extends CI_Controller {
 
             if(!empty($move_enquiry)){
 	      	    foreach($move_enquiry as $key){
+
+
 	      	        $enq = $this->enquiry_model->enquiry_by_id($key);
+
+	      	        $this->db->where('comp_id',$this->session->companey_id);
+	                $this->db->where('sys_para','usermail_in_cc');
+	                $this->db->where('type','COMPANY_SETTING');
+	                $cc_row = $ci->db->get('sys_parameters')->row_array(); 
+	                $cc = '';
+	                if(!empty($cc_row))
+	                {
+	                    $this->db->where('pk_i_admin_id',$cc_row['sys_value']);
+	                   $cc_user =  $this->db->get('tbl_admin')->row_array();
+	                   if(!empty($cc_user))
+	                        $cc = $cc_user['s_user_email'];
+	                }
+
+
 			        $this->email->initialize($config);
 			        $this->email->from($email_row['smtp_user']);
 	                $to=$enq->email;
 	                $this->email->to($to);
+	                if($cc!='')
+	                	$this->email->cc($cc);
 	                $this->email->subject($email_subject); 
 	                $this->email->message($message); 
 	                //$this->email->set_mailtype('html');

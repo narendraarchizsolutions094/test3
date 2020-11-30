@@ -248,6 +248,7 @@ class LeadRules extends CI_Controller {
 
         $data['lead_stages'] = $this->Leads_Model->getStageJson(array(1,2,3));
         $data['ticket_stages'] = $this->Leads_Model->getStageJson(array(4));
+        
         $data['lead_description'] = $this->Leads_Model->getSubStageJson(array(1,2,3));
         $data['ticket_description'] = $this->Leads_Model->getSubStageJson(array(4));
 

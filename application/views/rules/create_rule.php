@@ -615,8 +615,8 @@ function builder_fun(rule_type)
 			}else if (rule == 9) {				
 				$("#disposition_action").show(1000);
 				<?php
-				if(empty($rule_data['rule_action']))
-				{
+				 if(empty($rule_data['rule_action']) or $rule_data['type']!='9')
+				 {
 					echo'$("select[name=stage]").load("'.base_url().'message/all_stages/4");';
 					echo'$("select[name=ticket_status]").load("'.base_url().'ticket/ticket_status");';
 				}
@@ -653,6 +653,7 @@ function builder_fun(rule_type)
 		echo'$("select[name=ticket_status]").load("'.base_url().'ticket/ticket_status/'.$res->ticket_status.'");';
 
 	}
+
 	if( !empty($rule_data['rule_action']) && $rule_data['type']==10)
 	{
 		$res = json_decode($rule_data['rule_action']);

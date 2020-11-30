@@ -207,7 +207,7 @@ class Enquiry extends CI_Controller
                                 $message = str_replace("@{email}", $enq->email, $temp_row['template_content']);
                                 $message = str_replace("@{password}", '12345678', $message);
                             }
-
+                            
                             $this->Message_models->send_email($enq->email, $subject, $message);
 
                             $this->db->where('temp_id', 124);
@@ -216,7 +216,7 @@ class Enquiry extends CI_Controller
                             if (!empty($temp_row)) {
                                 $message = str_replace("@{email}", $enq->email, $temp_row['template_content']);
                                 $message = str_replace("@{password}", '12345678', $message);
-                            }
+                            }   
                             $this->Message_models->smssend($enq->phone, $message);
                         }
                         // $msg .=    " And user created successfully";

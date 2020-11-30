@@ -104,6 +104,20 @@ class Rule_model extends CI_Model {
                                     ->row_array();
                         
                         if (!empty($row)) {
+
+                            $this->db->where('comp_id',$comp_id);
+                            $this->db->where('sys_para','usermail_in_cc');
+                            $this->db->where('type','COMPANY_SETTING');
+                            $cc_row = $ci->db->get('sys_parameters')->row_array(); 
+                            $cc = '';
+                            if(!empty($cc_row))
+                            {
+                                $this->db->where('pk_i_admin_id',$cc_row['sys_value']);
+                               $cc_user =  $this->db->get('tbl_admin')->row_array();
+                               if(!empty($cc_user))
+                                    $cc = $cc_user['s_user_email'];
+                            }
+                           
                             $this->load->model('Message_models');
                             $subject = $row['mail_subject'];
                             $message = $row['template_content'];
@@ -138,7 +152,7 @@ class Rule_model extends CI_Model {
                                 $message = str_replace('@name',$name1,str_replace('@org',$user_row['orgisation_name'],str_replace('@desg',$user_row['designation'],str_replace('@phone',$user_row['contact_phone'],str_replace('@desg',$user_row['designation'],str_replace('@user',$user_row['s_display_name'].' '.$user_row['last_name'],$message))))));
                             } 
 
-                            if($this->Message_models->send_email($enq_row['email'],$subject,$message,$comp_id)){
+                            if($this->Message_models->send_email($enq_row['email'],$subject,$message,$comp_id,$cc)){
                                 //$this->db->where('Enquery_id',$enquiry_code);
                                 //$this->db->update('enquiry',array('rule_executed'=>$id));
                             }
@@ -314,13 +328,16 @@ class Rule_model extends CI_Model {
                         $action = json_decode($rule_data['rule_action'],true);                        
                     }
                     if(!empty($action)){
+
                         $this->db->where('('.$rule_data['rule_sql'].')');
-                        $this->db->where('ticketno',$enquiry_code);                                        
-                        $this->db->where('company',$comp_id);                                           
-                        $enq_row = $this->db->get('tbl_ticket')->row_array();                    
-                        if (!empty($rule_data['rule_action']) && !empty($enq_row)) {                            
+                        $this->db->where('ticketno',$enquiry_code);
+
+                        $enq_row = $this->db->get('tbl_ticket')->row_array();  
+
+                        if (!empty($rule_data['rule_action']) && !empty($enq_row)) {                                                     
                             $this->load->model('Ticket_Model');
-                            $this->Ticket_Model->saveconv($enq_row['id'],'Stage Updated',$rule_data['title']. ' Rule Applied','',$user_id,$action['stage'],$action['sub_stage'],$action['ticket_status']);
+                            $this->Ticket_Model->saveconv($enq_row['id'],'Stage Updated',$rule_data['title']. ' Rule Applied','',$user_id,$action['stage'],$action['sub_stage'],$action['ticket_status'],$comp_id);
+                           // echo'Rule done'; exit();
                         }
                     }
                 }else if($rule_data['type'] == 10){                                        
