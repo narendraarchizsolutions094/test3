@@ -2970,8 +2970,7 @@ public function set_layout_to_session() {
             echo $this->email->print_debugger();
             echo "Something went wrong";			                	
         }
-    }else{
-        $this->load->library('pdf');
+    }else{        
         if($id==0){$dc_id=1;}else{ $dc_id=2; }
         $enquiry_id=$this->input->post('enquiry_id');
         $data['enquiry_id']=$enquiry_id;
@@ -2981,7 +2980,7 @@ public function set_layout_to_session() {
         $this->db->where('comp_id', $this->session->companey_id);
         $data['enquiry'] = $this->db->where('enquiry_id',$enquiry_id)->get('enquiry')->result();
         $html=   $this->pdf->load_view('gen_pdf',$data,0);
-        $this->pdf->createPDF($html, 'mypdf', true);
+        //$this->pdf->createPDF($html, 'mypdf', true);
         redirect('enquiry/view/'.$enquiry_id.'/');
         
     }

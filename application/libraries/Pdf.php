@@ -44,7 +44,7 @@ protected function ci()
  */
 public function load_view($view, $data = array(),$pdfFilePath1)
 {
-    $dompdf = new Dompdf();
+    $dompdf = new Dompdf(array('enable_remote' => true));
     $html = $this->ci()->load->view($view, $data, TRUE);
 
     $dompdf->loadHtml($html);
@@ -57,10 +57,14 @@ public function load_view($view, $data = array(),$pdfFilePath1)
   
     // Output the generated PDF to Browser
     //$pdf_string =   $dompdf->output($pdfFilePath1, 'F');
-    $pdf = $dompdf->output(['isRemoteEnabled' => true]);
-    $file_location = $pdfFilePath1;
-    file_put_contents($file_location,$pdf); 
-    $dompdf->output("quotation.pdf");
+    $pdf = $dompdf->output();
+    
+    if(!empty($pdfFilePath1)){
+        $file_location = $pdfFilePath1;
+        file_put_contents($file_location,$pdf); 
+    }
+    
+    $dompdf->stream("quotation.pdf");    
     //exit();
 
     // echo $pdf_string;
@@ -69,4 +73,13 @@ public function load_view($view, $data = array(),$pdfFilePath1)
 
    
 }
+public function create($html){
+    $dompdf = new Dompdf(array('enable_remote' => true));
+    $dompdf->loadHtml($html);
+    $dompdf->setPaper('A4', 'portrait');
+    $dompdf->render();    
+    $dompdf->stream("quotation.pdf", array('Attachment'=>0));
+    exit();
+}
+
 }
