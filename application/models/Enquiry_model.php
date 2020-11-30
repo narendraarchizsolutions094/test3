@@ -555,7 +555,8 @@ class Enquiry_model extends CI_Model {
 		$tckid = 0;
 		$process = 0;
 		if($form_for==2)
-		{	$ticketno = $enqno;
+		{	
+      $ticketno = $enqno;
 			$ticket = $this->db->select('id,client,process_id')
 					->where('ticketno',$enqno)
 					->get('tbl_ticket');
@@ -574,7 +575,7 @@ class Enquiry_model extends CI_Model {
 	     $this->db->where('enquiry_id',$enqno);
 	     $res_id = $this->db->get()->row_array();
 
-	     if($form_for==0 or $enqno==0)
+	     if($form_for==0 or $process==0)
 	     $process = $res_id['product_id'];
 	  
 

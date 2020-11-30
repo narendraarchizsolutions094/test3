@@ -726,6 +726,20 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                float: none;
                display: inline-block;
                font-size: 11px;
+               padding: 10px 10px;
+               color:white; 
+               cursor: pointer;
+               border:1px solid #283593;
+               font-weight: 300;
+            }
+
+            .nav-tabs > li.active
+            {
+              color:#283593;
+              background: white;
+              font-weight: 600;;
+              border: 1px #283593 dotted;
+              box-shadow: 1px 2px 5px;
             }
            
           </style> 
@@ -734,19 +748,19 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
          <div id="exTab3" class="">
             <ul  class="nav nav-tabs" role="tablist">  
             <span class="scrollTab" style="position: absolute; left: 0; font-size: 22px; line-height: 40px; z-index: 999"><i class="fa fa-caret-left" onclick="tabScroll('left')"></i></span>            
-              <li class="active"><a  href="#basic" data-toggle="tab" style="padding: 10px 10px; ">Basic</a></li>   
+              <li class="active" href="#basic" data-toggle="tab" >Basic</li>   
              <?php if($this->session->userdata('companey_id')==292) {  if($enquiry->status==3) {?>
-              <li><a href="#followup" data-toggle="tab" style="padding: 10px 10px;">AMC</a></li>
+              <li href="#followup" data-toggle="tab" >AMC</li>
 
                <?php } } if($enquiry->status==3) { 
 
                  if(in_array(300,$module) || in_array(301,$module) || in_array(302,$module) || in_array(303,$module)){ 
                 ?>
-                <li><a href="#order" data-toggle="tab" style="padding: 10px 10px;">Order Details</a></li> 
+                <li  href="#order" data-toggle="tab" >Order Details</li> 
                 <?php }
                  }?>     
                  <?php if($this->session->userdata('companey_id')==29){?>  
-                <li><a href="#amount" data-toggle="tab" style="padding: 10px 10px;">Amount</a></li> 
+                <li href="#amount" data-toggle="tab" >Amount</li> 
                 <?php }?>      
 
                 <?php 
@@ -754,7 +768,7 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                 //print_r($tab_list);die;
                 foreach ($tab_list as $key => $value) { 
                   if ($value['id'] != 1) { ?>
-                    <li><a href="#<?=str_replace(' ', '_', $value['title'])?>" data-toggle="tab" style="padding: 10px 10px;"><?=$value['title']?></a></li>
+                    <li href="#<?=str_replace(' ', '_', $value['title'])?>" data-toggle="tab"><?=$value['title']?></li>
                 <?php
                   }
                 }
@@ -762,22 +776,22 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
               ?>
 			<?php
               if (user_access('240')===true) { ?>
-               <li><a href="#institute" id="institute-tab" data-toggle="tab" style="padding: 10px 10px;">Institute</a></li>
+               <li href="#institute" id="institute-tab" data-toggle="tab" >Institute</li>
 			  <?php } ?>
 			<?php if ($this->session->companey_id=='67' || $this->session->companey_id=='83') { ?>
               <!--<li><a href="#qalification" data-toggle="tab" style="padding: 10px 10px; font-size:12px;">Qualifications</a></li>
               <li><a href="#english" data-toggle="tab" style="padding: 10px 10px; font-size:12px;">English Language</a></li>-->			  
-			  <li><a href="#payment" data-toggle="tab" style="padding: 10px 10px;">Payment</a></li>
-              <li><a href="#aggrement" data-toggle="tab" style="padding: 10px 10px;">Aggrement</a></li>
+			  <li href="#payment" data-toggle="tab" >Payment</li>
+              <li  href="#aggrement" data-toggle="tab" >Aggrement</li>
 			<?php } ?>
-			<li><a href="#task" data-toggle="tab" style="padding: 10px 10px;">Task</a></li>
-              <li><a  href="#related_enquiry" data-toggle="tab" style="padding: 10px 10px;">Related Data</a></li>
+			<li href="#task" data-toggle="tab" >Task</li>
+            <li href="#related_enquiry" data-toggle="tab">Related Data</li>
             <?php if($this->session->companey_id=='83'){ ?>
-            <li><a href="#login-tab" data-toggle="tab" style="padding: 10px 10px;">Login Trail</a></li>
+            <li href="#login-tab" data-toggle="tab" >Login Trail</li>
             <?php } ?>
             <?php if($this->session->companey_id==65){ ?>
-            <li><a href="#COMMERCIAL_INFORMATION" data-toggle="tab" style="padding: 10px 10px;">Commercial Information</a></li>
-            <li><a href="#vtransaggrement" data-toggle="tab" style="padding: 10px 10px;">Agreement</a></li>
+            <li href="#COMMERCIAL_INFORMATION" data-toggle="tab" >Commercial Information</li>
+            <li href="#vtransaggrement" data-toggle="tab" >Agreement</li>
             <?php } ?>
             
             <span class="scrollTab" style="position: absolute; right: 0; font-size: 22px; line-height: 40px; z-index: 999"><i class="fa fa-caret-right"  onclick="tabScroll('right')"></i></span>

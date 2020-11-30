@@ -144,12 +144,16 @@ class Rule_model extends CI_Model {
                                     $enq_row['tracking_no'],
                                     );
                                 $message  =str_replace($find, $replace, $message);
+
+                                $subject  = str_replace($find, $replace, $subject);
                             }
                             else
                             {
                                 $name1 = $enq_row['name_prefix'].' '.$enq_row['name'].' '.$enq_row['lastname'];
 
                                 $message = str_replace('@name',$name1,str_replace('@org',$user_row['orgisation_name'],str_replace('@desg',$user_row['designation'],str_replace('@phone',$user_row['contact_phone'],str_replace('@desg',$user_row['designation'],str_replace('@user',$user_row['s_display_name'].' '.$user_row['last_name'],$message))))));
+
+                                $subject = str_replace('@name',$name1,str_replace('@org',$user_row['orgisation_name'],str_replace('@desg',$user_row['designation'],str_replace('@phone',$user_row['contact_phone'],str_replace('@desg',$user_row['designation'],str_replace('@user',$user_row['s_display_name'].' '.$user_row['last_name'],$subject))))));
                             } 
 
                             if($this->Message_models->send_email($enq_row['email'],$subject,$message,$comp_id,$cc)){

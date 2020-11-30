@@ -448,6 +448,9 @@ class Enquiry extends REST_Controller {
     $this->db->where('temp_id',$template_id);
     $template_row = $this->db->get('api_templates')->row();
     $Templat_subject = $template_row->mail_subject;
+
+
+
     $message_name = $template_row->template_content;
       
           $enq = $this->enquiry_model->enquiry_by_code($Enquery_id);
@@ -471,7 +474,12 @@ class Enquiry extends REST_Controller {
               $to = $enq->email;
               $name1 = $enq->name_prefix.' '.$enq->name.' '.$enq->lastname;
               $msg = str_replace('@name',$name1,str_replace('@org',$user_row['orgisation_name'],str_replace('@desg',$user_row['designation'],str_replace('@phone',$user_row['contact_phone'],str_replace('@desg',$user_row['designation'],str_replace('@user',$user_row['s_display_name'].' '.$user_row['last_name'],$message_name))))));
-                     //str_replace('@web',$user_row['website'],
+                     //str_replace('@web',$user_row['website'], 
+
+              $Templat_subject = str_replace('@name',$name1,str_replace('@org',$user_row['orgisation_name'],str_replace('@desg',$user_row['designation'],str_replace('@phone',$user_row['contact_phone'],str_replace('@desg',$user_row['designation'],str_replace('@user',$user_row['s_display_name'].' '.$user_row['last_name'],$Templat_subject))))));
+
+
+
               if($this->Message_models->send_email($to,$msg,$Templat_subject,$company_id,$cc)){
                $msg= 'Email sent successfully';
                $this->set_response([

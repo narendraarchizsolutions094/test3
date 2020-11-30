@@ -925,6 +925,8 @@ class Ticket extends REST_Controller {
               $to = $ticket->email;
               $name1 = $ticket->name ;
               $msg = str_replace('@name',$name1,str_replace('@org',$user_row['orgisation_name'],str_replace('@desg',$user_row['designation'],str_replace('@phone',$user_row['contact_phone'],str_replace('@desg',$user_row['designation'],str_replace('@user',$user_row['s_display_name'].' '.$user_row['last_name'],$message_name))))));
+
+               $Templat_subject = str_replace('@name',$name1,str_replace('@org',$user_row['orgisation_name'],str_replace('@desg',$user_row['designation'],str_replace('@phone',$user_row['contact_phone'],str_replace('@desg',$user_row['designation'],str_replace('@user',$user_row['s_display_name'].' '.$user_row['last_name'],$Templat_subject))))));
                      
               if($this->Message_models->send_email($to,$msg,$Templat_subject,$company_id,$cc)){
                $msg= 'Email sent successfully';

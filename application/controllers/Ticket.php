@@ -435,10 +435,24 @@ class Ticket extends CI_Controller
 	public function view1($tckt = "")
 	{
 		if (isset($_POST["reply"])) {
+
+			$this->db->where('comp_id',$this->session->companey_id);
+            $this->db->where('sys_para','usermail_in_cc');
+            $this->db->where('type','COMPANY_SETTING');
+            $cc_row = $ci->db->get('sys_parameters')->row_array(); 
+			$cc = '';
+            if(!empty($cc_row))
+            {
+               $this->db->where('pk_i_admin_id',$cc_row['sys_value']);
+               $cc_user =  $this->db->get('tbl_admin')->row_array();
+               if(!empty($cc_user))
+                    $cc = $cc_user['s_user_email'];
+            }
+
 			$subject = $this->input->post("subjects", true);
 			$message = $this->input->post("reply", true);
 			$to = $this->input->post("email", true);
-			$this->Message_models->send_email($to, $subject, $message);
+			$this->Message_models->send_email($to,$message,$subject,$this->session->companey_id,$cc);
 			$this->Ticket_Model->saveconv();
 			redirect(base_url("ticket/view/" . $tckt), "refresh");
 		}
