@@ -283,7 +283,7 @@ class Ticket_Model extends CI_Model
 			if ($sub_stage) {
 				$this->db->set('tbl_ticket.ticket_substage', $sub_stage);
 			}
-			if ($this->input->post('ticket_status')) {
+			if ($ticket_status) {
 				$this->db->set('tbl_ticket.ticket_status', $ticket_status);
 			}
 			if ($stage || $sub_stage || $ticket_status) {
