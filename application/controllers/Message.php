@@ -223,7 +223,7 @@ class Message extends CI_Controller {
 		 $this->db->where('pk_i_admin_id',$this->session->user_id);
               $user_row  = $this->db->get('tbl_admin')->row_array();
 
-		  if($this->session->companey_id==1)
+		  if($this->session->companey_id==65)
 		  {	
 		  	
 		  	$email_subject = $this->input->post('email_subject')??'';
@@ -332,7 +332,7 @@ class Message extends CI_Controller {
         	$email_row	=	$this->db->get('email_integration')->row_array();
         	if(empty($email_row)){
   				echo "Email is not configured";
-  				//exit();
+  				exit();
         	}else{
 
 
@@ -382,7 +382,7 @@ class Message extends CI_Controller {
 	            	{
 	            		foreach($move_enquiry as $key){
 
-	            			if($this->session->companey_id==1)
+	            			if($this->session->companey_id==65)
 	            			{
 	            				$enq_row=(array)$this->Message_models->fetchenqById('enquiry',$key);
 								//print_r($enqData); exit();;
@@ -445,7 +445,7 @@ class Message extends CI_Controller {
 	      	    	}
 
         	}else{
-        	echo $to.'|'.$email_subject.'| '.$message.'|'.$cc; exit();			
+        	//echo $to.'|'.$email_subject.'| '.$message.'|'.$cc; exit();			
 		        $this->email->initialize($config);
 		        $this->email->from($email_row['smtp_user']);		                
 	            $this->email->to($to);
