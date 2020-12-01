@@ -57,7 +57,7 @@ public function load_view($view, $data = array(),$pdfFilePath1)
   
     // Output the generated PDF to Browser
     //$pdf_string =   $dompdf->output($pdfFilePath1, 'F');
-    $pdf = $dompdf->output(['isRemoteEnabled' => true]);
+    $pdf = $dompdf->output();
     $file_location = $pdfFilePath1;
     file_put_contents($file_location,$pdf); 
     $dompdf->output("quotation.pdf");
