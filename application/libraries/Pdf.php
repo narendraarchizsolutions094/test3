@@ -75,6 +75,7 @@ public function create($html){
     $dompdf->setPaper('A4', 'portrait');
     $dompdf->render();
     $dompdf->output("quotation.pdf");
+    exit();
 }
 
 }
