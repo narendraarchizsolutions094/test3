@@ -44,7 +44,7 @@ protected function ci()
  */
 public function load_view($view, $data = array(),$pdfFilePath1)
 {
-    $dompdf = new Dompdf();
+    $dompdf = new Dompdf(array('enable_remote' => true));
     $html = $this->ci()->load->view($view, $data, TRUE);
 
     $dompdf->loadHtml($html);
@@ -74,7 +74,7 @@ public function load_view($view, $data = array(),$pdfFilePath1)
    
 }
 public function create($html){
-    $dompdf = new Dompdf();
+    $dompdf = new Dompdf(array('enable_remote' => true));
     $dompdf->loadHtml($html);
     $dompdf->setPaper('A4', 'portrait');
     $dompdf->render();    
