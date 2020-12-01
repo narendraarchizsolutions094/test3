@@ -274,6 +274,14 @@ class Enquiry_model extends CI_Model {
 			              }
 			          }
 			          $heading[] = $value['input_label'];
+                 $dynamic[$key]['parameter_name'] = array(
+                                    array('key'=>'enqueryfield['.$value['input_id'].']',
+                                          'value'=>''),
+                                    array('key'=>'inputfieldno['.$i.']',
+                                          'value'=>$value['input_id']),
+                                    array('key'=>'inputtype['.$i.']',
+                                          'value'=>$value['input_type']),
+                                    );
 			      }
 
 
@@ -334,6 +342,76 @@ class Enquiry_model extends CI_Model {
 			return false;
 	}
 
+  public function update_dynamic_query($user_id=0,$comp_id=0)
+  {
+    $this->load->library('user_agent');
+   
+    $enq_id = $this->input->post('enquiry_id');
+    $cmnt_id = $this->input->post('cmnt_id');
+    $tid    =   $this->input->post('tid');
+    $form_type    =   $this->input->post('form_type');
+    $enqarr = $this->db->select('*')->where('enquiry_id',$enq_id)->get('enquiry')->row();
+    $en_comments = $enqarr->Enquery_id;
+    
+    $type = $enqarr->status;
+
+    $user_id = $this->session->user_id??$user_id;
+    $comp_id  = $this->input->post('comp_id')??$comp_id;
+        // if($type == 1){                 
+        //     $comment_id = $this->Leads_Model->add_comment_for_events($this->lang->line('enquery_updated'), $en_comments);                    
+        // }else if($type == 2){                   
+        //      $comment_id = $this->Leads_Model->add_comment_for_events($this->lang->line('lead_updated'), $en_comments);                   
+        // }else if($type == 3){
+        //      $comment_id = $this->Leads_Model->add_comment_for_events($this->lang->line('client_updated'), $en_comments);
+        // }  
+        
+
+          $this->Leads_Model->add_comment_for_events($this->lang->line("information_updated"),$en_comments,'',$user_id);
+
+        if(!empty($enqarr)){        
+            if(isset($_POST['inputfieldno'])) {                    
+                $inputno   = $this->input->post("inputfieldno", true);
+                $enqinfo   = $this->input->post("enqueryfield", true);
+                $inputtype = $this->input->post("inputtype", true);                
+                $file_count = 0;                
+                $file = !empty($_FILES['enqueryfiles'])?$_FILES['enqueryfiles']:'';                
+                foreach($inputno as $ind => $val){
+  
+
+                 if ($inputtype[$ind] == 8) {                                                
+                        $file_data    =   $this->doupload($file,$file_count,$comp_id);
+
+                        if (!empty($file_data['imageDetailArray']['file_name'])) {
+                            $file_path = base_url().'uploads/ticket_documents/'.$this->session->companey_id.'/'.$file_data['imageDetailArray']['file_name'];
+                                                
+                                    $this->db->where('enq_no',$en_comments);    
+                                    $this->db->where('comment_id',$cmnt_id);    
+                                    $this->db->where('input',$val);        
+                                    $this->db->where('parent',$enq_id);
+                                    $this->db->set('fvalue',$file_path);
+                                    $this->db->update('extra_enquery');
+                             
+                        }
+                        $file_count++;          
+                    }
+                    else
+                    {
+                        
+                                $this->db->where('enq_no',$en_comments);        
+                                $this->db->where('input',$val);        
+                                $this->db->where('parent',$enq_id);
+                                $this->db->where('comment_id',$cmnt_id); 
+                                $this->db->set('fvalue',$enqinfo[$val]);
+                                $this->db->update('extra_enquery');
+                          
+                    }                                      
+                } //foreach loop end               
+            }            
+             
+        }
+        
+        return $this->db->affected_rows();
+  }
     public function getPrimaryTab()
 	{
 		 return  $this->db->select('*')
@@ -342,6 +420,40 @@ class Enquiry_model extends CI_Model {
             ->row();
 	}
 
+  public function doupload($file,$key,$comp_id=0){        
+        $upload_path    =   "./uploads/enquiry_documents/";
+        $comp_id        =   $this->session->companey_id??$comp_id; //creare seperate folder for each company
+        $upPath         =   $upload_path.$comp_id;
+        
+        if(!file_exists($upPath)){
+            mkdir($upPath, 0777, true);
+        }        
+        $config = array(
+            'upload_path'   => $upPath,            
+            'overwrite'     => TRUE,
+            'max_size'      => "2048000",
+            'overwrite'    => false
+
+        );
+        $config['allowed_types'] = '*';
+
+
+        $this->load->library('upload');
+        $this->upload->initialize($config);
+
+        $_FILES['enqueryfiles']['name']      = $file['name'][$key];
+        $_FILES['enqueryfiles']['type']      = $file['type'][$key];
+        $_FILES['enqueryfiles']['tmp_name']  = $file['tmp_name'][$key];
+        $_FILES['enqueryfiles']['error']     = $file['error'][$key];
+        $_FILES['enqueryfiles']['size']      = $file['size'][$key];        
+        
+        if(!$this->upload->do_upload('enqueryfiles')){             
+            $data['imageError'] =  $this->upload->display_errors();
+        }else{
+            $data['imageDetailArray'] = $this->upload->data();        
+        }
+        return $data;
+    }
 
     public function comission_data($enq_code){
 	 	$this->db->select('*');

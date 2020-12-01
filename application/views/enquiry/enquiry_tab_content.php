@@ -413,7 +413,7 @@ $type="text";
                 $res = $this->db->query($sql)->result_array();    
                 //print_r($res);die;
 
-                if (!empty($res)) {
+                if (!empty($res)) { 
                   foreach ($res as $key => $value) {
                     ?>
                     <tr>
@@ -445,8 +445,20 @@ $type="text";
                       }
                       ?>
                       <td><?=!empty($arr1[2])?$arr1[2]:'NA'?></td> 
-                      <td><?=!empty($arr1[3])? "<a class='btn btn-danger' href='".base_url("enquiry/deleteDocument/$arr1[3]/$details->Enquery_id/".base64_encode($tabname)."")."' onclick='return alert(\'are you sure\')'><i class='fa fa-trash'></i></a> " :'NA'?></td>                                
                       <?php
+                     //print_r($arr1); exit();
+                        if($action['delete'] or $action['edit'])
+                        {
+
+                       ?>
+                      <td>
+                        <?=$action['edit']? "<a data-cmnt='".$arr1[3]."' data-tab-id='".$tid."' data-enq_code='".$details->Enquery_id."' data-comp-id='".$comp_id."' data-tab-name='".$tabname."' class='btn btn-primary btn-xs' onclick='edit_dynamic_query(this)'><i class='fa fa-edit'></i></a> " :''?>
+
+                        <?=$action['delete']? "<a class='btn btn-danger btn-xs' href='".base_url("enquiry/deleteDocument/$arr1[3]/$details->Enquery_id/").base64_encode($tabname)."' onclick='return alert(\'are you sure\')'><i class='fa fa-trash'></i></a> " :''?>
+                        
+                      </td>                                                 
+                      <?php
+                      }
                     } ?>                    
                     </tr>
                     <?php

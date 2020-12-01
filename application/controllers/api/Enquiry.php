@@ -86,7 +86,7 @@ class Enquiry extends REST_Controller {
                 'enquiry_subsource' => $this->input->post('product_id'),
                 'company' => $this->input->post('org_name'),
                 'address' => $this->input->post('address'),
-                'checked' => 0,                
+                'checked' => 0,
                 'product_id' => $this->input->post('process_id'),
                 'institute_id' => $this->input->post('institute_id'),
                 'datasource_id' => $this->input->post('datasource_id'),
@@ -102,7 +102,6 @@ class Enquiry extends REST_Controller {
                 //'status' => $this->input->post('status'),
             ];
             
-
             if(!empty($upd)){																	
             
             	$this->db->where('Enquery_id',$this->input->post('update'));
@@ -114,8 +113,6 @@ class Enquiry extends REST_Controller {
 
 			    $this->Leads_Model->add_comment_for_events($this->lang->line("information_updated"), $this->input->post('update'),'',$this->input->post('user_id'));
 
-
-			
             }else{
             	$postData['Enquery_id'] = $encode;
             	$postData['status'] = 1;
@@ -148,7 +145,7 @@ class Enquiry extends REST_Controller {
 			// 			$this->db->where('parent',$e_row['enquiry_id']);
 						
   	// 					if($this->db->get('extra_enquery')->num_rows()){					    
-  	// 					    $this->db->where('enq_no',$e_row['Enquery_id']);        
+  	// 					    $this->db->where('enqc_no',$e_row['Enquery_id']);        
   	// 					    $this->db->where('input',$ind);        
   	// 					    $this->db->where('parent',$e_row['enquiry_id']);
   	// 					    $this->db->set('fvalue',$val);
@@ -1154,7 +1151,7 @@ class Enquiry extends REST_Controller {
               		$user_role=$user_role1->user_roles;
              		$data['active_enquiry'] = $this->enquiry_model->active_enqueries_api($user_id,1,$user_role,$process);
     
-			   		if(!empty($data['active_enquiry']->result()))
+			   	if(!empty($data['active_enquiry']->result()))
 					{
 						$res= array();
 						foreach($data['active_enquiry']->result() as $value)
@@ -2360,26 +2357,19 @@ public function get_enq_list_post(){
 
   function updateQueryData_post()
   {
-
+    $this->load->model('Enquiry_model');
       $cmnt_id   = $this->input->post('cmnt_id');
-      $enquiry_code  = $this->input->post('enquiry_code');
-      $tabname =$this->input->post('tabname');
-
+      // $enquiry_code  = $this->input->post('enquiry_id');
+      // $tabname =$this->input->post('tabname');
+      $user_id = $this->input->post('user_id');
+      $comp_id = $this->input->post('comp_id');
         $this->form_validation->set_rules('cmnt_id','cmnt_id','trim|required',array('required'=>'You have not provided %s'));
-        $this->form_validation->set_rules('enquiry_code','enquiry_code','trim|required',array('required'=>'You have not provided %s'));
+        $this->form_validation->set_rules('enquiry_id','enquiry_id','trim|required',array('required'=>'You have not provided %s'));
         $this->form_validation->set_rules('tabname','tabname','trim|required',array('required'=>'You have not provided %s'));
+        $this->form_validation->set_rules('user_id','user_id','trim|required',array('required'=>'You have not provided %s'));
 
       if($this->form_validation->run()==true)
       {
-        
-        $this->load->library('user_agent');
-        $cmnt_id = $this->input->post('cmnt_id');
-        $tid    =   $this->input->post('tid');
-        $form_type    =   $this->input->post('form_type');
-        $enqarr = $this->db->select('*')->where('id',$tck_id)->get('tbl_ticket')->row();
-        $en_comments = $enqarr->ticketno;
-
-        $type = $enqarr->status;
 
         // if($type == 1){                 
         //     $comment_id = $this->Leads_Model->add_comment_for_events($this->lang->line('enquery_updated'), $en_comments);                    
@@ -2388,52 +2378,9 @@ public function get_enq_list_post(){
         // }else if($type == 3){
         //      $comment_id = $this->Leads_Model->add_comment_for_events($this->lang->line('client_updated'), $en_comments);
         // }  
-        
 
-       $comment_id = $this->Ticket_Model->saveconv($tck_id,'Details Updated','', $enqarr->client,$this->session->user_id);
+          $res = $this->Enquiry_model->update_dynamic_query($user_id,$comp_id);
 
-        if(!empty($enqarr)){        
-            if(isset($_POST['inputfieldno'])) {                    
-                $inputno   = $this->input->post("inputfieldno", true);
-                $enqinfo   = $this->input->post("enqueryfield", true);
-                $inputtype = $this->input->post("inputtype", true);                
-                $file_count = 0;                
-                $file = !empty($_FILES['enqueryfiles'])?$_FILES['enqueryfiles']:'';                
-                foreach($inputno as $ind => $val){
-  
-
-                 if ($inputtype[$ind] == 8) {                                                
-                        $file_data    =   $this->doupload($file,$file_count);
-
-                        if (!empty($file_data['imageDetailArray']['file_name'])) {
-                            $file_path = base_url().'uploads/ticket_documents/'.$this->session->companey_id.'/'.$file_data['imageDetailArray']['file_name'];
-                                                
-                                    $this->db->where('enq_no',$en_comments);    
-                                    $this->db->where('comment_id',$cmnt_id);    
-                                    $this->db->where('input',$val);        
-                                    $this->db->where('parent',$tck_id);
-                                    $this->db->set('fvalue',$file_path);
-                                    $this->db->update('ticket_dynamic_data');
-                             
-                        }
-                        $file_count++;          
-                    }
-                    else
-                    {
-                        
-                                $this->db->where('enq_no',$en_comments);        
-                                $this->db->where('input',$val);        
-                                $this->db->where('parent',$tck_id);
-                                $this->db->where('comment_id',$cmnt_id); 
-                                $this->db->set('fvalue',$enqinfo[$val]);
-                                $this->db->update('ticket_dynamic_data');
-                          
-                    }                                      
-                } //foreach loop end               
-            }            
-             
-        }
-        $res = $this->db->get_affected_rows();
           if($res)
           {
             $this->set_response([
