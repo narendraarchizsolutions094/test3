@@ -1133,7 +1133,7 @@ class Enquiry extends REST_Controller {
         
 		public function active_enquiry_post()
 		{
-          	$user_id= $this->input->post('user_id');
+      $user_id= $this->input->post('user_id');
 			$process_id= $this->input->post('process_id');
 			if (strpos(',',$process_id) !== false) 
  			{
@@ -1160,7 +1160,7 @@ class Enquiry extends REST_Controller {
 						foreach($data['active_enquiry']->result() as $value)
 						{
 							$customer='';
-							array_push($res,array('enquery_id'=>$value->enquiry_id,'enquery_code'=>$value->Enquery_id,'org_name'=>$value->company,'customer_name'=>$value->name_prefix.' '.$value->name.' '.$value->lastname,'email'=>$value->email,'phone'=>$value->phone,'state'=>'','source'=>'test','type'=>$customer));  
+							array_push($res,array('enquery_id'=>$value->enquiry_id,'enquery_code'=>$value->Enquery_id,'org_name'=>$value->company,'customer_name'=>$value->name_prefix.' '.$value->name.' '.$value->lastname,'email'=>$value->email,'phone'=>$value->phone,'state'=>'','source'=>'test','type'=>$customer,'process_id'=>$value->product_id));  
 						} 
 					}
                
@@ -1188,7 +1188,7 @@ class Enquiry extends REST_Controller {
 					'enquiry' =>'not found'
 					], REST_Controller::HTTP_OK);
 			}
-      	}
+    }
 	
 	
 	
