@@ -2367,6 +2367,7 @@ public function get_enq_list_post(){
         $this->form_validation->set_rules('enquiry_id','enquiry_id','trim|required',array('required'=>'You have not provided %s'));
         $this->form_validation->set_rules('tabname','tabname','trim|required',array('required'=>'You have not provided %s'));
         $this->form_validation->set_rules('user_id','user_id','trim|required',array('required'=>'You have not provided %s'));
+        $this->form_validation->set_rules('comp_id','comp_id','trim|required',array('required'=>'You have not provided %s'));
 
       if($this->form_validation->run()==true)
       {

@@ -881,6 +881,104 @@ class Ticket extends REST_Controller {
   }
 
 
+  function updateQueryData_post()
+  {
+      $cmnt_id   = $this->input->post('cmnt_id');
+      $comp_id = $this->input->post('comp_id');
+      // $enquiry_code  = $this->input->post('enquiry_id');
+      // $tabname =$this->input->post('tabname');
+      $user_id = $this->input->post('user_id');
+
+        $this->form_validation->set_rules('cmnt_id','cmnt_id','trim|required',array('required'=>'You have not provided %s'));
+        $this->form_validation->set_rules('ticketno','ticketno','trim|required',array('required'=>'You have not provided %s'));
+        $this->form_validation->set_rules('tabname','tabname','trim|required',array('required'=>'You have not provided %s'));
+        $this->form_validation->set_rules('user_id','user_id','trim|required',array('required'=>'You have not provided %s'));
+
+      if($this->form_validation->run()==true)
+      {
+
+        // if($type == 1){                 
+        //     $comment_id = $this->Leads_Model->add_comment_for_events($this->lang->line('enquery_updated'), $en_comments);                    
+        // }else if($type == 2){                   
+        //      $comment_id = $this->Leads_Model->add_comment_for_events($this->lang->line('lead_updated'), $en_comments);                   
+        // }else if($type == 3){
+        //      $comment_id = $this->Leads_Model->add_comment_for_events($this->lang->line('client_updated'), $en_comments);
+        // }  
+
+          $res = $this->Ticket_Model->update_dynamic_query($user_id,$comp_id);
+
+          if($res)
+          {
+            $this->set_response([
+            'status'      => TRUE,           
+            'msg'  => 'success',
+            ], REST_Controller::HTTP_OK);   
+          }
+          else
+          {
+            $this->set_response([
+            'status'  => false,           
+            'msg'     => "Unable to Update",
+            ], REST_Controller::HTTP_OK); 
+          }
+      }
+      else
+      {
+        $msg = strip_tags(validation_errors());
+        $this->set_response([
+          'status'  => false,
+          'msg'     => $msg,//"Please provide a company id"
+        ],REST_Controller::HTTP_OK);
+      }
+  }
+
+  function deleteQueryData_post()
+  {
+
+      $cmnt_id   = $this->input->post('cmnt_id');
+      $ticketno  = $this->input->post('ticketno');
+      $tabname =$this->input->post('tabname');
+      $user_id  =$this->input->post('user_id');
+      $comp_id  = $this->input->post('comp_id');
+
+        $this->form_validation->set_rules('cmnt_id','cmnt_id','trim|required',array('required'=>'You have not provided %s'));
+        $this->form_validation->set_rules('ticketno','ticketno','trim|required',array('required'=>'You have not provided %s'));
+        $this->form_validation->set_rules('tabname','tabname','trim|required',array('required'=>'You have not provided %s'));
+
+      if($this->form_validation->run()==true)
+      {
+        $tick = $this->db->where('ticketno',$ticketno)->get('tbl_ticket')->row();
+
+        $this->db->where(array('comment_id'=>$cmnt_id,'enq_no'=>$ticketno))->delete('ticket_dynamic_data');
+
+          $res =$this->db->affected_rows(); 
+          if($res)
+          {
+            $this->Ticket_Model->saveconv($tick->id,$tabname.' Data Deleted','',0,$user_id,0,0,0,$comp_id);
+            $this->set_response([
+            'status'      => TRUE,           
+            'msg'  => 'success',
+            ], REST_Controller::HTTP_OK);   
+          }
+          else
+          {
+            $this->set_response([
+            'status'  => false,           
+            'msg'     => "Unable to delete",
+            ], REST_Controller::HTTP_OK); 
+          }
+      }
+      else
+      {
+        $msg = strip_tags(validation_errors());
+        $this->set_response([
+          'status'  => false,
+          'msg'     => $msg,//"Please provide a company id"
+        ],REST_Controller::HTTP_OK);
+      }
+  }
+
+
   public function sendMessage_post()
   {
     $this->load->model('Message_models'); 

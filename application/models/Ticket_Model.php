@@ -257,11 +257,12 @@ class Ticket_Model extends CI_Model
 
 	public function saveconv($tckno, $subjects, $msg, $client, $user_id, $stage = 0, $sub_stage = 0, $ticket_status = 0,$comp_id=0)
 	{
+		//echo $comp_id; exit();
 		$ticket_status = $this->input->post('ticket_status') ?? $ticket_status;
 		//echo $ticket_status; exit();
 		$insarr = array(
 			"tck_id" => $tckno,
-			"comp_id" => $this->session->companey_id,
+			"comp_id" => $this->session->companey_id??$comp_id,
 			"parent" => 0,
 			"subj"   => $subjects,
 			"msg"    => $msg,
@@ -287,7 +288,7 @@ class Ticket_Model extends CI_Model
 				$this->db->set('tbl_ticket.ticket_status', $ticket_status);
 			}
 			if ($stage || $sub_stage || $ticket_status) {
-				$this->db->where('tbl_ticket.company', $comp_id??$this->session->companey_id);
+				$this->db->where('tbl_ticket.company', $this->session->companey_id??$comp_id);
 				$this->db->where('tbl_ticket.id', $tckno);
 				$this->db->update('tbl_ticket');
 			}
@@ -1071,6 +1072,110 @@ class Ticket_Model extends CI_Model
 		return $this->db->where('product',$id)->count_all_results('tbl_ticket');
 
 	}
+
+
+	public function update_dynamic_query($user_id=0,$comp_id=0)
+  	{
+    	$ticketno = $this->input->post('ticketno');
+    	$cmnt_id = $this->input->post('cmnt_id');
+		$tid    =   $this->input->post('tid');
+        $form_type    =   $this->input->post('form_type');
+        $enqarr = $this->db->select('*')->where('ticketno',$ticketno)->get('tbl_ticket')->row();
+        $en_comments = $enqarr->ticketno;
+        $tck_id = $enqarr->id;
+        $type = $enqarr->status;
+        $user_id = $this->session->user_id??$user_id;
+        $comp_id = $this->session->companey_id??$comp_id;
+
+        // if($type == 1){                 
+        //     $comment_id = $this->Leads_Model->add_comment_for_events($this->lang->line('enquery_updated'), $en_comments);                    
+        // }else if($type == 2){                   
+        //      $comment_id = $this->Leads_Model->add_comment_for_events($this->lang->line('lead_updated'), $en_comments);                   
+        // }else if($type == 3){
+        //      $comment_id = $this->Leads_Model->add_comment_for_events($this->lang->line('client_updated'), $en_comments);
+        // }	
+        
+
+       $comment_id = $this->Ticket_Model->saveconv($ticketno,'Details Updated','', $enqarr->client,$user_id,0,0,0,$comp_id);
+//echo $comment_id; exit();
+        if(!empty($enqarr)){        
+            if(isset($_POST['inputfieldno'])) {                    
+                $inputno   = $this->input->post("inputfieldno", true);
+                $enqinfo   = $this->input->post("enqueryfield", true);
+                $inputtype = $this->input->post("inputtype", true);                
+                $file_count = 0;                
+                $file = !empty($_FILES['enqueryfiles'])?$_FILES['enqueryfiles']:'';                
+                foreach($inputno as $ind => $val){
+	
+
+                 if ($inputtype[$ind] == 8) {                                                
+                        $file_data    =   $this->doupload($file,$file_count,$comp_id);
+
+                        if (!empty($file_data['imageDetailArray']['file_name'])) {
+                            $file_path = base_url().'uploads/ticket_documents/'.$this->session->companey_id.'/'.$file_data['imageDetailArray']['file_name'];
+                                                
+                                    $this->db->where('enq_no',$en_comments);    
+                                    $this->db->where('comment_id',$cmnt_id);    
+                                    $this->db->where('input',$val);        
+                                    $this->db->where('parent',$tck_id);
+                                    $this->db->set('fvalue',$file_path);
+                                    $this->db->update('ticket_dynamic_data');
+                             
+                        }
+                        $file_count++;          
+                    }
+                    else
+                    {
+                        
+                                $this->db->where('enq_no',$en_comments);        
+                                $this->db->where('input',$val);        
+                                $this->db->where('parent',$tck_id);
+                                $this->db->where('comment_id',$cmnt_id); 
+                                $this->db->set('fvalue',$enqinfo[$val]);
+                                $this->db->update('ticket_dynamic_data');
+                          
+                    }                                      
+                } //foreach loop end               
+            }            
+        	
+        return $this->db->affected_rows();
+  		}
+  }
+
+  		function doupload($file,$key,$comp_id=0){        
+        $upload_path    =   "./uploads/ticket_documents/";
+        $comp_id        =   $this->session->companey_id??$comp_id; //creare seperate folder for each company
+        $upPath         =   $upload_path.$comp_id;
+        
+        if(!file_exists($upPath)){
+            mkdir($upPath, 0777, true);
+        }        
+        $config = array(
+            'upload_path'   => $upPath,            
+            'overwrite'     => TRUE,
+            'max_size'      => "2048000",
+            'overwrite'    => false
+
+        );
+        $config['allowed_types'] = '*';
+
+
+        $this->load->library('upload');
+        $this->upload->initialize($config);
+
+        $_FILES['enqueryfiles']['name']      = $file['name'][$key];
+        $_FILES['enqueryfiles']['type']      = $file['type'][$key];
+        $_FILES['enqueryfiles']['tmp_name']  = $file['tmp_name'][$key];
+        $_FILES['enqueryfiles']['error']     = $file['error'][$key];
+        $_FILES['enqueryfiles']['size']      = $file['size'][$key];        
+        
+        if(!$this->upload->do_upload('enqueryfiles')){             
+            $data['imageError'] =  $this->upload->display_errors();
+        }else{
+            $data['imageDetailArray'] = $this->upload->data();        
+        }
+        return $data;
+    }
 
 	public function createdTodayCount()
 	{
