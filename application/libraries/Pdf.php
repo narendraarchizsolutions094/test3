@@ -73,8 +73,8 @@ public function create($html){
     $dompdf = new Dompdf();
     $dompdf->loadHtml($html);
     $dompdf->setPaper('A4', 'portrait');
-    $dompdf->render();
-    $dompdf->output("quotation.pdf");
+    $dompdf->render();    
+    $dompdf->stream("quotation.pdf", array('Attachment'=>0));
     exit();
 }
 
