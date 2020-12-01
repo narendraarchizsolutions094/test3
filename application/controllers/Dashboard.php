@@ -2979,9 +2979,10 @@ public function set_layout_to_session() {
         ->from("tbl_admin")->get() ->row();
         $this->db->where('comp_id', $this->session->companey_id);
         $data['enquiry'] = $this->db->where('enquiry_id',$enquiry_id)->get('enquiry')->result();
-        $html=   $this->pdf->load_view('gen_pdf',$data,);
-        //$this->pdf->create($html);
-        redirect('enquiry/view/'.$enquiry_id.'/');        
+        $html=   $this->pdf->load_view('gen_pdf',$data,0);
+        //$this->pdf->createPDF($html, 'mypdf', true);
+        redirect('enquiry/view/'.$enquiry_id.'/');
+        
     }
 }
 
