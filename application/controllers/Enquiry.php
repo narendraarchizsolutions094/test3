@@ -3250,6 +3250,75 @@ Array
         redirect($url, 'refresh');
     }
 
+
+
+  public function edit_query_data()
+    {
+      if($post = $this->input->post())
+      {
+        if($post['task']=='view')
+        {
+          $ci =& get_instance();
+          $tid = $post['tab_id'];
+          $comp_id = $post['comp_id'];
+          $enquiry_id = $post['enq_code'];
+          $tabname= $post['tabname'];
+          $cmnt_id = $post['cmnt_id'];
+
+          $ci->load->model('enquiry_model');
+            $ci->load->model('Ticket_Model');
+            $ci->load->model('location_model');
+            $ci->load->model('leads_model');
+          
+            $data['tid'] = $tid;
+            $data['comp_id'] = $comp_id;
+            $data['cmnt_id'] = $cmnt_id;
+            $ci->db->select('*,input_types.title as input_type_title');     
+            $ci->db->where('tbl_input.form_id',$tid);       
+            $ci->db->where('tbl_input.company_id',$comp_id);        
+            $ci->db->join('input_types','input_types.id=tbl_input.input_type');       
+            $data['form_fields']  = $ci->db->get('tbl_input')->result_array();
+           
+
+            $enq= $this->db->where('Enquery_id',$enquiry_id)->get('enquiry')->row();
+
+             $data['details']= $ci->Leads_Model->get_leadListDetailsby_id($enq->enquiry_id);
+               //print_r($data['details']); exit();
+               //1 for ticket form
+              $data['dynamic_field']=$ci->enquiry_model->get_dyn_fld_by_query($cmnt_id,$enq->enquiry_id,$tid,0);
+               //print_r($data['dynamic_field']); exit();
+               $data['products'] =array();
+               $data['product_contry']=array();
+               $data['leadsource']=array();
+
+            $ci->db->select('form_type,form_for,is_delete,is_edit');
+            $ci->db->where('id',$tid);        
+            $r    =      $ci->db->get('forms')->row_array();
+
+            $data['form_type'] = $r['form_type'];
+          
+            $data['form_for'] = $r['form_for'];
+            $data['action'] = array('delete'=>$r['is_delete'],'edit'=>$r['is_edit']);
+
+            $data['state_list']   = $ci->location_model->estate_list();
+            $data['city_list']      = $ci->location_model->ecity_list();
+            $data['all_country_list']   = $ci->location_model->country();
+            $data['name_prefix']    = $ci->enquiry_model->name_prefix_list();
+            $data['tabname'] = $tabname;       
+          
+            $ci->load->view('enquiry/edit_dynamic_query_data',$data);
+
+        }
+        else if($post['task']=='save')
+        {
+
+        }
+      }
+    }
+
+
+
+
     /****************************************************student edit profile********************************************/
 
     // public function create_from() {

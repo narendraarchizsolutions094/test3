@@ -250,13 +250,15 @@ class Enquiry_model extends CI_Model {
   //       					'table'=>$related_tickets??array(),
   //   						);
 
-
+        
         foreach ($tab_list as $res)
-        {
+        { 
+          
         	if($res['primary_tab']!='1')
         	{
         		$dynamic = $this->Enquiry_model->get_dyn_fld($enquiry_id,$res['id'],2);
         		$heading = array();
+            $i=0;
         		foreach ($dynamic as $key => $value)
 			      {
 			          if(in_array($value['input_type'],array('2','3','4','20')))
@@ -274,7 +276,7 @@ class Enquiry_model extends CI_Model {
 			              }
 			          }
 			          $heading[] = $value['input_label'];
-                 $dynamic[$key]['parameter_name'] = array(
+                $dynamic[$key]['parameter_name'] = array(
                                     array('key'=>'enqueryfield['.$value['input_id'].']',
                                           'value'=>''),
                                     array('key'=>'inputfieldno['.$i.']',
@@ -282,7 +284,8 @@ class Enquiry_model extends CI_Model {
                                     array('key'=>'inputtype['.$i.']',
                                           'value'=>$value['input_type']),
                                     );
-			      }
+              $i++;
+			       }
 
 
         		$part = array('tab_id'=>$res['id'],
@@ -412,7 +415,102 @@ class Enquiry_model extends CI_Model {
         
         return $this->db->affected_rows();
   }
-    public function getPrimaryTab()
+
+  public function update_enquiry_tab($user_id=0,$comp_id=0)
+  {    
+        $enquiry_id = $this->input->post('enquiry_id');
+
+        $tid    =   $this->input->post('tid');
+        $form_type    =   $this->input->post('form_type');
+        $enqarr = $this->db->select('*')->where('enquiry_id',$enquiry_id)->get('enquiry')->row();
+        $en_comments = $enqarr->Enquery_id;
+
+        $type = $enqarr->status;                
+        if($type == 1){                 
+            $comment_id = $this->Leads_Model->add_comment_for_events($this->lang->line('enquery_updated'), $en_comments);                    
+        }else if($type == 2){                   
+             $comment_id = $this->Leads_Model->add_comment_for_events($this->lang->line('lead_updated'), $en_comments);                   
+        }else if($type == 3){
+             $comment_id = $this->Leads_Model->add_comment_for_events($this->lang->line('client_updated'), $en_comments);
+        }
+        
+        if(!empty($enqarr)){        
+            if(isset($_POST['inputfieldno'])) {                    
+                $inputno   = $this->input->post("inputfieldno", true);
+                $enqinfo   = $this->input->post("enqueryfield", true);
+                $inputtype = $this->input->post("inputtype", true);                
+                $file_count = 0;                
+                $file = !empty($_FILES['enqueryfiles'])?$_FILES['enqueryfiles']:'';                
+                foreach($inputno as $ind => $val){
+  
+
+                 if ($inputtype[$ind] == 8) {                                                
+                        $file_data    =   $this->doupload($file,$file_count);
+
+                        if (!empty($file_data['imageDetailArray']['file_name'])) {
+                            $file_path = base_url().'uploads/enq_documents/'.$comp_id.'/'.$file_data['imageDetailArray']['file_name'];
+                            $biarr = array( 
+                                            "enq_no"  => $en_comments,
+                                            "input"   => $val,
+                                            "parent"  => $enquiry_id, 
+                                            "fvalue"  => $file_path,
+                                            "cmp_no"  => $comp_id,
+                                            "comment_id" => $comment_id
+                                        );
+
+                            $this->db->where('enq_no',$en_comments);        
+                            $this->db->where('input',$val);        
+                            $this->db->where('parent',$enquiry_id);
+                            if($this->db->get('extra_enquery')->num_rows()){
+                                if ($form_type == 1) {
+                                    $this->db->insert('extra_enquery',$biarr);                                       
+                                }else{                                    
+                                    $this->db->where('enq_no',$en_comments);        
+                                    $this->db->where('input',$val);        
+                                    $this->db->where('parent',$enquiry_id);
+                                    $this->db->set('fvalue',$file_path);
+                                    $this->db->set('comment_id',$comment_id);
+                                    $this->db->update('extra_enquery');
+                                }
+                            }else{
+                                $this->db->insert('extra_enquery',$biarr);
+                            }         
+                        }
+                        $file_count++;          
+                    }else{
+                        $biarr = array( "enq_no"  => $en_comments,
+                                      "input"   => $val,
+                                      "parent"  => $enquiry_id, 
+                                      "fvalue"  => $enqinfo[$val],
+                                      "cmp_no"  => $comp_id,
+                                      "comment_id" => $comment_id
+                                     );                                 
+                        $this->db->where('enq_no',$en_comments);        
+                        $this->db->where('input',$val);        
+                        $this->db->where('parent',$enquiry_id);
+                        if($this->db->get('extra_enquery')->num_rows()){  
+                            if ($form_type == 1) {
+                                $this->db->insert('extra_enquery',$biarr);                                       
+                            }else{                                                              
+                                $this->db->where('enq_no',$en_comments);        
+                                $this->db->where('input',$val);        
+                                $this->db->where('parent',$enquiry_id);
+                                $this->db->set('fvalue',$enqinfo[$val]);
+                                $this->db->set('comment_id',$comment_id);
+                                $this->db->update('extra_enquery');
+                            }
+                        }else{
+                            $this->db->insert('extra_enquery',$biarr);
+                        }
+                    }                                      
+                } //foreach loop end               
+            }            
+             
+        }
+  }
+
+
+  public function getPrimaryTab()
 	{
 		 return  $this->db->select('*')
             ->where(array('form_for'=>0,'primary_tab'=>1))
@@ -687,6 +785,7 @@ class Enquiry_model extends CI_Model {
 			}
 		}
 		
+    //echo $enqno; exit();
 	     $this->db->select('product_id,Enquery_id');
 	     $this->db->from('enquiry');
 	     $this->db->where('enquiry_id',$enqno);

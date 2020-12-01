@@ -4225,6 +4225,44 @@ $(".toogle-timeline").click(function(){
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment-with-locales.min.js"></script>
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/3.1.3/js/bootstrap-datetimepicker.min.js"></script>
 
+
+<script type="text/javascript">
+function edit_dynamic_query(t)
+{
+        var tab_id = $(t).data('tab-id');
+        var cmnt_id = $(t).data('cmnt');
+        var enq_code = $(t).data('enq-code');
+        var comp_id = $(t).data('comp-id');
+        var tabname = $(t).data('tab-name')
+        if(cmnt_id!='')
+        {
+          $.ajax({
+            url:'<?=base_url('enquiry/edit_query_data')?>',
+            data:{cmnt_id:cmnt_id,tab_id:tab_id,enq_code:enq_code,comp_id:comp_id,tabname:tabname,task:'view'},
+            type:'post',
+            success:function(res)
+            {
+              Swal.fire({
+                title:'Edit '+tabname,
+                html:res,
+                with:'100%',
+                showConfirmButton:false,
+                showCancelButton:true,
+                cancelButtonText:'Close',
+                cancelButtonColor:'#E5343D'
+              });
+            },
+            error:function(u,v,w)
+            {
+              alert(w);
+            }
+          });
+        }
+        
+}
+</script>
+
+
 <script type="text/javascript">
    $(function () {   
      function init_events(ele) {
