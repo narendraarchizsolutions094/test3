@@ -245,7 +245,6 @@ class Message extends CI_Controller {
 			  }
 			  else if($msg_from=='ticket')
 			  {
-
 					$enq_row=(array)$this->Message_models->fetchenqById('ticket',$ticketId);
 				
 					 $find = array('@name',
@@ -253,8 +252,8 @@ class Message extends CI_Controller {
                             '@username',
                             '@userphone',
                             '@designation',
-                            '@ticketno',
-                            '@trackingno'
+                            '@ticket_no',
+                            '@tracking_no'
                         );
 			            $replace = array(
 			                $enq_row['name'],

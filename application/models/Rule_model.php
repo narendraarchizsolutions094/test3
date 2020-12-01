@@ -131,8 +131,8 @@ class Rule_model extends CI_Model {
                                                 '@username',
                                                 '@userphone',
                                                 '@designation',
-                                                '@ticketno',
-                                                '@trackingno'
+                                                  '@ticket_no',
+                            '@tracking_no'
                                             );
                                 $replace = array(
                                     $enq_row['name'],
@@ -211,8 +211,8 @@ class Rule_model extends CI_Model {
                                                 '@username',
                                                 '@userphone',
                                                 '@designation',
-                                                '@ticketno',
-                                                '@trackingno'
+                                                 '@ticket_no',
+                                                    '@tracking_no'
                                             );
                                 $replace = array(
                                     $enq_row['name'],
@@ -285,8 +285,8 @@ class Rule_model extends CI_Model {
                                                 '@username',
                                                 '@userphone',
                                                 '@designation',
-                                                '@ticketno',
-                                                '@trackingno'
+                                                  '@ticket_no',
+                                                    '@tracking_no'
                                             );
                                 $replace = array(
                                     $enq_row['name'],
