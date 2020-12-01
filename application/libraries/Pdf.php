@@ -69,4 +69,12 @@ public function load_view($view, $data = array(),$pdfFilePath1)
 
    
 }
+public function create($html){
+    $dompdf = new Dompdf();
+    $dompdf->loadHtml($html);
+    $dompdf->setPaper('A4', 'portrait');
+    $dompdf->render();
+    $dompdf->output("quotation.pdf");
+}
+
 }
