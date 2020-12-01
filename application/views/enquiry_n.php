@@ -1234,11 +1234,12 @@ $('.checked_all1').on('change', function() {
 <script>
   function getTemplates(SMS,type){
      if(type != 'Send Email'){
-      $("#email_subject").hide();
+       $("#email_subject").hide();
       $("#email_subject").prev().hide();
-       $("#template_message").summernote('destroy');
-       $("#template_message").html('');
+      $("#template_message").summernote('code','');
+      $("#template_message").summernote('destroy');
     }else{
+      $("#msg_templates_message").html('');
       $("#template_message").summernote({
         height: 200,                 // set editor height
         minHeight: null,             // set minimum height of editor
@@ -1254,15 +1255,14 @@ $('.checked_all1').on('change', function() {
   })
   .done(function(data){
       
-      $('#modal-titlesms').html(type);
-      $('#mesge_type').val(SMS);
-      $('#templates').html(data);
+       $('#modal-titlesms').html(type);
+       $('#mesge_type').val(SMS);       
+       $('#templates').html(data);
       //$("#email_subject").val(data.mail_subject);
 
   })
   .fail(function() {
       alert( "fail!" );
-
   });
   }
 
@@ -1272,6 +1272,8 @@ function  send_sms(){
     alert('You can not send more that 1000 sms at once');
   }else{
     var sms_type = $("#mesge_type").val();
+    //var enquiry_ids = $('#enquery_assing_from').serialize();
+    //alert(enquiry_ids);
     //if ("<?=$this->session->companey_id?>" == 81 && sms_type!=1) {
       //url =  '<?php echo base_url();?>message/send_sms_career_ex';
     //}else{
@@ -1285,7 +1287,7 @@ function  send_sms(){
     .done(function(data){
         
       alert(data);
-      location.reload();
+      //location.reload();
     })
     .fail(function() {
     alert( "fail!" );
@@ -1299,8 +1301,6 @@ function  send_sms(){
         
         var tmpl_id = document.getElementById('templates').value;
         
-       
-        
         $.ajax({
             
             url : '<?php echo base_url('enquiry/msg_templates') ?>',
@@ -1309,9 +1309,26 @@ function  send_sms(){
             success:function(data){
                 
                 var obj = JSON.parse(data);
-                 $('#templates option[value='+tmpl_id+']').attr("selected", "selected");
-                $("#template_message").html(obj.template_content);
-                $("#email_subject").val(obj.mail_subject);
+
+                $('#templates option[value='+tmpl_id+']').attr("selected", "selected");
+
+                // $("#template_message").html(obj.template_content);
+                // $("#email_subject").val(obj.mail_subject);
+
+                 $("#template_message").summernote('destroy');
+                
+                  if($("#email_subject").is(':visible'))
+                  {
+                       $("#template_message").summernote("code", obj.template_content);
+                       $("#email_subject").val(obj.mail_subject);
+                  }
+                  else
+                  {
+                      $("#template_message").val(obj.template_content);
+                      //alert(obj.template_content);
+                  }
+                  //alert(obj.template_content);
+              
             }
             
         });

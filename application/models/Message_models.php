@@ -295,7 +295,7 @@ class Message_models extends CI_Model
   public function fetchenqById($type,$ID)
   {
      if($type=='enquiry'){
-				$enqData=$this->db->where(array('Enquery_id'=>$ID))->get('enquiry')->row();
+				$enqData=$this->db->where(array('enquiry_id'=>$ID))->get('enquiry')->row();
      }else{
       $enqData=$this->db->where(array('id'=>$ID))->get('tbl_ticket')->row();
      }  

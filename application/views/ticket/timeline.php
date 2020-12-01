@@ -176,17 +176,18 @@
        $.ajax({            
            type: 'POST',
            url: url,
-           data: $('#whatsaap').serialize()
-           })
-           .done(function(data){               
+           data: $('#whatsaap').serialize(),
+           success:function(data){               
               //console.log(data);
-               alert(data);
-               location.reload();
-           })
-           .fail(function() {
-           alert( "fail!" );       
-       });     
-       }
+                 alert(data);
+                 location.reload();
+              },
+              error:function(u,v,w)
+              {
+                alert(w);
+              }
+          });   
+    }
 
     function getMessage(){           
      var tmpl_id = document.getElementById('templates').value;           

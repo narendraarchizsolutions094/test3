@@ -3480,6 +3480,7 @@ if (document.getElementById('agg_same').checked)
             <input type="hidden"  id="mesge_type" name="mesge_type">
             <input type="hidden" id="mobile" name="mobile" value="<?php echo $enquiry->phone ?>">
             <input type="hidden" id="mail" name="mail" value="<?php echo $enquiry->email ?>">
+            <input type="hidden" id="" name="enquiry_id" value="<?php echo $enquiry->enquiry_id ?>">
             <button class="btn btn-primary" onclick="send_sms()" type="button">Send</button>            
          </div>
          <div class="modal-footer">
