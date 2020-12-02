@@ -15,7 +15,7 @@ $settings = $this->db->select("site_align")
 <?php $root=(isset($_SERVER["HTTPS"]) ? "https://" : "http://").$_SERVER["HTTP_HOST"];
 if($root=='https://student.spaceinternationals.com'){	 ?>	
     <link rel="icon" href="https://spaceinternationals.com/wp-content/uploads/2018/02/cropped-SPACE-INTERNATIONALS-LOGO-02-1-32x32.jpg" sizes="32x32" />
-<?php }else if($root=='http://v-trans.thecrm360.com/'){ ?>
+<?php }else if($root=='https://v-trans.thecrm360.com'){ ?>
     <link rel="icon" href="<?=base_url().'assets/images/vtrans_logo.png'?>" sizes="32x32" />
     <?
 }else if(!empty($_GET['c']) && base64_decode($_GET['c']) == 57 && (!empty($_GET['type']) && $_GET['type'] != 'admin')){ ?>
@@ -58,7 +58,7 @@ if($root=='https://student.spaceinternationals.com'){	 ?>
             <?php $root=(isset($_SERVER["HTTPS"]) ? "https://" : "http://").$_SERVER["HTTP_HOST"];
             if($root=='https://student.spaceinternationals.com'){	 ?>	
                         <img style="width: 26%;" src="<?php echo base_url('assets/images/lgo.png'); ?>" class="m-r-sm">
-            <?php }else if ($root=='http://v-trans.thecrm360.com/'){ ?>
+            <?php }else if ($root=='https://v-trans.thecrm360.com'){ ?>
                 <img style="width: 26%;" src="<?=base_url().'assets/images/vtrans_logo.png'?>" class="m-r-sm">
             <?php }else if (!empty($_GET['c']) && base64_decode($_GET['c']) == 57 && (!empty($_GET['type']) && $_GET['type'] != 'admin')){ ?>
                 <img style="width: 26%;" src="<?=base_url().'assets/images/Lalantop_logo.jpg'?>" class="m-r-sm">
@@ -77,7 +77,7 @@ if($root=='https://student.spaceinternationals.com'){	 ?>
                                 <?php
                                 if($root=='https://student.spaceinternationals.com'){    ?> 
                                 <!-- <h3><?php echo (!empty($title)?$title:null) ?></h3> -->
-                                <?php }else if ($root=='http://v-trans.thecrm360.com/') { ?>
+                                <?php }else if ($root=='https://v-trans.thecrm360.com') { ?>
                                     <h3>V-Trans</h3>
                                     <?php
                                 }else if (!empty($_GET['c']) && base64_decode($_GET['c']) == 57) { ?>
