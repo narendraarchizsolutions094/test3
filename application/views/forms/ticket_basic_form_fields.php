@@ -67,11 +67,13 @@ echo'<div class="trackingDetails"></div>';
                         if(x=='1')
                         {
                           $('input[name=tracking_no]').attr("required","required");
+                          $('select[name=relatedto]').attr("required","required");
                           $(".opt").show();
                         }
                         else if(x=='2')
                         {
                           $('input[name=tracking_no]').removeAttr("required");
+                          $('select[name=relatedto]').removeAttr("required");
                           $(".opt").hide();
                         }
                     });
