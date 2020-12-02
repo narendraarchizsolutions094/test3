@@ -258,8 +258,8 @@ echo'<div class="trackingDetails"></div>';
                    
                     <div class="col-md-6">
                         <div class="form-group">
-                          <label><?=display('ticket_problem')?></label>
-                          <select class="form-control " name = "relatedto">
+                          <label><?=display('ticket_problem')?><i class="text-danger opt">*</i></label>
+                          <select class="form-control " name = "relatedto" required>
                           <option value = "">Select Subject</option>
                         <?php  if(!empty($problem)) {
                               foreach($problem as $ind => $prblm){
