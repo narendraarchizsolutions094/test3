@@ -332,8 +332,9 @@ class Enquiry_model extends CI_Model {
 			             }
               $part['enquiry_code']=$enquiry_no;
 			        $part['table']=array('heading'=>$heading,
-			        					'data'=>$data);
-              $part['heading_ids'] = $heading_ids;
+			        					              'data'=>$data,
+                                      'heading_ids'=> $heading_ids
+                                    );
         		}
         		
         		$tabs[] = $part;
