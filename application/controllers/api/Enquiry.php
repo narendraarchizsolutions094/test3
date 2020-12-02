@@ -53,7 +53,7 @@ class Enquiry extends REST_Controller {
           {
 
           	$this->form_validation->set_rules('mobileno', 'mobileno', 'max_length[20]|callback_phone_check|required', array('is_unique' => 'Duplicate   Entery for phone'));
-            $this->form_validation->set_rules('enquirername', 'name', 'trim|required');
+            $this->form_validation->set_rules('fname', 'name', 'trim|required');
             $this->form_validation->set_rules('email', 'email', 'trim|required');
             $this->form_validation->set_rules('process_id','process_id', 'trim|required');
 
@@ -62,7 +62,6 @@ class Enquiry extends REST_Controller {
           {
             $this->form_validation->set_rules('update','update (enquiry_code)', 'trim|required');
           }	   
-
 
 	    	  $enquiry_date = $this->input->post('enquiry_date');
 	        if($enquiry_date !=''){
@@ -128,7 +127,7 @@ class Enquiry extends REST_Controller {
             {
 
               $postData['comp_id'] = $comp_id;
-              $postData['created_by'] =$userid;
+              $postData['created_by'] =$user_id;
               $postData['product_id'] =$process_id;
 
             	$postData['Enquery_id'] = $encode;
