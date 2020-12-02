@@ -141,8 +141,20 @@
     //alert(name);
     $("#ticket_disposition_form").submit();
   });
+
   <?php
 if(!empty($ticket->ticket_stage) && !empty($ticket->ticket_substage))
 echo'$("select[name=lead_description]").load("'.base_url('message/find_substage/').$ticket->ticket_stage.'/'.$ticket->ticket_substage.'");';
 ?>
 </script>
+<?php
+if($this->session->companey_id == 65){ ?>
+  <script>
+  if(<?=$ticket->complaint_type?>==2){
+    $("#lead_stage_change").val('1');
+    $("select[name='ticket_status']").val('3');
+  }  
+  </script>
+<?php
+}
+?>
