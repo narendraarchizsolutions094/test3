@@ -146,7 +146,6 @@
 if(!empty($ticket->ticket_stage) && !empty($ticket->ticket_substage))
 echo'$("select[name=lead_description]").load("'.base_url('message/find_substage/').$ticket->ticket_stage.'/'.$ticket->ticket_substage.'");';
 ?>
-find_description();
 </script>
 <?php
 if($this->session->companey_id == 65){ ?>
@@ -155,6 +154,7 @@ if($this->session->companey_id == 65){ ?>
     $("#lead_stage_change").val('1');
     $("select[name='ticket_status']").val('3');
   }
+  find_description();
   </script>
 <?php
 }
