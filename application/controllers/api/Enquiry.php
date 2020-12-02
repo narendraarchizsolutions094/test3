@@ -145,6 +145,25 @@ class Enquiry extends REST_Controller {
 			        $this->Leads_Model->add_comment_for_events($this->lang->line("enquery_create"), $encode,'',$this->input->post('user_id'));
             }
 		       
+            // if(isset($_POST['inputfieldno'])) 
+            // {
+            //   $inputno   = $this->input->post("inputfieldno", true);
+            //   $enqinfo   = $this->input->post("enqueryfield", true);
+            //   $inputtype = $this->input->post("inputtype", true);
+              
+            //   foreach($inputno as $ind => $val){
+                  
+            //       $biarr[] = array( 
+
+            //     "enq_no"  => $data["Enquery_id"],
+            //       "input"   => $val,
+            //       "parent"  => $insid, 
+            //       "fvalue"  => (!empty($enqinfo[$ind])) ? $enqinfo[$ind] : "",
+            //       "cmp_no"  => $comp_id,
+            //      );   
+            //   }
+
+            // }
            $this->load->model('rule_model');
         	 $this->rule_model->execute_rules($encode,array(1,2,3,6,7),$comp_id,$user_id);  
 
@@ -1549,7 +1568,8 @@ public function updateEnquiryTab_post()
      }
       ////////////// Transfer Enquiry to Lead API ///////////////////////
   
-      public function move_to_lead_post(){
+      public function move_to_lead_post()
+      {
         $this->form_validation->set_rules('expected_date','Expected Date');
         $this->form_validation->set_rules('conversion_probability','Conversion Probability','required');
         $this->form_validation->set_rules('comment','Comment','required');
@@ -1560,93 +1580,96 @@ public function updateEnquiryTab_post()
 
             if(!is_array($move_enquiry))
             {
-                $this->set_response([
-                'status' => true,
-                'message' => 'Enquiry Code should be array',  
-                 ], REST_Controller::HTTP_OK);
-              exit();
-            }
+              
             
-            $date 		= date('d-m-Y H:i:s');
+                $date 		= date('d-m-Y H:i:s');
+                        
+                $lead_score	= $this->input->post('conversion_probability');
+                $lead_stage = $this->input->post('lead_stage');
+                $comment 	= $this->input->post('comment');
+    //            $assign_to=$this->session->user_id;
+                
+                if(empty($lead_score)){
+                   $lead_score='';              
+                }
+                
+                 if(empty($lead_stage)){
+                   $lead_stage=''; 
+                }
+                if(empty($comment)){
+                   $comment=''; 
+                }
+                if(!empty($move_enquiry)){
+                  $assigner_user_id =  $this->input->post('user_id');
+                  $assigner_user 	= $this->User_model->read_by_id($this->input->post('user_id'));          
+                  $convertor_phone 	= '91'.$assigner_user->s_phoneno;
+                  
+                  foreach($move_enquiry as $key){
                     
-            $lead_score	= $this->input->post('conversion_probability');
-            $lead_stage = $this->input->post('lead_stage');
-            $comment 	= $this->input->post('comment');
-//            $assign_to=$this->session->user_id;
-            
-            if(empty($lead_score)){
-               $lead_score='';              
-            }
-            
-             if(empty($lead_stage)){
-               $lead_stage=''; 
-            }
-            if(empty($comment)){
-               $comment=''; 
-            }
-            if(!empty($move_enquiry)){
-              $assigner_user_id =  $this->input->post('user_id');
-              $assigner_user 	= $this->User_model->read_by_id($this->input->post('user_id'));          
-              $convertor_phone 	= '91'.$assigner_user->s_phoneno;
-              
-              foreach($move_enquiry as $key){
-                
-                $enq = $this->enquiry_model->enquiry_by_code($key);
-                
-               // if(empty($this->Leads_Model->get_leadListDetailsby_code($enq->Enquery_id))){
-              
-                  $data = array(
-                          'adminid' 		=> $enq->created_by,
-                          'ld_name' 		=> $enq->name,
-                          'ld_email' 		=> $enq->email,
-                          'ld_mobile' 		=> $enq->phone,
-                          'lead_code' 		=> $enq->Enquery_id,
-                          'city_id' 		=> $enq->city_id,
-                          'state_id' 		=> $enq->state_id,
-                          'country_id'  	=> $enq->country_id,
-                          'region_id'  		=> $enq->region_id,
-                          'territory_id'  	=> $enq->territory_id,
-                          'ld_created' 		=> $date,
-                          'ld_for' 			=> $enq->enquiry,
-                          'lead_score' 		=> $lead_score,
-                          'lead_stage' 		=> 1,
-                          'comment' 		=> $comment,
-                          'ld_status' 		=> '1'
-                );
-                
-                $this->db->set('status',2);
-                $this->db->where('Enquery_id',$key);
-                $this->db->update('enquiry');
-              	
-              	$this->Leads_Model->add_comment_for_events_stage_api("Enquiry Moved",$enq->Enquery_id,'','','',$assigner_user_id);
-              	
-              	//$this->Leads_Model->('Enquiry Moved ',$enq->Enquery_id,'','','',$assigner_user_id);             
-                 /*
+                    $enq = $this->enquiry_model->enquiry_by_code($key);
+                    
+                   // if(empty($this->Leads_Model->get_leadListDetailsby_code($enq->Enquery_id))){
+                  
+                      $data = array(
+                              'adminid' 		=> $enq->created_by,
+                              'ld_name' 		=> $enq->name,
+                              'ld_email' 		=> $enq->email,
+                              'ld_mobile' 		=> $enq->phone,
+                              'lead_code' 		=> $enq->Enquery_id,
+                              'city_id' 		=> $enq->city_id,
+                              'state_id' 		=> $enq->state_id,
+                              'country_id'  	=> $enq->country_id,
+                              'region_id'  		=> $enq->region_id,
+                              'territory_id'  	=> $enq->territory_id,
+                              'ld_created' 		=> $date,
+                              'ld_for' 			=> $enq->enquiry,
+                              'lead_score' 		=> $lead_score,
+                              'lead_stage' 		=> 1,
+                              'comment' 		=> $comment,
+                              'ld_status' 		=> '1'
+                    );
+                    
+                    $this->db->set('status',2);
+                    $this->db->where('Enquery_id',$key);
+                    $this->db->update('enquiry');
+                  	
+                  	$this->Leads_Model->add_comment_for_events_stage_api("Enquiry Moved",$enq->Enquery_id,'','','',$assigner_user_id);
+                  	
+                  	//$this->Leads_Model->('Enquiry Moved ',$enq->Enquery_id,'','','',$assigner_user_id);             
+                     /*
 
-              $created_by_user_id =   $enq->created_by;
-              
-              
-              $phone_no =$this->User_model->read_by_id($created_by_user_id)->s_phoneno;
-              
-              $creator_phone = '91'.$phone_no;          
-              
-              $enq_of_name = $enq->name_prefix.''.$enq->name.' '.$enq->lastname;
-              $notification_msg = sprintf($this->lang->line('enquiry_converted_to_lead'),trim($enq_of_name));
-        
-              $this->Message_models->sendwhatsapp($convertor_phone,$notification_msg);
-              
-              $this->Message_models->sendwhatsapp($creator_phone,$notification_msg);              
-              
-              $insert_id = $this->Leads_Model->LeadAdd($data);
-                
-             // }*/
-              }
+                  $created_by_user_id =   $enq->created_by;
+                  
+                  
+                  $phone_no =$this->User_model->read_by_id($created_by_user_id)->s_phoneno;
+                  
+                  $creator_phone = '91'.$phone_no;          
+                  
+                  $enq_of_name = $enq->name_prefix.''.$enq->name.' '.$enq->lastname;
+                  $notification_msg = sprintf($this->lang->line('enquiry_converted_to_lead'),trim($enq_of_name));
+            
+                  $this->Message_models->sendwhatsapp($convertor_phone,$notification_msg);
+                  
+                  $this->Message_models->sendwhatsapp($creator_phone,$notification_msg);              
+                  
+                  $insert_id = $this->Leads_Model->LeadAdd($data);
+                    
+                 // }*/
+                  }
                $this->set_response([
               'status' => true,
               'message' => array(array('error'=>'Enquiry moved successfully to lead'))  
                ], REST_Controller::HTTP_OK);
-          }
-          else{
+            }
+            else
+            {
+               $this->set_response([
+                'status' => true,
+                'message' => 'Enquiry Code should be array',  
+                 ], REST_Controller::HTTP_OK);
+            }
+        }    
+        else{
             $this->set_response([
               'status' => false,
               'message' => array(array('error'=>'No enquiry found to move.'))  
