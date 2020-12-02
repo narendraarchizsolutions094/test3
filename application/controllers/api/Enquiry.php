@@ -328,13 +328,13 @@ class Enquiry extends REST_Controller {
               }
           }
           $dynamic[$key]['parameter_name'] = array(
-                                              array('key'=>($value['input_type']=='8'?'enqueryfiles['.$i.']':'enqueryfield['.$i.']'),
-                                                    'value'=>''),
-                                              array('key'=>'inputfieldno['.$i.']',
-                                                    'value'=>$value['input_id']),
-                                              array('key'=>'inputtype['.$i.']',
-                                                    'value'=>$value['input_type']),
-                                              );
+                              array('key'=>($value['input_type']=='8'?'enqueryfiles['.$value['input_id'].']':'enqueryfield['.$value['input_id'].']'),
+                                    'value'=>''),
+                              array('key'=>'inputfieldno['.$i.']',
+                                    'value'=>$value['input_id']),
+                              array('key'=>'inputtype['.$i.']',
+                                    'value'=>$value['input_type']),
+                              );
           $i++;
       }
 
