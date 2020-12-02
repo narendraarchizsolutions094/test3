@@ -278,14 +278,15 @@ class Enquiry_model extends CI_Model {
 			          }
 			          $heading[] = $value['input_label'];
                 $heading_ids[]  = $value['input_id'];
-                $dynamic[$key]['parameter_name'] = array(
-                                    array('key'=>'enqueryfield['.$value['input_id'].']',
-                                          'value'=>''),
-                                    array('key'=>'inputfieldno['.$i.']',
-                                          'value'=>$value['input_id']),
-                                    array('key'=>'inputtype['.$i.']',
-                                          'value'=>$value['input_type']),
-                                    );
+                $dynamic[$key]['parameter_name'] = $value['input_id'];
+                // $dynamic[$key]['parameter_name'] = array(
+                //                     array('key'=>'enqueryfield['.$value['input_id'].']',
+                //                           'value'=>''),
+                //                     array('key'=>'inputfieldno['.$i.']',
+                //                           'value'=>$value['input_id']),
+                //                     array('key'=>'inputtype['.$i.']',
+                //                           'value'=>$value['input_type']),
+                //                     );
               $i++;
 			       }
 
