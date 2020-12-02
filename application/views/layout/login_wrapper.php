@@ -17,7 +17,7 @@ if($root=='https://student.spaceinternationals.com'){	 ?>
     <link rel="icon" href="https://spaceinternationals.com/wp-content/uploads/2018/02/cropped-SPACE-INTERNATIONALS-LOGO-02-1-32x32.jpg" sizes="32x32" />
 <?php }else if($root=='https://v-trans.thecrm360.com'){ ?>
     <link rel="icon" href="<?=base_url().'assets/images/vtrans_logo.png'?>" sizes="32x32" />
-    <?
+    <?php
 }else if(!empty($_GET['c']) && base64_decode($_GET['c']) == 57 && (!empty($_GET['type']) && $_GET['type'] != 'admin') && $root=='https://lalantop.thecrm360.com'){ ?>
     <link rel="icon" href="<?=base_url().'assets/images/Lalantop_logo.jpg'?>" sizes="32x32" />
     <title><?= display('login') ?> - <?php echo 'Lalantop' ?></title>
