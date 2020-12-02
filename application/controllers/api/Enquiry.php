@@ -380,14 +380,13 @@ class Enquiry extends REST_Controller {
 
     if($this->form_validation->run() == true)
     {
-
       $data  = $this->Enquiry_model->enquiry_all_tab_api($company_id,$enquiry_id);
 
-      if($data)
+      if(!empty($data))
       {
         $this->set_response([
         'status'      => TRUE,           
-        'data'  => 'Enquiry Tab Updated',
+        'data'  => $data,
         ], REST_Controller::HTTP_OK);   
       }
       else
@@ -427,11 +426,11 @@ public function updateEnquiryTab_post()
     if($this->form_validation->run() == true)
     {
       $data  = $this->Enquiry_model->update_enquiry_tab($user_id,$comp_id);
-      if(!empty($data))
+      if($data)
       {
         $this->set_response([
         'status'      => TRUE,           
-        'data'  => $data,
+        'data'  => 'Enquiry Updated',
         ], REST_Controller::HTTP_OK);   
       }
       else
