@@ -749,10 +749,11 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
             <ul  class="nav nav-tabs" role="tablist">  
             <span class="scrollTab" style="position: absolute; left: 0; font-size: 22px; line-height: 40px; z-index: 999"><i class="fa fa-caret-left" onclick="tabScroll('left')"></i></span>            
               <li class="active" href="#basic" data-toggle="tab" >Basic</li>   
-             <?php if($this->session->userdata('companey_id')==292) {  if($enquiry->status==3) {?>
-              <li href="#followup" data-toggle="tab" >AMC</li>
+             <?php if($this->session->userdata('companey_id')==292) { 
+                        if($enquiry->status==3) {?>
+                            <li href="#followup" data-toggle="tab" >AMC</li>
 
-               <?php } } if($enquiry->status==3) { 
+                  <?php } } if($enquiry->status==3) { 
 
                  if(in_array(300,$module) || in_array(301,$module) || in_array(302,$module) || in_array(303,$module)){ 
                 ?>
@@ -762,6 +763,7 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                  <?php if($this->session->userdata('companey_id')==29){?>  
                 <li href="#amount" data-toggle="tab" >Amount</li> 
                 <?php }?>      
+        
 
                 <?php 
               if(!empty($tab_list)){
@@ -781,10 +783,11 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
 			<?php if ($this->session->companey_id=='67' || $this->session->companey_id=='83') { ?>
               <!--<li><a href="#qalification" data-toggle="tab" style="padding: 10px 10px; font-size:12px;">Qualifications</a></li>
               <li><a href="#english" data-toggle="tab" style="padding: 10px 10px; font-size:12px;">English Language</a></li>-->			  
-			  <li href="#payment" data-toggle="tab" >Payment</li>
+			         <li href="#payment" data-toggle="tab" >Payment</li>
               <li  href="#aggrement" data-toggle="tab" >Aggrement</li>
 			<?php } ?>
 			<li href="#task" data-toggle="tab" >Task</li>
+            <li href="#company_contacts" data-toggle="tab">Contacts</li>
             <li href="#related_enquiry" data-toggle="tab">Related Data</li>
             <?php if($this->session->companey_id=='83'){ ?>
             <li href="#login-tab" data-toggle="tab" >Login Trail</li>
@@ -2602,8 +2605,10 @@ if (document.getElementById('agg_same').checked)
                </div>
 
               <div class="tab-pane" id="related_enquiry">                  
-               </div>
-
+              </div>
+              <div class="tab-pane" id="company_contacts">  
+                    <h2>Contacts</h2>
+              </div>
 
                <?php
                if(!empty($tab_list)){
