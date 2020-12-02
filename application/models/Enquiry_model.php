@@ -8,7 +8,7 @@ class Enquiry_model extends CI_Model {
 
     public function create($data = [],$comp_id =0) {
 		
-        $this->db->insert($this->table, $data);
+    $this->db->insert($this->table, $data);
 	
 		$insid = $this->db->insert_id();
 	
@@ -359,15 +359,7 @@ class Enquiry_model extends CI_Model {
     $type = $enqarr->status;
 
     $user_id = $this->session->user_id??$user_id;
-    $comp_id  = $this->input->post('comp_id')??$comp_id;
-        // if($type == 1){                 
-        //     $comment_id = $this->Leads_Model->add_comment_for_events($this->lang->line('enquery_updated'), $en_comments);                    
-        // }else if($type == 2){                   
-        //      $comment_id = $this->Leads_Model->add_comment_for_events($this->lang->line('lead_updated'), $en_comments);                   
-        // }else if($type == 3){
-        //      $comment_id = $this->Leads_Model->add_comment_for_events($this->lang->line('client_updated'), $en_comments);
-        // }  
-        
+    $comp_id  = $this->input->post('comp_id')??$comp_id;   
 
           $this->Leads_Model->add_comment_for_events($this->lang->line("information_updated"),$en_comments,'',$user_id);
 
@@ -418,10 +410,14 @@ class Enquiry_model extends CI_Model {
 
   public function update_enquiry_tab($user_id=0,$comp_id=0)
   {    
+        
         $enquiry_id = $this->input->post('enquiry_id');
+        $tab_id = $this->input->post('tab_id');
 
-        $tid    =   $this->input->post('tid');
-        $form_type    =   $this->input->post('form_type');
+        $tab_data = $this->db->where('id',$tab_id)->get('forms')->row();
+
+        $form_type    =   $tab_data->form_type;
+
         $enqarr = $this->db->select('*')->where('enquiry_id',$enquiry_id)->get('enquiry')->row();
         $en_comments = $enqarr->Enquery_id;
 
@@ -445,7 +441,7 @@ class Enquiry_model extends CI_Model {
   
 
                  if ($inputtype[$ind] == 8) {                                                
-                        $file_data    =   $this->doupload($file,$file_count);
+                        $file_data    =   $this->doupload($file,$file_count,$comp_id);
 
                         if (!empty($file_data['imageDetailArray']['file_name'])) {
                             $file_path = base_url().'uploads/enq_documents/'.$comp_id.'/'.$file_data['imageDetailArray']['file_name'];
@@ -507,8 +503,8 @@ class Enquiry_model extends CI_Model {
             }            
              
         }
+        return $this->db->affected_rows();
   }
-
 
   public function getPrimaryTab()
 	{

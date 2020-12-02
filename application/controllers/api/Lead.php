@@ -605,6 +605,16 @@ class Lead extends REST_Controller {
         if($this->form_validation->run() == true){
             $move_enquiry=$this->input->post('enquiry_code[]');
            
+
+            if(!is_array($move_enquiry))
+            {
+                $this->set_response([
+                'status' => true,
+                'message' => 'Enquiry Code should be array',  
+                 ], REST_Controller::HTTP_OK);
+              exit();
+            }
+           
             if(empty($comment)){
                $comment=''; 
             }

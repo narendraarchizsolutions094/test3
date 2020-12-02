@@ -587,15 +587,7 @@ class Ticket extends CI_Controller
 
         $type = $enqarr->status;
 
-        // if($type == 1){                 
-        //     $comment_id = $this->Leads_Model->add_comment_for_events($this->lang->line('enquery_updated'), $en_comments);                    
-        // }else if($type == 2){                   
-        //      $comment_id = $this->Leads_Model->add_comment_for_events($this->lang->line('lead_updated'), $en_comments);                   
-        // }else if($type == 3){
-        //      $comment_id = $this->Leads_Model->add_comment_for_events($this->lang->line('client_updated'), $en_comments);
-        // }	
-        
-
+      
        $comment_id = $this->Ticket_Model->saveconv($tck_id,'Ticket Updated','', $enqarr->client,$this->session->user_id);
        //echo $comment_id; exit();
         if(!empty($enqarr)){        
