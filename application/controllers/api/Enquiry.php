@@ -53,8 +53,8 @@ class Enquiry extends REST_Controller {
           {
 
           	$this->form_validation->set_rules('mobileno', 'mobileno', 'max_length[20]|callback_phone_check|required', array('is_unique' => 'Duplicate   Entery for phone'));
-            $this->form_validation->set_rules('fname', 'name', 'trim|required');
-            $this->form_validation->set_rules('email', 'email', 'trim|required');
+            
+           $this->form_validation->set_rules('company_id','company_id', 'trim|required');
             $this->form_validation->set_rules('process_id','process_id', 'trim|required');
 
           }
@@ -87,7 +87,7 @@ class Enquiry extends REST_Controller {
         				'phone' => $this->input->post('mobileno', true),
         				'other_phone' => $this->input->post('other_phone', true),				
                 'name_prefix' => $this->input->post('name_prefix', true),
-                'name' => $this->input->post('enquirername'),
+                'name' => $this->input->post('fname'),
                 'lastname' => $this->input->post('lastname'),
                 'gender' => $this->input->post('gender'),
                 'reference_type' => $this->input->post('reference_type'),
