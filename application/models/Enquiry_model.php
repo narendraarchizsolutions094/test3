@@ -258,12 +258,12 @@ class Enquiry_model extends CI_Model {
         	{
         		$dynamic = $this->Enquiry_model->get_dyn_fld($enquiry_id,$res['id'],2);
         		$heading = array();
+            $heading_ids=array();
             $i=0;
         		foreach ($dynamic as $key => $value)
 			      {
 			          if(in_array($value['input_type'],array('2','3','4','20')))
 			          {
-			             
 			              $temp  = explode(',', $value['input_values']);
 			              if(!empty($temp))
 			              {   $reshape = array();
@@ -276,6 +276,7 @@ class Enquiry_model extends CI_Model {
 			              }
 			          }
 			          $heading[] = $value['input_label'];
+                $heading_ids[]  = $value['input_id'];
                 $dynamic[$key]['parameter_name'] = array(
                                     array('key'=>'enqueryfield['.$value['input_id'].']',
                                           'value'=>''),
@@ -299,8 +300,8 @@ class Enquiry_model extends CI_Model {
         		if($res['form_type']==1)
         		{
         			$tid = $res['id'];
-					$comp_id = $companey_id;
-					$enquiry_no = $enquiry->Enquery_id;
+    					$comp_id = $companey_id;
+    					$enquiry_no = $enquiry->Enquery_id;
 
 					$sql  = "SELECT GROUP_CONCAT(concat(`extra_enquery`.`input`,'#',`extra_enquery`.`fvalue`,'#',`extra_enquery`.`created_date`,'#',`extra_enquery`.`comment_id`) separator ',') as d FROM `extra_enquery` INNER JOIN (select * from tbl_input where form_id=$tid) as tbl_input ON `tbl_input`.`input_id`=`extra_enquery`.`input` where `extra_enquery`.`cmp_no`=$comp_id and `extra_enquery`.`enq_no`='$enquiry_no' GROUP BY `extra_enquery`.`comment_id` ORDER BY `extra_enquery`.`comment_id` DESC";
 
@@ -332,6 +333,7 @@ class Enquiry_model extends CI_Model {
               $part['enquiry_code']=$enquiry_no;
 			        $part['table']=array('heading'=>$heading,
 			        					'data'=>$data);
+              $part['heading_ids'] = $heading_ids;
         		}
         		
         		$tabs[] = $part;
