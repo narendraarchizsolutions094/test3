@@ -67,11 +67,13 @@ echo'<div class="trackingDetails"></div>';
                         if(x=='1')
                         {
                           $('input[name=tracking_no]').attr("required","required");
+                          $('select[name=relatedto]').attr("required","required");
                           $(".opt").show();
                         }
                         else if(x=='2')
                         {
                           $('input[name=tracking_no]').removeAttr("required");
+                          $('select[name=relatedto]').removeAttr("required");
                           $(".opt").hide();
                         }
                     });
@@ -256,8 +258,8 @@ echo'<div class="trackingDetails"></div>';
                    
                     <div class="col-md-6">
                         <div class="form-group">
-                          <label><?=display('ticket_problem')?></label>
-                          <select class="form-control " name = "relatedto">
+                          <label><?=display('ticket_problem')?><i class="text-danger opt">*</i></label>
+                          <select class="form-control " name = "relatedto" required>
                           <option value = "">Select Subject</option>
                         <?php  if(!empty($problem)) {
                               foreach($problem as $ind => $prblm){
