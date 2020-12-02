@@ -153,8 +153,7 @@ if($this->session->companey_id == 65){ ?>
   if(<?=$ticket->complaint_type?>==2){
     $("#lead_stage_change").val('1');
     $("select[name='ticket_status']").val('3');
-  }
-  find_description();
+  }  
   </script>
 <?php
 }
