@@ -115,6 +115,7 @@ class Enquiry extends REST_Controller {
             {																
             	$this->db->where('Enquery_id',$this->input->post('update'));
             	$insert_id = $this->db->update('enquiry',$postData);
+
             	$this->db->select('enquiry.Enquery_id,enquiry.enquiry_id');
     			    $this->db->where('Enquery_id',$this->input->post('update'));
     			    $e_row	=	$this->db->get('enquiry')->row_array();
@@ -145,7 +146,7 @@ class Enquiry extends REST_Controller {
 			        $this->Leads_Model->add_comment_for_events($this->lang->line("enquery_create"), $encode,'',$this->input->post('user_id'));
             }
 
-            if ($insert_id)
+            if($insert_id)
             {
                 foreach($this->input->post() as $ind => $val){         
                     if(is_int($ind))
@@ -174,8 +175,8 @@ class Enquiry extends REST_Controller {
                               $this->db->insert('extra_enquery',$biarr);
                           }
                     }
-            }
-
+                  }
+              }
             // if(isset($_POST['inputfieldno'])) 
             // {
             //   $inputno   = $this->input->post("inputfieldno", true);
