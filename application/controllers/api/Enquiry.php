@@ -196,8 +196,8 @@ class Enquiry extends REST_Controller {
             //   }
 
             // }
-           $this->load->model('rule_model');
-        	 $this->rule_model->execute_rules($encode,array(1,2,3,6,7),$comp_id,$user_id);  
+          $this->load->model('rule_model');
+        	$this->rule_model->execute_rules($encode,array(1,2,3,6,7),$comp_id,$user_id);  
 
 				  $this->set_response([
                 'status' => TRUE,
@@ -253,7 +253,7 @@ class Enquiry extends REST_Controller {
             $basic[$key]['extra_field'][] =array('input_values'=>$prefix,
             									'parameter_name'=>'name_prefix');
 
-            $basic[$key]['parameter_name'] = 'enquirername';
+            $basic[$key]['parameter_name'] = 'fname';
             break;
 
             case 2:
@@ -377,14 +377,15 @@ class Enquiry extends REST_Controller {
                   $dynamic[$key]['input_values'] = $reshape;
               }
           }
-          $dynamic[$key]['parameter_name'] = array(
-                              array('key'=>($value['input_type']=='8'?'enqueryfiles['.$value['input_id'].']':'enqueryfield['.$value['input_id'].']'),
-                                    'value'=>''),
-                              array('key'=>'inputfieldno['.$i.']',
-                                    'value'=>$value['input_id']),
-                              array('key'=>'inputtype['.$i.']',
-                                    'value'=>$value['input_type']),
-                              );
+          $dynamic[$key]['parameter_name'] = $value['input_id'];
+          // $dynamic[$key]['parameter_name'] = array(
+          //                     array('key'=>($value['input_type']=='8'?'enqueryfiles['.$value['input_id'].']':'enqueryfield['.$value['input_id'].']'),
+          //                           'value'=>''),
+          //                     array('key'=>'inputfieldno['.$i.']',
+          //                           'value'=>$value['input_id']),
+          //                     array('key'=>'inputtype['.$i.']',
+          //                           'value'=>$value['input_type']),
+          //                     );
           $i++;
       }
 

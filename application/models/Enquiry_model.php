@@ -82,7 +82,7 @@ class Enquiry_model extends CI_Model {
             									'parameter_name'=>'name_prefix',
             									'current_value'=>$enquiry->name_prefix);
 
-            $basic[$key]['parameter_name'] = 'enquirername';
+            $basic[$key]['parameter_name'] = 'fname';
             $basic[$key]['current_value'] = $enquiry->name;
             break;
 
@@ -217,14 +217,15 @@ class Enquiry_model extends CI_Model {
                   $dynamic[$key]['input_values'] = $reshape;
               }
           }
-         $dynamic[$key]['parameter_name'] = array(
-                                              array('key'=>'enqueryfield['.$value['input_id'].']',
-                                                    'value'=>''),
-                                              array('key'=>'inputfieldno['.$i.']',
-                                                    'value'=>$value['input_id']),
-                                              array('key'=>'inputtype['.$i.']',
-                                                    'value'=>$value['input_type']),
-                                              );
+          $dynamic[$key]['parameter_name'] = $value['input_id'];
+         // $dynamic[$key]['parameter_name'] = array(
+         //                                      array('key'=>'enqueryfield['.$value['input_id'].']',
+         //                                            'value'=>''),
+         //                                      array('key'=>'inputfieldno['.$i.']',
+         //                                            'value'=>$value['input_id']),
+         //                                      array('key'=>'inputtype['.$i.']',
+         //                                            'value'=>$value['input_type']),
+         //                                      );
           $i++;
       }
 
