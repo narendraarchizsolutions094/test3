@@ -272,15 +272,18 @@ class Client extends CI_Controller {
         }
     }
 
-    public function create_newcontact() {
-        $clientid = $this->uri->segment(3);
+    public function create_newcontact() 
+    {
+        $this->load->model('Client_Model');
+        $clientid = $this->input->post('enquiry_id');
         if (!empty($_POST)) {
             $name = $this->input->post('name');
             $mobile = $this->input->post('mobileno');
             $email = $this->input->post('email');
             $otherdetails = $this->input->post('otherdetails');
             $data = array(
-                'client_id' => $this->uri->segment(3),
+                'comp_id'=>$this->session->companey_id,
+                'client_id' =>$clientid,
                 'c_name' => $name,
                 'emailid' => $email,
                 'contact_number' => $mobile,
@@ -288,12 +291,97 @@ class Client extends CI_Controller {
                 'other_detail' => $otherdetails
             );
            // $clientDetails = $this->Client_Model->clientdetail_by_id($clientid);
-            $enquiry_code = $this->uri->segment(4);
+            $enquiry_code = $this->input->post('enquiry_code');
             $this->Leads_Model->add_comment_for_events($this->lang->line("new_contact_detail_added") , $enquiry_code);
             $insert_id = $this->Client_Model->clientContact($data);
             $this->session->set_flashdata('message', 'Client Contact Add Successfully');
             redirect($this->agent->referrer());
         }
+    }
+
+    public function delete_contact()
+    {
+         $cc_id = $this->input->post('cc_id');
+          $this->db->where(array('cc_id'=>$cc_id,'comp_id'=>$this->session->companey_id));
+          $this->db->delete('tbl_client_contacts');
+    }
+
+    public function edit_contact()
+    {
+        if($this->input->post('task')=='view')
+        {
+            $cc_id = $this->input->post('cc_id');
+            $this->load->model('Client_Model');
+
+            $res = $this->Client_Model->getContactWhere(array('cc_id'=>$cc_id,'comp_id'=>$this->session->companey_id));
+
+            if(!$res->num_rows())
+            {
+                echo'NO Result';exit();
+            }
+            $row = $res->row();
+        echo'<hr><div class="row" align="left" >
+        <form method="post" action="'.base_url('client/edit_contact/').'" class="form-inner">
+        <input type="hidden" name="cc_id" value="'.$row->cc_id.'">
+        <input type="hidden" name="client_id" value="'.$row->client_id.'">
+            <input type="hidden" name="task" value="save">
+               <div class="form-group col-md-6">
+                  <label>Designation</label>
+                  <input class="form-control" name="designation" placeholder="Designation"  type="text" value="'.$row->designation.'" required>
+               </div>
+               <div class="form-group col-md-6">
+                  <label>Name</label>
+                  <input class="form-control" name="name" placeholder="Contact Name"  type="text"   value="'.$row->c_name.'" required>
+               </div>
+               <div class="form-group col-md-6">
+                  <label>Contact No.</label>
+                  <input class="form-control" name="mobileno" placeholder="Mobile No." maxlength="10"  value="'.$row->contact_number.'" type="text"  required>
+               </div>
+               <div class="form-group col-md-6">
+                  <label>Email</label>
+                  <input class="form-control" name="email" placeholder="Email"  type="text"  value="'.$row->emailid.'" required>
+               </div>
+               <div class="form-group col-md-12">
+                  <label>Other Details</label>
+                  <textarea class="form-control" name="otherdetails" rows="8">'.$row->other_detail.'</textarea>
+               </div>
+               <div class="sgnbtnmn form-group col-md-12">
+                  <div class="sgnbtn">
+                     <input id="signupbtn" type="submit" value="Save" class="btn btn-primary"  name="Save">
+                  </div>
+               </div>
+            </form>
+            </div>';
+        }
+        else if($this->input->post('task')=='save')
+        {
+            //print_r($this->input->post()); exit();
+            $name = $this->input->post('name');
+            $mobile = $this->input->post('mobileno');
+            $email = $this->input->post('email');
+            $otherdetails = $this->input->post('otherdetails');
+            $cc_id = $this->input->post('cc_id');
+            $data = array(
+                'c_name' => $name,
+                'emailid' => $email,
+                'contact_number' => $mobile,
+                'designation' => $this->input->post('designation'),
+                'other_detail' => $otherdetails
+            );
+            $this->db->where(array('cc_id'=>$cc_id,'comp_id'=>$this->session->companey_id,'client_id'=>$this->input->post('client_id')));
+            $this->db->update('tbl_client_contacts',$data);
+             redirect($this->agent->referrer());
+        }
+    }
+
+    public function contacts()
+    {
+        $this->load->model('Client_Model');
+        $data['title'] = display('Contacts');
+        $data['contact_list'] = $this->Client_Model->getContactList();//contacts.*,enquiry.---
+       // print_r($data['contact_list']->result_array()); exit();
+        $data['content'] = $this->load->view('enquiry/contacts', $data, true);
+        $this->load->view('layout/main_wrapper', $data);
     }
 
     public function create_Invoice() {

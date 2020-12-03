@@ -43,9 +43,15 @@ class Client_Model extends CI_Model
     public function clientContact($data)
     {
         $this->db->insert('tbl_client_contacts', $data);
-        
+        return $this->db->insert_id();
     }
     
+    public function getContactWhere($where)
+    {
+        $this->db->where($where);
+       return  $this->db->get('tbl_client_contacts');
+    }
+
     ////////////////////////////////////////////
     
     
@@ -98,6 +104,17 @@ class Client_Model extends CI_Model
     }
     
     
+    public function getContactList($where=0)
+    {
+        if($where)
+            $this->db->where($where);
+        $this->db->select('contacts.*,enquiry.company,enquiry.enquiry_id,concat (name_prefix," ",name," ",lastname) as name');
+        $this->db->from('tbl_client_contacts contacts');
+        $this->db->join('enquiry','enquiry.enquiry_id=contacts.client_id','left');
+        return $this->db->get();
+        //echo $this->db->last_query(); exit();
+    }
+
     public function all_created_today()
     {
         $user_id          = $this->session->user_id;

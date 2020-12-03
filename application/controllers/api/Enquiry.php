@@ -111,7 +111,7 @@ class Enquiry extends REST_Controller {
                 //'created_date' =>$enquiry_date, 
                 //'status' => $this->input->post('status'),
               ];
-              
+               
             if(!empty($upd))
             {																
             	$this->db->where('Enquery_id',$this->input->post('update'));
@@ -283,7 +283,7 @@ class Enquiry extends REST_Controller {
             $basic[$key]['parameter_name'] = 'email';
             break;
             case 6:
-            $basic[$key]['parameter_name'] = 'company';
+            $basic[$key]['parameter_name'] = 'org_name';
             break;
             
             case 7:
@@ -296,7 +296,7 @@ class Enquiry extends REST_Controller {
                               );
             }
             $basic[$key]['input_values'] = $values;
-            $basic[$key]['parameter_name'] = 'lead_source';
+            $basic[$key]['parameter_name'] = 'enquiry_source';
             break;
             case 8:
             $subsource = $this->location_model->productcountry();
@@ -308,7 +308,7 @@ class Enquiry extends REST_Controller {
                               );
             }
             $basic[$key]['input_values'] = $values;
-            $basic[$key]['parameter_name'] = 'sub_source';
+            $basic[$key]['parameter_name'] = 'product_id';
             break;
 
             case 9:
@@ -335,7 +335,7 @@ class Enquiry extends REST_Controller {
                               );
             }
             $basic[$key]['input_values'] = $values;
-            $basic[$key]['parameter_name'] = 'city_id';
+            $basic[$key]['parameter_name'] = 'city';
             break;
 
             case 11:

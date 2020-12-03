@@ -748,7 +748,8 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
          <div id="exTab3" class="">
             <ul  class="nav nav-tabs" role="tablist">  
             <span class="scrollTab" style="position: absolute; left: 0; font-size: 22px; line-height: 40px; z-index: 999"><i class="fa fa-caret-left" onclick="tabScroll('left')"></i></span>            
-              <li class="active" href="#basic" data-toggle="tab" >Basic</li>   
+              <li class="active" href="#basic" data-toggle="tab" >Basic</li>  
+              <li href="#company_contacts" data-toggle="tab">Contacts</li> 
              <?php if($this->session->userdata('companey_id')==292) { 
                         if($enquiry->status==3) {?>
                             <li href="#followup" data-toggle="tab" >AMC</li>
@@ -787,7 +788,7 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
               <li  href="#aggrement" data-toggle="tab" >Aggrement</li>
 			<?php } ?>
 			<li href="#task" data-toggle="tab" >Task</li>
-            <li href="#company_contacts" data-toggle="tab">Contacts</li>
+            
             <li href="#related_enquiry" data-toggle="tab">Related Data</li>
             <?php if($this->session->companey_id=='83'){ ?>
             <li href="#login-tab" data-toggle="tab" >Login Trail</li>
@@ -2564,19 +2565,19 @@ if (document.getElementById('agg_same').checked)
                      </div>
                   </div>
                </div>               
-               <div class="tab-pane" id="contacts">
+               <div class="tab-pane" id="company_contacts">
                   <hr>
-                  <div class="row">
-                     <table id="dataTable" class="table table-responsive-sm" style="background: #fff;">
+                  <div class="row" style="overflow-x: auto;">
+                     <table id="dataTable" class="table table-bordered table-striped table-responsive-sm" style="background: #fff;">
                         <thead class="thead-light">
                            <tr>
-                              <th>#</th>
+                              <th>&nbsp; # &nbsp;</th>
                               <th style="width: 20%;">Designation</th>
                               <th style="width: 20%;">Name</th>
                               <th style="width: 20%;">Contact Number</th>
                               <th style="width: 20%;">Email ID</th>
                               <th style="width: 20%;">Other Detail</th>
-                              <th></th>
+                              <th>Action</th>
                            </tr>
                         </thead>
                         <tbody id="tblDataContact">
@@ -2585,20 +2586,27 @@ if (document.getElementById('agg_same').checked)
                               foreach ($all_contact_list as $contact) { 
                               ?>
                            <tr>
-                              <td>#</td>
+                              <td><?=$sl?></td>
                               <td ><?php echo $contact->designation; ?></td>
                               <td ><?php echo $contact->c_name; ?></td>
                               <td ><?php echo $contact->contact_number; ?></td>
                               <td ><?php echo $contact->emailid; ?></td>
                               <td ><?php echo $contact->other_detail; ?></td>
-                              <td></td>
+                              <td style="width:50px;">
+                                <button class="btn btn-warning btn-xs" data-cc-id="<?=$contact->cc_id?>" onclick="edit_contact(this)">
+                                  <i class="fa fa-edit"></i>
+                                </button>
+                                <button class="btn btn-danger btn-xs" data-cc-id="<?=$contact->cc_id?>" onclick="deleteContact(this)">
+                                  <i class="fa fa-trash"></i>
+                                </button>
+                              </td>
                            </tr>
                            <?php $sl++; }} ?>
                         </tbody>
                      </table>
                      <br>
                      <center>
-                        <h5><a style="cursor: pointer;" data-toggle="modal" data-target="#createnewContact" class="btn btn-primary">Add new contact</a></h5>
+                        <h5><a style="cursor: pointer;" data-toggle="modal" data-target="#Save_Contact" class="btn btn-primary">Add Contact</a></h5>
                      </center>
                      <br>              
                   </div>
@@ -2606,9 +2614,9 @@ if (document.getElementById('agg_same').checked)
 
               <div class="tab-pane" id="related_enquiry">                  
               </div>
-              <div class="tab-pane" id="company_contacts">  
+             <!--  <div class="tab-pane" id="company_contacts">  
                     <h2>Contacts</h2>
-              </div>
+              </div> -->
 
                <?php
                if(!empty($tab_list)){
@@ -3090,17 +3098,19 @@ if (document.getElementById('agg_same').checked)
       </div>
    </div>
 </div>
-<div id="createnewContact" class="modal fade" role="dialog">
+<div id="Save_Contact" class="modal fade" role="dialog">
    <div class="modal-dialog">
       <!-- Modal content-->
       <div class="modal-content">
          <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <h4 class="modal-title">Create New Contact</h4>
+            <h4 class="modal-title">Contacts</h4>
          </div>
          <div class="modal-body">
             <div class="row" >
-               <?php echo form_open_multipart('client/create_newcontact/'.$details->enquiry_id.'/'.$details->Enquery_id,'class="form-inner"') ?> 
+               <?php echo form_open_multipart('client/create_newcontact/','class="form-inner"') ?> 
+               <input type="hidden" name="enquiry_id" value="<?=$details->enquiry_id?>">
+               <input type="hidden" name="enquiry_code" value="<?=$details->Enquery_id?>">
                <div class="form-group col-md-6">
                   <label>Designation</label>
                   <input class="form-control" name="designation" placeholder="Designation"  type="text" required>
@@ -3842,6 +3852,70 @@ if (document.getElementById('agg_same').checked)
   }
 </style>
 <script type="text/javascript">
+
+function edit_contact(t)
+{
+  var contact_id = $(t).data('cc-id');
+  //alert(contact_id);
+  $.ajax({
+        url:"<?=base_url('client/edit_contact/')?>",
+        type:"post",
+        data:{cc_id:contact_id,task:'view'},
+        success:function(res)
+        {
+          Swal.fire({
+                title:'Edit Contact',
+                html:res,
+                with:'100%',
+                showConfirmButton:false,
+                showCancelButton:true,
+                cancelButtonText:'Close',
+                cancelButtonColor:'#E5343D'
+              });
+        },
+        error:function(u,v,w)
+        {
+          alert(w);
+        }
+  });
+}
+
+function deleteContact(t)
+{
+    var contact_id = $(t).data('cc-id');
+
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+      }).then((result) => {
+       // alert(JSON.stringify(result));
+        if (result.value) {
+            $.ajax({
+                        url:"<?=base_url('client/delete_contact/')?>",
+                        type:"post",
+                        data:{cc_id:contact_id},
+                        success:function(res)
+                        {
+                          Swal.fire('Done!', '', 'success');
+                          $(t).closest('tr').remove();
+                        },
+                        error:function(u,v,w)
+                        {
+                          alert(w);
+                        }
+                });
+        }
+      });
+   
+                
+          
+}
+
 
 $(".toogle-timeline").click(function(){
     if($(this).data('vis')=='1')

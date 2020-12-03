@@ -1157,6 +1157,13 @@ if($root=='https://student.spaceinternationals.com'){  ?>
 
                   </li>  -->
 				  
+          <li class="">
+              <a href="<?=base_url('client/contacts')?>">
+                 <i class="fa fa-mobile" style="color:#fff;font-size:23px;background:#1a8d98;padding:5px; padding-left:10px;border-radius:4px;width:30px;"></i>
+                  <?=display('Contacts')?>
+              </a>
+          </li>
+
 				 <li class="treeview" style="<?php if(in_array(440,$module) || in_array(441,$module) || in_array(442,$module) || in_array(443,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
                      <a href="#">
                       <i class="fa fa-cart-plus" style="color:#fff;font-size:15px;background:#f1c40f;padding:7px;border-radius:4px;width:30px;"></i> E-commerce
