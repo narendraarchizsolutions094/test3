@@ -1775,22 +1775,33 @@ class Ticket extends CI_Controller
 					$rule_action = json_decode($value->rule_action);
 					$esc_hr = $rule_action->esc_hr;
 					$assign_to = $rule_action->assign_to;
-					$rule_title = $value->title;
+					$rule_title = $value->title; 
 					$lid = $value->id;					
 					$this->db->where($value->rule_sql);					
 					$tickets	=	$this->db->get('tbl_ticket')->result_array();					
+					
+					// echo '<pre>';
+					// print_r($tickets);
+					// echo '</pre>';
+
 					if(!empty($tickets)){
 						foreach($tickets as $tck){
 							if(!$this->Ticket_Model->is_tat_rule_executed($tck['id'],$lid)){
+								
 								$d = $tck['assigned_to_date']??$tck['coml_date'];
 								$currentDate = date('Y-m-d H:i:s');
 								$bh	=	$this->isBusinessHr(new DateTime($currentDate));	
+
 								if($bh){
 									$created_date	=	$this->currect_created_date($d,$assign_to);								
 									$working_hrs	=	$this->get_working_hours($created_date,$currentDate,$assign_to);
+									echo $tck['id'].' '.$working_hrs.' '.$esc_hr.'<br>';
 									if($working_hrs >= $esc_hr){
-										$this->Ticket_Model->insertData($assign_to,$tck['id'],$lid,$rule_title,$comp_id,286);
-										// 286 is bhavan user id
+										//$this->Ticket_Model->insertData($assign_to,$tck['id'],$lid,$rule_title,$comp_id,286);
+										
+										echo $this->db->last_query();
+										echo '<br>'.$rule_title.'<br>';
+
 									}
 								}
 							}
