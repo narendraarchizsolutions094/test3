@@ -1787,15 +1787,18 @@ class Ticket extends CI_Controller
 					if(!empty($tickets)){
 						foreach($tickets as $tck){
 							if(!$this->Ticket_Model->is_tat_rule_executed($tck['id'],$lid)){
-								
-								$d = $tck['assigned_to_date']??$tck['coml_date'];
+								$this->db->where('comp_id',$comp_id);
+								$this->db->where('tck_id',$tck['id']);
+								$this->db->order_by('id','desc');
+								$last_act = $this->db->get('tbl_ticket_conv')->row_array();
+								$d = $last_act['send_date']??$tck['coml_date'];								
 								$currentDate = date('Y-m-d H:i:s');
 								$bh	=	$this->isBusinessHr(new DateTime($currentDate));	
 
 								if($bh){
 									$created_date	=	$this->currect_created_date($d,$assign_to);								
 									$working_hrs	=	$this->get_working_hours($created_date,$currentDate,$assign_to);
-									echo $tck['id'].' '.$working_hrs.' '.$esc_hr.'<br>';
+									echo $d.' '.$tck['id'].' '.$working_hrs.' '.$esc_hr.'<br>';
 									if($working_hrs >= $esc_hr){
 										//$this->Ticket_Model->insertData($assign_to,$tck['id'],$lid,$rule_title,$comp_id,286);
 										
