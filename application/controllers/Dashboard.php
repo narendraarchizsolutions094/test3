@@ -2635,8 +2635,8 @@ public function set_layout_to_session() {
             //  $this->db->where('page_id',$pageId);
             //  $this->db->update('fb_page');  
             // }
-      $start=2675;
-      $end=4184;
+      $start=7003;
+      $end=7273;
       
             for ($i = $start; $i< $end; $i++)
             {
@@ -2772,7 +2772,7 @@ public function set_layout_to_session() {
                         }else{
                             $this->db->insert('extra_enquery',array('enq_no'=>$enqid,'parent'=>$enquiry_id,'input'=>4394,'fvalue'=>$add_name,'cmp_no'=>81));
                         }
-
+ 
                        }else{
                            echo 'na<br>';
                        }
