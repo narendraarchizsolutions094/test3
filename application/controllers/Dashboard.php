@@ -2725,7 +2725,7 @@ public function set_layout_to_session() {
                         $enqid=$enqdata->Enquery_id;
                         $enquiry_id=$enqdata->enquiry_id;
                         //response 
-                        if(empty($enqdata->name)){
+                        if(trim($enqdata->name) == ''){
 
                             $this->db->where('Enquery_id',$enqid);
                             $this->db->where('comp_id',81);
