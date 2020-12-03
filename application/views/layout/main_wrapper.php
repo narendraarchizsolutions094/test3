@@ -1157,7 +1157,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
 
                   </li>  -->
 				  
-          <!-- <li class="">
+       <!--    <li class="">
               <a href="<?=base_url('client/contacts')?>">
                  <i class="fa fa-mobile" style="color:#fff;font-size:23px;background:#1a8d98;padding:5px; padding-left:10px;border-radius:4px;width:30px;"></i>
                   <?=display('Contacts')?>

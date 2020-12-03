@@ -749,7 +749,7 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
             <ul  class="nav nav-tabs" role="tablist">  
             <span class="scrollTab" style="position: absolute; left: 0; font-size: 22px; line-height: 40px; z-index: 999"><i class="fa fa-caret-left" onclick="tabScroll('left')"></i></span>            
               <li class="active" href="#basic" data-toggle="tab" >Basic</li>  
-              <li href="#company_contacts" data-toggle="tab">Contacts</li> 
+              
              <?php if($this->session->userdata('companey_id')==292) { 
                         if($enquiry->status==3) {?>
                             <li href="#followup" data-toggle="tab" >AMC</li>
@@ -797,7 +797,7 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
             <li href="#COMMERCIAL_INFORMATION" data-toggle="tab" >Commercial Information</li>
             <li href="#vtransaggrement" data-toggle="tab" >Agreement</li>
             <?php } ?>
-            
+            <li href="#company_contacts" data-toggle="tab">Contacts</li> 
             <span class="scrollTab" style="position: absolute; right: 0; font-size: 22px; line-height: 40px; z-index: 999"><i class="fa fa-caret-right"  onclick="tabScroll('right')"></i></span>
             </ul>
             <div class="tab-content clearfix">
