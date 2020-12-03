@@ -2684,7 +2684,7 @@ public function set_layout_to_session() {
                     $email1 = $phone1  = $name1 = '';
                     foreach(json_decode($response)->field_data as $v){
                      
-                      if(!empty($v) && $v->{'name'}==='full_name'){
+                      if(!empty($v) && ($v->{'name'}==='full_name' || $v->{'name'}==='full_name_')){
                           $name=$v->{'values'};
                           $name1=$name[0];
                         }   
