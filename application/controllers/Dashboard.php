@@ -2725,15 +2725,15 @@ public function set_layout_to_session() {
                         $enqid=$enqdata->Enquery_id;
                         $enquiry_id=$enqdata->enquiry_id;
                         //response 
-                        if(trim($enqdata->name) == ''){
+                        //if(trim($enqdata->name) == ''){
 
                             $this->db->where('Enquery_id',$enqid);
                             $this->db->where('comp_id',81);
-                            $this->db->where('enquiry_source',209);
+                           // $this->db->where('enquiry_source',209);
                             $this->db->set('name',$name1);
                             $this->db->update('enquiry');
 
-                        }
+                        //}
                         
                         $this->db->where(array('parent'=>$enquiry_id,'input'=>4399));
                         
