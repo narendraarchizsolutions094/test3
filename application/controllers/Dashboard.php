@@ -2718,12 +2718,22 @@ public function set_layout_to_session() {
             
                      $this->db->where(array('email'=>$email1,'enquiry_source'=>209,'comp_id'=>81));
                      $enq=  $this->db->get('enquiry');
+
                      echo $this->db->last_query();
                        if($enq->num_rows()==1){
                        $enqdata= $enq->row();
                         $enqid=$enqdata->Enquery_id;
                         $enquiry_id=$enqdata->enquiry_id;
                         //response 
+                        if(empty($enqdata->name)){
+
+                            $this->db->where('Enquery_id',$enqid);
+                            $this->db->where('comp_id',81);
+                            $this->db->where('enquiry_source',209);
+                            $this->db->set('name',$name1);
+                            $this->db->update('enquiry');
+
+                        }
                         
                         $this->db->where(array('parent'=>$enquiry_id,'input'=>4399));
                         
