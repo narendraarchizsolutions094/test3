@@ -103,6 +103,7 @@ class Enquiry_model extends CI_Model {
            
             $basic[$key]['input_values'] = $values;
             $basic[$key]['parameter_name'] = 'gender';
+            $basic[$key]['current_value'] = $enquiry->gender;
             break;
 
             case 4:
@@ -114,7 +115,7 @@ class Enquiry_model extends CI_Model {
             $basic[$key]['current_value'] = $enquiry->email;
             break;
             case 6:
-            $basic[$key]['parameter_name'] = 'company';
+            $basic[$key]['parameter_name'] = 'org_name';
             $basic[$key]['current_value'] = $enquiry->company;
             break;
             case 7:
@@ -127,7 +128,7 @@ class Enquiry_model extends CI_Model {
                               );
             }
             $basic[$key]['input_values'] = $values;
-            $basic[$key]['parameter_name'] = 'lead_source';
+            $basic[$key]['parameter_name'] = 'enquiry_source';
             $basic[$key]['current_value'] = $enquiry->enquiry_source;
             break;
             case 8:
@@ -140,7 +141,7 @@ class Enquiry_model extends CI_Model {
                               );
             }
             $basic[$key]['input_values'] = $values;
-            $basic[$key]['parameter_name'] = 'sub_source';
+            $basic[$key]['parameter_name'] = 'product_id';
             $basic[$key]['current_value'] = $enquiry->enquiry_subsource;
             break;
 
@@ -169,7 +170,7 @@ class Enquiry_model extends CI_Model {
                               );
             }
             $basic[$key]['input_values'] = $values;
-            $basic[$key]['parameter_name'] = 'city_id';
+            $basic[$key]['parameter_name'] = 'city';
             $basic[$key]['current_value'] = $enquiry->city_id;
             break;
 
@@ -195,11 +196,13 @@ class Enquiry_model extends CI_Model {
             // case 28:
             // $basic[$key]['parameter_name'] = 'tracking_no';
             // break;
+            default:
+            unset($basic[$key]);
           }
 
       }
 
-      $dynamic = $this->Enquiry_model->get_dyn_fld($enquiry_id,$primary_tab,2);
+      $dynamic = $this->Enquiry_model->get_dyn_fld($enquiry_id,$primary_tab,0);
       $i=0;
       foreach ($dynamic as $key => $value)
       {
@@ -218,6 +221,7 @@ class Enquiry_model extends CI_Model {
               }
           }
           $dynamic[$key]['parameter_name'] = $value['input_id'];
+          $dynamic[$key]['current_value'] = $value['fvalue'];
          // $dynamic[$key]['parameter_name'] = array(
          //                                      array('key'=>'enqueryfield['.$value['input_id'].']',
          //                                            'value'=>''),
@@ -257,7 +261,7 @@ class Enquiry_model extends CI_Model {
           
         	if($res['primary_tab']!='1')
         	{
-        		$dynamic = $this->Enquiry_model->get_dyn_fld($enquiry_id,$res['id'],2);
+        		$dynamic = $this->Enquiry_model->get_dyn_fld($enquiry_id,$res['id'],0);
         		$heading = array();
             $heading_ids=array();
             $i=0;
@@ -278,7 +282,7 @@ class Enquiry_model extends CI_Model {
 			          }
 			          $heading[] = $value['input_label'];
                 $heading_ids[]  = $value['input_id'];
-                $dynamic[$key]['parameter_name'] = $value['input_id'];
+
                 $dynamic[$key]['parameter_name'] = array(
                                     array('key'=>'enqueryfield['.$value['input_id'].']',
                                           'value'=>''),
@@ -287,6 +291,7 @@ class Enquiry_model extends CI_Model {
                                     array('key'=>'inputtype['.$i.']',
                                           'value'=>$value['input_type']),
                                     );
+                $dynamic[$key]['current_value'] = $value['fvalue'];
               $i++;
 			       }
 
@@ -426,13 +431,16 @@ class Enquiry_model extends CI_Model {
         $enqarr = $this->db->select('*')->where('enquiry_id',$enquiry_id)->get('enquiry')->row();
         $en_comments = $enqarr->Enquery_id;
 
-        $type = $enqarr->status;                
+        $type = $enqarr->status;     
+
+        $msg = $tab_data->title.' Updated';
+
         if($type == 1){                 
-            $comment_id = $this->Leads_Model->add_comment_for_events($this->lang->line('enquery_updated'), $en_comments);                    
+            $comment_id = $this->Leads_Model->add_comment_for_events($msg, $en_comments);                    
         }else if($type == 2){                   
-             $comment_id = $this->Leads_Model->add_comment_for_events($this->lang->line('lead_updated'), $en_comments);                   
+             $comment_id = $this->Leads_Model->add_comment_for_events($msg, $en_comments);                   
         }else if($type == 3){
-             $comment_id = $this->Leads_Model->add_comment_for_events($this->lang->line('client_updated'), $en_comments);
+             $comment_id = $this->Leads_Model->add_comment_for_events($msg, $en_comments);
         }
         
         if(!empty($enqarr)){        

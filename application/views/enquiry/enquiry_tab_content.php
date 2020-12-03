@@ -401,8 +401,11 @@ $type="text";
                     }
                     ?>
                     <th>Created At</th>
-                    <th>Action</th>
                     <?php
+                    if($action['delete'] or $action['edit'])
+                        {
+                        echo'<th>Action</th>';
+                        }
                   }
                   ?>
                 </tr>              
