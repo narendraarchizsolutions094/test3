@@ -2368,6 +2368,8 @@ class Ticket extends CI_Controller
 	
 				$CHK=1;
 			}else{
+				if($CHK)
+					$where .= ' AND '; 
 				$where .= " ( tck.added_by IN (".implode(',', $all_reporting_ids).')';
 				$CHK=1;
 		
