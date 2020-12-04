@@ -450,10 +450,7 @@ $CHK = 0;
             $where.="  tck.last_update!=tck.coml_date";
             $CHK=1;
         }elseif($top_filter=='total_activity'){  
-            if($CHK)
-            $where .= ' AND ';          
-            $where.="  tck.status=3";
-            $CHK=1;
+            
         }elseif($top_filter=='closed'){  
             if($CHK)
                 $where .= ' AND ';          
