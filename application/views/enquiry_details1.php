@@ -2109,7 +2109,7 @@ $.ajax({
 });
  </script>
 
-<form class="" action="<?php echo base_url()?>client/generate_aggrement" method="post" enctype="multipart/form-data">
+<form class="" method="post">
 <div class="col-md-6" style="padding:20px;">
             <select class="form-control"  name="agg_frmt"  id="agg_frmt"> 
               <option>Select Format</option>
@@ -2117,10 +2117,43 @@ $.ajax({
             </select>
 </div>
 <div class="col-md-6" style="padding:20px;">                                                
-            <input class="btn btn-primary" type="submit" value="Genereate pdf" name="submit" >           
+   <input class="btn btn-primary" type="button" value="Genereate pdf" name="submit" onclick="loadAggrement()">           
 </div>
 </form>
  
+ <script type="text/javascript">
+   // function loadAggrement()
+   // {
+   //    $.ajax({
+   //      url:"<?=base_url('client/view_editable_aggrement')?>",
+   //      type:"post",
+   //      data:{task:'view'},
+   //      success:function(res)
+   //      {
+   //        $(".aggrement_view").html(res);
+   //        $(".aggrement_view").show();
+   //      }
+   //    });
+     
+   // }
+ </script>
+<div class="aggrement_view">
+
+</div>
+<style type="text/css">
+  .aggrement_view{
+    padding: 100px;
+    position: fixed;
+    z-index: 990999;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background:rgba(0,0,0,0.5);
+    display: none;
+  }
+</style>
+
  <form class="" action="<?php echo base_url()?>client/create_aggrement/<?php echo $this->uri->segment(3); ?>" id="" method="post" enctype="multipart/form-data">
             <div class="col-md-12 col-sm-12">        
                   <div class="row">                      
@@ -2164,7 +2197,7 @@ $.ajax({
 
 <!--------------------------------Modal Popup for Aggrement----------------------------------------------------------------------------->
                       
-      <div class="modal fade" id="modalagg" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel6" aria-hidden="true">
+<div class="modal fade" id="modalagg" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel6" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered" role="document">
      
 <form method="post" action="<?php echo base_url(); ?>client/upload_aggrement_team" enctype="multipart/form-data">
