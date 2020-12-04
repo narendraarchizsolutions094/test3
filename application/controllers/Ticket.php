@@ -2065,10 +2065,10 @@ class Ticket extends CI_Controller
 
         		$data['created'] = $this->db->count_all_results();
         		
-        		$this->common_query_short_dashboard();
+        		$this->common_query_short_dashboard('assigned');
 				//$this->db->where('tck.assign_to',$this->session->user_id);
 
-				$data['assigned'] = $this->db->count_all_results('assigned');
+				$data['assigned'] = $this->db->count_all_results();
 
 				//echo $this->db->last_query(); exit();
 
