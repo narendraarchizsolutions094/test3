@@ -521,7 +521,7 @@ input[name=lead_stages]{
                       ?>
                       <?=($showall or in_array(7,$acolarr))?'<th>Created By</th>':''?>
                       <?=($showall or in_array(9,$acolarr))?'<th>Date</th>':''?>
-
+                      <?=($showall or in_array(18,$acolarr))?'<th>Last Updated</th>':''?>                      
 											<?=($showall or in_array(2,$acolarr))?'<th>'.display('problem_for').'</th>':''?>
 										  <?=($showall or in_array(3,$acolarr))?'<th>Email</th>':''?>
 											<?=($showall or in_array(4,$acolarr))?'<th>Phone</th>':''?>
@@ -1130,6 +1130,10 @@ function delete_recorde(){
           <div class = "col-md-4">  
           
               <label class=""><input type="checkbox" class="choose-col"  value = "9"  <?php echo ($showall == true or in_array(9, $acolarr)) ? "checked" : ""; ?>>     <?php echo display("create_date"); ?></label> &nbsp;
+          </div>
+          <div class = "col-md-4">  
+          
+              <label class=""><input type="checkbox" class="choose-col"  value = "9"  <?php echo ($showall == true or in_array(18, $acolarr)) ? "checked" : ""; ?>>     <?php echo display("last_updated"); ?></label> &nbsp;
           </div>
 
         <div class = "col-md-4">  

@@ -241,6 +241,10 @@ class Ticket extends CI_Controller
 				$sub[] = $point->coml_date ?? 'NA';
 			}
 
+			if ($showall or in_array(18, $acolarr)) {
+				$sub[] = $point->last_update ?? 'NA';
+			}
+
 			if ($showall or in_array(2, $acolarr)) {
 				$sub[] = $point->clientname ?? "NA";
 			}
