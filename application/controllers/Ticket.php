@@ -2340,8 +2340,10 @@ class Ticket extends CI_Controller
 
 	            $where .= " tck.ticket_status =  '".$ticket_status."'"; 
 	            $CHK =1;                             
-	        }
-	        $where .= " AND ( tck.added_by IN (".implode(',', $all_reporting_ids).')';
+			}
+			if($CHK)
+	            $where .= 'AND';
+	        $where .= " ( tck.added_by IN (".implode(',', $all_reporting_ids).')';
 	        $CHK=1;
 	        if($CHK){
 	            $where .= ' OR ';
