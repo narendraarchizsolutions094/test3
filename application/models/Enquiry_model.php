@@ -93,11 +93,11 @@ class Enquiry_model extends CI_Model {
 
             case 3:
             $values = array(
-                            array('key'=>1,
+                            array('key'=>"1",
                                   'value'=>'Male'),
-                            array('key'=>2,
+                            array('key'=>"2",
                                   'value'=>'Female'),
-                            array('key'=>3,
+                            array('key'=>"3",
                                   'value'=>'Other'),
                           );
            

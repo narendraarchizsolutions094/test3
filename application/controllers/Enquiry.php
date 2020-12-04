@@ -1382,6 +1382,8 @@ class Enquiry extends CI_Controller
     {
         $compid = $this->session->userdata('companey_id');
 
+        $this->load->model('Client_Model');
+
         if (user_role('63') == true) {
         }
         $data['title'] = display('information');
@@ -1445,7 +1447,11 @@ class Enquiry extends CI_Controller
         $data['social_profile_list'] = $this->SocialProfile_model->social_profile_list($lead_code);
         $data['close_femily_list'] = $this->Closefemily_model->close_femily_list($lead_code);
         $data['all_country_list'] = $this->location_model->country();
-        $data['all_contact_list'] = $this->location_model->contact($enquiry_id);
+        // $data['all_contact_list'] = $this->location_model->contact($enquiry_id);
+
+        $data['all_contact_list'] = $this->Client_Model->getContactWhere(array('comp_id'=>$this->session->companey_id,'client_id'=>$enquiry_id))->result();
+
+
         $data['subsource_list'] = $this->Datasource_model->subsourcelist();
         $data['drops'] = $this->Leads_Model->get_drop_list();
         $data['name_prefix'] = $this->enquiry_model->name_prefix_list();

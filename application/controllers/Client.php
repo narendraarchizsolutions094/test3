@@ -319,7 +319,7 @@ class Client extends CI_Controller {
             {
                 echo'NO Result';exit();
             }
-            $row = $res->row();
+        $row = $res->row();
         echo'<hr><div class="row" align="left" >
         <form method="post" action="'.base_url('client/edit_contact/').'" class="form-inner">
         <input type="hidden" name="cc_id" value="'.$row->cc_id.'">
@@ -378,7 +378,7 @@ class Client extends CI_Controller {
     {
         $this->load->model('Client_Model');
         $data['title'] = display('Contacts');
-        $data['contact_list'] = $this->Client_Model->getContactList();//contacts.*,enquiry.---
+        $data['contact_list'] = $this->Client_Model->getContactList(array('contacts.comp_id'=>$this->session->companey_id));//contacts.*,enquiry.---
        // print_r($data['contact_list']->result_array()); exit();
         $data['content'] = $this->load->view('enquiry/contacts', $data, true);
         $this->load->view('layout/main_wrapper', $data);
@@ -1513,8 +1513,25 @@ if(!empty($_FILES['file']['name'])){
     }
     /***********************end add aggriment***********************/
 
+
+public function view_editable_aggrement()
+{
+    //$data['customer_name']  = $this->input->post()
+    echo $this->load->view('aggrement/editable_vtrans',array(),true);
+}
+
     /**************************Grenerate aggriment**************************/
     public function generate_aggrement() {
+
+         $data['title'] = 'Bangalore-Australia-Agreement';
+         $data['customer_name'] = 'Shivam Gautam';
+           // $this->load->helpers('dompdf');
+            $viewfile = $this->load->view('aggrement/vtrans-new', $data, TRUE);
+            echo $viewfile;
+            //pdf_create($viewfile,'Bangalore-Australia-Agreement'.$this->session->user_id);
+
+        exit();
+
         $pdf_name = $this->input->post('agg_frmt');
         if($pdf_name=='BAA'){
             $data['title'] = 'Bangalore-Australia-Agreement';

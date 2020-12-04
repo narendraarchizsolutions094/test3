@@ -268,7 +268,7 @@ class Ticket extends REST_Controller {
               }
           }
           $dynamic[$key]['parameter_name'] = array(
-                                              array('key'=>($value['input_type']=='8'?'enqueryfiles['.$i.']':'enqueryfield['.$i.']'),
+                                              array('key'=>($value['input_type']=='8'?'enqueryfiles['.$value['input_id'].']':'enqueryfield['.$value['input_id'].']'),
                                                     'value'=>''),
                                               array('key'=>'inputfieldno['.$i.']',
                                                     'value'=>$value['input_id']),
@@ -319,6 +319,7 @@ class Ticket extends REST_Controller {
     $this->form_validation->set_rules('company_id','Company','trim|required');
     $this->form_validation->set_rules('user_id','User','trim|required');
     $this->form_validation->set_rules('process_id','Process','trim|required');
+    
     if($this->form_validation->run() == true)
     {
       $session_backup = $this->session->userdata()??'';
@@ -421,21 +422,31 @@ class Ticket extends REST_Controller {
     $this->form_validation->set_rules('ticketno','Ticket','trim|required');
     if($this->form_validation->run() == true)
     {
+      $res = $this->db->where(array('ticketno' => $_POST['ticketno']))->get('tbl_ticket')->row();
+      $_POST['ticketno']  = $res->id;
+      $session_backup = $this->session->userdata()??'';
+
+      //$this->session->process = array($process_id);
+      $this->session->companey_id = $company_id;
+      $this->session->user_id = $user_id;
+
       $this->load->model('Ticket_Model');
       $inserted  = $this->Ticket_Model->save($company_id,$user_id);
       if(!empty($inserted))
       {
+        $this->session->set_userdata($session_backup);
+
         $this->set_response([
         'status'      => TRUE,            
         'insertId'    => $inserted,
-        'msg'         => "ticket Updated successfully"
+        'msg'         => "Ticket Updated successfully"
         ], REST_Controller::HTTP_OK);   
       }
       else
       {
         $this->set_response([
         'status'  => false,           
-        'msg'     => "ticket not inserted something went wrong"
+        'msg'     => "Ticket not Updated, Something went wrong"
         ], REST_Controller::HTTP_OK); 
       }
     }

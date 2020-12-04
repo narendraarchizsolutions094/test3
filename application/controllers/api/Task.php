@@ -92,12 +92,12 @@ class Task extends REST_Controller {
       $task_id  = $this->input->post('task_id');
 
 	  $this->db->select("resp.*,enq.enquiry,enq.status as enqtype,stg.lead_stage_name,ldscr.description, concat(enq.name_prefix,' ',enq.name,' ',enq.lastname) as username,enq.email as enqmail,enq.phone as enqphone");	
-      $this->db->where('resp.resp_id',$task_id);
+    $this->db->where('resp.resp_id',$task_id);
 	  $this->db->from('query_response resp');
 	  $this->db->join('enquiry enq', 'enq.Enquery_id = resp.query_id', 'Left');
 	  $this->db->join('lead_stage stg', 'stg.stg_id = enq.lead_stage', 'left');
       $this->db->join('lead_description ldscr', 'ldscr.id = enq.lead_discription', 'left');
-      
+      $this->db->join('tbl_taskstatus stts','stts.taskstatus_id=resp.task_status','left');
 		$task_row  = $this->db->get()->row();
 
 
@@ -130,12 +130,13 @@ class Task extends REST_Controller {
 			$task_array['related_to'] = '';
 		}
 
-        if($task_row->task_status == 0){
-          $task_array['task_status'] = 'Pending';
-        }else if($task_row->task_status == 1){
-          $task_array['task_status'] = 'Completed';
-        }else{
-			$task_array['task_status'] = 'Pending';
+        // if($task_row->task_status == 0){
+        //   $task_array['task_status'] = 'Pending';
+        // }else if($task_row->task_status == 1){
+        //   $task_array['task_status'] = 'Completed';
+        // }else{
+			// $task_array['task_status'] = 'Pending';
+    $task_array['task_status'] = $task_row->taskstatus_name;
 		}
 
       }else{

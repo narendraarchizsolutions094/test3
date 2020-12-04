@@ -129,7 +129,7 @@ class Ticket_Model extends CI_Model
 		$arr = array(
 			"message"    => ($this->input->post("remark", true)) ? $this->input->post("remark", true) : '',
 			"category"   => $this->input->post("relatedto", true),
-			"other"      => ($_POST["relatedto"] == "Others") ? $this->input->post("otherrel", true) : "",
+			"other"      => (!empty($_POST["relatedto"])  && $_POST["relatedto"] == "Others") ? $this->input->post("otherrel", true) : "",
 			"product"	 => ($this->input->post("product", true)) ? $this->input->post("product", true) : "",
 			"sourse"     => ($this->input->post("source", true)) ? $this->input->post("source", true) : "",
 			"complaint_type" => $this->input->post("complaint_type", true),
@@ -982,11 +982,25 @@ class Ticket_Model extends CI_Model
 			'tck.phone' => $ticket->phone, 
 		);
 
+
+
 		$related_tickets = $this->Ticket_Model->all_related_tickets($match);
+
+		$heading = array();
+
+		if($this->session->companey_id=='65')
+			$heading[] = display('tracking_no');
+
+			$heading[] = 'Ticket Number';
+			$heading[] = 'Name';
+			$heading[] = 'Type';
+			$heading[] = 'Status';
 
 		$tabs[]  = array('tab_id'=>null,
         					'title'=>'Related Tickets',
-        					'table'=>$related_tickets??array(),
+        					'table'=>array("heading"=>$heading,
+        									"data"=>$related_tickets,
+        									),
     						);
 
 
