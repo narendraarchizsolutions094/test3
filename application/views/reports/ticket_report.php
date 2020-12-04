@@ -319,7 +319,7 @@
                       ?>
                       <?=($showall or in_array(7,$acolarr))?'<th>Created By</th>':''?>
                       <?=($showall or in_array(9,$acolarr))?'<th>Created Date</th>':''?>
-
+                      <?=($showall or in_array(18,$acolarr))?'<th>'.display('last_updated').'</th>':''?>                      
 											<?=($showall or in_array(2,$acolarr))?'<th>Client</th>':''?>
 										  <?=($showall or in_array(3,$acolarr))?'<th>Email</th>':''?>
 											<?=($showall or in_array(4,$acolarr))?'<th>Phone</th>':''?>
@@ -844,6 +844,9 @@ function table_filter()
           <div class = "col-md-4">  
           
               <label class=""><input type="checkbox" class="choose-col"  value = "9"  <?php echo ($showall == true or in_array(9, $acolarr)) ? "checked" : ""; ?>>     <?php echo display("create_date"); ?></label> &nbsp;
+          </div>
+          <div class = "col-md-4">            
+              <label class=""><input type="checkbox" class="choose-col"  value = "18"  <?php echo ($showall == true or in_array(18, $acolarr)) ? "checked" : ""; ?>>     <?php echo display("last_updated"); ?></label> &nbsp;
           </div>
 
         <div class = "col-md-4">  
