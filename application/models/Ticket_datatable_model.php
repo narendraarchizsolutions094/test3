@@ -429,18 +429,19 @@ $CHK = 0;
             $where .= " tck.ticket_status =  '".$ticket_status."'"; 
             $CHK =1;                             
         }
-
+        $uid    =   $this->session->user_id;
         if($top_filter=='total'){            
 
         }elseif($top_filter=='created'){
              if($CHK)
                 $where .= ' AND ';            
-            $where.=" tck.added_by= $this->session->user_id";      
+            $where.=" tck.added_by= $uid";      
             $CHK=1;
         }elseif($top_filter=='assigned'){
              if($CHK)
                 $where .= ' AND ';
-            $where.=" tck.assign_to= $this->session->user_id";      
+            
+            $where.=" tck.assign_to= $uid";      
             $CHK=1;  
       
         }elseif($top_filter=='updated'){  
