@@ -432,28 +432,14 @@ $CHK = 0;
         $uid    =   $this->session->user_id;
         if($top_filter=='total'){            
 
-        }elseif($top_filter=='created'){
-             if($CHK)
-                $where .= ' AND ';            
-            $where.=" tck.added_by= $uid";      
-            $CHK=1;
-        }elseif($top_filter=='assigned'){
-             if($CHK)
-                $where .= ' AND ';
-            
-            $where.=" tck.assign_to= $uid";      
-            $CHK=1;  
-      
+        }elseif($top_filter=='created'){            
+        }elseif($top_filter=='assigned'){             
         }elseif($top_filter=='updated'){  
          if($CHK)
                 $where .= ' AND ';          
             $where.="  tck.last_update!=tck.coml_date";
             $CHK=1;
-        }elseif($top_filter=='total_activity'){  
-            if($CHK)
-            $where .= ' AND ';          
-            $where.="  tck.status=3";
-            $CHK=1;
+        }elseif($top_filter=='total_activity'){              
         }elseif($top_filter=='closed'){  
             if($CHK)
                 $where .= ' AND ';          
@@ -471,19 +457,29 @@ $CHK = 0;
         }
 
         
+        if($top_filter=='created'){
+            if($CHK)
+                $where .= ' AND ';                      
+            
+            $where .= " tck.added_by IN (".implode(',', $all_reporting_ids).')';
+            $CHK=1;
+        }else if($top_filter=='assigned'){
+            if($CHK)
+                $where .= ' AND ';                      
 
-        $where .= " ( tck.added_by IN (".implode(',', $all_reporting_ids).')';
-        $CHK=1;
+            $where .= " tck.assign_to IN (".implode(',', $all_reporting_ids).')';
 
-        if($CHK){
-            $where .= ' OR ';
-            $CHK =1;
+            $CHK=1;
+        }else{
+            $where .= " ( tck.added_by IN (".implode(',', $all_reporting_ids).')';
+            $CHK=1;
+    
+            if($CHK){
+                $where .= ' OR ';
+                $CHK =1;
+            }
+            $where .= " tck.assign_to IN (".implode(',', $all_reporting_ids).'))';
         }
-        $where .= " tck.assign_to IN (".implode(',', $all_reporting_ids).'))';
-
-
-
-
         $this->db->where($where);
     //}
 

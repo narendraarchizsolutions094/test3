@@ -574,8 +574,9 @@ class Ticket extends CI_Controller
 		if(!empty($ticket_status)){
 			foreach($ticket_status as $status)
 			{ ?>
-				<option value="<?=$status->id?>" <?=($status->id==$rule_ticket_status)?'selected':''?>><?php echo $status->status_name; ?></option>
-			<?php 
+<option value="<?=$status->id?>" <?=($status->id==$rule_ticket_status)?'selected':''?>>
+    <?php echo $status->status_name; ?></option>
+<?php 
 			}
 		}
 	}
@@ -1103,16 +1104,16 @@ class Ticket extends CI_Controller
 		if (!empty($tickets)) {
 			foreach ($tickets as $ind => $tck) {
 ?>
-				<tr>
-					<td><?php echo $ind + 1; ?></td>
-					<td><?php echo $tck->ticketno; ?></td>
-					<td><?php echo $tck->clientname; ?></td>
-					<td><?php echo $tck->email; ?></td>
-					<td><?php echo $tck->phone; ?></td>
-					<td><?php echo $tck->product_name; ?></td>
+<tr>
+    <td><?php echo $ind + 1; ?></td>
+    <td><?php echo $tck->ticketno; ?></td>
+    <td><?php echo $tck->clientname; ?></td>
+    <td><?php echo $tck->email; ?></td>
+    <td><?php echo $tck->phone; ?></td>
+    <td><?php echo $tck->product_name; ?></td>
 
-					<td><?php echo $tck->category; ?></td>
-					<td><?php
+    <td><?php echo $tck->category; ?></td>
+    <td><?php
 						if ($tck->priority == 1) {
 						?><span class="badge badge-info">Low</span><?php
 																} else if ($tck->priority == 2) {
@@ -1122,13 +1123,16 @@ class Ticket extends CI_Controller
 																																									}
 
 																																										?></td>
-					<td><?php echo $tck->message; ?></td>
-					<td><?php echo date("d, M, Y", strtotime($tck->send_date)); ?></td>
-					<td style="min-width:125px;"><a class="btn  btn-success" href="<?php echo base_url("ticket/view/" . $tck->ticketno) ?>"><i class="fa fa-eye" aria-hidden="true"></i>
-							<a class="btn  btn-default" href="<?php echo base_url("ticket/edit/" . $tck->ticketno) ?>"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
-							<a class="btn  btn-danger delete-ticket" data-ticket="<?php echo $tck->id; ?>" href="<?php echo base_url("ticket/tdelete") ?>"><i class="fa fa-trash-o"></i></a>
-					</td>
-				</tr>
+    <td><?php echo $tck->message; ?></td>
+    <td><?php echo date("d, M, Y", strtotime($tck->send_date)); ?></td>
+    <td style="min-width:125px;"><a class="btn  btn-success"
+            href="<?php echo base_url("ticket/view/" . $tck->ticketno) ?>"><i class="fa fa-eye" aria-hidden="true"></i>
+            <a class="btn  btn-default" href="<?php echo base_url("ticket/edit/" . $tck->ticketno) ?>"><i
+                    class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+            <a class="btn  btn-danger delete-ticket" data-ticket="<?php echo $tck->id; ?>"
+                href="<?php echo base_url("ticket/tdelete") ?>"><i class="fa fa-trash-o"></i></a>
+    </td>
+</tr>
 
 <?php
 
@@ -2056,15 +2060,15 @@ class Ticket extends CI_Controller
 			public function short_dashboard()
 			{
 				
-				$this->common_query_short_dashboard();
-				$this->db->where('tck.added_by',$this->session->user_id);
+				$this->common_query_short_dashboard('created');
+				//$this->db->where('tck.added_by',$this->session->user_id);
 
         		$data['created'] = $this->db->count_all_results();
         		
         		$this->common_query_short_dashboard();
-				$this->db->where('tck.assign_to',$this->session->user_id);
+				//$this->db->where('tck.assign_to',$this->session->user_id);
 
-				$data['assigned'] = $this->db->count_all_results();
+				$data['assigned'] = $this->db->count_all_results('assigned');
 
 				//echo $this->db->last_query(); exit();
 
@@ -2097,11 +2101,9 @@ class Ticket extends CI_Controller
 				echo json_encode($data);
 			}
 
-			public function common_query_short_dashboard()
-			{
-
+		public function common_query_short_dashboard($para='')
+		{
 		$all_reporting_ids    =   $this->common_model->get_categories($this->session->user_id);
-
         $acolarr = array();
         $dacolarr = array();
         if(isset($_COOKIE["ticket_allowcols"])) {
@@ -2119,20 +2121,10 @@ class Ticket extends CI_Controller
 
         $sel_string = array();
         $sel_string[] = "tck.*"; 
-
-        // if($showall or in_array(1,$acolarr))
-        // {
-        //     $sel_string[] = " tck.ticketno ";
-        // }
         if($showall or in_array(2,$acolarr))
         {
             $sel_string[] = " concat(enq.name_prefix,' ' , enq.name,' ', enq.lastname) as clientname ";
         }
-        // if($showall or in_array(3,$acolarr))
-        // {
-        //     $sel_string[] = " tck.email ";
-        // }
-
         if($showall or in_array(5,$acolarr))
         {
             $sel_string[] = " prd.country_name ";
@@ -2140,20 +2132,11 @@ class Ticket extends CI_Controller
         if($showall or in_array(6,$acolarr))
         {
             $sel_string[] = " concat(for_assign.s_display_name,' ',for_assign.last_name) as assign_to_name  ";
-            //$sel_string[] = "tck.last_esc";
         }
         if($showall or in_array(7,$acolarr))
         {
             $sel_string[] = " concat(for_created.s_display_name,' ',for_created.last_name) as created_by_name ";
         }
-        // if($showall or in_array(8,$acolarr))
-        // {
-        //     $sel_string[] = " tck.priority ";
-        // }
-        // if($showall or in_array(9,$acolarr))
-        // {
-        //     $sel_string[] = " tck.coml_date ";
-        // }
         if($showall or in_array(10,$acolarr))
         {
             $sel_string[] = " ref.name as referred_name ";
@@ -2184,9 +2167,8 @@ class Ticket extends CI_Controller
 
         $this->db->select($select);
         $this->db->from("tbl_ticket  tck");
-
-        //->join("tbl_ticket_conv cnv", "cnv.tck_id = tck.id", "LEFT")
-        if($showall or count(array_intersect(array(2,4),$acolarr))>0)
+		
+		if($showall or count(array_intersect(array(2,4),$acolarr))>0)
         {
             $this->db->join("enquiry enq", "enq.enquiry_id = tck.client", "LEFT");
         }
@@ -2231,15 +2213,12 @@ class Ticket extends CI_Controller
          $this->db->join("tbl_ticket_status status","tck.ticket_status=status.id","LEFT");
         } 
 
-        // $this->db->join("(select * from tbl_ticket_conv as tck_conv1 group by tck_conv1.tck_id ORDER BY tck_conv1.id DESC) as tck_conv","tck_conv.tck_id=tck.id","LEFT");
-
         if($showall or in_array(17, $acolarr))
         {
          $this->db->join("tbl_admin assign_by","tck.assigned_by=assign_by.pk_i_admin_id","LEFT");
         } 
          $this->db->where("tck.company",$this->session->companey_id);
          $this->db->group_by("tck.id");
-
 
 			$enquiry_filters_sess   =   $this->session->ticket_filters_sess;
             
@@ -2265,20 +2244,15 @@ class Ticket extends CI_Controller
 	        $sub_stage          =   !empty($enquiry_filters_sess['sub_stage'])?$enquiry_filters_sess['sub_stage']:'';
 
 	        $ticket_status          =   !empty($enquiry_filters_sess['ticket_status'])?$enquiry_filters_sess['ticket_status']:'';
-
 	         $assign_by          =   !empty($enquiry_filters_sess['assign_by'])?$enquiry_filters_sess['assign_by']:'';
-
-
 	        $where='';
 			$CHK = 0;
-
 	         if(!empty($from_created) && !empty($to_created)){
 	            $from_created = date("Y-m-d",strtotime($from_created));
 	            $to_created = date("Y-m-d",strtotime($to_created));
 	            $where .= " (DATE(tck.coml_date) >= '".$from_created."' AND DATE(tck.coml_date) <= '".$to_created."') OR (DATE(tck.last_update) >= '".$from_created."' AND DATE(tck.last_update) <= '".$to_created."')";
 	            $CHK = 1;
 	        }
-
 	        if(!empty($from_created) && empty($to_created)){
 	            $from_created = date("Y-m-d",strtotime($from_created));
 	            $where .= " DATE(tck.coml_date) >=  '".$from_created."' OR DATE(tck.last_update) >=  '".$from_created."'  "; 
@@ -2289,64 +2263,44 @@ class Ticket extends CI_Controller
 	            $where .= " DATE(tck.coml_date) <=  '".$to_created."' OR DATE(tck.last_update) <=  '".$to_created."'"; 
 	            $CHK = 1;                                  
 	        }
-
-
 	        if(!empty($productcntry)){            
-	           // $to_created = date("Y-m-d",strtotime($to_created));
 	            if($CHK)
 	                $where .= 'AND';
-
 	            $where .= " tck.product =  '".$productcntry."'"; 
 	            $CHK =1;                             
 	        }
-
 	        if(!empty($createdby)){            
-	           // $to_created = date("Y-m-d",strtotime($to_created));
 	            if($CHK)
 	                $where .= 'AND';
-
 	            $where .= " tck.added_by =  '".$createdby."'"; 
 	            $CHK =1;                             
 	        }
-
-	        if(!empty($assign)){            
-	                   // $to_created = date("Y-m-d",strtotime($to_created));
+	        if(!empty($assign)){    
 	            if($CHK)
 	                $where .= 'AND';
-
 	            $where .= " tck.assign_to =  '".$assign."'"; 
 	            $CHK =1;                             
 	        }
-
 	        if(!empty($assign_by)){            
-	                   // $to_created = date("Y-m-d",strtotime($to_created));
 	            if($CHK)
 	                $where .= 'AND';
-
 	            $where .= " tck.assigned_by =  '".$assign_by."'"; 
 	            $CHK =1;                             
 	        }
-
 	        if(!empty($source)){            
-	                   // $to_created = date("Y-m-d",strtotime($to_created));
 	            if($CHK)
 	                $where .= 'AND';
-
 	            $where .= " tck.sourse =  '".$source."'"; 
 	            $CHK =1;                             
 	        }
-
 	        if(!empty($problem)){            
-	                   // $to_created = date("Y-m-d",strtotime($to_created));
 	            if($CHK)
 	                $where .= 'AND';
 
 	            $where .= " tck.category =  '".$problem."'"; 
 	            $CHK =1;                             
 	        }
-
-	        if(!empty($priority)){            
-	                   // $to_created = date("Y-m-d",strtotime($to_created));
+	        if(!empty($priority)){           
 	            if($CHK)
 	                $where .= 'AND';
 
@@ -2355,7 +2309,6 @@ class Ticket extends CI_Controller
 	        }
 
 	         if(!empty($issue)){            
-	                   // $to_created = date("Y-m-d",strtotime($to_created));
 	            if($CHK)
 	                $where .= 'AND';
 
@@ -2365,7 +2318,6 @@ class Ticket extends CI_Controller
 
 
 	        if(!empty($stage)){            
-	                   // $to_created = date("Y-m-d",strtotime($to_created));
 	            if($CHK)
 	                $where .= 'AND';
 
@@ -2374,8 +2326,7 @@ class Ticket extends CI_Controller
 	        }
 
 
-	        if(!empty($sub_stage)){            
-	                   // $to_created = date("Y-m-d",strtotime($to_created));
+	        if(!empty($sub_stage)){        
 	            if($CHK)
 	                $where .= 'AND';
 
@@ -2384,25 +2335,49 @@ class Ticket extends CI_Controller
 	        }
 
 	        if(!empty($ticket_status)){            
-	                           // $to_created = date("Y-m-d",strtotime($to_created));
 	            if($CHK)
 	                $where .= 'AND';
 
 	            $where .= " tck.ticket_status =  '".$ticket_status."'"; 
 	            $CHK =1;                             
-	        }
+			}
 
-	        
-	        
+			// if($CHK)
+	        //     $where .= 'AND';
+	        // $where .= " ( tck.added_by IN (".implode(',', $all_reporting_ids).')';
+	        // $CHK=1;
+			
+			// if($CHK){
+	        //     $where .= ' OR ';
+	        //     $CHK =1;
+			// }
+			
+			// $where .= " tck.assign_to IN (".implode(',', $all_reporting_ids).'))';
 
-	        $where .= " ( tck.added_by IN (".implode(',', $all_reporting_ids).')';
-	        $CHK=1;
-
-	        if($CHK){
-	            $where .= ' OR ';
-	            $CHK =1;
-	        }
-	        $where .= " tck.assign_to IN (".implode(',', $all_reporting_ids).'))';
+			if($para=='created'){
+				if($CHK)
+					$where .= ' AND ';                      
+				
+				$where .= " tck.added_by IN (".implode(',', $all_reporting_ids).')';
+				$CHK=1;
+			}else if($para=='assigned'){
+				if($CHK)
+					$where .= ' AND ';                      
+	
+				$where .= " tck.assign_to IN (".implode(',', $all_reporting_ids).')';
+	
+				$CHK=1;
+			}else{
+				$where .= " ( tck.added_by IN (".implode(',', $all_reporting_ids).')';
+				$CHK=1;
+		
+				if($CHK){
+					$where .= ' OR ';
+					$CHK =1;
+				}
+				$where .= " tck.assign_to IN (".implode(',', $all_reporting_ids).'))';
+			}
+			
 	        $this->db->where($where);
 		}
 }
