@@ -447,7 +447,7 @@ $CHK = 0;
         }elseif($top_filter=='updated'){  
          if($CHK)
                 $where .= ' AND ';          
-            $where.="  tck.last_update!=','tck.coml_date";
+            $where.="  tck.last_update!=tck.coml_date";
             $CHK=1;
         }elseif($top_filter=='total_activity'){  
             if($CHK)
