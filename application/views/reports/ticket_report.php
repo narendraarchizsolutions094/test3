@@ -766,8 +766,7 @@ function table_filter()
                 alert(w);
               }
               },
-              <?php // if(user_access(317)) { ?>
-        // "lengthMenu": [[30, 60, 90, -1], [30, 60, 90, "All"]], 
+              
         buttons: [  
             {extend: 'copy', className: 'btn-xs btn',exportOptions: {
                         columns: "thead th:not(.noExport)"
@@ -784,7 +783,7 @@ function table_filter()
             {extend: 'print', className: 'btn-xs btn',exportOptions: {
                         columns: "thead th:not(.noExport)"
                     }} 
-             ] ,  <?php  // } ?>  });
+             ]);
   run=1;
 }
 
