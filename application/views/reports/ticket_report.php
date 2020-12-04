@@ -783,9 +783,8 @@ function table_filter()
             {extend: 'print', className: 'btn-xs btn',exportOptions: {
                         columns: "thead th:not(.noExport)"
                     }} 
-             ]);
-  run=1;
-}
+             ])}
+    }
 
 
 </script>
