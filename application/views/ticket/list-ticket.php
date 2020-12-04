@@ -430,7 +430,7 @@ input[name=lead_stages]{
 </form>
 <style>
   .wd-14{
-    width:12.5%;
+    width:14.2%;
     display:inline-block;
   }
 </style>
