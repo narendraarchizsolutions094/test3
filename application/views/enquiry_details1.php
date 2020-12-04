@@ -527,7 +527,7 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
             }
             $f = '';
             if(user_access(220) && !empty($enquiry->phone) && $this->session->companey_id!=65){
-               $f = 'send_parameters("<?php echo $enquiry->phone ?>")';
+               $f = 'send_parameters("'.$enquiry->phone.'")';
             }
             ?>            
             <a href='javascript:void(0)' onclick="<?=$f?>"><?php echo $p ?></a>
