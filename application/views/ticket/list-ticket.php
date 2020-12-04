@@ -974,6 +974,8 @@ $(document).ready(function() {
                 alert(w);
               }
               },
+              <?php if(user_access(317)) { ?>
+        // "lengthMenu": [[30, 60, 90, -1], [30, 60, 90, "All"]], 
         dom: "<'row text-center'<'col-sm-12 col-xs-12 col-md-4'l><'col-sm-12 col-xs-12 col-md-4 text-center'B><'col-sm-12 col-xs-12 col-md-4'f>>tp", 
         buttons: [  
             {extend: 'copy', className: 'btn-xs btn',exportOptions: {
@@ -991,7 +993,7 @@ $(document).ready(function() {
             {extend: 'print', className: 'btn-xs btn',exportOptions: {
                         columns: "thead th:not(.noExport)"
                     }} 
-             ] });
+             ] ,  <?php  } ?>  });
 
 
     $('#ticket_filter').change(function() {
