@@ -426,11 +426,11 @@ input[name=lead_stages]{
           
             </div>
         </div>
-    </div> 
+    </div>  
 </form>
 <style>
   .wd-14{
-    width:13%;
+    width:12.5%;
     display:inline-block;
   }
 </style>
