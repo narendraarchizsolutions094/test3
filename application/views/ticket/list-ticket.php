@@ -1133,7 +1133,7 @@ function delete_recorde(){
           </div>
           <div class = "col-md-4">  
           
-              <label class=""><input type="checkbox" class="choose-col"  value = "9"  <?php echo ($showall == true or in_array(18, $acolarr)) ? "checked" : ""; ?>>     <?php echo display("last_updated"); ?></label> &nbsp;
+              <label class=""><input type="checkbox" class="choose-col"  value = "18"  <?php echo ($showall == true or in_array(18, $acolarr)) ? "checked" : ""; ?>>     <?php echo display("last_updated"); ?></label> &nbsp;
           </div>
 
         <div class = "col-md-4">  
