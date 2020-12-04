@@ -452,10 +452,7 @@ $CHK = 0;
             $CHK=1;
         }
 
-        if($CHK){
-            $where .= ' AND ';
-        }
-
+       
         
         if($top_filter=='created'){
             if($CHK)
