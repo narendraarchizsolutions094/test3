@@ -103,8 +103,10 @@ class Ticket extends REST_Controller {
     $company_id   = $this->input->post('company_id');
     $process_id   = $this->input->post('process_id');
 // $user_id      = $this->input->post('user_id');
+    $session_backup = $this->session->userdata()??'';
 
-    $this->session->companey_id = $company_id;
+      $this->session->process = array($process_id);
+      $this->session->companey_id = $company_id;
 
     $this->form_validation->set_rules('company_id','Company ID','trim|required',array('required'=>'You have note provided %s'));
     $this->form_validation->set_rules('process_id','Process ID','trim|required',array('required'=>'You have note provided %s'));
@@ -281,7 +283,7 @@ class Ticket extends REST_Controller {
       $data = array_merge($basic,$dynamic);      
 
       session_destroy();
-
+      $this->session->set_userdata($session_backup);
       if(!empty($data))
       {
         $this->set_response([
@@ -322,11 +324,12 @@ class Ticket extends REST_Controller {
     
     if($this->form_validation->run() == true)
     {
+
       $session_backup = $this->session->userdata()??'';
 
       $this->session->process = array($process_id);
       $this->session->companey_id = $company_id;
-
+      $user_id  = $this->input->post('user_id');
       $this->load->model('Ticket_Model');
       $inserted  = $this->Ticket_Model->save($company_id,$user_id);
 
@@ -381,8 +384,8 @@ class Ticket extends REST_Controller {
             }    
             //dynamic end
         }
-    //echo "string".$inserted;die;
-
+      //echo "string".$inserted;die;
+      session_destroy();
       if(!empty($inserted))
       {
         $this->session->set_userdata($session_backup);
@@ -434,6 +437,7 @@ class Ticket extends REST_Controller {
       $inserted  = $this->Ticket_Model->save($company_id,$user_id);
       if(!empty($inserted))
       {
+        session_destroy();
         $this->session->set_userdata($session_backup);
 
         $this->set_response([
@@ -725,8 +729,18 @@ class Ticket extends REST_Controller {
 
     if($this->form_validation->run() == true)
     {
+
+      $session_backup = $this->session->userdata()??'';
+
+      $this->session->companey_id = $company_id;
+      $this->session->user_id = $user_id;
+      $res=0;
       $tck = $this->Ticket_Model->get($ticketno);
-      $res = $this->Ticket_Model->saveconv($tck->id, 'Stage Updated', $message,0, $user_id, $stage,$sub_stage,$status);
+      if(!empty($tck))
+      {
+        $res = $this->Ticket_Model->saveconv($tck->id, 'Stage Updated', $message,0, $user_id, $stage,$sub_stage,$status);
+      }
+      
 
       if($res)
       {

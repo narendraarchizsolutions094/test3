@@ -284,13 +284,13 @@ class Enquiry_model extends CI_Model {
                 $heading_ids[]  = $value['input_id'];
 
                 $dynamic[$key]['parameter_name'] = array(
-                                    array('key'=>'enqueryfield['.$value['input_id'].']',
-                                          'value'=>''),
-                                    array('key'=>'inputfieldno['.$i.']',
-                                          'value'=>$value['input_id']),
-                                    array('key'=>'inputtype['.$i.']',
-                                          'value'=>$value['input_type']),
-                                    );
+                              array('key'=>($value['input_type']=='8'?'enqueryfiles['.$value['input_id'].']':'enqueryfield['.$value['input_id'].']'),
+                                    'value'=>''),
+                              array('key'=>'inputfieldno['.$i.']',
+                                    'value'=>$value['input_id']),
+                              array('key'=>'inputtype['.$i.']',
+                                    'value'=>$value['input_type']),
+                              );
                 $dynamic[$key]['current_value'] = $value['fvalue'];
               $i++;
 			       }
