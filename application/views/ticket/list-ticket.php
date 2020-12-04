@@ -427,7 +427,7 @@ input[name=lead_stages]{
             </div>
         </div>
     </div>  
-</form>
+
 <style>
   .wd-14{
     width:13.2%;
@@ -438,7 +438,7 @@ input[name=lead_stages]{
     <div class="wd-14">
       <div  class="col-12 border_bottom" >
           <p style="margin-top: 2vh;font-weight:bold;">
-            <input id='short_dashboard_ticket_created_radio' value="created" type="radio" name="top_filter" class="enq_form_filters"><i class="fa fa-edit" ></i><label for="created_today_radio">&nbsp;&nbsp;<?php echo display('short_dashboard_ticket_created'); ?></label>            
+            <input id='short_dashboard_ticket_created' value="created" type="radio" name="top_filter" class="enq_form_filters"><i class="fa fa-edit" ></i><label for="short_dashboard_ticket_created">&nbsp;&nbsp;<?php echo display('short_dashboard_ticket_created'); ?></label>            
             <span class="badge badge-pill badge-warning created_self"><i class="fa fa-spinner fa-spin"></i></span>
           </p>
       </div>
@@ -447,7 +447,7 @@ input[name=lead_stages]{
     <div class="wd-14">
       <div  class="col-12 border_bottom" >
           <p style="margin-top: 2vh;font-weight:bold;">
-            <input id='short_dashboard_ticket_created_radio' value="created" type="radio" name="top_filter" class="enq_form_filters"><i class="fa fa-edit" ></i><label for="created_today_radio">&nbsp;&nbsp;<?php echo display('short_dashboard_ticket_assigned'); ?></label>            
+            <input id='short_dashboard_ticket_assigned' value="assigned" type="radio" name="top_filter" class="enq_form_filters"><i class="fa fa-edit" ></i><label for="short_dashboard_ticket_assigned">&nbsp;&nbsp;<?php echo display('short_dashboard_ticket_assigned'); ?></label>            
             <span class="badge badge-pill badge-info assigned"><i class="fa fa-spinner fa-spin"></i></span>
           </p>
       </div>
@@ -456,7 +456,7 @@ input[name=lead_stages]{
     <div class="wd-14">
       <div  class="col-12 border_bottom" >
           <p style="margin-top: 2vh;font-weight:bold;">
-            <input id='short_dashboard_ticket_created_radio' value="created" type="radio" name="top_filter" class="enq_form_filters"><i class="fa fa-edit" ></i><label for="created_today_radio">&nbsp;&nbsp;<?php echo display('short_dashboard_ticket_updated'); ?></label>            
+            <input id='short_dashboard_ticket_updated' value="updated" type="radio" name="top_filter" class="enq_form_filters"><i class="fa fa-edit" ></i><label for="short_dashboard_ticket_updated">&nbsp;&nbsp;<?php echo display('short_dashboard_ticket_updated'); ?></label>            
             <span class="badge badge-pill badge-success updated"><i class="fa fa-spinner fa-spin"></i></span>
           </p>
       </div>
@@ -465,7 +465,7 @@ input[name=lead_stages]{
     <div class="wd-14">
       <div  class="col-12 border_bottom" >
           <p style="margin-top: 2vh;font-weight:bold;">
-            <input id='short_dashboard_ticket_created_radio' value="created" type="radio" name="top_filter" class="enq_form_filters"><i class="fa fa-edit" ></i><label for="created_today_radio">&nbsp;&nbsp;<?php echo display('short_dashboard_ticket_followup'); ?></label>            
+            <input id='short_dashboard_ticket_followup' value="total_activity" type="radio" name="top_filter" class="enq_form_filters"><i class="fa fa-edit" ></i><label for="short_dashboard_ticket_followup">&nbsp;&nbsp;<?php echo display('short_dashboard_ticket_followup'); ?></label>            
             <span class="badge badge-pill badge-info total_activity"><i class="fa fa-spinner fa-spin"></i></span>
           </p>
       </div>
@@ -474,7 +474,7 @@ input[name=lead_stages]{
     <div class="wd-14">
       <div  class="col-12 border_bottom" >
           <p style="margin-top: 2vh;font-weight:bold;">
-            <input id='short_dashboard_ticket_created_radio' value="created" type="radio" name="top_filter" class="enq_form_filters"><i class="fa fa-edit" ></i><label for="created_today_radio">&nbsp;&nbsp;<?php echo display('short_dashboard_ticket_closed'); ?></label>            
+            <input id='short_dashboard_ticket_closed' value="closed" type="radio" name="top_filter" class="enq_form_filters"><i class="fa fa-edit" ></i><label for="short_dashboard_ticket_closed">&nbsp;&nbsp;<?php echo display('short_dashboard_ticket_closed'); ?></label>            
             <span class="badge badge-pill badge-primary closed"><i class="fa fa-spinner fa-spin"></i></span>
           </p>
       </div>
@@ -483,7 +483,7 @@ input[name=lead_stages]{
     <div class="wd-14">
       <div  class="col-12 border_bottom" >
           <p style="margin-top: 2vh;font-weight:bold;">
-            <input id='short_dashboard_ticket_pending' value="created" type="radio" name="top_filter" class="enq_form_filters"><i class="fa fa-edit" ></i><label for="created_today_radio">&nbsp;&nbsp;<?php echo display('short_dashboard_ticket_pending'); ?></label>            
+            <input id='short_dashboard_ticket_pending' value="pending" type="radio" name="top_filter" class="enq_form_filters"><i class="fa fa-edit" ></i><label for="short_dashboard_ticket_pending">&nbsp;&nbsp;<?php echo display('short_dashboard_ticket_pending'); ?></label>            
             <span class="badge badge-pill badge-danger pending"><i class="fa fa-spinner fa-spin"></i></span>
           </p>
       </div>
@@ -492,13 +492,13 @@ input[name=lead_stages]{
     <div class="wd-14">
       <div  class="col-12 border_bottom" >
           <p style="margin-top: 2vh;font-weight:bold;">
-            <input id='short_dashboard_ticket_pending' value="created" type="radio" name="top_filter" class="enq_form_filters"><i class="fa fa-edit" ></i><label for="created_today_radio">&nbsp;&nbsp;<?php echo display('short_dashboard_ticket_all'); ?></label>            
+            <input id='short_dashboard_ticket_all' value="total" type="radio" name="top_filter" class="enq_form_filters"><i class="fa fa-edit" ></i><label for="short_dashboard_ticket_all">&nbsp;&nbsp;<?php echo display('short_dashboard_ticket_all'); ?></label>            
             <span class="badge badge-pill badge-warrning total"><i class="fa fa-spinner fa-spin"></i></span>
           </p>
       </div>
     </div>   
 </div>
-
+</form>
  <?php 
         $acolarr = array();
         $dacolarr = array();
