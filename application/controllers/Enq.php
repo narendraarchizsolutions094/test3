@@ -119,7 +119,7 @@ class Enq extends CI_Controller
 				//user_access(220)?'onclick=send_parameters('+$enquiry->phone+')':''
 			}
 			if ($showall == true or in_array(5, $acolarr)) {
-				if (user_access(220)) {
+				if (user_access(220) && $this->session->companey_id!=65) {
 					$row[] = "<a href='javascript:void(0)' onclick='send_parameters(".$each->phone.")'>" . $each->phone . "</a>";
 				} else {
 					$row[] = $each->phone;

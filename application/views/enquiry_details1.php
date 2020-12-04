@@ -525,9 +525,13 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
             if (user_access(450)) {
               $p = '##########';
             }
-            ?>
-            
-            <a href='javascript:void(0)' onclick='send_parameters("<?php echo $enquiry->phone ?>")'><?php echo $p ?></a>
+            $f = '';
+            if(user_access(220) && !empty($enquiry->phone) && $this->session->companey_id!=65){
+               $f = 'send_parameters("<?php echo $enquiry->phone ?>")';
+            }
+            ?>            
+            <a href='javascript:void(0)' onclick="<?=$f?>"><?php echo $p ?></a>
+
             <br><?php if(!empty($enquiry->email)) { echo $enquiry->email; } ?>            
             <br><?php if(!empty($enquiry->reference_name)) {               
               $this->db->where('TRIM(partner_id)',trim($enquiry->reference_name));
