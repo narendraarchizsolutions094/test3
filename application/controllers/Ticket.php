@@ -2392,32 +2392,7 @@ class Ticket extends CI_Controller
 	            $CHK =1;                             
 	        }
 
-	        if($top_filter=='all'){            
-
-	        }elseif($top_filter=='created_today'){
-	             if($CHK)
-	                $where .= 'AND';
-	            $date=date('Y-m-d');
-	            $where.=" tck.coml_date LIKE '%$date%'";
-	            $CHK=1;
-	        }elseif($top_filter=='updated_today'){
-	             if($CHK)
-	                $where .= 'AND';
-	            $date=date('Y-m-d');
-	            $where.=" tck.last_update LIKE '%$date%'";      
-	            $CHK=1;  
-	      
-	        }elseif($top_filter=='closed'){  
-	         if($CHK)
-	                $where .= 'AND';          
-	            $where.="  tck.status=3";
-	            $CHK=1;
-	        }
-
-	        if($CHK){
-	            $where .= 'AND';
-	        }
-
+	        
 	        
 
 	        $where .= " ( tck.added_by IN (".implode(',', $all_reporting_ids).')';
