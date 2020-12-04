@@ -956,14 +956,15 @@ class Ticket_Model extends CI_Model
                   $dynamic[$key]['input_values'] = $reshape;
               }
           }
-         $dynamic[$key]['parameter_name'] = array(
-                                              array('key'=>'enqueryfield['.$value['input_id'].']',
-                                                    'value'=>''),
-                                              array('key'=>'inputfieldno['.$i.']',
-                                                    'value'=>$value['input_id']),
-                                              array('key'=>'inputtype['.$i.']',
-                                                    'value'=>$value['input_type']),
-                                              );
+          $dynamic[$key]['parameter_name'] = array(
+                              array('key'=>($value['input_type']=='8'?'enqueryfiles['.$value['input_id'].']':'enqueryfield['.$value['input_id'].']'),
+                                    'value'=>''),
+                              array('key'=>'inputfieldno['.$i.']',
+                                    'value'=>$value['input_id']),
+                              array('key'=>'inputtype['.$i.']',
+                                    'value'=>$value['input_type']),
+                              );
+         $dynamic[$key]['current_value'] = $value['fvalue'];
           $i++;
       }
 
@@ -1010,8 +1011,9 @@ class Ticket_Model extends CI_Model
         	{
         		$dynamic = $this->Enquiry_model->get_dyn_fld($ticketno,$res['id'],2);
         		$heading = array();
+        		$i=0;
         		foreach ($dynamic as $key => $value)
-			      {
+			     {
 			          if(in_array($value['input_type'],array('2','3','4','20')))
 			          {
 			             
@@ -1027,7 +1029,18 @@ class Ticket_Model extends CI_Model
 			              }
 			          }
 			          $heading[] = $value['input_label'];
-			      }
+			          $dynamic[$key]['parameter_name'] = array(
+                              array('key'=>($value['input_type']=='8'?'enqueryfiles['.$value['input_id'].']':'enqueryfield['.$value['input_id'].']'),
+                                    'value'=>''),
+                              array('key'=>'inputfieldno['.$i.']',
+                                    'value'=>$value['input_id']),
+                              array('key'=>'inputtype['.$i.']',
+                                    'value'=>$value['input_type']),
+                              );
+                $dynamic[$key]['current_value'] = $value['fvalue'];
+         				$dynamic[$key]['current_value'] = $value['fvalue'];
+         		$i++;
+			    }
 
 
         		$part = array('tab_id'=>$res['id'],
