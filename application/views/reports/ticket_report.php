@@ -319,7 +319,7 @@
                       ?>
                       <?=($showall or in_array(7,$acolarr))?'<th>Created By</th>':''?>
                       <?=($showall or in_array(9,$acolarr))?'<th>Created Date</th>':''?>
-
+                      <?=($showall or in_array(18,$acolarr))?'<th>'.display('last_updated').'</th>':''?>                      
 											<?=($showall or in_array(2,$acolarr))?'<th>Client</th>':''?>
 										  <?=($showall or in_array(3,$acolarr))?'<th>Email</th>':''?>
 											<?=($showall or in_array(4,$acolarr))?'<th>Phone</th>':''?>
@@ -761,13 +761,15 @@ function table_filter()
               "type": "POST",
               //"dataType":"html",
               //success:function(q){ //alert(q); //document.write(q);},
-              error:function(u,v,w)
+              error:function(u,v,w) 
               {
                 alert(w);
               }
               },
-              <?php // if(user_access(317)) { ?>
+              
+              <?php if(user_access(317)) { ?>
         // "lengthMenu": [[30, 60, 90, -1], [30, 60, 90, "All"]], 
+        dom: "<'row text-center'<'col-sm-12 col-xs-12 col-md-4'l><'col-sm-12 col-xs-12 col-md-4 text-center'B><'col-sm-12 col-xs-12 col-md-4'f>>tp", 
         buttons: [  
             {extend: 'copy', className: 'btn-xs btn',exportOptions: {
                         columns: "thead th:not(.noExport)"
@@ -784,9 +786,9 @@ function table_filter()
             {extend: 'print', className: 'btn-xs btn',exportOptions: {
                         columns: "thead th:not(.noExport)"
                     }} 
-             ] ,  <?php  // } ?>  });
-  run=1;
-}
+             ] ,  <?php  } ?>  
+    });
+  }
 
 
 </script>
@@ -844,6 +846,9 @@ function table_filter()
           <div class = "col-md-4">  
           
               <label class=""><input type="checkbox" class="choose-col"  value = "9"  <?php echo ($showall == true or in_array(9, $acolarr)) ? "checked" : ""; ?>>     <?php echo display("create_date"); ?></label> &nbsp;
+          </div>
+          <div class = "col-md-4">            
+              <label class=""><input type="checkbox" class="choose-col"  value = "18"  <?php echo ($showall == true or in_array(18, $acolarr)) ? "checked" : ""; ?>>     <?php echo display("last_updated"); ?></label> &nbsp;
           </div>
 
         <div class = "col-md-4">  

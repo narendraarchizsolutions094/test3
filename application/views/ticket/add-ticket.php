@@ -240,11 +240,11 @@ function autoFill(find_by,key)
 			if(res.status=='1')
 			{					
 				if(find_by!='email')
-					$("input[name=email").val(res.email);
+					//$("input[name=email").val(res.email);
 				if(find_by!='phone')	
-					$("input[name=phone]").val(res.phone);
+					//$("input[name=phone]").val(res.phone);
 				
-				$("input[name=name]").val(res.name);
+				//$("input[name=name]").val(res.name);
 				
 				$("select[name=client]").find('option[value='+res.problem_for+']').attr("selected","selected");
 				//alert(res.html);

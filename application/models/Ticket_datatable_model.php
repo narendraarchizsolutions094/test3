@@ -429,31 +429,45 @@ $CHK = 0;
             $where .= " tck.ticket_status =  '".$ticket_status."'"; 
             $CHK =1;                             
         }
+        $uid    =   $this->session->user_id;
+        if($top_filter=='total'){            
 
-        if($top_filter=='all'){            
-
-        }elseif($top_filter=='created_today'){
+        }elseif($top_filter=='created'){
              if($CHK)
-                $where .= 'AND';
-            $date=date('Y-m-d');
-            $where.=" tck.coml_date LIKE '%$date%'";
+                $where .= ' AND ';            
+            $where.=" tck.added_by= $uid";      
             $CHK=1;
-        }elseif($top_filter=='updated_today'){
+        }elseif($top_filter=='assigned'){
              if($CHK)
-                $where .= 'AND';
-            $date=date('Y-m-d');
-            $where.=" tck.last_update LIKE '%$date%'";      
+                $where .= ' AND ';
+            
+            $where.=" tck.assign_to= $uid";      
             $CHK=1;  
       
-        }elseif($top_filter=='closed'){  
+        }elseif($top_filter=='updated'){  
          if($CHK)
-                $where .= 'AND';          
+                $where .= ' AND ';          
+            $where.="  tck.last_update!=tck.coml_date";
+            $CHK=1;
+        }elseif($top_filter=='total_activity'){  
+            if($CHK)
+            $where .= ' AND ';          
             $where.="  tck.status=3";
+            $CHK=1;
+        }elseif($top_filter=='closed'){  
+            if($CHK)
+                $where .= ' AND ';          
+            $where.="  tck.ticket_status=3";
+            $CHK=1;
+        }elseif($top_filter=='pending'){  
+            if($CHK)
+                $where .= ' AND ';          
+            $where.="  tck.last_update = tck.coml_date";            
             $CHK=1;
         }
 
         if($CHK){
-            $where .= 'AND';
+            $where .= ' AND ';
         }
 
         

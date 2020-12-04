@@ -241,6 +241,10 @@ class Ticket extends CI_Controller
 				$sub[] = $point->coml_date ?? 'NA';
 			}
 
+			if ($showall or in_array(18, $acolarr)) {
+				$sub[] = $point->last_update ?? 'NA';
+			}
+
 			if ($showall or in_array(2, $acolarr)) {
 				$sub[] = $point->clientname ?? "NA";
 			}
@@ -1784,24 +1788,24 @@ class Ticket extends CI_Controller
 					// print_r($tickets);
 					// echo '</pre>';
 
-					if(!empty($tickets)){
+					if(!empty($tickets)){ 
 						foreach($tickets as $tck){
 							if(!$this->Ticket_Model->is_tat_rule_executed($tck['id'],$lid)){
-								
-								$d = $tck['assigned_to_date']??$tck['coml_date'];
+								$this->db->where('comp_id',$comp_id);
+								$this->db->where('tck_id',$tck['id']);
+								$this->db->order_by('id','desc');
+								$last_act = $this->db->get('tbl_ticket_conv')->row_array();
+								$d = $last_act['send_date']??$tck['coml_date'];								
 								$currentDate = date('Y-m-d H:i:s');
 								$bh	=	$this->isBusinessHr(new DateTime($currentDate));	
-
 								if($bh){
 									$created_date	=	$this->currect_created_date($d,$assign_to);								
 									$working_hrs	=	$this->get_working_hours($created_date,$currentDate,$assign_to);
-									echo $tck['id'].' '.$working_hrs.' '.$esc_hr.'<br>';
+									echo $d.' '.$tck['id'].' '.$working_hrs.' '.$esc_hr.'<br>';
 									if($working_hrs >= $esc_hr){
-										//$this->Ticket_Model->insertData($assign_to,$tck['id'],$lid,$rule_title,$comp_id,286);
-										
+										$this->Ticket_Model->insertData($assign_to,$tck['id'],$lid,$rule_title,$comp_id,286);										
 										echo $this->db->last_query();
 										echo '<br>'.$rule_title.'<br>';
-
 									}
 								}
 							}
@@ -2388,32 +2392,7 @@ class Ticket extends CI_Controller
 	            $CHK =1;                             
 	        }
 
-	        if($top_filter=='all'){            
-
-	        }elseif($top_filter=='created_today'){
-	             if($CHK)
-	                $where .= 'AND';
-	            $date=date('Y-m-d');
-	            $where.=" tck.coml_date LIKE '%$date%'";
-	            $CHK=1;
-	        }elseif($top_filter=='updated_today'){
-	             if($CHK)
-	                $where .= 'AND';
-	            $date=date('Y-m-d');
-	            $where.=" tck.last_update LIKE '%$date%'";      
-	            $CHK=1;  
-	      
-	        }elseif($top_filter=='closed'){  
-	         if($CHK)
-	                $where .= 'AND';          
-	            $where.="  tck.status=3";
-	            $CHK=1;
-	        }
-
-	        if($CHK){
-	            $where .= 'AND';
-	        }
-
+	        
 	        
 
 	        $where .= " ( tck.added_by IN (".implode(',', $all_reporting_ids).')';
