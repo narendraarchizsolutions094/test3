@@ -121,7 +121,7 @@ input[name=lead_stages]{
 
 .border_bottom{
   border-bottom:2px solid #E4E5E6;min-height: 7vh;margin-bottom: 1vh;cursor:pointer;
-  padding:10px;
+  padding-bottom:14px;
 }  
 .border_bottom:hover{
   border-bottom:2px solid #20A8D8;min-height: 7vh;margin-bottom: 1vh;cursor:pointer;
