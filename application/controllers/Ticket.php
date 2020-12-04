@@ -1867,7 +1867,7 @@ class Ticket extends CI_Controller
 				'Mon' => ['10:00 AM' => '06:00 PM'],				
 				'Tue' => ['10:00 AM' => '06:00 PM'],
 				'Wed' => ['10:00 AM' => '06:00 PM'],
-				'Thu' => ['10:00 AM' => '08:00 PM'],
+				'Thu' => ['10:00 AM' => '06:00 PM'],
 				'Fri' => ['10:00 AM' => '06:00 PM'],
 				'Sat' => ['10:00 AM' => '06:00 PM']				
 			];
@@ -1908,7 +1908,7 @@ class Ticket extends CI_Controller
 
 			// work day seconds
 			$workday_start_hour = 10;
-			$workday_end_hour = 20;
+			$workday_end_hour = 18;
 			$workday_seconds = ($workday_end_hour - $workday_start_hour)*3600;
 
 			// work days beetwen dates, minus 1 day
