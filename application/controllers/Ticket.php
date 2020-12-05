@@ -2421,7 +2421,6 @@ class Ticket extends CI_Controller
 			}
 			
 			$this->db->where($where);
-			$this->db->group_by('tck.id');
 			
 		}
 }
