@@ -348,7 +348,7 @@ $CHK = 0;
             $updated_to_created = date("Y-m-d",strtotime($updated_to_created));
             $where .= " (DATE(tck_conv.send_date) >= '".$updated_from_created."' AND DATE(tck_conv.send_date) <= '".$updated_to_created."') ";
             $CHK = 1;
-            $this->db->join("(select * tbl_ticket_conv where comp_id=$comp_id AND subj!='Ticked Created') as tck_conv","tck_conv.tck_id=tck.id","LEFT");
+            $this->db->join("(select * from tbl_ticket_conv where comp_id=$comp_id AND subj!='Ticked Created') as tck_conv","tck_conv.tck_id=tck.id","LEFT");
             
         }
 
