@@ -878,7 +878,7 @@ class Ticket extends REST_Controller {
       foreach ($tickets as $key => $value) 
       {
       
-        $this->db->where('tbl_ticket.id = cast('.$value.' as char(36))');
+        $this->db->where('id',$value);
         $this->db->delete('tbl_ticket');
         $ret = $this->db->affected_rows();
         
