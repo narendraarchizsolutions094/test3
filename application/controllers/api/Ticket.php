@@ -629,15 +629,10 @@ class Ticket extends REST_Controller {
 
     if($this->form_validation->run() == true)
     {
-      $session_backup = $this->session->userdata()??'';
-
-      $this->session->companey_id = $company_id;
-
+     
       $data  = $this->Ticket_Model->ticket_all_tab_api($company_id,$ticketno);
 
       //session_destroy();
-
-      $this->session->set_userdata($session_backup);
 
       if(!empty($data))
       {
