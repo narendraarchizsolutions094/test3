@@ -632,7 +632,6 @@ class Ticket extends REST_Controller {
       $session_backup = $this->session->userdata()??'';
 
       $this->session->companey_id = $company_id;
-      $this->session->user_id = $user_id;
 
       $data  = $this->Ticket_Model->ticket_all_tab_api($company_id,$ticketno);
 
