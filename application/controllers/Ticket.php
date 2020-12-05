@@ -280,7 +280,12 @@ class Ticket extends CI_Controller
 			if ($showall or in_array(8, $acolarr)) {
 				$sub[] = '<span class="label label-' . ($point->priority == 1 ? 'success">Low' : ($point->priority == 2 ? 'warning">Medium' : 'danger">High')) . '</span>';
 			}
+
 			
+			
+			if ($showall or in_array(19, $acolarr)) {
+				$sub[] = $point->subject_title ?? 'NA';
+			}
 			if ($showall or in_array(10, $acolarr)) {
 				$sub[] = $point->referred_name ?? 'NA';
 			}
@@ -2103,6 +2108,7 @@ class Ticket extends CI_Controller
 
 		public function common_query_short_dashboard($para='')
 		{
+			$comp_id = $this->session->companey_id;
 		$all_reporting_ids    =   $this->common_model->get_categories($this->session->user_id);
         $acolarr = array();
         $dacolarr = array();
@@ -2227,7 +2233,11 @@ class Ticket extends CI_Controller
 
 	        $from_created           =   !empty($enquiry_filters_sess['from_created'])?$enquiry_filters_sess['from_created']:'';       
 	        $to_created             =   !empty($enquiry_filters_sess['to_created'])?$enquiry_filters_sess['to_created']:'';
-	        $source                 =   !empty($enquiry_filters_sess['source'])?$enquiry_filters_sess['source']:'';
+		   
+			$updated_from_created           =   !empty($enquiry_filters_sess['update_from_created'])?$enquiry_filters_sess['update_from_created']:'';       
+			$updated_to_created             =   !empty($enquiry_filters_sess['update_to_created'])?$enquiry_filters_sess['update_to_created']:'';
+		  
+			$source                 =   !empty($enquiry_filters_sess['source'])?$enquiry_filters_sess['source']:'';
 	       
 	        $createdby              =   !empty($enquiry_filters_sess['createdby'])?$enquiry_filters_sess['createdby']:'';
 	        $assign                 =   !empty($enquiry_filters_sess['assign'])?$enquiry_filters_sess['assign']:'';
@@ -2262,7 +2272,42 @@ class Ticket extends CI_Controller
 	            $to_created = date("Y-m-d",strtotime($to_created));
 	            $where .= " DATE(tck.coml_date) <=  '".$to_created."' OR DATE(tck.last_update) <=  '".$to_created."'"; 
 	            $CHK = 1;                                  
-	        }
+			}
+			
+
+
+			
+			if(!empty($updated_from_created) && !empty($updated_to_created)){
+				if($CHK)
+                $where .= 'AND';
+				$updated_from_created = date("Y-m-d",strtotime($updated_from_created));
+				$updated_to_created = date("Y-m-d",strtotime($updated_to_created));
+				$where .= " (DATE(tck_conv.send_date) >= '".$updated_from_created."' AND DATE(tck_conv.send_date) <= '".$updated_to_created."') ";
+				$CHK = 1;
+				$this->db->join("(select * from tbl_ticket_conv where comp_id=$comp_id AND subj!='Ticked Created') as tck_conv","tck_conv.tck_id=tck.id","LEFT");
+				
+			}
+	
+			if(!empty($updated_from_created) && empty($updated_to_created)){
+				if($CHK)
+                	$where .= 'AND';
+				$updated_from_created = date("Y-m-d",strtotime($updated_from_created));
+				$where .= " DATE(tck_conv.send_date) >=  '".$updated_from_created."'"; 
+				$this->db->join("(select * from tbl_ticket_conv where comp_id=$comp_id AND subj!='Ticked Created') as tck_conv","tck_conv.tck_id=tck.id","LEFT");
+	
+				$CHK = 1;                           
+			}
+			if(empty($updated_from_created) && !empty($updated_to_created)){            
+				if($CHK)
+                	$where .= 'AND';
+				$updated_to_created = date("Y-m-d",strtotime($updated_to_created));
+				$where .= " DATE(tck_conv.send_date) <=  '".$updated_to_created."'"; 
+				$this->db->join("(select * from tbl_ticket_conv where comp_id=$comp_id AND subj!='Ticked Created') as tck_conv","tck_conv.tck_id=tck.id","LEFT");
+			  
+	
+				$CHK = 1;                                  
+			}
+
 	        if(!empty($productcntry)){            
 	            if($CHK)
 	                $where .= 'AND';
@@ -2380,6 +2425,7 @@ class Ticket extends CI_Controller
 				$where .= " tck.assign_to IN (".implode(',', $all_reporting_ids).'))';
 			}
 			
-	        $this->db->where($where);
+			$this->db->where($where);
+			
 		}
 }
