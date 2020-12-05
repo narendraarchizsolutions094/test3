@@ -339,6 +339,7 @@
 											<?=($showall or in_array(6,$acolarr))?'<th>Assign To</th>':''?>
                       <?=($showall or in_array(17,$acolarr))?'<th>Assign By</th>':''?>
                       <?=($showall or in_array(8,$acolarr))?'<th>Priority</th>':''?>
+                      <?=($showall or in_array(19,$acolarr))?'<th>'.display('ticket_problem').'</th>':''?>
 										  <?=($showall or in_array(10,$acolarr))?'<th>Referred By</th>':''?>
                       <?=($showall or in_array(11,$acolarr))?'<th>'.display('data_source').'</th>':''?>
                       <?=($showall or in_array(12,$acolarr))?'<th>'.display('stage').'</th>':''?>
@@ -623,7 +624,7 @@ $('#buttongroup').hide();
           $('#update_fromdatefilter').hide();
           $('#update_todatefilter').hide();
 
-          
+
            $('#fromdatefilter').hide();
            $('#todatefilter').hide();
            $("#buttongroup").hide();
@@ -864,7 +865,10 @@ function table_filter()
           <label class=""><input type="checkbox" class="choose-col"  value = "8"  <?php echo ($showall == true or in_array(8, $acolarr)) ? "checked" : ""; ?>>  Priority</label>  &nbsp;
           </div>
 
-
+          <div class = "col-md-4">  
+          <label class=""><input type="checkbox" class="choose-col"  value = "19"  <?php echo ($showall == true or in_array(19, $acolarr)) ? "checked" : ""; ?>>  <?=display('ticket_problem')?> </label>  &nbsp;
+          </div>
+          
           <div class = "col-md-4">  
           
               <label class=""><input type="checkbox" class="choose-col"  value = "9"  <?php echo ($showall == true or in_array(9, $acolarr)) ? "checked" : ""; ?>>     <?php echo display("create_date"); ?></label> &nbsp;
