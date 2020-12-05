@@ -290,8 +290,8 @@ class Ticket_datatable_model extends CI_Model{
         $to_created             =   !empty($enquiry_filters_sess['to_created'])?$enquiry_filters_sess['to_created']:'';
         
         
-        $updated_from_created           =   !empty($enquiry_filters_sess['updated_from_created'])?$enquiry_filters_sess['updated_from_created']:'';       
-        $updated_to_created             =   !empty($enquiry_filters_sess['updated_to_created'])?$enquiry_filters_sess['updated_to_created']:'';
+        $updated_from_created           =   !empty($enquiry_filters_sess['update_from_created'])?$enquiry_filters_sess['update_from_created']:'';       
+        $updated_to_created             =   !empty($enquiry_filters_sess['update_to_created'])?$enquiry_filters_sess['update_to_created']:'';
         
         $source                 =   !empty($enquiry_filters_sess['source'])?$enquiry_filters_sess['source']:'';
        
@@ -348,20 +348,22 @@ $CHK = 0;
             $updated_to_created = date("Y-m-d",strtotime($updated_to_created));
             $where .= " (DATE(tck_conv.send_date) >= '".$updated_from_created."' AND DATE(tck_conv.send_date) <= '".$updated_to_created."') ";
             $CHK = 1;
-            $this->db->join("tbl_ticket_conv as tck_conv","tck_conv.tck_id=tck.id","LEFT");
+            $this->db->join("(select * tbl_ticket_conv where comp_id=$comp_id AND subj!='Ticked Created') as tck_conv","tck_conv.tck_id=tck.id","LEFT");
+            
         }
 
         if(!empty($updated_from_created) && empty($updated_to_created)){
             $updated_from_created = date("Y-m-d",strtotime($updated_from_created));
             $where .= " DATE(tck_conv.send_date) >=  '".$updated_from_created; 
-            $this->db->join("tbl_ticket_conv as tck_conv","tck_conv.tck_id=tck.id","LEFT");
+            $this->db->join("(select * tbl_ticket_conv where comp_id=$comp_id AND subj!='Ticked Created') as tck_conv","tck_conv.tck_id=tck.id","LEFT");
 
             $CHK = 1;                           
         }
         if(empty($updated_from_created) && !empty($updated_to_created)){            
             $updated_to_created = date("Y-m-d",strtotime($updated_to_created));
             $where .= " DATE(tck_conv.send_date) <=  '".$updated_to_created; 
-            $this->db->join("tbl_ticket_conv as tck_conv","tck_conv.tck_id=tck.id","LEFT");
+            $this->db->join("(select * tbl_ticket_conv where comp_id=$comp_id AND subj!='Ticked Created') as tck_conv","tck_conv.tck_id=tck.id","LEFT");
+          
 
             $CHK = 1;                                  
         }
