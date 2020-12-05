@@ -635,9 +635,9 @@ class Ticket extends REST_Controller {
 
       $data  = $this->Ticket_Model->ticket_all_tab_api($company_id,$ticketno);
 
-      session_destroy();
+      //session_destroy();
 
-      $this->session->userdata($session_backup);
+      $this->session->set_userdata($session_backup);
 
       if(!empty($data))
       {
