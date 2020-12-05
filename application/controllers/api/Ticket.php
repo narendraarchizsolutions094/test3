@@ -790,16 +790,19 @@ class Ticket extends REST_Controller {
         if (!empty($move_enquiry)) {
           foreach ($move_enquiry as $key)
           {
+            $ticket =   $this->db->select('*')
+                        ->where('id',$key)
+                        ->get('tbl_ticket')
+                        ->row();
+
+            if(!empty($ticket))
             $this->db->set('assign_to', $assign_employee);
             $this->db->set('assigned_by', $user_id);
             $this->db->set('assigned_to_date', $assign_to_date);
             $this->db->where('id', $key);
             $this->db->update('tbl_ticket');
 
-          $ticket =   $this->db->select('*')
-                        ->where('id',$key)
-                        ->get('tbl_ticket')
-                        ->row();
+          
 
             $this->db->set('comp_id',$company_id);
             $this->db->set('query_id',$ticket->ticketno);
@@ -873,10 +876,10 @@ class Ticket extends REST_Controller {
       $ret = 0 ;
       foreach ($tickets as $key => $value) 
       {
-        $this->db->where('id', (int)$value);
+        $this->db->where('id',$value);
         $this->db->delete('tbl_ticket');
         $ret = $this->db->affected_rows();
-        $this->db->where('tck_id', $value);
+        $this->db->where('tck_id', (string)$value);
         $this->db->delete('tbl_ticket_conv');
       }
       if($ret)
@@ -1045,8 +1048,31 @@ class Ticket extends REST_Controller {
                     $cc = $cc_user['s_user_email'];
             }
 
-              $to = $ticket->email;
-              $name1 = $ticket->name ;
+                $to = $ticket->email;
+                $name1 = $ticket->name;
+
+                //   $find = array('@name',
+                //             '@phone',
+                //             '@username',
+                //             '@userphone',
+                //             '@designation',
+                //               '@ticket_no',
+                //                 '@tracking_no'
+                //         );
+                // $replace = array(
+                //     $enq_row['name'],
+                //     $user_row['contact_phone'],
+                //     $user_row['s_username'],
+                //     $enq_row['phone'],
+                //     $user_row['designation'],
+                //     $enquiry_code,
+                //     $enq_row['tracking_no'],
+                //     );
+                // $message  =str_replace($find, $replace, $message);
+
+                // $subject  = str_replace($find, $replace, $subject);
+
+
               $msg = str_replace('@name',$name1,str_replace('@org',$user_row['orgisation_name'],str_replace('@desg',$user_row['designation'],str_replace('@phone',$user_row['contact_phone'],str_replace('@desg',$user_row['designation'],str_replace('@user',$user_row['s_display_name'].' '.$user_row['last_name'],$message_name))))));
 
                $Templat_subject = str_replace('@name',$name1,str_replace('@org',$user_row['orgisation_name'],str_replace('@desg',$user_row['designation'],str_replace('@phone',$user_row['contact_phone'],str_replace('@desg',$user_row['designation'],str_replace('@user',$user_row['s_display_name'].' '.$user_row['last_name'],$Templat_subject))))));
