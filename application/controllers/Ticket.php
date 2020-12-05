@@ -2420,6 +2420,8 @@ class Ticket extends CI_Controller
 				$where .= " tck.assign_to IN (".implode(',', $all_reporting_ids).'))';
 			}
 			
-	        $this->db->where($where);
+			$this->db->where($where);
+			$this->db->group_by('tck.id');
+			
 		}
 }
