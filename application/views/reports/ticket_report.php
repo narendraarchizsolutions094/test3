@@ -119,6 +119,18 @@
                           <label for="to-date"><?php echo display("to_date"); ?></label>
                           <input type="date" class="form-control" id="to-date" name="to_created" style="padding-top:0px;">
                         </div> 
+
+
+                        <div class="form-group col-md-3" id="update_fromdatefilter">
+                          <label for="update-from-date"><?php echo display("update_from_date"); ?></label>
+                          <input type="date" class="form-control" id="update-from-date" name="update_from_created" style="padding-top:0px;">
+                        </div>
+                        <div class="form-group col-md-3" id="update_todatefilter">
+                          <label for="update-to-date"><?php echo display("update_to_date"); ?></label>
+                          <input type="date" class="form-control" id="update-to-date" name="update_to_created" style="padding-top:0px;">
+                        </div>
+
+
                          <div class="form-group col-md-3" id="sourcefilter">
                           <label for="source"><?php echo display("source"); ?></label>
                           <select class="form-control" name="source" id="source">
@@ -599,9 +611,19 @@ $('#buttongroup').hide();
         if($('#datecheckbox').is(":checked")){
          $('#fromdatefilter').show();
          $('#todatefilter').show();
+
+         $('#update_fromdatefilter').show();
+         $('#update_todatefilter').show();
+
+
          $("#buttongroup").show();
         }
         else{
+
+          $('#update_fromdatefilter').hide();
+          $('#update_todatefilter').hide();
+
+          
            $('#fromdatefilter').hide();
            $('#todatefilter').hide();
            $("#buttongroup").hide();
