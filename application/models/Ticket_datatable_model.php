@@ -265,7 +265,7 @@ class Ticket_datatable_model extends CI_Model{
          $this->db->join("tbl_ticket_status status","tck.ticket_status=status.id","LEFT");
         } 
 
-        // $this->db->join("(select * from tbl_ticket_conv as tck_conv1 group by tck_conv1.tck_id ORDER BY tck_conv1.id DESC) as tck_conv","tck_conv.tck_id=tck.id","LEFT");
+        
 
         if($showall or in_array(17, $acolarr))
         {
@@ -285,7 +285,14 @@ class Ticket_datatable_model extends CI_Model{
 
 
         $from_created           =   !empty($enquiry_filters_sess['from_created'])?$enquiry_filters_sess['from_created']:'';       
+        
+        
         $to_created             =   !empty($enquiry_filters_sess['to_created'])?$enquiry_filters_sess['to_created']:'';
+        
+        
+        $updated_from_created           =   !empty($enquiry_filters_sess['updated_from_created'])?$enquiry_filters_sess['updated_from_created']:'';       
+        $updated_to_created             =   !empty($enquiry_filters_sess['updated_to_created'])?$enquiry_filters_sess['updated_to_created']:'';
+        
         $source                 =   !empty($enquiry_filters_sess['source'])?$enquiry_filters_sess['source']:'';
        
         $createdby              =   !empty($enquiry_filters_sess['createdby'])?$enquiry_filters_sess['createdby']:'';
@@ -327,6 +334,38 @@ $CHK = 0;
             $where .= " DATE(tck.coml_date) <=  '".$to_created."' OR DATE(tck.last_update) <=  '".$to_created."'"; 
             $CHK = 1;                                  
         }
+
+        
+
+
+
+
+
+
+
+        if(!empty($updated_from_created) && !empty($updated_to_created)){
+            $updated_from_created = date("Y-m-d",strtotime($updated_from_created));
+            $updated_to_created = date("Y-m-d",strtotime($updated_to_created));
+            $where .= " (DATE(tck_conv.send_date) >= '".$updated_from_created."' AND DATE(tck_conv.send_date) <= '".$updated_to_created."') ";
+            $CHK = 1;
+            $this->db->join("tbl_ticket_conv as tck_conv","tck_conv.tck_id=tck.id","LEFT");
+        }
+
+        if(!empty($updated_from_created) && empty($updated_to_created)){
+            $updated_from_created = date("Y-m-d",strtotime($updated_from_created));
+            $where .= " DATE(tck_conv.send_date) >=  '".$updated_from_created; 
+            $this->db->join("tbl_ticket_conv as tck_conv","tck_conv.tck_id=tck.id","LEFT");
+
+            $CHK = 1;                           
+        }
+        if(empty($updated_from_created) && !empty($updated_to_created)){            
+            $updated_to_created = date("Y-m-d",strtotime($updated_to_created));
+            $where .= " DATE(tck_conv.send_date) <=  '".$updated_to_created; 
+            $this->db->join("tbl_ticket_conv as tck_conv","tck_conv.tck_id=tck.id","LEFT");
+
+            $CHK = 1;                                  
+        }
+
 
 
         if(!empty($productcntry)){            
@@ -480,6 +519,7 @@ $CHK = 0;
             $where .= " tck.assign_to IN (".implode(',', $all_reporting_ids).'))';
         }
         $this->db->where($where);
+        $this->db->group_by('tck.id');
     //}
 
         $i = 0;
