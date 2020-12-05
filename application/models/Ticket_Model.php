@@ -746,9 +746,7 @@ class Ticket_Model extends CI_Model
 		$process_id = 0;
 		if(!empty($ticket))
 		{	
-			
-
-			if($ticket->client==0)
+			if($ticket->process_id!=0)
 				$process_id = $ticket->process_id;
 			else
 			{
