@@ -2273,6 +2273,8 @@ class Ticket extends CI_Controller
 
 			
 			if(!empty($updated_from_created) && !empty($updated_to_created)){
+				if($CHK)
+                $where .= 'AND';
 				$updated_from_created = date("Y-m-d",strtotime($updated_from_created));
 				$updated_to_created = date("Y-m-d",strtotime($updated_to_created));
 				$where .= " (DATE(tck_conv.send_date) >= '".$updated_from_created."' AND DATE(tck_conv.send_date) <= '".$updated_to_created."') ";
@@ -2282,6 +2284,8 @@ class Ticket extends CI_Controller
 			}
 	
 			if(!empty($updated_from_created) && empty($updated_to_created)){
+				if($CHK)
+                	$where .= 'AND';
 				$updated_from_created = date("Y-m-d",strtotime($updated_from_created));
 				$where .= " DATE(tck_conv.send_date) >=  '".$updated_from_created."'"; 
 				$this->db->join("(select * from tbl_ticket_conv where comp_id=$comp_id AND subj!='Ticked Created') as tck_conv","tck_conv.tck_id=tck.id","LEFT");
@@ -2289,6 +2293,8 @@ class Ticket extends CI_Controller
 				$CHK = 1;                           
 			}
 			if(empty($updated_from_created) && !empty($updated_to_created)){            
+				if($CHK)
+                	$where .= 'AND';
 				$updated_to_created = date("Y-m-d",strtotime($updated_to_created));
 				$where .= " DATE(tck_conv.send_date) <=  '".$updated_to_created."'"; 
 				$this->db->join("(select * from tbl_ticket_conv where comp_id=$comp_id AND subj!='Ticked Created') as tck_conv","tck_conv.tck_id=tck.id","LEFT");
