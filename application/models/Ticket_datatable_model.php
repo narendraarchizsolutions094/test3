@@ -240,7 +240,7 @@ class Ticket_datatable_model extends CI_Model{
 
         if($showall or in_array(19, $acolarr))
         {
-            $this->db->join("tbl_ticket_subject natureofcomp", "tbl_ticket_subject.id = tck.tbl_ticket_subject", "LEFT");
+            $this->db->join("tbl_ticket_subject", "tbl_ticket_subject.id = tck.category", "LEFT");
         }
 
         if($showall or in_array(6,$acolarr))
