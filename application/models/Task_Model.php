@@ -247,16 +247,18 @@ public function __construct()
     }
 	
 	public function get_tasks_by_user_id($created_by) {
-        $this->db->select("resp.org_name,concat(enq.name_prefix, ' ',enq.name, '', enq.lastname) as contact_person, enq.email,enq.phone,resp.task_date,resp.resp_id,resp.comp_id,resp.query_id,resp.task_time,stg.lead_stage_name,ldscr.description");
+        $this->db->select("resp.org_name,concat(enq.name_prefix, ' ',enq.name, '', enq.lastname) as contact_person, enq.email,enq.phone,resp.task_date,resp.resp_id,resp.comp_id,resp.query_id,resp.task_time,stg.lead_stage_name,ldscr.description , tbl_taskstatus.taskstatus_name as task_status");
         $this->db->from('query_response resp'); 
 		$this->db->where('resp.create_by',$created_by);
 		$this->db->join('enquiry enq', 'enq.Enquery_id = resp.query_id', 'left');
 		$this->db->join('lead_stage stg', 'stg.stg_id = enq.lead_stage', 'left');
         $this->db->join('lead_description ldscr', 'ldscr.id = enq.lead_discription', 'left');
+        $this->db->join('tbl_taskstatus', 'tbl_taskstatus.taskstatus_id=resp.task_status', 'left');
         $this->db->order_by('resp.resp_id', 'DESC');
         $query = $this->db->get();
         return $query->result();
     }
+
 
     // get single task
     public function get_task($id){

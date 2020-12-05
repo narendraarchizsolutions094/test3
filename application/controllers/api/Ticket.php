@@ -425,6 +425,7 @@ class Ticket extends REST_Controller {
     $this->form_validation->set_rules('ticketno','Ticket','trim|required');
     if($this->form_validation->run() == true)
     {
+
       $res = $this->db->where(array('ticketno' => $_POST['ticketno']))->get('tbl_ticket')->row();
       $_POST['ticketno']  = $res->id;
       $session_backup = $this->session->userdata()??'';
@@ -459,6 +460,51 @@ class Ticket extends REST_Controller {
       $this->set_response([
         'status'  => false,
         'msg'     => "Please Fill All Mandatory Fields"
+      ],REST_Controller::HTTP_OK);
+    } 
+  }
+
+
+  public function updateTicketTab_post()
+  {      
+    $this->load->model('Ticket_Model');
+    $comp_id   = $this->input->post('company_id');
+    $user_id   = $this->input->post('user_id');
+    $enquiry_id   = $this->input->post('ticketno');
+    //$form_type  = $this->input->post('is_query_type');
+    $tab_id = $this->input->post('tab_id');
+    // $form_type = $this->input->post('is_query_type');
+
+    $this->form_validation->set_rules('company_id','company_id','trim|required',array('required'=>'You have note provided %s'));
+    $this->form_validation->set_rules('user_id','user_id','trim|required',array('required'=>'You have note provided %s'));
+    $this->form_validation->set_rules('ticketno','enquiry_id','trim|required',array('required'=>'You have note provided %s'));
+    $this->form_validation->set_rules('tab_id','tab_id','trim|required',array('required'=>'You have note provided %s'));
+    // $this->form_validation->set_rules('is_query_type','is_query_type','trim|required',array('required'=>'You have note provided %s'));
+
+    if($this->form_validation->run() == true)
+    {
+      $data  = $this->Ticket_Model->update_ticket_tab($user_id,$comp_id);
+      if($data)
+      {
+        $this->set_response([
+        'status'      => TRUE,           
+        'data'  => 'Ticket Updated',
+        ], REST_Controller::HTTP_OK);   
+      }
+      else
+      {
+        $this->set_response([
+        'status'  => false,           
+        'msg'     => "No Data found"
+        ], REST_Controller::HTTP_OK); 
+      }
+    }
+    else
+    {
+      $msg = strip_tags(validation_errors());
+      $this->set_response([
+        'status'  => false,
+        'msg'     => $msg,//"Please provide a company id"
       ],REST_Controller::HTTP_OK);
     } 
   }
@@ -574,7 +620,7 @@ class Ticket extends REST_Controller {
 
 
  public function getTicketTabs_post()
-  {      
+ {      
     $company_id   = $this->input->post('company_id');
     $ticketno      = $this->input->post('ticketno');
 
@@ -583,8 +629,16 @@ class Ticket extends REST_Controller {
 
     if($this->form_validation->run() == true)
     {
+      $session_backup = $this->session->userdata()??'';
+
+      $this->session->companey_id = $company_id;
+      $this->session->user_id = $user_id;
 
       $data  = $this->Ticket_Model->ticket_all_tab_api($company_id,$ticketno);
+
+      session_destroy();
+
+      $this->session->userdata($session_backup);
 
       if(!empty($data))
       {

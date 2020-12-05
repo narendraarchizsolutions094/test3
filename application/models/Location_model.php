@@ -110,7 +110,7 @@ class Location_model extends CI_Model {
     public function get_company_list1_ticket($process_id = ""){ // get basic field by process
         // print_r($process_id);
         
-            $compid=$this->session->companey_id;
+        $compid=$this->session->companey_id;
 
         $this->db->select("ticket_fileds_basic.*,basic_fields.title,input_types.title as type");
         $this->db->from('ticket_fileds_basic');

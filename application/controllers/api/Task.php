@@ -83,76 +83,81 @@ class Task extends REST_Controller {
     }
   }
 
-  public function view_post(){
+  public function view_post()
+  {
 	  
     $this->form_validation->set_rules('task_id','Task Id','required');    
     $this->form_validation->set_message('required', 'Invalid %s');
 	
-    if ($this->form_validation->run() == true) {
+    if ($this->form_validation->run() == true){
       $task_id  = $this->input->post('task_id');
 
-	  $this->db->select("resp.*,enq.enquiry,enq.status as enqtype,stg.lead_stage_name,ldscr.description, concat(enq.name_prefix,' ',enq.name,' ',enq.lastname) as username,enq.email as enqmail,enq.phone as enqphone");	
-    $this->db->where('resp.resp_id',$task_id);
-	  $this->db->from('query_response resp');
-	  $this->db->join('enquiry enq', 'enq.Enquery_id = resp.query_id', 'Left');
-	  $this->db->join('lead_stage stg', 'stg.stg_id = enq.lead_stage', 'left');
+	  $this->db->select("resp.*,enq.enquiry,enq.status as enqtype,stg.lead_stage_name,ldscr.description, concat(enq.name_prefix,' ',enq.name,' ',enq.lastname) as username,enq.email as enqmail,enq.phone as enqphone,stts.taskstatus_name");	
+      $this->db->where('resp.resp_id',$task_id);
+  	  $this->db->from('query_response resp');
+  	  $this->db->join('enquiry enq', 'enq.Enquery_id = resp.query_id', 'Left');
+  	  $this->db->join('lead_stage stg', 'stg.stg_id = enq.lead_stage', 'left');
       $this->db->join('lead_description ldscr', 'ldscr.id = enq.lead_discription', 'left');
       $this->db->join('tbl_taskstatus stts','stts.taskstatus_id=resp.task_status','left');
-		$task_row  = $this->db->get()->row();
+		  $task_row  = $this->db->get()->row();
 
 
-      if(!empty($task_row)){
-        $task_array = array(
-          'id'                        => $task_row->resp_id,
-          'enquery_code'              => $task_row->query_id,
-          'subject'                   => $task_row->subject,
-          'contact_person'            => $task_row->username,
-          'mobile'                    => $task_row->enqphone,
-          'email'                     => $task_row->enqmail,
-          'designation'               => $task_row->designation,
-          'org_name'                  => $task_row->org_name,
-          'conversation'              => $task_row->task_remark,
-          'task_date'                 => $task_row->task_date,
-          'task_time'                 => $task_row->task_time,
- 		  'task_name'				  => $task_row->subject,
-		  'end_date'				  => $task_row->nxt_date,
-		  'stage_name'				  => $task_row->lead_stage_name,		
-		  'stage_description'		  => $task_row->description		
-        );
+        if(!empty($task_row))
+        {
+            $task_array = array(
+              'id'                        => $task_row->resp_id,
+              'enquery_code'              => $task_row->query_id,
+              'subject'                   => $task_row->subject,
+              'contact_person'            => $task_row->username,
+              'mobile'                    => $task_row->enqphone,
+              'email'                     => $task_row->enqmail,
+              'designation'               => $task_row->designation,
+              'org_name'                  => $task_row->org_name,
+              'conversation'              => $task_row->task_remark,
+              'task_date'                 => $task_row->task_date,
+              'task_time'                 => $task_row->task_time,
+         		  'task_name'				  => $task_row->subject,
+        		  'end_date'				  => $task_row->nxt_date,
+        		  'stage_name'				  => $task_row->lead_stage_name,		
+        		  'stage_description'		  => $task_row->description		
+                );
 
-        if($task_row->enqtype == 1){
-          $task_array['related_to'] = 'Enquiry';
-        }else if($task_row->enqtype == 2){
-          $task_array['related_to'] = 'Lead';
-        }else if($task_row->enqtype == 3){
-          $task_array['related_to'] = 'Client';
+                if($task_row->enqtype == 1){
+                  $task_array['related_to'] = 'Enquiry';
+                }else if($task_row->enqtype == 2){
+                  $task_array['related_to'] = 'Lead';
+                }else if($task_row->enqtype == 3){
+                  $task_array['related_to'] = 'Client';
+                }else{
+        			$task_array['related_to'] = '';
+        		      }
+
+              // if($task_row->task_status == 0){
+              //   $task_array['task_status'] = 'Pending';
+              // }else if($task_row->task_status == 1){
+              //   $task_array['task_status'] = 'Completed';
+              // }else{
+      			// $task_array['task_status'] = 'Pending';
+              $task_array['task_status'] = $task_row->taskstatus_name;
+
+        }
+        else
+        {
+          $task_array = array();
+        }
+
+        if(!empty($task_array))
+        {
+          $this->set_response([
+                      'status' => true,
+                      'task' =>$task_array
+                       ], REST_Controller::HTTP_OK);
         }else{
-			$task_array['related_to'] = '';
-		}
-
-        // if($task_row->task_status == 0){
-        //   $task_array['task_status'] = 'Pending';
-        // }else if($task_row->task_status == 1){
-        //   $task_array['task_status'] = 'Completed';
-        // }else{
-			// $task_array['task_status'] = 'Pending';
-    $task_array['task_status'] = $task_row->taskstatus_name;
-		}
-
-      }else{
-        $task_array = array();
-      }
-      if(!empty($task_array)){
-        $this->set_response([
-                    'status' => true,
-                    'task' =>$task_array
-                     ], REST_Controller::HTTP_OK);
-      }else{
-        $this->set_response([
-            'status' => false,
-            'task' => array('error'=>'Invalid Task id')
-             ], REST_Controller::HTTP_OK);
-      }
+          $this->set_response([
+              'status' => false,
+              'task' => array('error'=>'Invalid Task id')
+               ], REST_Controller::HTTP_OK);
+        }
     }else{
         $this->set_response([
             'status' => false,
