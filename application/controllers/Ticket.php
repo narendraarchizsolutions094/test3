@@ -280,7 +280,12 @@ class Ticket extends CI_Controller
 			if ($showall or in_array(8, $acolarr)) {
 				$sub[] = '<span class="label label-' . ($point->priority == 1 ? 'success">Low' : ($point->priority == 2 ? 'warning">Medium' : 'danger">High')) . '</span>';
 			}
+
 			
+			
+			if ($showall or in_array(19, $acolarr)) {
+				$sub[] = $point->subject_title ?? 'NA';
+			}
 			if ($showall or in_array(10, $acolarr)) {
 				$sub[] = $point->referred_name ?? 'NA';
 			}

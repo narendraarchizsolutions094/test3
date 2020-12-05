@@ -213,6 +213,11 @@ class Ticket_datatable_model extends CI_Model{
         {
             $sel_string[] = " concat(assign_by.s_display_name,' ',assign_by.last_name) as assigned_by_name";    
         }
+        if($showall or in_array(19,$acolarr))
+        {
+            $sel_string[] = " tbl_ticket_subject.subject_title";    
+        }
+        
         
         $select = implode(',', $sel_string);
 
@@ -224,10 +229,18 @@ class Ticket_datatable_model extends CI_Model{
         {
             $this->db->join("enquiry enq", "enq.enquiry_id = tck.client", "LEFT");
         }
+
+        
+
         
         if($showall or in_array(5, $acolarr))
         {
             $this->db->join("tbl_product_country prd", "prd.id = tck.product", "LEFT");
+        }
+
+        if($showall or in_array(19, $acolarr))
+        {
+            $this->db->join("tbl_ticket_subject natureofcomp", "tbl_ticket_subject.id = tck.tbl_ticket_subject", "LEFT");
         }
 
         if($showall or in_array(6,$acolarr))
