@@ -999,7 +999,7 @@ class Ticket_Model extends CI_Model
 
 		$tabs[]  = array('tab_id'=>null,
         					'title'=>'Related Tickets',
-        					'table'=>array("heading"=>$heading,
+        					'related_table'=>array("heading"=>$heading,
         									"data"=>$related_tickets,
         									),
     						);
