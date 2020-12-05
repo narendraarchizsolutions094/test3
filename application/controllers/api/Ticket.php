@@ -874,14 +874,16 @@ class Ticket extends REST_Controller {
     if($this->form_validation->run() == true)
     {
       $ret = 0 ;
+
+      print_r($_POST);
       foreach ($tickets as $key => $value) 
       {
         $this->db->where('id',$value);
         $this->db->delete('tbl_ticket');
         $ret = $this->db->affected_rows();
-        $this->db->where('tck_id', (string)$value);
+        $this->db->where('tck_id',$value);
         $this->db->delete('tbl_ticket_conv');
-      }
+      }      
       if($ret)
       {
         $this->set_response([
