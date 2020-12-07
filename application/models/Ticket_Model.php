@@ -1207,12 +1207,15 @@ class Ticket_Model extends CI_Model
 		$tid    =   $this->input->post('tid');
         $form_type    =   $this->input->post('form_type');
         $enqarr = $this->db->select('*')->where('ticketno',$ticketno)->get('tbl_ticket')->row();
+        if(empty($enqarr))
+        	return 0;
         $en_comments = $enqarr->ticketno;
+
         $tck_id = $enqarr->id;
         $type = $enqarr->status;
         $user_id = $this->session->user_id??$user_id;
         $comp_id = $this->session->companey_id??$comp_id;
-
+        //$msg = 
         // if($type == 1){                 
         //     $comment_id = $this->Leads_Model->add_comment_for_events($this->lang->line('enquery_updated'), $en_comments);                    
         // }else if($type == 2){                   
@@ -1222,7 +1225,7 @@ class Ticket_Model extends CI_Model
         // }	
         
 
-       $comment_id = $this->Ticket_Model->saveconv($ticketno,'Details Updated','', $enqarr->client,$user_id,0,0,0,$comp_id);
+       $comment_id = $this->Ticket_Model->saveconv($tck_id,'Details Updated','', $enqarr->client,$user_id,0,0,0,$comp_id);
 //echo $comment_id; exit();
         if(!empty($enqarr)){        
             if(isset($_POST['inputfieldno'])) {                    
