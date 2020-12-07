@@ -969,7 +969,7 @@ class Ticket extends CI_Controller
 					"client"   	=> 0,
 					"added_by" 	=> $this->session->user_id,
 					);
-					$this->db->insert('tbl_ticket_conv',$inserr);
+					$this->db->insert('tbl_ticket_conv',$insarr);
 
 				}
 				echo display('save_successfully');
