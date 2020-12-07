@@ -2548,9 +2548,6 @@ public function set_layout_to_session() {
 		$data['content'] = $this->load->view('student/detail_page', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }
-    function test(){
-        echo date('Y-m-d H:i:s');
-    }
 	/********************************************************student panel*******************************************/
  /*public function careerex(){
         $result    =   $this->db->query("select Enquery_id from enquiry where comp_id = 81 AND enquiry_source=209")->result_array();
