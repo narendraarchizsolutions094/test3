@@ -747,9 +747,7 @@ class Ticket_Model extends CI_Model
 		$process_id = 0;
 		if(!empty($ticket))
 		{	
-			
-
-			if($ticket->client==0)
+			if($ticket->process_id!=0)
 				$process_id = $ticket->process_id;
 			else
 			{
@@ -1012,6 +1010,7 @@ class Ticket_Model extends CI_Model
         	{
         		$dynamic = $this->Enquiry_model->get_dyn_fld($ticketno,$res['id'],2);
         		$heading = array();
+        		$heading_ids = array();
         		$i=0;
         		foreach ($dynamic as $key => $value)
 			     {
@@ -1065,7 +1064,6 @@ class Ticket_Model extends CI_Model
 						$data =array();
 			             if(!empty($sql_res))
 			             {	
-			             	
 			             	foreach ($sql_res as $key => $value) 
 			             	{
 			             		$abc = explode(',',$value['d']);
@@ -1075,16 +1073,20 @@ class Ticket_Model extends CI_Model
 			             			foreach ($abc as $k => $v)
 			             			{
 			             				$x = explode('#', $v);
-			             				$sub[] = $x[1];
+			             				$sub[] = array(
+                                          'input_id'=>$x[0],
+                                          'value'=>$x[1],
+                                          'updated_at'=>$x[2],
+                                          'cmmnt_id'=>$x[3]
+                                        );
 			             			}
-			             			$sub[]=$x[2];
 			             		}
 			             		$data[] = $sub;
 			             	}
-			             }
+			             } 
 			        $part['table']=array('heading'=>$heading,
-			        					  'data'=>$data,
-                                      		'heading_ids'=> $heading_ids
+			        					'data'=>$data,
+                                      	'heading_ids'=> $heading_ids
                                     );
         		}
         		
