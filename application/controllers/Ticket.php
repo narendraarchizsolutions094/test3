@@ -1796,7 +1796,8 @@ class Ticket extends CI_Controller
 					// echo '<pre>';
 					// print_r($tickets); 
 					// echo '</pre>';
-
+					echo $lid.' '.$esc_hr.' '.$rule_title.'<br>';
+					
 					if(!empty($tickets)){ 
 						foreach($tickets as $tck){
 							if(!$this->Ticket_Model->is_tat_rule_executed($tck['id'],$lid)){
@@ -1807,6 +1808,7 @@ class Ticket extends CI_Controller
 								$d = $last_act['send_date']??$tck['coml_date'];								
 								$currentDate = date('Y-m-d H:i:s');
 								$bh	=	$this->isBusinessHr(new DateTime($currentDate));	
+
 								if($bh){
 									$created_date	=	$this->currect_created_date($d,$assign_to);								
 									$working_hrs	=	$this->get_working_hours($created_date,$currentDate,$assign_to);
