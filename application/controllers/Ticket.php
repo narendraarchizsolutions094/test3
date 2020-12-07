@@ -1782,7 +1782,7 @@ class Ticket extends CI_Controller
 		}
 		// tat rule code start
 		public function tat_run($comp_id){			
-			$fetchrules = $this->db->where(array('comp_id' => $comp_id, 'type' => 5))->order_by("id", "ASC")->get('leadrules')->result();
+			$fetchrules = $this->db->where(array('comp_id' => $comp_id, 'type' => 5))->order_by("id", "ASC")->get('leadrules')->result();			
 			if(!empty($fetchrules)){
 				foreach ($fetchrules as $key => $value) {
 					$rule_action = json_decode($value->rule_action);
@@ -1794,7 +1794,7 @@ class Ticket extends CI_Controller
 					$tickets	=	$this->db->get('tbl_ticket')->result_array();					
 					
 					// echo '<pre>';
-					// print_r($tickets);
+					// print_r($tickets); 
 					// echo '</pre>';
 
 					if(!empty($tickets)){ 

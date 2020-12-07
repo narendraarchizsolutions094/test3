@@ -173,10 +173,10 @@ echo'<div class="trackingDetails"></div>';
                    <?php
                     if($companylist['field_id']==PROBLEM_FOR){
                     ?>
-                     <div class="col-md-6">
+                     <div class="col-md-6" id='client_div'>
                       <div class="form-group">
                         <label><?=display('problem_for')?> </label>
-                        <select class="form-control  choose-client" name = "client" >
+                        <select class="form-control  choose-client" name = "client" id='client'>
                           <option value = "" style ="display:none;">---Select---</option>
                           <?php if(!empty($clients)){
                             foreach($clients as $ind => $clt){
@@ -184,8 +184,10 @@ echo'<div class="trackingDetails"></div>';
                             }
                           } ?>
                         </select>
+                        <i class="fa fa-plus" id='addmoreorg' onclick="add_more_org('add_more_org')" style="float:right;margin-top:-23px;margin-right:10px;color:red;position:relative;"></i>
                       </div>
                     </div>
+
                    
                   <?php
                    } 
@@ -373,4 +375,12 @@ echo'<div class="trackingDetails"></div>';
           ?> 
           <script>
             $('select').select2();
+            function add_more_org(type='add_more_org'){
+              $("#addmoreorg").hide();                            
+              $("#client").val("").trigger('change');
+              html = '<div class="col-md-6"><div class="form-group"><label>'+"<?='New '.display('problem_for')?>"+'</label><input type="text" name="client_new" class="form-control"></div></div>';
+              $("#client_div").after(html);
+              $("#client").attr('disabled',true);
+              
+            }
             </script>
