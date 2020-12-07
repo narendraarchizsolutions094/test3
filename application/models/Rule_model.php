@@ -132,7 +132,7 @@ class Rule_model extends CI_Model {
                                                 '@userphone',
                                                 '@designation',
                                                   '@ticket_no',
-                            '@tracking_no'
+                                                    '@tracking_no'
                                             );
                                 $replace = array(
                                     $enq_row['name'],
