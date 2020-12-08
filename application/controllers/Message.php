@@ -414,7 +414,8 @@ class Message extends CI_Controller {
 			                if($this->email->send()){
 									echo "Mail sent successfully";
 			                }else{
-									echo "Something went wrong";			                	
+								echo $this->email->print_debugger();
+								echo "Something went wrong";			                	
 			                }
 			  			}
 	            	}
@@ -439,7 +440,8 @@ class Message extends CI_Controller {
 			                if($this->email->send()){
 									echo "Mail sent successfully";
 			                }else{
-									echo "Something went wrong";			                	
+								echo $this->email->print_debugger();
+								echo "Something went wrong";			                	
 			                }
 	      	    	}
 
@@ -467,7 +469,7 @@ class Message extends CI_Controller {
 					  }
 	            }else{
 	            	echo $this->email->print_debugger();
-						echo "Something went wrong";			                	
+						echo "Something went wrong!";			                	
 	            }                 
     		}	        
     	}else if($this->input->post('mesge_type')== 2){
