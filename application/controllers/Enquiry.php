@@ -1950,11 +1950,10 @@ Array
 
     public function move_to_lead()
     {
-
         if (!empty($_POST)) {
             $move_enquiry = $this->input->post('enquiry_id');
             $date = date('d-m-Y H:i:s');
-
+            
             $lead_score = $this->input->post('lead_score');
             $lead_stage = $this->input->post('lead_stage');
             $comment = $this->input->post('comment');
@@ -1964,7 +1963,7 @@ Array
             } else {
                 $lead_score = '';
             }
-
+            
             if (!empty($lead_stage)) {
                 $lead_stage = $this->input->post('lead_stage');
             } else {
@@ -1975,7 +1974,7 @@ Array
             } else {
                 $comment = '';
             }
-
+            
             if (!empty($move_enquiry)) {
                 foreach ($move_enquiry as $key) {
                     $enq = $this->enquiry_model->enquiry_by_id($key);
@@ -2002,14 +2001,15 @@ Array
                     $this->db->set('lead_created_date',date('Y-m-d H:i:s'));
                     $this->db->where('enquiry_id', $key);
                     $this->db->update('enquiry');
-
+                    
                     $this->load->model('rule_model');
                     $this->rule_model->execute_rules($enq->Enquery_id, array(1, 2, 3, 6, 7));
-
+                    
+                    
                     $this->Leads_Model->add_comment_for_events($this->lang->line("move_to_lead"), $enq->Enquery_id);
                     $insert_id = $this->Leads_Model->LeadAdd($data);
-                     //insert follow up counter (2 is for lead )
-                     $this->enquiry_model->insetFollowupTime($key, 2, $enq->created_date, date('Y-m-d H:i:s'));
+                    //insert follow up counter (2 is for lead )
+                    $this->enquiry_model->insetFollowupTime($key, 2, $enq->created_date, date('Y-m-d H:i:s'));
                 }
                 echo '1';
             } else {

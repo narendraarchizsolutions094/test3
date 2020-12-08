@@ -969,7 +969,7 @@ class Ticket extends CI_Controller
 					"client"   	=> 0,
 					"added_by" 	=> $this->session->user_id,
 					);
-					$this->db->insert('tbl_ticket_conv',$inserr);
+					$this->db->insert('tbl_ticket_conv',$insarr);
 
 				}
 				echo display('save_successfully');
@@ -1783,7 +1783,8 @@ class Ticket extends CI_Controller
 		}
 		// tat rule code start
 		public function tat_run($comp_id){			
-			$fetchrules = $this->db->where(array('comp_id' => $comp_id, 'type' => 5))->order_by("id", "ASC")->get('leadrules')->result();
+			echo date('Y-m-d H:i:s').'<br>';
+			$fetchrules = $this->db->where(array('comp_id' => $comp_id, 'type' => 5,'status'=>1))->order_by("id", "ASC")->get('leadrules')->result();			
 			if(!empty($fetchrules)){
 				foreach ($fetchrules as $key => $value) {
 					$rule_action = json_decode($value->rule_action);
@@ -1795,12 +1796,24 @@ class Ticket extends CI_Controller
 					$tickets	=	$this->db->get('tbl_ticket')->result_array();					
 					
 					// echo '<pre>';
-					// print_r($tickets);
+					// print_r($tickets); 
 					// echo '</pre>';
-
+					//echo $lid.' '.$esc_hr.' '.$rule_title.'<br>';
+					
 					if(!empty($tickets)){ 
 						foreach($tickets as $tck){
-							if(!$this->Ticket_Model->is_tat_rule_executed($tck['id'],$lid)){
+							$this->db->select('GROUP_CONCAT(id) as rules');
+							$this->db->where(array('rule_json'=>$value->rule_json,'comp_id'=>$comp_id));
+							$this->db->where('id<',$lid);
+							$r	= $this->db->get('leadrules')->row_array();						
+							$r = $r['rules']??'';
+							
+							$t1 = $this->Ticket_Model->is_tat_rule_executed($tck['id'],$lid); // must not executed
+							$t2 = $this->Ticket_Model->is_tat_rule_executed($tck['id'],$r); //must executed
+							
+							//echo 't1 - '.$t1.' t2 - '.$t2.' '.$rule_title.'<br>';
+
+							if(!$t1 && ($t2||empty($r))){								
 								$this->db->where('comp_id',$comp_id);
 								$this->db->where('tck_id',$tck['id']);
 								$this->db->order_by('id','desc');
@@ -1808,6 +1821,7 @@ class Ticket extends CI_Controller
 								$d = $last_act['send_date']??$tck['coml_date'];								
 								$currentDate = date('Y-m-d H:i:s');
 								$bh	=	$this->isBusinessHr(new DateTime($currentDate));	
+
 								if($bh){
 									$created_date	=	$this->currect_created_date($d,$assign_to);								
 									$working_hrs	=	$this->get_working_hours($created_date,$currentDate,$assign_to);

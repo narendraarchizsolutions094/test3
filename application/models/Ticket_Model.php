@@ -96,7 +96,7 @@ class Ticket_Model extends CI_Model
 	{
 		$cid = '';
 		//print_r($_POST); 
-		if (!empty($companey_id) && !empty($user_id) && !empty($_POST['client']) && 0) {
+		if (!empty($companey_id) && !empty($user_id) && !empty($_POST['client_new']) && empty($_POST['client'])) {
 			if (isset($_SESSION['process']) && count($_SESSION['process']) == 1) {
 				$encode = get_enquery_code();
 				$postData = array(
@@ -105,6 +105,7 @@ class Ticket_Model extends CI_Model
 					'email' 		=> $this->input->post("email", true),
 					'phone' 		=> $this->input->post("phone", true),
 					'name' 			=> $this->input->post("name", true),
+					'company'		=> $this->input->post("client_new", true),
 					'checked' 		=> 0,
 					'product_id' 	=>  $_SESSION['process'][0],
 					'created_date' 	=>  date("Y-m-d H:i:s"),
@@ -627,11 +628,22 @@ class Ticket_Model extends CI_Model
 
 	public function is_tat_rule_executed($tid, $lid)
 	{
-		$this->db->where('tbl_ticket_conv.tck_id', $tid);
-		$this->db->where('tbl_ticket_conv.lid', $lid);
-		if ($this->db->get('tbl_ticket_conv')->num_rows()) {
-			return true;
-		} else {
+		if(!empty($lid)){
+			$lid = explode(',',$lid);
+			$i = 0;			
+			foreach($lid as $l){
+				$this->db->where('tbl_ticket_conv.tck_id', $tid);
+				$this->db->where('tbl_ticket_conv.lid', $l);
+				if ($this->db->get('tbl_ticket_conv')->num_rows()) {
+					$i++;
+				}
+			}			
+			if(count($lid) == $i){
+				return true;
+			}else{
+				return false;
+			}
+		}else{
 			return false;
 		}
 	}

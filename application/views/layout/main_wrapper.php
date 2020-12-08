@@ -397,6 +397,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
       
 </head>
    <body class="sidebar-mini <?php if($this->session->menu==1){echo 'sidebar-collapse';}?>" data-baseUrl="<?php echo base_url(); ?>">      
+      <div id='img-view-light'></div>
       <style>
         .main-header .logo{
           background-color:#fff !important;
@@ -2455,12 +2456,13 @@ $('#something').click(function() {
       <script src="<?php echo base_url('assets/js/frame.js?v=1.0?v=1.0') ?>" type="text/javascript"></script> 
       <!-- Custom Theme JavaScript -->
       <script src="<?php echo base_url() ?>assets/js/custom.js?v=1.0.1" type="text/javascript"></script>
-      <script src="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
+      <script src="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>            
    </body>
 </html>
 
 
 <script>
+  
 var content = document.getElementById("main");
 var btn = document.getElementById("btn");
 $(document).ready(function(){

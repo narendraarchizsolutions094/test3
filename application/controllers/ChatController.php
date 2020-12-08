@@ -114,7 +114,7 @@ class ChatController extends CI_Controller {
 						
 						if(!empty($user_data)){
 							$jarr["name"]    = $user_data->s_display_name.''.$user_data->last_name ;
-							$jarr["photo"]   = (!empty($user_data->picture)) ? base_url($user_data->picture) : base_url('uploads/user-icon.jpg'); 
+							$jarr["photo"]   = (!empty($user_data->picture)) ? base_url($user_data->picture) : base_url('assets/images/no-img.png'); 
 							$jarr["msgid"]   = $chat['id'];
 							$jarr["sendrid"] = $chat['sender_id'];
 							$jarr["message"] = $chat['message'];

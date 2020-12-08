@@ -76,15 +76,20 @@ class Rule_model extends CI_Model {
                     $rule_for = (substr($enquiry_code,0,3)=='TCK')?'ticket':'enquiry';
 
                     
+                    
                     if ($enquiry_code)
                     {
-                        if($rule_for == 'ticket')
-                            $this->db->where('ticketno',$enquiry_code); 
-                        else
-                            $this->db->where('Enquery_id',$enquiry_code);                
-                    }
-
-                    $this->db->where('comp_id',$comp_id);                                    
+                        if($rule_for == 'ticket'){
+                            $this->db->join('enquiry','enquiry.enquiry_id=tbl_ticket.ticketno','left');
+                            $this->db->where('tbl_ticket.ticketno',$enquiry_code); 
+                            $this->db->where('tbl_ticket.company',$comp_id);
+                        }
+                        else{
+                            $this->db->join('tbl_ticket','enquiry.enquiry_id=tbl_ticket.ticketno','left');
+                            $this->db->where('enquiry.Enquery_id',$enquiry_code);                
+                            $this->db->where('enquiry.comp_id',$comp_id);
+                        }
+                    }                                    
                     //$this->db->where('rule_executed!=',$id);   
                     if($rule_for=='ticket')
                         $enq_row = $this->db->get('tbl_ticket')->row_array();
@@ -166,15 +171,21 @@ class Rule_model extends CI_Model {
                 }else if($rule_data['type'] == 6){
                     $this->db->where('('.$rule_data['rule_sql'].')');
                      $rule_for = (substr($enquiry_code,0,3)=='TCK')?'ticket':'enquiry';
-                    if ($enquiry_code)
-                    {
-                        if($rule_for == 'ticket')
-                            $this->db->where('ticketno',$enquiry_code); 
-                        else
-                            $this->db->where('Enquery_id',$enquiry_code);                
-                    }
-
-                    $this->db->where('comp_id',$comp_id);
+                    
+                    
+                     if ($enquiry_code)
+                     {
+                         if($rule_for == 'ticket'){
+                             $this->db->join('enquiry','enquiry.enquiry_id=tbl_ticket.ticketno','left');
+                             $this->db->where('tbl_ticket.ticketno',$enquiry_code); 
+                             $this->db->where('tbl_ticket.company',$comp_id);
+                         }
+                         else{
+                             $this->db->join('tbl_ticket','enquiry.enquiry_id=tbl_ticket.ticketno','left');
+                             $this->db->where('enquiry.Enquery_id',$enquiry_code);                
+                             $this->db->where('enquiry.comp_id',$comp_id);
+                         }
+                     }                    
 
                     //$this->db->where('rule_executed!=',$id);                                    
                      if($rule_for=='ticket')
@@ -244,15 +255,20 @@ class Rule_model extends CI_Model {
 
 
                     $rule_for = (substr($enquiry_code,0,3)=='TCK')?'ticket':'enquiry';
+                    
                     if ($enquiry_code)
                     {
-                        if($rule_for == 'ticket')
-                            $this->db->where('ticketno',$enquiry_code); 
-                        else
-                            $this->db->where('Enquery_id',$enquiry_code);                
+                        if($rule_for == 'ticket'){
+                            $this->db->join('enquiry','enquiry.enquiry_id=tbl_ticket.ticketno','left');
+                            $this->db->where('tbl_ticket.ticketno',$enquiry_code); 
+                            $this->db->where('tbl_ticket.company',$comp_id);
+                        }
+                        else{
+                            $this->db->join('tbl_ticket','enquiry.enquiry_id=tbl_ticket.ticketno','left');
+                            $this->db->where('enquiry.Enquery_id',$enquiry_code);                
+                            $this->db->where('enquiry.comp_id',$comp_id);
+                        }
                     }
-
-                    $this->db->where('comp_id',$comp_id);
                     //$this->db->where('rule_executed!=',$id);                                    
                     
                      if($rule_for=='ticket')
