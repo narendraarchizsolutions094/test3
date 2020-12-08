@@ -1092,7 +1092,7 @@
 					};
 				});					
 				$( document ).ajaxComplete(function() {					
-					imageviewer();		// library function to view image in pop up
+					imageviewer('.attachmentImgCls');		// library function to view image in pop up
 				});
           </script>
 
