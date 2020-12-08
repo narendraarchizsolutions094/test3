@@ -1,4 +1,5 @@
-  <div style="width:70%;float:right;">
+<script src="<?php echo base_url('assets/js/jquery.imageviewer.min.js') ?>"></script> 
+<div style="width:70%;float:right;">
       <style>
       .class_chat_list {
           position: fixed;
@@ -1090,7 +1091,9 @@
 					return $(elem).text().toUpperCase().indexOf(arg.toUpperCase()) >= 0;
 					};
 				});					
+				imageviewer();		// library function to view image in pop up
           </script>
 
       </section>
   </div>
+  
