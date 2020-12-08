@@ -1091,7 +1091,9 @@
 					return $(elem).text().toUpperCase().indexOf(arg.toUpperCase()) >= 0;
 					};
 				});					
-				
+				$( document ).ajaxComplete(function() {					
+					imageviewer();		// library function to view image in pop up
+				});
           </script>
 
       </section>
