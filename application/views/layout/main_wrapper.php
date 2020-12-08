@@ -2456,12 +2456,13 @@ $('#something').click(function() {
       <!-- Custom Theme JavaScript -->
       <script src="<?php echo base_url() ?>assets/js/custom.js?v=1.0.1" type="text/javascript"></script>
       <script src="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>      
-      <script src="<?php echo base_url('assets/js/jquery.imageviewer.min.js') ?>" type="text/javascript"></script> 
+      <script src="<?php echo base_url('assets/js/jquery.imageviewer.min.js') ?>"></script> 
    </body>
 </html>
 
 
 <script>
+  imageviewer();		// library function to view image in pop up
 var content = document.getElementById("main");
 var btn = document.getElementById("btn");
 $(document).ready(function(){
