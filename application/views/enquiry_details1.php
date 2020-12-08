@@ -793,7 +793,7 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
             <?php if($this->session->companey_id=='83'){ ?>
             <li href="#login-tab" data-toggle="tab" >Login Trail</li>
             <?php } ?>
-            <?php if($this->session->companey_id==65){ ?>
+            <?php if($this->session->companey_id==){ ?>
             <li href="#COMMERCIAL_INFORMATION" data-toggle="tab" >Commercial Information</li>
             <li href="#vtransaggrement" data-toggle="tab" >Agreement</li>
             <?php } ?>
@@ -1688,7 +1688,7 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                      </div>
                   </form>
                </div>
-               <?php if($this->session->companey_id==65){ ?>
+               <?php if($this->session->companey_id==){ ?>
               <div class="tab-pane" id="COMMERCIAL_INFORMATION" >
             <!-- <div class="col-md-12"><a class="btn btn-primary" style="cursor: pointer;" data-toggle="modal" data-target="#downloadQuatation">Download Quatation</a></div> -->
                  <div  style="overflow-x:auto;">
