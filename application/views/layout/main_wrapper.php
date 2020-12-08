@@ -397,6 +397,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
       
 </head>
    <body class="sidebar-mini <?php if($this->session->menu==1){echo 'sidebar-collapse';}?>" data-baseUrl="<?php echo base_url(); ?>">      
+      <div id='img-view-light'></div>
       <style>
         .main-header .logo{
           background-color:#fff !important;
