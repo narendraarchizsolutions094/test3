@@ -1091,7 +1091,7 @@
 					return $(elem).text().toUpperCase().indexOf(arg.toUpperCase()) >= 0;
 					};
 				});					
-				imageviewer();		// library function to view image in pop up
+				
           </script>
 
       </section>
