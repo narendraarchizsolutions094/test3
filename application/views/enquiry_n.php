@@ -146,7 +146,6 @@ input[name=lead_stages]{
 }
 </style>
 
-
 <form method="post" id="enq_filter" >
 <div class="row">
  <div class="row" style="background-color: #fff;padding:7px;border-bottom: 1px solid #C8CED3;">  
@@ -315,6 +314,37 @@ input[name=lead_stages]{
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
       </div>
     </div>
+  </div>
+</div>
+
+
+<div class="row">
+  <div class="col-lg-12" style="padding-top: 5px;">
+    <?php
+    if(!empty($all_stage_lists))
+    {
+      foreach ($all_stage_lists as $stage) 
+      { 
+        echo '<label class="top_pill" data-stage-id="'.$stage->stg_id.'" onclick="active_stage()">'.$stage->lead_stage_name.'</label><label class="top2_pill"> <i class="fa fa-chevron-right"></i> </label>';
+      }
+              
+    }
+    ?>
+   <style type="text/css">
+     .top_pill{
+      padding:12px;
+     }
+     .top2_pill{
+      padding: 12px 7px;
+     }
+     .top-active
+     {
+      background: #1073ad;  
+      border-radius: 30px;
+      color: white;
+     }
+   </style>
+  
   </div>
 </div>
 
@@ -1136,8 +1166,43 @@ for (var i = 0; i < checkboxes.length; i++) {
       }
     });
 
+$(".top_pill").on('click',function(){
 
-      
+     var stg_id = $(this).data('stage-id');
+     if(!$(this).hasClass('top-active'))
+     {
+        $(".top_pill").removeClass('top-active');
+        $(this).addClass('top-active');
+        var form_data = $("#enq_filter").serialize(); 
+          form_data+="&stage="+stg_id;
+          $.ajax({
+            url: '<?=base_url()?>enq/enquiry_set_filters_session',
+            type: 'post',
+            data: form_data,
+            success: function(responseData){
+              $('#enq_table').DataTable().ajax.reload();   
+              update_top_filter_counter(); 
+          }
+        });
+        
+     }
+     else
+     {
+        $(".top_pill").removeClass('top-active');
+        var form_data = $("#enq_filter").serialize(); 
+          form_data+="&stage=";
+          $.ajax({
+            url: '<?=base_url()?>enq/enquiry_set_filters_session',
+            type: 'post',
+            data: form_data,
+            success: function(responseData){
+              $('#enq_table').DataTable().ajax.reload();    
+               update_top_filter_counter();
+          }
+        });
+     }
+    $('#enq_table').DataTable().ajax.reload();
+});
 
       function process_change_fun(){
         update_top_filter_counter();
@@ -1180,11 +1245,14 @@ for (var i = 0; i < checkboxes.length; i++) {
       });
 
       function update_top_filter_counter(){
+        //alert("dd");
         $.ajax({
-        url: "<?=base_url().'enq/stages_of_enq/'.$data_type?>",
-        type: 'get',
+        //url: "<?=base_url().'enq/stages_of_enq/'.$data_type?>",
+        url: "<?=base_url().'enq/short_dashboard_count/'.$data_type?>",
+        type: 'post',
         dataType: 'json',
         success: function(responseData){
+         //alert(JSON.stringify(responseData));
         $('#today_created').html(responseData.all_creaed_today_num);
         $('#active_all').html(responseData.all_active_num);
         $('#today_updated').html(responseData.all_today_update_num);
@@ -1196,6 +1264,10 @@ for (var i = 0; i < checkboxes.length; i++) {
         //console.log(all_lead_stage_c);
         
         $('#lead_stage_-1').text(all_lead_stage_c);     
+        },
+        error:function(u,v,w)
+        {
+          alert(w);
         }
     });
       }
@@ -1203,7 +1275,7 @@ for (var i = 0; i < checkboxes.length; i++) {
 
       $('#enq_filter').change(function() {
         
-        update_top_filter_counter(); 
+        //update_top_filter_counter(); 
         var form_data = $("#enq_filter").serialize();       
         $.ajax({
         url: '<?=base_url()?>enq/enquiry_set_filters_session',
@@ -1211,7 +1283,8 @@ for (var i = 0; i < checkboxes.length; i++) {
         data: form_data,
         success: function(responseData){
           $('#enq_table').DataTable().ajax.reload();
-          //stage_counter();      
+          alert('done');
+          update_top_filter_counter();      
         }
       });
       });

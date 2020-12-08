@@ -1221,6 +1221,7 @@ class Ticket extends CI_Controller
 			$this->form_validation->set_rules('tracking_no', display('tracking_no'), 'required|callback_tracking_no_check', array('tracking_no_check' => 'Ticket with this '.display('tracking_no').' is already open.'));
 		}
 		if ($this->form_validation->run()==TRUE) {
+			$_POST['relatedto'] =  !empty($_POST['relatedto'])?$_POST['relatedto']:'';
 			$res = $this->Ticket_Model->save($this->session->companey_id, $this->session->user_id);
 			
 			if ($res) 

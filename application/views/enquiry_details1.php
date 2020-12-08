@@ -525,13 +525,9 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
             if (user_access(450)) {
               $p = '##########';
             }
-            $f = '';
-            if(user_access(220) && !empty($enquiry->phone) && $this->session->companey_id!=65){
-               $f = 'send_parameters(\''.$enquiry->phone.'\')';
-            }
-            ?>            
-            <a href='javascript:void(0)' onclick="<?=$f?>"><?php echo $p ?></a>
-
+            ?>
+            
+            <a href='javascript:void(0)' onclick='send_parameters("<?php echo $enquiry->phone ?>")'><?php echo $p ?></a>
             <br><?php if(!empty($enquiry->email)) { echo $enquiry->email; } ?>            
             <br><?php if(!empty($enquiry->reference_name)) {               
               $this->db->where('TRIM(partner_id)',trim($enquiry->reference_name));
@@ -2113,33 +2109,36 @@ $.ajax({
 });
  </script>
 
-<form class="" method="post">
+<form action="<?=base_url('client/view_editable_aggrement')?>" method="post">
 <div class="col-md-6" style="padding:20px;">
+
+    <input type="hidden" name="customer_name" value="<?=$enquiry->name_prefix.' '.$enquiry->name.' '.$enquiry->lastname?>">
+    
             <select class="form-control"  name="agg_frmt"  id="agg_frmt"> 
               <option>Select Format</option>
               <option value = "vtrans">Vtrans Agreement</option>
             </select>
 </div>
 <div class="col-md-6" style="padding:20px;">                                                
-   <input class="btn btn-primary" type="button" value="Genereate pdf" name="submit" onclick="loadAggrement()">           
+   <input class="btn btn-primary" type="submit" value="Genereate pdf" name="submit" >           
 </div>
 </form>
  
- <script type="text/javascript">
-   // function loadAggrement()
-   // {
-   //    $.ajax({
-   //      url:"<?=base_url('client/view_editable_aggrement')?>",
-   //      type:"post",
-   //      data:{task:'view'},
-   //      success:function(res)
-   //      {
-   //        $(".aggrement_view").html(res);
-   //        $(".aggrement_view").show();
-   //      }
-   //    });
+<!--  <script type="text/javascript">
+   function loadAggrement()
+   {
+      $.ajax({
+        url:"<?=base_url('client/view_editable_aggrement')?>",
+        type:"post",
+        data:{task:'view'},
+        success:function(res)
+        { //document.write(res);
+          $(".aggrement_view").html(res);
+          $(".aggrement_view").show();
+        }
+      });
      
-   // }
+   }
  </script>
 <div class="aggrement_view">
 
@@ -2157,7 +2156,7 @@ $.ajax({
     display: none;
   }
 </style>
-
+ -->
  <form class="" action="<?php echo base_url()?>client/create_aggrement/<?php echo $this->uri->segment(3); ?>" id="" method="post" enctype="multipart/form-data">
             <div class="col-md-12 col-sm-12">        
                   <div class="row">                      

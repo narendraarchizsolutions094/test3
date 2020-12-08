@@ -52,12 +52,12 @@ class Enquiry_model extends CI_Model {
 		{	
 			$process_id = $enquiry->product_id;
 
-		$tab_list = $this->form_model->get_tabs_list($companey_id,$process_id,0);
+		  $tab_list = $this->form_model->get_tabs_list($companey_id,$process_id,0);
 
-		$tabs = array();
+  		$tabs = array();
 
-		$primary_tab=0;
-		$primary = $this->getPrimaryTab();
+  		$primary_tab=0;
+  		$primary = $this->getPrimaryTab();
 
         if($primary)
             $primary_tab = $primary->id;
@@ -1117,7 +1117,7 @@ class Enquiry_model extends CI_Model {
 
 	public function all_enquery($data_type=1)
 	{
-        $all_reporting_ids    =   $this->common_model->get_categories($this->session->user_id);
+    $all_reporting_ids    =   $this->common_model->get_categories($this->session->user_id);
 		$where='';
 		$this->db->from("enquiry");
 		$where.=" enquiry.status=$data_type";

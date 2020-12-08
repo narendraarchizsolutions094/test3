@@ -1513,23 +1513,87 @@ if(!empty($_FILES['file']['name'])){
     }
     /***********************end add aggriment***********************/
 
+public function abc()
+{
+    $data['title']='abc';
+   $data['content'] = $this->load->view('aggrement/editable_vtrans',array(),true);
+   $this->load->view('layout/main_wrapper',$data);
+}
 
 public function view_editable_aggrement()
 {
+    //print_r($_POST);
     //$data['customer_name']  = $this->input->post()
-    echo $this->load->view('aggrement/editable_vtrans',array(),true);
+    //$_POST['customer_name']  = 'Shivam Gautam';
+    //$_POST['region_name']  = 'south';
+    //$_POST['branch_name']  = 'Noida';
+    //$_POST['customer_code']  = '00283';
+
+   // echo'<form action="'.base_url('client/generate_aggrement').'" method="post" style="padding:20px;">';
+    // if(!empty($_POST['agg_frmt']))
+    // {
+    //     if($_POST['agg_frmt']=='vtrans')
+  
+    if(empty($_POST))
+        $_POST = array();
+
+    if(!empty($_POST['agg_frmt']))
+    {
+        if($_POST['agg_frmt']=='vtrans')
+        echo $this->load->view('aggrement/input-vtrans',array(),TRUE);
+        else
+            echo'No Agrrement';
+    }
+    echo'No Agrrement';
+    //echo'';
+    //$data['content'] = $this->load->view('aggrement/editable_vtrans',$data,TRUE);
+    //$this->load->view('layout/main_wrapper',$data);
 }
 
     /**************************Grenerate aggriment**************************/
     public function generate_aggrement() {
+        // $_POST['customer_name']  = 'Shivam Gautam';
+        // $_POST['region_name']  = 'south';
+        // $_POST['branch_name']  = 'Noida';
+        // $_POST['customer_code']  = '00283';
+        //print_r($_POST);
+        if(!empty($_POST))
+        {   // exit();
+            foreach ($_POST as $key => $v)
+            {
+                if(is_array($v))
+                {
+                    foreach ($v as $k => $value) 
+                    {
+                        if(empty($value))
+                            $_POST[$key][$k] = ' ';
+                    }
+                   
+                }
+                else
+                {
+                    if(empty($v))
+                            $_POST[$key] = ' ';
+                }
+            }
+            $this->load->helpers('dompdf');
+            //$data['title'] = 'Agrrement';
+            if($_POST['format_for']=='vtrans')
+                $viewfile = $this->load->view('aggrement/input-vtrans',$_POST,TRUE);
 
-         $data['title'] = 'Bangalore-Australia-Agreement';
-         $data['customer_name'] = 'Shivam Gautam';
-           // $this->load->helpers('dompdf');
-            $viewfile = $this->load->view('aggrement/vtrans-new', $data, TRUE);
             echo $viewfile;
+           //pdf_create($viewfile,'Demo Aggrement',true,'1');
+        }
+        // $abc = !empty($_POST['aggrement_data']) ? $_POST['aggrement_data'] : '';
+        
+        // echo $abc;
+         //$data['title'] = 'Bangalore-Australia-Agreement';
+         //$data['customer_name'] = 'Shivam Gautam';
+           //
+            // echo $viewfile;
             //pdf_create($viewfile,'Bangalore-Australia-Agreement'.$this->session->user_id);
-
+            //pdf_create($abc,'vtrans-Agreement');
+            //redirect($this->agent->referrer());
         exit();
 
         $pdf_name = $this->input->post('agg_frmt');
