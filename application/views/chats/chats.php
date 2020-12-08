@@ -19,7 +19,7 @@
       }
 
       #chatSection,
-      .chatSection {
+      .chatSection {		  
           display: inline-block;
           float: right;
           background: #fff;
@@ -50,7 +50,19 @@
           right: 300px;
           max-width: 70%;
 
-      }
+	  }
+	  @media only screen and (max-width: 600px) {
+		  #chatSection,
+		  .chatSection{
+			  position: absolute;
+			  bottom:0px;
+			  left:0px;
+			  z-index:201 !important;
+		  }  
+		  .class_chat_list{
+			z-index:unset;
+		  }
+	    }
 
       /*	  .box-footer{position:fixed;z-index:200;float:right;right:300px;bottom:0px;display:block;background:#fff;height:40px;width:250px;
 	   border:1px solid #000;} */
