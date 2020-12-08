@@ -223,8 +223,8 @@ class Message extends CI_Controller {
 		 $this->db->where('pk_i_admin_id',$this->session->user_id);
               $user_row  = $this->db->get('tbl_admin')->row_array();
 
-		  if($this->session->companey_id==65)
-		  {	
+		//   if($this->session->companey_id==65)
+		//   {	
 		  	
 		  	$email_subject = $this->input->post('email_subject')??'';
 
@@ -270,7 +270,7 @@ class Message extends CI_Controller {
 
 			//  echo $message.'<br>'.$email_subject;exit();
 
-		}
+		
         if($this->input->post('mesge_type')== 1){
 	      	$templates_id	=	$this->input->post('templates');
 	      	$this->db->where('temp_id',$templates_id);
