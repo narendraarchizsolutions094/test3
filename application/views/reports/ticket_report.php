@@ -265,9 +265,10 @@
                          <?php 
                               if (!empty($sub_stage)) {
                               foreach ($sub_stage as $sub_stage_list) {?>
-                              <option <?php if ($sub_stage_list->id==$this->input->post('sub_stage')) {echo 'selected';}}?> value="<?=$sub_stage_list->id?>"><?=$sub_stage_list->description?> </option>
+                              <option <?php if ($sub_stage_list->id==$this->input->post('sub_stage')) {echo 'selected';}?> value="<?=$sub_stage_list->id?>"><?=$sub_stage_list->description?> </option>
                               <?php 
                               }
+                            }
                             
                         ?>     
                     </select> 
