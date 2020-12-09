@@ -768,13 +768,12 @@ $(document).ready(function() {
         $("#ticket_filter").submit();
     });
 });
+</script>
 
-// function table_filter()
-// { 
   <?php  
   if(!empty($_POST)){
-?>
-  
+  ?>
+  <script>
   $('#ticket_table').DataTable({         
           "processing": true,
           "scrollX": true,
@@ -815,11 +814,11 @@ $(document).ready(function() {
                     }} 
              ] ,  <?php  } ?>  
     });
+</script>
+
   <?php
   }
   ?>
-
-</script>
 
 <!--------------------TABLE COLOUMN CONFIG----------------------------------------------->
 <div id="table-col-conf" class="modal fade" role="dialog">
