@@ -139,7 +139,7 @@ class Telephony extends CI_Controller {
         'uid_call'  =>str_replace('_','.',base64_decode($uid)), 
         );
         $where=' uid="'.str_replace('_','.',base64_decode($uid)).'" AND users!="" AND status=0 AND (cll_state=5 OR cll_state=3)';
-        $this->db->select('users');
+        $this->db->select('users,json_data');
         $this->db->from('tbl_col_log');
         $this->db->where($where);
         $this->db->order_by('id','DESC');
@@ -147,8 +147,15 @@ class Telephony extends CI_Controller {
         if(!empty($res)){
          $array_users= json_decode($res->users);
          $user_id='91'.$this->session->phone;
+
+        $call_json = !empty($json_data)?json_decode($res->json_data,true):array();
+        $inbound = 0;
+        if(!empty($call_json['event']) && $call_json['event'] ==1){
+            $inbound = 1;
+        }
+
         if(in_array($user_id,$array_users)){
-         echo '1';
+         echo $inbound;
         $this->session->set_userdata($newdata);   
         $this->db->set('status',1);
         //$this->db->set('enq_id',$this->session->enq_id);
