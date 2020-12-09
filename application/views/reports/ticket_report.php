@@ -113,7 +113,7 @@
                        
                         <div class="form-group col-md-3" id="fromdatefilter">
                           <label for="from-date"><?php echo display("from_date"); ?></label>
-                          <input type="date" class="form-control" id="from-date" name="from_created" style="padding-top:0px;">
+                          <input type="date" class="form-control" id="from-date" name="from_created" style="padding-top:0px;" value="<?=$this->input->post('from_created')?>">
                         </div>
                         <div class="form-group col-md-3" id="todatefilter">
                           <label for="to-date"><?php echo display("to_date"); ?></label>
