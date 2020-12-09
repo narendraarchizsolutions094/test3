@@ -758,13 +758,12 @@ $(document).ready(function() {
         type: 'post',
         data: form_data,
         success: function(responseData){
-         // document.write(responseData);
-        if(run==0)
-          //table_filter();
-        else
-          //$('#ticket_table').DataTable().ajax.reload();
-          //stage_counter();      
-           }
+            // document.write(responseData);
+            // if(run==0)
+            //   table_filter();
+            // else
+            //   $('#ticket_table').DataTable().ajax.reload();         
+        }
         });
         $("#ticket_filter").submit();
     });
