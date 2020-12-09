@@ -774,6 +774,7 @@ $(document).ready(function() {
   if(!empty($_POST)){
   ?>
   <script>
+  $(document).ready(function() {
   $('#ticket_table').DataTable({         
           "processing": true,
           "scrollX": true,
@@ -814,6 +815,8 @@ $(document).ready(function() {
                     }} 
              ] ,  <?php  } ?>  
     });
+  });
+
 </script>
 
   <?php
