@@ -750,7 +750,9 @@ $(document).ready(function() {
 
 
   $('#go_filter').click(function() {
-     // $("#ticket_table").destroy();
+    if ($.fn.dataTable.isDataTable('#ticket_table')) {
+      $("#ticket_table").destroy();
+    } 
 
         var form_data = $("#ticket_filter").serialize();       
        // alert(form_data);
