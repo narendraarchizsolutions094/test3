@@ -137,7 +137,7 @@
                               <option value="" style="display:">---Select Source---</option>
                                <?php foreach ($sourse as $row) {?>
                                 
-                                 <option value="<?=$row->lsid?>" <?php if(!empty($this->input->post('source'))){if (in_array($row->lsid,$this->input->post('source'))) {echo 'selected';}}?>><?=$row->lead_name?></option>
+                                 <option value="<?=$row->lsid?>" <?php if(!empty($this->input->post('source'))){if ($row->lsid==$this->input->post('source')) {echo 'selected';}}?>><?=$row->lead_name?></option>
                               <?php }?>
 
                           </select>
