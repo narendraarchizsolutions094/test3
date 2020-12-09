@@ -109,7 +109,6 @@ $('#example').DataTable({
           alert(w); 
         }
         },
-      <?php if(user_access(500)) { ?>
           dom: "<'row text-center'<'col-sm-12 col-xs-12 col-md-4'l><'col-sm-12 col-xs-12 col-md-4 text-center'B><'col-sm-12 col-xs-12 col-md-4'f>>tp", 
         buttons: [  
             {extend: 'copy', className: 'btn-xs btn',exportOptions: {
@@ -128,9 +127,6 @@ $('#example').DataTable({
                         columns: "thead th:not(.noExport)"
                     }} 
         ] ,
-        <?php
-        }
-        ?>
      createdRow: function( row, data, dataIndex ) {            
        var th = $("table>th");            
        l = $("table").find('th').length;
