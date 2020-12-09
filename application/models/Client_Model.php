@@ -114,7 +114,7 @@ class Client_Model extends CI_Model
             $this->db->where($where);
         $this->db->select('contacts.*,enquiry.company,enquiry.enquiry_id,concat (name_prefix," ",name," ",lastname) as enq_name');
         $this->db->from('tbl_client_contacts contacts');
-        $this->db->join('enquiry','enquiry.enquiry_id=contacts.client_id','left');
+        $this->db->join('enquiry','enquiry.enquiry_id=contacts.client_id','inner');
         return $this->db->get();
         //echo $this->db->last_query(); exit();
     }
