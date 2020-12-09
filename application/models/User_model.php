@@ -50,6 +50,16 @@ class User_model extends CI_Model {
         if (!empty($user_right)) {
             $where .= "  AND tbl_user_role.user_role='".$user_right."'";                                            
         }
+
+        $exclude = array();
+        if($this->session->companey_id == 57){
+            $exclude = array(200,201);
+        }
+        if(!empty($exclude)){
+            foreach($exclude as $rid){
+                $where .= "  AND tbl_user_role.user_role!='".$rid."'";                                            
+            }
+        }
         $this->db->where($where);
         return $this->db->get()->result();
     }
