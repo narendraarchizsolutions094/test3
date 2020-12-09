@@ -26,7 +26,7 @@
 								{
 									echo'<tr>
 											<td>'.$i++.'. </td>
-											<td><a href="'.base_url('enquiry/view/').$row['enquiry_id'].'">'.$row['name'].'</a></td>
+											<td><a href="'.base_url('enquiry/view/').$row['enquiry_id'].'">'.$row['enq_name'].'</a></td>
 											<td>'.getValue($row['company']).'</td>
 											<td>'.getValue($row['designation']).'</td>
 											<td>'.getValue($row['c_name']).'</td>
