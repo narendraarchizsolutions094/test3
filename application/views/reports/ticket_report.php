@@ -762,10 +762,10 @@ $(document).ready(function() {
         data: form_data,
         success: function(responseData){
          // document.write(responseData);
+         table_filter();
         if(run==0)
-          table_filter();
         else
-          $('#ticket_table').DataTable().ajax.reload();
+          //$('#ticket_table').DataTable().ajax.reload();
           //stage_counter();      
            }
         });
