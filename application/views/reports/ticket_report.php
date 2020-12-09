@@ -765,7 +765,7 @@ $(document).ready(function() {
          table_filter();
         if(run==0)
         else
-          //$('#ticket_table').DataTable().ajax.reload();
+          //y$('#ticket_table').DataTable().ajax.reload();
           //stage_counter();      
            }
         });
@@ -774,8 +774,7 @@ $(document).ready(function() {
 
 function table_filter()
 { 
-  $('#ticket_table').DataTable({
-          "retrieve": true,         
+  $('#ticket_table').DataTable({    
           "processing": true,
           "scrollX": true,
           "scrollY": 520,
