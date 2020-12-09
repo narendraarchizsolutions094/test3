@@ -1161,7 +1161,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
           if($this->session->companey_id == 65){ ?>
            <li class="<?=($segment2=='contacts')?'active':''?>">
               <a href="<?=base_url('client/contacts')?>">
-                 <i class="fa fa-address-book" style="color:#fff;font-size:23px;background:#1a8d98;padding:5px; padding-left:10px;border-radius:4px;width:30px;"></i>
+                 <i class="fa fa-address-book" style="color:#fff;font-size:20px;background:#008080;padding:7px;border-radius:4px;width:30px;"></i>
                   <?=display('contacts')?>
               </a>
           </li>
