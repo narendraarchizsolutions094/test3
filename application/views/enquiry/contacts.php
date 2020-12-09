@@ -27,12 +27,12 @@
 									echo'<tr>
 											<td>'.$i++.'. </td>
 											<td><a href="'.base_url('enquiry/view/').$row['enquiry_id'].'">'.$row['enq_name'].'</a></td>
-											<td>'.getValue($row['company']).'</td>
-											<td>'.getValue($row['designation']).'</td>
-											<td>'.getValue($row['c_name']).'</td>
-											<td>'.getValue($row['contact_number']).'</td>
-											<td>'.getValue($row['emailid']).'</td>
-											<td>'.getValue($row['other_detail']).'</td>
+											<td>'.$row['company'].'</td>
+											<td>'.$row['designation'].'</td>
+											<td>'.$row['c_name'].'</td>
+											<td>'.$row['contact_number'].'</td>
+											<td>'.$row['emailid'].'</td>
+											<td>'.$row['other_detail'].'</td>
 											<td style="width:50px;">
 											<div class="btn-group">
 				                                <button class="btn btn-warning btn-xs" data-cc-id="'.$row['cc_id'].'" onclick="edit_contact(this)">
