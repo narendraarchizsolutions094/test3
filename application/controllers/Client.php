@@ -377,7 +377,7 @@ class Client extends CI_Controller {
     public function contacts()
     {
         $this->load->model('Client_Model');
-        $data['title'] = display('Contacts');
+        $data['title'] = display('contacts');
         $data['contact_list'] = $this->Client_Model->getContactList(array('contacts.comp_id'=>$this->session->companey_id));//contacts.*,enquiry.---
        // print_r($data['contact_list']->result_array()); exit();
         $data['content'] = $this->load->view('enquiry/contacts', $data, true);

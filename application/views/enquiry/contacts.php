@@ -3,7 +3,7 @@
 	<div class="col-lg-12">
 		<div class="panel panel-success">
 			<div class="panel-body">
-				<table id="contactTable" class="table table-bordered table-response">
+				<table id="contactTable" class="datatable1 table table-bordered table-response">
 					<thead>
 	                             
 				         <tr>
