@@ -48,7 +48,7 @@ class User_model extends CI_Model {
         $where = "  tbl_admin.pk_i_admin_id IN (".implode(',', $all_reporting_ids).')';                
         $where .= "  AND tbl_admin.b_status=1";                                
         if (!empty($user_right)) {
-            $where .= "  AND tbl_user_role.user_role='".$user_right."'";                                            
+            $where .= "  AND tbl_admin.user_permissions='".$user_right."'";                                            
         }
 
         $exclude = array();
@@ -57,7 +57,7 @@ class User_model extends CI_Model {
         }
         if(!empty($exclude) && empty($user_right)){
             foreach($exclude as $rid){
-                $where .= "  AND tbl_user_role.user_role!='".$rid."'";                                            
+                $where .= "  AND tbl_admin.user_permissions!='".$rid."'";                                            
             }
         }
         $this->db->where($where);
