@@ -750,7 +750,7 @@ $(document).ready(function() {
 
 
   $('#go_filter').click(function() {
-      $("#ticket_table").destroy();
+     // $("#ticket_table").destroy();
 
         var form_data = $("#ticket_filter").serialize();       
        // alert(form_data);
