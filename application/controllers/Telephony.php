@@ -148,7 +148,7 @@ class Telephony extends CI_Controller {
          $array_users= json_decode($res->users);
          $user_id='91'.$this->session->phone;
 
-        $call_json = !empty($json_data)?json_decode($res->json_data,true):array();
+        $call_json = !empty($res->json_data)?json_decode($res->json_data,true):array();
         $inbound = 0;
         if(!empty($call_json['event']) && $call_json['event'] ==1){
             $inbound = 1;
