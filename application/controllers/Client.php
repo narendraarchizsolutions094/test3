@@ -378,7 +378,7 @@ class Client extends CI_Controller {
     {
         $this->load->model('Client_Model');
         $data['title'] = display('contacts');
-        $data['contact_list'] = $this->Client_Model->getContactList(array('contacts.comp_id'=>$this->session->companey_id));//contacts.*,enquiry.---
+        $data['contact_list'] = $this->Client_Model->getContactList();//contacts.*,enquiry.---
        // print_r($data['contact_list']->result_array()); exit();
         $data['content'] = $this->load->view('enquiry/contacts', $data, true);
         $this->load->view('layout/main_wrapper', $data);

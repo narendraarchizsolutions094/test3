@@ -104,8 +104,9 @@ class Client_Model extends CI_Model
     }
     
     
-    public function getContactList($where=0)
+    public function getContactList()
     {
+        $where = 'enquiry.comp_id='.$this->session->companey_id;
         $all_reporting_ids    =   $this->common_model->get_categories($this->session->user_id);
         $where .= " AND ( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
         $where .= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';          
