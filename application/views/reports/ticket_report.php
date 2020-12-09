@@ -268,7 +268,7 @@
                               <option <?php if ($sub_stage_list->id==$this->input->post('sub_stage')) {echo 'selected';}}?> value="<?=$sub_stage_list->id?>"><?=$sub_stage_list->description?> </option>
                               <?php 
                               }
-                            }
+                            
                         ?>     
                     </select> 
                     </div> 
@@ -280,9 +280,9 @@
                          <?php 
                               if (!empty($ticket_status)) {
                               foreach ($ticket_status as $sub_stage_list) {?>
-                              <option <?php if(!empty($this->input->post('ticket_status'))){if ($sub_stage_list->id==$this->input->post('ticket_status'))) {echo 'selected';}}?> value="<?=$sub_stage_list->id?>"><?=$sub_stage_list->status_name?> </option>
+                              <option <?php if ($sub_stage_list->id==$this->input->post('ticket_status')) {echo 'selected';}}?> value="<?=$sub_stage_list->id?>"><?=$sub_stage_list->status_name?> </option>
                               <?php 
-                              }
+                              
                             }
                         ?>     
                     </select> 
