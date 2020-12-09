@@ -152,7 +152,7 @@
                               <option value="" style="display:">---Select Problem---</option>
                                <?php foreach ($problem as $row) {?>
                                 
-                                 <option value="<?=$row->id?>"><?=$row->subject_title?></option>
+                                 <option <?php if(!empty($this->input->post('problem'))){if ($row->id==$this->input->post('problem')) {echo 'selected';}}?>  value="<?=$row->id?>"><?=$row->subject_title?></option>
                               <?php 
 	                          }
 	                          ?>
@@ -164,9 +164,9 @@
                           <label for="priority">Priority</label>
                           <select class="form-control" name="priority" id="priority">
               <option value="" style="display:">---Select Priority---</option>
-              <option value="1">Low</option>
-							<option value="2">Medium</option>
-							<option value="3">High</option>n>
+              <option value="1" <?php if(!empty($this->input->post('priority'))){if (1==$this->input->post('priority')) {echo 'selected';}}?>>Low</option>
+							<option value="2" <?php if(!empty($this->input->post('priority'))){if (2==$this->input->post('priority')) {echo 'selected';}}?> > Medium</option>
+							<option value="3" <?php if(!empty($this->input->post('priority'))){if (3==$this->input->post('priority')) {echo 'selected';}}?> >High</option>n>
                            </select>
                         </div>
 
@@ -176,7 +176,7 @@
                               <option value="" style="display:">---Select Issue---</option>
                                <?php  if(!empty($issues)) {
 								foreach($issues as $ind => $issue){
-									?><option value = "<?php echo $issue->id ?>"><?php echo ucfirst($issue->title) ?> </option>
+									?><option <?php if(!empty($this->input->post('issue'))){if ($issue->id==$this->input->post('issue')) {echo 'selected';}}?> value = "<?php echo $issue->id ?>"><?php echo ucfirst($issue->title) ?> </option>
 								<?php
 								}	
 							} ?>
@@ -194,7 +194,7 @@
                          <?php 
                           if (!empty($created_bylist)) {
                               foreach ($created_bylist as $createdbylist) {?>
-                              <option value="<?=$createdbylist->pk_i_admin_id;?>" <?php if(!empty(set_value('createdby'))){if (in_array($product->sb_id,set_value('createdby'))) {echo 'selected';}}?>><?=$createdbylist->s_display_name.' '.$createdbylist->last_name;?> -  <?=$createdbylist->s_user_email?$createdbylist->s_user_email:$createdbylist->s_phoneno;?>                               
+                              <option value="<?=$createdbylist->pk_i_admin_id;?>" <?php if(!empty($this->input->post('createdby'))){if ($product->sb_id==$this->input->post('createdby')) {echo 'selected';}}?>><?=$createdbylist->s_display_name.' '.$createdbylist->last_name;?> -  <?=$createdbylist->s_user_email?$createdbylist->s_user_email:$createdbylist->s_phoneno;?>                               
                               </option>
                               <?php }}?>    
                          </select>                       
@@ -206,7 +206,7 @@
                          <?php 
                               if (!empty($created_bylist)) {
                               foreach ($created_bylist as $createdbylist) {?>
-                              <option value="<?=$createdbylist->pk_i_admin_id;?>" <?php if(!empty(set_value('assign'))){if (in_array($product->sb_id,set_value('assign'))) {echo 'selected';}}?>><?=$createdbylist->s_display_name.' '.$createdbylist->last_name;?> -  <?=$createdbylist->s_user_email?$createdbylist->s_user_email:$createdbylist->s_phoneno;?></option>
+                              <option value="<?=$createdbylist->pk_i_admin_id;?>" <?php if(!empty($this->input->post('assign'))){if ($product->sb_id==$this->input->post('assign')) {echo 'selected';}}?>><?=$createdbylist->s_display_name.' '.$createdbylist->last_name;?> -  <?=$createdbylist->s_user_email?$createdbylist->s_user_email:$createdbylist->s_phoneno;?></option>
                               <?php }}?>    
                          </select>                          
                         </div>
@@ -218,7 +218,7 @@
                          <?php 
                               if (!empty($created_bylist)) {
                               foreach ($created_bylist as $createdbylist) {?>
-                              <option value="<?=$createdbylist->pk_i_admin_id;?>" <?php if(!empty(set_value('assign'))){if (in_array($product->sb_id,set_value('assign'))) {echo 'selected';}}?>><?=$createdbylist->s_display_name.' '.$createdbylist->last_name;?> -  <?=$createdbylist->s_user_email?$createdbylist->s_user_email:$createdbylist->s_phoneno;?></option>
+                              <option value="<?=$createdbylist->pk_i_admin_id;?>" <?php if(!empty($this->input->post('assign'))){if ($product->sb_id==$this->input->post('assign') {echo 'selected';}}?>><?=$createdbylist->s_display_name.' '.$createdbylist->last_name;?> -  <?=$createdbylist->s_user_email?$createdbylist->s_user_email:$createdbylist->s_phoneno;?></option>
                               <?php }}?>    
                          </select>                          
                         </div>
@@ -233,7 +233,7 @@
                          <?php 
                               if (!empty($prodcntry_list)) {
                               foreach ($prodcntry_list as $prodcntrylist) {?>
-                              <option value="<?=$prodcntrylist->id;?>" <?php if(!empty(set_value('prodcntry'))){if (in_array($prodcntrylist->id,set_value('prodcntry'))) {echo 'selected';}}?>><?= $prodcntrylist->country_name ?></option>
+                              <option value="<?=$prodcntrylist->id;?>" <?php if(!empty($this->input->post('prodcntry'))){if ($prodcntrylist->id==$this->input->post('prodcntry'))) {echo 'selected';}}?>><?= $prodcntrylist->country_name ?></option>
                               <?php }}?>    
                     </select> 
                     </div> 
@@ -245,7 +245,7 @@
                          <?php 
                               if (!empty($stage)) {
                               foreach ($stage as $stage_list) {?>
-                              <option value="<?=$stage_list->stg_id?>"><?=$stage_list->lead_stage_name?> </option>
+                              <option <?php if(!empty($this->input->post('stage'))){if ($stage_list->stg_id==$this->input->post('stage'))) {echo 'selected';}}?> value="<?=$stage_list->stg_id?>"><?=$stage_list->lead_stage_name?> </option>
                               <?php 
                               }
                             }
@@ -260,7 +260,7 @@
                          <?php 
                               if (!empty($sub_stage)) {
                               foreach ($sub_stage as $sub_stage_list) {?>
-                              <option value="<?=$sub_stage_list->id?>"><?=$sub_stage_list->description?> </option>
+                              <option <?php if(!empty($this->input->post('sub_stage'))){if ($sub_stage_list->id==$this->input->post('sub_stage'))) {echo 'selected';}}?> value="<?=$sub_stage_list->id?>"><?=$sub_stage_list->description?> </option>
                               <?php 
                               }
                             }
@@ -275,7 +275,7 @@
                          <?php 
                               if (!empty($ticket_status)) {
                               foreach ($ticket_status as $sub_stage_list) {?>
-                              <option value="<?=$sub_stage_list->id?>"><?=$sub_stage_list->status_name?> </option>
+                              <option <?php if(!empty($this->input->post('ticket_status'))){if ($sub_stage_list->id==$this->input->post('ticket_status'))) {echo 'selected';}}?> value="<?=$sub_stage_list->id?>"><?=$sub_stage_list->status_name?> </option>
                               <?php 
                               }
                             }
