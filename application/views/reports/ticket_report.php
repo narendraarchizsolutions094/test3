@@ -772,7 +772,8 @@ $(document).ready(function() {
 
 function table_filter()
 { 
-  $('#ticket_table').DataTable({         
+  $('#ticket_table').DataTable({
+          "retrieve": true,         
           "processing": true,
           "scrollX": true,
           "scrollY": 520,
