@@ -55,7 +55,7 @@ class User_model extends CI_Model {
         if($this->session->companey_id == 57){
             $exclude = array(200,201);
         }
-        if(!empty($exclude)){
+        if(!empty($exclude) && empty($user_right)){
             foreach($exclude as $rid){
                 $where .= "  AND tbl_user_role.user_role!='".$rid."'";                                            
             }
