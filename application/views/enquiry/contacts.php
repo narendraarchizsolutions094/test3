@@ -122,13 +122,3 @@ function deleteContact(t)
 }
 
 </script>
-
-<?php
-function getValue($val)
-{ 	
-	if(!empty($val) && trim($val)!='')
-		return $val;
-	else 
-		return 'NA';
-}
-?>
