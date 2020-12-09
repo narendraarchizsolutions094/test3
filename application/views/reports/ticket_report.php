@@ -104,7 +104,7 @@
 							<div class="panel-body">
 							<!-- Filter Panel Start -->
 
-<form id="ticket_filter">
+<form id="ticket_filter" method="POST">
 	<div class="row" id="filter_pannel">
         <div class="col-lg-12">
             <div class="panel panel-default" style="padding-top: 13px;">
