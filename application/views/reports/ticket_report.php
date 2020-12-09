@@ -117,17 +117,17 @@
                         </div>
                         <div class="form-group col-md-3" id="todatefilter">
                           <label for="to-date"><?php echo display("to_date"); ?></label>
-                          <input type="date" class="form-control" id="to-date" name="to_created" style="padding-top:0px;">
+                          <input type="date" class="form-control" id="to-date" name="to_created" style="padding-top:0px;" value="<?=$this->input->post('to_created')?>">
                         </div> 
 
 
                         <div class="form-group col-md-3" id="update_fromdatefilter">
                           <label for="update-from-date"><?php echo display("update_from_date"); ?></label>
-                          <input type="date" class="form-control" id="update-from-date" name="update_from_created" style="padding-top:0px;">
+                          <input type="date" class="form-control" id="update-from-date" name="update_from_created" style="padding-top:0px;" value="<?=$this->input->post('update_from_created')?>">
                         </div>
                         <div class="form-group col-md-3" id="update_todatefilter">
                           <label for="update-to-date"><?php echo display("update_to_date"); ?></label>
-                          <input type="date" class="form-control" id="update-to-date" name="update_to_created" style="padding-top:0px;">
+                          <input type="date" class="form-control" id="update-to-date" name="update_to_created" style="padding-top:0px;" value="<?=$this->input->post('update_to_created')?>">
                         </div>
 
 
@@ -137,7 +137,7 @@
                               <option value="" style="display:">---Select Source---</option>
                                <?php foreach ($sourse as $row) {?>
                                 
-                                 <option value="<?=$row->lsid?>" <?php if(!empty(set_value('source'))){if (in_array($row->lsid,set_value('source'))) {echo 'selected';}}?>><?=$row->lead_name?></option>
+                                 <option value="<?=$row->lsid?>" <?php if(!empty($this->input->post('source'))){if (in_array($row->lsid,$this->input->post('source'))) {echo 'selected';}}?>><?=$row->lead_name?></option>
                               <?php }?>
 
                           </select>
