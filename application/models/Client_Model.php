@@ -106,6 +106,9 @@ class Client_Model extends CI_Model
     
     public function getContactList($where=0)
     {
+        $all_reporting_ids    =   $this->common_model->get_categories($this->session->user_id);
+        $where .= " AND ( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
+        $where .= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';          
         if($where)
             $this->db->where($where);
         $this->db->select('contacts.*,enquiry.company,enquiry.enquiry_id,concat (name_prefix," ",name," ",lastname) as name');
@@ -178,7 +181,7 @@ class Client_Model extends CI_Model
         $this->db->join('tbl_datasource', 'enquiry.datasource_id=tbl_datasource.datasource_id', 'left');
         $this->db->join('tbl_product', 'tbl_product.sb_id = enquiry.product_id', 'left');
         
-        $where = '';
+        $where = ''; 
 
         $where .= " enquiry.status=3";
 
