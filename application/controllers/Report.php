@@ -718,7 +718,7 @@ class Report extends CI_Controller {
         $this->load->model(array('Ticket_Model','Datasource_model','dash_model','enquiry_model','report_model','Leads_Model','User_model'));
     
 
-        if (isset($_SESSION['ticket_filters_sess']))
+        if (isset($_SESSION['ticket_filters_sess']) && empty($_POST))
           unset($_SESSION['ticket_filters_sess']);
 
         $data['sourse'] = $this->report_model->all_source();
