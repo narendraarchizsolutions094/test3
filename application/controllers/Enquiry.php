@@ -2470,10 +2470,10 @@ Array
             }
             unlink($filePath);
             $this->session->set_flashdata('message', "File Uploaded successfully." . $res);
-            redirect(base_url() . 'lead/datasourcelist');
+            //redirect(base_url() . 'lead/datasourcelist');
         } else {
             $this->session->set_flashdata('exception', $this->upload->display_errors());
-            redirect(base_url() . 'lead/datasourcelist');
+            //redirect(base_url() . 'lead/datasourcelist');
         }
     }
 
