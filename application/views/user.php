@@ -109,16 +109,36 @@ $('#example').DataTable({
           alert(w); 
         }
         },
-    // "columnDefs": [{ "orderable": false, "targets": 0 }],
-    // "order": [[ 1, "desc" ]],
-    // createdRow: function( row, data, dataIndex ) {            
-    //   var th = $("table>th");            
-    //   l = $("table").find('th').length;
-    //   for(j=1;j<=l;j++){
-    //     h = $("table").find('th:eq('+j+')').html();
-    //     $(row).find('td:eq('+j+')').attr('data-th',h);
-    //   }  
-    // }                
+      <?php if(user_access(500)) { ?>
+          dom: "<'row text-center'<'col-sm-12 col-xs-12 col-md-4'l><'col-sm-12 col-xs-12 col-md-4 text-center'B><'col-sm-12 col-xs-12 col-md-4'f>>tp", 
+        buttons: [  
+            {extend: 'copy', className: 'btn-xs btn',exportOptions: {
+                        columns: "thead th:not(.noExport)"
+                    }}, 
+            {extend: 'csv', title: 'list<?=date("Y-m-d H:i:s")?>', className: 'btn-xs btn',exportOptions: {
+                        columns: "thead th:not(.noExport)"
+                    }}, 
+            {extend: 'excel', title: 'list<?=date("Y-m-d H:i:s")?>', className: 'btn-xs btn', title: 'exportTitle',exportOptions: {
+                        columns: "thead th:not(.noExport)"
+                    }}, 
+            {extend: 'pdf', title: 'list<?=date("Y-m-d H:i:s")?>', className: 'btn-xs btn',exportOptions: {
+                        columns: "thead th:not(.noExport)"
+                    }}, 
+            {extend: 'print', className: 'btn-xs btn',exportOptions: {
+                        columns: "thead th:not(.noExport)"
+                    }} 
+        ] ,
+        <?php
+        }
+        ?>
+     createdRow: function( row, data, dataIndex ) {            
+       var th = $("table>th");            
+       l = $("table").find('th').length;
+       for(j=1;j<=l;j++){
+         h = $("table").find('th:eq('+j+')').html();
+         $(row).find('td:eq('+j+')').attr('data-th',h);
+       }  
+     }                
 });
   });
 
