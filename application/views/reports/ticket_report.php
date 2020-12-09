@@ -285,7 +285,7 @@
 
                     </div>
                   <div class="col-md-12" style="border-top: 1px solid #f4f4f4; padding: 8px;">
-                    <button class="btn btn-success pull-right" type="button" id="go_filter">Generate Report</button>
+                    <button class="btn btn-success pull-right" type="submit" id="go_filter">Generate Report</button>
                 </div>
             </div>
         </div>
@@ -749,11 +749,8 @@ var run = 0 ;
 $(document).ready(function() {
 
 
-  $('#go_filter').click(function() {
-    if ($.fn.dataTable.isDataTable('#ticket_table')) {
-      $("#ticket_table").destroy();
-    } 
-
+  $('#go_filter').click(function(e) {
+        e.preventDefault();
         var form_data = $("#ticket_filter").serialize();       
        // alert(form_data);
         $.ajax({
@@ -762,19 +759,24 @@ $(document).ready(function() {
         data: form_data,
         success: function(responseData){
          // document.write(responseData);
-         table_filter();
         if(run==0)
+          //table_filter();
         else
-          //y$('#ticket_table').DataTable().ajax.reload();
+          //$('#ticket_table').DataTable().ajax.reload();
           //stage_counter();      
            }
         });
+        $("#ticket_filter").submit();
     });
 });
 
-function table_filter()
-{ 
-  $('#ticket_table').DataTable({    
+// function table_filter()
+// { 
+  <?php  
+  if(!empty($_POST)){
+?>
+  
+  $('#ticket_table').DataTable({         
           "processing": true,
           "scrollX": true,
           "scrollY": 520,
@@ -814,8 +816,9 @@ function table_filter()
                     }} 
              ] ,  <?php  } ?>  
     });
+  <?php
   }
-
+  ?>
 
 </script>
 
