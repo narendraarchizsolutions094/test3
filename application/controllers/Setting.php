@@ -108,15 +108,15 @@ class Setting extends CI_Controller {
 
 		if ($logo !== false && $logo != null) {
 
-			$this->fileupload->do_resize(
+			// $this->fileupload->do_resize(
 
-				$logo, 
+			// 	$logo, 
 
-				210,
+			// 	210,
 
-				48
+			// 	48
 
-			);
+			// );
 
 		}
 
