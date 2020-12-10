@@ -176,7 +176,7 @@
 
                                         <?php foreach (timezone_identifiers_list() as $value) { ?>
 
-                                            <option value="<?php echo $value ?>" <?php echo (($setting->time_zone==$value)?'selected':null) ?>><?php echo $value ?></option>";
+                                            <option value="<?php echo $value ?>" <?php echo (!empty($setting->time_zone) &&($setting->time_zone==$value)?'selected':null) ?>><?php echo $value ?></option>";
 
                                         <?php } ?>
 
