@@ -759,7 +759,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
 if($root=='https://student.spaceinternationals.com'){  ?>
                     <img src="<?php echo base_url("assets/images/lgo.png") ?>" alt="">
                     <?php }else{ ?>
-                    <img src="<?php echo base_url().$settings->logo ?>" alt="">
+                    <img src="<?php echo base_url("assets/images/new_logo.png")//.$settings->logo ?>" alt="">
                     <?php } ?>
                 </span>
                 <span class="logo-lg">
@@ -767,7 +767,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
 if($root=='https://student.spaceinternationals.com'){  ?>
                     <img src="<?php echo base_url("assets/images/lgo.png") ?>" alt="">
                     <?php }else{ ?>
-                    <img src="<?php echo base_url().$settings->logo ?>" alt="">
+                    <img src="<?php echo base_url("assets/images/new_logo.png")//.$settings->logo ?>" alt="">
                     <?php } ?>
                 </span>
             </a>
