@@ -1598,7 +1598,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
 
                     </li>
 
-                    <li class="<?php echo (($segment1 == "client" && empty($_GET['stage'])) ? "active" : null) ?>"
+                    <li class="<?php echo (($segment1 == "client" && empty($_GET['stage'])) && $segment2!='visits'? "active" : null) ?>"
                         style="<?php if(in_array(80,$module) || in_array(81,$module) || in_array(82,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
                         <a href="<?php echo base_url("client/index") ?>">
                             <i class="fa fa-user-circle-o"
@@ -1664,7 +1664,22 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                       <?php
                     }
                   }
-                  ?>
+
+                if($this->session->companey_id==65)
+                {
+                    echo' <li class="'.($segment1=='client' && $segment2=='visits'?'active':'').'" >
+                        <a href="'.base_url("client/visits").'">
+                        <i class="fa fa-car"
+                                style="color:#fff;
+                                font-size:20px;
+                                background:#c715b1;
+                                padding:7px;
+                                padding-left:4px;
+                                border-radius:4px;width:30px;"></i>
+                         Visits</a>
+                        </li>';
+                }
+                ?>
 
 
                     <li class="<?php echo (($segment1 == "task") ? "active" : null) ?>"

@@ -2069,40 +2069,7 @@ $.ajax({
 <form action="<?=base_url('enquiry/add_visit')?>" class="form-inner" enctype="multipart/form-data" method="post" accept-charset="utf-8" autocomplete="off">
   <input type="hidden" name="enquiry_id" value="<?=$details->enquiry_id?>">
     <div class="col-md-12"  style="margin-bottom: 25px; padding: 0px">
-     <!--  <div class="row"  style="padding-bottom:20px">
-        <div class="form-group">
-          <div class="pull-left">
-            <div style="top: 0px;
-                          margin-top: 0px;
-                          float: left;
-                          height: 51px;
-                          line-height: 50px;
-                          padding-right: 5px;" >
-            <label>From</label>
-            </div>
-            <div style="height: 51px;
-                        float: left;">
-              <input type="date" class="v_filter" name="v_from_date" style="width: 145px"><br>
-              <input type="time" class="v_filter" name="v_from_time" style="width: 145px">
-            </div>
-          </div>
-          <div class="pull-right">
-            <div style="top: 0px;
-                          margin-top: 0px;
-                          float: left;
-                          height: 51px;
-                          line-height: 50px;
-                          padding-right: 5px;" >
-            <label>To</label>
-            </div>
-            <div style="height: 51px;
-                        float: left;">
-              <input type="date" class="v_filter" name="v_to_date" style="width: 145px"><br>
-              <input type="time" class="v_filter" name="v_to_time" style="width: 145px">
-            </div>
-          </div>
-        </div>
-      </div> -->
+    
     <!-- <label style="color:#283593;">Outcome Of Visit<i class="text-danger"></i></label> -->
     <table id="visit_table" class="table table-bordered table-hover mobile-optimised" style="width:100%;">
       <thead>

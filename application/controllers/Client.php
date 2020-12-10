@@ -1542,4 +1542,14 @@ public function view_editable_aggrement()
         }
     }
     /***********************end Generate aggriment*****************************/
+    public function visits()
+    {
+        $this->load->model('Client_Model');
+        $this->load->model('Enquiry_Model');
+        $data['title'] = display('visit_list');
+       // print_r($data['contact_list']->result_array()); exit();
+        $data['all_enquiry'] = $this->Enquiry_Model->getEnquiry()->result_array();
+        $data['content'] = $this->load->view('enquiry/visits', $data, true);
+        $this->load->view('layout/main_wrapper', $data);
+    }
 }
