@@ -41,12 +41,15 @@
                             <td class="th1"><?php 
                             $process_in_each  = $sub->process_id;
                             $process_in_each  = explode(',',$process_in_each);
+                            $p = '';
                             if(!empty($process_in_each)){
                               foreach($process_in_each as $e){
                                 $process_name  = $this->common_model->get_process_name_by_id($e);
-                                echo $process_name.', ';
+                                $p .= $process_name.', ';
                               }
-                            }                            
+                            }       
+                            $p = rtrim($p, ", ");                   
+                            echo $p;  
                             ?>
                             </td>
                             <td class="center">
