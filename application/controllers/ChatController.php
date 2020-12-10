@@ -202,7 +202,6 @@ class ChatController extends CI_Controller {
 			
 		}
 		die(json_encode($msgarr));
-
  		
 	}
 	
@@ -253,24 +252,17 @@ class ChatController extends CI_Controller {
 						$prev = strtotime($lstlog);
 						
 					}
-
 					$date = new DateTime($v->last_log);
-
 					$date2 = new DateTime(date("Y-m-d h:i:s"));
-
 					$interval = date_diff($date, $date2);
-
 				
 					
 					$diff =  abs( $now - $prev);
 					$years   = $interval->y; 
 					$months  = $interval->m; 
 					$days    = $interval->d;
-
 					$hours   = $interval->h; 
-
 					$minuts  = $interval->i; 
-
 					$seconds = $interval->s; 
 					
 					if($days > 0){

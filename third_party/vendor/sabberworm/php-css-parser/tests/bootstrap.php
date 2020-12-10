@@ -1,5 +1,4 @@
 <?php
-
 spl_autoload_register(function($class)
 {
     $file = __DIR__.'/../lib/'.strtr($class, '\\', '/').'.php';

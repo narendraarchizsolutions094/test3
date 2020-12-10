@@ -32,17 +32,14 @@ class Payment extends CI_Controller {
 			$city			=	$this->input->post('city');
 			$pincode 		=	$this->input->post('pincode');
 			$gstin  		=	$this->input->post('gstin');
-
 			$this->session->set_userdata('payment_mode',$this->input->post('dbt'));
 			$this->user_model->set_user_meta($this->session->user_id,array(
 				'postal_code'=>$this->input->post('pincode'),
 				'gstin' => $this->input->post('gstin')
 				)
 			);
-
 			$comp_id	=	$this->session->companey_id;
 			$user_id	=	$this->session->user_id;
-
 			$this->db->where('companey_id',$comp_id);
 			$this->db->where('pk_i_admin_id',$user_id);
 			$this->db->set('add_ress',$address);
@@ -55,7 +52,6 @@ class Payment extends CI_Controller {
 				$this->load->library('cart');
 				$amount	=	$this->cart->total();							
 			}
-
 			if ($this->input->post('dbt') == 2) {
 				$ch = curl_init();
 				curl_setopt($ch, CURLOPT_URL, 'https://www.instamojo.com/api/1.1/payment-requests/');
@@ -97,9 +93,7 @@ class Payment extends CI_Controller {
 				$emp_id    =	$this->input->post('preferd');
 				$pk_i_admin_id	=	$this->order_model->get_pk_admin_id($emp_id);
 				$ord_no	=	!empty($pk_i_admin_id->pk_i_admin_id)?$this->order_model->placeorder($pk_i_admin_id->pk_i_admin_id):$this->order_model->placeorder();
-
 		//$ord_no	=	$this->order_model->placeorder($pk_i_admin_id->pk_i_admin_id);
-
 				if($ord_no){ 
 					$this->order_model->set_order_meta($ord_no,$comp_id,$user_id,array(
 							'fname' =>	$this->input->post('fname'),
@@ -131,7 +125,6 @@ class Payment extends CI_Controller {
 			redirect('buy/checkout');
 		}
 	}
-
 
 	
 	public function index(){
@@ -217,7 +210,6 @@ class Payment extends CI_Controller {
 			    'order_id' => $_POST['merchant_order_id'],
 			    'razorpay_payment_id' => $_POST['razorpay_payment_id'],
 			);
-
 			$paymentInfo = $dataFlesh;
 			$order_info = array('order_status_id' => $_POST['merchant_order_id']);
 			$amount = $_POST['merchant_total'];
@@ -236,7 +228,6 @@ class Payment extends CI_Controller {
 			    $data = json_decode($result);
 			  
 			    $http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-
 			    if ($result === false) {
 			        $success = false;
 			        $error = 'Curl error: ' . curl_error($ch);
@@ -275,7 +266,6 @@ class Payment extends CI_Controller {
 			        'amount'=>$_POST['merchant_amount'],
 					'response'=>$result
 			    );
-
 			$this->db->insert('payment_history',$data);
 			} else {
 				$data = array(
@@ -287,7 +277,6 @@ class Payment extends CI_Controller {
 			        'amount'=>$_POST['merchant_amount'],
 					'response'=>$result
 			    );
-
 			    $this->db->insert('payment_history',$data);
 			    $json['redirectURL'] = $_POST['merchant_furl_id'];
 			}
@@ -336,7 +325,6 @@ class Payment extends CI_Controller {
 		$data['content'] = $this->load->view('payment/payment-list', $data, true);
         $this->load->view('layout/main_wrapper', $data);
 	}
-
 	public function downloadexel($sdate,$edate)
     {
 		
@@ -397,7 +385,6 @@ class Payment extends CI_Controller {
 											  ->SetCellValue( ($ltr++).$count, $ord->transaction_no)
                                               ->SetCellValue( ($ltr++).$count, $ord->status)
                                               ->SetCellValue( ($ltr++).$count, date("d-M-Y",strtotime($ord->pay_date)));
-
 			
 			}
 		}

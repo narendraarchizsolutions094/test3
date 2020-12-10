@@ -1,6 +1,5 @@
 <?php
 namespace Aws\Api\Serializer;
-
 use Aws\Api\MapShape;
 use Aws\Api\Service;
 use Aws\Api\Shape;
@@ -8,7 +7,6 @@ use Aws\Api\StructureShape;
 use Aws\Api\ListShape;
 use Aws\Api\TimestampShape;
 use XMLWriter;
-
 /**
  * @internal Formats the XML body of a REST-XML services.
  */
@@ -16,7 +14,6 @@ class XmlBody
 {
     /** @var \Aws\Api\Service */
     private $api;
-
     /**
      * @param Service $api API being used to create the XML body.
      */
@@ -24,7 +21,6 @@ class XmlBody
     {
         $this->api = $api;
     }
-
     /**
      * Builds the XML body based on an array of arguments.
      *
@@ -40,14 +36,11 @@ class XmlBody
         $xml->startDocument('1.0', 'UTF-8');
         $this->format($shape, $shape['locationName'] ?: $shape['name'], $args, $xml);
         $xml->endDocument();
-
         return $xml->outputMemory();
     }
-
     private function startElement(Shape $shape, $name, XMLWriter $xml)
     {
         $xml->startElement($name);
-
         if ($ns = $shape['xmlNamespace']) {
             $xml->writeAttribute(
                 isset($ns['prefix']) ? "xmlns:{$ns['prefix']}" : 'xmlns',
@@ -55,7 +48,6 @@ class XmlBody
             );
         }
     }
-
     private function format(Shape $shape, $name, $value, XMLWriter $xml)
     {
         // Any method mentioned here has a custom serialization handler.
@@ -68,7 +60,6 @@ class XmlBody
             'add_map'       => true,
             'add_string'    => true
         ];
-
         $type = 'add_' . $shape['type'];
         if (isset($methods[$type])) {
             $this->{$type}($shape, $name, $value, $xml);
@@ -76,14 +67,12 @@ class XmlBody
             $this->defaultShape($shape, $name, $value, $xml);
         }
     }
-
     private function defaultShape(Shape $shape, $name, $value, XMLWriter $xml)
     {
         $this->startElement($shape, $name, $xml);
         $xml->text($value);
         $xml->endElement();
     }
-
     private function add_structure(
         StructureShape $shape,
         $name,
@@ -91,7 +80,6 @@ class XmlBody
         \XMLWriter $xml
     ) {
         $this->startElement($shape, $name, $xml);
-
         foreach ($this->getStructureMembers($shape, $value) as $k => $definition) {
             $this->format(
                 $definition['member'],
@@ -100,21 +88,17 @@ class XmlBody
                 $xml
             );
         }
-
         $xml->endElement();
     }
-
     private function getStructureMembers(StructureShape $shape, array $value)
     {
         $members = [];
-
         foreach ($value as $k => $v) {
             if ($v !== null && $shape->hasMember($k)) {
                 $definition = [
                     'member' => $shape->getMember($k),
                     'value'  => $v,
                 ];
-
                 if ($definition['member']['xmlAttribute']) {
                     // array_unshift_associative
                     $members = [$k => $definition] + $members;
@@ -123,10 +107,8 @@ class XmlBody
                 }
             }
         }
-
         return $members;
     }
-
     private function add_list(
         ListShape $shape,
         $name,
@@ -134,23 +116,19 @@ class XmlBody
         XMLWriter $xml
     ) {
         $items = $shape->getMember();
-
         if ($shape['flattened']) {
             $elementName = $name;
         } else {
             $this->startElement($shape, $name, $xml);
             $elementName = $items['locationName'] ?: 'member';
         }
-
         foreach ($value as $v) {
             $this->format($items, $elementName, $v, $xml);
         }
-
         if (!$shape['flattened']) {
             $xml->endElement();
         }
     }
-
     private function add_map(
         MapShape $shape,
         $name,
@@ -160,26 +138,21 @@ class XmlBody
         $xmlEntry = $shape['flattened'] ? $shape['locationName'] : 'entry';
         $xmlKey = $shape->getKey()['locationName'] ?: 'key';
         $xmlValue = $shape->getValue()['locationName'] ?: 'value';
-
         $this->startElement($shape, $name, $xml);
-
         foreach ($value as $key => $v) {
             $this->startElement($shape, $xmlEntry, $xml);
             $this->format($shape->getKey(), $xmlKey, $key, $xml);
             $this->format($shape->getValue(), $xmlValue, $v, $xml);
             $xml->endElement();
         }
-
         $xml->endElement();
     }
-
     private function add_blob(Shape $shape, $name, $value, XMLWriter $xml)
     {
         $this->startElement($shape, $name, $xml);
         $xml->writeRaw(base64_encode($value));
         $xml->endElement();
     }
-
     private function add_timestamp(
         TimestampShape $shape,
         $name,
@@ -193,7 +166,6 @@ class XmlBody
         $xml->writeRaw(TimestampShape::format($value, $timestampFormat));
         $xml->endElement();
     }
-
     private function add_boolean(
         Shape $shape,
         $name,
@@ -204,7 +176,6 @@ class XmlBody
         $xml->writeRaw($value ? 'true' : 'false');
         $xml->endElement();
     }
-
     private function add_string(
         Shape $shape,
         $name,

@@ -3,32 +3,24 @@ use Restserver\Libraries\REST_Controller;
 defined('BASEPATH') OR exit('No direct script access allowed');
 require APPPATH . 'libraries/REST_Controller.php';
 require APPPATH . 'libraries/Format.php';
-
 class Task extends REST_Controller {
-
     function __construct()
     {
         parent::__construct();
            $this->load->database();
            $this->load->library('form_validation');
            $this->load->helper('date');
-
 		$this->load->model(array(
 		'Task_Model','User_model','enquiry_model','Leads_Model','Client_Model'
 		)); 
   }
   public function get_tasks_post(){            
-
     $this->form_validation->set_rules('user_id','User Id','required');
     
     $this->form_validation->set_message('required', 'Invalid %s');
-
     if ($this->form_validation->run() == true) {
-
     $user_id  = $this->input->post('user_id');   
-
     $task_list = $this->Task_Model->get_tasks_by_user_id($user_id);
-
     $this->set_response([
                 'status' => true,
                 'tasks' =>$task_list
@@ -40,9 +32,7 @@ class Task extends REST_Controller {
              ], REST_Controller::HTTP_OK);
     }
   }
-
   public function get_task_user_list_post(){
-
     $this->form_validation->set_rules('user_id','User Id','required');    
     $this->form_validation->set_message('required', 'Invalid %s');
     
@@ -51,7 +41,6 @@ class Task extends REST_Controller {
       $user_id  = $this->input->post('user_id');  
       
       $user_row = $this->User_model->get_user_by_id($user_id);
-
       if ($user_row['user_roles'] == 2) {
         $user_list = $this->User_model->read_user_list($user_row);        
         
@@ -74,7 +63,6 @@ class Task extends REST_Controller {
                        ], REST_Controller::HTTP_OK);        
         
       }
-
     }else{
       $this->set_response([
           'status' => false,
@@ -82,7 +70,6 @@ class Task extends REST_Controller {
            ], REST_Controller::HTTP_OK);
     }
   }
-
   public function view_post()
   {
 	  
@@ -91,7 +78,6 @@ class Task extends REST_Controller {
 	
     if ($this->form_validation->run() == true){
       $task_id  = $this->input->post('task_id');
-
 	  $this->db->select("resp.*,enq.enquiry,enq.status as enqtype,stg.lead_stage_name,ldscr.description, concat(enq.name_prefix,' ',enq.name,' ',enq.lastname) as username,enq.email as enqmail,enq.phone as enqphone,stts.taskstatus_name");	
       $this->db->where('resp.resp_id',$task_id);
   	  $this->db->from('query_response resp');
@@ -100,7 +86,6 @@ class Task extends REST_Controller {
       $this->db->join('lead_description ldscr', 'ldscr.id = enq.lead_discription', 'left');
       $this->db->join('tbl_taskstatus stts','stts.taskstatus_id=resp.task_status','left');
 		  $task_row  = $this->db->get()->row();
-
 
         if(!empty($task_row))
         {
@@ -121,7 +106,6 @@ class Task extends REST_Controller {
         		  'stage_name'				  => $task_row->lead_stage_name,		
         		  'stage_description'		  => $task_row->description		
                 );
-
                 if($task_row->enqtype == 1){
                   $task_array['related_to'] = 'Enquiry';
                 }else if($task_row->enqtype == 2){
@@ -131,7 +115,6 @@ class Task extends REST_Controller {
                 }else{
         			$task_array['related_to'] = '';
         		      }
-
               // if($task_row->task_status == 0){
               //   $task_array['task_status'] = 'Pending';
               // }else if($task_row->task_status == 1){
@@ -139,13 +122,11 @@ class Task extends REST_Controller {
               // }else{
       			// $task_array['task_status'] = 'Pending';
               $task_array['task_status'] = $task_row->taskstatus_name;
-
         }
         else
         {
           $task_array = array();
         }
-
         if(!empty($task_array))
         {
           $this->set_response([
@@ -166,17 +147,12 @@ class Task extends REST_Controller {
     }
   
   }
-
   public function get_organizations_post(){            
-
     $this->form_validation->set_rules('user_id','User Id','required');
     
     $this->form_validation->set_message('required', 'Invalid %s');
-
     if ($this->form_validation->run() == true) {
-
       $user_id  = $this->input->post('user_id');   
-
       $user_role = $this->User_model->read_by_id($user_id); 
       
       $org_list = array();
@@ -184,17 +160,13 @@ class Task extends REST_Controller {
       if(!empty($user_role)){
         
         $user_role=$user_role->user_roles;
-
         $this->load->model('enquiry_model');
         
         $active_enquiry = $this->enquiry_model->active_enqueries_api($user_id,$user_role)->result();
       }
-
       foreach ($active_enquiry as $key => $value) {
           $org_list[] = array('id'=>$value->Enquery_id,'name'=>$value->org_name);
       }
-
-
 
       $this->set_response([
                   'status' => true,
@@ -207,8 +179,6 @@ class Task extends REST_Controller {
              ], REST_Controller::HTTP_OK);
     }
   }
-
-
 
 public function create_post(){  
       //new code
@@ -252,7 +222,6 @@ public function create_post(){
         
         $rem_time=nice_date($task_time, 'H:i');
 
-
         $adt          = date("d-m-Y h:i:s a");
          
 		    $end_date2       = str_replace('/' ,'-', $end_date);
@@ -282,11 +251,9 @@ public function create_post(){
 		    $this->db->set('task_time',$tsktime);
         //echo $update_task;
           $this->load->model('Notification_model'); 
-
         if(!empty($update_task)){
           $this->db->where('resp_id',$update_task);
           $this->db->update('query_response');
-
           $this->db->select('notification_id');
           $this->db->where('resp_id',$update_task);          
           $r  = $this->db->get('query_response')->row_array();
@@ -327,7 +294,6 @@ public function create_post(){
       }
       // new code end
     }
-
     public function related_list_post(){
       $related_to  = $this->input->post('related_to');
       $user_id= $this->input->post('user_id');
@@ -343,12 +309,10 @@ public function create_post(){
             }
           }
 		}
-
         $this->set_response([
           'status' => TRUE,
           'list' =>$res
            ], REST_Controller::HTTP_OK);
-
       } else {
         $this->set_response([
                 'status' => false,
@@ -375,7 +339,6 @@ public function create_post(){
           'id'=>1
         )
       );*/
-
       $this->load->model('Taskstatus_model');
       $rarr = $this->Taskstatus_model->taskstatuslist($this->input->post('company_id'));                 
       $arr = array();
@@ -389,7 +352,6 @@ public function create_post(){
                 'related_to' => $arr,
                  ], REST_Controller::HTTP_OK);
     }
-
     public function get_detail_post(){
 		
       $enq_code=$this->input->post('enquery_code');
@@ -401,34 +363,27 @@ public function create_post(){
 	  if (!empty($data)) {
         $res = array('customer_name'=>$data->name_prefix.' '.$data->name.' '.$data->lastname,'phone'=>$data->phone,'email'=>$data->email);        
       	$sts = true;
-
       }else{
       	$sts = false;
       	$res = array('error'=>'No enquiry found');
       }
-
       $this->set_response([
         'status' => $sts,
         'details' => $res,
          ], REST_Controller::HTTP_OK);
     }
 
-
     public function all_mode_type_post(){
       $res  = array();
       $all = $this->Task_Model->all_mode_type();
-
       if (!empty($all)) {
         foreach ($all as $key => $value) {
           array_push($res, array('exp_id'=>$value->exp_id,'exp_mode'=>$value->exp_mode,'exp_price_km'=>$value->exp_price_km,'exp_price_houre'=>$value->exp_price_houre));
         }
       }
-
       $this->set_response([
         'status' => TRUE,
         'modes' => $res,
          ], REST_Controller::HTTP_OK);
-
     } 
-
 }

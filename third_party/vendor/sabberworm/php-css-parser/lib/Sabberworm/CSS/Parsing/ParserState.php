@@ -1,21 +1,16 @@
 <?php
 namespace Sabberworm\CSS\Parsing;
-
 use Sabberworm\CSS\Comment\Comment;
 use Sabberworm\CSS\Parsing\UnexpectedTokenException;
 use Sabberworm\CSS\Settings;
-
 class ParserState {
 	private $oParserSettings;
-
 	private $sText;
-
 	private $aText;
 	private $iCurrentPosition;
 	private $sCharset;
 	private $iLength;
 	private $iLineNo;
-
 	public function __construct($sText, Settings $oParserSettings, $iLineNo = 1) {
 		$this->oParserSettings = $oParserSettings;
 		$this->sText = $sText;
@@ -23,26 +18,21 @@ class ParserState {
 		$this->iLineNo = $iLineNo;
 		$this->setCharset($this->oParserSettings->sDefaultCharset);
 	}
-
 	public function setCharset($sCharset) {
 		$this->sCharset = $sCharset;
 		$this->aText = $this->strsplit($this->sText);
 		$this->iLength = count($this->aText);
 	}
-
 	public function getCharset() {
 		$this->oParserHelper->getCharset();
 		return $this->sCharset;
 	}
-
 	public function currentLine() {
 		return $this->iLineNo;
 	}
-
 	public function getSettings() {
 		return $this->oParserSettings;
 	}
-
 	public function parseIdentifier($bIgnoreCase = true) {
 		$sResult = $this->parseCharacter(true);
 		if ($sResult === null) {
@@ -57,7 +47,6 @@ class ParserState {
 		}
 		return $sResult;
 	}
-
 	public function parseCharacter($bIsForIdentifier) {
 		if ($this->peek() === '\\') {
 			if ($bIsForIdentifier && $this->oParserSettings->bLenientParsing && ($this->comes('\0') || $this->comes('\9'))) {
@@ -106,7 +95,6 @@ class ParserState {
 		}
 		return null;
 	}
-
 	public function consumeWhiteSpace() {
 		$comments = array();
 		do {
@@ -130,14 +118,12 @@ class ParserState {
 		} while($oComment !== false);
 		return $comments;
 	}
-
 	public function comes($sString, $bCaseInsensitive = false) {
 		$sPeek = $this->peek(strlen($sString));
 		return ($sPeek == '')
 			? false
 			: $this->streql($sPeek, $sString, $bCaseInsensitive);
 	}
-
 	public function peek($iLength = 1, $iOffset = 0) {
 		$iOffset += $this->iCurrentPosition;
 		if ($iOffset >= $this->iLength) {
@@ -145,7 +131,6 @@ class ParserState {
 		}
 		return $this->substr($iOffset, $iLength);
 	}
-
 	public function consume($mValue = 1) {
 		if (is_string($mValue)) {
 			$iLineCount = substr_count($mValue, "\n");
@@ -167,7 +152,6 @@ class ParserState {
 			return $sResult;
 		}
 	}
-
 	public function consumeExpression($mExpression, $iMaxLength = null) {
 		$aMatches = null;
 		$sInput = $iMaxLength !== null ? $this->peek($iMaxLength) : $this->inputLeft();
@@ -176,7 +160,6 @@ class ParserState {
 		}
 		throw new UnexpectedTokenException($mExpression, $this->peek(5), 'expression', $this->iLineNo);
 	}
-
 	/**
 	 * @return false|Comment
 	 */
@@ -194,24 +177,19 @@ class ParserState {
 				}
 			}
 		}
-
 		if ($mComment !== false) {
 			// We skip the * which was included in the comment.
 			return new Comment(substr($mComment, 1), $iLineNo);
 		}
-
 		return $mComment;
 	}
-
 	public function isEnd() {
 		return $this->iCurrentPosition >= $this->iLength;
 	}
-
 	public function consumeUntil($aEnd, $bIncludeEnd = false, $consumeEnd = false, array &$comments = array()) {
 		$aEnd = is_array($aEnd) ? $aEnd : array($aEnd);
 		$out = '';
 		$start = $this->iCurrentPosition;
-
 		while (($char = $this->consume(1)) !== '') {
 			if (in_array($char, $aEnd)) {
 				if ($bIncludeEnd) {
@@ -226,15 +204,12 @@ class ParserState {
 				$comments[] = $comment;
 			}
 		}
-
 		$this->iCurrentPosition = $start;
 		throw new UnexpectedTokenException('One of ("'.implode('","', $aEnd).'")', $this->peek(5), 'search', $this->iLineNo);
 	}
-
 	private function inputLeft() {
 		return $this->substr($this->iCurrentPosition, -1);
 	}
-
 	public function streql($sString1, $sString2, $bCaseInsensitive = true) {
 		if($bCaseInsensitive) {
 			return $this->strtolower($sString1) === $this->strtolower($sString2);
@@ -242,11 +217,9 @@ class ParserState {
 			return $sString1 === $sString2;
 		}
 	}
-
 	public function backtrack($iAmount) {
 		$this->iCurrentPosition -= $iAmount;
 	}
-
 	public function strlen($sString) {
 		if ($this->oParserSettings->bMultibyteSupport) {
 			return mb_strlen($sString, $this->sCharset);
@@ -254,7 +227,6 @@ class ParserState {
 			return strlen($sString);
 		}	
 	}	
-
 	private function substr($iStart, $iLength) {
 		if ($iLength < 0) {
 			$iLength = $this->iLength - $iStart + $iLength;
@@ -270,7 +242,6 @@ class ParserState {
 		}	
 		return $sResult;
 	}
-
 	private function strtolower($sString) {
 		if ($this->oParserSettings->bMultibyteSupport) {
 			return mb_strtolower($sString, $this->sCharset);
@@ -278,7 +249,6 @@ class ParserState {
 			return strtolower($sString);
 		}
 	}
-
 	private function strsplit($sString) {
 		if ($this->oParserSettings->bMultibyteSupport) {
 			if ($this->streql($this->sCharset, 'utf-8')) {
@@ -299,7 +269,6 @@ class ParserState {
 			}
 		}
 	}
-
 	private function strpos($sString, $sNeedle, $iOffset) {
 		if ($this->oParserSettings->bMultibyteSupport) {
 			return mb_strpos($sString, $sNeedle, $iOffset, $this->sCharset);

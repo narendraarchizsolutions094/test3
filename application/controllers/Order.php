@@ -67,7 +67,6 @@ class Order extends CI_Controller {
 									 ->where("comp_id", $this->session->companey_id)
 									 ->from("tbl_product_country")
 									 ->join("tbl_proddetails", "tbl_product_country.id = tbl_proddetails.prodid")->get()->result();
-
 		$currdate = date("Y-m-d");
 		$data['scheme'] = $this->db->select("*")->where("comp_id", $this->session->companey_id)->where("from_date <= '$currdate' and to_date >= '$currdate'")->get("tbl_scheme")->result();
 		
@@ -210,9 +209,7 @@ class Order extends CI_Controller {
 	public function loadorders(){
 		//$this->load->model("datatable_model");		
 		$ordarr  	  = $this->order_model->orders(1);
-
 		/*echo $this->db->last_query();
-
 		echo "<pre>";
 		print_r($ordarr);
 		exit();*/
@@ -246,7 +243,6 @@ class Order extends CI_Controller {
 					->setSubject("Order excel")
 					->setDescription("Order")
 					->setKeywords("Order");
-
 		$objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(5);
 		$objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(10);
 		$objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(20);
@@ -265,7 +261,6 @@ class Order extends CI_Controller {
 			
 			$ltr++;
 		}
-
 
 		$convdelv = (!empty($ord->conf_delv) and $ord->conf_delv != "0000-00-00") ?  date("d, M Y", strtotime($ord->conf_delv)) : " - ";
 		$pay  = $this->payment_model->getpayments();
@@ -324,7 +319,6 @@ class Order extends CI_Controller {
 											  ->SetCellValue( ($ltr++).$count,   $convdelv)
 											  ->SetCellValue( ($ltr++).$count,   (!empty($ord->order_date )) ?  date("d, M Y", strtotime($ord->order_date))  : " - ")
 											  ->SetCellValue( ($ltr).$count,    $ord->status);
-
 			
 			}
 		}
@@ -473,7 +467,6 @@ class Order extends CI_Controller {
 	}
 	
 	
-
 	public function bookings(){
 		
 		$this->load->model("datatable_model");
@@ -582,7 +575,6 @@ class Order extends CI_Controller {
 						 );
 			
 		}
-
 		
 		/*
 		$arr = array("confirm_order" => $this->input->post("confirmqty", true),
@@ -616,13 +608,11 @@ class Order extends CI_Controller {
 			$comp_id	=	$this->session->companey_id;
 			$pid	=	$this->input->post('product_id');				
 			$odr_id	=	$this->input->post('order_id');				
-
 			$this->db->where('ord_no',$odr_id);
 			$this->db->where('product',$pid);
 			$this->db->where('company',$comp_id);
 			$this->db->set('status',$this->input->post('status'));
 			$this->db->update('tbl_order');
-
 			if ($this->input->post('status') == 4) {
 				$this->db->select('quantity');
 				$this->db->where('ord_no',$odr_id);
@@ -803,7 +793,6 @@ class Order extends CI_Controller {
 		
 		
 	}
-
 	public function check_stock($odr_id,$pid){
 		$return = '0';
 		$comp_id	=	$this->session->companey_id;

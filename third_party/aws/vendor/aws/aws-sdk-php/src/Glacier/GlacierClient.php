@@ -1,6 +1,5 @@
 <?php
 namespace Aws\Glacier;
-
 use Aws\Api\ApiProvider;
 use Aws\Api\DocModel;
 use Aws\Api\Service;
@@ -11,7 +10,6 @@ use Aws\HashingStream;
 use Aws\Middleware;
 use Aws\PhpHash;
 use Psr\Http\Message\RequestInterface;
-
 /**
  * This client is used to interact with the **Amazon Glacier** service.
  *
@@ -87,7 +85,6 @@ class GlacierClient extends AwsClient
     public function __construct(array $args)
     {
         parent::__construct($args);
-
         // Setup middleware.
         $stack = $this->getHandlerList();
         $stack->appendBuild($this->getApiVersionMiddleware(), 'glacier.api_version');
@@ -101,7 +98,6 @@ class GlacierClient extends AwsClient
             'glacier.source_file'
         );
     }
-
     /**
      * {@inheritdoc}
      *
@@ -111,7 +107,6 @@ class GlacierClient extends AwsClient
     {
         return parent::getCommand($name, $args + ['accountId' => '-']);
     }
-
     /**
      * Creates a middleware that updates a command with the content and tree
      * hash headers for upload operations.
@@ -131,7 +126,6 @@ class GlacierClient extends AwsClient
                     $command['ContentSHA256'] = $command['contentSHA256'];
                     unset($command['contentSHA256']);
                 }
-
                 // If uploading, then make sure checksums are added.
                 $name = $command->getName();
                 if (($name === 'UploadArchive' || $name === 'UploadMultipartPart')
@@ -141,7 +135,6 @@ class GlacierClient extends AwsClient
                     if (!$body->isSeekable()) {
                         throw new CouldNotCreateChecksumException('sha256');
                     }
-
                     // Add a tree hash if not provided.
                     if (!$command['checksum']) {
                         $body = new HashingStream(
@@ -154,7 +147,6 @@ class GlacierClient extends AwsClient
                             }
                         );
                     }
-
                     // Add a linear content hash if not provided.
                     if (!$command['ContentSHA256']) {
                         $body = new HashingStream(
@@ -164,14 +156,12 @@ class GlacierClient extends AwsClient
                             }
                         );
                     }
-
                     // Read the stream in order to calculate the hashes.
                     while (!$body->eof()) {
                         $body->read(1048576);
                     }
                     $body->seek(0);
                 }
-
                 // Set the content hash header if a value is in the command.
                 if ($command['ContentSHA256']) {
                     $request = $request->withHeader(
@@ -179,12 +169,10 @@ class GlacierClient extends AwsClient
                         $command['ContentSHA256']
                     );
                 }
-
                 return $handler($command, $request);
             };
         };
     }
-
     /**
      * Creates a middleware that adds the API version header for all requests.
      *
@@ -204,7 +192,6 @@ class GlacierClient extends AwsClient
             };
         };
     }
-
     /**
      * @internal
      * @codeCoverageIgnore
@@ -216,19 +203,16 @@ class GlacierClient extends AwsClient
         $api['shapes']['SourceFile'] = ['type' => 'string'];
         $api['shapes']['UploadArchiveInput']['members']['sourceFile'] = ['shape' => 'SourceFile'];
         $api['shapes']['UploadMultipartPartInput']['members']['sourceFile'] = ['shape' => 'SourceFile'];
-
         // Add the ContentSHA256 parameter.
         $docs['shapes']['ContentSHA256']['base'] = 'A SHA256 hash of the content of the request body';
         $api['shapes']['ContentSHA256'] = ['type' => 'string'];
         $api['shapes']['UploadArchiveInput']['members']['contentSHA256'] = ['shape' => 'ContentSHA256'];
         $api['shapes']['UploadMultipartPartInput']['members']['contentSHA256'] = ['shape' => 'ContentSHA256'];
-
         // Add information about "checksum" and "ContentSHA256" being optional.
         $optional = '<div class="alert alert-info">The SDK will compute this value '
             . 'for you on your behalf if it is not supplied.</div>';
         $docs['shapes']['checksum']['append'] = $optional;
         $docs['shapes']['ContentSHA256']['append'] = $optional;
-
         // Make "accountId" optional for all operations.
         foreach ($api['operations'] as $operation) {
             $inputShape =& $api['shapes'][$operation['input']['shape']];
@@ -242,7 +226,6 @@ class GlacierClient extends AwsClient
                 $ref .= $optional;
             }
         }
-
         return [
             new Service($api, ApiProvider::defaultProvider()),
             new DocModel($docs)

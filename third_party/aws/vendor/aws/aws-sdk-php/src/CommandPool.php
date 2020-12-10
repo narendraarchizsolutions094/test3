@@ -1,9 +1,7 @@
 <?php
 namespace Aws;
-
 use GuzzleHttp\Promise\PromisorInterface;
 use GuzzleHttp\Promise\EachPromise;
-
 /**
  * Sends and iterator of commands concurrently using a capped pool size.
  *
@@ -14,7 +12,6 @@ class CommandPool implements PromisorInterface
 {
     /** @var EachPromise */
     private $each;
-
     /**
      * The CommandPool constructor accepts a hash of configuration options:
      *
@@ -49,7 +46,6 @@ class CommandPool implements PromisorInterface
         if (!isset($config['concurrency'])) {
             $config['concurrency'] = 25;
         }
-
         $before = $this->getBefore($config);
         $mapFn = function ($commands) use ($client, $before, $config) {
             foreach ($commands as $key => $command) {
@@ -67,10 +63,8 @@ class CommandPool implements PromisorInterface
                 }
             }
         };
-
         $this->each = new EachPromise($mapFn($commands), $config);
     }
-
     /**
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
@@ -78,7 +72,6 @@ class CommandPool implements PromisorInterface
     {
         return $this->each->promise();
     }
-
     /**
      * Executes a pool synchronously and aggregates the results of the pool
      * into an indexed array in the same order as the passed in array.
@@ -98,7 +91,6 @@ class CommandPool implements PromisorInterface
         $results = [];
         self::cmpCallback($config, 'fulfilled', $results);
         self::cmpCallback($config, 'rejected', $results);
-
         return (new self($client, $commands, $config))
             ->promise()
             ->then(static function () use (&$results) {
@@ -107,7 +99,6 @@ class CommandPool implements PromisorInterface
             })
             ->wait();
     }
-
     /**
      * @return callable
      */
@@ -116,14 +107,11 @@ class CommandPool implements PromisorInterface
         if (!isset($config['before'])) {
             return null;
         }
-
         if (is_callable($config['before'])) {
             return $config['before'];
         }
-
         throw new \InvalidArgumentException('before must be callable');
     }
-
     /**
      * Adds an onFulfilled or onRejected callback that aggregates results into
      * an array. If a callback is already present, it is replaced with the

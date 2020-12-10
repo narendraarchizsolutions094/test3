@@ -1,9 +1,7 @@
 <?php
 namespace JmesPath\Tests;
-
 use JmesPath\SyntaxErrorException;
 use PHPUnit\Framework\TestCase;
-
 /**
  * @covers JmesPath\SyntaxErrorException
  */
@@ -24,7 +22,6 @@ Found comma
 EOT;
         $this->assertContains($expected, $e->getMessage());
     }
-
     public function testCreatesWithArray()
     {
         $e = new SyntaxErrorException(

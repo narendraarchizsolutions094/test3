@@ -1,6 +1,5 @@
 <?php
 namespace Aws\Api;
-
 /**
  * DateTime overrides that make DateTime work more seamlessly as a string,
  * with JSON documents, and with JMESPath.
@@ -18,7 +17,6 @@ class DateTimeResult extends \DateTime implements \JsonSerializable
     {
         return new self(gmdate('c', $unixTimestamp));
     }
-
     /**
      * Serialize the DateTimeResult as an ISO 8601 date string.
      *
@@ -28,7 +26,6 @@ class DateTimeResult extends \DateTime implements \JsonSerializable
     {
         return $this->format('c');
     }
-
     /**
      * Serialize the date as an ISO 8601 date when serializing as JSON.
      *

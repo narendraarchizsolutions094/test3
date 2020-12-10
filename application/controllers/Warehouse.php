@@ -2,7 +2,6 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 class Warehouse extends CI_Controller {
     public function __construct() {
-
         parent::__construct();
         $this->load->library('user_agent');
         $this->load->helper('date');
@@ -12,14 +11,10 @@ class Warehouse extends CI_Controller {
         if (empty($this->session->user_id)) {
             redirect('login');
         }
-
    
-
     }
 
-
 public function auto_logout(){
-
     // $minutes=3;//Set logout time in minutes    
     // if (!isset($_SESSION['time'])) {
     //     $_SESSION['time'] = time();
@@ -27,17 +22,13 @@ public function auto_logout(){
     //     session_destroy();
     //     redirect('login');//redirect user to a login page or any page to which we want to redirect.
     // }
-
 }
-
 public function warehouse(){
-
 
         $data['title'] = 'Warehouse List';
         $data['warehouse_list'] = $this->warehouse_model->warehouse_list();
         $data['content'] = $this->load->view('warehouse/warehouse_list', $data, true);
         $this->load->view('layout/main_wrapper', $data);
-
 
 }
 public function get_product_stock(){
@@ -51,10 +42,8 @@ public function get_product_stock(){
     }else{
         echo 0;
     }
-
 }
 public function addwarehouse(){
-
 
       $data['title'] = 'Add Warehouse';
         if (empty($this->input->post('user_id'))) {
@@ -102,9 +91,7 @@ public function addwarehouse(){
         }
 }
 
-
 public function editwarehouse($id){
-
 
      if (user_role('31') == true) {}
         $data['title'] = 'Edit Product';
@@ -113,43 +100,28 @@ public function editwarehouse($id){
         $data['content'] = $this->load->view('warehouse/add_warehouse', $data, true);
         $this->load->view('layout/main_wrapper', $data);
 }
-
 public function deletewarehouse($id){
-
    $res = $this->db->where('id',$id)->delete('tbl_warehouse');
-
    if($res){
-
              redirect('warehouse/warehouse');
    }
-
 }
 
 
-
-
 public function typeofproduct(){
-
         $data['title'] = 'Product Type';
         $data['protype_list'] = $this->warehouse_model->protype_list();
         $data['content'] = $this->load->view('warehouse/typeofproduct', $data, true);
         $this->load->view('layout/main_wrapper', $data);
-
 }
-
 public function deletetypeofproduct($id){
-
    $res = $this->db->where('id',$id)->delete('tbl_typeofproduct');
-
    if($res){
-
              redirect('warehouse/typeofproduct');
    }
 }
 
-
 public function addtypeofproduct(){
-
       $data['title'] = 'Add Product Type';
         if (empty($this->input->post('user_id'))) {
           $this->form_validation->set_rules('name', display('name'), 'required|max_length[50]');
@@ -191,9 +163,7 @@ public function addtypeofproduct(){
         }
 }
 
-
 public function edittypeofproduct($id){
-
      if (user_role('31') == true) {}
         $data['title'] = 'Edit Product';
         $data['formdata'] = $this->warehouse_model->readtypeofproduct($id);
@@ -201,27 +171,19 @@ public function edittypeofproduct($id){
         $data['content'] = $this->load->view('warehouse/add_typeofproduct', $data, true);
         $this->load->view('layout/main_wrapper', $data);
 }
-
 public function brand(){
-
         $data['title'] = 'Brand List';
         $data['brand_list'] = $this->warehouse_model->brand_list();
         $data['content'] = $this->load->view('warehouse/brand', $data, true);
         $this->load->view('layout/main_wrapper', $data);
 }
-
 public function deletebrand($id){
-
      $res = $this->db->where('id',$id)->delete('tbl_brand');
-
    if($res){
-
              redirect('warehouse/brand');
    }
 }
-
 public function addbrand(){
-
      $data['title'] = 'Add Brand';
         if (empty($this->input->post('user_id'))) {
           $this->form_validation->set_rules('name', display('name'), 'required|max_length[50]');
@@ -262,9 +224,7 @@ public function addbrand(){
             $this->load->view('layout/main_wrapper', $data);
         }
 }
-
 public function editbrand($id){
-
         if (user_role('31') == true) {}
         $data['title'] = 'Edit Brand';
         $data['formdata'] = $this->warehouse_model->readbrandlist($id);
@@ -272,7 +232,6 @@ public function editbrand($id){
         $data['content'] = $this->load->view('warehouse/addbrand', $data, true);
         $this->load->view('layout/main_wrapper', $data);
 }
-
 public function inventory(){
     $this->load->model('Product_model');
         $data['title'] = 'Inventory List';
@@ -283,9 +242,7 @@ public function inventory(){
 		
         $data['content'] = $this->load->view('warehouse/inventory', $data, true);
         $this->load->view('layout/main_wrapper', $data);
-
 }
-
 public function upload_inventory(){
     $this->load->library('upload');
  // echo  $_FILES['imgfile']['tmp_name'];exit();
@@ -302,7 +259,6 @@ public function upload_inventory(){
             for($i = 0, $j = count($csv_line); $i < $j; $i++)
             {
                 $insert_csv = array();
-
                 $insert_csv['skuid'] = $csv_line[0];//remove if you want to have primary key,
                 // $insert_csv['batchno'] = $csv_line[1];
                 $insert_csv['serialno'] = $csv_line[1];
@@ -315,7 +271,6 @@ public function upload_inventory(){
                 // $insert_csv['address'] = $csv_line[7];
                 // $insert_csv['sex'] = $csv_line[8];
          // print_r($insert_csv);
-
             }
             // $i++;
             $cnt = count($fp);
@@ -324,13 +279,9 @@ public function upload_inventory(){
              $res_proid = $this->warehouse_model->get_productid_byname($insert_csv['product_name']); 
              $res_warehouse = $this->warehouse_model->get_warehouseid_byname($insert_csv['warehouse']); 
              $res_brand = $this->warehouse_model->get_brandid_byname($insert_csv['brand']); 
-
               $str_result = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'; 
-
              $batchno = substr(str_shuffle($str_result),0, 10); 
-
             // print_r($res['id']);
-
             $data = array(
                 'comp_id'      => $this->session->userdata('companey_id'),
                 'skuid'        =>  $insert_csv['skuid'] ,
@@ -342,34 +293,26 @@ public function upload_inventory(){
                 'brand'        => $res_brand->id,
                 'created_by' => $this->session->userdata('user_id'),
                 );
-
              $result = $this->warehouse_model->addinventory($data);
              // print_r($result);exit();
-
            
 }
         }
         fclose($fp) or die("can't close file");
-
        /// if($result){
             $this->session->set_flashdata('message','Added successfuly');
             redirect('warehouse/inventory');
 }
 
 
-
-
 public function add_inventory(){
-
          $data['title'] = 'Add Warehouse';
         if (empty($this->input->post('user_id'))) {
           $this->form_validation->set_rules('proname', display('name'), 'required|max_length[50]');
         } else {
           $this->form_validation->set_rules('proname', display('name'), 'required|max_length[50]');
         }     
-
         $str_result = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'; 
-
         $batchno = substr(str_shuffle($str_result),0, 10); 
  
         $data['formdata'] = (object) $postData = [
@@ -410,28 +353,21 @@ public function add_inventory(){
             $this->load->view('layout/main_wrapper', $data);
         }
 }
-
 public function select_skuid(){
-
     $id = $this->input->post('id');
     $this->db->select('*');
     $this->db->from('tbl_proddetails');
     $this->db->where('prodid',$id);
     $res = $this->db->get()->result();
-
     echo json_encode($res);
 }
-
 // public function select_brand(){
-
 //     $id = $this->input->post('id');
 //     $this->db->select('*');
 //     $this->db->from('tbl_product_country');
 //     $this->db->where('id',$id);
 //     $resbrand = $this->db->get()->result();
-
 //     echo json_encode($resbrand);
 // }
-
 }
 ?>

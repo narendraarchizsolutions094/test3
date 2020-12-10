@@ -1,12 +1,10 @@
 <?php
 namespace Aws\Rds;
-
 use Aws\AwsClient;
 use Aws\Api\Service;
 use Aws\Api\DocModel;
 use Aws\Api\ApiProvider;
 use Aws\PresignUrlMiddleware;
-
 /**
  * This client is used to interact with the **Amazon Relational Database Service (Amazon RDS)**.
  *
@@ -295,10 +293,8 @@ class RdsClient extends AwsClient
                 'rds.presigner'
             );
         };
-
         parent::__construct($args);
     }
-
     /**
      * @internal
      * @codeCoverageIgnore
@@ -311,7 +307,6 @@ class RdsClient extends AwsClient
         $api['shapes']['SourceRegion'] = ['type' => 'string'];
         $api['shapes']['CopyDBSnapshotMessage']['members']['SourceRegion'] = ['shape' => 'SourceRegion'];
         $api['shapes']['CreateDBInstanceReadReplicaMessage']['members']['SourceRegion'] = ['shape' => 'SourceRegion'];
-
         // Add the DestinationRegion parameter
         $docs['shapes']['DestinationRegion']['base']
             = '<div class="alert alert-info">The SDK will populate this '
@@ -320,7 +315,6 @@ class RdsClient extends AwsClient
         $api['shapes']['DestinationRegion'] = ['type' => 'string'];
         $api['shapes']['CopyDBSnapshotMessage']['members']['DestinationRegion'] = ['shape' => 'DestinationRegion'];
         $api['shapes']['CreateDBInstanceReadReplicaMessage']['members']['DestinationRegion'] = ['shape' => 'DestinationRegion'];
-
         // Several parameters in presign APIs are optional.
         $docs['shapes']['String']['refs']['CopyDBSnapshotMessage$PreSignedUrl']
             = '<div class="alert alert-info">The SDK will compute this value '
@@ -329,7 +323,6 @@ class RdsClient extends AwsClient
             = '<div class="alert alert-info">The SDK will populate this '
             . 'parameter on your behalf using the configured region value of '
             . 'the client.</div>';
-
         // Several parameters in presign APIs are optional.
         $docs['shapes']['String']['refs']['CreateDBInstanceReadReplicaMessage$PreSignedUrl']
             = '<div class="alert alert-info">The SDK will compute this value '
@@ -338,14 +331,11 @@ class RdsClient extends AwsClient
             = '<div class="alert alert-info">The SDK will populate this '
             . 'parameter on your behalf using the configured region value of '
             . 'the client.</div>';
-
         if ($api['metadata']['apiVersion'] != '2014-09-01') {
             $api['shapes']['CopyDBClusterSnapshotMessage']['members']['SourceRegion'] = ['shape' => 'SourceRegion'];
             $api['shapes']['CreateDBClusterMessage']['members']['SourceRegion'] = ['shape' => 'SourceRegion'];
-
             $api['shapes']['CopyDBClusterSnapshotMessage']['members']['DestinationRegion'] = ['shape' => 'DestinationRegion'];
             $api['shapes']['CreateDBClusterMessage']['members']['DestinationRegion'] = ['shape' => 'DestinationRegion'];
-
             // Several parameters in presign APIs are optional.
             $docs['shapes']['String']['refs']['CopyDBClusterSnapshotMessage$PreSignedUrl']
                 = '<div class="alert alert-info">The SDK will compute this value '
@@ -354,7 +344,6 @@ class RdsClient extends AwsClient
                 = '<div class="alert alert-info">The SDK will populate this '
                 . 'parameter on your behalf using the configured region value of '
                 . 'the client.</div>';
-
             // Several parameters in presign APIs are optional.
             $docs['shapes']['String']['refs']['CreateDBClusterMessage$PreSignedUrl']
                 = '<div class="alert alert-info">The SDK will compute this value '
@@ -364,7 +353,6 @@ class RdsClient extends AwsClient
                 . 'parameter on your behalf using the configured region value of '
                 . 'the client.</div>';
         }
-
         return [
             new Service($api, ApiProvider::defaultProvider()),
             new DocModel($docs)

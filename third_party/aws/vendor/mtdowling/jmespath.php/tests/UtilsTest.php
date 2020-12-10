@@ -1,9 +1,7 @@
 <?php
 namespace JmesPath\Tests;
-
 use JmesPath\Utils;
 use PHPUnit\Framework\TestCase;
-
 class UtilsTest extends TestCase
 {
     public function typeProvider()
@@ -25,7 +23,6 @@ class UtilsTest extends TestCase
             [new _TestStr(), 'string']
         ];
     }
-
     /**
      * @dataProvider typeProvider
      */
@@ -33,7 +30,6 @@ class UtilsTest extends TestCase
     {
         $this->assertEquals($type, Utils::type($given));
     }
-
     /**
      * @expectedException \InvalidArgumentException
      */
@@ -41,7 +37,6 @@ class UtilsTest extends TestCase
     {
         Utils::type(new _TestClass());
     }
-
     public function isArrayProvider()
     {
         return [
@@ -54,7 +49,6 @@ class UtilsTest extends TestCase
             [new \stdClass(), false]
         ];
     }
-
     /**
      * @dataProvider isArrayProvider
      */
@@ -62,7 +56,6 @@ class UtilsTest extends TestCase
     {
         $this->assertSame($result, Utils::isArray($given));
     }
-
     public function isObjectProvider()
     {
         return [
@@ -75,7 +68,6 @@ class UtilsTest extends TestCase
             [new \stdClass(), true]
         ];
     }
-
     /**
      * @dataProvider isObjectProvider
      */
@@ -83,7 +75,6 @@ class UtilsTest extends TestCase
     {
         $this->assertSame($result, Utils::isObject($given));
     }
-
     public function testHasStableSort()
     {
         $data = [new _TestStr(), new _TestStr(), 0, 10, 2];
@@ -98,14 +89,12 @@ class UtilsTest extends TestCase
         $this->assertEquals(2, $result[3]);
         $this->assertEquals(0, $result[4]);
     }
-
     public function testSlicesArrays()
     {
         $this->assertEquals([3, 2, 1], Utils::slice([1, 2, 3], null, null, -1));
         $this->assertEquals([1, 3], Utils::slice([1, 2, 3], null, null, 2));
         $this->assertEquals([2, 3], Utils::slice([1, 2, 3], 1));
     }
-
     public function testSlicesStrings()
     {
         $this->assertEquals('cba', Utils::slice('abc', null, null, -1));
@@ -113,7 +102,6 @@ class UtilsTest extends TestCase
         $this->assertEquals('bc', Utils::slice('abc', 1));
     }
 }
-
 class _TestClass implements \ArrayAccess
 {
     public function offsetExists($offset) {}
@@ -121,7 +109,6 @@ class _TestClass implements \ArrayAccess
     public function offsetSet($offset, $value) {}
     public function offsetUnset($offset) {}
 }
-
 class _TestStr
 {
     public function __toString()

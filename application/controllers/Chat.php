@@ -5,7 +5,6 @@ class Chat extends CI_Controller {
 		parent::__construct();	
 		$this->load->model('enquiry_model');	
 	}
-
 	public function index($comp_id=0,$created_by=154){
 		$data['comp_id'] = $comp_id;
 		$data['created_by'] = $created_by;
@@ -44,14 +43,11 @@ class Chat extends CI_Controller {
 			$this->session->set_userdata('chat_email',$row['email']);
 			$this->session->set_userdata('chat_companey_id',$row['comp_id']);
 		}else{
-
 			$name	=	explode(' ', $name);
 			
 			$fname  	= !empty($name[0])?$name[0]:'';
 			$last_name  = !empty($name[1])?$name[1]:'';
-
 			
-
 			$curl = curl_init();
 			$api_url = base_url()."api/enquiry/create";
 			curl_setopt_array($curl, array(
@@ -70,14 +66,10 @@ class Chat extends CI_Controller {
 			  	),
 			));
 			$response = curl_exec($curl);
-
 			if(curl_error($curl))
 				echo curl_error($curl);
-
 			curl_close($curl);	
-
 			$row	=	$this->enquiry_model->is_enquiry_exist($where);	
-
 			//echo $row;
 			//echo $response.'by me';
 			//echo $this->db->last_query();
@@ -95,7 +87,6 @@ class Chat extends CI_Controller {
 		}
 		//print_r($_SESSION);
 		echo json_encode(array('user_id'=>$this->session->chat_user_id,'fullname'=>$this->session->chat_fullname,'mobile'=>$this->session->chat_mobile,'email'=>$this->session->chat_email,'companey_id'=>$this->session->chat_companey_id));		
-
 	}
 	public function get_current_chat_session(){
 		echo json_encode(array('user_id'=>$this->session->user_id,'fullname'=>$this->session->fullname,'mobile'=>$this->session->mobile,'email'=>$this->session->email,'companey_id'=>$this->session->companey_id));	

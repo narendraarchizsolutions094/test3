@@ -1,10 +1,8 @@
 <?php
 namespace Aws\S3\RegionalEndpoint;
-
 class Configuration implements ConfigurationInterface
 {
     private $endpointsType;
-
     public function __construct($endpointsType)
     {
         $this->endpointsType = strtolower($endpointsType);
@@ -14,7 +12,6 @@ class Configuration implements ConfigurationInterface
             );
         }
     }
-
     /**
      * {@inheritdoc}
      */
@@ -22,7 +19,6 @@ class Configuration implements ConfigurationInterface
     {
         return $this->endpointsType;
     }
-
     /**
      * {@inheritdoc}
      */

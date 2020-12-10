@@ -1,8 +1,6 @@
 <?php
 namespace Aws\MigrationHubConfig;
-
 use Aws\AwsClient;
-
 /**
  * This client is used to interact with the **AWS Migration Hub Config** service.
  * @method \Aws\Result createHomeRegionControl(array $args = [])

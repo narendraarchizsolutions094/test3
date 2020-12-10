@@ -1,10 +1,8 @@
 <?php
 namespace Aws\Crypto;
-
 use GuzzleHttp\Psr7;
 use GuzzleHttp\Psr7\LimitStream;
 use Psr\Http\Message\StreamInterface;
-
 trait DecryptionTrait
 {
     /**
@@ -18,7 +16,6 @@ trait DecryptionTrait
      * @internal
      */
     abstract protected function getCipherFromAesName($aesName);
-
     /**
      * Dependency to generate a CipherMethod from a set of inputs for loading
      * in to an AesDecryptingStream.
@@ -33,7 +30,6 @@ trait DecryptionTrait
      * @internal
      */
     abstract protected function buildCipherMethod($cipherName, $iv, $keySize);
-
     /**
      * Builds an AesStreamInterface using cipher options loaded from the
      * MetadataEnvelope and MaterialsProvider.
@@ -62,10 +58,8 @@ trait DecryptionTrait
         $cipherOptions['Iv'] = base64_decode(
             $envelope[MetadataEnvelope::IV_HEADER]
         );
-
         $cipherOptions['TagLength'] =
             $envelope[MetadataEnvelope::CRYPTO_TAG_LENGTH_HEADER] / 8;
-
         $cek = $provider->decryptCek(
             base64_decode(
                 $envelope[MetadataEnvelope::CONTENT_KEY_V2_HEADER]
@@ -79,17 +73,14 @@ trait DecryptionTrait
         $cipherOptions['Cipher'] = $this->getCipherFromAesName(
             $envelope[MetadataEnvelope::CONTENT_CRYPTO_SCHEME_HEADER]
         );
-
         $decryptionSteam = $this->getDecryptingStream(
             $cipherText,
             $cek,
             $cipherOptions
         );
         unset($cek);
-
         return $decryptionSteam;
     }
-
     private function getTagFromCiphertextStream(
         StreamInterface $cipherText,
         $tagLength
@@ -105,7 +96,6 @@ trait DecryptionTrait
             $cipherTextSize - $tagLength
         );
     }
-
     private function getStrippedCiphertextStream(
         StreamInterface $cipherText,
         $tagLength
@@ -121,7 +111,6 @@ trait DecryptionTrait
             0
         );
     }
-
     /**
      * Generates a stream that wraps the cipher text with the proper cipher and
      * uses the content encryption key (CEK) to decrypt the data when read.
@@ -149,7 +138,6 @@ trait DecryptionTrait
                         $cipherTextStream,
                         $cipherOptions['TagLength']
                     );
-
                 return new AesGcmDecryptingStream(
                     $this->getStrippedCiphertextStream(
                         $cipherTextStream,

@@ -1,8 +1,6 @@
 <?php
 namespace Aws\Mobile;
-
 use Aws\AwsClient;
-
 /**
  * This client is used to interact with the **AWS Mobile** service.
  * @method \Aws\Result createProject(array $args = [])

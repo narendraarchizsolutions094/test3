@@ -1,8 +1,6 @@
 <?php
 namespace Aws\CodeStar;
-
 use Aws\AwsClient;
-
 /**
  * This client is used to interact with the **AWS CodeStar** service.
  * @method \Aws\Result associateTeamMember(array $args = [])

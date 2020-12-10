@@ -1,6 +1,5 @@
 <?php
 namespace Aws\S3\UseArnRegion;
-
 interface ConfigurationInterface
 {
     /**
@@ -9,7 +8,6 @@ interface ConfigurationInterface
      * @return bool
      */
     public function isUseArnRegion();
-
     /**
      * Returns the configuration as an associative array
      *

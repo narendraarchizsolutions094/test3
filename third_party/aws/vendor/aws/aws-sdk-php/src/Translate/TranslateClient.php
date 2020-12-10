@@ -1,8 +1,6 @@
 <?php
 namespace Aws\Translate;
-
 use Aws\AwsClient;
-
 /**
  * This client is used to interact with the **Amazon Translate** service.
  * @method \Aws\Result deleteTerminology(array $args = [])

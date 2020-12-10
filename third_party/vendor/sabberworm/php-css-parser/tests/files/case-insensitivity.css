@@ -1,10 +1,7 @@
 @CharSet "utf-8";
 @IMPORT uRL(test.css);
-
 @MEDIA screen {
-
 }
-
 #myid {
 	CaSe: insensitive !imPORTANT;
 	frequency: 30hz;

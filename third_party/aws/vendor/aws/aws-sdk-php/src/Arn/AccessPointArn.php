@@ -1,15 +1,12 @@
 <?php
 namespace Aws\Arn;
-
 use Aws\Arn\Exception\InvalidArnException;
-
 /**
  * @internal
  */
 class AccessPointArn extends Arn implements ArnInterface
 {
     use ResourceTypeAndIdTrait;
-
     /**
      * AccessPointArn constructor
      *
@@ -20,13 +17,11 @@ class AccessPointArn extends Arn implements ArnInterface
         parent::__construct($data);
         static::validate($this->data);
     }
-
     public static function parse($string)
     {
         $data = parent::parse($string);
         return self::parseResourceTypeAndId($data);
     }
-
     /**
      * Validation specific to AccessPointArn
      *
@@ -38,7 +33,6 @@ class AccessPointArn extends Arn implements ArnInterface
             throw new InvalidArnException("The 4th component of an access point ARN"
                 . " represents the region and must not be empty.");
         }
-
         if (empty($data['account_id'])) {
             throw new InvalidArnException("The 5th component of an access point ARN"
                 . " represents the account ID and must not be empty.");
@@ -47,12 +41,10 @@ class AccessPointArn extends Arn implements ArnInterface
             throw new InvalidArnException("The account ID in an access point ARN"
                 . " must be a valid host label value.");
         }
-
         if ($data['resource_type'] !== 'accesspoint') {
             throw new InvalidArnException("The 6th component of an access point ARN"
                 . " represents the resource type and must be 'accesspoint'.");
         }
-
         if (empty($data['resource_id'])) {
             throw new InvalidArnException("The 7th component of an access point ARN"
                 . " represents the resource ID and must not be empty.");
@@ -67,7 +59,6 @@ class AccessPointArn extends Arn implements ArnInterface
                 . " must be a valid host label value.");
         }
     }
-
     protected static function isValidHostLabel($string)
     {
         $length = strlen($string);

@@ -1,8 +1,6 @@
 <?php
 namespace Aws\AppMesh;
-
 use Aws\AwsClient;
-
 /**
  * This client is used to interact with the **AWS App Mesh** service.
  * @method \Aws\Result createMesh(array $args = [])

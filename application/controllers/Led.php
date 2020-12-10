@@ -14,7 +14,6 @@ class Led extends CI_Controller {
             redirect('login');
         }
     }
-
    	public function index() { 
         $this->session->unset_userdata('enquiry_filters_sess');
         $process_id = $this->session->userdata('process');
@@ -39,31 +38,22 @@ class Led extends CI_Controller {
         $data['content'] = $this->load->view('enquiry_n', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }
-
     public function get_leadstage_list_byprocess(){
-
     	$id = $this->input->post('id');
         // print_r($id);exit();
     	$res = $this->Leads_Model->get_leadstage_list_byprocess1($id);
-
     	// print_r($res);exit();
     	$radio='';
     	if($res){
-
     		foreach ($res as $result) {
-
     			$radio .= "<input type='radio' value='".$result->stg_id."' id='".$result->lead_stage_name."' name='lead_stages'><label>".$result->lead_stage_name. "</label>";
     		
     		}
-
     	}
         // print_r($res);
     	 echo $radio;
-
     	 exit();
-
     }
-
     public function index1($all='') {
         if (user_role('60') == true) {}  
          if(!empty($this->session->enq_type)){
@@ -113,12 +103,10 @@ class Led extends CI_Controller {
 		$this->pagination->initialize($config);
 		$data['pagination'] = $this->pagination->create_links();
 		$data['empData'] = $empRecord->result_array();
-
 /*
 		echo "<pre>";
 		echo $this->db->last_query();
 		echo "</pre>";*/
-
 
 	 	echo json_encode($data);
 	}

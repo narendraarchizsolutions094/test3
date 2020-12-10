@@ -1,6 +1,5 @@
 <?php
 namespace Aws\Rds;
-
 use Aws\Credentials\CredentialsInterface;
 use Aws\Credentials\Credentials;
 use Aws\Signature\SignatureV4;
@@ -8,15 +7,12 @@ use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Uri;
 use GuzzleHttp\Promise;
 use Aws;
-
 /**
  * Generates RDS auth tokens for use with IAM authentication.
  */
 class AuthTokenGenerator
 {
-
     private $credentialProvider;
-
     /**
      * The constructor takes an instance of Credentials or a CredentialProvider
      *
@@ -31,7 +27,6 @@ class AuthTokenGenerator
             $this->credentialProvider = $creds;
         }
     }
-
     /**
      * Create the token for database login
      *
@@ -47,17 +42,14 @@ class AuthTokenGenerator
         $uri = new Uri($endpoint);
         $uri = $uri->withPath('/');
         $uri = $uri->withQuery('Action=connect&DBUser=' . $username);
-
         $request = new Request('GET', $uri);
         $signer = new SignatureV4('rds-db', $region);
         $provider = $this->credentialProvider;
-
         $url = (string) $signer->presign(
             $request,
             $provider()->wait(),
             '+15 minutes'
         )->getUri();
-
         // Remove 2 extra slash from the presigned url result
         return substr($url, 2);
     }

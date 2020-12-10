@@ -1,8 +1,6 @@
 <?php
 namespace Aws\Endpoint;
-
 use Aws\Exception\UnresolvedEndpointException;
-
 /**
  * Endpoint providers.
  *
@@ -61,14 +59,12 @@ class EndpointProvider
         if (is_array($result)) {
             return $result;
         }
-
         throw new UnresolvedEndpointException(
             'Unable to resolve an endpoint using the provider arguments: '
             . json_encode($args) . '. Note: you can provide an "endpoint" '
             . 'option to a client constructor to bypass invoking an endpoint '
             . 'provider.');
     }
-
     /**
      * Creates and returns the default SDK endpoint provider.
      *
@@ -80,7 +76,6 @@ class EndpointProvider
     {
         return PartitionEndpointProvider::defaultProvider();
     }
-
     /**
      * Creates and returns an endpoint provider that uses patterns from an
      * array.

@@ -1,6 +1,5 @@
 <?php
 namespace JmesPath;
-
 class Utils
 {
     public static $typeMap = [
@@ -11,7 +10,6 @@ class Utils
         'float'   => 'number',
         'integer' => 'number'
     ];
-
     /**
      * Returns true if the value is truthy
      *
@@ -29,7 +27,6 @@ class Utils
             return true;
         }
     }
-
     /**
      * Gets the JMESPath type equivalent of a PHP variable.
      *
@@ -61,12 +58,10 @@ class Utils
         } elseif (method_exists($arg, '__toString')) {
             return 'string';
         }
-
         throw new \InvalidArgumentException(
             'Unable to determine JMESPath type from ' . get_class($arg)
         );
     }
-
     /**
      * Determine if the provided value is a JMESPath compatible object.
      *
@@ -79,13 +74,11 @@ class Utils
         if (is_array($value)) {
             return !$value || array_keys($value)[0] !== 0;
         }
-
         // Handle array-like values. Must be empty or offset 0 does not exist
         return $value instanceof \Countable && $value instanceof \ArrayAccess
             ? count($value) == 0 || !$value->offsetExists(0)
             : $value instanceof \stdClass;
     }
-
     /**
      * Determine if the provided value is a JMESPath compatible array.
      *
@@ -98,13 +91,11 @@ class Utils
         if (is_array($value)) {
             return !$value || array_keys($value)[0] === 0;
         }
-
         // Handle array-like values. Must be empty or offset 0 exists.
         return $value instanceof \Countable && $value instanceof \ArrayAccess
             ? count($value) == 0 || $value->offsetExists(0)
             : false;
     }
-
     /**
      * JSON aware value comparison function.
      *
@@ -125,7 +116,6 @@ class Utils
             return false;
         }
     }
-
     /**
      * JMESPath requires a stable sorting algorithm, so here we'll implement
      * a simple Schwartzian transform that uses array index positions as tie
@@ -147,13 +137,11 @@ class Utils
         uasort($data, function ($a, $b) use ($sortFn) {
             return $sortFn($a[0], $b[0]) ?: ($a[1] < $b[1] ? -1 : 1);
         });
-
         // Undecorate each item and return the resulting sorted array
         return array_map(function ($v) {
             return $v[0];
         }, array_values($data));
     }
-
     /**
      * Creates a Python-style slice of a string or array.
      *
@@ -170,10 +158,8 @@ class Utils
         if (!is_array($value) && !is_string($value)) {
             throw new \InvalidArgumentException('Expects string or array');
         }
-
         return self::sliceIndices($value, $start, $stop, $step);
     }
-
     private static function adjustEndpoint($length, $endpoint, $step)
     {
         if ($endpoint < 0) {
@@ -184,10 +170,8 @@ class Utils
         } elseif ($endpoint >= $length) {
             $endpoint = $step < 0 ? $length - 1 : $length;
         }
-
         return $endpoint;
     }
-
     private static function adjustSlice($length, $start, $stop, $step)
     {
         if ($step === null) {
@@ -195,28 +179,23 @@ class Utils
         } elseif ($step === 0) {
             throw new \RuntimeException('step cannot be 0');
         }
-
         if ($start === null) {
             $start = $step < 0 ? $length - 1 : 0;
         } else {
             $start = self::adjustEndpoint($length, $start, $step);
         }
-
         if ($stop === null) {
             $stop = $step < 0 ? -1 : $length;
         } else {
             $stop = self::adjustEndpoint($length, $stop, $step);
         }
-
         return [$start, $stop, $step];
     }
-
     private static function sliceIndices($subject, $start, $stop, $step)
     {
         $type = gettype($subject);
         $len = $type == 'string' ? mb_strlen($subject, 'UTF-8') : count($subject);
         list($start, $stop, $step) = self::adjustSlice($len, $start, $stop, $step);
-
         $result = [];
         if ($step > 0) {
             for ($i = $start; $i < $stop; $i += $step) {
@@ -227,7 +206,6 @@ class Utils
                 $result[] = $subject[$i];
             }
         }
-
         return $type == 'string' ? implode('', $result) : $result;
     }
 }

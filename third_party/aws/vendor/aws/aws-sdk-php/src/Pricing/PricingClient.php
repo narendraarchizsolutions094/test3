@@ -1,8 +1,6 @@
 <?php
 namespace Aws\Pricing;
-
 use Aws\AwsClient;
-
 /**
  * This client is used to interact with the **AWS Price List Service** service.
  * @method \Aws\Result describeServices(array $args = [])

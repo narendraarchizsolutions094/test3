@@ -1,8 +1,6 @@
 <?php
 namespace Aws;
-
 use GuzzleHttp\Promise;
-
 /**
  * A configuration provider is a function that returns a promise that is
  * fulfilled with a configuration object. This class provides base functionality
@@ -12,12 +10,9 @@ abstract class AbstractConfigurationProvider
 {
     const ENV_PROFILE = 'AWS_PROFILE';
     const ENV_CONFIG_FILE = 'AWS_CONFIG_FILE';
-
     public static $cacheKey;
-
     protected static $interfaceClass;
     protected static $exceptionClass;
-
     /**
      * Wraps a config provider and saves provided configuration in an
      * instance of Aws\CacheInterface. Forwards calls when no config found
@@ -35,13 +30,11 @@ abstract class AbstractConfigurationProvider
         $cacheKey = null
     ) {
         $cacheKey = $cacheKey ?: static::$cacheKey;
-
         return function () use ($provider, $cache, $cacheKey) {
             $found = $cache->get($cacheKey);
             if ($found instanceof static::$interfaceClass) {
                 return Promise\promise_for($found);
             }
-
             return $provider()
                 ->then(function ($config) use (
                     $cache,
@@ -52,7 +45,6 @@ abstract class AbstractConfigurationProvider
                 });
         };
     }
-
     /**
      * Creates an aggregate configuration provider that invokes the provided
      * variadic providers one after the other until a provider returns
@@ -66,7 +58,6 @@ abstract class AbstractConfigurationProvider
         if (empty($links)) {
             throw new \InvalidArgumentException('No providers in chain');
         }
-
         return function () use ($links) {
             /** @var callable $parent */
             $parent = array_shift($links);
@@ -77,7 +68,6 @@ abstract class AbstractConfigurationProvider
             return $promise;
         };
     }
-
     /**
      * Gets the environment's HOME directory if available.
      *
@@ -89,14 +79,11 @@ abstract class AbstractConfigurationProvider
         if ($homeDir = getenv('HOME')) {
             return $homeDir;
         }
-
         // Get the HOMEDRIVE and HOMEPATH values for Windows hosts
         $homeDrive = getenv('HOMEDRIVE');
         $homePath = getenv('HOMEPATH');
-
         return ($homeDrive && $homePath) ? $homeDrive . $homePath : null;
     }
-
     /**
      * Gets default config file location from environment, falling back to aws
      * default location
@@ -110,7 +97,6 @@ abstract class AbstractConfigurationProvider
         }
         return self::getHomeDir() . '/.aws/config';
     }
-
     /**
      * Wraps a config provider and caches previously provided configuration.
      *
@@ -123,17 +109,14 @@ abstract class AbstractConfigurationProvider
         return function () use ($provider) {
             static $result;
             static $isConstant;
-
             // Constant config will be returned constantly.
             if ($isConstant) {
                 return $result;
             }
-
             // Create the initial promise that will be used as the cached value
             if (null === $result) {
                 $result = $provider();
             }
-
             // Return config and set flag that provider is already set
             return $result
                 ->then(function ($config) use (&$isConstant) {
@@ -142,7 +125,6 @@ abstract class AbstractConfigurationProvider
                 });
         };
     }
-
     /**
      * Reject promise with standardized exception.
      *

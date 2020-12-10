@@ -1,8 +1,6 @@
 <?php
 namespace Aws\Schemas;
-
 use Aws\AwsClient;
-
 /**
  * This client is used to interact with the **Schemas** service.
  * @method \Aws\Result createDiscoverer(array $args = [])

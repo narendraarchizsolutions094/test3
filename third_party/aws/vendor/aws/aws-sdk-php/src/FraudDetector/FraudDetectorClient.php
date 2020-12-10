@@ -1,8 +1,6 @@
 <?php
 namespace Aws\FraudDetector;
-
 use Aws\AwsClient;
-
 /**
  * This client is used to interact with the **Amazon Fraud Detector** service.
  * @method \Aws\Result batchCreateVariable(array $args = [])

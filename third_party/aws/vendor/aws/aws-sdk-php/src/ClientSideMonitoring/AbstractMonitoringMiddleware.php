@@ -1,7 +1,5 @@
 <?php
-
 namespace Aws\ClientSideMonitoring;
-
 use Aws\CommandInterface;
 use Aws\Exception\AwsException;
 use Aws\MonitoringEventsInterface;
@@ -10,7 +8,6 @@ use Aws\ResultInterface;
 use GuzzleHttp\Promise;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-
 /**
  * @internal
  */
@@ -18,13 +15,11 @@ abstract class AbstractMonitoringMiddleware
     implements MonitoringMiddlewareInterface
 {
     private static $socket;
-
     private $nextHandler;
     private $options;
     protected $credentialProvider;
     protected $region;
     protected $service;
-
     protected static function getAwsExceptionHeader(AwsException $e, $headerName)
     {
         $response = $e->getResponse();
@@ -36,7 +31,6 @@ abstract class AbstractMonitoringMiddleware
         }
         return null;
     }
-
     protected static function getResultHeader(ResultInterface $result, $headerName)
     {
         if (isset($result['@metadata']['headers'][$headerName])) {
@@ -44,7 +38,6 @@ abstract class AbstractMonitoringMiddleware
         }
         return null;
     }
-
     protected static function getExceptionHeader(\Exception $e, $headerName)
     {
         if ($e instanceof ResponseContainerInterface) {
@@ -58,7 +51,6 @@ abstract class AbstractMonitoringMiddleware
         }
         return null;
     }
-
     /**
      * Constructor stores the passed in handler and options.
      *
@@ -81,7 +73,6 @@ abstract class AbstractMonitoringMiddleware
         $this->region = $region;
         $this->service = $service;
     }
-
     /**
      * Standard invoke pattern for middleware execution to be implemented by
      * child classes.
@@ -95,7 +86,6 @@ abstract class AbstractMonitoringMiddleware
         $handler = $this->nextHandler;
         $eventData = null;
         $enabled = $this->isEnabled();
-
         if ($enabled) {
             $cmd['@http']['collect_stats'] = true;
             $eventData = $this->populateRequestEventData(
@@ -104,7 +94,6 @@ abstract class AbstractMonitoringMiddleware
                 $this->getNewEvent($cmd, $request)
             );
         }
-
         $g = function ($value) use ($eventData, $enabled) {
             if ($enabled) {
                 $eventData = $this->populateResultEventData(
@@ -112,7 +101,6 @@ abstract class AbstractMonitoringMiddleware
                     $eventData
                 );
                 $this->sendEventData($eventData);
-
                 if ($value instanceof MonitoringEventsInterface) {
                     $value->appendMonitoringEvent($eventData);
                 }
@@ -122,15 +110,12 @@ abstract class AbstractMonitoringMiddleware
             }
             return $value;
         };
-
         return Promise\promise_for($handler($cmd, $request))->then($g, $g);
     }
-
     private function getClientId()
     {
         return $this->unwrappedOptions()->getClientId();
     }
-
     private function getNewEvent(
         CommandInterface $cmd,
         RequestInterface $request
@@ -150,27 +135,22 @@ abstract class AbstractMonitoringMiddleware
         ];
         return $event;
     }
-
     private function getHost()
     {
         return $this->unwrappedOptions()->getHost();
     }
-
     private function getPort()
     {
         return $this->unwrappedOptions()->getPort();
     }
-
     private function getRegion()
     {
         return $this->region;
     }
-
     private function getService()
     {
         return $this->service;
     }
-
     /**
      * Returns enabled flag from options, unwrapping options if necessary.
      *
@@ -180,7 +160,6 @@ abstract class AbstractMonitoringMiddleware
     {
         return $this->unwrappedOptions()->isEnabled();
     }
-
     /**
      * Returns $eventData array with information from the request and command.
      *
@@ -202,7 +181,6 @@ abstract class AbstractMonitoringMiddleware
         }
         return $event;
     }
-
     /**
      * Returns $eventData array with information from the response, including
      * the calculation for attempt latency.
@@ -223,7 +201,6 @@ abstract class AbstractMonitoringMiddleware
         }
         return $event;
     }
-
     /**
      * Creates a UDP socket resource and stores it with the class, or retrieves
      * it if already instantiated and connected. Handles error-checking and
@@ -243,10 +220,8 @@ abstract class AbstractMonitoringMiddleware
             socket_clear_error(self::$socket);
             socket_connect(self::$socket, $this->getHost(), $this->getPort());
         }
-
         return self::$socket;
     }
-
     /**
      * Sends formatted monitoring event data via the UDP socket connection to
      * the CSM agent endpoint.
@@ -264,7 +239,6 @@ abstract class AbstractMonitoringMiddleware
         }
         return $result;
     }
-
     /**
      * Unwraps options, if needed, and returns them.
      *

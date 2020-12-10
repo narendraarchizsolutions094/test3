@@ -1,8 +1,6 @@
 <?php
 namespace Aws\WorkMail;
-
 use Aws\AwsClient;
-
 /**
  * This client is used to interact with the **Amazon WorkMail** service.
  * @method \Aws\Result associateDelegateToResource(array $args = [])

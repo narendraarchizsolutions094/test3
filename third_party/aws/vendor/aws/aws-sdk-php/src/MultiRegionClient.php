@@ -1,13 +1,10 @@
 <?php
 namespace Aws;
-
 use Aws\Endpoint\PartitionEndpointProvider;
 use Aws\Endpoint\PartitionInterface;
-
 class MultiRegionClient implements AwsClientInterface
 {
     use AwsClientTrait;
-
     /** @var AwsClientInterface[] A pool of clients keyed by region. */
     private $clientPool = [];
     /** @var callable */
@@ -22,7 +19,6 @@ class MultiRegionClient implements AwsClientInterface
     private $handlerList;
     /** @var array */
     private $aliases;
-
     public static function getArguments()
     {
         $args = array_intersect_key(
@@ -30,7 +26,6 @@ class MultiRegionClient implements AwsClientInterface
             ['service' => true, 'region' => true]
         );
         $args['region']['required'] = false;
-
         return $args + [
             'client_factory' => [
                 'type' => 'config',
@@ -44,12 +39,10 @@ class MultiRegionClient implements AwsClientInterface
                     $namespace = manifest($args['service'])['namespace'];
                     $klass = "Aws\\{$namespace}\\{$namespace}Client";
                     $region = isset($args['region']) ? $args['region'] : null;
-
                     return function (array $args) use ($klass, $region) {
                         if ($region && empty($args['region'])) {
                             $args['region'] = $region;
                         }
-
                         return new $klass($args);
                     };
                 },
@@ -70,7 +63,6 @@ class MultiRegionClient implements AwsClientInterface
                         $value = PartitionEndpointProvider::defaultProvider()
                             ->getPartitionByName($value);
                     }
-
                     if (!$value instanceof PartitionInterface) {
                         throw new \InvalidArgumentException('No valid partition'
                             . ' was provided. Provide a concrete partition or'
@@ -78,14 +70,12 @@ class MultiRegionClient implements AwsClientInterface
                             . ' or "aws-us-gov").'
                         );
                     }
-
                     $args['partition'] = $value;
                     $args['endpoint_provider'] = $value;
                 }
             ],
         ];
     }
-
     /**
      * The multi-region client constructor accepts the following options:
      *
@@ -105,7 +95,6 @@ class MultiRegionClient implements AwsClientInterface
         if (!isset($args['service'])) {
             $args['service'] = $this->parseClass();
         }
-
         $this->handlerList = new HandlerList(function (
             CommandInterface $command
         ) {
@@ -114,7 +103,6 @@ class MultiRegionClient implements AwsClientInterface
                 ->getCommand($command->getName(), $args);
             return $this->executeAsync($command);
         });
-
         $argDefinitions = static::getArguments();
         $resolver = new ClientResolver($argDefinitions);
         $args = $resolver->resolve($args, $this->handlerList);
@@ -123,7 +111,6 @@ class MultiRegionClient implements AwsClientInterface
         $this->partition = $args['partition'];
         $this->args = array_diff_key($args, $args['config']);
     }
-
     /**
      * Get the region to which the client is configured to send requests by
      * default.
@@ -134,7 +121,6 @@ class MultiRegionClient implements AwsClientInterface
     {
         return $this->getClientFromPool()->getRegion();
     }
-
     /**
      * Create a command for an operation name.
      *
@@ -157,40 +143,32 @@ class MultiRegionClient implements AwsClientInterface
     {
         return new Command($name, $args, clone $this->getHandlerList());
     }
-
     public function getConfig($option = null)
     {
         if (null === $option) {
             return $this->config;
         }
-
         if (isset($this->config[$option])) {
             return $this->config[$option];
         }
-
         return $this->getClientFromPool()->getConfig($option);
     }
-
     public function getCredentials()
     {
         return $this->getClientFromPool()->getCredentials();
     }
-
     public function getHandlerList()
     {
         return $this->handlerList;
     }
-
     public function getApi()
     {
         return $this->getClientFromPool()->getApi();
     }
-
     public function getEndpoint()
     {
         return $this->getClientFromPool()->getEndpoint();
     }
-
     /**
      * @param string $region    Omit this argument or pass in an empty string to
      *                          allow the configured client factory to apply the
@@ -206,10 +184,8 @@ class MultiRegionClient implements AwsClientInterface
                 array_replace($this->args, array_filter(['region' => $region]))
             );
         }
-
         return $this->clientPool[$region];
     }
-
     /**
      * Parse the class name and return the "service" name of the client.
      *
@@ -218,21 +194,17 @@ class MultiRegionClient implements AwsClientInterface
     private function parseClass()
     {
         $klass = get_class($this);
-
         if ($klass === __CLASS__) {
             return '';
         }
-
         return strtolower(substr($klass, strrpos($klass, '\\') + 1, -17));
     }
-
     private function getRegionFromArgs(array $args)
     {
         $region = isset($args['@region'])
             ? $args['@region']
             : $this->getRegion();
         unset($args['@region']);
-
         return [$region, $args];
     }
 }

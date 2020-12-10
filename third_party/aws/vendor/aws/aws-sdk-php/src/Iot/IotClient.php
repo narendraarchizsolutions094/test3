@@ -1,8 +1,6 @@
 <?php
 namespace Aws\Iot;
-
 use Aws\AwsClient;
-
 /**
  * This client is used to interact with the **AWS IoT** service.
  *

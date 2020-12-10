@@ -1,8 +1,6 @@
 <?php
 namespace Aws\DocDB;
-
 use Aws\AwsClient;
-
 /**
  * This client is used to interact with the **Amazon DocumentDB with MongoDB compatibility** service.
  * @method \Aws\Result addTagsToResource(array $args = [])

@@ -1,8 +1,6 @@
 <?php
 namespace Aws\Synthetics;
-
 use Aws\AwsClient;
-
 /**
  * This client is used to interact with the **Synthetics** service.
  * @method \Aws\Result createCanary(array $args = [])

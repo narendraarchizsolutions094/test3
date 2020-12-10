@@ -1,12 +1,9 @@
 <?php
-
 namespace Sabberworm\CSS\Property;
-
 /**
  * Class representing a single CSS selector. Selectors have to be split by the comma prior to being passed into this class.
  */
 class Selector {
-
 	//Regexes for specificity calculations
 	const NON_ID_ATTRIBUTES_AND_PSEUDO_CLASSES_RX = '/
 	(\.[\w]+)                   # classes
@@ -26,7 +23,6 @@ class Selector {
 		|empty|contains
 	))
 	/ix';
-
 	const ELEMENTS_AND_PSEUDO_ELEMENTS_RX = '/
 	((^|[\s\+\>\~]+)[\w]+   # elements
 	|
@@ -34,30 +30,24 @@ class Selector {
 		after|before|first-letter|first-line|selection
 	))
 	/ix';
-
 	private $sSelector;
 	private $iSpecificity;
-
 	public function __construct($sSelector, $bCalculateSpecificity = false) {
 		$this->setSelector($sSelector);
 		if ($bCalculateSpecificity) {
 			$this->getSpecificity();
 		}
 	}
-
 	public function getSelector() {
 		return $this->sSelector;
 	}
-
 	public function setSelector($sSelector) {
 		$this->sSelector = trim($sSelector);
 		$this->iSpecificity = null;
 	}
-
 	public function __toString() {
 		return $this->getSelector();
 	}
-
 	public function getSpecificity() {
 		if ($this->iSpecificity === null) {
 			$a = 0;
@@ -70,5 +60,4 @@ class Selector {
 		}
 		return $this->iSpecificity;
 	}
-
 }

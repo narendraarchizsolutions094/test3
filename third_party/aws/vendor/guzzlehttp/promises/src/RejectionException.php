@@ -1,6 +1,5 @@
 <?php
 namespace GuzzleHttp\Promise;
-
 /**
  * A special exception that is thrown when waiting on a rejected promise.
  *
@@ -10,7 +9,6 @@ class RejectionException extends \RuntimeException
 {
     /** @var mixed Rejection reason. */
     private $reason;
-
     /**
      * @param mixed $reason       Rejection reason.
      * @param string $description Optional description
@@ -18,9 +16,7 @@ class RejectionException extends \RuntimeException
     public function __construct($reason, $description = null)
     {
         $this->reason = $reason;
-
         $message = 'The promise was rejected';
-
         if ($description) {
             $message .= ' with reason: ' . $description;
         } elseif (is_string($reason)
@@ -31,10 +27,8 @@ class RejectionException extends \RuntimeException
             $message .= ' with reason: '
                 . json_encode($this->reason, JSON_PRETTY_PRINT);
         }
-
         parent::__construct($message);
     }
-
     /**
      * Returns the rejection reason.
      *

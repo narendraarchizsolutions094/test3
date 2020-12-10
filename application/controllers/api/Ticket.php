@@ -3,16 +3,13 @@ use Restserver\Libraries\REST_Controller;
 defined('BASEPATH') OR exit('No direct script access allowed');
 require APPPATH . 'libraries/REST_Controller.php';
 require APPPATH . 'libraries/Format.php';
-
 class Ticket extends REST_Controller {
-
   function __construct()
   {
       parent::__construct();
       $this->load->library('form_validation');
 	   $this->load->model(array('location_model','Ticket_Model'));
   }
-
   //api for providing ticket source Company Wise
   public function getTicketSource_post()
   {      
@@ -36,7 +33,6 @@ class Ticket extends REST_Controller {
     
   }
 
-
   // api for ticket problem list Company Wise
   public function getProblemList_post()
   {      
@@ -58,7 +54,6 @@ class Ticket extends REST_Controller {
       ], REST_Controller::HTTP_OK); 
     }
   }
-
   // api for ticket list Company Wise 
   public function getTicketList_post()
   {      
@@ -99,27 +94,20 @@ class Ticket extends REST_Controller {
   public function createTicketForm_post()
   {
     $this->load->model(array('Enquiry_model','Leads_Model'));
-
     $company_id   = $this->input->post('company_id');
     $process_id   = $this->input->post('process_id');
 // $user_id      = $this->input->post('user_id');
     $session_backup = $this->session->userdata()??'';
-
       $this->session->process = array($process_id);
       $this->session->companey_id = $company_id;
-
     $this->form_validation->set_rules('company_id','Company ID','trim|required',array('required'=>'You have note provided %s'));
     $this->form_validation->set_rules('process_id','Process ID','trim|required',array('required'=>'You have note provided %s'));
 
-
     if($this->form_validation->run() == true)
     {
-
       $primary_tab= $this->Ticket_Model->getPrimaryTab()->id;
      
-
       $basic= $this->location_model->get_company_list1_ticket($process_id);
-
       foreach ($basic as $key => $input)
       {
           switch($input['field_id'])
@@ -133,7 +121,6 @@ class Ticket extends REST_Controller {
                                             );
             $basic[$key]['parameter_name'] = 'complaint_type';
             break;
-
             case 16:
             $referred_by = $this->Ticket_Model->refferedBy();
             $values = array();
@@ -145,7 +132,6 @@ class Ticket extends REST_Controller {
             $basic[$key]['input_values'] = $values;
             $basic[$key]['parameter_name'] = 'referred_by';
             break;
-
             case 17:
             $clients = $this->Enquiry_model->getEnquiry()->result();
             $values = array();
@@ -180,7 +166,6 @@ class Ticket extends REST_Controller {
             $basic[$key]['input_values'] = $values;
             $basic[$key]['parameter_name'] = 'product';
             break;
-
             case 22:
             $problems = $this->Ticket_Model->get_sub_list();
             $values = array();
@@ -193,7 +178,6 @@ class Ticket extends REST_Controller {
             $basic[$key]['input_values'] = $values;
             $basic[$key]['parameter_name'] = 'relatedto';
             break;
-
             case 23:
             $natures = $this->Ticket_Model->get_issue_list();
             $values = array();
@@ -206,12 +190,10 @@ class Ticket extends REST_Controller {
             $basic[$key]['input_values'] = $values;
             $basic[$key]['parameter_name'] = 'issue';
             break;
-
             case 24:
             $values = array(
                               array('key'=>'1',
                                     'value'=>'Low'),
-
                               array('key'=>'2',
                                     'value'=>'Medium'),
                               array('key'=>'3',
@@ -220,7 +202,6 @@ class Ticket extends REST_Controller {
             $basic[$key]['input_values'] = $values;
             $basic[$key]['parameter_name'] = 'priority';
             break;
-
             case 25:
             $source = $this->Leads_Model->get_leadsource_list();
             $values = array();
@@ -233,24 +214,18 @@ class Ticket extends REST_Controller {
             $basic[$key]['input_values'] = $values;
             $basic[$key]['parameter_name'] = 'source';
             break;
-
             case 26: 
             $basic[$key]['parameter_name'] = 'attachment[]';
             break;
-
             case 27:
             $basic[$key]['parameter_name'] = 'remark';
             break;
-
             case 28:
             $basic[$key]['parameter_name'] = 'tracking_no';
             break;
 
-
           }
-
       }
-
       $dynamic = $this->location_model->get_company_list($process_id,$primary_tab);
       $i=0;
       foreach ($dynamic as $key => $value)
@@ -279,9 +254,7 @@ class Ticket extends REST_Controller {
                                               );
           $i++;
       }
-
       $data = array_merge($basic,$dynamic);      
-
       session_destroy();
       $this->session->set_userdata($session_backup);
       if(!empty($data))
@@ -310,29 +283,24 @@ class Ticket extends REST_Controller {
     } 
   }
 
-
 //api for creating new ticket
   public function createTicket_post()
   {      
     $company_id   = $this->input->post('company_id'); //mandatory to pass
     $user_id      = $this->input->post('user_id');    //mandatory to pass
     $process_id   = $this->input->post('process_id');
-
     $this->form_validation->set_rules('company_id','Company','trim|required');
     $this->form_validation->set_rules('user_id','User','trim|required');
     $this->form_validation->set_rules('process_id','Process','trim|required');
     
     if($this->form_validation->run() == true)
     {
-
       $session_backup = $this->session->userdata()??'';
-
       $this->session->process = array($process_id);
       $this->session->companey_id = $company_id;
       $user_id  = $this->input->post('user_id');
       $this->load->model('Ticket_Model');
       $inserted  = $this->Ticket_Model->save($company_id,$user_id);
-
       //for dynamic fields update
       if($res=$inserted) 
       {
@@ -343,7 +311,6 @@ class Ticket extends REST_Controller {
         $comment_id = $this->db->select('id')
                 ->where('tck_id',$tck_id)
                 ->get('tbl_ticket_conv')->row()->id;
-
         if(isset($_POST['inputfieldno'])) {                    
                 $inputno   = $this->input->post("inputfieldno", true);
                 $enqinfo   = $this->input->post("enqueryfield", true);
@@ -352,10 +319,8 @@ class Ticket extends REST_Controller {
                 $file = !empty($_FILES['enqueryfiles'])?$_FILES['enqueryfiles']:'';                
                 foreach($inputno as $ind => $val){
   
-
                  if ($inputtype[$ind] == 8) {                                                
                         $file_data    =   $this->doupload($file,$file_count);
-
                         if (!empty($file_data['imageDetailArray']['file_name'])) {
                             $file_path = base_url().'uploads/ticket_documents/'.$this->session->companey_id.'/'.$file_data['imageDetailArray']['file_name'];
                             $biarr = array( 
@@ -412,7 +377,6 @@ class Ticket extends REST_Controller {
     } 
   }
 
-
 /// api for updating an existing ticket
   public function updateTicket_post()
   {      
@@ -425,22 +389,18 @@ class Ticket extends REST_Controller {
     $this->form_validation->set_rules('ticketno','Ticket','trim|required');
     if($this->form_validation->run() == true)
     {
-
       $res = $this->db->where(array('ticketno' => $_POST['ticketno']))->get('tbl_ticket')->row();
       $_POST['ticketno']  = $res->id;
       $session_backup = $this->session->userdata()??'';
-
       //$this->session->process = array($process_id);
       $this->session->companey_id = $company_id;
       $this->session->user_id = $user_id;
-
       $this->load->model('Ticket_Model');
       $inserted  = $this->Ticket_Model->save($company_id,$user_id);
       if(!empty($inserted))
       {
         session_destroy();
         $this->session->set_userdata($session_backup);
-
         $this->set_response([
         'status'      => TRUE,            
         'insertId'    => $inserted,
@@ -464,7 +424,6 @@ class Ticket extends REST_Controller {
     } 
   }
 
-
   public function updateTicketTab_post()
   {      
     $this->load->model('Ticket_Model');
@@ -474,13 +433,11 @@ class Ticket extends REST_Controller {
     //$form_type  = $this->input->post('is_query_type');
     $tab_id = $this->input->post('tab_id');
     // $form_type = $this->input->post('is_query_type');
-
     $this->form_validation->set_rules('company_id','company_id','trim|required',array('required'=>'You have note provided %s'));
     $this->form_validation->set_rules('user_id','user_id','trim|required',array('required'=>'You have note provided %s'));
     $this->form_validation->set_rules('ticketno','enquiry_id','trim|required',array('required'=>'You have note provided %s'));
     $this->form_validation->set_rules('tab_id','tab_id','trim|required',array('required'=>'You have note provided %s'));
     // $this->form_validation->set_rules('is_query_type','is_query_type','trim|required',array('required'=>'You have note provided %s'));
-
     if($this->form_validation->run() == true)
     {
       $data  = $this->Ticket_Model->update_ticket_tab($user_id,$comp_id);
@@ -508,7 +465,6 @@ class Ticket extends REST_Controller {
       ],REST_Controller::HTTP_OK);
     } 
   }
-
 //api to create ticket subject
   public function addSubject_post()
   {      
@@ -551,7 +507,6 @@ class Ticket extends REST_Controller {
       ],REST_Controller::HTTP_OK);
     } 
   }
-
 //subject list api
   public function subjectList_post()
   {      
@@ -584,7 +539,6 @@ class Ticket extends REST_Controller {
       ],REST_Controller::HTTP_OK);
     } 
   }
-
 //delete subject api
   public function deleteSubject_post()
   {      
@@ -618,22 +572,17 @@ class Ticket extends REST_Controller {
     } 
   }
 
-
  public function getTicketTabs_post()
  {      
     $company_id   = $this->input->post('company_id');
     $ticketno      = $this->input->post('ticketno');
-
     $this->form_validation->set_rules('company_id','company_id','trim|required',array('required'=>'You have note provided %s'));
     $this->form_validation->set_rules('ticketno','ticketno','trim|required',array('required'=>'You have note provided %s'));
-
     if($this->form_validation->run() == true)
     {
      
       $data  = $this->Ticket_Model->ticket_all_tab_api($company_id,$ticketno);
-
       //session_destroy();
-
       if(!empty($data))
       {
         $this->set_response([
@@ -658,15 +607,12 @@ class Ticket extends REST_Controller {
       ],REST_Controller::HTTP_OK);
     } 
   }
-
   public function getTicketTimeline_post()
   {
     $company_id   = $this->input->post('company_id');
     $ticketno      = $this->input->post('ticketno');
-
     $this->form_validation->set_rules('company_id','company_id','trim|required',array('required'=>'You have note provided %s'));
     $this->form_validation->set_rules('ticketno','ticketno','trim|required',array('required'=>'You have note provided %s'));
-
     if($this->form_validation->run() == true)
     {
       $this->session->companey_id = $company_id;
@@ -697,28 +643,20 @@ class Ticket extends REST_Controller {
         'msg'     => $msg,//"Please provide a company id"
       ],REST_Controller::HTTP_OK);
     }
-
   }
-
   public function getTicketDisposition_post()
   {
     $this->load->model(array('Leads_Model'));
-
     $company_id   = $this->input->post('company_id');
     $ticketno      = $this->input->post('ticketno');
-
     $this->form_validation->set_rules('company_id','company_id','trim|required',array('required'=>'You have note provided %s'));
     $this->form_validation->set_rules('ticketno','ticketno','trim|required',array('required'=>'You have note provided %s'));
-
     if($this->form_validation->run() == true)
     {
       $this->session->companey_id = $company_id;
-
       $ticket= $this->db->select('*')->where(array('ticketno'=>$ticketno))->get('tbl_ticket')->row();
-
       $stage = $this->Leads_Model->stage_by_type(4);
       $data =array();
-
       foreach ($stage as $key => $val)
       {
          $sub_stage =  $this->Leads_Model->all_description($val->stg_id);
@@ -759,7 +697,6 @@ class Ticket extends REST_Controller {
     }
   }
 
-
   public function saveTicketDisposition_post()
   {
     $company_id   = $this->input->post('company_id');
@@ -768,18 +705,13 @@ class Ticket extends REST_Controller {
     $stage   =$this->input->post('stage')??'';
     $sub_stage = $this->input->post('sub_stage')??'';
     $status = $this->input->post('status')??'';
-
     $message = $this->input->post('conversation')??'';
-
     $this->form_validation->set_rules('company_id','company_id','trim|required',array('required'=>'You have note provided %s'));
     $this->form_validation->set_rules('ticketno','ticketno','trim|required',array('required'=>'You have note provided %s'));
     $this->form_validation->set_rules('user_id','user_id','trim|required',array('required'=>'You have note provided %s'));
-
     if($this->form_validation->run() == true)
     {
-
       $session_backup = $this->session->userdata()??'';
-
       $this->session->companey_id = $company_id;
       $this->session->user_id = $user_id;
       $res=0;
@@ -789,7 +721,6 @@ class Ticket extends REST_Controller {
         $res = $this->Ticket_Model->saveconv($tck->id, 'Stage Updated', $message,0, $user_id, $stage,$sub_stage,$status);
       }
       
-
       if($res)
       {
         $this->set_response([
@@ -813,16 +744,13 @@ class Ticket extends REST_Controller {
         'msg'     => $msg,//"Please provide a company id"
       ],REST_Controller::HTTP_OK);
     }
-
   }  
-
  public function assignTickets_post()
   {
     $company_id   = $this->input->post('company_id');
     $user_id      = $this->input->post('user_id');
     $tickets      = $this->input->post('tickets');
     $emp_id       = $this->input->post('emp_id');
-
     $this->form_validation->set_rules('company_id','company_id','trim|required',array('required'=>'You have note provided %s'));
     $this->form_validation->set_rules('tickets[]','tickets','trim|required',array('required'=>'You have note provided %s'));
     $this->form_validation->set_rules('user_id','user_id','trim|required',array('required'=>'You have note provided %s'));
@@ -834,7 +762,6 @@ class Ticket extends REST_Controller {
       $notification_data = array();
       $assign_data = array();
       $last=0;
-
         if (!empty($move_enquiry)) {
           foreach ($move_enquiry as $key)
           {
@@ -842,16 +769,13 @@ class Ticket extends REST_Controller {
                         ->where('id',$key)
                         ->get('tbl_ticket')
                         ->row();
-
             if(!empty($ticket))
             $this->db->set('assign_to', $assign_employee);
             $this->db->set('assigned_by', $user_id);
             $this->db->set('assigned_to_date', $assign_to_date);
             $this->db->where('id', $key);
             $this->db->update('tbl_ticket');
-
           
-
             $this->db->set('comp_id',$company_id);
             $this->db->set('query_id',$ticket->ticketno);
             $this->db->set('noti_read',0);
@@ -864,7 +788,6 @@ class Ticket extends REST_Controller {
             $this->db->set('task_type','17');
             $this->db->set('subject','Ticket Assigned');
             $this->db->insert('query_response');
-
 
             $insarr = array(
           "tck_id"  => $key,
@@ -879,7 +802,6 @@ class Ticket extends REST_Controller {
           "added_by"  => $user_id,
           "assignedTo"=>$emp_id);
           $this->db->insert('tbl_ticket_conv',$insarr);
-
 
             $last = $this->db->insert_id();
           }
@@ -910,15 +832,12 @@ class Ticket extends REST_Controller {
     }
   }
 
-
   public function deleteTickets_post()
   {
     $company_id   = $this->input->post('company_id');
     $tickets      = $this->input->post('tickets');
-
     $this->form_validation->set_rules('company_id','company_id','trim|required',array('required'=>'You have note provided %s'));
     $this->form_validation->set_rules('tickets[]','tickets','trim|required',array('required'=>'You have note provided %s'));
-
     if($this->form_validation->run() == true)
     {
       $ret = 0 ;
@@ -957,9 +876,7 @@ class Ticket extends REST_Controller {
         'msg'     => $msg,//"Please provide a company id"
       ],REST_Controller::HTTP_OK);
     }
-
   }
-
 
   function updateQueryData_post()
   {
@@ -968,15 +885,12 @@ class Ticket extends REST_Controller {
       // $enquiry_code  = $this->input->post('enquiry_id');
       // $tabname =$this->input->post('tabname');
       $user_id = $this->input->post('user_id');
-
         $this->form_validation->set_rules('cmnt_id','cmnt_id','trim|required',array('required'=>'You have not provided %s'));
         $this->form_validation->set_rules('ticketno','ticketno','trim|required',array('required'=>'You have not provided %s'));
         $this->form_validation->set_rules('tabname','tabname','trim|required',array('required'=>'You have not provided %s'));
         $this->form_validation->set_rules('user_id','user_id','trim|required',array('required'=>'You have not provided %s'));
-
       if($this->form_validation->run()==true)
       {
-
         // if($type == 1){                 
         //     $comment_id = $this->Leads_Model->add_comment_for_events($this->lang->line('enquery_updated'), $en_comments);                    
         // }else if($type == 2){                   
@@ -984,9 +898,7 @@ class Ticket extends REST_Controller {
         // }else if($type == 3){
         //      $comment_id = $this->Leads_Model->add_comment_for_events($this->lang->line('client_updated'), $en_comments);
         // }  
-
           $res = $this->Ticket_Model->update_dynamic_query($user_id,$comp_id);
-
           if($res)
           {
             $this->set_response([
@@ -1011,26 +923,20 @@ class Ticket extends REST_Controller {
         ],REST_Controller::HTTP_OK);
       }
   }
-
   function deleteQueryData_post()
   {
-
       $cmnt_id   = $this->input->post('cmnt_id');
       $ticketno  = $this->input->post('ticketno');
       $tabname =$this->input->post('tabname');
       $user_id  =$this->input->post('user_id');
       $comp_id  = $this->input->post('comp_id');
-
         $this->form_validation->set_rules('cmnt_id','cmnt_id','trim|required',array('required'=>'You have not provided %s'));
         $this->form_validation->set_rules('ticketno','ticketno','trim|required',array('required'=>'You have not provided %s'));
         $this->form_validation->set_rules('tabname','tabname','trim|required',array('required'=>'You have not provided %s'));
-
       if($this->form_validation->run()==true)
       {
         $tick = $this->db->where('ticketno',$ticketno)->get('tbl_ticket')->row();
-
         $this->db->where(array('comment_id'=>$cmnt_id,'enq_no'=>$ticketno))->delete('ticket_dynamic_data');
-
           $res =$this->db->affected_rows(); 
           if($res)
           {
@@ -1058,16 +964,13 @@ class Ticket extends REST_Controller {
       }
   }
 
-
   public function sendMessage_post()
   {
     $this->load->model('Message_models'); 
     $ticketno = $this->input->post('ticketno');
     $template_id = $this->input->post('template_id');
     $company_id  = $this->input->post('company_id');
-
     $user_id = $this->input->post('user_id');
-
     $this->form_validation->set_rules('ticketno','Ticket No','required');
     $this->form_validation->set_rules('template_id','Template ID','required');
     $this->form_validation->set_rules('user_id','User ID','required');
@@ -1086,7 +989,6 @@ class Ticket extends REST_Controller {
        //print_r($user_row); exit();
           //echo $enq->email;
           if(!empty($ticket->email)){
-
             $this->db->where('comp_id',$company_id);
             $this->db->where('sys_para','usermail_in_cc');
             $this->db->where('type','COMPANY_SETTING');
@@ -1099,10 +1001,8 @@ class Ticket extends REST_Controller {
                if(!empty($cc_user))
                     $cc = $cc_user['s_user_email'];
             }
-
                 $to = $ticket->email;
                 $name1 = $ticket->name;
-
                 //   $find = array('@name',
                 //             '@phone',
                 //             '@username',
@@ -1121,12 +1021,9 @@ class Ticket extends REST_Controller {
                 //     $enq_row['tracking_no'],
                 //     );
                 // $message  =str_replace($find, $replace, $message);
-
                 // $subject  = str_replace($find, $replace, $subject);
 
-
               $msg = str_replace('@name',$name1,str_replace('@org',$user_row['orgisation_name'],str_replace('@desg',$user_row['designation'],str_replace('@phone',$user_row['contact_phone'],str_replace('@desg',$user_row['designation'],str_replace('@user',$user_row['s_display_name'].' '.$user_row['last_name'],$message_name))))));
-
                $Templat_subject = str_replace('@name',$name1,str_replace('@org',$user_row['orgisation_name'],str_replace('@desg',$user_row['designation'],str_replace('@phone',$user_row['contact_phone'],str_replace('@desg',$user_row['designation'],str_replace('@user',$user_row['s_display_name'].' '.$user_row['last_name'],$Templat_subject))))));
                      
               if($this->Message_models->send_email($to,$msg,$Templat_subject,$company_id,$cc)){
@@ -1159,5 +1056,4 @@ class Ticket extends REST_Controller {
              ], REST_Controller::HTTP_OK);
     }
   }
-
 }

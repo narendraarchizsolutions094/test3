@@ -14,7 +14,6 @@ class Lead extends CI_Controller
             redirect('login');
         }
     }
-
     public function view_datasource_data($did)
     {
         $data['title'] = 'Datasource raw data';
@@ -48,10 +47,8 @@ class Lead extends CI_Controller
         $length = $this->input->post('c_length');
         $disc = $this->input->post('c_disc');
         echo json_encode($this->Leads_Model->all_course($course, $lvl, $length, $disc));
-
         // echo $diesc;
     }
-
     public function index()
     {
         $aid = $this->session->userdata('user_id');
@@ -82,8 +79,6 @@ class Lead extends CI_Controller
         $this->load->view('layout/main_wrapper', $data);
     }
 
-
-
     public function enquery_detals_by_status($id = '')
     {
         if ($id > 0 and $id <= 20) {
@@ -91,7 +86,6 @@ class Lead extends CI_Controller
         } else {
             $serach_key = explode('_', $id);
         }
-
         $data['title'] = display('lead_list');
         $data['all_user'] = $this->User_model->all_user();
         $data['leadsource'] = $this->Leads_Model->get_leadsource_list();
@@ -99,7 +93,6 @@ class Lead extends CI_Controller
         $data['lead_stages'] = $this->Leads_Model->get_leadstage_list();
         if ($id == 1) {
             $data['all_active'] = $this->Leads_Model->all_created_today();
-
             /*echo "<pre>";
             print_r($data['all_active']->result_array());*/
         } elseif ($id == 2) {
@@ -110,7 +103,6 @@ class Lead extends CI_Controller
             $data['all_active'] = $this->Leads_Model->all_lead_toClient();
         } elseif ($id == 5) {
             $data['all_active'] = $this->Leads_Model->all_drop_lead();
-
             /*     echo "<pre>";
             print_r($data['all_active']->result_array());
             echo $this->db->last_query();
@@ -134,7 +126,6 @@ class Lead extends CI_Controller
         $data['drops'] = $this->Leads_Model->get_drop_list();
         $this->load->view('lead_list', $data);
     }
-
     public function lead_details($enquiry_id = null)
     {
         $data['title'] = display('Lead Details');
@@ -166,13 +157,9 @@ class Lead extends CI_Controller
             redirect('lead/lead_details/' . $enquiry_id);
         }
 
-
         $data['details'] = $this->Leads_Model->get_leadListDetailsby_id($enquiry_id);
-
         //$data['state_city_list'] = $this->location_model->get_city_by_state_id($data['details']->enquiry_state_id);
         //$data['state_city_list'] = $this->location_model->ecity_list();
-
-
 
         $data['allleads'] = $this->Leads_Model->get_leadList();
         if (!empty($data['details'])) {
@@ -181,11 +168,9 @@ class Lead extends CI_Controller
         $data['check_status'] = $this->Leads_Model->get_leadListDetailsby_code($lead_code);
         $data['all_drop_lead'] = $this->Leads_Model->all_drop_lead();
         $data['products'] = $this->dash_model->get_user_product_list();
-
         $data['prod_list'] = $this->Doctor_model->product_list($compid);
         $data['amc_list'] = $this->Doctor_model->amc_list($compid, $enquiry_id);
         $data['bank_list'] = $this->dash_model->get_bank_list();
-
         $data['allcountry_list'] = $this->Taskstatus_model->countrylist();
         $data['allstate_list'] = $this->Taskstatus_model->statelist();
         $data['allcity_list'] = $this->Taskstatus_model->citylist();
@@ -209,11 +194,8 @@ class Lead extends CI_Controller
         $data['comment_details'] = $this->Leads_Model->comment_byId($enquiry_code);
         $user_role    =   $this->session->user_role;
         $data['country_list'] = $this->location_model->productcountry();
-
         $data['institute_list'] = $this->Institute_model->institutelist_by_country($data['details']->enq_country);
-
         $data['institute_app_status'] = $this->Institute_model->get_institute_app_status();
-
 
         $data['datasource_list'] = $this->Datasource_model->datasourcelist();
         $data['taskstatus_list'] = $this->Taskstatus_model->taskstatuslist();
@@ -222,10 +204,8 @@ class Lead extends CI_Controller
         $data['product_contry'] = $this->location_model->productcountry();
         $data['get_message'] = $this->Message_models->get_chat($phone_id);
         $data['all_stage_lists'] = $this->Leads_Model->find_stage();
-
         //$data['all_estage_lists'] = $this->Leads_Model->find_estage($enquiry_id);
         $data['all_estage_lists'] = $this->Leads_Model->find_estage($data['details']->product_id, 2);
-
 
         $data['all_description_lists']    =   $this->Leads_Model->find_description();
         $data['institute_data'] = $this->enquiry_model->institute_data($data['details']->Enquery_id);
@@ -250,7 +230,6 @@ class Lead extends CI_Controller
         $this->enquiry_model->assign_notification_update($enquiry_code);
         $this->load->view('layout/main_wrapper', $data);
     }
-
     public function get_last_task_by_code()
     {
         $enq_code    =   $this->input->post('enq_code');
@@ -261,7 +240,6 @@ class Lead extends CI_Controller
         echo json_encode($this->db->get('query_response')->row_array());
         //echo $this->db->last_query();
     }
-
     public function select_des_by_stage()
     {
         $diesc = $this->input->post('lead_stage');
@@ -269,7 +247,6 @@ class Lead extends CI_Controller
         //print_r($this->Leads_Model->all_description($diesc));
         // echo $diesc;
     }
-
     public function lead_detail()
     {
         $leadid = $this->uri->segment(3);
@@ -277,7 +254,6 @@ class Lead extends CI_Controller
         $lead_code = $data['details']->lid;
         redirect('lead/lead_details/' . $lead_code);
     }
-
 
     public function add_comment()
     {
@@ -290,18 +266,15 @@ class Lead extends CI_Controller
             $coment_type = trim($this->input->post('coment_type'));
             $adt = date("Y-m-d H:i:s");
             $msg = $conversation;
-
             $this->db->set('lead_id', $lead_id);
             $this->db->set('created_date', $adt);
             $this->db->set('coment_type ', $coment_type);
             $this->db->set('comment_msg', $conversation);
             $this->db->set('created_by', $ld_updt_by);
             $this->db->insert('tbl_comment');
-
             $this->db->set('update_date', $adt);
             $this->db->where('Enquery_id', $lead_id);
             $this->db->update('enquiry');
-
             $this->session->set_flashdata('message', ' added successfully');
             redirect($this->agent->referrer());
             //	redirect('lead/lead_details/'.$lead_id);
@@ -309,10 +282,8 @@ class Lead extends CI_Controller
             redirect('lead');
         }
     }
-
     public function enquiry_response_task()
     {
-
         if (!empty($_POST)) {
             $ld_updt_by = $this->session->userdata('user_id');
             $lead_id = $this->input->post('enq_code');
@@ -325,27 +296,18 @@ class Lead extends CI_Controller
             $conversation = trim($this->input->post('conversation'));
             $subject = $this->input->post('subject');
             $task_status = $this->input->post('task_status');
-
             $task_date = date("d-m-Y", strtotime($this->input->post('task_date')));
-
             $task_time = date("H:i:s", strtotime($this->input->post('task_time')));
-
             $task_remark = $this->input->post('task_remark');
-
             $cdate2 = str_replace('/', '-', $meeting_date);
-
             //$adt = date("d-m-Y h:i:s a");
-
             if (!empty($this->input->post('subject'))) {
                 $this->db->set('query_id', $this->input->post('subject'));
             }
             $this->db->set('query_id', $lead_id);
-
             $this->db->set('subject', $subject);
-
             //$this->db->set('upd_date', $adt); //Created Date
             //$this->db->set('nxt_date', $cdate2);
-
             $this->db->set('contact_person', $contact_person);
             $this->db->set('mobile', $mobileno);
             $this->db->set('email', $email);
@@ -354,24 +316,19 @@ class Lead extends CI_Controller
             $this->db->set('conversation', $conversation);
             $this->db->set('task_type', $task_type);
             $this->db->set('task_status', $task_status);
-
             $this->db->set('task_date', $task_date);
             $this->db->set('task_time', $task_time);
             $this->db->set('task_remark', $task_remark);
             $this->db->set('notification_id', $this->input->post('notification_id'));
-
             $this->db->set('create_by', $this->session->user_id);
             $this->db->insert('query_response');
-
             $this->Leads_Model->add_comment_for_events('Task Added ', $lead_id);
-
             $this->session->set_flashdata('message', 'Task Added Successfully');
             redirect($this->agent->referrer());
         } else {
             redirect('lead');
         }
     }
-
     public function enquiry_response_updatetask()
     {
         if (!empty($_POST)) {
@@ -385,28 +342,20 @@ class Lead extends CI_Controller
             $designation = $this->input->post('designation');
             $conversation = trim($this->input->post('task_remark'));
             $subject = $this->input->post('subject');
-
             $task_date = date("d-m-Y", strtotime($this->input->post('task_date')));
-
             $task_time = date("H:i:s", strtotime($this->input->post('task_time')));
-
             $task_remark = $this->input->post('task_remark');
-
             $task_status = $this->input->post('task_status');
             //$cdate2 = str_replace('/', '-', $meeting_date);
             $adt = date("d-m-Y h:i:s a");
-
             //$this->db->set('upd_date', $adt);
             //$this->db->set('nxt_date', $cdate2);
-
             $this->db->set('contact_person', $contact_person);
             $this->db->set('mobile', $mobileno);
             $this->db->set('task_status', $task_status);
-
             $this->db->set('task_date', $task_date);
             $this->db->set('task_time', $task_time);
             $this->db->set('task_remark', $task_remark);
-
             $this->db->set('subject', $subject);
             $this->db->set('email', $email);
             $this->db->set('designation', $designation);
@@ -416,24 +365,19 @@ class Lead extends CI_Controller
             $this->db->set('create_by', $this->session->user_id);
             $this->db->update('query_response');
             $task_enquiry_code = $this->input->post('task_enquiry_code');
-
             $this->Leads_Model->add_comment_for_events_stage('Task Updated Successfully', $task_enquiry_code, 0, 0, $subject . '<br>' . $conversation, 1);
-
             $this->session->set_flashdata('message', 'Task Updated Successfully');
             redirect($this->agent->referrer());
         } else {
             redirect('lead');
         }
     }
-
     ///////////////// STAGE ////////////////////
-
     public function stage()
     {
         $data['nav1'] = 'nav2';
         if (!empty($_POST)) {
            
-
             $lead_stage_name = $this->input->post('stage_name');
             $process = $this->input->post('process');
             $stage_for = $this->input->post('stage_for');
@@ -450,20 +394,16 @@ class Lead extends CI_Controller
             $this->session->set_flashdata('exception', display('please_try_again'));
                 redirect('lead/stage');
             }
-
             $data = array(
                 'lead_stage_name' => $lead_stage_name,
                 'process_id'   => $process,
                 'stage_for'   => $stage_for,
                 'comp_id' => $this->session->userdata('companey_id')
             );
-
             $insert_id = $this->Leads_Model->lead_stageadd($data);
-
             $this->session->set_flashdata('SUCCESSMSG', 'Lead Stage Add Successfully');
             redirect('lead/stage');
         }
-
 
         $data['lead_stages'] = $this->Leads_Model->get_leadstage_list();
         // echo $this->db->last_query();
@@ -475,7 +415,6 @@ class Lead extends CI_Controller
         $data['content'] = $this->load->view('lead_stage', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }
-
     public function delete_stage($stage = null)
     {
         if ($this->Leads_Model->delete_stage($stage)) {
@@ -487,10 +426,8 @@ class Lead extends CI_Controller
         }
         redirect('lead/stage');
     }
-
     public function update_stage()
     {
-
         if (!empty($_POST)) {
             $stage_name = $this->input->post('stage_name');
             $stage_id = $this->input->post('stage_id');
@@ -512,18 +449,14 @@ class Lead extends CI_Controller
         }
     }
 
-
     public function update_description()
     {
-
         /*echo "<pre>";
         print_r($_POST);*/
         //exit();
-
         $en_id = $this->uri->segment(3);
         $action = $this->input->post('url');
         if (!empty($_POST)) {
-
             if ($action === 'enquiry') {
                 $coment_type = 1;
             }
@@ -536,11 +469,8 @@ class Lead extends CI_Controller
             $lead_id = $this->input->post('unique_no');
             $stage_id = $this->input->post('lead_stage');
             $stage_date = date("d-m-Y", strtotime($this->input->post('c_date')));
-
             //echo $stage_date;
-
             $stage_time = date("H:i:s", strtotime($this->input->post('c_time')));
-
             $stage_desc = $this->input->post('lead_description');
             $stage_remark = $this->input->post('conversation');
             $contact_person = $this->input->post('contact_person1');
@@ -549,20 +479,15 @@ class Lead extends CI_Controller
             $designation = $this->input->post('designation1');
             $enq_code = $this->input->post('enq_code1');
 
-
-
             $this->db->set('lead_stage', $stage_id);
             $this->db->set('lead_discription', $stage_desc);
             $this->db->set('lead_discription_reamrk', $stage_remark);
-
             $this->db->where('enquiry_id', $en_id);
             $this->db->update('enquiry');
             $this->session->set_flashdata('SUCCESSMSG', 'Update Successfully');
             $this->Leads_Model->add_comment_for_events_stage('Stage Updated', $lead_id, $stage_id, $stage_desc, $stage_remark, $coment_type);
-
             $notification_id = $this->input->post('dis_notification_id');
             $dis_subject = $this->input->post('dis_subject');
-
             if ($stage_desc == 'updt') {
                 $tid    =   $this->input->post('latest_task_id');
                 $this->db->set('task_date', $stage_date);
@@ -589,7 +514,6 @@ class Lead extends CI_Controller
             }
         }
     }
-
     public function delete_score($score = null)
     {
         if ($this->Leads_Model->delete_score($score)) {
@@ -601,14 +525,12 @@ class Lead extends CI_Controller
         }
         redirect('lead/lead_score');
     }
-
     public function update_score()
     {
         if (!empty($_POST)) {
             $score_name = $this->input->post('score_name');
             $score_rate = $this->input->post('score_rate');
             $score_id = $this->input->post('score_id');
-
             $this->db->set('score_name', $score_name);
             $this->db->set('probability', $score_rate);
             $this->db->where('sc_id', $score_id);
@@ -617,7 +539,6 @@ class Lead extends CI_Controller
             redirect('lead/lead_score');
         }
     }
-
     public function delete_source($source = null)
     {
         if ($this->Leads_Model->delete_source($source)) {
@@ -629,15 +550,11 @@ class Lead extends CI_Controller
         }
         redirect('lead/lead_source');
     }
-
     public function update_source()
     {
-
         if (!empty($_POST)) {
             $source_id = $this->input->post('source_id');
-
             $source_name = $this->input->post('source_name');
-
             $this->db->set('lead_name', $source_name);
             $this->db->where('lsid', $source_id);
             $this->db->update('lead_source');
@@ -645,7 +562,6 @@ class Lead extends CI_Controller
             redirect('lead/lead_source');
         }
     }
-
     public function delete_dropReason($drop = null)
     {
         if ($this->Leads_Model->delete_dropReason($drop)) {
@@ -657,15 +573,11 @@ class Lead extends CI_Controller
         }
         redirect('lead/add_drop');
     }
-
     public function update_drop()
     {
-
         if (!empty($_POST)) {
             $drop_id = $this->input->post('drop_id');
-
             $reason = $this->input->post('reason');
-
             $this->db->set('drop_reason', $reason);
             $this->db->where('d_id', $drop_id);
             $this->db->update('tbl_drop');
@@ -673,7 +585,6 @@ class Lead extends CI_Controller
             redirect('lead/add_drop');
         }
     }
-
     public function delete_ctype($ctype = null)
     {
         if ($this->Leads_Model->delete_ctype($ctype)) {
@@ -685,16 +596,12 @@ class Lead extends CI_Controller
         }
         redirect('lead/customer_type');
     }
-
     public function update_cusType()
     {
-
         if (!empty($_POST)) {
             $cid = $this->input->post('cid');
-
             $c_type = $this->input->post('c_type');
             $c_typename = $this->input->post('c_typename');
-
             $this->db->set('c_typename', $c_typename);
             $this->db->set('c_type', $c_type);
             $this->db->where('cid', $cid);
@@ -703,109 +610,78 @@ class Lead extends CI_Controller
             redirect('lead/customer_type');
         }
     }
-
     /////////////////////////////////////////////////
-
-
 
     public function lead_source()
     {
         $data['nav1'] = 'nav2';
-
         if (!empty($_POST)) {
-
             $lead_source_name = $this->input->post('source_name');
-
             $data = array(
                 'lead_name' => $lead_source_name,
                 'comp_id' => $this->session->userdata('companey_id')
             );
-
             $insert_id = $this->Leads_Model->lead_sourceadd($data);
-
             $this->session->set_flashdata('SUCCESSMSG', 'Lead Source Add Successfully');
             redirect('lead/lead_source');
         }
-
         $data['lead_source'] = $this->Leads_Model->get_leadsource_list();
         $data['content'] = $this->load->view('lead_source', $data, true);
-
         $this->load->view('layout/main_wrapper', $data);
     }
-
     public function lead_score()
     {
         $data['nav1'] = 'nav2';
-
         if (!empty($_POST)) {
-
             $score_name = $this->input->post('score_name');
             $score_rate = $this->input->post('score_rate');
-
             $data = array(
                 'score_name' => $score_name,
                 'comp_id' => $this->session->userdata('companey_id'),
                 'probability' => $score_rate
             );
-
             $insert_id = $this->Leads_Model->lead_scoreadd($data);
-
             $this->session->set_flashdata('SUCCESSMSG', 'Lead Score Add Successfully');
             redirect('lead/lead_score');
         }
-
         $data['lead_score'] = $this->Leads_Model->get_leadscore_list();
         $data['title'] = 'Lead Probability';
         $data['content'] = $this->load->view('lead_score', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }
-
     public function customer_type()
     {
-
         if (!empty($_POST)) {
-
             $c_type = $this->input->post('c_type');
             $c_typename = $this->input->post('c_typename');
-
             $data = array(
                 'c_typename' => $c_typename,
                 'c_type' => $c_type
             );
-
             $insert_id = $this->Leads_Model->add_customerType($data);
-
             $this->session->set_flashdata('SUCCESSMSG', 'Customer Type Add Successfully');
             redirect('lead/customer_type');
         }
-
         $data['title'] = 'Customer Type';
         $data['c_type'] = $this->Leads_Model->get_customerType_list();
         $data['content'] = $this->load->view('customer_type', $data, true);
-
         $this->load->view('layout/main_wrapper', $data);
     }
-
     /////////////////// Move To Client ////////////////////////////
     public function move_to_lead()
     {
-
         if (!empty($_POST)) {
             $move_lead = $this->input->post('lead_status');
             foreach ($move_lead as $key) {
-
                 $this->db->set('lead_stage', 'Account');
                 $this->db->where('lid', $key);
                 $this->db->update('allleads');
-
                 //////////////// Insert Lead Data Into Client Table ///////////////////////
                 $lead = $this->Leads_Model->get_lead_for_account($key);
-
                 $name = $lead->ld_name;
                 $email = $lead->ld_email;
                 $mobile = $lead->ld_mobile;
                 $address = $lead->address;
-
                 $data = array(
                     'cl_name' => $name,
                     'city_id' => $lead->city_id,
@@ -820,7 +696,6 @@ class Lead extends CI_Controller
                     'cl_status' => '1'
                 );
                 $insert_id = $this->Leads_Model->ClientMove($data);
-
                 //////////////////////////////////////////////////////////////////////////
             }
             //echo 'Transfer Lead Successfully';
@@ -830,7 +705,6 @@ class Lead extends CI_Controller
             redirect('lead');
         }
     }
-
     public function convert_to_lead()
     {
         $enquiry_id = $this->uri->segment('3');
@@ -840,7 +714,6 @@ class Lead extends CI_Controller
            $Enquery_id = $lead->Enquery_id;
           $stage = $lead->status;
         $next_stage = $stage + 1;
-
         if ($leadSataus >= 2) {
             //$this->Leads_Model->ClientMove($data);
             $enquiry_separation  = get_sys_parameter('enquiry_separation', 'COMPANY_SETTING');
@@ -882,14 +755,10 @@ class Lead extends CI_Controller
             $this->db->update('enquiry');
             $data['enquiry'] = $this->Leads_Model->get_leadListDetailsby_id($enquiry_id);
             $lead_code = $data['enquiry']->Enquery_id;
-
             $this->Leads_Model->add_comment_for_events($comment, $lead_code);
-
             $msg = $comment . ' Successfully';
-
             $this->load->model('rule_model');
             $this->rule_model->execute_rules($lead_code, array(1, 2, 3, 6, 7));
-
             if ($lead->status == 2 && $this->session->companey_id == 76 || ($this->session->companey_id == 57 && $data['enquiry']->product_id == 122)) {
                 $user_right = '';
                 if ($data['enquiry']->product_id == 168) {
@@ -899,7 +768,6 @@ class Lead extends CI_Controller
                 }
                 $report_to = '';
                 if ($this->session->companey_id == 57) {
-
                     if (!empty($data['enquiry']->email) || !empty($data['enquiry']->phone)) {
                         $user_exist = $this->dashboard_model->check_user_by_mail_phone(array('email' => $data['enquiry']->email, 'phone' => $data['enquiry']->phone));
                     }
@@ -907,16 +775,13 @@ class Lead extends CI_Controller
                     $report_to = $data['enquiry']->enq_created_by;
                 }
                 $ucid    =   $this->session->companey_id;
-
                 $postData = array(
                     's_display_name'  =>    $data['enquiry']->name,
                     'last_name'       =>    $data['enquiry']->lastname,
                     's_user_email'    =>    $data['enquiry']->email,
                     's_phoneno'       =>    $data['enquiry']->phone,
-
                     'city_id'         =>    $data['enquiry']->enquiry_city_id,
                     'state_id'        =>    $data['enquiry']->enquiry_state_id,
-
                     'companey_id'     =>    $ucid,
                     'b_status'        =>    1,
                     'user_permissions' =>    $user_right,
@@ -928,7 +793,6 @@ class Lead extends CI_Controller
                 if (!empty($user_exist)) {
                     $this->db->where('tbl_admin.companey_id', 57);
                     $this->db->where('tbl_admin.pk_i_admin_id', $user_exist->pk_i_admin_id);
-
                     if ($this->db->update('tbl_admin', array('user_permissions' => 200, 'user_roles' => 200, 'user_type' => 200))) {
                         $user_id = $user_exist->pk_i_admin_id;
                     } else {
@@ -939,7 +803,6 @@ class Lead extends CI_Controller
                 }
                 $message = 'Email - ' . $data['enquiry']->email . '<br>Password - 12345678';
                 $subject = 'Login Details';
-
                 if ($this->session->companey_id == 57 && $user_id) {
                     $this->db->where('temp_id', 125);
                     $this->db->where('comp_id', 57);
@@ -949,9 +812,7 @@ class Lead extends CI_Controller
                         $message = str_replace("@{email}", $data['enquiry']->email, $temp_row['template_content']);
                         $message = str_replace("@{password}", '12345678', $message);
                     }
-
                     $this->Message_models->send_email($data['enquiry']->email, $subject, $message);
-
                     $this->db->where('temp_id', 124);
                     $this->db->where('comp_id', 57);
                     $temp_row    =   $this->db->get('api_templates')->row_array();
@@ -967,7 +828,6 @@ class Lead extends CI_Controller
             }
             //$mail_access = $this->enquiry_model->access_mail_temp(); //access mail template..
             //$signature = $this->enquiry_model->get_signature();
-
             /*     $to = 'glahsnigam@gmail.com';
             $from_email = 'info@archizcrm.com';            
                 $phone = '91' . $lead->phone;
@@ -999,64 +859,47 @@ class Lead extends CI_Controller
             redirect($url);
         }
     }
-
     public function add_drop()
     {
         $data['title'] = 'Drop Reasons';
         $data['nav1'] = 'nav2';
         #------------------------------# 
         $leadid = $this->uri->segment(3);
-
         //////////////////////////////////////////////////////
         if (!empty($_POST)) {
-
             $reason = $this->input->post('reason');
-
             $data = array(
                 'drop_reason' => $reason,
                 'comp_id' => $this->session->userdata('companey_id')
             );
-
             $insert_id = $this->Leads_Model->add_dropType($data);
-
             redirect('lead/add_drop');
         }
         //////////////////////////////////////////////////////
 
-
         $data['drops'] = $this->Leads_Model->get_drop_list();
-
         $data['content'] = $this->load->view('drop', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }
-
     public function drop_lead()
     {
         $data['title'] = 'Drop Reasons';
         $leadid = $this->uri->segment(3);
-
         // print_r($this->input->post('drop_status'));exit;
-
         if (!empty($_POST)) {
             $reason = $this->input->post('reason');
             $drop_status = $this->input->post('drop_status');
-
             $this->db->set('drop_status', $drop_status);
             $this->db->set('drop_reason', $reason);
-
             $this->db->where('enquiry_id', $leadid);
-
             $this->db->update('enquiry');
-
             $this->Leads_Model->add_comment_for_events('Dropped Leads', $leadid);
-
             redirect('led/index');
         }
         $data['drops'] = $this->Leads_Model->get_drop_list();
         $data['content'] = $this->load->view('drop', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }
-
     public function post_po()
     {
         if (!empty($_POST)) {
@@ -1079,14 +922,12 @@ class Lead extends CI_Controller
                 $this->db->update('allleads');
                 $this->session->set_flashdata('message', display('Uploaded Successfully'));
                 redirect('lead');
-
                 $data['enquiry'] = $this->Leads_Model->get_leadListDetailsby_id($this->input->post('lead_id_name'));
                 $lead_code = $data['enquiry']->lead_code;
                 $this->Leads_Model->add_comment_for_events('Converted to clients', $lead_code);
             }
         }
     }
-
     public function network_digram()
     {
         if (!empty($_POST)) {
@@ -1110,11 +951,8 @@ class Lead extends CI_Controller
                     $this->db->where('lead_code', $this->input->post('lead_id_name'));
                     $this->db->update('allleads');
                     $this->session->set_flashdata('message', 'Uploaded Successfully');
-
                     $data['enquiry'] = $this->Leads_Model->get_leadListDetailsby_id($this->input->post('lead_id_name'));
-
                     $lead_code = base64_encode($this->input->post('lead_id_name'));
-
                     $this->Leads_Model->add_comment_for_events('Layout Sheet Added', $lead_code);
                     $this->session->set_flashdata('message', display('Layout Sheet Uploaded successfully'));
                     redirect('lead');
@@ -1124,10 +962,8 @@ class Lead extends CI_Controller
                 }
             }
         }
-
         redirect($this->agent->referrer());
     }
-
     public function invoice_add()
     {
         if (!empty($_POST)) {
@@ -1149,37 +985,25 @@ class Lead extends CI_Controller
                 $this->db->where('lid', $this->input->post('lead_id_name'));
                 $this->db->update('allleads');
                 $this->session->set_flashdata('message', display('Uploaded Successfully'));
-
                 $data['enquiry'] = $this->Leads_Model->get_leadListDetailsby_id($this->input->post('lead_id_name'));
                 $lead_code = $data['enquiry']->lead_code;
                 $this->Leads_Model->add_comment_for_events('Network Diagram Added', $lead_code);
             }
         }
     }
-
     public function active_lead($id)
     {
 
-
         $this->db->set('drop_status', 0);
-
         $this->db->where('enquiry_id', $id);
-
         $this->db->update('enquiry');
-
         $data['enquiry'] = $this->Leads_Model->get_leadListDetailsby_ledsonly($id);
-
         $lead_code = $data['enquiry']->Enquery_id;
-
         $this->Leads_Model->add_comment_for_events('Lead actived ', $lead_code);
-
         $this->session->set_flashdata('message', "Activated Successfully");
-
         redirect('lead/lead_details/' . $id);
     }
-
     /////////////////////////////////////////////////////
-
     public function assign_lead()
     {
         if (!empty($_POST)) {
@@ -1203,7 +1027,6 @@ class Lead extends CI_Controller
             }
         }
     }
-
     public function assign_presales()
     {
         if (!empty($_POST)) {
@@ -1216,7 +1039,6 @@ class Lead extends CI_Controller
                     $this->db->set('update_date', date('Y-m-d H:i:s'));
                     $this->db->where('lid', $key);
                     $this->db->update('allleads');
-
                     $data['enquiry'] = $this->Leads_Model->get_leadListDetailsby_ledsonly($key);
                     $lead_code = $data['enquiry']->lead_code;
                     $this->Leads_Model->add_comment_for_events('Leads Assigned To Pre-Salses', $lead_code);
@@ -1227,33 +1049,21 @@ class Lead extends CI_Controller
             }
         }
     }
-
     public function drop_leadss()
     {
-
         if (!empty($_POST)) {
-
             $reason = $this->input->post('reason_details');
             $drop_status = $this->input->post('drop_status');
             $move_enquiry = $this->input->post('enquiry_id');
-
             if (!empty($move_enquiry)) {
                 foreach ($move_enquiry as $key) {
-
                     /*    $this->db->set('drop_status', $drop_status);
-
                     $this->db->set('drop_reason', $reason);
-
                     $this->db->set('update_date', date('Y-m-d H:i:s'));
-
                     $this->db->set('ld_status', 0);
-
                     $this->db->where('lid', $key);
-
                     $this->db->update('allleads');
-
                 */
-
 
                     $this->db->set('drop_status', $drop_status);
                     $this->db->set('drop_reason', $reason);
@@ -1261,17 +1071,12 @@ class Lead extends CI_Controller
                     $this->db->where('enquiry_id', $key);
                     $this->db->update('enquiry');
 
-
                     $data['enquiry'] = $this->Leads_Model->get_leadListDetailsby_ledsonly($key);
-
                     /*echo "<pre>";
                     print_r($_POST);
                     exit();*/
-
                     //$lead_code = $data['enquiry']->lead_code;
-
                     $lead_code = $data['enquiry']->Enquery_id;
-
                     $this->Leads_Model->add_comment_for_events('Dropped Leads', $lead_code);
                 }
                 echo '1';
@@ -1280,15 +1085,11 @@ class Lead extends CI_Controller
             }
         }
     }
-
     public function delete_recorde()
     {
-
         if (!empty($_POST)) {
 
-
             $move_enquiry = $this->input->post('enquiry_id');
-
 
             if (!empty($move_enquiry)) {
                 foreach ($move_enquiry as $key) {
@@ -1303,20 +1104,17 @@ class Lead extends CI_Controller
             }
         }
     }
-
     function productcountry()
     {
         if (user_role('33') == true) {
         }
         $data['title'] = 'Product List';
         $data['country'] = $this->location_model->productcountry();
-
         // echo "<pre>";
         // print_r($data['country']);exit();
         $data['content'] = $this->load->view('location/product_country_list', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }
-
     public function addproductcountry()
     {
         $data['title'] = 'Add Product';
@@ -1363,7 +1161,6 @@ class Lead extends CI_Controller
             $this->load->view('layout/main_wrapper', $data);
         }
     }
-
     public function addproduct()
     {
         $data['title'] = 'Add Product';
@@ -1413,7 +1210,6 @@ class Lead extends CI_Controller
             $this->load->view('layout/main_wrapper', $data);
         }
     }
-
     public function editproductcountry($param_id = null)
     {
         if (user_role('31') == true) {
@@ -1423,7 +1219,6 @@ class Lead extends CI_Controller
         $data['content'] = $this->load->view('location/product_country_form', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }
-
     public function editproductcountry1($param_id = null)
     {
         if (user_role('31') == true) {
@@ -1435,7 +1230,6 @@ class Lead extends CI_Controller
         $data['content'] = $this->load->view('location/product_country_form', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }
-
 
     public function deleteproductcountry($paramId = null)
     {
@@ -1449,7 +1243,6 @@ class Lead extends CI_Controller
         redirect('lead/productcountry');
     }
 
-
     public function institutelist()
     {
         if (user_role('30') == true) {
@@ -1461,7 +1254,6 @@ class Lead extends CI_Controller
         $data['content'] = $this->load->view('institute/institute_list', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }
-
     public function courselist()
     {
         if (user_role('30') == true) {
@@ -1472,13 +1264,9 @@ class Lead extends CI_Controller
         $config["base_url"]     = base_url() . "lead/courselist";
         $config["total_rows"]   = $this->Institute_model->courselist('', '', 'count');
         $config["per_page"]     = 10;
-
         $this->pagination->initialize($config);
-
         $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
-
         $data["links"]          = $this->pagination->create_links();
-
         $data['course_list']    = $this->Institute_model->courselist($config["per_page"], $page);
         /*echo $this->db->last_query();
         print_r($data['institute_list']);*/
@@ -1489,7 +1277,6 @@ class Lead extends CI_Controller
         $data['content']        = $this->load->view('institute/course_list', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }
-
     public function upload_course()
     {
         /*echo "<pre>";    
@@ -1514,11 +1301,9 @@ class Lead extends CI_Controller
                     $tuition_fees   = $courseData[7];
                     $description    = $courseData[8];
                     $status         = $courseData[9];
-
                     /*echo "<pre>";
                     print_r($courseData);
                     echo "</pre>";*/
-
                     $this->db->select('id');
                     $this->db->where('course_name', $course_name);
                     $this->db->where('comp_id', $comp_id);
@@ -1594,7 +1379,6 @@ class Lead extends CI_Controller
         $this->session->set_flashdata('message', $c . ' Data inserted successfully.');
         redirect('lead/courselist');
     }
-
     public function crslist()
     {
         if (user_role('30') == true) {
@@ -1605,21 +1389,15 @@ class Lead extends CI_Controller
         $config["base_url"] = base_url() . "lead/crslist";
         $config["total_rows"] = $this->Institute_model->crslist('', '', 'count');
         $config["per_page"] = 10;
-
         $this->pagination->initialize($config);
-
         $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
-
         $data["links"] = $this->pagination->create_links();
-
         $data['course_list'] = $this->Institute_model->crslist($config["per_page"], $page);
-
         /*echo $this->db->last_query();
         print_r($data['institute_list']);*/
         $data['content'] = $this->load->view('institute/crs_list', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }
-
     public function sub_course()
     {
         if (user_role('30') == true) {
@@ -1630,13 +1408,9 @@ class Lead extends CI_Controller
         $config["base_url"] = base_url() . "lead/sub_course";
         $config["total_rows"] = $this->Institute_model->sub_course('', '', 'count');
         $config["per_page"] = 10;
-
         $this->pagination->initialize($config);
-
         $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
-
         $data["links"] = $this->pagination->create_links();
-
         $data['course_list'] = $this->Institute_model->sub_course($config["per_page"], $page);
         $data['cource'] = $this->Institute_model->crsmstrlist();
         /*echo $this->db->last_query();
@@ -1644,7 +1418,6 @@ class Lead extends CI_Controller
         $data['content'] = $this->load->view('institute/sub_crs_list', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }
-
     public function vidlist()
     {
         if (user_role('30') == true) {
@@ -1668,13 +1441,11 @@ class Lead extends CI_Controller
         $data['content'] = $this->load->view('institute/discipline_list', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }
-
     public function add_discipline()
     {
         $data['title'] = display('add_discipline');
         $data['discipline'] = '';
         $this->form_validation->set_rules('discipline_name', display('program_discipline'), 'required');
-
         $data['discipline'] = (object) $postData = [
             'id' => $this->input->post('discipline_id', true),
             'comp_id' => $this->session->userdata('companey_id'),
@@ -1683,7 +1454,6 @@ class Lead extends CI_Controller
             'created_by' => $this->session->userdata('user_id'),
             'create_date' => date('Y-m-d')
         ];
-
         if ($this->form_validation->run() === true) {
             // print_r($postData);exit;
             if (empty($this->input->post('discipline_id'))) {
@@ -1709,7 +1479,6 @@ class Lead extends CI_Controller
             $this->load->view('layout/main_wrapper', $data);
         }
     }
-
     public function edit_discipline($id = null)
     {
         if (user_role('31') == true) {
@@ -1719,7 +1488,6 @@ class Lead extends CI_Controller
         $data['content'] = $this->load->view('institute/discipline_form', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }
-
     public function delete_discipline($paramId = null)
     {
         if (user_role('32') == true) {
@@ -1732,7 +1500,6 @@ class Lead extends CI_Controller
         redirect('lead/discipline');
     }
     /**************************************** Discipline End*****************************************/
-
     /**************************************** Level *****************************************/
     public function level()
     {
@@ -1745,13 +1512,11 @@ class Lead extends CI_Controller
         $data['content'] = $this->load->view('institute/level_list', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }
-
     public function add_level()
     {
         $data['title'] = display('add_level');
         $data['level'] = '';
         $this->form_validation->set_rules('level_name', display('program_level'), 'required');
-
         $data['level'] = (object) $postData = [
             'id' => $this->input->post('level_id', true),
             'comp_id' => $this->session->userdata('companey_id'),
@@ -1760,7 +1525,6 @@ class Lead extends CI_Controller
             'created_by' => $this->session->userdata('user_id'),
             'create_date' => date('Y-m-d')
         ];
-
         if ($this->form_validation->run() === true) {
             // print_r($postData);exit;
             if (empty($this->input->post('level_id'))) {
@@ -1786,7 +1550,6 @@ class Lead extends CI_Controller
             $this->load->view('layout/main_wrapper', $data);
         }
     }
-
     public function edit_level($id = null)
     {
         if (user_role('31') == true) {
@@ -1796,7 +1559,6 @@ class Lead extends CI_Controller
         $data['content'] = $this->load->view('institute/level_form', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }
-
     public function delete_level($paramId = null)
     {
         if (user_role('32') == true) {
@@ -1809,7 +1571,6 @@ class Lead extends CI_Controller
         redirect('lead/level');
     }
     /**************************************** Lavel End*****************************************/
-
     /**************************************** Length *****************************************/
     public function length()
     {
@@ -1823,13 +1584,11 @@ class Lead extends CI_Controller
         $data['content'] = $this->load->view('institute/length_list', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }
-
     public function add_length()
     {
         $data['title'] = display('add_length');
         $data['level'] = '';
         $this->form_validation->set_rules('length_name', display('program_length'), 'required');
-
         $data['length'] = (object) $postData = [
             'id' => $this->input->post('length_id', true),
             'comp_id' => $this->session->userdata('companey_id'),
@@ -1839,7 +1598,6 @@ class Lead extends CI_Controller
             'created_by' => $this->session->userdata('user_id'),
             'created_date' => date('Y-m-d')
         ];
-
         if ($this->form_validation->run() === true) {
             // print_r($postData);exit;
             if (empty($this->input->post('length_id'))) {
@@ -1866,7 +1624,6 @@ class Lead extends CI_Controller
             $this->load->view('layout/main_wrapper', $data);
         }
     }
-
     public function edit_length($id = null)
     {
         if (user_role('31') == true) {
@@ -1877,7 +1634,6 @@ class Lead extends CI_Controller
         $data['content'] = $this->load->view('institute/length_form', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }
-
     public function delete_length($paramId = null)
     {
         if (user_role('32') == true) {
@@ -1889,16 +1645,13 @@ class Lead extends CI_Controller
         }
         redirect('lead/length');
     }
-
     public function select_length_lvl()
     {
         $diesc = $this->input->post('lead_stage');
         echo json_encode($this->location_model->all_length($diesc));
-
         // echo $diesc;
     }
     /**************************************** Length End*****************************************/
-
     public function add_institute()
     {
         $data['title'] = display('add_institute');
@@ -1907,13 +1660,11 @@ class Lead extends CI_Controller
         $this->form_validation->set_rules('country_id', display('country_name'), 'required');
         if (!empty($_FILES['profile_image']['name'])) {
             //$this->load->library("aws");
-
             $_FILES['userfile']['name'] = $_FILES['profile_image']['name'];
             $_FILES['userfile']['type'] = $_FILES['profile_image']['type'];
             $_FILES['userfile']['tmp_name'] = $_FILES['profile_image']['tmp_name'];
             $_FILES['userfile']['error'] = $_FILES['profile_image']['error'];
             $_FILES['userfile']['size'] = $_FILES['profile_image']['size'];
-
             $image = $_FILES['userfile']['name'];
             $path =  "uploads/" . $image;
             $ret = move_uploaded_file($_FILES['userfile']['tmp_name'], $path);
@@ -1929,14 +1680,12 @@ class Lead extends CI_Controller
             $_FILES['userfile']['tmp_name'] = $_FILES['agreement_doc']['tmp_name'];
             $_FILES['userfile']['error'] = $_FILES['agreement_doc']['error'];
             $_FILES['userfile']['size'] = $_FILES['agreement_doc']['size'];
-
             $image1 = $_FILES['userfile']['name'];
             $path1 =  "uploads/" . $image1;
             $ret1 = move_uploaded_file($_FILES['userfile']['tmp_name'], $path1);
             //if($ret1){
             //    $this->aws->upload($path1);
             //}
-
         } else {
             $path1 = $this->input->post('agreement_docs', true);
         }
@@ -1960,7 +1709,6 @@ class Lead extends CI_Controller
             'created_date' => date('Y-m-d'),
             'updated_date' => date('Y-m-d')
         ];
-
         if ($this->form_validation->run() === true) {
             // print_r($postData);exit;
             if (empty($this->input->post('institute_id'))) {
@@ -1987,7 +1735,6 @@ class Lead extends CI_Controller
             $this->load->view('layout/main_wrapper', $data);
         }
     }
-
     public function edit_institute($institute_id = null)
     {
         if (user_role('31') == true) {
@@ -1998,7 +1745,6 @@ class Lead extends CI_Controller
         $data['content'] = $this->load->view('institute/institute_form', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }
-
     public function delete_institute($paramId = null)
     {
         if (user_role('32') == true) {
@@ -2010,7 +1756,6 @@ class Lead extends CI_Controller
         }
         redirect('lead/institutelist');
     }
-
     /*    public function datasourcelist() {
         if (user_role('20') == true) {}
         $data['title'] = display('datasource_list');
@@ -2018,7 +1763,6 @@ class Lead extends CI_Controller
         $data['content'] = $this->load->view('datasource/datasource_list', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }*/
-
     public function datasourcelist()
     {
         if (user_role('30') == true) {
@@ -2031,20 +1775,16 @@ class Lead extends CI_Controller
         $data['content'] = $this->load->view('datasource/datasource_list', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }
-
     /********************************************create CSV file*********************************/
     public function createcsv($pd)
     {
         header('Content-type: text/csv');
         header('Content-Disposition: attachment; filename="sample.csv"');
-
         // do not cache the file
         header('Pragma: no-cache');
         header('Expires: 0');
-
         // create a file pointer connected to the output stream
         $file = fopen('php://output', 'w');
-
         $input = array();
         $this->db->select('*');
         $this->db->from('tbl_input');
@@ -2067,7 +1807,6 @@ class Lead extends CI_Controller
         exit();
     }
     /************************************************end CSV create********************************/
-
     public function add_datasource()
     {
         $data['title'] = display('add_datasource');
@@ -2082,7 +1821,6 @@ class Lead extends CI_Controller
             'created_date' => date('Y-m-d'),
             'updated_date' => date('Y-m-d')
         ];
-
         if ($this->form_validation->run() === true) {
             if (empty($this->input->post('datasource_id'))) {
                 if (user_role('30') == true) {
@@ -2108,7 +1846,6 @@ class Lead extends CI_Controller
             $this->load->view('layout/main_wrapper', $data);
         }
     }
-
     public function edit_datasource($datasource_id = null)
     {
         if (user_role('31') == true) {
@@ -2119,7 +1856,6 @@ class Lead extends CI_Controller
         $data['content'] = $this->load->view('datasource/datasource_form', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }
-
     public function delete_datasource($paramId = null)
     {
         if (user_role('32') == true) {
@@ -2131,7 +1867,6 @@ class Lead extends CI_Controller
         }
         redirect('lead/datasourcelist');
     }
-
     public function taskstatuslist()
     {
         if (user_role('30') == true) {
@@ -2141,7 +1876,6 @@ class Lead extends CI_Controller
         $data['content'] = $this->load->view('taskstatus/taskstatus_list', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }
-
     public function add_taskstatus()
     {
         $data['title'] = display('add_taskstatus');
@@ -2156,7 +1890,6 @@ class Lead extends CI_Controller
             'created_date' => date('Y-m-d'),
             'updated_date' => date('Y-m-d')
         ];
-
         if ($this->form_validation->run() === true) {
             if (empty($this->input->post('taskstatus_id'))) {
                 if (user_role('30') == true) {
@@ -2181,7 +1914,6 @@ class Lead extends CI_Controller
             $this->load->view('layout/main_wrapper', $data);
         }
     }
-
     public function edit_taskstatus($taskstatus_id = null)
     {
         if (user_role('31') == true) {
@@ -2191,7 +1923,6 @@ class Lead extends CI_Controller
         $data['content'] = $this->load->view('taskstatus/taskstatus_form', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }
-
     public function delete_taskstatus($paramId = null)
     {
         if (user_role('32') == true) {
@@ -2203,7 +1934,6 @@ class Lead extends CI_Controller
         }
         redirect('lead/taskstatuslist');
     }
-
     public function centerlist()
     {
         if (user_role('30') == true) {
@@ -2213,7 +1943,6 @@ class Lead extends CI_Controller
         $data['content'] = $this->load->view('center/center_list', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }
-
     public function add_center()
     {
         $data['title'] = display('add_center');
@@ -2234,7 +1963,6 @@ class Lead extends CI_Controller
             'created_date' => date('Y-m-d'),
             'updated_date' => date('Y-m-d')
         ];
-
         if ($this->form_validation->run() === true) {
             if (empty($this->input->post('center_id'))) {
                 if (user_role('30') == true) {
@@ -2260,7 +1988,6 @@ class Lead extends CI_Controller
             $this->load->view('layout/main_wrapper', $data);
         }
     }
-
     public function edit_center($center_id = null)
     {
         if (user_role('31') == true) {
@@ -2271,7 +1998,6 @@ class Lead extends CI_Controller
         $data['content'] = $this->load->view('center/center_form', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }
-
     public function delete_center($paramId = null)
     {
         if (user_role('32') == true) {
@@ -2283,7 +2009,6 @@ class Lead extends CI_Controller
         }
         redirect('lead/centerlist');
     }
-
     public function subsourcelist()
     {
         if (user_role('30') == true) {
@@ -2293,25 +2018,19 @@ class Lead extends CI_Controller
         $data['content'] = $this->load->view('subsource/subsource_list', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }
-
     public function get_subsource_by_source()
     {
-
         $id = $this->input->post('src_id');
         $subid = $this->input->post('sub_src_id');
-
         $res = $this->SubSource_model->get_subsource($id);
-
         $opt = "<option>---Select Subsource---</option>";
         foreach ($res as $result) {
             if ($subid == $result['subsource_id']) {
-
                 $opt .= "<option value='" . $result['subsource_id'] . "' selected>" . ucwords($result['subsource_name']) . "</option>";
             } else {
                 $opt .= "<option value='" . $result['subsource_id'] . "'>" . ucwords($result['subsource_name']) . "</option>";
             }
         }
-
         echo $opt;
     }
     public function description()
@@ -2324,7 +2043,6 @@ class Lead extends CI_Controller
         $data['content'] = $this->load->view('lead_description', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }
-
     public function add_subsource()
     {
         $data['title'] = display('add_subsource');
@@ -2367,7 +2085,6 @@ class Lead extends CI_Controller
             $this->load->view('layout/main_wrapper', $data);
         }
     }
-
 
     public function add_description()
     {
@@ -2417,26 +2134,18 @@ class Lead extends CI_Controller
             $this->load->view('layout/main_wrapper', $data);
         }
     }
-
     public function get_process_bystage()
     {
-
         $id = $this->input->post('id');
-
         $this->db->select('tbl_product.product_name');
         $this->db->from('tbl_product');
         $this->db->join('lead_stage', 'tbl_product.sb_id=lead_stage.process_id');
-
         $this->db->where('lead_stage.stg_id', $id);
         $this->db->where('lead_stage.comp_id', $this->session->companey_id);
-
         $res = $this->db->get()->row();
-
         // print_r($res);exit();
-
         echo json_encode($res);
     }
-
     public function edit_subsource($subsource_id = null)
     {
         if (user_role('31') == true) {
@@ -2447,7 +2156,6 @@ class Lead extends CI_Controller
         $data['content'] = $this->load->view('subsource/subsource_form', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }
-
     public function edit_discription($description_id = null)
     {
         if (user_role('31') == true) {
@@ -2459,7 +2167,6 @@ class Lead extends CI_Controller
         $data['content'] = $this->load->view('description_form', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }
-
     public function delete_subsource($paramId = null)
     {
         if (user_role('32') == true) {
@@ -2471,7 +2178,6 @@ class Lead extends CI_Controller
         }
         redirect('lead/subsourcelist');
     }
-
     public function delete_description($paramId = null)
     {
         if (user_role('32') == true) {
@@ -2483,7 +2189,6 @@ class Lead extends CI_Controller
         }
         redirect('lead/description');
     }
-
     public function addnewkyc()
     {
         $postData = $this->input->post();
@@ -2519,7 +2224,6 @@ class Lead extends CI_Controller
         redirect($this->agent->referrer());
     }
 
-
     public function addnewwork()
     {
         $postData = $this->input->post();
@@ -2551,7 +2255,6 @@ class Lead extends CI_Controller
         }
         redirect($this->agent->referrer());
     }
-
     public function addnewedu()
     {
         $postData = $this->input->post();
@@ -2581,7 +2284,6 @@ class Lead extends CI_Controller
         }
         redirect($this->agent->referrer());
     }
-
     public function addnewsprof()
     {
         $postData = $this->input->post();
@@ -2610,7 +2312,6 @@ class Lead extends CI_Controller
         }
         redirect($this->agent->referrer());
     }
-
     public function addnewtravel()
     {
         $postData = $this->input->post();
@@ -2645,7 +2346,6 @@ class Lead extends CI_Controller
         }
         redirect($this->agent->referrer());
     }
-
     public function addnewmember()
     {
         $postData = $this->input->post();
@@ -2680,7 +2380,6 @@ class Lead extends CI_Controller
         }
         redirect($this->agent->referrer());
     }
-
     /*****************************************************************notification start********************************************************************/
     function alertList()
     {
@@ -2688,7 +2387,6 @@ class Lead extends CI_Controller
         $this->db->where('create_by', $this->session->user_id);
         $this->db->where('status', '0');
         $alertData = $this->db->get('query_response')->result();
-
         if (!empty($alertData)) {
             $myalertdate = array();
             $myalertmsg = array();
@@ -2709,7 +2407,6 @@ class Lead extends CI_Controller
             $dd = $d[0];
             $tt = $d[1];
         }
-
         if ((!empty($alertData)) && in_array($dd, $myalertdate) && (strtotime($tt) == strtotime($t))) {
             $status = 1;
             $popup = '
@@ -2732,10 +2429,8 @@ class Lead extends CI_Controller
         $this->db->update('query_response');
     }
     /*****************************************************************notification end********************************************************************/
-
     function lead_search() // route created for this function
     {
-
         $filter = (!empty($_GET["search"])) ? trim($_GET["search"]) : "";
         if (empty($filter)) {
             redirect(base_url());
@@ -2791,7 +2486,6 @@ class Lead extends CI_Controller
         echo json_encode($result);
     }
 
-
     //Switch box master....
     public function product_list()
     {
@@ -2799,7 +2493,6 @@ class Lead extends CI_Controller
         $data['nav1'] = 'nav1';
         $data['get_users'] = $this->dash_model->area_list();
         $data['product_list'] = $this->dash_model->all_process_list();
-
         $data['content'] = $this->load->view('product-list', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }
@@ -2813,29 +2506,22 @@ class Lead extends CI_Controller
         $data['content'] = $this->load->view('master_enquiry_type', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }
-
     public function select_state_by_city()
     {
         $city = $this->input->post('city_id');
         echo json_encode($this->Leads_Model->all_csc($city));
     }
-
     public function get_lead_stage()
     {
-
         $id = $this->input->post('id');
-
         $res = $this->Leads_Model->get_leadstage_name($id);
         $opt = "<option>---Select Stage---</option>";
         foreach ($res as $result) {
             $opt .= "<option value='" . $result['stg_id'] . "'>" . ucwords($result['lead_stage_name']) . "</option>";
         }
-
         echo $opt;
         // exit();
-
     }
-
     public function add_course()
     {
         $data['title'] = display('add_course');
@@ -2844,13 +2530,11 @@ class Lead extends CI_Controller
         $this->form_validation->set_rules('institute_id', display('institute_name'), 'required');
         if (!empty($_FILES['course_image']['name'])) {
             //$this->load->library("aws");
-
             $_FILES['userfile']['name'] = $_FILES['course_image']['name'];
             $_FILES['userfile']['type'] = $_FILES['course_image']['type'];
             $_FILES['userfile']['tmp_name'] = $_FILES['course_image']['tmp_name'];
             $_FILES['userfile']['error'] = $_FILES['course_image']['error'];
             $_FILES['userfile']['size'] = $_FILES['course_image']['size'];
-
             $image = $_FILES['userfile']['name'];
             $path =  "uploads/" . $image;
             $ret = move_uploaded_file($_FILES['userfile']['tmp_name'], $path);
@@ -2909,13 +2593,11 @@ class Lead extends CI_Controller
             $this->load->view('layout/main_wrapper', $data);
         }
     }
-
     public function add_crs()
     {
         $data['title'] = display('add_course');
         $data['institute'] = '';
         $this->form_validation->set_rules('course_name', display('Course_name'), 'required');
-
         $data['crs'] = (object) $postData = [
             'id' => $this->input->post('crs_id', true),
             'comp_id' => $this->session->userdata('companey_id'),
@@ -2950,13 +2632,11 @@ class Lead extends CI_Controller
             $this->load->view('layout/main_wrapper', $data);
         }
     }
-
     public function add_sub_crs()
     {
         $data['title'] = display('add_sub_crs');
         $data['institute'] = '';
         $this->form_validation->set_rules('sub_course', display('Sub Course'), 'required');
-
         $data['subcrs'] = (object) $postData = [
             'id' => $this->input->post('sub_crs_id', true),
             'comp_id' => $this->session->userdata('companey_id'),
@@ -2992,7 +2672,6 @@ class Lead extends CI_Controller
             $this->load->view('layout/main_wrapper', $data);
         }
     }
-
     public function add_video()
     {
         $data['title'] = display('add_course');
@@ -3000,7 +2679,6 @@ class Lead extends CI_Controller
         $this->form_validation->set_rules('title_name', 'Title Name', 'required');
         $this->form_validation->set_rules('link_name', 'Link Name', 'required');
         $this->form_validation->set_rules('discription_name', 'Description', 'required');
-
         $data['vid'] = (object) $postData = [
             'id' => $this->input->post('vid_id', true),
             'comp_id' => $this->session->userdata('companey_id'),
@@ -3038,7 +2716,6 @@ class Lead extends CI_Controller
             $this->load->view('layout/main_wrapper', $data);
         }
     }
-
     public function edit_course($crs_id = null)
     {
         if (user_role('31') == true) {
@@ -3053,7 +2730,6 @@ class Lead extends CI_Controller
         $data['content'] = $this->load->view('institute/course_form', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }
-
     public function edit_crs($crs_id = null)
     {
         if (user_role('31') == true) {
@@ -3063,7 +2739,6 @@ class Lead extends CI_Controller
         $data['content'] = $this->load->view('institute/crs_form', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }
-
     public function edit_sub_crs($crs_id = null)
     {
         if (user_role('31') == true) {
@@ -3074,7 +2749,6 @@ class Lead extends CI_Controller
         $data['content'] = $this->load->view('institute/sub_crs_form', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }
-
     public function edit_vid($vid_id = null)
     {
         if (user_role('31') == true) {
@@ -3084,7 +2758,6 @@ class Lead extends CI_Controller
         $data['content'] = $this->load->view('institute/vid_form', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }
-
     public function delete_course($paramId = null)
     {
         if (user_role('32') == true) {
@@ -3096,7 +2769,6 @@ class Lead extends CI_Controller
         }
         redirect('lead/courselist');
     }
-
     public function delete_crs($paramId = null)
     {
         if (user_role('32') == true) {
@@ -3108,7 +2780,6 @@ class Lead extends CI_Controller
         }
         redirect('lead/crslist');
     }
-
     public function delete_sub_crs($paramId = null)
     {
         if (user_role('32') == true) {
@@ -3120,7 +2791,6 @@ class Lead extends CI_Controller
         }
         redirect('lead/sub_course');
     }
-
     public function delete_vid($paramId = null)
     {
         if (user_role('32') == true) {
@@ -3132,16 +2802,13 @@ class Lead extends CI_Controller
         }
         redirect('lead/vidlist');
     }
-
     ///////////////// FAQ SECTION START////////////////////
     public function faq()
     {
         $data['nav1'] = 'nav2';
         if (!empty($_POST)) {
-
             $faq_title = $this->input->post('faq_title');
             $faq_dscptn = $this->input->post('faq_dscptn');
-
             $data = array(
                 'que_type'   => $faq_title,
                 'answer'   => $faq_dscptn,
@@ -3149,19 +2816,16 @@ class Lead extends CI_Controller
                 'created_by' => $this->session->userdata('user_id'),
                 'status' => '1'
             );
-
             $insert_id = $this->Leads_Model->faq_add($data);
             $this->session->set_flashdata('SUCCESSMSG', 'Lead Stage Add Successfully');
             redirect('lead/faq');
         }
-
 
         $data['all_faq'] = $this->Leads_Model->faq_select();
         $data['title'] = 'FAQ';
         $data['content'] = $this->load->view('faq/faq_list', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }
-
     public function delete_faq($faq_id = null)
     {
         if ($this->Leads_Model->delete_faq($faq_id)) {
@@ -3173,7 +2837,6 @@ class Lead extends CI_Controller
         }
         redirect('lead/faq');
     }
-
     public function update_faq()
     {
         if (!empty($_POST)) {

@@ -1,10 +1,8 @@
 <?php
 namespace Aws\Arn\S3;
-
 use Aws\Arn\AccessPointArn as BaseAccessPointArn;
 use Aws\Arn\ArnInterface;
 use Aws\Arn\Exception\InvalidArnException;
-
 /**
  * @internal
  */

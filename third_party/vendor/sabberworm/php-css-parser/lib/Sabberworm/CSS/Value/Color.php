@@ -1,15 +1,10 @@
 <?php
-
 namespace Sabberworm\CSS\Value;
-
 use Sabberworm\CSS\Parsing\ParserState;
-
 class Color extends CSSFunction {
-
 	public function __construct($aColor, $iLineNo = 0) {
 		parent::__construct(implode('', array_keys($aColor)), $aColor, ',', $iLineNo);
 	}
-
 	public static function parse(ParserState $oParserState) {
 		$aColor = array();
 		if ($oParserState->comes('#')) {
@@ -20,7 +15,6 @@ class Color extends CSSFunction {
 			} else if ($oParserState->strlen($sValue) === 4) {
 				$sValue = $sValue[0] . $sValue[0] . $sValue[1] . $sValue[1] . $sValue[2] . $sValue[2] . $sValue[3] . $sValue[3];
 			}
-
 			if ($oParserState->strlen($sValue) === 8) {
 				$aColor = array(
 					'r' => new Size(intval($sValue[0] . $sValue[1], 16), null, true, $oParserState->currentLine()),
@@ -52,7 +46,6 @@ class Color extends CSSFunction {
 		}
 		return new Color($aColor, $oParserState->currentLine());
 	}
-
 	private static function mapRange($fVal, $fFromMin, $fFromMax, $fToMin, $fToMax) {
 		$fFromRange = $fFromMax - $fFromMin;
 		$fToRange = $fToMax - $fToMin;
@@ -61,24 +54,19 @@ class Color extends CSSFunction {
 		$fNewVal *= $fMultiplier;
 		return $fNewVal + $fToMin;
 	}
-
 	public function getColor() {
 		return $this->aComponents;
 	}
-
 	public function setColor($aColor) {
 		$this->setName(implode('', array_keys($aColor)));
 		$this->aComponents = $aColor;
 	}
-
 	public function getColorDescription() {
 		return $this->getName();
 	}
-
 	public function __toString() {
 		return $this->render(new \Sabberworm\CSS\OutputFormat());
 	}
-
 	public function render(\Sabberworm\CSS\OutputFormat $oOutputFormat) {
 		// Shorthand RGB color values
 		if($oOutputFormat->getRGBHashNotation() && implode('', array_keys($this->aComponents)) === 'rgb') {

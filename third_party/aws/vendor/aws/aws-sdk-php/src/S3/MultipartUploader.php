@@ -1,6 +1,5 @@
 <?php
 namespace Aws\S3;
-
 use Aws\HashingStream;
 use Aws\Multipart\AbstractUploader;
 use Aws\PhpHash;
@@ -8,18 +7,15 @@ use Aws\ResultInterface;
 use GuzzleHttp\Psr7;
 use Psr\Http\Message\StreamInterface as Stream;
 use Aws\S3\Exception\S3MultipartUploadException;
-
 /**
  * Encapsulates the execution of a multipart upload to S3 or Glacier.
  */
 class MultipartUploader extends AbstractUploader
 {
     use MultipartUploadingTrait;
-
     const PART_MIN_SIZE = 5242880;
     const PART_MAX_SIZE = 5368709120;
     const PART_MAX_NUM = 10000;
-
     /**
      * Creates a multipart upload for an S3 object.
      *
@@ -71,7 +67,6 @@ class MultipartUploader extends AbstractUploader
             'exception_class' => S3MultipartUploadException::class,
         ]);
     }
-
     protected function loadUploadWorkflowInfo()
     {
         return [
@@ -88,21 +83,17 @@ class MultipartUploader extends AbstractUploader
             'part_num' => 'PartNumber',
         ];
     }
-
     protected function createPart($seekable, $number)
     {
         // Initialize the array of part data that will be returned.
         $data = [];
-
         // Apply custom params to UploadPart data
         $config = $this->getConfig();
         $params = isset($config['params']) ? $config['params'] : [];
         foreach ($params as $k => $v) {
             $data[$k] = $v;
         }
-
         $data['PartNumber'] = $number;
-
         // Read from the source to create the body stream.
         if ($seekable) {
             // Case 1: Source is seekable, use lazy stream to defer work.
@@ -116,26 +107,20 @@ class MultipartUploader extends AbstractUploader
             $body = Psr7\stream_for();
             Psr7\copy_to_stream($source, $body);
         }
-
         $contentLength = $body->getSize();
-
         // Do not create a part if the body size is zero.
         if ($contentLength === 0) {
             return false;
         }
-
         $body->seek(0);
         $data['Body'] = $body;
         $data['ContentLength'] = $contentLength;
-
         return $data;
     }
-
     protected function extractETag(ResultInterface $result)
     {
         return $result['ETag'];
     }
-
     protected function getSourceMimeType()
     {
         if ($uri = $this->source->getMetadata('uri')) {
@@ -143,12 +128,10 @@ class MultipartUploader extends AbstractUploader
                 ?: 'application/octet-stream';
         }
     }
-
     protected function getSourceSize()
     {
         return $this->source->getSize();
     }
-
     /**
      * Decorates a stream with a sha256 linear hashing stream.
      *

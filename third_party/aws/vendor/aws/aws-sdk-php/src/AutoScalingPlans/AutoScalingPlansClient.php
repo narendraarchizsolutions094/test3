@@ -1,8 +1,6 @@
 <?php
 namespace Aws\AutoScalingPlans;
-
 use Aws\AwsClient;
-
 /**
  * This client is used to interact with the **AWS Auto Scaling Plans** service.
  * @method \Aws\Result createScalingPlan(array $args = [])

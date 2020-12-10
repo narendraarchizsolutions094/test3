@@ -8,7 +8,6 @@ class Knowledge_base extends CI_Controller {
 			'knowledge_base_model'			
 		));
 		  $this->load->helper('text');
-
 		if(empty($this->session->user_id)){
 		 redirect('login');   
 		}
@@ -22,7 +21,6 @@ class Knowledge_base extends CI_Controller {
 	} 
 	public function get_kb_feed(){
 		$articles = $this->knowledge_base_model->get_all_articles();				
-
 		$feed = array();		
 		if(!empty($articles)){
 			foreach ($articles as $key => $value) {
@@ -30,7 +28,6 @@ class Knowledge_base extends CI_Controller {
 			}
 		}
 		echo json_encode($feed);
-
 	}
 	public function article_read($id){
 		$data['title'] = 'Articles';
@@ -39,17 +36,13 @@ class Knowledge_base extends CI_Controller {
 		$data['content'] = $this->load->view('knowledge_base/read_articles',$data,true);
 		$this->load->view('layout/main_wrapper',$data);
 	} 
-
 	public function articles(){
 		$data['title'] = 'Articles';
 		#-------------------------------#	
-
 		$data['articles'] = $this->knowledge_base_model->get_all_articles();
-
 		$data['content'] = $this->load->view('knowledge_base/articles',$data,true);
 		$this->load->view('layout/main_wrapper',$data);
 	} 
-
 	public function create_article($id=0){
 		$data['title'] = 'Created Articles';
 		#-------------------------------#			
@@ -67,23 +60,19 @@ class Knowledge_base extends CI_Controller {
 		$this->load->view('layout/main_wrapper',$data);	
 	}
 	public function saved_articles(){	
-
 		$this->form_validation->set_rules('title', 'Title', 'trim|required|min_length[5]|max_length[120]');
 		$this->form_validation->set_rules('slug', 'Slug', 'trim|required|min_length[5]|max_length[120]');
 		$this->form_validation->set_rules('kb_category_id', 'Category', 'trim|required');
 		//$this->form_validation->set_rules('for_all', 'Scope', 'trim|required');
 		$this->form_validation->set_rules('status', 'Status', 'trim|required');
 		$this->form_validation->set_rules('description', 'Description', 'trim|required');
-
 		if ($this->form_validation->run() == TRUE) {
-
 			$title 			= $this->input->post('title');
 			$slug 			= $this->input->post('slug');
 			$category_id 	= $this->input->post('kb_category_id');
 			$scope 			= $this->input->post('for_all');
 			$status 		= $this->input->post('status');
 			$description 	= $this->input->post('description');
-
 			$insert_array   = array(									
 									'title' => $title,
 									'slug' => $slug,
@@ -112,7 +101,6 @@ class Knowledge_base extends CI_Controller {
 				
 				echo "string";				
 				exit();*/
-
 				$images = array();
 				$config['upload_path'] 	 = './uploads/knowledge_base';
 				$config['allowed_types'] =  'pdf|doc|docx|mp3|mp4|jpg|png|jpeg';
@@ -125,9 +113,7 @@ class Knowledge_base extends CI_Controller {
 			        $_FILES['kb_attachment[]']['error']= $files['error'][$key];
 			        $_FILES['kb_attachment[]']['size']= $files['size'][$key];
 			        $fileName = $image;
-
 			        $images[] = $fileName;
-
 			        $config['file_name'] = $fileName;
 			        $this->upload->initialize($config);
 			        if ($this->upload->do_upload('kb_attachment[]')) {
@@ -140,26 +126,21 @@ class Knowledge_base extends CI_Controller {
 			        }
 			    }
 			}
-
 			$insert_array['attachment'] = json_encode($attachment_array);
-
 
 			/*
 			if($_FILES['kb_attachment']['name']!=""){
-
 				$config['upload_path'] 	 = './uploads/knowledge_base';
 				$config['allowed_types'] =  'pdf|doc|docx';
 				$config['encrypt_name']  =  'TRUE';
 				
 				$this->load->library('upload', $config);				
-
 				if (!$this->upload->do_upload('kb_attachment')){
 					$error = $this->upload->display_errors();
 	            	$this->session->set_flashdata('exception',$error);
 					redirect('knowledge_base/articles','refresh');
 				}
 				else{
-
 					/*$this->db->select('attachment');
 					$this->db->where('id',$this->input->post('edit'));
 					$attachment	=	$this->db->get('articles')->row_array()['attachment'];
@@ -169,7 +150,6 @@ class Knowledge_base extends CI_Controller {
 					$insert_array['attachment'] = base_url().'uploads/knowledge_base/'.$upload_data['file_name'];
 				}
 			}*/
-
 
 			if($this->input->post('edit')){
 				$this->db->where('id',$this->input->post('edit'));
@@ -194,7 +174,6 @@ class Knowledge_base extends CI_Controller {
 		}
 		redirect('knowledge_base/articles','refresh');
 	}
-
 	public function remove_article_file(){
 		//print_r($_POST);
 		$id	=	$this->input->post('id');
@@ -220,7 +199,6 @@ class Knowledge_base extends CI_Controller {
 		}
 		echo 1;
 	}
-
 	public function category(){
 		$data['title'] = 'Category';
 		#-------------------------------#	
@@ -233,12 +211,10 @@ class Knowledge_base extends CI_Controller {
 		
 		$this->form_validation->set_rules('category', 'Category', 'trim|required');
 		$this->form_validation->set_rules('status', 'Status', 'trim|required');		
-
 		if($this->form_validation->run() == TRUE) {			
 			$name			=	$this->input->post('category');
 			$description	=	$this->input->post('description');
 			$status			=	$this->input->post('status');
-
 			$insert_array = array(
 				'name' 			=>$name,
 				'description'	=>$description,
@@ -254,7 +230,6 @@ class Knowledge_base extends CI_Controller {
 				$insert	=	$this->db->insert('tbl_category',$insert_array);
 				$msg = 'Category created successfully';				
 			}
-
 			if($insert){
                 $this->session->set_flashdata('message',$msg);				
 			}else{
@@ -266,14 +241,11 @@ class Knowledge_base extends CI_Controller {
 		redirect('Knowledge_base/category','refresh');
 	}	
 	public function delete_row(){
-
 		$this->form_validation->set_rules('id','Id','required');
 		$this->form_validation->set_rules('table','Table','required');
-
 		if ($this->form_validation->run() == TRUE) {
 			$id		=	$this->input->post('id');
 			$table	=	$this->input->post('table');
-
 			$this->db->where('id',$id);
 			$row_array	=	$this->db->get($table)->row_array();
 			if(!empty($row_array['attachment'])){
@@ -284,14 +256,10 @@ class Knowledge_base extends CI_Controller {
 			    	unlink($_SERVER['DOCUMENT_ROOT'].$p['path']);
 				}
 				
-
 			}
-
-
 
 			$this->db->where('id',$id);
 			if($this->db->delete($table)){
-
 				echo 1;
 			}else{
 				echo 0;				
@@ -300,7 +268,6 @@ class Knowledge_base extends CI_Controller {
 			echo 0;
 		}
 	}
-
 	public function category_details(){
 		$this->form_validation->set_rules('id','Id','required');		
 		$res = array();		
@@ -311,5 +278,4 @@ class Knowledge_base extends CI_Controller {
 		}
 		echo json_encode($res);
 	}
-
 }

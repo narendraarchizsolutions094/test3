@@ -1,13 +1,10 @@
 <?php
 namespace Aws\S3\UseArnRegion;
-
 use Aws;
 use Aws\S3\UseArnRegion\Exception\ConfigurationException;
-
 class Configuration implements ConfigurationInterface
 {
     private $useArnRegion;
-
     public function __construct($useArnRegion)
     {
         $this->useArnRegion = Aws\boolean_value($useArnRegion);
@@ -16,7 +13,6 @@ class Configuration implements ConfigurationInterface
                 . " must be a boolean value.");
         }
     }
-
     /**
      * {@inheritdoc}
      */
@@ -24,7 +20,6 @@ class Configuration implements ConfigurationInterface
     {
         return $this->useArnRegion;
     }
-
     /**
      * {@inheritdoc}
      */

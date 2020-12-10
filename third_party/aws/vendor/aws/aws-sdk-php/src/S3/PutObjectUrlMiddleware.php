@@ -1,10 +1,8 @@
 <?php
 namespace Aws\S3;
-
 use Aws\CommandInterface;
 use Aws\ResultInterface;
 use Psr\Http\Message\RequestInterface;
-
 /**
  * Injects ObjectURL into the result of the PutObject operation.
  *
@@ -14,7 +12,6 @@ class PutObjectUrlMiddleware
 {
     /** @var callable  */
     private $nextHandler;
-
     /**
      * Create a middleware wrapper function.
      *
@@ -26,7 +23,6 @@ class PutObjectUrlMiddleware
             return new self($handler);
         };
     }
-
     /**
      * @param callable $nextHandler Next handler to invoke.
      */
@@ -34,7 +30,6 @@ class PutObjectUrlMiddleware
     {
         $this->nextHandler = $nextHandler;
     }
-
     public function __invoke(CommandInterface $command, RequestInterface $request = null)
     {
         $next = $this->nextHandler;

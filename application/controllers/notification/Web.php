@@ -5,17 +5,13 @@ class Web extends CI_Controller{
     /**
      * Send to a single device
      */
-
     public function get_pop_reminder_content(){
     	$notification_id	=	$this->input->post('notication_id');
     	$enq_id	=	$this->input->post('enq_id');
     	$this->db->where('notification_id',$notification_id);
     	$res	=	$this->db->get('query_response')->row_array();
-
     	$html = '';
-
     	if(!empty($res)){
-
             if($res['task_type']!=17)
             {
     		$this->db->select('enquiry_id,name_prefix,name,lastname,status');
@@ -31,7 +27,6 @@ class Web extends CI_Controller{
 		    }else{
 		      $url  = 'javascript:void(0)';
 		    }
-
     		$html .= '<b>Subject :'.$res['subject'].'</b><br>'.$res['task_remark'].'<br><a href="'.$url.'"><b>'.$enq_res['name_prefix'].' '.$enq_res['name'].' '.$enq_res['lastname'].'</b></a><br>';
             /*$html .= `<div class='col-md-4'>
                     <label>Snooze Till? (Time)</label>
@@ -46,12 +41,10 @@ class Web extends CI_Controller{
             $this->db->select('*');
             $this->db->where('ticketno',$enq_id);
             $enq_res    =   $this->db->get('tbl_ticket')->row_array(); 
-
             $url  = base_url().'ticket/view/'.$enq_res['ticketno'];
            
            $html .= '<b>Subject :'.$enq_res['message'].'</b><br>'.$res['task_remark'].'<br><a href="'.$url.'"><b>'.$enq_res['name'].'</b></a><br>';
         }
-
     	}
     	echo $html;
     }
@@ -70,7 +63,6 @@ class Web extends CI_Controller{
         }
         redirect($url,'refresh');
     }
-
     public function get_bell_notification_content()
     {   
         $limit = ($this->input->post('limit')) ? $this->input->post('limit') : 20;
@@ -81,18 +73,13 @@ class Web extends CI_Controller{
         $this->db->join('tbl_admin', 'tbl_admin.pk_i_admin_id=query_response.create_by', 'left');
         
         $this->db->join('enquiry', 'enquiry.Enquery_id=query_response.query_id', 'left');
-
         $this->db->join('tbl_ticket ticket', 'ticket.ticketno=query_response.query_id', 'left');
 
-
         $where = " ((enquiry.created_by=$user_id OR enquiry.aasign_to=$user_id OR ticket.assign_to=$user_id OR ticket.assigned_by=$user_id) OR query_response.create_by=$user_id)  AND CONCAT(str_to_date(task_date,'%d-%m-%Y'),' ',task_time) <= NOW() ORDER BY CONCAT(str_to_date(task_date,'%d-%m-%Y'),' ',task_time) DESC";
-
         $this->db->where($where);
         $this->db->limit($limit);
-
     	$data['res']	=	$this->db->get()->result_array();
         $data['limit']  = ($limit + 20);
-
         if($load!='')
         { 
             echo json_encode(array('html'=>$this->load->view('notifications/bell_notification',$data,true)));
@@ -126,5 +113,4 @@ class Web extends CI_Controller{
         echo $this->db->get()->num_rows();
     }
 }
-
 

@@ -1,8 +1,6 @@
 <?php
 namespace Aws\ComprehendMedical;
-
 use Aws\AwsClient;
-
 /**
  * This client is used to interact with the **AWS Comprehend Medical** service.
  * @method \Aws\Result describeEntitiesDetectionV2Job(array $args = [])

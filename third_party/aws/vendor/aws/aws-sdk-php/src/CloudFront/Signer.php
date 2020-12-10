@@ -1,6 +1,5 @@
 <?php
 namespace Aws\CloudFront;
-
 /**
  * @internal
  */
@@ -8,7 +7,6 @@ class Signer
 {
     private $keyPairId;
     private $pkHandle;
-
     /**
      * A signer for creating the signature values used in CloudFront signed URLs
      * and signed cookies.
@@ -28,9 +26,7 @@ class Signer
                 . 'sign CloudFront urls.');
             //@codeCoverageIgnoreEnd
         }
-
         $this->keyPairId = $keyPairId;
-
         if (!$this->pkHandle = openssl_pkey_get_private($privateKey, $passphrase)) {
             if (!file_exists($privateKey)) {
                 throw new \InvalidArgumentException("PK file not found: $privateKey");
@@ -42,12 +38,10 @@ class Signer
             }
         }
     }
-
     public function __destruct()
     {
         $this->pkHandle && openssl_pkey_free($this->pkHandle);
     }
-
     /**
      * Create the values used to construct signed URLs and cookies.
      *
@@ -83,13 +77,10 @@ class Signer
             throw new \InvalidArgumentException('Either a policy or a resource'
                 . ' and an expiration time must be provided.');
         }
-
         $signatureHash['Signature'] = $this->encode($this->sign($policy));
         $signatureHash['Key-Pair-Id'] = $this->keyPairId;
-
         return $signatureHash;
     }
-
     private function createCannedPolicy($resource, $expiration)
     {
         return json_encode([
@@ -103,15 +94,12 @@ class Signer
             ],
         ], JSON_UNESCAPED_SLASHES);
     }
-
     private function sign($policy)
     {
         $signature = '';
         openssl_sign($policy, $signature, $this->pkHandle);
-
         return $signature;
     }
-
     private function encode($policy)
     {
         return strtr(base64_encode($policy), '+=/', '-_~');

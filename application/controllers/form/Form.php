@@ -26,7 +26,6 @@ class Form extends CI_Controller {
  		else
  			echo $this->load->view('forms/custom_enquiry_form',$data,true);				
 	}
-
 	public function get_tab_fields($tid,$comp_id,$for=0){		 		
 		$data['tid'] = $tid;
 		$data['comp_id'] = $comp_id;
@@ -58,15 +57,12 @@ class Form extends CI_Controller {
  		$this->db->where('comp_id',$comp_id);
 		$this->db->where('form_id',$tid);
 		$data['form_process_row']	=	$this->db->get('form_process')->row_array();		         		
-
  		$data['products'] = $this->dash_model->get_user_product_list_bycompany($comp_id);
  		$data['input_types'] = $this->form_model->get_input_types();
-
  		$data['tab_details'] = $this->db->get_where('forms',array('id'=>$tid))->row_array();
  		$data['field_for']  = $for;
  		echo $this->load->view('forms/field_by_tab',$data,true);		
 	}
-
 	/*public function enquiry_save_custom_field($comp_id){	
     	$this->form_validation->set_rules('label_name','Label Name','required|trim');
     	$this->form_validation->set_rules('label_type','Label Type','required|trim');
@@ -84,7 +80,6 @@ class Form extends CI_Controller {
 			$input_readonly = $this->input->post('readonly');
 			$input_disabled = $this->input->post('disabled');
 			$form_id = $this->input->post('form_id');
-
 
 			$process_list = $this->input->post('process_list');		
 			
@@ -114,7 +109,6 @@ class Form extends CI_Controller {
     	//echo $this->db->last_query();		
 		redirect('customer/edit/'.$comp_id,'refresh');				
 	}*/
-
 	public function enquiry_save_custom_field($comp_id){	
     	$this->form_validation->set_rules('label_name','Label Name','required|trim');
     	$this->form_validation->set_rules('label_type','Label Type','required|trim');
@@ -132,9 +126,7 @@ class Form extends CI_Controller {
 			$input_disabled = $this->input->post('disabled');
 			$form_id = $this->input->post('form_id');
 			$page_id	=	$this->input->post('page_id');
-
 			// print_r($this->input->post()); exit();
-
 			$process_list = $this->input->post('process_list');		
 			if (!empty($process_list)) {
 				$process_list1 = implode(',', $process_list);
@@ -179,17 +171,12 @@ class Form extends CI_Controller {
     	//echo $this->db->last_query();		
 		redirect('customer/edit/'.$comp_id,'refresh');								
 	}
-
 	public function get_custom_field_by_process(){
-
 		$process_id	= 	$this->input->post('process_id');
 		$field_for  = 	$this->input->post('field_for')??0;
-
 		$tid = $this->input->post('primary_tab')??0;
 
-
 		$data['company_list'] = $this->location_model->get_company_list($process_id,$tid);
-
 		echo $this->load->view('forms/custom_field_by_process',$data,true);
 	}
 	
@@ -200,7 +187,6 @@ class Form extends CI_Controller {
 		if($this->session->process && count($this->session->process) == 1){
 			$process_id = $this->session->process[0];
 		}
-
 		
 		$this->load->model(
 					array('location_model',
@@ -212,23 +198,19 @@ class Form extends CI_Controller {
         
 	    $data['name_prefix'] = $this->Enquiry_model->name_prefix_list();
 	    
-
 	    if($this->input->post('field_for')==2)
 	    {
-
     		$data['source'] = $this->Leads_Model->get_leadsource_list();
 			$data["clients"] = $this->Enquiry_model->getEnquiry()->result();
 			$data["product"] = $this->Ticket_Model->getproduct();
 			$data["referred_type"] = $this->Leads_Model->get_referred_by();
 			$data['problem'] = $this->Ticket_Model->get_sub_list();
 			$data['issues'] = $this->Ticket_Model->get_issue_list();
-
 	    	$data['company_list'] = $this->location_model->get_company_list1_ticket($process_id);
 	    	echo $this->load->view('forms/ticket_basic_form_fields',$data,true);
 	    }
 	    else
 	    {
-
 			$data['leadsource'] = $this->Leads_Model->get_leadsource_list();
 	        $data['lead_score'] = $this->Leads_Model->get_leadscore_list();            
 	        $data['product_contry'] = $this->location_model->productcountry();
@@ -240,15 +222,12 @@ class Form extends CI_Controller {
 	        $data['state_list'] = $this->location_model->estate_list();
 	        $data['city_list'] = $this->location_model->ecity_list();
 	        $data['country_list'] = $this->location_model->ecountry_list();
-
 	    	$data['company_list'] = $this->location_model->get_company_list1($process_id);
-
 	    	echo $this->load->view('forms/basic_form_fields',$data,true);
 	    }
 		
 	
 	}
-
 	public function get_custom_field_in_basic()
 	{
 		$this->load->helper('custom_form_helper');
@@ -259,7 +238,6 @@ class Form extends CI_Controller {
 		$form_for = 2;
 		echo tab_content($tid,$comp_id,$ticketno,$tabname,$form_for);
 	}
-
 	public function get_basic_field_by_process_update($tckt)
 	{
 		$this->load->model(
@@ -268,9 +246,7 @@ class Form extends CI_Controller {
 							'Ticket_Model',
 							'Leads_Model'
 					));
-
 		$process_id = $this->input->post('process_id');
-
 		$data["ticket"] = $this->Ticket_Model->get($tckt);
 		//print_r($data['ticket']); exit();
 		$data['source'] = $this->Leads_Model->get_leadsource_list();
@@ -284,19 +260,16 @@ class Form extends CI_Controller {
 		
 	}
 
-
 	public function get_customview_field_by_process(){		
 		$process_id	=	$this->input->post('process_id');
 		$data['company_list'] = $this->location_model->get_company_list2($process_id);
 		echo $this->load->view('forms/get_dynamics_fields_inview',$data,true);
 	}
-
 	public function get_basicview_field_by_process(){		
 		$process_id	=	$this->input->post('process_id');		
 		$this->load->model('location_model');
 		$data['leadsource'] = $this->Leads_Model->get_leadsource_list();
 		$data['lead_score'] = $this->Leads_Model->get_leadscore_list();
-
 		$data['product_contry'] = $this->location_model->productcountry();
 		$data['institute_list'] = $this->Institute_model->institutelist();
 		$data['datasource_list'] = $this->Datasource_model->datasourcelist();
@@ -310,7 +283,6 @@ class Form extends CI_Controller {
 		$data['company_list'] = $this->location_model->get_company_list1($process_id);
 		echo $this->load->view('forms/get_basicfields_inview',$data,true);
 	}
-
 	public function change_basic_enquiry_field_status(){
 		$field_id = $this->input->post('id');		
 		$status = $this->input->post('status');
@@ -319,7 +291,6 @@ class Form extends CI_Controller {
 		$this->db->where('field_id',$field_id);
 	    $this->db->where('comp_id',$comp_id);
 	    $arr = array('status'=>$status);
-
 	    if($for==2)
 	    {
 			$res = $this->db->update('ticket_fileds_basic',$arr);	
@@ -328,7 +299,6 @@ class Form extends CI_Controller {
 	    {
 	    	$res = $this->db->update('enquiry_fileds_basic',$arr);	
 	    }
-
 	    if($res){
         	echo 1;
 	    }
@@ -336,13 +306,10 @@ class Form extends CI_Controller {
 	    	echo 0;
 	    }
 	}
-
 	public function change_extra_enquiry_field_status(){
-
 		$field_id = $this->input->post('id');		
 		$status = $this->input->post('status');
 		$comp_id = $this->input->post('comp_id');
-
 		$this->db->where('input_id',$field_id);
 	    $this->db->where('company_id',$comp_id);
 	    $arr = array('status'=>$status);
@@ -354,7 +321,6 @@ class Form extends CI_Controller {
 	    	echo 0;
 	    }	
 	}
-
 	public function save_form_row(){
 		if($this->input->post('basic') != 'false'){
 			$this->db->where('comp_id',$this->input->post('comp_id'));
@@ -368,7 +334,6 @@ class Form extends CI_Controller {
 				$res	=	$this->db->update('enquiry_fileds_basic');
 			else if($this->input->post('field_for')==2)
 				$res	=	$this->db->update('ticket_fileds_basic');
-
 		}else{
 			$this->db->where('company_id',$this->input->post('comp_id'));
 			$this->db->where('input_id',$this->input->post('id'));
@@ -381,7 +346,6 @@ class Form extends CI_Controller {
 		}
 		echo $res;		
 	}
-
 	public function save_form_rules(){
 		echo "<pre>";
 		print_r($_POST);
@@ -389,7 +353,6 @@ class Form extends CI_Controller {
 		parse_str($form_data,$form_data1);
 		print_r($form_data1);
 	}
-
 	public function assign_process_in_tab(){
 		$comp_id=$this->input->post('comp_id');
 		$tid=$this->input->post('tid');
@@ -414,7 +377,6 @@ class Form extends CI_Controller {
 		/*echo "<pre>";
 		print_r($data['company_list']);
 		echo "</pre>";*/
-
 		$data['tab_list'] = $this->form_model->get_all_tabs(); 	
 		$data['content'] = $this->load->view('forms/tab_list', $data, true);
         $this->load->view('layout/main_wrapper', $data);
@@ -439,7 +401,6 @@ class Form extends CI_Controller {
 			$edit 	= $this->input->post('edit')??0;
 			$delete = $this->input->post('delete')??0;
 		}
-
 		if (!empty($comp_ids)) {
 			$comp_ids = implode(',', $comp_ids);
 		}
@@ -453,7 +414,6 @@ class Form extends CI_Controller {
 		}		
 		redirect('form/form/tabs','refresh');
 	}
-
 	public function get_edit_tab_content(){		
 		$data['company_list'] = $this->doctor_model->read();
 		$tab_id	=	$this->input->post('tab_id');
@@ -461,7 +421,6 @@ class Form extends CI_Controller {
 		$data['tab_row'] 	=	$this->db->get('forms')->row_array();
 		echo $this->load->view('forms/edit_tab_content',$data,true);
 	}
-
 	public function edit_tab_field(){
 		$fid	=	$this->input->post('id');
 		$data['fid'] = $fid;
@@ -471,30 +430,24 @@ class Form extends CI_Controller {
 		$data['comp_id'] = $this->input->post('comp_id');
 		echo $this->load->view('forms/edit_tab_field',$data,true);		
 	}
-
 	public function reorder_field(){
 		echo "<pre>";
 		print_r($_POST);
 		echo "</pre>";
-
 		$comp_id	=	$this->input->post('comp_id');
 		$fid		=	$this->input->post('fid');
 		$type	 	= 	$this->input->post('type');
 		$fld_order 	=  	$this->input->post('fld_order');
 		$field_for  =   $this->input->post('field_for');
-
 		echo $field_for;
-
 		if ($type == 'extra') {
 			$this->db->where('input_id',$fid);
 			$this->db->set('fld_order',$fld_order);
 			$this->db->update('tbl_input');
 		}else if ($type == 'basic') {
-
 			$this->db->where('field_id',$fid);
 			$this->db->where('comp_id',$comp_id);
 			$this->db->set('fld_order',$fld_order);
-
 			if($field_for=='2')
 				$this->db->update('ticket_fileds_basic');
 			else
@@ -514,7 +467,6 @@ class Form extends CI_Controller {
  		$data['form_process_row']	=	array();		         		
  		$data['category'] = $this->db->get_where('tbl_category',array('comp_id'=>$data['comp_id']))->result();
  		$data['input_types'] = $this->form_model->get_input_types();
-
  		$data['tab_details'] = array(); 		 
  		$data['content']	=	$this->load->view('forms/product_form',$data,true);		
  		$this->load->view('layout/main_wrapper',$data);

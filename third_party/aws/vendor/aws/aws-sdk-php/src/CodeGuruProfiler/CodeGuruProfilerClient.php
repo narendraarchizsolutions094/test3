@@ -1,8 +1,6 @@
 <?php
 namespace Aws\CodeGuruProfiler;
-
 use Aws\AwsClient;
-
 /**
  * This client is used to interact with the **Amazon CodeGuru Profiler** service.
  * @method \Aws\Result configureAgent(array $args = [])

@@ -1,8 +1,6 @@
 <?php
 namespace Aws\NetworkManager;
-
 use Aws\AwsClient;
-
 /**
  * This client is used to interact with the **AWS Network Manager** service.
  * @method \Aws\Result associateCustomerGateway(array $args = [])

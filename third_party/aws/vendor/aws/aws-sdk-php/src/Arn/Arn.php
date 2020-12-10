@@ -1,8 +1,6 @@
 <?php
 namespace Aws\Arn;
-
 use Aws\Arn\Exception\InvalidArnException;
-
 /**
  * Amazon Resource Names (ARNs) uniquely identify AWS resources. The Arn class
  * parses and stores a generic ARN object representation that can apply to any
@@ -14,7 +12,6 @@ class Arn implements ArnInterface
 {
     protected $data;
     protected $string;
-
     public static function parse($string)
     {
         $data = [
@@ -25,22 +22,18 @@ class Arn implements ArnInterface
             'account_id' => null,
             'resource' => null,
         ];
-
         $length = strlen($string);
         $lastDelim = 0;
         $numComponents = 0;
         for ($i = 0; $i < $length; $i++) {
-
             if (($numComponents < 5 && $string[$i] === ':')) {
                 // Split components between delimiters
                 $data[key($data)] = substr($string, $lastDelim, $i - $lastDelim);
-
                 // Do not include delimiter character itself
                 $lastDelim = $i + 1;
                 next($data);
                 $numComponents++;
             }
-
             if ($i === $length - 1) {
                 // Put the remainder in the last component.
                 if (in_array($numComponents, [5])) {
@@ -52,10 +45,8 @@ class Arn implements ArnInterface
                 }
             }
         }
-
         return $data;
     }
-
     public function __construct($data)
     {
         if (is_array($data)) {
@@ -66,10 +57,8 @@ class Arn implements ArnInterface
             throw new InvalidArnException('Constructor accepts a string or an'
                 . ' array as an argument.');
         }
-
         self::validate($this->data);
     }
-
     public function __toString()
     {
         if (!isset($this->string)) {
@@ -81,47 +70,38 @@ class Arn implements ArnInterface
                 $this->getAccountId(),
                 $this->getResource(),
             ];
-
             $this->string = implode(':', $components);
         }
         return $this->string;
     }
-
     public function getPrefix()
     {
         return $this->data['arn'];
     }
-
     public function getPartition()
     {
         return $this->data['partition'];
     }
-
     public function getService()
     {
         return $this->data['service'];
     }
-
     public function getRegion()
     {
         return $this->data['region'];
     }
-
     public function getAccountId()
     {
         return $this->data['account_id'];
     }
-
     public function getResource()
     {
         return $this->data['resource'];
     }
-
     public function toArray()
     {
         return $this->data;
     }
-
     /**
      * Minimally restrictive generic ARN validation
      *
@@ -133,17 +113,14 @@ class Arn implements ArnInterface
             throw new InvalidArnException("The 1st component of an ARN must be"
                 . " 'arn'.");
         }
-
         if (empty($data['partition'])) {
             throw new InvalidArnException("The 2nd component of an ARN"
                 . " represents the partition and must not be empty.");
         }
-
         if (empty($data['service'])) {
             throw new InvalidArnException("The 3rd component of an ARN"
                 . " represents the service and must not be empty.");
         }
-
         if (empty($data['resource'])) {
             throw new InvalidArnException("The 6th component of an ARN"
                 . " represents the resource information and must not be empty."

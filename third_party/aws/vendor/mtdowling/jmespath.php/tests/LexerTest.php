@@ -1,10 +1,8 @@
 <?php
 namespace JmesPath\Tests;
-
 use JmesPath\Lexer;
 use JmesPath\SyntaxErrorException;
 use PHPUnit\Framework\TestCase;
-
 /**
  * @covers JmesPath\Lexer
  */
@@ -43,7 +41,6 @@ class LexerTest extends TestCase
             ['`"true"`', 'literal']
         ];
     }
-
     /**
      * @dataProvider inputProvider
      */
@@ -53,7 +50,6 @@ class LexerTest extends TestCase
         $tokens = $l->tokenize($input);
         $this->assertEquals($tokens[0]['type'], $type);
     }
-
     public function testTokenizesJsonLiterals()
     {
         $l = new Lexer();
@@ -68,7 +64,6 @@ class LexerTest extends TestCase
         $this->assertSame(0.45, $tokens[12]['value']);
         $this->assertSame(-0.5, $tokens[14]['value']);
     }
-
     public function testTokenizesJsonNumbers()
     {
         $l = new Lexer();
@@ -78,7 +73,6 @@ class LexerTest extends TestCase
         $this->assertEquals(-1.02E-9, $tokens[4]['value']);
         $this->assertEquals(120, $tokens[6]['value']);
     }
-
     public function testCanWorkWithElidedJsonLiterals()
     {
         $l = new Lexer();

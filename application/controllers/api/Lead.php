@@ -3,9 +3,7 @@ use Restserver\Libraries\REST_Controller;
 defined('BASEPATH') OR exit('No direct script access allowed');
 require APPPATH . 'libraries/REST_Controller.php';
 require APPPATH . 'libraries/Format.php';
-
 class Lead extends REST_Controller {
-
     function __construct()
     {
         parent::__construct();
@@ -18,7 +16,6 @@ class Lead extends REST_Controller {
 		$this->load->model('api/sync_model');
 		$this->load->library('email'); 
    // $this->lang->load('notifications_lang', 'english');   
-
 		
            $this->load->helper('url');
            $this->methods['users_get']['limit'] = 500; 
@@ -33,13 +30,11 @@ class Lead extends REST_Controller {
     public function active_leads_post(){   
       $user_id= $this->input->post('user_id');
       $process_id= $this->input->post('process_id');
-
       //for multiprocess id
       if(!empty($process_id))
       {
         $process = implode(',',$process_id);
       }
-
             $res= array();
             if(!empty($user_id)){
                     $user_role1 = $this->User_model->read_by_id($user_id); 
@@ -71,9 +66,7 @@ class Lead extends REST_Controller {
                  ], REST_Controller::HTTP_OK);
         }
   }
-
   public function view_post(){
-
     $this->form_validation->set_rules('lead_id','Lead Id','required');    
     $this->form_validation->set_message('required', 'Invalid %s');
     
@@ -85,7 +78,6 @@ class Lead extends REST_Controller {
      /* echo "<pre>";
       print_r($lead_row);
       echo "</pre>";*/
-
       if (!empty($lead_row)) {
           
           $lead_array = array(
@@ -113,7 +105,6 @@ class Lead extends REST_Controller {
           'created_by'        =>  $lead_row->created_by_name,
           'assigned_to'        =>  $lead_row->assign_name
         );
-
           if($lead_row->enquiry_cust_type == 1){
             $this->db->select('customer_type');
             if (!empty($lead_row->customer_type)) {
@@ -125,17 +116,14 @@ class Lead extends REST_Controller {
               $lead_array['customer_type'] = '';              
             }
 
-
           }else if ($lead_row->enquiry_cust_type == 11) {
             $this->db->select('channel_partner_type');
             $this->db->where('ch_id',$lead_row->channel_partnr_type);
-
             $channel_type_name   = $this->db->get('tbl_channel_partner')->row();
             
             $lead_array['customer_type'] = $channel_type_name->channel_partner_type;            
           
           }
-
       }else{
         $lead_array = array();
       }
@@ -143,16 +131,13 @@ class Lead extends REST_Controller {
                       'status' => true,
                       'lead' =>array($lead_array)
                        ], REST_Controller::HTTP_OK);     
-
     }else{
       $this->set_response([
           'status' => false,
           'lead' => array('error'=>str_replace(array("\n", "\r"), ' ', strip_tags(validation_errors())))  
            ], REST_Controller::HTTP_OK);
     }
-
   }
-
 
   public function update_post(){
       
@@ -212,7 +197,6 @@ class Lead extends REST_Controller {
       
           $en_comments      = $this->input->post('en_comments');
       
-
           $city_id  = $this->db->select("*")
           ->from("city")
           ->where('id',$this->input->post('fcity'))
@@ -239,23 +223,14 @@ class Lead extends REST_Controller {
           if(!empty($this->input->post('other_no'))){
       
             $other_no=implode(',',$this->input->post('other_no'));
-
           }else{
-
             $other_no=''; 
-
           }
-
           if(!empty($this->input->post('other_email'))){
-
             $other_email=implode(',',$this->input->post('other_email'));
-
           }else{
-
             $other_email=''; 
-
           }
-
           $this->db->set('city_id',$city_id->row()->id);
       
           $this->db->set('state_id',$city_id->row()->state_id);
@@ -303,7 +278,6 @@ class Lead extends REST_Controller {
           $this->db->where('Enquery_id',$this->input->post('lead_code'));
       
           $this->db->update('enquiry');
-
           //echo $this->db->last_query();
         
           $lead_source = $this->input->post('lead_source');
@@ -322,14 +296,12 @@ class Lead extends REST_Controller {
       
           $ld_updt_by = $this->input->post('user_id');
 
-
           $adt = date("d-m-Y H:i:s");          
           $this->db->set('lead_id',$lead_code);
           $this->db->set('created_date',$adt);
           $this->db->set('comment_msg','Update Leads');
           $this->db->set('created_by',$ld_updt_by);
           $this->db->insert('tbl_comment');
-
           $this->set_response([
                       'status' => true,
                       'message' =>array(array('error'=>'Lead updated Successfully'))
@@ -354,27 +326,21 @@ class Lead extends REST_Controller {
       foreach ($leadsource as $key => $value) {
         $leadsource_array[] = array('id'=>$value->lsid,'lead_name'=>$value->lead_name);
       }
-
       foreach ($lead_score as $key => $value) {
         $lead_score_array[] = array('id'=>$value->sc_id,'score_name'=>$value->score_name.' '.$value->probability);
       }
-
       $this->set_response([
           'status' => true,
           'probability_stage' => array(array('lead_stage'=>$leadsource_array,'probability'=>$lead_score_array))  
            ], REST_Controller::HTTP_OK);
   }
-
           //////// Drop Enquiry API /////////
   public function drop_leads_post(){
-
       $this->form_validation->set_rules('reason','Reason','required');
       $this->form_validation->set_rules('drop_status','Drop Status','required');
       $this->form_validation->set_rules('lead_code[]','Lead Code','required');
       $this->form_validation->set_rules('user_id','User Id','required');
-
       if( $this->form_validation->run() == true){
-
         $reason = $this->input->post('reason');
         
         $drop_status = $this->input->post('drop_status');
@@ -395,7 +361,6 @@ class Lead extends REST_Controller {
               $this->db->where('lead_code',$key);
           
               $this->db->update('allleads');
-
               $this->Leads_Model->add_comment_for_events_api('Dropped Leads',$key,$user_id);
           
             } 
@@ -412,7 +377,6 @@ class Lead extends REST_Controller {
                ], REST_Controller::HTTP_OK);
         
         }
-
       }else{
         $this->set_response([
           'status' => false,
@@ -421,19 +385,15 @@ class Lead extends REST_Controller {
       }
     
   }
-
       public function assign_lead_post(){
         
-
         $this->form_validation->set_rules('user_id','User ID' ,'required');
         $this->form_validation->set_rules('assign_user_id','Assign ID' ,'required');
         $this->form_validation->set_rules('lead_code[]','Lead Code' ,'required');
 
-
         if($this->form_validation->run()==true){
           
           $move_enquiry = $this->input->post('lead_code[]');
-
           $assign_employee = $this->input->post('assign_user_id');
           
           $user_id = $this->input->post('user_id');
@@ -456,28 +416,22 @@ class Lead extends REST_Controller {
           
               $lid = $this->Leads_Model->get_leadListDetailsby_code($key)->lid;   
               $enquiry_row = $this->Leads_Model->get_leadListDetailsby_ledsonly($lid);   
-
                          
               
         /*      echo "<pre>";
               print_r($enquiry_row);
               exit();*/
               $customer_name  .= $enquiry_row->name_prefix.''.$enquiry_row->name.' '.$enquiry_row->lastname.', ';
-
               $this->Leads_Model->add_comment_for_events_api('Lead Assigned successfully to Sales',$key,$user_id);
           
             }
-
             $assigner_user = $this->User_model->read_by_id($user_id); // assigner user row
-
             $assignee_phone = '91'.$user->s_phoneno; 
             $assign_to_name = $user->s_display_name.' '.$user->last_name;
             
             $assign_by_name = $assigner_user->s_display_name.' '.$assigner_user->last_name;
-
           $notification_msg = sprintf($this->lang->line('lead_assigned_to'),trim($customer_name),trim($assign_to_name),trim($assign_by_name));
           $this->Message_models->sendwhatsapp($assignee_phone,$notification_msg);
-
             $this->set_response([
               'status' => true,
               'message' => array(array('error'=>'Lead Assigned successfully to Sales'))  
@@ -497,7 +451,6 @@ class Lead extends REST_Controller {
            ], REST_Controller::HTTP_OK);
         } 
       }
-
        public function lead_stage_post()
         {
 		 $comp=$this->input->post('company_id');	
@@ -529,7 +482,6 @@ class Lead extends REST_Controller {
                  ], REST_Controller::HTTP_OK);
         
         }
-
         public function disposition_update_post(){
             
             $this->form_validation->set_rules('lead_stage', 'Lead Stage', 'trim|required');
@@ -537,7 +489,6 @@ class Lead extends REST_Controller {
         //    $this->form_validation->set_rules('remark', 'Remark', 'trim|required');
             $this->form_validation->set_rules('enquiry_code', 'Enquiry Code', 'trim|required');
             $this->form_validation->set_rules('user_id', 'User Id', 'trim|required');
-
             if ($this->form_validation->run() == TRUE ) {              
               
               $stage_id         = $this->input->post('lead_stage');
@@ -557,18 +508,15 @@ class Lead extends REST_Controller {
               $this->db->where('Enquery_id', $en_id);
               $this->db->update('enquiry');
               $this->Leads_Model->add_comment_for_events_stage_api('Stage Updated',$en_id,$stage_id,$stage_desc,$stage_remark,$user_id); 
-
 			  $tid = $this->Leads_Model->add_comment_for_events_popup_api($stage_remark,$stage_date,$stage_time,$en_id,$user_id);
         
         $this->load->model('Notification_model');
         $this->db->select('CONCAT_WS(" ",name_prefix,name,lastname) as enq_name'); 
         $this->db->where('Enquery_id',$en_id);
         $enq_row  = $this->db->get('enquiry')->row_array();
-
         $this->db->select('lead_stage_name');
         $this->db->where('stg_id',$stage_id);
         $lead_stage_row  = $this->db->get('lead_stage')->row_array();
-
         $reminder_txt = $lead_stage_row['lead_stage_name'].' :'.$enq_row['enq_name'];
         
         $res  = $this->Notification_model->add_task_reminder($user_id,$en_id,$stage_date,$rem_time,$reminder_txt);            
@@ -577,23 +525,19 @@ class Lead extends REST_Controller {
         $this->db->where('resp_id',$tid);
         $this->db->update('query_response',array('notification_id'=>$nid,'subject'=>$reminder_txt));
 
-
              $this->set_response([  
               'status' => true,
               'message' => array(array('error'=>'Successfully Status Changed'))  
                ], REST_Controller::HTTP_OK);
-
             } else {
               $this->set_response([
               'status' => false,
               'message' => array(array('error'=>str_replace(array("\n", "\r"), ' ', strip_tags(validation_errors()))))  
                ], REST_Controller::HTTP_OK);   
             }
-
             
         }
 		
-
       public function move_to_client_post(){ 
         // $this->form_validation->set_rules('expected_date','Expected Date');
        // $this->form_validation->set_rules('conversion_probability','Conversion Probability','required');
@@ -601,11 +545,9 @@ class Lead extends REST_Controller {
         $this->form_validation->set_rules('enquiry_code[]','Enquery Code' ,'required');
         $this->form_validation->set_rules('user_id','User Id' ,'required');
 
-
         if($this->form_validation->run() == true){
             $move_enquiry=$this->input->post('enquiry_code[]');
            
-
             if(!is_array($move_enquiry))
             {
                 $this->set_response([
@@ -619,10 +561,8 @@ class Lead extends REST_Controller {
                $comment=''; 
             }
             if(!empty($move_enquiry)){
-
               $assigner_user_id =  $this->input->post('user_id');
               $assigner_user = $this->User_model->read_by_id($this->input->post('user_id'));          
-
               $convertor_phone = '91'.$assigner_user->s_phoneno;
               
               foreach($move_enquiry as $key){
@@ -632,7 +572,6 @@ class Lead extends REST_Controller {
                 $this->db->update('enquiry');
                  /*
 
-
               $created_by_user_id =   $enq->created_by;
               
               
@@ -641,13 +580,11 @@ class Lead extends REST_Controller {
               $creator_phone = '91'.$phone_no;          
               
               $enq_of_name = $enq->name_prefix.''.$enq->name.' '.$enq->lastname;
-
               $notification_msg = sprintf($this->lang->line('enquiry_converted_to_lead'),trim($enq_of_name));
         
               $this->Message_models->sendwhatsapp($convertor_phone,$notification_msg);
               
               $this->Message_models->sendwhatsapp($creator_phone,$notification_msg);              
-
               $this->Leads_Model->add_comment_for_events_api($notification_msg,$enq->Enquery_id,$assigner_user_id);             
               
               $insert_id = $this->Leads_Model->LeadAdd($data);
@@ -674,12 +611,10 @@ class Lead extends REST_Controller {
         
  
       }
-
       public function user_boq_post(){ // assign lead BOQ users
         $user_list =  $this->User_model->read();
         $user_list_array = array();
         
-
         foreach ($user_list as $user) { 
           if (!empty($user->user_permissions)) {
             $module=explode(',',$user->user_permissions);
@@ -688,7 +623,6 @@ class Lead extends REST_Controller {
             $user_list_array[] = array('user_id'=>$user->pk_i_admin_id,'name'=>$user->s_display_name.' '.$user->last_name);           
           } 
         }
-
         $this->set_response([
                 'status' => true,
                 'boq_users' => $user_list_array  
@@ -702,17 +636,11 @@ class Lead extends REST_Controller {
             $this->form_validation->set_rules('client_code','Client Code' ,'required');
             $this->form_validation->set_rules('user_id','User Id' ,'required');
 
-
-
             if($this->form_validation->run() == true){
-
             //////////////// Insert Lead Data Into Client Table ///////////////////////
               $key = $this->input->post('client_code');
-
               $key = $this->Leads_Model->get_leadListDetailsby_code($key)->lid;
-
               $lead = $this->Leads_Model->get_leadListDetailsby_ledsonly($key);
-
         
               if($lead->lead_stage>=8){
                 $data = array(
@@ -726,14 +654,11 @@ class Lead extends REST_Controller {
                 'create_by' => $this->session->user_id,
                 'cl_status' => '1'
                 );
-
                
                $insert_id = $this->Leads_Model->ClientMove($data);
-
                $this->db->set('lead_stage','Account');
                $this->db->where('lid',$key);
                $this->db->update('allleads');
-
                $data['enquiry'] = $this->Leads_Model->get_leadListDetailsby_ledsonly($key);
                $lead_code = $data['enquiry']->lead_code;
                $this->Leads_Model->add_comment_for_events('Converted to clients',$lead_code);
@@ -744,7 +669,6 @@ class Lead extends REST_Controller {
              
                $to = $lead->ld_email;
             
-
                $custype=  $this->enquiry_model->get_custemertype($lead_code);
                if($custype->num_rows()>0){
                 $phone ='91'.$lead->ld_mobile;
@@ -770,7 +694,6 @@ class Lead extends REST_Controller {
               }else{
                   $phone ='91'.$lead->ld_mobile;
                   $message = "Congratulations and Welcome on board as Authorized Channel Partner. We highly value your association and look forward to a long lasting and profitable business relationship with you. We appreciate your  business and look forward to serve you well with our innovative products and world class services. For any query or complaints kindly reach out to us at +91-8010-600-200 or write to us at support@osum.in . Once again a very warm welcome to the OSUM family - Associating with you is an OSUM feeling.";
-
                   $this->Message_models->smssend($phone,$message); 
                   $this->Message_models->sendwhatsapp($phone,$message);
                   
@@ -811,12 +734,9 @@ class Lead extends REST_Controller {
           }          
         }
 
-
 public function get_enq_post(){
-
 $compid = $this->input->post('comp_id');
       if(!empty($compid)){
-
         $arr_basic = array();
     
         $result = $this->sync_model->all_enquiry1($compid);
@@ -824,13 +744,10 @@ $compid = $this->input->post('comp_id');
         // $extra_result = $this->sync_model->all_enquiry_extra1($compid);
         // $res['extra'] = $extra_result->result_array();
 
-
     foreach ($result as $key => $value) {
-
       foreach ($res as $key => $value1) {
         
       
-
         array_push($arr_basic,array('nameprefix'=>$value->name_prefix,'firstname'=>$value->name,'Mobile No.'=>$value->phone,'Email Address'=>$value->email,'Enquiry Source'=>$value->lead_name,'state'=>$value->stname,'city'=>$value->ciname,'Adress'=>$value->address,'Pin Code'=>$value->fvalue ,'Sub Source'=>$value->sub_source,'DOB'=>$value->fvalue,'Occupation'=>$value->fvalue,'Credit Score Doc'=>$value->fvalue,'Score'=>$value->fvalue ));
       
     }
@@ -848,6 +765,5 @@ $compid = $this->input->post('comp_id');
              ], REST_Controller::HTTP_OK);
     }
 }
-
 
 }

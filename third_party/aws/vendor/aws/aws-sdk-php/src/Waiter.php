@@ -1,21 +1,17 @@
 <?php
 namespace Aws;
-
 use Aws\Exception\AwsException;
 use GuzzleHttp\Promise;
 use GuzzleHttp\Promise\PromisorInterface;
 use GuzzleHttp\Promise\RejectedPromise;
-
 /**
  * "Waiters" are associated with an AWS resource (e.g., EC2 instance), and poll
  * that resource and until it is in a particular state.
-
  * The Waiter object produces a promise that is either a.) resolved once the
  * waiting conditions are met, or b.) rejected if the waiting conditions cannot
  * be met or has exceeded the number of allowed attempts at meeting the
  * conditions. You can use waiters in a blocking or non-blocking way, depending
  * on whether you call wait() on the promise.
-
  * The configuration for the waiter must include information about the operation
  * and the conditions for wait completion.
  */
@@ -23,19 +19,14 @@ class Waiter implements PromisorInterface
 {
     /** @var AwsClientInterface Client used to execute each attempt. */
     private $client;
-
     /** @var string Name of the waiter. */
     private $name;
-
     /** @var array Params to use with each attempt operation. */
     private $args;
-
     /** @var array Waiter configuration. */
     private $config;
-
     /** @var array Default configuration options. */
     private static $defaults = ['initDelay' => 0, 'before' => null];
-
     /** @var array Required configuration options. */
     private static $required = [
         'acceptors',
@@ -43,7 +34,6 @@ class Waiter implements PromisorInterface
         'maxAttempts',
         'operation',
     ];
-
     /**
      * The array of configuration options include:
      *
@@ -69,7 +59,6 @@ class Waiter implements PromisorInterface
         $this->client = $client;
         $this->name = $name;
         $this->args = $args;
-
         // Prepare and validate config.
         $this->config = $config + self::$defaults;
         foreach (self::$required as $key) {
@@ -85,7 +74,6 @@ class Waiter implements PromisorInterface
             );
         }
     }
-
     public function promise()
     {
         return Promise\coroutine(function () {
@@ -102,7 +90,6 @@ class Waiter implements PromisorInterface
                 } catch (AwsException $e) {
                     $result = $e;
                 }
-
                 // Determine the waiter's state and what to do next.
                 $state = $this->determineState($result);
                 if ($state === 'success') {
@@ -124,7 +111,6 @@ class Waiter implements PromisorInterface
             }
         });
     }
-
     /**
      * Gets the operation arguments for the attempt, including the delay.
      *
@@ -135,7 +121,6 @@ class Waiter implements PromisorInterface
     private function getArgsForAttempt($attempt)
     {
         $args = $this->args;
-
         // Determine the delay.
         $delay = ($attempt === 1)
             ? $this->config['initDelay']
@@ -143,16 +128,13 @@ class Waiter implements PromisorInterface
         if (is_callable($delay)) {
             $delay = $delay($attempt);
         }
-
         // Set the delay. (Note: handlers except delay in milliseconds.)
         if (!isset($args['@http'])) {
             $args['@http'] = [];
         }
         $args['@http']['delay'] = $delay * 1000;
-
         return $args;
     }
-
     /**
      * Determines the state of the waiter attempt, based on the result of
      * polling the resource. A waiter can have the state of "success", "failed",
@@ -170,10 +152,8 @@ class Waiter implements PromisorInterface
                 return $acceptor['state'];
             }
         }
-
         return $result instanceof \Exception ? 'failed' : 'retry';
     }
-
     /**
      * @param Result $result   Result or exception.
      * @param array  $acceptor Acceptor configuration being checked.
@@ -186,7 +166,6 @@ class Waiter implements PromisorInterface
             ? false
             : $acceptor['expected'] == $result->search($acceptor['argument']);
     }
-
     /**
      * @param Result $result   Result or exception.
      * @param array  $acceptor Acceptor configuration being checked.
@@ -198,17 +177,14 @@ class Waiter implements PromisorInterface
         if (!($result instanceof ResultInterface)) {
             return false;
         }
-
         $actuals = $result->search($acceptor['argument']) ?: [];
         foreach ($actuals as $actual) {
             if ($actual != $acceptor['expected']) {
                 return false;
             }
         }
-
         return true;
     }
-
     /**
      * @param Result $result   Result or exception.
      * @param array  $acceptor Acceptor configuration being checked.
@@ -220,11 +196,9 @@ class Waiter implements PromisorInterface
         if (!($result instanceof ResultInterface)) {
             return false;
         }
-
         $actuals = $result->search($acceptor['argument']) ?: [];
         return in_array($acceptor['expected'], $actuals);
     }
-
     /**
      * @param Result $result   Result or exception.
      * @param array  $acceptor Acceptor configuration being checked.
@@ -236,14 +210,11 @@ class Waiter implements PromisorInterface
         if ($result instanceof ResultInterface) {
             return $acceptor['expected'] == $result['@metadata']['statusCode'];
         }
-
         if ($result instanceof AwsException && $response = $result->getResponse()) {
             return $acceptor['expected'] == $response->getStatusCode();
         }
-
         return false;
     }
-
     /**
      * @param Result $result   Result or exception.
      * @param array  $acceptor Acceptor configuration being checked.
@@ -256,7 +227,6 @@ class Waiter implements PromisorInterface
             return $result->isConnectionError()
                 || $result->getAwsErrorCode() == $acceptor['expected'];
         }
-
         return false;
     }
 }

@@ -1,8 +1,6 @@
 <?php
 namespace Aws\imagebuilder;
-
 use Aws\AwsClient;
-
 /**
  * This client is used to interact with the **EC2 Image Builder** service.
  * @method \Aws\Result cancelImageCreation(array $args = [])

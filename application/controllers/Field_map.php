@@ -1,12 +1,8 @@
 <?php
-
 defined('BASEPATH') OR exit('No direct script access allowed');
-
 class Field_map extends CI_Controller {
-
     public function __construct() {
         parent::__construct();
-
         $this->load->model(array(            
             'map_model'
         ));
@@ -24,7 +20,6 @@ class Field_map extends CI_Controller {
     public function map_model_content(){        
         
         $this->form_validation->set_rules('id','Id','trim|required');            
-
         if ($this->form_validation->run() == TRUE) {
             $id    =   $this->input->post('id');
 			$mspsid= $this->map_model->get_users_map_feed($id);
@@ -41,5 +36,4 @@ class Field_map extends CI_Controller {
             echo json_encode(array('status'=>false,'msg'=>validation_error()));
         }
     }
-
 }

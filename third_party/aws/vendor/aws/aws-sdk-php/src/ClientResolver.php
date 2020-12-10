@@ -1,6 +1,5 @@
 <?php
 namespace Aws;
-
 use Aws\Api\Validator;
 use Aws\Api\ApiProvider;
 use Aws\Api\Service;
@@ -20,7 +19,6 @@ use Aws\Endpoint\EndpointProvider;
 use Aws\Credentials\CredentialProvider;
 use InvalidArgumentException as IAE;
 use Psr\Http\Message\RequestInterface;
-
 /**
  * @internal Resolves a hash of client arguments to construct a client.
  */
@@ -28,7 +26,6 @@ class ClientResolver
 {
     /** @var array */
     private $argDefinitions;
-
     /** @var array Map of types to a corresponding function */
     private static $typeMap = [
         'resource' => 'is_resource',
@@ -39,7 +36,6 @@ class ClientResolver
         'object'   => 'is_object',
         'array'    => 'is_array',
     ];
-
     private static $defaultArgs = [
         'service' => [
             'type'     => 'value',
@@ -218,7 +214,6 @@ class ClientResolver
             'fn'        => [__CLASS__, '_apply_idempotency_auto_fill']
         ],
     ];
-
     /**
      * Gets an array of default client arguments, each argument containing a
      * hash of the following:
@@ -251,7 +246,6 @@ class ClientResolver
     {
         return self::$defaultArgs;
     }
-
     /**
      * @param array $argDefinitions Client arguments.
      */
@@ -259,7 +253,6 @@ class ClientResolver
     {
         $this->argDefinitions = $argDefinitions;
     }
-
     /**
      * Resolves client configuration options and attached event listeners.
      * Check for missing keys in passed arguments
@@ -295,7 +288,6 @@ class ClientResolver
                     $this->throwRequired($args);
                 }
             }
-
             // Validate the types against the provided value.
             foreach ($a['valid'] as $check) {
                 if (isset(self::$typeMap[$check])) {
@@ -307,23 +299,18 @@ class ClientResolver
                     goto is_valid;
                 }
             }
-
             $this->invalidType($key, $args[$key]);
-
             // Apply the value
             is_valid:
             if (isset($a['fn'])) {
                 $a['fn']($args[$key], $args, $list);
             }
-
             if ($a['type'] === 'config') {
                 $args['config'][$key] = $args[$key];
             }
         }
-
         return $args;
     }
-
     /**
      * Creates a verbose error message for an invalid argument.
      *
@@ -348,17 +335,14 @@ class ClientResolver
             $msg .= '(' . implode('; ', $modifiers) . ')';
         }
         $msg = wordwrap("{$name}: {$msg}", 75, "\n  ");
-
         if ($useRequired && is_callable($arg['required'])) {
             $msg .= "\n\n  ";
             $msg .= str_replace("\n", "\n  ", call_user_func($arg['required'], $args));
         } elseif (isset($arg['doc'])) {
             $msg .= wordwrap("\n\n  {$arg['doc']}", 75, "\n  ");
         }
-
         return $msg;
     }
-
     /**
      * Throw when an invalid type is encountered.
      *
@@ -375,7 +359,6 @@ class ClientResolver
             . $this->getArgMessage($name);
         throw new IAE($msg);
     }
-
     /**
      * Throws an exception for missing required arguments.
      *
@@ -398,13 +381,11 @@ class ClientResolver
         $msg .= implode("\n\n", $missing);
         throw new IAE($msg);
     }
-
     public static function _apply_retries($value, array &$args, HandlerList $list)
     {
         // A value of 0 for the config option disables retries
         if ($value) {
             $config = RetryConfigProvider::unwrap($value);
-
             if ($config->getMode() === 'legacy') {
                 // # of retries is 1 less than # of attempts
                 $decider = RetryMiddleware::createDefaultDecider(
@@ -425,13 +406,11 @@ class ClientResolver
             }
         }
     }
-
     public static function _apply_credentials($value, array &$args)
     {
         if (is_callable($value)) {
             return;
         }
-
         if ($value instanceof CredentialsInterface) {
             $args['credentials'] = CredentialProvider::fromCredentials($value);
         } elseif (is_array($value)
@@ -460,12 +439,10 @@ class ClientResolver
                 . 'key-value pairs, a credentials provider function, or false.');
         }
     }
-
     public static function _default_credential_provider(array $args)
     {
         return CredentialProvider::defaultProvider($args);
     }
-
     public static function _apply_csm($value, array &$args, HandlerList $list)
     {
         if ($value === false) {
@@ -477,7 +454,6 @@ class ClientResolver
             );
             $args['csm'] = $value;
         }
-
         $list->appendBuild(
             ApiCallMonitoringMiddleware::wrap(
                 $args['credentials'],
@@ -487,7 +463,6 @@ class ClientResolver
             ),
             'ApiCallMonitoringMiddleware'
         );
-
         $list->appendAttempt(
             ApiCallAttemptMonitoringMiddleware::wrap(
                 $args['credentials'],
@@ -498,7 +473,6 @@ class ClientResolver
             'ApiCallAttemptMonitoringMiddleware'
         );
     }
-
     public static function _apply_api_provider(callable $value, array &$args)
     {
         $api = new Service(
@@ -510,26 +484,22 @@ class ClientResolver
             ),
             $value
         );
-
         if (
             empty($args['config']['signing_name'])
             && isset($api['metadata']['signingName'])
         ) {
             $args['config']['signing_name'] = $api['metadata']['signingName'];
         }
-
         $args['api'] = $api;
         $args['parser'] = Service::createParser($api);
         $args['error_parser'] = Service::createErrorParser($api->getProtocol(), $api);
     }
-
     public static function _apply_endpoint_provider(callable $value, array &$args)
     {
         if (!isset($args['endpoint'])) {
             $endpointPrefix = isset($args['api']['metadata']['endpointPrefix'])
                 ? $args['api']['metadata']['endpointPrefix']
                 : $args['service'];
-
             // Invoke the endpoint provider and throw if it does not resolve.
             $result = EndpointProvider::resolve($value, [
                 'service' => $endpointPrefix,
@@ -537,9 +507,7 @@ class ClientResolver
                 'scheme'  => $args['scheme'],
                 'options' => self::getEndpointProviderOptions($args),
             ]);
-
             $args['endpoint'] = $result['endpoint'];
-
             if (
                 empty($args['config']['signature_version'])
                 && isset($result['signatureVersion'])
@@ -547,14 +515,12 @@ class ClientResolver
                 $args['config']['signature_version']
                     = $result['signatureVersion'];
             }
-
             if (
                 empty($args['config']['signing_region'])
                 && isset($result['signingRegion'])
             ) {
                 $args['config']['signing_region'] = $result['signingRegion'];
             }
-
             if (
                 empty($args['config']['signing_name'])
                 && isset($result['signingName'])
@@ -563,28 +529,23 @@ class ClientResolver
             }
         }
     }
-
     public static function _apply_endpoint_discovery($value, array &$args) {
         $args['endpoint_discovery'] = $value;
     }
-
     public static function _default_endpoint_discovery_provider(array $args)
     {
         return ConfigurationProvider::defaultProvider($args);
     }
-
     public static function _apply_serializer($value, array &$args, HandlerList $list)
     {
         $list->prependBuild(Middleware::requestBuilder($value), 'builder');
     }
-
     public static function _apply_debug($value, array &$args, HandlerList $list)
     {
         if ($value !== false) {
             $list->interpose(new TraceMiddleware($value === true ? [] : $value));
         }
     }
-
     public static function _apply_stats($value, array &$args, HandlerList $list)
     {
         // Create an array of stat collectors that are disabled (set to false)
@@ -597,23 +558,19 @@ class ClientResolver
         $args['stats'] = is_array($value)
             ? array_replace($defaults, $value)
             : $defaults;
-
         if ($args['stats']['timer']) {
             $list->prependInit(Middleware::timer(), 'timer');
         }
     }
-
     public static function _apply_profile($_, array &$args)
     {
         $args['credentials'] = CredentialProvider::ini($args['profile']);
     }
-
     public static function _apply_validate($value, array &$args, HandlerList $list)
     {
         if ($value === false) {
             return;
         }
-
         $validator = $value === true
             ? new Validator()
             : new Validator($value);
@@ -622,12 +579,10 @@ class ClientResolver
             'validation'
         );
     }
-
     public static function _apply_handler($value, array &$args, HandlerList $list)
     {
         $list->setHandler($value);
     }
-
     public static function _default_handler(array &$args)
     {
         return new WrappedHttpHandler(
@@ -638,7 +593,6 @@ class ClientResolver
             $args['stats']['http']
         );
     }
-
     public static function _apply_http_handler($value, array &$args, HandlerList $list)
     {
         $args['handler'] = new WrappedHttpHandler(
@@ -649,21 +603,17 @@ class ClientResolver
             $args['stats']['http']
         );
     }
-
     public static function _apply_user_agent($value, array &$args, HandlerList $list)
     {
         if (!is_array($value)) {
             $value = [$value];
         }
-
         $value = array_map('strval', $value);
-
         if (defined('HHVM_VERSION')) {
             array_unshift($value, 'HHVM/' . HHVM_VERSION);
         }
         array_unshift($value, 'aws-sdk-php/' . Sdk::VERSION);
         $args['ua_append'] = $value;
-
         $list->appendBuild(static function (callable $handler) use ($value) {
             return function (
                 CommandInterface $command,
@@ -679,7 +629,6 @@ class ClientResolver
             };
         });
     }
-
     public static function _apply_endpoint($value, array &$args, HandlerList $list)
     {
         $parts = parse_url($value);
@@ -688,10 +637,8 @@ class ClientResolver
                 'Endpoints must be full URIs and include a scheme and host'
             );
         }
-
         $args['endpoint'] = $value;
     }
-
     public static function _apply_idempotency_auto_fill(
         $value,
         array &$args,
@@ -700,14 +647,12 @@ class ClientResolver
         $enabled = false;
         $generator = null;
 
-
         if (is_bool($value)) {
             $enabled = $value;
         } elseif (is_callable($value)) {
             $enabled = true;
             $generator = $value;
         }
-
         if ($enabled) {
             $list->prependInit(
                 IdempotencyTokenMiddleware::wrap($args['api'], $generator),
@@ -715,14 +660,12 @@ class ClientResolver
             );
         }
     }
-
     public static function _default_endpoint_provider(array $args)
     {
         $options = self::getEndpointProviderOptions($args);
         return PartitionEndpointProvider::defaultProvider($options)
             ->getPartition($args['region'], $args['service']);
     }
-
     public static function _default_serializer(array $args)
     {
         return Service::createSerializer(
@@ -730,72 +673,59 @@ class ClientResolver
             $args['endpoint']
         );
     }
-
     public static function _default_signature_provider()
     {
         return SignatureProvider::defaultProvider();
     }
-
     public static function _default_signature_version(array &$args)
     {
         if (isset($args['config']['signature_version'])) {
             return $args['config']['signature_version'];
         }
-
         $args['__partition_result'] = isset($args['__partition_result'])
             ? isset($args['__partition_result'])
             : call_user_func(PartitionEndpointProvider::defaultProvider(), [
                 'service' => $args['service'],
                 'region' => $args['region'],
             ]);
-
         return isset($args['__partition_result']['signatureVersion'])
             ? $args['__partition_result']['signatureVersion']
             : $args['api']->getSignatureVersion();
     }
-
     public static function _default_signing_name(array &$args)
     {
         if (isset($args['config']['signing_name'])) {
             return $args['config']['signing_name'];
         }
-
         $args['__partition_result'] = isset($args['__partition_result'])
             ? isset($args['__partition_result'])
             : call_user_func(PartitionEndpointProvider::defaultProvider(), [
                 'service' => $args['service'],
                 'region' => $args['region'],
             ]);
-
         if (isset($args['__partition_result']['signingName'])) {
             return $args['__partition_result']['signingName'];
         }
-
         if ($signingName = $args['api']->getSigningName()) {
             return $signingName;
         }
-
         return $args['service'];
     }
-
     public static function _default_signing_region(array &$args)
     {
         if (isset($args['config']['signing_region'])) {
             return $args['config']['signing_region'];
         }
-
         $args['__partition_result'] = isset($args['__partition_result'])
             ? isset($args['__partition_result'])
             : call_user_func(PartitionEndpointProvider::defaultProvider(), [
                 'service' => $args['service'],
                 'region' => $args['region'],
             ]);
-
         return isset($args['__partition_result']['signingRegion'])
             ? $args['__partition_result']['signingRegion']
             : $args['region'];
     }
-
     public static function _missing_version(array $args)
     {
         $service = isset($args['service']) ? $args['service'] : '';
@@ -803,37 +733,30 @@ class ClientResolver
         $versions = implode("\n", array_map(function ($v) {
             return "* \"$v\"";
         }, $versions)) ?: '* (none found)';
-
         return <<<EOT
 A "version" configuration value is required. Specifying a version constraint
 ensures that your code will not be affected by a breaking change made to the
 service. For example, when using Amazon S3, you can lock your API version to
 "2006-03-01".
-
 Your build of the SDK has the following version(s) of "{$service}": {$versions}
-
 You may provide "latest" to the "version" configuration value to utilize the
 most recent available API version that your client's API provider can find.
 Note: Using 'latest' in a production application is not recommended.
-
 A list of available API versions can be found on each client's API documentation
 page: http://docs.aws.amazon.com/aws-sdk-php/v3/api/index.html. If you are
 unable to load a specific API version, then you may need to update your copy of
 the SDK.
 EOT;
     }
-
     public static function _missing_region(array $args)
     {
         $service = isset($args['service']) ? $args['service'] : '';
-
         return <<<EOT
 A "region" configuration value is required for the "{$service}" service
 (e.g., "us-west-2"). A list of available public regions and endpoints can be
 found at http://docs.aws.amazon.com/general/latest/gr/rande.html.
 EOT;
     }
-
     /**
      * Extracts client options for the endpoint provider to its own array
      *

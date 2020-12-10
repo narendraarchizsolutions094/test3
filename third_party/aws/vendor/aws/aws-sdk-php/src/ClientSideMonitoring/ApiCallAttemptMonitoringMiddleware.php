@@ -1,7 +1,5 @@
 <?php
-
 namespace Aws\ClientSideMonitoring;
-
 use Aws\CommandInterface;
 use Aws\Credentials\CredentialsInterface;
 use Aws\Exception\AwsException;
@@ -9,13 +7,11 @@ use Aws\ResponseContainerInterface;
 use Aws\ResultInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-
 /**
  * @internal
  */
 class ApiCallAttemptMonitoringMiddleware extends AbstractMonitoringMiddleware
 {
-
     /**
      * Standard middleware wrapper function with CSM options passed in.
      *
@@ -46,7 +42,6 @@ class ApiCallAttemptMonitoringMiddleware extends AbstractMonitoringMiddleware
             );
         };
     }
-
     /**
      * {@inheritdoc}
      */
@@ -56,7 +51,6 @@ class ApiCallAttemptMonitoringMiddleware extends AbstractMonitoringMiddleware
             'Fqdn' => $request->getUri()->getHost(),
         ];
     }
-
     /**
      * {@inheritdoc}
      */
@@ -118,10 +112,8 @@ class ApiCallAttemptMonitoringMiddleware extends AbstractMonitoringMiddleware
                 'XAmznRequestId' => self::getExceptionHeader($klass, 'x-amzn-RequestId'),
             ];
         }
-
         throw new \InvalidArgumentException('Parameter must be an instance of ResultInterface, AwsException or Exception.');
     }
-
     private static function getResultAttemptLatency(ResultInterface $result)
     {
         if (isset($result['@metadata']['transferStats']['http'])) {
@@ -132,7 +124,6 @@ class ApiCallAttemptMonitoringMiddleware extends AbstractMonitoringMiddleware
         }
         return null;
     }
-
     private static function getResultDestinationIp(ResultInterface $result)
     {
         if (isset($result['@metadata']['transferStats']['http'])) {
@@ -143,7 +134,6 @@ class ApiCallAttemptMonitoringMiddleware extends AbstractMonitoringMiddleware
         }
         return null;
     }
-
     private static function getResultDnsLatency(ResultInterface $result)
     {
         if (isset($result['@metadata']['transferStats']['http'])) {
@@ -154,12 +144,10 @@ class ApiCallAttemptMonitoringMiddleware extends AbstractMonitoringMiddleware
         }
         return null;
     }
-
     private static function getResultHttpStatusCode(ResultInterface $result)
     {
         return $result['@metadata']['statusCode'];
     }
-
     private static function getAwsExceptionAttemptLatency(AwsException $e) {
         $attempt = $e->getTransferInfo();
         if (isset($attempt['total_time'])) {
@@ -167,15 +155,12 @@ class ApiCallAttemptMonitoringMiddleware extends AbstractMonitoringMiddleware
         }
         return null;
     }
-
     private static function getAwsExceptionErrorCode(AwsException $e) {
         return $e->getAwsErrorCode();
     }
-
     private static function getAwsExceptionMessage(AwsException $e) {
         return $e->getAwsErrorMessage();
     }
-
     private static function getAwsExceptionDestinationIp(AwsException $e) {
         $attempt = $e->getTransferInfo();
         if (isset($attempt['primary_ip'])) {
@@ -183,7 +168,6 @@ class ApiCallAttemptMonitoringMiddleware extends AbstractMonitoringMiddleware
         }
         return null;
     }
-
     private static function getAwsExceptionDnsLatency(AwsException $e) {
         $attempt = $e->getTransferInfo();
         if (isset($attempt['namelookup_time'])) {
@@ -191,7 +175,6 @@ class ApiCallAttemptMonitoringMiddleware extends AbstractMonitoringMiddleware
         }
         return null;
     }
-
     private static function getAwsExceptionHttpStatusCode(AwsException $e) {
         $response = $e->getResponse();
         if ($response !== null) {
@@ -199,7 +182,6 @@ class ApiCallAttemptMonitoringMiddleware extends AbstractMonitoringMiddleware
         }
         return null;
     }
-
     private static function getExceptionHttpStatusCode(\Exception $e) {
         if ($e instanceof ResponseContainerInterface) {
             $response = $e->getResponse();
@@ -209,21 +191,18 @@ class ApiCallAttemptMonitoringMiddleware extends AbstractMonitoringMiddleware
         }
         return null;
     }
-
     private static function getExceptionCode(\Exception $e) {
         if (!($e instanceof AwsException)) {
             return get_class($e);
         }
         return null;
     }
-
     private static function getExceptionMessage(\Exception $e) {
         if (!($e instanceof AwsException)) {
             return $e->getMessage();
         }
         return null;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -236,7 +215,6 @@ class ApiCallAttemptMonitoringMiddleware extends AbstractMonitoringMiddleware
         $event['Type'] = 'ApiCallAttempt';
         return $event;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -245,7 +223,6 @@ class ApiCallAttemptMonitoringMiddleware extends AbstractMonitoringMiddleware
         array $event
     ) {
         $event = parent::populateResultEventData($result, $event);
-
         $provider = $this->credentialProvider;
         /** @var CredentialsInterface $credentials */
         $credentials = $provider()->wait();

@@ -1,9 +1,7 @@
 <?php
 namespace JmesPath\Tests\Tree;
-
 use JmesPath\TreeCompiler;
 use PHPUnit\Framework\TestCase;
-
 /**
  * @covers JmesPath\Tree\TreeCompiler
  */

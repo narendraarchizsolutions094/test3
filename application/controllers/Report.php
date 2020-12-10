@@ -74,7 +74,6 @@ class Report extends CI_Controller {
                     $data['to'] = $to1;
                 }
             }
-
             $updated_from = $this->session->userdata('updated_from1');
             $updated_to =  $this->session->userdata('updated_to1');
             
@@ -99,7 +98,6 @@ class Report extends CI_Controller {
                     $data['updated_to'] = $updated_to1;
                 }
             }
-
             if(empty($filters['employee'])){
                 $employe ='';
             }else{
@@ -222,15 +220,12 @@ class Report extends CI_Controller {
               if (in_array('Lead Description', $report_columns)){
                 $row[] = (!empty($repdetails->description)) ? $repdetails->description :"NA"; 
               }
-
               if (in_array('Disposition Remark', $report_columns)){
                 $row[] = (!empty($repdetails->lead_discription_reamrk)) ? $repdetails->lead_discription_reamrk :"NA"; 
               }
-
               if (in_array('Drop Reason', $report_columns)){
                 $row[] = (!empty($repdetails->drop_status)) ? $repdetails->drop_status :"NA"; 
               }
-
               if (in_array('Drop Comment', $report_columns)){
                 $row[] = (!empty($repdetails->drop_reason)) ? $repdetails->drop_reason :"NA"; 
               }
@@ -241,7 +236,6 @@ class Report extends CI_Controller {
                 $row[] = (!empty($repdetails->enq_remark)) ? $repdetails->enq_remark :"NA"; 
               }              
                           
-
               if (in_array('Status', $report_columns)) {
                  if ($repdetails->status == 1) {
                  $status = 'Enquiry';
@@ -327,7 +321,6 @@ class Report extends CI_Controller {
                $to = date("d/m/Y", strtotime($tto)); 
             }
 
-
             if($this->input->post('updated_from_exp')==''){
               $updated_from ='';  
              }else{
@@ -341,7 +334,6 @@ class Report extends CI_Controller {
                 $updated_tto= $this->input->post('updated_to_exp');
                 $updated_to = date("d/m/Y", strtotime($updated_tto)); 
              }
-
             if($this->input->post('employee')==''){
                 $employe ='';
             }else{
@@ -398,7 +390,6 @@ class Report extends CI_Controller {
             }else{
                $lead_subsource = $this->input->post('lead_subsource');
             }
-
             if($this->input->post('sub_disposition')==''){  
                 $sub_disposition = '';
             }else{
@@ -406,7 +397,6 @@ class Report extends CI_Controller {
             }
             
             
-
             if($this->input->post('enq_product')==''){
                 $enq_product = '';
             }else{
@@ -422,7 +412,6 @@ class Report extends CI_Controller {
             }else{
                $drop_status = $this->input->post('drop_status');
             }
-
             if($this->input->post('hier_wise')==''){
                 $hier_wise = '';
             }else{
@@ -479,7 +468,6 @@ class Report extends CI_Controller {
         $this->load->model('User_model');
         //$data['employee'] =$this->User_model->companey_users();
         $data['employee'] = $this->User_model->read();
-
         $data['process'] = $this->dash_model->product_list();
         $data["dfields"] = $this->report_model->get_dynfields(); 
       
@@ -495,9 +483,7 @@ class Report extends CI_Controller {
         $dfields    = $this->report_model->get_dynfields();
         $fieldsval  = $this->report_model->getdynfielsval();  
         $this->load->model('report_datatable_model');
-
         $no = $_POST['start'];
-
         $from = $this->session->userdata('from1');
         $to= $this->session->userdata('to1');
         $employe = $this->session->userdata('employe1');
@@ -569,16 +555,12 @@ class Report extends CI_Controller {
                 $row[] = (!empty($repdetails->description)) ? $repdetails->description :"NA"; 
               }
 
-
-
               if (in_array('Disposition Remark', $this->session->userdata('post_report_columns'))){
                 $row[] = (!empty($repdetails->lead_discription_reamrk)) ? $repdetails->lead_discription_reamrk :"NA"; 
               }
-
               if (in_array('Drop Reason', $this->session->userdata('post_report_columns'))){
                 $row[] = (!empty($repdetails->drop_status)) ? $repdetails->drop_status :"NA"; 
               }
-
               if (in_array('Drop Comment', $this->session->userdata('post_report_columns'))){
                 $row[] = (!empty($repdetails->drop_reason)) ? $repdetails->drop_reason :"NA"; 
               }
@@ -588,8 +570,6 @@ class Report extends CI_Controller {
               if (in_array('Remark', $this->session->userdata('post_report_columns'))){
                 $row[] = (!empty($repdetails->enq_remark)) ? $repdetails->enq_remark :"NA"; 
               }              
-
-
 
               if (in_array('Status', $this->session->userdata('post_report_columns'))) {
                  if ($repdetails->status == 1) {
@@ -622,7 +602,6 @@ class Report extends CI_Controller {
                if (in_array('Product', $this->session->userdata('post_report_columns'))){
                   $row[] = (!empty($repdetails->enq_product_name)) ? $repdetails->enq_product_name:'NA';
                }
-
                if (in_array('Enquiry Id', $this->session->userdata('post_report_columns'))){
                 $row[] = (!empty($repdetails->Enquery_id)) ? $repdetails->Enquery_id:'NA';
               }
@@ -712,30 +691,23 @@ class Report extends CI_Controller {
     public function funnel_reports() {
         echo json_encode($this->report_model->funnel_report());
     }
-
     public function ticket_report()
     {
         $this->load->model(array('Ticket_Model','Datasource_model','dash_model','enquiry_model','report_model','Leads_Model','User_model'));
     
-
         if (isset($_SESSION['ticket_filters_sess']) && empty($_POST))
           unset($_SESSION['ticket_filters_sess']);
-
         $data['sourse'] = $this->report_model->all_source();
         $data['title'] = "Ticket Report";
-
         $data["tickets"] = $this->Ticket_Model->getall();
         //print_r($data['tickets']); exit();
         $data['created_bylist'] = $this->User_model->read();
         $data['products'] = $this->dash_model->get_user_product_list();
         $data['prodcntry_list'] = $this->enquiry_model->get_user_productcntry_list();
         $data['problem'] = $this->Ticket_Model->get_sub_list();
-
         
         $data['stage'] =  $this->Leads_Model->stage_by_type(4);
-
         $data['sub_stage'] = $this->Leads_Model->find_description();
-
         $data['ticket_status'] = $this->Ticket_Model->ticket_status()->result();
         
         $data['dfields'] = $this->enquiry_model->getformfield(2);
@@ -746,5 +718,4 @@ class Report extends CI_Controller {
         $data['content'] = $this->load->view('reports/ticket_report', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }
-
 }

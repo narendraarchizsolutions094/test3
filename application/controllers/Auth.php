@@ -4,24 +4,18 @@ class Auth extends CI_Controller {
 	public function __construct(){
 		parent::__construct();		
 		$this->lang->load("activitylogmsg","english");
-
 	}
-
 	public function signup_content(){		
 		$data['c']	=	$this->input->post('c');
 		$this->load->view('signup',$data);		
 	}
 	public function signup(){
         $this->form_validation->set_rules('name', display('email'), 'required');
-
         $this->form_validation->set_rules('mobile', display('mobile'), 'required|is_unique[tbl_admin.s_phoneno]', array('is_unique' => 'Mobile no already exist'));
         
         $this->form_validation->set_rules('email', display('email'), 'required|is_unique[tbl_admin.s_user_email]', array('is_unique' => 'Email address already exist'));
-
         $this->form_validation->set_rules('password',display('password'),"trim|required");
-
         $this->form_validation->set_rules('confirm_password',display('confirm_password'),"trim|required|matches[password]");
-
         $name	=	$this->input->post('name');
         $mobile	=	$this->input->post('mobile');
         $email	=	$this->input->post('email');
@@ -61,11 +55,9 @@ class Auth extends CI_Controller {
 			$this->load->model('enquiry_model');
 			$user_id	=	$this->user_model->create($postData);
 			$enq_code   = 	get_enquery_code();
-
 			$name 		= explode(' ', $name);
 			$fname   = !empty($name[0])?$name[0]:'';
 			$lname   = !empty($name[1])?$name[1]:'';
-
 			$enq_data 	= 	array(
 								'Enquery_id' => $enq_code,
 								'name'		 => $fname,
@@ -77,7 +69,6 @@ class Auth extends CI_Controller {
 								'product_id' => $enq_process,
 								'created_by' => $enq_created_by								
 							);
-
 			$insert_id = $this->enquiry_model->create($enq_data);			
 			if ($insert_id) {
 				$this->load->model('Leads_Model');                                				                

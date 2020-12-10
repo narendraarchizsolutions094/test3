@@ -1,17 +1,14 @@
 <?php
 namespace Aws\CloudFront;
-
 use GuzzleHttp\Psr7;
 use GuzzleHttp\Psr7\Uri;
 use Psr\Http\Message\UriInterface;
-
 /**
  * Creates signed URLs for Amazon CloudFront resources.
  */
 class UrlSigner
 {
     private $signer;
-
     /**
      * @param $keyPairId  string ID of the key pair
      * @param $privateKey string Path to the private key used for signing
@@ -23,7 +20,6 @@ class UrlSigner
     {
         $this->signer = new Signer($keyPairId, $privateKey);
     }
-
     /**
      * Create a signed Amazon CloudFront URL.
      *
@@ -49,11 +45,9 @@ class UrlSigner
     {
         // Determine the scheme of the url
         $urlSections = explode('://', $url);
-
         if (count($urlSections) < 2) {
             throw new \InvalidArgumentException("Invalid URL: {$url}");
         }
-
         // Get the real scheme by removing wildcards from the scheme
         $scheme = str_replace('*', '', $urlSections[0]);
         $uri = new Uri($scheme . '://' . $urlSections[1]);
@@ -66,24 +60,19 @@ class UrlSigner
         $uri = $uri->withQuery(
             http_build_query($query + $signature, null, '&', PHP_QUERY_RFC3986)
         );
-
         return $scheme === 'rtmp'
             ? $this->createRtmpUrl($uri)
             : (string) $uri;
     }
-
     private function createRtmpUrl(UriInterface $uri)
     {
         // Use a relative URL when creating Flash player URLs
         $result = ltrim($uri->getPath(), '/');
-
         if ($query = $uri->getQuery()) {
             $result .= '?' . $query;
         }
-
         return $result;
     }
-
     /**
      * @param $scheme
      * @param $url
@@ -104,15 +93,12 @@ class UrlSigner
                     $pathParts['dirname'] . '/' . $pathParts['basename'],
                     '/'
                 );
-
                 // Add a query string if present.
                 if (isset($parts['query'])) {
                     $resource .= "?{$parts['query']}";
                 }
-
                 return $resource;
         }
-
         throw new \InvalidArgumentException("Invalid URI scheme: {$scheme}. "
             . "Scheme must be one of: http, https, or rtmp");
     }

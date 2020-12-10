@@ -1,7 +1,5 @@
 <?php
-
 namespace GuzzleHttp\Psr7;
-
 final class Rfc7230
 {
     /**

@@ -1,14 +1,10 @@
 <?php
-
 namespace Sabberworm\CSS\Value;
-
 use Sabberworm\CSS\Parsing\ParserState;
 use Sabberworm\CSS\Parsing\UnexpectedTokenException;
-
 class CalcFunction extends CSSFunction {
 	const T_OPERAND  = 1;
 	const T_OPERATOR = 2;
-
 	public static function parse(ParserState $oParserState) {
 		$aOperators = array('+', '-', '*', '/');
 		$sFunction = trim($oParserState->consumeUntil('(', false, true));
@@ -58,5 +54,4 @@ class CalcFunction extends CSSFunction {
 		$oParserState->consume(')');
 		return new CalcFunction($sFunction, $oList, ',', $oParserState->currentLine());
 	}
-
 }

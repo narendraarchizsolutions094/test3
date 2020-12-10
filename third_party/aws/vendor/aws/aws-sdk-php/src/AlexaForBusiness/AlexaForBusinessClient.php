@@ -1,8 +1,6 @@
 <?php
 namespace Aws\AlexaForBusiness;
-
 use Aws\AwsClient;
-
 /**
  * This client is used to interact with the **Alexa For Business** service.
  * @method \Aws\Result approveSkill(array $args = [])

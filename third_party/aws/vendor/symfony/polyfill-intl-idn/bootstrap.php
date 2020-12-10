@@ -1,5 +1,4 @@
 <?php
-
 /*
  * This file is part of the Symfony package.
  *
@@ -8,9 +7,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 use Symfony\Polyfill\Intl\Idn as p;
-
 if (!defined('IDNA_DEFAULT')) {
     define('U_IDNA_PROHIBITED_ERROR', 66560);
     define('U_IDNA_ERROR_START', 66560);
@@ -49,7 +46,6 @@ if (!defined('IDNA_DEFAULT')) {
     define('IDNA_ERROR_BIDI', 2048);
     define('IDNA_ERROR_CONTEXTJ', 4096);
 }
-
 if (!function_exists('idn_to_ascii')) {
     if (PHP_VERSION_ID < 70400) {
         function idn_to_ascii($domain, $options = IDNA_DEFAULT, $variant = INTL_IDNA_VARIANT_2003, &$idna_info = array()) { return p\Idn::idn_to_ascii($domain, $options, $variant, $idna_info); }

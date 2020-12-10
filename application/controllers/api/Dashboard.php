@@ -7,7 +7,6 @@ class Dashboard extends REST_Controller {
     function __construct(){
         parent::__construct();
     }
-
     public function dashboard_post()
     {
         $user_id = $this->input->post('user_id');
@@ -17,7 +16,6 @@ class Dashboard extends REST_Controller {
         {
             $process = implode(',',$process_id);
         }
-
 
         $this->load->model('enquiry_model');
         $funneldata = $this->enquiry_model->all_enqueries_api($user_id,$company_id,$process);

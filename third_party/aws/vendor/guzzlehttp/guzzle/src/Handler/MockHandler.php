@@ -1,6 +1,5 @@
 <?php
 namespace GuzzleHttp\Handler;
-
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Promise\PromiseInterface;
@@ -8,7 +7,6 @@ use GuzzleHttp\Promise\RejectedPromise;
 use GuzzleHttp\TransferStats;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-
 /**
  * Handler that returns responses or throw exceptions from a queue.
  */
@@ -19,7 +17,6 @@ class MockHandler implements \Countable
     private $lastOptions;
     private $onFulfilled;
     private $onRejected;
-
     /**
      * Creates a new MockHandler that uses the default handler stack list of
      * middlewares.
@@ -37,7 +34,6 @@ class MockHandler implements \Countable
     ) {
         return HandlerStack::create(new self($queue, $onFulfilled, $onRejected));
     }
-
     /**
      * The passed in value must be an array of
      * {@see Psr7\Http\Message\ResponseInterface} objects, Exceptions,
@@ -54,26 +50,21 @@ class MockHandler implements \Countable
     ) {
         $this->onFulfilled = $onFulfilled;
         $this->onRejected = $onRejected;
-
         if ($queue) {
             call_user_func_array([$this, 'append'], $queue);
         }
     }
-
     public function __invoke(RequestInterface $request, array $options)
     {
         if (!$this->queue) {
             throw new \OutOfBoundsException('Mock queue is empty');
         }
-
         if (isset($options['delay']) && is_numeric($options['delay'])) {
             usleep($options['delay'] * 1000);
         }
-
         $this->lastRequest = $request;
         $this->lastOptions = $options;
         $response = array_shift($this->queue);
-
         if (isset($options['on_headers'])) {
             if (!is_callable($options['on_headers'])) {
                 throw new \InvalidArgumentException('on_headers must be callable');
@@ -85,15 +76,12 @@ class MockHandler implements \Countable
                 $response = new RequestException($msg, $request, $response, $e);
             }
         }
-
         if (is_callable($response)) {
             $response = call_user_func($response, $request, $options);
         }
-
         $response = $response instanceof \Exception
             ? \GuzzleHttp\Promise\rejection_for($response)
             : \GuzzleHttp\Promise\promise_for($response);
-
         return $response->then(
             function ($value) use ($request, $options) {
                 $this->invokeStats($request, $options, $value);
@@ -103,7 +91,6 @@ class MockHandler implements \Countable
                 if (isset($options['sink'])) {
                     $contents = (string) $value->getBody();
                     $sink = $options['sink'];
-
                     if (is_resource($sink)) {
                         fwrite($sink, $contents);
                     } elseif (is_string($sink)) {
@@ -112,7 +99,6 @@ class MockHandler implements \Countable
                         $sink->write($contents);
                     }
                 }
-
                 return $value;
             },
             function ($reason) use ($request, $options) {
@@ -124,7 +110,6 @@ class MockHandler implements \Countable
             }
         );
     }
-
     /**
      * Adds one or more variadic requests, exceptions, callables, or promises
      * to the queue.
@@ -144,7 +129,6 @@ class MockHandler implements \Countable
             }
         }
     }
-
     /**
      * Get the last received request.
      *
@@ -154,7 +138,6 @@ class MockHandler implements \Countable
     {
         return $this->lastRequest;
     }
-
     /**
      * Get the last received request options.
      *
@@ -164,7 +147,6 @@ class MockHandler implements \Countable
     {
         return $this->lastOptions;
     }
-
     /**
      * Returns the number of remaining items in the queue.
      *
@@ -174,12 +156,10 @@ class MockHandler implements \Countable
     {
         return count($this->queue);
     }
-
     public function reset()
     {
         $this->queue = [];
     }
-
     private function invokeStats(
         RequestInterface $request,
         array $options,

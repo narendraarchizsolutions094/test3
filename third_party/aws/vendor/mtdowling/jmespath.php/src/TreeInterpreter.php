@@ -1,6 +1,5 @@
 <?php
 namespace JmesPath;
-
 /**
  * Tree visitor used to evaluates JMESPath AST expressions.
  */
@@ -8,7 +7,6 @@ class TreeInterpreter
 {
     /** @var callable */
     private $fnDispatcher;
-
     /**
      * @param callable $fnDispatcher Function dispatching function that accepts
      *                               a function name argument and an array of
@@ -18,7 +16,6 @@ class TreeInterpreter
     {
         $this->fnDispatcher = $fnDispatcher ?: FnDispatcher::getInstance();
     }
-
     /**
      * Visits each node in a JMESPath AST and returns the evaluated result.
      *
@@ -31,7 +28,6 @@ class TreeInterpreter
     {
         return $this->dispatch($node, $data);
     }
-
     /**
      * Recursively traverses an AST using depth-first, pre-order traversal.
      * The evaluation logic for each node type is embedded into a large switch
@@ -41,9 +37,7 @@ class TreeInterpreter
     private function dispatch(array $node, $value)
     {
         $dispatcher = $this->fnDispatcher;
-
         switch ($node['type']) {
-
             case 'field':
                 if (is_array($value) || $value instanceof \ArrayAccess) {
                     return isset($value[$node['value']]) ? $value[$node['value']] : null;
@@ -51,13 +45,11 @@ class TreeInterpreter
                     return isset($value->{$node['value']}) ? $value->{$node['value']} : null;
                 }
                 return null;
-
             case 'subexpression':
                 return $this->dispatch(
                     $node['children'][1],
                     $this->dispatch($node['children'][0], $value)
                 );
-
             case 'index':
                 if (!Utils::isArray($value)) {
                     return null;
@@ -66,7 +58,6 @@ class TreeInterpreter
                     ? $node['value']
                     : $node['value'] + count($value);
                 return isset($value[$idx]) ? $value[$idx] : null;
-
             case 'projection':
                 $left = $this->dispatch($node['children'][0], $value);
                 switch ($node['from']) {
@@ -85,7 +76,6 @@ class TreeInterpreter
                             return null;
                         }
                 }
-
                 $collected = [];
                 foreach ((array) $left as $val) {
                     $result = $this->dispatch($node['children'][1], $val);
@@ -93,17 +83,13 @@ class TreeInterpreter
                         $collected[] = $result;
                     }
                 }
-
                 return $collected;
-
             case 'flatten':
                 static $skipElement = [];
                 $value = $this->dispatch($node['children'][0], $value);
-
                 if (!Utils::isArray($value)) {
                     return null;
                 }
-
                 $merged = [];
                 foreach ($value as $values) {
                     // Only merge up arrays lists and not hashes
@@ -113,55 +99,43 @@ class TreeInterpreter
                         $merged[] = $values;
                     }
                 }
-
                 return $merged;
-
             case 'literal':
                 return $node['value'];
-
             case 'current':
                 return $value;
-
             case 'or':
                 $result = $this->dispatch($node['children'][0], $value);
                 return Utils::isTruthy($result)
                     ? $result
                     : $this->dispatch($node['children'][1], $value);
-
             case 'and':
                 $result = $this->dispatch($node['children'][0], $value);
                 return Utils::isTruthy($result)
                     ? $this->dispatch($node['children'][1], $value)
                     : $result;
-
             case 'not':
                 return !Utils::isTruthy(
                     $this->dispatch($node['children'][0], $value)
                 );
-
             case 'pipe':
                 return $this->dispatch(
                     $node['children'][1],
                     $this->dispatch($node['children'][0], $value)
                 );
-
             case 'multi_select_list':
                 if ($value === null) {
                     return null;
                 }
-
                 $collected = [];
                 foreach ($node['children'] as $node) {
                     $collected[] = $this->dispatch($node, $value);
                 }
-
                 return $collected;
-
             case 'multi_select_hash':
                 if ($value === null) {
                     return null;
                 }
-
                 $collected = [];
                 foreach ($node['children'] as $node) {
                     $collected[$node['value']] = $this->dispatch(
@@ -169,9 +143,7 @@ class TreeInterpreter
                         $value
                     );
                 }
-
                 return $collected;
-
             case 'comparator':
                 $left = $this->dispatch($node['children'][0], $value);
                 $right = $this->dispatch($node['children'][1], $value);
@@ -182,19 +154,16 @@ class TreeInterpreter
                 } else {
                     return self::relativeCmp($left, $right, $node['value']);
                 }
-
             case 'condition':
                 return Utils::isTruthy($this->dispatch($node['children'][0], $value))
                     ? $this->dispatch($node['children'][1], $value)
                     : null;
-
             case 'function':
                 $args = [];
                 foreach ($node['children'] as $arg) {
                     $args[] = $this->dispatch($arg, $value);
                 }
                 return $dispatcher($node['value'], $args);
-
             case 'slice':
                 return is_string($value) || Utils::isArray($value)
                     ? Utils::slice(
@@ -203,18 +172,15 @@ class TreeInterpreter
                         $node['value'][1],
                         $node['value'][2]
                     ) : null;
-
             case 'expref':
                 $apply = $node['children'][0];
                 return function ($value) use ($apply) {
                     return $this->visit($apply, $value);
                 };
-
             default:
                 throw new \RuntimeException("Unknown node type: {$node['type']}");
         }
     }
-
     /**
      * @return bool
      */
@@ -223,7 +189,6 @@ class TreeInterpreter
         if (!(is_int($left) || is_float($left)) || !(is_int($right) || is_float($right))) {
             return false;
         }
-
         switch ($cmp) {
             case '>': return $left > $right;
             case '>=': return $left >= $right;

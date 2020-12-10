@@ -1,8 +1,6 @@
 <?php
 namespace Aws\DirectoryService;
-
 use Aws\AwsClient;
-
 /**
  * AWS Directory Service client
  *

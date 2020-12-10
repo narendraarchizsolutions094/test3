@@ -1,6 +1,5 @@
 <?php
 namespace Aws\S3;
-
 use Aws\Api\Parser\PayloadParserTrait;
 use Aws\CommandInterface;
 use Aws\Exception\AwsException;
@@ -10,7 +9,6 @@ use Aws\S3\Exception\S3Exception;
 use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Promise\RejectedPromise;
 use Psr\Http\Message\ResponseInterface;
-
 /**
  * A trait providing S3-specific functionality. This is meant to be used in
  * classes implementing \Aws\S3\S3ClientInterface
@@ -18,7 +16,6 @@ use Psr\Http\Message\ResponseInterface;
 trait S3ClientTrait
 {
     use PayloadParserTrait;
-
     /**
      * @see S3ClientInterface::upload()
      */
@@ -33,7 +30,6 @@ trait S3ClientTrait
             ->uploadAsync($bucket, $key, $body, $acl, $options)
             ->wait();
     }
-
     /**
      * @see S3ClientInterface::uploadAsync()
      */
@@ -47,7 +43,6 @@ trait S3ClientTrait
         return (new ObjectUploader($this, $bucket, $key, $body, $acl, $options))
             ->promise();
     }
-
     /**
      * @see S3ClientInterface::copy()
      */
@@ -62,7 +57,6 @@ trait S3ClientTrait
         return $this->copyAsync($fromB, $fromK, $destB, $destK, $acl, $opts)
             ->wait();
     }
-
     /**
      * @see S3ClientInterface::copyAsync()
      */
@@ -85,11 +79,9 @@ trait S3ClientTrait
             'Bucket' => $destB,
             'Key' => $destK
         ];
-
         return (new ObjectCopier($this, $source, $destination, $acl, $opts))
             ->promise();
     }
-
     /**
      * @see S3ClientInterface::registerStreamWrapper()
      */
@@ -97,7 +89,6 @@ trait S3ClientTrait
     {
         StreamWrapper::register($this);
     }
-
     /**
      * @see S3ClientInterface::deleteMatchingObjects()
      */
@@ -110,7 +101,6 @@ trait S3ClientTrait
         $this->deleteMatchingObjectsAsync($bucket, $prefix, $regex, $options)
             ->wait();
     }
-
     /**
      * @see S3ClientInterface::deleteMatchingObjectsAsync()
      */
@@ -125,20 +115,16 @@ trait S3ClientTrait
                 new \RuntimeException('A prefix or regex is required.')
             );
         }
-
         $params = ['Bucket' => $bucket, 'Prefix' => $prefix];
         $iter = $this->getIterator('ListObjects', $params);
-
         if ($regex) {
             $iter = \Aws\filter($iter, function ($c) use ($regex) {
                 return preg_match($regex, $c['Key']);
             });
         }
-
         return BatchDelete::fromIterator($this, $bucket, $iter, $options)
             ->promise();
     }
-
     /**
      * @see S3ClientInterface::uploadDirectory()
      */
@@ -151,7 +137,6 @@ trait S3ClientTrait
         $this->uploadDirectoryAsync($directory, $bucket, $keyPrefix, $options)
             ->wait();
     }
-
     /**
      * @see S3ClientInterface::uploadDirectoryAsync()
      */
@@ -164,7 +149,6 @@ trait S3ClientTrait
         $d = "s3://$bucket" . ($keyPrefix ? '/' . ltrim($keyPrefix, '/') : '');
         return (new Transfer($this, $directory, $d, $options))->promise();
     }
-
     /**
      * @see S3ClientInterface::downloadBucket()
      */
@@ -177,7 +161,6 @@ trait S3ClientTrait
         $this->downloadBucketAsync($directory, $bucket, $keyPrefix, $options)
             ->wait();
     }
-
     /**
      * @see S3ClientInterface::downloadBucketAsync()
      */
@@ -190,7 +173,6 @@ trait S3ClientTrait
         $s = "s3://$bucket" . ($keyPrefix ? '/' . ltrim($keyPrefix, '/') : '');
         return (new Transfer($this, $s, $directory, $options))->promise();
     }
-
     /**
      * @see S3ClientInterface::determineBucketRegion()
      */
@@ -198,7 +180,6 @@ trait S3ClientTrait
     {
         return $this->determineBucketRegionAsync($bucketName)->wait();
     }
-
     /**
      * @see S3ClientInterface::determineBucketRegionAsync()
      *
@@ -213,7 +194,6 @@ trait S3ClientTrait
         $handlerList->remove('s3.permanent_redirect');
         $handlerList->remove('signer');
         $handler = $handlerList->resolve();
-
         return $handler($command)
             ->then(static function (ResultInterface $result) {
                 return $result['@metadata']['headers']['x-amz-bucket-region'];
@@ -222,7 +202,6 @@ trait S3ClientTrait
                 if ($response === null) {
                     throw $e;
                 }
-
                 if ($e->getAwsErrorCode() === 'AuthorizationHeaderMalformed') {
                     $region = $this->determineBucketRegionFromExceptionBody(
                         $response
@@ -232,11 +211,9 @@ trait S3ClientTrait
                     }
                     throw $e;
                 }
-
                 return $response->getHeaderLine('x-amz-bucket-region');
             });
     }
-
     private function determineBucketRegionFromExceptionBody(ResponseInterface $response)
     {
         try {
@@ -249,7 +226,6 @@ trait S3ClientTrait
         }
         return false;
     }
-
     /**
      * @see S3ClientInterface::doesBucketExist()
      */
@@ -259,7 +235,6 @@ trait S3ClientTrait
             $this->getCommand('HeadBucket', ['Bucket' => $bucket])
         );
     }
-
     /**
      * @see S3ClientInterface::doesObjectExist()
      */
@@ -272,7 +247,6 @@ trait S3ClientTrait
                 ] + $options)
         );
     }
-
     /**
      * Determines whether or not a resource exists using a command
      *
@@ -296,24 +270,20 @@ trait S3ClientTrait
             return false;
         }
     }
-
     /**
      * @see S3ClientInterface::execute()
      */
     abstract public function execute(CommandInterface $command);
-
     /**
      * @see S3ClientInterface::getCommand()
      */
     abstract public function getCommand($name, array $args = []);
-
     /**
      * @see S3ClientInterface::getHandlerList()
      *
      * @return HandlerList
      */
     abstract public function getHandlerList();
-
     /**
      * @see S3ClientInterface::getIterator()
      *

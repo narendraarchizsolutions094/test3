@@ -1,8 +1,6 @@
 <?php
 namespace Aws\ManagedBlockchain;
-
 use Aws\AwsClient;
-
 /**
  * This client is used to interact with the **Amazon Managed Blockchain** service.
  * @method \Aws\Result createMember(array $args = [])

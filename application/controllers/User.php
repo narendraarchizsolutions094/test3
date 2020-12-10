@@ -1,14 +1,10 @@
 <?php
-
 defined('BASEPATH') or exit('No direct script access allowed');
-
 class User extends CI_Controller
 {
-
     public function __construct()
     {
         parent::__construct();
-
         $this->load->model(array(
             'department_model',
             'User_model',
@@ -26,11 +22,9 @@ class User extends CI_Controller
                                      'user.valid_upto',
                                      'tbl_admin.b_status'
                                      );
-
         if (empty($this->session->userdata('isLogIn')))
             redirect('login');
     }
-
     public function index()
     {
         if (!empty($_GET['user_role'])) {
@@ -46,7 +40,6 @@ class User extends CI_Controller
     }
     public function departments()
     {
-
         // print($_GET['search']);
         // die();
        
@@ -60,7 +53,6 @@ class User extends CI_Controller
                 }
             }            
         }
-
         $this->db->select("user.valid_upto,user.user_id,tbl_admin.*,tbl_user_role.user_role as user_role_title");
         $this->db->from('tbl_admin');
         $this->db->join('user', 'user.user_id = tbl_admin.companey_id');
@@ -118,7 +110,6 @@ class User extends CI_Controller
             }elseif($department->b_status == 0){
                 $status='<a style="color:red">Inactive</a>';
             }
-
                 
             $sub = array();
             $sub[] = '<input name="com_id" hidden value="' . $department->companey_id . '"> <input type="checkbox" value="' . $department->pk_i_admin_id . '" id="checkitem" name="user_ids[]"> ' . $i++ . '';
@@ -142,7 +133,6 @@ class User extends CI_Controller
             $this->db->where('tbl_admin.user_type', $_GET['user_role']);
         }
         $iTotalRecords = $this->db->where('tbl_admin.user_type!=', 1)->where('tbl_admin.companey_id', $this->session->companey_id)->count_all_results('tbl_admin');
-
         //print_r($res);
         $output = array(
             "draw" => $_POST['draw'],
@@ -173,7 +163,6 @@ class User extends CI_Controller
         $data['content'] = $this->load->view('user_import', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }
-
     function upload_user()
     {
         if (!is_dir('assets/csv')) {
@@ -201,7 +190,6 @@ class User extends CI_Controller
             $ic = 0;
             while (($filesop = fgetcsv($handle, 1000, ",")) !== false) {
                 if ($c > 0) {
-
                     $firstname  = $filesop[0];
                     $lastname   = $filesop[1];
                     $email      = $filesop[2];
@@ -237,16 +225,13 @@ class User extends CI_Controller
                 $this->session->set_flashdata('message', "" . $ic . " user added successfully");
             }
             unlink(base_url('assets/csv') . $filename);
-
             redirect(base_url() . 'user');
             // echo '<pre>'; print_r ($discCodeArr); print_r ($stateArr); print_r ($cityArr); print_r ($blockArr); die;
         } else {
             $this->session->set_flashdata('error', $this->upload->display_errors());
-
             redirect(base_url() . 'user');
         }
     }
-
     public function company()
     {
         $data['title'] = display('Company');
@@ -255,7 +240,6 @@ class User extends CI_Controller
         $data['content'] = $this->load->view('company_list', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }
-
     public function add_company()
     {
         $data['title'] = display('Company');
@@ -264,7 +248,6 @@ class User extends CI_Controller
         $data['content'] = $this->load->view('company_list', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }
-
     public function channel_partner()
     {
         $data['title'] = display('user_list');
@@ -275,22 +258,18 @@ class User extends CI_Controller
         $data['content'] = $this->load->view('partner_list', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }
-
     public function user_type()
     {
         $data['title'] = display('user_list');
         $data['page_title'] = display('user_function');
         $data['nav1'] = 'nav3';
-
         $this->db->where('use_id!=', 1);
         $this->db->where('comp_id', $this->session->companey_id);
         $data['lead_score'] = $this->db->get('tbl_user_role')->result();
 
-
         $data['content'] = $this->load->view('user_role', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }
-
     public function user_type_add()
     {
         if (!empty($_POST)) {
@@ -320,19 +299,13 @@ class User extends CI_Controller
             $this->load->view('layout/main_wrapper', $data);
         }
     }
-
     public function prepare_hierarchy_nodes($data)
     {
         $nodes = array();
-
         //$nodes[] = array('id'=>1,'pid'=>0,'name'=>'abc','txt'=>'','isCollapsed'=>false,'img'=>'');
-
         $this->db->where_in('pk_i_admin_id', $data);
-
         $user_results    =   $this->db->get('tbl_admin')->result_array();
-
         if (!empty($user_results)) {
-
             foreach ($user_results as $key => $value) {
                 if ($this->session->user_id == $value['pk_i_admin_id']) {
                     $nodes[] = array(
@@ -357,39 +330,28 @@ class User extends CI_Controller
         }
         return $nodes;
     }
-
     public function user_tree()
     {
-
         $data['title'] = 'User Hierarchy';
-
         $this->load->model('common_model');
-
         $data = $this->common_model->get_categories($this->session->user_id);
-
         $nodes    =   $this->prepare_hierarchy_nodes($data);
-
         $data['nodes_data'] = $nodes;
         $data['content'] = $this->load->view('user_hierarchy', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }
-
     public function create()
     {
         // if (user_role('131') == true || user_role('130') == true) {
-
         // } 
-
         $data['page_title'] = display('add_user');
         $this->form_validation->set_rules('Name', display('disolay_name'), 'required');
         $this->form_validation->set_rules('designation', 'designation', 'required');
         $this->form_validation->set_rules('user_type', display('user_type'), 'required');
         //$this->form_validation->set_rules('user_role', display('user_role'), 'required');
         //$this->form_validation->set_rules('modules', display('customer_services'));
-
         $this->form_validation->set_rules('status', display('status'), 'required');
         //$this->form_validation->set_rules('cname', 'Contact person Name ', 'differs[Name]');
-
 
         if (empty($this->input->post('dprt_id'))) {
             $this->form_validation->set_rules('employee_id', display('employee_id'), 'required|is_unique[tbl_admin.employee_id]', array('is_unique' => 'Duplicate Entery For Employee Id '));
@@ -398,9 +360,7 @@ class User extends CI_Controller
             $this->form_validation->set_rules('cell', display('cell'), 'required|is_unique[tbl_admin.s_phoneno]');
         }
 
-
         #-------------------------------#
-
         if (empty($this->input->post('dprt_id'))) {
             $password = md5($this->input->post('password', true));
         } else {
@@ -417,20 +377,17 @@ class User extends CI_Controller
                 350
             );
         }
-
         if ($this->input->post('user_type')) {
             $permission = $this->input->post('user_type');
         } else {
             $permission = '';
         }
-
         $inactive = $this->input->post('status', true);
         if ($inactive == "0") {
             $inactive_date = date("Y-m-d h:i:s");
         } else {
             $inactive_date = '';
         }
-
         $data['department'] = (object) $postData = [
             'pk_i_admin_id' => $this->input->post('dprt_id', true),
             'user_roles' => $this->input->post('user_role', true),
@@ -517,7 +474,6 @@ class User extends CI_Controller
             $data['user_role'] = $this->db->get('tbl_user_role')->result();
             $data['user_list'] = $this->User_model->user_list();
             $data['companey_list'] = $this->User_model->companyList();
-
             $this->load->model('dash_model');
             $data['products'] = $this->dash_model->all_process_list();
             $data['products_list'] = $this->dash_model->all_product_list();
@@ -527,7 +483,6 @@ class User extends CI_Controller
             $this->load->view('layout/main_wrapper', $data);
         }
     }
-
     public function add_partner()
     {
         if (user_role('130') == true) {
@@ -549,7 +504,6 @@ class User extends CI_Controller
             $this->form_validation->set_rules('email', display('email'), 'required|is_unique[tbl_admin.s_user_email]', array('is_unique' => 'Duplicate Entery For email'));
             $this->form_validation->set_rules('password', display('password'), 'required|min_length[8]');
         }
-
         #-------------------------------#
         if (!empty($this->input->post('modules'))) {
             $modules = implode(",", $this->input->post('modules'));
@@ -562,7 +516,6 @@ class User extends CI_Controller
             // $this->session->set_flashdata('exception','password not updated');
             $password = $this->input->post('old_pass', true);
         }
-
         //Upload employee image..
         //picture upload
         $img = $this->fileupload->do_upload(
@@ -577,14 +530,11 @@ class User extends CI_Controller
                 350
             );
         }
-
         if ($this->input->post('user_type')) {
             $permission = $this->input->post('user_type');
         } else {
-
             $permission = '';
         }
-
         $data['department'] = (object) $postData = [
             'pk_i_admin_id' => $this->input->post('dprt_id', true),
             'user_roles' => $this->input->post('user_role', true),
@@ -623,7 +573,6 @@ class User extends CI_Controller
         ];
         #-------------------------------#
         if ($this->form_validation->run() === true) {
-
             #if empty $dprt_id then insert data
             if (empty($this->input->post('dprt_id'))) {
                 if ($this->User_model->create($postData)) {
@@ -662,17 +611,14 @@ class User extends CI_Controller
             $this->load->view('layout/main_wrapper', $data);
         }
     }
-
     public function password_check($str)
     {
         if (preg_match('#[0-9]#', $str) && preg_match('#[a-zA-Z]#', $str)) {
-
             return TRUE;
         }
         $this->form_validation->set_message('password_check', 'Password is invalid formate ');
         return FALSE;
     }
-
     public function partner_edit($id = null)
     {
         $data['title'] = display('edit_user');
@@ -693,7 +639,6 @@ class User extends CI_Controller
         $data['content'] = $this->load->view('partnerfrom', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }
-
     public function edit($id = null)
     {
         $data['title'] = display('edit_user');
@@ -708,10 +653,8 @@ class User extends CI_Controller
         $data['user_role'] = $this->User_model->get_user_role_cid();
         $data['department'] = $this->User_model->read_by_id($id);
         $data['county_list'] = $this->location_model->country();
-
         //echo "<pre>";
         //print_r($data['county_list']);exit();
-
         $this->load->model('dash_model');
         $data['products_list'] = $this->dash_model->all_product_list();
         $data['products'] = $this->dash_model->all_process_list();
@@ -721,7 +664,6 @@ class User extends CI_Controller
         $data['content'] = $this->load->view('user_from', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }
-
     public function delete($dprt_id = null)
     {
         if ($this->User_model->delete($dprt_id)) {
@@ -733,7 +675,6 @@ class User extends CI_Controller
         }
         redirect('user');
     }
-
     public function delete_userrole($user_role = null)
     {
         if (user_role('141') == true) {
@@ -747,14 +688,11 @@ class User extends CI_Controller
         }
         redirect('user/user_type');
     }
-
     public function update_role()
     {
-
         if (!empty($_POST)) {
             $user_type = $this->input->post('user_type');
             $role_id = $this->input->post('role_id');
-
             $this->db->set('user_role', $user_type);
             $this->db->where('use_id', $role_id);
             $this->db->update('tbl_user_role');
@@ -762,14 +700,11 @@ class User extends CI_Controller
             redirect('user/user_type');
         }
     }
-
     public function update_status()
     {
-
         if (!empty($_POST)) {
             $status = $this->input->post('someSwitchOption001');
             $role_id = $this->input->post('role_id');
-
             $this->db->set('status', $status);
             $this->db->where('use_id', $role_id);
             $this->db->update('tbl_user_role');
@@ -777,19 +712,15 @@ class User extends CI_Controller
             redirect('user/user_type');
         }
     }
-
     //Define user Permissions..
     public function permissions()
     {
         $data['title'] = display('user_list');
-
         $this->db->select('id,title');
         $data['modules']    =   $this->db->get('all_modules')->result_array();
-
         $data['content'] = $this->load->view('user_permissions', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }
-
     //Open Edit user role form
     public function edit_user_role($role_id)
     {
@@ -797,14 +728,11 @@ class User extends CI_Controller
         }
         $data['title'] = display('user_list');
         $data['user_role'] = $this->User_model->get_user_role($role_id);
-
         $this->db->select('id,title');
         $data['modules']    =   $this->db->get('all_modules')->result_array();
-
         $data['content'] = $this->load->view('edit_user_role', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }
-
     //Save updated user role data
     public function update_user_role()
     {
@@ -821,8 +749,6 @@ class User extends CI_Controller
         redirect('user/edit_user_role/' . $id);
     }
 
-
-
     public function upload_users()
     {
         ini_set('max_execution_time', '-1');
@@ -836,7 +762,6 @@ class User extends CI_Controller
         $this->load->library('upload', $config);
         $this->upload->initialize($config);
         if ($this->upload->do_upload('user')) {
-
             $upload = $this->upload->data();
             $json['success'] = 1;
             $filePath = $config['upload_path'] . '/' . $upload['file_name'];
@@ -870,11 +795,9 @@ class User extends CI_Controller
                     //$this->db->where('s_user_email',$post_data['s_user_email']);
                     $this->db->where('s_phoneno', $post_data['s_phoneno']);
                     $r    =   $this->db->get('tbl_admin')->row_array();
-
                     /*echo "<pre>";
             print_r($r['s_user_email']);
             echo "</pre>";*/
-
                     if (empty($r) && $post_data['s_phoneno']) {
                         //$this->db->insert('tbl_admin',$post_data);
                         $this->db->set('status', 2);
@@ -901,12 +824,10 @@ class User extends CI_Controller
         echo $c . '<br>';
         echo $u;
         unlink($filePath);
-
         echo "<pre>";
         print_r($post_data);
         echo "</pre>";
         exit();
-
         /*$post_data    =   array(       
             'user_permissions'      => $post_data['user_permissions'],                                                  
             's_password'            => $post_data['password'],
@@ -922,11 +843,8 @@ class User extends CI_Controller
             's_phoneno'             => $post_data['mobile'],
             'process'               => NULL
           );*/
-
         //$this->db->insert('tbl_admin',$post_data);
-
     }
-
     public function bulk_upload_user()
     {
         $data['title']  = 'test';

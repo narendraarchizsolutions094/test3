@@ -12,7 +12,6 @@ class Enquiry extends CI_Controller
         $this->load->library('user_agent');
         $this->lang->load("activitylogmsg", "english"); 
         $apiarr = explode("/", $_SERVER['REQUEST_URI']);
-
         if (in_array("viewapi", $apiarr)) {
         } else if (in_array("viewapi", $apiarr)) {
         } else if (in_array("re_login", $apiarr)) {
@@ -22,16 +21,11 @@ class Enquiry extends CI_Controller
             }
         }
     }
-
     public function add_enquery_comission($enq_code) 
     {
-
         $enq_code = base64_decode($enq_code);
-
         $this->form_validation->set_rules('amtdisb', 'Amount Disbursed', 'trim|required');
-
         if ($this->form_validation->run() == TRUE) {
-
             $amtdisb       =   $this->input->post('amtdisb');
             $comission    =   $this->input->post('comission');
             $dateofpay     =   $this->input->post('dateofpay');
@@ -39,7 +33,6 @@ class Enquiry extends CI_Controller
             $amtpaid          =   $this->input->post('amtpaid');
             $payoutper         =   $this->input->post('payoutper');
             $month         =   $this->input->post('month');
-
 
             $amt_data = array(
                 'Enquiry_code'  => $enq_code,
@@ -60,7 +53,6 @@ class Enquiry extends CI_Controller
                 $ins    =   $this->db->insert('tbl_comission', $amt_data);
                 $msg = ' added successfully';
             }
-
             if ($ins) {
                 echo json_encode(array('status' => true, 'msg' => $msg));
             } else {
@@ -81,14 +73,11 @@ class Enquiry extends CI_Controller
         $content    =   $this->load->view('comission_modal_content', $data, true);
         echo $content;
     }
-
     public function move_to_client()
     {
-
         if (!empty($_POST)) {
             $move_enquiry = $this->input->post('enquiry_id');
             $date = date('d-m-Y H:i:s');
-
             $lead_score = $this->input->post('lead_score');
             $lead_stage = $this->input->post('lead_stage');
             $comment = $this->input->post('comment');
@@ -98,7 +87,6 @@ class Enquiry extends CI_Controller
             } else {
                 $lead_score = '';
             }
-
             if (!empty($lead_stage)) {
                 $lead_stage = $this->input->post('lead_stage');
             } else {
@@ -109,7 +97,6 @@ class Enquiry extends CI_Controller
             } else {
                 $comment = '';
             }
-
             if (!empty($move_enquiry)) {
                 foreach ($move_enquiry as $key) {
                     $enq = $this->enquiry_model->enquiry_by_id($key);
@@ -135,19 +122,15 @@ class Enquiry extends CI_Controller
                     $this->db->set('status', 3);
                     $this->db->where('enquiry_id', $key);
                     $this->db->update('enquiry');
-
                     $this->load->model('rule_model');
                     $this->rule_model->execute_rules($enq->Enquery_id, array(1, 2, 3, 6, 7));
-
                     $this->Leads_Model->add_comment_for_events(display("move_to_client"), $enq->Enquery_id);
                 
                     $insert_id = $this->Leads_Model->LeadAdd($data);
                     //insert follow up counter (3 is for client )
                     $this->enquiry_model->insetFollowupTime($key, 3, $enq->lead_created_date, date('Y-m-d H:i:s'));
 
-
                     if ($this->session->companey_id == 76 || ($this->session->companey_id == 57 && $enq->product_id == 122)) {
-
                         $user_right = '';
                         if ($enq->product_id == 168) {
                             $user_right = 180;
@@ -156,7 +139,6 @@ class Enquiry extends CI_Controller
                         }
                         $report_to = '';
                         if ($this->session->companey_id == 57) {
-
                             if (!empty($enq->email) || !empty($enq->phone)) {
                                 $user_exist = $this->dashboard_model->check_user_by_mail_phone(array('email' => $enq->email, 'phone' => $enq->phone));
                             }
@@ -164,7 +146,6 @@ class Enquiry extends CI_Controller
                             $report_to = $enq->enq_created_by;
                         }
                         $ucid    =   $this->session->companey_id;
-
                         $postData = array(
                             's_display_name'  =>    $enq->name,
                             'last_name'       =>    $enq->lastname,
@@ -180,12 +161,9 @@ class Enquiry extends CI_Controller
                             's_password'      =>    md5(12345678),
                             'report_to'       =>    $report_to
                         );
-
                         if (!empty($user_exist->pk_i_admin_id)) {
-
                             $this->db->where('tbl_admin.companey_id', 57);
                             $this->db->where('tbl_admin.pk_i_admin_id', $user_exist->pk_i_admin_id);
-
                             if ($this->db->update('tbl_admin', array('user_permissions' => 200, 'user_roles' => 200, 'user_type' => 200))) {
                                 $user_id = $user_exist->pk_i_admin_id;
                             } else {
@@ -197,7 +175,6 @@ class Enquiry extends CI_Controller
                         
                         $message = 'Email - ' . $enq->email . '<br>Password - 12345678';
                         $subject = 'Login Details';
-
                         if ($this->session->companey_id == 57 && $user_id) {
                             $this->db->where('temp_id', 125);
                             $this->db->where('comp_id', 57);
@@ -209,7 +186,6 @@ class Enquiry extends CI_Controller
                             }
                             
                             $this->Message_models->send_email($enq->email, $subject, $message);
-
                             $this->db->where('temp_id', 124);
                             $this->db->where('comp_id', 57);
                             $temp_row    =   $this->db->get('api_templates')->row_array();
@@ -230,27 +206,18 @@ class Enquiry extends CI_Controller
             echo "Something Went Wrong";
         }
     }
-
     public function assign_rowdata()
     {
-
         if (!empty($_POST)) {
-
             $id = $this->input->post('datasource_name');
-
             $limit = '*';
-
             $move_enquiry = $this->enquiry_model->datasourcelist($id);
-
             $assign_employee = $this->input->post('assign_employee');
-
             $this->db->select('*');
             $this->db->from('tbl_admin');
             $this->db->where('pk_i_admin_id', $assign_employee);
             $c_id = $this->db->get()->row();
-
             $postData = array();
-
             $change_status = array();
             $commentData = array();
             //print_r($move_enquiry);
@@ -260,13 +227,10 @@ class Enquiry extends CI_Controller
             exit();*/
             if (!empty($move_enquiry)) {
                 $sendarr = array();
-
                 foreach ($move_enquiry as $res) {
                     $postData = array();
                     $enquiry_code = $res->Enquery_id;
-
                     $this->db->where('phone', $res->phone);
-
                     if (!empty($res->product_id)) {
                         $this->db->where('product_id', $res->product_id);
                     }
@@ -306,14 +270,12 @@ class Enquiry extends CI_Controller
                             'assign_by' => $this->session->user_id,
                             'status' => 1
                         );
-
                         $commentData = array(
                             'lead_id'         => $encode,
                             'created_date'    => $adt,
                             'comment_msg'    => 'Raw Data Assigned',
                             'created_by'    => $ld_updt_by
                         );
-
                         $sendarr[] = array(
                             "camp_name" => $res->product_name,
                             "mobile"    => $res->phone
@@ -323,7 +285,6 @@ class Enquiry extends CI_Controller
                         'status' => 3,
                         'phone' => $res->phone
                     );
-
 
                     if (!empty($postData)) {
                         $this->enquiry_model->update_tbleqry2($res->enquiry_id);
@@ -339,7 +300,6 @@ class Enquiry extends CI_Controller
                     $sendp = $this->curlpost($sendarr);
                 }
                 //$this->Leads_Model->add_comment_for_events('Row Data Assigned', $encode);
-
                 $this->session->set_flashdata('message', display('save_successfully'));
                 redirect(base_url() . 'lead/datasourcelist');
             } else {
@@ -349,12 +309,9 @@ class Enquiry extends CI_Controller
         }
     }
 
-
     public function curlpost($sendarr = '')
     {
-
         $curl = curl_init();
-
         curl_setopt_array($curl, array(
             CURLOPT_URL => "https://czadmin.c-zentrixcloud.com/apps/addlead_bulk.php",
             CURLOPT_RETURNTRANSFER => true,
@@ -369,81 +326,50 @@ class Enquiry extends CI_Controller
                 "Content-Type: application/json"
             ),
         ));
-
         $response = curl_exec($curl);
         curl_close($curl);
         $this->db->insert('czentrix', array('comp_id' => $this->session->companey_id, 'res' => $response, 'created_by' => $this->session->user_id));
     }
 
-
     public function index()
     {
         //$this->output->enable_profiler(TRUE);
-
         if (user_role('60') == true) {
         }
-
         //$this->benchmark->mark('all_inq_start');    
         $data['all_enquery_num'] = $this->enquiry_model->all_enquery()->num_rows();
         //$this->benchmark->mark('all_inq_end');
 
-
         $data['user_list'] = $this->User_model->read();
-
         $data['title'] = display('enquiry_list');
-
         //$data['leadsource'] = $this->Leads_Model->get_leadsource_list();
-
         $data['lead_score'] = $this->Leads_Model->get_leadscore_list();
-
         //$data['lead_stages'] = $this->Leads_Model->get_leadstage_list();
-
         //$data['enquirys'] = $this->enquiry_model->read();
-
         //$data['state_list'] = $this->location_model->state_list();
-
         //$data['raw_enquery'] = $this->enquiry_model->raw_enquery();
 
-
         $data['all_drop_num'] = $this->enquiry_model->all_drop()->num_rows();
-
         $data['all_active'] = $this->enquiry_model->active_enqueries('0', '*');
-
         $data['all_active_num'] = $data['all_active']->num_rows();
-
         //$data['unassigned'] = $this->enquiry_model->unassigned();
-
         //$data['all_leads'] = $this->enquiry_model->all_leads();
-
         //$data['all_user'] = $this->User_model->all_user();
-
         $data['all_today_update_num'] = $this->enquiry_model->all_today_update()->num_rows();
-
         $data['all_creaed_today_num'] = $this->enquiry_model->all_creaed_today()->num_rows();
-
         $data['drops'] = $this->Leads_Model->get_drop_list();
-
         //$data['checked_enquiry'] = $this->enquiry_model->checked_enquiry();
-
         //$data['unchecked_enquiry'] = $this->enquiry_model->unchecked_enquiry();
-
         //$data['scheduled'] = $this->enquiry_model->scheduled();
-
         //$data['unscheduled'] = $this->enquiry_model->unscheduled();
-
         //Total duplicate entry...
-
         //$data['dublicate'] = $this->enquiry_model->all_duplicate();
-
         //$data['customer_types'] = $this->enquiry_model->customers_types();
-
         // $data['channel_p_type'] = $this->enquiry_model->channel_partner_type_list();
  
         $data['content'] = $this->load->view('enquiry', $data, true);
-
         $this->load->view('layout/main_wrapper', $data);
     }
-
     public function send_sms()
     {
         $this->input->post('mesge_type');
@@ -455,7 +381,6 @@ class Enquiry extends CI_Controller
             echo '<option value="' . $value->temp_id . '">' . $value->template_name . '<option>';
         }
     }
-
     function phone_check($phone)
     {
         $product_id    =   $this->input->post('product_id');
@@ -478,7 +403,6 @@ class Enquiry extends CI_Controller
             }
         }
     }
-
     function email_check($email)
     {
         $product_id    =   $this->input->post('product_id');
@@ -501,14 +425,12 @@ class Enquiry extends CI_Controller
             }
         }
     }
-
     // public function test()
     // {$this->load->model('Enquiry_model');
     //    $prefix=  $this->Enquiry_model->getEnquiry(array('enquiry_id'=>'192874'))->result();
     //     //$basic= $this->location_model->get_company_list1(197);
     //     print_r($prefix);
     // }
-
 
     public function create()
     {
@@ -538,7 +460,6 @@ class Enquiry extends CI_Controller
         if (!empty($this->input->post('email'))) {
             $this->form_validation->set_rules('email', display('email'), 'required|callback_email_check', array('email_check' => 'The Email you entered is already exist'));
         }
-
         $enquiry_date = $this->input->post('enquiry_date');
         if ($enquiry_date != '') {
             $enquiry_date = date('d/m/Y');
@@ -550,17 +471,13 @@ class Enquiry extends CI_Controller
             ->where('id', $this->input->post('city_id'))
             ->get();
         $other_phone = $this->input->post('other_no[]');
-
         if ($this->form_validation->run() === true) {
-
             if (empty($this->input->post('product_id'))) {
                 $process_id    =   $this->session->process[0];
             } else {
                 $process_id    =   $this->input->post('product_id');
             }
-
             $name = $this->input->post('enquirername');
-
             $name_w_prefix = $name;
             if ($this->session->companey_id == '83') {
                 $daynamic = $this->input->post('enqueryfield[4400]', true);
@@ -582,7 +499,6 @@ class Enquiry extends CI_Controller
             } else {
                 $encode = $this->get_enquery_code();
             }
-
 
             $encode = $this->get_enquery_code();
             if (!empty($other_phone)) {
@@ -675,7 +591,6 @@ class Enquiry extends CI_Controller
             $this->load->model('Dash_model', 'dash_model');
             $data['name_prefix'] = $this->enquiry_model->name_prefix_list();
             $user_role    =   $this->session->user_role;
-
             $data['products'] = $this->dash_model->get_user_product_list();
             $data['product_contry'] = $this->location_model->productcountry();
             $data['institute_list'] = $this->Institute_model->institutelist();
@@ -698,7 +613,6 @@ class Enquiry extends CI_Controller
             } else {
                 $data['invalid_process'] = 1;
             }
-
             if (!(user_access(230) || user_access(231) || user_access(232) || user_access(233) || user_access(234) || user_access(235) || user_access(236))) {
                 $data['invalid_process'] = 0;
             }
@@ -714,7 +628,6 @@ class Enquiry extends CI_Controller
             $this->load->view('layout/main_wrapper', $data);
         }
     }
-
     public function apply_to_course()
     {
         $crs_id          =   $this->input->post('id');
@@ -861,7 +774,6 @@ class Enquiry extends CI_Controller
             $this->load->view('layout/main_wrapper', $data);
         }
     }
-
     public function create1()
     {
         $process = $this->session->userdata('process');
@@ -870,7 +782,6 @@ class Enquiry extends CI_Controller
         $data['lead_score'] = $this->Leads_Model->get_leadscore_list();
         $data['title'] = display('new_enquiry');
         $this->form_validation->set_rules('mobileno', display('mobileno'), 'max_length[20]|callback_phone_check|required', array('phone_check' => 'Duplicate entry for phone'));
-
         $enquiry_date = $this->input->post('enquiry_date');
         if ($enquiry_date != '') {
             $enquiry_date = date('d/m/Y');
@@ -882,7 +793,6 @@ class Enquiry extends CI_Controller
             ->where('id', $this->input->post('city_id'))
             ->get();
         $other_phone = $this->input->post('other_no[]');
-
         if ($this->form_validation->run() === true) {
             if (empty($this->input->post('product_id'))) {
                 $process_id    =   $this->session->process[0];
@@ -933,7 +843,6 @@ class Enquiry extends CI_Controller
             if ($this->enquiry_model->create($postData)) {
                 $insert_id = $this->db->insert_id();
                 $this->Leads_Model->add_comment_for_events($this->lang->line("enquery_create"), $encode);
-
                 $this->session->set_flashdata('message', 'Your Enquiry has been  Successfully created');
                 redirect(base_url() . 'enquiry/view/' . $insert_id);
             }
@@ -941,7 +850,6 @@ class Enquiry extends CI_Controller
             $this->load->model('Dash_model', 'dash_model');
             $data['name_prefix'] = $this->enquiry_model->name_prefix_list();
             $user_role    =   $this->session->user_role;
-
             $data['products'] = $this->dash_model->get_user_product_list();
             $data['product_contry'] = $this->location_model->productcountry();
             $data['institute_list'] = $this->Institute_model->institutelist();
@@ -954,11 +862,9 @@ class Enquiry extends CI_Controller
             $data['country_list'] = $this->location_model->ecountry_list();
             // print_r($data['company_list']);exit();
             $data['content'] = $this->load->view('add-equiry', $data, true);
-
             $this->load->view('layout/main_wrapper', $data);
         }
     }
-
     public function attach_po($enquiry_id = null)
     {
         $data['page_title'] = 'PO';
@@ -968,10 +874,8 @@ class Enquiry extends CI_Controller
         $data['content'] = $this->load->view('attach_po', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }
-
     function get_sub_byid()
     {
-
         $sub_id = $this->input->post('lead_source');
         $data['sub'] = $this->Datasource_model->get_sub_byid($sub_id);
         echo '<option value="" style="display:none">---Select subsource---</option>';
@@ -981,7 +885,6 @@ class Enquiry extends CI_Controller
     }
     function get_sub_byid1()
     {
-
         $sub_id = $this->input->post('sid');
         $data['sub'] = $this->Datasource_model->get_sub_byid($sub_id);
         echo '<option value="" style="display:none">---Select subsource---</option>';
@@ -989,7 +892,6 @@ class Enquiry extends CI_Controller
             echo '<option value="' . $r->subsource_id . '">' . $r->subsource_name . '</option>';
         }
     }
-
     public function attach_network($enquiry_id = null)
     {
         $data['page_title'] = 'Layout Sheet';
@@ -999,7 +901,6 @@ class Enquiry extends CI_Controller
         $data['content'] = $this->load->view('network_diagram', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }
-
     public function add_invoice($enquiry_id = null)
     {
         $data['page_title'] = 'Add Inovice';
@@ -1010,14 +911,12 @@ class Enquiry extends CI_Controller
         $this->load->view('layout/main_wrapper', $data);
     }
 
-
     /* public function autoDial()
     {
         $allenquiry = $this->input->post('enquiry_id[]');
         $enq = implode(",", $allenquiry);
         $res = $this->db->query("SELECT `phone` FROM `enquiry` WHERE enquiry_id IN ( $enq )");
         $phoneArr = $res->result_array();
-
         // $phone           = $this->input->post("phone_no");
         // $token           = $this->input->post("token");
         // $support_user_id = $this->input->post("support_user_id");
@@ -1058,14 +957,12 @@ class Enquiry extends CI_Controller
         print_r($response);
         }
     }*/
-
     public function autoDial()
     {
         $allenquiry = $this->input->post('enquiry_id[]');
         $enq = implode(",", $allenquiry);
         $res = $this->db->query("SELECT aasign_to,phone FROM `enquiry` WHERE enquiry_id IN ( $enq )");
         $phoneArr = $res->result_array();
-
         // $phone           = $this->input->post("phone_no");
         // $token           = $this->input->post("token");
         // $support_user_id = $this->input->post("support_user_id");
@@ -1113,21 +1010,16 @@ class Enquiry extends CI_Controller
                 ),
             ));
             $response = curl_exec($curl);
-
             // print_r($response);
-
             // $this->db->select('phone');
             // $this->db->from('enquiry');
             // $this->db->where('enquiry_id IN',"( ".$enq." )");
             // $arr = $this->db->get()->result_array();
-
             print_r($response);
         }
     }
-
     public function assign_enquiry()
     {
-
         if (!empty($_POST)) {
             $move_enquiry = $this->input->post('enquiry_id[]');
             // echo json_encode($move_enquiry);
@@ -1144,7 +1036,6 @@ class Enquiry extends CI_Controller
                         'aasign_to' => $assign_employee,
                         'assign_by' => $this->session->user_id,
                         'update_date' => date('Y-m-d H:i:s'),
-
                         'enquiry_id' => $key
                     );
                     $notification_data[] = array(
@@ -1156,7 +1047,6 @@ class Enquiry extends CI_Controller
                         'assign_status' => 0
                     );
                     $this->Leads_Model->add_comment_for_events($this->lang->line("enquery_assign"), $enquiry_code);
-
 
                     $this->db->set('comp_id',$this->session->companey_id);
                     $this->db->set('query_id',$enquiry_code);
@@ -1170,7 +1060,6 @@ class Enquiry extends CI_Controller
                     $this->db->set('task_type','0');
                     $this->db->set('subject','Enquiry Assigned');
                     $this->db->insert('query_response');
-
                 }
                 $this->db->update_batch('enquiry', $assign_data, 'enquiry_id');
                 $this->db->insert_batch('tbl_assign_notification', $notification_data);
@@ -1180,7 +1069,6 @@ class Enquiry extends CI_Controller
             }
         }
     }
-
     public function get_assigned()
     {
         $res = $this->enquiry_model->get_assigned();
@@ -1190,10 +1078,8 @@ class Enquiry extends CI_Controller
         }
         echo json_encode($resultSet);
     }
-
     public function enquery_detals_by_status($id = '')
     {
-
         /*
         if ($id > 0 and $id <= 20) {
             $serach_key = '';
@@ -1203,39 +1089,24 @@ class Enquiry extends CI_Controller
         }
         */
         //print_r($id2);exit;
-
         //$data['title'] = display('enquiry_list');
-
         $data['user_list'] = $this->User_model->read();
-
         $data['leadsource'] = $this->Leads_Model->get_leadsource_list();
-
         //$data['lead_score'] = $this->Leads_Model->get_leadscore_list();
-
         //$data['lead_stages'] = $this->Leads_Model->get_leadstage_list();
-
         //$data['customer_types'] = $this->enquiry_model->customers_types();
-
         //$data['channel_p_type'] = $this->enquiry_model->channel_partner_type_list();
-
         $data['all_user'] = $this->User_model->all_user();
-
         if ($id == 1) {
-
             $data['all_active'] = $this->enquiry_model->all_creaed_today();
         } elseif ($id == 2) {
-
             $data['all_active'] = $this->enquiry_model->all_today_update();
         } elseif ($id == 3) {
-
             $data['all_active'] = $this->enquiry_model->active_enqueries();
-
             //echo "<pre>";
             //echo 'fffffffffffffff'.$id;
             //print_r($data['all_active']->result());
-
             //exit();
-
         } elseif ($id == 4) {
             //$data['all_active'] = $this->enquiry_model->all_leads();
         } elseif ($id == 5) {
@@ -1257,26 +1128,18 @@ class Enquiry extends CI_Controller
         } else {
             $data['all_active'] = $this->enquiry_model->all_creaed_today();
         }
-
         $data['get_sent_whats_app'] = $this->enquiry_model->get_sent_whats_app();
-
         $data['get_received_whats_app'] = $this->enquiry_model->get_received_whats_app();
-
         $data['state_list'] = $this->location_model->state_list();
-
         $data['city_list'] = $this->location_model->city_list();
-
         $data['drops'] = $this->Leads_Model->get_drop_list();
-
         $this->load->view('enquiry_list', $data);
     }
-
     public function view1($enquiry_id = null)
     {
         if (user_role('63') == true) {
         }
         $data['title'] = display('information');
-
         if (!empty($_POST)) {
             $name = $this->input->post('enquirername');
             $email = $this->input->post('email');
@@ -1310,15 +1173,9 @@ class Enquiry extends CI_Controller
         }
 
 
-
-
-
         $data['details'] = $this->Leads_Model->get_leadListDetailsby_id($enquiry_id);
-
         //$data['state_city_list'] = $this->location_model->get_city_by_state_id($data['details']->enquiry_state_id);
         //$data['state_city_list'] = $this->location_model->ecity_list();
-
-
 
         $data['allleads'] = $this->Leads_Model->get_leadList();
         if (!empty($data['details'])) {
@@ -1327,7 +1184,6 @@ class Enquiry extends CI_Controller
         $data['check_status'] = $this->Leads_Model->get_leadListDetailsby_code($lead_code);
         $data['all_drop_lead'] = $this->Leads_Model->all_drop_lead();
         $data['products'] = $this->dash_model->get_user_product_list();
-
         $data['allcountry_list'] = $this->Taskstatus_model->countrylist();
         $data['allstate_list'] = $this->Taskstatus_model->statelist();
         $data['allcity_list'] = $this->Taskstatus_model->citylist();
@@ -1351,11 +1207,8 @@ class Enquiry extends CI_Controller
         $data['comment_details'] = $this->Leads_Model->comment_byId($enquiry_code);
         $user_role    =   $this->session->user_role;
         $data['country_list'] = $this->location_model->productcountry();
-
         $data['institute_list'] = $this->Institute_model->institutelist_by_country($data['details']->enq_country);
-
         $data['institute_app_status'] = $this->Institute_model->get_institute_app_status();
-
 
         $data['datasource_list'] = $this->Datasource_model->datasourcelist();
         $data['taskstatus_list'] = $this->Taskstatus_model->taskstatuslist();
@@ -1365,10 +1218,8 @@ class Enquiry extends CI_Controller
         $data['get_message'] = $this->Message_models->get_chat($phone_id);
         $data['all_stage_lists'] = $this->Leads_Model->find_stage();
         $data['all_estage_lists'] = $this->Leads_Model->find_estage($enquiry_id);
-
         $data['institute_data'] = $this->enquiry_model->institute_data($data['details']->Enquery_id);
         $data['dynamic_field']  = $this->enquiry_model->get_dyn_fld($enquiry_id);
-
 
         $data['content'] = $this->load->view('enquiry_details', $data, true);
         $this->enquiry_model->assign_notification_update($enquiry_code);
@@ -1376,18 +1227,13 @@ class Enquiry extends CI_Controller
     }
 
 
-
-
     public function view($enquiry_id = null)
     {
         $compid = $this->session->userdata('companey_id');
-
         $this->load->model('Client_Model');
-
         if (user_role('63') == true) {
         }
         $data['title'] = display('information');
-
         if (!empty($_POST)) {
             $name = $this->input->post('enquirername');
             $email = $this->input->post('email');
@@ -1421,9 +1267,7 @@ class Enquiry extends CI_Controller
             $this->session->set_flashdata('message', 'Save successfully');
             redirect('enquiry/view/' . $enquiry_id);
         }
-
         
-
         $data['details'] = $this->Leads_Model->get_leadListDetailsby_id($enquiry_id);
         $data['data_type']  = $data['details']->status;
        $data['region_name'] = 0; 
@@ -1438,7 +1282,6 @@ class Enquiry extends CI_Controller
         //echo $data['region_name']; exit();
         //$data['state_city_list'] = $this->location_model->get_city_by_state_id($data['details']->enquiry_state_id);
         //$data['state_city_list'] = $this->location_model->ecity_list();
-
         $data['allleads'] = $this->Leads_Model->get_leadList();
         if (!empty($data['details'])) {
             $lead_code = $data['details']->Enquery_id;
@@ -1447,7 +1290,6 @@ class Enquiry extends CI_Controller
         $data['all_drop_lead'] = $this->Leads_Model->all_drop_lead();
         $data['products'] = $this->dash_model->get_user_product_list();
         $data['bank_list'] = $this->dash_model->get_bank_list();
-
         $data['allcountry_list'] = $this->Taskstatus_model->countrylist();
         $data['allstate_list'] = $this->Taskstatus_model->statelist();
         $data['allcity_list'] = $this->Taskstatus_model->citylist();
@@ -1458,9 +1300,7 @@ class Enquiry extends CI_Controller
         $data['close_femily_list'] = $this->Closefemily_model->close_femily_list($lead_code);
         $data['all_country_list'] = $this->location_model->country();
         // $data['all_contact_list'] = $this->location_model->contact($enquiry_id);
-
         $data['all_contact_list'] = $this->Client_Model->getContactWhere(array('comp_id'=>$this->session->companey_id,'client_id'=>$enquiry_id))->result();
-
 
         $data['subsource_list'] = $this->Datasource_model->subsourcelist();
         $data['drops'] = $this->Leads_Model->get_drop_list();
@@ -1472,24 +1312,19 @@ class Enquiry extends CI_Controller
         $enquiry_code = $data['enquiry']->Enquery_id;
         $phone_id = '91' . $data['enquiry']->phone;
         $data['recent_tasks'] = $this->Task_Model->get_recent_taskbyID($enquiry_code);
-
         $user_role    =   $this->session->user_role;
         $data['country_list'] = $this->location_model->productcountry();
-
         $data['institute_list'] = $this->Institute_model->institutelist_by_country($data['details']->enq_country);
         $data['course_list'] = $this->Leads_Model->get_course_list();
         $data['institute_app_status'] = $this->Institute_model->get_institute_app_status();
-
         $data['prod_list'] = $this->Doctor_model->product_list($compid);
         $data['amc_list'] = $this->Doctor_model->amc_list($compid, $enquiry_id);
         $data['comission_data'] = $this->enquiry_model->comission_data($data['details']->Enquery_id);
-
 
         $data['login_user_id'] = $this->user_model->get_user_by_email($data['details']->email);
         if (!empty($data['login_user_id']->pk_i_admin_id)) {
             $data['login_details'] = $this->Leads_Model->logdata_select($data['login_user_id']->pk_i_admin_id);
         }
-
         $data['datasource_list'] = $this->Datasource_model->datasourcelist();
         $data['taskstatus_list'] = $this->Taskstatus_model->taskstatuslist();
         $data['state_list'] = $this->location_model->estate_list();
@@ -1498,7 +1333,6 @@ class Enquiry extends CI_Controller
         $data['get_message'] = $this->Message_models->get_chat($phone_id);
         $data['all_stage_lists'] = $this->Leads_Model->find_stage();
         $data['all_estage_lists'] = $this->Leads_Model->find_estage($data['details']->product_id, 1);
-
         $data['institute_data'] = $this->enquiry_model->institute_data($data['details']->Enquery_id);
         $data['dynamic_field']  = $this->enquiry_model->get_dyn_fld($enquiry_id);
         $data['ins_list'] = $this->location_model->get_ins_list($data['details']->Enquery_id);
@@ -1523,7 +1357,6 @@ class Enquiry extends CI_Controller
             ->limit(1)->get('commercial_info');
             $data['commInfoCount']=$comm_data->num_rows();
             $data['commInfoData']=$comm_data->row();
-
         } 
         else
         {    $data['CommercialInfo'] =array();
@@ -1549,7 +1382,6 @@ class Enquiry extends CI_Controller
         if (!empty($data['enquiry']->email) && $email_imap) {
             $this->enquiry_model->getuseremail($data['enquiry']->email, $enquiry_code);
         }
-
         $comment_details = $this->Leads_Model->comment_byId($enquiry_code);
         $countdassigned=0;
         $html = '<ul class="cbp_tmtimeline" >';
@@ -1566,7 +1398,6 @@ class Enquiry extends CI_Controller
            }
         }
             //fetching assigned user end
-
             if ($comments->comment_msg == 'Stage Updated') {
                 $html .= '<li>
                    <div class="cbp_tmicon cbp_tmicon-phone" style="background:#cb4335;"></div>
@@ -1647,7 +1478,6 @@ class Enquiry extends CI_Controller
                     $html .= '' . $comments->drop_reason . '</span>';
                 }
 
-
                 if ($comments->comment_msg == 'Stage Updated') {
                     $html .= '<span style="font-weight:900;font-size:12px;">' . ucfirst($comments->lead_stage_name) . ' </span>
                     </br>
@@ -1672,7 +1502,6 @@ class Enquiry extends CI_Controller
                     </br>
                     <span style="font-weight:900;font-size:10px;">' . ucfirst($comments->description) . ' </span>';
                 }
-
                 if ($assigned_user != NULL) {
                     if($countdassigned==1){
                     if ($comments->comment_msg == 'Enquiry Assigned' OR $comments->comment_msg == 'Assign Leads' OR $comments->comment_msg == 'Client Assigned' ) {
@@ -1687,7 +1516,6 @@ class Enquiry extends CI_Controller
                   </div>
                 </li>';
                 } else {
-
                     $html .= '<p>' . date("j-M-Y h:i:s a", strtotime($comments->ddate)) . ' <br>
                       Updated By : <strong>' . ucfirst($comments->comment_created_by . ' ' . $comments->lastname) . ' </strong></p>
                   </div>
@@ -1695,49 +1523,37 @@ class Enquiry extends CI_Controller
                 }
             }
         }
-
         $html .= '</ul>';
         echo $html;
     }
-
     function deleteDocument($cmmnt_id, $enqcode, $tabname)
     {
         // echo "$cmmnt_id";die;
-
         $dataAry = $this->db->select('fvalue')->from('extra_enquery')->where("comment_id", $cmmnt_id)->get()->result_array();
-
         $this->db->where("comment_id", $cmmnt_id);
         $this->db->delete('extra_enquery');
         $tabname = base64_decode($tabname);
         if ($this->db->affected_rows() > 0) {
             if ($tabname == "Documents") {
-
                 foreach ($dataAry as $k) {   //echo "ddd".$k['fvalue'];die;
                     //echo"<pre>";print_r($k);die;
                     unlink($k['fvalue']);
                 }
             }
-
             $this->Leads_Model->add_comment_for_events("$tabname Deleted  From This Enquiry", $enqcode);
         }
         redirect($this->agent->referrer());
     }
 
-
-
     public function mview($enquiry_id)
     {
 
-
         $usrno = $this->input->post("user_id", true);
         $enqno = $this->input->post("enquiry_id", true);
-
         if (user_role('63') == true) {
         }
         $data['title'] = display('information');
-
         if (!empty($_POST)) {
-
             $name = $this->input->post('enquirername');
             $email = $this->input->post('email');
             $mobile = $this->input->post('mobileno');
@@ -1770,11 +1586,7 @@ class Enquiry extends CI_Controller
         }
 
 
-
-
-
         $data['details'] = $this->Leads_Model->get_leadListDetailsby_id2($enquiry_id);
-
         //$enqcode  = (!empty($data['details']))? $data['details']->Enquery_id : "";  
         $data['state_city_list'] = $this->location_model->get_city_by_state_id($data['details']->enquiry_state_id);
         $data['allleads'] = $this->Leads_Model->get_leadList();
@@ -1785,7 +1597,6 @@ class Enquiry extends CI_Controller
         $data['check_status'] = $this->Leads_Model->get_leadListDetailsby_code($lead_code);
         $data['all_drop_lead'] = $this->Leads_Model->all_drop_lead();
         $data['products'] = $this->dash_model->get_user_product_list();
-
         $data['allcountry_list'] = $this->Taskstatus_model->countrylist();
         $data['allstate_list'] = $this->Taskstatus_model->statelist();
         $data['allcity_list'] = $this->Taskstatus_model->citylist();
@@ -1809,11 +1620,8 @@ class Enquiry extends CI_Controller
         //    $data['comment_details'] = $this->Leads_Model->comment_byId($enquiry_code);        
         $user_role    =   $this->session->user_role;
         $data['country_list'] = $this->location_model->productcountry();
-
         $data['institute_list'] = $this->Institute_model->institutelist_by_country($data['details']->enq_country);
-
         $data['institute_app_status'] = $this->Institute_model->get_institute_app_status();
-
 
         $data['datasource_list'] = $this->Datasource_model->datasourcelist();
         $data['taskstatus_list'] = $this->Taskstatus_model->taskstatuslist();
@@ -1823,21 +1631,15 @@ class Enquiry extends CI_Controller
         $data['get_message'] = $this->Message_models->get_chat($phone_id);
         $data['all_stage_lists'] = $this->Leads_Model->find_stage();
         $data['all_estage_lists'] = $this->Leads_Model->find_estage($enquiry_id);
-
         $data['institute_data'] = $this->enquiry_model->institute_data($data['details']->Enquery_id);
         $data['dynamic_field']  = $this->enquiry_model->get_dyn_fld_api($enquiry_id);
-
         // print_r($data['dynamic_field']);exit();
-
         /*var_dump($data['institute_data']);
         exit();*/
-
         // $data['content'] = $this->load->view('menquiry_details', $data, true);
-
         $this->enquiry_model->assign_notification_update($enquiry_code);
         $this->load->view('menquiry_details', $data);
     }
-
     public function add_enquery_institute($enq_code)
     {
         $enq_code = base64_decode($enq_code);
@@ -1879,9 +1681,7 @@ Array
         $this->form_validation->set_rules('app_status','App Status','trim|required');
 		*/
         $this->form_validation->set_rules('institute_id', 'Institute', 'trim|required');
-
         if ($this->form_validation->run() == TRUE) {
-
             $institute_id       =   $this->input->post('institute_id');
             $course_id          =   $this->input->post('app_course');
             $p_lvl              =   $this->input->post('p_lvl');
@@ -1905,7 +1705,6 @@ Array
             $reference_no       =   $this->input->post('reference_no');
             $courier_status     =   $this->input->post('courier_status');
             $app_status         =   $this->input->post('app_status');
-
 
             $institute_data = array(
                 'institute_id'      => $institute_id,
@@ -1942,7 +1741,6 @@ Array
                 $ins    =   $this->db->insert('institute_data', $institute_data);
                 $msg = 'Institute added successfully';
             }
-
             if ($ins) {
                 echo json_encode(array('status' => true, 'msg' => $msg));
             } else {
@@ -1963,7 +1761,6 @@ Array
         }
         redirect('enquiry');
     }
-
     public function move_to_lead()
     {
         if (!empty($_POST)) {
@@ -2035,7 +1832,6 @@ Array
             echo "Something Went Wrong";
         }
     }
-
     public function move_to_lead_details()
     {
         if (!empty($_POST)) {
@@ -2044,7 +1840,6 @@ Array
             $lead_score = $this->input->post('lead_score');
             $lead_stage = $this->input->post('move_lead_stage');
             $lead_discription = $this->input->post('lead_description');
-
             $comment = $this->input->post('comment');
             $expected_date = $this->input->post('expected_date');
             if (!empty($lead_score)) {
@@ -2056,14 +1851,12 @@ Array
             if (!empty($comment)) {
                 $comment = $this->input->post('comment');
             }
-
             if ((!empty($move_enquiry)) && $this->session->companey_id == '67') {
                 $this->db->select('*');
                 $this->db->from('enquiry');
                 $this->db->where('enquiry_id', $move_enquiry);
                 $q = $this->db->get()->row();
                 $pass = '12345678';
-
                 $assign_data = array(
                     's_username' => $q->name_prefix,
                     's_password' => md5($pass),
@@ -2084,10 +1877,8 @@ Array
                     'user_permissions' => '151',
                     'user_type' => '0'
                 );
-
                 $this->db->insert('tbl_admin', $assign_data);
             }
-
             $this->db->set('lead_score', $lead_score);
             $this->db->set('lead_stage', $lead_stage);
             $this->db->set('lead_discription', $lead_discription);
@@ -2100,10 +1891,8 @@ Array
             $this->db->where('enquiry_id', $move_enquiry);
             $this->db->update('enquiry');
 
-
             $this->load->model('rule_model');
             $this->rule_model->execute_rules($enquiry->row()->Enquery_id, array(1, 2, 3, 6, 7));
-
             $this->Leads_Model->add_comment_for_events('Enquiry Moved ', $enquiry->row()->Enquery_id);
            
             //insert follow up counter (2 is for lead )
@@ -2116,7 +1905,6 @@ Array
             redirect('enquiry');
         }
     }
-
     public function active_enquery($id)
     {
         $this->db->set('drop_status', 0);
@@ -2124,7 +1912,6 @@ Array
         $this->db->update('enquiry');
         $data['enquiry'] = $this->enquiry_model->enquiry_by_id($id);
         $enquiry_code = $data['enquiry']->Enquery_id;
-
         $enquiryid  = $id;
         if ($data['enquiry']->status == 1) {
             $url = 'enquiry/view/' . $enquiryid;
@@ -2145,18 +1932,14 @@ Array
                 $comment = $title . ' Activated';
             }
         }
-
         $this->Leads_Model->add_comment_for_events($comment, $enquiry_code);
         $this->session->set_flashdata('message', $comment . " Successfully");
         redirect($url, 'refresh');
-
         /*
         $this->Leads_Model->add_comment_for_events('Active Enquiry', $enquiry_code);
         $this->session->set_flashdata('message', "Activated Successfully");
-
         redirect('enquiry/view/' . $id);*/
     }
-
     public function drop_enquiry()
     {
         $data['title'] = 'Drop Reasons';
@@ -2164,16 +1947,13 @@ Array
         if (!empty($_POST)) {
             $reason = $this->input->post('reason');
             $drop_status = $this->input->post('drop_status');
-
             $this->db->set('drop_status', $drop_status);
             $this->db->set('drop_reason', $reason);
             $this->db->set('update_date', date('Y-m-d H:i:s'));
             $this->db->where('enquiry_id', $enquiryid);
             $this->db->update('enquiry');
-
             $data['enquiry'] = $this->enquiry_model->enquiry_by_id($enquiryid);
             $enquiry_code = $data['enquiry']->Enquery_id;
-
             if ($data['enquiry']->status == 1) {
                 $url = 'enquiry/view/' . $enquiryid;
                 $comment = 'Enquiry dropped';
@@ -2199,7 +1979,6 @@ Array
             redirect($url, 'refresh');
         }
     }
-
     public function drop_enquiries()
     {
         if (!empty($_POST)) {
@@ -2223,7 +2002,6 @@ Array
             }
         }
     }
-
     public function delete_recorde()
     {
         if (!empty($_POST)) {
@@ -2242,7 +2020,6 @@ Array
             }
         }
     }
-
     function upload_enquiry()
     {
         ini_set('max_execution_time', '-1');
@@ -2253,7 +2030,6 @@ Array
             'remove_spaces' => TRUE,
             'file_name' => $filename
         );
-
         $this->load->library('upload', $config);
         $this->upload->initialize($config);
         if (empty($this->input->post('datasource_name'))) {
@@ -2262,7 +2038,6 @@ Array
         } else {
             $datasource_name = $this->input->post('datasource_name');
         }
-
         if ($this->upload->do_upload('img_file')) {
             $upload = $this->upload->data();
             $json['success'] = 1;
@@ -2274,15 +2049,12 @@ Array
             $record = 0;
             $failed_record = 0;
             $i = 0;
-
             $dat_array = array();
-
             while (($filesop = fgetcsv($handle, 2000, ",")) !== false) {
                 $dat_array = array();
                 $count++;
                 if ($count == 1) {
                 } else {
-
                     if (!empty($filesop[8]) && !empty($this->location_model->get_city_by_name($filesop[8]))) {
                         $res = $this->location_model->get_city_by_name($filesop[8]);
                         $country_id = !empty($res->country_id) ? $res->country_id : '';
@@ -2298,9 +2070,7 @@ Array
                         $city_id = '';
                     }
                     $product_name = '';
-
                     $product_row    =   !empty($filesop[10]) ? $this->enquiry_model->name_product_list_byname($filesop[10]) : '';   // process                  
-
                     if (!empty($product_row)) {
                         $sb_id =  $product_row->sb_id;
                     }
@@ -2309,15 +2079,12 @@ Array
                     } else {
                         $product_name = '';
                     }
-
                     $enquiry_source = !empty($filesop[11]) ? $this->enquiry_model->enquiry_source_byname($filesop[11]) : '';       //     source         
-
 
                     $enquiry_source_id = '';
                     if (!empty($enquiry_source)) {
                         $enquiry_source_id =  $enquiry_source->lsid;
                     }
-
                     $service_row    =   !empty($filesop[14]) ? $this->enquiry_model->name_services_list_byname($filesop[14]) : '';
                     if (!empty($service_row)) {
                         $ser_id =  $service_row->id;
@@ -2332,37 +2099,31 @@ Array
                     } else {
                         $zero = '';
                     } // Company name
-
                     if (!empty($filesop[1])) {
                         $one = $filesop[1];
                     } else {
                         $one = '';
                     } // Name prefixed
-
                     if (!empty($filesop[2])) {
                         $two = $filesop[2];
                     } else {
                         $two = '';
                     } // First Name
-
                     if (!empty($filesop[3])) {
                         $three = $filesop[3];
                     } else {
                         $three = '';
                     } //Last Name
-
                     if (!empty($filesop[4])) {
                         $phone_no = $filesop[4];
                     } else {
                         $phone_no = 0;
                     } //Mobile No
-
                     if (!empty($filesop[5])) {
                         $five = $filesop[5];
                     } else {
                         $five = '';
                     } //other_number
-
                     if (!empty($filesop[6])) {
                         $six = $filesop[6];
                     } else {
@@ -2370,7 +2131,6 @@ Array
                     } // Email Address
                     // 7 state
                     // 8 city
-
                     if (!empty($filesop[9])) {
                         $nine = $filesop[9];
                     } else {
@@ -2379,14 +2139,12 @@ Array
                     //10 process
                     //11 source
                     // 12 datasource
-
                     //if(!empty($filesop[11])){$eleven=$filesop[11];}else{$eleven='';}
                     if (!empty($filesop[13])) {
                         $therteen = $filesop[13];
                     } else {
                         $therteen = '';
                     } // remark
-
                     // $product_country_id = '';                    
                     /*if($fourteen){
                         $this->db->select('id');    
@@ -2397,7 +2155,6 @@ Array
                         }
                     }
                     */
-
                     //$phone=preg_match('/^[0-9]{10}+$/', $phone_no);                    
                     //$phone=preg_replace('/[^0-9]/i', '',$phone_no);
                     $phone = $phone_no;
@@ -2443,12 +2200,10 @@ Array
                     if (!empty($dat_array)) {
                         $this->db->insert('enquiry2', $dat_array);
                         $l_id = $this->db->insert_id();
-
                         //print_r($l_id);exit;
                         /**************************************daynamic fields inserts****************************/
                         if (!empty($filesop[10])) {
                             $colmn_data    =   $this->enquiry_model->all_list_colmn($filesop[10]);
-
                             if (!empty($colmn_data)) {
                                 $j = 15;
                                 foreach ($colmn_data as $cdata) {
@@ -2467,14 +2222,12 @@ Array
                             }
                         }
 
-
                         /**************************************daynamic fields inserts End****************************/
                     }
                 }
                 //echo $i;
                 $i++;
             }
-
 
             if ($record > 0) {
                 $res = 'Record(' . $record . ') inserted';
@@ -2492,7 +2245,6 @@ Array
             redirect(base_url() . 'lead/datasourcelist');
         }
     }
-
     public function search_comment_and_task($date = '', $id = '')
     {
         if (!empty($date)) {
@@ -2512,7 +2264,6 @@ Array
                             </a>
                          </div>';
             }
-
             foreach ($data['recent_tasks'] as $task) {
                 $details1 = '<div class="list-group" >
    <div class="col-md-12 list-group-item list-group-item-action flex-column align-items-start" style="margin-top:10px;">
@@ -2580,7 +2331,6 @@ Array
    </div>
 </div>';
             }
-
             //  echo json_encode($d); 
             $this->output
                 ->set_content_type("application/json")
@@ -2603,7 +2353,6 @@ Array
                             </a>
                          </div>';
             }
-
             foreach ($data['recent_tasks'] as $task) {
                 $details1 = '<div class="list-group" >
    <div class="col-md-12 list-group-item list-group-item-action flex-column align-items-start" style="margin-top:10px;">
@@ -2671,52 +2420,39 @@ Array
    </div>
 </div>';
             }
-
             $this->output
                 ->set_content_type("application/json")
                 ->set_output(json_encode(array('details' => $details, 'details1' => $details1)));
         }
     }
-
     public function get_enquery_code()
     {
-
         $code = $this->genret_code();
         $code2 = 'ENQ' . $code;
         $response = $this->enquiry_model->check_existance($code2);
-
         if ($response) {
-
             $this->get_enquery_code();
         } else {
-
             return $code2;
-
             //exit;
         }
         //exit;
     }
-
     function genret_code()
     {
         $pass = "";
         $chars = array("0", "1", "2", "3", "4", "5", "6", "7", "8", "9");
-
         for ($i = 0; $i < 12; $i++) {
             $pass .= $chars[mt_rand(0, count($chars) - 1)];
         }
         return $pass;
     }
-
     //Get Message Templates enquiry_model
     public function msg_templates()
     {
-
         $template = $this->input->post('tmpl_id');
-
         echo json_encode($this->enquiry_model->get_templates($template));
     }
-
     //Insert customer type in table..
     public function add_customer_types()
     {
@@ -2735,7 +2471,6 @@ Array
         $this->session->set_flashdata('message', 'Customer type added successfully');
         return redirect('Enquiry/load_customer_channel_mater');
     }
-
     public function edit_customer_types()
     {
         $customer_type = $this->input->post('input_cus_type');
@@ -2753,13 +2488,11 @@ Array
         $this->session->set_flashdata('message', 'Customer type updated successfully');
         return redirect('Enquiry/load_customer_channel_mater');
     }
-
     public function delete_customer_type()
     {
         $delete_ids = $this->input->post('favorite');
         $this->enquiry_model->delete_customer_types($delete_ids);
     }
-
     public function add_channel_partner_types()
     {
         $channel_partner = $this->input->post('channel_partner');
@@ -2776,7 +2509,6 @@ Array
         $this->session->set_flashdata('message', 'Channel partner added successfully');
         return redirect('Enquiry/load_customer_channel_mater');
     }
-
     public function update_channel_partner()
     {
         $input_cus_type = $this->input->post('input_cus_type');
@@ -2790,18 +2522,15 @@ Array
             'updated_on' => $updated_on,
             'updated_by' => $updated_by
         );
-
         $this->enquiry_model->update_channel_partner($data, $id);
         $this->session->set_flashdata('message', 'Channel partner updated successfully');
         return redirect('Enquiry/load_customer_channel_mater');
     }
-
     public function delete_channel_partner()
     {
         $delete_ids = $this->input->post('favorite');
         $this->enquiry_model->delete_channel_partner_type($delete_ids);
     }
-
     public function add_name_prefix()
     {
         $name_prefix = $this->input->post('name_prefix');
@@ -2819,7 +2548,6 @@ Array
         $this->session->set_flashdata('message', 'Name Prefix added successfully');
         return redirect('lead/load_customer_channel_mater');
     }
-
     public function add_partner_type()
     {
         $name_prefix = $this->input->post('name_type');
@@ -2834,7 +2562,6 @@ Array
         $this->session->set_flashdata('message', 'Partner Type added successfully');
         return redirect('Enquiry/load_customer_channel_mater');
     }
-
     public function update_name_prefix()
     {
         $name_prefix = $this->input->post('name-prefix');
@@ -2852,7 +2579,6 @@ Array
         $this->session->set_flashdata('message', 'Name prefix updated successfully');
         return redirect('lead/load_customer_channel_mater');
     }
-
     public function update_name_partner()
     {
         $name_prefix = $this->input->post('name-type');
@@ -2868,13 +2594,11 @@ Array
         $this->session->set_flashdata('message', 'Partner Type updated successfully');
         return redirect('Enquiry/load_customer_channel_mater');
     }
-
     public function delete_name_prefix()
     {
         $delete_ids = $this->input->post('favorite');
         $this->enquiry_model->delete_name_prefixes($delete_ids);
     }
-
     public function delete_name_partners()
     {
         $delete_ids = $this->input->post('favorite');
@@ -2885,61 +2609,36 @@ Array
     {
         $states = $this->input->post('enq_state');
         echo json_encode($this->enquiry_model->all_states($states));
-
         // echo $diesc;
     }
 
-
     // enquiry datatable
-
     public function enquiry_load()
     {
         $this->load->model('enquiry_datatable_model');
-
         $list = $this->enquiry_datatable_model->get_datatables();
-
         $data = array();
-
         $no = $_POST['start'];
-
         $i = 1;
-
         foreach ($list as $each) {
-
             $no++;
-
             $row = array();
-
             $row[] = '<input onclick="event.stopPropagation();" type="checkbox" name="enquiry_id[]" class="checkbox1" value="<?php echo $each->enquiry_id; ?>">';
-
             $row[] = $i;
-
             $row[] = $each->icon_url;
-
             $row[] = $each->company;
-
             $row[] = $each->name_prefix . " " . $each->name . " " . $each->lastname;
-
             $row[] = $each->email;
-
             $row[] = $each->phone;
-
             $row[] = $each->address;
-
             $row[] = $each->created_date;
-
             $row[] = $each->created_by;
-
             $row[] = $each->aasign_to;
-
             $row[] = $each->datasource_name;
 
-
             $data[] = $row;
-
             $i++;
         }
-
         /*[0] => stdClass Object
         (
             [enquiry_id] => 3859
@@ -3001,14 +2700,12 @@ Array
             [lead_name] => 
             [datasource_name] => 
         )*/
-
         $output = array(
             "draw" => $_POST['draw'],
             "recordsTotal" => $this->enquiry_datatable_model->count_all(),
             "recordsFiltered" => $this->enquiry_datatable_model->count_filtered(),
             "data" => $data,
         );
-
         echo json_encode($output);
     }
     public function delete_institute()
@@ -3020,7 +2717,6 @@ Array
             echo json_encode(array('status' => false, 'msg' => 'Something went wrong'));
         }
     }
-
     public function delete_comission()
     {
         $this->db->where('id', $this->input->post('id'));
@@ -3030,7 +2726,6 @@ Array
             echo json_encode(array('status' => false, 'msg' => 'Something went wrong'));
         }
     }
-
     public function get_update_enquery_institute_content()
     {
         $id    =   $this->input->post('id');
@@ -3052,8 +2747,6 @@ Array
         echo $content;
     }
 
-
-
     public function re_login($id, $process)
     {
         $user_id = $id;
@@ -3063,7 +2756,6 @@ Array
             ->where('id', $check_user->row()->city_id)
             ->get();
         $setting = $this->setting_model->read();
-
         $data['title'] = (!empty($setting->title) ? $setting->title : null);
         $data['logo'] = (!empty($setting->logo) ? $setting->logo : null);
         $data['favicon'] = (!empty($setting->favicon) ? $setting->favicon : null);
@@ -3094,7 +2786,6 @@ Array
             'process' => $process,
             'telephony_agent_id' => $check_user->row()->telephony_agent_id
         ]);
-
         if (!empty($check_user->result())) {
             redirect(base_url() . 'enquiry/create_from.html');
         } else {
@@ -3105,15 +2796,11 @@ Array
             ], REST_Controller::HTTP_OK);
         }
     }
-
     /***************************************************************student edit profile******************************************/
     public function viewpro($enquiry_id = null)
     {
-
         $compid = $this->session->userdata('companey_id');
-
         $data['title'] = display('information');
-
         if (!empty($_POST)) {
             $name = $this->input->post('enquirername');
             $email = $this->input->post('email');
@@ -3147,33 +2834,24 @@ Array
         }
 
 
-
-
-
         $data['details'] = $this->Leads_Model->get_leadListDetailsby_id($enquiry_id);
         $data['ins_list'] = $this->location_model->stu_ins_list();
         $data['vid_list'] = $this->schedule_model->vid_list();
         $data['course_list'] = $this->Institute_model->courselist();
         $data['institute_list'] = $this->Institute_model->institutelist();
         // $compid = $data['details']->comp_id;
-
         // print_r($data['vid_list']);exit();
-
         //$data['state_city_list'] = $this->location_model->get_city_by_state_id($data['details']->enquiry_state_id);
         //$data['state_city_list'] = $this->location_model->ecity_list();
-
         $stu_phone = $this->session->userdata('phone');
         $data['student_Details'] = $this->home_model->studentdetail($stu_phone);
         $studetails = $this->home_model->studentdetail($stu_phone);
-
         $en_id = $studetails['Enquery_id'];
         $comp_id = $studetails['comp_id'];
-
         //print_r($data['student_Details']);exit;
         $data['invoice_details'] = $this->home_model->invoicedetail($en_id);
         $data['agrrem_doc'] = $this->home_model->aggr_doc($en_id);
         $data['schdl_list'] = $this->schedule_model->get_schedule_list();
-
         $data['allleads'] = $this->Leads_Model->get_leadList();
         if (!empty($data['details'])) {
             $lead_code = $data['details']->Enquery_id;
@@ -3181,9 +2859,7 @@ Array
         $data['check_status'] = $this->Leads_Model->get_leadListDetailsby_code($lead_code);
         $data['all_drop_lead'] = $this->Leads_Model->all_drop_lead();
         $data['products'] = $this->dash_model->get_user_product_list();
-
         $this->enquiry_model->change_enq_status($data['details']->Enquery_id);
-
 
         // print_r($data['amc_list']);exit();
         $data['allcountry_list'] = $this->Taskstatus_model->countrylist();
@@ -3209,11 +2885,8 @@ Array
         $data['comment_details'] = $this->Leads_Model->comment_byId($enquiry_code);
         $user_role    =   $this->session->user_role;
         $data['country_list'] = $this->location_model->productcountry();
-
         $data['institute_list'] = $this->Institute_model->institutelist_by_country($data['details']->enq_country);
-
         $data['institute_app_status'] = $this->Institute_model->get_institute_app_status();
-
 
         $data['datasource_list'] = $this->Datasource_model->datasourcelist();
         $data['taskstatus_list'] = $this->Taskstatus_model->taskstatuslist();
@@ -3223,7 +2896,6 @@ Array
         $data['get_message'] = $this->Message_models->get_chat($phone_id);
         $data['all_stage_lists'] = $this->Leads_Model->find_stage();
         $data['all_estage_lists'] = $this->Leads_Model->find_estage($enquiry_id);
-
         $data['institute_data'] = $this->enquiry_model->institute_data($data['details']->Enquery_id);
         $data['comission_data'] = $this->enquiry_model->comission_data($data['details']->Enquery_id);
         $data['dynamic_field']  = $this->enquiry_model->get_dyn_fld($enquiry_id);
@@ -3231,7 +2903,6 @@ Array
         $data['aggrement_list'] = $this->location_model->get_agg_list($data['details']->Enquery_id);
         $data['prod_list'] = $this->Doctor_model->product_list($compid);
         $data['amc_list'] = $this->Doctor_model->amc_list($compid, $enquiry_id);
-
         $data['tab_list'] = $this->form_model->get_tabs_list($this->session->companey_id, $data['details']->product_id);
         $this->load->helper('custom_form_helper');
         $data['discipline'] = $this->location_model->find_discipline();
@@ -3239,13 +2910,11 @@ Array
         $data['length'] = $this->location_model->find_length();
         $data['enquiry_id'] = $enquiry_id;
         $data['all_description_lists']    =   $this->Leads_Model->find_description();
-
         $data['compid']     =  $data['details']->comp_id;
         $data['content'] = $this->load->view('enq_proedit', $data, true);
         $this->enquiry_model->assign_notification_update($enquiry_code);
         $this->load->view('layout/main_wrapper', $data);
     }
-
     public function related_enquiry()
     {
         $phone = $this->input->post('phone');
@@ -3256,13 +2925,11 @@ Array
         $this->load->view('enquiry/related_enquiry', $data, 'true');
     }
 
-
     function enq_redirect($id)
     {
         $this->db->select('status');
         $this->db->where('enquiry_id', $id);
         $r  =   $this->db->get('enquiry')->row_array();
-
         if ($r['status']  == 1) {
             $url = 'enquiry/view/' . $id;
         } else if ($r['status']  == 2) {
@@ -3272,8 +2939,6 @@ Array
         }
         redirect($url, 'refresh');
     }
-
-
 
   public function edit_query_data()
     {
@@ -3287,7 +2952,6 @@ Array
           $enquiry_id = $post['enq_code'];
           $tabname= $post['tabname'];
           $cmnt_id = $post['cmnt_id'];
-
           $ci->load->model('enquiry_model');
             $ci->load->model('Ticket_Model');
             $ci->load->model('location_model');
@@ -3302,9 +2966,7 @@ Array
             $ci->db->join('input_types','input_types.id=tbl_input.input_type');       
             $data['form_fields']  = $ci->db->get('tbl_input')->result_array();
            
-
             $enq= $this->db->where('Enquery_id',$enquiry_id)->get('enquiry')->row();
-
              $data['details']= $ci->Leads_Model->get_leadListDetailsby_id($enq->enquiry_id);
                //print_r($data['details']); exit();
                //1 for ticket form
@@ -3313,16 +2975,13 @@ Array
                $data['products'] =array();
                $data['product_contry']=array();
                $data['leadsource']=array();
-
             $ci->db->select('form_type,form_for,is_delete,is_edit');
             $ci->db->where('id',$tid);        
             $r    =      $ci->db->get('forms')->row_array();
-
             $data['form_type'] = $r['form_type'];
           
             $data['form_for'] = $r['form_for'];
             $data['action'] = array('delete'=>$r['is_delete'],'edit'=>$r['is_edit']);
-
             $data['state_list']   = $ci->location_model->estate_list();
             $data['city_list']      = $ci->location_model->ecity_list();
             $data['all_country_list']   = $ci->location_model->country();
@@ -3330,35 +2989,25 @@ Array
             $data['tabname'] = $tabname;       
           
             $ci->load->view('enquiry/edit_dynamic_query_data',$data);
-
         }
         else if($post['task']=='save')
         {
-
         }
       }
     }
 
 
-
-
     /****************************************************student edit profile********************************************/
-
     // public function create_from() {
-
     // 	$userno     = $this->session->user_id;
     // 	$proccessno = $this->session->process;
-
     //        $data['leadsource'] = $this->Leads_Model->get_leadsource_list();
     //        $data['lead_score'] = $this->Leads_Model->get_leadscore_list();
     // 	$data["userno"]     = $userno;
     // 	$data["proccessno"]     = $proccessno;
-
     //        // print_r($proccessno);exit();
-
     //        $data['title'] = display('new_enquiry');
     //        $this->form_validation->set_rules('mobileno', display('mobileno'), 'max_length[20]|required', array('is_unique' => 'Duplicate   entry for phone'));
-
     //        $enquiry_date = $this->input->post('enquiry_date');
     //        if($enquiry_date !=''){
     //          $enquiry_date = date('Y-m-d', strtotime($enquiry_date));
@@ -3370,13 +3019,11 @@ Array
     // 		->where('id',$this->input->post('city_id'))
     // 		->get();
     //        $other_phone = $this->input->post('other_no[]');
-
     // 	$usrarr = $this->db->select("*")
     // 						 ->where("pk_i_admin_id", $userno)
     // 						 ->from("tbl_admin")
     // 						 ->get()
     // 						 ->row();
-
     //        if ($this->form_validation->run() === true) {
     //            $name = $this->input->post('enquirername');
     //            $name_w_prefix = $name;
@@ -3423,26 +3070,19 @@ Array
     //                $insert_id = $this->db->insert_id();
     //                $this->Leads_Model->add_comment_for_events($this->lang->line("enquery_create"), $encode);				
     //                echo '<br><br>Your Enquiry has been  Successfully created';
-
     //            }
     //        } else {
 
-
-
     // 		if(!empty($usrarr)){
-
     // 			$compno = $usrarr->companey_id;
     // 		}else{
     // 			$compno = "";
     // 		}
 
 
-
-
     //            $this->load->model('Dash_model', 'dash_model');
     //            $data['name_prefix'] = $this->enquiry_model->name_prefix_list();
     //           // $user_role    =   $this->session->user_role;
-
     //            $data['products'] = $this->dash_model->get_user_product_list();
     //            $data['product_contry'] = $this->location_model->productcountry();
     //            $data['institute_list'] = $this->Institute_model->institutelist();
@@ -3454,12 +3094,10 @@ Array
     //            $data['city_list'] = $this->location_model->ecity_list();
     //            $data['country_list'] = $this->location_model->ecountry_list();
     //            $data['company_list'] = $this->location_model-> get_company_list_api($proccessno, $compno );
-
     // 	//	echo $this->db->last_query();
     //            $this->load->view('create_newenq', $data);
     //        }
     //    }
-
     /*public function zip_extract(){         
              $zip = new ZipArchive;
              $filename = 'aws.zip';
@@ -3486,7 +3124,6 @@ Array
             echo 0;
         }
     }
-
     public function get_institute_tab_content($enquiry_id)
     {
         $data = array();
@@ -3504,7 +3141,6 @@ Array
         }
         echo $this->load->view('enquiry/institute_tab_content', $data, true);
     }
-
 public function timelinePopup()
 {
     $data='Stage Update';
@@ -3526,10 +3162,8 @@ public function timelinePopup()
         }
     }
     echo json_encode(array('subject'=>$subject,'created_at'=>$created_at,'msg'=>$data,'tempname'=>$tempname));
-
     // }else{
     //     echo json_encode(array('msg'=>'Stage Updated'));
-
     // }
 }
  public function insertCommercialInfo()
@@ -3668,7 +3302,6 @@ public function timelinePopup()
             redirect($url);
             } 
     }
-
  }
     public function get_rate()
     {
@@ -3706,7 +3339,6 @@ public function timelinePopup()
         $comp_id=$this->session->companey_id;
           $count=$this->db->where(array('id'=>$id,'comp_id'=>$comp_id))->get('commercial_info');
           $url=base_url('enquiry/view/'.$enquiry_id.'');
-
           //check exist of not
           if($count->num_rows()==1){
          $insert= $this->db->where(array('id'=>$id,'comp_id'=>$comp_id))->delete('commercial_info');
@@ -3776,7 +3408,6 @@ public function timelinePopup()
     public function add_visit()
     {   
         $this->load->model('Client_Model');
-
         if($post = $this->input->post())
         {
             //print_r($_POST); exit();
@@ -3796,21 +3427,17 @@ public function timelinePopup()
             redirect(base_url('enquiry/view/'.$this->input->post('enquiry_id')));;
         }
     }
-
     public function visit_load_data()
     {
         //print_r($_POST); exit(); 
         $this->load->model('visit_datatable_model');
-
         $result = $this->visit_datatable_model->getRows($_POST);
         //echo $this->db->last_query(); exit();
         $data = array();
-
         foreach ($result as $res)
         {
             $sub = array();
             $time = $res->visit_time=='00:00:00'?null:date("g:i a", strtotime($res->visit_time));
-
             $sub[] = $res->id;
             $sub[] = $res->visit_date!='0000-00-00'?$res->visit_date:'NA';
             $sub[] = $time??'NA';
@@ -3819,7 +3446,6 @@ public function timelinePopup()
             $sub[] = $res->rating!=''?$res->rating:'NA';
             $sub[] = $res->next_date!='0000-00-00'?$res->next_date:'NA';
             $sub[] = $res->next_location?$res->next_location:'NA';
-
             $data[] =$sub;
         }
     
@@ -3830,7 +3456,5 @@ public function timelinePopup()
             "data" => $data,
         );
         echo json_encode($output);
-
     }
-
 }

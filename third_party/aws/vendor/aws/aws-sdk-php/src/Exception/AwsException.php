@@ -1,6 +1,5 @@
 <?php
 namespace Aws\Exception;
-
 use Aws\Api\Shape;
 use Aws\CommandInterface;
 use Aws\HasDataTrait;
@@ -11,7 +10,6 @@ use Aws\ResultInterface;
 use JmesPath\Env as JmesPath;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\RequestInterface;
-
 /**
  * Represents an AWS exception that is thrown when a command fails.
  */
@@ -22,7 +20,6 @@ class AwsException extends \RuntimeException implements
 {
     use HasDataTrait;
     use HasMonitoringEventsTrait;
-
     /** @var ResponseInterface */
     private $response;
     private $request;
@@ -36,7 +33,6 @@ class AwsException extends \RuntimeException implements
     private $transferInfo;
     private $errorMessage;
     private $maxRetriesExceeded;
-
 
     /**
      * @param string           $message Exception message
@@ -72,13 +68,11 @@ class AwsException extends \RuntimeException implements
         $this->maxRetriesExceeded = false;
         parent::__construct($message, 0, $previous);
     }
-
     public function __toString()
     {
         if (!$this->getPrevious()) {
             return parent::__toString();
         }
-
         // PHP strangely shows the innermost exception first before the outer
         // exception message. It also has a default character limit for
         // exception message strings such that the "next" exception (this one)
@@ -92,7 +86,6 @@ class AwsException extends \RuntimeException implements
             parent::__toString()
         );
     }
-
     /**
      * Get the command that was executed.
      *
@@ -102,7 +95,6 @@ class AwsException extends \RuntimeException implements
     {
         return $this->command;
     }
-
     /**
      * Get the concise error message if any.
      *
@@ -112,7 +104,6 @@ class AwsException extends \RuntimeException implements
     {
         return $this->errorMessage;
     }
-
     /**
      * Get the sent HTTP request if any.
      *
@@ -122,7 +113,6 @@ class AwsException extends \RuntimeException implements
     {
         return $this->request;
     }
-
     /**
      * Get the received HTTP response if any.
      *
@@ -132,7 +122,6 @@ class AwsException extends \RuntimeException implements
     {
         return $this->response;
     }
-
     /**
      * Get the result of the exception if available
      *
@@ -142,7 +131,6 @@ class AwsException extends \RuntimeException implements
     {
         return $this->result;
     }
-
     /**
      * Returns true if this is a connection error.
      *
@@ -152,7 +140,6 @@ class AwsException extends \RuntimeException implements
     {
         return $this->connectionError;
     }
-
     /**
      * If available, gets the HTTP status code of the corresponding response
      *
@@ -162,7 +149,6 @@ class AwsException extends \RuntimeException implements
     {
         return $this->response ? $this->response->getStatusCode() : null;
     }
-
     /**
      * Get the request ID of the error. This value is only present if a
      * response was received and is not present in the event of a networking
@@ -174,7 +160,6 @@ class AwsException extends \RuntimeException implements
     {
         return $this->requestId;
     }
-
     /**
      * Get the AWS error type.
      *
@@ -184,7 +169,6 @@ class AwsException extends \RuntimeException implements
     {
         return $this->errorType;
     }
-
     /**
      * Get the AWS error code.
      *
@@ -194,7 +178,6 @@ class AwsException extends \RuntimeException implements
     {
         return $this->errorCode;
     }
-
     /**
      * Get the AWS error shape.
      *
@@ -204,7 +187,6 @@ class AwsException extends \RuntimeException implements
     {
         return $this->errorShape;
     }
-
     /**
      * Get all transfer information as an associative array if no $name
      * argument is supplied, or gets a specific transfer statistic if
@@ -219,12 +201,10 @@ class AwsException extends \RuntimeException implements
         if (!$name) {
             return $this->transferInfo;
         }
-
         return isset($this->transferInfo[$name])
             ? $this->transferInfo[$name]
             : null;
     }
-
     /**
      * Replace the transfer information associated with an exception.
      *
@@ -234,7 +214,6 @@ class AwsException extends \RuntimeException implements
     {
         $this->transferInfo = $info;
     }
-
     /**
      * Returns whether the max number of retries is exceeded.
      *
@@ -244,7 +223,6 @@ class AwsException extends \RuntimeException implements
     {
         return $this->maxRetriesExceeded;
     }
-
     /**
      * Sets the flag for max number of retries exceeded.
      */
@@ -252,17 +230,14 @@ class AwsException extends \RuntimeException implements
     {
         $this->maxRetriesExceeded = true;
     }
-
     public function hasKey($name)
     {
         return isset($this->data[$name]);
     }
-
     public function get($key)
     {
         return $this[$key];
     }
-
     public function search($expression)
     {
         return JmesPath::search($expression, $this->toArray());

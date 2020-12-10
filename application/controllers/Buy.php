@@ -36,7 +36,6 @@ class Buy extends CI_Controller {
 					"next_pay"		 => '',
 					"remark" 		 => '',
 					);	
-
 			$arr["prev_balance"] = 0;							
 			$arr["ord_id"] 		 = $ordno;
 			$arr["tot_pay"]		 = $amt;
@@ -45,28 +44,23 @@ class Buy extends CI_Controller {
 			$arr["added_by"]	 = $this->session->user_id;
 			$arr["created_date"] = date("Y-m-d h:i:s");
 			$arr["approve"] = 1;
-
 			$this->load->model('payment_model');
 			$this->payment_model->save_payment($arr);
-
 			redirect(base_url("order/invoice/".$ordno), "refresh");			
 		}else{
 			$this->db->insert('payment_history',$ins_arr);
 			redirect('buy/checkout');
 		}
 	}
-
 	public function index(){
 		
 		$data['title'] = 'Product List';
 		$data['limit'] = 8;
 		$data['product_list'] = $this->Product_model->productdetlist(1,1);
-
 		$data["totalprod"]        = $this->Product_model->productdetlist(2,1);
 		//$data['category'] = $this->sell_model->subCategory();
 		$carts = $this->cart->contents();
 		
-
 		$prodcart = array();
 		if(!empty($carts)){
 			foreach($carts as $ind =>$crd) {
@@ -83,12 +77,10 @@ class Buy extends CI_Controller {
         $this->load->view('layout/main_wrapper', $data);
 		
 	}
-
 	public function checkAlreadyExist()
     {
         $user      = $this->input->post('user');
         $parameter  = $this->input->post('parameter');
-
         if($parameter == 'userid')
         {
             $check  = $this->db->select('pk_i_admin_id')->from('tbl_admin')->where('employee_id',"$user")->get()->result();
@@ -101,7 +93,6 @@ class Buy extends CI_Controller {
         	echo json_encode(array('status'=>"exist"));
         }
     }
-
 	public function checkout(){		
 		$data = array();
 		$prodcart = array();
@@ -129,13 +120,11 @@ class Buy extends CI_Controller {
 		$data['uid'] = $uid;
 		$data['user_row']	=	$this->user_model->read_by_id($uid);
 		//$data['user_city']	=	$this->location_model->ecity_list();
-
 		$data['user_state']	=	$this->location_model->estate_list_api();
 		$data['user_meta'] = $this->user_model->get_user_meta($uid,array('postal_code','gstin'));
 		if (empty($prodcart)) {
 			$data['content'] = '<br><div class="alert alert-danger text-center"><h2>Your Cart in empty.</h2></div>';
 		}else{
-
 			$data['content']	=	$this->load->view('sell/checkout_form',$data,true);
 		}
         $this->load->view('layout/main_wrapper', $data);	
@@ -279,7 +268,6 @@ class Buy extends CI_Controller {
 	
 		public function addtocart(){
 		$this->cart->product_name_rules = '[:print:]';
-
 		$this->form_validation->set_rules("product", "Product", "trim|required");
 		
 		if($this->form_validation->run()){
@@ -312,7 +300,6 @@ class Buy extends CI_Controller {
 			if ($product->gst>0) {
 				$gst_price = round((float)$product->price*((float)$product->gst/100),1);				
 			}
-
 			$data = array('id'      => $prodno,
 							'qty'       => 1,
 							'price'     => round($product->price+$gst_price,1),
@@ -382,7 +369,6 @@ class Buy extends CI_Controller {
 					$this->cart->insert($data);
 				}
 				$cardcontent = $this->cart->contents();
-
 				$gst_price = 0;
 				if ($product->gst>0) {
 					$gst_price = round((float)$product->price*((float)$product->gst/100),1);				
@@ -391,12 +377,10 @@ class Buy extends CI_Controller {
 				$prdarr = array("status" => $status,"prodid" => $prodno, "product" => $product->country_name, "price" => (float)$product->price+(float)$gst_price , "qty" => (int)$qty + (int)$pqty,"total" => count($cardcontent),'minalert'=>!empty($_POST['minimum']) ? $_POST['minimum'] : 0);
 				
 			}else{
-
 				$gst_price = 0;
 				if ($product->gst>0) {
 					$gst_price = round((float)$product->price*((float)$product->gst/100),1);				
 				}
-
 				$prdarr = array("status" => 1,"prodid" => $prodno, "product" => $product->country_name, "price" => (float)$product->price+(float)$gst_price, "qty" => (int)$data['qty'],"total" => count($cardcontent) + 1,'minalert'=>$data['minalert']);
 				$this->cart->insert($data);	
 			}				
@@ -432,7 +416,6 @@ class Buy extends CI_Controller {
 		
 	
 		die(json_encode($prdarr));	
-
 	}
 	public function cart()
 	{
@@ -442,7 +425,6 @@ class Buy extends CI_Controller {
 			foreach($cartarr as $ind => $cart) {
 			$productData = $this->Product_model->productdet($cart['id']);
 			
-
 		echo ' <li id = "cart-li-'.$cart['id'].'" >  
 			  <div class = "cart-items"><h4><a class="prodname" href = "">'.$cart['name'].'</a></h4>
 				  <p> Price : <i class = "fa fa-price"></i> '.$cart['price'].' X <input type="hidden" name="minimum" class="minimum" value="'.$productData->minimum_order_quantity.'"> <input type="number" onchange="manageCartQty()" class="cart-qty" value="'.$cart['qty'].'" min="1" data-prodid="'.$cart['id'].'" > = <i class = "fa fa-rupee"></i><span class="item-price-'.$cart['id'].'">'.round($cart['price']*$cart['qty'],2).'</span> 
@@ -451,7 +433,6 @@ class Buy extends CI_Controller {
 				  <hr />
 				  </div>
 			  </li>';
-
 	}
 }
 	}

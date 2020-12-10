@@ -1,8 +1,6 @@
 <?php
 namespace Aws\MTurk;
-
 use Aws\AwsClient;
-
 /**
  * This client is used to interact with the **Amazon Mechanical Turk Requester Service** service.
  * @method \Aws\Result acceptQualificationRequest(array $args = [])

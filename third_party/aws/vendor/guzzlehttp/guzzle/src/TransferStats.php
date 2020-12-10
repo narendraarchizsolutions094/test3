@@ -1,10 +1,8 @@
 <?php
 namespace GuzzleHttp;
-
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\UriInterface;
-
 /**
  * Represents data at the point after it was transferred either successfully
  * or after a network error.
@@ -16,7 +14,6 @@ final class TransferStats
     private $transferTime;
     private $handlerStats;
     private $handlerErrorData;
-
     /**
      * @param RequestInterface       $request          Request that was sent.
      * @param ResponseInterface|null $response         Response received (if any)
@@ -37,7 +34,6 @@ final class TransferStats
         $this->handlerErrorData = $handlerErrorData;
         $this->handlerStats = $handlerStats;
     }
-
     /**
      * @return RequestInterface
      */
@@ -45,7 +41,6 @@ final class TransferStats
     {
         return $this->request;
     }
-
     /**
      * Returns the response that was received (if any).
      *
@@ -55,7 +50,6 @@ final class TransferStats
     {
         return $this->response;
     }
-
     /**
      * Returns true if a response was received.
      *
@@ -65,7 +59,6 @@ final class TransferStats
     {
         return $this->response !== null;
     }
-
     /**
      * Gets handler specific error data.
      *
@@ -79,7 +72,6 @@ final class TransferStats
     {
         return $this->handlerErrorData;
     }
-
     /**
      * Get the effective URI the request was sent to.
      *
@@ -89,7 +81,6 @@ final class TransferStats
     {
         return $this->request->getUri();
     }
-
     /**
      * Get the estimated time the request was being transferred by the handler.
      *
@@ -99,7 +90,6 @@ final class TransferStats
     {
         return $this->transferTime;
     }
-
     /**
      * Gets an array of all of the handler specific transfer data.
      *
@@ -109,7 +99,6 @@ final class TransferStats
     {
         return $this->handlerStats;
     }
-
     /**
      * Get a specific handler statistic from the handler by name.
      *

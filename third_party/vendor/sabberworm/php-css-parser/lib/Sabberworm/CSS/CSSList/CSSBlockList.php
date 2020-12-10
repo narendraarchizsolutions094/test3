@@ -1,14 +1,11 @@
 <?php
-
 namespace Sabberworm\CSS\CSSList;
-
 use Sabberworm\CSS\RuleSet\DeclarationBlock;
 use Sabberworm\CSS\RuleSet\RuleSet;
 use Sabberworm\CSS\Property\Selector;
 use Sabberworm\CSS\Rule\Rule;
 use Sabberworm\CSS\Value\ValueList;
 use Sabberworm\CSS\Value\CSSFunction;
-
 /**
  * A CSSBlockList is a CSSList whose DeclarationBlocks are guaranteed to contain valid declaration blocks or at-rules.
  * Most CSSLists conform to this category but some at-rules (such as @keyframes) do not.
@@ -17,7 +14,6 @@ abstract class CSSBlockList extends CSSList {
 	public function __construct($iLineNo = 0) {
 		parent::__construct($iLineNo);
 	}
-
 	protected function allDeclarationBlocks(&$aResult) {
 		foreach ($this->aContents as $mContent) {
 			if ($mContent instanceof DeclarationBlock) {
@@ -27,7 +23,6 @@ abstract class CSSBlockList extends CSSList {
 			}
 		}
 	}
-
 	protected function allRuleSets(&$aResult) {
 		foreach ($this->aContents as $mContent) {
 			if ($mContent instanceof RuleSet) {
@@ -37,7 +32,6 @@ abstract class CSSBlockList extends CSSList {
 			}
 		}
 	}
-
 	protected function allValues($oElement, &$aResult, $sSearchString = null, $bSearchInFunctionArguments = false) {
 		if ($oElement instanceof CSSBlockList) {
 			foreach ($oElement->getContents() as $oContent) {
@@ -60,7 +54,6 @@ abstract class CSSBlockList extends CSSList {
 			$aResult[] = $oElement;
 		}
 	}
-
 	protected function allSelectors(&$aResult, $sSpecificitySearch = null) {
 		$aDeclarationBlocks = array();
 		$this->allDeclarationBlocks($aDeclarationBlocks);
@@ -103,5 +96,4 @@ abstract class CSSBlockList extends CSSList {
 			}
 		}
 	}
-
 }

@@ -1,6 +1,5 @@
 <?php
 namespace Aws\Crypto;
-
 interface MetadataStrategyInterface
 {
     /**
@@ -15,7 +14,6 @@ interface MetadataStrategyInterface
      * @return array Updated arguments for PutObject.
      */
     public function save(MetadataEnvelope $envelope, array $args);
-
     /**
      * Generates a MetadataEnvelope according to the specific strategy using the
      * passed arguments.

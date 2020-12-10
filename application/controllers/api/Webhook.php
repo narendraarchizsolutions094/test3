@@ -3,9 +3,7 @@ use Restserver\Libraries\REST_Controller;
 defined('BASEPATH') OR exit('No direct script access allowed');
 require APPPATH . 'libraries/REST_Controller.php';
 require APPPATH . 'libraries/Format.php';
-
 class Webhook extends REST_Controller {
-
     function __construct()
     {
         parent::__construct();
@@ -17,9 +15,7 @@ class Webhook extends REST_Controller {
         ));
         
         $this->load->library('email'); 
-
    // $this->lang->load('notifications_lang', 'english');   
-
         
            $this->load->helper('url');
            $this->methods['users_get']['limit'] = 500; 
@@ -69,7 +65,6 @@ class Webhook extends REST_Controller {
         curl_close( $curl );
           ///
     }
-
   public function click_to_dial_post()
   {
     $mob  = $this->input->post("phone_no");
@@ -133,7 +128,6 @@ class Webhook extends REST_Controller {
   {
     $phone   = $this->input->post("phone_no");
     $comp_id = $this->input->post("companey_id");
-
     $this->form_validation->set_rules('phone_no', 'Phone No', 'required');
     $this->form_validation->set_rules('companey_id', 'Company id', 'required');
     
@@ -165,9 +159,7 @@ class Webhook extends REST_Controller {
             'message' => array('error'=>'fields required!') 
             ], REST_Controller::HTTP_OK);
     }
-
   }
-
   public function updateEnquiryStatus_post()
   {
     $phone   = '91'.$this->input->post("phone_no");
@@ -260,5 +252,4 @@ class Webhook extends REST_Controller {
                 $this->db->insert('tbl_col_log2'); 
         
     }
-
 }

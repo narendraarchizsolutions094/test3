@@ -1,8 +1,6 @@
 <?php
 namespace Aws\SesV2;
-
 use Aws\AwsClient;
-
 /**
  * This client is used to interact with the **Amazon Simple Email Service** service.
  * @method \Aws\Result createConfigurationSet(array $args = [])

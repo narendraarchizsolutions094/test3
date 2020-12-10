@@ -1,8 +1,6 @@
 <?php
 namespace Aws\Personalize;
-
 use Aws\AwsClient;
-
 /**
  * This client is used to interact with the **Amazon Personalize** service.
  * @method \Aws\Result createBatchInferenceJob(array $args = [])

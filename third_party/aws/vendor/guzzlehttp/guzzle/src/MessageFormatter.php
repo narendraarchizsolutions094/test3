@@ -1,10 +1,8 @@
 <?php
 namespace GuzzleHttp;
-
 use Psr\Http\Message\MessageInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-
 /**
  * Formats log messages using variable substitutions for requests, responses,
  * and other transactional data.
@@ -42,10 +40,8 @@ class MessageFormatter
     const CLF = "{hostname} {req_header_User-Agent} - [{date_common_log}] \"{method} {target} HTTP/{version}\" {code} {res_header_Content-Length}";
     const DEBUG = ">>>>>>>>\n{request}\n<<<<<<<<\n{response}\n--------\n{error}";
     const SHORT = '[{ts}] "{method} {target} HTTP/{version}" {code}';
-
     /** @var string Template used to format log messages */
     private $template;
-
     /**
      * @param string $template Log message template
      */
@@ -53,7 +49,6 @@ class MessageFormatter
     {
         $this->template = $template ?: self::CLF;
     }
-
     /**
      * Returns a formatted message string.
      *
@@ -69,14 +64,12 @@ class MessageFormatter
         \Exception $error = null
     ) {
         $cache = [];
-
         return preg_replace_callback(
             '/{\s*([A-Za-z_\-\.0-9]+)\s*}/',
             function (array $matches) use ($request, $response, $error, &$cache) {
                 if (isset($cache[$matches[1]])) {
                     return $cache[$matches[1]];
                 }
-
                 $result = '';
                 switch ($matches[1]) {
                     case 'request':
@@ -160,14 +153,12 @@ class MessageFormatter
                                 : 'NULL';
                         }
                 }
-
                 $cache[$matches[1]] = $result;
                 return $result;
             },
             $this->template
         );
     }
-
     /**
      * Get headers from message as string
      *
@@ -179,7 +170,6 @@ class MessageFormatter
         foreach ($message->getHeaders() as $name => $values) {
             $result .= $name . ': ' . implode(', ', $values) . "\r\n";
         }
-
         return trim($result);
     }
 }

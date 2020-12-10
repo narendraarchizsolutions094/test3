@@ -1,10 +1,8 @@
 <?php
 namespace Aws;
-
 use Aws\Api\Service;
 use Aws\Exception\IncalculablePayloadException;
 use Psr\Http\Message\RequestInterface;
-
 /**
  * @internal
  */
@@ -12,7 +10,6 @@ class StreamRequestPayloadMiddleware
 {
     private $nextHandler;
     private $service;
-
     /**
      * Create a middleware wrapper function
      *
@@ -25,22 +22,18 @@ class StreamRequestPayloadMiddleware
             return new self($handler, $service);
         };
     }
-
     public function __construct(callable $nextHandler, Service $service)
     {
         $this->nextHandler = $nextHandler;
         $this->service = $service;
     }
-
     public function __invoke(CommandInterface $command, RequestInterface $request)
     {
         $nextHandler = $this->nextHandler;
-
         $operation = $this->service->getOperation($command->getName());
         $contentLength = $request->getHeader('content-length');
         $hasStreaming = false;
         $requiresLength = false;
-
         // Check if any present input member is a stream and requires the
         // content length
         foreach ($operation->getInput()->getMembers() as $name => $member) {
@@ -51,9 +44,7 @@ class StreamRequestPayloadMiddleware
                 }
             }
         }
-
         if ($hasStreaming) {
-
             // Add 'transfer-encoding' header if payload size not required to
             // to be calculated and not already known
             if (empty($requiresLength)
@@ -62,7 +53,6 @@ class StreamRequestPayloadMiddleware
                 && $operation['authtype'] == 'v4-unsigned-body'
             ) {
                 $request = $request->withHeader('transfer-encoding', 'chunked');
-
             // Otherwise, make sure 'content-length' header is added
             } else {
                 if (empty($contentLength)) {
@@ -79,7 +69,6 @@ class StreamRequestPayloadMiddleware
                 }
             }
         }
-
         return $nextHandler($command, $request);
     }
 }

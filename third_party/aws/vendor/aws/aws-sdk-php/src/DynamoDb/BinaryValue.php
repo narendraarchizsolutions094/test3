@@ -1,8 +1,6 @@
 <?php
 namespace Aws\DynamoDb;
-
 use GuzzleHttp\Psr7;
-
 /**
  * Special object to represent a DynamoDB binary (B) value.
  */
@@ -10,7 +8,6 @@ class BinaryValue implements \JsonSerializable
 {
     /** @var string Binary value. */
     private $value;
-
     /**
      * @param mixed $value A binary value compatible with Guzzle streams.
      *
@@ -23,12 +20,10 @@ class BinaryValue implements \JsonSerializable
         }
         $this->value = (string) $value;
     }
-
     public function jsonSerialize()
     {
         return $this->value;
     }
-
     public function __toString()
     {
         return $this->value;

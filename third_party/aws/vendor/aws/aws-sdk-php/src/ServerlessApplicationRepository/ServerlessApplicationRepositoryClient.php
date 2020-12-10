@@ -1,8 +1,6 @@
 <?php
 namespace Aws\ServerlessApplicationRepository;
-
 use Aws\AwsClient;
-
 /**
  * This client is used to interact with the **AWSServerlessApplicationRepository** service.
  * @method \Aws\Result createApplication(array $args = [])

@@ -1,16 +1,12 @@
 <?php
-
 namespace Sabberworm\CSS;
-
 use Sabberworm\CSS\CSSList\Document;
 use Sabberworm\CSS\Parsing\ParserState;
-
 /**
  * Parser class parses CSS from text into a data structure.
  */
 class Parser {
 	private $oParserState;
-
 	/**
 	 * Parser constructor.
 	 * Note that that iLineNo starts from 1 and not 0
@@ -25,17 +21,13 @@ class Parser {
 		}
 		$this->oParserState = new ParserState($sText, $oParserSettings, $iLineNo);
 	}
-
 	public function setCharset($sCharset) {
 		$this->oParserState->setCharset($sCharset);
 	}
-
 	public function getCharset() {
 		$this->oParserState->getCharset();
 	}
-
 	public function parse() {
 		return Document::parse($this->oParserState);
 	}
-
 }

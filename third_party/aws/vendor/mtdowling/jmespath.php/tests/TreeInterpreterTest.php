@@ -1,10 +1,8 @@
 <?php
 namespace JmesPath\Tests\Tree;
-
 use JmesPath\AstRuntime;
 use JmesPath\TreeInterpreter;
 use PHPUnit\Framework\TestCase;
-
 /**
  * @covers JmesPath\Tree\TreeInterpreter
  */
@@ -23,7 +21,6 @@ class TreeInterpreterTest extends TestCase
             'runtime' => new AstRuntime()
         ]));
     }
-
     public function testWorksWithArrayObjectAsObject()
     {
         $runtime = new AstRuntime();
@@ -31,7 +28,6 @@ class TreeInterpreterTest extends TestCase
             'foo' => new \ArrayObject(['bar' => 'baz'])
         ])));
     }
-
     public function testWorksWithArrayObjectAsArray()
     {
         $runtime = new AstRuntime();
@@ -39,7 +35,6 @@ class TreeInterpreterTest extends TestCase
             'foo' => new \ArrayObject([new \ArrayObject(['bar' => 'baz'])])
         ])));
     }
-
     public function testWorksWithArrayProjections()
     {
         $runtime = new AstRuntime();
@@ -54,7 +49,6 @@ class TreeInterpreterTest extends TestCase
             ]))
         );
     }
-
     public function testWorksWithObjectProjections()
     {
         $runtime = new AstRuntime();

@@ -1,8 +1,6 @@
 <?php
 namespace Aws\DynamoDb;
-
 use Psr\Http\Message\StreamInterface;
-
 /**
  * Marshals and unmarshals JSON documents and PHP arrays into DynamoDB items.
  */
@@ -14,10 +12,8 @@ class Marshaler
         'nullify_invalid' => false,
         'wrap_numbers'    => false,
     ];
-
     /** @var array Marshaler options. */
     private $options;
-
     /**
      * Instantiates a DynamoDB Marshaler.
      *
@@ -36,7 +32,6 @@ class Marshaler
     {
         $this->options = $options + self::$defaultOptions;
     }
-
     /**
      * Creates a special object to represent a DynamoDB binary (B) value.
      *
@@ -51,7 +46,6 @@ class Marshaler
     {
         return new BinaryValue($value);
     }
-
     /**
      * Creates a special object to represent a DynamoDB number (N) value.
      *
@@ -65,7 +59,6 @@ class Marshaler
     {
         return new NumberValue($value);
     }
-
     /**
      * Creates a special object to represent a DynamoDB set (SS/NS/BS) value.
      *
@@ -80,7 +73,6 @@ class Marshaler
     {
         return new SetValue($values);
     }
-
     /**
      * Marshal a JSON document from a string to a DynamoDB item.
      *
@@ -100,10 +92,8 @@ class Marshaler
                 'The JSON document must be valid and be an object at its root.'
             );
         }
-
         return current($this->marshalValue($data));
     }
-
     /**
      * Marshal a native PHP array of data to a DynamoDB item.
      *
@@ -118,7 +108,6 @@ class Marshaler
     {
         return current($this->marshalValue($item));
     }
-
     /**
      * Marshal a native PHP value into a DynamoDB attribute value.
      *
@@ -133,16 +122,13 @@ class Marshaler
     public function marshalValue($value)
     {
         $type = gettype($value);
-
         // Handle string values.
         if ($type === 'string') {
             if ($value === '') {
                 return $this->handleInvalid('empty strings are invalid');
             }
-
             return ['S' => $value];
         }
-
         // Handle number values.
         if ($type === 'integer'
             || $type === 'double'
@@ -150,17 +136,14 @@ class Marshaler
         ) {
             return ['N' => (string) $value];
         }
-
         // Handle boolean values.
         if ($type === 'boolean') {
             return ['BOOL' => $value];
         }
-
         // Handle null values.
         if ($type === 'NULL') {
             return ['NULL' => true];
         }
-
         // Handle set values.
         if ($value instanceof SetValue) {
             if (count($value) === 0) {
@@ -178,10 +161,8 @@ class Marshaler
                 }
                 $data[] = current($marshaled);
             }
-
             return [$previousType . 'S' => array_values(array_unique($data))];
         }
-
         // Handle list and map values.
         $dbType = 'L';
         if ($value instanceof \stdClass) {
@@ -201,7 +182,6 @@ class Marshaler
             }
             return [$dbType => $data];
         }
-
         // Handle binary values.
         if (is_resource($value) || $value instanceof StreamInterface) {
             $value = $this->binary($value);
@@ -209,11 +189,9 @@ class Marshaler
         if ($value instanceof BinaryValue) {
             return ['B' => (string) $value];
         }
-
         // Handle invalid values.
         return $this->handleInvalid('encountered unexpected value');
     }
-
     /**
      * Unmarshal a document (item) from a DynamoDB operation result into a JSON
      * document string.
@@ -230,7 +208,6 @@ class Marshaler
             $jsonEncodeFlags
         );
     }
-
     /**
      * Unmarshal an item from a DynamoDB operation result into a native PHP
      * array. If you set $mapAsObject to true, then a stdClass value will be
@@ -245,7 +222,6 @@ class Marshaler
     {
         return $this->unmarshalValue(['M' => $data], $mapAsObject);
     }
-
     /**
      * Unmarshal a value from a DynamoDB operation result into a native PHP
      * value. Will return a scalar, array, or (if you set $mapAsObject to true)
@@ -271,7 +247,6 @@ class Marshaler
                 if ($this->options['wrap_numbers']) {
                     return new NumberValue($value);
                 }
-
                 // Use type coercion to unmarshal numbers to int/float.
                 return $value + 0;
             case 'M':
@@ -298,10 +273,8 @@ class Marshaler
                 }
                 return new SetValue($value);
         }
-
         throw new \UnexpectedValueException("Unexpected type: {$type}.");
     }
-
     /**
      * Handle invalid value based on marshaler configuration.
      *
@@ -314,11 +287,9 @@ class Marshaler
         if ($this->options['ignore_invalid']) {
             return null;
         }
-
         if ($this->options['nullify_invalid']) {
             return ['NULL' => true];
         }
-
         throw new \UnexpectedValueException("Marshaling error: {$message}.");
     }
 }

@@ -1,9 +1,7 @@
 <?php
 namespace Aws\Signature;
-
 use Aws\Credentials\CredentialsInterface;
 use Psr\Http\Message\RequestInterface;
-
 /**
  * Amazon S3 signature version 4 support.
  */
@@ -22,10 +20,8 @@ class S3SignatureV4 extends SignatureV4
                 $this->getPayload($request)
             );
         }
-
         return parent::signRequest($request, $credentials);
     }
-
     /**
      * Always add a x-amz-content-sha-256 for data integrity.
      */
@@ -41,10 +37,8 @@ class S3SignatureV4 extends SignatureV4
                 $this->getPresignedPayload($request)
             );
         }
-
         return parent::presign($request, $credentials, $expires, $options);
     }
-
     /**
      * Override used to allow pre-signed URLs to be created for an
      * in-determinate request payload.
@@ -53,7 +47,6 @@ class S3SignatureV4 extends SignatureV4
     {
         return SignatureV4::UNSIGNED_PAYLOAD;
     }
-
     /**
      * Amazon S3 does not double-encode the path component in the canonical request
      */

@@ -1,8 +1,6 @@
 <?php
 namespace Aws\MediaStore;
-
 use Aws\AwsClient;
-
 /**
  * This client is used to interact with the **AWS Elemental MediaStore** service.
  * @method \Aws\Result createContainer(array $args = [])

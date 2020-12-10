@@ -1,8 +1,6 @@
 <?php
 namespace Aws\IoTSiteWise;
-
 use Aws\AwsClient;
-
 /**
  * This client is used to interact with the **AWS IoT SiteWise** service.
  * @method \Aws\Result associateAssets(array $args = [])

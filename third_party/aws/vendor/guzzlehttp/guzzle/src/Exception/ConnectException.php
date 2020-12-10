@@ -1,8 +1,6 @@
 <?php
 namespace GuzzleHttp\Exception;
-
 use Psr\Http\Message\RequestInterface;
-
 /**
  * Exception thrown when a connection cannot be established.
  *
@@ -18,7 +16,6 @@ class ConnectException extends RequestException
     ) {
         parent::__construct($message, $request, null, $previous, $handlerContext);
     }
-
     /**
      * @return null
      */
@@ -26,7 +23,6 @@ class ConnectException extends RequestException
     {
         return null;
     }
-
     /**
      * @return bool
      */

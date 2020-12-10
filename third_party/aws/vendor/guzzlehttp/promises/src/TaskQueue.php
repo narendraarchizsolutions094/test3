@@ -1,6 +1,5 @@
 <?php
 namespace GuzzleHttp\Promise;
-
 /**
  * A task queue that executes tasks in a FIFO order.
  *
@@ -14,7 +13,6 @@ class TaskQueue implements TaskQueueInterface
 {
     private $enableShutdown = true;
     private $queue = [];
-
     public function __construct($withShutdown = true)
     {
         if ($withShutdown) {
@@ -29,17 +27,14 @@ class TaskQueue implements TaskQueueInterface
             });
         }
     }
-
     public function isEmpty()
     {
         return !$this->queue;
     }
-
     public function add(callable $task)
     {
         $this->queue[] = $task;
     }
-
     public function run()
     {
         /** @var callable $task */
@@ -47,7 +42,6 @@ class TaskQueue implements TaskQueueInterface
             $task();
         }
     }
-
     /**
      * The task queue will be run and exhausted by default when the process
      * exits IFF the exit is not the result of a PHP E_ERROR error.

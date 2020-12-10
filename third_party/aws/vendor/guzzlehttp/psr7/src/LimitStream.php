@@ -1,8 +1,6 @@
 <?php
 namespace GuzzleHttp\Psr7;
-
 use Psr\Http\Message\StreamInterface;
-
 
 /**
  * Decorator used to return only a subset of a stream
@@ -10,13 +8,10 @@ use Psr\Http\Message\StreamInterface;
 class LimitStream implements StreamInterface
 {
     use StreamDecoratorTrait;
-
     /** @var int Offset to start reading from */
     private $offset;
-
     /** @var int Limit the number of bytes that can be read */
     private $limit;
-
     /**
      * @param StreamInterface $stream Stream to wrap
      * @param int             $limit  Total number of bytes to allow to be read
@@ -33,22 +28,18 @@ class LimitStream implements StreamInterface
         $this->setLimit($limit);
         $this->setOffset($offset);
     }
-
     public function eof()
     {
         // Always return true if the underlying stream is EOF
         if ($this->stream->eof()) {
             return true;
         }
-
         // No limit and the underlying stream is not at EOF
         if ($this->limit == -1) {
             return false;
         }
-
         return $this->stream->tell() >= $this->offset + $this->limit;
     }
-
     /**
      * Returns the size of the limited subset of data
      * {@inheritdoc}
@@ -63,7 +54,6 @@ class LimitStream implements StreamInterface
             return min($this->limit, $length - $this->offset);
         }
     }
-
     /**
      * Allow for a bounded seek on the read limited stream
      * {@inheritdoc}
@@ -77,18 +67,14 @@ class LimitStream implements StreamInterface
                 $whence
             ));
         }
-
         $offset += $this->offset;
-
         if ($this->limit !== -1) {
             if ($offset > $this->offset + $this->limit) {
                 $offset = $this->offset + $this->limit;
             }
         }
-
         $this->stream->seek($offset);
     }
-
     /**
      * Give a relative tell()
      * {@inheritdoc}
@@ -97,7 +83,6 @@ class LimitStream implements StreamInterface
     {
         return $this->stream->tell() - $this->offset;
     }
-
     /**
      * Set the offset to start limiting from
      *
@@ -108,7 +93,6 @@ class LimitStream implements StreamInterface
     public function setOffset($offset)
     {
         $current = $this->stream->tell();
-
         if ($current !== $offset) {
             // If the stream cannot seek to the offset position, then read to it
             if ($this->stream->isSeekable()) {
@@ -119,10 +103,8 @@ class LimitStream implements StreamInterface
                 $this->stream->read($offset - $current);
             }
         }
-
         $this->offset = $offset;
     }
-
     /**
      * Set the limit of bytes that the decorator allows to be read from the
      * stream.
@@ -134,13 +116,11 @@ class LimitStream implements StreamInterface
     {
         $this->limit = $limit;
     }
-
     public function read($length)
     {
         if ($this->limit == -1) {
             return $this->stream->read($length);
         }
-
         // Check if the current position is less than the total allowed
         // bytes + original offset
         $remaining = ($this->offset + $this->limit) - $this->stream->tell();
@@ -149,7 +129,6 @@ class LimitStream implements StreamInterface
             // limit is not exceeded
             return $this->stream->read(min($remaining, $length));
         }
-
         return '';
     }
 }

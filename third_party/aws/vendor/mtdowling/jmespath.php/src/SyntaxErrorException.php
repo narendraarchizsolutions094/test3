@@ -1,6 +1,5 @@
 <?php
 namespace JmesPath;
-
 /**
  * Syntax errors raise this exception that gives context
  */
@@ -23,7 +22,6 @@ class SyntaxErrorException extends \InvalidArgumentException
             : $this->createTokenMessage($token, $expectedTypesOrMessage);
         parent::__construct($message);
     }
-
     private function createTokenMessage(array $token, array $valid)
     {
         return sprintf(

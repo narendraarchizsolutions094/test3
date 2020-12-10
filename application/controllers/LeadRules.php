@@ -11,12 +11,10 @@ class LeadRules extends CI_Controller {
     public function index() {                     
         $data['leaddata'] = 
         $this->db->select('leadrules.*,concat_ws(" ",tbl_admin.s_display_name,tbl_admin.last_name) as created_by_name,concat_ws(" ",tbl_admin1.s_display_name,tbl_admin1.last_name) as updated_by_name')->from("leadrules")->where("leadrules.comp_id",$this->session->companey_id)->join('tbl_admin',"tbl_admin.pk_i_admin_id=leadrules.created_by",'inner')->join('tbl_admin as tbl_admin1',"tbl_admin1.pk_i_admin_id=leadrules.updated_by",'left')->get()->result_array();                          
-
         $data['content'] = $this->load->view('rules/rules_list', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }  
     
-
     /**
      * Parse a group of conditions */
     function parseGroup($rule, &$param) {
@@ -38,7 +36,6 @@ class LeadRules extends CI_Controller {
         }
         return $parseResult.")";
     }
-
     /**
      * Parsing of a single condition */
     function parseRule($rule, &$param) {
@@ -67,7 +64,6 @@ class LeadRules extends CI_Controller {
         $parseResult .= $operators[$rule['operator']]." ".$rule['value'];
         return $parseResult;
     }
-
     public function save_rule($id=0){                
         $type           =   $this->input->post('type');
         $rule_json      =   $this->input->post('rule_json');
@@ -77,7 +73,6 @@ class LeadRules extends CI_Controller {
         $this->form_validation->set_rules('type','Rule For','required');        
         $this->form_validation->set_rules('rule_action','Rule Action','required');        
         $this->form_validation->set_rules('rule_title','Rule Title','required');                
-
         $status = 0;        
         if ($this->form_validation->run() == true) {
             if (!empty($rule_json) && !empty($rule_action)) {  
@@ -135,7 +130,6 @@ class LeadRules extends CI_Controller {
                     $res    =   $this->db->insert('leadrules',$ins_data);
                     $msg = 'Rule Added Successfully';
                 }
-
                 if($res){                                        
                     $status = 1;
                 }else{
@@ -149,7 +143,6 @@ class LeadRules extends CI_Controller {
         }
         echo json_encode(array('status'=>$status,'msg'=>$msg));
     }    
-
     public function create_rule($id=0){
         $data['title'] = display('leadrules');
         $data['id'] = $id;
@@ -168,13 +161,10 @@ class LeadRules extends CI_Controller {
         $country   =   $this->location_model->country();
         $state     =   $this->location_model->estate_list();
         $city      =   $this->location_model->ecity_list();
-
         
-
         $process_list = $this->dash_model->get_user_product_list();        
         $sub_source = $this->Datasource_model->subsourcelist();             
         $products = $this->enquiry_model->get_user_productcntry_list();
-
         
         $this->load->model('ticket_Model');
         $ticket_status = $this->ticket_Model->get_ticket_status();
@@ -245,13 +235,11 @@ class LeadRules extends CI_Controller {
             }
         }  
 
-
         $data['lead_stages'] = $this->Leads_Model->getStageJson(array(1,2,3));
         $data['ticket_stages'] = $this->Leads_Model->getStageJson(array(4));
         
         $data['lead_description'] = $this->Leads_Model->getSubStageJson(array(1,2,3));
         $data['ticket_description'] = $this->Leads_Model->getSubStageJson(array(4));
-
         $data['rule_ticket_status'] = json_encode($rule_ticket_status);
         $data['rule_enquiry_status'] = json_encode(array(1=>'Enquiry',2=>'Lead',3=>'Client'));
         $data['lead_source'] = json_encode($rule_source);
@@ -261,16 +249,12 @@ class LeadRules extends CI_Controller {
         // $data['lead_stages'] = json_encode($rule_lead_stage);
         
 
-
         $all_description  = $this->Leads_Model->getSubStageJson(array(1,2,3));  
-
         $ticket_description  = $this->Leads_Model->getSubStageJson(array(4)); 
-
         $data['rule_process']   = json_encode($rule_process);
         $data['user_list']   = $this->user_model->companey_users();
         $data['products']   = json_encode($rule_product);
         $data['sub_source']   = json_encode($rule_subsource);
-
        
         $data['content'] = $this->load->view('rules/create_rule', $data, true);
         $this->load->view('layout/main_wrapper', $data);       

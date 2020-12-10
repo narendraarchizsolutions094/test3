@@ -1,10 +1,8 @@
 <?php
 namespace Aws\Crypto;
-
 use GuzzleHttp\Psr7;
 use GuzzleHttp\Psr7\AppendStream;
 use GuzzleHttp\Psr7\Stream;
-
 trait EncryptionTrait
 {
     private static $allowedOptions = [
@@ -12,7 +10,6 @@ trait EncryptionTrait
         'KeySize' => true,
         'Aad' => true,
     ];
-
     /**
      * Dependency to generate a CipherMethod from a set of inputs for loading
      * in to an AesEncryptingStream.
@@ -27,7 +24,6 @@ trait EncryptionTrait
      * @internal
      */
     abstract protected function buildCipherMethod($cipherName, $iv, $keySize);
-
     /**
      * Builds an AesStreamInterface and populates encryption metadata into the
      * supplied envelope.
@@ -55,22 +51,18 @@ trait EncryptionTrait
         MetadataEnvelope $envelope
     ) {
         $materialsDescription = $provider->getMaterialsDescription();
-
         $cipherOptions = array_intersect_key(
             $cipherOptions,
             self::$allowedOptions
         );
-
         if (empty($cipherOptions['Cipher'])) {
             throw new \InvalidArgumentException('An encryption cipher must be'
                 . ' specified in the "cipher_options".');
         }
-
         if (!self::isSupportedCipher($cipherOptions['Cipher'])) {
             throw new \InvalidArgumentException('The cipher requested is not'
                 . ' supported by the SDK.');
         }
-
         if (empty($cipherOptions['KeySize'])) {
             $cipherOptions['KeySize'] = 256;
         }
@@ -78,29 +70,24 @@ trait EncryptionTrait
             throw new \InvalidArgumentException('The cipher "KeySize" must be'
                 . ' an integer.');
         }
-
         if (!MaterialsProvider::isSupportedKeySize(
             $cipherOptions['KeySize']
         )) {
             throw new \InvalidArgumentException('The cipher "KeySize" requested'
                 . ' is not supported by AES (128, 192, or 256).');
         }
-
         $cipherOptions['Iv'] = $provider->generateIv(
             $this->getCipherOpenSslName(
                 $cipherOptions['Cipher'],
                 $cipherOptions['KeySize']
             )
         );
-
         $cek = $provider->generateCek($cipherOptions['KeySize']);
-
         list($encryptingStream, $aesName) = $this->getEncryptingStream(
             $plaintext,
             $cek,
             $cipherOptions
         );
-
         // Populate envelope data
         $envelope[MetadataEnvelope::CONTENT_KEY_V2_HEADER] =
             $provider->encryptCek(
@@ -108,7 +95,6 @@ trait EncryptionTrait
                 $materialsDescription
             );
         unset($cek);
-
         $envelope[MetadataEnvelope::IV_HEADER] =
             base64_encode($cipherOptions['Iv']);
         $envelope[MetadataEnvelope::KEY_WRAP_ALGORITHM_HEADER] =
@@ -124,10 +110,8 @@ trait EncryptionTrait
             $envelope[MetadataEnvelope::CRYPTO_TAG_LENGTH_HEADER] =
                 strlen($cipherOptions['Tag']) * 8;
         }
-
         return $encryptingStream;
     }
-
     /**
      * Generates a stream that wraps the plaintext with the proper cipher and
      * uses the content encryption key (CEK) to encrypt the data when read.
@@ -151,7 +135,6 @@ trait EncryptionTrait
         switch ($cipherOptions['Cipher']) {
             case 'gcm':
                 $cipherOptions['TagLength'] = 16;
-
                 $cipherTextStream = new AesGcmEncryptingStream(
                     $plaintext,
                     $cek,
@@ -162,7 +145,6 @@ trait EncryptionTrait
                     $cipherOptions['TagLength'],
                     $cipherOptions['KeySize']
                 );
-
                 $appendStream = new AppendStream([
                     $cipherTextStream->createStream()
                 ]);

@@ -1,10 +1,8 @@
 <?php
 namespace Aws\S3\Crypto;
-
 use \Aws\Crypto\MetadataStrategyInterface;
 use \Aws\Crypto\MetadataEnvelope;
 use \Aws\S3\S3Client;
-
 /**
  * Stores and reads encryption MetadataEnvelope information in a file on Amazon
  * S3.
@@ -20,10 +18,8 @@ use \Aws\S3\S3Client;
 class InstructionFileMetadataStrategy implements MetadataStrategyInterface
 {
     const DEFAULT_FILE_SUFFIX = '.instruction';
-
     private $client;
     private $suffix;
-
     /**
      * @param S3Client $client Client for use in uploading the instruction file.
      * @param string|null $suffix Optional override suffix for instruction file
@@ -36,7 +32,6 @@ class InstructionFileMetadataStrategy implements MetadataStrategyInterface
             : $suffix;
         $this->client = $client;
     }
-
     /**
      * Places the information in the MetadataEnvelope to a location on S3.
      *
@@ -54,10 +49,8 @@ class InstructionFileMetadataStrategy implements MetadataStrategyInterface
             'Key' => $args['Key'] . $this->suffix,
             'Body' => json_encode($envelope)
         ]);
-
         return $args;
     }
-
     /**
      * Uses the strategy's client to retrieve the instruction file from S3 and generates
      * a MetadataEnvelope from its contents.
@@ -74,17 +67,14 @@ class InstructionFileMetadataStrategy implements MetadataStrategyInterface
             'Bucket' => $args['Bucket'],
             'Key' => $args['Key'] . $this->suffix
         ]);
-
         $metadataHeaders = json_decode($result['Body'], true);
         $envelope = new MetadataEnvelope();
         $constantValues = MetadataEnvelope::getConstantValues();
-
         foreach ($constantValues as $constant) {
             if (!empty($metadataHeaders[$constant])) {
                 $envelope[$constant] = $metadataHeaders[$constant];
             }
         }
-
         return $envelope;
     }
 }

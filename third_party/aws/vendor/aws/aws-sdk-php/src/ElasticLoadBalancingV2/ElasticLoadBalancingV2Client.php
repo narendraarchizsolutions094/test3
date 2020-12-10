@@ -1,8 +1,6 @@
 <?php
 namespace Aws\ElasticLoadBalancingV2;
-
 use Aws\AwsClient;
-
 /**
  * This client is used to interact with the **Elastic Load Balancing** service.
  * @method \Aws\Result addListenerCertificates(array $args = [])

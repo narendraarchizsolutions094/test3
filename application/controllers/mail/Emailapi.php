@@ -9,7 +9,6 @@ class Emailapi extends CI_Controller {
         $this->load->library(array('email'));
         if ($this->session->userdata('isLogIn') == false   || $this->session->userdata('user_role') != 1) 
         redirect('login'); 
-
 	}
     public function contructApi()
     {

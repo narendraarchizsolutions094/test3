@@ -54,9 +54,7 @@ class Crm_setting extends CI_Controller {
          set_sys_parameter($para ,$payment_value,'PAYMENT_GETWAY');
           $this->session->set_flashdata('message', display('save_successfully'));
           redirect('crm_setting');
-
 	}
-
 	public function stage()
 	{
 		$title = 'STAGE';
@@ -74,7 +72,6 @@ class Crm_setting extends CI_Controller {
       redirect('crm_setting');
 	}
 
-
 	public function processrights()
 	{
 		
@@ -86,7 +83,6 @@ class Crm_setting extends CI_Controller {
                 'user_right' => $user_right
             );
           $right = json_encode($data);
-
           $processrights = array(
           	'sys_para' => $para,
           	'sys_value' =>$right,
@@ -99,7 +95,6 @@ class Crm_setting extends CI_Controller {
            
             redirect('crm_setting');
 	}
-
 	public function enquiry_setting()
 	{
 	
@@ -113,7 +108,6 @@ class Crm_setting extends CI_Controller {
                 'digit' => $digit
             );
           $rights = json_encode($data);
-
           $enquirysetting = array(
             'sys_para' => $para,
             'sys_value' =>$rights,
@@ -125,7 +119,6 @@ class Crm_setting extends CI_Controller {
      $this->session->set_flashdata('message', display('save_successfully'));
           
             redirect('crm_setting');
-
 	}
   public function duplicates()
   {
@@ -143,7 +136,6 @@ class Crm_setting extends CI_Controller {
                 'company_name' => $company_name
             );
      $duplicate = json_encode($data);
-
           $duplicates = array(
             'sys_para' => $para,
             'sys_value' =>$duplicate,

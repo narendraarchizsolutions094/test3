@@ -27,7 +27,6 @@ class location extends CI_Controller {
     function territory() {
         if (user_role('13') == true) {
         }
-
         $data['title'] = display('territory_lsit');
         $data['country'] = $this->location_model->territory_lsit();
         $data['content'] = $this->load->view('location/territory_list', $data, true);
@@ -41,13 +40,11 @@ class location extends CI_Controller {
             echo '<option value="' . $r->region_id . '">' . $r->region_name . '</option>';
         }
     }
-
      public function find_state_country() {
         $country = $this->input->post('country');
         $data = $this->location_model->get_state($country);
         echo json_encode($data);
     }
-
   public function select_city_by_state() {
         $state_id = $this->input->post('state_id');
         echo json_encode($this->location_model->all_city_state($state_id));
@@ -63,10 +60,8 @@ class location extends CI_Controller {
         }
     }
      public function select_city_bystate(){
-
         $stateid = $this->input->post('state_id');
         echo json_encode($this->location_model->all_city_bystate($stateid));
-
 
     }
     function get_state_byid() {
@@ -188,7 +183,6 @@ class location extends CI_Controller {
                 'created_by' => $this->session->userdata('user_id'),
                 'created_date' => date('Y-m-d'),
             ];
-
 
         }
         #-------------------------------#

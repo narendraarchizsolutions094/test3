@@ -1,9 +1,7 @@
 <?php
 namespace Aws\S3Control;
-
 use Aws\CommandInterface;
 use Psr\Http\Message\RequestInterface;
-
 /**
  * Used to update the URL used for S3 Control requests to support S3 Control
  * DualStack. It will build to host style paths, including for S3 Control
@@ -17,14 +15,12 @@ class S3ControlEndpointMiddleware
 {
     const NO_PATTERN = 0;
     const DUALSTACK = 1;
-
     /** @var bool */
     private $dualStackByDefault;
     /** @var string */
     private $region;
     /** @var callable */
     private $nextHandler;
-
     /**
      * Create a middleware wrapper function
      *
@@ -39,7 +35,6 @@ class S3ControlEndpointMiddleware
             return new self($handler, $region, $options);
         };
     }
-
     public function __construct(
         callable $nextHandler,
         $region,
@@ -50,7 +45,6 @@ class S3ControlEndpointMiddleware
         $this->region = (string) $region;
         $this->nextHandler = $nextHandler;
     }
-
     public function __invoke(CommandInterface $command, RequestInterface $request)
     {
         if ($this->isDualStackRequest($command, $request)) {
@@ -59,11 +53,9 @@ class S3ControlEndpointMiddleware
         $request = $this->applyHostStyleEndpoint($command, $request)
             ->withoutHeader('x-amz-account-id');
         unset($command['AccountId']);
-
         $nextHandler = $this->nextHandler;
         return $nextHandler($command, $request);
     }
-
     private function isDualStackRequest(
         CommandInterface $command,
         RequestInterface $request
@@ -71,13 +63,11 @@ class S3ControlEndpointMiddleware
         return isset($command['@use_dual_stack_endpoint'])
             ? $command['@use_dual_stack_endpoint'] : $this->dualStackByDefault;
     }
-
     private function getDualStackHost($host)
     {
         $parts = explode(".{$this->region}.", $host);
         return $parts[0] . ".dualstack.{$this->region}." . $parts[1];
     }
-
     private function applyDualStackEndpoint(
         CommandInterface $command,
         RequestInterface $request
@@ -89,7 +79,6 @@ class S3ControlEndpointMiddleware
             ))
         );
     }
-
     private function getAccountIdStyleHost(CommandInterface $command, $host)
     {
         if (!\Aws\is_valid_hostname($command['AccountId'])) {
@@ -99,13 +88,11 @@ class S3ControlEndpointMiddleware
         }
         return "{$command['AccountId']}.{$host}";
     }
-
     private function getAccountIdlessPath($path, CommandInterface $command)
     {
         $pattern = '/^\\/' . preg_quote($command['AccountId'], '/') . '/';
         return preg_replace($pattern, '', $path) ?: '/';
     }
-
     private function applyHostStyleEndpoint(
         CommandInterface $command,
         RequestInterface $request

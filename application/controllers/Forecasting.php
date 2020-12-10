@@ -379,7 +379,6 @@ class Forecasting extends CI_Controller {
 			}					 
     	    }
 	    }
-
 /************************************************forecast view**********************************************/
 		
 		public function get_all_forecast($id){
@@ -443,7 +442,6 @@ if(!empty($trgt_list)){
         $myAppliedtr[] = $trdata->u_id;
     }
 }
-
 			               echo '<tr>';
 						   echo '<td>'.$value->s_display_name.' '.$value->last_name.'</td>';
 						   foreach ($trgt_list as $key => $tar) { if($value->pk_i_admin_id==$tar->u_id){ if($tar->jan!=''){echo '<td>'.$tar->jan.'</td>';}else{echo '<td></td>';} } }
@@ -465,7 +463,6 @@ if(!empty($trgt_list)){
 							   echo '<td><a class="btn btn-success"  data-toggle="modal" type="button" title="Add Target" data-target="#addtarget" data-toggle="modal" onclick="getuid('.$value->pk_i_admin_id.','.$id.')"><i class="fa fa-plus"></i></a></td>';}
 						   
 						   echo '</tr>';
-
 
 			
     }
@@ -494,5 +491,4 @@ if(!empty($trgt_list)){
 			}
 	
 }
-
 }

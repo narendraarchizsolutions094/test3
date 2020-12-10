@@ -1,8 +1,6 @@
 <?php
 namespace Aws\IoT1ClickDevicesService;
-
 use Aws\AwsClient;
-
 /**
  * This client is used to interact with the **AWS IoT 1-Click Devices Service** service.
  * @method \Aws\Result claimDevicesByClaimCode(array $args = [])

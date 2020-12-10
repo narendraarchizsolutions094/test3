@@ -1,8 +1,6 @@
 <?php
 namespace Aws\Detective;
-
 use Aws\AwsClient;
-
 /**
  * This client is used to interact with the **Amazon Detective** service.
  * @method \Aws\Result acceptInvitation(array $args = [])

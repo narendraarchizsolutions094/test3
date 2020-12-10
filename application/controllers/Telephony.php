@@ -1,6 +1,5 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-
 class Telephony extends CI_Controller {
     public function __construct() {
         parent::__construct();      
@@ -22,7 +21,6 @@ class Telephony extends CI_Controller {
                     );
         $this->db->insert('telephony_log',$insert_arr);
     }
-
     public function forword_to($phone=''){
         if(!empty($_GET['phone'])){
             $phone=$_GET['phone'];
@@ -61,9 +59,7 @@ class Telephony extends CI_Controller {
         $atID   =   !empty($_POST['callbreakstatus'])?$_POST['callbreakstatus']:'';
         
         $user_id    =   $this->session->user_id;        
-
             $curl = curl_init();
-
             curl_setopt_array($curl, array(
               CURLOPT_URL => "https://developers.myoperator.co/user",
               CURLOPT_RETURNTRANSFER => true,
@@ -79,12 +75,9 @@ class Telephony extends CI_Controller {
                 "postman-token: 3d348a84-e8b7-0c9c-c602-d7b6dd625bca"
               ),
             ));
-
             $response = curl_exec($curl);
             $err = curl_error($curl);
-
             curl_close($curl);
-
             if ($err) {
               echo "cURL Error #:" . $err;
             } else {
@@ -104,7 +97,6 @@ class Telephony extends CI_Controller {
         //     echo json_encode(array('id'=>0,'status'=>$atID));           
         // }
     }
-
    public function get_call_status($uid=''){
         $newdata = array( 
         'uid_call'  =>str_replace('_','.',base64_decode($uid)), 
@@ -147,13 +139,11 @@ class Telephony extends CI_Controller {
         if(!empty($res)){
          $array_users= json_decode($res->users);
          $user_id='91'.$this->session->phone;
-
         $call_json = !empty($res->json_data)?json_decode($res->json_data,true):array();
         $inbound = 0;
         if(!empty($call_json['event']) && $call_json['event'] ==1){
             $inbound = 1;
         }
-
         if(in_array($user_id,$array_users)){
          echo $inbound;
         $this->session->set_userdata($newdata);   
@@ -406,7 +396,6 @@ class Telephony extends CI_Controller {
         curl_close( $curl );
         print_r($response);
     }
-
     /*public function ameyo_api(){
         $ameyo_url    =   $this->input->post('ameyo_url');
         $curl = curl_init();
@@ -423,9 +412,7 @@ class Telephony extends CI_Controller {
             "Cookie: JSESSIONID=451E64BF7E8FFC80ACA818B68F8BE2DF; __METADATA__=772eb950-8910-456b-b35d-eee95f57dc1d"
           ),
         ));
-
         $response = curl_exec($curl);
-
         curl_close($curl);
         echo $response;
         
@@ -488,5 +475,4 @@ class Telephony extends CI_Controller {
             echo $response;
         }
     }
-
 }

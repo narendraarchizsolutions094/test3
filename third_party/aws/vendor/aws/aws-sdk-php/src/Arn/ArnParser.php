@@ -1,9 +1,7 @@
 <?php
 namespace Aws\Arn;
-
 use Aws\Arn\S3\AccessPointArn as S3AccessPointArn;
 use Aws\Arn\S3\BucketArn;
-
 /**
  * @internal
  */
@@ -17,7 +15,6 @@ class ArnParser
     {
         return strpos($string, 'arn:') === 0;
     }
-
     /**
      * Parses a string and returns an instance of ArnInterface. Returns a
      * specific type of Arn object if it has a specific class representation
@@ -35,7 +32,6 @@ class ArnParser
             }
             return new AccessPointArn($string);
         }
-
         return new Arn($data);
     }
 }

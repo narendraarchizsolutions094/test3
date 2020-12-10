@@ -1,8 +1,6 @@
 <?php
 namespace Aws\IoTSecureTunneling;
-
 use Aws\AwsClient;
-
 /**
  * This client is used to interact with the **AWS IoT Secure Tunneling** service.
  * @method \Aws\Result closeTunnel(array $args = [])

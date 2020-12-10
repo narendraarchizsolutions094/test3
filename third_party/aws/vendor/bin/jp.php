@@ -1,7 +1,5 @@
 #!/usr/bin/env sh
-
 dir=$(cd "${0%[/\\]*}" > /dev/null; cd "../mtdowling/jmespath.php/bin" && pwd)
-
 if [ -d /proc/cygdrive ]; then
     case $(which php) in
         $(readlink -n /proc/cygdrive)/*)
@@ -10,5 +8,4 @@ if [ -d /proc/cygdrive ]; then
             ;;
     esac
 fi
-
 "${dir}/jp.php" "$@"

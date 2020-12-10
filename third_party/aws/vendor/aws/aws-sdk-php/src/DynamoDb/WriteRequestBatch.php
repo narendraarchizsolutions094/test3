@@ -1,11 +1,9 @@
 <?php
 namespace Aws\DynamoDb;
-
 use Aws\CommandInterface;
 use Aws\CommandPool;
 use Aws\Exception\AwsException;
 use Aws\ResultInterface;
-
 /**
  * The WriteRequestBatch is an object that is capable of efficiently sending
  * DynamoDB BatchWriteItem requests from queued up put and delete item requests.
@@ -17,13 +15,10 @@ class WriteRequestBatch
 {
     /** @var DynamoDbClient DynamoDB client used to perform write operations. */
     private $client;
-
     /** @var array Configuration options for the batch. */
     private $config;
-
     /** @var array Queue of pending put/delete requests in the batch. */
     private $queue;
-
     /**
      * Creates a WriteRequestBatch object that is capable of efficiently sending
      * DynamoDB BatchWriteItem requests from queued up Put and Delete requests.
@@ -64,12 +59,10 @@ class WriteRequestBatch
             'before'     => null,
             'error'      => null
         ];
-
         // Ensure the batch size is valid
         if ($config['batch_size'] > 25 || $config['batch_size'] < 2) {
             throw new \InvalidArgumentException('"batch_size" must be between 2 and 25.');
         }
-
         // Ensure the callbacks are valid
         if ($config['before'] && !is_callable($config['before'])) {
             throw new \InvalidArgumentException('"before" must be callable.');
@@ -77,17 +70,14 @@ class WriteRequestBatch
         if ($config['error'] && !is_callable($config['error'])) {
             throw new \InvalidArgumentException('"error" must be callable.');
         }
-
         // If autoflush is enabled, set the threshold
         if ($config['autoflush']) {
             $config['threshold'] = $config['batch_size'] * $config['pool_size'];
         }
-
         $this->client = $client;
         $this->config = $config;
         $this->queue = [];
     }
-
     /**
      * Adds a put item request to the batch.
      *
@@ -109,12 +99,9 @@ class WriteRequestBatch
             'table' => $this->determineTable($table),
             'data'  => ['PutRequest' => ['Item' => $item]],
         ];
-
         $this->autoFlush();
-
         return $this;
     }
-
     /**
      * Adds a delete item request to the batch.
      *
@@ -135,12 +122,9 @@ class WriteRequestBatch
             'table' => $this->determineTable($table),
             'data'  => ['DeleteRequest' => ['Key' => $key]],
         ];
-
         $this->autoFlush();
-
         return $this;
     }
-
     /**
      * Flushes the batch by combining all the queued put and delete requests
      * into BatchWriteItem commands and executing them. Unprocessed items are
@@ -181,10 +165,8 @@ class WriteRequestBatch
             $pool->promise()->wait();
             $keepFlushing = (bool) $untilEmpty;
         }
-
         return $this;
     }
-
     /**
      * Creates BatchWriteItem commands from the items in the queue.
      *
@@ -195,7 +177,6 @@ class WriteRequestBatch
         // Chunk the queue into batches
         $batches = array_chunk($this->queue, $this->config['batch_size']);
         $this->queue = [];
-
         // Create BatchWriteItem commands for each batch
         $commands = [];
         foreach ($batches as $batch) {
@@ -211,10 +192,8 @@ class WriteRequestBatch
                 ['RequestItems' => $requests]
             );
         }
-
         return $commands;
     }
-
     /**
      * Re-queues unprocessed results with the correct data.
      *
@@ -231,7 +210,6 @@ class WriteRequestBatch
             }
         }
     }
-
     /**
      * If autoflush is enabled and the threshold is met, flush the batch
      */
@@ -244,7 +222,6 @@ class WriteRequestBatch
             $this->flush(false);
         }
     }
-
     /**
      * Determine the table name by looking at what was provided and what the
      * WriteRequestBatch was originally configured with.
@@ -260,7 +237,6 @@ class WriteRequestBatch
         if (!$table) {
             throw new \RuntimeException('There was no table specified.');
         }
-
         return $table;
     }
 }

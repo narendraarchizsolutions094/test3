@@ -1,8 +1,6 @@
 <?php
 namespace Aws\WafRegional;
-
 use Aws\AwsClient;
-
 /**
  * This client is used to interact with the **AWS WAF Regional** service.
  * @method \Aws\Result associateWebACL(array $args = [])

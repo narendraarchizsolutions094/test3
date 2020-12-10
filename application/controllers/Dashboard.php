@@ -1,7 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 class Dashboard extends CI_Controller {
-
     public function __construct() {
         parent::__construct();
 		$this->load->library('user_agent');
@@ -17,7 +16,6 @@ class Dashboard extends CI_Controller {
             'enquiry_model', 'Leads_Model', 'Client_Model','Message_models',
             'Product_model'
         ));
-
     }
          public function fb_token() { 
      $challenge = $_REQUEST['hub_challenge'];
@@ -58,9 +56,7 @@ class Dashboard extends CI_Controller {
                 ));
                 $response = curl_exec($curl);
                 $err = curl_error($curl);
-
                 curl_close($curl);
-
                 if ($err) {
                 } else {
        foreach(json_decode($response)->field_data as $v){
@@ -114,16 +110,13 @@ class Dashboard extends CI_Controller {
                 ));
                 $response = curl_exec($curl);
                 $err = curl_error($curl);
-
                 curl_close($curl);
-
                 if ($err) {
                 } else { 
                    $this->db->set('is_status',1);
                    $this->db->where('id',$updateid);
                    $this->db->update('fb_setting');
                 }
-
 
                         }
                      }
@@ -177,9 +170,7 @@ class Dashboard extends CI_Controller {
                 ));
                 $response = curl_exec($curl);
                 $err = curl_error($curl);
-
                 curl_close($curl);
-
                 if ($err) {
                     
                 } else {
@@ -234,9 +225,7 @@ class Dashboard extends CI_Controller {
                 ));
                 $response = curl_exec($curl);
                 $err = curl_error($curl);
-
                 curl_close($curl);
-
                 if ($err) {
                 } else { 
                    $this->db->set('is_status',1);
@@ -261,11 +250,8 @@ class Dashboard extends CI_Controller {
         if ($sessionId && $campaignId && $userCrtObjectId && $userId) {            
             $user_data    =   $this->user_model->get_user_by_email($userId);
             if (!empty($user_data) && ($user_data->companey_id == 79 || $user_data->companey_id == 82)) {
-
                 $this->session->set_userdata('user_id',$user_data->pk_i_admin_id);     
-
                 if(user_access(230) || user_access(231) || user_access(232) || user_access(233) || user_access(234) || user_access(235) || user_access(236)){ 
-
                     $arr = explode(',', $user_data->process);
                     $this->session->set_userdata('companey_id',$user_data->companey_id);                
                     $process_filter =   get_cookie('selected_process');
@@ -288,12 +274,10 @@ class Dashboard extends CI_Controller {
                  
                 } 
 
-
                 $city_row = $this->db->select("*")
                         ->from("city")
                         ->where('id', $user_data->city_id)
                         ->get();  
-
                 $location_arr = array();
                 if(!empty($city_row->row_array())){
                     $location_arr = $city_row->row_array();
@@ -339,14 +323,12 @@ class Dashboard extends CI_Controller {
             }
         }
 
-
         if ($this->session->userdata('isLogIn'))
             $this->redirectTo($this->session->userdata('user_role'));
         $this->form_validation->set_rules('email', display('email'), 'required|max_length[50]|valid_email');
         $this->form_validation->set_rules('password', display('password'), 'required|max_length[32]|md5');
         
         //$this->form_validation->set_rules('process', 'Process', 'required');
-
         //$process    =   $this->input->post('process');
         
         $setting = $this->setting_model->read();
@@ -362,10 +344,8 @@ class Dashboard extends CI_Controller {
         $this->load->model('dash_model');
         
         $data['products'] = $this->dash_model->product_list();
-
         if ($this->form_validation->run() === true) {
             $check_user = $this->dashboard_model->check_user($postData);
-
             if ($check_user->num_rows() === 1) {
 /*                echo "<pre>";
                 print_r($check_user);
@@ -379,7 +359,6 @@ class Dashboard extends CI_Controller {
                         redirect('login');
                     }
                 }*/
-
                 $city_id = $this->db->select("*")
                         ->from("city")
                         ->where('id', $check_user->row()->city_id)
@@ -432,7 +411,6 @@ class Dashboard extends CI_Controller {
         }
     }
 
-
    public function backupDatabase(){  
   if ($this->session->user_right == 1) {    
    $this->load->dbutil();
@@ -457,7 +435,6 @@ $this->load->library('zip');
     $this->zip->download('file_backup.zip'); 
    }
  }
-
     public function validate_login() {  
         
 	
@@ -468,9 +445,7 @@ $this->load->library('zip');
             'email' => trim($this->input->post('email', true)),
             'password' => md5($this->input->post('password', true)),
         ];
-
         $this->load->model('dash_model');
-
         if ($this->input->post('remember_me')) {
              $this->rememberme->setCookie($data['user']->email);
         }
@@ -532,7 +507,6 @@ $this->load->library('zip');
                     }
                 }
             }
-
           
             //end
                 $city_row = $this->db->select("*")
@@ -542,7 +516,6 @@ $this->load->library('zip');
                 
                 $this->session->set_userdata('user_id',$user_data->pk_i_admin_id);                
                 if(user_access(230) || user_access(231) || user_access(232) || user_access(233) || user_access(234) || user_access(235) || user_access(236)){ 
-
                     $arr = explode(',', $user_data->process);
                     $this->session->set_userdata('companey_id',$user_data->companey_id);                
                     $process_filter =   get_cookie('selected_process');
@@ -565,16 +538,13 @@ $this->load->library('zip');
                  
                 }               
 
-
                 $location_arr = array();
                 if(!empty($city_row->row_array())){
                     $location_arr = $city_row->row_array();
                 }                
-
                 
                    if(0){                        
                         $user_process = explode(',', $user_data->process);                        
-
                         $this->db->select('sb_id,product_name');
                         $this->db->where('comp_id',$this->session->companey_id);
                         $this->db->where_in('sb_id',$user_process);
@@ -596,9 +566,7 @@ $this->load->library('zip');
                                 $process[$value['sb_id']] = $value['product_name'];
                             }
 							$process_html .= "</select>";                                                       
-
                             $res = array('status'=>true,'message'=>'Successfully Logged In','process'=>$process_html);
-
                        }else{
                             $res = array('status'=>false,'message'=>'You are not in any process. Please contact your admin!','process'=>$process_html);
                        }
@@ -664,10 +632,7 @@ $this->load->library('zip');
         echo json_encode($res);
     }
 
-
-
 public function login_in_process(){
-
     $this->form_validation->set_rules('email', display('email'), 'required|max_length[50]|valid_email');
     $this->form_validation->set_rules('password', display('password'), 'required|max_length[32]|md5');        
     $this->form_validation->set_rules('process_ids[]', 'Process ', 'required');
@@ -677,7 +642,6 @@ public function login_in_process(){
     ];
     $this->load->model('dash_model');        
     if ($this->form_validation->run() === true) {
-
         $check_user = $this->dashboard_model->check_user($postData);
         if ($check_user->num_rows() === 1) {                
             $city_row = $this->db->select("*")
@@ -701,7 +665,6 @@ public function login_in_process(){
 	}else{
 		$menu=2;
 	}
-
                     $data = $this->session->set_userdata([
 					    'menu'                  => $menu,
                         'isLogIn'               => true,
@@ -730,7 +693,6 @@ public function login_in_process(){
                         'expiry_date'           => strtotime($check_user->row()->valid_upto),
                         'account_type'          => $check_user->row()->account_type,
                         'availability'    => $check_user->row()->availability,
-
                     ]);         
                     $res = array('status'=>true,'message'=>'Logged in');                                        
                }else{                    
@@ -744,15 +706,12 @@ public function login_in_process(){
         }
         echo json_encode($res);
     }   
-
     public function redirectTo($user_role = null) {
         redirect('dashboard/home');
     }
-
     public function sales_dashboard() {
         $this->load->view('salesdash');
     }
-
     public function update_all_whatsapp_received(){        
     
         $received_whats_app = $this->enquiry_model->get_received_whats_app(); 
@@ -773,13 +732,11 @@ public function login_in_process(){
        
         if ($this->session->userdata('isLogIn') == false)
         redirect('login');
-
         if ($this->session->userdata('user_right') == 201 || $this->session->app_type == 'buyer') // lalantop user
         redirect('buy');        
         
         if ($this->session->userdata('user_right') == 200) // lalantop user
         redirect('product');        
-
         $data = array();
         $this->load->model('dash_model');
         if($this->session->userdata('user_right')==151 || $this->session->userdata('user_right')==180 || $this->session->userdata('user_right')==183)
@@ -800,24 +757,19 @@ public function login_in_process(){
             $data['cmtdata'] = $this->dash_model->all_comments();
         }
 
-
 //lead
 $data['leadCount']=$this->dashboard_model->countLead(2);
 $data['leadSum']=$this->dashboard_model->dataLead(2);
-
 //client
 $data['clientCount2']=$this->dashboard_model->countLead(3);
 $data['clientsum']=$this->dashboard_model->dataLead(3);
 
-
     $data['enquiry_separation']  = get_sys_parameter('enquiry_separation', 'COMPANY_SETTING');
-
         $data['lead_score'] = $this->db->query('select * from lead_score limit 3')->result();
         // $data['content'] = $this->load->view('msg-log-dashboard-enquiry', $data, true);
         $data['content'] = $this->load->view('home', $data, true);	     
         $this->load->view('layout/main_wrapper', $data);
     }
-
     public function processWiseChart()
     {   
        // echo "string";die;
@@ -833,10 +785,8 @@ $data['clientsum']=$this->dashboard_model->dataLead(3);
             echo json_encode(array('status'=>'fail'));
         }
     }
-
     public function enquiryLeadClientChart()
     {   
-
     //    // echo "string";die;
     //     $chartData = $this->enquiry_model->enquiryLeadClientChart($this->session->user_id,$this->session->companey_id);
     //     //print_r($chartData);die;
@@ -850,9 +800,7 @@ $data['clientsum']=$this->dashboard_model->dataLead(3);
     //         echo json_encode(array('status'=>'fail'));
     //     }
     $enquiry_separation  = get_sys_parameter('enquiry_separation', 'COMPANY_SETTING');
-
  $data=[];
-
  $count1 = $this->enquiry_model->DyenquiryLeadClientChart($this->session->user_id,$this->session->companey_id,1);
  $enq=display("enquiry");
  $data[]=['name'=>$enq,'value'=>$count1];
@@ -868,13 +816,10 @@ if (!empty($enquiry_separation)) {
                 $ctitle = $enquiry_separation[$key]['title']; 
                 $count = $this->enquiry_model->DyenquiryLeadClientChart($this->session->user_id,$this->session->companey_id,$key);
             $data[]=['name'=>$ctitle,'value'=>$count];
-
         }
     }
             echo json_encode(array('data'=>$data,'status'=>'success'));
-
     }
-
     public function conversionProbabilityChart()
     {   
         // function not in use
@@ -890,22 +835,18 @@ if (!empty($enquiry_separation)) {
             echo json_encode(array('status'=>'fail'));
         }
     }
-
     
     public function dropDataChart()
     {   
        // echo "string";die;
         $chartData = $this->enquiry_model->dropDataChart($this->session->user_id,$this->session->companey_id);
-
         $droplst    = $chartData['droplst'];
         $enquiry    = $chartData['enquiry_dropWise'];
         $lead       = $chartData['lead_dropWise'];
         $client     = $chartData['client_dropWise'];
-
         $enquiryChartData   = array();
         $leadChartData      = array();
         $clientChartData    = array();
-
         foreach ($droplst as $key => $value) 
         {
             //echo $value['drop_reason'];
@@ -927,7 +868,6 @@ if (!empty($enquiry_separation)) {
                 array_push($enquiryChartData, 0);
             }
 
-
             foreach ($lead as $key => $valueArray) 
             {
                 if ($value['drop_reason'] == $valueArray['drop_reason']) 
@@ -945,7 +885,6 @@ if (!empty($enquiry_separation)) {
                 array_push($leadChartData, 0);
             }
 
-
             foreach ($client as $key => $valueArray) 
             {
                 if ($value['drop_reason'] == $valueArray['drop_reason']) 
@@ -962,7 +901,6 @@ if (!empty($enquiry_separation)) {
             {
                 array_push($clientChartData, 0);
             }
-
         }
         
         if(!empty($enquiryChartData))
@@ -979,21 +917,17 @@ if (!empty($enquiry_separation)) {
     {   
        // echo "string";die;
         $chartData = $this->enquiry_model->despositionDataChart($this->session->user_id,$this->session->companey_id);
-
         /*echo "<pre>";
         print_r($chartData);
         echo "</pre>";
         exit(); */
-
         $desplst    = $chartData['desplst'];
         $enquiry    = $chartData['despenq'];
         $lead       = $chartData['desplead'];
         $client     = $chartData['despcli'];
-
         $enquiryChartData   = array();
         $leadChartData      = array();
         $clientChartData    = array();
-
         foreach ($desplst as $key => $value) 
         {
             //echo $value['drop_reason'];
@@ -1015,7 +949,6 @@ if (!empty($enquiry_separation)) {
                 array_push($enquiryChartData, 0);
             }
 
-
             foreach ($lead as $key => $valueArray) 
             {
                 if ($value['lead_stage_name'] == $valueArray['lead_stage_name']) 
@@ -1032,7 +965,6 @@ if (!empty($enquiry_separation)) {
             {
                 array_push($leadChartData, 0);
             }
-
 
             foreach ($client as $key => $valueArray) 
             {
@@ -1051,7 +983,6 @@ if (!empty($enquiry_separation)) {
                 array_push($clientChartData, 0);
             }
           
-
         }
         
         if(!empty($enquiryChartData))
@@ -1067,21 +998,17 @@ if (!empty($enquiry_separation)) {
             echo json_encode(array('status'=>'fail'));
         }
     }
-
     public function sourceDataChart()
     {   
        // echo "string";die;
         $chartData = $this->enquiry_model->sourceDataChart($this->session->user_id,$this->session->companey_id);
-
         $srclst    = $chartData['srclst'];
         $enquiry    = $chartData['EnquirySrc'];
         $lead       = $chartData['leadSrc'];
         $client     = $chartData['ClientSrc'];
-
         $enquiryChartData   = array();
         $leadChartData      = array();
         $clientChartData    = array();
-
         foreach ($srclst as $key => $value) 
         {
             //echo $value['drop_reason'];
@@ -1103,7 +1030,6 @@ if (!empty($enquiry_separation)) {
                 array_push($enquiryChartData, 0);
             }
 
-
             foreach ($lead as $key => $valueArray) 
             {
                 if ($value['lead_name'] == $valueArray['lead_name']) 
@@ -1121,7 +1047,6 @@ if (!empty($enquiry_separation)) {
                 array_push($leadChartData, 0);
             }
 
-
             foreach ($client as $key => $valueArray) 
             {
                 if ($value['lead_name'] == $valueArray['lead_name']) 
@@ -1138,7 +1063,6 @@ if (!empty($enquiry_separation)) {
             {
                 array_push($clientChartData, 0);
             }
-
         }
         
         if(!empty($enquiryChartData))
@@ -1150,11 +1074,9 @@ if (!empty($enquiry_separation)) {
             echo json_encode(array('status'=>'fail'));
         }
     }
-
     public function monthWiseChart()
     {    
         // function not in use
-
        // echo "string";die;
         $chartData = $this->enquiry_model->monthWiseChart($this->session->user_id,$this->session->companey_id);
         //print_r($chartData);die;
@@ -1169,7 +1091,6 @@ if (!empty($enquiry_separation)) {
     }
    
 
-
     public function home2() {
        /* echo "<pre>";
         print_r($_SESSION);
@@ -1177,7 +1098,6 @@ if (!empty($enquiry_separation)) {
         
         if ($this->session->userdata('isLogIn') == false)
             redirect('login');
-
         $data['title']              = display('home');                    
         $data['all_enquery']        = $this->enquiry_model->all_enquery_count();                           
         $data['all_active']         = $this->Leads_Model->all_Active_lead_count(0, '*');                   
@@ -1189,22 +1109,18 @@ if (!empty($enquiry_separation)) {
         $data['total_msg']          = $this->Message_models->total_msg();                           
         $data['today_tody_msg']     = $this->Message_models->today_tody_msg();
         $received_whats_app = '';
-
         //$this->enquiry_model->get_received_whats_app(); 
         
         if(!empty($received_whats_app)){
             $this->enquiry_model->set_received_whats_app_status($received_whats_app); 
         }
-
         
         $this->load->model('dash_model');
         $data['products'] = $this->dash_model->product_list();
-
         $data['lead_score'] = $this->db->query('select * from lead_score limit 3')->result();
         $data['content'] = $this->load->view('home2', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }
-
     public function profile() {
         $data['title'] = display('profile');
         $user_id = $this->session->userdata('user_id');
@@ -1212,7 +1128,6 @@ if (!empty($enquiry_separation)) {
         $data['content'] = $this->load->view('profile', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }
-
     public function email_check($email, $user_id) {
         $emailExists = $this->db->select('email')
                 ->where('email', $email)
@@ -1255,7 +1170,6 @@ if (!empty($enquiry_separation)) {
         if ($this->input->post('user_type')) {
             $permission = $this->input->post('user_type');
         } else {
-
             $permission = '';
         }
         $path = 'assets/images/user/';
@@ -1356,30 +1270,25 @@ if (!empty($enquiry_separation)) {
       $this->db->order_by('id', 'DESC');
       $this->db->limit(1);
       $q = $this->db->get()->row();
-
       $std = date('Y-m-d H:i:s', time());
       if(!empty($q)){
         $this->db->set('lgot_date_time',$std);
         $this->db->where('id', $q->id);
         $this->db->update('login_history');
       }
-
       if($this->session->companey_id == 57){
         $parma = '?c='.$comp_id.'&type='.$this->session->app_type;
       }else{
         $parma = '?c='.$comp_id;
       }
-
       $this->rememberme->deleteCookie();      
       redirect('login/'.$parma);
     }
-
     //Select country..
     public function selected_country() {
         $country = $this->input->post('country');
         echo json_encode($this->dashboard_model->location_base_country($country));
     }
-
 
      public function forgot_password() {
              
@@ -1410,7 +1319,6 @@ if (!empty($enquiry_separation)) {
             if(empty($email_row) && $data->companey_id != 81){ 
                 echo "4";die;                
             }else{
-
                 if(is_numeric($email) == 1)
                 {
                   expirePreviousOTP($data->pk_i_admin_id);
@@ -1472,9 +1380,7 @@ if (!empty($enquiry_separation)) {
             }
         }
       }
-
     }
-
     public function verifyOTP()
     {
       $mobno  = $this->input->post('mobno');
@@ -1482,7 +1388,6 @@ if (!empty($enquiry_separation)) {
       $data = $this->dashboard_model->getUserDataByPhone($mobno);
       if(!empty($data))
       {
-
         $getOtp = $this->db->select('*')->from('tbl_otp')->where('user_id',$data->pk_i_admin_id)->where('status',1)->get()->row();
         if($otp == $getOtp->otp)
         {
@@ -1500,10 +1405,7 @@ if (!empty($enquiry_separation)) {
       {
         echo json_encode(array('status'=>'notverified'));
       }
-
     }
-
-
 
     public function forgot_password_email_career_ex ($message,$email_subject,$to_email){       
           $curl_fields = array(
@@ -1537,9 +1439,7 @@ if (!empty($enquiry_separation)) {
             "Content-Type: application/json"
           ),
         ));
-
         $response = curl_exec($curl);
-
         curl_close($curl);
         /*echo $response;*/
         $res  = json_decode($response,true);
@@ -1550,13 +1450,11 @@ if (!empty($enquiry_separation)) {
         }
       }
     }
-
     //change password mail link...
     public function change_password() {
         //print_r($_POST);
         
         $email = $this->input->post('femail');
-
         $data = $this->dashboard_model->change_pass($email);
         
         /*print_r($data);
@@ -1564,9 +1462,7 @@ if (!empty($enquiry_separation)) {
             echo "3";
             exit();
         }*/
-
         $this->load->library('email');
-
         $config['protocol']     = 'smtp';
         $config['smtp_host']    = 'ssl://smtp.zoho.com';
         $config['smtp_port']    = '465';
@@ -1577,9 +1473,7 @@ if (!empty($enquiry_separation)) {
         $config['newline']      = "\r\n";
         $config['mailtype']     = 'text'; // or html
         $config['validation']   = TRUE; // bool whether to validate email or not 
-
         $this->email->initialize($config);
-
         $url = $this->config->base_url()."change-password/" . base64_encode($data->pk_i_admin_id);
         //$this->load->library('email');
         $this->email->from('narendra@archizsolutions.com', 'Lalan Top');
@@ -1599,7 +1493,6 @@ if (!empty($enquiry_separation)) {
             }
         }
     }
-
     //Chnage password 
     public function send_change_password_link($user) {
         $user = base64_decode($user);
@@ -1618,7 +1511,6 @@ if (!empty($enquiry_separation)) {
             $this->load->view('mail/change-password', $data1);
         }
     }
-
     public function qazwsxedc($uid,$token){
         
         if ($token == 'Plmkoijn') {
@@ -1640,13 +1532,11 @@ if (!empty($enquiry_separation)) {
             echo "not allowed";
         }
     }
-
 	
 	/*******************************************************8student panel****************************************/
 	public function select_state() {
         $state = $this->input->post('lead_stage');
         echo json_encode($this->location_model->all_state($state));
-
        // echo $diesc;
     }
 	
@@ -1668,7 +1558,6 @@ if (!empty($enquiry_separation)) {
 	    	$disc = $this->input->post('l_disc');
 			$ins = $this->input->post('l_ins');
         echo json_encode($this->location_model->all_course($ctnry,$sta,$lvl,$lgth,$disc,$ins));
-
        // echo $diesc;
     }
 	
@@ -1692,7 +1581,6 @@ if (!empty($enquiry_separation)) {
     		$this->db->where('tbl_course.comp_id',$comp_id);
             $q = $this->db->get()->result();
 		}*/
-
         $this->load->model('program_model');
         $q  =   $this->program_model->get_data();
         $data['count_filtered_data']  =   $this->program_model->count_filtered_data();
@@ -1700,7 +1588,6 @@ if (!empty($enquiry_separation)) {
         $data['courses'] = $q;
         $data['i'] = 1;
 		$data["courses"] = $q;
-
 		
 		if($this->session->userdata('companey_id')==67){
 		  $data['discipline'] = $this->location_model->find_discipline();
@@ -1728,7 +1615,6 @@ if (!empty($enquiry_separation)) {
 		 $level = $this->input->post('level');
 		 $state = $this->input->post('state_id');
 		 $ielts = $this->input->post('ielts');
-
         $this->load->model('program_model');
         $q  =   $this->program_model->get_data();
         $data['count_filtered_data']  =   $this->program_model->count_filtered_data();
@@ -1767,7 +1653,6 @@ public function user_profile() {
         
         $en_id=$studetails['Enquery_id'];
         $comp_id=$studetails['comp_id'];
-
 		if($this->session->userdata('companey_id')!=67){
             $data['vid_list'] = $this->schedule_model->vid_list();  
             $data['faq_list'] = $this->schedule_model->faq_list(); 
@@ -1801,16 +1686,12 @@ public function user_profile() {
         $this->load->view('layout/main_wrapper', $data);
     }
 
-
  public function add_video(){
-
   if($_POST){
-
     $id = $this->input->post('vid');
     if(empty($id)){
  
    $data = array(
-
     'link' => $this->input->post('vlink'),
     'title' => $this->input->post('title'),
     'des' => $this->input->post('des'),
@@ -1819,19 +1700,15 @@ public function user_profile() {
     'created_by' => $this->session->user_id,
     'status' =>1
    );
-
    $res = $this->schedule_model->insert('tbl_vid',$data);
-
    if($res){
     
     redirect(base_url('dashboard/user_profile'));
-
    }
   }
   else{
   
   $data = array(
-
     'link' => $this->input->post('vlink'),
     'title' => $this->input->post('title'),
     'des' => $this->input->post('des'),
@@ -1840,133 +1717,101 @@ public function user_profile() {
     'created_by' => $this->session->user_id,
     'status' =>$this->input->post('status')
    );
-
   $res = $this->schedule_model->update1('tbl_vid',$data,$id);
   redirect(base_url('dashboard/user_profile'));
-
   }
 }
-
  } 
 
 
-
-
  public function delete_vid($id){
-
     $res = $this->db->where('id',$id)->delete('tbl_vid');
     if($res){
     
       redirect(base_url('dashboard/user_profile'));
-
     }
     else{
         redirect(base_url('dashboard/user_profile'));
     }
  } 
-
   public function delete_course($id){
-
     $res = $this->db->where('id',$id)->delete('tbl_course');
     if($res){
     
       redirect(base_url('dashboard/user_profile'));
-
     }
     else{
         redirect(base_url('dashboard/user_profile'));
     }
  }
-
    public function delete_institute($id){
-
     $res = $this->db->where('id',$id)->delete('tbl_institute');
     if($res){
     
       redirect(base_url('dashboard/user_profile'));
-
     }
     else{
         redirect(base_url('dashboard/user_profile'));
     }
  }
 
-
  
    public function delete_schedule($id){
-
     $res = $this->db->where('id',$id)->delete('tbl_schdl');
     if($res){
     
       redirect(base_url('dashboard/user_profile'));
-
     }
     else{
         redirect(base_url('dashboard/user_profile'));
     }
  }
 
-
  public function add_faq(){
-
   if($_POST){
-
     $id = $this->input->post('faqid');
     if(empty($id)){
  
    $data = array(
-
     'que_type' => $this->input->post('qtype'),
     'answer' => $this->input->post('answ'),
     'comp_id' => $this->session->companey_id,
     'created_by' => $this->session->user_id,
     'status' =>1
    );
-
    $res = $this->schedule_model->insert('tbl_faq',$data);
-
    if($res){
     
     redirect(base_url('dashboard/user_profile'));
-
    }
   }
   else{
   
   $data = array(
-
     'que_type' => $this->input->post('qtype'),
     'answer' => $this->input->post('answ'),
     'comp_id' => $this->session->companey_id,
     'created_by' => $this->session->user_id,
     'status' =>$this->input->post('status')
    );
-
   $res = $this->schedule_model->update1('tbl_faq',$data,$id);
   redirect(base_url('dashboard/user_profile'));
-
   }
 }
-
  } 
 
-
  public function delete_faq($id){
-
     $res = $this->db->where('id',$id)->delete('tbl_faq');
     if($res){
     
       redirect(base_url('dashboard/user_profile'));
-
     }
     else{
         redirect(base_url('dashboard/user_profile'));
     }
  } 
 
-
   public function add_institute() {
-
         $data['title'] = display('add_institute');
         $data['institute'] = '';       
         $this->form_validation->set_rules('institute_name', display('institute_name'), 'required');
@@ -2002,7 +1847,6 @@ public function user_profile() {
                 //if($ret1){
                 //    $this->aws->upload($path1);
                 //}
-
         }else{
           $path1=$this->input->post('agreement_docs', true);  
         }
@@ -2049,9 +1893,7 @@ public function user_profile() {
         }
     }
 
-
     public function add_course() {
-
         $data['title'] = display('add_course');
         $data['institute'] = '';       
         $this->form_validation->set_rules('course_name', display('Course_name'), 'required');
@@ -2112,7 +1954,6 @@ public function user_profile() {
         }
     }
 
-
     public function add_schedule()
     {     
 $jwt=$this->get_token();
@@ -2124,27 +1965,20 @@ $jwt=$this->get_token();
      
       
 if($action==='edit'){
-
       if($_POST){
-
       $this->form_validation->set_rules('date', 'Date', 'trim|required');
       $this->form_validation->set_rules('stm', 'Strat Time', 'trim|required');
       $this->form_validation->set_rules('etm', 'End Time', 'trim|required');
       
-
     if ($this->form_validation->run() == FALSE) {
             redirect('dashboard/add_schedule/edit');
             $this->session->set_flashdata('exception',validation_errors());
     }
-
      else{
-
           $dt = explode('-',$this->input->post("date"));
           $newdt = $dt[2].'-'.$dt[1].'-'.$dt[0];
-
           $stm =  $this->input->post('stm');
           $etm = $this->input->post('etm');
-
           $tmslt = $stm.' - '.$etm;
           
           $data = array(
@@ -2170,7 +2004,6 @@ if($action==='edit'){
               redirect('dashboard/add_schedule/edit');
           }
        }
-
      }
           $data['res_update'] = $this->schedule_model->get_schedule_byid($id);
           $data['institute'] = $this->Institute_model->findinstitute();
@@ -2178,9 +2011,7 @@ if($action==='edit'){
           $data['content'] = $this->load->view('student/profile_wrapper',$data,true);
           $this->load->view('layout/main_wrapper',$data);
      }
-
   if($_POST){
-
      // print_r($_POST);exit();
       $this->form_validation->set_rules('stm[]', 'Strat Time', 'trim|required');
       $this->form_validation->set_rules('etm[]', 'End Time', 'trim|required');
@@ -2189,9 +2020,7 @@ if($action==='edit'){
                 redirect('dashboard/add_schedule');
                 $this->session->set_flashdata('exception',validation_errors());
             }
-
   else{
-
           $doctmslt     =  $this->session->userdata('tmslt');
           $avail       = $this->input->post('avail'); 
           $date        = $this->input->post("date");
@@ -2221,9 +2050,7 @@ foreach($starttime as $st){
 $time1 = strtotime($start);
 $time2 = strtotime($end);
 $drtn = ($time2-$time1)/60;
-
 if(strlen($fromdate[0]) > 0){
-
           $i=0;
         foreach($fromdate as $fromdt){
           $frmdt = $fromdate[$i];
@@ -2232,7 +2059,6 @@ if(strlen($fromdate[0]) > 0){
           $totaldays= abs(round($diff/ 86400)); 
           $time1 = $starttime[$i];
           $time2 = $endtime[$i];
-
           $total      = strtotime($time2) - strtotime($time1);
           $hours      = floor($total / 60 / 60);
           $timemins = $hours*60/$doctmslt; 
@@ -2247,9 +2073,7 @@ if($timemins=='0'){
           $tempdate = $fromdate[$i];
     for($j=0;$j<=$totaldays;$j++){ 
       $stm1 = $starttime[$i];
-
 $newdt = date('Y-m-d',strtotime($tempdate));
-
  $start_date=date("c",strtotime($newdt.' '.$start));
  $z_id = $this->session->userdata('zoom');
  
@@ -2302,7 +2126,6 @@ $newdt = date('Y-m-d',strtotime($tempdate));
             );
             //print_r($datas);exit;
     $insert_id = $this->schedule_model->register('zoom_link',$datas);
-
     for($k=1;$k<=$timemins;$k++){ 
      
           $endTime = strtotime("+$doctmslt minutes", strtotime($stm1));
@@ -2333,7 +2156,6 @@ $newdt = date('Y-m-d',strtotime($tempdate));
     
     $insid = $this->db->insert_id();
 /*************************************notification code here******************************************/
-
 /*************************************notification code End here******************************************/
   $tempdate= date('Y-m-d', strtotime($tempdate. ' + 1 days')); 
     }
@@ -2341,9 +2163,7 @@ $newdt = date('Y-m-d',strtotime($tempdate));
   }
           $this->session->set_flashdata('message',"Schedule has been added successfuly");
           redirect('dashboard/user_profile');
-
     }   
-
     if(strlen($date[0]) > 0){
         $i=0;
         $result1='';
@@ -2351,7 +2171,6 @@ $newdt = date('Y-m-d',strtotime($tempdate));
         //print_r($fromdt);exit;    
           $time1 = $starttime[$i];
           $time2 = $endtime[$i];
-
           $total      = strtotime($time2) - strtotime($time1);
           $hours      = floor($total / 60 / 60);
            $timemins = (!empty($doctmslt)) ?  $hours*60/$doctmslt : 1;
@@ -2455,30 +2274,23 @@ $newdt = date('Y-m-d',strtotime($tempdate));
         $insid = $this->db->insert_id();
         
 /*************************************notification code here******************************************/
-
 /*************************************notification code End here******************************************/
    $i++;     
   }
-
           $this->session->set_flashdata('message',"Schedule has been added successfuly");
           redirect('dashboard/user_profile');
     }
 
-
          }
        }
-
 }
-
  function get_token(){
-
             $header = json_encode([ "alg"=>"HS256", "typ"=>"JWT"]);
             
             $payload = json_encode([
                "iss"=>"daTGFD0BQjiUvaCLiowpOw",
               "exp"=>1496091964000
             ]);
-
             $base64UrlHeader = base64_encode($header);
             
             $base64UrlPayload = base64_encode($payload);
@@ -2490,7 +2302,6 @@ $newdt = date('Y-m-d',strtotime($tempdate));
             return $jwt = $base64UrlHeader . "." . $base64UrlPayload . "." . $base64UrlSignature;
         
     }
-
 public function my_applications() {
 	$data['title'] = display('my_applications');
     $user_id = $this->session->userdata('user_id');
@@ -2506,7 +2317,6 @@ public function remove_from_wish_list($id){
     $this->session->set_flashdata('message','Successfully Removed from wishlist');
     redirect('dashboard/my_applications');
 }
-
 public function menu_style() {	
 		if($this->session->menu==1){
         $this->session->set_userdata('menu',2);
@@ -2519,7 +2329,6 @@ public function set_layout_to_session() {
         $layout = $this->input->post('layout');
         $this->session->set_userdata('layout', $layout);
     }
-
     public function add_wishlist() {
         $crs=$this->uri->segment(3);
         $ins=$this->uri->segment(4);
@@ -2572,9 +2381,7 @@ public function set_layout_to_session() {
                                 'input' =>4399,
                                 'fvalue' => $fv,
                                 'cmp_no' => 81,
-
                               );
-
                   var_dump($this->db->insert("extra_enquery",$arr));
                   var_dump($this->db->query("update extra_enquery set fvalue='' where enq_no='".$fe."' and cmp_no=81 and input=4016"));
                 }
@@ -2585,7 +2392,6 @@ public function set_layout_to_session() {
         }
     }
     */
-
     public function data_fix_lalantop(){
         $this->db->select('phone,enquiry_id');
         $this->db->where('comp_id',57);
@@ -2601,7 +2407,6 @@ public function set_layout_to_session() {
                 if(!empty($user)){
                     $this->db->where('seller_id',$user['pk_i_admin_id']);
                     if($this->db->get('tbl_proddetails')->num_rows()){
-
                     }else{
                         $this->db->where('comp_id',57);
                         $this->db->where('status',3);
@@ -2609,18 +2414,15 @@ public function set_layout_to_session() {
                         $this->db->where('enquiry_id',$enq['enquiry_id']);
                         $this->db->set('status',2);
                         $this->db->update('enquiry');
-
                         $this->db->where('pk_i_admin_id',$user['pk_i_admin_id']);
                         $this->db->where('companey_id',57);
                         $this->db->delete('tbl_admin');
-
                         echo $enq['enquiry_id'].' '.$user['pk_i_admin_id'];
                     }
                 }
             }
         }
     }
-
     public function updatefb_page(){ 
         $page_token='';
         $pageId='';
@@ -2719,14 +2521,12 @@ public function set_layout_to_session() {
                      $this->db->where(array('email'=>$email1,'enquiry_source'=>209,'comp_id'=>81));
                      $enq=  $this->db->get('enquiry');
                      echo $this->db->last_query();
-
                        if($enq->num_rows()==1){
                        $enqdata= $enq->row();
                         $enqid=$enqdata->Enquery_id;
                         $enquiry_id=$enqdata->enquiry_id;
                         //response 
                         //if(trim($enqdata->name) == ''){
-
                             $this->db->where('Enquery_id',$enqid);
                             $this->db->where('comp_id',81);
                            // $this->db->where('enquiry_source',209);
@@ -2744,7 +2544,6 @@ public function set_layout_to_session() {
                         }else{
                             $this->db->insert('extra_enquery',array('enq_no'=>$enqid,'parent'=>$enquiry_id,'input'=>4399,'fvalue'=>$response,'cmp_no'=>81));
                         }
-
                         //
                         $this->db->where(array('parent'=>$enquiry_id,'input'=>4393));
                         if($this->db->get('extra_enquery')->num_rows()){
@@ -2786,7 +2585,6 @@ public function set_layout_to_session() {
                        }else{
                            echo 'na<br>';
                        }
-
                     }
                     }
                     }
@@ -2794,7 +2592,6 @@ public function set_layout_to_session() {
                     }
                     //end for loop
                 }
-
 
                 public function enquiry_dash()
                 {
@@ -2808,7 +2605,6 @@ public function set_layout_to_session() {
                         redirect('dashboard');
                     }
                 }
-
                 public function datewiseSupportData()
                 {
                      $userId=$this->session->userdata('user_id');
@@ -2863,7 +2659,6 @@ public function set_layout_to_session() {
                 }
                 echo json_encode($data);
             }
-
                 public function getuserWiseSupportData()
                 {
                     $id=$this->input->post('id');
@@ -2890,19 +2685,16 @@ public function set_layout_to_session() {
                     }
                     $this->load->view('graph',$data);
                     }
-
                     function printPdf_gen(){
                         // $this->load->library('pdf');
                             $id=$this->input->post('typeId');
                             if($id==0){$dc_id=1;}else{ $dc_id=2; }
-
                         $enquiry_id=$this->input->post('enqid');
                         $docTemplate=$this->db->where(array('comp_id'=>65,'id'=>$dc_id))->get('tbl_docTemplate')->result();
                            foreach ($docTemplate as $key => $value) {
                           $content=  $value->content;
                           $this->db->where('comp_id',65);
                           $enquiry = $this->db->where('enquiry_id',$enquiry_id)->get('enquiry')->result();
-
                           foreach ($enquiry as $key => $evalue) {
                             $content = str_replace("@{fullname}",$evalue->name, $content);
                             $content = str_replace("@{mobile}",$evalue->phone, $content);
@@ -2923,9 +2715,7 @@ public function set_layout_to_session() {
                          echo $content;
                                                       }
                     }
-
                   
-
     public function pdf_gen(){
         $this->load->library('pdf');
         $id=$this->input->post('idType');
@@ -2995,5 +2785,4 @@ public function set_layout_to_session() {
         
     }
 }
-
 }

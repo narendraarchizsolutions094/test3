@@ -1,6 +1,5 @@
 <?php
 namespace Aws\S3;
-
 use Aws\Api\Service;
 use Aws\Arn\ArnInterface;
 use Aws\Arn\ArnParser;
@@ -12,7 +11,6 @@ use Aws\Exception\InvalidRegionException;
 use Aws\Exception\UnresolvedEndpointException;
 use Aws\S3\Exception\S3Exception;
 use Psr\Http\Message\RequestInterface;
-
 /**
  * Checks for access point ARN in members targeting BucketName, modifying
  * endpoint as appropriate
@@ -23,22 +21,16 @@ class BucketEndpointArnMiddleware
 {
     /** @var Service */
     private $service;
-
     /** @var callable */
     private $nextHandler;
-
     /** @var string */
     private $region;
-
     /** @var $config */
     private $config;
-
     /** @var PartitionEndpointProvider */
     private $partitionProvider;
-
     /** @var array */
     private $nonArnableCommands = ['CreateBucket'];
-
     /**
      * Create a middleware wrapper function.
      *
@@ -51,13 +43,11 @@ class BucketEndpointArnMiddleware
         Service $service,
         $region,
         array $config
-
     ) {
         return function (callable $handler) use ($service, $region, $config) {
             return new self($handler, $service, $region, $config);
         };
     }
-
     public function __construct(
         callable $nextHandler,
         Service $service,
@@ -70,11 +60,9 @@ class BucketEndpointArnMiddleware
         $this->config = $config;
         $this->nextHandler = $nextHandler;
     }
-
     public function __invoke(CommandInterface $cmd, RequestInterface $req)
     {
         $nextHandler = $this->nextHandler;
-
         $op = $this->service->getOperation($cmd->getName())->toArray();
         if (!empty($op['input']['shape'])) {
             $service = $this->service->toArray();
@@ -85,9 +73,7 @@ class BucketEndpointArnMiddleware
                         break;
                     }
                 }
-
                 if (!empty($arnableKey) && ArnParser::isArn($cmd[$arnableKey])) {
-
                     try {
                         // Throw for commands that do not support ARN inputs
                         if (in_array($cmd->getName(), $this->nonArnableCommands)) {
@@ -97,12 +83,9 @@ class BucketEndpointArnMiddleware
                                 $cmd
                             );
                         }
-
                         $arn = ArnParser::parse($cmd[$arnableKey]);
                         $partition = $this->validateArn($arn);
-
                         $host = $this->generateAccessPointHost($arn, $req);
-
                         // Remove encoded bucket string from path
                         $path = $req->getUri()->getPath();
                         $encoded = rawurlencode($cmd[$arnableKey]);
@@ -113,12 +96,10 @@ class BucketEndpointArnMiddleware
                         if (empty($path)) {
                             $path = '';
                         }
-
                         // Set modified request
                         $req = $req->withUri(
                             $req->getUri()->withHost($host)->withPath($path)
                         );
-
                         // Update signing region based on ARN data if configured to do so
                         if ($this->config['use_arn_region']->isUseArnRegion()) {
                             $region = $arn->getRegion();
@@ -130,7 +111,6 @@ class BucketEndpointArnMiddleware
                             'service' => $arn->getService()
                         ]);
                         $cmd['@context']['signing_region'] = $endpointData['signingRegion'];
-
                     } catch (InvalidArnException $e) {
                         // Add context to ARN exception
                         throw new S3Exception(
@@ -144,10 +124,8 @@ class BucketEndpointArnMiddleware
                 }
             }
         }
-
         return $nextHandler($cmd, $req);
     }
-
     private function generateAccessPointHost(
         AccessPointArn $arn,
         RequestInterface $req
@@ -163,10 +141,8 @@ class BucketEndpointArnMiddleware
             $region = $this->region;
         }
         $host .= '.' . $region . '.' . $this->getPartitionSuffix($arn);
-
         return $host;
     }
-
     private function getPartitionSuffix(ArnInterface $arn)
     {
         $partition = $this->partitionProvider->getPartition(
@@ -175,7 +151,6 @@ class BucketEndpointArnMiddleware
         );
         return $partition->getDnsSuffix();
     }
-
     private function getSigningRegion($region)
     {
         $partition = PartitionEndpointProvider::defaultProvider()->getPartition($region, 's3');
@@ -185,7 +160,6 @@ class BucketEndpointArnMiddleware
         }
         return $region;
     }
-
     private function isMatchingSigningRegion($arnRegion, $clientRegion)
     {
         $arnRegion = strtolower($arnRegion);
@@ -198,12 +172,10 @@ class BucketEndpointArnMiddleware
         }
         return false;
     }
-
     private function stripPseudoRegions($region)
     {
         return str_replace(['fips-', '-fips'], ['', ''], $region);
     }
-
     /**
      * Validates an ARN, returning a partition object corresponding to the ARN
      * if successful
@@ -221,7 +193,6 @@ class BucketEndpointArnMiddleware
                     . ' Please disable accelerate or do not supply an access'
                     . ' point ARN.');
             }
-
             // Path-style is not supported with access points
             if (!empty($this->config['path_style'])) {
                 throw new UnresolvedEndpointException(
@@ -229,7 +200,6 @@ class BucketEndpointArnMiddleware
                     . ' access points. Please disable path-style or do not'
                     . ' supply an access point ARN.');
             }
-
             // Custom endpoint is not supported with access points
             if (!is_null($this->config['endpoint'])) {
                 throw new UnresolvedEndpointException(
@@ -237,7 +207,6 @@ class BucketEndpointArnMiddleware
                     . ' point ARN, and these are not compatible with each other.'
                     . ' Please only use one or the other.');
             }
-
             // Get partitions for ARN and client region
             $arnPart = $this->partitionProvider->getPartition(
                 $arn->getRegion(),
@@ -247,7 +216,6 @@ class BucketEndpointArnMiddleware
                 $this->region,
                 's3'
             );
-
             // If client partition not found, try removing pseudo-region qualifiers
             if (!($clientPart->isRegionMatch($this->region, 's3'))) {
                 $clientPart = $this->partitionProvider->getPartition(
@@ -255,7 +223,6 @@ class BucketEndpointArnMiddleware
                     's3'
                 );
             }
-
             // Verify that the partition matches for supplied partition and region
             if ($arn->getPartition() !== $clientPart->getName()) {
                 throw new InvalidRegionException('The supplied ARN partition'
@@ -266,7 +233,6 @@ class BucketEndpointArnMiddleware
                     . ' for the supplied ARN region does not match the'
                     . " client's partition.");
             }
-
             // Ensure ARN region matches client region unless
             // configured for using ARN region over client region
             if (!($this->isMatchingSigningRegion($arn->getRegion(), $this->region))) {
@@ -279,10 +245,8 @@ class BucketEndpointArnMiddleware
                         . "{$this->region}).");
                 }
             }
-
             return $arnPart;
         }
-
         throw new InvalidArnException('Provided ARN was not'
             . ' a valid S3 access point ARN');
     }

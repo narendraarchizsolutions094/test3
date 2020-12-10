@@ -1,18 +1,13 @@
 <?php
-
 namespace Sabberworm\CSS\Value;
-
 use Sabberworm\CSS\Parsing\ParserState;
 use Sabberworm\CSS\Parsing\UnexpectedTokenException;
 use Sabberworm\CSS\Renderable;
-
 abstract class Value implements Renderable {
 	protected $iLineNo;
-
 	public function __construct($iLineNo = 0) {
 		$this->iLineNo = $iLineNo;
 	}
-
 	public static function parseValue(ParserState $oParserState, $aListDelimiters = array()) {
 		$aStack = array();
 		$oParserState->consumeWhiteSpace();
@@ -61,20 +56,16 @@ abstract class Value implements Renderable {
 		}
 		return $aStack[0];
 	}
-
 	public static function parseIdentifierOrFunction(ParserState $oParserState, $bIgnoreCase = false) {
 		$sResult = $oParserState->parseIdentifier($bIgnoreCase);
-
 		if ($oParserState->comes('(')) {
 			$oParserState->consume('(');
 			$aArguments = Value::parseValue($oParserState, array('=', ' ', ','));
 			$sResult = new CSSFunction($sResult, $aArguments, ',', $oParserState->currentLine());
 			$oParserState->consume(')');
 		}
-
 		return $sResult;
 	}
-
 	public static function parsePrimitiveValue(ParserState $oParserState) {
 		$oValue = null;
 		$oParserState->consumeWhiteSpace();
@@ -100,13 +91,11 @@ abstract class Value implements Renderable {
 		$oParserState->consumeWhiteSpace();
 		return $oValue;
 	}
-
 	private static function parseMicrosoftFilter(ParserState $oParserState) {
 		$sFunction = $oParserState->consumeUntil('(', false, true);
 		$aArguments = Value::parseValue($oParserState, array(',', '='));
 		return new CSSFunction($sFunction, $aArguments, ',', $oParserState->currentLine());
 	}
-
 	private static function parseUnicodeRangeValue(ParserState $oParserState) {
 		$iCodepointMaxLenth = 6; // Code points outside BMP can use up to six digits
 		$sRange = "";
@@ -124,7 +113,6 @@ abstract class Value implements Renderable {
 	public function getLineNo() {
 		return $this->iLineNo;
 	}
-
 	//Methods are commented out because re-declaring them here is a fatal error in PHP < 5.3.9
 	//public abstract function __toString();
 	//public abstract function render(\Sabberworm\CSS\OutputFormat $oOutputFormat);

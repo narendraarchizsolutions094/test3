@@ -1,9 +1,7 @@
 <?php
 namespace GuzzleHttp\Handler;
-
 use GuzzleHttp\RequestOptions;
 use Psr\Http\Message\RequestInterface;
-
 /**
  * Provides basic proxies for handlers.
  */
@@ -28,7 +26,6 @@ class Proxy
                 : $sync($request, $options);
         };
     }
-
     /**
      * Sends streaming requests to a streaming compatible handler while sending
      * all other requests to a default handler.

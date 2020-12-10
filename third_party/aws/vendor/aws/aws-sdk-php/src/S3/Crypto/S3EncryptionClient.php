@@ -1,6 +1,5 @@
 <?php
 namespace Aws\S3\Crypto;
-
 use Aws\HashingStream;
 use Aws\PhpHash;
 use Aws\Crypto\AbstractCryptoClient;
@@ -13,7 +12,6 @@ use Aws\S3\S3Client;
 use GuzzleHttp\Promise;
 use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Psr7;
-
 /**
  * Provides a wrapper for an S3Client that supplies functionality to encrypt
  * data on putObject[Async] calls and decrypt data on getObject[Async] calls.
@@ -21,10 +19,8 @@ use GuzzleHttp\Psr7;
 class S3EncryptionClient extends AbstractCryptoClient
 {
     use EncryptionTrait, DecryptionTrait, CipherBuilderTrait, CryptoParamsTrait;
-
     private $client;
     private $instructionFileSuffix;
-
     /**
      * @param S3Client $client The S3Client to be used for true uploading and
      *                         retrieving objects from S3 when using the
@@ -40,12 +36,10 @@ class S3EncryptionClient extends AbstractCryptoClient
         $this->client = $client;
         $this->instructionFileSuffix = $instructionFileSuffix;
     }
-
     private static function getDefaultStrategy()
     {
         return new HeadersMetadataStrategy();
     }
-
     /**
      * Encrypts the data in the 'Body' field of $args and promises to upload it
      * to the specified location on S3.
@@ -86,15 +80,11 @@ class S3EncryptionClient extends AbstractCryptoClient
     {
         $provider = $this->getMaterialsProvider($args);
         unset($args['@MaterialsProvider']);
-
         $instructionFileSuffix = $this->getInstructionFileSuffix($args);
         unset($args['@InstructionFileSuffix']);
-
         $strategy = $this->getMetadataStrategy($args, $instructionFileSuffix);
         unset($args['@MetadataStrategy']);
-
         $envelope = new MetadataEnvelope();
-
         return Promise\promise_for($this->encrypt(
             Psr7\stream_for($args['Body']),
             $args['@CipherOptions'] ?: [],
@@ -116,7 +106,6 @@ class S3EncryptionClient extends AbstractCryptoClient
                 if ($strategy === null) {
                     $strategy = self::getDefaultStrategy();
                 }
-
                 $updatedArgs = $strategy->save($envelope, $args);
                 $updatedArgs['Body'] = $bodyStream;
                 return $updatedArgs;
@@ -128,14 +117,12 @@ class S3EncryptionClient extends AbstractCryptoClient
             }
         );
     }
-
     private static function getContentShaDecorator(&$args)
     {
         return function ($hash) use (&$args) {
             $args['ContentSHA256'] = bin2hex($hash);
         };
     }
-
     /**
      * Encrypts the data in the 'Body' field of $args and uploads it to the
      * specified location on S3.
@@ -178,7 +165,6 @@ class S3EncryptionClient extends AbstractCryptoClient
     {
         return $this->putObjectAsync($args)->wait();
     }
-
     /**
      * Promises to retrieve an object from S3 and decrypt the data in the
      * 'Body' field.
@@ -219,18 +205,14 @@ class S3EncryptionClient extends AbstractCryptoClient
     {
         $provider = $this->getMaterialsProvider($args);
         unset($args['@MaterialsProvider']);
-
         $instructionFileSuffix = $this->getInstructionFileSuffix($args);
         unset($args['@InstructionFileSuffix']);
-
         $strategy = $this->getMetadataStrategy($args, $instructionFileSuffix);
         unset($args['@MetadataStrategy']);
-
         $saveAs = null;
         if (!empty($args['SaveAs'])) {
             $saveAs = $args['SaveAs'];
         }
-
         $promise = $this->client->getObjectAsync($args)
             ->then(
                 function ($result) use (
@@ -245,13 +227,10 @@ class S3EncryptionClient extends AbstractCryptoClient
                             $instructionFileSuffix
                         );
                     }
-
                     $envelope = $strategy->load($args + [
                         'Metadata' => $result['Metadata']
                     ]);
-
                     $provider = $provider->fromDecryptionEnvelope($envelope);
-
                     $result['Body'] = $this->decrypt(
                         $result['Body'],
                         $provider,
@@ -274,10 +253,8 @@ class S3EncryptionClient extends AbstractCryptoClient
                     return $result;
                 }
             );
-
         return $promise;
     }
-
     /**
      * Retrieves an object from S3 and decrypts the data in the 'Body' field.
      *

@@ -1,6 +1,5 @@
 <?php
 namespace Aws\DynamoDb;
-
 /**
  * Provides an interface for using Amazon DynamoDB as a session store by hooking
  * into PHP's session handler hooks. Once registered, You may use the native
@@ -22,22 +21,16 @@ class SessionHandler implements \SessionHandlerInterface
 {
     /** @var SessionConnectionInterface Session save logic.*/
     private $connection;
-
     /** @var string Session save path. */
     private $savePath;
-
     /** @var string Session name. */
     private $sessionName;
-
     /** @var string The last known session ID */
     private $openSessionId = '';
-
     /** @var string Stores serialized data for tracking changes. */
     private $dataRead = '';
-
     /** @var bool Keeps track of whether the session has been written. */
     private $sessionWritten = false;
-
     /**
      * Creates a new DynamoDB Session Handler.
      *
@@ -70,10 +63,8 @@ class SessionHandler implements \SessionHandlerInterface
         } else {
             $connection = new StandardSessionConnection($client, $config);
         }
-
         return new static($connection);
     }
-
     /**
      * @param SessionConnectionInterface $connection
      */
@@ -81,7 +72,6 @@ class SessionHandler implements \SessionHandlerInterface
     {
         $this->connection = $connection;
     }
-
     /**
      * Register the DynamoDB session handler.
      *
@@ -92,7 +82,6 @@ class SessionHandler implements \SessionHandlerInterface
     {
          return session_set_save_handler($this, true);
     }
-
     /**
      * Open a session for writing. Triggered by session_start().
      *
@@ -105,10 +94,8 @@ class SessionHandler implements \SessionHandlerInterface
     {
         $this->savePath = $savePath;
         $this->sessionName = $sessionName;
-
         return true;
     }
-
     /**
      * Close a session from writing.
      *
@@ -123,10 +110,8 @@ class SessionHandler implements \SessionHandlerInterface
             $result = $this->connection->write($this->formatId($id), '', false);
             $this->sessionWritten = (bool) $result;
         }
-
         return $this->sessionWritten;
     }
-
     /**
      * Read a session stored in DynamoDB.
      *
@@ -140,13 +125,10 @@ class SessionHandler implements \SessionHandlerInterface
         // PHP expects an empty string to be returned from this method if no
         // data is retrieved
         $this->dataRead = '';
-
         // Get session data using the selected locking strategy
         $item = $this->connection->read($this->formatId($id));
-
         $dataAttribute = $this->connection->getDataAttribute();
         $sessionLifetimeAttribute = $this->connection->getSessionLifetimeAttribute();
-
         // Return the data if it is not expired. If it is expired, remove it
         if (isset($item[$sessionLifetimeAttribute]) && isset($item[$dataAttribute])) {
             $this->dataRead = $item[$dataAttribute];
@@ -155,10 +137,8 @@ class SessionHandler implements \SessionHandlerInterface
                 $this->destroy($id);
             }
         }
-
         return $this->dataRead;
     }
-
     /**
      * Write a session to DynamoDB.
      *
@@ -172,14 +152,11 @@ class SessionHandler implements \SessionHandlerInterface
         $changed = $id !== $this->openSessionId
             || $data !== $this->dataRead;
         $this->openSessionId = $id;
-
         // Write the session data using the selected locking strategy
         $this->sessionWritten = $this->connection
             ->write($this->formatId($id), $data, $changed);
-
         return $this->sessionWritten;
     }
-
     /**
      * Delete a session stored in DynamoDB.
      *
@@ -193,10 +170,8 @@ class SessionHandler implements \SessionHandlerInterface
         // Delete the session data using the selected locking strategy
         $this->sessionWritten
             = $this->connection->delete($this->formatId($id));
-
         return $this->sessionWritten;
     }
-
     /**
      * Satisfies the session handler interface, but does nothing. To do garbage
      * collection, you must manually call the garbageCollect() method.
@@ -211,7 +186,6 @@ class SessionHandler implements \SessionHandlerInterface
         // Garbage collection for a DynamoDB table must be triggered manually.
         return true;
     }
-
     /**
      * Triggers garbage collection on expired sessions.
      * @codeCoverageIgnore
@@ -220,7 +194,6 @@ class SessionHandler implements \SessionHandlerInterface
     {
         $this->connection->deleteExpired();
     }
-
     /**
      * Prepend the session ID with the session name.
      *

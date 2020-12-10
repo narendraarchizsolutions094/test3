@@ -1,8 +1,6 @@
 <?php
 namespace Aws\ServiceQuotas;
-
 use Aws\AwsClient;
-
 /**
  * This client is used to interact with the **Service Quotas** service.
  * @method \Aws\Result associateServiceQuotaTemplate(array $args = [])

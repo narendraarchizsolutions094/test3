@@ -1,8 +1,6 @@
 <?php
 namespace Aws\MarketplaceCatalog;
-
 use Aws\AwsClient;
-
 /**
  * This client is used to interact with the **AWS Marketplace Catalog Service** service.
  * @method \Aws\Result cancelChangeSet(array $args = [])

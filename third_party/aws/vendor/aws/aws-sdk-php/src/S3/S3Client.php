@@ -1,6 +1,5 @@
 <?php
 namespace Aws\S3;
-
 use Aws\Api\ApiProvider;
 use Aws\Api\DocModel;
 use Aws\Api\Service;
@@ -24,7 +23,6 @@ use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Promise\Promise;
 use GuzzleHttp\Promise\PromiseInterface;
 use Psr\Http\Message\RequestInterface;
-
 /**
  * Client used to interact with **Amazon Simple Storage Service (Amazon S3)**.
  *
@@ -208,13 +206,11 @@ use Psr\Http\Message\RequestInterface;
 class S3Client extends AwsClient implements S3ClientInterface
 {
     use S3ClientTrait;
-
     public static function getArguments()
     {
         $args = parent::getArguments();
         $args['retries']['fn'] = [__CLASS__, '_applyRetryConfig'];
         $args['api_provider']['fn'] = [__CLASS__, '_applyApiProvider'];
-
         return $args + [
             'bucket_endpoint' => [
                 'type'    => 'config',
@@ -268,7 +264,6 @@ class S3Client extends AwsClient implements S3ClientInterface
             ],
         ];
     }
-
     /**
      * {@inheritdoc}
      *
@@ -332,7 +327,6 @@ class S3Client extends AwsClient implements S3ClientInterface
             Middleware::contentType(['PutObject', 'UploadPart']),
             's3.content_type'
         );
-
         // Use the bucket style middleware when using a "bucket_endpoint" (for cnames)
         if ($this->getConfig('bucket_endpoint')) {
             $stack->appendBuild(BucketEndpointMiddleware::wrap(), 's3.bucket_endpoint');
@@ -349,7 +343,6 @@ class S3Client extends AwsClient implements S3ClientInterface
                 's3.endpoint_middleware'
             );
         }
-
         $stack->appendBuild(
             BucketEndpointArnMiddleware::wrap(
                 $this->getApi(),
@@ -374,7 +367,6 @@ class S3Client extends AwsClient implements S3ClientInterface
         $stack->appendInit($this->getEncodingTypeMiddleware(), 's3.auto_encode');
         $stack->appendInit($this->getHeadObjectMiddleware(), 's3.head_object');
     }
-
     /**
      * Determine if a string is a valid name for a DNS compatible Amazon S3
      * bucket.
@@ -389,13 +381,11 @@ class S3Client extends AwsClient implements S3ClientInterface
     public static function isBucketDnsCompatible($bucket)
     {
         $bucketLen = strlen($bucket);
-
         return ($bucketLen >= 3 && $bucketLen <= 63) &&
             // Cannot look like an IP address
             !filter_var($bucket, FILTER_VALIDATE_IP) &&
             preg_match('/^[a-z0-9]([a-z0-9\-\.]*[a-z0-9])?$/', $bucket);
     }
-
     public static function _apply_use_arn_region($value, array &$args, HandlerList $list)
     {
         if ($value instanceof CacheInterface) {
@@ -414,12 +404,10 @@ class S3Client extends AwsClient implements S3ClientInterface
             $args['use_arn_region'] = new Configuration($value);
         }
     }
-
     public function createPresignedRequest(CommandInterface $command, $expires, array $options = [])
     {
         $command = clone $command;
         $command->getHandlerList()->remove('signer');
-
         /** @var \Aws\Signature\SignatureInterface $signer */
         $signer = call_user_func(
             $this->getSignatureProvider(),
@@ -427,7 +415,6 @@ class S3Client extends AwsClient implements S3ClientInterface
             $this->getConfig('signing_name'),
             $this->getConfig('signing_region')
         );
-
         return $signer->presign(
             \Aws\serialize($command),
             $this->getCredentials()->wait(),
@@ -435,7 +422,6 @@ class S3Client extends AwsClient implements S3ClientInterface
             $options
         );
     }
-
     /**
      * Returns the URL to an object identified by its bucket and key.
      *
@@ -455,10 +441,8 @@ class S3Client extends AwsClient implements S3ClientInterface
             'Bucket' => $bucket,
             'Key'    => $key
         ]);
-
         return (string) \Aws\serialize($command)->getUri();
     }
-
     /**
      * Raw URL encode a key and allow for '/' characters
      *
@@ -470,7 +454,6 @@ class S3Client extends AwsClient implements S3ClientInterface
     {
         return str_replace('%2F', '/', rawurlencode($key));
     }
-
     /**
      * Provides a middleware that removes the need to specify LocationConstraint on CreateBucket.
      *
@@ -485,19 +468,16 @@ class S3Client extends AwsClient implements S3ClientInterface
                     $locationConstraint = isset($command['CreateBucketConfiguration']['LocationConstraint'])
                         ? $command['CreateBucketConfiguration']['LocationConstraint']
                         : null;
-
                     if ($locationConstraint === 'us-east-1') {
                         unset($command['CreateBucketConfiguration']);
                     } elseif ('us-east-1' !== $region && empty($locationConstraint)) {
                         $command['CreateBucketConfiguration'] = ['LocationConstraint' => $region];
                     }
                 }
-
                 return $handler($command, $request);
             };
         };
     }
-
     /**
      * Provides a middleware that supports the `SaveAs` parameter.
      *
@@ -511,12 +491,10 @@ class S3Client extends AwsClient implements S3ClientInterface
                     $command['@http']['sink'] = $command['SaveAs'];
                     unset($command['SaveAs']);
                 }
-
                 return $handler($command, $request);
             };
         };
     }
-
     /**
      * Provides a middleware that disables content decoding on HeadObject
      * commands.
@@ -535,12 +513,10 @@ class S3Client extends AwsClient implements S3ClientInterface
                 ) {
                     $command['@http']['decode_content'] = false;
                 }
-
                 return $handler($command, $request);
             };
         };
     }
-
     /**
      * Provides a middleware that autopopulates the EncodingType parameter on
      * ListObjects commands.
@@ -558,7 +534,6 @@ class S3Client extends AwsClient implements S3ClientInterface
                     $command['EncodingType'] = 'url';
                     $autoSet = true;
                 }
-
                 return $handler($command, $request)
                     ->then(function (ResultInterface $result) use ($autoSet) {
                         if ($result['EncodingType'] === 'url' && $autoSet) {
@@ -572,7 +547,6 @@ class S3Client extends AwsClient implements S3ClientInterface
                                 ['Contents', 'Key'],
                                 ['CommonPrefixes', 'Prefix'],
                             ];
-
                             foreach ($topLevel as $key) {
                                 if (isset($result[$key])) {
                                     $result[$key] = urldecode($result[$key]);
@@ -588,21 +562,17 @@ class S3Client extends AwsClient implements S3ClientInterface
                                     }
                                 }
                             }
-
                         }
-
                         return $result;
                     });
             };
         };
     }
-
     /** @internal */
     public static function _applyRetryConfig($value, $args, HandlerList $list)
     {
         if ($value) {
             $config = \Aws\Retry\ConfigurationProvider::unwrap($value);
-
             if ($config->getMode() === 'legacy') {
                 $maxRetries = $config->getMaxAttempts() - 1;
                 $decider = RetryMiddleware::createDefaultDecider($maxRetries);
@@ -610,11 +580,9 @@ class S3Client extends AwsClient implements S3ClientInterface
                     $maxRetries = null !== $command['@retries']
                         ? $command['@retries']
                         : $maxRetries;
-
                     if ($decider($retries, $command, $request, $result, $error)) {
                         return true;
                     }
-
                     if ($error instanceof AwsException
                         && $retries < $maxRetries
                     ) {
@@ -626,7 +594,6 @@ class S3Client extends AwsClient implements S3ClientInterface
                                     'Your socket connection to the server'
                                 ) !== false;
                         }
-
                         if ($error->getPrevious() instanceof RequestException) {
                             // All commands except CompleteMultipartUpload are
                             // idempotent and may be retried without worry if a
@@ -634,10 +601,8 @@ class S3Client extends AwsClient implements S3ClientInterface
                             return $command->getName() !== 'CompleteMultipartUpload';
                         }
                     }
-
                     return false;
                 };
-
                 $delay = [RetryMiddleware::class, 'exponentialDelay'];
                 $list->appendSign(Middleware::retry($decider, $delay), 'retry');
             } else {
@@ -645,7 +610,6 @@ class S3Client extends AwsClient implements S3ClientInterface
                     new QuotaManager(),
                     $config->getMaxAttempts()
                 );
-
                 $list->appendSign(
                     RetryMiddlewareV2::wrap(
                         $config,
@@ -684,7 +648,6 @@ class S3Client extends AwsClient implements S3ClientInterface
             }
         }
     }
-
     /** @internal */
     public static function _applyApiProvider($value, array &$args, HandlerList $list)
     {
@@ -700,7 +663,6 @@ class S3Client extends AwsClient implements S3ClientInterface
             )
         );
     }
-
     /**
      * @internal
      * @codeCoverageIgnore
@@ -709,13 +671,11 @@ class S3Client extends AwsClient implements S3ClientInterface
     {
         $b64 = '<div class="alert alert-info">This value will be base64 encoded on your behalf.</div>';
         $opt = '<div class="alert alert-info">This value will be computed for you it is not supplied.</div>';
-
         // Add the SourceFile parameter.
         $docs['shapes']['SourceFile']['base'] = 'The path to a file on disk to use instead of the Body parameter.';
         $api['shapes']['SourceFile'] = ['type' => 'string'];
         $api['shapes']['PutObjectRequest']['members']['SourceFile'] = ['shape' => 'SourceFile'];
         $api['shapes']['UploadPartRequest']['members']['SourceFile'] = ['shape' => 'SourceFile'];
-
         // Add the ContentSHA256 parameter.
         $docs['shapes']['ContentSHA256']['base'] = 'A SHA256 hash of the body content of the request.';
         $api['shapes']['ContentSHA256'] = ['type' => 'string'];
@@ -724,24 +684,20 @@ class S3Client extends AwsClient implements S3ClientInterface
         unset($api['shapes']['PutObjectRequest']['members']['ContentMD5']);
         unset($api['shapes']['UploadPartRequest']['members']['ContentMD5']);
         $docs['shapes']['ContentSHA256']['append'] = $opt;
-
         // Add the SaveAs parameter.
         $docs['shapes']['SaveAs']['base'] = 'The path to a file on disk to save the object data.';
         $api['shapes']['SaveAs'] = ['type' => 'string'];
         $api['shapes']['GetObjectRequest']['members']['SaveAs'] = ['shape' => 'SaveAs'];
-
         // Several SSECustomerKey documentation updates.
         $docs['shapes']['SSECustomerKey']['append'] = $b64;
         $docs['shapes']['CopySourceSSECustomerKey']['append'] = $b64;
         $docs['shapes']['SSECustomerKeyMd5']['append'] = $opt;
-
         // Add the ObjectURL to various output shapes and documentation.
         $docs['shapes']['ObjectURL']['base'] = 'The URI of the created object.';
         $api['shapes']['ObjectURL'] = ['type' => 'string'];
         $api['shapes']['PutObjectOutput']['members']['ObjectURL'] = ['shape' => 'ObjectURL'];
         $api['shapes']['CopyObjectOutput']['members']['ObjectURL'] = ['shape' => 'ObjectURL'];
         $api['shapes']['CompleteMultipartUploadOutput']['members']['ObjectURL'] = ['shape' => 'ObjectURL'];
-
         // Fix references to Location Constraint.
         unset($api['shapes']['CreateBucketRequest']['payload']);
         $api['shapes']['BucketLocationConstraint']['enum'] = [
@@ -756,17 +712,14 @@ class S3Client extends AwsClient implements S3ClientInterface
             "us-west-2",
             "sa-east-1",
         ];
-
         // Add a note that the ContentMD5 is optional.
         $docs['shapes']['ContentMD5']['append'] = '<div class="alert alert-info">The value will be computed on '
             . 'your behalf.</div>';
-
         return [
             new Service($api, ApiProvider::defaultProvider()),
             new DocModel($docs)
         ];
     }
-
     /**
      * @internal
      * @codeCoverageIgnore
@@ -796,7 +749,6 @@ class S3Client extends AwsClient implements S3ClientInterface
         } else {
             $examples['GetObject'] = [$getObjectExample];
         }
-
         $putObjectExample = [
             'input' => [
                 'Bucket' => 'arn:aws:s3:us-east-1:123456789012:accesspoint:myaccesspoint',
@@ -819,7 +771,6 @@ class S3Client extends AwsClient implements S3ClientInterface
         } else {
             $examples['PutObject'] = [$putObjectExample];
         }
-
         return $examples;
     }
 }

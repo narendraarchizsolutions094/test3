@@ -1,13 +1,11 @@
 <?php
 namespace Aws\EndpointDiscovery;
-
 use Aws\AbstractConfigurationProvider;
 use Aws\CacheInterface;
 use Aws\ConfigurationProviderInterface;
 use Aws\EndpointDiscovery\Exception\ConfigurationException;
 use GuzzleHttp\Promise;
 use GuzzleHttp\Promise\PromiseInterface;
-
 /**
  * A configuration provider is a function that returns a promise that is
  * fulfilled with a {@see \Aws\EndpointDiscovery\ConfigurationInterface}
@@ -50,12 +48,9 @@ class ConfigurationProvider extends AbstractConfigurationProvider
     const ENV_ENABLED = 'AWS_ENDPOINT_DISCOVERY_ENABLED';
     const ENV_ENABLED_ALT = 'AWS_ENABLE_ENDPOINT_DISCOVERY';
     const ENV_PROFILE = 'AWS_PROFILE';
-
     public static $cacheKey = 'aws_cached_endpoint_discovery_config';
-
     protected static $interfaceClass = ConfigurationInterface::class;
     protected static $exceptionClass = ConfigurationException::class;
-
     /**
      * Create a default config provider that first checks for environment
      * variables, then checks for a specified profile in the environment-defined
@@ -78,20 +73,16 @@ class ConfigurationProvider extends AbstractConfigurationProvider
             self::ini(),
             self::fallback()
         ];
-
         $memo = self::memoize(
             call_user_func_array('self::chain', $configProviders)
         );
-
         if (isset($config['endpoint_discovery'])
             && $config['endpoint_discovery'] instanceof CacheInterface
         ) {
             return self::cache($memo, $config['endpoint_discovery'], self::$cacheKey);
         }
-
         return $memo;
     }
-
     /**
      * Provider that creates config from environment variables.
      *
@@ -111,12 +102,10 @@ class ConfigurationProvider extends AbstractConfigurationProvider
                     new Configuration($enabled, $cacheLimit)
                 );
             }
-
             return self::reject('Could not find environment variable config'
                 . ' in ' . self::ENV_ENABLED);
         };
     }
-
     /**
      * Fallback config options when other sources are not set.
      *
@@ -133,7 +122,6 @@ class ConfigurationProvider extends AbstractConfigurationProvider
             );
         };
     }
-
     /**
      * Config provider that creates config using a config file whose location
      * is specified by an environment variable 'AWS_CONFIG_FILE', defaulting to
@@ -154,7 +142,6 @@ class ConfigurationProvider extends AbstractConfigurationProvider
     ) {
         $filename = $filename ?: (self::getDefaultConfigFilename());
         $profile = $profile ?: (getenv(self::ENV_PROFILE) ?: 'default');
-
         return function () use ($profile, $filename, $cacheLimit) {
             if (!is_readable($filename)) {
                 return self::reject("Cannot read configuration from $filename");
@@ -170,7 +157,6 @@ class ConfigurationProvider extends AbstractConfigurationProvider
                 return self::reject("Required endpoint discovery config values 
                     not present in INI profile '{$profile}' ({$filename})");
             }
-
             return Promise\promise_for(
                 new Configuration(
                     $data[$profile]['endpoint_discovery_enabled'],
@@ -179,7 +165,6 @@ class ConfigurationProvider extends AbstractConfigurationProvider
             );
         };
     }
-
     /**
      * Unwraps a configuration object in whatever valid form it is in,
      * always returning a ConfigurationInterface object.
@@ -210,7 +195,6 @@ class ConfigurationProvider extends AbstractConfigurationProvider
                 self::DEFAULT_CACHE_LIMIT
             );
         }
-
         throw new \InvalidArgumentException('Not a valid endpoint_discovery '
             . 'configuration argument.');
     }

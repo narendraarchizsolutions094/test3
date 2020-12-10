@@ -1,10 +1,8 @@
 <?php
 namespace Aws\Lambda;
-
 use Aws\AwsClient;
 use Aws\CommandInterface;
 use Aws\Middleware;
-
 /**
  * This client is used to interact with AWS Lambda
  *
@@ -120,7 +118,6 @@ class LambdaClient extends AwsClient
             $list->appendInit($this->getDefaultCurlOptionsMiddleware());
         }
     }
-
     /**
      * Provides a middleware that sets default Curl options for the command
      *

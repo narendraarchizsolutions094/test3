@@ -1,7 +1,5 @@
 <?php
-
 namespace Sabberworm\CSS\RuleSet;
-
 use Sabberworm\CSS\Parsing\ParserState;
 use Sabberworm\CSS\Parsing\OutputException;
 use Sabberworm\CSS\Property\Selector;
@@ -11,20 +9,16 @@ use Sabberworm\CSS\Value\Value;
 use Sabberworm\CSS\Value\Size;
 use Sabberworm\CSS\Value\Color;
 use Sabberworm\CSS\Value\URL;
-
 /**
  * Declaration blocks are the parts of a css file which denote the rules belonging to a selector.
  * Declaration blocks usually appear directly inside a Document or another CSSList (mostly a MediaQuery).
  */
 class DeclarationBlock extends RuleSet {
-
 	private $aSelectors;
-
 	public function __construct($iLineNo = 0) {
 		parent::__construct($iLineNo);
 		$this->aSelectors = array();
 	}
-
 	public static function parse(ParserState $oParserState) {
 		$aComments = array();
 		$oResult = new DeclarationBlock($oParserState->currentLine());
@@ -33,7 +27,6 @@ class DeclarationBlock extends RuleSet {
 		RuleSet::parseRuleSet($oParserState, $oResult);
 		return $oResult;
 	}
-
 
 	public function setSelectors($mSelector) {
 		if (is_array($mSelector)) {
@@ -47,7 +40,6 @@ class DeclarationBlock extends RuleSet {
 			}
 		}
 	}
-
 	// remove one of the selector of the block
 	public function removeSelector($mSelector) {
 		if($mSelector instanceof Selector) {
@@ -61,21 +53,18 @@ class DeclarationBlock extends RuleSet {
 		}
 		return false;
 	}
-
 	/**
 	 * @deprecated use getSelectors()
 	 */
 	public function getSelector() {
 		return $this->getSelectors();
 	}
-
 	/**
 	 * @deprecated use setSelectors()
 	 */
 	public function setSelector($mSelector) {
 		$this->setSelectors($mSelector);
 	}
-
 	/**
 	 * Get selectors.
 	 *
@@ -84,7 +73,6 @@ class DeclarationBlock extends RuleSet {
 	public function getSelectors() {
 		return $this->aSelectors;
 	}
-
 	/**
 	 * Split shorthand declarations (e.g. +margin+ or +font+) into their constituent parts.
 	 * */
@@ -96,7 +84,6 @@ class DeclarationBlock extends RuleSet {
 		$this->expandBackgroundShorthand();
 		$this->expandListStyleShorthand();
 	}
-
 	/**
 	 * Create shorthand declarations (e.g. +margin+ or +font+) whenever possible.
 	 * */
@@ -108,7 +95,6 @@ class DeclarationBlock extends RuleSet {
 		$this->createFontShorthand();
 		$this->createListStyleShorthand();
 	}
-
 	/**
 	 * Split shorthand border declarations (e.g. <tt>border: 1px red;</tt>)
 	 * Additional splitting happens in expandDimensionsShorthand
@@ -158,7 +144,6 @@ class DeclarationBlock extends RuleSet {
 			$this->removeRule($sBorderRule);
 		}
 	}
-
 	/**
 	 * Split shorthand dimensional declarations (e.g. <tt>margin: 0px auto;</tt>)
 	 * into their constituent parts.
@@ -214,7 +199,6 @@ class DeclarationBlock extends RuleSet {
 			$this->removeRule($sProperty);
 		}
 	}
-
 	/**
 	 * Convert shorthand font declarations
 	 * (e.g. <tt>font: 300 italic 11px/14px verdana, helvetica, sans-serif;</tt>)
@@ -278,14 +262,12 @@ class DeclarationBlock extends RuleSet {
 		}
 		$this->removeRule('font');
 	}
-
 	/*
 	 * Convert shorthand background declarations
 	 * (e.g. <tt>background: url("chess.png") gray 50% repeat fixed;</tt>)
 	 * into their constituent parts.
 	 * @see http://www.w3.org/TR/21/colors.html#propdef-background
 	 * */
-
 	public function expandBackgroundShorthand() {
 		$aRules = $this->getRulesAssoc();
 		if (!isset($aRules['background']))
@@ -346,7 +328,6 @@ class DeclarationBlock extends RuleSet {
 		}
 		$this->removeRule('background');
 	}
-
 	public function expandListStyleShorthand() {
 		$aListProperties = array(
 			'list-style-type' => 'disc',
@@ -403,7 +384,6 @@ class DeclarationBlock extends RuleSet {
 		}
 		$this->removeRule('list-style');
 	}
-
 	public function createShorthandProperties(array $aProperties, $sShorthand) {
 		$aRules = $this->getRulesAssoc();
 		$aNewValues = array();
@@ -433,7 +413,6 @@ class DeclarationBlock extends RuleSet {
 			$this->addRule($oNewRule);
 		}
 	}
-
 	public function createBackgroundShorthand() {
 		$aProperties = array(
 			'background-color', 'background-image', 'background-repeat',
@@ -441,14 +420,12 @@ class DeclarationBlock extends RuleSet {
 		);
 		$this->createShorthandProperties($aProperties, 'background');
 	}
-
 	public function createListStyleShorthand() {
 		$aProperties = array(
 			'list-style-type', 'list-style-position', 'list-style-image'
 		);
 		$this->createShorthandProperties($aProperties, 'list-style');
 	}
-
 	/**
 	 * Combine border-color, border-style and border-width into border
 	 * Should be run after create_dimensions_shorthand!
@@ -459,13 +436,11 @@ class DeclarationBlock extends RuleSet {
 		);
 		$this->createShorthandProperties($aProperties, 'border');
 	}
-
 	/*
 	 * Looks for long format CSS dimensional properties
 	 * (margin, padding, border-color, border-style and border-width) 
 	 * and converts them into shorthand CSS properties.
 	 * */
-
 	public function createDimensionsShorthand() {
 		$aPositions = array('top', 'right', 'bottom', 'left');
 		$aExpansions = array(
@@ -530,7 +505,6 @@ class DeclarationBlock extends RuleSet {
 			}
 		}
 	}
-
 	/**
 	 * Looks for long format CSS font properties (e.g. <tt>font-weight</tt>) and 
 	 * tries to convert them into a shorthand CSS <tt>font</tt> property. 
@@ -599,17 +573,14 @@ class DeclarationBlock extends RuleSet {
 		$oFFValue = new RuleValueList(',', $this->iLineNo);
 		$oFFValue->setListComponents($aFFValues);
 		$oNewRule->addValue($oFFValue);
-
 		$this->addRule($oNewRule);
 		foreach ($aFontProperties as $sProperty) {
 			$this->removeRule($sProperty);
 		}
 	}
-
 	public function __toString() {
 		return $this->render(new \Sabberworm\CSS\OutputFormat());
 	}
-
 	public function render(\Sabberworm\CSS\OutputFormat $oOutputFormat) {
 		if(count($this->aSelectors) === 0) {
 			// If all the selectors have been removed, this declaration block becomes invalid
@@ -624,5 +595,4 @@ class DeclarationBlock extends RuleSet {
 		$sResult .= $oOutputFormat->sAfterDeclarationBlock;
 		return $sResult;
 	}
-
 }

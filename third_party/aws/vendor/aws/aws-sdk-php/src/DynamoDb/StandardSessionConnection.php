@@ -1,8 +1,6 @@
 <?php
 namespace Aws\DynamoDb;
-
 use Aws\DynamoDb\Exception\DynamoDbException;
-
 /**
  * The standard connection performs the read and write operations to DynamoDB.
  */
@@ -22,7 +20,6 @@ class StandardSessionConnection implements SessionConnectionInterface
         $this->client = $client;
         $this->initConfig($config);
     }
-
     public function read($id)
     {
         $item = [];
@@ -33,7 +30,6 @@ class StandardSessionConnection implements SessionConnectionInterface
                  'Key'            => $this->formatKey($id),
                  'ConsistentRead' => $this->isConsistentRead(),
              ]);
-
             // Get the item values
             $result = isset($result['Item']) ? $result['Item'] : [];
             foreach ($result as $key => $value) {
@@ -42,10 +38,8 @@ class StandardSessionConnection implements SessionConnectionInterface
         } catch (DynamoDbException $e) {
             // Could not retrieve item, so return nothing.
         }
-
         return $item;
     }
-
     public function write($id, $data, $isChanged)
     {
         // Prepare the attributes
@@ -62,12 +56,10 @@ class StandardSessionConnection implements SessionConnectionInterface
                 } else {
                     $attributes[$this->getDataAttribute()] = ['Value' => ['S' => $data]];
                 }
-
             } else {
                 $attributes[$this->getDataAttribute()] = ['Action' => 'DELETE'];
             }
         }
-
         // Perform the UpdateItem command
         try {
             return (bool) $this->client->updateItem([
@@ -79,7 +71,6 @@ class StandardSessionConnection implements SessionConnectionInterface
             return $this->triggerError("Error writing session $id: {$e->getMessage()}");
         }
     }
-
     public function delete($id)
     {
         try {
@@ -91,7 +82,6 @@ class StandardSessionConnection implements SessionConnectionInterface
             return $this->triggerError("Error deleting session $id: {$e->getMessage()}");
         }
     }
-
     public function deleteExpired()
     {
         // Create a Scan iterator for finding expired session items
@@ -108,10 +98,8 @@ class StandardSessionConnection implements SessionConnectionInterface
                 ]
             ],
         ]);
-
         // Create a WriteRequestBatch for deleting the expired items
         $batch = new WriteRequestBatch($this->client, $this->getBatchConfig());
-
         // Perform Scan and BatchWriteItem (delete) operations as needed
         foreach ($scan->search('Items') as $item) {
             $batch->delete(
@@ -119,11 +107,9 @@ class StandardSessionConnection implements SessionConnectionInterface
                 $this->getTableName()
             );
         }
-
         // Delete any remaining items that were not auto-flushed
         $batch->flush();
     }
-
     /**
      * @param string $key
      *
@@ -133,7 +119,6 @@ class StandardSessionConnection implements SessionConnectionInterface
     {
         return [$this->getHashKey() => ['S' => $key]];
     }
-
     /**
      * @param string $error
      *
@@ -142,7 +127,6 @@ class StandardSessionConnection implements SessionConnectionInterface
     protected function triggerError($error)
     {
         trigger_error($error, E_USER_WARNING);
-
         return false;
     }
 }

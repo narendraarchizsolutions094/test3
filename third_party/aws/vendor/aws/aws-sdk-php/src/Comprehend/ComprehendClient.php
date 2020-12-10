@@ -1,8 +1,6 @@
 <?php
 namespace Aws\Comprehend;
-
 use Aws\AwsClient;
-
 /**
  * This client is used to interact with the **Amazon Comprehend** service.
  * @method \Aws\Result batchDetectDominantLanguage(array $args = [])

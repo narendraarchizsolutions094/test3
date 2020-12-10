@@ -5,7 +5,6 @@
  * @author  Fabien Ménager <fabien.menager@gmail.com>
  * @license GNU LGPLv3+ http://www.gnu.org/copyleft/lesser.html
  */
-
 spl_autoload_register(function($class) {
   if (0 === strpos($class, "Svg")) {
     $file = str_replace('\\', DIRECTORY_SEPARATOR, $class);

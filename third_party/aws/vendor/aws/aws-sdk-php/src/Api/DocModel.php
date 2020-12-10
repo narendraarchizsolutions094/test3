@@ -1,6 +1,5 @@
 <?php
 namespace Aws\Api;
-
 /**
  * Encapsulates the documentation strings for a given service-version and
  * provides methods for extracting the desired parts related to a service,
@@ -10,7 +9,6 @@ class DocModel
 {
     /** @var array */
     private $docs;
-
     /**
      * @param array $docs
      *
@@ -21,10 +19,8 @@ class DocModel
         if (!extension_loaded('tidy')) {
             throw new \RuntimeException('The "tidy" PHP extension is required.');
         }
-
         $this->docs = $docs;
     }
-
     /**
      * Convert the doc model to an array.
      *
@@ -34,7 +30,6 @@ class DocModel
     {
         return $this->docs;
     }
-
     /**
      * Retrieves documentation about the service.
      *
@@ -44,7 +39,6 @@ class DocModel
     {
         return isset($this->docs['service']) ? $this->docs['service'] : null;
     }
-
     /**
      * Retrieves documentation about an operation.
      *
@@ -58,7 +52,6 @@ class DocModel
             ? $this->docs['operations'][$operation]
             : null;
     }
-
     /**
      * Retrieves documentation about an error.
      *
@@ -72,7 +65,6 @@ class DocModel
             ? $this->docs['shapes'][$error]['base']
             : null;
     }
-
     /**
      * Retrieves documentation about a shape, specific to the context.
      *
@@ -87,7 +79,6 @@ class DocModel
         if (!isset($this->docs['shapes'][$shapeName])) {
             return '';
         }
-
         $result = '';
         $d = $this->docs['shapes'][$shapeName];
         if (isset($d['refs']["{$parentName}\$${ref}"])) {
@@ -95,20 +86,16 @@ class DocModel
         } elseif (isset($d['base'])) {
             $result = $d['base'];
         }
-
         if (isset($d['append'])) {
             $result .= $d['append'];
         }
-
         return $this->clean($result);
     }
-
     private function clean($content)
     {
         if (!$content) {
             return '';
         }
-
         $tidy = new \tidy();
         $tidy->parseString($content, [
             'indent' => true,
@@ -122,7 +109,6 @@ class DocModel
             'logical-emphasis' => true
         ]);
         $tidy->cleanRepair();
-
         return (string) $content;
     }
 }

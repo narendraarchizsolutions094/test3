@@ -1,8 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-
 class Setting extends CI_Controller {
-
 	public function __construct()
 	{
 		parent::__construct();
@@ -10,12 +8,10 @@ class Setting extends CI_Controller {
 		$this->load->model(array(
 			'website/setting_model'
 		));
-
 		if (empty($this->session->user_id)) {
             redirect('login');
         }
 	}
-
 	public function index()
 	{
 		$data['title'] = display('website_setting');
@@ -27,7 +23,6 @@ class Setting extends CI_Controller {
 		$data['content'] = $this->load->view('website/pages/setting',$data,true);
 		$this->load->view('layout/main_wrapper',$data);
 	} 
-
 	public function create()
 	{
 		$data['title'] = display('website_setting');
@@ -66,7 +61,6 @@ class Setting extends CI_Controller {
 		if ($logo === false) {
 			$this->session->set_flashdata('exception', display('invalid_logo'));
 		}
-
 		//favicon upload
 		$favicon = $this->fileupload->do_upload(
 			'assets_web/images/icons/',
@@ -85,7 +79,6 @@ class Setting extends CI_Controller {
 			$this->session->set_flashdata('exception', display('invalid_favicon'));
 		}
 		#-------------------------------# 
-
 		$data['setting'] = (object)$postData = [
 			'id'  		  => $this->input->post('id'),
 			'comp_id' 	  => $this->session->userdata('companey_id'),
@@ -112,7 +105,6 @@ class Setting extends CI_Controller {
 		]; 
 		#-------------------------------#
 		if ($this->form_validation->run() === true) {
-
 			#if empty $id then insert data
 			if (empty($postData['id'])) {
 				if ($this->setting_model->create($postData)) {
@@ -131,15 +123,12 @@ class Setting extends CI_Controller {
 					$this->session->set_flashdata('exception', display('please_try_again'));
 				} 
 			}
-
 			redirect('website/setting');
-
 		} else { 
 			$data['content'] = $this->load->view('website/pages/setting',$data,true);
 			$this->load->view('layout/main_wrapper',$data);
 		} 
 	}
-
 	//check setting table row if not exists then insert a row
 	public function check_setting()
 	{
@@ -154,6 +143,5 @@ class Setting extends CI_Controller {
 			]);
 		}
 	}
-
 
 }

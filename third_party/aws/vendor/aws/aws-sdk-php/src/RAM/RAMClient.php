@@ -1,8 +1,6 @@
 <?php
 namespace Aws\RAM;
-
 use Aws\AwsClient;
-
 /**
  * This client is used to interact with the **AWS Resource Access Manager** service.
  * @method \Aws\Result acceptResourceShareInvitation(array $args = [])

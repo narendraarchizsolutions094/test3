@@ -1,13 +1,11 @@
 <?php
 namespace Aws\ClientSideMonitoring;
-
 use Aws\AbstractConfigurationProvider;
 use Aws\CacheInterface;
 use Aws\ClientSideMonitoring\Exception\ConfigurationException;
 use Aws\ConfigurationProviderInterface;
 use GuzzleHttp\Promise;
 use GuzzleHttp\Promise\PromiseInterface;
-
 /**
  * A configuration provider is a function that accepts no arguments and returns
  * a promise that is fulfilled with a {@see \Aws\ClientSideMonitoring\ConfigurationInterface}
@@ -54,12 +52,9 @@ class ConfigurationProvider extends AbstractConfigurationProvider
     const ENV_HOST = 'AWS_CSM_HOST';
     const ENV_PORT = 'AWS_CSM_PORT';
     const ENV_PROFILE = 'AWS_PROFILE';
-
     public static $cacheKey = 'aws_cached_csm_config';
-
     protected static $interfaceClass = ConfigurationInterface::class;
     protected static $exceptionClass = ConfigurationException::class;
-
     /**
      * Create a default config provider that first checks for environment
      * variables, then checks for a specified profile in the environment-defined
@@ -82,18 +77,14 @@ class ConfigurationProvider extends AbstractConfigurationProvider
             self::ini(),
             self::fallback()
         ];
-
         $memo = self::memoize(
             call_user_func_array('self::chain', $configProviders)
         );
-
         if (isset($config['csm']) && $config['csm'] instanceof CacheInterface) {
             return self::cache($memo, $config['csm'], self::$cacheKey);
         }
-
         return $memo;
     }
-
     /**
      * Provider that creates CSM config from environment variables.
      *
@@ -114,13 +105,11 @@ class ConfigurationProvider extends AbstractConfigurationProvider
                      )
                 );
             }
-
             return self::reject('Could not find environment variable CSM config'
                 . ' in ' . self::ENV_ENABLED. '/' . self::ENV_HOST . '/'
                 . self::ENV_PORT . '/' . self::ENV_CLIENT_ID);
         };
     }
-
     /**
      * Fallback config options when other sources are not set.
      *
@@ -139,7 +128,6 @@ class ConfigurationProvider extends AbstractConfigurationProvider
             );
         };
     }
-
     /**
      * Config provider that creates config using a config file whose location
      * is specified by an environment variable 'AWS_CONFIG_FILE', defaulting to
@@ -156,7 +144,6 @@ class ConfigurationProvider extends AbstractConfigurationProvider
     {
         $filename = $filename ?: (self::getDefaultConfigFilename());
         $profile = $profile ?: (getenv(self::ENV_PROFILE) ?: 'aws_csm');
-
         return function () use ($profile, $filename) {
             if (!is_readable($filename)) {
                 return self::reject("Cannot read CSM config from $filename");
@@ -172,22 +159,18 @@ class ConfigurationProvider extends AbstractConfigurationProvider
                 return self::reject("Required CSM config values not present in 
                     INI profile '{$profile}' ({$filename})");
             }
-
             // host is optional
             if (empty($data[$profile]['csm_host'])) {
                 $data[$profile]['csm_host'] = self::DEFAULT_HOST;
             }
-
             // port is optional
             if (empty($data[$profile]['csm_port'])) {
                 $data[$profile]['csm_port'] = self::DEFAULT_PORT;
             }
-
             // client_id is optional
             if (empty($data[$profile]['csm_client_id'])) {
                 $data[$profile]['csm_client_id'] = self::DEFAULT_CLIENT_ID;
             }
-
             return Promise\promise_for(
                 new Configuration(
                     $data[$profile]['csm_enabled'],
@@ -198,7 +181,6 @@ class ConfigurationProvider extends AbstractConfigurationProvider
             );
         };
     }
-
     /**
      * Unwraps a configuration object in whatever valid form it is in,
      * always returning a ConfigurationInterface object.
@@ -226,7 +208,6 @@ class ConfigurationProvider extends AbstractConfigurationProvider
                 : self::DEFAULT_PORT;
             return new Configuration($config['enabled'], $host, $port, $client_id);
         }
-
         throw new \InvalidArgumentException('Not a valid CSM configuration '
             . 'argument.');
     }

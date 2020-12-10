@@ -1,39 +1,24 @@
 <?php
-
 defined('BASEPATH') or exit('No direct script access allowed');
  
-
-
 class Ticket extends CI_Controller
 {
-
-
 	public function __construct() 
-
 	{
-
 		parent::__construct();
-
-
 		$this->load->model(array(
-
 			'Ticket_Model', 'Client_Model', 'User_model', 'Leads_Model', 'Message_models'
-
 		));
 	}
-
 	public function natureOfComplaintList()
 	{
-
 		$data['title'] = "Nature Of Complaint List";
 		$data["tickets"] = $this->db->select('*')->from('tbl_nature_of_complaint')->where('comp_id', $this->session->companey_id)->get()->result();
 		$data['content'] = $this->load->view('ticket/natureofcomplain-list', $data, true);
 		$this->load->view('layout/main_wrapper', $data);
 	}
-
 	public function addNatureOfComplaint()
 	{
-
 		$data['title'] = "Add Nature Of Complaint";
 		if (!empty($_POST)) {
 			if (empty($this->input->post('complainid'))) {
@@ -68,7 +53,6 @@ class Ticket extends CI_Controller
 			$this->load->view('layout/main_wrapper', $data);
 		}
 	}
-
 	public function editNatureOfComplaint($id)
 	{
 		$data['title'] 	= "Edit Nature Of Complaint";
@@ -76,7 +60,6 @@ class Ticket extends CI_Controller
 		$data['content'] = $this->load->view('ticket/addNatureof_complaint', $data, true);
 		$this->load->view('layout/main_wrapper', $data);
 	}
-
 	public function deleteNatureOfComplaint($id)
 	{
 		$this->db->where('id', $id);
@@ -84,34 +67,26 @@ class Ticket extends CI_Controller
 		$this->session->set_flashdata('message', 'Deleted successfully');
 		redirect('ticket/natureOfComplaintList');
 	}
-
 	public function index()
 	{
-
 		$this->load->model('Datasource_model');
 		$this->load->model('dash_model');
 		$this->load->model('enquiry_model');
 		$this->load->model('report_model');
 		$this->load->model('Leads_Model');
-
 		if (isset($_SESSION['ticket_filters_sess']))
 			unset($_SESSION['ticket_filters_sess']);
-
 		$data['sourse'] = $this->report_model->all_source();
 		$data['title'] = "All Ticket";
-
 		$data["tickets"] = $this->Ticket_Model->getall();
 		//print_r($data['tickets']); exit();
 		$data['created_bylist'] = $this->User_model->read();
 		$data['products'] = $this->dash_model->get_user_product_list();
 		$data['prodcntry_list'] = $this->enquiry_model->get_user_productcntry_list();
 		$data['problem'] = $this->Ticket_Model->get_sub_list();
-
 		
 		$data['stage'] =  $this->Leads_Model->stage_by_type(4);
-
 		$data['sub_stage'] = $this->Leads_Model->find_description();
-
 		$data['ticket_status'] = $this->Ticket_Model->ticket_status()->result();
 		
 		$data['dfields'] = $this->enquiry_model->getformfield(2);
@@ -122,8 +97,6 @@ class Ticket extends CI_Controller
 		$data['content'] = $this->load->view('ticket/list-ticket', $data, true);
 		$this->load->view('layout/main_wrapper', $data);
 	}
-
-
 	public function is_open_ticket($tracking_no){
 		$comp_id = $this->session->companey_id;
 		$this->db->where('tbl_ticket.ticket_status!=',3);
@@ -141,12 +114,8 @@ class Ticket extends CI_Controller
 		if($post = $this->input->post())
 		{
 			$this->load->model('Enquiry_model');
-
-
 			$res = $this->Ticket_Model->filterticket(array('tck.'.$post['find_by'] => $post['key']));
-
 			$html = "";
-
 			if($res) 
 			{
 				$html .= '<table class="table table-bordered">
@@ -172,7 +141,6 @@ class Ticket extends CI_Controller
 					</tr>';
 				}
 				$html .= '</table>';
-
 				$data = array(
 				'status' => '1',				
 				'html' => $html,
@@ -194,13 +162,10 @@ class Ticket extends CI_Controller
 		// $_POST = array('search'=>array('value'=>''),'length'=>10,'start'=>0);
 		$this->load->model('Ticket_datatable_model');
 		$this->load->model('enquiry_model');
-
 		$res = $this->Ticket_datatable_model->getRows($_POST);
 		//print_r($res); exit();
 		$data  = array();
-
 		$dfields = $this->enquiry_model->getformfield(2);
-
 		$acolarr = array();
 		$dacolarr = array();
 		if (isset($_COOKIE["ticket_allowcols"])) {
@@ -215,9 +180,7 @@ class Ticket extends CI_Controller
 		} else {
 			$dshowall = false;
 		}
-
 		$fieldval =  $this->enquiry_model->getfieldvalue(0,2); //2 for ticket
-
 		foreach ($res as $point) {
 			$sub = array();
 			$sub[] = '<input type="checkbox" class="checkbox1" onclick="event.stopPropagation();" value="' . $point->id . '">';
@@ -225,10 +188,8 @@ class Ticket extends CI_Controller
 			if ($showall or in_array(1, $acolarr)) {
 				$sub[] = '<a href="' . base_url('ticket/view/' . $point->ticketno) . '">' . $point->ticketno . '</a>';
 			}
-
         if($this->session->companey_id==65)
         {
-
 			if ($showall or in_array(15, $acolarr)) {
 				$sub[] = $point->tracking_no == '' ? 'NA' : $point->tracking_no;
 			}
@@ -236,23 +197,18 @@ class Ticket extends CI_Controller
 			if ($showall or in_array(7, $acolarr)) {
 				$sub[] = $point->created_by_name ?? "NA";
 			}
-
 			if ($showall or in_array(9, $acolarr)) {
 				$sub[] = $point->coml_date ?? 'NA';
 			}
-
 			if ($showall or in_array(18, $acolarr)) {
 				$sub[] = $point->last_update ?? 'NA';
 			}
-
 			if ($showall or in_array(2, $acolarr)) {
 				$sub[] = $point->clientname ?? "NA";
 			}
-
 			if ($showall or in_array(3, $acolarr)) {
 				$sub[] = $point->email ?? "NA";
 			}
-
 			if ($showall or in_array(4, $acolarr)) {
 				if (user_access(220) && !empty($point->phone)) {
 					$sub[] = "<a href='javascript:void(0)' onclick='send_parameters(".$point->phone.")'>" . $point->phone . " <button class='btn btn-xs btn-success'><i class='fa fa-phone' aria-hidden='true'></i></button></a>";
@@ -260,27 +216,22 @@ class Ticket extends CI_Controller
 					$sub[] = $point->phone ?? "NA";
 				}
 			}
-
 			//$sub[] = $point->phone??"NA";
 			if ($showall or in_array(5, $acolarr)) {
 				$sub[] = $point->country_name ?? "NA";
 			}
-
 			if ($showall or in_array(6, $acolarr)) {
 				$assign_to = $point->assign_to_name ?? "NA";
 				$assign_to .=	!empty($point->last_esc)?' (<small style="color:red;">'.$point->last_esc.'</small>)':"";
 				$sub[] = $assign_to;
 			}
-
 			if ($showall or in_array(17, $acolarr)) {
 				$sub[] = $point->assigned_by_name ?? "NA";
 			}
-
 			
 			if ($showall or in_array(8, $acolarr)) {
 				$sub[] = '<span class="label label-' . ($point->priority == 1 ? 'success">Low' : ($point->priority == 2 ? 'warning">Medium' : 'danger">High')) . '</span>';
 			}
-
 			
 			
 			if ($showall or in_array(19, $acolarr)) {
@@ -298,18 +249,13 @@ class Ticket extends CI_Controller
 			if ($showall or in_array(13, $acolarr)) {
 				$sub[] = $point->description ?? 'NA';
 			}
-
 			if ($showall or in_array(14, $acolarr)) {
 				$sub[] = $point->message == '' ? 'NA' : $point->message;
 			}
-
 			
-
 			if ($showall or in_array(16, $acolarr)) {
 				$sub[] = $point->status_name == '' ? 'Open' : $point->status_name;
 			}
-
-
 			//dynamic fields
 			$enqid = $point->id;
 			if (!empty($dacolarr) and !empty($dfields)) {
@@ -335,11 +281,8 @@ class Ticket extends CI_Controller
 					}
 				}
 			}
-
-
 			$data[] = $sub;
 		}
-
 		//print_r($res);
 		$output = array(
 			"draw" => $_POST['draw'],
@@ -349,33 +292,24 @@ class Ticket extends CI_Controller
 		);
 		echo json_encode($output);
 	}
-
-
 	public function view_tracking()
 	{
 		if ($post = $this->input->post()) {
 			if ($post['trackingno']) {
 				$ch = curl_init();
-
 				curl_setopt($ch, CURLOPT_URL, "https://thecrm360.com/new_crm/ticket/gc_vtrans_api/" . $post['trackingno']);
-
 				curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-
 				$output = curl_exec($ch);
-
 				curl_close($ch);
-
 				if ($output == '') {
 					echo '0';
 					exit();
 				}
-
 				$a = json_decode($output);
 				$table  = empty($a->Table) ? '' : $a->Table;
 				$table1 = empty($a->Table1) ? '' : $a->Table1;
 				$table2 = empty($a->Table2) ? '' : $a->Table2;
 				$table3 = empty($a->Table3) ? '' : $a->Table3;
-
 				if (isset($a->Table)) {
 					echo '<table class="table table-bordered">
 		        <tr><th colspan="4" style="text-align:center;">'.display('tracking_no').': ' . (empty($table->GCNO) ? '' : $table->GCNO) . '</td></tr>
@@ -384,12 +318,10 @@ class Ticket extends CI_Controller
 		         <tr><th>Delivery Branch:</th><td>' . (empty($table->DeliveryBranch) ? '' : $table->DeliveryBranch) . '</td><th>Booking Branch:</th><td>' . (empty($table->BookingBranch) ? '' : $table->BookingBranch) . '</td></tr>';
 					if (sizeof((array)$table->EDD))
 						echo ' <tr><th>EDD</th><td colspan="3">' . print_r($table->EDD) . '</td></tr>';
-
 					echo '<tr><th>Delivery Date:</th><td>' . (empty($table->DeliveryDate) ? '' : $table->DeliveryDate) . '</td><th>Arrival Date:</th><td>' . (empty($table->ArrivalDate) ? '' : $table->ArrivalDate) . '</td></tr>
 		         <tr><th>Delivery Type:</th><td>' . (empty($table->DeliveryType) ? '' : $table->DeliveryType) . '</td><th>CRNO:</th><td>' . (empty($table->CRNO) ? '' : $table->CRNO) . '</td></tr>
 		        </table>';
 				}
-
 				if (isset($a->Table1)) {
 					echo '<center style="color:red; padding:0px 0px 0px 10px; cursor:pointer;" onclick="$(this).hide(),$(\'.hiddenTrackingDetails\').show();">View More</center>
 		        <div class="hiddenTrackingDetails" style="display:none;">
@@ -403,7 +335,6 @@ class Ticket extends CI_Controller
 		        	<tr><th>Latitude:</th><td>' . (empty($table1->Latitude) ? '' : $table1->Latitude) . '</td><th>Longitude:</th><td>' . (empty($table1->Longitude) ? '' : $table1->Longitude) . '</td></tr>
 	        	</table>';
 				}
-
 				if (isset($a->Table2)) {
 					echo '<table class="table table-bordered">
 		        	<tr><th colspan="4" style="text-align:center;">Delivery Details</th></tr>
@@ -415,7 +346,6 @@ class Ticket extends CI_Controller
 		        	<tr><th>Latitude:</th><td>' . (empty($table2->Latitude) ? '' : $table2->Latitude) . '</td><th>Longitude:</th><td>' . (empty($table2->Longitude) ? '' : $table2->Longitude) . '</td></tr>
 	        	</table>';
 				}
-
 				if (!empty($table3)) {
 					echo '<table class="table table-bordered">
 	        	<tr><th colspan="5" style="text-align:center;">Status</th></tr>
@@ -440,11 +370,9 @@ class Ticket extends CI_Controller
 			}
 		}
 	}
-
 	public function view1($tckt = "")
 	{
 		if (isset($_POST["reply"])) {
-
 			$this->db->where('comp_id',$this->session->companey_id);
             $this->db->where('sys_para','usermail_in_cc');
             $this->db->where('type','COMPANY_SETTING');
@@ -457,7 +385,6 @@ class Ticket extends CI_Controller
                if(!empty($cc_user))
                     $cc = $cc_user['s_user_email'];
             }
-
 			$subject = $this->input->post("subjects", true);
 			$message = $this->input->post("reply", true);
 			$to = $this->input->post("email", true);
@@ -493,7 +420,6 @@ class Ticket extends CI_Controller
 		if (empty($data['ticket'])) {
 			show_404();
 		}
-
 		//print_r($data['ticket']);exit();	
 		$match = array(
 			'ticket_no' => $data['ticket']->ticketno,
@@ -505,39 +431,29 @@ class Ticket extends CI_Controller
 		//print_r($data['related_tickets']); exit();
 		$data["referred_type"] = $this->Leads_Model->get_referred_by();
 		$data['all_description_lists']    =   $this->Leads_Model->find_description();
-
 		//$data["clients"] = $this->Ticket_Model->getallclient();
-
 		$data["problem_for"] = $this->Ticket_Model->getclient($data['ticket']->client);
 		//print_r($data['problem_for']); exit();
-
 		$data['ticket_status'] = $this->Ticket_Model->ticket_status()->result();
-
 		$data["product"] = $this->Ticket_Model->getproduct();
 		//print_r($data['product']); exit();
 		$data["conversion"] = $this->Ticket_Model->getconv($data["ticket"]->id);
 		// print_r($data['conversion']); exit(); 
 		$data['problem'] = $this->Ticket_Model->get_sub_list();
-
 		$data['prodcntry_list'] = $this->enquiry_model->get_user_productcntry_list();
 		//print_r($data['prodcntry_list']); exit();
 		$data['issues'] = $this->Ticket_Model->get_issue_list();
-
-
 		if (!$data["ticket"]->client)
 			//show_404();
 		$this->load->model('enquiry_model');
 		//$data['enquiry'] = $this->enquiry_model->enquiry_by_id($data["ticket"]->client);
-
 		$data['ticket_stages'] = $this->Leads_Model->stage_by_type(4); // 4 = ticket
 		$data['leadsource'] = $this->Leads_Model->get_leadsource_list();
 		//print_r($data['leadsource']);	
 		//print_r($data['ticket_stages']); exit();
 		$this->load->model(array('form_model', 'dash_model', 'location_model'));
 		$this->load->helper('custom_form_helper');
-
 		$process_id = 0;
-
 		if($data['ticket']->process_id!=0)
 			$process_id = $data['ticket']->process_id;
 		else
@@ -548,11 +464,8 @@ class Ticket extends CI_Controller
 				$process_id = $enq->row()->product_id; // Process id
 			}
 		}
-
-
 		$data['tab_list'] = $this->form_model->get_tabs_list($this->session->companey_id,$process_id,2); //2 for Ticket Tab 
        // print_r($data['tab_list']); exit;
-
 		
 		$primary_tab=0;
 		$tabs = $this->db->select('id')
@@ -562,18 +475,13 @@ class Ticket extends CI_Controller
         if($tabs)
             $primary_tab = $tabs->id;
         $data['primary_tab'] = $primary_tab;
-
-
 		$data['process_id'] =$process_id;
-
 		$content	 =	$this->load->view('ticket/ticket_disposition', $data, true);
 		$content    .=  $this->load->view('ticket/ticket_details', $data, true);
 		$content    .=  $this->load->view('ticket/timeline', $data, true);
-
 		$data['content'] = $content;
 		$this->load->view('layout/main_wrapper', $data);
 	}
-
 	public function ticket_status($rule_ticket_status=0){
 		$ticket_status = $this->Ticket_Model->ticket_status()->result();
 		if(!empty($ticket_status)){
@@ -585,7 +493,6 @@ class Ticket extends CI_Controller
 			}
 		}
 	}
-
 	public function update_ticket_tab($tck_id)
 	{
 		$this->load->library('user_agent');
@@ -594,9 +501,7 @@ class Ticket extends CI_Controller
         $form_type    =   $this->input->post('form_type');
         $enqarr = $this->db->select('*')->where('id',$tck_id)->get('tbl_ticket')->row();
         $en_comments = $enqarr->ticketno;
-
         $type = $enqarr->status;
-
       
        $comment_id = $this->Ticket_Model->saveconv($tck_id,'Ticket Updated','', $enqarr->client,$this->session->user_id);
        //echo $comment_id; exit();
@@ -609,10 +514,8 @@ class Ticket extends CI_Controller
                 $file = !empty($_FILES['enqueryfiles'])?$_FILES['enqueryfiles']:'';                
                 foreach($inputno as $ind => $val){
 	
-
                  if ($inputtype[$ind] == 8) {                                                
                         $file_data    =   $this->doupload($file,$file_count);
-
                         if (!empty($file_data['imageDetailArray']['file_name'])) {
                             $file_path = base_url().'uploads/ticket_documents/'.$this->session->companey_id.'/'.$file_data['imageDetailArray']['file_name'];
                             $biarr = array( 
@@ -623,7 +526,6 @@ class Ticket extends CI_Controller
                                             "cmp_no"  => $this->session->companey_id,
                                             "comment_id" => $comment_id
                                         );
-
                             $this->db->where('enq_no',$en_comments);        
                             $this->db->where('input',$val);        
                             $this->db->where('parent',$tck_id);
@@ -681,7 +583,6 @@ class Ticket extends CI_Controller
             echo json_encode(array('msg'=>'Saved Successfully','status'=>1));
         }
 	}
-
 	public function update_dynamic_query($tck_id)
 	{
 		$this->load->library('user_agent');
@@ -690,9 +591,7 @@ class Ticket extends CI_Controller
         $form_type    =   $this->input->post('form_type');
         $enqarr = $this->db->select('*')->where('id',$tck_id)->get('tbl_ticket')->row();
         $en_comments = $enqarr->ticketno;
-
         $type = $enqarr->status;
-
         // if($type == 1){                 
         //     $comment_id = $this->Leads_Model->add_comment_for_events($this->lang->line('enquery_updated'), $en_comments);                    
         // }else if($type == 2){                   
@@ -701,9 +600,7 @@ class Ticket extends CI_Controller
         //      $comment_id = $this->Leads_Model->add_comment_for_events($this->lang->line('client_updated'), $en_comments);
         // }	
         
-
        $comment_id = $this->Ticket_Model->saveconv($tck_id,'Details Updated','', $enqarr->client,$this->session->user_id);
-
         if(!empty($enqarr)){        
             if(isset($_POST['inputfieldno'])) {                    
                 $inputno   = $this->input->post("inputfieldno", true);
@@ -713,10 +610,8 @@ class Ticket extends CI_Controller
                 $file = !empty($_FILES['enqueryfiles'])?$_FILES['enqueryfiles']:'';                
                 foreach($inputno as $ind => $val){
 	
-
                  if ($inputtype[$ind] == 8) {                                                
                         $file_data    =   $this->doupload($file,$file_count);
-
                         if (!empty($file_data['imageDetailArray']['file_name'])) {
                             $file_path = base_url().'uploads/ticket_documents/'.$this->session->companey_id.'/'.$file_data['imageDetailArray']['file_name'];
                                                 
@@ -752,8 +647,6 @@ class Ticket extends CI_Controller
             echo json_encode(array('msg'=>'Saved Successfully','status'=>1));
         }
 	}
-
-
 	public function doupload($file,$key){        
         $upload_path    =   "./uploads/ticket_documents/";
         $comp_id        =   $this->session->companey_id; //creare seperate folder for each company
@@ -767,14 +660,10 @@ class Ticket extends CI_Controller
             'overwrite'     => TRUE,
             'max_size'      => "2048000",
             'overwrite'    => false
-
         );
         $config['allowed_types'] = '*';
-
-
         $this->load->library('upload');
         $this->upload->initialize($config);
-
         $_FILES['enqueryfiles']['name']      = $file['name'][$key];
         $_FILES['enqueryfiles']['type']      = $file['type'][$key];
         $_FILES['enqueryfiles']['tmp_name']  = $file['tmp_name'][$key];
@@ -788,13 +677,11 @@ class Ticket extends CI_Controller
         }
         return $data;
     }
-
     public function delete_query_data($cmnt_id,$tckno)
     {
 		$this->db->where(array('comment_id'=>$cmnt_id,'enq_no'=>$tckno))->delete('ticket_dynamic_data');
 		redirect($this->agent->referrer());
     }
-
     public function edit_query_data()
     {
     	if($post = $this->input->post())
@@ -807,11 +694,9 @@ class Ticket extends CI_Controller
     			$enquiry_id = $post['ticket'];
     			$tabname= $post['tabname'];
     			$cmnt_id = $post['cmnt_id'];
-
     			$ci->load->model('enquiry_model');
         		$ci->load->model('Ticket_Model');
         		$ci->load->model('location_model');
-
     			
 		        $data['tid'] = $tid;
 				$data['comp_id'] = $comp_id;
@@ -822,7 +707,6 @@ class Ticket extends CI_Controller
 		 		$ci->db->join('input_types','input_types.id=tbl_input.input_type');  			
 		 		$data['form_fields']	= $ci->db->get('tbl_input')->result_array();
 		 		$ticketno = $enquiry_id;
-
 	             $data['basic_fields'] =array();
 	             $data['details']=$ci->Ticket_Model->get($ticketno);
 	             //print_r($data['details']); exit();
@@ -832,16 +716,13 @@ class Ticket extends CI_Controller
 	             $data['products'] =array();
 	             $data['product_contry']=array();
 	             $data['leadsource']=array();
-
 	            $ci->db->select('form_type,form_for,is_delete,is_edit');
 		        $ci->db->where('id',$tid);        
 		        $r    =      $ci->db->get('forms')->row_array();
-
 		        $data['form_type'] = $r['form_type'];
 		    	
 		        $data['form_for'] = $r['form_for'];
 		        $data['action'] = array('delete'=>$r['is_delete'],'edit'=>$r['is_edit']);
-
 		        $data['state_list'] 	= $ci->location_model->estate_list();
 		        $data['city_list'] 			= $ci->location_model->ecity_list();
 		        $data['all_country_list'] 	= $ci->location_model->country();
@@ -849,45 +730,34 @@ class Ticket extends CI_Controller
 		        $data['tabname'] = $tabname;       
         	
         		$ci->load->view('ticket/edit_dynamic_query_data',$data);
-
     		}
     		else if($post['task']=='save')
     		{
-
     		}
     	}
     }
-
 	public function get_enquery_code()
 	{
-
 		$code = $this->genret_code();
 		$code2 = 'ENQ' . $code;
 		$response = $this->enquiry_model->check_existance($code2);
-
 		if ($response) {
-
 			$this->get_enquery_code();
 		} else {
-
 			return $code2;
-
 			//exit;
 		}
 		//exit;
 	}
-
 	function genret_code()
 	{
 		$pass = "";
 		$chars = array("0", "1", "2", "3", "4", "5", "6", "7", "8", "9");
-
 		for ($i = 0; $i < 12; $i++) {
 			$pass .= $chars[mt_rand(0, count($chars) - 1)];
 		}
 		return $pass;
 	}
-
 	public function ticket_disposition($ticketno)
 	{
 		//print_r($_POST); exit();
@@ -898,13 +768,9 @@ class Ticket extends CI_Controller
 		
 		$stage_date = date("d-m-Y", strtotime($this->input->post('c_date')));
 		$stage_time = date("H:i:s", strtotime($this->input->post('c_time')));
-
 		$user_id = $this->session->user_id;
 		$this->session->set_flashdata('SUCCESSMSG', 'Update Successfully');
 		$this->Ticket_Model->saveconv($ticketno, 'Stage Updated', $stage_remark, $client, $user_id, $lead_stage, $stage_desc);
-
-
-
 
 		$contact_person = '';
 		$mobileno = '';
@@ -913,14 +779,12 @@ class Ticket extends CI_Controller
 		$enq_code = $this->input->post('ticketno');
 		$notification_id = $this->input->post('dis_notification_id');
 		$dis_subject = '';
-
 		$this->Leads_Model->add_comment_for_events_popup($stage_remark, $stage_date, $contact_person, $mobileno, $email, $designation, $stage_time, $enq_code, $notification_id, $dis_subject, 17);
 		$ticketno	=	$this->input->post('ticketno');
 		$this->load->model('rule_model');
 		$this->rule_model->execute_rules($ticketno, array(8,10));
 		redirect('ticket/view/' . $ticketno);
 	}
-
 	public function assign_tickets()
 	{
 		$assign_to_date = date('Y-m-d H:i:s');
@@ -938,12 +802,10 @@ class Ticket extends CI_Controller
 					$this->db->set('assigned_to_date', $assign_to_date);
 					$this->db->where('id', $key);
 					$this->db->update('tbl_ticket');
-
 				$ticket = 	$this->db->select('*')
 											->where('id',$key)
 											->get('tbl_ticket')
 											->row();
-
 					$this->db->set('comp_id',$this->session->companey_id);
 					$this->db->set('query_id',$ticket->ticketno);
 					$this->db->set('noti_read',0);
@@ -956,7 +818,6 @@ class Ticket extends CI_Controller
 					$this->db->set('task_type','17');
 					$this->db->set('subject','Ticket Assigned');
 					$this->db->insert('query_response');
-
 					$insarr = array(
 					"tck_id" 	=> $key,
 					"parent" 	=> 0,
@@ -970,7 +831,6 @@ class Ticket extends CI_Controller
 					"added_by" 	=> $this->session->user_id,
 					);
 					$this->db->insert('tbl_ticket_conv',$insarr);
-
 				}
 				echo display('save_successfully');
 			} 
@@ -980,7 +840,6 @@ class Ticket extends CI_Controller
 			}
 		}
 	}
-
 	public function update_ticket($tckt = "")
 	{
 		//print_r($_POST); exit();
@@ -990,7 +849,6 @@ class Ticket extends CI_Controller
 			$this->Ticket_Model->updatestatus();
 			//echo $this->session->flashdata('message'); exit();
 			//redirect(base_url("ticket/view/".$tckt), "refresh");
-
 			$res = $this->Ticket_Model->save($this->session->companey_id, $this->session->user_id);
 	
 		if(isset($_POST['inputfieldno']))
@@ -1005,30 +863,22 @@ class Ticket extends CI_Controller
 			redirect(base_url('ticket/view/' . $tckt), "refresh");
 			//echo'in';
 		}
-
 		}
 		echo 'out';
 	}
 	public function edit($tckt = "")
 	{
-
 		if (isset($_POST["ticketno"])) {
-
 			$res = $this->Ticket_Model->save($this->session->companey_id, $this->session->user_id);
 			if ($res) {
 				$this->session->set_flashdata('message', 'Successfully Updated ticket');
 				redirect(base_url('ticket/edit/' . $tckt), "refresh");
 			}
 		}
-
 		$data["ticket"] = $this->Ticket_Model->get($tckt);
-
 		if (empty($data["ticket"])) {
 			show_404();
 		}
-
-
-
 		$data['title'] = "Edit ";
 		$data["conversion"] = $this->Ticket_Model->getconv($data["ticket"]->id);
 		$data["clients"] = $this->Ticket_Model->getallclient();
@@ -1036,13 +886,11 @@ class Ticket extends CI_Controller
 		//$data["problem"] = $this->Ticket_Model->getissues();
 		$data['problem'] = $this->Ticket_Model->get_sub_list();
 		$data['issues'] = $this->Ticket_Model->get_issue_list();
-
 		$data['source'] = $this->Leads_Model->get_leadsource_list();
 		//$data["source"] = $this->Ticket_Model->getSource($this->session->companey_id);//getting ticket source list
 		$data['content'] = $this->load->view('ticket/edit-ticket', $data, true);
 		$this->load->view('layout/main_wrapper', $data);
 	}
-
 	public function delete_ticket()
 	{
 		foreach ($this->input->post('ticket_list') as $key => $value) {
@@ -1053,20 +901,15 @@ class Ticket extends CI_Controller
 			$this->db->delete('tbl_ticket_conv');
 		}
 	}
-
 	function tdelete()
 	{
-
 		$cnt = $this->input->post("content", true);
-
 		$this->db->where('id', $cnt);
 		$this->db->delete('tbl_ticket');
 		$ret = $this->db->affected_rows();
 		$this->db->where('tck_id', $cnt);
 		$this->db->delete('tbl_ticket_conv');
-
 		if ($ret) {
-
 			$stsarr = array(
 				"status" => "success",
 				"message" => "Successfully deleted"
@@ -1079,33 +922,23 @@ class Ticket extends CI_Controller
 		}
 		die(json_encode($stsarr));
 	}
-
 	public function filter()
 	{
-
 		$pst = $this->input->post("top_filter", true);
-
 		if ($pst == "created_today") {
-
 			$where =  " tck.send_date = cast((now()) as date)";
 		} else if ($pst == "updated_today") {
-
 			$where =  " tck.last_update	 = cast((now()) as date)";
 		} else if ($pst == "droped") {
-
 			$where = array(" tck.status" => 3);
 		} else if ($pst == "unread") {
-
 			$where  =  "tck.status = 0";
 		} else if ($pst == "all") {
 			$where = false;
 		} else {
 			$where = false;
 		}
-
 		$tickets =  $this->Ticket_Model->filterticket($where);
-
-
 		if (!empty($tickets)) {
 			foreach ($tickets as $ind => $tck) {
 ?>
@@ -1116,7 +949,6 @@ class Ticket extends CI_Controller
     <td><?php echo $tck->email; ?></td>
     <td><?php echo $tck->phone; ?></td>
     <td><?php echo $tck->product_name; ?></td>
-
     <td><?php echo $tck->category; ?></td>
     <td><?php
 						if ($tck->priority == 1) {
@@ -1126,7 +958,6 @@ class Ticket extends CI_Controller
 																													} else if ($tck->priority == 2) {
 																														?><span class="badge badge-danger">High</span><?php
 																																									}
-
 																																										?></td>
     <td><?php echo $tck->message; ?></td>
     <td><?php echo date("d, M, Y", strtotime($tck->send_date)); ?></td>
@@ -1138,27 +969,20 @@ class Ticket extends CI_Controller
                 href="<?php echo base_url("ticket/tdelete") ?>"><i class="fa fa-trash-o"></i></a>
     </td>
 </tr>
-
 <?php
-
 			}
 		}
 	}
-
-
 	public function getmail()
 	{
-
 		$hostname =  '{imappro.zoho.com:993/imap/ssl}INBOX';
 		$username = 'shahnawazbx@gmail.com';
 		$password = 'BuX@76543210';
 		$username = 'shahnawaz@archizsolutions.com';
 		$password = 'Archiz321';
 		echo "Hello 1";
-
 		/* try to connect */
 		$inbox = imap_open($hostname, $username, $password) or die('Cannot connect to Gmail: ' . imap_last_error());
-
 		echo "<pre>";
 		print_r(imap_errors());
 		echo "</pre>";
@@ -1166,37 +990,28 @@ class Ticket extends CI_Controller
 		echo "Hello 2";
 		/* grab emails */
 		$emails = imap_search($inbox, 'ALL');
-
 		/* if emails are returned, cycle through each... */
 		if ($emails) {
-
 			/* begin output var */
 			$output = '';
-
 			/* put the newest emails on top */
 			rsort($emails);
-
 			/* for every email... */
 			foreach ($emails as $ind => $email_number) {
-
 				if ($ind > 10) break;
-
 				/* get information specific to this email */
 				$overview = imap_fetch_overview($inbox, $email_number, 0);
 				$message  = imap_fetchbody($inbox, $email_number, 1);
 				echo "<pre>";
 				print_r($message);
 				echo "</pre>";
-
 				$output .= 'Name:  ' . $overview[0]->from . '</br>';
 				$output .= 'Email:  ' . $overview[0]->message_id . '</br>';
 			}
-
 			echo $output;
 		}
 		imap_close($inbox);
 	}
-
 	public function tracking_no_check($tn){
 		$comp_id = $this->session->companey_id;
 		$this->db->where('company',$comp_id);
@@ -1212,11 +1027,9 @@ class Ticket extends CI_Controller
 	public function add()
 	{
 		$this->load->model('Enquiry_model');
-
 		$this->form_validation->set_rules('name','Name','required');
 		$this->form_validation->set_rules('phone','Mobile No','required');
 		$this->form_validation->set_rules('email','Email','required');
-
 		if($this->session->companey_id == 65 && ($this->input->post('complaint_type') == 1)){
 			$this->form_validation->set_rules('tracking_no', display('tracking_no'), 'required|callback_tracking_no_check', array('tracking_no_check' => 'Ticket with this '.display('tracking_no').' is already open.'));
 		}
@@ -1233,7 +1046,6 @@ class Ticket extends CI_Controller
 				$comment_id = $this->db->select('id')
 								->where('tck_id',$tck_id)
 								->get('tbl_ticket_conv')->row()->id;
-
 				if(isset($_POST['inputfieldno'])) {                    
                 $inputno   = $this->input->post("inputfieldno", true);
                 $enqinfo   = $this->input->post("enqueryfield", true);
@@ -1242,10 +1054,8 @@ class Ticket extends CI_Controller
                 $file = !empty($_FILES['enqueryfiles'])?$_FILES['enqueryfiles']:'';                
                 foreach($inputno as $ind => $val){
 	
-
                  if ($inputtype[$ind] == 8) {                                                
                         $file_data    =   $this->doupload($file,$file_count);
-
                         if (!empty($file_data['imageDetailArray']['file_name'])) {
                             $file_path = base_url().'uploads/ticket_documents/'.$this->session->companey_id.'/'.$file_data['imageDetailArray']['file_name'];
                             $biarr = array( 
@@ -1278,9 +1088,7 @@ class Ticket extends CI_Controller
 				redirect(base_url('ticket/view/' . $res));
 			}
 		}
-
 		$process = $this->session->userdata('process');
-
 		 $data['process_id'] = 0;
 		 
             if (is_array($process)) {
@@ -1293,7 +1101,6 @@ class Ticket extends CI_Controller
             } else {
                 $data['invalid_process'] = 1;
             }
-
 		$data['title'] = "Add Ticket";
 		$primary_tab=0;
 		$tabs = $this->db->select('id')
@@ -1307,14 +1114,11 @@ class Ticket extends CI_Controller
 		$data['content'] = $this->load->view('ticket/add-ticket', $data, true);
 		$this->load->view('layout/main_wrapper', $data);
 	}
-
-
 	public function view_previous_ticket()
 	{
 		if ($post = $this->input->post()) {
 			$no = $post['tracking_no'];
 			$res = $this->Ticket_Model->filterticket(array('tracking_no' => $no));
-
 			if ($res) {
 				echo '<table class="table table-bordered">
 				<tr>
@@ -1345,30 +1149,21 @@ class Ticket extends CI_Controller
 			}
 		}
 	}
-
 	public function loadinfo()
 	{
-
 		$usr = $this->input->post("clientno", true);
-
 		$user = $this->db->select("*")->where("enquiry_id", $usr)->get("enquiry")->row();
-
 		if (!empty($user)) {
-
 			$jarr = array(
 				"name"   => $user->name_prefix . " " . $user->name . " " . $user->lastname,
 				"email"  => $user->email,
 				"phone"  => $user->phone
 			);
-
 			die(json_encode($jarr));
 		}
 	}
-
-
 	public function referred_by($id = 0)
 	{
-
 		$data['nav1'] = 'nav2';
 		$data['title']    = display('Lead Details');
 		$data['header'] = ($id ? ' Edit ' : ' Add ') . 'Referred By';
@@ -1376,24 +1171,20 @@ class Ticket extends CI_Controller
 		if ($id) {
 			$data['data'] = $this->Leads_Model->get_referred_by(array('id' => $id));
 		}
-
 		if ($_POST) {
 			$_POST['company_id'] = $this->session->companey_id;
 			$_POST['created_by'] = $this->session->userdata('user_id');
 			$this->Leads_Model->save_referred_by($_POST, $id);
 			redirect(base_url('ticket/referred_by/' . $id));
 		}
-
 		$data['content']  = $this->load->view('add_referred_by', $data, true);
 		$this->load->view('layout/main_wrapper', $data);
 	}
-
 	public function delete_referred_by($id)
 	{
 		$this->Leads_Model->delete_referred_by($id);
 		redirect(base_url('ticket/referred_by'));
 	}
-
 	public function remove_attachment($ticketno,$delete_key)
 	{
 		$res = $this->Ticket_Model->get($ticketno);
@@ -1402,9 +1193,7 @@ class Ticket extends CI_Controller
 			$att = json_decode($res->attachment);
 			
 			$del = $att[$delete_key];
-
 			unset($att[$delete_key]);
-
 			$att = json_encode(array_values($att));
 			//json_encode($att); exit();
  			//print_r($att); exit();
@@ -1420,21 +1209,14 @@ class Ticket extends CI_Controller
  			}
 		}
 		
-
 	}
-
 	public function loadamc()
 	{
-
 		$prodno = $this->input->post("product", true);
-
 		$enqno  = $this->input->post("client", true);
-
 		$amcarr = $this->db->select("*")->where(array("product_name" => $prodno, "enq_id" => $enqno))->get("tbl_amc")->row();
-
 		$amc = array();
 		if (!empty($amcarr)) {
-
 			$amcarr = array(
 				"status" 	  => "found",
 				"from_date"   => date("d, M Y ", strtotime($amcarr->amc_fromdate)),
@@ -1445,10 +1227,8 @@ class Ticket extends CI_Controller
 		}
 		die(json_encode($amcarr));
 	}
-
 	public function loadoldticket($prd = "")
 	{
-
 		$data['oldticket'] = $this->db->select("tck.*,sour.lead_name as source_name,subj.subject_title as issue_name")
 			->from("tbl_ticket as tck")
 			->join("lead_source as sour", "tck.sourse=sour.lsid", "left")
@@ -1458,40 +1238,25 @@ class Ticket extends CI_Controller
 			->get()->result();
 		$this->load->view("ticket/page/tck-table", $data);
 	}
-
 	public function addproblems($prblm = "")
 	{
-
 		$this->saveticket();
-
 		if (empty($prblm)) {
-
 			$data['title'] = "Add Problems";
 			$data["problem"] = $this->Ticket_Model->getissues();
-
 			$data['content'] = $this->load->view("ticket/page/problem-list", $data, true);
 		} else {
-
 			$data["eproblem"] = $this->db->select("*")->where("cmp", $this->session->companey_id)->where("id", $prblm)->get("tck_mstr")->row();
-
 			$data['content'] = $this->load->view("ticket/page/problem-list", $data, true);
 		}
-
 		$this->load->view('layout/main_wrapper', $data);
 	}
-
 	public function saveticket()
 	{
-
 		if (isset($_POST["problem"])) {
-
-
-
 			if (isset($_POST["problemno"])) {
-
 				$updarr = array("title" 	=> $this->input->post("problem"),);
 				$prblm  = $this->input->post("problemno", true);
-
 				$this->db->where("id", $prblm);
 				$this->db->update("tck_mstr", $updarr);
 				$this->session->set_flashdata('message', 'Successfully Updated Problem');
@@ -1515,33 +1280,23 @@ class Ticket extends CI_Controller
 		#------------------------------# 
 		$leadid = $this->uri->segment(3);
 		if (!empty($_POST)) {
-
 			$reason = $this->input->post('subject');
-
 			$data = array(
 				'subject_title' => $reason,
 				'comp_id' => $this->session->userdata('companey_id')
 			);
-
 			$insert_id = $this->Ticket_Model->add_tsub($data);
-
 			redirect('ticket/add_subject');
 		}
-
 		$data['subject'] = $this->Ticket_Model->get_sub_list();
-
 		$data['content'] = $this->load->view('ticket_subject', $data, true);
 		$this->load->view('layout/main_wrapper', $data);
 	}
-
 	public function update_subject()
 	{
-
 		if (!empty($_POST)) {
 			$drop_id = $this->input->post('drop_id');
-
 			$reason = $this->input->post('subject');
-
 			$this->db->set('subject_title', $reason);
 			$this->db->where('id', $drop_id);
 			$this->db->update('tbl_ticket_subject');
@@ -1574,20 +1329,17 @@ class Ticket extends CI_Controller
 		}
 		echo $res;
 	}
-
 	public function Dashboard()
 	{
 		if (user_access(310)) {
 			$data['title'] = 'Ticket Dashboard';
 			$data['subject'] = $this->Ticket_Model->get_sub_list();
-
 			$data['content'] = $this->load->view('ticket/dashboard', $data, true);
 			$this->load->view('layout/main_wrapper', $data);
 		} else {
 			redirect('dashboard');
 		}
 	}
-
 	public function createddatewise()
 	{
 		$get = $this->Ticket_Model->getfistDate();
@@ -1607,7 +1359,6 @@ class Ticket extends CI_Controller
 		}
 		echo json_encode($data);
 	}
-
 	public function createddatewise1()
 	{
 		$get = $this->Ticket_Model->getfistDate();
@@ -1653,14 +1404,12 @@ class Ticket extends CI_Controller
 		$data[] = ['name' => 'query', 'value' => $query];
 		echo json_encode($data);
 	}
-
 	public function source_typeJson()
 	{
 		$getSourse = $this->Ticket_Model->getSourse(1);
 		$data=[];
 		foreach ($getSourse as $key => $value) {
 			$count = $this->Ticket_Model->countTSourse($value->lsid);
-
 			$data[] = ['name' => $value->lead_name, 'value' => $count];
 		}
 		echo json_encode($data);
@@ -1672,7 +1421,6 @@ class Ticket extends CI_Controller
 		// print_r($getSourse);
 		// die();
 		foreach ($getSourse as $key => $value) {
-
 			$count = $this->Ticket_Model->countTstage($value->stg_id);
 			$data[] = ['name' => $value->lead_stage_name, 'value' => $count];
 		}
@@ -1681,7 +1429,6 @@ class Ticket extends CI_Controller
 	public function subsource_typeJson()
 	{
 		$data=[];
-
 		$subsource = $this->Ticket_Model->Subsource();
 		foreach ($subsource as $key => $value) {
 			$count = $this->Ticket_Model->countSubsource($value->id);
@@ -1692,7 +1439,6 @@ class Ticket extends CI_Controller
 	public function product_ticketJson()
 	{
 		$data=[];
-
 		//fetch products
 		$products=$this->db->get('tbl_product_country')->result();
 		foreach ($products as $key => $value) {
@@ -1734,7 +1480,6 @@ class Ticket extends CI_Controller
 							$outTime='18:00';
 							$currentTime = date('H:i');
 							$todayIntime=date('Y-m-d '.$inTime);
-
 							$nextAssignment = date('Y-m-d H:i',strtotime($todayIntime . "+1 days"));
 							if ($nextAssignTimeF <= $currentD OR $nextAssignTimeF!=NULL) {
 								if ($currentTime >= $outTime ) {
@@ -1755,7 +1500,6 @@ class Ticket extends CI_Controller
 												$days=$dateTo-$dateFrom;
 												if($days==0){ $days=1; }
 										        echo'Added next assignmnet time ';
-
 												$nextAssignment = date('Y-m-d H:i',strtotime($todayIntime . "+".$days." days"));
 												$this->Ticket_Model->insertNextAssignTime($assign_to,$nextAssignment,$tid);
 										}else{
@@ -1812,7 +1556,6 @@ class Ticket extends CI_Controller
 							$t2 = $this->Ticket_Model->is_tat_rule_executed($tck['id'],$r); //must executed
 							
 							//echo 't1 - '.$t1.' t2 - '.$t2.' '.$rule_title.'<br>';
-
 							if(!$t1 && ($t2||empty($r))){								
 								$this->db->where('comp_id',$comp_id);
 								$this->db->where('tck_id',$tck['id']);
@@ -1821,7 +1564,6 @@ class Ticket extends CI_Controller
 								$d = $last_act['send_date']??$tck['coml_date'];								
 								$currentDate = date('Y-m-d H:i:s');
 								$bh	=	$this->isBusinessHr(new DateTime($currentDate));	
-
 								if($bh){
 									$created_date	=	$this->currect_created_date($d,$assign_to);								
 									$working_hrs	=	$this->get_working_hours($created_date,$currentDate,$assign_to);
@@ -1835,7 +1577,6 @@ class Ticket extends CI_Controller
 							}
 						}
 					}
-
 				}
 			}
 		}
@@ -1868,7 +1609,6 @@ class Ticket extends CI_Controller
 			}
 		}
 		
-
 		function get_working_date($d){
 						
 			$timeObject = new DateTime($d);
@@ -1885,11 +1625,8 @@ class Ticket extends CI_Controller
 			}
 			
 			return $next_time;
-
 		}
-
 		function isBusinessHr($timeObject=0) {		
-
 			$status = FALSE;
 			$storeSchedule = [
 				'Mon' => ['10:00 AM' => '06:00 PM'],				
@@ -1926,19 +1663,15 @@ class Ticket extends CI_Controller
 			}
 			return $status;
 		}
-
-
 		function get_working_hours($from,$to,$uid)
 		{
 			// timestamps
 			$from_timestamp = strtotime($from);
 			$to_timestamp = strtotime($to);
-
 			// work day seconds
 			$workday_start_hour = 10;
 			$workday_end_hour = 18;
 			$workday_seconds = ($workday_end_hour - $workday_start_hour)*3600;
-
 			// work days beetwen dates, minus 1 day
 			$from_date = date('Y-m-d',$from_timestamp);
 			$to_date = date('Y-m-d',$to_timestamp);
@@ -1946,28 +1679,22 @@ class Ticket extends CI_Controller
 			$workdays_number = $workdays_number<0 ? 0 : $workdays_number;
 			
 			// echo $workdays_number.'<br>';
-
 			// start and end time
 			$start_time_in_seconds = date("H",$from_timestamp)*3600+date("i",$from_timestamp)*60;
 			$end_time_in_seconds = date("H",$to_timestamp)*3600+date("i",$to_timestamp)*60;
-
 			// final calculations
 			$working_hours = ($workdays_number * $workday_seconds + $end_time_in_seconds - $start_time_in_seconds) / 86400 * 24;
-
 			return $working_hours;
 		}
-
 		function get_workdays($from,$to,$uid) 
 		{
 			// arrays
 			$days_array = array();
 			$skipdays = array("Sunday");
 			$skipdates = $this->get_holidays($uid);
-
 			// other variables
 			$i = 0;
 			$current = $from;
-
 			if($current == $to) // same dates
 			{
 				$timestamp = strtotime($from);
@@ -1986,19 +1713,15 @@ class Ticket extends CI_Controller
 					$i++;
 				}
 			}
-
 			return $days_array;
 		}
-
 		function get_holidays($uid) 
 		{
 			// arrays			
 			$days_array = $this->Ticket_Model->get_user_holidays($uid);;
-
 			// You have to put there your source of holidays and make them as array...
 			// For example, database in Codeigniter:
 			// $days_array = $this->my_model->get_holidays_array();
-
 			return $days_array;
 		}
 		// tat code end
@@ -2067,7 +1790,6 @@ class Ticket extends CI_Controller
 			}
 			imap_close($inbox);
 			}
-
 			public function list_short_details()
 			{
 				$data['created_today'] = $this->Ticket_Model->createdTodayCount();
@@ -2076,51 +1798,38 @@ class Ticket extends CI_Controller
 				$data['all_today']     = $this->Ticket_Model->allTodayCount();
 				echo json_encode($data);
 			}
-
 			public function short_dashboard()
 			{
 				
 				$this->common_query_short_dashboard('created');
 				//$this->db->where('tck.added_by',$this->session->user_id);
-
         		$data['created'] = $this->db->count_all_results();
         		
         		$this->common_query_short_dashboard('assigned');
 				//$this->db->where('tck.assign_to',$this->session->user_id);
-
 				$data['assigned'] = $this->db->count_all_results();
-
 				//echo $this->db->last_query(); exit();
-
 				$this->common_query_short_dashboard();
 				$this->db->where('tck.last_update!=','tck.coml_date');
-
 				$data['updated'] = $this->db->count_all_results();
-
 				
 				$this->common_query_short_dashboard();
 				$this->db->where('tck.ticket_status','3');
-
 				$data['closed'] = $this->db->count_all_results();
 				
 				$this->common_query_short_dashboard();
 				$this->db->where('tck.last_update = tck.coml_date');
-
 				$data['pending'] = $this->db->count_all_results();
 				//echo $this->db->last_query(); exit();
 				$this->common_query_short_dashboard();
-
 				$data['total']  = $this->db->count_all_results();
-
 				$this->common_query_short_dashboard();
 				 $this->db->get();
 				 $res = $this->db->last_query();
 				$num = $this->db->query("SELECT count(*) as num from tbl_ticket_conv inner join ($res) chk on chk.id= tbl_ticket_conv.tck_id");
 				$data['activity'] = $num->row()->num;
-
 				echo json_encode($data);
 			}
-
 		public function common_query_short_dashboard($para='')
 		{
 			$comp_id = $this->session->companey_id;
@@ -2139,7 +1848,6 @@ class Ticket extends CI_Controller
         }else{
           $dshowall = false;
         }       
-
         $sel_string = array();
         $sel_string[] = "tck.*"; 
         if($showall or in_array(2,$acolarr))
@@ -2178,14 +1886,12 @@ class Ticket extends CI_Controller
         {
             $sel_string[] = " status.status_name ";    
         }
-
         if($showall or in_array(17,$acolarr))
         {
             $sel_string[] = " concat(assign_by.s_display_name,' ',assign_by.last_name) as assigned_by_name";    
         }
         
         $select = implode(',', $sel_string);
-
         $this->db->select($select);
         $this->db->from("tbl_ticket  tck");
 		
@@ -2198,7 +1904,6 @@ class Ticket extends CI_Controller
         {
             $this->db->join("tbl_product_country prd", "prd.id = tck.product", "LEFT");
         }
-
         if($showall or in_array(6,$acolarr))
         {
             $this->db->join("tbl_admin as for_assign", "for_assign.pk_i_admin_id = tck.assign_to", "LEFT");
@@ -2213,7 +1918,6 @@ class Ticket extends CI_Controller
         {
          $this->db->join("tbl_referred_by ref","tck.referred_by=ref.id","LEFT");
         }
-
         if($showall or in_array(11, $acolarr))
         {
          $this->db->join("lead_source source","tck.sourse=source.lsid","LEFT");
@@ -2228,24 +1932,19 @@ class Ticket extends CI_Controller
         {
          $this->db->join("lead_description sub_stage","tck.ticket_substage=sub_stage.id","LEFT");
         } 
-
         if($showall or in_array(16, $acolarr))
         {
          $this->db->join("tbl_ticket_status status","tck.ticket_status=status.id","LEFT");
         } 
-
         if($showall or in_array(17, $acolarr))
         {
          $this->db->join("tbl_admin assign_by","tck.assigned_by=assign_by.pk_i_admin_id","LEFT");
         } 
          $this->db->where("tck.company",$this->session->companey_id);
          $this->db->group_by("tck.id");
-
 			$enquiry_filters_sess   =   $this->session->ticket_filters_sess;
             
 	        $top_filter             =   !empty($enquiry_filters_sess['top_filter'])?$enquiry_filters_sess['top_filter']:'';
-
-
 	        $from_created           =   !empty($enquiry_filters_sess['from_created'])?$enquiry_filters_sess['from_created']:'';       
 	        $to_created             =   !empty($enquiry_filters_sess['to_created'])?$enquiry_filters_sess['to_created']:'';
 		   
@@ -2258,16 +1957,11 @@ class Ticket extends CI_Controller
 	        $assign                 =   !empty($enquiry_filters_sess['assign'])?$enquiry_filters_sess['assign']:'';
 	      
 	        $problem                 =   !empty($enquiry_filters_sess['problem'])?$enquiry_filters_sess['problem']:'';
-
 	        $priority                 =   !empty($enquiry_filters_sess['priority'])?$enquiry_filters_sess['priority']:'';
-
 	        $issue                 =   !empty($enquiry_filters_sess['issue'])?$enquiry_filters_sess['issue']:'';
-
 	        $productcntry          =   !empty($enquiry_filters_sess['prodcntry'])?$enquiry_filters_sess['prodcntry']:'';
-
 	        $stage          =   !empty($enquiry_filters_sess['stage'])?$enquiry_filters_sess['stage']:'';
 	        $sub_stage          =   !empty($enquiry_filters_sess['sub_stage'])?$enquiry_filters_sess['sub_stage']:'';
-
 	        $ticket_status          =   !empty($enquiry_filters_sess['ticket_status'])?$enquiry_filters_sess['ticket_status']:'';
 	         $assign_by          =   !empty($enquiry_filters_sess['assign_by'])?$enquiry_filters_sess['assign_by']:'';
 	        $where='';
@@ -2289,8 +1983,6 @@ class Ticket extends CI_Controller
 	            $CHK = 1;                                  
 			}
 			
-
-
 			
 			if(!empty($updated_from_created) && !empty($updated_to_created)){
 				if($CHK)
@@ -2322,7 +2014,6 @@ class Ticket extends CI_Controller
 	
 				$CHK = 1;                                  
 			}
-
 	        if(!empty($productcntry)){            
 	            if($CHK)
 	                $where .= 'AND';
@@ -2356,52 +2047,39 @@ class Ticket extends CI_Controller
 	        if(!empty($problem)){            
 	            if($CHK)
 	                $where .= 'AND';
-
 	            $where .= " tck.category =  '".$problem."'"; 
 	            $CHK =1;                             
 	        }
 	        if(!empty($priority)){           
 	            if($CHK)
 	                $where .= 'AND';
-
 	            $where .= " tck.priority =  '".$priority."'"; 
 	            $CHK =1;                             
 	        }
-
 	         if(!empty($issue)){            
 	            if($CHK)
 	                $where .= 'AND';
-
 	            $where .= " tck.category =  '".$issue."'"; 
 	            $CHK =1;                             
 	        }
-
-
 	        if(!empty($stage)){            
 	            if($CHK)
 	                $where .= 'AND';
-
 	            $where .= " tck.ticket_stage =  '".$stage."'"; 
 	            $CHK =1;                             
 	        }
-
-
 	        if(!empty($sub_stage)){        
 	            if($CHK)
 	                $where .= 'AND';
-
 	            $where .= " tck.ticket_substage =  '".$sub_stage."'"; 
 	            $CHK =1;                             
 	        }
-
 	        if(!empty($ticket_status)){            
 	            if($CHK)
 	                $where .= 'AND';
-
 	            $where .= " tck.ticket_status =  '".$ticket_status."'"; 
 	            $CHK =1;                             
 			}
-
 			// if($CHK)
 	        //     $where .= 'AND';
 	        // $where .= " ( tck.added_by IN (".implode(',', $all_reporting_ids).')';
@@ -2413,7 +2091,6 @@ class Ticket extends CI_Controller
 			// }
 			
 			// $where .= " tck.assign_to IN (".implode(',', $all_reporting_ids).'))';
-
 			if($para=='created'){
 				if($CHK)
 					$where .= ' AND ';                      

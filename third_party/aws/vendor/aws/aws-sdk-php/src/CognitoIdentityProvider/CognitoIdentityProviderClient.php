@@ -1,8 +1,6 @@
 <?php
 namespace Aws\CognitoIdentityProvider;
-
 use Aws\AwsClient;
-
 /**
  * This client is used to interact with the **Amazon Cognito Identity Provider** service.
  * 

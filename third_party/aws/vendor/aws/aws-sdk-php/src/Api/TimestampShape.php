@@ -1,6 +1,5 @@
 <?php
 namespace Aws\Api;
-
 /**
  * Represents a timestamp shape.
  */
@@ -11,7 +10,6 @@ class TimestampShape extends Shape
         $definition['type'] = 'timestamp';
         parent::__construct($definition, $shapeMap);
     }
-
     /**
      * Formats a timestamp value for a service.
      *
@@ -32,7 +30,6 @@ class TimestampShape extends Shape
             throw new \InvalidArgumentException('Unable to handle the provided'
                 . ' timestamp type: ' . gettype($value));
         }
-
         switch ($format) {
             case 'iso8601':
                 return gmdate('Y-m-d\TH:i:s\Z', $value);

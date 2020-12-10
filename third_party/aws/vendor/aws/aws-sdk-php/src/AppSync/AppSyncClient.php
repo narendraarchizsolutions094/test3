@@ -1,8 +1,6 @@
 <?php
 namespace Aws\AppSync;
-
 use Aws\AwsClient;
-
 /**
  * This client is used to interact with the **AWS AppSync** service.
  * @method \Aws\Result createApiCache(array $args = [])

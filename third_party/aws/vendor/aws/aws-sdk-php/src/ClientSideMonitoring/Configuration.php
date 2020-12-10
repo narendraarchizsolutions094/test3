@@ -1,13 +1,11 @@
 <?php
 namespace Aws\ClientSideMonitoring;
-
 class Configuration implements ConfigurationInterface
 {
     private $clientId;
     private $enabled;
     private $host;
     private $port;
-
     /**
      * Constructs a new Configuration object with the specified CSM options set.
      *
@@ -24,12 +22,10 @@ class Configuration implements ConfigurationInterface
             throw new \InvalidArgumentException(
                 "CSM 'port' value must be an integer!");
         }
-
         // Unparsable $enabled flag errors on the side of disabling CSM
         $this->enabled = filter_var($enabled, FILTER_VALIDATE_BOOLEAN);
         $this->clientId = trim($clientId);
     }
-
     /**
      * {@inheritdoc}
      */
@@ -37,7 +33,6 @@ class Configuration implements ConfigurationInterface
     {
         return $this->enabled;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -45,7 +40,6 @@ class Configuration implements ConfigurationInterface
     {
         return $this->clientId;
     }
-
     /**
      * /{@inheritdoc}
      */
@@ -53,7 +47,6 @@ class Configuration implements ConfigurationInterface
     {
         return $this->host;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -61,7 +54,6 @@ class Configuration implements ConfigurationInterface
     {
         return $this->port;
     }
-
     /**
      * {@inheritdoc}
      */

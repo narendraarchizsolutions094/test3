@@ -1,10 +1,8 @@
 <?php
 namespace JmesPath\Tests;
-
 use JmesPath\Lexer;
 use JmesPath\Parser;
 use PHPUnit\Framework\TestCase;
-
 /**
  * @covers JmesPath\Parser
  */
@@ -19,7 +17,6 @@ class ParserTest extends TestCase
         $p = new Parser(new Lexer());
         $p->parse('.bar');
     }
-
     /**
      * @expectedException \JmesPath\SyntaxErrorException
      * @expectedExceptionMessage Syntax error at character 1
@@ -29,7 +26,6 @@ class ParserTest extends TestCase
         $p = new Parser(new Lexer());
         $p->parse('a,');
     }
-
     /**
      * @expectedException \JmesPath\SyntaxErrorException
      * @expectedExceptionMessage Syntax error at character 2
@@ -39,7 +35,6 @@ class ParserTest extends TestCase
         $p = new Parser(new Lexer());
         $p->parse('a.,');
     }
-
     /**
      * @expectedException \JmesPath\SyntaxErrorException
      * @expectedExceptionMessage Unexpected "eof" token
