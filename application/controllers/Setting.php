@@ -194,6 +194,7 @@ class Setting extends CI_Controller {
 
 			'footer_text' => $this->input->post('footer_text', false),
 			'comp_id'     => $this->session->companey_id,
+			'domain'     => $_SERVER['HTTP_HOST'],
 
 		]; 
 
