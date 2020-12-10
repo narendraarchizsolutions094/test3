@@ -33,9 +33,9 @@ if($root=='https://student.spaceinternationals.com'){	 ?>
     <title><?= display('login') ?> - <?php echo 'Lalantop' ?></title>
     <?php
 }else{ ?>
-    <link rel="icon" href="<?=base_url().$settings['favicon']?>"
+    <link rel="icon" href="<?=base_url().$settings->favicon?>"
         sizes="32x32" />
-    <title><?= display('login') ?> - <?php echo $settings['title'] ?></title>
+    <title><?= display('login') ?> - <?php echo $settings->title ?></title>
     <?php } ?>
     <!-- Favicon and touch icons -->
 
@@ -79,7 +79,7 @@ if($root=='https://student.spaceinternationals.com'){	 ?>
             <?php }else if (!empty($_GET['c']) && base64_decode($_GET['c']) == 57 && (!empty($_GET['type']) && $_GET['type'] != 'admin')){ ?>
             <img style="width: 26%;" src="<?=base_url().'assets/images/Lalantop_logo.jpg'?>" class="m-r-sm">
             <?php } else{ ?>
-            <img style="width: 26%;" src="<?=base_url().$settings['logo']?>" class="m-r-sm">
+            <img style="width: 26%;" src="<?=base_url().$settings->logo?>" class="m-r-sm">
             <?php } ?>
         </div>
         <div class="container-center" style="margin-top: auto;">
@@ -101,7 +101,7 @@ if($root=='https://student.spaceinternationals.com'){	 ?>
                             <?php
                                 }else{
                                     ?>
-                            <h3><?php echo $settings['title'] ?></h3>
+                            <h3><?php echo $settings->title ?></h3>
                             <?php
                                 } ?>
                             <small><strong id="login-title"><?= display('please_login') ?></strong></small>
