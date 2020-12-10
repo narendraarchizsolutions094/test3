@@ -289,7 +289,20 @@
                         ?>     
                     </select> 
                     </div> 
-
+                    <?php
+                    if($this->session->companey_id == 65){                    
+                    ?>
+                    <div class="form-group col-md-3" id="tickettype">
+                    <label for="tickettype">Ticket Type</label>  
+                    <select name="ticket_type" class="form-control"> 
+                          <option value="">Select</option>
+                          <option value="1">Complaint</option>
+                          <option value="2">Query</option>
+                    </select> 
+                    </div> 
+                  <?php
+                    }
+                    ?>
                     </div>
                   <div class="col-md-12" style="border-top: 1px solid #f4f4f4; padding: 8px;">
                     <button class="btn btn-success pull-right" type="submit" id="go_filter">Generate Report</button>
