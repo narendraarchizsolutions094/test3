@@ -70,7 +70,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
         href="https://spaceinternationals.com/wp-content/uploads/2018/02/cropped-SPACE-INTERNATIONALS-LOGO-02-1-32x32.jpg"
         sizes="32x32" />
     <?php }else{ ?>
-    <link rel="icon" href="<?=$settings->favicon?>"
+    <link rel="icon" href="<?=base_url().$settings->favicon?>"
         sizes="32x32" />
     <?php } ?>
 
