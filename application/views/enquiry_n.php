@@ -1290,7 +1290,7 @@ $(".top_pill").on('click',function(){
         data: form_data,
         success: function(responseData){
           $('#enq_table').DataTable().ajax.reload();
-          alert('done');
+         // alert('done');
           update_top_filter_counter();      
         }
       });
