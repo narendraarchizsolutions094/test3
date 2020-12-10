@@ -16,13 +16,14 @@
             </div>
             <br>
             <div class="panel-body">
-                <table width="100%" class="datatable table table-striped table-bordered table-hover">
+                <table width="100%" class="datatable1 table table-striped table-bordered table-hover">
                     <thead>
                         <tr>
                             <th class="sorting_asc wid-20 th0" tabindex="0" rowspan="1" colspan="1"><input
                                     type='checkbox' class="checked_all" value="check all">&nbsp;
                                 <?php echo display('serial') ?></th>
                             <th class="th1">Title</th>
+                            <th class="th1"><?=display('process')?></th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -37,6 +38,17 @@
                                 &nbsp; <?php echo $sl;?>
                             </td>
                             <td class="th1"><?php echo $sub->subject_title; ?></td>
+                            <td class="th1"><?php 
+                            $process_in_each  = $sub->process_id;
+                            $process_in_each  = explode(',',$process_in_each);
+                            if(!empty($process_in_each)){
+                              foreach($process_in_each as $e){
+                                $process_name  = $this->common_model->get_process_name_by_id($e);
+                                echo $process_name.', ';
+                              }
+                            }                            
+                            ?>
+                            </td>
                             <td class="center">
                                 <a class="btn btn-xs  btn-primary" data-toggle="modal"
                                     data-target="#Editreason<?php echo $sub->id;?>"><i class="fa fa-edit"></i></a>
