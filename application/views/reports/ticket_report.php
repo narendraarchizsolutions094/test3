@@ -296,8 +296,8 @@
                     <label for="tickettype">Ticket Type</label>  
                     <select name="ticket_type" class="form-control"> 
                           <option value="">Select</option>
-                          <option value="1">Complaint</option>
-                          <option value="2">Query</option>
+                          <option <?php if (1==$this->input->post('ticket_type')) {echo 'selected';}?> value="1">Complaint</option>
+                          <option <?php if (2==$this->input->post('ticket_type')) {echo 'selected';}?> value="2">Query</option>
                     </select> 
                     </div> 
                   <?php
