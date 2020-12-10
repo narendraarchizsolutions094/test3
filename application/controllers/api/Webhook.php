@@ -206,7 +206,7 @@ class Webhook extends REST_Controller {
         $this->db->set('phone_number',$phone);
         $this->db->insert('tbl_col_log');
         $insert_id = $this->db->insert_id();
-        if($call_state=3 || $call_state=5){
+      //  if($call_state=3 || $call_state=5 || $call_state=2 || $call_state=6){
 	     $phone_s =preg_replace('/[^0-9]/', '', $users);
          if(strlen($phone_s) >= 11){$phone_n = substr($phone_s,2,12);}else{$phone_n = $phone_s;}
 		 if(!empty($phone_n)){
@@ -232,7 +232,7 @@ class Webhook extends REST_Controller {
         curl_close( $curl );
         }
 		}
-        }
+     //   }
     }
     
      public function after_call_post(){
