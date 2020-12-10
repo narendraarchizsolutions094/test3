@@ -1,8 +1,7 @@
 <?php
    defined('BASEPATH') OR exit('No direct script access allowed');   
-
     $settings = $this->db->select("*")
-    ->where('domain',$_SERVER['HTTP_HOST'])
+    ->where('comp_id',$this->session->companey_id)
     ->get('setting')
     ->row();
    if(empty($settings)){

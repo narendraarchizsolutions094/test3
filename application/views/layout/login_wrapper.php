@@ -3,13 +3,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 //get site_align setting
 $settings = $this->db->select("*")
     ->where('domain',$_SERVER['HTTP_HOST'])
-    ->get('setting')
-    ->row();
-if(empty($settings)){
+    ->get('setting');
+    
+if($settings->num_rows() != 1){
     $settings = $this->db->select("*")
     ->where('comp_id',0)
     ->get('setting')
     ->row();
+}else{
+    $settings = $settings->row();
 }    
 ?>
 <!DOCTYPE html>
