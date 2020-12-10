@@ -523,11 +523,13 @@ class Ticket_Model extends CI_Model
 			$this->db->where('comp_id', $this->session->userdata('companey_id'));
 		}
 		if(!empty($process)){
-			$this->db->where('FIND_IN_SET('.$process.',"process_id")>0');
+			$this->db->where('FIND_IN_SET('.$process.',process_id)>',0);
 		}
 
 		$query = $this->db->get('tbl_ticket_subject');
 		return $query->result();
+		//echo $this->db->last_query();
+		//return 
 	}
 
 	public function delete_subject($drop = null)
