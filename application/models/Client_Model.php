@@ -323,4 +323,10 @@ class Client_Model extends CI_Model
         $this->db->order_by('enquiry.enquiry_id', 'desc');
         return $this->db->get();        
     }
+
+    public function add_visit($data)
+    {
+        $this->db->insert('tbl_visit',$data);
+        return $this->db->insert_id();
+    }
 }

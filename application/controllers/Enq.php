@@ -38,9 +38,9 @@ class Enq extends CI_Controller
 			$this->session->unset_userdata('enq_type', $this->session->enq_type);
 		}
 
-		$process =  0;
-		if(!empty($this->session->process))
-			$process = implode(',', $this->session->process);
+		// $process =  0;
+		// if(!empty($this->session->process))
+		// 	$process = implode(',', $this->session->process);
 
 		$data['title'] = display('enquiry_list');
 
@@ -50,7 +50,7 @@ class Enq extends CI_Controller
 		$data['products'] = $this->dash_model->get_user_product_list();
 		$data['drops'] = $this->enquiry_model->get_drop_list();
 
-		$data['all_stage_lists'] = $this->Leads_Model->stage_by_type(1);
+		$data['all_stage_lists'] = $this->Leads_Model->get_leadstage_list_byprocess1($this->session->process,1);
 
 		$data['prodcntry_list'] = $this->enquiry_model->get_user_productcntry_list();
 		$data['state_list'] = $this->enquiry_model->get_user_state_list();

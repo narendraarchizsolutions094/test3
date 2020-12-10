@@ -375,7 +375,7 @@ public function all_description($diesc) {
         return $this->db->get()->result();
     }
 
-    public function get_leadstage_list_byprocess1($process_id) {
+    public function get_leadstage_list_byprocess1($process_id,$for=0) {
         //print_r($process_id);exit();
         // print_r($this->session->userdata('companey_id'));
          if(empty($process_id)){
@@ -393,6 +393,8 @@ public function all_description($diesc) {
          $id1 = $process_id;
        } 
         $this->db->where('comp_id',$this->session->userdata('companey_id'));
+        if($for)
+            $this->db->where("FIND_IN_SET(".$for.",stage_for) >0");
         $this->db->where_in("process_id",$id1);
         // $this->db->order_by("stg_id", "asc");
         $query = $this->db->get('lead_stage');

@@ -28,7 +28,7 @@ function pdf_create($html, $filename = '', $stream = TRUE, $set_paper = '', $att
     $dompdf->loadHtml($html);
 
     if ($set_paper != '') {
-        $dompdf->setPaper(array(0, 0, 500, 5000), 'portrait');
+        $dompdf->setPaper(array(0, 0, 600, 5000), 'portrait');
     } else {
         $dompdf->setPaper("a4", "portrait");
     }
