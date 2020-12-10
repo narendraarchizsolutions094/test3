@@ -23,7 +23,7 @@
                                     type='checkbox' class="checked_all" value="check all">&nbsp;
                                 <?php echo display('serial') ?></th>
                             <th class="th1">Title</th>
-                            <th class="th1"><?=display('process')?></th>
+                            <th class="th1"><?=display('proccess')?></th>
                             <th>Action</th>
                         </tr>
                     </thead>
