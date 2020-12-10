@@ -82,7 +82,7 @@
                                               <label><?=display('proccess')?></label>
                                             <select  class="form-control" name="process[]" multiple required>        
                                               <?php foreach($products as $product){?>
-                                              <option value="<?=$product->sb_id ?>" <?=(in_array($product->sb_id,$sub->process_id))?'selected':''?>><?=$product->product_name ?></option>
+                                              <option value="<?=$product->sb_id ?>" <?=(in_array($product->sb_id,implode(',',$sub->process_id)))?'selected':''?>><?=$product->product_name ?></option>
                                               <?php } ?>
                                             </select>
                                           </div>
