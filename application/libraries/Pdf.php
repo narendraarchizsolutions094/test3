@@ -44,6 +44,7 @@ protected function ci()
  */
 public function load_view($view, $data = array(),$pdfFilePath1)
 {
+    define("DOMPDF_UNICODE_ENABLED", true);
     $dompdf = new Dompdf(array('enable_remote' => true));
     $html = $this->ci()->load->view($view, $data, TRUE);
 
@@ -76,9 +77,10 @@ public function load_view($view, $data = array(),$pdfFilePath1)
 public function create($html){
     $dompdf = new Dompdf(array('enable_remote' => true));
     $dompdf->loadHtml($html);
-    $dompdf->setPaper('A4', 'portrait');
+    //$dompdf->setPaper('A4', 'portrait');
+    $dompdf->setPaper(array(0,0,600,5200));
     $dompdf->render();    
-    $dompdf->stream("quotation.pdf", array('Attachment'=>0));
+    $dompdf->stream("quotation.pdf", array('Attachment'=>1));
     exit();
 }
 

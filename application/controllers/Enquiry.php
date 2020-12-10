@@ -1425,7 +1425,17 @@ class Enquiry extends CI_Controller
         
 
         $data['details'] = $this->Leads_Model->get_leadListDetailsby_id($enquiry_id);
-
+        $data['data_type']  = $data['details']->status;
+       $data['region_name'] = 0; 
+       if(!empty($data['details']))
+       {
+            $dd = $this->db->where('region_id',$data['details']->region_id)->get('tbl_region')->row();
+            if(!empty($dd))
+            {
+                $data['region_name'] = $dd->region_name;
+            }
+        }
+        //echo $data['region_name']; exit();
         //$data['state_city_list'] = $this->location_model->get_city_by_state_id($data['details']->enquiry_state_id);
         //$data['state_city_list'] = $this->location_model->ecity_list();
 
@@ -1515,6 +1525,12 @@ class Enquiry extends CI_Controller
             $data['commInfoData']=$comm_data->row();
 
         } 
+        else
+        {    $data['CommercialInfo'] =array();
+             $data['branch'] =array();
+            $data['commInfoCount']=0;
+            $data['commInfoData']=array();
+        }
                             
         $this->enquiry_model->make_enquiry_read($data['details']->Enquery_id);
         //echo"<pre>";print_r($data);die;
@@ -3756,4 +3772,64 @@ public function timelinePopup()
         }
        }
  
+    public function add_visit()
+    {   
+        $this->load->model('Client_Model');
+
+        if($post = $this->input->post())
+        {
+            //print_r($_POST); exit();
+            $data = array(  'enquiry_id'=>$this->input->post('enquiry_id'),
+                            'visit_date'=>$this->input->post('visit_date'),
+                            'visit_time'=>$this->input->post('visit_time'),
+                            'travelled'=>$this->input->post('travelled'),
+                            'travelled_type'=>$this->input->post('travelled_type'),
+                            'rating'=>$this->input->post('rating'),
+                            'next_date'=>$this->input->post('next_visit_date'),
+                            'next_location'=>$this->input->post('next_location'),
+                            'comp_id'=>$this->session->companey_id,
+                            'user_id'=>$this->session->user_id,
+                        );
+            $this->Client_Model->add_visit($data);
+            $this->session->set_flashdata('SUCCESSMSG','Visit Saved Successfully');
+            redirect(base_url('enquiry/view/'.$this->input->post('enquiry_id')));;
+        }
+    }
+
+    public function visit_load_data()
+    {
+        //print_r($_POST); exit(); 
+        $this->load->model('visit_datatable_model');
+
+        $result = $this->visit_datatable_model->getRows($_POST);
+        //echo $this->db->last_query(); exit();
+        $data = array();
+
+        foreach ($result as $res)
+        {
+            $sub = array();
+            $time = $res->visit_time=='00:00:00'?null:date("g:i a", strtotime($res->visit_time));
+
+            $sub[] = $res->id;
+            $sub[] = $res->visit_date!='0000-00-00'?$res->visit_date:'NA';
+            $sub[] = $time??'NA';
+            $sub[] = $res->travelled!=''?$res->travelled:'NA';
+            $sub[] = $res->travelled_type!=''?$res->travelled_type:'NA';
+            $sub[] = $res->rating!=''?$res->rating:'NA';
+            $sub[] = $res->next_date!='0000-00-00'?$res->next_date:'NA';
+            $sub[] = $res->next_location?$res->next_location:'NA';
+
+            $data[] =$sub;
+        }
+    
+        $output = array(
+            "draw" => $_POST['draw'],
+            "recordsTotal" =>$this->visit_datatable_model->countAll(),
+            "recordsFiltered" => $this->visit_datatable_model->countFiltered($_POST),
+            "data" => $data,
+        );
+        echo json_encode($output);
+
+    }
+
 }

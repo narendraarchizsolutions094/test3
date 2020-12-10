@@ -319,9 +319,9 @@ input[name=lead_stages]{
 
 
 <div class="row">
-  <div class="col-lg-12" style="padding-top: 5px;">
-    <ul class="crumb-trail clearfix">
-
+  <div class="col-lg-12 " style="padding-top: 5px;">
+    <div id="crumbs">
+    <ul>
     <?php
     if($this->session->companey_id==1)
     {
@@ -329,27 +329,107 @@ input[name=lead_stages]{
       {
         foreach ($all_stage_lists as $stage) 
         { 
-          echo '<label class="top_pill" data-stage-id="'.$stage->stg_id.'" onclick="active_stage()">'.$stage->lead_stage_name.'</label><label class="top2_pill"> <i class="fa fa-chevron-right"></i> </label>';
+          echo '<li class="top_pill" data-stage-id="'.$stage->stg_id.'"><a>'.$stage->lead_stage_name.'</a></li>';
         }
                 
       }
     }
     ?>  
 
-    </ul>
-   <style type="text/css">
-     .top_pill{
-      padding:12px;
-     }
-     .top2_pill{
-      padding: 12px 7px;
-     }
-     .top-active
-     {
-      background: #1073ad;  
-      border-radius: 30px;
-      color: white;
-     }
+    </ul></div>
+   <style type="text/css">   
+#crumbs {
+  text-align: center;
+}
+
+#crumbs ul {
+  margin: 0;
+  padding: 0; 
+  list-style: none;
+  display: inline-block;
+  height: 40px!important;
+  white-space: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  width: 100%;
+}
+#crumbs ul li {
+  display: inline-block;
+  white-space: nowrap;
+}
+#crumbs ul li a {
+display: block;
+    float: left;
+    height: 30px;
+    background: #F3F5FA;
+    text-align: center;
+    padding: 6px 10px 0 30px;
+    position: relative;
+    margin: 0 10px 0 0;
+    font-size: 12px;
+    text-decoration: none;
+    color: #32373c;
+    cursor: pointer;
+}
+#crumbs ul li a:after {
+     content: "";
+    border-top: 15px solid transparent;
+    border-bottom: 15px solid transparent;
+    border-left: 15px solid #F3F5FA;
+    position: absolute;
+    right: -15px;
+    top: 0;
+    z-index: 1;
+}
+#crumbs ul li a:before {
+    content: "";
+    border-top: 15px solid transparent;
+    border-bottom: 15px solid transparent;
+    border-left: 15px solid #fff;
+    position: absolute;
+    left: 0px;
+    top: 0;
+}
+
+/*#crumbs ul li:first-child a {
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+}*/
+
+/*#crumbs ul li:first-child a:before {
+  display: none;
+}
+*/
+/*#crumbs ul li:last-child a {
+  padding-right: 40px;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+#crumbs ul li:last-child a:after {
+  display: none;
+}*/
+
+#crumbs ul li a:hover {
+  background: #357DFD;
+  border-left-color: #357DFD;
+  color: #fff;
+}
+
+#crumbs ul li a:hover:after {
+  border-left-color: #357DFD;
+  color: #fff;
+}
+#crumbs ul li.top-active a:after
+{
+  border-left-color: #357DFD;
+  color: #fff;
+}
+#crumbs ul li.top-active a{
+  background: #357DFD;
+  font-weight: 700;
+  color: #fff;
+}
    </style>
   
   </div>
@@ -1043,7 +1123,25 @@ for (var i = 0; i < checkboxes.length; i++) {
 <!---------------------------- DROP Lead -------------------------------->
 
 
-  
+<?php
+if(!empty($_GET['desposition']))
+{
+  echo'<script>
+  $(document).ready(function(){
+         setTimeout(call_to_disposition,1000);
+    });
+
+  function call_to_disposition()
+  {
+    var x = $("li[data-stage-id=\''.$_GET['desposition'].'\'");
+       try{
+        $(x[0]).trigger("click");
+        }catch(e){alert(e);}
+  }
+
+  </script>';
+}
+?> 
 
 
 <div id="deleteselected" class="modal fade" role="dialog">
@@ -1173,7 +1271,7 @@ for (var i = 0; i < checkboxes.length; i++) {
       }
     });
 
-$(".top_pill").on('click',function(){
+$(document).on('click',".top_pill",function(){
 
      var stg_id = $(this).data('stage-id');
      if(!$(this).hasClass('top-active'))
@@ -1290,7 +1388,7 @@ $(".top_pill").on('click',function(){
         data: form_data,
         success: function(responseData){
           $('#enq_table').DataTable().ajax.reload();
-          alert('done');
+          //alert('done');
           update_top_filter_counter();      
         }
       });

@@ -795,6 +795,7 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
             <?php } ?>
             <?php if($this->session->companey_id==65){ ?>
             <li href="#COMMERCIAL_INFORMATION" data-toggle="tab" >Commercial Information</li>
+            <li href="#vtran_visit" data-toggle="tab" >Visit Details</li>
             <li href="#vtransaggrement" data-toggle="tab" >Agreement</li>
             <?php } ?>
             <li href="#company_contacts" data-toggle="tab">Contacts</li> 
@@ -2062,6 +2063,162 @@ $.ajax({
             });
 }
 </script>
+<div class="tab-pane" id="vtran_visit">
+ <hr>
+
+<form action="<?=base_url('enquiry/add_visit')?>" class="form-inner" enctype="multipart/form-data" method="post" accept-charset="utf-8" autocomplete="off">
+  <input type="hidden" name="enquiry_id" value="<?=$details->enquiry_id?>">
+    <div class="col-md-12"  style="margin-bottom: 25px; padding: 0px">
+     <!--  <div class="row"  style="padding-bottom:20px">
+        <div class="form-group">
+          <div class="pull-left">
+            <div style="top: 0px;
+                          margin-top: 0px;
+                          float: left;
+                          height: 51px;
+                          line-height: 50px;
+                          padding-right: 5px;" >
+            <label>From</label>
+            </div>
+            <div style="height: 51px;
+                        float: left;">
+              <input type="date" class="v_filter" name="v_from_date" style="width: 145px"><br>
+              <input type="time" class="v_filter" name="v_from_time" style="width: 145px">
+            </div>
+          </div>
+          <div class="pull-right">
+            <div style="top: 0px;
+                          margin-top: 0px;
+                          float: left;
+                          height: 51px;
+                          line-height: 50px;
+                          padding-right: 5px;" >
+            <label>To</label>
+            </div>
+            <div style="height: 51px;
+                        float: left;">
+              <input type="date" class="v_filter" name="v_to_date" style="width: 145px"><br>
+              <input type="time" class="v_filter" name="v_to_time" style="width: 145px">
+            </div>
+          </div>
+        </div>
+      </div> -->
+    <!-- <label style="color:#283593;">Outcome Of Visit<i class="text-danger"></i></label> -->
+    <table id="visit_table" class="table table-bordered table-hover mobile-optimised" style="width:100%;">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Visit Date</th>
+          <th>Visit Time</th>
+          <th>Distance Travelled</th>
+          <th>Travelled Type</th>
+          <th>Rating</th>
+          <th>Next Visit Date</th>
+          <th>Next Visit Location</th>
+        </tr>
+      </thead>
+      <thead>
+      </thead>
+    </table>
+    </div>
+        <div class="form-group col-md-6 visit-date col-md-6">     
+          <label>Visit Date</label>
+          <input type="date" name="visit_date" class="form-control">
+        </div>
+    
+        <div class="form-group col-md-6 visit-time col-md-6">     
+         <label>Visit Time</label>
+          <input type="time" name="visit_time" class="form-control">
+        </div>
+    
+        <div class="form-group col-md-6 distance-travelled col-md-6">     
+        <label>Distance Travelled</label>
+           <input type="text" name="travelled" class="form-control">
+        </div>
+    
+        <div class="form-group col-md-6 distance-travelled-type col-md-6">      
+        <label>DISTANCE TRAVELLED TYPE</label>
+           <input type="text" name="travelled_type" class="form-control">
+        </div>
+    
+        <div class="form-group col-md-6 customer-rating col-md-6">      
+        <label>Customer Rating</label>
+          <select class="form-control" name="rating">
+              <option value="">Select</option>
+              <option value="1 star">1 star</option>
+              <option value="2 star"> 2 star</option>
+              <option value="3 star"> 3 star</option>
+              <option value="4 star"> 4 star</option>
+              <option value="5 star"> 5 star</option>
+            </select>
+        </div>
+        
+         
+      <div class="col-md-12">
+      <label style="color:#283593;">Next Visit Information<i class="text-danger"></i></label>
+       <hr>
+      </div>
+        
+          <div class="form-group col-md-6 next-visit-date col-md-6">      
+            <label>Next Visit Date</label>
+             <input type="date" name="next_visit_date" class="form-control">
+          </div>
+      
+          <div class="form-group col-md-6 next-visit-location col-md-6">      
+           <label>Next Visit Location</label>
+             <input type="text" name="next_location" class="form-control">
+          </div>
+
+         <div class="row" id="save_button">
+            <div class="col-md-12 text-center">
+               <input type="submit" name="submit_only" class="btn btn-primary" value="Save">
+            </div>
+         </div>
+   </form>
+
+<script type="text/javascript">
+var Data = {"from_data":"","to_date":"","from_time":"","to_time":""};
+
+$(".v_filter").change(function(){
+  // var obj = $(".v_filter:input").serializeArray();
+
+  // Data["from_date"]= obj[0]["value"];
+  // Data["to_date"] = obj[1]["value"];
+  // Data["from_time"] = obj[2]["value"];
+  // Data["to_time"] = obj[3]["value"];
+ $("#visit_table").DataTable().ajax.reload(); 
+
+});
+
+$(document).ready(function(){
+
+  $('#visit_table').DataTable({ 
+
+          "processing": true,
+          "scrollX": true,
+          "serverSide": true,          
+          "lengthMenu": [ [10,30, 50,100,500,1000, -1], [10,30, 50,100,500,1000, "All"] ],
+          "ajax": {
+              "url": "<?=base_url().'enquiry/visit_load_data'?>",
+              "type": "POST",
+              "data":function(d){
+                      //var obj = $(".v_filter:input").serializeArray();
+
+                     d.enquiry_id ="<?=$details->enquiry_id?>";
+                     // d.to_date = obj[2]["value"];
+                     // d.from_time = obj[1]["value"];
+                     // d.to_time = obj[3]["value"];
+                     //console.log(JSON.stringify(d));
+                    return d;
+              }
+          },
+  });
+
+});
+//+"&data_type=<?=$data_type?>"
+</script>  
+
+</div>
 
 <div class="tab-pane" id="vtransaggrement">
  <hr>
@@ -2109,13 +2266,16 @@ $.ajax({
 });
  </script>
 
-<form action="<?=base_url('client/view_editable_aggrement')?>" method="post">
+<form target="_blank" action="<?=base_url('client/view_editable_aggrement')?>" method="post">
 <div class="col-md-6" style="padding:20px;">
 
     <input type="hidden" name="customer_name" value="<?=$enquiry->name_prefix.' '.$enquiry->name.' '.$enquiry->lastname?>">
-    
+    <?php
+    if(!empty($region_name) && $region_name)
+      echo'<input type="hidden" name="region_name" value="'.$region_name.'">';
+    ?>
             <select class="form-control"  name="agg_frmt"  id="agg_frmt"> 
-              <option>Select Format</option>
+              <option value="">Select Format</option>
               <option value = "vtrans">Vtrans Agreement</option>
             </select>
 </div>

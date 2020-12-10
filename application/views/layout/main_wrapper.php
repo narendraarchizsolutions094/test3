@@ -1414,7 +1414,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                      
                   </li>
                   
-                  <li class="<?php echo (($segment1 == "client" && empty($_GET['stage'])) ? "active" : null) ?>" style="<?php if(in_array(80,$module) || in_array(81,$module) || in_array(82,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
+                  <li class="<?php echo (($segment1 == "client" && empty($_GET['stage']) && empty($_GET['desposition'])) ? "active" : null) ?>" style="<?php if(in_array(80,$module) || in_array(81,$module) || in_array(82,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
                     <a href="<?php echo base_url("client/index") ?>">
                     <i class="fa fa-user-circle-o" style="color:#fff;font-size:20px;background:#3498db;padding:7px;border-radius:4px;width:30px;"></i> &nbsp;<?php echo display('client') ?>
           <?php  if($this->session->menu==1){ ?></br><p style="color:#fff;font-size:9px;margin-left:-12px;padding-top:10px;"><?php echo display('client') ?></p> <?php } ?>
@@ -1438,6 +1438,36 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                           </a>
                         </li>
                         <?php
+                    }
+                  }
+
+                  $disposition_in_menu  = get_sys_parameter('disposition_in_menu','COMPANY_SETTING');    
+
+                  if (!empty($disposition_in_menu)) 
+                  { 
+                    //echo json_encode(array(array('stage_id'=>299,'icon'=>'<i class="fa fa-user"></i>')));
+                    //echo $disposition_in_menu; exit();
+                    $x = json_decode($disposition_in_menu);
+                  //print_r($x); exit();
+                    foreach ($x as $des)
+                    { 
+                      $ci = &get_instance();
+                      $ci->load->database();
+                      $desp = $ci->db->where('stg_id',$des->stage_id)->get('lead_stage')->row();
+                      $des_title = '';
+                      if(!empty($desp))
+                      {
+                        $des_title = $desp->lead_stage_name;
+                      }
+                      ?>
+                       <li class="<?php echo (($segment1 == "client") && (!empty($_GET['desposition']) && $_GET['desposition'] == $des->stage_id) ) ? "active" : null ?>">
+                         
+                        <a href="<?php echo base_url("client/desposition?desposition=").$des->stage_id; ?>">
+                            <i class="<?=$des->icon;?>" style="color:#fff;font-size:20px;background:#3498db;padding:7px;border-radius:4px;width:30px;"></i> &nbsp;<?=$des_title?>                 
+                        </a>
+
+                       </li>
+                      <?php
                     }
                   }
                   ?>

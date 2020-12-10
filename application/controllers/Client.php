@@ -1513,11 +1513,49 @@ if(!empty($_FILES['file']['name'])){
     }
     /***********************end add aggriment***********************/
 
-public function abc()
+
+public function desposition()
 {
-    $data['title']='abc';
-   $data['content'] = $this->load->view('aggrement/editable_vtrans',array(),true);
-   $this->load->view('layout/main_wrapper',$data);
+        if (user_role('60') == true) {
+        }
+        $this->load->model('Datasource_model');
+
+        $data['sourse'] = $this->report_model->all_source();
+        $data['datasourse'] = $this->report_model->all_datasource();
+        $data['lead_score'] = $this->enquiry_model->get_leadscore_list();
+        $data['dfields']  = $this->enquiry_model->getformfield();
+
+        $data['data_type'] = 1;
+        $this->session->unset_userdata('enquiry_filters_sess');
+        if (!empty($this->session->enq_type)) {
+            $this->session->unset_userdata('enq_type', $this->session->enq_type);
+        }
+
+        // $process =  0;
+        // if(!empty($this->session->process))
+        //  $process = implode(',', $this->session->process);
+         $desp = $this->db->where('stg_id',$_GET['desposition'])->get('lead_stage')->row();
+            $des_title = '';
+          if(!empty($desp))
+          {
+            $des_title = $desp->lead_stage_name;
+          }
+        $data['title'] = $des_title;
+
+        $data['subsource_list'] = $this->Datasource_model->subsourcelist();
+        $data['user_list'] = $this->User_model->companey_users();
+        $data['created_bylist'] = $this->User_model->read();
+        $data['products'] = $this->dash_model->get_user_product_list();
+        $data['drops'] = $this->enquiry_model->get_drop_list();
+
+        $data['all_stage_lists'] = $this->Leads_Model->get_leadstage_list_byprocess1($this->session->process,1);
+
+        $data['prodcntry_list'] = $this->enquiry_model->get_user_productcntry_list();
+        $data['state_list'] = $this->enquiry_model->get_user_state_list();
+        $data['city_list'] = $this->enquiry_model->get_user_city_list();
+ 
+        $data['content'] = $this->load->view('enquiry_n', $data, true);
+        $this->load->view('layout/main_wrapper', $data);
 }
 
 public function view_editable_aggrement()
@@ -1538,13 +1576,14 @@ public function view_editable_aggrement()
         $_POST = array();
 
     if(!empty($_POST['agg_frmt']))
-    {
+    {   $_POST['edit'] = 1;
+        $_POST['checkss'] = array();
         if($_POST['agg_frmt']=='vtrans')
         echo $this->load->view('aggrement/input-vtrans',array(),TRUE);
         else
             echo'No Agrrement';
     }
-    echo'No Agrrement';
+    //echo'No Agrrement';
     //echo'';
     //$data['content'] = $this->load->view('aggrement/editable_vtrans',$data,TRUE);
     //$this->load->view('layout/main_wrapper',$data);
@@ -1576,12 +1615,22 @@ public function view_editable_aggrement()
                             $_POST[$key] = ' ';
                 }
             }
-            $this->load->helpers('dompdf');
-            //$data['title'] = 'Agrrement';
-            if($_POST['format_for']=='vtrans')
-                $viewfile = $this->load->view('aggrement/input-vtrans',$_POST,TRUE);
+            
+            if(empty($_POST['checkss']))
+                $_POST['checkss'] = array();
+            if(empty($_POST['ip'][14]))
+                    $_POST['ip'][14] = 'none';
 
-            echo $viewfile;
+            //$this->load->helpers('dompdf');
+            //$data['title'] = 'Agrrement';
+            // if($_POST['format_for']=='vtrans')
+            $viewfile = $this->load->view('aggrement/input-vtrans',$_POST,TRUE);
+          
+           //echo $viewfile;
+            $this->load->library('pdf');
+            $this->pdf->create($viewfile);
+            //$this->pdf->load_view('aggrement/input-vtrans',$_POST,array(),'.');
+            //echo $viewfile;
            //pdf_create($viewfile,'Demo Aggrement',true,'1');
         }
         // $abc = !empty($_POST['aggrement_data']) ? $_POST['aggrement_data'] : '';
