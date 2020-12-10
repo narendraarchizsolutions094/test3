@@ -156,7 +156,7 @@
 
                                 <div class="col-xs-9">
 
-                                    <?= form_dropdown('language',$languageList,$setting->language, 'class="form-control"') ?>
+                                    <?= form_dropdown('language',$languageList,$setting->language??'', 'class="form-control"') ?>
 
                                 </div>
 
