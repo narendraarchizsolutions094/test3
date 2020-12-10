@@ -58,10 +58,10 @@ class Visit_datatable_model extends CI_Model{
      */
     public function _get_datatables_query($postData){
 
-        $this->db->select('*');
+        $this->db->select($this->table.'.*,enquiry.name,enquiry.status as enq_type');
         $this->db->from($this->table);
-
-        $this->db->where("comp_id",$this->session->companey_id);
+        $this->db->join('enquiry','enquiry.enquiry_id=tbl_visit.enquiry_id','left');
+        $this->db->where("tbl_visit.comp_id",$this->session->companey_id);
 
         $where="";
         $and =0;
@@ -104,9 +104,19 @@ class Visit_datatable_model extends CI_Model{
             if($and)
                 $where.=" and ";
 
-            $where.=" enquiry_id = '".$_POST['enquiry_id']."'";
+            $where.=" tbl_visit.enquiry_id = '".$_POST['enquiry_id']."'";
             $and =1;
         }
+
+        if(!empty($_POST['rating']))
+        {   
+            if($and)
+                $where.=" and ";
+
+            $where.=" tbl_visit.rating LIKE '%".$_POST['rating']."%'";
+            $and =1;
+        }
+
         if($where!='')
         $this->db->where($where);
  

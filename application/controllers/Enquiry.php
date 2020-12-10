@@ -3814,11 +3814,26 @@ public function timelinePopup()
             $sub[] = $res->id;
             $sub[] = $res->visit_date!='0000-00-00'?$res->visit_date:'NA';
             $sub[] = $time??'NA';
+
+            if(!empty($_POST['view_all']))
+            {
+                if($res->enq_type=='1')
+                    $url = base_url('enquiry/view/').$res->enquiry_id;
+                else if($res->enq_type=='2')
+                    $url = base_url('lead/lead_details/').$res->enquiry_id;
+                else if($res->enq_type=='3')
+                    $url = base_url('client/view/').$res->enquiry_id;
+
+                $sub[] = '<a href="'.$url.'">'.$res->name.'</a>'??'NA';
+            }
+
             $sub[] = $res->travelled!=''?$res->travelled:'NA';
             $sub[] = $res->travelled_type!=''?$res->travelled_type:'NA';
             $sub[] = $res->rating!=''?$res->rating:'NA';
             $sub[] = $res->next_date!='0000-00-00'?$res->next_date:'NA';
             $sub[] = $res->next_location?$res->next_location:'NA';
+
+
 
             $data[] =$sub;
         }
