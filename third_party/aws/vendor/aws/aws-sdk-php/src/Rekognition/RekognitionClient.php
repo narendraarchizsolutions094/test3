@@ -1,8 +1,6 @@
 <?php
 namespace Aws\Rekognition;
-
 use Aws\AwsClient;
-
 /**
  * This client is used to interact with the **Amazon Rekognition** service.
  * @method \Aws\Result compareFaces(array $args = [])

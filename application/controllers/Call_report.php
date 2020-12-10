@@ -1,6 +1,5 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-
 class Call_report extends CI_Controller {
     public function __construct() {
         parent::__construct();      
@@ -165,10 +164,8 @@ class Call_report extends CI_Controller {
 				$this->db->set('event_type',$v->_source->event);
 				$this->db->set('json_data',json_encode($v)); 
 				$this->db->insert('tbl_col_log2'); 
-
 		 } }
 		
     }
 	}
-
 }

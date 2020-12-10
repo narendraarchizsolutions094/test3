@@ -1,8 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-
 class Configurations extends CI_Controller {
-
     public function __construct()
 	{
 		parent::__construct();
@@ -45,7 +43,6 @@ class Configurations extends CI_Controller {
 	
 		$this->load->view('layout/main_wrapper',$data);
 	}
-
 	
 	
         public function createwebsiteintegration()
@@ -102,13 +99,11 @@ class Configurations extends CI_Controller {
             
             $this->db->where('wid',$qr_code_id);
             $qr_row    =   $this->db->get('website_integration')->row_array();
-
             if($qr_row){
  
             $compid = $qr_row['comp_id'];
             $assign = $qr_row['assign_by'];
             }
-
  
             $encode=$this->get_enquery_code();
             $createdate = date('d-m-Y h:i:s a');
@@ -137,15 +132,12 @@ class Configurations extends CI_Controller {
              redirect($this->agent->referrer());
             }
             $data['title'] = 'Capture';	
-
             /*$data['state_list']=$this->enquiry_model->state_list();*/
             /*$data['customer_types'] = $this->enquiry_model->customers_types();*/
             //$data['channel_p_type'] = $this->enquiry_model->channel_partner_type_list();
             $wid = $this->uri->segment(3);
             $wid = base64_decode($wid);     
-
             $data['products'] = $this->dash_model->product_list_byqr_comp($wid);
-
             // print_r($data['products']);exit();
             $data['country_list']=$this->location_model->country();            
  
@@ -154,7 +146,6 @@ class Configurations extends CI_Controller {
             // echo $wid ;exit();      
             $this->db->where('wid',$wid);            
             $data['qr_row']    =   $this->db->get('website_integration')->row_array();
-
             $this->load->view('web_integrationform',$data);
         }
         
@@ -164,7 +155,6 @@ class Configurations extends CI_Controller {
         //////////////// QR CODE //////////////////////////
         
         public function create_qr_code(){
-
             if(!empty($_POST)){            
                 $integration_name = $this->input->post('integration_name');
                 $source_name = $this->input->post('source_name');
@@ -184,11 +174,9 @@ class Configurations extends CI_Controller {
                     'integration_type' => 10,
                     'type'=>$type
                 );   
-
                 $insert_id = $this->Configuration_Model->website_integrate($data);
                 $lastID = $this->db->insert_id();                
                 $captureLINK = base_url()."configurations/website_form/".base64_encode($lastID);
-
                 $this->db->set('capture_link',$captureLINK);
                 $this->db->where('wid',$lastID);
                 $this->db->update('website_integration');                    
@@ -305,9 +293,7 @@ public function facebook()
         }
 /////////////////////////////////////////////////////////////////////////////////////////        
         
-
 //////////////////////////////////////////////////////////////
-
  public function delete_integration($integration = null) 
         { 
         if ($this->Configuration_Model->delete_integration($integration)) {
@@ -319,7 +305,6 @@ public function facebook()
         }
         redirect($this->agent->referrer());
         }
-
     
 	   public function get_enquery_code()
         {
@@ -337,7 +322,6 @@ public function facebook()
          function genret_code() {
             $pass = "";
             $chars = array("0", "1", "2", "3", "4", "5", "6", "7", "8", "9");
-
             for ($i = 0; $i < 4; $i++) {
                 $pass .= $chars[mt_rand(0, count($chars) - 1)];
             }

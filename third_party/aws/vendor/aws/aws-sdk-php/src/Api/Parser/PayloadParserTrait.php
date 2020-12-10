@@ -1,9 +1,7 @@
 <?php
 namespace Aws\Api\Parser;
-
 use Aws\Api\Parser\Exception\ParserException;
 use Psr\Http\Message\ResponseInterface;
-
 trait PayloadParserTrait
 {
     /**
@@ -16,7 +14,6 @@ trait PayloadParserTrait
     private function parseJson($json, $response)
     {
         $jsonPayload = json_decode($json, true);
-
         if (JSON_ERROR_NONE !== json_last_error()) {
             throw new ParserException(
                 'Error parsing JSON: ' . json_last_error_msg(),
@@ -25,10 +22,8 @@ trait PayloadParserTrait
                 ['response' => $response]
             );
         }
-
         return $jsonPayload;
     }
-
     /**
      * @param string $xml
      *
@@ -55,7 +50,6 @@ trait PayloadParserTrait
         } finally {
             libxml_use_internal_errors($priorSetting);
         }
-
         return $xmlPayload;
     }
 }

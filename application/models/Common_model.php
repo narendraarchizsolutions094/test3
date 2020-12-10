@@ -107,4 +107,11 @@ class Common_model extends CI_Model {
         return  $this->db->get()->result();
         // print_r($res);exit();
     }
+
+    public function get_process_name_by_id($id){
+        $this->db->select('product_name as process_name');
+        $this->db->where('sb_id',$id);
+        $row = $this->db->get('tbl_product')->row_array();
+        return $row['process_name']??false;
+    }
 }

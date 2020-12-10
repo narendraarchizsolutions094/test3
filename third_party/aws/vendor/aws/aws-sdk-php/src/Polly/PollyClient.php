@@ -1,13 +1,11 @@
 <?php
 namespace Aws\Polly;
-
 use Aws\Api\Serializer\JsonBody;
 use Aws\AwsClient;
 use Aws\Signature\SignatureV4;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Uri;
 use GuzzleHttp\Psr7;
-
 /**
  * This client is used to interact with the **Amazon Polly** service.
  * @method \Aws\Result deleteLexicon(array $args = [])
@@ -33,7 +31,6 @@ class PollyClient extends AwsClient
 {
     /** @var JsonBody */
     private $formatter;
-
     /**
      * Create a pre-signed URL for Polly operation `SynthesizeSpeech`
      *
@@ -46,7 +43,6 @@ class PollyClient extends AwsClient
     {
         $uri = new Uri($this->getEndpoint());
         $uri = $uri->withPath('/v1/speech');
-
         // Formatting parameters follows rest-json protocol
         $this->formatter = $this->formatter ?: new JsonBody($this->getApi());
         $queryArray = json_decode(
@@ -56,11 +52,9 @@ class PollyClient extends AwsClient
             ),
             true
         );
-
         // Mocking a 'GET' request in pre-signing the Url
         $query = Psr7\build_query($queryArray);
         $uri = $uri->withQuery($query);
-
         $request = new Request('GET', $uri);
         $request = $request->withBody(Psr7\stream_for(''));
         $signer = new SignatureV4('polly', $this->getRegion());

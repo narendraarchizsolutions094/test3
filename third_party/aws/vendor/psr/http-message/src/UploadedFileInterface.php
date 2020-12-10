@@ -1,7 +1,5 @@
 <?php
-
 namespace Psr\Http\Message;
-
 /**
  * Value object representing a file uploaded through an HTTP request.
  *
@@ -29,7 +27,6 @@ interface UploadedFileInterface
      *     created.
      */
     public function getStream();
-
     /**
      * Move the uploaded file to a new location.
      *

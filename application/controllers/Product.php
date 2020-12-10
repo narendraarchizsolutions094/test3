@@ -8,7 +8,6 @@ class Product extends CI_Controller
 		$this->load->model(array(
 			'Product_model',));
 	}
-
 	public function index()
 	{
 		$data['title'] = 'Product List';
@@ -17,7 +16,6 @@ class Product extends CI_Controller
 		$data['content'] = $this->load->view('product/prod-det-list', $data, true);
 		$this->load->view('layout/main_wrapper', $data);
 	}
-
 
 	//check product dupolicacy for seller
 	function checkProductDuplicacy()
@@ -31,7 +29,6 @@ class Product extends CI_Controller
 			echo json_encode(array('status' => 'notexist'));
 		}
 	}
-
 	function addproduct()
 	{
 		if (isset($_POST['proname'])) {
@@ -56,7 +53,6 @@ class Product extends CI_Controller
 			$this->saveProduct();
 		}
 		$data['units'] = $this->Product_model->get_units();
-
 		$data['title'] = 'Update Product';
 		$data['product'] = $this->Product_model->productdet($prodno);
 		$data['category'] = $this->db->select("*")->where("comp_id", $this->session->companey_id)->get("tbl_category")->result();
@@ -71,50 +67,37 @@ class Product extends CI_Controller
 		$data['brand_list'] = $this->warehouse_model->brand_list();
 		$data['pid'] = $prodno;
 
-
 		$data['content'] = $this->load->view('product/add-product', $data, true);
 		//echo $data['content'];
 		$this->load->view('layout/main_wrapper', $data);
 	}
 	public function addorder()
 	{
-
 		if (isset($_POST["proname"])) {
-
 			$this->saveorder();
 		}
-
 		$data['title'] = 'Add Order';
-
 		$data['products'] = $this->db->select("tbl_proddetails.*,tbl_product.*")
 			->where("comp_id", $this->session->companey_id)
 			->from("tbl_product")
 			->join("tbl_proddetails", "tbl_product.sb_id = tbl_proddetails.prodid")->get()->result();
-
 		$data['content'] = $this->load->view('product/add-order', $data, true);
 		$this->load->view('layout/main_wrapper', $data);
 	}
-
 	public function orderlist()
 	{
-
 		$data['title'] = 'Order List';
 		$data['content'] = $this->load->view('order/order-list', $data, true);
 		$this->load->view('layout/main_wrapper', $data);
 	}
-
 	public function saveorder()
 	{
-
 		$price 	  = $this->input->post("rate", true);
 		$discount = $this->input->post("discount", true);
 		$otrprice = $this->input->post("othrprice", true);
 		$tax 	  = $this->input->post("tax", true);
 		$total    = $price + $otrprice + $tax - $discount;
-
 		$ordno    = "ORD" . strtotime("Y-m-d h:i:s");
-
-
 
 		$insarr = array(
 			"ord_no"  		=> $ordno,
@@ -138,34 +121,27 @@ class Product extends CI_Controller
 			"status"		=> 1,
 			"company"		=> $this->session->companey_id,
 		);
-
 		$ret = $this->db->insert("tbl_order", $insarr);
-
 		if ($ret) {
 			$this->session->set_flashdata('message', "Successfully saved");
 		} else {
 			$this->session->set_flashdata('exception', "Failed to saved");
 		}
 	}
-
 	public function do_upload()
 	{
 		$config['upload_path']          = './assets/images/products/';
 		$config['allowed_types']        = 'gif|jpg|png|jpeg';
-
 		$config['max_size']      = '1024';
 		$config['max_width']     = '1024';
 		$config['max_height']    = '768';
-
 		$this->load->library('upload', $config);
-
 		if (!$this->upload->do_upload('mainimage')) {
 			return array('error' => $this->upload->display_errors());
 		} else {
 			return array('upload_data' => $this->upload->data());
 		}
 	}
-
 	public function saveProduct()
 	{
 		// echo "<pre>";
@@ -228,7 +204,6 @@ class Product extends CI_Controller
 				$this->db->insert("tbl_product_country", $insarr);
 				$prodid  = $this->db->insert_id();
 			}
-
 			if (isset($_POST['inputfieldno'])) {
 				$inputno   = $this->input->post("inputfieldno", true);
 				$enqinfo   = $this->input->post("enqueryfield", true);
@@ -316,7 +291,6 @@ class Product extends CI_Controller
 			}
 		}
 	}
-
 	public function upload_files($path, $title, $files)
 	{
 		/*print_r($files);
@@ -332,9 +306,7 @@ class Product extends CI_Controller
 		);
 		$this->load->library('upload', $config);
 		$images = array();
-
 		foreach ($files['name'] as $key => $image) {
-
 			$_FILES['images[]']['name'] = $files['name'][$key];
 			$_FILES['images[]']['type'] = $files['type'][$key];
 			$_FILES['images[]']['tmp_name'] = $files['tmp_name'][$key];
@@ -352,7 +324,6 @@ class Product extends CI_Controller
 		}
 		return $images;
 	}
-
 	function productlist()
 	{
 		if (user_role('60') == true) {
@@ -491,38 +462,28 @@ class Product extends CI_Controller
 			->setSubject("Stock excel")
 			->setDescription("Stock")
 			->setKeywords("Stock");
-
 		/*	$objPHPExcel->getActiveSheet()
             ->getStyle("A1:P1")
             ->getFont()
             ->setSize(18); */
-
 		$objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(5);
 		$objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(10);
 		$objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(20);
 		$objPHPExcel->getActiveSheet()->getColumnDimension('O')->setWidth(20);
-
 		$objPHPExcel->getActiveSheet()->getStyle('A1:P1')->getFont()->setBold(true);
-
 		$rowarr = array("Sr No", "Product", "Old Stock", "Quantity", "Purchase price", "Supplier", "Stock Date");
-
 		$objPHPExcel->setActiveSheetIndex(0);
-
 		$ltr = 'A';
 		foreach ($rowarr as $ind => $val) {
-
 			$objPHPExcel->getActiveSheet()->setCellValue($ltr . "1", $val);
-
 			$ltr++;
 		}
 		$pending   = $totprice = $totqty = 0;
 		$count     = 1;
-
 		if (!empty($stocks)) {
 			foreach ($stocks as $ind => $ord) {
 				$ltr = 'A';
 				$count  =  $count + 1;
-
 				$objPHPExcel->getActiveSheet()->SetCellValue(($ltr++) . $count, $count - 1)
 					->SetCellValue(($ltr++) . $count, $ord->product_name)
 					->SetCellValue(($ltr++) . $count, $ord->old_stock)
@@ -534,71 +495,49 @@ class Product extends CI_Controller
 		}
 		$objPHPExcel->getActiveSheet()->setTitle('Stock(' . count($stocks) . ')');
 		$objPHPExcel->setActiveSheetIndex(0);
-
 		$writer = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
-
 		$fname = "stocks_" . date("y_m_d") . ".xls";
-
 		header('Content-Type: application/vnd.ms-excel');
 		header('Content-Disposition: attachment;filename="' . $fname . '"');
 		header('Cache-Control: max-age=0');
 		$writer->save('php://output');
 	}
-
 	public function csvupload()
 	{
-
 		$this->load->library("CsvRead");
 
-
 		$stkarr = $this->csvread->readFile(8);
-
 		$insarr = $errors =  array();
-
 		foreach ($stkarr as $ind => $stk) {
-
 			$warehouse  =  $stk['0'];
 			$product    =  $stk['1'];
 			$quantity   =  $stk['3'];
 			$supplier   =  $stk['5'];
-
 			if (empty($stk[0]) or empty($stk[1]) or empty($stk[2]) or empty($stk[3])) {
-
 				$errors[] = "Check madatory fiels";
 			}
-
 			$wrhouse = $this->db->select("id")->where(array("name" => $warehouse, "comp_id" => $this->session->userdata("companey_id")))->get("tbl_warehouse");
-
 			if ($wrhouse->num_rows() > 0) {
-
 				$whid = $wrhouse->row()->id;
 			} else {
 				$errors[] = "Warehouse  <b>" . $warehouse . "</b> not founds";
 				continue;
 			}
-
 			$prod = $this->db->select("id,stock")->where(array("pro_name" => $product, "comp_id" => $this->session->userdata("companey_id")))->where("pro_name", $product)->get("tbl_product");
-
 			if ($prod->num_rows() > 0) {
-
 				$prodid = $prod->row()->id;
 				$oldstk = $prod->row()->stock;
 			} else {
 				$errors[] = "Product <b>" . $product . "</b> not founds";
 				continue;
 			}
-
 			$splr = $this->db->select("id")->where(array("email" => $supplier, "company" => $this->session->userdata("companey_id")))->get("users");
-
 			if ($splr->num_rows() > 0) {
-
 				$splrid = $splr->row()->id;
 			} else {
-
 				$errors[] = "Supplier <b>" . $supplier . "</b> not founds";
 				continue;
 			}
-
 			$insarr[] = array(
 				"warehouse"   =>  $whid,
 				"product"    =>  $prodid,
@@ -618,37 +557,27 @@ class Product extends CI_Controller
 		}
 		$msg = "";
 		if (count($errors) > 0) {
-
 			$msg = count($errors) . "is failed to add. " . implode("<br />", $errors);
 		}
-
 		if (!empty($insarr)) {
-
 			$ret = $this->db->insert_batch("stock", $insarr);
-
 
 			$this->session->set_flashdata("message", "Successfully uploaded " . count($insarr) . " stock. " . $msg);
 		} else {
-
 			$this->session->set_flashdata("error", "Failed to uploaded user. " . $msg);
 		}
 	}
 
-
 	public function category($categ = "")
 	{
 
-
 		if (isset($_POST["categid"])) {
-
 			$this->savesubcateg();
 			redirect(base_url("product/category/" . $categ), "refresh");
 		} else if (isset($_POST["category"])) {
-
 			$this->savecateg();
 			redirect(base_url("product/category.html"), "refresh");
 		}
-
 		if (empty($categ)) {
 			$data["title"] 	  = "Add Category";
 			$data['category'] = $this->db->select("*")->where("comp_id", $this->session->companey_id)->get("tbl_category")->result();
@@ -659,16 +588,12 @@ class Product extends CI_Controller
 				->where("cat_id", $categ)->where("comp_id", $this->session->companey_id)->get("tbl_subcategory")->result();
 			$data["categid"]     = $categ;
 		}
-
 		$data['content'] = $this->load->view('product/categ-list', $data, true);
 		$this->load->view('layout/main_wrapper', $data);
 	}
-
 	public function savecateg()
 	{
-
 		$this->form_validation->set_rules("category", "Category", "trim|required");
-
 		if ($this->form_validation->run()) {
 			$arr = array(
 				"comp_id" 		=> $this->session->companey_id,
@@ -679,11 +604,8 @@ class Product extends CI_Controller
 				"created_date"	=> date("Y-m-d h:i:s"),
 				"updated_date" => date("Y-m-d h:i:s")
 			);
-
 			$ret = $this->db->insert("tbl_category", $arr);
-
 			if ($ret) {
-
 				$this->session->set_flashdata("message", "Successfully saved category");
 			} else {
 				$this->session->set_flashdata("error", "Failed to saved category");
@@ -694,9 +616,7 @@ class Product extends CI_Controller
 	}
 	public function savesubcateg()
 	{
-
 		$this->form_validation->set_rules("category", "Category", "trim|required");
-
 		if ($this->form_validation->run()) {
 			$arr = array(
 				"comp_id" 		=> $this->session->companey_id,
@@ -706,11 +626,8 @@ class Product extends CI_Controller
 				"created_date"	=> date("Y-m-d h:i:s"),
 				"created_by" => $this->session->user_id
 			);
-
 			$ret = $this->db->insert("tbl_subcategory", $arr);
-
 			if ($ret) {
-
 				$this->session->set_flashdata("message", "Successfully saved subcategory");
 			} else {
 				$this->session->set_flashdata("error", "Failed to saved category");
@@ -720,54 +637,38 @@ class Product extends CI_Controller
 		}
 	}
 
-
-
 	public function stockupdate($stkno)
 	{
-
 		$this->savestock();
-
 		$data["products"] = $this->Product_model->getProduct();
-
 		$stkno = base64_decode(base64_decode(urldecode($stkno)));
 		$data["stock"] = $this->Product_model->getStockById($stkno);
 		$this->load->model("warehouse_model");
 		$data["warehouse"]  = $this->warehouse_model->warehouse_list1();
-
 		if (empty($data["stock"])) show_404();
-
 		$data["title"] = "Update Stocks";
 		$data['content'] = $this->load->view('product/update-stock', $data, true);
 		$this->load->view('layout/main_wrapper', $data);
 	}
-
 	public function loadstock()
 	{
-
 
 		$stockarr = $this->Product_model->stock(1);
 		$rows  = array();
 		if (!empty($stockarr)) {
-
 			foreach ($stockarr as $ind => $stk) {
-
 				$cols = array();
 				$srno   = $ind + 1;
-
 				$image  = (!empty($stk->main_img)) ? base_url($stk->main_img)  : base_url("assets/images/products/33.png");
 				$cols[] = '<label class="custom-control custom-checkbox"><input type="checkbox" class="custom-control-input" name="example-checkbox1" value="' . $stk->id . '"><span class="custom-control-label"> ' . $srno . '</span></label>';
-
 				$cols[] = ucwords($stk->product_name);
 				$cols[] = $stk->quantity . "<br /> <span class = 'badge badge-primary'> Old Stock: " . $stk->old_stock . " </span>";
-
 				$cols[] = (!empty($stk->price)) ? $stk->price : " ";
 				$cols[] = (!empty($stk->supplier)) ? $stk->supplier : " ";
 				$cols[] = date("m/d/Y", strtotime($stk->stock_date));
 
-
 				$cols[] =  '<a href="' . base_url("product/stockupdate/" . urlencode(base64_encode(base64_encode($stk->id)))) . '" class="btn btn-info">
 								<i class="fa fa-pencil" data-toggle="tooltip" title="" data-original-title="Edit"></i></a><a href="' . base64_encode(base64_encode($stk->id)) . '"  class="btn btn-danger delete-stocks"><i class="fa fa-trash" data-toggle="tooltip" title="" data-original-title="Delete"></i></a>';
-
 				$rows[] = $cols;
 			}
 		}
@@ -780,7 +681,6 @@ class Product extends CI_Controller
 		);
 		die(json_encode($output));
 	}
-
 	function get_region_byid()
 	{
 		$country_id = $this->input->post('country_id');
@@ -790,7 +690,6 @@ class Product extends CI_Controller
 			echo '<option value="' . $r->region_id . '">' . $r->region_name . '</option>';
 		}
 	}
-
 	function get_state_byid()
 	{
 		$country_id = $this->input->post('country_id');
@@ -801,7 +700,6 @@ class Product extends CI_Controller
 			echo '<option value="' . $r->id . '">' . $r->state . '</option>';
 		}
 	}
-
 	function get_city_byid()
 	{
 		$state_id = $this->input->post('state_id');
@@ -811,7 +709,6 @@ class Product extends CI_Controller
 			echo '<option value="' . $r->id . '">' . $r->city . '</option>';
 		}
 	}
-
 	function get_product()
 	{
 		//slected_product_id
@@ -832,10 +729,8 @@ class Product extends CI_Controller
 			echo '<option ' . $selected . ' value="' . $fellowObj->product_id . '">' . $fellowObj->product_name . '</option>';
 		}
 	}
-
 	public function add_product()
 	{
-
 		$this->load->model("location_model");
 		$data['title'] = display('add_product');
 		$data['product'] = '';
@@ -864,7 +759,6 @@ class Product extends CI_Controller
 			'updated_date' => date('Y-m-d'),
 			'ipaddress' => $_SERVER['REMOTE_ADDR']
 		];
-
 		if ($this->form_validation->run() === true) {
 			if (empty($this->input->post('product_id'))) {
 				if (user_role('20') == true) {
@@ -894,7 +788,6 @@ class Product extends CI_Controller
 			$this->load->view('layout/main_wrapper', $data);
 		}
 	}
-
 	public function edit_product($product_id = null)
 	{
 		if (user_role('21') == true) {
@@ -919,7 +812,6 @@ class Product extends CI_Controller
 	}
 	public function delete_product_category()
 	{
-
 		$cat = $this->input->post('cat');
 		if (!empty($cat)) {
 			foreach ($cat as $key => $value) {
@@ -932,7 +824,6 @@ class Product extends CI_Controller
 			}
 		}
 	}
-
 	public function delete_product_unit()
 	{
 		$unit = $this->input->post('unit');
@@ -943,7 +834,6 @@ class Product extends CI_Controller
 			}
 		}
 	}
-
 	public function measurement_unit()
 	{
 		if (!empty($_POST)) {
@@ -963,6 +853,5 @@ class Product extends CI_Controller
 		$data['content']	=	$this->load->view('product/measurement_unit', $data, true);
 		$this->load->view('layout/main_wrapper', $data);
 	}
-
 
 }

@@ -1,8 +1,6 @@
 <?php
 namespace Aws\Signature;
-
 use Aws\Exception\UnresolvedSignatureException;
-
 /**
  * Signature providers.
  *
@@ -44,7 +42,6 @@ class SignatureProvider
         's3' => true,
         's3control' => true,
     ];
-
     /**
      * Resolves and signature provider and ensures a non-null return value.
      *
@@ -62,13 +59,11 @@ class SignatureProvider
         if ($result instanceof SignatureInterface) {
             return $result;
         }
-
         throw new UnresolvedSignatureException(
             "Unable to resolve a signature for $version/$service/$region.\n"
             . "Valid signature versions include v4 and anonymous."
         );
     }
-
     /**
      * Default SDK signature provider.
      *
@@ -78,7 +73,6 @@ class SignatureProvider
     {
         return self::memoize(self::version());
     }
-
     /**
      * Creates a signature provider that caches previously created signature
      * objects. The computed cache key is the concatenation of the version,
@@ -99,7 +93,6 @@ class SignatureProvider
             return $cache[$key];
         };
     }
-
     /**
      * Creates signature objects from known signature versions.
      *

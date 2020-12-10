@@ -1,8 +1,6 @@
 <?php
 namespace Aws\DataExchange;
-
 use Aws\AwsClient;
-
 /**
  * This client is used to interact with the **AWS Data Exchange** service.
  * @method \Aws\Result cancelJob(array $args = [])

@@ -1,8 +1,6 @@
 <?php
 namespace Aws\XRay;
-
 use Aws\AwsClient;
-
 /**
  * This client is used to interact with the **AWS X-Ray** service.
  * @method \Aws\Result batchGetTraces(array $args = [])

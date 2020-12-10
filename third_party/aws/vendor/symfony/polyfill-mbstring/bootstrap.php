@@ -1,5 +1,4 @@
 <?php
-
 /*
  * This file is part of the Symfony package.
  *
@@ -8,15 +7,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 use Symfony\Polyfill\Mbstring as p;
-
 if (!defined('MB_CASE_UPPER')) {
     define('MB_CASE_UPPER', 0);
     define('MB_CASE_LOWER', 1);
     define('MB_CASE_TITLE', 2);
 }
-
 if (!function_exists('mb_strlen')) {
     function mb_convert_encoding($s, $to, $from = null) { return p\Mbstring::mb_convert_encoding($s, $to, $from); }
     function mb_decode_mimeheader($s) { return p\Mbstring::mb_decode_mimeheader($s); }
@@ -58,7 +54,6 @@ if (!function_exists('mb_chr')) {
     function mb_chr($code, $enc = null) { return p\Mbstring::mb_chr($code, $enc); }
     function mb_scrub($s, $enc = null) { $enc = null === $enc ? mb_internal_encoding() : $enc; return mb_convert_encoding($s, $enc, $enc); }
 }
-
 if (!function_exists('mb_str_split')) {
     function mb_str_split($string, $split_length = 1, $encoding = null) { return p\Mbstring::mb_str_split($string, $split_length, $encoding); }
 }

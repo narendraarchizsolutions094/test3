@@ -1,9 +1,7 @@
 <?php
 namespace GuzzleHttp;
-
 use GuzzleHttp\Exception\InvalidArgumentException;
 use Psr\Http\Message\UriInterface;
-
 final class Utils
 {
     /**
@@ -18,7 +16,6 @@ final class Utils
     {
         return function_exists('hrtime') ? hrtime(true) / 1e9 : microtime(true);
     }
-
     /**
      * @param int $options
      *
@@ -36,23 +33,19 @@ final class Utils
                 : idn_to_ascii($uri->getHost(), $options, $idnaVariant, $info);
             if ($asciiHost === false) {
                 $errorBitSet = isset($info['errors']) ? $info['errors'] : 0;
-
                 $errorConstants = array_filter(array_keys(get_defined_constants()), function ($name) {
                     return substr($name, 0, 11) === 'IDNA_ERROR_';
                 });
-
                 $errors = [];
                 foreach ($errorConstants as $errorConstant) {
                     if ($errorBitSet & constant($errorConstant)) {
                         $errors[] = $errorConstant;
                     }
                 }
-
                 $errorMessage = 'IDN conversion failed';
                 if ($errors) {
                     $errorMessage .= ' (errors: ' . implode(', ', $errors) . ')';
                 }
-
                 throw new InvalidArgumentException($errorMessage);
             } else {
                 if ($uri->getHost() !== $asciiHost) {
@@ -61,7 +54,6 @@ final class Utils
                 }
             }
         }
-
         return $uri;
     }
 }

@@ -1,13 +1,11 @@
 <?php
 namespace GuzzleHttp\Psr7;
-
 use Psr\Http\Message\MessageInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UriInterface;
-
 /**
  * Returns the string representation of an HTTP message.
  *
@@ -31,14 +29,11 @@ function str(MessageInterface $message)
     } else {
         throw new \InvalidArgumentException('Unknown message type');
     }
-
     foreach ($message->getHeaders() as $name => $values) {
         $msg .= "\r\n{$name}: " . implode(', ', $values);
     }
-
     return "{$msg}\r\n\r\n" . $message->getBody();
 }
-
 /**
  * Returns a UriInterface for the given value.
  *
@@ -58,10 +53,8 @@ function uri_for($uri)
     } elseif (is_string($uri)) {
         return new Uri($uri);
     }
-
     throw new \InvalidArgumentException('URI must be a string or UriInterface');
 }
-
 /**
  * Create a new stream based on the input type.
  *
@@ -85,7 +78,6 @@ function stream_for($resource = '', array $options = [])
         }
         return new Stream($stream, $options);
     }
-
     switch (gettype($resource)) {
         case 'resource':
             return new Stream($resource, $options);
@@ -108,14 +100,11 @@ function stream_for($resource = '', array $options = [])
         case 'NULL':
             return new Stream(fopen('php://temp', 'r+'), $options);
     }
-
     if (is_callable($resource)) {
         return new PumpStream($resource, $options);
     }
-
     throw new \InvalidArgumentException('Invalid resource type: ' . gettype($resource));
 }
-
 /**
  * Parse an array of header values containing ";" separated data into an
  * array of associative arrays representing the header key value pair
@@ -130,7 +119,6 @@ function parse_header($header)
 {
     static $trimmed = "\"'  \n\t\r";
     $params = $matches = [];
-
     foreach (normalize_header($header) as $val) {
         $part = [];
         foreach (preg_split('/;(?=([^"]*"[^"]*")*[^"]*$)/', $val) as $kvp) {
@@ -147,10 +135,8 @@ function parse_header($header)
             $params[] = $part;
         }
     }
-
     return $params;
 }
-
 /**
  * Converts an array of header values that may contain comma separated
  * headers into an array of headers with no comma separated values.
@@ -164,7 +150,6 @@ function normalize_header($header)
     if (!is_array($header)) {
         return array_map('trim', explode(',', $header));
     }
-
     $result = [];
     foreach ($header as $value) {
         foreach ((array) $value as $v) {
@@ -177,10 +162,8 @@ function normalize_header($header)
             }
         }
     }
-
     return $result;
 }
-
 /**
  * Clone and modify a request with the given changes.
  *
@@ -203,16 +186,13 @@ function modify_request(RequestInterface $request, array $changes)
     if (!$changes) {
         return $request;
     }
-
     $headers = $request->getHeaders();
-
     if (!isset($changes['uri'])) {
         $uri = $request->getUri();
     } else {
         // Remove the host header if one is on the URI
         if ($host = $changes['uri']->getHost()) {
             $changes['set_headers']['Host'] = $host;
-
             if ($port = $changes['uri']->getPort()) {
                 $standardPorts = ['http' => 80, 'https' => 443];
                 $scheme = $changes['uri']->getScheme();
@@ -223,20 +203,16 @@ function modify_request(RequestInterface $request, array $changes)
         }
         $uri = $changes['uri'];
     }
-
     if (!empty($changes['remove_headers'])) {
         $headers = _caseless_remove($changes['remove_headers'], $headers);
     }
-
     if (!empty($changes['set_headers'])) {
         $headers = _caseless_remove(array_keys($changes['set_headers']), $headers);
         $headers = $changes['set_headers'] + $headers;
     }
-
     if (isset($changes['query'])) {
         $uri = $uri->withQuery($changes['query']);
     }
-
     if ($request instanceof ServerRequestInterface) {
         return (new ServerRequest(
             isset($changes['method']) ? $changes['method'] : $request->getMethod(),
@@ -253,7 +229,6 @@ function modify_request(RequestInterface $request, array $changes)
         ->withCookieParams($request->getCookieParams())
         ->withUploadedFiles($request->getUploadedFiles());
     }
-
     return new Request(
         isset($changes['method']) ? $changes['method'] : $request->getMethod(),
         $uri,
@@ -264,7 +239,6 @@ function modify_request(RequestInterface $request, array $changes)
             : $request->getProtocolVersion()
     );
 }
-
 /**
  * Attempts to rewind a message body and throws an exception on failure.
  *
@@ -278,12 +252,10 @@ function modify_request(RequestInterface $request, array $changes)
 function rewind_body(MessageInterface $message)
 {
     $body = $message->getBody();
-
     if ($body->tell()) {
         $body->rewind();
     }
 }
-
 /**
  * Safely opens a PHP stream resource using a filename.
  *
@@ -307,18 +279,14 @@ function try_fopen($filename, $mode)
             func_get_args()[1]
         ));
     });
-
     $handle = fopen($filename, $mode);
     restore_error_handler();
-
     if ($ex) {
         /** @var $ex \RuntimeException */
         throw $ex;
     }
-
     return $handle;
 }
-
 /**
  * Copy the contents of a stream into a string until the given number of
  * bytes have been read.
@@ -332,7 +300,6 @@ function try_fopen($filename, $mode)
 function copy_to_string(StreamInterface $stream, $maxLen = -1)
 {
     $buffer = '';
-
     if ($maxLen === -1) {
         while (!$stream->eof()) {
             $buf = $stream->read(1048576);
@@ -344,7 +311,6 @@ function copy_to_string(StreamInterface $stream, $maxLen = -1)
         }
         return $buffer;
     }
-
     $len = 0;
     while (!$stream->eof() && $len < $maxLen) {
         $buf = $stream->read($maxLen - $len);
@@ -355,10 +321,8 @@ function copy_to_string(StreamInterface $stream, $maxLen = -1)
         $buffer .= $buf;
         $len = strlen($buffer);
     }
-
     return $buffer;
 }
-
 /**
  * Copy the contents of a stream into another stream until the given number
  * of bytes have been read.
@@ -376,7 +340,6 @@ function copy_to_stream(
     $maxLen = -1
 ) {
     $bufferSize = 8192;
-
     if ($maxLen === -1) {
         while (!$source->eof()) {
             if (!$dest->write($source->read($bufferSize))) {
@@ -396,7 +359,6 @@ function copy_to_stream(
         }
     }
 }
-
 /**
  * Calculate a hash of a Stream
  *
@@ -413,22 +375,17 @@ function hash(
     $rawOutput = false
 ) {
     $pos = $stream->tell();
-
     if ($pos > 0) {
         $stream->rewind();
     }
-
     $ctx = hash_init($algo);
     while (!$stream->eof()) {
         hash_update($ctx, $stream->read(1048576));
     }
-
     $out = hash_final($ctx, (bool) $rawOutput);
     $stream->seek($pos);
-
     return $out;
 }
-
 /**
  * Read a line from the stream up to the maximum allowed buffer length
  *
@@ -441,7 +398,6 @@ function readline(StreamInterface $stream, $maxLength = null)
 {
     $buffer = '';
     $size = 0;
-
     while (!$stream->eof()) {
         // Using a loose equality here to match on '' and false.
         if (null == ($byte = $stream->read(1))) {
@@ -453,10 +409,8 @@ function readline(StreamInterface $stream, $maxLength = null)
             break;
         }
     }
-
     return $buffer;
 }
-
 /**
  * Parses a request message string into a request object.
  *
@@ -473,7 +427,6 @@ function parse_request($message)
     }
     $parts = explode(' ', $data['start-line'], 3);
     $version = isset($parts[2]) ? explode('/', $parts[2])[1] : '1.1';
-
     $request = new Request(
         $parts[0],
         $matches[1] === '/' ? _parse_request_uri($parts[1], $data['headers']) : $parts[1],
@@ -481,10 +434,8 @@ function parse_request($message)
         $data['body'],
         $version
     );
-
     return $matches[1] === '/' ? $request : $request->withRequestTarget($parts[1]);
 }
-
 /**
  * Parses a response message string into a response object.
  *
@@ -502,7 +453,6 @@ function parse_response($message)
         throw new \InvalidArgumentException('Invalid response string: ' . $data['start-line']);
     }
     $parts = explode(' ', $data['start-line'], 3);
-
     return new Response(
         $parts[1],
         $data['headers'],
@@ -511,7 +461,6 @@ function parse_response($message)
         isset($parts[2]) ? $parts[2] : null
     );
 }
-
 /**
  * Parse a query string into an associative array.
  *
@@ -528,11 +477,9 @@ function parse_response($message)
 function parse_query($str, $urlEncoding = true)
 {
     $result = [];
-
     if ($str === '') {
         return $result;
     }
-
     if ($urlEncoding === true) {
         $decoder = function ($value) {
             return rawurldecode(str_replace('+', ' ', $value));
@@ -544,7 +491,6 @@ function parse_query($str, $urlEncoding = true)
     } else {
         $decoder = function ($str) { return $str; };
     }
-
     foreach (explode('&', $str) as $kvp) {
         $parts = explode('=', $kvp, 2);
         $key = $decoder($parts[0]);
@@ -558,10 +504,8 @@ function parse_query($str, $urlEncoding = true)
             $result[$key][] = $value;
         }
     }
-
     return $result;
 }
-
 /**
  * Build a query string from an array of key value pairs.
  *
@@ -580,7 +524,6 @@ function build_query(array $params, $encoding = PHP_QUERY_RFC3986)
     if (!$params) {
         return '';
     }
-
     if ($encoding === false) {
         $encoder = function ($str) { return $str; };
     } elseif ($encoding === PHP_QUERY_RFC3986) {
@@ -590,7 +533,6 @@ function build_query(array $params, $encoding = PHP_QUERY_RFC3986)
     } else {
         throw new \InvalidArgumentException('Invalid type');
     }
-
     $qs = '';
     foreach ($params as $k => $v) {
         $k = $encoder($k);
@@ -610,10 +552,8 @@ function build_query(array $params, $encoding = PHP_QUERY_RFC3986)
             }
         }
     }
-
     return $qs ? (string) substr($qs, 0, -1) : '';
 }
-
 /**
  * Determines the mimetype of a file by looking at its extension.
  *
@@ -625,7 +565,6 @@ function mimetype_from_filename($filename)
 {
     return mimetype_from_extension(pathinfo($filename, PATHINFO_EXTENSION));
 }
-
 /**
  * Maps a file extensions to a mimetype.
  *
@@ -739,14 +678,11 @@ function mimetype_from_extension($extension)
         'yml' => 'text/yaml',
         'zip' => 'application/zip',
     ];
-
     $extension = strtolower($extension);
-
     return isset($mimetypes[$extension])
         ? $mimetypes[$extension]
         : null;
 }
-
 /**
  * Parses an HTTP message into an associative array.
  *
@@ -764,56 +700,42 @@ function _parse_message($message)
     if (!$message) {
         throw new \InvalidArgumentException('Invalid message');
     }
-
     $message = ltrim($message, "\r\n");
-
     $messageParts = preg_split("/\r?\n\r?\n/", $message, 2);
-
     if ($messageParts === false || count($messageParts) !== 2) {
         throw new \InvalidArgumentException('Invalid message: Missing header delimiter');
     }
-
     list($rawHeaders, $body) = $messageParts;
     $rawHeaders .= "\r\n"; // Put back the delimiter we split previously
     $headerParts = preg_split("/\r?\n/", $rawHeaders, 2);
-
     if ($headerParts === false || count($headerParts) !== 2) {
         throw new \InvalidArgumentException('Invalid message: Missing status line');
     }
-
     list($startLine, $rawHeaders) = $headerParts;
-
     if (preg_match("/(?:^HTTP\/|^[A-Z]+ \S+ HTTP\/)(\d+(?:\.\d+)?)/i", $startLine, $matches) && $matches[1] === '1.0') {
         // Header folding is deprecated for HTTP/1.1, but allowed in HTTP/1.0
         $rawHeaders = preg_replace(Rfc7230::HEADER_FOLD_REGEX, ' ', $rawHeaders);
     }
-
     /** @var array[] $headerLines */
     $count = preg_match_all(Rfc7230::HEADER_REGEX, $rawHeaders, $headerLines, PREG_SET_ORDER);
-
     // If these aren't the same, then one line didn't match and there's an invalid header.
     if ($count !== substr_count($rawHeaders, "\n")) {
         // Folding is deprecated, see https://tools.ietf.org/html/rfc7230#section-3.2.4
         if (preg_match(Rfc7230::HEADER_FOLD_REGEX, $rawHeaders)) {
             throw new \InvalidArgumentException('Invalid header syntax: Obsolete line folding');
         }
-
         throw new \InvalidArgumentException('Invalid header syntax');
     }
-
     $headers = [];
-
     foreach ($headerLines as $headerLine) {
         $headers[$headerLine[1]][] = $headerLine[2];
     }
-
     return [
         'start-line' => $startLine,
         'headers' => $headers,
         'body' => $body,
     ];
 }
-
 /**
  * Constructs a URI for an HTTP request message.
  *
@@ -828,18 +750,14 @@ function _parse_request_uri($path, array $headers)
     $hostKey = array_filter(array_keys($headers), function ($k) {
         return strtolower($k) === 'host';
     });
-
     // If no host is found, then a full URI cannot be constructed.
     if (!$hostKey) {
         return $path;
     }
-
     $host = $headers[reset($hostKey)][0];
     $scheme = substr($host, -4) === ':443' ? 'https' : 'http';
-
     return $scheme . '://' . $host . '/' . ltrim($path, '/');
 }
-
 /**
  * Get a short summary of the message body
  *
@@ -853,47 +771,36 @@ function _parse_request_uri($path, array $headers)
 function get_message_body_summary(MessageInterface $message, $truncateAt = 120)
 {
     $body = $message->getBody();
-
     if (!$body->isSeekable() || !$body->isReadable()) {
         return null;
     }
-
     $size = $body->getSize();
-
     if ($size === 0) {
         return null;
     }
-
     $summary = $body->read($truncateAt);
     $body->rewind();
-
     if ($size > $truncateAt) {
         $summary .= ' (truncated...)';
     }
-
     // Matches any printable character, including unicode characters:
     // letters, marks, numbers, punctuation, spacing, and separators.
     if (preg_match('/[^\pL\pM\pN\pP\pS\pZ\n\r\t]/', $summary)) {
         return null;
     }
-
     return $summary;
 }
-
 /** @internal */
 function _caseless_remove($keys, array $data)
 {
     $result = [];
-
     foreach ($keys as &$key) {
         $key = strtolower($key);
     }
-
     foreach ($data as $k => $v) {
         if (!in_array(strtolower($k), $keys)) {
             $result[$k] = $v;
         }
     }
-
     return $result;
 }

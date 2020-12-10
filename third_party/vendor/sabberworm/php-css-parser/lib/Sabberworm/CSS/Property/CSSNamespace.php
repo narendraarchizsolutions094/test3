@@ -1,7 +1,5 @@
 <?php
-
 namespace Sabberworm\CSS\Property;
-
 /**
 * CSSNamespace represents an @namespace rule.
 */
@@ -17,18 +15,15 @@ class CSSNamespace implements AtRule {
 		$this->iLineNo = $iLineNo;
 		$this->aComments = array();
 	}
-
 	/**
 	 * @return int
 	 */
 	public function getLineNo() {
 		return $this->iLineNo;
 	}
-
 	public function __toString() {
 		return $this->render(new \Sabberworm\CSS\OutputFormat());
 	}
-
 	public function render(\Sabberworm\CSS\OutputFormat $oOutputFormat) {
 		return '@namespace '.($this->sPrefix === null ? '' : $this->sPrefix.' ').$this->mUrl->render($oOutputFormat).';';
 	}
@@ -36,23 +31,18 @@ class CSSNamespace implements AtRule {
 	public function getUrl() {
 		return $this->mUrl;
 	}
-
 	public function getPrefix() {
 		return $this->sPrefix;
 	}
-
 	public function setUrl($mUrl) {
 		$this->mUrl = $mUrl;
 	}
-
 	public function setPrefix($sPrefix) {
 		$this->sPrefix = $sPrefix;
 	}
-
 	public function atRuleName() {
 		return 'namespace';
 	}
-
 	public function atRuleArgs() {
 		$aResult = array($this->mUrl);
 		if($this->sPrefix) {
@@ -60,15 +50,12 @@ class CSSNamespace implements AtRule {
 		}
 		return $aResult;
 	}
-
 	public function addComments(array $aComments) {
 		$this->aComments = array_merge($this->aComments, $aComments);
 	}
-
 	public function getComments() {
 		return $this->aComments;
 	}
-
 	public function setComments(array $aComments) {
 		$this->aComments = $aComments;
 	}

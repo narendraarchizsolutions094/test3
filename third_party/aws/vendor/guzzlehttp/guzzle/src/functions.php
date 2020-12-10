@@ -1,11 +1,9 @@
 <?php
 namespace GuzzleHttp;
-
 use GuzzleHttp\Handler\CurlHandler;
 use GuzzleHttp\Handler\CurlMultiHandler;
 use GuzzleHttp\Handler\Proxy;
 use GuzzleHttp\Handler\StreamHandler;
-
 /**
  * Expands a URI template
  *
@@ -21,15 +19,12 @@ function uri_template($template, array $variables)
         return \uri_template($template, $variables);
         // @codeCoverageIgnoreEnd
     }
-
     static $uriTemplate;
     if (!$uriTemplate) {
         $uriTemplate = new UriTemplate();
     }
-
     return $uriTemplate->expand($template, $variables);
 }
-
 /**
  * Debug function used to describe the provided value type and class.
  *
@@ -52,7 +47,6 @@ function describe_type($input)
             return str_replace('double(', 'float(', rtrim(ob_get_clean()));
     }
 }
-
 /**
  * Parses an array of header lines into an associative array of headers.
  *
@@ -63,17 +57,14 @@ function describe_type($input)
 function headers_from_lines($lines)
 {
     $headers = [];
-
     foreach ($lines as $line) {
         $parts = explode(':', $line, 2);
         $headers[trim($parts[0])][] = isset($parts[1])
             ? trim($parts[1])
             : null;
     }
-
     return $headers;
 }
-
 /**
  * Returns a debug stream based on the provided variable.
  *
@@ -88,10 +79,8 @@ function debug_resource($value = null)
     } elseif (defined('STDOUT')) {
         return STDOUT;
     }
-
     return fopen('php://output', 'w');
 }
-
 /**
  * Chooses and creates a default handler to use based on the environment.
  *
@@ -110,7 +99,6 @@ function choose_handler()
     } elseif (function_exists('curl_multi_exec')) {
         $handler = new CurlMultiHandler();
     }
-
     if (ini_get('allow_url_fopen')) {
         $handler = $handler
             ? Proxy::wrapStreaming($handler, new StreamHandler())
@@ -119,10 +107,8 @@ function choose_handler()
         throw new \RuntimeException('GuzzleHttp requires cURL, the '
             . 'allow_url_fopen ini setting, or a custom HTTP handler.');
     }
-
     return $handler;
 }
-
 /**
  * Get the default User-Agent string to use with Guzzle
  *
@@ -131,7 +117,6 @@ function choose_handler()
 function default_user_agent()
 {
     static $defaultAgent = '';
-
     if (!$defaultAgent) {
         $defaultAgent = 'GuzzleHttp/' . Client::VERSION;
         if (extension_loaded('curl') && function_exists('curl_version')) {
@@ -139,10 +124,8 @@ function default_user_agent()
         }
         $defaultAgent .= ' PHP/' . PHP_VERSION;
     }
-
     return $defaultAgent;
 }
-
 /**
  * Returns the default cacert bundle for the current system.
  *
@@ -177,25 +160,20 @@ function default_ca_bundle()
         'C:\\windows\\system32\\curl-ca-bundle.crt',
         'C:\\windows\\curl-ca-bundle.crt',
     ];
-
     if ($cached) {
         return $cached;
     }
-
     if ($ca = ini_get('openssl.cafile')) {
         return $cached = $ca;
     }
-
     if ($ca = ini_get('curl.cainfo')) {
         return $cached = $ca;
     }
-
     foreach ($cafiles as $filename) {
         if (file_exists($filename)) {
             return $cached = $filename;
         }
     }
-
     throw new \RuntimeException(
         <<< EOT
 No system CA bundle could be found in any of the the common system locations.
@@ -213,7 +191,6 @@ information.
 EOT
     );
 }
-
 /**
  * Creates an associative array of lowercase header names to the actual
  * header casing.
@@ -228,10 +205,8 @@ function normalize_header_keys(array $headers)
     foreach (array_keys($headers) as $key) {
         $result[strtolower($key)] = $key;
     }
-
     return $result;
 }
-
 /**
  * Returns true if the provided host matches any of the no proxy areas.
  *
@@ -256,12 +231,10 @@ function is_host_in_noproxy($host, array $noProxyArray)
     if (strlen($host) === 0) {
         throw new \InvalidArgumentException('Empty host provided');
     }
-
     // Strip port if present.
     if (strpos($host, ':')) {
         $host = explode($host, ':', 2)[0];
     }
-
     foreach ($noProxyArray as $area) {
         // Always match on wildcards.
         if ($area === '*') {
@@ -281,10 +254,8 @@ function is_host_in_noproxy($host, array $noProxyArray)
             }
         }
     }
-
     return false;
 }
-
 /**
  * Wrapper for json_decode that throws when an error occurs.
  *
@@ -306,10 +277,8 @@ function json_decode($json, $assoc = false, $depth = 512, $options = 0)
             'json_decode error: ' . json_last_error_msg()
         );
     }
-
     return $data;
 }
-
 /**
  * Wrapper for JSON encoding that throws when an error occurs.
  *
@@ -329,6 +298,5 @@ function json_encode($value, $options = 0, $depth = 512)
             'json_encode error: ' . json_last_error_msg()
         );
     }
-
     return $json;
 }

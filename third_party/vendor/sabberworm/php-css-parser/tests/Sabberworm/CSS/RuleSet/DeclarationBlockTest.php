@@ -1,13 +1,9 @@
 <?php
-
 namespace Sabberworm\CSS\RuleSet;
-
 use Sabberworm\CSS\Parser;
 use Sabberworm\CSS\Rule\Rule;
 use Sabberworm\CSS\Value\Size;
-
 class DeclarationBlockTest extends \PHPUnit_Framework_TestCase {
-
 	/**
 	 * @dataProvider expandBorderShorthandProvider
 	 * */
@@ -19,7 +15,6 @@ class DeclarationBlockTest extends \PHPUnit_Framework_TestCase {
 		}
 		$this->assertSame(trim((string) $oDoc), $sExpected);
 	}
-
 	public function expandBorderShorthandProvider() {
 		return array(
 			array('body{ border: 2px solid #000 }', 'body {border-width: 2px;border-style: solid;border-color: #000;}'),
@@ -30,7 +25,6 @@ class DeclarationBlockTest extends \PHPUnit_Framework_TestCase {
 			array('body{ margin: 1em; }', 'body {margin: 1em;}')
 		);
 	}
-
 	/**
 	 * @dataProvider expandFontShorthandProvider
 	 * */
@@ -42,7 +36,6 @@ class DeclarationBlockTest extends \PHPUnit_Framework_TestCase {
 		}
 		$this->assertSame(trim((string) $oDoc), $sExpected);
 	}
-
 	public function expandFontShorthandProvider() {
 		return array(
 			array(
@@ -71,7 +64,6 @@ class DeclarationBlockTest extends \PHPUnit_Framework_TestCase {
 			),
 		);
 	}
-
 	/**
 	 * @dataProvider expandBackgroundShorthandProvider
 	 * */
@@ -83,7 +75,6 @@ class DeclarationBlockTest extends \PHPUnit_Framework_TestCase {
 		}
 		$this->assertSame(trim((string) $oDoc), $sExpected);
 	}
-
 	public function expandBackgroundShorthandProvider() {
 		return array(
 			array('body {border: 1px;}', 'body {border: 1px;}'),
@@ -94,7 +85,6 @@ class DeclarationBlockTest extends \PHPUnit_Framework_TestCase {
 			array('body {background: #f00 url("foobar.png") no-repeat top left;}', 'body {background-color: #f00;background-image: url("foobar.png");background-repeat: no-repeat;background-attachment: scroll;background-position: top left;}'),
 		);
 	}
-
 	/**
 	 * @dataProvider expandDimensionsShorthandProvider
 	 * */
@@ -106,7 +96,6 @@ class DeclarationBlockTest extends \PHPUnit_Framework_TestCase {
 		}
 		$this->assertSame(trim((string) $oDoc), $sExpected);
 	}
-
 	public function expandDimensionsShorthandProvider() {
 		return array(
 			array('body {border: 1px;}', 'body {border: 1px;}'),
@@ -116,7 +105,6 @@ class DeclarationBlockTest extends \PHPUnit_Framework_TestCase {
 			array('body {margin: 1em 2em 3em;}', 'body {margin-top: 1em;margin-right: 2em;margin-bottom: 3em;margin-left: 2em;}'),
 		);
 	}
-
 	/**
 	 * @dataProvider createBorderShorthandProvider
 	 * */
@@ -128,7 +116,6 @@ class DeclarationBlockTest extends \PHPUnit_Framework_TestCase {
 		}
 		$this->assertSame(trim((string) $oDoc), $sExpected);
 	}
-
 	public function createBorderShorthandProvider() {
 		return array(
 			array('body {border-width: 2px;border-style: solid;border-color: #000;}', 'body {border: 2px solid #000;}'),
@@ -137,7 +124,6 @@ class DeclarationBlockTest extends \PHPUnit_Framework_TestCase {
 			array('body {margin: 1em;}', 'body {margin: 1em;}')
 		);
 	}
-
 	/**
 	 * @dataProvider createFontShorthandProvider
 	 * */
@@ -149,7 +135,6 @@ class DeclarationBlockTest extends \PHPUnit_Framework_TestCase {
 		}
 		$this->assertSame(trim((string) $oDoc), $sExpected);
 	}
-
 	public function createFontShorthandProvider() {
 		return array(
 			array('body {font-size: 12px; font-family: serif}', 'body {font: 12px serif;}'),
@@ -160,7 +145,6 @@ class DeclarationBlockTest extends \PHPUnit_Framework_TestCase {
 			array('body {margin: 1em;}', 'body {margin: 1em;}')
 		);
 	}
-
 	/**
 	 * @dataProvider createDimensionsShorthandProvider
 	 * */
@@ -172,7 +156,6 @@ class DeclarationBlockTest extends \PHPUnit_Framework_TestCase {
 		}
 		$this->assertSame(trim((string) $oDoc), $sExpected);
 	}
-
 	public function createDimensionsShorthandProvider() {
 		return array(
 			array('body {border: 1px;}', 'body {border: 1px;}'),
@@ -182,7 +165,6 @@ class DeclarationBlockTest extends \PHPUnit_Framework_TestCase {
 			array('body {margin-top: 1em; margin-right: 2em; margin-bottom: 3em; margin-left: 2em;}', 'body {margin: 1em 2em 3em;}'),
 		);
 	}
-
 	/**
 	 * @dataProvider createBackgroundShorthandProvider
 	 * */
@@ -194,7 +176,6 @@ class DeclarationBlockTest extends \PHPUnit_Framework_TestCase {
 		}
 		$this->assertSame(trim((string) $oDoc), $sExpected);
 	}
-
 	public function createBackgroundShorthandProvider() {
 		return array(
 			array('body {border: 1px;}', 'body {border: 1px;}'),
@@ -206,7 +187,6 @@ class DeclarationBlockTest extends \PHPUnit_Framework_TestCase {
 			array('body {background-color: #f00;background-image: url(foobar.png);background-repeat: no-repeat;background-position: top left;}', 'body {background: #f00 url("foobar.png") no-repeat top left;}'),
 		);
 	}
-
 	public function testOverrideRules() {
 		$sCss = '.wrapper { left: 10px; text-align: left; }';
 		$oParser = new Parser($sCss);
@@ -215,10 +195,8 @@ class DeclarationBlockTest extends \PHPUnit_Framework_TestCase {
 		$oRule->setValue('-10px');
 		$aContents = $oDoc->getContents();
 		$oWrapper = $aContents[0];
-
 		$this->assertCount(2, $oWrapper->getRules());
 		$aContents[0]->setRules(array($oRule));
-
 		$aRules = $oWrapper->getRules();
 		$this->assertCount(1, $aRules);
 		$this->assertEquals('right', $aRules[0]->getRule());
@@ -231,37 +209,27 @@ class DeclarationBlockTest extends \PHPUnit_Framework_TestCase {
 		$oDoc = $oParser->parse();
 		$aContents = $oDoc->getContents();
 		$oWrapper = $aContents[0];
-
 		$oFirst = $oWrapper->getRules('left');
 		$this->assertCount(1, $oFirst);
 		$oFirst = $oFirst[0];
-
 		$oSecond = $oWrapper->getRules('text-');
 		$this->assertCount(1, $oSecond);
 		$oSecond = $oSecond[0];
-
 		$oBefore = new Rule('left');
 		$oBefore->setValue(new Size(16, 'em'));
-
 		$oMiddle = new Rule('text-align');
 		$oMiddle->setValue(new Size(1));
-
 		$oAfter = new Rule('border-bottom-width');
 		$oAfter->setValue(new Size(1, 'px'));
-
 		$oWrapper->addRule($oAfter);
 		$oWrapper->addRule($oBefore, $oFirst);
 		$oWrapper->addRule($oMiddle, $oSecond);
-
 		$aRules = $oWrapper->getRules();
-
 		$this->assertSame($oBefore, $aRules[0]);
 		$this->assertSame($oFirst, $aRules[1]);
 		$this->assertSame($oMiddle, $aRules[2]);
 		$this->assertSame($oSecond, $aRules[3]);
 		$this->assertSame($oAfter, $aRules[4]);
-
 		$this->assertSame('.wrapper {left: 16em;left: 10px;text-align: 1;text-align: left;border-bottom-width: 1px;}', $oDoc->render());
 	}
-
 }

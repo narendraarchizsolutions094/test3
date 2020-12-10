@@ -1,8 +1,6 @@
 <?php
 namespace Aws\CloudHSMV2;
-
 use Aws\AwsClient;
-
 /**
  * This client is used to interact with the **AWS CloudHSM V2** service.
  * @method \Aws\Result copyBackupToRegion(array $args = [])

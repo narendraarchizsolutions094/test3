@@ -3,9 +3,7 @@ use Restserver\Libraries\REST_Controller;
 defined('BASEPATH') OR exit('No direct script access allowed');
 require APPPATH . 'libraries/REST_Controller.php';
 require APPPATH . 'libraries/Format.php';
-
 class Login extends REST_Controller {
-
     function __construct()
     {
         parent::__construct();
@@ -27,7 +25,6 @@ class Login extends REST_Controller {
 	{
 	    $this->form_validation->set_rules('email', display('email'),'required|max_length[50]|valid_email');
         $this->form_validation->set_rules('password', display('password'),'required|max_length[32]|md5');
-
         $process    =   $this->input->post('process');
         
         $setting = $this->setting_model->read();
@@ -81,7 +78,6 @@ class Login extends REST_Controller {
                     'status' => TRUE,
                     'message' =>$data,
                 ], REST_Controller::HTTP_OK);
-
                 }
             } else {
                 $array=array('error'=>'Invalid Username or Password');
@@ -100,7 +96,6 @@ class Login extends REST_Controller {
 		$this->load->helper("api");
 	    $this->form_validation->set_rules('email', display('email'),'required|max_length[50]|valid_email');
         $this->form_validation->set_rules('password', display('password'),'required|max_length[32]|md5');
-
         $data['user'] = (object) $postData = [
             'email' => $this->input->post('email', true),
             'password' => md5($this->input->post('password', true)),
@@ -135,7 +130,6 @@ class Login extends REST_Controller {
 							}
                             foreach ($process_arr as $value) {  
 
-
 								$process[] = array( 
 												"proccess_id" 	 => $value['sb_id'],
 												"proccess_name"  => $value['product_name']
@@ -144,12 +138,10 @@ class Login extends REST_Controller {
 						
            
                        }else{
-
 							$process = array();
                        }
 					}
 				
-
                 $data=array(
                     'isProcess'   => (!empty($process)) ? TRUE : FALSE,
                     "process"     => $process,
@@ -160,7 +152,6 @@ class Login extends REST_Controller {
                 'proccess' =>$process,
 				"ismultiple" => $type
             ], REST_Controller::HTTP_OK);
-
             } else {
                 $array=array('error'=>'Invalid Username or Password');
                    $this->set_response([
@@ -224,7 +215,6 @@ class Login extends REST_Controller {
                 'status' => TRUE,
                 'message' =>$data,
             ], REST_Controller::HTTP_OK);
-
             } else {
                 $array=array('error'=>'Invalid Username or Password');
                    $this->set_response([

@@ -1,8 +1,6 @@
 <?php
 namespace Aws\AppConfig;
-
 use Aws\AwsClient;
-
 /**
  * This client is used to interact with the **Amazon AppConfig** service.
  * @method \Aws\Result createApplication(array $args = [])

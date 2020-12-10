@@ -1,8 +1,6 @@
 <?php
 namespace Aws\Cloud9;
-
 use Aws\AwsClient;
-
 /**
  * This client is used to interact with the **AWS Cloud9** service.
  * @method \Aws\Result createEnvironmentEC2(array $args = [])

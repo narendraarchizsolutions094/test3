@@ -1,9 +1,7 @@
 <?php
 namespace Aws\CognitoIdentity;
-
 use Aws\Credentials\Credentials;
 use GuzzleHttp\Promise;
-
 class CognitoIdentityProvider
 {
     /** @var CognitoIdentityClient */
@@ -14,7 +12,6 @@ class CognitoIdentityProvider
     private $accountId;
     /** @var array */
     private $logins;
-
     public function __construct(
         $poolId,
         array $clientOptions,
@@ -28,7 +25,6 @@ class CognitoIdentityProvider
             'credentials' => false,
         ]);
     }
-
     public function __invoke()
     {
         return Promise\coroutine(function () {
@@ -37,12 +33,10 @@ class CognitoIdentityProvider
             if ($this->accountId) {
                 $getIdParams['AccountId'] = $this->accountId;
             }
-
             $id = (yield $this->client->getId($getIdParams));
             $result = (yield $this->client->getCredentialsForIdentity([
                 'IdentityId' => $id['IdentityId'],
             ] + $params));
-
             yield new Credentials(
                 $result['Credentials']['AccessKeyId'],
                 $result['Credentials']['SecretKey'],
@@ -51,11 +45,9 @@ class CognitoIdentityProvider
             );
         });
     }
-
     public function updateLogin($key, $value)
     {
         $this->logins[$key] = $value;
-
         return $this;
     }
 }

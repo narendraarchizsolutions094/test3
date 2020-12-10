@@ -1,8 +1,6 @@
 <?php
 namespace Aws\CloudWatchEvents;
-
 use Aws\AwsClient;
-
 /**
  * This client is used to interact with the **Amazon CloudWatch Events** service.
  *

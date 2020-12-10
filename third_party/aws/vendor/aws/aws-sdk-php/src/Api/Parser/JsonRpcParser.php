@@ -1,20 +1,17 @@
 <?php
 namespace Aws\Api\Parser;
-
 use Aws\Api\StructureShape;
 use Aws\Api\Service;
 use Aws\Result;
 use Aws\CommandInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
-
 /**
  * @internal Implements JSON-RPC parsing (e.g., DynamoDB)
  */
 class JsonRpcParser extends AbstractParser
 {
     use PayloadParserTrait;
-
     /**
      * @param Service    $api    Service description
      * @param JsonParser $parser JSON body builder
@@ -24,7 +21,6 @@ class JsonRpcParser extends AbstractParser
         parent::__construct($api);
         $this->parser = $parser ?: new JsonParser();
     }
-
     public function __invoke(
         CommandInterface $command,
         ResponseInterface $response
@@ -37,10 +33,8 @@ class JsonRpcParser extends AbstractParser
                 $operation->getOutput(),
                 $response
             );
-
         return new Result($result ?: []);
     }
-
     public function parseMemberFromStream(
         StreamInterface $stream,
         StructureShape $member,

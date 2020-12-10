@@ -1,10 +1,8 @@
 <?php
 namespace Aws\S3;
-
 use Aws\CommandInterface;
 use GuzzleHttp\Psr7;
 use Psr\Http\Message\RequestInterface;
-
 /**
  * Apply required or optional MD5s to requests before sending.
  *
@@ -26,14 +24,11 @@ class ApplyChecksumMiddleware
         'PutObjectRetention',
         'PutObjectLockConfiguration',
     ];
-
     private static $sha256 = [
         'PutObject',
         'UploadPart',
     ];
-
     private $nextHandler;
-
     /**
      * Create a middleware wrapper function.
      *
@@ -45,12 +40,10 @@ class ApplyChecksumMiddleware
             return new self($handler);
         };
     }
-
     public function __construct(callable $nextHandler)
     {
         $this->nextHandler = $nextHandler;
     }
-
     public function __invoke(
         CommandInterface $command,
         RequestInterface $request
@@ -58,7 +51,6 @@ class ApplyChecksumMiddleware
         $next = $this->nextHandler;
         $name = $command->getName();
         $body = $request->getBody();
-
         if (in_array($name, self::$md5) && !$request->hasHeader('Content-MD5')) {
             // Set the content MD5 header for operations that require it.
             $request = $request->withHeader(
@@ -72,7 +64,6 @@ class ApplyChecksumMiddleware
                 $command['ContentSHA256']
             );
         }
-
         return $next($command, $request);
     }
 }

@@ -1,8 +1,6 @@
 <?php
 namespace Aws\Shield;
-
 use Aws\AwsClient;
-
 /**
  * This client is used to interact with the **AWS Shield** service.
  * @method \Aws\Result associateDRTLogBucket(array $args = [])

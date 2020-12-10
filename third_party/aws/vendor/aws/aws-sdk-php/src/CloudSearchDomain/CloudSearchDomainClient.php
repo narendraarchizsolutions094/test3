@@ -1,12 +1,10 @@
 <?php
 namespace Aws\CloudSearchDomain;
-
 use Aws\AwsClient;
 use Aws\CommandInterface;
 use GuzzleHttp\Psr7\Uri;
 use Psr\Http\Message\RequestInterface;
 use GuzzleHttp\Psr7;
-
 /**
  * This client is used to search and upload documents to an **Amazon CloudSearch** Domain.
  *
@@ -25,7 +23,6 @@ class CloudSearchDomainClient extends AwsClient
         $list = $this->getHandlerList();
         $list->appendBuild($this->searchByPost(), 'cloudsearchdomain.search_by_POST');
     }
-
     public static function getArguments()
     {
         $args = parent::getArguments();
@@ -35,10 +32,8 @@ class CloudSearchDomainClient extends AwsClient
             // (e.g. http://search-blah.{region}.cloudsearch.amazonaws.com)
             return explode('.', new Uri($args['endpoint']))[1];
         };
-
         return $args;
     }
-
     /**
      * Use POST for search command
      *
@@ -58,7 +53,6 @@ class CloudSearchDomainClient extends AwsClient
             };
         };
     }
-
     /**
      * Converts default GET request to a POST request
      *
@@ -72,7 +66,6 @@ class CloudSearchDomainClient extends AwsClient
         if ($r->getMethod() === 'POST') {
             return $r;
         }
-
         $query = $r->getUri()->getQuery();
         $req = $r->withMethod('POST')
             ->withBody(Psr7\stream_for($query))

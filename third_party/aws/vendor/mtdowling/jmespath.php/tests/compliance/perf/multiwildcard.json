@@ -5,7 +5,6 @@
             {"bar": [{"kind": "basic"}, {"kind": "intermediate"}]},
             {"bar": [{"kind": "advanced"}, {"kind": "expert"}]}
         ]
-
      },
      "cases": [
          {

@@ -1,10 +1,8 @@
 <?php
 namespace Aws\S3;
-
 use Aws\CommandInterface;
 use Aws\Multipart\UploadState;
 use Aws\ResultInterface;
-
 trait MultipartUploadingTrait
 {
     /**
@@ -29,7 +27,6 @@ trait MultipartUploadingTrait
             'Key'      => $key,
             'UploadId' => $uploadId,
         ]);
-
         foreach ($client->getPaginator('ListParts', $state->getId()) as $result) {
             // Get the part size from the first part in the first result.
             if (!$state->getPartSize()) {
@@ -43,12 +40,9 @@ trait MultipartUploadingTrait
                 ]);
             }
         }
-
         $state->setStatus(UploadState::INITIATED);
-
         return $state;
     }
-
     protected function handleResult(CommandInterface $command, ResultInterface $result)
     {
         $this->getState()->markPartAsUploaded($command['PartNumber'], [
@@ -56,26 +50,20 @@ trait MultipartUploadingTrait
             'ETag'       => $this->extractETag($result),
         ]);
     }
-
     abstract protected function extractETag(ResultInterface $result);
-
     protected function getCompleteParams()
     {
         $config = $this->getConfig();
         $params = isset($config['params']) ? $config['params'] : [];
-
         $params['MultipartUpload'] = [
             'Parts' => $this->getState()->getUploadedParts()
         ];
-
         return $params;
     }
-
     protected function determinePartSize()
     {
         // Make sure the part size is set.
         $partSize = $this->getConfig()['part_size'] ?: MultipartUploader::PART_MIN_SIZE;
-
         // Adjust the part size to be larger for known, x-large uploads.
         if ($sourceSize = $this->getSourceSize()) {
             $partSize = (int) max(
@@ -83,48 +71,38 @@ trait MultipartUploadingTrait
                 ceil($sourceSize / MultipartUploader::PART_MAX_NUM)
             );
         }
-
         // Ensure that the part size follows the rules: 5 MB <= size <= 5 GB.
         if ($partSize < MultipartUploader::PART_MIN_SIZE || $partSize > MultipartUploader::PART_MAX_SIZE) {
             throw new \InvalidArgumentException('The part size must be no less '
                 . 'than 5 MB and no greater than 5 GB.');
         }
-
         return $partSize;
     }
-
     protected function getInitiateParams()
     {
         $config = $this->getConfig();
         $params = isset($config['params']) ? $config['params'] : [];
-
         if (isset($config['acl'])) {
             $params['ACL'] = $config['acl'];
         }
-
         // Set the ContentType if not already present
         if (empty($params['ContentType']) && $type = $this->getSourceMimeType()) {
             $params['ContentType'] = $type;
         }
-
         return $params;
     }
-
     /**
      * @return UploadState
      */
     abstract protected function getState();
-
     /**
      * @return array
      */
     abstract protected function getConfig();
-
     /**
      * @return int
      */
     abstract protected function getSourceSize();
-
     /**
      * @return string|null
      */

@@ -1,9 +1,7 @@
 <?php
 namespace Aws\Api\Parser;
-
 use Aws\Api\DateTimeResult;
 use Aws\Api\Shape;
-
 /**
  * @internal Implements standard JSON parsing.
  */
@@ -14,7 +12,6 @@ class JsonParser
         if ($value === null) {
             return $value;
         }
-
         switch ($shape['type']) {
             case 'structure':
                 $target = [];
@@ -25,7 +22,6 @@ class JsonParser
                     }
                 }
                 return $target;
-
             case 'list':
                 $member = $shape->getMember();
                 $target = [];
@@ -33,7 +29,6 @@ class JsonParser
                     $target[] = $this->parse($member, $v);
                 }
                 return $target;
-
             case 'map':
                 $values = $shape->getValue();
                 $target = [];
@@ -41,7 +36,6 @@ class JsonParser
                     $target[$k] = $this->parse($values, $v);
                 }
                 return $target;
-
             case 'timestamp':
                 if (!empty($shape['timestampFormat'])
                     && $shape['timestampFormat'] !== 'unixTimestamp') {
@@ -51,10 +45,8 @@ class JsonParser
                 // timestamp) is the number of seconds that have elapsed since
                 // January 1, 1970 (midnight UTC/GMT).
                 return DateTimeResult::fromEpoch($value);
-
             case 'blob':
                 return base64_decode($value);
-
             default:
                 return $value;
         }

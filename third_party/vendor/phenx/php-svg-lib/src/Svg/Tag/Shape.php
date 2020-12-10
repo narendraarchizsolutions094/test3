@@ -5,37 +5,26 @@
  * @author  Fabien Ménager <fabien.menager@gmail.com>
  * @license GNU LGPLv3+ http://www.gnu.org/copyleft/lesser.html
  */
-
 namespace Svg\Tag;
-
 use Svg\Style;
-
 class Shape extends AbstractTag
 {
     protected function before($attributes)
     {
         $surface = $this->document->getSurface();
-
         $surface->save();
-
         $style = $this->makeStyle($attributes);
-
         $this->setStyle($style);
         $surface->setStyle($style);
-
         $this->applyTransform($attributes);
     }
-
     protected function after()
     {
         $surface = $this->document->getSurface();
-
         if ($this->hasShape) {
             $style = $surface->getStyle();
-
             $fill   = $style->fill   && is_array($style->fill);
             $stroke = $style->stroke && is_array($style->stroke);
-
             if ($fill) {
                 if ($stroke) {
                     $surface->fillStroke();
@@ -46,7 +35,6 @@ class Shape extends AbstractTag
 //
 //                        var_dump($gradient->getStops());
 //                    }
-
                     $surface->fill();
                 }
             }
@@ -57,7 +45,6 @@ class Shape extends AbstractTag
                 $surface->endPath();
             }
         }
-
         $surface->restore();
     }
 } 

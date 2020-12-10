@@ -1,8 +1,6 @@
 <?php
 namespace Aws\CodeStarNotifications;
-
 use Aws\AwsClient;
-
 /**
  * This client is used to interact with the **AWS CodeStar Notifications** service.
  * @method \Aws\Result createNotificationRule(array $args = [])

@@ -1,6 +1,5 @@
 <?php
 namespace JmesPath;
-
 /**
  * Uses an external tree visitor to interpret an AST.
  */
@@ -10,7 +9,6 @@ class AstRuntime
     private $interpreter;
     private $cache = [];
     private $cachedCount = 0;
-
     public function __construct(
         Parser $parser = null,
         callable $fnDispatcher = null
@@ -19,7 +17,6 @@ class AstRuntime
         $this->interpreter = new TreeInterpreter($fnDispatcher);
         $this->parser = $parser ?: new Parser();
     }
-
     /**
      * Returns data from the provided input that matches a given JMESPath
      * expression.
@@ -41,7 +38,6 @@ class AstRuntime
             }
             $this->cache[$expression] = $this->parser->parse($expression);
         }
-
         return $this->interpreter->visit($this->cache[$expression], $data);
     }
 }

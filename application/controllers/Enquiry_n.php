@@ -12,9 +12,7 @@ class Enquiry_n extends CI_Controller {
             redirect('login');
         }
     }
-
    
-
     public function index($all='') {
         $this->session->unset_userdata('enquiry_filters_sess');
         if (user_role('60') == true) {}  
@@ -30,13 +28,10 @@ class Enquiry_n extends CI_Controller {
         $this->load->view('layout/main_wrapper', $data);
     }
     public function enq_load_data(){
-
     	$this->load->model('enquiry_datatable_model');
-
         $list = $this->enquiry_datatable_model->get_datatables();
        // echo $this->db->last_query();
         $data = array();
-
         $no = $_POST['start'];
         
         $i = 1;
@@ -50,33 +45,20 @@ class Enquiry_n extends CI_Controller {
             $row[] = '<input onclick="event.stopPropagation();" type="checkbox" name="enquiry_id[]" class="checkbox1" value="<?php echo $each->enquiry_id; ?>">';
             
             $row[] = $i;
-
             $row[] = $each->icon_url;
-
             $row[] = $each->company;
-
             $row[] = $each->name_prefix . " " . $each->name . " " . $each->lastname;
-
             $row[] = $each->email;
-
             $row[] = $each->phone;
-
             $row[] = $each->address;
             $row[] = $each->product_name;
-
             $row[] = $each->created_date;
-
             $row[] = $each->created_by_name;
-
             $row[] = $each->assign_to_name;
-
             $row[] = $each->datasource_name;
-
             
             $data[] = $row;
-
             $i++;
-
         }      
         $output = array(
             "draw" => $_POST['draw'],
@@ -84,7 +66,6 @@ class Enquiry_n extends CI_Controller {
             "recordsFiltered" => $this->enquiry_datatable_model->count_filtered(),
             "data" => $data,
         );
-
         echo json_encode($output);
     }
 }

@@ -1,16 +1,10 @@
 PHP CSS Parser
 --------------
-
 [![build status](https://api.travis-ci.org/sabberworm/PHP-CSS-Parser.svg)](https://travis-ci.org/sabberworm/PHP-CSS-Parser) [![HHVM Status](http://hhvm.h4cc.de/badge/sabberworm/php-css-parser.svg)](http://hhvm.h4cc.de/package/sabberworm/php-css-parser)
-
 A Parser for CSS Files written in PHP. Allows extraction of CSS files into a data structure, manipulation of said structure and output as (optimized) CSS.
-
 ## Usage
-
 ### Installation using composer
-
 Add php-css-parser to your composer.json
-
 ```json
 {
     "require": {
@@ -18,114 +12,71 @@ Add php-css-parser to your composer.json
     }
 }
 ```
-
 ### Extraction
-
 To use the CSS Parser, create a new instance. The constructor takes the following form:
-
 ```php
 new Sabberworm\CSS\Parser($sText);
 ```
-
 To read a file, for example, you’d do the following:
-
 ```php
 $oCssParser = new Sabberworm\CSS\Parser(file_get_contents('somefile.css'));
 $oCssDocument = $oCssParser->parse();
 ```
-
 The resulting CSS document structure can be manipulated prior to being output.
-
 ### Options
-
 #### Charset
-
 The charset option is used only if no @charset declaration is found in the CSS file. UTF-8 is the default, so you won’t have to create a settings object at all if you don’t intend to change that.
-
 ```php
 $oSettings = Sabberworm\CSS\Settings::create()->withDefaultCharset('windows-1252');
 new Sabberworm\CSS\Parser($sText, $oSettings);
 ```
-
 #### Strict parsing
-
 To have the parser choke on invalid rules, supply a thusly configured Sabberworm\CSS\Settings object:
-
 ```php
 $oCssParser = new Sabberworm\CSS\Parser(file_get_contents('somefile.css'), Sabberworm\CSS\Settings::create()->beStrict());
 ```
-
 #### Disable multibyte functions
-
 To achieve faster parsing, you can choose to have PHP-CSS-Parser use regular string functions instead of `mb_*` functions. This should work fine in most cases, even for UTF-8 files, as all the multibyte characters are in string literals. Still it’s not recommended to use this with input you have no control over as it’s not thoroughly covered by test cases.
-
 ```php
 $oSettings = Sabberworm\CSS\Settings::create()->withMultibyteSupport(false);
 new Sabberworm\CSS\Parser($sText, $oSettings);
 ```
-
 ### Manipulation
-
 The resulting data structure consists mainly of five basic types: `CSSList`, `RuleSet`, `Rule`, `Selector` and `Value`. There are two additional types used: `Import` and `Charset` which you won’t use often.
-
 #### CSSList
-
 `CSSList` represents a generic CSS container, most likely containing declaration blocks (rule sets with a selector) but it may also contain at-rules, charset declarations, etc. `CSSList` has the following concrete subtypes:
-
 * `Document` – representing the root of a CSS file.
 * `MediaQuery` – represents a subsection of a CSSList that only applies to a output device matching the contained media query.
-
 To access the items stored in a `CSSList` – like the document you got back when calling `$oCssParser->parse()` –, use `getContents()`, then iterate over that collection and use instanceof to check whether you’re dealing with another `CSSList`, a `RuleSet`, a `Import` or a `Charset`.
-
 To append a new item (selector, media query, etc.) to an existing `CSSList`, construct it using the constructor for this class and use the `append($oItem)` method.
-
 #### RuleSet
-
 `RuleSet` is a container for individual rules. The most common form of a rule set is one constrained by a selector. The following concrete subtypes exist:
-
 * `AtRuleSet` – for generic at-rules which do not match the ones specifically mentioned like @import, @charset or @media. A common example for this is @font-face.
 * `DeclarationBlock` – a RuleSet constrained by a `Selector`; contains an array of selector objects (comma-separated in the CSS) as well as the rules to be applied to the matching elements.
-
 Note: A `CSSList` can contain other `CSSList`s (and `Import`s as well as a `Charset`) while a `RuleSet` can only contain `Rule`s.
-
 If you want to manipulate a `RuleSet`, use the methods `addRule(Rule $oRule)`, `getRules()` and `removeRule($mRule)` (which accepts either a Rule instance or a rule name; optionally suffixed by a dash to remove all related rules).
-
 #### Rule
-
 `Rule`s just have a key (the rule) and a value. These values are all instances of a `Value`.
-
 #### Value
-
 `Value` is an abstract class that only defines the `render` method. The concrete subclasses for atomic value types are:
-
 * `Size` – consists of a numeric `size` value and a unit.
 * `Color` – colors can be input in the form #rrggbb, #rgb or schema(val1, val2, …) but are always stored as an array of ('s' => val1, 'c' => val2, 'h' => val3, …) and output in the second form.
 * `CSSString` – this is just a wrapper for quoted strings to distinguish them from keywords; always output with double quotes.
 * `URL` – URLs in CSS; always output in URL("") notation.
-
 There is another abstract subclass of `Value`, `ValueList`. A `ValueList` represents a lists of `Value`s, separated by some separation character (mostly `,`, whitespace, or `/`). There are two types of `ValueList`s:
-
 * `RuleValueList` – The default type, used to represent all multi-valued rules like `font: bold 12px/3 Helvetica, Verdana, sans-serif;` (where the value would be a whitespace-separated list of the primitive value `bold`, a slash-separated list and a comma-separated list).
 * `CSSFunction` – A special kind of value that also contains a function name and where the values are the function’s arguments. Also handles equals-sign-separated argument lists like `filter: alpha(opacity=90);`.
-
 #### Convenience methods
-
 There are a few convenience methods on Document to ease finding, manipulating and deleting rules:
-
 * `getAllDeclarationBlocks()` – does what it says; no matter how deeply nested your selectors are. Aliased as `getAllSelectors()`.
 * `getAllRuleSets()` – does what it says; no matter how deeply nested your rule sets are.
 * `getAllValues()` – finds all `Value` objects inside `Rule`s.
-
 ## To-Do
-
 * More convenience methods [like `selectorsWithElement($sId/Class/TagName)`, `attributesOfType($sType)`, `removeAttributesOfType($sType)`]
 * Real multibyte support. Currently only multibyte charsets whose first 255 code points take up only one byte and are identical with ASCII are supported (yes, UTF-8 fits this description).
 * Named color support (using `Color` instead of an anonymous string literal)
-
 ## Use cases
-
 ### Use `Parser` to prepend an id to all selectors
-
 ```php
 $sMyId = "#my_id";
 $oParser = new Sabberworm\CSS\Parser($sText);
@@ -137,9 +88,7 @@ foreach($oCss->getAllDeclarationBlocks() as $oBlock) {
 	}
 }
 ```
-
 ### Shrink all absolute sizes to half
-
 ```php
 $oParser = new Sabberworm\CSS\Parser($sText);
 $oCss = $oParser->parse();
@@ -149,9 +98,7 @@ foreach($oCss->getAllValues() as $mValue) {
 	}
 }
 ```
-
 ### Remove unwanted rules
-
 ```php
 $oParser = new Sabberworm\CSS\Parser($sText);
 $oCss = $oParser->parse();
@@ -160,60 +107,42 @@ foreach($oCss->getAllRuleSets() as $oRuleSet) {
 	$oRuleSet->removeRule('cursor');
 }
 ```
-
 ### Output
-
 To output the entire CSS document into a variable, just use `->render()`:
-
 ```php
 $oCssParser = new Sabberworm\CSS\Parser(file_get_contents('somefile.css'));
 $oCssDocument = $oCssParser->parse();
 print $oCssDocument->render();
 ```
-
 If you want to format the output, pass an instance of type `Sabberworm\CSS\OutputFormat`:
-
 ```php
 $oFormat = Sabberworm\CSS\OutputFormat::create()->indentWithSpaces(4)->setSpaceBetweenRules("\n");
 print $oCssDocument->render($oFormat);
 ```
-
 Or use one of the predefined formats:
-
 ```php
 print $oCssDocument->render(Sabberworm\CSS\OutputFormat::createPretty());
 print $oCssDocument->render(Sabberworm\CSS\OutputFormat::createCompact());
 ```
-
 To see what you can do with output formatting, look at the tests in `tests/Sabberworm/CSS/OutputFormatTest.php`.
-
 ## Examples
-
 ### Example 1 (At-Rules)
-
 #### Input
-
 ```css
 @charset "utf-8";
-
 @font-face {
   font-family: "CrassRoots";
   src: url("../media/cr.ttf")
 }
-
 html, body {
     font-size: 1.6em
 }
-
 @keyframes mymove {
 	from { top: 0px; }
 	to { top: 200px; }
 }
-
 ```
-
 #### Structure (`var_dump()`)
-
 ```php
 class Sabberworm\CSS\CSSList\Document#4 (2) {
   protected $aContents =>
@@ -431,11 +360,8 @@ class Sabberworm\CSS\CSSList\Document#4 (2) {
   protected $iLineNo =>
   int(1)
 }
-
 ```
-
 #### Output (`render()`)
-
 ```css
 @charset "utf-8";
 @font-face {font-family: "CrassRoots";src: url("../media/cr.ttf");}
@@ -443,22 +369,16 @@ html, body {font-size: 1.6em;}
 @keyframes mymove {from {top: 0px;}
 	to {top: 200px;}}
 ```
-
 ### Example 2 (Values)
-
 #### Input
-
 ```css
 #header {
 	margin: 10px 2em 1cm 2%;
 	font-family: Verdana, Helvetica, "Gill Sans", sans-serif;
 	color: red !important;
 }
-
 ```
-
 #### Structure (`var_dump()`)
-
 ```php
 class Sabberworm\CSS\CSSList\Document#4 (2) {
   protected $aContents =>
@@ -600,17 +520,12 @@ class Sabberworm\CSS\CSSList\Document#4 (2) {
   protected $iLineNo =>
   int(1)
 }
-
 ```
-
 #### Output (`render()`)
-
 ```css
 #header {margin: 10px 2em 1cm 2%;font-family: Verdana,Helvetica,"Gill Sans",sans-serif;color: red !important;}
 ```
-
 ## Contributors/Thanks to
-
 * [raxbg](https://github.com/raxbg) for contributions to parse `calc`, grid lines, and various bugfixes.
 * [westonruter](https://github.com/westonruter) for bugfixes and improvements.
 * [FMCorz](https://github.com/FMCorz) for many patches and suggestions, for being able to parse comments and IE hacks (in lenient mode).
@@ -623,20 +538,12 @@ class Sabberworm\CSS\CSSList\Document#4 (2) {
 * [diegoembarcadero](https://github.com/diegoembarcadero) for keyframe at-rule parsing.
 * [goetas](https://github.com/goetas) for @namespace at-rule support.
 * [View full list](https://github.com/sabberworm/PHP-CSS-Parser/contributors)
-
 ## Misc
-
 * Legacy Support: The latest pre-PSR-0 version of this project can be checked with the `0.9.0` tag.
 * Running Tests: To run all unit tests for this project, run `composer install` to install phpunit and use `./vendor/phpunit/phpunit/phpunit`.
-
 ## License
-
 PHP-CSS-Parser is freely distributable under the terms of an MIT-style license.
-
 Copyright (c) 2011 Raphael Schweikert, http://sabberworm.com/
-
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.

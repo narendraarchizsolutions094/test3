@@ -1,13 +1,11 @@
 <?php
 namespace Aws\Sts\RegionalEndpoints;
-
 use Aws\AbstractConfigurationProvider;
 use Aws\CacheInterface;
 use Aws\ConfigurationProviderInterface;
 use Aws\Sts\RegionalEndpoints\Exception\ConfigurationException;
 use GuzzleHttp\Promise;
 use GuzzleHttp\Promise\PromiseInterface;
-
 /**
  * A configuration provider is a function that returns a promise that is
  * fulfilled with a {@see \Aws\Sts\RegionalEndpoints\ConfigurationInterface}
@@ -49,12 +47,9 @@ class ConfigurationProvider extends AbstractConfigurationProvider
     const ENV_ENDPOINTS_TYPE = 'AWS_STS_REGIONAL_ENDPOINTS';
     const ENV_PROFILE = 'AWS_PROFILE';
     const INI_ENDPOINTS_TYPE = 'sts_regional_endpoints';
-
     public static $cacheKey = 'aws_sts_regional_endpoints_config';
-
     protected static $interfaceClass = ConfigurationInterface::class;
     protected static $exceptionClass = ConfigurationException::class;
-
     /**
      * Create a default config provider that first checks for environment
      * variables, then checks for a specified profile in the environment-defined
@@ -77,20 +72,16 @@ class ConfigurationProvider extends AbstractConfigurationProvider
             self::ini(),
             self::fallback()
         ];
-
         $memo = self::memoize(
             call_user_func_array('self::chain', $configProviders)
         );
-
         if (isset($config['sts_regional_endpoints'])
             && $config['sts_regional_endpoints'] instanceof CacheInterface
         ) {
             return self::cache($memo, $config['sts_regional_endpoints'], self::$cacheKey);
         }
-
         return $memo;
     }
-
     /**
      * Provider that creates config from environment variables.
      *
@@ -106,12 +97,10 @@ class ConfigurationProvider extends AbstractConfigurationProvider
                     new Configuration($endpointsType)
                 );
             }
-
             return self::reject('Could not find environment variable config'
                 . ' in ' . self::ENV_ENDPOINTS_TYPE);
         };
     }
-
     /**
      * Fallback config options when other sources are not set.
      *
@@ -125,7 +114,6 @@ class ConfigurationProvider extends AbstractConfigurationProvider
             );
         };
     }
-
     /**
      * Config provider that creates config using a config file whose location
      * is specified by an environment variable 'AWS_CONFIG_FILE', defaulting to
@@ -144,7 +132,6 @@ class ConfigurationProvider extends AbstractConfigurationProvider
     ) {
         $filename = $filename ?: (self::getDefaultConfigFilename());
         $profile = $profile ?: (getenv(self::ENV_PROFILE) ?: 'default');
-
         return function () use ($profile, $filename) {
             if (!is_readable($filename)) {
                 return self::reject("Cannot read configuration from $filename");
@@ -160,13 +147,11 @@ class ConfigurationProvider extends AbstractConfigurationProvider
                 return self::reject("Required STS regional endpoints config values 
                     not present in INI profile '{$profile}' ({$filename})");
             }
-
             return Promise\promise_for(
                 new Configuration($data[$profile][self::INI_ENDPOINTS_TYPE])
             );
         };
     }
-
     /**
      * Unwraps a configuration object in whatever valid form it is in,
      * always returning a ConfigurationInterface object.
@@ -192,7 +177,6 @@ class ConfigurationProvider extends AbstractConfigurationProvider
         if (is_array($config) && isset($config['endpoints_type'])) {
             return new Configuration($config['endpoints_type']);
         }
-
         throw new \InvalidArgumentException('Not a valid STS regional endpoints '
             . 'configuration argument.');
     }

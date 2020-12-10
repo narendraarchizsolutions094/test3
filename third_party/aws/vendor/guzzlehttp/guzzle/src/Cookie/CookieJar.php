@@ -1,9 +1,7 @@
 <?php
 namespace GuzzleHttp\Cookie;
-
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-
 /**
  * Cookie jar that stores cookies as an array
  */
@@ -11,10 +9,8 @@ class CookieJar implements CookieJarInterface
 {
     /** @var SetCookie[] Loaded cookie data */
     private $cookies = [];
-
     /** @var bool */
     private $strictMode;
-
     /**
      * @param bool $strictMode   Set to true to throw exceptions when invalid
      *                           cookies are added to the cookie jar.
@@ -25,7 +21,6 @@ class CookieJar implements CookieJarInterface
     public function __construct($strictMode = false, $cookieArray = [])
     {
         $this->strictMode = $strictMode;
-
         foreach ($cookieArray as $cookie) {
             if (!($cookie instanceof SetCookie)) {
                 $cookie = new SetCookie($cookie);
@@ -33,7 +28,6 @@ class CookieJar implements CookieJarInterface
             $this->setCookie($cookie);
         }
     }
-
     /**
      * Create a new Cookie jar from an associative array and domain.
      *
@@ -53,10 +47,8 @@ class CookieJar implements CookieJarInterface
                 'Discard' => true
             ]));
         }
-
         return $cookieJar;
     }
-
     /**
      * @deprecated
      */
@@ -64,7 +56,6 @@ class CookieJar implements CookieJarInterface
     {
         return $value;
     }
-
     /**
      * Evaluate if this cookie should be persisted to storage
      * that survives between requests.
@@ -82,10 +73,8 @@ class CookieJar implements CookieJarInterface
                 return true;
             }
         }
-
         return false;
     }
-
     /**
      * Finds and returns the cookie based on the name
      *
@@ -103,17 +92,14 @@ class CookieJar implements CookieJarInterface
                 return $cookie;
             }
         }
-
         return null;
     }
-
     public function toArray()
     {
         return array_map(function (SetCookie $cookie) {
             return $cookie->toArray();
         }, $this->getIterator()->getArrayCopy());
     }
-
     public function clear($domain = null, $path = null, $name = null)
     {
         if (!$domain) {
@@ -145,7 +131,6 @@ class CookieJar implements CookieJarInterface
             );
         }
     }
-
     public function clearSessionCookies()
     {
         $this->cookies = array_filter(
@@ -155,7 +140,6 @@ class CookieJar implements CookieJarInterface
             }
         );
     }
-
     public function setCookie(SetCookie $cookie)
     {
         // If the name string is empty (but not 0), ignore the set-cookie
@@ -164,7 +148,6 @@ class CookieJar implements CookieJarInterface
         if (!$name && $name !== '0') {
             return false;
         }
-
         // Only allow cookies with set and valid domain, name, value
         $result = $cookie->validate();
         if ($result !== true) {
@@ -175,10 +158,8 @@ class CookieJar implements CookieJarInterface
                 return false;
             }
         }
-
         // Resolve conflicts with previously set cookies
         foreach ($this->cookies as $i => $c) {
-
             // Two cookies are identical, when their path, and domain are
             // identical.
             if ($c->getPath() != $cookie->getPath() ||
@@ -187,46 +168,37 @@ class CookieJar implements CookieJarInterface
             ) {
                 continue;
             }
-
             // The previously set cookie is a discard cookie and this one is
             // not so allow the new cookie to be set
             if (!$cookie->getDiscard() && $c->getDiscard()) {
                 unset($this->cookies[$i]);
                 continue;
             }
-
             // If the new cookie's expiration is further into the future, then
             // replace the old cookie
             if ($cookie->getExpires() > $c->getExpires()) {
                 unset($this->cookies[$i]);
                 continue;
             }
-
             // If the value has changed, we better change it
             if ($cookie->getValue() !== $c->getValue()) {
                 unset($this->cookies[$i]);
                 continue;
             }
-
             // The cookie exists, so no need to continue
             return false;
         }
-
         $this->cookies[] = $cookie;
-
         return true;
     }
-
     public function count()
     {
         return count($this->cookies);
     }
-
     public function getIterator()
     {
         return new \ArrayIterator(array_values($this->cookies));
     }
-
     public function extractCookies(
         RequestInterface $request,
         ResponseInterface $response
@@ -244,7 +216,6 @@ class CookieJar implements CookieJarInterface
             }
         }
     }
-
     /**
      * Computes cookie path following RFC 6265 section 5.1.4
      *
@@ -268,10 +239,8 @@ class CookieJar implements CookieJarInterface
         if (0 === $lastSlashPos = strrpos($uriPath, '/')) {
             return '/';
         }
-
         return substr($uriPath, 0, $lastSlashPos);
     }
-
     public function withCookieHeader(RequestInterface $request)
     {
         $values = [];
@@ -279,7 +248,6 @@ class CookieJar implements CookieJarInterface
         $scheme = $uri->getScheme();
         $host = $uri->getHost();
         $path = $uri->getPath() ?: '/';
-
         foreach ($this->cookies as $cookie) {
             if ($cookie->matchesPath($path) &&
                 $cookie->matchesDomain($host) &&
@@ -290,12 +258,10 @@ class CookieJar implements CookieJarInterface
                     . $cookie->getValue();
             }
         }
-
         return $values
             ? $request->withHeader('Cookie', implode('; ', $values))
             : $request;
     }
-
     /**
      * If a cookie already exists and the server asks to set it again with a
      * null value, the cookie must be deleted.

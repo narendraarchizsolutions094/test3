@@ -21,7 +21,6 @@ class Invoice extends CI_Controller {
         $data['content'] = $this->load->view('invoice/index', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }
-
     public function report() {
         $aid = $this->session->userdata('user_id');
         $data['title'] = "Invoice List";
@@ -29,7 +28,6 @@ class Invoice extends CI_Controller {
         $data['content'] = '';
         $this->load->view('layout/main_wrapper', $data);
     }
-
     public function settings() {
         $aid = $this->session->userdata('user_id');
         $data['title'] = "Invoice Settings";
@@ -37,8 +35,6 @@ class Invoice extends CI_Controller {
         $data['content'] = $this->load->view('invoice/settings',$data,true);
         $this->load->view('layout/main_wrapper', $data);
     }
-
-
 
     public function create($id=0) {
         $aid = $this->session->userdata('user_id');
@@ -67,12 +63,9 @@ class Invoice extends CI_Controller {
             $data['invoice_items'] = $items;
         }
 
-
-
         $data['content'] = $this->load->view('invoice/create', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     } 
-
     public function saveInvoice(){        
         $invoice = array(
                             'comp_id'           => $this->session->companey_id,
@@ -88,7 +81,6 @@ class Invoice extends CI_Controller {
                             'net_payable'       => $this->input->post('net_amount'),                        
                             'created_by'        => $this->session->user_id
                         );
-
         if($this->input->post('id')){
             $this->db->where('id',$this->input->post('id'));
             $this->db->update('invoice',$invoice);
@@ -101,7 +93,6 @@ class Invoice extends CI_Controller {
             $msg = "Invoice Created Successfully";
             $invoice_id    =   $this->db->insert_id();
         }
-
         $items = $this->input->post('items');
         if(!empty($items)){
             $invoice_items = array();
@@ -119,14 +110,11 @@ class Invoice extends CI_Controller {
             }        
             $this->db->insert_batch('invoice_products',$invoice_items);
         }
-
         echo json_encode(array('status'=>true,'msg'=>$msg));
     }   
-
     public function view($id) {
         $aid = $this->session->userdata('user_id');
         $data['title'] = "Invoice";
-
         $this->db->where('user_id',$this->session->companey_id);
         $data['company_row']    =   $this->db->get('user')->row_array();        
         $data['invoice'] = $this->Invoice_model->get_invoice_by_id($id);
@@ -136,7 +124,6 @@ class Invoice extends CI_Controller {
         $data['content'] = $this->load->view('invoice/view', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }
-
     public function get_related_to_list(){
         $related_to    =   $this->input->post('related_to');
         $result = $this->Invoice_model->related_to_list($related_to);
@@ -145,7 +132,6 @@ class Invoice extends CI_Controller {
             $html .= "<option value=".$value['Enquery_id'].">".$value['name_prefix'].' '.$value['name'].' '.$value['lastname']."</option>";
         }
         echo $html;
-
     }
 	public function delete_invoice_row(){
         $id = $this->input->post('id');        
@@ -157,7 +143,6 @@ class Invoice extends CI_Controller {
         }
         echo 1;
     }
-
     public function save_general_setting(){                
         
         $invoice_id_prefix    =     $this->input->post('prefix');
@@ -174,10 +159,7 @@ class Invoice extends CI_Controller {
         set_sys_parameter('invoice_allowed_download',$invoice_allowed_download,'INVOICE_SETTINGS');
         set_sys_parameter('invoice_customer_email',$customer_invoice_email,'INVOICE_SETTINGS');
         echo json_encode(array('status'=>1,'msg'=>"Saved Successfully"));
-
     }
-
     
-
 
 }

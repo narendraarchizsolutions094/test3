@@ -1,13 +1,11 @@
 <?php
 namespace Aws\Retry;
-
 use Aws\AbstractConfigurationProvider;
 use Aws\CacheInterface;
 use Aws\ConfigurationProviderInterface;
 use Aws\Retry\Exception\ConfigurationException;
 use GuzzleHttp\Promise;
 use GuzzleHttp\Promise\PromiseInterface;
-
 /**
  * A configuration provider is a function that returns a promise that is
  * fulfilled with a {@see \Aws\Retry\ConfigurationInterface}
@@ -52,12 +50,9 @@ class ConfigurationProvider extends AbstractConfigurationProvider
     const ENV_PROFILE = 'AWS_PROFILE';
     const INI_MAX_ATTEMPTS = 'max_attempts';
     const INI_MODE = 'retry_mode';
-
     public static $cacheKey = 'aws_retries_config';
-
     protected static $interfaceClass = ConfigurationInterface::class;
     protected static $exceptionClass = ConfigurationException::class;
-
     /**
      * Create a default config provider that first checks for environment
      * variables, then checks for a specified profile in the environment-defined
@@ -80,20 +75,16 @@ class ConfigurationProvider extends AbstractConfigurationProvider
             self::ini(),
             self::fallback()
         ];
-
         $memo = self::memoize(
             call_user_func_array('self::chain', $configProviders)
         );
-
         if (isset($config['retries'])
             && $config['retries'] instanceof CacheInterface
         ) {
             return self::cache($memo, $config['retries'], self::$cacheKey);
         }
-
         return $memo;
     }
-
     /**
      * Provider that creates config from environment variables.
      *
@@ -112,12 +103,10 @@ class ConfigurationProvider extends AbstractConfigurationProvider
                     new Configuration($mode, $maxAttempts)
                 );
             }
-
             return self::reject('Could not find environment variable config'
                 . ' in ' . self::ENV_MODE);
         };
     }
-
     /**
      * Fallback config options when other sources are not set.
      *
@@ -131,7 +120,6 @@ class ConfigurationProvider extends AbstractConfigurationProvider
             );
         };
     }
-
     /**
      * Config provider that creates config using a config file whose location
      * is specified by an environment variable 'AWS_CONFIG_FILE', defaulting to
@@ -150,7 +138,6 @@ class ConfigurationProvider extends AbstractConfigurationProvider
     ) {
         $filename = $filename ?: (self::getDefaultConfigFilename());
         $profile = $profile ?: (getenv(self::ENV_PROFILE) ?: 'default');
-
         return function () use ($profile, $filename) {
             if (!is_readable($filename)) {
                 return self::reject("Cannot read configuration from $filename");
@@ -166,11 +153,9 @@ class ConfigurationProvider extends AbstractConfigurationProvider
                 return self::reject("Required retry config values
                     not present in INI profile '{$profile}' ({$filename})");
             }
-
             $maxAttempts = isset($data[$profile][self::INI_MAX_ATTEMPTS])
                 ? $data[$profile][self::INI_MAX_ATTEMPTS]
                 : self::DEFAULT_MAX_ATTEMPTS;
-
             return Promise\promise_for(
                 new Configuration(
                     $data[$profile][self::INI_MODE],
@@ -179,7 +164,6 @@ class ConfigurationProvider extends AbstractConfigurationProvider
             );
         };
     }
-
     /**
      * Unwraps a configuration object in whatever valid form it is in,
      * always returning a ConfigurationInterface object.
@@ -199,20 +183,17 @@ class ConfigurationProvider extends AbstractConfigurationProvider
         if ($config instanceof ConfigurationInterface) {
             return $config;
         }
-
         // An integer value for this config indicates the legacy 'retries'
         // config option, which is incremented to translate to max attempts
         if (is_int($config)) {
             return new Configuration('legacy', $config + 1);
         }
-
         if (is_array($config) && isset($config['mode'])) {
             $maxAttempts = isset($config['max_attempts'])
                 ? $config['max_attempts']
                 : self::DEFAULT_MAX_ATTEMPTS;
             return new Configuration($config['mode'], $maxAttempts);
         }
-
         throw new \InvalidArgumentException('Not a valid retry configuration'
             . ' argument.');
     }

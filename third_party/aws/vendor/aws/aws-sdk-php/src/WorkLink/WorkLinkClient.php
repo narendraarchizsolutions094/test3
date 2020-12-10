@@ -1,8 +1,6 @@
 <?php
 namespace Aws\WorkLink;
-
 use Aws\AwsClient;
-
 /**
  * This client is used to interact with the **Amazon WorkLink** service.
  * @method \Aws\Result associateDomain(array $args = [])

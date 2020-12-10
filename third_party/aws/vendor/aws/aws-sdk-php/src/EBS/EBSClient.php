@@ -1,8 +1,6 @@
 <?php
 namespace Aws\EBS;
-
 use Aws\AwsClient;
-
 /**
  * This client is used to interact with the **Amazon Elastic Block Store** service.
  * @method \Aws\Result getSnapshotBlock(array $args = [])

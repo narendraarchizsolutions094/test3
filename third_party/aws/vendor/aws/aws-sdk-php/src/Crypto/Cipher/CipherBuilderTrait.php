@@ -1,6 +1,5 @@
 <?php
 namespace Aws\Crypto\Cipher;
-
 trait CipherBuilderTrait
 {
     /**
@@ -18,7 +17,6 @@ trait CipherBuilderTrait
     {
         return "aes-{$keySize}-{$cipherName}";
     }
-
     /**
      * Constructs a CipherMethod for the given name, initialized with the other
      * data passed for use in encrypting or decrypting.
@@ -44,7 +42,6 @@ trait CipherBuilderTrait
                 return null;
         }
     }
-
     /**
      * Performs a reverse lookup to get the openssl_* cipher name from the
      * AESName passed in from the MetadataEnvelope.

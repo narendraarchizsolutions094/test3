@@ -1,8 +1,6 @@
 <?php
 namespace Aws\GuardDuty;
-
 use Aws\AwsClient;
-
 /**
  * This client is used to interact with the **Amazon GuardDuty** service.
  * @method \Aws\Result acceptInvitation(array $args = [])

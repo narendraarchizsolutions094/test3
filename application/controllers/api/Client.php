@@ -3,9 +3,7 @@ use Restserver\Libraries\REST_Controller;
 defined('BASEPATH') OR exit('No direct script access allowed');
 require APPPATH . 'libraries/REST_Controller.php';
 require APPPATH . 'libraries/Format.php';
-
 class Client extends REST_Controller {
-
     function __construct()
     {
         parent::__construct();
@@ -18,9 +16,7 @@ class Client extends REST_Controller {
 		
 		$this->load->library('email'); 
     $this->load->model('api/sync_model');
-
    // $this->lang->load('notifications_lang', 'english');   
-
 		
            $this->load->helper('url');
            $this->methods['users_get']['limit'] = 500; 
@@ -36,7 +32,6 @@ class Client extends REST_Controller {
        $user_id= $this->input->post('user_id');
        $process_id= $this->input->post('process_id');
        $process = implode(",", $process_id);
-
             $res= array();
             if(!empty($user_id)){
                     $user_role1 = $this->User_model->read_by_id($user_id); 
@@ -68,11 +63,8 @@ class Client extends REST_Controller {
                 'message' => array('error'=>'not found!') 
                  ], REST_Controller::HTTP_OK);
         }
-
     }
-
     public function view_post(){
-
       $this->form_validation->set_rules('client_id','Client Id','required');    
       $this->form_validation->set_message('required', 'Invalid %s');
       
@@ -87,7 +79,6 @@ class Client extends REST_Controller {
         $this->db->where('pk_i_admin_id',$client_row->created_by);
         $created_by_row  = $this->db->get('tbl_admin')->row();
         $created_by_name = $created_by_row->s_display_name.' '.$created_by_row->last_name;
-
             $customer='';
               if(!empty($client_row->customer_type)>0){
                     $customer_type_val =$client_row->customer_type;
@@ -130,11 +121,9 @@ class Client extends REST_Controller {
             $this->db->where('cus_id',$client_row->customer_type);
             $customer_type_name   = $this->db->get('tbl_customer_type')->row();
             $client_array['customer_type'] = $customer_type_name->customer_type;
-
           }else if ($client_row->enquiry_cust_type == 11) {
             $this->db->select('channel_partner_type');
             $this->db->where('ch_id',$client_row->channel_partnr_type);
-
             $channel_type_name   = $this->db->get('tbl_channel_partner')->row();
             
             $client_array['customer_type'] = $channel_type_name->channel_partner_type;            
@@ -144,21 +133,17 @@ class Client extends REST_Controller {
                         'status' => true,
                         'client' =>$client_array
                          ], REST_Controller::HTTP_OK);     
-
       }else{
         $this->set_response([
             'status' => false,
             'client' => array('error'=>str_replace(array("\n", "\r"), ' ', strip_tags(validation_errors())))  
              ], REST_Controller::HTTP_OK);
       }
-
   }
-
   
      public function update_post()
      {
          $client_code = $this->form_validation->set_rules('client_code');
-
          $user_id = $this->form_validation->set_rules('user_id');
          
          if($this->form_validation->run() == true){
@@ -179,7 +164,6 @@ class Client extends REST_Controller {
           
           $this->db->where('customer_code',$client_code);
           $this->db->update('clients');
-
         
           $this->Leads_Model->add_comment_for_events_api('Informanation Updated',$client_code,$user_id);
           
@@ -194,16 +178,13 @@ class Client extends REST_Controller {
                 'message' => array('error'=>str_replace(array("\n", "\r"), ' ', strip_tags(validation_errors())))  
                  ], REST_Controller::HTTP_OK);
       }
-
     }
-
 
       public function assign_client_post(){
           
           $this->form_validation->set_rules('user_id','User ID' ,'required');
           $this->form_validation->set_rules('assign_user_id','Assign ID' ,'required');
           $this->form_validation->set_rules('client_code[]','Client Code' ,'required');
-
           if($this->form_validation->run() == true){
             
             $move_enquiry=$this->input->post('client_code[]');
@@ -215,34 +196,22 @@ class Client extends REST_Controller {
             
             if(!empty($move_enquiry)){
 
-
-
                 $assignee_phone = '91'.$user->s_phoneno;
                 $assign_to_name = $user->s_display_name.' '.$user->last_name;
-
                 $assigner_user = $this->User_model->read_by_id($user_id);            
-
                 $assigner_name  = $assigner_user->s_display_name.' '.$assigner_user->s_display_name;
-
                 $customer_name  = '';
-
               foreach($move_enquiry as $key){
-
                 $data['enquiry'] = $this->Client_Model->clientdetail_by_client_code($key);             
                 $enquiry_code = $data['enquiry']->Enquery_id;            
                 $enquiry_id = $data['enquiry']->enquiry_id;            
                 $this->Client_Model->assign_enquery_api($enquiry_id,$assign_employee,$enquiry_code,$user_id);
-
                 $customer_name  .= $data['enquiry']->name_prefix.''.$data['enquiry']->name.' '.$data['enquiry']->lastname.',';
                 $customer_name1  = $data['enquiry']->name_prefix.''.$data['enquiry']->name.' '.$data['enquiry']->lastname;
-
                 $notification_msg = sprintf($this->lang->line('client_assigned_to'),trim($customer_name1),trim($assign_to_name),trim($assigner_name));
-
                 $this->Leads_Model->add_comment_for_events_api($notification_msg,$enquiry_code,$user_id);
               }
-
               $notification_msg = sprintf($this->lang->line('client_assigned_to'),trim($customer_name),trim($assign_to_name),trim($assigner_name));
-
               $this->Message_models->sendwhatsapp($assignee_phone,$notification_msg); 
             
               $this->set_response([
@@ -267,8 +236,6 @@ class Client extends REST_Controller {
           }  
       }
 
-
-
        public function assign_installation_post(){  // assign to service
           $this->form_validation->set_rules('client_code[]','Client Code','required');
           $this->form_validation->set_rules('user_id','User Id','required');
@@ -277,7 +244,6 @@ class Client extends REST_Controller {
             if($this->form_validation->run() == true){
                 
                 $move_enquiry=$this->input->post('client_code[]');
-
                 $assign_employee=$this->input->post('assign_employee');
                 $user_id=$this->input->post('user_id');
                 
@@ -288,15 +254,10 @@ class Client extends REST_Controller {
                   $assignee_phone = '91'.$user->s_phoneno;
   
                   $assign_to_name = $user->s_display_name.' '.$user->last_name;
-
                   $assigner_user = $this->User_model->read_by_id($user_id);            
-
                   $assigner_name  = $assigner_user->s_display_name.' '.$assigner_user->s_display_name;
-
                   $customer_name  = '';
-
                   //echo $assigner_name;
-
 
                   foreach($move_enquiry as $key){
                   //echo "string";
@@ -305,30 +266,22 @@ class Client extends REST_Controller {
                       //$this->Leads_Model->add_comment_for_events('Client Assigned',$key);
                     
                       $data['enquiry'] = $this->Client_Model->clientdetail_by_client_code($key);             
-
                     /*  echo "<pre>dty";
                       print_r($data['enquiry']);
                       exit();
 */
-
                       
                       $customer_name  .= $data['enquiry']->name_prefix.''.$data['enquiry']->name.' '.$data['enquiry']->lastname.', ';
                       
                       $customer_name1  = $data['enquiry']->name_prefix.''.$data['enquiry']->name.' '.$data['enquiry']->lastname;
                       
                       $notification_msg = sprintf($this->lang->line('client_assign_for_installation'),trim($customer_name1),trim($assign_to_name),trim($assigner_name));
-
                       $this->Leads_Model->add_comment_for_events_api($notification_msg,$key,$user_id);
-
-
 
                     }
                   }
-
                   $notification_msg = sprintf($this->lang->line('client_assign_for_installation'),trim($customer_name),trim($assign_to_name),trim($assigner_name));
-
                   $this->Message_models->sendwhatsapp($assignee_phone,$notification_msg);
-
 
                        $this->set_response([
                   'status' => true,
@@ -350,7 +303,6 @@ class Client extends REST_Controller {
                  ], REST_Controller::HTTP_OK);
             }  
       }
-
       public function assignee_list_post(){ // assign client as service
         $user_list =  $this->User_model->read();
         $user_list_array = array();
@@ -362,31 +314,24 @@ class Client extends REST_Controller {
             $user_list_array[] = array('user_id'=>$user->pk_i_admin_id,'name'=>$user->s_display_name.' '.$user->last_name);           
           } 
         }
-
         $this->set_response([
                 'status' => true,
                 'message' => array($user_list_array)  
                  ], REST_Controller::HTTP_OK);
       
       }
-
 public function get_client_list_post(){
-
       $dfields = $this->sync_model->getformfield();       
         
       $dacolarr = array();
-
 $data_type = 3;
 $compid = $this->input->post('comp_id');
  $fieldval =  $this->sync_model->getfieldvalue($compid);  
 if(!empty($compid)){
     $arr_basic = $arr_dyn = array();
   $res = $this->sync_model->get_enquiry_list($data_type,$compid);
-
     foreach ($res as $key => $value) {
-
         $arr_basic = array('nameprefix'=>$value->name_prefix,'firstname'=>$value->name,'lastname'=>$value->lastname,'phone'=>$value->phone,'address'=>$value->address,'process'=>$value->product_name,'lead_stage'=>$value->lead_stage_name,'lead_description'=>$value->lead_discription,'reference_name'=>$value->reference_name,'created_date'=>$value->created_date,'created_by'=>$value->created_by_name,'assign_to'=>$value->assign_to_name,'datasource_name'=>$value->datasource_name,'country_name'=>$value->country_name,'bank_name'=>$value->bank_name);
-
             $enqid = $value->enquiry_id;      
       if(!empty($dacolarr) and !empty($dfields)){
         foreach($dfields as $ind => $flds){         
@@ -397,17 +342,13 @@ if(!empty($compid)){
       }
       
     }
-
     $this->set_response([
       'status' => TRUE,
       'basic' =>$arr_basic,
       'dyn'   =>$arr_dyn,
       ], REST_Controller::HTTP_OK); 
-
 }
-
 }
         
   
-
 }

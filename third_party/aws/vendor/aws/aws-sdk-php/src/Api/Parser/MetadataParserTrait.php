@@ -1,10 +1,8 @@
 <?php
 namespace Aws\Api\Parser;
-
 use Aws\Api\DateTimeResult;
 use Aws\Api\Shape;
 use Psr\Http\Message\ResponseInterface;
-
 trait MetadataParserTrait
 {
     /**
@@ -17,7 +15,6 @@ trait MetadataParserTrait
         &$result
     ) {
         $value = $response->getHeaderLine($shape['locationName'] ?: $name);
-
         switch ($shape->getType()) {
             case 'float':
             case 'double':
@@ -51,10 +48,8 @@ trait MetadataParserTrait
                 }
                 break;
         }
-
         $result[$name] = $value;
     }
-
     /**
      * Extract a map of headers with an optional prefix from the response.
      */
@@ -68,7 +63,6 @@ trait MetadataParserTrait
         $result[$name] = [];
         $prefix = $shape['locationName'];
         $prefixLen = strlen($prefix);
-
         foreach ($response->getHeaders() as $k => $values) {
             if (!$prefixLen) {
                 $result[$name][$k] = implode(', ', $values);
@@ -77,7 +71,6 @@ trait MetadataParserTrait
             }
         }
     }
-
     /**
      * Places the status code of the response into the result array.
      */

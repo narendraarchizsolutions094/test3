@@ -1,7 +1,5 @@
 <?php
-
 namespace Sabberworm\CSS\CSSList;
-
 use Sabberworm\CSS\Comment\Commentable;
 use Sabberworm\CSS\Parsing\ParserState;
 use Sabberworm\CSS\Parsing\SourceException;
@@ -18,23 +16,19 @@ use Sabberworm\CSS\RuleSet\RuleSet;
 use Sabberworm\CSS\Value\CSSString;
 use Sabberworm\CSS\Value\URL;
 use Sabberworm\CSS\Value\Value;
-
 /**
  * A CSSList is the most generic container available. Its contents include RuleSet as well as other CSSList objects.
  * Also, it may contain Import and Charset objects stemming from @-rules.
  */
 abstract class CSSList implements Renderable, Commentable {
-
 	protected $aComments;
 	protected $aContents;
 	protected $iLineNo;
-
 	public function __construct($iLineNo = 0) {
 		$this->aComments = array();
 		$this->aContents = array();
 		$this->iLineNo = $iLineNo;
 	}
-
 	public static function parseList(ParserState $oParserState, CSSList $oList) {
 		$bIsRoot = $oList instanceof Document;
 		if(is_string($oParserState)) {
@@ -67,7 +61,6 @@ abstract class CSSList implements Renderable, Commentable {
 			throw new SourceException("Unexpected end of document", $oParserState->currentLine());
 		}
 	}
-
 	private static function parseListItem(ParserState $oParserState, CSSList $oList) {
 		$bIsRoot = $oList instanceof Document;
 		if ($oParserState->comes('@')) {
@@ -98,7 +91,6 @@ abstract class CSSList implements Renderable, Commentable {
 			return DeclarationBlock::parse($oParserState);
 		}
 	}
-
 	private static function parseAtRule(ParserState $oParserState) {
 		$oParserState->consume('@');
 		$sIdentifier = $oParserState->parseIdentifier();
@@ -166,7 +158,6 @@ abstract class CSSList implements Renderable, Commentable {
 			return $oAtRule;
 		}
 	}
-
 		/**
 	 * Tests an identifier for a given value. Since identifiers are all keywords, they can be vendor-prefixed. We need to check for these versions too.
 	 */
@@ -175,14 +166,12 @@ abstract class CSSList implements Renderable, Commentable {
 			?: preg_match("/^(-\\w+-)?$sMatch$/i", $sIdentifier) === 1;
 	}
 
-
 	/**
 	 * @return int
 	 */
 	public function getLineNo() {
 		return $this->iLineNo;
 	}
-
 	/**
 	 * Prepend item to list of contents.
 	 *
@@ -191,7 +180,6 @@ abstract class CSSList implements Renderable, Commentable {
 	public function prepend($oItem) {
 		array_unshift($this->aContents, $oItem);
 	}
-
 	/**
 	 * Append item to list of contents.
 	 *
@@ -200,7 +188,6 @@ abstract class CSSList implements Renderable, Commentable {
 	public function append($oItem) {
 		$this->aContents[] = $oItem;
 	}
-
 	/**
 	 * Splice the list of contents.
 	 *
@@ -211,7 +198,6 @@ abstract class CSSList implements Renderable, Commentable {
 	public function splice($iOffset, $iLength = null, $mReplacement = null) {
 		array_splice($this->aContents, $iOffset, $iLength, $mReplacement);
 	}
-
 	/**
 	 * Removes an item from the CSS list.
 	 * @param RuleSet|Import|Charset|CSSList $oItemToRemove May be a RuleSet (most likely a DeclarationBlock), a Import, a Charset or another CSSList (most likely a MediaQuery)
@@ -225,7 +211,6 @@ abstract class CSSList implements Renderable, Commentable {
 		}
 		return false;
 	}
-
 	/**
 	 * Replaces an item from the CSS list.
 	 * @param RuleSet|Import|Charset|CSSList $oItemToRemove May be a RuleSet (most likely a DeclarationBlock), a Import, a Charset or another CSSList (most likely a MediaQuery)
@@ -238,7 +223,6 @@ abstract class CSSList implements Renderable, Commentable {
 		}
 		return false;
 	}
-
 	/**
 	 * Set the contents.
 	 * @param array $aContents Objects to set as content.
@@ -249,7 +233,6 @@ abstract class CSSList implements Renderable, Commentable {
 			$this->append($content);
 		}
 	}
-
 	/**
 	 * Removes a declaration block from the CSS list if it matches all given selectors.
 	 * @param array|string $mSelector The selectors to match.
@@ -279,11 +262,9 @@ abstract class CSSList implements Renderable, Commentable {
 			}
 		}
 	}
-
 	public function __toString() {
 		return $this->render(new \Sabberworm\CSS\OutputFormat());
 	}
-
 	public function render(\Sabberworm\CSS\OutputFormat $oOutputFormat) {
 		$sResult = '';
 		$bIsFirst = true;
@@ -306,12 +287,10 @@ abstract class CSSList implements Renderable, Commentable {
 			}
 			$sResult .= $sRendered;
 		}
-
 		if(!$bIsFirst) {
 			// Had some output
 			$sResult .= $oOutputFormat->spaceAfterBlocks();
 		}
-
 		return $sResult;
 	}
 	
@@ -319,30 +298,25 @@ abstract class CSSList implements Renderable, Commentable {
 	* Return true if the list can not be further outdented. Only important when rendering.
 	*/
 	public abstract function isRootList();
-
 	public function getContents() {
 		return $this->aContents;
 	}
-
 	/**
 	 * @param array $aComments Array of comments.
 	 */
 	public function addComments(array $aComments) {
 		$this->aComments = array_merge($this->aComments, $aComments);
 	}
-
 	/**
 	 * @return array
 	 */
 	public function getComments() {
 		return $this->aComments;
 	}
-
 	/**
 	 * @param array $aComments Array containing Comment objects.
 	 */
 	public function setComments(array $aComments) {
 		$this->aComments = $aComments;
 	}
-
 }

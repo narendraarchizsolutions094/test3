@@ -1,11 +1,9 @@
 <?php
 namespace Aws\Credentials;
-
 use Aws\Exception\CredentialsException;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Promise\PromiseInterface;
 use Psr\Http\Message\ResponseInterface;
-
 /**
  * Credential provider that fetches credentials with GET request.
  * ECS environment variable is used in constructing request URI.
@@ -15,13 +13,10 @@ class EcsCredentialProvider
     const SERVER_URI = 'http://169.254.170.2';
     const ENV_URI = "AWS_CONTAINER_CREDENTIALS_RELATIVE_URI";
     const ENV_TIMEOUT = 'AWS_METADATA_SERVICE_TIMEOUT';
-
     /** @var callable */
     private $client;
-
     /** @var float|mixed */
     private $timeout;
-
     /**
      *  The constructor accepts following options:
      *  - timeout: (optional) Connection timeout, in seconds, default 1.0
@@ -36,7 +31,6 @@ class EcsCredentialProvider
             ? $config['client']
             : \Aws\default_http_handler();
     }
-
     /**
      * Load ECS credentials
      *
@@ -68,7 +62,6 @@ class EcsCredentialProvider
             );
         });
     }
-
     /**
      * Fetch credential URI from ECS environment variable
      *
@@ -79,11 +72,9 @@ class EcsCredentialProvider
         $creds_uri = getenv(self::ENV_URI);
         return self::SERVER_URI . $creds_uri;
     }
-
     private function decodeResult($response)
     {
         $result = json_decode($response, true);
-
         if (!isset($result['AccessKeyId'])) {
             throw new CredentialsException('Unexpected ECS credential value');
         }

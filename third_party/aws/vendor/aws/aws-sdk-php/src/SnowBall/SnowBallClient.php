@@ -1,8 +1,6 @@
 <?php
 namespace Aws\SnowBall;
-
 use Aws\AwsClient;
-
 /**
  * This client is used to interact with the **Amazon Import/Export Snowball** service.
  * @method \Aws\Result cancelCluster(array $args = [])

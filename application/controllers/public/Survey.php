@@ -58,10 +58,8 @@ class Survey extends CI_Controller {
                 $file = !empty($_FILES['enqueryfiles'])?$_FILES['enqueryfiles']:'';                
                 foreach($inputno as $ind => $val){
 	
-
                  if ($inputtype[$ind] == 8) {                                                
                         $file_data    =   $this->doupload($file,$file_count);
-
                         if (!empty($file_data['imageDetailArray']['file_name'])) {
                             $file_path = base_url().'uploads/ticket_documents/'.$comp_id.'/'.$file_data['imageDetailArray']['file_name'];
                             $biarr = array( 
@@ -72,7 +70,6 @@ class Survey extends CI_Controller {
                                             "cmp_no"  => $comp_id,
                                             "comment_id" => $comment_id
                                         );
-
                             $this->db->where('enq_no',$en_comments);        
                             $this->db->where('input',$val);        
                             $this->db->where('parent',$tck_id);
@@ -126,7 +123,6 @@ class Survey extends CI_Controller {
         echo '<h4 style="text-align: center;">Thanks for your feedback</h4';
         $this->session->userdata('submitted',true);
     }
-
     public function survery_form_submit($enquiry_id){  
         /*echo "<pre>";
         print_r($_POST);
@@ -136,11 +132,9 @@ class Survey extends CI_Controller {
         $tid    =   $this->input->post('tid');
         $form_type    =   $this->input->post('form_type');
         $user_id    =   $this->input->post('uid');
-
         $enqarr = $this->db->select('*')->where('enquiry_id',$enquiry_id)->get('enquiry')->row();
         $en_comments = $enqarr->Enquery_id;
         $type = $enqarr->status;           
-
         $comment_id = $this->Leads_Model->add_comment_for_events_stage_api('Survery submitted', $en_comments,'','','',$user_id,$comment_type=0);     
         if(!empty($enqarr)){
             if(isset($_POST['inputfieldno'])) {
@@ -151,7 +145,6 @@ class Survey extends CI_Controller {
                 $file = !empty($_FILES['enqueryfiles'])?$_FILES['enqueryfiles']:'';                
                 foreach($inputno as $ind => $val){
                  if ($inputtype[$ind] == 8) {
-
                  }else{
                         $biarr = array( "enq_no"  => $en_comments,
                                       "input"   => $val,

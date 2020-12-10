@@ -1,16 +1,13 @@
 <?php
 namespace GuzzleHttp\Psr7;
-
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
-
 /**
  * PSR-7 response implementation.
  */
 class Response implements ResponseInterface
 {
     use MessageTrait;
-
     /** @var array Map of standard HTTP status code/reason phrases */
     private static $phrases = [
         100 => 'Continue',
@@ -72,13 +69,10 @@ class Response implements ResponseInterface
         508 => 'Loop Detected',
         511 => 'Network Authentication Required',
     ];
-
     /** @var string */
     private $reasonPhrase = '';
-
     /** @var int */
     private $statusCode = 200;
-
     /**
      * @param int                                  $status  Status code
      * @param array                                $headers Response headers
@@ -96,39 +90,31 @@ class Response implements ResponseInterface
         $this->assertStatusCodeIsInteger($status);
         $status = (int) $status;
         $this->assertStatusCodeRange($status);
-
         $this->statusCode = $status;
-
         if ($body !== '' && $body !== null) {
             $this->stream = stream_for($body);
         }
-
         $this->setHeaders($headers);
         if ($reason == '' && isset(self::$phrases[$this->statusCode])) {
             $this->reasonPhrase = self::$phrases[$this->statusCode];
         } else {
             $this->reasonPhrase = (string) $reason;
         }
-
         $this->protocol = $version;
     }
-
     public function getStatusCode()
     {
         return $this->statusCode;
     }
-
     public function getReasonPhrase()
     {
         return $this->reasonPhrase;
     }
-
     public function withStatus($code, $reasonPhrase = '')
     {
         $this->assertStatusCodeIsInteger($code);
         $code = (int) $code;
         $this->assertStatusCodeRange($code);
-
         $new = clone $this;
         $new->statusCode = $code;
         if ($reasonPhrase == '' && isset(self::$phrases[$new->statusCode])) {
@@ -137,14 +123,12 @@ class Response implements ResponseInterface
         $new->reasonPhrase = $reasonPhrase;
         return $new;
     }
-
     private function assertStatusCodeIsInteger($statusCode)
     {
         if (filter_var($statusCode, FILTER_VALIDATE_INT) === false) {
             throw new \InvalidArgumentException('Status code must be an integer value.');
         }
     }
-
     private function assertStatusCodeRange($statusCode)
     {
         if ($statusCode < 100 || $statusCode >= 600) {

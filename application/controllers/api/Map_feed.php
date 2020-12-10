@@ -3,9 +3,7 @@ use Restserver\Libraries\REST_Controller;
 defined('BASEPATH') OR exit('No direct script access allowed');
 require APPPATH . 'libraries/REST_Controller.php';
 require APPPATH . 'libraries/Format.php';
-
 class Map_feed extends REST_Controller {
-
   function __construct(){
     parent::__construct();
     $this->load->database();
@@ -47,7 +45,6 @@ class Map_feed extends REST_Controller {
                 'status' => true,
                 'message' =>'Feed accepted'
                  ], REST_Controller::HTTP_OK);
-
     } else {
       $this->set_response([
             'status' => false,
@@ -55,27 +52,20 @@ class Map_feed extends REST_Controller {
              ], REST_Controller::HTTP_OK);
     }
   }
-
   public function mark_attendance_post(){
-
     $this->form_validation->set_rules('user_id','User id','required');
     $this->form_validation->set_rules('punchout','Punchout','required');
-
     if ($this->form_validation->run() == TRUE) {
       
       $user_id  = $this->input->post('user_id');
       $punchout = $this->input->post('punchout');
-
       $insert_array    =  array('uid'=>$user_id,'status'=>$punchout);
-
       $where = " uid=$user_id AND status='$punchout' AND DATE(created_date)=CURDATE()";
-
       $this->db->where($where);    
       $res_row  = $this->db->get('map_attendance')->row_array();      
       //if(empty($res_row)){
       if(1){
         $att_arr  = array('message'=>'Mark attendance successfully');
-
         $this->db->insert('map_attendance',$insert_array);
         $this->set_response([
                     'status' => true,
@@ -88,10 +78,8 @@ class Map_feed extends REST_Controller {
                     'att_data' =>$att_arr
                      ], REST_Controller::HTTP_OK);      
       }
-
     } else {
         $att_arr  = array('message'=>'Fields are required');
-
       $this->set_response([
             'status' => false,
             'message' =>$att_arr   
@@ -106,9 +94,7 @@ class Map_feed extends REST_Controller {
       $where = " uid=$user_id AND status='in' AND DATE(created_date)=CURDATE()";      
       $this->db->where($where);   
       $res_row  = $this->db->get('map_attendance')->row_array();      
-
       if(!empty($res_row)){
-
       	$where = " uid=$user_id AND status='out' AND DATE(created_date)=CURDATE()";      
       	$this->db->where($where);    
       	$res_row  = $this->db->get('map_attendance')->row_array();      
@@ -129,10 +115,8 @@ class Map_feed extends REST_Controller {
                     'att_data' =>$att_arr
                      ], REST_Controller::HTTP_OK);
       }
-
     } else {
         $att_arr  = array('message'=>'Fields are required');
-
       $this->set_response([
             'status' => false,
             'message' =>$att_arr   
@@ -140,5 +124,4 @@ class Map_feed extends REST_Controller {
     }
   }
   
-
 }

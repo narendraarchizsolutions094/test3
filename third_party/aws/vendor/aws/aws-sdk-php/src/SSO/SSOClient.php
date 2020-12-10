@@ -1,8 +1,6 @@
 <?php
 namespace Aws\SSO;
-
 use Aws\AwsClient;
-
 /**
  * This client is used to interact with the **AWS Single Sign-On** service.
  * @method \Aws\Result getRoleCredentials(array $args = [])

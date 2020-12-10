@@ -1,8 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-
 class Item extends CI_Controller {
-
 	public function __construct()
 	{
 		parent::__construct();
@@ -10,13 +8,11 @@ class Item extends CI_Controller {
 		$this->load->model(array(
 			'website/item_model'
 		)); 
-
 		if (empty($this->session->user_id)) {
             redirect('login');
         } 
 	}
  
-
 	public function index()
 	{
 		$data['title'] = display("select_item");
@@ -25,7 +21,6 @@ class Item extends CI_Controller {
 		$data['content'] = $this->load->view('website/pages/item',$data,true);
 		$this->load->view('layout/main_wrapper',$data);
 	} 
-
 	public function create()
 	{
 		$data['title'] = display('add_item');
@@ -57,7 +52,6 @@ class Item extends CI_Controller {
 					64
 				);
 			}
-
 		}
 		//if icon_image is not uploaded
 		if ($icon_image === false) {
@@ -118,7 +112,6 @@ class Item extends CI_Controller {
 		} 
 	} 
 
-
 	public function edit($id = null) 
 	{ 
 		$data['title'] = display('item_edit');
@@ -137,7 +130,6 @@ class Item extends CI_Controller {
 		$data['content'] = $this->load->view('website/pages/item_form',$data,true);
 		$this->load->view('layout/main_wrapper',$data);
 	}
-
 	public function delete($id = null) 
 	{ 
 		if ($this->item_model->delete($id)) {
@@ -149,5 +141,4 @@ class Item extends CI_Controller {
 		}
 		redirect('website/item/');
 	}
-
 }

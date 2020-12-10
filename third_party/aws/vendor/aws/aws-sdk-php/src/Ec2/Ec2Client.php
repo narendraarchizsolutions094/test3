@@ -1,12 +1,10 @@
 <?php
 namespace Aws\Ec2;
-
 use Aws\AwsClient;
 use Aws\Api\Service;
 use Aws\Api\DocModel;
 use Aws\Api\ApiProvider;
 use Aws\PresignUrlMiddleware;
-
 /**
  * Client used to interact with Amazon EC2.
  *
@@ -837,10 +835,8 @@ class Ec2Client extends AwsClient
                 'ec2.copy_snapshot'
             );
         };
-
         parent::__construct($args);
     }
-
     /**
      * @internal
      * @codeCoverageIgnore
@@ -855,7 +851,6 @@ class Ec2Client extends AwsClient
             = '<div class="alert alert-info">The SDK will populate this '
             . 'parameter on your behalf using the configured region value of '
             . 'the client.</div>';
-
         return [
             new Service($api, ApiProvider::defaultProvider()),
             new DocModel($docs)

@@ -1,8 +1,6 @@
 <?php
 namespace Aws\GlobalAccelerator;
-
 use Aws\AwsClient;
-
 /**
  * This client is used to interact with the **AWS Global Accelerator** service.
  * @method \Aws\Result advertiseByoipCidr(array $args = [])

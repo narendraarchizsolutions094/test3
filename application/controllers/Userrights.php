@@ -1,19 +1,14 @@
 <?php
-
 defined('BASEPATH') OR exit('No direct script access allowed');
-
 class Userrights extends CI_Controller {
-
     public function __construct() {
         parent::__construct();
-
         $this->load->model(array(
             'User_model'
         ));
      if(empty($this->session->userdata('isLogIn')))
         redirect('login');
     }
-
     public function index() {
         if (!empty($_GET['user_role'])) {
             $data['title'] = $this->User_model->get_role_name_by_id($_GET['user_role']).' List';            
@@ -40,7 +35,6 @@ class Userrights extends CI_Controller {
         $data['user_role'] = $this->db->get('all_modules')->result();
         $data['userRole'] = $this->User_model->get_user_role($role_id);
         // print_r($user_role->user_permissions);
-
             //print_r($data['user_role']);die;
         $data['content'] = $this->load->view('userrights-edit', $data, true);
         $this->load->view('layout/main_wrapper', $data);
@@ -74,6 +68,5 @@ class Userrights extends CI_Controller {
         }
         
     }
-
     
 }

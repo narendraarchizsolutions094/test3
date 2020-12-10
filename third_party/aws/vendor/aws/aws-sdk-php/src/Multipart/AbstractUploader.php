@@ -1,16 +1,13 @@
 <?php
 namespace Aws\Multipart;
-
 use Aws\AwsClientInterface as Client;
 use GuzzleHttp\Psr7;
 use InvalidArgumentException as IAE;
 use Psr\Http\Message\StreamInterface as Stream;
-
 abstract class AbstractUploader extends AbstractUploadManager
 {
     /** @var Stream Source of the data to be uploaded. */
     protected $source;
-
     /**
      * @param Client $client
      * @param mixed  $source
@@ -21,7 +18,6 @@ abstract class AbstractUploader extends AbstractUploadManager
         $this->source = $this->determineSource($source);
         parent::__construct($client, $config);
     }
-
     /**
      * Create a stream for a part that starts at the current position and
      * has a length of the upload part size (or less with the final part).
@@ -39,13 +35,11 @@ abstract class AbstractUploader extends AbstractUploadManager
             $this->source->tell()
         );
     }
-
     protected function getUploadCommands(callable $resultHandler)
     {
         // Determine if the source can be seeked.
         $seekable = $this->source->isSeekable()
             && $this->source->getMetadata('wrapper_type') === 'plainfile';
-
         for ($partNumber = 1; $this->isEof($seekable); $partNumber++) {
             // If we haven't already uploaded this part, yield a new part.
             if (!$this->state->hasPartBeenUploaded($partNumber)) {
@@ -63,7 +57,6 @@ abstract class AbstractUploader extends AbstractUploadManager
                     continue;
                 }
             }
-
             // Advance the source's offset if not already advanced.
             if ($seekable) {
                 $this->source->seek(min(
@@ -75,7 +68,6 @@ abstract class AbstractUploader extends AbstractUploadManager
             }
         }
     }
-
     /**
      * Generates the parameters for an upload part by analyzing a range of the
      * source starting from the current offset up to the part size.
@@ -86,7 +78,6 @@ abstract class AbstractUploader extends AbstractUploadManager
      * @return array|null
      */
     abstract protected function createPart($seekable, $number);
-
     /**
      * Checks if the source is at EOF.
      *
@@ -100,7 +91,6 @@ abstract class AbstractUploader extends AbstractUploadManager
             ? $this->source->tell() < $this->source->getSize()
             : !$this->source->eof();
     }
-
     /**
      * Turns the provided source into a stream and stores it.
      *
@@ -117,13 +107,11 @@ abstract class AbstractUploader extends AbstractUploadManager
         if (is_string($source)) {
             $source = Psr7\try_fopen($source, 'r');
         }
-
         // Create a source stream.
         $stream = Psr7\stream_for($source);
         if (!$stream->isReadable()) {
             throw new IAE('Source stream must be readable.');
         }
-
         return $stream;
     }
 }

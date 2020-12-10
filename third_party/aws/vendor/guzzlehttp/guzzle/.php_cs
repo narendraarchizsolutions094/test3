@@ -1,5 +1,4 @@
 <?php
-
 $config = PhpCsFixer\Config::create()
     ->setRiskyAllowed(true)
     ->setRules([
@@ -19,5 +18,4 @@ $config = PhpCsFixer\Config::create()
             ->name('*.php')
     )
 ;
-
 return $config;

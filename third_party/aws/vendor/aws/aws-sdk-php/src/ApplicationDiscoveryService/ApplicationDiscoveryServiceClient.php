@@ -1,8 +1,6 @@
 <?php
 namespace Aws\ApplicationDiscoveryService;
-
 use Aws\AwsClient;
-
 /**
  * This client is used to interact with the **AWS Application Discovery Service** service.
  * @method \Aws\Result associateConfigurationItemsToApplication(array $args = [])

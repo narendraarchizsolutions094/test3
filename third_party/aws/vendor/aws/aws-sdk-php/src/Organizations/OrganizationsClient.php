@@ -1,8 +1,6 @@
 <?php
 namespace Aws\Organizations;
-
 use Aws\AwsClient;
-
 /**
  * This client is used to interact with the **AWS Organizations** service.
  * @method \Aws\Result acceptHandshake(array $args = [])

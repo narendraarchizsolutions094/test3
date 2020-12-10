@@ -13,7 +13,6 @@ class Customer extends CI_Controller
             'dash_model'
         ));
 
-
         if ($this->session->user_right != 1) {
             redirect('', 'refresh');
         }
@@ -25,7 +24,6 @@ class Customer extends CI_Controller
         $data['content'] = $this->load->view('doctor', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }
-
     public function logged_in_as_user()
     {
         $user_id = $this->uri->segment('3');
@@ -49,20 +47,16 @@ class Customer extends CI_Controller
                 // $this->rememberme->deleteCookie();
                 // ends
 
-
                 $city_row = $this->db->select("*")
                     ->from("city")
                     ->where('id', $check_user->row()->city_id)
                     ->get();
-
                 $user_data = $check_user->row();
                 $this->session->set_userdata('user_id', $user_data->pk_i_admin_id);
                 if (user_access(230) || user_access(231) || user_access(232) || user_access(233) || user_access(234) || user_access(235) || user_access(236)) {
-
                     $arr = explode(',', $user_data->process);
                     $this->session->set_userdata('companey_id', $user_data->companey_id);
                     $process_filter =   get_cookie('selected_process');
-
                     if (!empty($process_filter)) {
                         $process_filter = explode(',', $process_filter);
                         $process_filter = array_intersect($process_filter, $arr);
@@ -73,7 +67,6 @@ class Customer extends CI_Controller
                         }
                     } else {
                         $process_filter = array();
-
                         $this->session->set_userdata('process', $arr);
                     }
                     $c = implode(',', $this->session->process);
@@ -85,18 +78,13 @@ class Customer extends CI_Controller
                 }
                 if (0) {
                     $user_process = explode(',', $user_data->process);
-
                     $this->db->select('sb_id,product_name');
                     $this->db->where('comp_id', $this->session->companey_id);
                     $this->db->where_in('sb_id', $user_process);
                     $process_arr     =   $this->db->get('tbl_product')->result_array();
-
                     $process = [];
-
                     $process_html = '';
-
                     if (!empty($process_arr)) {
-
                         if (user_access(270)) {
                             $process_html .= "<select class='form-control text-center' name='user_process[]' multiple id='process_elem'>";
                         } else {
@@ -107,7 +95,6 @@ class Customer extends CI_Controller
                             $process[$value['sb_id']] = $value['product_name'];
                         }
                         $process_html .= "</select>";
-
                         $res = array('status' => true, 'message' => 'Successfully Logged In', 'process' => $process_html);
                     } else {
                         $res = array('status' => false, 'message' => 'You are not in any process. Please contact your admin!', 'process' => $process_html);
@@ -156,14 +143,12 @@ class Customer extends CI_Controller
             }
         } else {
             $this->session->set_flashdata('exception', display('please_try_again'));
-
             redirect('login');
         }
     }
     public function update_formfields()
     {
         if ($_POST) {
-
             $id = $_POST['id'];
             $active = $_POST['active'];
             $proc = $_POST['proc'];
@@ -177,7 +162,6 @@ class Customer extends CI_Controller
                 $status = 0;
             }
             // print_r($status);exit();
-
             $proc1 = implode(',', $proc);
             $arr = array(
                 'process_id' => $proc1,
@@ -186,7 +170,6 @@ class Customer extends CI_Controller
             // print_r($arr);
             $res = $this->User_model->update_inputfileds($arr, $id, $user_id);
             if ($res) {
-
                 $this->session->set_flashdata('message', "Updated Successfuly");
                 // redirect('customer/edit/'.$user_id);
                 echo 1;
@@ -195,10 +178,8 @@ class Customer extends CI_Controller
             }
         }
     }
-
     public function create()
     {
-
 
         $data['page_title'] = display('add_doctor');
         $this->form_validation->set_rules('firstname', display('first_name'), 'required|max_length[50]');
@@ -310,7 +291,6 @@ class Customer extends CI_Controller
                 'status' => $this->input->post('status', true),
             ];
         }
-
         if ($this->form_validation->run() === true) {
             if (empty($postData['user_id'])) {
                 $companey_id    =   $this->doctor_model->create($postData);
@@ -323,8 +303,6 @@ class Customer extends CI_Controller
                 );
                 $user_right    =   $this->db->insert('tbl_user_role', $tbl_user_role);
                 $right_insert_id = $this->db->insert_id();
-
-
 
                 if ($companey_id) {
                     $post_data = $postData;
@@ -348,12 +326,9 @@ class Customer extends CI_Controller
                     $user_role = $this->input->post('user_type');
                     $permissions = $this->input->post('permissions');
 
-
                     if (in_array(230, $permissions) || in_array(231, $permissions) || in_array(232, $permissions) || in_array(233, $permissions) || in_array(234, $permissions) || in_array(235, $permissions) || in_array(236, $permissions)) {
-
                         $this->db->where('comp_id', $this->input->post('user_id', true));
                         $c_product    =    $this->db->get('tbl_product')->num_rows();
-
                         if ($c_product == 0) {
                             $product_name = 'Demo Process';
                             $main_fun_name = '';
@@ -367,14 +342,11 @@ class Customer extends CI_Controller
                             );
                             $this->load->model('dash_model');
                             $this->dash_model->add_product($process_data);
-
                             $process_id    =    $this->db->insert_id();
-
                             $this->db->where('user_permissions', $id);
                             $this->db->update('tbl_admin', array('process' => $process_id));
                         }
                     }
-
 
                     $permissions = implode(',', $permissions);
                     $data = array(
@@ -382,8 +354,6 @@ class Customer extends CI_Controller
                         'user_permissions' => $permissions
                     );
                     $this->User_model->update_user_role($id, $data);
-
-
 
                     $this->session->set_flashdata('message', display('update_successfully'));
                 } else {
@@ -403,14 +373,12 @@ class Customer extends CI_Controller
             $this->load->view('layout/main_wrapper', $data);
         }
     }
-
     public function create_user($post_data)
     {
         /*echo "<pre>";
         print_r($post_data);
         echo "</pre>";
         exit();*/
-
         $post_data    =   array(
             'user_permissions'      => $post_data['user_permissions'],
             's_password'            => $post_data['password'],
@@ -426,10 +394,8 @@ class Customer extends CI_Controller
             's_phoneno'             => $post_data['mobile'],
             'process'               => NULL
         );
-
         $this->db->insert('tbl_admin', $post_data);
     }
-
     public function profile($user_id = null)
     {
         if (!empty($_POST)) {
@@ -457,13 +423,11 @@ class Customer extends CI_Controller
             $this->load->view('layout/main_wrapper', $data);
         }
     }
-
     public function edit($user_id = null)
     {
         $user_role = $this->session->userdata('user_role');
         $checkcompany = $this->doctor_model->geCompanybyId($user_id);
         if ($checkcompany == 1) {
-
             if ($user_role == 1 && $this->session->userdata('user_id') == $user_id)
                 $data['page_title'] = display('edit_profile');
             elseif ($user_role == 2)
@@ -473,23 +437,19 @@ class Customer extends CI_Controller
             $data['department_list'] = $this->Modules_model->modules_list();
             $data['doctor'] = $this->doctor_model->read_by_id($user_id);
             $data['users'] = $this->doctor_model->geCompanyUsers($user_id);
-
             // print_r($data['users']);
             // die();
             $this->db->select('user_permissions');
             $this->db->where('s_phoneno', $data['doctor']->mobile);
             $user_row    =   $this->db->get('tbl_admin')->result_array();
-
             $this->db->select('id,title');
             $this->db->where('status', 1);
             $data['modules']    =   $this->db->get('all_modules')->result_array();
-
             if (count($user_row) > 1) {
                 echo "Error: there are multiple mobile of this company";
                 exit();
             }
             $this->load->model('User_model');
-
             /*echo $user_row[0]['user_permissions'];
              exit();*/
             $data['user_role'] = $this->User_model->get_user_role($user_row[0]['user_permissions']);

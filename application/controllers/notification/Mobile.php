@@ -1,6 +1,5 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
-
 class Mobile extends CI_Controller
 {
     /**
@@ -8,7 +7,6 @@ class Mobile extends CI_Controller
      */
     public function sendNotification()
     {
-
 
     $query  = $this->db->query("select tbl_admin.mobile_token,query_response.subject,query_response.task_time,query_response.task_date,query_response.task_remark,query_response.query_id,query_response.create_by,enquiry.status,enquiry.enquiry_id as enqid,CONCAT_WS(' ',enquiry.name_prefix,enquiry.name,enquiry.lastname) as enq_name from query_response INNER JOIN enquiry ON query_response.query_id = enquiry.Enquery_id INNER JOIN tbl_admin ON query_response.create_by = tbl_admin.pk_i_admin_id where STR_TO_DATE(query_response.task_date,'%d-%m-%Y') = CURDATE() AND tbl_admin.mobile_token!=''");
     
@@ -23,7 +21,6 @@ class Mobile extends CI_Controller
             $t_time = date('H:i',strtotime($value['task_time']));
             $curr_time    =   date("H:i");            
             if($t_time == $curr_time){
-
                 $message = $value['task_remark'];      
                 if(empty($message)){
                   $message = 'N/A';      
@@ -36,7 +33,6 @@ class Mobile extends CI_Controller
                     "title" => $title,
                     ]
                 ];
-
                 $data = json_encode($d);
                 $url = 'https://fcm.googleapis.com/fcm/send';
                 $server_key = 'AAAAXIizH-0:APA91bFPGZglqP0yxF141MeRksGMhGOjIsBSDUNtTPHl8WZ9vb0UMacfl87A4yetHE4o6LtUncQJ92bdeGnLf-Tb-M4wStFSwfrnZmI4G9kR-_7YU8QTC0rkQ7Ub7bxUXghCjWwOHlaF';
@@ -58,7 +54,6 @@ class Mobile extends CI_Controller
         }
     }   
     }
-
     /**
      * Send to multiple devices
      */
@@ -66,7 +61,6 @@ class Mobile extends CI_Controller
     {
         $token = array('Registratin_id1', 'Registratin_id2'); // array of push tokens
         $message = "Test notification message";
-
         $this->load->library('fcm');
         $this->fcm->setTitle('Test FCM Notification');
         $this->fcm->setMessage($message);
@@ -76,7 +70,6 @@ class Mobile extends CI_Controller
         $this->fcm->setPayload($payload);
         $this->fcm->setImage('https://firebase.google.com/_static/9f55fd91be/images/firebase/lockup.png');
         $json = $this->fcm->getPush();
-
         /** 
          * Send to multiple
          * 

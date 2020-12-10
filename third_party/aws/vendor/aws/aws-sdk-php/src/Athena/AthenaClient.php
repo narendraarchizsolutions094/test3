@@ -1,8 +1,6 @@
 <?php
 namespace Aws\Athena;
-
 use Aws\AwsClient;
-
 /**
  * This client is used to interact with the **Amazon Athena** service.
  * @method \Aws\Result batchGetNamedQuery(array $args = [])

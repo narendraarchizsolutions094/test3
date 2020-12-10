@@ -1,8 +1,6 @@
 <?php
 namespace Aws\GroundStation;
-
 use Aws\AwsClient;
-
 /**
  * This client is used to interact with the **AWS Ground Station** service.
  * @method \Aws\Result cancelContact(array $args = [])

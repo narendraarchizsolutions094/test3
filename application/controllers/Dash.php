@@ -1,8 +1,6 @@
 <?php  	/****  Creadte By Narendra Verma ***********/
 defined('BASEPATH') OR exit('No direct script access allowed');
-
 class Dash extends CI_Controller {
-
 	 public function __construct()
         {
                parent::__construct();
@@ -183,7 +181,6 @@ class Dash extends CI_Controller {
 	    $data['content'] =$this->load->view('room-list', $data,true);
 		$this->load->view('layout/main_wrapper',$data);
 	}
-
    	public function room_add()
 	{   $data['page_title']='Room List';
 	    $data['nav1']='nav1';
@@ -315,7 +312,6 @@ public function	edit_floor()
 		}
 	}
    
-
 	public function delete_floor()
 	{  
 	        $id=base64_decode($this->uri->segment(3));
@@ -350,7 +346,6 @@ public function	edit_floor()
 			echo 'Record(s) Deleted Successfully';
 	    }
 	}
-
 
 /**** end room ***********/
      	/****  Creadte By Narendra Verma ***********/
@@ -458,7 +453,6 @@ public function	edit_floor()
 			 $this->db->delete('tbl_itemlist');
 			 $this->session->set_flashdata('success','Function Deleted Successfully');
 		     redirect('function-list');
-
 	 
 	}
 	  		public function active_item()
@@ -475,7 +469,6 @@ public function	edit_floor()
 			echo 'Record(s) Active Successfully ';
 	    }
 	}
-
 	public function deactive_item()
 	{   
 	    
@@ -488,7 +481,6 @@ public function	edit_floor()
 		}
 			echo 'Record(s) Deleted Successfully';
 	    }
-
 	}
 	public function deactive_products()
 	{   
@@ -506,18 +498,15 @@ public function	edit_floor()
 	    }else{
 	      echo '0';  
 	    }
-
 	}
 	
 /**** end tax ***********/
-
 /**** item start ***********/
 	public function sub_list()
 	{    $data['page_title']='Sub Function List';
 	    
 	    $data['all_item']=$this->dash_model->sub_function_list();
 	  $data['nav1']='nav1';
-
 		 $data['content'] =$this->load->view('sub-function-list', $data,true);
 		$this->load->view('layout/main_wrapper',$data);
 	}
@@ -581,7 +570,6 @@ public function	edit_floor()
 			 $this->db->delete('sub_function');
 			 $this->session->set_flashdata('success','Function Deleted Successfully');
 		     redirect('sub-function-list');
-
 	  
 	}
 	  		public function active_sub_function()
@@ -598,7 +586,6 @@ public function	edit_floor()
 			echo 'Record(s) Active Successfully ';
 	    }
 	}
-
 	public function deactive_sub_function()
 	{   
 	    
@@ -828,8 +815,6 @@ public function	edit_floor()
 	
 	
 /**** end tax ***********/
-
      	/****  Creadte By Narendra Verma ***********/
-
 
 }

@@ -1,8 +1,6 @@
 <?php
 namespace Aws\Endpoint;
-
 use JmesPath\Env;
-
 class PartitionEndpointProvider
 {
     /** @var Partition[] */
@@ -11,7 +9,6 @@ class PartitionEndpointProvider
     private $defaultPartition;
     /** @var array  */
     private $options;
-
     /**
      * The 'options' parameter accepts the following arguments:
      *
@@ -37,7 +34,6 @@ class PartitionEndpointProvider
         $this->defaultPartition = $defaultPartition;
         $this->options = $options;
     }
-
     public function __invoke(array $args = [])
     {
         $partition = $this->getPartition(
@@ -45,10 +41,8 @@ class PartitionEndpointProvider
             isset($args['service']) ? $args['service'] : ''
         );
         $args['options'] = $this->options;
-
         return $partition($args);
     }
-
     /**
      * Returns the partition containing the provided region or the default
      * partition if no match is found.
@@ -65,10 +59,8 @@ class PartitionEndpointProvider
                 return $partition;
             }
         }
-
         return $this->getPartitionByName($this->defaultPartition);
     }
-
     /**
      * Returns the partition with the provided name or null if no partition with
      * the provided name can be found.
@@ -85,7 +77,6 @@ class PartitionEndpointProvider
             }
         }
     }
-
     /**
      * Creates and returns the default SDK partition provider.
      *
@@ -97,10 +88,8 @@ class PartitionEndpointProvider
         $data = \Aws\load_compiled_json(__DIR__ . '/../data/endpoints.json');
         $prefixData = \Aws\load_compiled_json(__DIR__ . '/../data/endpoints_prefix_history.json');
         $mergedData = self::mergePrefixData($data, $prefixData);
-
         return new self($mergedData['partitions'], 'aws', $options);
     }
-
     /**
      * Copy endpoint data for other prefixes used by a given service
      *
@@ -111,7 +100,6 @@ class PartitionEndpointProvider
     public static function mergePrefixData($data, $prefixData)
     {
         $prefixGroups = $prefixData['prefix-groups'];
-
         foreach ($data["partitions"] as $index => $partition) {
             foreach ($prefixGroups as $current => $old) {
                 $serviceData = Env::search("services.\"{$current}\"", $partition);
@@ -124,7 +112,6 @@ class PartitionEndpointProvider
                 }
             }
         }
-
         return $data;
     }
 }

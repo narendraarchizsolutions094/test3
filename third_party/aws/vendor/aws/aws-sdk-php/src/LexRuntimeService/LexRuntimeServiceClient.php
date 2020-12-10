@@ -1,8 +1,6 @@
 <?php
 namespace Aws\LexRuntimeService;
-
 use Aws\AwsClient;
-
 /**
  * This client is used to interact with the **Amazon Lex Runtime Service** service.
  * @method \Aws\Result deleteSession(array $args = [])

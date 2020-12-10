@@ -1,8 +1,6 @@
 <?php
 namespace Aws\Macie;
-
 use Aws\AwsClient;
-
 /**
  * This client is used to interact with the **Amazon Macie** service.
  * @method \Aws\Result associateMemberAccount(array $args = [])

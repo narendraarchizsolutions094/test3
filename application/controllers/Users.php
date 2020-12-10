@@ -1,8 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-
 class User extends CI_Controller {
-
 	public function __construct()
 	{
 		parent::__construct();
@@ -16,7 +14,6 @@ class User extends CI_Controller {
 			'enquiry_model'
 			
 		));
-
 	}
  
 	public function index()
@@ -195,7 +192,6 @@ class User extends CI_Controller {
 		]; 
 		#-------------------------------#
 		if ($this->form_validation->run() === true) {
-
 			#if empty $dprt_id then insert data
 			if (empty($this->input->post('dprt_id'))) {
 				if ($this->User_model->create($postData)) {
@@ -220,7 +216,6 @@ class User extends CI_Controller {
 				}
 				redirect('user');
 			}
-
 		} else {
 		     $data['state_list']=$this->location_model->state_list();
 		     $data['region_list']=$this->location_model->region_list();
@@ -330,7 +325,6 @@ class User extends CI_Controller {
 		]; 
 		#-------------------------------#
 		if ($this->form_validation->run() === true) {
-
 			#if empty $dprt_id then insert data
 			if (empty($this->input->post('dprt_id'))) {
 				if ($this->User_model->create($postData)) {
@@ -355,7 +349,6 @@ class User extends CI_Controller {
 				}
 				redirect('user/channel_partner');
 			}
-
 		} else {
 		     $data['state_list']=$this->location_model->state_list();
 		     $data['region_list']=$this->location_model->region_list();
@@ -382,7 +375,6 @@ class User extends CI_Controller {
     $this->form_validation->set_message('password_check', 'Password is invalid formate ');
    return FALSE;
 }
-
 	public function partner_edit($id = null) 
 	{
 		$data['title'] = display('edit_user');
@@ -425,7 +417,6 @@ class User extends CI_Controller {
 	}
  
  
-
 	public function delete($dprt_id = null) 
 	{
 		if ($this->User_model->delete($dprt_id)) {

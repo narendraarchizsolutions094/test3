@@ -1,13 +1,11 @@
 <?php
 namespace Aws;
-
 use Aws\Exception\AwsException;
 use Aws\Retry\RetryHelperTrait;
 use GuzzleHttp\Exception\RequestException;
 use Psr\Http\Message\RequestInterface;
 use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Promise;
-
 /**
  * Middleware that retries failures. V1 implemention that supports 'legacy' mode.
  *
@@ -16,14 +14,12 @@ use GuzzleHttp\Promise;
 class RetryMiddleware
 {
     use RetryHelperTrait;
-
     private static $retryStatusCodes = [
         500 => true,
         502 => true,
         503 => true,
         504 => true
     ];
-
     private static $retryCodes = [
         // Throttling error
         'RequestLimitExceeded'                   => true,
@@ -38,12 +34,10 @@ class RetryMiddleware
         'IDPCommunicationError'                  => true,
         'EC2ThrottledException'                  => true,
     ];
-
     private $decider;
     private $delay;
     private $nextHandler;
     private $collectStats;
-
     public function __construct(
         callable $decider,
         callable $delay,
@@ -55,7 +49,6 @@ class RetryMiddleware
         $this->nextHandler = $nextHandler;
         $this->collectStats = (bool) $collectStats;
     }
-
     /**
      * Creates a default AWS retry decider function.
      *
@@ -82,7 +75,6 @@ class RetryMiddleware
         if (extension_loaded('curl')) {
             $retryCurlErrors[CURLE_RECV_ERROR] = true;
         }
-
         return function (
             $retries,
             CommandInterface $command,
@@ -94,14 +86,12 @@ class RetryMiddleware
             $maxRetries = null !== $command['@retries'] ?
                 $command['@retries']
                 : $maxRetries;
-
             $isRetryable = self::isRetryable(
                 $result,
                 $error,
                 $retryCurlErrors,
                 $extraConfig
             );
-
             if ($retries >= $maxRetries) {
                 if (!empty($error)
                     && $error instanceof AwsException
@@ -111,11 +101,9 @@ class RetryMiddleware
                 }
                 return false;
             }
-
             return $isRetryable;
         };
     }
-
     private static function isRetryable(
         $result,
         $error,
@@ -130,7 +118,6 @@ class RetryMiddleware
                 $errorCodes[$code] = true;
             }
         }
-
         $statusCodes = self::$retryStatusCodes;
         if (!empty($extraConfig['status_codes'])
             && is_array($extraConfig['status_codes'])
@@ -139,7 +126,6 @@ class RetryMiddleware
                 $statusCodes[$code] = true;
             }
         }
-
         if (!empty($extraConfig['curl_errors'])
             && is_array($extraConfig['curl_errors'])
         ) {
@@ -147,30 +133,24 @@ class RetryMiddleware
                 $retryCurlErrors[$code] = true;
             }
         }
-
         if (!$error) {
             if (!isset($result['@metadata']['statusCode'])) {
                 return false;
             }
             return isset($statusCodes[$result['@metadata']['statusCode']]);
         }
-
         if (!($error instanceof AwsException)) {
             return false;
         }
-
         if ($error->isConnectionError()) {
             return true;
         }
-
         if (isset($errorCodes[$error->getAwsErrorCode()])) {
             return true;
         }
-
         if (isset($statusCodes[$error->getStatusCode()])) {
             return true;
         }
-
         if (count($retryCurlErrors)
             && ($previous = $error->getPrevious())
             && $previous instanceof RequestException
@@ -180,7 +160,6 @@ class RetryMiddleware
                 return !empty($context['errno'])
                     && isset($retryCurlErrors[$context['errno']]);
             }
-
             $message = $previous->getMessage();
             foreach (array_keys($retryCurlErrors) as $curlError) {
                 if (strpos($message, 'cURL error ' . $curlError . ':') === 0) {
@@ -188,10 +167,8 @@ class RetryMiddleware
                 }
             }
         }
-
         return false;
     }
-
     /**
      * Delay function that calculates an exponential delay.
      *
@@ -207,7 +184,6 @@ class RetryMiddleware
     {
         return mt_rand(0, (int) min(20000, (int) pow(2, $retries) * 100));
     }
-
     /**
      * @param CommandInterface $command
      * @param RequestInterface $request
@@ -224,9 +200,7 @@ class RetryMiddleware
         $handler = $this->nextHandler;
         $decider = $this->decider;
         $delay = $this->delay;
-
         $request = $this->addRetryHeader($request, 0, 0);
-
         $g = function ($value) use (
             $handler,
             $decider,
@@ -239,7 +213,6 @@ class RetryMiddleware
             &$g
         ) {
             $this->updateHttpStats($value, $requestStats);
-
             if ($value instanceof MonitoringEventsInterface) {
                 $reversedEvents = array_reverse($monitoringEvents);
                 $monitoringEvents = array_merge($monitoringEvents, $value->getMonitoringEvents());
@@ -258,20 +231,16 @@ class RetryMiddleware
             ) {
                 return $this->bindStatsToReturn($value, $requestStats);
             }
-
             // Delay fn is called with 0, 1, ... so increment after the call.
             $delayBy = $delay($retries++);
             $command['@http']['delay'] = $delayBy;
             if ($this->collectStats) {
                 $this->updateStats($retries, $delayBy, $requestStats);
             }
-
             // Update retry header with retry count and delayBy
             $request = $this->addRetryHeader($request, $retries, $delayBy);
-
             return $handler($command, $request)->then($g, $g);
         };
-
         return $handler($command, $request)->then($g, $g);
     }
 }

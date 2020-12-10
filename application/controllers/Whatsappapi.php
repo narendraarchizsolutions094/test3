@@ -1,8 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-
 class Whatsappapi extends CI_Controller {
-
     public function __construct()
 	{
 		parent::__construct();
@@ -104,7 +102,6 @@ class Whatsappapi extends CI_Controller {
         $data['content'] = $this->load->view('whatsappapi', $data, true);
         $this->load->view('layout/main_wrapper',$data);
     }
-
     
         public function createapi()
         {
@@ -145,7 +142,6 @@ class Whatsappapi extends CI_Controller {
             $path= "uploads/media/".$image;
             move_uploaded_file($_FILES['media']['tmp_name'],$path);
         }
-
         
         $data = array(
         'template_name'     => $template_name,
@@ -163,7 +159,6 @@ class Whatsappapi extends CI_Controller {
         
         }
         }
-
 
         public function delete_api(){
         if(!empty($_POST)){
@@ -184,7 +179,6 @@ class Whatsappapi extends CI_Controller {
         }
         }
         }
-
         public function facebook(){
             $data['page_title']='Facebook'; 
         $data['content'] = $this->load->view('facebook1',$data,true);

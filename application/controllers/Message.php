@@ -1,8 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-
 class Message extends CI_Controller {
-
 	public function __construct()
 	{
 		parent::__construct();
@@ -14,7 +12,6 @@ class Message extends CI_Controller {
 		));
 		$this->password = "67";
 		 $this->load->library('email');
-
 	}
     
     	public function get_templates($for,$ins=''){
@@ -31,7 +28,6 @@ class Message extends CI_Controller {
     	    
     	    }
 	    }
-
 	    public function all_description()
 	    {
 	    	$this->load->model('Leads_Model');
@@ -42,7 +38,6 @@ class Message extends CI_Controller {
 	    		echo'<option value="'.$res->id.'">'.$res->description.'</option>';
 	    	}
 	    }
-
 		public function getMessage($id){
 		if((int)$id){
 	    $this->db->where('temp_id',$id);
@@ -75,13 +70,10 @@ class Message extends CI_Controller {
 			echo'<option value=""></option>';
 		}
 		
-
 	}
-
 	public function all_stages($id,$selected=0)
 	{
 		$this->load->model('Leads_Model');
-
 		if(sizeof($this->session->process)==1)
 		{
 			$res = $this->Leads_Model->find_estage($this->session->process[0],$id);
@@ -96,7 +88,6 @@ class Message extends CI_Controller {
 			echo'<option value="">First Please Select only One Process</option>';
 		}
 	}
-
 	public function send_sms_career_ex(){
 		if ($this->input->post('mesge_type')== 3) {
 			$temp_id = $this->input->post('templates');
@@ -136,7 +127,6 @@ class Message extends CI_Controller {
 			exit();*/
 			if ($to) {
 				$curl = curl_init();
-
 				curl_setopt_array($curl, array(
 				  CURLOPT_URL => "https://teleduce.in/send-email-json-otom/8c999fa1-e303-423d-a804-eb0e6210604d/1007/",
 				  CURLOPT_RETURNTRANSFER => true,
@@ -151,9 +141,7 @@ class Message extends CI_Controller {
 				    "Content-Type: application/json"
 				  ),
 				));
-
 				$response = curl_exec($curl);
-
 				curl_close($curl);
 				/*echo $response;*/
 				$res	=	json_decode($response,true);
@@ -197,7 +185,6 @@ class Message extends CI_Controller {
 			//echo $response;
 		}
 	}
-
    
 	public function send_sms(){
 	    
@@ -205,7 +192,6 @@ class Message extends CI_Controller {
 		// $usermeta = $this->user_model->get_user_meta( $this->session->user_id,array('api_name','api_url'));
 		// print_r($usermeta);
 		// die();
-
 		  $signature   = $this->enquiry_model->get_signature();
 		  $msgType= $this->input->post('mesge_type');
 		  $ticketId= $this->input->post('ticketId');
@@ -219,15 +205,12 @@ class Message extends CI_Controller {
 		  $userphone=$this->session->userdata('phone');
 		  $designation=$this->session->userdata('designation');
 		  $media_url='';
-
 		 $this->db->where('pk_i_admin_id',$this->session->user_id);
               $user_row  = $this->db->get('tbl_admin')->row_array();
-
 		//   if($this->session->companey_id==65)
 		//   {	
 		  	
 		  	$email_subject = $this->input->post('email_subject')??'';
-
 			 
 			if(!empty($move_enquiry) && !is_array($move_enquiry)){
 				
@@ -235,11 +218,8 @@ class Message extends CI_Controller {
 				//print_r($enqData); exit();;
 				// $replaceName=	$enqData->name_prefix.' '.$enqData->name;
 				// $replacePhone=	$enqData->phone;
-
 			    $name1 = $enq_row['name_prefix'].' '.$enq_row['name'].' '.$enq_row['lastname'];
-
                 $message = str_replace('@name',$name1,str_replace('@org',$user_row['orgisation_name'],str_replace('@desg',$user_row['designation'],str_replace('@phone',$user_row['contact_phone'],str_replace('@desg',$user_row['designation'],str_replace('@user',$user_row['s_display_name'].' '.$user_row['last_name'],$message))))));
-
                 $email_subject = str_replace('@name',$name1,str_replace('@org',$user_row['orgisation_name'],str_replace('@desg',$user_row['designation'],str_replace('@phone',$user_row['contact_phone'],str_replace('@desg',$user_row['designation'],str_replace('@user',$user_row['s_display_name'].' '.$user_row['last_name'],$email_subject))))));
 			   
 			  }
@@ -267,9 +247,7 @@ class Message extends CI_Controller {
 		            $message  =str_replace($find, $replace, $message);
 		            $email_subject  = str_replace($find, $replace, $email_subject);
 			  }
-
 			//  echo $message.'<br>'.$email_subject;exit();
-
 		
         if($this->input->post('mesge_type')== 1){
 	      	$templates_id	=	$this->input->post('templates');
@@ -280,7 +258,6 @@ class Message extends CI_Controller {
             $phone= '91'.$this->input->post('mobile');
             $move_enquiry = $this->input->post('enquiry_id');
         	if(!empty($move_enquiry) && is_array($move_enquiry)){
-
       	      foreach($move_enquiry as $key){	
       	        $enq = $this->enquiry_model->enquiry_by_id($key);
       	        $phone='91'.$enq->phone;
@@ -314,7 +291,6 @@ class Message extends CI_Controller {
               echo "Message sent successfully";
            }
         }else if($this->input->post('mesge_type')== 3){
-
         	$temp_id = $this->input->post('templates');
         	$rows	=	$this->db->select('*')
                         ->from('api_templates')
@@ -334,7 +310,6 @@ class Message extends CI_Controller {
   				exit();
         	}else{
 
-
         		/*
         		$config['protocol']     = $email_row['protocol'];
 		        $config['smtp_host']    = $email_row['smtp_host'];
@@ -346,7 +321,6 @@ class Message extends CI_Controller {
         		$config['mailtype']     = 'text'; // or html
 		        $config['newline']      = "\r\n";        
 		        */
-
 
 		        $config['smtp_auth']    = true;
         		$config['protocol']     = $email_row['protocol'];
@@ -361,7 +335,6 @@ class Message extends CI_Controller {
 		        //$config['validation']   = TRUE; // bool whether to validate email or not    
         	}
         	//$this->load->library('email');
-
 
         	$this->db->where('comp_id',$this->session->companey_id);
             $this->db->where('sys_para','usermail_in_cc');
@@ -380,22 +353,17 @@ class Message extends CI_Controller {
 	            	if(is_array($move_enquiry))
 	            	{
 	            		foreach($move_enquiry as $key){
-
 	            			if($this->session->companey_id==65)
 	            			{
 	            				$enq_row=(array)$this->Message_models->fetchenqById('enquiry',$key);
 								//print_r($enqData); exit();;
 								// $replaceName=	$enqData->name_prefix.' '.$enqData->name;
 								// $replacePhone=	$enqData->phone;
-
 						    $name1 = $enq_row['name_prefix'].' '.$enq_row['name'].' '.$enq_row['lastname'];
-
 			                $message = str_replace('@name',$name1,str_replace('@org',$user_row['orgisation_name'],str_replace('@desg',$user_row['designation'],str_replace('@phone',$user_row['contact_phone'],str_replace('@desg',$user_row['designation'],str_replace('@user',$user_row['s_display_name'].' '.$user_row['last_name'],$message))))));
-
 			                $email_subject = str_replace('@name',$name1,str_replace('@org',$user_row['orgisation_name'],str_replace('@desg',$user_row['designation'],str_replace('@phone',$user_row['contact_phone'],str_replace('@desg',$user_row['designation'],str_replace('@user',$user_row['s_display_name'].' '.$user_row['last_name'],$email_subject))))));
 	            			}
 	            			//echo $to.'|'.$email_subject.'| '.$message.'|'.$cc; exit();	
-
 			      	        $enq = $this->enquiry_model->enquiry_by_id($key);
 			      	       
 					        $this->email->initialize($config);
@@ -422,7 +390,6 @@ class Message extends CI_Controller {
 	      	    	else
 	      	    	{
 	      	    		$enq = $this->enquiry_model->enquiry_by_id($move_enquiry);
-
 					        $this->email->initialize($config);
 					        $this->email->from($email_row['smtp_user']);
 			                $to=$enq->email;
@@ -444,7 +411,6 @@ class Message extends CI_Controller {
 								echo "Something went wrong";			                	
 			                }
 	      	    	}
-
         	}else{
         	//echo $to.'|'.$email_subject.'| '.$message.'|'.$cc; exit();			
 		        $this->email->initialize($config);

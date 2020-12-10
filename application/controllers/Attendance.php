@@ -11,7 +11,6 @@ class Attendance extends CI_Controller {
 			'User_model',
 			'attendance_model'			
 		));
-
 		if(empty($this->session->user_id)){
 		 redirect('login');   
 		}
@@ -21,9 +20,7 @@ class Attendance extends CI_Controller {
         $list = $this->attendance_model->get_datatables();
        // echo $this->db->last_query();
         $data = array();
-
         $no = $_POST['start'];
-
         foreach ($list as $each) {
         
             $no++;
@@ -31,15 +28,10 @@ class Attendance extends CI_Controller {
             $row = array();
             
             $row[] = $no;
-
             $row[] = $each->s_display_name.' '.$each->last_name;            
-
             $row[] = $each->check_in;
-
             $row[] = $each->check_out;
-
             
-
             $time1 = new DateTime($each->check_in);
             $time2 = new DateTime($each->check_out);
             
@@ -54,14 +46,11 @@ class Attendance extends CI_Controller {
             	$row[] = '';
             }
 
-
             $row[] = $each->total;
             $row[] = '';
             
             $data[] = $row;
-
             
-
         }      
         $output = array(
             "draw" => $_POST['draw'],
@@ -69,16 +58,12 @@ class Attendance extends CI_Controller {
             "recordsFiltered" => $this->attendance_model->count_filtered(),
             "data" => $data,
         );
-
         //echo $this->db->last_query();
-
         echo json_encode($output);
  	}
-
  	function att_set_filters_session(){
  		$this->session->set_userdata('attendance_filter_date',$_POST['date']);
  	}
-
 	
 	
  	public function logs(){
@@ -90,7 +75,6 @@ class Attendance extends CI_Controller {
 			$from		=	$this->input->post('att_date_from');
 			$to			=	$this->input->post('att_date_to');			
 			$employee	=	$this->input->post('employee');			
-
 			$from = new DateTime($from);
 			$to	  =	new DateTime($to);
 			$to	  =	$to->modify('+1 day');
@@ -118,7 +102,6 @@ class Attendance extends CI_Controller {
 			$content .= $this->load->view('loginfo/attendance_logs',$data,true);
 			$data['content'] = $content;
  		}
-
 		$this->load->view('layout/main_wrapper',$data);
  	}
 	
@@ -146,7 +129,6 @@ class Attendance extends CI_Controller {
 			$update_arr = array(							
 							'check_out_time'=>Date("Y-m-d H:i:s")
 							);
-
 			$this->db->where('id',$atID);
 			$insert_id = $this->db->update('tbl_attendance',$update_arr);	
 			if($insert_id){
@@ -192,9 +174,7 @@ class Attendance extends CI_Controller {
 		$this->load->view('layout/main_wrapper',$data);
 		
 	}
-
 	public function check_attendance_status(){
-
 		$user_id	=	$this->session->user_id;
 		$this->db->where('uid',$user_id);
 		$this->db->where('check_out_time',"0000-00-00 00:00:00");
@@ -216,7 +196,6 @@ class Attendance extends CI_Controller {
 		$data['content'] = $this->load->view('loginfo/attendance_details',$data,true);
 		$this->load->view('layout/main_wrapper',$data);
 	}
-
 	public function record_geolocation(){
 		$user_id = $this->input->post('user_id');
 		$lat = $this->input->post('lat');

@@ -1,5 +1,4 @@
 language: php
-
 matrix:
   include:
     - php: 5.4
@@ -20,11 +19,8 @@ matrix:
       dist: bionic
     - php: hhvm-3.18
       dist: trusty
-
 install: travis_retry composer install
-
 script: make test
-
 after_script:
   - make perf
   - JP_PHP_COMPILE=on make perf

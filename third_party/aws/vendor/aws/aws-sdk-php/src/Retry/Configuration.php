@@ -1,8 +1,6 @@
 <?php
 namespace Aws\Retry;
-
 use Aws\Retry\Exception\ConfigurationException;
-
 class Configuration implements ConfigurationInterface
 {
     private $mode;
@@ -12,7 +10,6 @@ class Configuration implements ConfigurationInterface
         'standard',
         'adaptive'
     ];
-
     public function __construct($mode = 'legacy', $maxAttempts = 3)
     {
         $mode = strtolower($mode);
@@ -27,11 +24,9 @@ class Configuration implements ConfigurationInterface
             throw new ConfigurationException("The 'maxAttempts' parameter has"
                 . " to be an integer >= 1.");
         }
-
         $this->mode = $mode;
         $this->maxAttempts = intval($maxAttempts);
     }
-
     /**
      * {@inheritdoc}
      */
@@ -39,7 +34,6 @@ class Configuration implements ConfigurationInterface
     {
         return $this->mode;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -47,7 +41,6 @@ class Configuration implements ConfigurationInterface
     {
         return $this->maxAttempts;
     }
-
     /**
      * {@inheritdoc}
      */

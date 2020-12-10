@@ -1,8 +1,6 @@
 <?php
 namespace Aws\signer;
-
 use Aws\AwsClient;
-
 /**
  * This client is used to interact with the **AWS Signer** service.
  * @method \Aws\Result cancelSigningProfile(array $args = [])

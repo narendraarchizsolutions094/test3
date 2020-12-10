@@ -238,7 +238,6 @@
             {"bar": [{"kind": "advanced"}, {"kind": "expert"}]},
             {"bar": "string"}
         ]
-
      },
      "cases": [
          {

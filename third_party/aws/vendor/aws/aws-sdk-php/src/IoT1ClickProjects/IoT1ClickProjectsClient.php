@@ -1,8 +1,6 @@
 <?php
 namespace Aws\IoT1ClickProjects;
-
 use Aws\AwsClient;
-
 /**
  * This client is used to interact with the **AWS IoT 1-Click Projects Service** service.
  * @method \Aws\Result associateDeviceWithPlacement(array $args = [])

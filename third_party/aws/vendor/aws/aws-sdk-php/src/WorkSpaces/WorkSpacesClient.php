@@ -1,8 +1,6 @@
 <?php
 namespace Aws\WorkSpaces;
-
 use Aws\AwsClient;
-
 /**
  * Amazon WorkSpaces client.
  *

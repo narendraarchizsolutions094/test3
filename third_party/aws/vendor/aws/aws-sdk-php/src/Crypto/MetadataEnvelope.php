@@ -1,12 +1,10 @@
 <?php
 namespace Aws\Crypto;
-
 use Aws\HasDataTrait;
 use \ArrayAccess;
 use \IteratorAggregate;
 use \InvalidArgumentException;
 use \JsonSerializable;
-
 /**
  * Stores encryption metadata for reading and writing.
  *
@@ -15,7 +13,6 @@ use \JsonSerializable;
 class MetadataEnvelope implements ArrayAccess, IteratorAggregate, JsonSerializable
 {
     use HasDataTrait;
-
     const CONTENT_KEY_V2_HEADER = 'x-amz-key-v2';
     const IV_HEADER = 'x-amz-iv';
     const MATERIALS_DESCRIPTION_HEADER = 'x-amz-matdesc';
@@ -24,9 +21,7 @@ class MetadataEnvelope implements ArrayAccess, IteratorAggregate, JsonSerializab
     const CRYPTO_TAG_LENGTH_HEADER = 'x-amz-tag-len';
     const UNENCRYPTED_CONTENT_MD5_HEADER = 'x-amz-unencrypted-content-md5';
     const UNENCRYPTED_CONTENT_LENGTH_HEADER = 'x-amz-unencrypted-content-length';
-
     private static $constants = [];
-
     public static function getConstantValues()
     {
         if (empty(self::$constants)) {
@@ -35,10 +30,8 @@ class MetadataEnvelope implements ArrayAccess, IteratorAggregate, JsonSerializab
                 self::$constants[$constant] = true;
             }
         }
-
         return array_keys(self::$constants);
     }
-
     public function offsetSet($name, $value)
     {
         $constants = self::getConstantValues();
@@ -46,10 +39,8 @@ class MetadataEnvelope implements ArrayAccess, IteratorAggregate, JsonSerializab
             throw new InvalidArgumentException('MetadataEnvelope fields must'
                 . ' must match a predefined offset; use the header constants.');
         }
-
         $this->data[$name] = $value;
     }
-
     public function jsonSerialize()
     {
         return $this->data;

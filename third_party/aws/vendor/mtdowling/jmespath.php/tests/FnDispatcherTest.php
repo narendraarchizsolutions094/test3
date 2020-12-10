@@ -1,9 +1,7 @@
 <?php
 namespace JmesPath\Tests;
-
 use JmesPath\fnDispatcher;
 use PHPUnit\Framework\TestCase;
-
 class fnDispatcherTest extends TestCase
 {
     public function testConvertsToString()
@@ -19,7 +17,6 @@ class fnDispatcherTest extends TestCase
         $this->assertEquals('"foo"', $fn('to_string', [new _TestJsonStringClass()]));
     }
 }
-
 class _TestStringClass
 {
     public function __toString()
@@ -27,14 +24,12 @@ class _TestStringClass
         return 'foo';
     }
 }
-
 class _TestJsonStringClass implements \JsonSerializable
 {
     public function __toString()
     {
         return 'no!';
     }
-
     public function jsonSerialize()
     {
         return 'foo';

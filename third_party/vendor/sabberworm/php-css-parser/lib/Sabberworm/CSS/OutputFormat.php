@@ -1,9 +1,6 @@
 <?php
-
 namespace Sabberworm\CSS;
-
 use Sabberworm\CSS\Parsing\OutputException;
-
 /**
  * Class OutputFormat
  *
@@ -31,19 +28,15 @@ class OutputFormat {
 	* The triples (After, Before, Between) can be set using a wildcard (e.g. `$oFormat->set('Space*Rules', "\n");`)
 	*/
 	public $sSpaceAfterRuleName = ' ';
-
 	public $sSpaceBeforeRules = '';
 	public $sSpaceAfterRules = '';
 	public $sSpaceBetweenRules = '';
-
 	public $sSpaceBeforeBlocks = '';
 	public $sSpaceAfterBlocks = '';
 	public $sSpaceBetweenBlocks = "\n";
-
 	// Content injected in and around @-rule blocks.
 	public $sBeforeAtRuleBlock = '';
 	public $sAfterAtRuleBlock = '';
-
 	// This is what’s printed before and after the comma if a declaration block contains multiple selectors.
 	public $sSpaceBeforeSelectorSeparator = '';
 	public $sSpaceAfterSelectorSeparator = ' ';
@@ -52,12 +45,10 @@ class OutputFormat {
 	public $sSpaceAfterListArgumentSeparator = '';
 	
 	public $sSpaceBeforeOpeningBrace = ' ';
-
 	// Content injected in and around declaration blocks.
 	public $sBeforeDeclarationBlock = '';
 	public $sAfterDeclarationBlockSelectors = '';
 	public $sAfterDeclarationBlock = '';
-
 	/**
 	* Indentation
 	*/
@@ -155,7 +146,6 @@ class OutputFormat {
 	public function level() {
 		return $this->iIndentationLevel;
 	}
-
 	/**
 	 * Create format.
 	 *
@@ -164,7 +154,6 @@ class OutputFormat {
 	public static function create() {
 		return new OutputFormat();
 	}
-
 	/**
 	 * Create compact format.
 	 *
@@ -175,7 +164,6 @@ class OutputFormat {
 		$format->set('Space*Rules', "")->set('Space*Blocks', "")->setSpaceAfterRuleName('')->setSpaceBeforeOpeningBrace('')->setSpaceAfterSelectorSeparator('');
 		return $format;
 	}
-
 	/**
 	 * Create pretty format.
 	 *
@@ -187,7 +175,6 @@ class OutputFormat {
 		return $format;
 	}
 }
-
 class OutputFormatter {
 	private $oFormat;
 	
@@ -239,23 +226,18 @@ class OutputFormatter {
 	public function spaceBeforeSelectorSeparator() {
 		return $this->space('BeforeSelectorSeparator');
 	}
-
 	public function spaceAfterSelectorSeparator() {
 		return $this->space('AfterSelectorSeparator');
 	}
-
 	public function spaceBeforeListArgumentSeparator($sSeparator) {
 		return $this->space('BeforeListArgumentSeparator', $sSeparator);
 	}
-
 	public function spaceAfterListArgumentSeparator($sSeparator) {
 		return $this->space('AfterListArgumentSeparator', $sSeparator);
 	}
-
 	public function spaceBeforeOpeningBrace() {
 		return $this->space('BeforeOpeningBrace');
 	}
-
 	/**
 	* Runs the given code, either swallowing or passing exceptions, depending on the bIgnoreExceptions setting.
 	*/
@@ -272,7 +254,6 @@ class OutputFormatter {
 			return $cCode();
 		}
 	}
-
 	/**
 	* Clone of the implode function but calls ->render with the current output format instead of __toString()
 	*/
@@ -311,11 +292,9 @@ class OutputFormatter {
 		array_push($sString, $sNextToLast.$sLast);
 		return implode(';', $sString);
 	}
-
 	private function prepareSpace($sSpaceString) {
 		return str_replace("\n", "\n".$this->indent(), $sSpaceString);
 	}
-
 	private function indent() {
 		return str_repeat($this->oFormat->sIndentation, $this->oFormat->level());
 	}

@@ -1,8 +1,6 @@
 <?php
 namespace Aws\PinpointEmail;
-
 use Aws\AwsClient;
-
 /**
  * This client is used to interact with the **Amazon Pinpoint Email Service** service.
  * @method \Aws\Result createConfigurationSet(array $args = [])

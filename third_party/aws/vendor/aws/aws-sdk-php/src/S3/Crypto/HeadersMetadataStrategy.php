@@ -1,9 +1,7 @@
 <?php
 namespace Aws\S3\Crypto;
-
 use \Aws\Crypto\MetadataStrategyInterface;
 use \Aws\Crypto\MetadataEnvelope;
-
 class HeadersMetadataStrategy implements MetadataStrategyInterface
 {
     /**
@@ -22,10 +20,8 @@ class HeadersMetadataStrategy implements MetadataStrategyInterface
         foreach ($envelope as $header=>$value) {
             $args['Metadata'][$header] = $value;
         }
-
         return $args;
     }
-
     /**
      * Generates a MetadataEnvelope according to the Metadata headers from the
      * GetObject result.
@@ -40,13 +36,11 @@ class HeadersMetadataStrategy implements MetadataStrategyInterface
     {
         $envelope = new MetadataEnvelope();
         $constantValues = MetadataEnvelope::getConstantValues();
-
         foreach ($constantValues as $constant) {
             if (!empty($args['Metadata'][$constant])) {
                 $envelope[$constant] = $args['Metadata'][$constant];
             }
         }
-
         return $envelope;
     }
 }

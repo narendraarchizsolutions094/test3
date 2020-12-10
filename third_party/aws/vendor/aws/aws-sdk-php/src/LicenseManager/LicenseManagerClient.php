@@ -1,8 +1,6 @@
 <?php
 namespace Aws\LicenseManager;
-
 use Aws\AwsClient;
-
 /**
  * This client is used to interact with the **AWS License Manager** service.
  * @method \Aws\Result createLicenseConfiguration(array $args = [])

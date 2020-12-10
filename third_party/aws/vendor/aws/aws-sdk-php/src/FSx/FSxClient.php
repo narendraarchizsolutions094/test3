@@ -1,8 +1,6 @@
 <?php
 namespace Aws\FSx;
-
 use Aws\AwsClient;
-
 /**
  * This client is used to interact with the **Amazon FSx** service.
  * @method \Aws\Result cancelDataRepositoryTask(array $args = [])

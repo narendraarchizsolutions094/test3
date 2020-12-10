@@ -1,12 +1,10 @@
 <?php
 namespace Aws\S3\RegionalEndpoint;
-
 use Aws\AbstractConfigurationProvider;
 use Aws\CacheInterface;
 use Aws\ConfigurationProviderInterface;
 use Aws\S3\RegionalEndpoint\Exception\ConfigurationException;
 use GuzzleHttp\Promise;
-
 /**
  * A configuration provider is a function that returns a promise that is
  * fulfilled with a {@see \Aws\S3\RegionalEndpoint\ConfigurationInterface}
@@ -47,12 +45,9 @@ class ConfigurationProvider extends AbstractConfigurationProvider
     const ENV_ENDPOINTS_TYPE = 'AWS_S3_US_EAST_1_REGIONAL_ENDPOINT';
     const INI_ENDPOINTS_TYPE = 's3_us_east_1_regional_endpoint';
     const DEFAULT_ENDPOINTS_TYPE = 'legacy';
-
     public static $cacheKey = 'aws_s3_us_east_1_regional_endpoint_config';
-
     protected static $interfaceClass = ConfigurationInterface::class;
     protected static $exceptionClass = ConfigurationException::class;
-
     /**
      * Create a default config provider that first checks for environment
      * variables, then checks for a specified profile in the environment-defined
@@ -75,20 +70,16 @@ class ConfigurationProvider extends AbstractConfigurationProvider
             self::ini(),
             self::fallback()
         ];
-
         $memo = self::memoize(
             call_user_func_array('self::chain', $configProviders)
         );
-
         if (isset($config['s3_us_east_1_regional_endpoint'])
             && $config['s3_us_east_1_regional_endpoint'] instanceof CacheInterface
         ) {
             return self::cache($memo, $config['s3_us_east_1_regional_endpoint'], self::$cacheKey);
         }
-
         return $memo;
     }
-
     public static function env()
     {
         return function () {
@@ -99,12 +90,10 @@ class ConfigurationProvider extends AbstractConfigurationProvider
                     new Configuration($endpointsType)
                 );
             }
-
             return self::reject('Could not find environment variable config'
                 . ' in ' . self::ENV_ENDPOINTS_TYPE);
         };
     }
-
     /**
      * Config provider that creates config using a config file whose location
      * is specified by an environment variable 'AWS_CONFIG_FILE', defaulting to
@@ -123,7 +112,6 @@ class ConfigurationProvider extends AbstractConfigurationProvider
     ) {
         $filename = $filename ?: (self::getDefaultConfigFilename());
         $profile = $profile ?: (getenv(self::ENV_PROFILE) ?: 'default');
-
         return function () use ($profile, $filename) {
             if (!is_readable($filename)) {
                 return self::reject("Cannot read configuration from $filename");
@@ -139,13 +127,11 @@ class ConfigurationProvider extends AbstractConfigurationProvider
                 return self::reject("Required S3 regional endpoint config values 
                     not present in INI profile '{$profile}' ({$filename})");
             }
-
             return Promise\promise_for(
                 new Configuration($data[$profile][self::INI_ENDPOINTS_TYPE])
             );
         };
     }
-
     /**
      * Fallback config options when other sources are not set.
      *
@@ -159,7 +145,6 @@ class ConfigurationProvider extends AbstractConfigurationProvider
             );
         };
     }
-
     /**
      * Unwraps a configuration object in whatever valid form it is in,
      * always returning a ConfigurationInterface object.
@@ -185,7 +170,6 @@ class ConfigurationProvider extends AbstractConfigurationProvider
         if (is_array($config) && isset($config['endpoints_type'])) {
             return new Configuration($config['endpoints_type']);
         }
-
         throw new \InvalidArgumentException('Not a valid S3 regional endpoint '
             . 'configuration argument.');
     }

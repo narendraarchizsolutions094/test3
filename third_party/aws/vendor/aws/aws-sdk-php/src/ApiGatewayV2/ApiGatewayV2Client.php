@@ -1,8 +1,6 @@
 <?php
 namespace Aws\ApiGatewayV2;
-
 use Aws\AwsClient;
-
 /**
  * This client is used to interact with the **AmazonApiGatewayV2** service.
  * @method \Aws\Result createApi(array $args = [])

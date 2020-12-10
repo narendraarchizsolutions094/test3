@@ -1,12 +1,10 @@
 <?php
 namespace Aws\Sts;
-
 use Aws\AwsClient;
 use Aws\CacheInterface;
 use Aws\Credentials\Credentials;
 use Aws\Result;
 use Aws\Sts\RegionalEndpoints\ConfigurationProvider;
-
 /**
  * This client is used to interact with the **AWS Security Token Service (AWS STS)**.
  *
@@ -29,7 +27,6 @@ use Aws\Sts\RegionalEndpoints\ConfigurationProvider;
  */
 class StsClient extends AwsClient
 {
-
     /**
      * {@inheritdoc}
      *
@@ -58,7 +55,6 @@ class StsClient extends AwsClient
         }
         parent::__construct($args);
     }
-
     /**
      * Creates credentials from the result of an STS operations
      *
@@ -72,9 +68,7 @@ class StsClient extends AwsClient
         if (!$result->hasKey('Credentials')) {
             throw new \InvalidArgumentException('Result contains no credentials');
         }
-
         $c = $result['Credentials'];
-
         return new Credentials(
             $c['AccessKeyId'],
             $c['SecretAccessKey'],

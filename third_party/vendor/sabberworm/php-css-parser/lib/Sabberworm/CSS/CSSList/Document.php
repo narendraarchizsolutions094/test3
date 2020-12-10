@@ -1,9 +1,6 @@
 <?php
-
 namespace Sabberworm\CSS\CSSList;
-
 use Sabberworm\CSS\Parsing\ParserState;
-
 /**
  * The root CSSList of a parsed file. Contains all top-level css contents, mostly declaration blocks, but also any @-rules encountered.
  */
@@ -15,13 +12,11 @@ class Document extends CSSBlockList {
 	public function __construct($iLineNo = 0) {
 		parent::__construct($iLineNo);
 	}
-
 	public static function parse(ParserState $oParserState) {
 		$oDocument = new Document($oParserState->currentLine());
 		CSSList::parseList($oParserState, $oDocument);
 		return $oDocument;
 	}
-
 	/**
 	 * Gets all DeclarationBlock objects recursively.
 	 */
@@ -30,14 +25,12 @@ class Document extends CSSBlockList {
 		$this->allDeclarationBlocks($aResult);
 		return $aResult;
 	}
-
 	/**
 	 * @deprecated use getAllDeclarationBlocks()
 	 */
 	public function getAllSelectors() {
 		return $this->getAllDeclarationBlocks();
 	}
-
 	/**
 	 * Returns all RuleSet objects found recursively in the tree.
 	 */
@@ -46,7 +39,6 @@ class Document extends CSSBlockList {
 		$this->allRuleSets($aResult);
 		return $aResult;
 	}
-
 	/**
 	 * Returns all Value objects found recursively in the tree.
 	 * @param (object|string) $mElement the CSSList or RuleSet to start the search from (defaults to the whole document). If a string is given, it is used as rule name filter (@see{RuleSet->getRules()}).
@@ -64,7 +56,6 @@ class Document extends CSSBlockList {
 		$this->allValues($mElement, $aResult, $sSearchString, $bSearchInFunctionArguments);
 		return $aResult;
 	}
-
 	/**
 	 * Returns all Selector objects found recursively in the tree.
 	 * Note that this does not yield the full DeclarationBlock that the selector belongs to (and, currently, there is no way to get to that).
@@ -76,7 +67,6 @@ class Document extends CSSBlockList {
 		$this->allSelectors($aResult, $sSpecificitySearch);
 		return $aResult;
 	}
-
 	/**
 	 * Expands all shorthand properties to their long value
 	 */
@@ -85,7 +75,6 @@ class Document extends CSSBlockList {
 			$oDeclaration->expandShorthands();
 		}
 	}
-
 	/**
 	 * Create shorthands properties whenever possible
 	 */
@@ -94,7 +83,6 @@ class Document extends CSSBlockList {
 			$oDeclaration->createShorthands();
 		}
 	}
-
 	// Override render() to make format argument optional
 	public function render(\Sabberworm\CSS\OutputFormat $oOutputFormat = null) {
 		if($oOutputFormat === null) {
@@ -102,9 +90,7 @@ class Document extends CSSBlockList {
 		}
 		return parent::render($oOutputFormat);
 	}
-
 	public function isRootList() {
 		return true;
 	}
-
 }

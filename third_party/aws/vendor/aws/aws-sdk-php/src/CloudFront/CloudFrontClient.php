@@ -1,8 +1,6 @@
 <?php
 namespace Aws\CloudFront;
-
 use Aws\AwsClient;
-
 /**
  * This client is used to interact with the **Amazon CloudFront** service.
  *
@@ -132,19 +130,16 @@ class CloudFrontClient extends AwsClient
                 throw new \InvalidArgumentException("$required is required");
             }
         }
-
         $urlSigner = new UrlSigner(
             $options['key_pair_id'],
             $options['private_key']
         );
-
         return $urlSigner->getSignedUrl(
             $options['url'],
             isset($options['expires']) ? $options['expires'] : null,
             isset($options['policy']) ? $options['policy'] : null
         );
     }
-
     /**
      * Create a signed Amazon CloudFront cookie.
      *
@@ -175,12 +170,10 @@ class CloudFrontClient extends AwsClient
                 throw new \InvalidArgumentException("$required is required");
             }
         }
-
         $cookieSigner = new CookieSigner(
             $options['key_pair_id'],
             $options['private_key']
         );
-
         return $cookieSigner->getSignedCookie(
             isset($options['url']) ? $options['url'] : null,
             isset($options['expires']) ? $options['expires'] : null,

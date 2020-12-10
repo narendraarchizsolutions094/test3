@@ -1,13 +1,11 @@
 <?php
 namespace Aws\Sqs;
-
 use Aws\AwsClient;
 use Aws\CommandInterface;
 use Aws\Sqs\Exception\SqsException;
 use GuzzleHttp\Psr7\Uri;
 use GuzzleHttp\Psr7\UriResolver;
 use Psr\Http\Message\RequestInterface;
-
 /**
  * Client used to interact Amazon Simple Queue Service (Amazon SQS)
  *
@@ -61,7 +59,6 @@ class SqsClient extends AwsClient
         $list->appendBuild($this->queueUrl(), 'sqs.queue_url');
         $list->appendSign($this->validateMd5(), 'sqs.md5');
     }
-
     /**
      * Converts a queue URL into a queue ARN.
      *
@@ -79,14 +76,12 @@ class SqsClient extends AwsClient
             '/'              => ':',
             '.'              => ':',
         ]);
-
         // Cope with SQS' .fifo / :fifo arn inconsistency
         if (substr($queueArn, -5) === ':fifo') {
             $queueArn = substr_replace($queueArn, '.fifo', -5);
         }
         return $queueArn;
     }
-
     /**
      * Moves the URI of the queue to the URI in the input parameter.
      *
@@ -109,7 +104,6 @@ class SqsClient extends AwsClient
             };
         };
     }
-
     /**
      * Calculates the expected md5 hash of message attributes according to the encoding
      * scheme detailed in SQS documentation.
@@ -130,7 +124,6 @@ class SqsClient extends AwsClient
         ) {
             return null;
         }
-
         ksort($message['MessageAttributes']);
         $attributeValues = "";
         foreach ($message['MessageAttributes'] as $name => $details) {
@@ -148,15 +141,12 @@ class SqsClient extends AwsClient
                 );
             }
         }
-
         return md5($attributeValues);
     }
-
     private static function calculateBodyMd5($message)
     {
         return md5($message['Body']);
     }
-
     private static function getEncodedStringPiece($piece)
     {
         $utf8Piece = iconv(
@@ -166,17 +156,14 @@ class SqsClient extends AwsClient
         );
         return self::getFourBytePieceLength($utf8Piece) . $utf8Piece;
     }
-
     private static function getEncodedBinaryPiece($piece)
     {
         return self::getFourBytePieceLength($piece) . $piece;
     }
-
     private static function getFourBytePieceLength($piece)
     {
         return pack('N', (int)strlen($piece));
     }
-
     /**
      * Validates ReceiveMessage body and message attribute MD5s.
      *
@@ -192,7 +179,6 @@ class SqsClient extends AwsClient
                 if ($c->getName() !== 'ReceiveMessage') {
                     return $handler($c, $r);
                 }
-
                 return $handler($c, $r)
                     ->then(
                         function ($result) use ($c, $r) {
@@ -214,7 +200,6 @@ class SqsClient extends AwsClient
                                         ]
                                     );
                                 }
-
                                 if (isset($msg['MD5OfMessageAttributes'])) {
                                     $messageAttributesMd5 = self::calculateMessageAttributesMd5($msg);
                                     if ($messageAttributesMd5 !== $msg['MD5OfMessageAttributes']) {

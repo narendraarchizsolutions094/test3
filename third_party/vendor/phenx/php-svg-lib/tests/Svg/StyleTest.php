@@ -5,15 +5,11 @@
  * Date: 13/04/14
  * Time: 17:42
  */
-
 namespace Svg\Tests;
-
 use Svg\Style;
 use PHPUnit\Framework\TestCase;
-
 class StyleTest extends TestCase
 {
-
     public function test_parseColor()
     {
         $this->assertEquals("none", Style::parseColor("none"));
@@ -29,24 +25,19 @@ class StyleTest extends TestCase
         $this->assertEquals(array(0, 0, 0), Style::parseColor("rgb(0, 0, 0)"));
         $this->assertEquals(array(255, 255, 255), Style::parseColor("rgb(255, 255, 255)"));
     }
-
     public function test_fromAttributes()
     {
         $style = new Style();
-
         $attributes = array(
             "color" => "blue",
             "fill" => "#fff",
             "stroke" => "none",
         );
-
         $style->fromAttributes($attributes);
-
         $this->assertEquals(array(0, 0, 255), $style->color);
         $this->assertEquals(array(255, 255, 255), $style->fill);
         $this->assertEquals("none", $style->stroke);
     }
-
     public function test_convertSize()
     {
         $this->assertEquals(1, Style::convertSize(1));
@@ -54,6 +45,5 @@ class StyleTest extends TestCase
         $this->assertEquals(10, Style::convertSize("10pt"));
         $this->assertEquals(8, Style::convertSize("80%", 10, 72));
     }
-
 }
  

@@ -1,9 +1,7 @@
 <?php
 namespace Aws\Retry;
-
 use Aws\Exception\AwsException;
 use Aws\ResultInterface;
-
 /**
  * @internal
  */
@@ -16,7 +14,6 @@ class QuotaManager
     private $noRetryIncrement;
     private $retryCost;
     private $timeoutRetryCost;
-
     public function __construct($config = [])
     {
         $this->initialRetryTokens = isset($config['initial_retry_tokens'])
@@ -34,7 +31,6 @@ class QuotaManager
         $this->maxCapacity = $this->initialRetryTokens;
         $this->availableCapacity = $this->initialRetryTokens;
     }
-
     public function hasRetryQuota($result)
     {
         if ($result instanceof AwsException && $result->isConnectionError()) {
@@ -42,15 +38,12 @@ class QuotaManager
         } else {
             $this->capacityAmount = $this->retryCost;
         }
-
         if ($this->capacityAmount > $this->availableCapacity) {
             return false;
         }
-
         $this->availableCapacity -= $this->capacityAmount;
         return true;
     }
-
     public function releaseToQuota($result)
     {
         if ($result instanceof AwsException) {
@@ -60,7 +53,6 @@ class QuotaManager
                 ? (int) $result['@metadata']['statusCode']
                 : null;
         }
-
         if (!empty($statusCode) && $statusCode >= 200 && $statusCode < 300) {
             if (isset($this->capacityAmount)) {
                 $amount = $this->capacityAmount;
@@ -75,10 +67,8 @@ class QuotaManager
                 $this->maxCapacity
             );
         }
-
         return (isset($amount) ? $amount : 0);
     }
-
     public function getAvailableCapacity()
     {
         return $this->availableCapacity;

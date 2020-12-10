@@ -168,7 +168,6 @@
                                     <label><?php echo display('region_list')?> </label>
                                      <select class="form-control" name="region" id="region" >
                                           <option value="" >---Select region---</option>
-
                                             <?php foreach($region_list as $region){
                                             if($region->region_id==$department->region){ ?>                     
                                                 <option value="<?=$region->region_id ?>" selected><?=$region->region_name ?></option>                                                
@@ -177,11 +176,9 @@
                                            <?php  } }?>                                            
                                      </select>                                    
                                 </div>       
-
                                 <div class="form-group col-md-4">                                    
                                     <label><?php echo display('state_name')?> </label>                                <select class="form-control state_id" name="state_id" id="state_id"> 
                                           <option value="" >---Select state---</option>
-
                                        <?php foreach($state_list as $state){?>                                       
                                             <option value="<?= $state->id?>" <?php if($state->id==$department->state_id){echo 'selected';} ?>><?=$state->state ?></option>                                       
                                        <?php } ?>                            
@@ -191,7 +188,6 @@
                                        <label  class="col-form-label"><?php echo display('territory_name')?> </label>
                                        <select class="form-control territory" name="territory" id="territory">
                                           <option value="" >---Select territory---</option>
-
                                        <?php 
                                        
                                        if (!empty($territory_lsit)) {
@@ -217,7 +213,6 @@
                             <div class="form-row">
                                    <div class="form-group col-md-4">
                                      <label><?php echo display('city_name')?> </label>
-
                                     <select class="form-control city_name" name="city_name" id="city_name" >
                                              <option value="" >---Select city---</option>
                                                                        <?php 
@@ -252,7 +247,6 @@
                                   <?php
                                   }
                                   ?>
-
                                 
                                 <div class="form-group col-md-4" style="visibility: hidden;">
                                     <label><?php echo display('user_level');?> <i class="text-danger">*</i></label>
@@ -286,7 +280,6 @@
                                     </select>
                                     
                                 </div>
-
                             <div class="form-row">
                                 <div class="form-group col-md-4">
                                     <label class="control-label" for="process">Process</label> 									
@@ -303,13 +296,11 @@
                                 </div>
                             </div> 
 							
-
                                 <?php if (!empty($department->pk_i_admin_id)) { ?>
                                 
                                 <input type="hidden" id="password" class="form-control br_25  m-0 icon_left_input" name="old_pass" placeholder="Password"  value="<?php echo $department->s_password; ?>" >
                                        
                                  <?php 	}?>							
-
 						    <div class="row">
 								  <div class="col-md-12 text-center"> <a href="#act-det-info" class="ui positive button nxt-tab-btn">  Next </a></div>
 						    </div>	
@@ -390,7 +381,6 @@
                                     <input name="a_branch" type="text" class="form-control" id="firstname" placeholder="Branch Name" value="">
                                 </div>
                             </div>
-
                             <div class="form-group row">
                                  <label class="col-xs-3 col-form-label"><?php echo display('status') ?></label>
                                  <div class="col-xs-9">
@@ -458,7 +448,6 @@ $('#new_pass, #c_pass').on('keyup', function() {
     } else
         $('#password_error').html('Not Matching').css('color', 'red');
 });
-
 function find_teretory() {
     $.ajax({
             type: 'POST',
@@ -475,7 +464,6 @@ function find_teretory() {
         .fail(function() {
         });
 }
-
 function find_state() {
     $.ajax({
             type: 'POST',
@@ -492,7 +480,6 @@ function find_state() {
         .fail(function() {
         });
 }
-
 function find_city() {
     $.ajax({
             type: 'POST',
@@ -507,32 +494,22 @@ function find_city() {
             }
         })
         .fail(function() {
-
         });
 }
 $(function() {
-
     $("#country").change(function() {
-
         var country = $(this).val();
         var html = '';
-
         $.ajax({
-
             url: '<?php echo base_url();?>Location/find_region',
             type: 'POST',
             data: {
                 country: country
             },
-
             success: function(data) {
-
                 var obj = JSON.parse(data);
-
                 html += '<option value="">---Select Region---</option>';
-
                 for (var i = 0; i < (obj.length); i++) {
-
                     html += '<option value="' + obj[i].region_id + '">' + obj[i].region_name + '</option>';
                 }
                 $("#region").html(html);
@@ -541,92 +518,61 @@ $(function() {
                 $('.territory').prop('selectedIndex',0);
             }
 
-
         });
-
     });
-
 
     //Get region 
     $("#region").change(function() {
-
         var region_id = $(this).val();
-
         var html1 = '';
-
         $.ajax({
-
             url: '<?php echo base_url();?>Location/select_state_by_region',
             type: 'POST',
             data: {
                 region_id: region_id
             },
             success: function(data) {
-
                 var obj = JSON.parse(data);
-
                 if (obj.lenght == 0) {
-
                     console.log('NOT data found');
-
                 } else {
-
                     html1 += '<option value="" >---Select State---</option>';
-
                     for (var i = 0; i < (obj.length); i++) {
-
                         html1 += '<option value="' + obj[i].id + '">' + obj[i].state + '</option>';
                     }
-
                     $(".state_id").html(html1);
                 $('.city_name').prop('selectedIndex',0);
                 $('.territory').prop('selectedIndex',0);
 
-
                 }
-
-
 
             }
 
-
         });
-
     });
-
     //Get State according to region..
-
 
     //Find state base on territory
     $(".state_id").change(function() {
-
         var state_id = $(this).val();
         var html = '';
-
         $.ajax({
-
             url: '<?php echo base_url();?>Location/select_territory_by_state',
             type: 'POST',
             data: {
                 state_id: state_id
             },
             success: function(data) {
-
                 var obj = JSON.parse(data);
-
                 html += '<option value="" >---Select Territory---</option>';
-
                 for (var i = 0; i < (obj.length); i++) {
-
                     html += '<option value="' + obj[i].territory_id + '">' + obj[i].territory_name + '</option>';
                 }
-
                 $('.territory').html(html);
                 $('.city_name').prop('selectedIndex',0);
             }
         });
     });
-
     //Find City based on territory....
     $(".territory").change(function() {
         var territory_id = $(this).val();
@@ -641,20 +587,16 @@ $(function() {
                 var obj = JSON.parse(data);
                 html += '<option value="" >---Select City---</option>';
                 for (var i = 0; i < (obj.length); i++) {
-
                     html += '<option value="' + obj[i].id + '">' + obj[i].city + '</option>';
                 }
-
                 $('.city_name').html(html);
             }
         });
     });
 });   
-
 $(".chosen-select").chosen({
   no_results_text: "Oops, nothing found!"
 })
-
 $("#submit_btn").on('click',function(e){
   
   var emp_id  = $("input[name='employee_id']").val();
@@ -665,7 +607,6 @@ $("#submit_btn").on('click',function(e){
   var mobile  = $("input[name='cell']").val();
   var pass  = $("input[name='password']").val();
   var user_type  = $("select[name='user_type']").val();
-
   var msg = '';
   
   if (!emp_id) {
@@ -674,28 +615,22 @@ $("#submit_btn").on('click',function(e){
   if (!designation) {
     msg += '<b>Designation is required.</b><br>';    
   }  
-
   if (!fname) {
     msg += '<b>First Name is required.</b><br>';    
   }
-
   if (!lname) {
     msg += '<b>Last Name is required.</b><br>';    
   }
-
   if (!email) {
     msg += '<b>Email is required.</b><br>';    
   }
-
   if (!mobile) {
     msg += '<b>Mobile No is required.</b><br>';    
   }
   var editt = $("input[name='dprt_id']").val();
-
   if (!pass && editt=='') {
     msg += '<b>Password is required.</b><br>';    
   }
-
   if (!user_type) {
     msg += '<b>User Right is required</b>.<br>';    
   }
@@ -707,6 +642,5 @@ $("#submit_btn").on('click',function(e){
       html: msg    
     });
   }
-
 });
 </script>                              

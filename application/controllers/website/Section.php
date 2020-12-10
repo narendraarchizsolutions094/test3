@@ -1,8 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-
 class Section extends CI_Controller {
-
 	public function __construct()
 	{
 		parent::__construct();
@@ -10,14 +8,12 @@ class Section extends CI_Controller {
 		$this->load->model(array(
 			'website/section_model'
 		)); 
-
 		
 		if (empty($this->session->user_id)) {
             redirect('login');
         } 
 	}
  
-
 	public function index()
 	{
 		$data['title'] = display('section');
@@ -26,7 +22,6 @@ class Section extends CI_Controller {
 		$data['content'] = $this->load->view('website/pages/section',$data,true);
 		$this->load->view('layout/main_wrapper',$data);
 	} 
-
 	public function create()
 	{
 		$data['title'] = display('add_section');
@@ -97,7 +92,6 @@ class Section extends CI_Controller {
 		} 
 	} 
 
-
 	public function edit($id = null) 
 	{
 		$data['title'] = display('section_edit');
@@ -117,7 +111,6 @@ class Section extends CI_Controller {
 		$this->load->view('layout/main_wrapper',$data);
 	}
  
-
 	public function delete($id = null) 
 	{
 		if ($this->section_model->delete($id)) {
@@ -129,7 +122,5 @@ class Section extends CI_Controller {
 		}
 		redirect('website/section/');
 	}
-
-
 
 }

@@ -1,8 +1,6 @@
 <?php
 namespace Aws\CodeStarconnections;
-
 use Aws\AwsClient;
-
 /**
  * This client is used to interact with the **AWS CodeStar connections** service.
  * @method \Aws\Result createConnection(array $args = [])

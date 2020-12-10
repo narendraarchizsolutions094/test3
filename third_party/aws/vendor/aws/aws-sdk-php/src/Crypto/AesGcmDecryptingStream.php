@@ -1,32 +1,22 @@
 <?php
 namespace Aws\Crypto;
-
 use GuzzleHttp\Psr7;
 use GuzzleHttp\Psr7\StreamDecoratorTrait;
 use Psr\Http\Message\StreamInterface;
 use \RuntimeException;
-
 /**
  * @internal Represents a stream of data to be gcm decrypted.
  */
 class AesGcmDecryptingStream implements AesStreamInterface
 {
     use StreamDecoratorTrait;
-
     private $aad;
-
     private $initializationVector;
-
     private $key;
-
     private $keySize;
-
     private $cipherText;
-
     private $tag;
-
     private $tagLength;
-
     /**
      * @param StreamInterface $cipherText
      * @param string $key
@@ -50,7 +40,6 @@ class AesGcmDecryptingStream implements AesStreamInterface
                 'AES-GCM decryption is only supported in PHP 7.1 or greater'
             );
         }
-
         $this->cipherText = $cipherText;
         $this->key = $key;
         $this->initializationVector = $initializationVector;
@@ -59,22 +48,18 @@ class AesGcmDecryptingStream implements AesStreamInterface
         $this->tagLength = $tagLength;
         $this->keySize = $keySize;
     }
-
     public function getOpenSslName()
     {
         return "aes-{$this->keySize}-gcm";
     }
-
     public function getAesName()
     {
         return 'AES/GCM/NoPadding';
     }
-
     public function getCurrentIv()
     {
         return $this->initializationVector;
     }
-
     public function createStream()
     {
         return Psr7\stream_for(openssl_decrypt(
@@ -87,7 +72,6 @@ class AesGcmDecryptingStream implements AesStreamInterface
             $this->aad
         ));
     }
-
     public function isWritable()
     {
         return false;

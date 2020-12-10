@@ -1,6 +1,5 @@
 <?php
 namespace Aws\Handler\GuzzleV5;
-
 use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
@@ -13,7 +12,6 @@ use GuzzleHttp\Psr7\Response as Psr7Response;
 use GuzzleHttp\Stream\Stream;
 use Psr\Http\Message\RequestInterface as Psr7Request;
 use Psr\Http\Message\StreamInterface as Psr7StreamInterface;
-
 /**
  * A request handler that sends PSR-7-compatible requests with Guzzle 5.
  *
@@ -37,10 +35,8 @@ class GuzzleHandler
         'delay'             => true,
         'sink'              => true,
     ];
-
     /** @var ClientInterface */
     private $client;
-
     /**
      * @param ClientInterface $client
      */
@@ -48,7 +44,6 @@ class GuzzleHandler
     {
         $this->client = $client ?: new Client();
     }
-
     /**
      * @param Psr7Request $request
      * @param array $options
@@ -61,7 +56,6 @@ class GuzzleHandler
         $guzzlePromise = $this->client->send(
             $this->createGuzzleRequest($request, $options)
         );
-
         $promise = new Promise\Promise(
             function () use ($guzzlePromise) {
                 try {
@@ -73,9 +67,7 @@ class GuzzleHandler
             },
             [$guzzlePromise, 'cancel']
         );
-
         $guzzlePromise->then([$promise, 'resolve'], [$promise, 'reject']);
-
         return $promise->then(
             function (GuzzleResponse $response) {
                 // Adapt the Guzzle 5 Future to a Guzzle 6 ResponsePromise.
@@ -101,7 +93,6 @@ class GuzzleHandler
             }
         );
     }
-
     private function createGuzzleRequest(Psr7Request $psrRequest, array $options)
     {
         $ringConfig = [];
@@ -109,20 +100,17 @@ class GuzzleHandler
             ? $options['http_stats_receiver']
             : null;
         unset($options['http_stats_receiver']);
-
         // Remove unsupported options.
         foreach (array_keys($options) as $key) {
             if (!isset(self::$validOptions[$key])) {
                 unset($options[$key]);
             }
         }
-
         // Handle delay option.
         if (isset($options['delay'])) {
             $ringConfig['delay'] = $options['delay'];
             unset($options['delay']);
         }
-
         // Prepare sink option.
         if (isset($options['sink'])) {
             $ringConfig['save_to'] = ($options['sink'] instanceof Psr7StreamInterface)
@@ -130,17 +118,14 @@ class GuzzleHandler
                 : $options['sink'];
             unset($options['sink']);
         }
-
         // Ensure that all requests are async and lazy like Guzzle 6.
         $options['future'] = 'lazy';
-
         // Create the Guzzle 5 request from the provided PSR7 request.
         $request = $this->client->createRequest(
             $psrRequest->getMethod(),
             $psrRequest->getUri(),
             $options
         );
-
         if (is_callable($statsCallback)) {
             $request->getEmitter()->on(
                 'end',
@@ -149,7 +134,6 @@ class GuzzleHandler
                 }
             );
         }
-
         // For the request body, adapt the PSR stream to a Guzzle stream.
         $body = $psrRequest->getBody();
         if ($body->getSize() === 0) {
@@ -157,31 +141,25 @@ class GuzzleHandler
         } else {
             $request->setBody(new GuzzleStream($body));
         }
-
         $request->setHeaders($psrRequest->getHeaders());
-
         $request->setHeader(
             'User-Agent',
             $request->getHeader('User-Agent')
                 . ' ' . Client::getDefaultUserAgent()
         );
-
         // Make sure the delay is configured, if provided.
         if ($ringConfig) {
             foreach ($ringConfig as $k => $v) {
                 $request->getConfig()->set($k, $v);
             }
         }
-
         return $request;
     }
-
     private function createPsr7Response(GuzzleResponse $response)
     {
         if ($body = $response->getBody()) {
             $body = new PsrStream($body);
         }
-
         return new Psr7Response(
             $response->getStatusCode(),
             $response->getHeaders(),
@@ -189,7 +167,6 @@ class GuzzleHandler
             $response->getReasonPhrase()
         );
     }
-
     private function prepareErrorData(Exception $e)
     {
         $error = [
@@ -197,15 +174,12 @@ class GuzzleHandler
             'connection_error' => false,
             'response'         => null,
         ];
-
         if ($e instanceof ConnectException) {
             $error['connection_error'] = true;
         }
-
         if ($e instanceof RequestException && $e->getResponse()) {
             $error['response'] = $this->createPsr7Response($e->getResponse());
         }
-
         return $error;
     }
 }

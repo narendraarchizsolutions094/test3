@@ -1,6 +1,5 @@
 <?php
 namespace Aws\Arn;
-
 /**
  * @internal
  */
@@ -10,12 +9,10 @@ trait ResourceTypeAndIdTrait
     {
         return $this->data['resource_type'];
     }
-
     public function getResourceId()
     {
         return $this->data['resource_id'];
     }
-
     private static function parseResourceTypeAndId(array $data)
     {
         $data['resource_type'] = null;
@@ -28,7 +25,6 @@ trait ResourceTypeAndIdTrait
                 break;
             }
         }
-
         return $data;
     }
 }

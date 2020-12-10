@@ -15,193 +15,156 @@
  * @license Public Domain http://creativecommons.org/licenses/publicdomain/
  * @package Cpdf
  */
-
 namespace Svg\Surface;
-
 class CPdf
 {
-
     /**
      * @var integer The current number of pdf objects in the document
      */
     public $numObj = 0;
-
     /**
      * @var array This array contains all of the pdf objects, ready for final assembly
      */
     public $objects = array();
-
     /**
      * @var integer The objectId (number within the objects array) of the document catalog
      */
     public $catalogId;
-
     /**
      * @var array Array carrying information about the fonts that the system currently knows about
      * Used to ensure that a font is not loaded twice, among other things
      */
     public $fonts = array();
-
     /**
      * @var string The default font metrics file to use if no other font has been loaded.
      * The path to the directory containing the font metrics should be included
      */
     public $defaultFont = './fonts/Helvetica.afm';
-
     /**
      * @string A record of the current font
      */
     public $currentFont = '';
-
     /**
      * @var string The current base font
      */
     public $currentBaseFont = '';
-
     /**
      * @var integer The number of the current font within the font array
      */
     public $currentFontNum = 0;
-
     /**
      * @var integer
      */
     public $currentNode;
-
     /**
      * @var integer Object number of the current page
      */
     public $currentPage;
-
     /**
      * @var integer Object number of the currently active contents block
      */
     public $currentContents;
-
     /**
      * @var integer Number of fonts within the system
      */
     public $numFonts = 0;
-
     /**
      * @var integer Number of graphic state resources used
      */
     private $numStates = 0;
-
     /**
      * @var array Current color for fill operations, defaults to inactive value,
      * all three components should be between 0 and 1 inclusive when active
      */
     public $currentColor = null;
-
     /**
      * @var string Fill rule (nonzero or evenodd)
      */
     public $fillRule = "nonzero";
-
     /**
      * @var array Current color for stroke operations (lines etc.)
      */
     public $currentStrokeColor = null;
-
     /**
      * @var string Current style that lines are drawn in
      */
     public $currentLineStyle = '';
-
     /**
      * @var array Current line transparency (partial graphics state)
      */
     public $currentLineTransparency = array("mode" => "Normal", "opacity" => 1.0);
-
     /**
      * array Current fill transparency (partial graphics state)
      */
     public $currentFillTransparency = array("mode" => "Normal", "opacity" => 1.0);
-
     /**
      * @var array An array which is used to save the state of the document, mainly the colors and styles
      * it is used to temporarily change to another state, the change back to what it was before
      */
     public $stateStack = array();
-
     /**
      * @var integer Number of elements within the state stack
      */
     public $nStateStack = 0;
-
     /**
      * @var integer Number of page objects within the document
      */
     public $numPages = 0;
-
     /**
      * @var array Object Id storage stack
      */
     public $stack = array();
-
     /**
      * @var integer Number of elements within the object Id storage stack
      */
     public $nStack = 0;
-
     /**
      * an array which contains information about the objects which are not firmly attached to pages
      * these have been added with the addObject function
      */
     public $looseObjects = array();
-
     /**
      * array contains infomation about how the loose objects are to be added to the document
      */
     public $addLooseObjects = array();
-
     /**
      * @var integer The objectId of the information object for the document
      * this contains authorship, title etc.
      */
     public $infoObject = 0;
-
     /**
      * @var integer Number of images being tracked within the document
      */
     public $numImages = 0;
-
     /**
      * @var array An array containing options about the document
      * it defaults to turning on the compression of the objects
      */
     public $options = array('compression' => true);
-
     /**
      * @var integer The objectId of the first page of the document
      */
     public $firstPageId;
-
     /**
      * @var float Used to track the last used value of the inter-word spacing, this is so that it is known
      * when the spacing is changed.
      */
     public $wordSpaceAdjust = 0;
-
     /**
      * @var float Used to track the last used value of the inter-letter spacing, this is so that it is known
      * when the spacing is changed.
      */
     public $charSpaceAdjust = 0;
-
     /**
      * @var integer The object Id of the procset object
      */
     public $procsetObjectId;
-
     /**
      * @var array Store the information about the relationship between font families
      * this used so that the code knows which font is the bold version of another font, etc.
      * the value of this array is initialised in the constuctor function.
      */
     public $fontFamilies = array();
-
     /**
      * @var string Folder for php serialized formats of font metrics files.
      * If empty string, use same folder as original metrics files.
@@ -210,13 +173,11 @@ class CPdf
      * Because of potential trouble with php safe mode, folder cannot be created at runtime.
      */
     public $fontcache = '';
-
     /**
      * @var integer The version of the font metrics cache file.
      * This value must be manually incremented whenever the internal font data structure is modified.
      */
     public $fontcacheVersion = 6;
-
     /**
      * @var string Temporary folder.
      * If empty string, will attempty system tmp folder.
@@ -224,101 +185,82 @@ class CPdf
      * Only used for conversion of gd images to jpeg images.
      */
     public $tmp = '';
-
     /**
      * @var string Track if the current font is bolded or italicised
      */
     public $currentTextState = '';
-
     /**
      * @var string Messages are stored here during processing, these can be selected afterwards to give some useful debug information
      */
     public $messages = '';
-
     /**
      * @var string The ancryption array for the document encryption is stored here
      */
     public $arc4 = '';
-
     /**
      * @var integer The object Id of the encryption information
      */
     public $arc4_objnum = 0;
-
     /**
      * @var string The file identifier, used to uniquely identify a pdf document
      */
     public $fileIdentifier = '';
-
     /**
      * @var boolean A flag to say if a document is to be encrypted or not
      */
     public $encrypted = false;
-
     /**
      * @var string The encryption key for the encryption of all the document content (structure is not encrypted)
      */
     public $encryptionKey = '';
-
     /**
      * @var array Array which forms a stack to keep track of nested callback functions
      */
     public $callback = array();
-
     /**
      * @var integer The number of callback functions in the callback array
      */
     public $nCallback = 0;
-
     /**
      * @var array Store label->id pairs for named destinations, these will be used to replace internal links
      * done this way so that destinations can be defined after the location that links to them
      */
     public $destinations = array();
-
     /**
      * @var array Store the stack for the transaction commands, each item in here is a record of the values of all the
      * publiciables within the class, so that the user can rollback at will (from each 'start' command)
      * note that this includes the objects array, so these can be large.
      */
     public $checkpoint = '';
-
     /**
      * @var array Table of Image origin filenames and image labels which were already added with o_image().
      * Allows to merge identical images
      */
     public $imagelist = array();
-
     /**
      * @var boolean Whether the text passed in should be treated as Unicode or just local character set.
      */
     public $isUnicode = false;
-
     /**
      * @var string the JavaScript code of the document
      */
     public $javascript = '';
-
     /**
      * @var boolean whether the compression is possible
      */
     protected $compressionReady = false;
-
     /**
      * @var array Current page size
      */
     protected $currentPageSize = array("width" => 0, "height" => 0);
-
     /**
      * @var array All the chars that will be required in the font subsets
      */
     protected $stringSubsets = array();
-
     /**
      * @var string The target internal encoding
      */
     static protected $targetEncoding = 'iso-8859-1';
-
     /**
      * @var array The list of the core fonts
      */
@@ -338,7 +280,6 @@ class CPdf
         'symbol',
         'zapfdingbats'
     );
-
     /**
      * Class constructor
      * This will start a new document
@@ -354,18 +295,14 @@ class CPdf
         $this->fontcache = $fontcache;
         $this->tmp = $tmp;
         $this->newDocument($pageSize);
-
         $this->compressionReady = function_exists('gzcompress');
-
         if (in_array('Windows-1252', mb_list_encodings())) {
             self::$targetEncoding = 'Windows-1252';
         }
-
         // also initialize the font families that are known about already
         $this->setFontFamily('init');
         //  $this->fileIdentifier = md5('xxxxxxxx'.time());
     }
-
     /**
      * Document object methods (internal use only)
      *
@@ -380,7 +317,6 @@ class CPdf
      * These, in conjunction with the output function are the ONLY way for output to be produced
      * within the pdf 'file'.
      */
-
     /**
      * Destination object, used to specify the location for the user to jump to, presently on opening
      */
@@ -389,7 +325,6 @@ class CPdf
         if ($action !== 'new') {
             $o = &$this->objects[$id];
         }
-
         switch ($action) {
             case 'new':
                 $this->objects[$id] = array('t' => 'destination', 'info' => array());
@@ -410,15 +345,12 @@ class CPdf
                         $this->objects[$id]['info']['page'] = $options['page'];
                 }
                 break;
-
             case 'out':
                 $tmp = $o['info'];
                 $res = "\n$id 0 obj\n" . '[' . $tmp['page'] . ' 0 R /' . $tmp['string'] . "]\nendobj";
-
                 return $res;
         }
     }
-
     /**
      * set the viewer preferences
      */
@@ -427,12 +359,10 @@ class CPdf
         if ($action !== 'new') {
             $o = &$this->objects[$id];
         }
-
         switch ($action) {
             case 'new':
                 $this->objects[$id] = array('t' => 'viewerPreferences', 'info' => array());
                 break;
-
             case 'add':
                 foreach ($options as $k => $v) {
                     switch ($k) {
@@ -448,18 +378,15 @@ class CPdf
                     }
                 }
                 break;
-
             case 'out':
                 $res = "\n$id 0 obj\n<< ";
                 foreach ($o['info'] as $k => $v) {
                     $res .= "\n/$k $v";
                 }
                 $res .= "\n>>\n";
-
                 return $res;
         }
     }
-
     /**
      * define the document catalog, the overall controller for the document
      */
@@ -468,65 +395,51 @@ class CPdf
         if ($action !== 'new') {
             $o = &$this->objects[$id];
         }
-
         switch ($action) {
             case 'new':
                 $this->objects[$id] = array('t' => 'catalog', 'info' => array());
                 $this->catalogId = $id;
                 break;
-
             case 'outlines':
             case 'pages':
             case 'openHere':
             case 'javascript':
                 $o['info'][$action] = $options;
                 break;
-
             case 'viewerPreferences':
                 if (!isset($o['info']['viewerPreferences'])) {
                     $this->numObj++;
                     $this->o_viewerPreferences($this->numObj, 'new');
                     $o['info']['viewerPreferences'] = $this->numObj;
                 }
-
                 $vp = $o['info']['viewerPreferences'];
                 $this->o_viewerPreferences($vp, 'add', $options);
-
                 break;
-
             case 'out':
                 $res = "\n$id 0 obj\n<< /Type /Catalog";
-
                 foreach ($o['info'] as $k => $v) {
                     switch ($k) {
                         case 'outlines':
                             $res .= "\n/Outlines $v 0 R";
                             break;
-
                         case 'pages':
                             $res .= "\n/Pages $v 0 R";
                             break;
-
                         case 'viewerPreferences':
                             $res .= "\n/ViewerPreferences $v 0 R";
                             break;
-
                         case 'openHere':
                             $res .= "\n/OpenAction $v 0 R";
                             break;
-
                         case 'javascript':
                             $res .= "\n/Names <</JavaScript $v 0 R>>";
                             break;
                     }
                 }
-
                 $res .= " >>\nendobj";
-
                 return $res;
         }
     }
-
     /**
      * object which is a parent to the pages in the document
      */
@@ -535,13 +448,11 @@ class CPdf
         if ($action !== 'new') {
             $o = &$this->objects[$id];
         }
-
         switch ($action) {
             case 'new':
                 $this->objects[$id] = array('t' => 'pages', 'info' => array());
                 $this->o_catalog($this->catalogId, 'pages', $id);
                 break;
-
             case 'page':
                 if (!is_array($options)) {
                     // then it will just be the id of the new page
@@ -552,76 +463,61 @@ class CPdf
                     if (isset($options['id']) && isset($options['rid']) && isset($options['pos'])) {
                         $i = array_search($options['rid'], $o['info']['pages']);
                         if (isset($o['info']['pages'][$i]) && $o['info']['pages'][$i] == $options['rid']) {
-
                             // then there is a match
                             // make a space
                             switch ($options['pos']) {
                                 case 'before':
                                     $k = $i;
                                     break;
-
                                 case 'after':
                                     $k = $i + 1;
                                     break;
-
                                 default:
                                     $k = -1;
                                     break;
                             }
-
                             if ($k >= 0) {
                                 for ($j = count($o['info']['pages']) - 1; $j >= $k; $j--) {
                                     $o['info']['pages'][$j + 1] = $o['info']['pages'][$j];
                                 }
-
                                 $o['info']['pages'][$k] = $options['id'];
                             }
                         }
                     }
                 }
                 break;
-
             case 'procset':
                 $o['info']['procset'] = $options;
                 break;
-
             case 'mediaBox':
                 $o['info']['mediaBox'] = $options;
                 // which should be an array of 4 numbers
                 $this->currentPageSize = array('width' => $options[2], 'height' => $options[3]);
                 break;
-
             case 'font':
                 $o['info']['fonts'][] = array('objNum' => $options['objNum'], 'fontNum' => $options['fontNum']);
                 break;
-
             case 'extGState':
                 $o['info']['extGStates'][] = array('objNum' => $options['objNum'], 'stateNum' => $options['stateNum']);
                 break;
-
             case 'xObject':
                 $o['info']['xObjects'][] = array('objNum' => $options['objNum'], 'label' => $options['label']);
                 break;
-
             case 'out':
                 if (count($o['info']['pages'])) {
                     $res = "\n$id 0 obj\n<< /Type /Pages\n/Kids [";
                     foreach ($o['info']['pages'] as $v) {
                         $res .= "$v 0 R\n";
                     }
-
                     $res .= "]\n/Count " . count($this->objects[$id]['info']['pages']);
-
                     if ((isset($o['info']['fonts']) && count($o['info']['fonts'])) ||
                         isset($o['info']['procset']) ||
                         (isset($o['info']['extGStates']) && count($o['info']['extGStates']))
                     ) {
                         $res .= "\n/Resources <<";
-
                         if (isset($o['info']['procset'])) {
                             $res .= "\n/ProcSet " . $o['info']['procset'] . " 0 R";
                         }
-
                         if (isset($o['info']['fonts']) && count($o['info']['fonts'])) {
                             $res .= "\n/Font << ";
                             foreach ($o['info']['fonts'] as $finfo) {
@@ -629,7 +525,6 @@ class CPdf
                             }
                             $res .= "\n>>";
                         }
-
                         if (isset($o['info']['xObjects']) && count($o['info']['xObjects'])) {
                             $res .= "\n/XObject << ";
                             foreach ($o['info']['xObjects'] as $finfo) {
@@ -637,7 +532,6 @@ class CPdf
                             }
                             $res .= "\n>>";
                         }
-
                         if (isset($o['info']['extGStates']) && count($o['info']['extGStates'])) {
                             $res .= "\n/ExtGState << ";
                             foreach ($o['info']['extGStates'] as $gstate) {
@@ -645,7 +539,6 @@ class CPdf
                             }
                             $res .= "\n>>";
                         }
-
                         $res .= "\n>>";
                         if (isset($o['info']['mediaBox'])) {
                             $tmp = $o['info']['mediaBox'];
@@ -658,16 +551,13 @@ class CPdf
                                 ) . ']';
                         }
                     }
-
                     $res .= "\n >>\nendobj";
                 } else {
                     $res = "\n$id 0 obj\n<< /Type /Pages\n/Count 0\n>>\nendobj";
                 }
-
                 return $res;
         }
     }
-
     /**
      * define the outlines in the doc, empty for now
      */
@@ -676,33 +566,27 @@ class CPdf
         if ($action !== 'new') {
             $o = &$this->objects[$id];
         }
-
         switch ($action) {
             case 'new':
                 $this->objects[$id] = array('t' => 'outlines', 'info' => array('outlines' => array()));
                 $this->o_catalog($this->catalogId, 'outlines', $id);
                 break;
-
             case 'outline':
                 $o['info']['outlines'][] = $options;
                 break;
-
             case 'out':
                 if (count($o['info']['outlines'])) {
                     $res = "\n$id 0 obj\n<< /Type /Outlines /Kids [";
                     foreach ($o['info']['outlines'] as $v) {
                         $res .= "$v 0 R ";
                     }
-
                     $res .= "] /Count " . count($o['info']['outlines']) . " >>\nendobj";
                 } else {
                     $res = "\n$id 0 obj\n<< /Type /Outlines /Count 0 >>\nendobj";
                 }
-
                 return $res;
         }
     }
-
     /**
      * an object to hold the font description
      */
@@ -711,7 +595,6 @@ class CPdf
         if ($action !== 'new') {
             $o = &$this->objects[$id];
         }
-
         switch ($action) {
             case 'new':
                 $this->objects[$id] = array(
@@ -724,7 +607,6 @@ class CPdf
                 );
                 $fontNum = $this->numFonts;
                 $this->objects[$id]['info']['fontNum'] = $fontNum;
-
                 // deal with the encoding and the differences
                 if (isset($options['differences'])) {
                     // then we'll need an encoding dictionary

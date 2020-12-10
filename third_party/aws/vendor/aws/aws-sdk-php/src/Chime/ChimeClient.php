@@ -1,8 +1,6 @@
 <?php
 namespace Aws\Chime;
-
 use Aws\AwsClient;
-
 /**
  * This client is used to interact with the **Amazon Chime** service.
  * @method \Aws\Result associatePhoneNumberWithUser(array $args = [])

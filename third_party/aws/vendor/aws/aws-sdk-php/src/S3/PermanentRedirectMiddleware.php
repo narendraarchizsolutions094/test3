@@ -1,11 +1,9 @@
 <?php
 namespace Aws\S3;
-
 use Aws\CommandInterface;
 use Aws\ResultInterface;
 use Aws\S3\Exception\PermanentRedirectException;
 use Psr\Http\Message\RequestInterface;
-
 /**
  * Throws a PermanentRedirectException exception when a 301 redirect is
  * encountered.
@@ -16,7 +14,6 @@ class PermanentRedirectMiddleware
 {
     /** @var callable  */
     private $nextHandler;
-
     /**
      * Create a middleware wrapper function.
      *
@@ -28,7 +25,6 @@ class PermanentRedirectMiddleware
             return new self($handler);
         };
     }
-
     /**
      * @param callable $nextHandler Next handler to invoke.
      */
@@ -36,7 +32,6 @@ class PermanentRedirectMiddleware
     {
         $this->nextHandler = $nextHandler;
     }
-
     public function __invoke(CommandInterface $command, RequestInterface $request = null)
     {
         $next = $this->nextHandler;

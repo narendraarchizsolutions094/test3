@@ -1,6 +1,5 @@
 <?php
 namespace GuzzleHttp\Cookie;
-
 /**
  * Persists cookies in the client session
  */
@@ -11,7 +10,6 @@ class SessionCookieJar extends CookieJar
     
     /** @var bool Control whether to persist session cookies or not. */
     private $storeSessionCookies;
-
     /**
      * Create a new SessionCookieJar object
      *
@@ -27,7 +25,6 @@ class SessionCookieJar extends CookieJar
         $this->storeSessionCookies = $storeSessionCookies;
         $this->load();
     }
-
     /**
      * Saves cookies to session when shutting down
      */
@@ -35,7 +32,6 @@ class SessionCookieJar extends CookieJar
     {
         $this->save();
     }
-
     /**
      * Save cookies to the client session
      */
@@ -48,10 +44,8 @@ class SessionCookieJar extends CookieJar
                 $json[] = $cookie->toArray();
             }
         }
-
         $_SESSION[$this->sessionKey] = json_encode($json);
     }
-
     /**
      * Load the contents of the client session into the data array
      */

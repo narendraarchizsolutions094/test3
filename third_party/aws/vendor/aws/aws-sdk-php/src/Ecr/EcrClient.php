@@ -1,8 +1,6 @@
 <?php
 namespace Aws\Ecr;
-
 use Aws\AwsClient;
-
 /**
  * This client is used to interact with the **Amazon EC2 Container Registry** service.
  *

@@ -1,12 +1,10 @@
 <?php
 namespace Aws\Credentials;
-
 use Aws\Exception\AwsException;
 use Aws\Exception\CredentialsException;
 use Aws\Result;
 use Aws\Sts\StsClient;
 use GuzzleHttp\Promise;
-
 /**
  * Credential provider that provides credentials via assuming a role with a web identity
  * More Information, see: https://docs.aws.amazon.com/aws-sdk-php/v3/api/api-sts-2011-06-15.html#assumerolewithwebidentity
@@ -15,25 +13,18 @@ class AssumeRoleWithWebIdentityCredentialProvider
 {
     const ERROR_MSG = "Missing required 'AssumeRoleWithWebIdentityCredentialProvider' configuration option: ";
     const ENV_RETRIES = 'AWS_METADATA_SERVICE_NUM_ATTEMPTS';
-
     /** @var string */
     private $tokenFile;
-
     /** @var string */
     private $arn;
-
     /** @var string */
     private $session;
-
     /** @var StsClient */
     private $client;
-
     /** @var integer */
     private $retries;
-
     /** @var integer */
     private $attempts;
-
     /**
      * The constructor attempts to load config from environment variables.
      * If not set, the following config options are used:
@@ -50,27 +41,21 @@ class AssumeRoleWithWebIdentityCredentialProvider
             throw new \InvalidArgumentException(self::ERROR_MSG . "'RoleArn'.");
         }
         $this->arn = $config['RoleArn'];
-
         if (!isset($config['WebIdentityTokenFile'])) {
             throw new \InvalidArgumentException(self::ERROR_MSG . "'WebIdentityTokenFile'.");
         }
         $this->tokenFile = $config['WebIdentityTokenFile'];
-
         if (!preg_match("/^\w\:|^\/|^\\\/", $this->tokenFile)) {
             throw new \InvalidArgumentException("'WebIdentityTokenFile' must be an absolute path.");
         }
-
         $this->retries = (int) getenv(self::ENV_RETRIES) ?: (isset($config['retries']) ? $config['retries'] : 3);
         $this->attempts = 0;
-
         $this->session = isset($config['SessionName'])
             ? $config['SessionName']
             : 'aws-sdk-php-' . round(microtime(true) * 1000);
-
         $region = isset($config['region'])
             ? $config['region']
             : 'us-east-1';
-
         if (isset($config['client'])) {
             $this->client = $config['client'];
         } else {
@@ -81,7 +66,6 @@ class AssumeRoleWithWebIdentityCredentialProvider
             ]);
         }
     }
-
     /**
      * Loads assume role with web identity credentials.
      *
@@ -102,13 +86,11 @@ class AssumeRoleWithWebIdentityCredentialProvider
                         $exception
                     );
                 }
-
                 $assumeParams = [
                     'RoleArn' => $this->arn,
                     'RoleSessionName' => $this->session,
                     'WebIdentityToken' => $token
                 ];
-
                 try {
                     $result = $client->assumeRoleWithWebIdentity($assumeParams);
                 } catch (AwsException $e) {
@@ -135,7 +117,6 @@ class AssumeRoleWithWebIdentityCredentialProvider
                 }
                 $this->attempts++;
             }
-
             yield $this->client->createCredentials($result);
         });
     }

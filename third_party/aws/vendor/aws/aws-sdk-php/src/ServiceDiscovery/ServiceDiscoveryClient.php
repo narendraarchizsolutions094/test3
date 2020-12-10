@@ -1,8 +1,6 @@
 <?php
 namespace Aws\ServiceDiscovery;
-
 use Aws\AwsClient;
-
 /**
  * This client is used to interact with the **Amazon Route 53 Auto Naming** service.
  * @method \Aws\Result createHttpNamespace(array $args = [])

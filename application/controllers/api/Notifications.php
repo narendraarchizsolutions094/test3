@@ -3,15 +3,11 @@ use Restserver\Libraries\REST_Controller;
 defined('BASEPATH') OR exit('No direct script access allowed');
 require APPPATH . 'libraries/REST_Controller.php';
 require APPPATH . 'libraries/Format.php';
-
 class Notifications extends REST_Controller {
-
     function __construct(){
         parent::__construct();
         $this->load->library('form_validation');
-
     }
-
     public function count_bell_notification_post(){
         $user_id  = $this->input->post('user_id');        
         $this->form_validation->set_rules('user_id', 'User Id', 'required');                   
@@ -33,9 +29,7 @@ class Notifications extends REST_Controller {
                 'message' =>strip_tags(validation_errors())
              ], REST_Controller::HTTP_OK);
         }
-
     }
-
     public function get_bell_notification_content_post(){      
         $user_id  = $this->input->post('user_id');        
         $this->form_validation->set_rules('user_id', 'User Id', 'required');                   
@@ -51,7 +45,6 @@ class Notifications extends REST_Controller {
                   'status' => TRUE,
                   'message' => $res
               ], REST_Controller::HTTP_OK);
-
         } else {
           $this->set_response([
                 'status' => false,
@@ -59,5 +52,4 @@ class Notifications extends REST_Controller {
              ], REST_Controller::HTTP_OK);
         }                
     }
-
 }

@@ -1,8 +1,6 @@
 <?php
 namespace Aws\DynamoDb;
-
 use Aws\DynamoDb\Exception\DynamoDbException;
-
 /**
  * The locking connection adds locking logic to the read operation.
  */
@@ -12,7 +10,6 @@ class LockingSessionConnection extends StandardSessionConnection
     {
         parent::__construct($client, $config);
     }
-
     /**
      * {@inheritdoc}
      * Retries the request until the lock can be acquired
@@ -28,7 +25,6 @@ class LockingSessionConnection extends StandardSessionConnection
             'AttributeUpdates' => ['lock' => ['Value' => ['N' => '1']]],
             'ReturnValues'     => 'ALL_NEW',
         ];
-
         // Acquire the lock and fetch the item data.
         $timeout  = time() + $this->getMaxLockWaitTime();
         while (true) {

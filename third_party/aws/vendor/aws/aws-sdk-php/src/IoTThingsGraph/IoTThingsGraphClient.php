@@ -1,8 +1,6 @@
 <?php
 namespace Aws\IoTThingsGraph;
-
 use Aws\AwsClient;
-
 /**
  * This client is used to interact with the **AWS IoT Things Graph** service.
  * @method \Aws\Result associateEntityToThing(array $args = [])

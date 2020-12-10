@@ -1,6 +1,5 @@
 <?php
 namespace Aws;
-
 use Aws\Api\Service;
 use Aws\Api\Validator;
 use Aws\Credentials\CredentialsInterface;
@@ -9,7 +8,6 @@ use GuzzleHttp\Promise;
 use GuzzleHttp\Psr7;
 use GuzzleHttp\Psr7\LazyOpenStream;
 use Psr\Http\Message\RequestInterface;
-
 final class Middleware
 {
     /**
@@ -43,19 +41,16 @@ final class Middleware
             ) {
                 $operation = $api->getOperation($command->getName());
                 $source = $command[$sourceParameter];
-
                 if ($source !== null
                     && $operation->getInput()->hasMember($bodyParameter)
                 ) {
                     $command[$bodyParameter] = new LazyOpenStream($source, 'r');
                     unset($command[$sourceParameter]);
                 }
-
                 return $handler($command, $request);
             };
         };
     }
-
     /**
      * Adds a middleware that uses client-side validation.
      *
@@ -81,7 +76,6 @@ final class Middleware
             };
         };
     }
-
     /**
      * Builds an HTTP request for a command.
      *
@@ -97,7 +91,6 @@ final class Middleware
             };
         };
     }
-
     /**
      * Creates a middleware that signs requests for a command.
      *
@@ -130,7 +123,6 @@ final class Middleware
             };
         };
     }
-
     /**
      * Creates a middleware that invokes a callback at a given step.
      *
@@ -155,7 +147,6 @@ final class Middleware
             };
         };
     }
-
     /**
      * Middleware wrapper function that retries requests based on the boolean
      * result of invoking the provided "decider" function.
@@ -180,7 +171,6 @@ final class Middleware
     ) {
         $decider = $decider ?: RetryMiddleware::createDefaultDecider();
         $delay = $delay ?: [RetryMiddleware::class, 'exponentialDelay'];
-
         return function (callable $handler) use ($decider, $delay, $stats) {
             return new RetryMiddleware($decider, $delay, $handler, $stats);
         };
@@ -234,12 +224,10 @@ final class Middleware
                         Psr7\mimetype_from_filename($uri) ?: 'application/octet-stream'
                     );
                 }
-
                 return $handler($command, $request);
             };
         };
     }
-
     /**
      * Tracks command and request history using a history container.
      *
@@ -271,7 +259,6 @@ final class Middleware
             };
         };
     }
-
     /**
      * Creates a middleware that applies a map function to requests as they
      * pass through the middleware.
@@ -292,7 +279,6 @@ final class Middleware
             };
         };
     }
-
     /**
      * Creates a middleware that applies a map function to commands as they
      * pass through the middleware.
@@ -313,7 +299,6 @@ final class Middleware
             };
         };
     }
-
     /**
      * Creates a middleware that applies a map function to results.
      *
@@ -333,7 +318,6 @@ final class Middleware
             };
         };
     }
-
     public static function timer()
     {
         return function (callable $handler) {
@@ -351,10 +335,8 @@ final class Middleware
                             if (!isset($res['@metadata']['transferStats'])) {
                                 $res['@metadata']['transferStats'] = [];
                             }
-
                             $res['@metadata']['transferStats']['total_time']
                                 = microtime(true) - $start;
-
                             return $res;
                         },
                         function ($err) use ($start) {

@@ -1,15 +1,11 @@
 <?php
-
 namespace Sabberworm\CSS\Value;
-
 use Sabberworm\CSS\Parsing\ParserState;
 use Sabberworm\CSS\Parsing\UnexpectedTokenException;
-
 class LineName extends ValueList {
 	public function __construct($aComponents = array(), $iLineNo = 0) {
 		parent::__construct($aComponents, ' ', $iLineNo);
 	}
-
 	public static function parse(ParserState $oParserState) {
 		$oParserState->consume('[');
 		$oParserState->consumeWhiteSpace();
@@ -28,14 +24,10 @@ class LineName extends ValueList {
 		return new LineName($aNames, $oParserState->currentLine());
 	}
 
-
-
 	public function __toString() {
 		return $this->render(new \Sabberworm\CSS\OutputFormat());
 	}
-
 	public function render(\Sabberworm\CSS\OutputFormat $oOutputFormat) {
 		return '[' . parent::render(\Sabberworm\CSS\OutputFormat::createCompact()) . ']';
 	}
-
 }

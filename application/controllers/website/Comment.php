@@ -1,8 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-
 class Comment extends CI_Controller {
-
 	public function __construct()
 	{
 		parent::__construct();
@@ -12,14 +10,11 @@ class Comment extends CI_Controller {
 		));  
 	}
  
-
 	public function index()
 	{   
-
 		if (empty($this->session->user_id)) {
             redirect('login');
         } 
-
 
 		$data['title'] = display('comments');
 		#-------------------------------#
@@ -27,7 +22,6 @@ class Comment extends CI_Controller {
 		$data['content'] = $this->load->view('website/pages/comment',$data,true);
 		$this->load->view('layout/main_wrapper',$data);
 	} 
-
 	public function create()
 	{   
 		$this->form_validation->set_rules('item_id', display('post_id'), 'required|strip_tags|max_length[11]'); 
@@ -36,7 +30,6 @@ class Comment extends CI_Controller {
 		$this->form_validation->set_rules('comment',display('comments'),'required|strip_tags|max_length[1000]'); 
 		#-------------------------------#		
 		if ($this->form_validation->run() === true) {
-
 			$commentData = [
 				'item_id' 		 => $this->input->post('item_id', true),
 				'comp_id' 	     => $this->session->userdata('companey_id'),
@@ -46,7 +39,6 @@ class Comment extends CI_Controller {
 				'add_to_website' => 2,
 				'date'           => date('Y-m-d h:i:s')
 			];
-
 			if ($this->comment_model->create($commentData)) {
 				#set success message
 				$data['message'] = display('thank_you_for_your_comment');
@@ -54,7 +46,6 @@ class Comment extends CI_Controller {
 				#set exception message
 				$data['exception'] = lang('please_try_again');
 			}
-
 		} else {
 			#set exception message
 			$data['exception'] = validation_errors();
@@ -62,27 +53,22 @@ class Comment extends CI_Controller {
 		echo json_encode($data);
 	} 
 
-
 	public function status() 
 	{
-
 		if (empty($this->session->user_id)) {
             redirect('login');
         } 
-
 
 		$this->form_validation->set_rules('id', display('comment_id'), 'required|strip_tags|max_length[11]'); 
 		$this->form_validation->set_rules('value',display('comment_status'), 'required|strip_tags|max_length[11]');   
 		#-------------------------------#		
 		if ($this->form_validation->run() === true) {
-
 			$id = $this->input->post('id', true);
 			$value = $this->input->post('value', true);
  
 			$this->db->set('add_to_website', $value)
 				->where('id', $id)
 				->update('ws_comment');
-
 			if ($this->db->affected_rows() > 0) {
 				#set success message
 				if ($value == 1) {
@@ -94,17 +80,14 @@ class Comment extends CI_Controller {
 				#set exception message
 				$data['exception'] = display('please_try_again');
 			}
-
 		} else {
 			#set exception message
 			$data['exception'] = validation_errors();
 		}  
 		echo json_encode($data);
 	}
-
 	public function delete($id = null) 
 	{
-
 		if (empty($this->session->user_id)) {
             redirect('login');
         } 
@@ -119,5 +102,4 @@ class Comment extends CI_Controller {
 		redirect('website/comment/');
 	}
  
-
 }

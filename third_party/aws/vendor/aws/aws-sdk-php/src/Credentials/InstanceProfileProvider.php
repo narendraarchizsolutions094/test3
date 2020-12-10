@@ -1,6 +1,5 @@
 <?php
 namespace Aws\Credentials;
-
 use Aws\Exception\CredentialsException;
 use Aws\Exception\InvalidJsonException;
 use Aws\Sdk;
@@ -9,7 +8,6 @@ use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Promise\PromiseInterface;
 use Psr\Http\Message\ResponseInterface;
-
 /**
  * Credential provider that provides credentials from the EC2 metadata service.
  */
@@ -18,29 +16,21 @@ class InstanceProfileProvider
     const SERVER_URI = 'http://169.254.169.254/latest/';
     const CRED_PATH = 'meta-data/iam/security-credentials/';
     const TOKEN_PATH = 'api/token';
-
     const ENV_DISABLE = 'AWS_EC2_METADATA_DISABLED';
     const ENV_TIMEOUT = 'AWS_METADATA_SERVICE_TIMEOUT';
     const ENV_RETRIES = 'AWS_METADATA_SERVICE_NUM_ATTEMPTS';
-
     /** @var string */
     private $profile;
-
     /** @var callable */
     private $client;
-
     /** @var int */
     private $retries;
-
     /** @var int */
     private $attempts;
-
     /** @var float|mixed */
     private $timeout;
-
     /** @var bool */
     private $secureMode = true;
-
     /**
      * The constructor accepts the following options:
      *
@@ -60,7 +50,6 @@ class InstanceProfileProvider
             ? $config['client'] // internal use only
             : \Aws\default_http_handler();
     }
-
     /**
      * Loads instance profile credentials.
      *
@@ -69,7 +58,6 @@ class InstanceProfileProvider
     public function __invoke()
     {
         return Promise\coroutine(function () {
-
             // Retrieve token or switch out of secure mode
             $token = null;
             while ($this->secureMode && is_null($token)) {
@@ -101,7 +89,6 @@ class InstanceProfileProvider
                 }
                 $this->attempts++;
             }
-
             // Set token header only for secure mode
             $headers = [];
             if ($this->secureMode) {
@@ -109,7 +96,6 @@ class InstanceProfileProvider
                     'x-aws-ec2-metadata-token' => $token
                 ];
             }
-
             // Retrieve profile
             while (!$this->profile) {
                 try {
@@ -132,10 +118,8 @@ class InstanceProfileProvider
                         $this->createErrorMessage($e->getMessage())
                     );
                 }
-
                 $this->attempts++;
             }
-
             // Retrieve credentials
             $result = null;
             while ($result == null) {
@@ -178,7 +162,6 @@ class InstanceProfileProvider
             );
         });
     }
-
     /**
      * @param string $url
      * @param string $method
@@ -194,7 +177,6 @@ class InstanceProfileProvider
                 $this->createErrorMessage('EC2 metadata service access disabled')
             );
         }
-
         $fn = $this->client;
         $request = new Request($method, self::SERVER_URI . $url);
         $userAgent = 'aws-sdk-php/' . Sdk::VERSION;
@@ -206,7 +188,6 @@ class InstanceProfileProvider
         foreach ($headers as $key => $value) {
             $request = $request->withHeader($key, $value);
         }
-
         return $fn($request, ['timeout' => $this->timeout])
             ->then(function (ResponseInterface $response) {
                 return (string) $response->getBody();
@@ -221,7 +202,6 @@ class InstanceProfileProvider
                 );
             });
     }
-
     private function handleRetryableException(
         \Exception $e,
         $retryOptions,
@@ -240,7 +220,6 @@ class InstanceProfileProvider
             throw new CredentialsException($message);
         }
     }
-
     private function getExceptionStatusCode(\Exception $e)
     {
         if (method_exists($e, 'getResponse')
@@ -250,26 +229,21 @@ class InstanceProfileProvider
         }
         return null;
     }
-
     private function createErrorMessage($previous)
     {
         return "Error retrieving credentials from the instance profile "
             . "metadata service. ({$previous})";
     }
-
     private function decodeResult($response)
     {
         $result = json_decode($response, true);
-
         if (json_last_error() > 0) {
             throw new InvalidJsonException();
         }
-
         if ($result['Code'] !== 'Success') {
             throw new CredentialsException('Unexpected instance profile '
                 .  'response code: ' . $result['Code']);
         }
-
         return $result;
     }
 }

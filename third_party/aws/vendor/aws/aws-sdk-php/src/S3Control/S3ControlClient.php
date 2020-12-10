@@ -1,8 +1,6 @@
 <?php
 namespace Aws\S3Control;
-
 use Aws\AwsClient;
-
 /**
  * This client is used to interact with the **AWS S3 Control** service.
  * @method \Aws\Result createAccessPoint(array $args = [])
@@ -61,7 +59,6 @@ class S3ControlClient extends AwsClient
             ],
         ];
     }
-
     /**
      * {@inheritdoc}
      *

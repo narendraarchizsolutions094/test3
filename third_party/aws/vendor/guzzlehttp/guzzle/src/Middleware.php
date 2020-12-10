@@ -1,13 +1,11 @@
 <?php
 namespace GuzzleHttp;
-
 use GuzzleHttp\Cookie\CookieJarInterface;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Promise\RejectedPromise;
 use GuzzleHttp\Psr7;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
-
 /**
  * Functions used to create and wrap handlers with handler middleware.
  */
@@ -42,7 +40,6 @@ final class Middleware
             };
         };
     }
-
     /**
      * Middleware that throws exceptions for 4xx or 5xx responses when the
      * "http_error" request option is set to true.
@@ -68,7 +65,6 @@ final class Middleware
             };
         };
     }
-
     /**
      * Middleware that pushes history data to an ArrayAccess container.
      *
@@ -82,7 +78,6 @@ final class Middleware
         if (!is_array($container) && !$container instanceof \ArrayAccess) {
             throw new \InvalidArgumentException('history container must be an array or object implementing ArrayAccess');
         }
-
         return function (callable $handler) use (&$container) {
             return function ($request, array $options) use ($handler, &$container) {
                 return $handler($request, $options)->then(
@@ -108,7 +103,6 @@ final class Middleware
             };
         };
     }
-
     /**
      * Middleware that invokes a callback before and after sending a request.
      *
@@ -137,7 +131,6 @@ final class Middleware
             };
         };
     }
-
     /**
      * Middleware that handles request redirects.
      *
@@ -149,7 +142,6 @@ final class Middleware
             return new RedirectMiddleware($handler);
         };
     }
-
     /**
      * Middleware that retries requests based on the boolean result of
      * invoking the provided "decider" function.
@@ -171,7 +163,6 @@ final class Middleware
             return new RetryMiddleware($decider, $handler, $delay);
         };
     }
-
     /**
      * Middleware that logs requests, responses, and errors using a message
      * formatter.
@@ -204,7 +195,6 @@ final class Middleware
             };
         };
     }
-
     /**
      * This middleware adds a default content-type if possible, a default
      * content-length or transfer-encoding header, and the expect header.
@@ -217,7 +207,6 @@ final class Middleware
             return new PrepareBodyMiddleware($handler);
         };
     }
-
     /**
      * Middleware that applies a map function to the request before passing to
      * the next handler.
@@ -234,7 +223,6 @@ final class Middleware
             };
         };
     }
-
     /**
      * Middleware that applies a map function to the resolved promise's
      * response.

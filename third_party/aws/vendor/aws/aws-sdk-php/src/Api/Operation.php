@@ -1,6 +1,5 @@
 <?php
 namespace Aws\Api;
-
 /**
  * Represents an API operation.
  */
@@ -9,22 +8,17 @@ class Operation extends AbstractModel
     private $input;
     private $output;
     private $errors;
-
     public function __construct(array $definition, ShapeMap $shapeMap)
     {
         $definition['type'] = 'structure';
-
         if (!isset($definition['http']['method'])) {
             $definition['http']['method'] = 'POST';
         }
-
         if (!isset($definition['http']['requestUri'])) {
             $definition['http']['requestUri'] = '/';
         }
-
         parent::__construct($definition, $shapeMap);
     }
-
     /**
      * Returns an associative array of the HTTP attribute of the operation:
      *
@@ -37,7 +31,6 @@ class Operation extends AbstractModel
     {
         return $this->definition['http'];
     }
-
     /**
      * Get the input shape of the operation.
      *
@@ -52,10 +45,8 @@ class Operation extends AbstractModel
                 $this->input = new StructureShape([], $this->shapeMap);
             }
         }
-
         return $this->input;
     }
-
     /**
      * Get the output shape of the operation.
      *
@@ -70,10 +61,8 @@ class Operation extends AbstractModel
                 $this->output = new StructureShape([], $this->shapeMap);
             }
         }
-
         return $this->output;
     }
-
     /**
      * Get an array of operation error shapes.
      *
@@ -91,7 +80,6 @@ class Operation extends AbstractModel
                 $this->errors = [];
             }
         }
-
         return $this->errors;
     }
 }

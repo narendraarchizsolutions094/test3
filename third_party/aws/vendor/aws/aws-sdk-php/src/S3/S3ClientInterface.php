@@ -1,12 +1,10 @@
 <?php
 namespace Aws\S3;
-
 use Aws\AwsClientInterface;
 use Aws\CommandInterface;
 use Aws\ResultInterface;
 use GuzzleHttp\Promise\PromiseInterface;
 use Psr\Http\Message\RequestInterface;
-
 interface S3ClientInterface extends AwsClientInterface
 {
     /**
@@ -23,7 +21,6 @@ interface S3ClientInterface extends AwsClientInterface
      * @return RequestInterface
      */
     public function createPresignedRequest(CommandInterface $command, $expires, array $options = []);
-
     /**
      * Returns the URL to an object identified by its bucket and key.
      *
@@ -38,7 +35,6 @@ interface S3ClientInterface extends AwsClientInterface
      * @return string The URL to the object
      */
     public function getObjectUrl($bucket, $key);
-
     /**
      * Determines whether or not a bucket exists by name.
      *
@@ -47,7 +43,6 @@ interface S3ClientInterface extends AwsClientInterface
      * @return bool
      */
     public function doesBucketExist($bucket);
-
     /**
      * Determines whether or not an object exists by name.
      *
@@ -59,12 +54,10 @@ interface S3ClientInterface extends AwsClientInterface
      * @return bool
      */
     public function doesObjectExist($bucket, $key, array $options = []);
-
     /**
      * Register the Amazon S3 stream wrapper with this client instance.
      */
     public function registerStreamWrapper();
-
     /**
      * Deletes objects from Amazon S3 that match the result of a ListObjects
      * operation. For example, this allows you to do things like delete all
@@ -84,7 +77,6 @@ interface S3ClientInterface extends AwsClientInterface
         $regex = '',
         array $options = []
     );
-
     /**
      * Deletes objects from Amazon S3 that match the result of a ListObjects
      * operation. For example, this allows you to do things like delete all
@@ -106,7 +98,6 @@ interface S3ClientInterface extends AwsClientInterface
         $regex = '',
         array $options = []
     );
-
     /**
      * Upload a file, stream, or string to a bucket.
      *
@@ -146,7 +137,6 @@ interface S3ClientInterface extends AwsClientInterface
         $acl = 'private',
         array $options = []
     );
-
     /**
      * Upload a file, stream, or string to a bucket asynchronously.
      *
@@ -169,7 +159,6 @@ interface S3ClientInterface extends AwsClientInterface
         $acl = 'private',
         array $options = []
     );
-
     /**
      * Copy an object of any size to a different location.
      *
@@ -207,7 +196,6 @@ interface S3ClientInterface extends AwsClientInterface
         $acl = 'private',
         array $options = []
     );
-
     /**
      * Copy an object of any size to a different location asynchronously.
      *
@@ -230,7 +218,6 @@ interface S3ClientInterface extends AwsClientInterface
         $acl = 'private',
         array $options = []
     );
-
     /**
      * Recursively uploads all files in a given directory to a given bucket.
      *
@@ -247,7 +234,6 @@ interface S3ClientInterface extends AwsClientInterface
         $keyPrefix = null,
         array $options = []
     );
-
     /**
      * Recursively uploads all files in a given directory to a given bucket.
      *
@@ -267,7 +253,6 @@ interface S3ClientInterface extends AwsClientInterface
         $keyPrefix = null,
         array $options = []
     );
-
     /**
      * Downloads a bucket to the local filesystem
      *
@@ -282,7 +267,6 @@ interface S3ClientInterface extends AwsClientInterface
         $keyPrefix = '',
         array $options = []
     );
-
     /**
      * Downloads a bucket to the local filesystem
      *
@@ -300,7 +284,6 @@ interface S3ClientInterface extends AwsClientInterface
         $keyPrefix = '',
         array $options = []
     );
-
     /**
      * Returns the region in which a given bucket is located.
      *
@@ -309,7 +292,6 @@ interface S3ClientInterface extends AwsClientInterface
      * @return string
      */
     public function determineBucketRegion($bucketName);
-
     /**
      * Returns a promise fulfilled with the region in which a given bucket is
      * located.

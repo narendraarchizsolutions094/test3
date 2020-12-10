@@ -8,5 +8,4 @@
 .test-9 { content: "\"\27" } /* Same as ""\"\'"" */
 .test-10 { content: "\'\\" } /* Same as "'\" */
 .test-11 { content: "\test" } /* Same as "test" */
-
 .test-4 { content: "\1D11E" } /* Beyond the Basic Multilingual Plane */

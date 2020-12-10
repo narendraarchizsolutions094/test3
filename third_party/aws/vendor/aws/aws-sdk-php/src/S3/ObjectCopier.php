@@ -1,6 +1,5 @@
 <?php
 namespace Aws\S3;
-
 use Aws\Arn\ArnParser;
 use Aws\Arn\S3\AccessPointArn;
 use Aws\Exception\MultipartUploadException;
@@ -8,7 +7,6 @@ use Aws\Result;
 use Aws\S3\Exception\S3Exception;
 use GuzzleHttp\Promise\PromisorInterface;
 use InvalidArgumentException;
-
 /**
  * Copies objects from one S3 location to another, utilizing a multipart copy
  * when appropriate.
@@ -16,13 +14,11 @@ use InvalidArgumentException;
 class ObjectCopier implements PromisorInterface
 {
     const DEFAULT_MULTIPART_THRESHOLD = MultipartUploader::PART_MAX_SIZE;
-
     private $client;
     private $source;
     private $destination;
     private $acl;
     private $options;
-
     private static $defaults = [
         'before_lookup' => null,
         'before_upload' => null,
@@ -32,7 +28,6 @@ class ObjectCopier implements PromisorInterface
         'part_size'     => null,
         'version_id'    => null,
     ];
-
     /**
      * @param S3ClientInterface $client         The S3 Client used to execute
      *                                          the copy command(s).
@@ -63,14 +58,12 @@ class ObjectCopier implements PromisorInterface
     ) {
         $this->validateLocation($source);
         $this->validateLocation($destination);
-
         $this->client = $client;
         $this->source = $source;
         $this->destination = $destination;
         $this->acl = $acl;
         $this->options = $options + self::$defaults;
     }
-
     /**
      * Perform the configured copy asynchronously. Returns a promise that is
      * fulfilled with the result of the CompleteMultipartUpload or CopyObject
@@ -89,7 +82,6 @@ class ObjectCopier implements PromisorInterface
             $objectStats = (yield $this->client->executeAsync(
                 $headObjectCommand
             ));
-
             if ($objectStats['ContentLength'] > $this->options['mup_threshold']) {
                 $mup = new MultipartCopy(
                     $this->client,
@@ -98,7 +90,6 @@ class ObjectCopier implements PromisorInterface
                         + $this->destination
                         + $this->options
                 );
-
                 yield $mup->promise();
             } else {
                 $defaults = [
@@ -106,17 +97,14 @@ class ObjectCopier implements PromisorInterface
                     'MetadataDirective' => 'COPY',
                     'CopySource' => $this->getSourcePath(),
                 ];
-
                 $params = array_diff_key($this->options, self::$defaults)
                     + $this->destination + $defaults + $this->options['params'];
-
                 yield $this->client->executeAsync(
                     $this->client->getCommand('CopyObject', $params)
                 );
             }
         });
     }
-
     /**
      * Perform the configured copy synchronously. Returns the result of the
      * CompleteMultipartUpload or CopyObject operation.
@@ -130,7 +118,6 @@ class ObjectCopier implements PromisorInterface
     {
         return $this->promise()->wait();
     }
-
     private function validateLocation(array $location)
     {
         if (empty($location['Bucket']) || empty($location['Key'])) {
@@ -138,7 +125,6 @@ class ObjectCopier implements PromisorInterface
                 . ' Aws\S3\ObjectCopier must have a non-empty Bucket and Key');
         }
     }
-
     private function getSourcePath()
     {
         if (ArnParser::isArn($this->source['Bucket'])) {
@@ -154,11 +140,9 @@ class ObjectCopier implements PromisorInterface
             }
         }
         $sourcePath = "/{$this->source['Bucket']}/" . rawurlencode($this->source['Key']);
-
         if (isset($this->source['VersionId'])) {
             $sourcePath .= "?versionId={$this->source['VersionId']}";
         }
-
         return $sourcePath;
     }
 }

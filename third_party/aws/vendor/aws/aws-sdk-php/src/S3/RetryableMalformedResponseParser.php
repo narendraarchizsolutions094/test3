@@ -1,6 +1,5 @@
 <?php
 namespace Aws\S3;
-
 use Aws\Api\Parser\AbstractParser;
 use Aws\Api\StructureShape;
 use Aws\Api\Parser\Exception\ParserException;
@@ -8,7 +7,6 @@ use Aws\CommandInterface;
 use Aws\Exception\AwsException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
-
 /**
  * Converts malformed responses to a retryable error type.
  *
@@ -18,7 +16,6 @@ class RetryableMalformedResponseParser extends AbstractParser
 {
     /** @var string */
     private $exceptionClass;
-
     public function __construct(
         callable $parser,
         $exceptionClass = AwsException::class
@@ -26,13 +23,11 @@ class RetryableMalformedResponseParser extends AbstractParser
         $this->parser = $parser;
         $this->exceptionClass = $exceptionClass;
     }
-
     public function __invoke(
         CommandInterface $command,
         ResponseInterface $response
     ) {
         $fn = $this->parser;
-
         try {
             return $fn($command, $response);
         } catch (ParserException $e) {
@@ -45,7 +40,6 @@ class RetryableMalformedResponseParser extends AbstractParser
             );
         }
     }
-
     public function parseMemberFromStream(
         StreamInterface $stream,
         StructureShape $member,

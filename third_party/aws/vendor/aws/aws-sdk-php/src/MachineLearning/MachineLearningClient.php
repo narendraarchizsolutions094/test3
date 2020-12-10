@@ -1,11 +1,9 @@
 <?php
 namespace Aws\MachineLearning;
-
 use Aws\AwsClient;
 use Aws\CommandInterface;
 use GuzzleHttp\Psr7\Uri;
 use Psr\Http\Message\RequestInterface;
-
 /**
  * Amazon Machine Learning client.
  *
@@ -74,7 +72,6 @@ class MachineLearningClient extends AwsClient
         $list = $this->getHandlerList();
         $list->appendBuild($this->predictEndpoint(), 'ml.predict_endpoint');
     }
-
     /**
      * Changes the endpoint of the Predict operation to the provided endpoint.
      *

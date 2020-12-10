@@ -1,8 +1,6 @@
 <?php
 namespace GuzzleHttp\Psr7;
-
 use Psr\Http\Message\StreamInterface;
-
 /**
  * Stream decorator that can cache previously read bytes from a sequentially
  * read stream.
@@ -10,13 +8,10 @@ use Psr\Http\Message\StreamInterface;
 class CachingStream implements StreamInterface
 {
     use StreamDecoratorTrait;
-
     /** @var StreamInterface Stream being wrapped */
     private $remoteStream;
-
     /** @var int Number of bytes to skip reading due to a write on the buffer */
     private $skipReadBytes = 0;
-
     /**
      * We will treat the buffer object as the body of the stream
      *
@@ -30,17 +25,14 @@ class CachingStream implements StreamInterface
         $this->remoteStream = $stream;
         $this->stream = $target ?: new Stream(fopen('php://temp', 'r+'));
     }
-
     public function getSize()
     {
         return max($this->stream->getSize(), $this->remoteStream->getSize());
     }
-
     public function rewind()
     {
         $this->seek(0);
     }
-
     public function seek($offset, $whence = SEEK_SET)
     {
         if ($whence == SEEK_SET) {
@@ -56,9 +48,7 @@ class CachingStream implements StreamInterface
         } else {
             throw new \InvalidArgumentException('Invalid whence');
         }
-
         $diff = $byte - $this->stream->getSize();
-
         if ($diff > 0) {
             // Read the remoteStream until we have read in at least the amount
             // of bytes requested, or we reach the end of the file.
@@ -71,13 +61,11 @@ class CachingStream implements StreamInterface
             $this->stream->seek($byte);
         }
     }
-
     public function read($length)
     {
         // Perform a regular read on any previously read data from the buffer
         $data = $this->stream->read($length);
         $remaining = $length - strlen($data);
-
         // More data was requested so read from the remote stream
         if ($remaining) {
             // If data was written to the buffer in a position that would have
@@ -87,20 +75,16 @@ class CachingStream implements StreamInterface
             $remoteData = $this->remoteStream->read(
                 $remaining + $this->skipReadBytes
             );
-
             if ($this->skipReadBytes) {
                 $len = strlen($remoteData);
                 $remoteData = substr($remoteData, $this->skipReadBytes);
                 $this->skipReadBytes = max(0, $this->skipReadBytes - $len);
             }
-
             $data .= $remoteData;
             $this->stream->write($remoteData);
         }
-
         return $data;
     }
-
     public function write($string)
     {
         // When appending to the end of the currently read stream, you'll want
@@ -111,15 +95,12 @@ class CachingStream implements StreamInterface
         if ($overflow > 0) {
             $this->skipReadBytes += $overflow;
         }
-
         return $this->stream->write($string);
     }
-
     public function eof()
     {
         return $this->stream->eof() && $this->remoteStream->eof();
     }
-
     /**
      * Close both the remote stream and buffer stream
      */
@@ -127,12 +108,10 @@ class CachingStream implements StreamInterface
     {
         $this->remoteStream->close() && $this->stream->close();
     }
-
     private function cacheEntireStream()
     {
         $target = new FnStream(['write' => 'strlen']);
         copy_to_stream($this, $target);
-
         return $this->tell();
     }
 }

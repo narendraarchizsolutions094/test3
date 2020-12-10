@@ -1,8 +1,6 @@
 <?php
-
 class Holiday extends CI_controller
 {
-
 	function __construct()
 	{
 		parent::__construct();
@@ -10,7 +8,6 @@ class Holiday extends CI_controller
 			'location_model', 'User_model', 'Holiday_Model'
 		));
 	}
-
 	public function index()
 	{
 		if ($_POST) {
@@ -48,13 +45,11 @@ class Holiday extends CI_controller
 			}
 		}
 		$data['title'] = "Add Festival";
-
 		$data['user_list'] = $this->User_model->companey_users();
 		$data['festivals']  = $this->Holiday_Model->getFestival();
 		$data['content'] = $this->load->view('add-festival', $data, true);
 		$this->load->view('layout/main_wrapper', $data);
 	}
-
 	public function edit_festival($fest_id)
 	{
 		$this->load->model('User_model');
@@ -76,7 +71,6 @@ class Holiday extends CI_controller
 		$data['content'] = $this->load->view('edit-festival', $data, true);
 		$this->load->view('layout/main_wrapper', $data);
 	}
-
 	public function edit_holiday($holi_id)
 	{
 		$this->load->model('User_model');
@@ -97,13 +91,11 @@ class Holiday extends CI_controller
 		$this->load->view('layout/main_wrapper', $data);
 	}
 
-
 	public function delete_festival($id)
 	{
 		$this->Holiday_Model->delete_festival($id);
 		redirect(base_url('holiday/add-festival'));
 	}
-
 	public function delete_holiday($id)
 	{
 		$this->Holiday_Model->delete_holiday($id);

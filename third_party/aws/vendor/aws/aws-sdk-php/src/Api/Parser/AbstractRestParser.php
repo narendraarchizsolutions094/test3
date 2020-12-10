@@ -1,20 +1,17 @@
 <?php
 namespace Aws\Api\Parser;
-
 use Aws\Api\DateTimeResult;
 use Aws\Api\Shape;
 use Aws\Api\StructureShape;
 use Aws\Result;
 use Aws\CommandInterface;
 use Psr\Http\Message\ResponseInterface;
-
 /**
  * @internal
  */
 abstract class AbstractRestParser extends AbstractParser
 {
     use PayloadParserTrait;
-
     /**
      * Parses a payload from a response.
      *
@@ -29,18 +26,15 @@ abstract class AbstractRestParser extends AbstractParser
         StructureShape $member,
         array &$result
     );
-
     public function __invoke(
         CommandInterface $command,
         ResponseInterface $response
     ) {
         $output = $this->api->getOperation($command->getName())->getOutput();
         $result = [];
-
         if ($payload = $output['payload']) {
             $this->extractPayload($payload, $output, $response, $result);
         }
-
         foreach ($output->getMembers() as $name => $member) {
             switch ($member['location']) {
                 case 'header':
@@ -54,7 +48,6 @@ abstract class AbstractRestParser extends AbstractParser
                     break;
             }
         }
-
         if (!$payload
             && $response->getBody()->getSize() > 0
             && count($output->getMembers()) > 0
@@ -62,10 +55,8 @@ abstract class AbstractRestParser extends AbstractParser
             // if no payload was found, then parse the contents of the body
             $this->payload($response, $output, $result);
         }
-
         return new Result($result);
     }
-
     private function extractPayload(
         $payload,
         StructureShape $output,
@@ -73,7 +64,6 @@ abstract class AbstractRestParser extends AbstractParser
         array &$result
     ) {
         $member = $output->getMember($payload);
-
         if (!empty($member['eventstream'])) {
             $result[$payload] = new EventParsingIterator(
                 $response->getBody(),
@@ -89,7 +79,6 @@ abstract class AbstractRestParser extends AbstractParser
             $result[$payload] = $response->getBody();
         }
     }
-
     /**
      * Extract a single header from the response into the result.
      */
@@ -100,7 +89,6 @@ abstract class AbstractRestParser extends AbstractParser
         &$result
     ) {
         $value = $response->getHeaderLine($shape['locationName'] ?: $name);
-
         switch ($shape->getType()) {
             case 'float':
             case 'double':
@@ -133,7 +121,6 @@ abstract class AbstractRestParser extends AbstractParser
                     if ($shape['jsonvalue']) {
                         $value = $this->parseJson(base64_decode($value), $response);
                     }
-
                     // If value is not set, do not add to output structure.
                     if (!isset($value)) {
                         return;
@@ -145,10 +132,8 @@ abstract class AbstractRestParser extends AbstractParser
                     return;
                 }
         }
-
         $result[$name] = $value;
     }
-
     /**
      * Extract a map of headers with an optional prefix from the response.
      */
@@ -162,7 +147,6 @@ abstract class AbstractRestParser extends AbstractParser
         $result[$name] = [];
         $prefix = $shape['locationName'];
         $prefixLen = strlen($prefix);
-
         foreach ($response->getHeaders() as $k => $values) {
             if (!$prefixLen) {
                 $result[$name][$k] = implode(', ', $values);
@@ -171,7 +155,6 @@ abstract class AbstractRestParser extends AbstractParser
             }
         }
     }
-
     /**
      * Places the status code of the response into the result array.
      */

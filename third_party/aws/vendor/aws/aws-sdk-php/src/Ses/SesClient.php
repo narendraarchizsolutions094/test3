@@ -1,11 +1,9 @@
 <?php
 namespace Aws\Ses;
-
 use Aws\Api\ApiProvider;
 use Aws\Api\DocModel;
 use Aws\Api\Service;
 use Aws\Credentials\CredentialsInterface;
-
 /**
  * This client is used to interact with the **Amazon Simple Email Service (Amazon SES)**.
  *
@@ -171,10 +169,8 @@ class SesClient extends \Aws\AwsClient
         static $algo = 'sha256';
         static $message = 'SendRawEmail';
         $signature = hash_hmac($algo, $message, $creds->getSecretKey(), true);
-
         return base64_encode($version . $signature);
     }
-
     /**
      * @internal
      * @codeCoverageIgnore
@@ -182,9 +178,7 @@ class SesClient extends \Aws\AwsClient
     public static function applyDocFilters(array $api, array $docs)
     {
         $b64 = '<div class="alert alert-info">This value will be base64 encoded on your behalf.</div>';
-
         $docs['shapes']['RawMessage']['append'] = $b64;
-
         return [
             new Service($api, ApiProvider::defaultProvider()),
             new DocModel($docs)

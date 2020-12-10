@@ -1,8 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-
 class Slider extends CI_Controller {
-
 	public function __construct()
 	{
 		parent::__construct();
@@ -15,7 +13,6 @@ class Slider extends CI_Controller {
             redirect('login');
         }
 	}
-
 	public function index()
 	{
 		$data['title'] = display('slider');
@@ -24,7 +21,6 @@ class Slider extends CI_Controller {
 		$data['content'] = $this->load->view('website/pages/slider',$data,true);
 		$this->load->view('layout/main_wrapper',$data);
 	} 
-
 	public function create()
 	{
 		$data['title'] = display('add_slider');
@@ -64,13 +60,10 @@ if(!empty($_FILES['image']['name'])){
 		];
 		#-------------------------------#
 		if ($this->form_validation->run() === true) {
-
 			if(empty($secData['image'])) {
 				$this->session->set_flashdata('exception', display('image_is_required'));
 				redirect('website/slider/create');
 			}
-
-
 
 			#if empty $id then insert data
 			if (empty($secData['id'])) {
@@ -97,7 +90,6 @@ if(!empty($_FILES['image']['name'])){
 			$this->load->view('layout/main_wrapper',$data);
 		} 
 	} 
-
 	public function edit($id = null) 
 	{
 		$data['title'] = display('slider_edit');
@@ -106,7 +98,6 @@ if(!empty($_FILES['image']['name'])){
 		$data['content'] = $this->load->view('website/pages/slider_form',$data,true);
 		$this->load->view('layout/main_wrapper',$data);
 	}
-
 	public function delete($id = null) 
 	{
 		if ($this->slider_model->delete($id)) {
@@ -118,6 +109,4 @@ if(!empty($_FILES['image']['name'])){
 		}
 		redirect('website/slider/');
 	}
-
 }
-

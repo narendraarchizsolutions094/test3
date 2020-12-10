@@ -1,8 +1,6 @@
 <?php
 namespace Aws\MediaPackage;
-
 use Aws\AwsClient;
-
 /**
  * This client is used to interact with the **AWS Elemental MediaPackage** service.
  * @method \Aws\Result createChannel(array $args = [])

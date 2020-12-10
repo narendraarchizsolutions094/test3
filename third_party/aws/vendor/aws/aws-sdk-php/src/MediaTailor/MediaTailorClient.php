@@ -1,8 +1,6 @@
 <?php
 namespace Aws\MediaTailor;
-
 use Aws\AwsClient;
-
 /**
  * This client is used to interact with the **AWS MediaTailor** service.
  * @method \Aws\Result deletePlaybackConfiguration(array $args = [])

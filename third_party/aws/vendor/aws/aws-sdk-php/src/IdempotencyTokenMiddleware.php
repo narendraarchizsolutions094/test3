@@ -1,9 +1,7 @@
 <?php
 namespace Aws;
-
 use Aws\Api\Service;
 use Psr\Http\Message\RequestInterface;
-
 /**
  * @internal Middleware that auto fills parameters with `idempotencyToken` trait
  */
@@ -15,7 +13,6 @@ class IdempotencyTokenMiddleware
     private $bytesGenerator;
     /** @var callable */
     private $nextHandler;
-
     /**
      * Creates a middleware that populates operation parameter
      * with trait 'idempotencyToken' enabled with a random UUIDv4
@@ -43,7 +40,6 @@ class IdempotencyTokenMiddleware
             return new self($handler, $service, $bytesGenerator);
         };
     }
-
     public function __construct(
         callable $nextHandler,
         Service $service,
@@ -54,7 +50,6 @@ class IdempotencyTokenMiddleware
         $this->service = $service;
         $this->nextHandler = $nextHandler;
     }
-
     public function __invoke(
         CommandInterface $command,
         RequestInterface $request = null
@@ -76,7 +71,6 @@ class IdempotencyTokenMiddleware
         }
         return $handler($command, $request);
     }
-
     /**
      * This function generates a random UUID v4 string,
      * which is used as auto filled token value.
@@ -95,7 +89,6 @@ class IdempotencyTokenMiddleware
         $bytes[8] = chr(ord($bytes[8]) & 0x3f | 0x80);
         return vsprintf('%s%s-%s-%s-%s-%s%s%s', str_split(bin2hex($bytes), 4));
     }
-
     /**
      * This function decides the PHP function used in generating random bytes.
      *
@@ -106,11 +99,9 @@ class IdempotencyTokenMiddleware
         if (function_exists('random_bytes')) {
             return 'random_bytes';
         }
-
         if (function_exists('openssl_random_pseudo_bytes')) {
             return 'openssl_random_pseudo_bytes';
         }
-
         if (function_exists('mcrypt_create_iv')) {
             return 'mcrypt_create_iv';
         }

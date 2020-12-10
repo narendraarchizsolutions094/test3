@@ -1,7 +1,5 @@
 <?php
-
 namespace Sabberworm\CSS\Parsing;
-
 class SourceException extends \Exception {
 	private $iLineNo;
 	public function __construct($sMessage, $iLineNo = 0) {
@@ -11,7 +9,6 @@ class SourceException extends \Exception {
 		}
 		parent::__construct($sMessage);
 	}
-
 	public function getLineNo() {
 		return $this->iLineNo;
 	}

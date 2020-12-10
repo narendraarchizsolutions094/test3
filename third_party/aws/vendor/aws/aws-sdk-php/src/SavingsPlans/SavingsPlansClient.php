@@ -1,8 +1,6 @@
 <?php
 namespace Aws\SavingsPlans;
-
 use Aws\AwsClient;
-
 /**
  * This client is used to interact with the **AWS Savings Plans** service.
  * @method \Aws\Result createSavingsPlan(array $args = [])

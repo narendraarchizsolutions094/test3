@@ -1,8 +1,6 @@
 <?php
 namespace Aws\TranscribeService;
-
 use Aws\AwsClient;
-
 /**
  * This client is used to interact with the **Amazon Transcribe Service** service.
  * @method \Aws\Result createMedicalVocabulary(array $args = [])
