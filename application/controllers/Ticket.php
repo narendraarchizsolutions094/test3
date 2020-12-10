@@ -1289,6 +1289,8 @@ class Ticket extends CI_Controller
 			redirect('ticket/add_subject');
 		}
 		$data['subject'] = $this->Ticket_Model->get_sub_list();
+		$this->load->model('dash_model');
+		$data['products'] = $this->dash_model->get_user_product_list();
 		$data['content'] = $this->load->view('ticket_subject', $data, true);
 		$this->load->view('layout/main_wrapper', $data);
 	}

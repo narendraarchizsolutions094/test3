@@ -78,6 +78,14 @@
                                                 <input class="form-control" name="subject" type="text"
                                                     value="<?php echo $sub->subject_title;?>" required="">
                                             </div>
+                                            <div class="form-group col-sm-12">
+                                              <label><?=display('process')?></label>
+                                            <select  class="form-control" name="process[]" multiple required>        
+                                              <?php foreach($products as $product){?>
+                                              <option value="<?=$product->sb_id ?>"><?=$product->product_name ?></option>
+                                              <?php } ?>
+                                            </select>
+                                          </div>
                                         </div>
                                         <div class="col-12" style="padding: 0px;">
                                             <div class="row">
