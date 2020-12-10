@@ -1283,6 +1283,7 @@ class Ticket extends CI_Controller
 			$reason = $this->input->post('subject');
 			$data = array(
 				'subject_title' => $reason,
+				'process' => $this->input->post('process'),
 				'comp_id' => $this->session->userdata('companey_id')
 			);
 			$insert_id = $this->Ticket_Model->add_tsub($data);
@@ -1300,6 +1301,7 @@ class Ticket extends CI_Controller
 			$drop_id = $this->input->post('drop_id');
 			$reason = $this->input->post('subject');
 			$this->db->set('subject_title', $reason);
+			$this->db->set('process', $this->input->post('process'));			
 			$this->db->where('id', $drop_id);
 			$this->db->update('tbl_ticket_subject');
 			$this->session->set_flashdata('SUCCESSMSG', 'Update Successfully');
