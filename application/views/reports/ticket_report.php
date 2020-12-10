@@ -194,7 +194,7 @@
                          <?php 
                           if (!empty($created_bylist)) {
                               foreach ($created_bylist as $createdbylist) {?>
-                              <option value="<?=$createdbylist->pk_i_admin_id;?>" <?php if(!empty($this->input->post('createdby'))){if ($product->sb_id==$this->input->post('createdby')) {echo 'selected';}}?>><?=$createdbylist->s_display_name.' '.$createdbylist->last_name;?> -  <?=$createdbylist->s_user_email?$createdbylist->s_user_email:$createdbylist->s_phoneno;?>                               
+                              <option value="<?=$createdbylist->pk_i_admin_id;?>" <?php if(!empty($this->input->post('createdby'))){if ($createdbylist->pk_i_admin_id==$this->input->post('createdby')) {echo 'selected';}}?>><?=$createdbylist->s_display_name.' '.$createdbylist->last_name;?> -  <?=$createdbylist->s_user_email?$createdbylist->s_user_email:$createdbylist->s_phoneno;?>                               
                               </option>
                               <?php }}?>    
                          </select>                       
@@ -206,7 +206,7 @@
                          <?php 
                               if (!empty($created_bylist)) {
                               foreach ($created_bylist as $createdbylist) {?>
-                              <option value="<?=$createdbylist->pk_i_admin_id;?>" <?php if(!empty($this->input->post('assign'))){if ($product->sb_id==$this->input->post('assign')) {echo 'selected';}}?>><?=$createdbylist->s_display_name.' '.$createdbylist->last_name;?> -  <?=$createdbylist->s_user_email?$createdbylist->s_user_email:$createdbylist->s_phoneno;?></option>
+                              <option value="<?=$createdbylist->pk_i_admin_id;?>" <?php if(!empty($this->input->post('assign'))){if ($createdbylist->pk_i_admin_id==$this->input->post('assign')) {echo 'selected';}}?>><?=$createdbylist->s_display_name.' '.$createdbylist->last_name;?> -  <?=$createdbylist->s_user_email?$createdbylist->s_user_email:$createdbylist->s_phoneno;?></option>
                               <?php }}?>    
                          </select>                          
                         </div>
@@ -281,10 +281,11 @@
                          <?php 
                               if (!empty($ticket_status)) {
                               foreach ($ticket_status as $sub_stage_list) {?>
-                              <option <?php if ($sub_stage_list->id==$this->input->post('ticket_status')) {echo 'selected';}}?> value="<?=$sub_stage_list->id?>"><?=$sub_stage_list->status_name?> </option>
+                              <option <?php if ($sub_stage_list->id==$this->input->post('ticket_status')) {echo 'selected';}?> value="<?=$sub_stage_list->id?>"><?=$sub_stage_list->status_name?> </option>
                               <?php 
                               
                             }
+                          }
                         ?>     
                     </select> 
                     </div> 
