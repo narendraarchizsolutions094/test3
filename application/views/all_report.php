@@ -43,13 +43,13 @@
                         </div>
 
                         <div class="form-group col-md-3">
-                            <label for="inputEmail4"><?php echo display("update_from_created"); ?></label>
+                            <label for="inputEmail4"><?php echo display("update_from_date"); ?></label>
                             <input type="date" class="form-control" id="from-date"
                                 value="<?php if (!empty(set_value('updated_from_exp'))) {echo set_value('updated_from_exp');}?>"
                                 name="updated_from_exp" style="padding-top:0px;">
                         </div>
                         <div class="form-group col-md-3">
-                            <label for="inputPassword4"><?php echo display("update_from_created"); ?></label>
+                            <label for="inputPassword4"><?php echo display("update_to_date"); ?></label>
                             <input type="date" class="form-control" id="to-date"
                                 value="<?php if (!empty(set_value('updated_to_exp'))) {echo set_value('updated_to_exp');}?>"
                                 name="updated_to_exp" style="padding-top:0px;">
