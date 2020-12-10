@@ -1388,11 +1388,7 @@ $(document).on('click',".top_pill",function(){
         data: form_data,
         success: function(responseData){
           $('#enq_table').DataTable().ajax.reload();
-<<<<<<< HEAD
          // alert('done');
-=======
-          //alert('done');
->>>>>>> ab30256e0ba403122833cc65e3bc234507ce9059
           update_top_filter_counter();      
         }
       });
