@@ -104,13 +104,17 @@ class Client_Model extends CI_Model
     }
     
     
-    public function getContactList($where=0)
+    public function getContactList()
     {
+        $where = 'enquiry.comp_id='.$this->session->companey_id;
+        $all_reporting_ids    =   $this->common_model->get_categories($this->session->user_id);
+        $where .= " AND ( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
+        $where .= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';          
         if($where)
             $this->db->where($where);
-        $this->db->select('contacts.*,enquiry.company,enquiry.enquiry_id,concat (name_prefix," ",name," ",lastname) as name');
+        $this->db->select('contacts.*,enquiry.company,enquiry.enquiry_id,concat_ws(" ",name_prefix,name,lastname) as enq_name');
         $this->db->from('tbl_client_contacts contacts');
-        $this->db->join('enquiry','enquiry.enquiry_id=contacts.client_id','left');
+        $this->db->join('enquiry','enquiry.enquiry_id=contacts.client_id','inner');
         return $this->db->get();
         //echo $this->db->last_query(); exit();
     }
@@ -178,7 +182,7 @@ class Client_Model extends CI_Model
         $this->db->join('tbl_datasource', 'enquiry.datasource_id=tbl_datasource.datasource_id', 'left');
         $this->db->join('tbl_product', 'tbl_product.sb_id = enquiry.product_id', 'left');
         
-        $where = '';
+        $where = ''; 
 
         $where .= " enquiry.status=3";
 

@@ -60,7 +60,7 @@ class Setting extends CI_Controller {
 
 		$data['languageList'] = $this->languageList(); 
 
-		$data['setting'] = $this->setting_model->read();
+		$data['setting'] = $this->setting_model->read($this->session->companey_id);
 
 		$data['content'] = $this->load->view('setting',$data,true);
 
@@ -108,15 +108,15 @@ class Setting extends CI_Controller {
 
 		if ($logo !== false && $logo != null) {
 
-			$this->fileupload->do_resize(
+			// $this->fileupload->do_resize(
 
-				$logo, 
+			// 	$logo, 
 
-				210,
+			// 	210,
 
-				48
+			// 	48
 
-			);
+			// );
 
 		}
 
@@ -193,6 +193,8 @@ class Setting extends CI_Controller {
 			'site_align'  => $this->input->post('site_align'), 
 
 			'footer_text' => $this->input->post('footer_text', false),
+			'comp_id'     => $this->session->companey_id,
+			'domain'     => $_SERVER['HTTP_HOST'],
 
 		]; 
 

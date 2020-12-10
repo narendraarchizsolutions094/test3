@@ -104,7 +104,7 @@
 							<div class="panel-body">
 							<!-- Filter Panel Start -->
 
-<form id="ticket_filter">
+<form id="ticket_filter" method="POST">
 	<div class="row" id="filter_pannel">
         <div class="col-lg-12">
             <div class="panel panel-default" style="padding-top: 13px;">
@@ -113,21 +113,21 @@
                        
                         <div class="form-group col-md-3" id="fromdatefilter">
                           <label for="from-date"><?php echo display("from_date"); ?></label>
-                          <input type="date" class="form-control" id="from-date" name="from_created" style="padding-top:0px;">
+                          <input type="date" class="form-control" id="from-date" name="from_created" style="padding-top:0px;" value="<?=$this->input->post('from_created')?>">
                         </div>
                         <div class="form-group col-md-3" id="todatefilter">
                           <label for="to-date"><?php echo display("to_date"); ?></label>
-                          <input type="date" class="form-control" id="to-date" name="to_created" style="padding-top:0px;">
+                          <input type="date" class="form-control" id="to-date" name="to_created" style="padding-top:0px;" value="<?=$this->input->post('to_created')?>">
                         </div> 
 
 
                         <div class="form-group col-md-3" id="update_fromdatefilter">
                           <label for="update-from-date"><?php echo display("update_from_date"); ?></label>
-                          <input type="date" class="form-control" id="update-from-date" name="update_from_created" style="padding-top:0px;">
+                          <input type="date" class="form-control" id="update-from-date" name="update_from_created" style="padding-top:0px;" value="<?=$this->input->post('update_from_created')?>">
                         </div>
                         <div class="form-group col-md-3" id="update_todatefilter">
                           <label for="update-to-date"><?php echo display("update_to_date"); ?></label>
-                          <input type="date" class="form-control" id="update-to-date" name="update_to_created" style="padding-top:0px;">
+                          <input type="date" class="form-control" id="update-to-date" name="update_to_created" style="padding-top:0px;" value="<?=$this->input->post('update_to_created')?>">
                         </div>
 
 
@@ -137,7 +137,7 @@
                               <option value="" style="display:">---Select Source---</option>
                                <?php foreach ($sourse as $row) {?>
                                 
-                                 <option value="<?=$row->lsid?>" <?php if(!empty(set_value('source'))){if (in_array($row->lsid,set_value('source'))) {echo 'selected';}}?>><?=$row->lead_name?></option>
+                                 <option value="<?=$row->lsid?>" <?php if(!empty($this->input->post('source'))){if ($row->lsid==$this->input->post('source')) {echo 'selected';}}?>><?=$row->lead_name?></option>
                               <?php }?>
 
                           </select>
@@ -152,7 +152,7 @@
                               <option value="" style="display:">---Select Problem---</option>
                                <?php foreach ($problem as $row) {?>
                                 
-                                 <option value="<?=$row->id?>"><?=$row->subject_title?></option>
+                                 <option <?php if(!empty($this->input->post('problem'))){if ($row->id==$this->input->post('problem')) {echo 'selected';}}?>  value="<?=$row->id?>"><?=$row->subject_title?></option>
                               <?php 
 	                          }
 	                          ?>
@@ -164,9 +164,9 @@
                           <label for="priority">Priority</label>
                           <select class="form-control" name="priority" id="priority">
               <option value="" style="display:">---Select Priority---</option>
-              <option value="1">Low</option>
-							<option value="2">Medium</option>
-							<option value="3">High</option>n>
+              <option value="1" <?php if(!empty($this->input->post('priority'))){if (1==$this->input->post('priority')) {echo 'selected';}}?>>Low</option>
+							<option value="2" <?php if(!empty($this->input->post('priority'))){if (2==$this->input->post('priority')) {echo 'selected';}}?> > Medium</option>
+							<option value="3" <?php if(!empty($this->input->post('priority'))){if (3==$this->input->post('priority')) {echo 'selected';}}?> >High</option>n>
                            </select>
                         </div>
 
@@ -176,7 +176,7 @@
                               <option value="" style="display:">---Select Issue---</option>
                                <?php  if(!empty($issues)) {
 								foreach($issues as $ind => $issue){
-									?><option value = "<?php echo $issue->id ?>"><?php echo ucfirst($issue->title) ?> </option>
+									?><option <?php if(!empty($this->input->post('issue'))){if ($issue->id==$this->input->post('issue')) {echo 'selected';}}?> value = "<?php echo $issue->id ?>"><?php echo ucfirst($issue->title) ?> </option>
 								<?php
 								}	
 							} ?>
@@ -194,7 +194,7 @@
                          <?php 
                           if (!empty($created_bylist)) {
                               foreach ($created_bylist as $createdbylist) {?>
-                              <option value="<?=$createdbylist->pk_i_admin_id;?>" <?php if(!empty(set_value('createdby'))){if (in_array($product->sb_id,set_value('createdby'))) {echo 'selected';}}?>><?=$createdbylist->s_display_name.' '.$createdbylist->last_name;?> -  <?=$createdbylist->s_user_email?$createdbylist->s_user_email:$createdbylist->s_phoneno;?>                               
+                              <option value="<?=$createdbylist->pk_i_admin_id;?>" <?php if(!empty($this->input->post('createdby'))){if ($createdbylist->pk_i_admin_id==$this->input->post('createdby')) {echo 'selected';}}?>><?=$createdbylist->s_display_name.' '.$createdbylist->last_name;?> -  <?=$createdbylist->s_user_email?$createdbylist->s_user_email:$createdbylist->s_phoneno;?>                               
                               </option>
                               <?php }}?>    
                          </select>                       
@@ -206,7 +206,7 @@
                          <?php 
                               if (!empty($created_bylist)) {
                               foreach ($created_bylist as $createdbylist) {?>
-                              <option value="<?=$createdbylist->pk_i_admin_id;?>" <?php if(!empty(set_value('assign'))){if (in_array($product->sb_id,set_value('assign'))) {echo 'selected';}}?>><?=$createdbylist->s_display_name.' '.$createdbylist->last_name;?> -  <?=$createdbylist->s_user_email?$createdbylist->s_user_email:$createdbylist->s_phoneno;?></option>
+                              <option value="<?=$createdbylist->pk_i_admin_id;?>" <?php if(!empty($this->input->post('assign'))){if ($createdbylist->pk_i_admin_id==$this->input->post('assign')) {echo 'selected';}}?>><?=$createdbylist->s_display_name.' '.$createdbylist->last_name;?> -  <?=$createdbylist->s_user_email?$createdbylist->s_user_email:$createdbylist->s_phoneno;?></option>
                               <?php }}?>    
                          </select>                          
                         </div>
@@ -218,7 +218,11 @@
                          <?php 
                               if (!empty($created_bylist)) {
                               foreach ($created_bylist as $createdbylist) {?>
-                              <option value="<?=$createdbylist->pk_i_admin_id;?>" <?php if(!empty(set_value('assign'))){if (in_array($product->sb_id,set_value('assign'))) {echo 'selected';}}?>><?=$createdbylist->s_display_name.' '.$createdbylist->last_name;?> -  <?=$createdbylist->s_user_email?$createdbylist->s_user_email:$createdbylist->s_phoneno;?></option>
+                              <option value="<?=$createdbylist->pk_i_admin_id?>" <?php if($createdbylist->pk_i_admin_id==$this->input->post('assign_by')) { echo 'selected'; } ?> >
+                              
+                              <?=$createdbylist->s_display_name.' '.$createdbylist->last_name;?> -  <?=$createdbylist->s_user_email?$createdbylist->s_user_email:$createdbylist->s_phoneno;?>
+                              
+                              </option>
                               <?php }}?>    
                          </select>                          
                         </div>
@@ -233,7 +237,8 @@
                          <?php 
                               if (!empty($prodcntry_list)) {
                               foreach ($prodcntry_list as $prodcntrylist) {?>
-                              <option value="<?=$prodcntrylist->id;?>" <?php if(!empty(set_value('prodcntry'))){if (in_array($prodcntrylist->id,set_value('prodcntry'))) {echo 'selected';}}?>><?= $prodcntrylist->country_name ?></option>
+                              <option value="<?=$prodcntrylist->id;?>" <?php if ($prodcntrylist->id==$this->input->post('prodcntry')) {echo 'selected';}?>>
+                              <?= $prodcntrylist->country_name ?></option>
                               <?php }}?>    
                     </select> 
                     </div> 
@@ -245,7 +250,7 @@
                          <?php 
                               if (!empty($stage)) {
                               foreach ($stage as $stage_list) {?>
-                              <option value="<?=$stage_list->stg_id?>"><?=$stage_list->lead_stage_name?> </option>
+                              <option <?php if ($stage_list->stg_id==$this->input->post('stage')) {echo 'selected';}?> value="<?=$stage_list->stg_id?>"><?=$stage_list->lead_stage_name?> </option>
                               <?php 
                               }
                             }
@@ -260,10 +265,11 @@
                          <?php 
                               if (!empty($sub_stage)) {
                               foreach ($sub_stage as $sub_stage_list) {?>
-                              <option value="<?=$sub_stage_list->id?>"><?=$sub_stage_list->description?> </option>
+                              <option <?php if ($sub_stage_list->id==$this->input->post('sub_stage')) {echo 'selected';}?> value="<?=$sub_stage_list->id?>"><?=$sub_stage_list->description?> </option>
                               <?php 
                               }
                             }
+                            
                         ?>     
                     </select> 
                     </div> 
@@ -275,17 +281,31 @@
                          <?php 
                               if (!empty($ticket_status)) {
                               foreach ($ticket_status as $sub_stage_list) {?>
-                              <option value="<?=$sub_stage_list->id?>"><?=$sub_stage_list->status_name?> </option>
+                              <option <?php if ($sub_stage_list->id==$this->input->post('ticket_status')) {echo 'selected';}?> value="<?=$sub_stage_list->id?>"><?=$sub_stage_list->status_name?> </option>
                               <?php 
-                              }
+                              
                             }
+                          }
                         ?>     
                     </select> 
                     </div> 
-
+                    <?php
+                    if($this->session->companey_id == 65){                    
+                    ?>
+                    <div class="form-group col-md-3" id="tickettype">
+                    <label for="tickettype">Ticket Type</label>  
+                    <select name="ticket_type" class="form-control"> 
+                          <option value="">Select</option>
+                          <option <?php if (1==$this->input->post('ticket_type')) {echo 'selected';}?> value="1">Complaint</option>
+                          <option <?php if (2==$this->input->post('ticket_type')) {echo 'selected';}?> value="2">Query</option>
+                    </select> 
+                    </div> 
+                  <?php
+                    }
+                    ?>
                     </div>
                   <div class="col-md-12" style="border-top: 1px solid #f4f4f4; padding: 8px;">
-                    <button class="btn btn-success pull-right" type="button" id="go_filter">Generate Report</button>
+                    <button class="btn btn-success pull-right" type="submit" id="go_filter">Generate Report</button>
                 </div>
             </div>
         </div>
@@ -749,8 +769,8 @@ var run = 0 ;
 $(document).ready(function() {
 
 
-  $('#go_filter').click(function() {
-
+  $('#go_filter').click(function(e) {
+        e.preventDefault();
         var form_data = $("#ticket_filter").serialize();       
        // alert(form_data);
         $.ajax({
@@ -758,19 +778,23 @@ $(document).ready(function() {
         type: 'post',
         data: form_data,
         success: function(responseData){
-         // document.write(responseData);
-        if(run==0)
-          table_filter();
-        else
-          $('#ticket_table').DataTable().ajax.reload();
-          //stage_counter();      
-           }
+            // document.write(responseData);
+            // if(run==0)
+            //   table_filter();
+            // else
+            //   $('#ticket_table').DataTable().ajax.reload();         
+        }
         });
+        $("#ticket_filter").submit();
     });
 });
+</script>
 
-function table_filter()
-{ 
+  <?php  
+  if(!empty($_POST)){
+  ?>
+  <script>
+  $(document).ready(function() {
   $('#ticket_table').DataTable({         
           "processing": true,
           "scrollX": true,
@@ -811,10 +835,13 @@ function table_filter()
                     }} 
              ] ,  <?php  } ?>  
     });
-  }
-
+  });
 
 </script>
+
+  <?php
+  }
+  ?>
 
 <!--------------------TABLE COLOUMN CONFIG----------------------------------------------->
 <div id="table-col-conf" class="modal fade" role="dialog">

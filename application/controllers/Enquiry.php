@@ -2407,6 +2407,7 @@ Array
                         $this->db->where('product_id', $product_name);
                     }
                     $res_phone = $this->db->get('enquiry2')->num_rows();
+                    //echo $this->db->last_query().'<br>';
                     //$encode=$this->get_enquery_code();                    
                     if ($res_phone == 0) {
                         $dat_array = array(
@@ -2470,7 +2471,7 @@ Array
                         /**************************************daynamic fields inserts End****************************/
                     }
                 }
-                echo $i;
+                //echo $i;
                 $i++;
             }
 

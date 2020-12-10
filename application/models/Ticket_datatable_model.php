@@ -325,6 +325,7 @@ class Ticket_datatable_model extends CI_Model{
         $ticket_status          =   !empty($enquiry_filters_sess['ticket_status'])?$enquiry_filters_sess['ticket_status']:'';
 
          $assign_by          =   !empty($enquiry_filters_sess['assign_by'])?$enquiry_filters_sess['assign_by']:'';
+         $ticket_type          =   !empty($enquiry_filters_sess['ticket_type'])?$enquiry_filters_sess['ticket_type']:'';
 
 
         $where='';
@@ -345,13 +346,18 @@ $CHK = 0;
         if(empty($from_created) && !empty($to_created)){            
             $to_created = date("Y-m-d",strtotime($to_created));
             $where .= " DATE(tck.coml_date) <=  '".$to_created."' OR DATE(tck.last_update) <=  '".$to_created."'"; 
-            $CHK = 1;                                  
+            $CHK = 1;                                 
         }
 
         
 
 
-
+        if(!empty($ticket_type)){
+            if($CHK)
+                $where .= 'AND';
+            $where .= " tck.complaint_type=".$ticket_type;
+            $CHK = 1;          
+        }
 
 
 

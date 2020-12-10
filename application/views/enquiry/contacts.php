@@ -3,7 +3,7 @@
 	<div class="col-lg-12">
 		<div class="panel panel-success">
 			<div class="panel-body">
-				<table id="contactTable" class="table table-bordered table-response">
+				<table id="contactTable" class="datatable1 table table-bordered table-response">
 					<thead>
 	                             
 				         <tr>
@@ -15,6 +15,7 @@
 			                      <th style="width: 20%;">Contact Number</th>
 			                      <th style="width: 20%;">Email ID</th>
 			                      <th style="width: 20%;">Other Detail</th>
+			                      <th style="width: 20%;">Created At</th>
 			                      <th>Action</th>
 				         </tr>
 					</thead>
@@ -26,13 +27,14 @@
 								{
 									echo'<tr>
 											<td>'.$i++.'. </td>
-											<td><a href="'.base_url('enquiry/view/').$row['enquiry_id'].'">'.$row['name'].'</a></td>
-											<td>'.getValue($row['company']).'</td>
-											<td>'.getValue($row['designation']).'</td>
-											<td>'.getValue($row['c_name']).'</td>
-											<td>'.getValue($row['contact_number']).'</td>
-											<td>'.getValue($row['emailid']).'</td>
-											<td>'.getValue($row['other_detail']).'</td>
+											<td><a href="'.base_url('enquiry/view/').$row['enquiry_id'].'">'.$row['enq_name'].'</a></td>
+											<td>'.$row['company'].'</td>
+											<td>'.$row['designation'].'</td>
+											<td>'.$row['c_name'].'</td>
+											<td>'.$row['contact_number'].'</td>
+											<td>'.$row['emailid'].'</td>
+											<td>'.$row['other_detail'].'</td>
+											<td>'.$row['created_at'].'</td>
 											<td style="width:50px;">
 											<div class="btn-group">
 				                                <button class="btn btn-warning btn-xs" data-cc-id="'.$row['cc_id'].'" onclick="edit_contact(this)">
@@ -120,13 +122,3 @@ function deleteContact(t)
 }
 
 </script>
-
-<?php
-function getValue($val)
-{ 	
-	if(!empty($val) && trim($val)!='')
-		return $val;
-	else 
-		return 'NA';
-}
-?>
