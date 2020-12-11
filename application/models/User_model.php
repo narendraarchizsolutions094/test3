@@ -38,6 +38,14 @@ class User_model extends CI_Model {
         return $this->db->get()->result(); 
     }
 
+    public function get_report_locations(){
+        
+        $this->db->where('comp_id',$this->session->companey_id);
+        return $this->db->get('reporting_location')->result_array();
+    }
+
+    
+
     public function read($user_right='') {        
         $this->load->model('common_model');
         $all_reporting_ids    =   $this->common_model->get_categories($this->session->user_id);                      

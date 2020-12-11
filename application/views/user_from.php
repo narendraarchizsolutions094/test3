@@ -294,7 +294,29 @@
                                         ?>
                                     </select>
                                 </div>
+                            </div>
+                        
+                            <?php
+                            if($this->session->companey_id == 65){    
+                            ?>
+                             <div class="form-row">
+                                <div class="form-group col-md-4">
+                                    <label class="control-label" for="reporting_location"><?=display('reporting_location')?></label> 									
+                                    <select class="form-control" name="reporting_location">
+                                        <?php
+                                        if (!empty($reporting_locations)) {
+                                            foreach ($reporting_locations as $key => $value) { ?>
+                                                <option value="<?=$value->id?>" <?php if(1) echo "selected"; ?>><?=$value->title?></option>
+                                            <?php
+                                            }
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
                             </div> 
+                            <?php
+                            }
+                            ?>
 							
                                 <?php if (!empty($department->pk_i_admin_id)) { ?>
                                 
