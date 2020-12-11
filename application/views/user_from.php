@@ -306,7 +306,7 @@
                                         <?php
                                         if (!empty($reporting_locations)) {
                                             foreach ($reporting_locations as $key => $value) { ?>
-                                                <option value="<?=$value->id?>" <?php if(1) echo "selected"; ?>><?=$value->title?></option>
+                                                <option value="<?=$value['id']?>" <?php if(1) echo "selected"; ?>><?=$value['title']?></option>
                                             <?php
                                             }
                                         }
