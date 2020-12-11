@@ -45,7 +45,7 @@
                 <td><?php echo $sl; ?></td>
                 <td width=""><?= $reporting_location->title ?></td>
                 <td><?php echo (($reporting_location->status == 0) ? display('active') : display('inactive')); ?></td>
-                <td width=""><?= $reporting_location->created->at ?></td>
+                <td width=""><?= $reporting_location->created_at ?></td>
                 <td class="center">
                   <a data-toggle="modal" data-target="#editLocation" id="<?php echo $reporting_location->id ?>" href="javascript:void(0)" class="btn btn-xs  btn-primary view_data"><i class="fa fa-edit"></i></a>
                   <a href="<?= base_url('users/reportingLocation_delete/' . $reporting_location->id . '') ?>" onclick="return confirm('Are You Sure ? ')" class="btn btn-xs  btn-danger"><i class="fa fa-trash"></i></a>
