@@ -556,7 +556,7 @@ class Users extends CI_Controller {
 		if (!empty($loc_id)) {
 			$count=$this->db->where('title',$reploc)->where_not_in('id',$loc_id)->count_all_results('reporting_location');
 			if($count==0){
-				$data=['title'=>$branch,'status'=>$status,'updated_at'=>date('Y-m-d H:i:s')];
+				$data=['title'=>$reploc,'status'=>$status,'updated_at'=>date('Y-m-d H:i:s')];
 				$insert=$this->db->where('id',$loc_id)->update('reporting_location',$data);
 					$this->session->set_flashdata('success','Reporting Location Added');
 					redirect('users/reportingList');
@@ -567,7 +567,7 @@ class Users extends CI_Controller {
 		}else{			
 			$count=$this->db->where('title',$reploc)->count_all_results('reporting_location');
 			if($count==0){
-				$data=['title'=>$branch,'status'=>$status,'created_by'=>$this->session->user_id,'comp_id'=>$this->session->companey_id];
+				$data=['title'=>$reploc,'status'=>$status,'created_by'=>$this->session->user_id,'comp_id'=>$this->session->companey_id];
 				$insert=$this->db->insert('reporting_location',$data);
 					$this->session->set_flashdata('success','Reporting Location Added');
 					redirect('users/reportingList');
