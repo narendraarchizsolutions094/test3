@@ -526,7 +526,7 @@ class Users extends CI_Controller {
 		
 				echo'<div class="col-md-12">
 				<label>Location Name </label>
-				<input type="text" value="'.$value->title.'" name="location" class="form-control" id="location">  
+				<input type="text" value="'.$value->title.'" name="reploc" class="form-control" id="location">  
 			</div> 
 			<input name="loc_id" value="'.$location_id.'"  type="hidden" >
 			<div class="col-md-12">
