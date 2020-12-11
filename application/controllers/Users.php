@@ -544,6 +544,10 @@ class User extends CI_Controller {
 		}
 		
 	}
+	
+	function reportingLocation_delete(){
+
+	}
 
 	public function addReportingLocation(){
 		$reploc=$this->input->post('reploc');
@@ -555,10 +559,10 @@ class User extends CI_Controller {
 				$data=['title'=>$branch,'status'=>$status,'updated_at'=>date('Y-m-d H:i:s')];
 				$insert=$this->db->where('id',$loc_id)->update('reporting_location',$data);
 					$this->session->set_flashdata('success','Reporting Location Added');
-					redirect('user/reportingList');
+					redirect('users/reportingList');
 				}else{
 					$this->session->set_flashdata('error','Reporting Location Already Added');
-					redirect('user/reportingList');
+					redirect('users/reportingList');
 				}
 		}else{			
 			$count=$this->db->where('title',$reploc)->count_all_results('reporting_location');
@@ -566,10 +570,10 @@ class User extends CI_Controller {
 				$data=['title'=>$branch,'status'=>$status,'created_by'=>$this->session->user_id,'comp_id'=>$this->session->companey_id];
 				$insert=$this->db->insert('reporting_location',$data);
 					$this->session->set_flashdata('success','Reporting Location Added');
-					redirect('user/reportingList');
+					redirect('users/reportingList');
 			}else{
 				$this->session->set_flashdata('error','Reporting Location Already Added');
-				redirect('user/reportingList');
+				redirect('users/reportingList');
 			}
 		}
 	}

@@ -48,7 +48,7 @@
                 <td width=""><?= $reporting_location->created->at ?></td>
                 <td class="center">
                   <a data-toggle="modal" data-target="#editLocation" id="<?php echo $reporting_location->id ?>" href="javascript:void(0)" class="btn btn-xs  btn-primary view_data"><i class="fa fa-edit"></i></a>
-                  <a href="<?= base_url('user/reportingLocation_delete/' . $reporting_location->id . '') ?>" onclick="return confirm('Are You Sure ? ')" class="btn btn-xs  btn-danger"><i class="fa fa-trash"></i></a>
+                  <a href="<?= base_url('users/reportingLocation_delete/' . $reporting_location->id . '') ?>" onclick="return confirm('Are You Sure ? ')" class="btn btn-xs  btn-danger"><i class="fa fa-trash"></i></a>
                 </td>
 
                 </td>
@@ -86,7 +86,7 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <form action="<?= base_url() . 'user/addReportingLocation' ?>" enctype="multipart/form-data" method='post'>
+      <form action="<?= base_url() . 'users/addReportingLocation' ?>" enctype="multipart/form-data" method='post'>
         <div class="modal-body">
           <div class="row">
             <div class="col-md-12">
@@ -120,7 +120,7 @@
         <h5 class="modal-title" id="">Edit Location</h5>
         </button>
       </div>
-      <form action="<?= base_url() . 'user/addReportingLocation' ?>" enctype="multipart/form-data" method='post'>
+      <form action="<?= base_url() . 'users/addReportingLocation' ?>" enctype="multipart/form-data" method='post'>
         <div class="modal-body">
           <div class="row" id="location_data">
           </div>
@@ -138,7 +138,7 @@
     var location_id = $(this).attr("id");
     if (location_id != '') {
       $.ajax({
-        url: "<?= base_url('user/editlocation/') ?>",
+        url: "<?= base_url('users/editlocation/') ?>",
         method: "POST",
         data: {
             location_id: location_id
