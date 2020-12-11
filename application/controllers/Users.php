@@ -514,6 +514,70 @@ class User extends CI_Controller {
         redirect('user/edit_user_role/'.$id);
     }
     
-    
-  
+
+	public function editlocation()
+	{
+		$location_id=$this->input->post('location_id');
+		
+		$get=$this->db->where('id',$location_id)->get('reporting_location');
+		if($get->num_rows()==1){
+			foreach ($get->result() as $key => $value) {
+				$status=$value->status;
+		
+				echo'<div class="col-md-12">
+				<label>Location Name </label>
+				<input type="text" value="'.$value->title.'" name="location" class="form-control" id="location">  
+			</div> 
+			<input name="loc_id" value="'.$location_id.'"  type="hidden" >
+			<div class="col-md-12">
+				<label>Status </label>
+				<div class="form-check">
+				<label class="radio-inline">
+				<input type="radio" name="status" value="0" ';if($status==0){echo'checked';}
+				echo '>Active</label>
+				<label class="radio-inline">
+				<input type="radio" name="status" value="1" ';if($status==1){echo'checked';}
+				echo '>Inactive</label>
+				</div>
+			</div> ';
+			}
+		}
+		
+	}
+
+	public function addReportingLocation(){
+		$reploc=$this->input->post('reploc');
+		$status=$this->input->post('status');
+		$loc_id=$this->input->post('loc_id');
+		if (!empty($loc_id)) {
+			$count=$this->db->where('title',$reploc)->where_not_in('id',$loc_id)->count_all_results('reporting_location');
+			if($count==0){
+				$data=['title'=>$branch,'status'=>$status,'updated_at'=>date('Y-m-d H:i:s')];
+				$insert=$this->db->where('id',$loc_id)->update('reporting_location',$data);
+					$this->session->set_flashdata('success','Reporting Location Added');
+					redirect('user/reportingList');
+				}else{
+					$this->session->set_flashdata('error','Reporting Location Already Added');
+					redirect('user/reportingList');
+				}
+		}else{			
+			$count=$this->db->where('title',$reploc)->count_all_results('reporting_location');
+			if($count==0){
+				$data=['title'=>$branch,'status'=>$status,'created_by'=>$this->session->user_id,'comp_id'=>$this->session->companey_id];
+				$insert=$this->db->insert('reporting_location',$data);
+					$this->session->set_flashdata('success','Reporting Location Added');
+					redirect('user/reportingList');
+			}else{
+				$this->session->set_flashdata('error','Reporting Location Already Added');
+				redirect('user/reportingList');
+			}
+		}
+	}
+	public function reportingList()
+	{
+		$data['title'] = 'Reporting List';
+		$data['reporting_location']=$this->db->where('comp_id',65)->get('reporting_location')->result();
+		$data['content'] = $this->load->view('user/reporting_locations',$data,true);
+		$this->load->view('layout/main_wrapper',$data);
+	}  
 }
