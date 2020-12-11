@@ -1246,7 +1246,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                             <li
                                 class="<?php echo (in_array($segment2,array('reportingList')) ?"active":'') ?>">
                                 <a href="<?php echo base_url() ?>users/reportingList">
-                                    <?=display('reporting_location')?>
+                                    Reporting Location
                                 </a>
                             </li>
                             <?php }  ?>
