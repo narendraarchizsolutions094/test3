@@ -40,7 +40,7 @@
           </thead>
           <tbody>
             <?php $sl = 1;
-            foreach ($branch_list as $branch) { ?>
+            foreach ($reporting_location as $reporting_location) { ?>
               <tr>
                 <td><?php echo $sl; ?></td>
                 <td width=""><?= $reporting_location->title ?></td>
