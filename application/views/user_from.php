@@ -304,9 +304,10 @@
                                     <label class="control-label" for="reporting_location"><?=display('reporting_location')?></label> 									
                                     <select class="form-control" name="reporting_location">
                                         <?php
+                                        $rep_loc = $this->user_model->get_user_meta($this->session->user_id,array('reporting_location'));;
                                         if (!empty($reporting_locations)) {
                                             foreach ($reporting_locations as $key => $value) { ?>
-                                                <option value="<?=$value['id']?>" <?php if(1) echo "selected"; ?>><?=$value['title']?></option>
+                                                <option value="<?=$value['id']?>" <?php if(!empty($rep_loc) && $rep_loc['reporting_location'] == $value['id']) echo "selected"; ?>><?=$value['title']?></option>
                                             <?php
                                             }
                                         }

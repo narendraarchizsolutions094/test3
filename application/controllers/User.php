@@ -431,6 +431,11 @@ class User extends CI_Controller
         // die();
         #-------------------------------#
         if ($this->form_validation->run() === true) {
+            if($this->session->companey_id==65){
+                $this->user_model->set_user_meta($this->input->post('dprt_id'),array(
+                    'reporting_location'=>$this->input->post('reporting_location')
+                ));
+            }
             #if empty $dprt_id then insert data
             if (empty($this->input->post('dprt_id'))) {
               $insert_id=$this->User_model->create($postData);
