@@ -1052,6 +1052,8 @@
 
                   getunread();
               } else {
+                    getunread();
+
                   getloginuser(cont);
               }
           }, 10000);
