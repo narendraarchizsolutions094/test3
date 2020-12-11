@@ -90,7 +90,7 @@
         <div class="modal-body">
           <div class="row">
             <div class="col-md-12">
-              <label>Branch Name </label>
+              <label>Location Name </label>
               <input type="text" name="reploc" class="form-control">
             </div>
             <div class="col-md-12">
