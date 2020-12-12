@@ -1014,7 +1014,6 @@
           }
 
           function getunread() {
-
               $.ajax({
                   url: '<?php echo base_url();?>ChatController/getunread',
                   success: function(data) {
@@ -1027,6 +1026,7 @@
 
                               $("#" + ind).find(".total-unread-msg").addClass("badge badge-success")
                                   .text(msg + " New");
+                                  $("#" + ind).insertAfter("#chat-user-box");  
                           });
                       }
 
