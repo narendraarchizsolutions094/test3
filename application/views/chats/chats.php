@@ -558,9 +558,12 @@
 					 $this->db->select("*");
 					 $this->db->from('tbl_admin');        
 					 $this->db->join('tbl_user_role', 'tbl_user_role.use_id=tbl_admin.user_permissions', 'left');        
+                     $this->db->join("chat", "receiver_id = '$user_id'", "LEFT");
 					 $this->db->where('tbl_admin.companey_id',$this->session->companey_id); 
-					 $this->db->where('tbl_admin.b_status',1);                                                
-					 $all_user=$this->db->get()->result();
+                     $this->db->where('tbl_admin.b_status',1);                              
+                     $this->db->order_by('chat.message_date_time','DESC');	                  
+                     
+                     $all_user=$this->db->get()->result();
 					 if(!empty($all_user)){
 						foreach($all_user as $v){
 							if($v->pk_i_admin_id!=$this->session->user_id){
