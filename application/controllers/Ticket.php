@@ -321,7 +321,7 @@ class Ticket extends CI_Controller
 				$extra  = empty($a->extra) ? '' : $a->extra;
 				//print_r($extra);
 				if (isset($extra) ) {
-					$gc_data = $extra['gcDdata'];
+					$gc_data = (array) $extra->gcDdata;
 					?>
 					<table>
 						<tr>
