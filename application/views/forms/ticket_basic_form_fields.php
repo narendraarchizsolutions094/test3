@@ -180,10 +180,11 @@ echo'<div class="trackingDetails"></div>';
                           <option value = "" style ="display:none;">---Select---</option>
                           <?php if(!empty($clients)){
                             foreach($clients as $ind => $clt){
-                              $n = $clt->name." ".$clt->lastname;
+                              $n = $clt->company;
+                              $n = $n??($clt->name." ".$clt->lastname);
+                              $n = trim($n);
                               $n = $n??$clt->phone;
                               $n = $n??$ctl->email;
-                              $n = $clt->company??$n;
                               ?><option value ="<?php echo $clt->enquiry_id ?>"><?php echo $n; ?> </option><?php
                             }
                           } ?>
