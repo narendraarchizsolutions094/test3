@@ -187,8 +187,12 @@ echo'
                           {
                             foreach($clients as $ind => $clt)
                             {
+                              $n = $clt->name." ".$clt->lastname;
+                              $n = $n??$clt->phone;
+                              $n = $n??$ctl->email;
+
                               if($clt->enquiry_id==$ticket->client)
-                        echo "<option value =".$clt->enquiry_id." selected>".$clt->name."</option>";
+                        echo "<option value =".$clt->enquiry_id." selected>".$clt->company??$n."</option>";
 
                             }
                           } 
