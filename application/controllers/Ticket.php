@@ -204,7 +204,7 @@ class Ticket extends CI_Controller
 				$sub[] = $point->last_update ?? 'NA';
 			}
 			if ($showall or in_array(2, $acolarr)) {
-				$sub[] = $point->company??($point->clientname ?? "NA");
+				$sub[] = $point->org_name??($point->clientname ?? "NA");
 			}
 			if ($showall or in_array(3, $acolarr)) {
 				$sub[] = $point->email ?? "NA";
