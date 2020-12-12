@@ -1331,7 +1331,37 @@ class Ticket extends CI_Controller
 		if (!empty($response->NewDataSet)) {
 			$res = json_encode($response->NewDataSet);
 		}
-		echo $res;
+		$gc_extra	=	$this->get_gc_extra_data($gc_no);
+		if(!empty($gc_extra)){
+			$gc_extra['extra'] = $gc_extra;
+			$gc_extra = json_encode($gc_extra);
+		}else{
+			$gc_extra = '';
+		}
+		echo $res.$gc_extra;
+	}
+
+	public function get_gc_extra_data($gc_no){
+		$curl = curl_init();
+		curl_setopt_array($curl, array(
+		CURLOPT_URL => 'http://203.112.143.175/GCTracking/api/GCTracking/GetGCDetails?GCNO='.$gc_no,
+		CURLOPT_RETURNTRANSFER => true,
+		CURLOPT_ENCODING => '',
+		CURLOPT_MAXREDIRS => 10,
+		CURLOPT_TIMEOUT => 0,
+		CURLOPT_FOLLOWLOCATION => true,
+		CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+		CURLOPT_CUSTOMREQUEST => 'POST',
+		CURLOPT_HTTPHEADER => array(
+		'tokenid: 48673A8B-EE3E-498F-A0BE-FD7AE9BAC538-b654fbe2-c353-428a-9832-a36defdae100',
+		'clientid: 10000001'
+		),
+		));
+		$response = curl_exec($curl);
+		curl_close($curl);
+		if(!empty($response['gccrossingDetails']) && !empty($response['gcDdata'])){
+			return $response;
+		}
 	}
 	public function Dashboard()
 	{
