@@ -24,7 +24,7 @@
     <div class="panel panel-default thumbnail">
       <div class="panel-heading no-print">
         <div class="btn-group">
-          <a class="btn btn-success btn-sm" data-toggle="modal" data-target="#AddLocation" href="javascript:void(0)"> <i class="fa fa-plus"></i> Add Branch</a>
+          <a class="btn btn-success btn-sm" data-toggle="modal" data-target="#AddLocation" href="javascript:void(0)"> <i class="fa fa-plus"></i> Add <?=display('reporting_location')?></a>
         </div>
       </div>
       <div class="panel-body">
