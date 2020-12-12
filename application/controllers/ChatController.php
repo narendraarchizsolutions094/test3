@@ -219,6 +219,7 @@ class ChatController extends CI_Controller {
 			 $this->db->where('tbl_admin.companey_id',$this->session->companey_id); 
 			 $this->db->where('tbl_admin.b_status',1);   
 			 $this->db->group_by('chat.receiver_id');	
+			 $this->db->order_by('message_date_time','DESC');	
 		$data['all_user']  = $this->db->get()->result();
 		
 		
@@ -318,7 +319,7 @@ class ChatController extends CI_Controller {
 		 $this->db->where("sender_id != '$user_id'");
 		 $this->db->where("status != 2");
 		 $this->db->group_by('sender_id'); 
-		 $this->db->order_by('message_date_time','DESC'); 
+		 //$this->db->order_by('message_date_time','DESC'); 
 		 $unread = $this->db->get('chat')->result();
 		//echo $this->db->last_query();
 		$chtarr = array();	
