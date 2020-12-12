@@ -323,166 +323,39 @@ class Ticket extends CI_Controller
 				if (isset($extra) ) {
 					$gc_data = (array) $extra->gcDdata;
 					?>
-					<table>
-						<tr>
-							<td>
-							<b>GC NO. : </b><?=$gc_data['Gc_No']?>
-							</td>
-						</tr>
-						<tr>
-							<td>
-							<b>GC Date. : </b><?=$gc_data['Gc_Date']?>
-							</td>
-							<td>
-							<b>Arrival Date. : </b><?=$gc_data['ArrivalDate']?>
-							</td>
-						</tr>
-						<tr>
-							<td>
-							<b>Booking Branch : </b><?=$gc_data['BookingBranch']?>
-							</td>
-							<td>
-							<b>Delivery Branch : </b><?=$gc_data['DeliveryBranch']?>
-							</td>
-						</tr>
-						<tr>
-							<td>
-							<b> Booking Type: </b><?=$gc_data['BookingType']?>
-							</td>
-							<td>
-							<b> Delivery Type: </b><?=$gc_data['DeliveryType']?>
-							</td>
-						</tr>
-						<tr>
-							<td>
-							<b> Item: </b><?=$gc_data['Item']?>
-							</td>
-							<td>
-							<b> Commodity: </b><?=$gc_data['Commodity']?>
-							</td>
-						</tr>
-						<tr>
-							<td>
-							<b> Unload Place: </b><?=$gc_data['UnloadPlace']?>
-							</td>
-							<td>
-							<b> Packing: </b><?=$gc_data['Packing']?>
-							</td>
-						</tr>
-						<tr>
-							<td>
-							<b> PickupLocation: </b><?=$gc_data['PickupLocation']?>
-							</td>
-							<td>
-							<b> InvoiceValue: </b><?=$gc_data['InvoiceValue']?>
-							</td>
-						</tr>
-						<tr>
-							<td>
-							<b> ISDACC: </b><?=$gc_data['ISDACC']?>
-							</td>
-							<td>
-							<b> PaymentType: </b><?=$gc_data['PaymentType']?>
-							</td>
-						</tr>
-						<tr>
-							<td>
-							<b> IsODA: </b><?=$gc_data['IsODA']?>
-							</td>
-							<td>
-							<b> Articles: </b><?=$gc_data['Articles']?>
-							</td>
-						</tr>
-						<tr>
-							<td>
-							<b> ActualWeight: </b><?=$gc_data['ActualWeight']?>
-							</td>
-							<td>
-							<b> IsGCContractual: </b><?=$gc_data['IsGCContractual']?>
-							</td>
-						</tr>
-						<tr>
-							<td>
-							<b> ChargedWeight: </b><?=$gc_data['ChargedWeight']?>
-							</td>
-							<td>
-							<b> ContractTermTypeAndUOM: </b><?=$gc_data['ContractTermTypeAndUOM']?>
-							</td>
-						</tr>
-						<tr>
-							<td>
-							<b> BasicFreight: </b><?=$gc_data['BasicFreight']?>
-							</td>
-							<td>
-							<b> GCTotalAmount: </b><?=$gc_data['GCTotalAmount']?>
-							</td>
-						</tr>
-						<tr>
-							<td>
-							<b> InvoiceNo: </b><?=$gc_data['InvoiceNo']?>
-							</td>
-							<td>
-							<b> GSTTaxType: </b><?=$gc_data['GSTTaxType']?>
-							</td>
-						</tr>
-						<tr>
-							<td>
-							<b> DODAmount: </b><?=$gc_data['DODAmount']?>
-							</td>
-							<td>
-							<b> CurrentStatus: </b><?=$gc_data['CurrentStatus']?>
-							</td>
-						</tr>
-						<tr>
-							<td>
-							<b> Consignor: </b><?=$gc_data['Consignor']?>
-							</td>
-							<td>
-							<b> InvoiceDate: </b><?=$gc_data['InvoiceDate']?>
-							</td>
-						</tr>
-						<tr>
-							<td>
-							<b> DODAmount: </b><?=$gc_data['DODAmount']?>
-							</td>
-							<td>
-							<b> ContractTermTypeAndUOM: </b><?=$gc_data['CurrentBranch']?>
-							</td>
-						</tr>
-						<tr>
-							<td>
-							<b> Consignee: </b><?=$gc_data['Consignee']?>
-							</td>
-							<td>
-							<b> ServiceReceiverState: </b><?=$gc_data['ServiceReceiverState']?>
-							</td>
-						</tr>
-						<tr>
-							<td>
-							<b> ConsignorContactNo: </b><?=$gc_data['ConsignorContactNo']?>
-							</td>
-							<td>
-							<b> ConsigneeContactNo: </b><?=$gc_data['ConsigneeContactNo']?>
-							</td>
-						</tr>
-						<tr>
-							<td>
-							<b> ServiceReceiverGSTIN: </b><?=$gc_data['ServiceReceiverGSTIN']?>
-							</td>							
-						</tr>
-					</table>
-					<?php	
+					<table class='table table-bordered'>
+					<tr><th colspan="4" style="text-align:center;">
+						<?php
+						echo display('tracking_no').': ' .(empty($table->GCNO) ? '' : $table->GCNO) .'</td></tr>';
+						$i = 0;
+						foreach($gc_data as $key=>$value){
+							if($i==2){
+								$i = 0;
+							}
+							if($i == 0){
+								echo '<tr>';
+							}
+							echo '<td>';
+							echo '<b>'.$key.'</b>';
+							echo '</td>';
+							echo '<td>';
+							echo $value;
+							echo '</td>';
+							if($i == 1){
+								echo '</tr>';
+							}										
+							$i++;							
+						}
+						
 				}
 				if (isset($a->Table)) {
-					echo '<table class="table table-bordered">
-		        <tr><th colspan="4" style="text-align:center;">'.display('tracking_no').': ' . (empty($table->GCNO) ? '' : $table->GCNO) . '</td></tr>
-		        <tr><th>Date:</th><td>' . (empty($table->GC_Date) ? '' : $table->GC_Date) . '</td><th>Status:</th><td>' . (empty($table->status) ? '' : $table->status) . '</td></tr>
-		         <tr><th>Delivery Location:</th><td  colspan="3">' . (empty($table->DeliveryLocation) ? '' : $table->DeliveryLocation) . '</td></tr>
-		         <tr><th>Delivery Branch:</th><td>' . (empty($table->DeliveryBranch) ? '' : $table->DeliveryBranch) . '</td><th>Booking Branch:</th><td>' . (empty($table->BookingBranch) ? '' : $table->BookingBranch) . '</td></tr>';
+					echo '<table class="table table-bordered">		        		        
+				 <tr><th>Delivery Location:</th><td  colspan="3">' . (empty($table->DeliveryLocation) ? '' : $table->DeliveryLocation) . '</td></tr>';				 
 					if (sizeof((array)$table->EDD))
 						echo ' <tr><th>EDD</th><td colspan="3">' . print_r($table->EDD) . '</td></tr>';
-					echo '<tr><th>Delivery Date:</th><td>' . (empty($table->DeliveryDate) ? '' : $table->DeliveryDate) . '</td><th>Arrival Date:</th><td>' . (empty($table->ArrivalDate) ? '' : $table->ArrivalDate) . '</td></tr>
-		         <tr><th>Delivery Type:</th><td>' . (empty($table->DeliveryType) ? '' : $table->DeliveryType) . '</td><th>CRNO:</th><td>' . (empty($table->CRNO) ? '' : $table->CRNO) . '</td></tr>
+
+					echo '<tr><th>Delivery Date:</th><td>' . (empty($table->DeliveryDate) ? '' : $table->DeliveryDate) . '</td></tr>
+		         <tr><th>CRNO:</th><td>' . (empty($table->CRNO) ? '' : $table->CRNO) . '</td></tr>
 		        </table>';
 				}
 				if (isset($a->Table1)) {
