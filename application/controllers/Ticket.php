@@ -295,9 +295,11 @@ class Ticket extends CI_Controller
 	public function view_tracking()
 	{
 		if ($post = $this->input->post()) {
+			$url = base_url()."ticket/gc_vtrans_api/" . $post['trackingno'];
+			
 			if ($post['trackingno']) {
 				$ch = curl_init();
-				curl_setopt($ch, CURLOPT_URL, "https://thecrm360.com/new_crm/ticket/gc_vtrans_api/" . $post['trackingno']);
+				curl_setopt($ch, CURLOPT_URL, $url);
 				curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 				$output = curl_exec($ch);
 				curl_close($ch);
@@ -310,6 +312,162 @@ class Ticket extends CI_Controller
 				$table1 = empty($a->Table1) ? '' : $a->Table1;
 				$table2 = empty($a->Table2) ? '' : $a->Table2;
 				$table3 = empty($a->Table3) ? '' : $a->Table3;
+				print_r($output);
+				$extra  = empty($a->extra) ? '' : $a->extra;
+
+				if (isset($extra)) {
+					$gc_data = $extra['gcDdata'];
+					?>
+					<table>
+						<tr>
+							<td>
+							<b>GC NO. : </b><?=$gc_data['Gc_No']?>
+							</td>
+						</tr>
+						<tr>
+							<td>
+							<b>GC Date. : </b><?=$gc_data['Gc_Date']?>
+							</td>
+							<td>
+							<b>Arrival Date. : </b><?=$gc_data['ArrivalDate']?>
+							</td>
+						</tr>
+						<tr>
+							<td>
+							<b>Booking Branch : </b><?=$gc_data['BookingBranch']?>
+							</td>
+							<td>
+							<b>Delivery Branch : </b><?=$gc_data['DeliveryBranch']?>
+							</td>
+						</tr>
+						<tr>
+							<td>
+							<b> Booking Type: </b><?=$gc_data['BookingType']?>
+							</td>
+							<td>
+							<b> Delivery Type: </b><?=$gc_data['DeliveryType']?>
+							</td>
+						</tr>
+						<tr>
+							<td>
+							<b> Item: </b><?=$gc_data['Item']?>
+							</td>
+							<td>
+							<b> Commodity: </b><?=$gc_data['Commodity']?>
+							</td>
+						</tr>
+						<tr>
+							<td>
+							<b> Unload Place: </b><?=$gc_data['UnloadPlace']?>
+							</td>
+							<td>
+							<b> Packing: </b><?=$gc_data['Packing']?>
+							</td>
+						</tr>
+						<tr>
+							<td>
+							<b> PickupLocation: </b><?=$gc_data['PickupLocation']?>
+							</td>
+							<td>
+							<b> InvoiceValue: </b><?=$gc_data['InvoiceValue']?>
+							</td>
+						</tr>
+						<tr>
+							<td>
+							<b> ISDACC: </b><?=$gc_data['ISDACC']?>
+							</td>
+							<td>
+							<b> PaymentType: </b><?=$gc_data['PaymentType']?>
+							</td>
+						</tr>
+						<tr>
+							<td>
+							<b> IsODA: </b><?=$gc_data['IsODA']?>
+							</td>
+							<td>
+							<b> Articles: </b><?=$gc_data['Articles']?>
+							</td>
+						</tr>
+						<tr>
+							<td>
+							<b> ActualWeight: </b><?=$gc_data['ActualWeight']?>
+							</td>
+							<td>
+							<b> IsGCContractual: </b><?=$gc_data['IsGCContractual']?>
+							</td>
+						</tr>
+						<tr>
+							<td>
+							<b> ChargedWeight: </b><?=$gc_data['ChargedWeight']?>
+							</td>
+							<td>
+							<b> ContractTermTypeAndUOM: </b><?=$gc_data['ContractTermTypeAndUOM']?>
+							</td>
+						</tr>
+						<tr>
+							<td>
+							<b> BasicFreight: </b><?=$gc_data['BasicFreight']?>
+							</td>
+							<td>
+							<b> GCTotalAmount: </b><?=$gc_data['GCTotalAmount']?>
+							</td>
+						</tr>
+						<tr>
+							<td>
+							<b> InvoiceNo: </b><?=$gc_data['InvoiceNo']?>
+							</td>
+							<td>
+							<b> GSTTaxType: </b><?=$gc_data['GSTTaxType']?>
+							</td>
+						</tr>
+						<tr>
+							<td>
+							<b> DODAmount: </b><?=$gc_data['DODAmount']?>
+							</td>
+							<td>
+							<b> CurrentStatus: </b><?=$gc_data['CurrentStatus']?>
+							</td>
+						</tr>
+						<tr>
+							<td>
+							<b> Consignor: </b><?=$gc_data['Consignor']?>
+							</td>
+							<td>
+							<b> InvoiceDate: </b><?=$gc_data['InvoiceDate']?>
+							</td>
+						</tr>
+						<tr>
+							<td>
+							<b> DODAmount: </b><?=$gc_data['DODAmount']?>
+							</td>
+							<td>
+							<b> ContractTermTypeAndUOM: </b><?=$gc_data['CurrentBranch']?>
+							</td>
+						</tr>
+						<tr>
+							<td>
+							<b> Consignee: </b><?=$gc_data['Consignee']?>
+							</td>
+							<td>
+							<b> ServiceReceiverState: </b><?=$gc_data['ServiceReceiverState']?>
+							</td>
+						</tr>
+						<tr>
+							<td>
+							<b> ConsignorContactNo: </b><?=$gc_data['ConsignorContactNo']?>
+							</td>
+							<td>
+							<b> ConsigneeContactNo: </b><?=$gc_data['ConsigneeContactNo']?>
+							</td>
+						</tr>
+						<tr>
+							<td>
+							<b> ServiceReceiverGSTIN: </b><?=$gc_data['ServiceReceiverGSTIN']?>
+							</td>							
+						</tr>
+					</table>
+					<?php	
+				}
 				if (isset($a->Table)) {
 					echo '<table class="table table-bordered">
 		        <tr><th colspan="4" style="text-align:center;">'.display('tracking_no').': ' . (empty($table->GCNO) ? '' : $table->GCNO) . '</td></tr>
@@ -1326,19 +1484,15 @@ class Ticket extends CI_Controller
 		$response = $soapclient->__soapCall('GetTrackNTraceData', array('parameters' => array('UserName' => 'vtransweb', 'Password' => 'vt@2016', 'Gc_No' => $gc_no)));
 		$xml = $response->GetTrackNTraceDataResult->any;
 		$response = simplexml_load_string($xml);
-		$ns = $response->getNamespaces(true);
-		$res = '';
+		$ns = $response->getNamespaces(true);		
+		$res = array();
 		if (!empty($response->NewDataSet)) {
-			$res = json_encode($response->NewDataSet);
+			$res = (array) $response->NewDataSet;
 		}
-		$gc_extra	=	$this->get_gc_extra_data($gc_no);
-		if(!empty($gc_extra)){
-			$gc_extra['extra'] = $gc_extra;
-			$gc_extra = json_encode($gc_extra);
-		}else{
-			$gc_extra = '';
-		}
-		echo $res.$gc_extra;
+		$gc_extra	=	$this->get_gc_extra_data($gc_no);				
+		//$res['extra'] = $gc_extra;
+		array_push($res,array('extra'=>$gc_extra));
+		echo json_encode($res);
 	}
 
 	public function get_gc_extra_data($gc_no){
@@ -1354,12 +1508,18 @@ class Ticket extends CI_Controller
 		CURLOPT_CUSTOMREQUEST => 'POST',
 		CURLOPT_HTTPHEADER => array(
 		'tokenid: 48673A8B-EE3E-498F-A0BE-FD7AE9BAC538-b654fbe2-c353-428a-9832-a36defdae100',
-		'clientid: 10000001'
+		'clientid: 10000001',
+		'Content-Length:0'
 		),
 		));
 		$response = curl_exec($curl);
+		$response = json_decode($response,true);
+		// echo "<pre>";
+		// print_r($response);
+		// echo "</pre>";
 		curl_close($curl);
-		if(!empty($response['gccrossingDetails']) && !empty($response['gcDdata'])){
+		$res = array();
+		if(!empty($response['gccrossingDetails']) && !empty($response['gcDdata'])){			
 			return $response;
 		}
 	}
