@@ -295,7 +295,7 @@ class Ticket extends CI_Controller
 	public function view_tracking()
 	{
 		if ($post = $this->input->post()) {
-			$url = base_url()."ticket/gc_vtrans_api/" . $post['trackingno'];
+			$url = "https://thecrm360.com/new_crm/ticket/gc_vtrans_api/" . $post['trackingno'];
 			
 			if ($post['trackingno']) {
 				$ch = curl_init();
@@ -308,15 +308,19 @@ class Ticket extends CI_Controller
 					exit();
 				}
 				$a = json_decode($output);
-				$b = json_decode($output,true);
+				
 				$table  = empty($a->Table) ? '' : $a->Table;
 				$table1 = empty($a->Table1) ? '' : $a->Table1;
 				$table2 = empty($a->Table2) ? '' : $a->Table2;
 				$table3 = empty($a->Table3) ? '' : $a->Table3;
-				//print_r($output);
-				$extra  = empty($b[0]) ? '' : $b[0];
-
-				if (isset($extra) && 0) {
+				
+				 echo "<pre>";
+				 print_r($a);
+				 echo "</pre>";
+				
+				$extra  = empty($a[0]) ? '' : $a[0];
+				print_r($extra);
+				if (isset($extra) ) {
 					$gc_data = $extra['gcDdata'];
 					?>
 					<table>
@@ -1491,8 +1495,8 @@ class Ticket extends CI_Controller
 			$res = (array) $response->NewDataSet;
 		}
 		$gc_extra	=	$this->get_gc_extra_data($gc_no);				
-		//$res['extra'] = $gc_extra;
-		array_push($res,array('extra'=>$gc_extra));
+		$res['extra'] = $gc_extra;
+		//array_push($res,array('extra'=>$gc_extra));
 		echo json_encode($res);
 	}
 
