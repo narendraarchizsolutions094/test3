@@ -316,7 +316,7 @@ class Ticket extends CI_Controller
 				//print_r($output);
 				$extra  = empty($b[0]) ? '' : $b[0];
 
-				if (isset($extra)) {
+				if (isset($extra) && 0) {
 					$gc_data = $extra['gcDdata'];
 					?>
 					<table>
