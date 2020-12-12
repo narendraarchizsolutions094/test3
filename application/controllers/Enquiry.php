@@ -3423,6 +3423,7 @@ public function timelinePopup()
                             'user_id'=>$this->session->user_id,
                         );
             $this->Client_Model->add_visit($data);
+            $this->Leads_Model->add_comment_for_events('Visit Added', $data['enquiry_id']);
             $this->session->set_flashdata('SUCCESSMSG','Visit Saved Successfully');
             redirect(base_url('enquiry/view/'.$this->input->post('enquiry_id')));;
         }
