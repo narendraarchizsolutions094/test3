@@ -314,12 +314,12 @@ class Ticket extends CI_Controller
 				$table2 = empty($a->Table2) ? '' : $a->Table2;
 				$table3 = empty($a->Table3) ? '' : $a->Table3;
 				
-				 echo "<pre>";
-				 print_r($a);
-				 echo "</pre>";
+				//  echo "<pre>";
+				//  print_r($a);
+				//  echo "</pre>";
 				
-				$extra  = empty($a[0]) ? '' : $a[0];
-				print_r($extra);
+				$extra  = empty($a->extra) ? '' : $a->extra;
+				//print_r($extra);
 				if (isset($extra) ) {
 					$gc_data = $extra['gcDdata'];
 					?>
