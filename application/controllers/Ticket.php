@@ -327,7 +327,7 @@ class Ticket extends CI_Controller
 					<tr><th colspan="4" style="text-align:center;">GC Data
 					</td></tr>
 						<?php
-						$i = 0;
+						$i = 0; 
 						foreach($gc_data as $key=>$value){
 							if($i==2){
 								$i = 0;
