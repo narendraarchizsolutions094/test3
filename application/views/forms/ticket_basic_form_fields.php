@@ -183,7 +183,8 @@ echo'<div class="trackingDetails"></div>';
                               $n = $clt->name." ".$clt->lastname;
                               $n = $n??$clt->phone;
                               $n = $n??$ctl->email;
-                              ?><option value ="<?php echo $clt->enquiry_id ?>"><?php echo $clt->company??$n ?> </option><?php
+                              $n = $clt->company??$n;
+                              ?><option value ="<?php echo $clt->enquiry_id ?>"><?php echo $n; ?> </option><?php
                             }
                           } ?>
                         </select>

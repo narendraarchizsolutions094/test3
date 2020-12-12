@@ -190,9 +190,9 @@ echo'
                               $n = $clt->name." ".$clt->lastname;
                               $n = $n??$clt->phone;
                               $n = $n??$ctl->email;
-
+                              $n = $clt->company??$n;
                               if($clt->enquiry_id==$ticket->client)
-                        echo "<option value =".$clt->enquiry_id." selected>".$clt->company??$n."</option>";
+                        echo "<option value =".$clt->enquiry_id." selected>".$n."</option>";
 
                             }
                           } 
