@@ -1018,6 +1018,7 @@
                   url: '<?php echo base_url();?>ChatController/getunread',
                   success: function(data) {
                       var jresp = JSON.parse(data);
+                      console.log(jresp);
                       $("#totat-chat-unread").html(jresp.total);
 
                       if (jresp.total > 0) {
