@@ -324,9 +324,9 @@ class Ticket extends CI_Controller
 					$gc_data = (array) $extra->gcDdata;
 					?>
 					<table class='table table-bordered'>
-					<tr><th colspan="4" style="text-align:center;">
+					<tr><th colspan="4" style="text-align:center;">GC Data
+					</td></tr>
 						<?php
-						echo display('tracking_no').': ' .(empty($table->GCNO) ? '' : $table->GCNO) .'</td></tr>';
 						$i = 0;
 						foreach($gc_data as $key=>$value){
 							if($i==2){
