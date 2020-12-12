@@ -219,7 +219,7 @@ class ChatController extends CI_Controller {
 			 $this->db->where('tbl_admin.companey_id',$this->session->companey_id); 
 			 $this->db->where('tbl_admin.b_status',1);   
 			 $this->db->group_by('chat.receiver_id');	
-			 $this->db->order_by('message_date_time','DESC');	
+			 $this->db->order_by('chat.message_date_time','DESC');	
 		$data['all_user']  = $this->db->get()->result();
 		
 		
