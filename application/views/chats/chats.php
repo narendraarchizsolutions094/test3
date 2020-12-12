@@ -561,7 +561,7 @@
                      $this->db->join("chat", "chat.sender_id = tbl_admin.pk_i_admin_id", "LEFT");
 					 $this->db->where('tbl_admin.companey_id',$this->session->companey_id); 
                      $this->db->where('tbl_admin.b_status',1);                              
-                     $this->db->order_by('chat.message_date_time','DESC');	                  
+                     $this->db->order_by('chat.id','DESC');	                  
                      $this->db->group_by('tbl_admin.pk_i_admin_id');
                      
                      $all_user=$this->db->get()->result();
