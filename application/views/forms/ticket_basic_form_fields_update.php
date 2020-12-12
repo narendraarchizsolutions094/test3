@@ -189,13 +189,12 @@ echo'
                             {
                               
                               $n = $clt->company;
-                              $n = $n??($clt->name." ".$clt->lastname);
-                              $n = trim($n);
-                              $n = $n??$clt->phone;
-                              $n = $n??$ctl->email;
-                              if($clt->enquiry_id==$ticket->client)
-                        echo "<option value =".$clt->enquiry_id." selected>".$n."</option>";
-
+                              if(!empty($n)){
+                                
+                                if($clt->enquiry_id==$ticket->client)
+                                echo "<option value =".$clt->enquiry_id." selected>".$n."</option>";
+                                
+                              }
                             }
                           } 
                           ?>
