@@ -3411,7 +3411,7 @@ public function timelinePopup()
         if($post = $this->input->post())
         {
             //print_r($_POST); exit();
-            $data = array(  'enquiry_id'=>$this->input->post('enquiry_id'),
+            $data = array('enquiry_id'=>$this->input->post('enquiry_id'),
                             'visit_date'=>$this->input->post('visit_date'),
                             'visit_time'=>$this->input->post('visit_time'),
                             'travelled'=>$this->input->post('travelled'),
@@ -3423,7 +3423,7 @@ public function timelinePopup()
                             'user_id'=>$this->session->user_id,
                         );
             $this->Client_Model->add_visit($data);
-            $this->Leads_Model->add_comment_for_events('Visit Added', $data['enquiry_id']);
+            $this->Leads_Model->add_comment_for_events('Visit Added', $this->input->post('enq_code'));
             $this->session->set_flashdata('SUCCESSMSG','Visit Saved Successfully');
             redirect(base_url('enquiry/view/'.$this->input->post('enquiry_id')));;
         }

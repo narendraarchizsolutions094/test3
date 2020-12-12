@@ -2068,6 +2068,7 @@ $.ajax({
 
 <form action="<?=base_url('enquiry/add_visit')?>" class="form-inner" enctype="multipart/form-data" method="post" accept-charset="utf-8" autocomplete="off">
   <input type="hidden" name="enquiry_id" value="<?=$details->enquiry_id?>">
+  <input type="hidden" name="enq_code" value="<?=$details->Enquery_id?>">
     <div class="col-md-12"  style="margin-bottom: 25px; padding: 0px">
     
     <!-- <label style="color:#283593;">Outcome Of Visit<i class="text-danger"></i></label> -->
