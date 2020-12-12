@@ -319,7 +319,7 @@ class ChatController extends CI_Controller {
 		 $this->db->where("status != 2");
 		 $this->db->group_by('receiver_id'); 
 		 $unread = $this->db->get('chat')->result();
-		
+		echo $this->db->last_query();
 		$chtarr = array();	
 		
 		if(!empty($unread)){
