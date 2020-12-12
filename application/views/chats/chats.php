@@ -1026,7 +1026,7 @@
 
                               $("#" + ind).find(".total-unread-msg").addClass("badge badge-success")
                                   .text(msg + " New");
-                                  $("#" + ind).insertAfter("#chat-user-box");  
+                                  $("#" + ind).prependTo("#chat-user-box");  
                           });
                       }
 
