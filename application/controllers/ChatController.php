@@ -313,13 +313,13 @@ class ChatController extends CI_Controller {
 		$this->db->where("pk_i_admin_id", $user_id)
 					->update("tbl_admin", $updarr);
 		
-		 $this->db->select('sender_id,receiver_id, COUNT(receiver_id) as total');
+		 $this->db->select('sender_id,receiver_id, COUNT(sender_id) as total');
 		 $this->db->where(array("receiver_id"=> $user_id));
 		 $this->db->where("sender_id != '$user_id'");
 		 $this->db->where("status != 2");
-		 $this->db->group_by('receiver_id'); 
+		 $this->db->group_by('sender_id'); 
 		 $unread = $this->db->get('chat')->result();
-		echo $this->db->last_query();
+		//echo $this->db->last_query();
 		$chtarr = array();	
 		
 		if(!empty($unread)){
