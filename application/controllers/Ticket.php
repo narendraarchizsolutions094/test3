@@ -308,15 +308,16 @@ class Ticket extends CI_Controller
 					exit();
 				}
 				$a = json_decode($output);
+				$b = json_decode($output,true);
 				$table  = empty($a->Table) ? '' : $a->Table;
 				$table1 = empty($a->Table1) ? '' : $a->Table1;
 				$table2 = empty($a->Table2) ? '' : $a->Table2;
 				$table3 = empty($a->Table3) ? '' : $a->Table3;
 				//print_r($output);
-				$extra  = empty($a->extra) ? '' : $a->extra;
+				$extra  = empty($b[0]) ? '' : $b[0];
 
 				if (isset($extra)) {
-					$gc_data = $extra[0]['gcDdata'];
+					$gc_data = $extra['gcDdata'];
 					?>
 					<table>
 						<tr>
