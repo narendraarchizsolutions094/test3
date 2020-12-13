@@ -2205,7 +2205,7 @@ $(document).ready(function(){
       <th class="th-sm">Mobile</th>
       <th class="th-sm">Email</th>
       <th class="th-sm">Address</th>
-      <th class="th-sm">Aggrement Date</th>
+      <th class="th-sm">Agreement Date</th>
     <th class="th-sm">After sign</th>
     </tr>
   </thead>
