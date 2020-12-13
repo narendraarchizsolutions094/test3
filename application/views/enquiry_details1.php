@@ -2166,22 +2166,26 @@ $(document).ready(function(){
   });
   
 });
-   window.onload = function() {
-      function delete_visit(visit_id){
-         if(confirm('Are you sure?')){      
-            $.ajax({
-            url:"<?=base_url('enquiry/delete_visit')?>",
-            type:"post",
-            data:{vid:visit_id},
-            success:function(res)
-            { 
-               $("#visit_table").DataTable().ajax.reload(); 
-               Swal.fire('Visit Deleted!', '', 'success');
-            }
-            });
+   $(".visit-delete").on('click','.visit-delete',function(){
+      vid =  $(this).data('id');
+      delete_visit(vid);
+   });
+   
+   function delete_visit(visit_id){
+      if(confirm('Are you sure?')){      
+         $.ajax({
+         url:"<?=base_url('enquiry/delete_visit')?>",
+         type:"post",
+         data:{vid:visit_id},
+         success:function(res)
+         { 
+            $("#visit_table").DataTable().ajax.reload(); 
+            Swal.fire('Visit Deleted!', '', 'success');
          }
+         });
       }
-   };
+   }
+   
 </script>  
 
 </div>
