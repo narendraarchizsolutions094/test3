@@ -1776,7 +1776,7 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                               <td class="center">
                   <a href="<?= base_url('enquiry/editinfo/' . $value->id . '')?>" class="btn btn-xs  btn-primary view_data"><i class="fa fa-edit"></i></a>
                   <a href="<?= base_url('enquiry/deleteInfo/' . $value->id . '/'.$value->enquiry_id.'/') ?>" onclick="return confirm('Are You Sure ? ')" class="btn btn-xs  btn-danger"><i class="fa fa-trash"></i></a>
-                  <a class="btn btn-primary btn-xs view_datas" id="view_sdatas" onclick="myFunction(<?= $value->booking_type ?>,<?= $value->enquiry_id ?>)" style="cursor: pointer;" data-toggle="modal"  data-target="#downloadQuatation" data-id="" data-equid=""><i class="fa fa-download"></i></a>
+                  <a class="btn btn-primary btn-xs view_datas" id="view_sdatas" onclick="quotation_pdf(<?= $value->booking_type ?>,<?= $value->enquiry_id ?>)" style="cursor: pointer;" data-toggle="modal"  data-target="#downloadQuatation" data-id="" data-equid=""><i class="fa fa-download"></i></a>
                 </td>
                            </tr> 
                            <?php  } }  ?>
@@ -2050,7 +2050,7 @@ $('#infotype').on('change', function() {
 </div>
 <script>
 
-function myFunction(typeId,enqid) {
+function quotation_pdf(typeId,enqid) {
    $(".data_value").empty();
    var elem = document.getElementById('view_sdatas');
 $.ajax({
@@ -2063,6 +2063,9 @@ $.ajax({
             });
 }
 </script>
+<?php
+if($this->session->companey_id == 65){
+?>
 <div class="tab-pane" id="vtran_visit">
  <hr>
 
@@ -2083,6 +2086,7 @@ $.ajax({
           <th>Rating</th>
           <th>Next Visit Date</th>
           <th>Next Visit Location</th>
+          <th>Action</th>
         </tr>
       </thead>
       <thead>
@@ -2145,23 +2149,9 @@ $.ajax({
    </form>
 
 <script type="text/javascript">
-var Data = {"from_data":"","to_date":"","from_time":"","to_time":""};
-
-$(".v_filter").change(function(){
-  // var obj = $(".v_filter:input").serializeArray();
-
-  // Data["from_date"]= obj[0]["value"];
-  // Data["to_date"] = obj[1]["value"];
-  // Data["from_time"] = obj[2]["value"];
-  // Data["to_time"] = obj[3]["value"];
- $("#visit_table").DataTable().ajax.reload(); 
-
-});
 
 $(document).ready(function(){
-
-  $('#visit_table').DataTable({ 
-
+  $('#visit_table').DataTable({
           "processing": true,
           "scrollX": true,
           "serverSide": true,          
@@ -2170,23 +2160,23 @@ $(document).ready(function(){
               "url": "<?=base_url().'enquiry/visit_load_data'?>",
               "type": "POST",
               "data":function(d){
-                      //var obj = $(".v_filter:input").serializeArray();
-
-                     d.enquiry_id ="<?=$details->enquiry_id?>";
-                     // d.to_date = obj[2]["value"];
-                     // d.from_time = obj[1]["value"];
-                     // d.to_time = obj[3]["value"];
-                     //console.log(JSON.stringify(d));
-                    return d;
+                  d.enquiry_id ="<?=$details->enquiry_id?>";
+                  return d;
               }
           },
   });
-
+  function delete_visit(visit_id){
+   if(confirm('Are you sure?')){
+      alert(visit_id);
+   }
+  }
 });
-//+"&data_type=<?=$data_type?>"
 </script>  
 
 </div>
+<?php
+   }
+?>
 
 <div class="tab-pane" id="vtransaggrement">
  <hr>
