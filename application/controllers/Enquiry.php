@@ -3428,6 +3428,12 @@ public function timelinePopup()
             redirect(base_url('enquiry/view/'.$this->input->post('enquiry_id')));;
         }
     }
+    public function delete_visit(){
+        $id    =   $this->input->post('vid',true);
+        $this->db->where('id',$id);
+        $this->db->where('comp_id',$this->session->companey_id);
+        echo $this->db->delete('tbl_visit');
+    }
     public function visit_load_data()
     {
         //print_r($_POST); exit(); 
@@ -3460,7 +3466,7 @@ public function timelinePopup()
             $sub[] = $res->rating!=''?$res->rating:'NA';
             $sub[] = $res->next_date!='0000-00-00'?$res->next_date:'NA';
             $sub[] = $res->next_location?$res->next_location:'NA';
-            $sub[] = "<a class='btn btn-xs btn-danger fa fa-trash' onclick='delete_visit('".$res->id."')'></a>";
+            $sub[] = "<a class='btn btn-xs btn-danger fa fa-trash' onclick='delete_visit('$res->id')'></a>";
             $data[] =$sub;
         }
     
