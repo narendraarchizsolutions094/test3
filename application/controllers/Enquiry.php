@@ -3466,7 +3466,7 @@ public function timelinePopup()
             $sub[] = $res->rating!=''?$res->rating:'NA';
             $sub[] = $res->next_date!='0000-00-00'?$res->next_date:'NA';
             $sub[] = $res->next_location?$res->next_location:'NA';
-            $sub[] = "<a class='btn btn-xs btn-danger fa fa-trash' onclick='delete_visit('$res->id')'></a>";
+            $sub[] = "<a class='btn btn-xs btn-danger fa fa-trash' onclick='delete_visit($res->id)'></a>";
             $data[] =$sub;
         }
     
