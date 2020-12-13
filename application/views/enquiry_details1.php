@@ -2173,7 +2173,10 @@ $(document).ready(function(){
            $.ajax({
            url:"<?=base_url('enquiry/delete_visit')?>",
            type:"post",
-           data:{vid:vid},
+           data:{
+              vid:vid,
+              enq_code:"<?=$details->Enquery_id?>",
+            },
            success:function(res)
            { 
               $("#visit_table").DataTable().ajax.reload(); 
