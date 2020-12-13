@@ -2166,7 +2166,7 @@ $(document).ready(function(){
   });
   
 });
-   $(".visit-delete").on('click','.visit-delete',function(){
+   $(".visit-delete").on('click','a',function(){
       vid =  $(this).data('id');
       delete_visit(vid);
    });
