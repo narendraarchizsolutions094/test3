@@ -2164,7 +2164,9 @@ $(document).ready(function(){
               }
           },
   });
-  window.onload = function() {
+  
+});
+   window.onload = function() {
       function delete_visit(visit_id){
          if(confirm('Are you sure?')){      
             $.ajax({
@@ -2180,8 +2182,6 @@ $(document).ready(function(){
          }
       }
    };
-
-});
 </script>  
 
 </div>
