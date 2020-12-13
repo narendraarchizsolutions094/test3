@@ -3429,10 +3429,10 @@ public function timelinePopup()
         }
     }
     public function delete_visit(){
+        $this->Leads_Model->add_comment_for_events('Visit Delete', $this->input->post('enq_code'));
         $id    =   $this->input->post('vid',true);
         $this->db->where('id',$id);
         $this->db->where('comp_id',$this->session->companey_id);
-        $this->Leads_Model->add_comment_for_events('Visit Delete', $this->input->post('enq_code'));
         echo $this->db->delete('tbl_visit');
     }
     public function visit_load_data()
