@@ -1510,9 +1510,9 @@ public function view_editable_aggrement()
           
            //echo $viewfile;
             $this->load->library('pdf');
-            $this->pdf->create($viewfile);
+            $this->pdf->create($viewfile,'Agreement.pdf');
             //$this->pdf->load_view('aggrement/input-vtrans',$_POST,array(),'.');
-            //echo $viewfile;
+            //echo $viewfile; 
            //pdf_create($viewfile,'Demo Aggrement',true,'1');
         }
         // $abc = !empty($_POST['aggrement_data']) ? $_POST['aggrement_data'] : '';

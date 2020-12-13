@@ -2296,7 +2296,7 @@ $(document).ready(function(){
                   <div class="row">                      
                     <div class="form-group col-sm-10">
                           <label>If Details Are Same As Privious Data (Click Checkbox) <i class="text-danger"></i></label>
-                        <input type="checkbox" name="agg_same" id="agg_same" value="<?php echo $this->uri->segment(3); ?>" onclick="myaggrement()" class="">
+                        <input type="checkbox" name="agg_same" id="agg_same" value="<?php echo $this->uri->segment(3); ?>" onclick="myaggrement()" class="form-control">
                     </div>  
                     <div class="form-group col-sm-6">
                           <label>Name <i class="text-danger"></i></label>
