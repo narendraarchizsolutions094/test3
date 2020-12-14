@@ -41,12 +41,15 @@
                             <td class="th1"><?php 
                             $process_in_each  = $sub->process_id;
                             $process_in_each  = explode(',',$process_in_each);
+                            $p = '';
                             if(!empty($process_in_each)){
                               foreach($process_in_each as $e){
                                 $process_name  = $this->common_model->get_process_name_by_id($e);
-                                echo $process_name.', ';
+                                $p .= $process_name.', ';
                               }
-                            }                            
+                            }       
+                            $p = rtrim($p, ", ");                   
+                            echo $p;  
                             ?>
                             </td>
                             <td class="center">
@@ -75,6 +78,14 @@
                                                 <input class="form-control" name="subject" type="text"
                                                     value="<?php echo $sub->subject_title;?>" required="">
                                             </div>
+                                            <div class="form-group col-sm-12">
+                                              <label><?=display('proccess')?></label>
+                                            <select  class="form-control" name="process[]" multiple required>        
+                                              <?php foreach($products as $product){?>
+                                              <option value="<?=$product->sb_id ?>" <?=(in_array($product->sb_id,explode(',',$sub->process_id)))?'selected':''?>><?=$product->product_name ?></option>
+                                              <?php } ?>
+                                            </select>
+                                          </div>
                                         </div>
                                         <div class="col-12" style="padding: 0px;">
                                             <div class="row">
@@ -155,6 +166,14 @@ input[type=number]::-webkit-outer-spin-button {
                     <div class="form-group col-sm-12">
                         <label>Title<span style="color:red;">*</span></label>
                         <input class="form-control" name="subject" type="text" required="">
+                    </div>
+                    <div class="form-group col-sm-12">
+                        <label><?=display('proccess')?></label>
+                      <select  class="form-control" name="process[]" multiple required>        
+                        <?php foreach($products as $product){?>
+                        <option value="<?=$product->sb_id ?>"><?=$product->product_name ?></option>
+                        <?php } ?>
+                      </select>
                     </div>
                 </div>
                 <div class="col-12" style="padding: 0px;">

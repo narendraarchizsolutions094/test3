@@ -431,6 +431,11 @@ class User extends CI_Controller
         // die();
         #-------------------------------#
         if ($this->form_validation->run() === true) {
+            if($this->session->companey_id==65){
+                $this->user_model->set_user_meta($this->input->post('dprt_id'),array(
+                    'reporting_location'=>$this->input->post('reporting_location')
+                ));
+            }
             #if empty $dprt_id then insert data
             if (empty($this->input->post('dprt_id'))) {
               $insert_id=$this->User_model->create($postData);
@@ -659,6 +664,11 @@ class User extends CI_Controller
         $data['products_list'] = $this->dash_model->all_product_list();
         $data['products'] = $this->dash_model->all_process_list();
         $data['user_meta'] = $this->user_model->get_user_meta($id,array('api_name','api_url'));
+        
+        if($this->session->companey_id == 65){
+            $data['reporting_locations'] = $this->User_model->get_report_locations();
+        }
+
         // print_r($data['user_meta']->api_name);
         // die();
         $data['content'] = $this->load->view('user_from', $data, true);

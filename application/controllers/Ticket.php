@@ -204,7 +204,7 @@ class Ticket extends CI_Controller
 				$sub[] = $point->last_update ?? 'NA';
 			}
 			if ($showall or in_array(2, $acolarr)) {
-				$sub[] = $point->clientname ?? "NA";
+				$sub[] = $point->org_name??($point->clientname ?? "NA");
 			}
 			if ($showall or in_array(3, $acolarr)) {
 				$sub[] = $point->email ?? "NA";
@@ -295,9 +295,11 @@ class Ticket extends CI_Controller
 	public function view_tracking()
 	{
 		if ($post = $this->input->post()) {
+			$url = "https://thecrm360.com/new_crm/ticket/gc_vtrans_api/" . $post['trackingno'];
+			
 			if ($post['trackingno']) {
 				$ch = curl_init();
-				curl_setopt($ch, CURLOPT_URL, "https://thecrm360.com/new_crm/ticket/gc_vtrans_api/" . $post['trackingno']);
+				curl_setopt($ch, CURLOPT_URL, $url);
 				curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 				$output = curl_exec($ch);
 				curl_close($ch);
@@ -306,20 +308,54 @@ class Ticket extends CI_Controller
 					exit();
 				}
 				$a = json_decode($output);
+				
 				$table  = empty($a->Table) ? '' : $a->Table;
 				$table1 = empty($a->Table1) ? '' : $a->Table1;
 				$table2 = empty($a->Table2) ? '' : $a->Table2;
 				$table3 = empty($a->Table3) ? '' : $a->Table3;
+				
+				//  echo "<pre>";
+				//  print_r($a);
+				//  echo "</pre>";
+				
+				$extra  = empty($a->extra) ? '' : $a->extra;
+				//print_r($extra);
+				if (isset($extra) ) {
+					$gc_data = (array) $extra->gcDdata;
+					?>
+					<table class='table table-bordered'>
+					<tr><th colspan="4" style="text-align:center;">GC Data
+					</td></tr>
+						<?php
+						$i = 0; 
+						foreach($gc_data as $key=>$value){
+							if($i==2){
+								$i = 0;
+							}
+							if($i == 0){
+								echo '<tr>';
+							}
+							echo '<td>';
+							echo '<b>'.$key.'</b>';
+							echo '</td>';
+							echo '<td>';
+							echo $value;
+							echo '</td>';
+							if($i == 1){
+								echo '</tr>';
+							}										
+							$i++;							
+						}
+						
+				}
 				if (isset($a->Table)) {
-					echo '<table class="table table-bordered">
-		        <tr><th colspan="4" style="text-align:center;">'.display('tracking_no').': ' . (empty($table->GCNO) ? '' : $table->GCNO) . '</td></tr>
-		        <tr><th>Date:</th><td>' . (empty($table->GC_Date) ? '' : $table->GC_Date) . '</td><th>Status:</th><td>' . (empty($table->status) ? '' : $table->status) . '</td></tr>
-		         <tr><th>Delivery Location:</th><td  colspan="3">' . (empty($table->DeliveryLocation) ? '' : $table->DeliveryLocation) . '</td></tr>
-		         <tr><th>Delivery Branch:</th><td>' . (empty($table->DeliveryBranch) ? '' : $table->DeliveryBranch) . '</td><th>Booking Branch:</th><td>' . (empty($table->BookingBranch) ? '' : $table->BookingBranch) . '</td></tr>';
+					echo '<table class="table table-bordered">		        		        
+				 <tr><th>Delivery Location:</th><td  colspan="3">' . (empty($table->DeliveryLocation) ? '' : $table->DeliveryLocation) . '</td></tr>';				 
 					if (sizeof((array)$table->EDD))
 						echo ' <tr><th>EDD</th><td colspan="3">' . print_r($table->EDD) . '</td></tr>';
-					echo '<tr><th>Delivery Date:</th><td>' . (empty($table->DeliveryDate) ? '' : $table->DeliveryDate) . '</td><th>Arrival Date:</th><td>' . (empty($table->ArrivalDate) ? '' : $table->ArrivalDate) . '</td></tr>
-		         <tr><th>Delivery Type:</th><td>' . (empty($table->DeliveryType) ? '' : $table->DeliveryType) . '</td><th>CRNO:</th><td>' . (empty($table->CRNO) ? '' : $table->CRNO) . '</td></tr>
+
+					echo '<tr><th>Delivery Date:</th><td>' . (empty($table->DeliveryDate) ? '' : $table->DeliveryDate) . '</td></tr>
+		         <tr><th>CRNO:</th><td>' . (empty($table->CRNO) ? '' : $table->CRNO) . '</td></tr>
 		        </table>';
 				}
 				if (isset($a->Table1)) {
@@ -1283,12 +1319,15 @@ class Ticket extends CI_Controller
 			$reason = $this->input->post('subject');
 			$data = array(
 				'subject_title' => $reason,
+				'process_id' => implode(',',$this->input->post('process')),
 				'comp_id' => $this->session->userdata('companey_id')
 			);
 			$insert_id = $this->Ticket_Model->add_tsub($data);
 			redirect('ticket/add_subject');
 		}
 		$data['subject'] = $this->Ticket_Model->get_sub_list();
+		$this->load->model('dash_model');
+		$data['products'] = $this->dash_model->get_user_product_list();
 		$data['content'] = $this->load->view('ticket_subject', $data, true);
 		$this->load->view('layout/main_wrapper', $data);
 	}
@@ -1298,6 +1337,7 @@ class Ticket extends CI_Controller
 			$drop_id = $this->input->post('drop_id');
 			$reason = $this->input->post('subject');
 			$this->db->set('subject_title', $reason);
+			$this->db->set('process_id',implode(',',$this->input->post('process')));			
 			$this->db->where('id', $drop_id);
 			$this->db->update('tbl_ticket_subject');
 			$this->session->set_flashdata('SUCCESSMSG', 'Update Successfully');
@@ -1322,12 +1362,44 @@ class Ticket extends CI_Controller
 		$response = $soapclient->__soapCall('GetTrackNTraceData', array('parameters' => array('UserName' => 'vtransweb', 'Password' => 'vt@2016', 'Gc_No' => $gc_no)));
 		$xml = $response->GetTrackNTraceDataResult->any;
 		$response = simplexml_load_string($xml);
-		$ns = $response->getNamespaces(true);
-		$res = '';
+		$ns = $response->getNamespaces(true);		
+		$res = array();
 		if (!empty($response->NewDataSet)) {
-			$res = json_encode($response->NewDataSet);
+			$res = (array) $response->NewDataSet;
 		}
-		echo $res;
+		$gc_extra	=	$this->get_gc_extra_data($gc_no);				
+		$res['extra'] = $gc_extra;
+		//array_push($res,array('extra'=>$gc_extra));
+		echo json_encode($res);
+	}
+
+	public function get_gc_extra_data($gc_no){
+		$curl = curl_init();
+		curl_setopt_array($curl, array(
+		CURLOPT_URL => 'http://203.112.143.175/GCTracking/api/GCTracking/GetGCDetails?GCNO='.$gc_no,
+		CURLOPT_RETURNTRANSFER => true,
+		CURLOPT_ENCODING => '',
+		CURLOPT_MAXREDIRS => 10,
+		CURLOPT_TIMEOUT => 0,
+		CURLOPT_FOLLOWLOCATION => true,
+		CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+		CURLOPT_CUSTOMREQUEST => 'POST',
+		CURLOPT_HTTPHEADER => array(
+		'tokenid: 48673A8B-EE3E-498F-A0BE-FD7AE9BAC538-b654fbe2-c353-428a-9832-a36defdae100',
+		'clientid: 10000001',
+		'Content-Length:0'
+		),
+		));
+		$response = curl_exec($curl);
+		$response = json_decode($response,true);
+		// echo "<pre>";
+		// print_r($response);
+		// echo "</pre>";
+		curl_close($curl);
+		$res = array();
+		if(!empty($response['gccrossingDetails']) && !empty($response['gcDdata'])){			
+			return $response;
+		}
 	}
 	public function Dashboard()
 	{

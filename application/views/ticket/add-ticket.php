@@ -12,6 +12,7 @@
 	</style>
 
 	<?php
+
 	if(!$invalid_process)
 	{	
 	?>	

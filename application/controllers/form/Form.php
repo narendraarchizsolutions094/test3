@@ -204,7 +204,7 @@ class Form extends CI_Controller {
 			$data["clients"] = $this->Enquiry_model->getEnquiry()->result();
 			$data["product"] = $this->Ticket_Model->getproduct();
 			$data["referred_type"] = $this->Leads_Model->get_referred_by();
-			$data['problem'] = $this->Ticket_Model->get_sub_list();
+			$data['problem'] = $this->Ticket_Model->get_sub_list($this->session->companey_id,$this->session->process[0]);
 			$data['issues'] = $this->Ticket_Model->get_issue_list();
 	    	$data['company_list'] = $this->location_model->get_company_list1_ticket($process_id);
 	    	echo $this->load->view('forms/ticket_basic_form_fields',$data,true);
@@ -253,7 +253,7 @@ class Form extends CI_Controller {
 		$data["clients"] = $this->Enquiry_model->getEnquiry()->result();
 		$data["product"] = $this->Ticket_Model->getproduct();
 		$data["referred_type"] = $this->Leads_Model->get_referred_by();
-		$data['problem'] = $this->Ticket_Model->get_sub_list();
+		$data['problem'] = $this->Ticket_Model->get_sub_list($this->session->companey_id,$data['ticket']->process_id);
 		$data['issues'] = $this->Ticket_Model->get_issue_list();
     	$data['company_list'] = $this->location_model->get_company_list1_ticket($process_id);
     	echo $this->load->view('forms/ticket_basic_form_fields_update',$data,true);

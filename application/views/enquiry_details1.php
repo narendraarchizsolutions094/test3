@@ -1776,7 +1776,7 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                               <td class="center">
                   <a href="<?= base_url('enquiry/editinfo/' . $value->id . '')?>" class="btn btn-xs  btn-primary view_data"><i class="fa fa-edit"></i></a>
                   <a href="<?= base_url('enquiry/deleteInfo/' . $value->id . '/'.$value->enquiry_id.'/') ?>" onclick="return confirm('Are You Sure ? ')" class="btn btn-xs  btn-danger"><i class="fa fa-trash"></i></a>
-                  <a class="btn btn-primary btn-xs view_datas" id="view_sdatas" onclick="myFunction(<?= $value->booking_type ?>,<?= $value->enquiry_id ?>)" style="cursor: pointer;" data-toggle="modal"  data-target="#downloadQuatation" data-id="" data-equid=""><i class="fa fa-download"></i></a>
+                  <a class="btn btn-primary btn-xs view_datas" id="view_sdatas" onclick="quotation_pdf(<?= $value->booking_type ?>,<?= $value->enquiry_id ?>)" style="cursor: pointer;" data-toggle="modal"  data-target="#downloadQuatation" data-id="" data-equid=""><i class="fa fa-download"></i></a>
                 </td>
                            </tr> 
                            <?php  } }  ?>
@@ -2050,7 +2050,7 @@ $('#infotype').on('change', function() {
 </div>
 <script>
 
-function myFunction(typeId,enqid) {
+function quotation_pdf(typeId,enqid) {
    $(".data_value").empty();
    var elem = document.getElementById('view_sdatas');
 $.ajax({
@@ -2063,14 +2063,17 @@ $.ajax({
             });
 }
 </script>
+<?php
+if($this->session->companey_id == 65){
+?>
 <div class="tab-pane" id="vtran_visit">
  <hr>
 
 <form action="<?=base_url('enquiry/add_visit')?>" class="form-inner" enctype="multipart/form-data" method="post" accept-charset="utf-8" autocomplete="off">
   <input type="hidden" name="enquiry_id" value="<?=$details->enquiry_id?>">
-    <div class="col-md-12"  style="margin-bottom: 25px; padding: 0px">
+  <input type="hidden" name="enq_code" value="<?=$details->Enquery_id?>">
+    <div class="col-md-12"  style="margin-bottom: 25px; padding: 0px">   
     
-    <!-- <label style="color:#283593;">Outcome Of Visit<i class="text-danger"></i></label> -->
     <table id="visit_table" class="table table-bordered table-hover mobile-optimised" style="width:100%;">
       <thead>
         <tr>
@@ -2082,6 +2085,7 @@ $.ajax({
           <th>Rating</th>
           <th>Next Visit Date</th>
           <th>Next Visit Location</th>
+          <th>Action</th>
         </tr>
       </thead>
       <thead>
@@ -2144,23 +2148,9 @@ $.ajax({
    </form>
 
 <script type="text/javascript">
-var Data = {"from_data":"","to_date":"","from_time":"","to_time":""};
-
-$(".v_filter").change(function(){
-  // var obj = $(".v_filter:input").serializeArray();
-
-  // Data["from_date"]= obj[0]["value"];
-  // Data["to_date"] = obj[1]["value"];
-  // Data["from_time"] = obj[2]["value"];
-  // Data["to_time"] = obj[3]["value"];
- $("#visit_table").DataTable().ajax.reload(); 
-
-});
 
 $(document).ready(function(){
-
-  $('#visit_table').DataTable({ 
-
+  $('#visit_table').DataTable({
           "processing": true,
           "scrollX": true,
           "serverSide": true,          
@@ -2169,23 +2159,40 @@ $(document).ready(function(){
               "url": "<?=base_url().'enquiry/visit_load_data'?>",
               "type": "POST",
               "data":function(d){
-                      //var obj = $(".v_filter:input").serializeArray();
-
-                     d.enquiry_id ="<?=$details->enquiry_id?>";
-                     // d.to_date = obj[2]["value"];
-                     // d.from_time = obj[1]["value"];
-                     // d.to_time = obj[3]["value"];
-                     //console.log(JSON.stringify(d));
-                    return d;
+                  d.enquiry_id ="<?=$details->enquiry_id?>";
+                  return d;
               }
           },
   });
-
+  
+  
 });
-//+"&data_type=<?=$data_type?>"
+      $(document).delegate('.visit-delete', 'click', function() {    
+        vid =  $(this).data('id');      
+        if(confirm('Are you sure?')){      
+           $.ajax({
+           url:"<?=base_url('enquiry/delete_visit')?>",
+           type:"post",
+           data:{
+              vid:vid,
+              enq_code:"<?=$details->Enquery_id?>",
+            },
+           success:function(res)
+           { 
+              $("#visit_table").DataTable().ajax.reload(); 
+              Swal.fire('Visit Deleted!', '', 'success');
+           }
+           });
+        }
+     });  
+   
+   
 </script>  
 
 </div>
+<?php
+   }
+?>
 
 <div class="tab-pane" id="vtransaggrement">
  <hr>
@@ -2198,7 +2205,7 @@ $(document).ready(function(){
       <th class="th-sm">Mobile</th>
       <th class="th-sm">Email</th>
       <th class="th-sm">Address</th>
-      <th class="th-sm">Aggrement Date</th>
+      <th class="th-sm">Agreement Date</th>
     <th class="th-sm">After sign</th>
     </tr>
   </thead>

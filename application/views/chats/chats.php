@@ -558,9 +558,13 @@
 					 $this->db->select("*");
 					 $this->db->from('tbl_admin');        
 					 $this->db->join('tbl_user_role', 'tbl_user_role.use_id=tbl_admin.user_permissions', 'left');        
+                     //$this->db->join("chat", "chat.sender_id = tbl_admin.pk_i_admin_id", "LEFT");
 					 $this->db->where('tbl_admin.companey_id',$this->session->companey_id); 
-					 $this->db->where('tbl_admin.b_status',1);                                                
-					 $all_user=$this->db->get()->result();
+                     $this->db->where('tbl_admin.b_status',1);                              
+                     //$this->db->order_by('chat.id','DESC');	                  
+                     //$this->db->group_by('tbl_admin.pk_i_admin_id');
+                     
+                     $all_user=$this->db->get()->result();
 					 if(!empty($all_user)){
 						foreach($all_user as $v){
 							if($v->pk_i_admin_id!=$this->session->user_id){
@@ -1014,11 +1018,11 @@
           }
 
           function getunread() {
-
               $.ajax({
                   url: '<?php echo base_url();?>ChatController/getunread',
                   success: function(data) {
                       var jresp = JSON.parse(data);
+                      console.log(jresp);
                       $("#totat-chat-unread").html(jresp.total);
 
                       if (jresp.total > 0) {
@@ -1027,6 +1031,7 @@
 
                               $("#" + ind).find(".total-unread-msg").addClass("badge badge-success")
                                   .text(msg + " New");
+                                  $("#" + ind).prependTo("#chat-user-box");  
                           });
                       }
 
@@ -1052,6 +1057,7 @@
 
                   getunread();
               } else {
+                    getunread();
                   getloginuser(cont);
               }
           }, 10000);

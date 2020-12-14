@@ -217,39 +217,28 @@ div.cls_006{font-family:"Gill Sans MT",serif;font-size:11.1px;color:rgb(48,68,12
 <div style="position:absolute;left:41.38px;top:352.29px" class="cls_003"><span class="cls_003">Whereas V-Trans is a Transport service provider, carrying on its business across the country and customer willing to</span></div>
 <div style="position:absolute;left:41.38px;top:365.49px" class="cls_003"><span class="cls_003">avail the services of  V-Trans on the terms and conditions hereinafter mentioned in this contract.</span></div>
 <div style="position:absolute;left:41.02px;top:392.03px" class="cls_002"><span class="cls_002">1. CONTRACT  VALIDITY:</span></div>
-<div style="position:absolute;left:52.03px;top:405.23px" class="cls_003"><span class="cls_003">This Agreement shall become effective from <!-- <input style="    
-	top: 0;
-    margin-left: 0px;
-   	width: 50px;
-    font-family: arial;
-    font-size: 11px;" type="text">  -->
+<div style="position:absolute;left:52.03px;top:405.23px" class="cls_003"><span class="cls_003">This Agreement shall become effective from 
     <?=empty($_POST['from'])?'<input name="from" style="
 	top: 0;
     margin-left: 0px;
-   	width: 50px;
+   	width: 60px;
     font-family: arial;
     font-size: 11px;" type="text" >':'<div class="dynamic_input"  style="
 	top: 0;
     margin-left: 0px;
-   	width: 50px;
+   	width: 60px;
     font-family: arial;
     font-size: 11px;">'.$_POST['from'].'</div> <input name="from" type="hidden" value="'.$_POST['from'].'">'?>
-    To 
-    <!-- <input style="    
-	top: 0;
-    margin-left: 0px;
-   	width: 50px;
-    font-family: arial;
-    font-size: 11px;" type="text"> -->
+    To     
     <?=empty($_POST['to'])?'<input name="to" style="
 	top: 0;
     margin-left: 0px;
-   	width: 50px;
+   	width: 60px;
     font-family: arial;
     font-size: 11px;" type="text" >':'<div class="dynamic_input"  style="
 	top: 0;
     margin-left: 0px;
-   	width: 50px;
+   	width: 60px;
     font-family: arial;
     font-size: 11px;">'.$_POST['to'].'</div> <input name="from" type="hidden" value="'.$_POST['to'].'">'?>
 . Either party can terminate this contract by</span></div>

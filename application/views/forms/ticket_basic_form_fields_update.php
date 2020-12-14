@@ -187,9 +187,14 @@ echo'
                           {
                             foreach($clients as $ind => $clt)
                             {
-                              if($clt->enquiry_id==$ticket->client)
-                        echo "<option value =".$clt->enquiry_id." selected>".$clt->name."</option>";
-
+                              
+                              $n = $clt->company;
+                              if(!empty($n)){
+                                
+                                if($clt->enquiry_id==$ticket->client)
+                                echo "<option value =".$clt->enquiry_id." selected>".$n."</option>";
+                                
+                              }
                             }
                           } 
                           ?>

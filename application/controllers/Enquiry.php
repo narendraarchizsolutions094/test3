@@ -3411,7 +3411,7 @@ public function timelinePopup()
         if($post = $this->input->post())
         {
             //print_r($_POST); exit();
-            $data = array(  'enquiry_id'=>$this->input->post('enquiry_id'),
+            $data = array('enquiry_id'=>$this->input->post('enquiry_id'),
                             'visit_date'=>$this->input->post('visit_date'),
                             'visit_time'=>$this->input->post('visit_time'),
                             'travelled'=>$this->input->post('travelled'),
@@ -3423,9 +3423,17 @@ public function timelinePopup()
                             'user_id'=>$this->session->user_id,
                         );
             $this->Client_Model->add_visit($data);
+            $this->Leads_Model->add_comment_for_events('Visit Added', $this->input->post('enq_code'));
             $this->session->set_flashdata('SUCCESSMSG','Visit Saved Successfully');
             redirect(base_url('enquiry/view/'.$this->input->post('enquiry_id')));;
         }
+    }
+    public function delete_visit(){
+        $this->Leads_Model->add_comment_for_events('Visit Deleted', $this->input->post('enq_code'));
+        $id    =   $this->input->post('vid',true);
+        $this->db->where('id',$id);
+        $this->db->where('comp_id',$this->session->companey_id);
+        echo $this->db->delete('tbl_visit');
     }
     public function visit_load_data()
     {
@@ -3459,6 +3467,7 @@ public function timelinePopup()
             $sub[] = $res->rating!=''?$res->rating:'NA';
             $sub[] = $res->next_date!='0000-00-00'?$res->next_date:'NA';
             $sub[] = $res->next_location?$res->next_location:'NA';
+            $sub[] = "<a class='btn btn-xs btn-danger fa fa-trash visit-delete' href='javascript:void(0)' data-id='$res->id' ></a>";
             $data[] =$sub;
         }
     

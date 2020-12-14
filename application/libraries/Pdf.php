@@ -74,13 +74,13 @@ public function load_view($view, $data = array(),$pdfFilePath1)
 
    
 }
-public function create($html){
+public function create($html,$title='quotation.pdf'){
     $dompdf = new Dompdf(array('enable_remote' => true));
     $dompdf->loadHtml($html);
     //$dompdf->setPaper('A4', 'portrait');
     $dompdf->setPaper(array(0,0,600,5200));
     $dompdf->render();    
-    $dompdf->stream("quotation.pdf", array('Attachment'=>1));
+    $dompdf->stream($title, array('Attachment'=>1));
     exit();
 }
 

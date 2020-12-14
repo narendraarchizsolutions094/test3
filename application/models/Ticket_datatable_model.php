@@ -160,7 +160,7 @@ class Ticket_datatable_model extends CI_Model{
         // }
         if($showall or in_array(2,$acolarr))
         {
-            $sel_string[] = " concat(enq.name_prefix,' ' , enq.name,' ', enq.lastname) as clientname ";
+            $sel_string[] = " concat_ws(enq.name_prefix,' ' , enq.name,' ', enq.lastname) as clientname,enq.company as org_name ";
         }
         // if($showall or in_array(3,$acolarr))
         // {
