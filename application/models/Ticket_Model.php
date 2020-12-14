@@ -546,9 +546,9 @@ class Ticket_Model extends CI_Model
 		$this->db->where('company_id', $this->session->companey_id);
 		return $this->db->get('tbl_ticket_status')->result();
 	}
-	public function createddatewise($idate)
+	public function createddatewise($type,$idate)
 	{
-		$count = $this->db->where('company', $this->session->companey_id)->like('coml_date', $idate)->count_all_results('tbl_ticket');
+		$count = $this->db->where(array('company'=>$this->session->companey_id,'complaint_type'=>$type))->like('coml_date', $idate)->count_all_results('tbl_ticket');
 		return $count;
 	}
 	
