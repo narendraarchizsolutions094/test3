@@ -83,7 +83,10 @@
   width: 100%;
   height: 500px;
 }
-
+#chartdiv_substage {
+  width: 100%;
+  height: 500px;
+}
 </style>
 <!-- Resources -->
 
@@ -110,32 +113,24 @@
 
 </div>
 </div>
-<!-- Styles -->
-<!-- HTML -->
-<!-- Styles -->
 
+<br>
+<br>
 
-<!-- HTML -->
-<!-- Styles -->
-<style>
-#chartdiv4 {
-  width: 100%;
-  height: 500px;
-}
-
-</style>
-
-<!-- Resources -->
-
-<!-- Chart code -->
-    
 <center><h3>Stage Vs Ticket</h3></center>
+<br>
 
 <!-- HTML -->
-<div id="chartdiv4"></div>
+<div id="chartdiv_substage"></div>
+<br>
+<br>
+
 <center><h3>Substage Vs Ticket</h3></center>
 <!-- HTML -->
 <div id="chartdiv5"></div>
+<br>
+<br>
+
 <!-- HTML -->
 <div class="row">
     <div class="col-md-6">
@@ -149,6 +144,8 @@
 </div>
 </div>
 
+<br>
+<br>
 
 <!-- Chart code -->
 <script>
@@ -615,6 +612,7 @@ chart.cursor = new am4charts.XYCursor();
       contentType: false,
       success : function(response)
       {
+       
 am4core.ready(function() {
 
 // Themes begin
@@ -622,40 +620,37 @@ am4core.useTheme(am4themes_animated);
 // Themes end
 
 // Create chart instance
-var chart = am4core.create("chartdiv4", am4charts.XYChart3D);
+var chart = am4core.create("chartdiv_substage", am4charts.XYChart3D);
+chart.paddingBottom = 30;
+chart.angle = 35;
 
 // Add data
 chart.data = response;
 
 // Create axes
-let categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
+var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
 categoryAxis.dataFields.category = "name";
-categoryAxis.renderer.labels.template.rotation = 270;
-categoryAxis.renderer.labels.template.hideOversized = false;
+categoryAxis.renderer.grid.template.location = 0;
 categoryAxis.renderer.minGridDistance = 20;
-categoryAxis.renderer.labels.template.horizontalCenter = "right";
-categoryAxis.renderer.labels.template.verticalCenter = "middle";
-categoryAxis.tooltip.label.rotation = 270;
-categoryAxis.tooltip.label.horizontalCenter = "right";
-categoryAxis.tooltip.label.verticalCenter = "middle";
+categoryAxis.renderer.inside = true;
+categoryAxis.renderer.grid.template.disabled = true;
 
-let valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
-valueAxis.title.text = "Stage";
-valueAxis.title.fontWeight = "bold";
+let labelTemplate = categoryAxis.renderer.labels.template;
+labelTemplate.rotation = -90;
+labelTemplate.horizontalCenter = "left";
+labelTemplate.verticalCenter = "middle";
+labelTemplate.dy = 10; // moves it a bit down;
+labelTemplate.inside = false; // this is done to avoid settings which are not suitable when label is rotated
+
+var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+valueAxis.renderer.grid.template.disabled = true;
 
 // Create series
-var series = chart.series.push(new am4charts.ColumnSeries3D());
+var series = chart.series.push(new am4charts.ConeSeries());
 series.dataFields.valueY = "value";
 series.dataFields.categoryX = "name";
-series.name = "Tickets";
-series.tooltipText = "{categoryX}: [bold]{valueY}[/]";
-series.columns.template.fillOpacity = .8;
 
 var columnTemplate = series.columns.template;
-columnTemplate.strokeWidth = 2;
-columnTemplate.strokeOpacity = 1;
-columnTemplate.stroke = am4core.color("#FFFFFF");
-
 columnTemplate.adapter.add("fill", function(fill, target) {
   return chart.colors.getIndex(target.dataItem.index);
 })
@@ -663,10 +658,6 @@ columnTemplate.adapter.add("fill", function(fill, target) {
 columnTemplate.adapter.add("stroke", function(stroke, target) {
   return chart.colors.getIndex(target.dataItem.index);
 })
-
-chart.cursor = new am4charts.XYCursor();
-chart.cursor.lineX.strokeOpacity = 0;
-chart.cursor.lineY.strokeOpacity = 0;
 
 }); // end am4core.ready()
       }
