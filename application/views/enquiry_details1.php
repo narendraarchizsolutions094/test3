@@ -5518,9 +5518,9 @@ jQuery(document).ready(function(){
    } 
    $('form').submit(function(e){
       e.preventDefault();
-      var l = window.location;   
-      console.log(l);
+      var l = window.location;         
       $(this).append('<input type="hidden" name="redirect_url" value="'+l+'" />');
+      $(this).submit();
    })
 });
 </script>
