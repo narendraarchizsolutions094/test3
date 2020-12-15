@@ -329,6 +329,7 @@ class Client extends CI_Controller {
                      <input id="signupbtn" type="submit" value="Save" class="btn btn-primary"  name="Save">
                   </div>
                </div>
+               <input type="hidden" name="redirect_url" value="'.$this->agent->referrer().'#company_contacts" />
             </form>
             </div>';
         }
@@ -349,7 +350,11 @@ class Client extends CI_Controller {
             );
             $this->db->where(array('cc_id'=>$cc_id,'comp_id'=>$this->session->companey_id,'client_id'=>$this->input->post('client_id')));
             $this->db->update('tbl_client_contacts',$data);
-             redirect($this->agent->referrer());
+            if($this->input->post('redirect_url')){
+                redirect($this->input->post('redirect_url')); //updateclient                
+            }else{
+                redirect($this->agent->referrer()); //updateclient
+            }
         }
     }
     public function contacts()
