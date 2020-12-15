@@ -1401,9 +1401,18 @@ class Ticket extends CI_Controller
 			return $response;
 		}
 	}
+
 	public function Dashboard()
 	{
 		if (user_access(310)) {
+			if($_POST){
+              $data['fromdate']=$this->input->post('fromdate');
+			  $data['todate']=$this->input->post('todate');
+			  $data['type']='datewise';
+			}else{
+				$data['fromdate']='all';
+				$data['todate']='all';
+			}
 			$data['title'] = 'Ticket Dashboard';
 			$data['subject'] = $this->Ticket_Model->get_sub_list();
 			$data['content'] = $this->load->view('ticket/dashboard', $data, true);
@@ -1414,21 +1423,31 @@ class Ticket extends CI_Controller
 	}
 	public function createddatewise()
 	{
+		$fromdate=$this->uri->segment(3);
+	    $todate=$this->uri->segment(4);
+		if($fromdate=='all'){
 		$get = $this->Ticket_Model->getfistDate();
-		$data = [];
-		if (!empty($get)) {
 			$date = date('Y-m-d', strtotime($get));
 			$date2 = date('Y-m-d');
 			$begin = new DateTime($date);
 			$end   = new DateTime($date2);
+		}else{
+			 $begin = new DateTime(date('Y-m-d', strtotime($fromdate)));
+			 $end   = new DateTime(date('Y-m-d', strtotime($todate)));
+		     }
+		
+		$data = [];
+			
 			for ($i = $begin; $i <= $end; $i->modify('+1 day')) {
 				$idate = $i->format("Y-m-d");
-				$isdate = strtotime($i->format("Y-m-d")).'000';
-				$isdate = strtotime('+24 hours',$isdate);
-				$count = $this->Ticket_Model->createddatewise($idate);				
-				$data[] = [(int)$isdate, $count];
+				$count_1 = $this->Ticket_Model->createddatewise(1,$idate);				
+				$count_2 = $this->Ticket_Model->createddatewise(2,$idate);				
+				$data[] = [
+							'date'  => $idate,
+							'visits'=>$count_1,
+							'hits'=>$count_2,
+						  ];
 			}
-		}
 		echo json_encode($data);
 	}
 	public function createddatewise1()
@@ -1451,18 +1470,22 @@ class Ticket extends CI_Controller
 	public function referred_byJson()
 	{
 		$data = array();
+		$fromdate=$this->uri->segment(3);
+	    $todate=$this->uri->segment(4);
 		$refData = $this->Ticket_Model->refferedBy();
 		foreach ($refData as $key => $value) {
-			$count = $this->Ticket_Model->countrefferedBy($value->id);
+			$count = $this->Ticket_Model->countrefferedBy($value->id,$fromdate,$todate);
 			$data[] = ['name' => $value->name, 'value' => $count];
 		}
 		echo json_encode($data);
 	}
 	public function priority_wiseJson()
 	{
-		$low = $this->Ticket_Model->countPriority(1);
-		$medium = $this->Ticket_Model->countPriority(2);
-		$high = $this->Ticket_Model->countPriority(3);
+		$fromdate=$this->uri->segment(3);
+	    $todate=$this->uri->segment(4);
+		$low = $this->Ticket_Model->countPriority(1,$fromdate,$todate);
+		$medium = $this->Ticket_Model->countPriority(2,$fromdate,$todate);
+		$high = $this->Ticket_Model->countPriority(3,$fromdate,$todate);
 		$data[] = ['name' => 'High', 'value' => $high];
 		$data[] = ['name' => 'Medium', 'value' => $medium];
 		$data[] = ['name' => 'Low', 'value' => $low];
@@ -1470,52 +1493,63 @@ class Ticket extends CI_Controller
 	}
 	public function complaint_typeJson()
 	{
-		$complaint = $this->Ticket_Model->complaint_type(1);
-		$query = $this->Ticket_Model->complaint_type(2);
+		$fromdate=$this->uri->segment(3);
+	    $todate=$this->uri->segment(4);
+		$complaint = $this->Ticket_Model->complaint_type(1,$fromdate,$todate);
+		$query = $this->Ticket_Model->complaint_type(2,$fromdate,$todate);
 		$data[] = ['name' => 'complaint', 'value' => $complaint];
 		$data[] = ['name' => 'query', 'value' => $query];
 		echo json_encode($data);
 	}
 	public function source_typeJson()
 	{
+		$fromdate=$this->uri->segment(3);
+	    $todate=$this->uri->segment(4);
 		$getSourse = $this->Ticket_Model->getSourse(1);
 		$data=[];
 		foreach ($getSourse as $key => $value) {
-			$count = $this->Ticket_Model->countTSourse($value->lsid);
+			$count = $this->Ticket_Model->countTSourse($value->lsid,$fromdate,$todate);
 			$data[] = ['name' => $value->lead_name, 'value' => $count];
 		}
 		echo json_encode($data);
 	}
 	public function stage_typeJson()
 	{
+		$fromdate=$this->uri->segment(3);
+	    $todate=$this->uri->segment(4);
 		$data=[];
 		$getSourse = $this->Ticket_Model->getstage(4);
 		// print_r($getSourse);
 		// die();
 		foreach ($getSourse as $key => $value) {
-			$count = $this->Ticket_Model->countTstage($value->stg_id);
+			$count = $this->Ticket_Model->countTstage($value->stg_id,$fromdate,$todate);
 			$data[] = ['name' => $value->lead_stage_name, 'value' => $count];
 		}
 		echo json_encode($data);
 	}
 	public function subsource_typeJson()
 	{
+		$fromdate=$this->uri->segment(3);
+	    $todate=$this->uri->segment(4);
+		//substage wise 
 		$data=[];
-		$subsource = $this->Ticket_Model->Subsource();
+		$subsource = $this->Ticket_Model->subsource();
 		foreach ($subsource as $key => $value) {
-			$count = $this->Ticket_Model->countSubsource($value->id);
+			$count = $this->Ticket_Model->countSubsource($value->id,$fromdate,$todate);
 			$data[] = ['name' => $value->description, 'value' => $count];
 		}
 		echo json_encode($data);
 	}
 	public function product_ticketJson()
 	{
+		$fromdate=$this->uri->segment(3);
+	    $todate=$this->uri->segment(4);
 		$data=[];
 		//fetch products
-		$products=$this->db->get('tbl_product_country')->result();
+		$products=$this->db->where('comp_id',$this->session->companey_id)->get('tbl_product')->result();
 		foreach ($products as $key => $value) {
-		$count = $this->Ticket_Model->countproduct_ticket($value->id);
-		$data[] = ['name' => $value->country_name, 'value' => $count];
+		$count = $this->Ticket_Model->countproduct_ticket($value->sb_id,$fromdate,$todate);
+		$data[] = ['name' => $value->product_name, 'value' => $count];
 		}
 		echo json_encode($data);
 	}

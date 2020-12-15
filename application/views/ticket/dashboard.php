@@ -1,3 +1,22 @@
+<br>
+<br>
+
+<div class="col-md-12">
+  <form action="<?= base_url('ticket/dashboard') ?>" method="POST" >
+  <div class="col-md-4">
+    <label>From</label>
+    <input name="fromdate" value="<?php if($this->input->post('fromdate')){echo $this->input->post('fromdate');} ?>" class="form-control" type="date">
+   </div>
+  <div class="col-md-4">
+    <label>To</label>
+  <input name="todate" value="<?php if($this->input->post('todate')){echo $this->input->post('todate');} ?>" class="form-control" type="date">
+</div>
+  <div class="col-md-4"><button style="margin-top:22px;" type="submit" class="form-control" >Submit</button></div>
+  </form>
+</div>
+<br>
+<br>
+
 <style>
 #chartdiv {
   width: 100%;
@@ -19,11 +38,11 @@
 }
 #chartdiv6 {
   width: 100%;
-  height: 500px;
+  height: 300px;
 }
 #product_Ticket {
   width: 100%;
-  height: 500px;
+  height: 300px;
 }
 
 .highcharts-data-table table {
@@ -54,88 +73,31 @@
     background: #f1f7ff;
 }
 
+
+#chartdiv_date {
+  width: 100%;
+  height: 500px;
+}
+
+#chartdiv_datewise {
+  width: 100%;
+  height: 500px;
+}
+
 </style>
-<script src="https://code.highcharts.com/highcharts.js"></script>
-<script src="https://code.highcharts.com/modules/data.js"></script>
-<script src="https://code.highcharts.com/modules/exporting.js"></script>
-<script src="https://code.highcharts.com/modules/export-data.js"></script>
-<script src="https://code.highcharts.com/modules/accessibility.js"></script>
+<!-- Resources -->
 
-<figure class="highcharts-figure">
-    <div id="container"></div>
-    <p class="highcharts-description">
-       
-    </p>
-</figure>
 
-<script>
-    Highcharts.getJSON(
-    '<?=base_url('ticket/createddatewise')?>',
-    function (data) {
 
-        Highcharts.chart('container', {
-            chart: {
-                zoomType: 'x'
-            },
-            title: {
-                text: 'Datewise Ticket Graph'
-            },
-            subtitle: {
-                text: document.ontouchstart === undefined ?
-                    'Click and drag in the plot area to zoom in' : 'Pinch the chart to zoom in'
-            },
-            xAxis: {
-                type: 'datetime',
-                    },
-            yAxis: {
-                title: {
-                    text: 'Ticket Generation Rate'
-                }
-            },
-            legend: {
-                enabled: false
-            },
-            plotOptions: {
-                area: {
-                    fillColor: {
-                        linearGradient: {
-                            x1: 0,
-                            y1: 0,
-                            x2: 0,
-                            y2: 1
-                        },
-                        stops: [
-                            [0, Highcharts.getOptions().colors[0]],
-                            [1, Highcharts.color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
-                        ]
-                    },
-                    marker: {
-                        radius: 2
-                    },
-                    lineWidth: 1,
-                    states: {
-                        hover: {
-                            lineWidth: 2
-                        }
-                    },
-                    threshold: null
-                }
-            },
 
-            series: [{
-                type: 'area',
-                name: 'Number Of Tickets',
-                data: data
-            }]
-        });
-    }
-);
-</script>
-<center><h3>Reffered By Graph</h3></center>
+<br>
+<div id="chartdiv_datewise"></div>
 
+<br>
+<br>
+
+<center><h3>Reffered By</h3></center>
 <div id="chartdiv1"></div>
-
-
 <div class="row">
     <div class="col-md-6">
     <center><h3>Priority Wise</h3></center>
@@ -143,7 +105,7 @@
 
     </div>
     <div class="col-md-6">
-<center><h3>Complaint Or Query </h3></center>
+<center><h3>Complaint Type/ Quiery Type</h3></center>
 <div id="chartdiv2"></div>
 
 </div>
@@ -153,16 +115,12 @@
 <!-- Styles -->
 
 
-<!-- Resources -->
-<script src="https://cdn.amcharts.com/lib/4/core.js"></script>
-<script src="https://cdn.amcharts.com/lib/4/charts.js"></script>
-<script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
 
 <!-- Chart code -->
 <script>
       $(document).ready(function(){
     $.ajax({
-      url : "<?=base_url('ticket/referred_byJson')?>",
+      url : "<?=base_url('ticket/referred_byJson/'.$fromdate.'/'.$todate.'')?>",
       type: "post",
       dataType : "json",
       processData: false,
@@ -235,7 +193,7 @@ chart.cursor = new am4charts.XYCursor();
     <script>
       $(document).ready(function(){
     $.ajax({
-      url : "<?=base_url('ticket/priority_wiseJson')?>",
+      url : "<?=base_url('ticket/priority_wiseJson/'.$fromdate.'/'.$todate.'')?>",
       type: "post",
       dataType : "json",
       processData: false,
@@ -285,15 +243,12 @@ pieSeries.colors.list = [
 <!-- HTML -->
 
 <!-- Resources -->
-<script src="https://cdn.amcharts.com/lib/4/core.js"></script>
-<script src="https://cdn.amcharts.com/lib/4/charts.js"></script>
-<script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
 
 <!-- Chart code -->
     <script>
       $(document).ready(function(){
     $.ajax({
-      url : "<?=base_url('ticket/complaint_typeJson')?>",
+      url : "<?=base_url('ticket/complaint_typeJson/'.$fromdate.'/'.$todate.'')?>",
       type: "post",
       dataType : "json",
       processData: false,
@@ -355,7 +310,7 @@ pieSeries.colors.list = [
         <script>
       $(document).ready(function(){
     $.ajax({
-      url : "<?=base_url('ticket/stage_typeJson')?>",
+      url : "<?=base_url('ticket/stage_typeJson/'.$fromdate.'/'.$todate.'')?>",
       type: "post",
       dataType : "json",
       processData: false,
@@ -420,7 +375,7 @@ chart.cursor.lineY.strokeOpacity = 0;
     });
     });
 </script>
-<!-- <center><h3>Stage Vs Ticket</h3></center> -->
+<center><h3>Stage Vs Ticket</h3></center>
 
 <!-- HTML -->
 <div id="chartdiv4"></div>
@@ -443,7 +398,7 @@ chart.cursor.lineY.strokeOpacity = 0;
 <script>
           $(document).ready(function(){
     $.ajax({
-      url : "<?=base_url('ticket/source_typeJson')?>",
+      url : "<?=base_url('ticket/source_typeJson/'.$fromdate.'/'.$todate.'')?>",
       type: "post",
       dataType : "json",
       processData: false,
@@ -482,7 +437,7 @@ pieSeries.hiddenState.properties.startAngle = -90;
 <script>
       $(document).ready(function(){
     $.ajax({
-      url : "<?=base_url('ticket/subsource_typeJson')?>",
+      url : "<?=base_url('ticket/subsource_typeJson/'.$fromdate.'/'.$todate.'')?>",
       type: "post",
       dataType : "json",
       processData: false,
@@ -555,7 +510,7 @@ chart.cursor.lineY.strokeOpacity = 0;
 <script>
       $(document).ready(function(){
     $.ajax({
-      url : "<?=base_url('ticket/product_ticketJson')?>",
+      url : "<?=base_url('ticket/product_ticketJson/'.$fromdate.'/'.$todate.'')?>",
       type: "post",
       dataType : "json",
       processData: false,
@@ -600,4 +555,122 @@ pieSeries.colors.list = [
 });
     
 });
+
+
+
+
 </script>
+<!-- HTML -->
+
+<!-- Chart code -->
+<script>
+    $(document).ready(function(){
+    $.ajax({
+      url : "<?=base_url('ticket/createddatewise/'.$fromdate.'/'.$todate.'')?>",
+      type: "post",
+      dataType : "json",
+      processData: false,
+      contentType: false,
+      success : function(response)
+      {
+am4core.ready(function() {
+
+// Themes begin
+am4core.useTheme(am4themes_animated);
+// Themes end
+
+// Create chart instance
+var chart = am4core.create("chartdiv_datewise", am4charts.XYChart);
+
+//
+
+// Increase contrast by taking evey second color
+chart.colors.step = 2;
+
+// Add data
+chart.data =response;
+
+// Create axes
+var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
+dateAxis.renderer.minGridDistance = 50;
+
+// Create series
+function createAxisAndSeries(field, name, opposite, bullet) {
+  var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+  if(chart.yAxes.indexOf(valueAxis) != 0){
+  	valueAxis.syncWithAxis = chart.yAxes.getIndex(0);
+  }
+  
+  var series = chart.series.push(new am4charts.LineSeries());
+  series.dataFields.valueY = field;
+  series.dataFields.dateX = "date";
+  series.strokeWidth = 2;
+  series.yAxis = valueAxis;
+  series.name = name;
+  series.tooltipText = "{name}: [bold]{valueY}[/]";
+  series.tensionX = 0.8;
+  series.showOnInit = true;
+  
+  var interfaceColors = new am4core.InterfaceColorSet();
+  
+  switch(bullet) {
+    case "triangle":
+      var bullet = series.bullets.push(new am4charts.Bullet());
+      bullet.width = 12;
+      bullet.height = 12;
+      bullet.horizontalCenter = "middle";
+      bullet.verticalCenter = "middle";
+      
+      var triangle = bullet.createChild(am4core.Triangle);
+      triangle.stroke = interfaceColors.getFor("background");
+      triangle.strokeWidth = 2;
+      triangle.direction = "top";
+      triangle.width = 12;
+      triangle.height = 12;
+      break;
+    case "rectangle":
+      var bullet = series.bullets.push(new am4charts.Bullet());
+      bullet.width = 10;
+      bullet.height = 10;
+      bullet.horizontalCenter = "middle";
+      bullet.verticalCenter = "middle";
+      
+      var rectangle = bullet.createChild(am4core.Rectangle);
+      rectangle.stroke = interfaceColors.getFor("background");
+      rectangle.strokeWidth = 2;
+      rectangle.width = 10;
+      rectangle.height = 10;
+      break;
+    default:
+      var bullet = series.bullets.push(new am4charts.CircleBullet());
+      bullet.circle.stroke = interfaceColors.getFor("background");
+      bullet.circle.strokeWidth = 2;
+      break;
+  }
+  
+  valueAxis.renderer.line.strokeOpacity = 1;
+  valueAxis.renderer.line.strokeWidth = 2;
+  valueAxis.renderer.line.stroke = series.stroke;
+  valueAxis.renderer.labels.template.fill = series.stroke;
+  valueAxis.renderer.opposite = opposite;
+}
+createAxisAndSeries("visits", "Complaint Type", false, "circle");
+// createAxisAndSeries("views", "Query Type", true, "triangle");
+createAxisAndSeries("hits", "Query Type", true, "rectangle");
+
+// Add legend
+chart.legend = new am4charts.Legend();
+
+// Add cursor
+chart.cursor = new am4charts.XYCursor();
+
+
+}); // end am4core.ready()
+}
+});
+    
+});
+</script>
+<script src="https://cdn.amcharts.com/lib/4/core.js"></script>
+<script src="https://cdn.amcharts.com/lib/4/charts.js"></script>
+<script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>

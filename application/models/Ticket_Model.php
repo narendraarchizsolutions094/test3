@@ -546,32 +546,55 @@ class Ticket_Model extends CI_Model
 		$this->db->where('company_id', $this->session->companey_id);
 		return $this->db->get('tbl_ticket_status')->result();
 	}
-	public function createddatewise($idate)
+	public function createddatewise($type,$idate)
 	{
-		$count = $this->db->where('company', $this->session->companey_id)->like('coml_date', $idate)->count_all_results('tbl_ticket');
+		$count = $this->db->where(array('company'=>$this->session->companey_id,'complaint_type'=>$type))->like('coml_date', $idate)->count_all_results('tbl_ticket');
 		return $count;
 	}
+	
 	public function getfistDate()
 	{
 		return $this->db->where('company', $this->session->companey_id)->limit(1)->get('tbl_ticket')->row()->coml_date;
 	}
+
 	public function refferedBy()
 	{
 
 		return $this->db->where('company_id', $this->session->companey_id)->get('tbl_referred_by')->result();
 	}
-	public function countrefferedBy($rfid)
+	public function countrefferedBy($rfid,$fromdate,$todate)
 	{
-		return $this->db->where(array('company' => $this->session->companey_id, 'referred_by' => $rfid))->count_all_results('tbl_ticket');
+		$data= $this->db->where(array('company' => $this->session->companey_id, 'referred_by' => $rfid));
+		if($fromdate!='all'){
+					
+			$data=$this->db->where('last_update >=', $fromdate);
+			$data=$this->db->where('last_update <=', $todate);
+		}
+	                 	// $where .= " DATE(tck.coml_date) <=  '".$to_created."' OR DATE(tck.last_update) <=  '".$to_created."'"; 
+						 $data= $this->db->count_all_results('tbl_ticket');
+						return $data;
 	}
-	public function countPriority($type)
+	public function countPriority($type,$fromdate,$todate)
 	{
-		$data = $this->db->where(array('company' => $this->session->companey_id, 'priority' => $type))->count_all_results('tbl_ticket');
+		$data = $this->db->where(array('company' => $this->session->companey_id, 'priority' => $type));
+		
+		if($fromdate!='all'){
+					
+			$data=$this->db->where('last_update >=', $fromdate);
+			$data=$this->db->where('last_update <=', $todate);
+	                     	}
+		$data = $this->db->count_all_results('tbl_ticket');
 		return $data;
 	}
-	public function complaint_type($type)
+	public function complaint_type($type,$fromdate,$todate)
 	{
-		$data = $this->db->where(array('company' => $this->session->companey_id, 'complaint_type' => $type))->count_all_results('tbl_ticket');
+		$data = $this->db->where(array('company' => $this->session->companey_id, 'complaint_type' => $type));
+		if($fromdate!='all'){
+					
+			$data=$this->db->where('last_update >=', $fromdate);
+			$data=$this->db->where('last_update <=', $todate);
+	                     	}
+						 $data = $this->db->count_all_results('tbl_ticket');
 		return $data;
 	}
 	public function getSourse()
@@ -579,9 +602,14 @@ class Ticket_Model extends CI_Model
 		$stage = $this->db->where(array('comp_id' => $this->session->companey_id))->get('lead_source')->result();
 		return $stage;
 	}
-	public function countTSourse($lsid)
+	public function countTSourse($lsid,$fromdate,$todate)
 	{
-		$count = $this->db->where(array('company' => $this->session->companey_id, 'sourse' => $lsid))->count_all_results('tbl_ticket');
+		$count = $this->db->where(array('company' => $this->session->companey_id, 'sourse' => $lsid));
+		if($fromdate!='all'){
+			$count=$this->db->where('last_update >=', $fromdate);
+			$count=$this->db->where('last_update <=', $todate);
+	                     	}
+							 $count=$this->db->count_all_results('tbl_ticket');
 		return $count;
 	}
 	public function getstage()
@@ -589,9 +617,15 @@ class Ticket_Model extends CI_Model
 		$stage = $this->db->where(array('comp_id' => $this->session->companey_id, 'stage_for' => 4))->get('lead_stage')->result();
 		return $stage;
 	}
-	public function countTstage($stg_id)
+
+	public function countTstage($stg_id,$fromdate,$todate)
 	{
-		$count = $this->db->where(array('company' => $this->session->companey_id, 'ticket_stage' => $stg_id))->count_all_results('tbl_ticket');
+		$count = $this->db->where(array('company' => $this->session->companey_id, 'ticket_stage' => $stg_id));
+		if($fromdate!='all'){
+			$count=$this->db->where('last_update >=', $fromdate);
+			$count=$this->db->where('last_update <=', $todate);
+	                     	}
+							 $count=$this->db->count_all_results('tbl_ticket');
 		return $count;
 	}
 	public function subsource()
@@ -599,10 +633,27 @@ class Ticket_Model extends CI_Model
 		$subsource = $this->db->where(array('comp_id' => $this->session->companey_id))->get('lead_description')->result();
 		return $subsource;
 	}
-	public function countSubsource($stg_id)
+
+	public function countSubsource($stg_id,$fromdate,$todate)
 	{
-		$count = $this->db->where(array('company' => $this->session->companey_id, 'ticket_stage' => $stg_id))->count_all_results('tbl_ticket');
+		$count = $this->db->where(array('company' => $this->session->companey_id, 'ticket_substage' => $stg_id));
+		if($fromdate!='all'){
+			$count=$this->db->where('last_update >=', $fromdate);
+			$count=$this->db->where('last_update <=', $todate);
+							 }
+							$count= $this->db->count_all_results('tbl_ticket');
 		return $count;
+	}
+	public function countproduct_ticket($id,$fromdate,$todate)
+	{
+		$count= $this->db->where('product',$id);
+		if($fromdate!='all'){
+			$count=$this->db->where('last_update >=', $fromdate);
+			$count=$this->db->where('last_update <=', $todate);
+							 }
+			$count=$this->db->count_all_results('tbl_ticket');
+		return $count;
+
 	}
 	// tat rule holiday list
 	public function get_user_holidays($uid)
@@ -1115,11 +1166,6 @@ class Ticket_Model extends CI_Model
 		}
 		else
 			return false;
-	}
-	public function countproduct_ticket($id)
-	{
-		return $this->db->where('product',$id)->count_all_results('tbl_ticket');
-
 	}
 
 
