@@ -906,7 +906,11 @@ class Client extends CI_Controller {
         }
         if (!$this->input->is_ajax_request()) {           
             $this->session->set_flashdata('message', 'Save successfully');
-            redirect($this->agent->referrer()); //updateclient
+            if($this->input->post('redirect_url')){
+                redirect($this->input->post('redirect_url')); //updateclient                
+            }else{
+                redirect($this->agent->referrer()); //updateclient
+            }
         }else{
             echo json_encode(array('msg'=>'Saved Successfully','status'=>1));
         }
