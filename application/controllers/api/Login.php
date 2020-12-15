@@ -222,6 +222,5 @@ class Login extends REST_Controller {
                 'message' => $array
             ], REST_Controller::HTTP_OK);
             }			
-	   
    }
 }
