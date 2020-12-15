@@ -273,7 +273,12 @@ class Client extends CI_Controller {
             $this->Leads_Model->add_comment_for_events($this->lang->line("new_contact_detail_added") , $enquiry_code);
             $insert_id = $this->Client_Model->clientContact($data);
             $this->session->set_flashdata('message', 'Client Contact Add Successfully');
-            redirect($this->agent->referrer());
+             
+        }
+        if($this->input->post('redirect_url')){
+            redirect($this->input->post('redirect_url')); //updateclient                
+        }else{
+            redirect($this->agent->referrer()); //updateclient
         }
     }
     public function delete_contact()
@@ -1081,8 +1086,13 @@ public function updateclientpersonel() {
             $result = $this->Doctor_model->add_amc($arr);
         if($result){
          $this->session->set_flashdata('message', "Added Successfuly");
-            redirect(base_url('enquiry/view/'.$enqid), 'refresh');
+            
            }
+        if($this->input->post('redirect_url')){
+            redirect($this->input->post('redirect_url')); //updateclient                
+        }else{
+            redirect($this->agent->referrer()); //updateclient
+        }
     }
 	
 	/***********************************qualification Tab **************************************/
@@ -1317,7 +1327,11 @@ if(empty($eid)){
             }
                 
             $this->session->set_flashdata('message', 'Save successfully');
-            redirect($this->agent->referrer()); //updateclient
+            if($this->input->post('redirect_url')){
+                redirect($this->input->post('redirect_url')); //updateclient                
+            }else{
+                redirect($this->agent->referrer()); //updateclient
+            }
     }
 	public function find_same() {
         $smae_id = $this->input->post('cdata');
@@ -1370,7 +1384,12 @@ if(!empty($_FILES['file']['name'])){
                         );
            $this->db->insert_batch('query_response',$assign_data_noti);
            $this->load->library('user_agent');
-redirect($this->agent->referrer());
+           
+           if($this->input->post('redirect_url')){
+            redirect($this->input->post('redirect_url')); //updateclient                
+           }else{
+             redirect($this->agent->referrer()); //updateclient
+           }
 }
 /*******************************************************************************end add aggriment***************************************************/
 	public function upload_aggrement_student() {
@@ -1536,13 +1555,21 @@ public function view_editable_aggrement()
             $this->load->helpers('dompdf');
             $viewfile = $this->load->view('aggrement/Bangalore-Australia-Agreement', $data, TRUE);
             pdf_create($viewfile,'Bangalore-Australia-Agreement'.$this->session->user_id);
-            redirect($this->agent->referrer());
+            if($this->input->post('redirect_url')){
+                redirect($this->input->post('redirect_url')); //updateclient                
+            }else{
+                redirect($this->agent->referrer()); //updateclient
+            }
         }elseif($pdf_name=='vtrans'){
             $data['title'] = 'vtrans-vtrans';
             $this->load->helpers('dompdf');
             $viewfile = $this->load->view('aggrement/vtrans-Agreement', $data, TRUE);
-            pdf_create($viewfile,'vtrans-Agreement'.$this->session->user_id);
-            redirect($this->agent->referrer());
+            pdf_create($viewfile,'vtrans-Agreement'.$this->session->user_id);            
+            if($this->input->post('redirect_url')){
+                redirect($this->input->post('redirect_url')); //updateclient                
+            }else{
+                redirect($this->agent->referrer()); //updateclient
+            }
         }
     }
     /***********************end Generate aggriment*****************************/
