@@ -40,10 +40,32 @@ class Notifications extends REST_Controller {
           $this->db->join('enquiry', 'enquiry.Enquery_id=query_response.query_id', 'left');
           $where = " (enquiry.created_by=$user_id OR enquiry.aasign_to=$user_id)  AND CONCAT(str_to_date(task_date,'%d-%m-%Y'),' ',task_time) <= NOW() ORDER BY CONCAT(str_to_date(task_date,'%d-%m-%Y'),' ',task_time) DESC";
           $this->db->where($where);
-          $res  = $this->db->get()->result_array();                
+          $res  = $this->db->get()->result_array();     
+
+
+          $all =$res;
+          $read=array();
+          $unread=array();
+          $today=array();
+          foreach ($res as $value)
+          {
+              if($value['noti_read'])
+                  $read[] = $value;
+              if(!$value['noti_read'])
+                  $unread[] = $value;
+              if($value['task_date']==date("d-m-Y"))
+                  $today[] = $value;
+          }
+
+          $data = array('all'=>$all,
+                        'read'=>$read,
+                        'unread'=>$unread,
+                        'today' =>$today,
+                        );
+
           $this->set_response([
                   'status' => TRUE,
-                  'message' => $res
+                  'data' => $data
               ], REST_Controller::HTTP_OK);
         } else {
           $this->set_response([
@@ -51,5 +73,53 @@ class Notifications extends REST_Controller {
                 'message' =>strip_tags(validation_errors())
              ], REST_Controller::HTTP_OK);
         }                
+    }
+
+    public function mark_as_read_post()
+    {
+       $this->form_validation->set_rules('resp_id', 'resp_id', 'required');    
+      
+
+      if($this->form_validation->run())
+      {
+        $id   = $this->input->post('resp_id');
+        $this->db->where('resp_id',$id);
+        $this->db->set('noti_read',1);
+        $this->db->update('query_response');
+
+        $this->set_response([
+                  'status' => TRUE,
+                  'data' => 'Done',
+              ], REST_Controller::HTTP_OK);
+        } else {
+          $this->set_response([
+                'status' => false,
+                'message' =>strip_tags(validation_errors())
+             ], REST_Controller::HTTP_OK);
+        }     
+
+    }
+    public function mark_as_unread_post()
+    {
+
+      $this->form_validation->set_rules('resp_id', 'resp_id', 'required');    
+      
+      if($this->form_validation->run())
+      {
+        $id    =   $this->input->post('resp_id');
+        
+        $this->db->where('resp_id',$id);
+        $this->db->set('noti_read',0);
+        $this->db->update('query_response');
+          $this->set_response([
+                  'status' => TRUE,
+                  'data' => 'Done',
+              ], REST_Controller::HTTP_OK);
+        } else {
+          $this->set_response([
+                'status' => false,
+                'message' =>strip_tags(validation_errors())
+             ], REST_Controller::HTTP_OK);
+        }     
     }
 }
