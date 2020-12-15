@@ -247,7 +247,7 @@ class Dashboard extends CI_Controller {
         $customerId     =   isset($_GET['customerId'])?$_GET['customerId']:'';
         $phone          =   isset($_GET['phone'])?$_GET['phone']:'';
  
-        if ($sessionId && $campaignId && $userCrtObjectId && $userId) {            
+        if ($sessionId && $campaignId && $userId) {            
             $user_data    =   $this->user_model->get_user_by_email($userId);
             if (!empty($user_data) && ($user_data->companey_id == 79 || $user_data->companey_id == 82)) {
                 $this->session->set_userdata('user_id',$user_data->pk_i_admin_id);     

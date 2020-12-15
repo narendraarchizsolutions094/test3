@@ -456,66 +456,124 @@ public function updateEnquiryTab_post()
     $Enquery_id = $this->input->post('enquery_code');
     $template_id = $this->input->post('template_id');
     $company_id  = $this->input->post('company_id');
-
+    $msg_type = $this->input->post('msg_type');
     $user_id = $this->input->post('user_id');
+
     $this->form_validation->set_rules('enquery_code','Inquiry Code','required');
     $this->form_validation->set_rules('company_id','Company ID','required');
     $this->form_validation->set_rules('template_id','Template ID','required');
     $this->form_validation->set_rules('user_id','User ID','required');
+    $this->form_validation->set_rules('msg_type','Message Type','required');
+    
     if($this->form_validation->run() == true){
     
     $this->db->where('pk_i_admin_id',$user_id);
     $user_row  = $this->db->get('tbl_admin')->row_array();
-    $this->db->where('temp_id',$template_id);
-    $template_row = $this->db->get('api_templates')->row();
-    $Templat_subject = $template_row->mail_subject;
 
-    $message_name = $template_row->template_content;
+    $this->db->where('temp_id',$template_id);
+    $this->db->where('temp_for',$msg_type);
+    $template_row = $this->db->get('api_templates')->row();
+    if(!empty($template_row))
+    {
+
+        $Templat_subject = $template_row->mail_subject;
+        $message_name = $template_row->template_content;
       
           $enq = $this->enquiry_model->enquiry_by_code($Enquery_id);
-          //echo $enq->email;
-          if(!empty($enq->email)){
+
+          $empty =1;
+          if($msg_type=='1')
+          {
+             $empty = empty($enq->phone);
+             $type = 'Whatasapp Message';
+          }
+          else if($msg_type=='2')
+          {
+              $empty = empty($enq->phone);
+              $type = 'Message';
+          }
+          else if($msg_type=='3')
+          {
+              $empty = empty($enq->email);
+              $type = 'Email';
+          }
+          //echo $empty; exit();
+          if(!$empty)
+          {
             $this->db->where('comp_id',$company_id);
             $this->db->where('sys_para','usermail_in_cc');
             $this->db->where('type','COMPANY_SETTING');
             $cc_row = $this->db->get('sys_parameters')->row_array(); 
             $cc = '';
-            if(!empty($cc_row))
-            {
-              $this->db->where('pk_i_admin_id',$user_id);
-              $cc_user =  $this->db->get('tbl_admin')->row_array();
-              if(!empty($cc_user))
-                    $cc = $cc_user['s_user_email'];
-            }
+                if(!empty($cc_row))
+                {
+                  $this->db->where('pk_i_admin_id',$user_id);
+                  $cc_user =  $this->db->get('tbl_admin')->row_array();
+                  if(!empty($cc_user))
+                        $cc = $cc_user['s_user_email'];
+                }
                            
               $to = $enq->email;
               $name1 = $enq->name_prefix.' '.$enq->name.' '.$enq->lastname;
+
               $msg = str_replace('@name',$name1,str_replace('@org',$user_row['orgisation_name'],str_replace('@desg',$user_row['designation'],str_replace('@phone',$user_row['contact_phone'],str_replace('@desg',$user_row['designation'],str_replace('@user',$user_row['s_display_name'].' '.$user_row['last_name'],$message_name))))));
                      //str_replace('@web',$user_row['website'], 
               $Templat_subject = str_replace('@name',$name1,str_replace('@org',$user_row['orgisation_name'],str_replace('@desg',$user_row['designation'],str_replace('@phone',$user_row['contact_phone'],str_replace('@desg',$user_row['designation'],str_replace('@user',$user_row['s_display_name'].' '.$user_row['last_name'],$Templat_subject))))));
 
-              if($this->Message_models->send_email($to,$msg,$Templat_subject,$company_id,$cc)){
-               $msg= 'Email sent successfully';
+              if($msg_type=='1')
+              {
+                $phone = '91'.$enq->phone;
+               // echo $phone.'<br>'.$msg; exit();
+                  $this->Message_models->sendwhatsapp($phone,$msg); 
+                    if($template_row['media'])
+                    {            
+                      $media_url = $template_row['media'];    
+                      $this->Message_models->sendwhatsapp($phone,base_url().$media_url);              
+                    }
+              }
+              else if($msg_type=='2')
+              {
+                 $phone = '91'.$enq->phone;
+                  $this->Message_models->smssend($phone,$msg);
+              }
+              else if($msg_type=='3')
+                $send_result = $this->Message_models->send_email($to,$msg,$Templat_subject,$company_id,$cc);
+
+
+              if($send_result)
+              {
+               $msg= $type.' Sent successfully';
                $this->set_response([
                       'status' => true,
                       'message' =>$msg
                    ], REST_Controller::HTTP_OK);
-             }else{
-               $msg= 'Something went wrong!';
-               $this->set_response([
-                      'status' => false,
-                      'message' =>$msg
-                   ], REST_Controller::HTTP_OK);
-             }
-          }else{
-               $msg= 'Email does not exist for this inquiry';
+               }
+               else
+               {
+                 $msg= 'Something went wrong!';
+                 $this->set_response([
+                        'status' => false,
+                        'message' =>$msg
+                     ], REST_Controller::HTTP_OK);
+               }
+          }else
+          {
+               $msg= (($msg_type=='1' or $msg_type=='2')?'Phone Number':'Email').' does not exist for this inquiry';
                $this->set_response([
                       'status' => false,
                       'message' =>$msg
                    ], REST_Controller::HTTP_OK);
           }
          
-      
+      }
+      else
+      {
+          $msg= 'No Template Found';
+               $this->set_response([
+                      'status' => false,
+                      'message' =>$msg
+                   ], REST_Controller::HTTP_OK);
+      }
     }else{
           $error= strip_tags(validation_errors());
          $this->set_response([
