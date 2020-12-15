@@ -3232,10 +3232,15 @@ public function timelinePopup()
           $insert=$this->enquiry_model->insertComInfo($data);
         if($insert){
         $this->session->set_flashdata('message', 'Commercial information inserted successfully');
-        redirect($url);
+        
         }else{
         $this->session->set_flashdata('error', 'Error while submiting data ');
-        redirect($url);
+        
+        }
+        if($this->input->post('redirect_url')){
+            redirect($this->input->post('redirect_url')); //updateclient                
+        }else{
+            redirect($this->agent->referrer()); //updateclient
         }
     }else{
         $comp_id=$this->session->companey_id;
@@ -3424,8 +3429,12 @@ public function timelinePopup()
                         );
             $this->Client_Model->add_visit($data);
             $this->Leads_Model->add_comment_for_events('Visit Added', $this->input->post('enq_code'));
-            $this->session->set_flashdata('SUCCESSMSG','Visit Saved Successfully');
-            redirect(base_url('enquiry/view/'.$this->input->post('enquiry_id')));;
+            $this->session->set_flashdata('SUCCESSMSG','Visit Saved Successfully');            
+            if($this->input->post('redirect_url')){
+                redirect($this->input->post('redirect_url')); //updateclient                
+            }else{
+                redirect($this->agent->referrer()); //updateclient
+            }
         }
     }
     public function delete_visit(){

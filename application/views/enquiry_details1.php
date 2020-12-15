@@ -746,9 +746,9 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
 
       <div class="col-md-6 col-xs-12 col-sm-12 card card-body col-height details-column" style="background:#fff;border-top: unset;">
          <div id="exTab3" class="">
-            <ul  class="nav nav-tabs" role="tablist">  
+            <ul  class="nav nav-tabs" role="tablist" id="main_tab">  
             <span class="scrollTab" style="position: absolute; left: 0; font-size: 22px; line-height: 40px; z-index: 999"><i class="fa fa-caret-left" onclick="tabScroll('left')"></i></span>            
-              <li class="active" href="#basic" data-toggle="tab" >Basic</li>  
+              <li class="" href="#basic" data-toggle="tab" >Basic</li>  
               
              <?php if($this->session->userdata('companey_id')==292) { 
                         if($enquiry->status==3) {?>
@@ -5496,3 +5496,34 @@ $("a[href$='#related_enquiry']").on('click',function(){
 <?php
 }
 ?>
+<script>
+jQuery(document).ready(function(){
+   $('#main_tab a').click(function(e) {
+      e.preventDefault();
+      $(this).tab('show');
+   });
+ 
+   // store the currently selected tab in the hash value
+   $("ul.nav-tabs > li").on("shown.bs.tab", function(e) {
+      var id = $(e.target).attr("href").substr(1);
+      window.location.hash = id;
+   });
+
+   // on load of the page: switch to the currently selected tab
+   var hash = window.location.hash;   
+   if(hash==''){
+      $('li[href="#basic"]').click();      
+   }else{
+      $('li[href="' + hash + '"]').click();
+   } 
+   $('form').submit(function(e){
+      if(!$(this).find("input[name='redirect_url']").val()){
+         e.preventDefault();
+         var l = window.location;   
+         $(this).append('<input type="hidden" name="redirect_url" value="'+l+'" />');
+         $(this).submit();
+      }
+   })
+});
+</script>
+   

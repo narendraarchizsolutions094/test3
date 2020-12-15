@@ -275,9 +275,13 @@ class Lead extends CI_Controller
             $this->db->set('update_date', $adt);
             $this->db->where('Enquery_id', $lead_id);
             $this->db->update('enquiry');
-            $this->session->set_flashdata('message', ' added successfully');
-            redirect($this->agent->referrer());
-            //	redirect('lead/lead_details/'.$lead_id);
+            $this->session->set_flashdata('message', ' added successfully');            
+             
+            if($this->input->post('redirect_url')){
+                redirect($this->input->post('redirect_url')); //updateclient                
+            }else{
+                redirect($this->agent->referrer()); //updateclient
+            }
         } else {
             redirect('lead');
         }
@@ -324,7 +328,12 @@ class Lead extends CI_Controller
             $this->db->insert('query_response');
             $this->Leads_Model->add_comment_for_events('Task Added ', $lead_id);
             $this->session->set_flashdata('message', 'Task Added Successfully');
-            redirect($this->agent->referrer());
+             
+            if($this->input->post('redirect_url')){
+                redirect($this->input->post('redirect_url')); //updateclient                
+            }else{
+                redirect($this->agent->referrer()); //updateclient
+            }
         } else {
             redirect('lead');
         }
@@ -2217,11 +2226,19 @@ class Lead extends CI_Controller
             } else {
                 $this->session->set_flashdata('exception', display('please_try_again'));
             }
-            redirect('lead/lead_details/' . $enquiry_id . '#kyctab');
+            if($this->input->post('redirect_url')){
+                redirect($this->input->post('redirect_url')); //updateclient                
+            }else{
+                redirect($this->agent->referrer()); //updateclient
+            }
         } else {
             $this->session->set_flashdata('exception', display('please_try_again'));
         }
-        redirect($this->agent->referrer());
+        if($this->input->post('redirect_url')){
+            redirect($this->input->post('redirect_url')); //updateclient                
+        }else{
+            redirect($this->agent->referrer()); //updateclient
+        }
     }
 
     public function addnewwork()
@@ -2249,11 +2266,19 @@ class Lead extends CI_Controller
             } else {
                 $this->session->set_flashdata('exception', display('please_try_again'));
             }
-            redirect('lead/lead_details/' . $enquiry_id);
+            if($this->input->post('redirect_url')){
+                redirect($this->input->post('redirect_url')); //updateclient                
+            }else{
+                redirect($this->agent->referrer()); //updateclient
+            }
         } else {
             $this->session->set_flashdata('exception', display('please_try_again'));
         }
-        redirect($this->agent->referrer());
+        if($this->input->post('redirect_url')){
+            redirect($this->input->post('redirect_url')); //updateclient                
+        }else{
+            redirect($this->agent->referrer()); //updateclient
+        }
     }
     public function addnewedu()
     {
@@ -2277,12 +2302,16 @@ class Lead extends CI_Controller
                 $this->session->set_flashdata('message', 'Education added successfully');
             } else {
                 $this->session->set_flashdata('exception', display('please_try_again'));
-            }
-            redirect($this->agent->referrer());
+            }          
         } else {
             $this->session->set_flashdata('exception', display('please_try_again'));
         }
-        redirect($this->agent->referrer());
+
+        if($this->input->post('redirect_url')){
+            redirect($this->input->post('redirect_url')); //updateclient                
+        }else{
+            redirect($this->agent->referrer()); //updateclient
+        }
     }
     public function addnewsprof()
     {
@@ -2306,11 +2335,16 @@ class Lead extends CI_Controller
             } else {
                 $this->session->set_flashdata('exception', display('please_try_again'));
             }
-            redirect($this->agent->referrer());
+            
         } else {
             $this->session->set_flashdata('exception', display('please_try_again'));
         }
-        redirect($this->agent->referrer());
+         
+        if($this->input->post('redirect_url')){
+            redirect($this->input->post('redirect_url')); //updateclient                
+        }else{
+            redirect($this->agent->referrer()); //updateclient
+        }
     }
     public function addnewtravel()
     {
@@ -2340,11 +2374,16 @@ class Lead extends CI_Controller
             } else {
                 $this->session->set_flashdata('exception', display('please_try_again'));
             }
-            redirect($this->agent->referrer());
+            
         } else {
             $this->session->set_flashdata('exception', display('please_try_again'));
         }
-        redirect($this->agent->referrer());
+         
+        if($this->input->post('redirect_url')){
+            redirect($this->input->post('redirect_url')); //updateclient                
+        }else{
+            redirect($this->agent->referrer()); //updateclient
+        }
     }
     public function addnewmember()
     {
@@ -2374,11 +2413,16 @@ class Lead extends CI_Controller
             } else {
                 $this->session->set_flashdata('exception', display('please_try_again'));
             }
-            redirect($this->agent->referrer());
+            
         } else {
             $this->session->set_flashdata('exception', display('please_try_again'));
         }
-        redirect($this->agent->referrer());
+         
+        if($this->input->post('redirect_url')){
+            redirect($this->input->post('redirect_url')); //updateclient                
+        }else{
+            redirect($this->agent->referrer()); //updateclient
+        }
     }
     /*****************************************************************notification start********************************************************************/
     function alertList()
