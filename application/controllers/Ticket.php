@@ -320,7 +320,7 @@ class Ticket extends CI_Controller
 				
 				$extra  = empty($a->extra) ? '' : $a->extra;
 				//print_r($extra);
-				if (isset($extra) ) {
+				if (!empty($extra) ) {
 					$gc_data = (array) $extra->gcDdata;
 					?>
 					<table class='table table-bordered'>
@@ -348,7 +348,7 @@ class Ticket extends CI_Controller
 						}
 						
 				}
-				if (isset($a->Table)) {
+				if (!empty($a->Table)) {
 					echo '<table class="table table-bordered">		        		        
 				 <tr><th>Delivery Location:</th><td  colspan="3">' . (empty($table->DeliveryLocation) ? '' : $table->DeliveryLocation) . '</td></tr>';				 
 					if (sizeof((array)$table->EDD))
@@ -358,7 +358,7 @@ class Ticket extends CI_Controller
 		         <tr><th>CRNO:</th><td>' . (empty($table->CRNO) ? '' : $table->CRNO) . '</td></tr>
 		        </table>';
 				}
-				if (isset($a->Table1)) {
+				if (!empty($a->Table1)) {
 					echo '<center style="color:red; padding:0px 0px 0px 10px; cursor:pointer;" onclick="$(this).hide(),$(\'.hiddenTrackingDetails\').show();">View More</center>
 		        <div class="hiddenTrackingDetails" style="display:none;">
 	        	<table class="table table-bordered">
@@ -371,7 +371,7 @@ class Ticket extends CI_Controller
 		        	<tr><th>Latitude:</th><td>' . (empty($table1->Latitude) ? '' : $table1->Latitude) . '</td><th>Longitude:</th><td>' . (empty($table1->Longitude) ? '' : $table1->Longitude) . '</td></tr>
 	        	</table>';
 				}
-				if (isset($a->Table2)) {
+				if (!empty($a->Table2)) {
 					echo '<table class="table table-bordered">
 		        	<tr><th colspan="4" style="text-align:center;">Delivery Details</th></tr>
 		        	<tr><th>Branch Name:</th><td>' . (empty($table2->Branch_Name) ? '' : $table2->Branch_Name) . '</td><th>Contact Person:</th><td>' . (empty($table2->Contact_Person) ? '' : $table2->Contact_Person) . '</td></tr>	

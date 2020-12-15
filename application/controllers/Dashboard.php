@@ -247,7 +247,7 @@ class Dashboard extends CI_Controller {
         $customerId     =   isset($_GET['customerId'])?$_GET['customerId']:'';
         $phone          =   isset($_GET['phone'])?$_GET['phone']:'';
  
-        if ($sessionId && $campaignId && $userCrtObjectId && $userId) {            
+        if ($sessionId && $campaignId && $userId) {            
             $user_data    =   $this->user_model->get_user_by_email($userId);
             if (!empty($user_data) && ($user_data->companey_id == 79 || $user_data->companey_id == 82)) {
                 $this->session->set_userdata('user_id',$user_data->pk_i_admin_id);     
@@ -2781,7 +2781,11 @@ public function set_layout_to_session() {
         $data['enquiry'] = $this->db->where('enquiry_id',$enquiry_id)->get('enquiry')->result();
         $html=   $this->pdf->load_view('gen_pdf',$data,0);
         //$this->pdf->createPDF($html, 'mypdf', true);
-        redirect('enquiry/view/'.$enquiry_id.'/');
+        if($this->input->post('redirect_url')){
+            redirect($this->input->post('redirect_url')); //updateclient                
+        }else{
+            redirect('enquiry/view/'.$enquiry_id.'/');            
+        }
         
     }
 }
