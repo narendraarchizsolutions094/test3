@@ -3753,19 +3753,27 @@ public function insetFollowupTime($enquiry_id,$stageType,$oldTime,$newTime)
 
 
 public function getComInfo($enquiry_id)
-	{
-		 
-        $CommercialInfo=$this->db->select('bb.*,bs.branch_name as bn,commercial_info.*')
-        ->where('enquiry_id',$enquiry_id)
-        ->join('branch bb','bb.branch_id=commercial_info.booking_branch')
-        ->join('branch bs','bs.branch_id=commercial_info.delivery_branch')
-        ->get('commercial_info')->result();
-        return $CommercialInfo;
-	}
+{
+	 
+      $CommercialInfo=$this->db->select('bb.*,bs.branch_name as bn,commercial_info.*')
+      ->where('enquiry_id',$enquiry_id)
+      ->join('branch bb','bb.branch_id=commercial_info.booking_branch')
+      ->join('branch bs','bs.branch_id=commercial_info.delivery_branch')
+      ->get('commercial_info')->result();
+      return $CommercialInfo;
+}
 
 public function insertComInfo($data)
 {
    $insert= $this->db->insert('commercial_info',$data);
+
+   // $forecast = ['enquiry_id'=>$data['enquiry_id'],
+   //              'deal_value'=>$data['potential_amount'],
+   //              'won_value'=>$data['expected_amount'],
+   //              'created_by'=>$data['createdby'],
+   //              'comp_id' =>$this->session->companey_id,
+   //            ]; 
+   //  $this->db->insert('tbl_forecast_data',$forecast);
    return $insert;
 }
 
