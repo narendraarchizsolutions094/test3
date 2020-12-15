@@ -250,6 +250,7 @@ class Rule_model extends CI_Model {
                         }
 
                     }
+                    exit;
                 }else if($rule_data['type'] == 7){
                     $this->db->where('('.$rule_data['rule_sql'].')');
 
