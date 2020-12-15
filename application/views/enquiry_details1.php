@@ -5516,6 +5516,12 @@ jQuery(document).ready(function(){
    }else{
       $('li[href="' + hash + '"]').click();
    } 
+   $('form').submit(function(e){
+      e.preventDefault();
+      var l = window.location;   
+      console.log(l);
+      $(this).append('<input type="hidden" name="redirect_url" value="'+l+'" />');
+   })
 });
 </script>
    
