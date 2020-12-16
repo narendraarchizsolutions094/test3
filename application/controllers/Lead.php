@@ -224,6 +224,25 @@ class Lead extends CI_Controller
             $data['level'] = $this->location_model->find_level();
             $data['length'] = $this->location_model->find_length();
         }
+
+        if($this->session->companey_id == 65)
+        {
+            $data['branch']=$this->db->where('comp_id',$this->session->companey_id)->get('branch')->result();
+            $data['CommercialInfo'] = $this->enquiry_model->getComInfo($enquiry_id);
+            //print_r($data['CommercialInfo']); exit();
+            //fetch last entry
+            $comm_data=$this->db->where(array('enquiry_id'=>$enquiry_id))->order_by('id',"desc")
+            ->limit(1)->get('commercial_info');
+            $data['commInfoCount']=$comm_data->num_rows();
+            $data['commInfoData']=$comm_data->row();
+        } 
+        else
+        {    $data['CommercialInfo'] =array();
+             $data['branch'] =array();
+            $data['commInfoCount']=0;
+            $data['commInfoData']=array();
+        }
+
         $data['course_list'] = $this->Leads_Model->get_course_list();
         $this->enquiry_model->make_enquiry_read($data['details']->Enquery_id);
         $data['content'] = $this->load->view('enquiry_details1', $data, true);
