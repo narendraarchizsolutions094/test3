@@ -71,11 +71,11 @@ class Dashboard extends CI_Controller {
                         $name=$v->{'values'};
                         $name1=$name[0];
                         }   
-                        if(!empty($v) && $v->{'name'}==='phone_number'){
+                        if(!empty($v) && ($v->{'name'}==='phone_number' || $v->{'name'}==='phone_number_')){
                         $phone=$v->{'values'};
                         $phone1=$phone[0];
                         } 
-                        if(!empty($v) && $v->{'name'}==='email'){
+                        if(!empty($v) && ($v->{'name'}==='email' || $v->{'name'}==='email_')){
                         $email=$v->{'values'};
                         $email1= $email[0];
                         }     
@@ -189,11 +189,11 @@ class Dashboard extends CI_Controller {
                             $name=$v->{'values'};
                             $name1=$name[0];
                             }   
-                            if(!empty($v) && $v->{'name'}==='phone_number'){
+                            if(!empty($v) && ($v->{'name'}==='phone_number' || $v->{'name'}==='phone_number_')){
                             $phone=$v->{'values'};
                             $phone1=$phone[0];
                             } 
-                            if(!empty($v) && $v->{'name'}==='email'){
+                            if(!empty($v) && ($v->{'name'}==='email' || $v->{'name'}==='email_')){
                             $email=$v->{'values'};
                             $email1= $email[0];
                             }     
