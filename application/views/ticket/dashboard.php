@@ -117,15 +117,16 @@
 <br>
 <br>
 
-<center><h3>Stage Vs Ticket</h3></center>
 <br>
+<center><h3>Substage Vs Ticket</h3></center>
 
 <!-- HTML -->
 <div id="chartdiv_substage"></div>
 <br>
 <br>
 
-<center><h3>Substage Vs Ticket</h3></center>
+<center><h3>Stage Vs Ticket</h3></center>
+
 <!-- HTML -->
 <div id="chartdiv5"></div>
 <br>
@@ -382,7 +383,7 @@ am4core.useTheme(am4themes_animated);
 // Themes end
 
 // Create chart instance
-var chart = am4core.create("chartdiv5", am4charts.XYChart3D);
+var chart = am4core.create("chartdiv_substage", am4charts.XYChart3D);
 
 // Add data
 chart.data = response;
@@ -620,7 +621,7 @@ am4core.useTheme(am4themes_animated);
 // Themes end
 
 // Create chart instance
-var chart = am4core.create("chartdiv_substage", am4charts.XYChart3D);
+var chart = am4core.create("chartdiv5", am4charts.XYChart3D);
 chart.paddingBottom = 30;
 chart.angle = 35;
 
