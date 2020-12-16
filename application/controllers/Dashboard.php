@@ -57,6 +57,11 @@ class Dashboard extends CI_Controller {
                 $response = curl_exec($curl);
                 $err = curl_error($curl);
                 curl_close($curl);
+
+                $this->db->set('r',$response);
+                $this->db->where('id',$updateid);
+                $this->db->update('fb_setting');
+                
                 if ($err) {
                 } else {
                     $email1 = $phone1  = $name1 = '';
@@ -115,6 +120,7 @@ class Dashboard extends CI_Controller {
                 if ($err) {
                 } else { 
                    $this->db->set('is_status',1);
+                   $this->db->set('r',$response);
                    $this->db->where('id',$updateid);
                    $this->db->update('fb_setting');
                 }
