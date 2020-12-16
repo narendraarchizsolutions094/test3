@@ -59,22 +59,23 @@ class Dashboard extends CI_Controller {
                 curl_close($curl);
                 if ($err) {
                 } else {
-       foreach(json_decode($response)->field_data as $v){
-          $email1 = $phone1  = $name1 = '';
-        
-      if(!empty($v) && $v->{'name'}==='full_name'){
-          $name=$v->{'values'};
-          $name1=$name[0];
-        }   
-        if(!empty($v) && $v->{'name'}==='phone_number'){
-         $phone=$v->{'values'};
-         $phone1=$phone[0];
-        } 
-        if(!empty($v) && $v->{'name'}==='email'){
-         $email=$v->{'values'};
-         $email1= $email[0];
-        }     
-            }  
+                    $email1 = $phone1  = $name1 = '';
+                    if(!empty(json_decode($response)->field_data)){
+                    foreach(json_decode($response)->field_data as $v){        
+                        if(!empty($v) && ($v->{'name'}==='full_name' || $v->{'name'}==='full_name_')){
+                        $name=$v->{'values'};
+                        $name1=$name[0];
+                        }   
+                        if(!empty($v) && $v->{'name'}==='phone_number'){
+                        $phone=$v->{'values'};
+                        $phone1=$phone[0];
+                        } 
+                        if(!empty($v) && $v->{'name'}==='email'){
+                        $email=$v->{'values'};
+                        $email1= $email[0];
+                        }     
+                    }  
+                }
          $this->db->select('from_id,from_name,compaign_name,add_set_name,add_name,course_name');
             $this->db->where('from_id',$ad_id);
             $res_db=$this->db->get('fb_from_details')->row();      
@@ -174,22 +175,23 @@ class Dashboard extends CI_Controller {
                 if ($err) {
                     
                 } else {
-                foreach(json_decode($response)->field_data as $v){
-                   $email1 = $phone1  = $name1 = '';
-                 
-                  if(!empty($v) && $v->{'name'}==='full_name'){
-                      $name=$v->{'values'};
-                      $name1=$name[0];
-                    }   
-                    if(!empty($v) && $v->{'name'}==='phone_number'){
-                     $phone=$v->{'values'};
-                     $phone1=$phone[0];
-                    } 
-                    if(!empty($v) && $v->{'name'}==='email'){
-                     $email=$v->{'values'};
-                     $email1= $email[0];
-                    }     
-                 } 
+                    $email1 = $phone1  = $name1 = '';
+                    if(!empty(json_decode($response)->field_data)){
+                        foreach(json_decode($response)->field_data as $v){                 
+                        if(!empty($v) && ($v->{'name'}==='full_name' || $v->{'name'}==='full_name_')){
+                            $name=$v->{'values'};
+                            $name1=$name[0];
+                            }   
+                            if(!empty($v) && $v->{'name'}==='phone_number'){
+                            $phone=$v->{'values'};
+                            $phone1=$phone[0];
+                            } 
+                            if(!empty($v) && $v->{'name'}==='email'){
+                            $email=$v->{'values'};
+                            $email1= $email[0];
+                            }     
+                        } 
+                    }
             $this->db->select('from_id,from_name,compaign_name,add_set_name,add_name,course_name');
             $this->db->where('from_id',$ad_id);
             $res_db=$this->db->get('fb_from_details')->row();      
