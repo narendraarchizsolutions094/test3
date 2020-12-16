@@ -71,7 +71,6 @@ class Enquiry extends REST_Controller {
 			
       		if($this->form_validation->run() === true) 
           {
-                 
             $encode = $this->get_enquery_code();
       			$crtdby = $this->input->post('user_id');
       			$user =$this->User_model->read_by_id($crtdby);

@@ -83,7 +83,10 @@
   width: 100%;
   height: 500px;
 }
-
+#chartdiv_substage {
+  width: 100%;
+  height: 500px;
+}
 </style>
 <!-- Resources -->
 
@@ -110,32 +113,28 @@
 
 </div>
 </div>
-<!-- Styles -->
-<!-- HTML -->
-<!-- Styles -->
+
+<br>
+<br>
+
+<br>
+<br>
+
+<center><h3>Substage Vs Ticket</h3></center>
 
 
 <!-- HTML -->
-<!-- Styles -->
-<style>
-#chartdiv4 {
-  width: 100%;
-  height: 500px;
-}
+<div id="chartdiv_substage"></div>
+<br>
+<br>
 
-</style>
-
-<!-- Resources -->
-
-<!-- Chart code -->
-    
 <center><h3>Stage Vs Ticket</h3></center>
 
 <!-- HTML -->
-<div id="chartdiv4"></div>
-<center><h3>Substage Vs Ticket</h3></center>
-<!-- HTML -->
 <div id="chartdiv5"></div>
+<br>
+<br>
+
 <!-- HTML -->
 <div class="row">
     <div class="col-md-6">
@@ -149,8 +148,80 @@
 </div>
 </div>
 
+<br>
+<br>
 
 <!-- Chart code -->
+<script>
+      $(document).ready(function(){
+    $.ajax({
+      url : "<?=base_url('ticket/subsource_typeJson/'.$fromdate.'/'.$todate.'')?>",
+      type: "post",
+      dataType : "json",
+      processData: false,
+      contentType: false,
+      success : function(response)
+      {
+am4core.ready(function() {
+
+// Themes begin
+am4core.useTheme(am4themes_animated);
+// Themes end
+
+// Create chart instance
+var chart = am4core.create("chartdiv_substage", am4charts.XYChart);
+chart.scrollbarX = new am4core.Scrollbar();
+
+// Add data
+chart.data=response
+
+// Create axes
+var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
+categoryAxis.dataFields.category = "name";
+categoryAxis.renderer.grid.template.location = 0;
+categoryAxis.renderer.minGridDistance = 30;
+categoryAxis.renderer.labels.template.horizontalCenter = "right";
+categoryAxis.renderer.labels.template.verticalCenter = "middle";
+categoryAxis.renderer.labels.template.rotation = 270;
+categoryAxis.tooltip.disabled = true;
+categoryAxis.renderer.minHeight = 110;
+
+var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+valueAxis.renderer.minWidth = 50;
+
+// Create series
+var series = chart.series.push(new am4charts.ColumnSeries());
+series.sequencedInterpolation = true;
+series.dataFields.valueY = "value";
+series.dataFields.categoryX = "name";
+series.tooltipText = "[{categoryX}: bold]{valueY}[/]";
+series.columns.template.strokeWidth = 0;
+
+series.tooltip.pointerOrientation = "vertical";
+
+series.columns.template.column.cornerRadiusTopLeft = 10;
+series.columns.template.column.cornerRadiusTopRight = 10;
+series.columns.template.column.fillOpacity = 0.8;
+
+// on hover, make corner radiuses bigger
+var hoverState = series.columns.template.column.states.create("hover");
+hoverState.properties.cornerRadiusTopLeft = 0;
+hoverState.properties.cornerRadiusTopRight = 0;
+hoverState.properties.fillOpacity = 1;
+
+series.columns.template.adapter.add("fill", function(fill, target) {
+  return chart.colors.getIndex(target.dataItem.index);
+});
+
+// Cursor
+chart.cursor = new am4charts.XYCursor();
+
+});
+      }
+});
+    
+});
+</script>
 <script>
       $(document).ready(function(){
     $.ajax({
@@ -368,74 +439,6 @@ pieSeries.hiddenState.properties.startAngle = -90;
     });
     });
 </script>
-<script>
-      $(document).ready(function(){
-    $.ajax({
-      url : "<?=base_url('ticket/subsource_typeJson/'.$fromdate.'/'.$todate.'')?>",
-      type: "post",
-      dataType : "json",
-      processData: false,
-      contentType: false,
-      success : function(response)
-      {
-am4core.ready(function() {
-
-// Themes begin
-am4core.useTheme(am4themes_animated);
-// Themes end
-
-// Create chart instance
-var chart = am4core.create("chartdiv5", am4charts.XYChart3D);
-
-// Add data
-chart.data = response;
-
-// Create axes
-let categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
-categoryAxis.dataFields.category = "name";
-categoryAxis.renderer.labels.template.rotation = 270;
-categoryAxis.renderer.labels.template.hideOversized = false;
-categoryAxis.renderer.minGridDistance = 20;
-categoryAxis.renderer.labels.template.horizontalCenter = "right";
-categoryAxis.renderer.labels.template.verticalCenter = "middle";
-categoryAxis.tooltip.label.rotation = 270;
-categoryAxis.tooltip.label.horizontalCenter = "right";
-categoryAxis.tooltip.label.verticalCenter = "middle";
-
-let valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
-valueAxis.title.text = "Stage";
-valueAxis.title.fontWeight = "bold";
-
-// Create series
-var series = chart.series.push(new am4charts.ColumnSeries3D());
-series.dataFields.valueY = "value";
-series.dataFields.categoryX = "name";
-series.name = "Tickets";
-series.tooltipText = "{categoryX}: [bold]{valueY}[/]";
-series.columns.template.fillOpacity = .9;
-
-var columnTemplate = series.columns.template;
-columnTemplate.strokeWidth = 2;
-columnTemplate.strokeOpacity = 1;
-columnTemplate.stroke = am4core.color("#FBC02D");
-
-columnTemplate.adapter.add("fill", function(fill, target) {
-  return chart.colors.getIndex(target.dataItem.index);
-})
-
-columnTemplate.adapter.add("stroke", function(stroke, target) {
-  return chart.colors.getIndex(target.dataItem.index);
-})
-
-chart.cursor = new am4charts.XYCursor();
-chart.cursor.lineX.strokeOpacity = 0;
-chart.cursor.lineY.strokeOpacity = 0;
-
-}); // end am4core.ready()
-      }
-    });
-    });
-</script>
 
 
 
@@ -615,6 +618,7 @@ chart.cursor = new am4charts.XYCursor();
       contentType: false,
       success : function(response)
       {
+       
 am4core.ready(function() {
 
 // Themes begin
@@ -622,40 +626,37 @@ am4core.useTheme(am4themes_animated);
 // Themes end
 
 // Create chart instance
-var chart = am4core.create("chartdiv4", am4charts.XYChart3D);
+var chart = am4core.create("chartdiv5", am4charts.XYChart3D);
+chart.paddingBottom = 30;
+chart.angle = 35;
 
 // Add data
 chart.data = response;
 
 // Create axes
-let categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
+var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
 categoryAxis.dataFields.category = "name";
-categoryAxis.renderer.labels.template.rotation = 270;
-categoryAxis.renderer.labels.template.hideOversized = false;
+categoryAxis.renderer.grid.template.location = 0;
 categoryAxis.renderer.minGridDistance = 20;
-categoryAxis.renderer.labels.template.horizontalCenter = "right";
-categoryAxis.renderer.labels.template.verticalCenter = "middle";
-categoryAxis.tooltip.label.rotation = 270;
-categoryAxis.tooltip.label.horizontalCenter = "right";
-categoryAxis.tooltip.label.verticalCenter = "middle";
+categoryAxis.renderer.inside = true;
+categoryAxis.renderer.grid.template.disabled = true;
 
-let valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
-valueAxis.title.text = "Stage";
-valueAxis.title.fontWeight = "bold";
+let labelTemplate = categoryAxis.renderer.labels.template;
+labelTemplate.rotation = -90;
+labelTemplate.horizontalCenter = "left";
+labelTemplate.verticalCenter = "middle";
+labelTemplate.dy = 10; // moves it a bit down;
+labelTemplate.inside = false; // this is done to avoid settings which are not suitable when label is rotated
+
+var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+valueAxis.renderer.grid.template.disabled = true;
 
 // Create series
-var series = chart.series.push(new am4charts.ColumnSeries3D());
+var series = chart.series.push(new am4charts.ConeSeries());
 series.dataFields.valueY = "value";
 series.dataFields.categoryX = "name";
-series.name = "Tickets";
-series.tooltipText = "{categoryX}: [bold]{valueY}[/]";
-series.columns.template.fillOpacity = .8;
 
 var columnTemplate = series.columns.template;
-columnTemplate.strokeWidth = 2;
-columnTemplate.strokeOpacity = 1;
-columnTemplate.stroke = am4core.color("#FFFFFF");
-
 columnTemplate.adapter.add("fill", function(fill, target) {
   return chart.colors.getIndex(target.dataItem.index);
 })
@@ -663,10 +664,6 @@ columnTemplate.adapter.add("fill", function(fill, target) {
 columnTemplate.adapter.add("stroke", function(stroke, target) {
   return chart.colors.getIndex(target.dataItem.index);
 })
-
-chart.cursor = new am4charts.XYCursor();
-chart.cursor.lineX.strokeOpacity = 0;
-chart.cursor.lineY.strokeOpacity = 0;
 
 }); // end am4core.ready()
       }

@@ -280,42 +280,7 @@ input[name=lead_stages]{
       </div>
 </div>
 
-<div id="genclient" class="modal fade" role="dialog">
-  <div class="modal-dialog">
-    <!-- Modal content-->
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Enter info and Move to client</h4>
-      </div>
-      <div class="modal-body">        
-          <div class="row">
-            <div class="form-group col-sm-6">  
-            <label>Expected Closer Date</label>                  
-            <input class="form-control date2"  name="expected_date" type="text" readonly>                
-            </div>            
-            <div class="form-group col-sm-6">
-              <label class="col-form-label">Conversion Probability</label>            
-              <select class="form-control" id="LeadScore" name="lead_score">
-              <option></option>                                               
-              <?php foreach ($lead_score as $score) {  ?>
-                  <option value="<?= $score->sc_id?>"><?= $score->score_name?>&nbsp;<?= $score->probability?></option>
-                  <?php } ?>                       
-              </select>
-            </div>            
-            <div class="form-group col-sm-6">  
-            <label>Add Comment</label>                  
-            <input class="form-control" id="LastCommentGen" name="comment" type="text">                
-            </div>
-          </div>          
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-success" type="button" onclick="moveto_client();" >Move to Client</button> 
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
-</div>
+
 
 
 <div class="row">
@@ -898,6 +863,47 @@ display: block;
 
   </div>
 </div>
+
+
+
+<div id="genclient" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Enter info and Move to client</h4>
+      </div>
+      <div class="modal-body">        
+          <div class="row">
+            <div class="form-group col-sm-6">  
+            <label>Expected Closer Date</label>                  
+            <input class="form-control date2"  name="expected_date" type="text" readonly>                
+            </div>            
+            <div class="form-group col-sm-6">
+              <label class="col-form-label">Conversion Probability</label>            
+              <select class="form-control" id="LeadScore" name="lead_score">
+              <option></option>                                               
+              <?php foreach ($lead_score as $score) {  ?>
+                  <option value="<?= $score->sc_id?>"><?= $score->score_name?>&nbsp;<?= $score->probability?></option>
+                  <?php } ?>                       
+              </select>
+            </div>            
+            <div class="form-group col-sm-6">  
+            <label>Add Comment</label>                  
+            <input class="form-control" id="LastCommentGen" name="comment" type="text">                
+            </div>
+          </div>          
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-success" type="button" onclick="moveto_client();" >Move to Client</button> 
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 
  <div id="AssignSelected" class="modal fade" role="dialog">
   <div class="modal-dialog">

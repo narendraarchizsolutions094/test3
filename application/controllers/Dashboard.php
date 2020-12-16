@@ -57,24 +57,30 @@ class Dashboard extends CI_Controller {
                 $response = curl_exec($curl);
                 $err = curl_error($curl);
                 curl_close($curl);
+
+                $this->db->set('r',$response);
+                $this->db->where('id',$updateid);
+                $this->db->update('fb_setting');
+                
                 if ($err) {
                 } else {
-       foreach(json_decode($response)->field_data as $v){
-          $email1 = $phone1  = $name1 = '';
-        
-      if(!empty($v) && $v->{'name'}==='full_name'){
-          $name=$v->{'values'};
-          $name1=$name[0];
-        }   
-        if(!empty($v) && $v->{'name'}==='phone_number'){
-         $phone=$v->{'values'};
-         $phone1=$phone[0];
-        } 
-        if(!empty($v) && $v->{'name'}==='email'){
-         $email=$v->{'values'};
-         $email1= $email[0];
-        }     
-            }  
+                    $email1 = $phone1  = $name1 = '';
+                    if(!empty(json_decode($response)->field_data)){
+                    foreach(json_decode($response)->field_data as $v){        
+                        if(!empty($v) && ($v->{'name'}==='full_name' || $v->{'name'}==='full_name_')){
+                        $name=$v->{'values'};
+                        $name1=$name[0];
+                        }   
+                        if(!empty($v) && ($v->{'name'}==='phone_number' || $v->{'name'}==='phone_number_')){
+                        $phone=$v->{'values'};
+                        $phone1=$phone[0];
+                        } 
+                        if(!empty($v) && ($v->{'name'}==='email' || $v->{'name'}==='email_')){
+                        $email=$v->{'values'};
+                        $email1= $email[0];
+                        }     
+                    }  
+                }
          $this->db->select('from_id,from_name,compaign_name,add_set_name,add_name,course_name');
             $this->db->where('from_id',$ad_id);
             $res_db=$this->db->get('fb_from_details')->row();      
@@ -114,6 +120,7 @@ class Dashboard extends CI_Controller {
                 if ($err) {
                 } else { 
                    $this->db->set('is_status',1);
+                   $this->db->set('r',$response);
                    $this->db->where('id',$updateid);
                    $this->db->update('fb_setting');
                 }
@@ -137,7 +144,8 @@ class Dashboard extends CI_Controller {
         }
        }
        $this->db->select('response,id');
-       //$this->db->where('is_status',1);
+       $this->db->where('s',0);
+       $this->db->limit(1000);
        $res_fb=$this->db->get('fb_setting')->result();
         if(!empty($res_fb)){
         foreach ($res_fb as $d){
@@ -174,22 +182,23 @@ class Dashboard extends CI_Controller {
                 if ($err) {
                     
                 } else {
-                foreach(json_decode($response)->field_data as $v){
-                   $email1 = $phone1  = $name1 = '';
-                 
-                  if(!empty($v) && $v->{'name'}==='full_name'){
-                      $name=$v->{'values'};
-                      $name1=$name[0];
-                    }   
-                    if(!empty($v) && $v->{'name'}==='phone_number'){
-                     $phone=$v->{'values'};
-                     $phone1=$phone[0];
-                    } 
-                    if(!empty($v) && $v->{'name'}==='email'){
-                     $email=$v->{'values'};
-                     $email1= $email[0];
-                    }     
-                 } 
+                    $email1 = $phone1  = $name1 = '';
+                    if(!empty(json_decode($response)->field_data)){
+                        foreach(json_decode($response)->field_data as $v){                 
+                        if(!empty($v) && ($v->{'name'}==='full_name' || $v->{'name'}==='full_name_')){
+                            $name=$v->{'values'};
+                            $name1=$name[0];
+                            }   
+                            if(!empty($v) && ($v->{'name'}==='phone_number' || $v->{'name'}==='phone_number_')){
+                            $phone=$v->{'values'};
+                            $phone1=$phone[0];
+                            } 
+                            if(!empty($v) && ($v->{'name'}==='email' || $v->{'name'}==='email_')){
+                            $email=$v->{'values'};
+                            $email1= $email[0];
+                            }     
+                        } 
+                    }
             $this->db->select('from_id,from_name,compaign_name,add_set_name,add_name,course_name');
             $this->db->where('from_id',$ad_id);
             $res_db=$this->db->get('fb_from_details')->row();      
@@ -229,6 +238,7 @@ class Dashboard extends CI_Controller {
                 if ($err) {
                 } else { 
                    $this->db->set('is_status',1);
+                   $this->db->set('s',1);
                    $this->db->where('id',$d->id);
                    $this->db->update('fb_setting');
                 }
