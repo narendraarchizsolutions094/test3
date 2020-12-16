@@ -4,9 +4,11 @@
 var Ignore = new Array();
 </script>
 
-
-<div style="padding: 15px; text-align:right;">
-	<button class="btn btn-primary" data-toggle="modal" data-target="#add_goal" >Add Goal</button>
+<div class="row" style="background-color: #fff;padding:7px;border-bottom: 1px solid #C8CED3;">
+	<div class="col-md-4 col-sm-4 col-xs-4"> 
+          <a class="pull-left fa fa-arrow-left btn btn-circle btn-default btn-sm" onclick="history.back(-1)" title="Back"></a>        
+          <a class="dropdown-toggle btn btn-danger btn-circle btn-sm fa fa-plus" data-toggle="modal" data-target="#add_goal" title="Add Goal"></a>         
+        </div>
 </div>
 
 <div class="panel">
@@ -19,6 +21,7 @@ var Ignore = new Array();
 						<th rowspan="2">METRIC</th>
 						<th rowspan="2">For</th>
 						<th colspan="3">ATTAINMENT</th>
+						<th rowspan="2" align="center"></th>
 					</tr>
 					<tr><th>T</th><th>F</th><th>A</th></tr>
 				</thead>
@@ -35,18 +38,40 @@ var Ignore = new Array();
 
 						$ci = &get_instance();
 						$ci->load->model('Target_Model');
-						$Forecast = $ci->Target_Model->getForecast($goal->goal_id)->row();
-						$Achieved = $ci->Target_Model->getAchieved($goal->goal_id)->row();
-						//print_r($achieved);
+						$Forecast = $ci->Target_Model->getForecast($goal->goal_id,$goal->goal_for);
+						$Achieved = $ci->Target_Model->getAchieved($goal->goal_id,$goal->goal_for);
+
+						$forecast_value =(int)($goal->metric_type=='deal'?$Forecast->p_amnt:$Forecast->e_amnt);
+						$achieved_value =(int)($goal->metric_type=='deal'?$Achieved->p_amnt:$Achieved->e_amnt);
+
+						$percent=0;
+						if($target)
+								$percent = round(($achieved_value/$target)*100,2);
+						if($percent<30)
+								$barcolor='danger';
+							else if($percent>=30 && $percent<60)
+								$barcolor='warning';
+							else
+								$barcolor='success';
+
 						echo'<tr>
 							<td>'.$goal->goal_id.'</td>
 							<td>'.ucwords($goal->goal_period).' <br>
-							<b>'.date('d/m/Y',strtotime($goal->date_from)).' - '.date('d/m/Y',strtotime($goal->date_to)).'</b></td>
+							<a href="'.base_url('target/goal_details/'.$goal->goal_id).'"><b>'.date('d/m/Y',strtotime($goal->date_from)).' - '.date('d/m/Y',strtotime($goal->date_to)).'</b></a></td>
 							<td>'.($goal->metric_type=='deal'?'Deal value':'Won deals').'</td>
-							<td>'.($goal->goal_type=='team'?'Team':'User').'</td>
+							<td>'.($goal->goal_type=='team'?'Role':'User').'</td>
 							<td>'.$target.'</td>
-							<td>'.(int)($goal->metric_type=='deal'?$Forecast->p_amnt:$Forecast->e_amnt).'</td>
-							<td>'.(int)($goal->metric_type=='deal'?$Achieved->p_amnt:$Achieved->e_amnt).'</td>
+							<td>'.$forecast_value.'</td>
+							<td>'.$achieved_value.'</td>
+							<td style="text-align:center">
+								'.$achieved_value.'/'.$target.'<br>
+								<div class="progress">
+									  <div class="progress-bar progress-bar-'.$barcolor.' progress-bar-striped" role="progressbar"
+									  aria-valuenow="'.$percent.'" aria-valuemin="0" aria-valuemax="100" style="width:'.$percent.'%; max-width:100%;">
+									  </div>
+								</div>
+
+								</td>
 							</tr>';
 					}
 					
@@ -87,16 +112,16 @@ var Ignore = new Array();
             <div class="form-group">
   				<div class="col-sm-4" style="padding: 4px;">
   					<label>Time Range <font color="red">*</font></label>      
-					<select class="form-control"  name="time_range" required>
+					<select class="form-control"  name="time_range" onchange="setTimeRange()" required>
 		        	</select>
 		        </div>
 		        <div class="col-sm-4" style="padding: 4px;">
 					<label>From <font color="red">*</font></label>
-					<input type="date" name="period_from" class="form-control" required>
+					<input type="date" name="period_from" class="form-control" readonly required>
 				</div>
 				 <div class="col-sm-4" style="padding: 4px;">
 					<label>To <font color="red">*</font></label>
-					<input type="date" name="period_to" class="form-control" required>
+					<input type="date" name="period_to" class="form-control" readonly required>
 				</div>
 			</div>
 		</div>
@@ -149,7 +174,6 @@ var Ignore = new Array();
 load_range('weekly');
 function load_range(v)
 {
-
 	var range_list = '';
 		if(v=='weekly')
 		{
@@ -170,6 +194,7 @@ function load_range(v)
 		}
 
 	$("select[name=time_range]").html(range_list);
+	setTimeRange();
 }
 
 var users = <?=$users?>;
@@ -273,5 +298,116 @@ function validate_form()
 		}
 	}
 	//return false;
+}
+
+function setTimeRange()
+{
+	var time_range = $('select[name=time_range]').val();
+	var period = $('select[name=goal_period]').val();
+	
+	var date_from;
+	var date_to;
+
+	var month,day,year;
+
+	var d = new Date();
+
+	if(time_range=='custom')
+	{
+		$("input[name=period_from]").val('').removeAttr('readonly');
+		$("input[name=period_to]").val('').removeAttr('readonly');
+		return;
+	}
+
+	if(period=='weekly')
+	{
+		if(time_range=='1')
+		{	
+			var from = manageDate(d,0,0,0);
+			var to = manageDate(d,7,0,0);
+		}
+		else if(time_range=='2')
+		{	
+			d.setDate(d.getDate()+7);
+
+			var from = manageDate(d,0,0,0);
+			var to = manageDate(d,7,0,0);
+		}
+	}
+	else if(period=='monthly')
+	{
+		if(time_range=='1')
+		{	d.setDate(1);
+			var from = manageDate(d,0,0,0);
+			d.setDate(0);
+			var to = manageDate(d,0,1,0);
+		}
+		else if(time_range=='2')
+		{	
+			d.setMonth(d.getMonth()+1);
+			d.setDate(1);
+			var from = manageDate(d,0,0,0);
+			d.setDate(0)
+			var to = manageDate(d,0,1,0);
+		}
+	}
+	else if(period=='quarterly')
+	{
+		if(time_range=='1')
+		{	d.setDate(1);
+			var from = manageDate(d,0,0,0);
+			d.setDate(0);
+			var to = manageDate(d,0,4,0);
+		}
+		else if(time_range=='2')
+		{	
+			d.setMonth(d.getMonth()+4);
+			d.setDate(1);
+			var from = manageDate(d,0,0,0);
+			d.setDate(0)
+			var to = manageDate(d,0,4,0);
+		}
+	}
+	else if(period=='yearly')
+	{
+		if(time_range=='1')
+		{	d.setDate(1);
+			d.setMonth(0);
+			var from = manageDate(d,0,0,0);
+			d.setDate(0);
+			var to = manageDate(d,0,0,1);
+		}
+		else if(time_range=='2')
+		{	
+			d.setDate(1);
+			d.setMonth(0);
+			d.setFullYear(d.getFullYear()+1);
+			var from = manageDate(d,0,0,0);
+			d.setDate(0);
+			var to = manageDate(d,0,0,1);
+		}
+	}
+
+		$("input[name=period_from]").val(from).attr('readonly','readonly');
+		$("input[name=period_to]").val(to).attr('readonly','readonly');
+}
+
+function manageDate(cur_date,day,month,year)
+{
+	var d = new Date(cur_date);
+		d.setDate(d.getDate()+day);
+		d.setMonth(d.getMonth()+month);
+		d.setFullYear(d.getFullYear()+year);
+
+		month = '' + (d.getMonth() + 1);
+        day = '' + d.getDate();
+        year = d.getFullYear();
+
+        if (month.length < 2) 
+	        month = '0' + month;
+	    if (day.length < 2) 
+	        day = '0' + day;
+
+		return [year,month,day].join('-');
 }
 </script>

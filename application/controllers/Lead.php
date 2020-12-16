@@ -718,7 +718,7 @@ class Lead extends CI_Controller
     {
         $enquiry_id = $this->uri->segment('3');
         $lead = $this->Leads_Model->get_leadListDetailsby_id($enquiry_id);
-        // print_r($lead->status); exit;
+         //print_r($lead); exit;
         $leadSataus = $lead->status;
            $Enquery_id = $lead->Enquery_id;
           $stage = $lead->status;
@@ -754,10 +754,14 @@ class Lead extends CI_Controller
             } else {
                 $url = 'led/index';
                 $comment = 'Converted to '.display('Client');
+                //echo $comment ; exit();
                 //insert follow up counter (3 is for client )
+                if(empty($lead->lead_created_date))
+                    $lead->lead_created_date='0000-00-00 00:00:00';
                 $this->enquiry_model->insetFollowupTime($enquiry_id, 3, $lead->lead_created_date, date('Y-m-d H:i:s'));
                 $this->db->set('status', 3);
             }
+            $this->db->set('client_created_date',date('Y-m-d h:i:s'));
             $this->db->set('created_date', date('Y-m-d H:i:s'));
             $this->db->set('update_date', '');
             $this->db->where('enquiry_id', $enquiry_id);

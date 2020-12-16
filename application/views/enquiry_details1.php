@@ -746,9 +746,9 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
 
       <div class="col-md-6 col-xs-12 col-sm-12 card card-body col-height details-column" style="background:#fff;border-top: unset;">
          <div id="exTab3" class="">
-            <ul  class="nav nav-tabs" role="tablist" id="main_tab">  
+            <ul  class="nav nav-tabs" role="tablist">  
             <span class="scrollTab" style="position: absolute; left: 0; font-size: 22px; line-height: 40px; z-index: 999"><i class="fa fa-caret-left" onclick="tabScroll('left')"></i></span>            
-              <li class="" href="#basic" data-toggle="tab" >Basic</li>  
+              <li class="active" href="#basic" data-toggle="tab" >Basic</li>  
               
              <?php if($this->session->userdata('companey_id')==292) { 
                         if($enquiry->status==3) {?>
@@ -1714,6 +1714,7 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                               <th>Vehicle Carrying Capacity</th>
                               <th>Invoice Value</th>
                               <th>Create Date</th>
+                              <th>Status</th>
                               <th>Action</th>
                            </tr>
                         </thead>
@@ -1773,6 +1774,13 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                               <td><?=$value->carrying_capacity ?></td>
                               <td><?=$value->invoice_value ?></td>
                               <td><?=$value->creation_date ?></td>
+                              <th>
+                                <select onchange="update_info_status(<?=$value->id?>,this.value)">
+                                  <option <?php if($value->status==1){ echo'selected';} ?> value="1">Done</option>
+                                  <option <?php if($value->status==0){ echo'selected';} ?> value="0">Pending</option>
+                                  <option <?php if($value->status==2){ echo'selected';} ?> value="2">Deferred</option>
+                                </select>
+                              </th>
                               <td class="center">
                   <a href="<?= base_url('enquiry/editinfo/' . $value->id . '')?>" class="btn btn-xs  btn-primary view_data"><i class="fa fa-edit"></i></a>
                   <a href="<?= base_url('enquiry/deleteInfo/' . $value->id . '/'.$value->enquiry_id.'/') ?>" onclick="return confirm('Are You Sure ? ')" class="btn btn-xs  btn-danger"><i class="fa fa-trash"></i></a>
@@ -1956,6 +1964,18 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                   </form>
                </div>
                <script>
+
+function update_info_status(id,status)
+{
+     $.ajax({
+            type: 'POST',
+            url: '<?php echo base_url();?>enquiry/update_info_status',
+            data: {id:id,status:status},
+            success:function(data){
+                Swal.fire('Status Updated');
+            }
+        });
+}
 
 $('#delivery_branch').on('change', function() {
             var delivery_branch = $("select[name='delivery_branch']").val();
@@ -5496,11 +5516,11 @@ $("a[href$='#related_enquiry']").on('click',function(){
 <?php
 }
 ?>
-<script>
+<!-- <script>
 jQuery(document).ready(function(){
    $('#main_tab a').click(function(e) {
       e.preventDefault();
-      $(this).tab('show');
+      $(this).tab('show');  
    });
  
    // store the currently selected tab in the hash value
@@ -5525,5 +5545,4 @@ jQuery(document).ready(function(){
       }
    })
 });
-</script>
-   
+</script> -->

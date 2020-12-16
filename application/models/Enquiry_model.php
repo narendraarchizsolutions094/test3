@@ -1047,7 +1047,7 @@ class Enquiry_model extends CI_Model {
 
 
 	public function all_today_update($data_type=1){
-	    $all_reporting_ids    =   $this->common_model->get_categories($this->session->user_id);
+	 $all_reporting_ids    =   $this->common_model->get_categories($this->session->user_id);
 		$where = '';
 		$this->db->select('enquiry.Enquery_id');
 		$this->db->from("enquiry");		
