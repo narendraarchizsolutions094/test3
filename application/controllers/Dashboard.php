@@ -139,7 +139,7 @@ class Dashboard extends CI_Controller {
        }
        $this->db->select('response,id');
        $this->db->where('s',0);
-       $this->db->limit(100);
+       $this->db->limit(1000);
        $res_fb=$this->db->get('fb_setting')->result();
         if(!empty($res_fb)){
         foreach ($res_fb as $d){
