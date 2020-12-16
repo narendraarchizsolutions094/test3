@@ -138,7 +138,8 @@ class Dashboard extends CI_Controller {
         }
        }
        $this->db->select('response,id');
-       //$this->db->where('is_status',1);
+       $this->db->where('s',0);
+       $this->db->limit(100);
        $res_fb=$this->db->get('fb_setting')->result();
         if(!empty($res_fb)){
         foreach ($res_fb as $d){
@@ -231,6 +232,7 @@ class Dashboard extends CI_Controller {
                 if ($err) {
                 } else { 
                    $this->db->set('is_status',1);
+                   $this->db->set('s',1);
                    $this->db->where('id',$d->id);
                    $this->db->update('fb_setting');
                 }
