@@ -583,7 +583,7 @@ public function updateEnquiryTab_post()
   }
   public function get_mail_template_post()
   {    
-    $this->db->where('temp_for',3);
+    $this->db->where('temp_for',$this->input->post('msg_type'));
     $this->db->where('response_type',1);
     $this->db->where('comp_id',$this->input->post('company_id'));
     $res=$this->db->get('api_templates');
@@ -595,7 +595,7 @@ public function updateEnquiryTab_post()
     if(empty($template)){
       $this->set_response([
           'status' => false,
-          'template' => $template,
+          'message' =>'No Template',
            ], REST_Controller::HTTP_OK);
     }else{      
       $this->set_response([
