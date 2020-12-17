@@ -454,10 +454,10 @@ class Enquiry_model extends CI_Model {
   
 
                  if ($inputtype[$ind] == 8) {                                                
-                        $file_data    =   $this->doupload($file,$file_count,$comp_id);
+                        $file_data    =   $this->doupload($file,$val,$comp_id);
 
                         if (!empty($file_data['imageDetailArray']['file_name'])) {
-                            $file_path = base_url().'uploads/enq_documents/'.$comp_id.'/'.$file_data['imageDetailArray']['file_name'];
+                            $file_path = base_url().'uploads/enquiry_documents/'.$comp_id.'/'.$file_data['imageDetailArray']['file_name'];
                             $biarr = array( 
                                             "enq_no"  => $en_comments,
                                             "input"   => $val,
@@ -527,7 +527,8 @@ class Enquiry_model extends CI_Model {
             ->row();
 	}
 
-  public function doupload($file,$key,$comp_id=0){        
+  public function doupload($file,$key,$comp_id=0){ 
+      //print_r($file); exit();
         $upload_path    =   "./uploads/enquiry_documents/";
         $comp_id        =   $this->session->companey_id??$comp_id; //creare seperate folder for each company
         $upPath         =   $upload_path.$comp_id;

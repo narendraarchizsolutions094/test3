@@ -203,6 +203,23 @@ class Client extends CI_Controller {
             $data['level'] = $this->location_model->find_level();
             $data['length'] = $this->location_model->find_length();
         }
+
+         if ($this->session->companey_id == 65) {
+            $data['branch']=$this->db->where('comp_id',$this->session->companey_id)->get('branch')->result();
+            $data['CommercialInfo'] = $this->enquiry_model->getComInfo($enquiry_id);
+            //fetch last entry
+            $comm_data=$this->db->where(array('enquiry_id'=>$enquiry_id))->order_by('id',"desc")
+            ->limit(1)->get('commercial_info');
+            $data['commInfoCount']=$comm_data->num_rows();
+            $data['commInfoData']=$comm_data->row();
+        } 
+        else
+        {    $data['CommercialInfo'] =array();
+             $data['branch'] =array();
+            $data['commInfoCount']=0;
+            $data['commInfoData']=array();
+        }
+
 		$data['course_list'] = $this->Leads_Model->get_course_list();
         $enquiry_separation  = get_sys_parameter('enquiry_separation','COMPANY_SETTING');                  
         if (!empty($enquiry_separation) && !empty($_GET['stage'])) {                    
