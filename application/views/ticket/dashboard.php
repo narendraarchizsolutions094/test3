@@ -236,6 +236,7 @@ $(document).ready(function() {
                 categoryAxis.renderer.minHeight = 110;
                 var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
                 valueAxis.renderer.minWidth = 50; // Create series
+                valueAxis.min = 0;
                 var series = chart.series.push(new am4charts.ColumnSeries());
                 series.sequencedInterpolation = true;
                 series.dataFields.valueY = "value";
@@ -417,12 +418,13 @@ $(document).ready(function() {
                 .XYChart); //                // Increase contrast by taking evey second color
                 chart.colors.step = 2; // Add data
                 chart.data = response; // Create axes
-                chart.numberFormatter.numberFormat = "#.";
+                chart.numberFormatter.numberFormat = "#";
 
                 var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
                 dateAxis.renderer.minGridDistance = 50; // Create series
                 function createAxisAndSeries(field, name, opposite, bullet) {
                     var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+                    valueAxis.min = 0;
                     if (chart.yAxes.indexOf(valueAxis) != 0) {
                         valueAxis.syncWithAxis = chart.yAxes.getIndex(0);
                     }
