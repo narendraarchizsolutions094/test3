@@ -1603,7 +1603,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                         $ci = &get_instance();
                         $ci->load->database();
 
-                        $desp = $ci->db->where(array('stg_id'=>$des->stage_id,"FIND_IN_SET(1,stage_for)>"=>1))->get('lead_stage')->row();
+                        $desp = $ci->db->where(array('stg_id'=>$des->stage_id,"FIND_IN_SET(1,stage_for)>"=>0))->get('lead_stage')->row();
                         if($this->session->user_id == 286){
                             echo $this->db->last_query();
                         }
@@ -1646,7 +1646,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                         $ci = &get_instance();
                         $ci->load->database();
 
-                        $desp = $ci->db->where(array('stg_id'=>$des->stage_id,"FIND_IN_SET(2,stage_for)>"=>1))->get('lead_stage')->row();
+                        $desp = $ci->db->where(array('stg_id'=>$des->stage_id,"FIND_IN_SET(2,stage_for)>"=>0))->get('lead_stage')->row();
                         $des_title = '';
                         if(!empty($desp))
                         {
@@ -1685,7 +1685,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                         $ci = &get_instance();
                         $ci->load->database();
 
-                        $desp = $ci->db->where(array('stg_id'=>$des->stage_id,"FIND_IN_SET(3,stage_for)>"=>1))->get('lead_stage')->row();
+                        $desp = $ci->db->where(array('stg_id'=>$des->stage_id,"FIND_IN_SET(3,stage_for)>"=>0))->get('lead_stage')->row();
                         $des_title = '';
                         if(!empty($desp))
                         {
