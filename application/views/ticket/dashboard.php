@@ -182,6 +182,7 @@ $(document).ready(function() {
                 categoryAxis.tooltip.disabled = true;
                 categoryAxis.renderer.minHeight = 110;
                 var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+                valueAxis.min = 1;
                 valueAxis.renderer.minWidth = 50; // Create series
                 var series = chart.series.push(new am4charts.ColumnSeries());
                 series.sequencedInterpolation = true;
