@@ -102,7 +102,7 @@
 
 #chartdiv_substage {
     width: 100%;
-    height: 1500px;
+    height: 700px;
 }
 </style>
 <!-- Resources -->
@@ -187,6 +187,8 @@ $(document).ready(function() {
                 series.sequencedInterpolation = true;
                 series.dataFields.valueY = "value";
                 series.dataFields.categoryX = "name";
+                let labelTemplate = categoryAxis.renderer.labels.template;
+                labelTemplate.inside =    false;
                 series.tooltipText = "[{categoryX}: bold]{valueY}[/]";
                 series.columns.template.strokeWidth = 0;
                 series.tooltip.pointerOrientation = "vertical";
