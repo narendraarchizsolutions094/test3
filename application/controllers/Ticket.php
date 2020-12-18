@@ -1497,8 +1497,8 @@ class Ticket extends CI_Controller
 	    $todate=$this->uri->segment(4);
 		$complaint = $this->Ticket_Model->complaint_type(1,$fromdate,$todate);
 		$query = $this->Ticket_Model->complaint_type(2,$fromdate,$todate);
-		$data[] = ['name' => 'complaint', 'value' => $complaint];
-		$data[] = ['name' => 'query', 'value' => $query];
+		$data[] = ['name' => 'Complaint', 'value' => $complaint];
+		$data[] = ['name' => 'Query', 'value' => $query];
 		echo json_encode($data);
 	}
 	public function source_typeJson()
