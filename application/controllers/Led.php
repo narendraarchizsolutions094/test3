@@ -35,6 +35,7 @@ class Led extends CI_Controller {
 			echo "<pre>";
 			print_r($data['all_stage_lists']);
 			echo "</pre>";
+			echo $this->db->last_query();
 		}
 		
 		$data['lead_score'] = $this->enquiry_model->get_leadscore_list();	
