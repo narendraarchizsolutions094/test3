@@ -417,6 +417,8 @@ $(document).ready(function() {
                 .XYChart); //                // Increase contrast by taking evey second color
                 chart.colors.step = 2; // Add data
                 chart.data = response; // Create axes
+                chart.numberFormatter.numberFormat = "#.";
+
                 var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
                 dateAxis.renderer.minGridDistance = 50; // Create series
                 function createAxisAndSeries(field, name, opposite, bullet) {
@@ -477,7 +479,7 @@ $(document).ready(function() {
                 createAxisAndSeries("hits", "Query Type", true, "rectangle"); // Add legend
                 chart.legend = new am4charts.Legend(); // Add cursor
                 chart.cursor = new am4charts.XYCursor();
-            }); // end am4core.ready()
+            }); // end am4core.ready() 
         }
     });
 });
