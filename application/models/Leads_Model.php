@@ -389,7 +389,7 @@ public function all_description($diesc) {
         } 
         $this->db->where('comp_id',$this->session->userdata('companey_id'));
         if($for)
-            $this->db->where("FIND_IN_SET(".$for.",stage_for) >0");
+            $this->db->where("FIND_IN_SET($for,stage_for) >0");
         $this->db->where_in("process_id",$id1);
         // $this->db->order_by("stg_id", "asc");
         $query = $this->db->get('lead_stage');
