@@ -641,7 +641,15 @@ class Ticket_Model extends CI_Model
 
 	public function countSubsource($stg_id,$fromdate,$todate)
 	{
-		$count = $this->db->where(array('company' => $this->session->companey_id, 'ticket_substage' => $stg_id));
+		$process	=	$this->session->process[0];		
+		$all_reporting_ids  = $this->common_model->get_categories($this->session->user_id);
+		
+		$where = " ( tbl_ticket.added_by IN (".implode(',', $all_reporting_ids).')';
+		$where .= " OR tbl_ticket.assign_to IN (".implode(',', $all_reporting_ids).'))';  
+		$this->db->where($where);
+		
+		$count = $this->db->where(array('tbl_ticket.process_id' => $process,'tbl_ticket.company' => $this->session->companey_id, 'tbl_ticket.ticket_substage' => $stg_id));
+		
 		if($fromdate!='all'){
 			$count=$this->db->where('last_update >=', $fromdate);
 			$count=$this->db->where('last_update <=', $todate);
