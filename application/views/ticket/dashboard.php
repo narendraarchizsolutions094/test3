@@ -516,7 +516,8 @@ $(document).ready(function() {
                 var columnTemplate = series.columns.template;
                 columnTemplate.adapter.add("fill", function(fill, target) {
                     return chart.colors.getIndex(target.dataItem.index);
-                }) columnTemplate.adapter.add("stroke", function(stroke, target) {
+                });
+                 columnTemplate.adapter.add("stroke", function(stroke, target) {
                     return chart.colors.getIndex(target.dataItem.index);
                 })
             }); // end am4core.ready()
