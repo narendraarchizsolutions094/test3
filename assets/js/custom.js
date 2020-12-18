@@ -191,9 +191,9 @@ $("input[name='product_filter[]']").on('change',function(){
         success: function(data){       
            var enq_url = base_url+'enquiry/create';
            var curr_url = window.location.href;           
-            if(curr_url == enq_url){               
-                window.location.reload();
-            }
+            // if(curr_url == enq_url){               
+            // }
+            window.location.reload();
         }
     });
 });
