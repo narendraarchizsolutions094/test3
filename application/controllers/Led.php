@@ -31,12 +31,12 @@ class Led extends CI_Controller {
 	    //$data['all_stage_lists'] = $this->Leads_Model->find_stage();
 		$data['all_stage_lists'] = $this->Leads_Model->get_leadstage_list_byprocess1($this->session->process,2);
 		
-		// if($this->session->user_id == 286){
-		// 	echo "<pre>";
-		// 	print_r($data['all_stage_lists']);
-		// 	echo "</pre>";
-		// 	echo $this->db->last_query();
-		// }
+		if($this->session->user_id == 286){
+			echo "<pre>";
+			print_r($data['all_stage_lists']);
+			echo "</pre>";
+			echo $this->db->last_query();
+		}
 		
 		$data['lead_score'] = $this->enquiry_model->get_leadscore_list();	
 		$data['created_bylist'] = $this->User_model->user_list();	
