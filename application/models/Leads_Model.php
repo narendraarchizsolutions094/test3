@@ -376,22 +376,17 @@ public function all_description($diesc) {
     }
 
     public function get_leadstage_list_byprocess1($process_id,$for=0) {
-        //print_r($process_id);exit();
-        // print_r($this->session->userdata('companey_id'));
-         if(empty($process_id)){
-        
-           $id1 = '';
-       }
-       if(is_array($process_id))
-       {
+        if(empty($process_id)){        
+            $id1 = '';
+        }
+        if(is_array($process_id))
+        {
            $id = implode(',',$process_id);
            $id1 = explode(",", $id);
-       }
-   
-    else{
-       
-         $id1 = $process_id;
-       } 
+        }   
+        else{       
+            $id1 = $process_id;
+        } 
         $this->db->where('comp_id',$this->session->userdata('companey_id'));
         if($for)
             $this->db->where("FIND_IN_SET(".$for.",stage_for) >0");

@@ -288,7 +288,7 @@ input[name=lead_stages]{
     <div id="crumbs">
     <ul>
     <?php
-    if($this->session->companey_id==1)
+    if($this->session->companey_id==1 || $this->session->companey_id==65)
     {
       if(!empty($all_stage_lists))
       {
