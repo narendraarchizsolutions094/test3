@@ -548,6 +548,13 @@ class Ticket_Model extends CI_Model
 	}
 	public function createddatewise($type,$idate)
 	{
+		$process	=	$this->session->process[0];		
+		$all_reporting_ids  = $this->common_model->get_categories($this->session->user_id);
+		
+		$where = " ( tbl_ticket.added_by IN (".implode(',', $all_reporting_ids).')';
+		$where .= " OR tbl_ticket.assign_to IN (".implode(',', $all_reporting_ids).'))';  
+		$this->db->where($where);
+		
 		$count = $this->db->where(array('company'=>$this->session->companey_id,'complaint_type'=>$type))->like('coml_date', $idate)->count_all_results('tbl_ticket');
 		return $count;
 	}
@@ -564,6 +571,14 @@ class Ticket_Model extends CI_Model
 	}
 	public function countrefferedBy($rfid,$fromdate,$todate)
 	{
+		$process	=	$this->session->process[0];		
+		$all_reporting_ids  = $this->common_model->get_categories($this->session->user_id);
+		
+		$where = " ( tbl_ticket.added_by IN (".implode(',', $all_reporting_ids).')';
+		$where .= " OR tbl_ticket.assign_to IN (".implode(',', $all_reporting_ids).'))';  
+		$this->db->where($where);
+		
+
 		$data= $this->db->where(array('company' => $this->session->companey_id, 'referred_by' => $rfid));
 		if($fromdate!='all'){
 					
@@ -576,6 +591,13 @@ class Ticket_Model extends CI_Model
 	}
 	public function countPriority($type,$fromdate,$todate)
 	{
+		$process	=	$this->session->process[0];		
+		$all_reporting_ids  = $this->common_model->get_categories($this->session->user_id);
+		
+		$where = " ( tbl_ticket.added_by IN (".implode(',', $all_reporting_ids).')';
+		$where .= " OR tbl_ticket.assign_to IN (".implode(',', $all_reporting_ids).'))';  
+		$this->db->where($where);
+		
 		$data = $this->db->where(array('company' => $this->session->companey_id, 'priority' => $type));
 		
 		if($fromdate!='all'){
@@ -588,6 +610,14 @@ class Ticket_Model extends CI_Model
 	}
 	public function complaint_type($type,$fromdate,$todate)
 	{
+		$process	=	$this->session->process[0];		
+		$all_reporting_ids  = $this->common_model->get_categories($this->session->user_id);
+		
+		$where = " ( tbl_ticket.added_by IN (".implode(',', $all_reporting_ids).')';
+		$where .= " OR tbl_ticket.assign_to IN (".implode(',', $all_reporting_ids).'))';  
+		$this->db->where($where);
+		
+
 		$data = $this->db->where(array('company' => $this->session->companey_id, 'complaint_type' => $type));
 		if($fromdate!='all'){
 					
@@ -682,7 +712,7 @@ class Ticket_Model extends CI_Model
 		$where .= " OR tbl_ticket.assign_to IN (".implode(',', $all_reporting_ids).'))';  
 		$this->db->where($where);
 		
-		
+
 		$count= $this->db->where('product',$id);
 		if($fromdate!='all'){
 			$count=$this->db->where('last_update >=', $fromdate);
