@@ -584,7 +584,7 @@ public function updateEnquiryTab_post()
   public function get_mail_template_post()
   {    
     $this->db->where('temp_for',$this->input->post('msg_type'));
-    $this->db->where('response_type',1);
+    $this->db->where('response_type IN (0,1) ');
     $this->db->where('comp_id',$this->input->post('company_id'));
     $res=$this->db->get('api_templates');
     $q=$res->result_array();
