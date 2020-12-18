@@ -1578,6 +1578,9 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                         </ul>
 
                     </li>
+                    <?php
+                        $disposition_in_menu  = get_sys_parameter('disposition_in_menu','COMPANY_SETTING');                        
+                    ?>
 
                     <li class="treeview <?php echo (($segment1 == "enq" || ($segment1 == "enquiry" && $segment2 == "view")) ? "active" : null) ?>"
                         style="<?php if(in_array(60,$module) || in_array(61,$module) || in_array(62,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
@@ -1590,6 +1593,33 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                                 <?php echo display('enquiry') ?></p> <?php } ?>
                         </a>
                     </li>
+                    
+                    <?php
+                    if (!empty($disposition_in_menu)) 
+                    { 
+                      $x = json_decode($disposition_in_menu);
+                      foreach ($x as $des)
+                      { 
+                        $ci = &get_instance();
+                        $ci->load->database();
+
+                        $desp = $ci->db->where(array('stg_id'=>$des->stage_id,"FIND_IN_SET(1,stage_for)>"=>0))->get('lead_stage')->row();
+                        $des_title = '';
+                        if(!empty($desp))
+                        {
+                          $des_title = $desp->lead_stage_name;
+                        }
+                        ?>
+                         <li class="<?php echo (($segment1 == "client") && (!empty($_GET['desposition']) && $_GET['desposition'] == $des->stage_id) ) ? "active" : null ?>">                           
+                          <a href="<?php echo base_url("client/desposition?desposition=").$des->stage_id; ?>">
+                              <i class="<?=$des->icon;?>" style="color:#fff;font-size:20px;background:#3498db;padding:7px;border-radius:4px;width:30px;"></i> &nbsp;<?=$des_title?>                 
+                          </a>
+                         </li>
+                        <?php
+                      }
+                    }
+                    ?>
+
 
                     <li class="<?php echo ($segment1 == "led" || $segment2 == 'lead_details') ? "active" : null ?>"
                         style="<?php if(in_array(70,$module) || in_array(71,$module) || in_array(72,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
@@ -1604,6 +1634,31 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                         </a>
 
                     </li>
+                    <?php
+                    if (!empty($disposition_in_menu)) 
+                    { 
+                      $x = json_decode($disposition_in_menu);
+                      foreach ($x as $des)
+                      { 
+                        $ci = &get_instance();
+                        $ci->load->database();
+
+                        $desp = $ci->db->where(array('stg_id'=>$des->stage_id,"FIND_IN_SET(2,stage_for)>"=>0))->get('lead_stage')->row();
+                        $des_title = '';
+                        if(!empty($desp))
+                        {
+                          $des_title = $desp->lead_stage_name;
+                        }
+                        ?>
+                         <li class="<?php echo (($segment1 == "client") && (!empty($_GET['desposition']) && $_GET['desposition'] == $des->stage_id) ) ? "active" : null ?>">                           
+                          <a href="<?php echo base_url("client/desposition?desposition=").$des->stage_id; ?>">
+                              <i class="<?=$des->icon;?>" style="color:#fff;font-size:20px;background:#3498db;padding:7px;border-radius:4px;width:30px;"></i> &nbsp;<?=$des_title?>                 
+                          </a>
+                         </li>
+                        <?php
+                      }
+                    }
+                    ?>
 
                     <li class="<?php echo (($segment1 == "client" && empty($_GET['stage'])) && $segment2!='visits'? "active" : null) ?>"
                         style="<?php if(in_array(80,$module) || in_array(81,$module) || in_array(82,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
@@ -1617,6 +1672,32 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                         </a>
 
                     </li>
+
+                    <?php
+                    if (!empty($disposition_in_menu)) 
+                    { 
+                      $x = json_decode($disposition_in_menu);
+                      foreach ($x as $des)
+                      { 
+                        $ci = &get_instance();
+                        $ci->load->database();
+
+                        $desp = $ci->db->where(array('stg_id'=>$des->stage_id,"FIND_IN_SET(3,stage_for)>"=>0))->get('lead_stage')->row();
+                        $des_title = '';
+                        if(!empty($desp))
+                        {
+                          $des_title = $desp->lead_stage_name;
+                        }
+                        ?>
+                         <li class="<?php echo (($segment1 == "client") && (!empty($_GET['desposition']) && $_GET['desposition'] == $des->stage_id) ) ? "active" : null ?>">                           
+                          <a href="<?php echo base_url("client/desposition?desposition=").$des->stage_id; ?>">
+                              <i class="<?=$des->icon;?>" style="color:#fff;font-size:20px;background:#3498db;padding:7px;border-radius:4px;width:30px;"></i> &nbsp;<?=$des_title?>                 
+                          </a>
+                         </li>
+                        <?php
+                      }
+                    }
+                    ?>
 
                     <?php
                   $enquiry_separation  = get_sys_parameter('enquiry_separation','COMPANY_SETTING');                  
@@ -1642,35 +1723,8 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                     }
                   }
 
-                  $disposition_in_menu  = get_sys_parameter('disposition_in_menu','COMPANY_SETTING');    
+                  
 
-                  if (!empty($disposition_in_menu)) 
-                  { 
-                    //echo json_encode(array(array('stage_id'=>299,'icon'=>'<i class="fa fa-user"></i>')));
-                    //echo $disposition_in_menu; exit();
-                    $x = json_decode($disposition_in_menu);
-                  //print_r($x); exit();
-                    foreach ($x as $des)
-                    { 
-                      $ci = &get_instance();
-                      $ci->load->database();
-                      $desp = $ci->db->where('stg_id',$des->stage_id)->get('lead_stage')->row();
-                      $des_title = '';
-                      if(!empty($desp))
-                      {
-                        $des_title = $desp->lead_stage_name;
-                      }
-                      ?>
-                       <li class="<?php echo (($segment1 == "client") && (!empty($_GET['desposition']) && $_GET['desposition'] == $des->stage_id) ) ? "active" : null ?>">
-                         
-                        <a href="<?php echo base_url("client/desposition?desposition=").$des->stage_id; ?>">
-                            <i class="<?=$des->icon;?>" style="color:#fff;font-size:20px;background:#3498db;padding:7px;border-radius:4px;width:30px;"></i> &nbsp;<?=$des_title?>                 
-                        </a>
-
-                       </li>
-                      <?php
-                    }
-                  }
 
                 if($this->session->companey_id==65)
                 {
