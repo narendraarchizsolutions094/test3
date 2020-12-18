@@ -1604,6 +1604,9 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                         $ci->load->database();
 
                         $desp = $ci->db->where(array('stg_id'=>$des->stage_id,"FIND_IN_SET(1,stage_for)>"=>1))->get('lead_stage')->row();
+                        if($this->session->user_id == 286){
+                            echo $this->db->last_query();
+                        }
                         $des_title = '';
                         if(!empty($desp))
                         {
