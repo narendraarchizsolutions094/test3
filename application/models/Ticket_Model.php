@@ -604,6 +604,14 @@ class Ticket_Model extends CI_Model
 	}
 	public function countTSourse($lsid,$fromdate,$todate)
 	{
+		$process	=	$this->session->process[0];		
+		$all_reporting_ids  = $this->common_model->get_categories($this->session->user_id);
+		
+		$where = " ( tbl_ticket.added_by IN (".implode(',', $all_reporting_ids).')';
+		$where .= " OR tbl_ticket.assign_to IN (".implode(',', $all_reporting_ids).'))';  
+		$this->db->where($where);
+		
+
 		$count = $this->db->where(array('company' => $this->session->companey_id, 'sourse' => $lsid));
 		if($fromdate!='all'){
 			$count=$this->db->where('last_update >=', $fromdate);
@@ -620,6 +628,14 @@ class Ticket_Model extends CI_Model
 
 	public function countTstage($stg_id,$fromdate,$todate)
 	{
+		$process	=	$this->session->process[0];		
+		$all_reporting_ids  = $this->common_model->get_categories($this->session->user_id);
+		
+		$where = " ( tbl_ticket.added_by IN (".implode(',', $all_reporting_ids).')';
+		$where .= " OR tbl_ticket.assign_to IN (".implode(',', $all_reporting_ids).'))';  
+		$this->db->where($where);
+		
+
 		$count = $this->db->where(array('company' => $this->session->companey_id, 'ticket_stage' => $stg_id));
 		if($fromdate!='all'){
 			$count=$this->db->where('last_update >=', $fromdate);
@@ -647,7 +663,7 @@ class Ticket_Model extends CI_Model
 		$where = " ( tbl_ticket.added_by IN (".implode(',', $all_reporting_ids).')';
 		$where .= " OR tbl_ticket.assign_to IN (".implode(',', $all_reporting_ids).'))';  
 		$this->db->where($where);
-		
+
 		$count = $this->db->where(array('tbl_ticket.process_id' => $process,'tbl_ticket.company' => $this->session->companey_id, 'tbl_ticket.ticket_substage' => $stg_id));
 		
 		if($fromdate!='all'){
@@ -659,6 +675,14 @@ class Ticket_Model extends CI_Model
 	}
 	public function countproduct_ticket($id,$fromdate,$todate)
 	{
+		$process	=	$this->session->process[0];		
+		$all_reporting_ids  = $this->common_model->get_categories($this->session->user_id);
+		
+		$where = " ( tbl_ticket.added_by IN (".implode(',', $all_reporting_ids).')';
+		$where .= " OR tbl_ticket.assign_to IN (".implode(',', $all_reporting_ids).'))';  
+		$this->db->where($where);
+		
+		
 		$count= $this->db->where('product',$id);
 		if($fromdate!='all'){
 			$count=$this->db->where('last_update >=', $fromdate);
