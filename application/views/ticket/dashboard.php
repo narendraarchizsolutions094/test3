@@ -488,7 +488,7 @@ $(document).ready(function() {
         processData: false,
         contentType: false,
         success: function(response) {
-            alert('loaded');
+            //alert('loaded');
             am4core.ready(function() { // Themes begin
                 am4core.useTheme(am4themes_animated);
                 // Themes end                // Create chart instance
