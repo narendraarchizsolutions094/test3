@@ -45,7 +45,10 @@
     width: 100%;
     height: 300px;
 }
-
+#chartdiv6 {
+    width: 100%;
+    height: 1500px;
+}
 #product_Ticket {
     width: 100%;
     height: 300px;
