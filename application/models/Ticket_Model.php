@@ -630,6 +630,11 @@ class Ticket_Model extends CI_Model
 	}
 	public function subsource()
 	{
+		$process	=	$this->session->process[0];
+
+		$this->db->join('lead_stage','lead_stage.stg_id=lead_description.lead_stage_id');
+		$this->db->where('FIND_IN_SET($process_id,lead_stage.process_id)>',0);
+		$this->db->where('FIND_IN_SET(4,lead_stage.stage_for)>',0);
 		$subsource = $this->db->where(array('comp_id' => $this->session->companey_id))->get('lead_description')->result();
 		return $subsource;
 	}
