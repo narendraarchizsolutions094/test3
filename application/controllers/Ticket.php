@@ -1517,8 +1517,10 @@ class Ticket extends CI_Controller
 	{
 		$fromdate=$this->uri->segment(3);
 	    $todate=$this->uri->segment(4);
+		$process = $this->session->process[0]??0;
 		$data=[];
-		$getSourse = $this->Ticket_Model->getstage(4);
+
+		$getSourse = $this->leads_Model->find_estage($process,4);
 		// print_r($getSourse);
 		// die();
 		foreach ($getSourse as $key => $value) {
