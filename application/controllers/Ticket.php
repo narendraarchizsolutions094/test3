@@ -1520,7 +1520,7 @@ class Ticket extends CI_Controller
 		$process = $this->session->process[0]??0;
 		$data=[];
 
-		$getSourse = $this->leads_Model->find_estage($process,4);
+		$getSourse = $this->Leads_Model-->find_estage($process,4);
 		// print_r($getSourse);
 		// die();
 		foreach ($getSourse as $key => $value) {
