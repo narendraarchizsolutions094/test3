@@ -508,7 +508,9 @@ $(document).ready(function() {
                 labelTemplate.verticalCenter = "middle";
                 labelTemplate.dy = 10; // moves it a bit down;
                 labelTemplate.inside =
-                    false; // this is done to avoid settings which are not suitable when label is rotated                var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+                    false; 
+                // this is done to avoid settings which are not suitable when label is rotated                
+                var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
                 valueAxis.renderer.grid.template.disabled = true; // Create series
                 var series = chart.series.push(new am4charts.ConeSeries());
                 series.dataFields.valueY = "value";
