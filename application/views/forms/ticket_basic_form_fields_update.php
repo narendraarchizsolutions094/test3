@@ -148,11 +148,16 @@ echo'
                 <div class="form-group">
                   <label><?=display('tracking_no')?> <i class="text-danger opt" style="display: none;">*</i>
                         <?php
-                        if($this->session->companey_id==65){
+                        if($ticket->process_id == 141){
+                          ?>                            
+                           <a href='http://203.112.143.175/ecargont/' target="_blank" class='float-right'><u> Go To Ecargo </u></a>
+                          <?php
+                          }
+                          if($ticket->process_id == 198){
                             ?>                            
-                             <a href='http://203.112.143.175/ecargont/' target="_blank" class='float-right'> <u> Go To Ecargo </u> </a>
+                             <a href='http://180.179.114.148/ecargovx/' target="_blank" class='float-right'><u> Go To Ecargo </u></a>
                             <?php
-                        }
+                            }
                         ?></label>
                   <input type="text" name="tracking_no" class="form-control" onblur="loadTracking(this)" value="<?php if(!empty($ticket->tracking_no)){ echo $ticket->tracking_no;} ?>">
                 </div>

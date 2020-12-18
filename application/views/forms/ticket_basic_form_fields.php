@@ -157,10 +157,17 @@ echo'<div class="trackingDetails"></div>';
                         <label><?=display('tracking_no')?> <i class="text-danger opt">*</i>
                         <?php
                         if($this->session->companey_id==65){
+                            if(is_array($this->session->process) && !empty($this->session->process[0]) && $this->session->process[0] == 141){
                             ?>                            
                              <a href='http://203.112.143.175/ecargont/' target="_blank" class='float-right'><u> Go To Ecargo </u></a>
                             <?php
-                        }
+                            }
+                            if(is_array($this->session->process) && !empty($this->session->process[0]) && $this->session->process[0] == 198){
+                              ?>                            
+                               <a href='http://180.179.114.148/ecargovx/' target="_blank" class='float-right'><u> Go To Ecargo </u></a>
+                              <?php
+                              }
+                        }                        
                         ?>
                         </label>
                         <input type="text" name="tracking_no" class="form-control" onblur="loadTracking(this),match_previous(this.value)" required>
