@@ -119,7 +119,7 @@
     </div>
     <div class="col-md-6">
         <center>
-            <h3>Complaint Type/ Quiery Type</h3>
+            <h3>Type Wise</h3>
         </center>
         <div id="chartdiv2"></div>
     </div>
@@ -127,14 +127,14 @@
 <br><br>
 <br>
 <center>
-    <h3>Substage Vs Ticket</h3>
+    <h3>Substage Wise Ticket</h3>
 </center>
 <!-- HTML -->
 <div id="chartdiv_substage"></div>
 <br>
 <br>
 <center>
-    <h3>Stage Vs Ticket</h3>
+    <h3>Stage Wise Ticket</h3>
 </center><!-- HTML -->
 <div id="chartdiv5"></div>
 <br>
@@ -142,13 +142,13 @@
 <div class="row">
     <div class="col-md-6">
         <center>
-            <h3>Source Vs Ticket</h3>
+            <h3>Source Wise Ticket</h3>
         </center>
         <div id="chartdiv6"></div>
     </div>
     <div class="col-md-6">
         <center>
-            <h3>Product/Service Vs Ticket </h3>
+            <h3>Product/Service Wise Ticket </h3>
         </center>
         <div id="product_Ticket"></div>
     </div>

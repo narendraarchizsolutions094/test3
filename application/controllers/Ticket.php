@@ -1546,10 +1546,10 @@ class Ticket extends CI_Controller
 	    $todate=$this->uri->segment(4);
 		$data=[];
 		//fetch products
-		$products=$this->db->where('comp_id',$this->session->companey_id)->get('tbl_product')->result();
+		$products=$this->db->where('comp_id',$this->session->companey_id)->get('tbl_product_country')->result();
 		foreach ($products as $key => $value) {
 		$count = $this->Ticket_Model->countproduct_ticket($value->sb_id,$fromdate,$todate);
-		$data[] = ['name' => $value->product_name, 'value' => $count];
+		$data[] = ['name' => $value->country_name, 'value' => $count];
 		}
 		echo json_encode($data);
 	}
