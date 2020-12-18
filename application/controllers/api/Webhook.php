@@ -133,7 +133,7 @@ class Webhook extends REST_Controller {
     
     if ($this->form_validation->run() == true){
         
-        $this->db->select("enquiry_id,Enquery_id");        
+        $this->db->select("enquiry_id,Enquery_id,name_prefix,name,lastname,address,email");        
         $this->db->from("enquiry");
         $this->db->where("phone",$phone);
         $this->db->where('comp_id',$comp_id);
