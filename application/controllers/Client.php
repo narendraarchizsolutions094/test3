@@ -60,7 +60,14 @@ class Client extends CI_Controller {
         $data['created_bylist'] = $this->User_model->user_list();
         $data['sourse'] = $this->report_model->all_source();
         $data['datasourse'] = $this->report_model->all_datasource(); 
-	    $data['dfields']  = $this->enquiry_model-> getformfield();		 
+        $data['dfields']  = $this->enquiry_model-> getformfield();		 
+        
+        if(!empty($_GET['desposition'])){
+            $desp = $this->db->where('stg_id',$_GET['desposition'])->get('lead_stage')->row();        
+			$data[$desp] = $desp;			
+			$this->session->set_userdata('enquiry_filters_sess',array('stage'=>$_GET['desposition']));
+		}
+        
         $data['subsource_list'] = $this->Datasource_model->subsourcelist();     
         $enquiry_separation  = get_sys_parameter('enquiry_separation','COMPANY_SETTING');                  
         if (!empty($enquiry_separation) && !empty($_GET['stage'])) {                    

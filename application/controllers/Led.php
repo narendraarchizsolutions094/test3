@@ -37,6 +37,11 @@ class Led extends CI_Controller {
 		// 	echo "</pre>";
 		// 	echo $this->db->last_query();
 		// }
+		if(!empty($_GET['desposition'])){
+            $desp = $this->db->where('stg_id',$_GET['desposition'])->get('lead_stage')->row();        
+			$data[$desp] = $desp;			
+			$this->session->set_userdata('enquiry_filters_sess',array('stage'=>$_GET['desposition']));
+		}
 		
 		$data['lead_score'] = $this->enquiry_model->get_leadscore_list();	
 		$data['created_bylist'] = $this->User_model->user_list();	
