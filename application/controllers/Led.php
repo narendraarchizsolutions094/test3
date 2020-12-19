@@ -29,7 +29,7 @@ class Led extends CI_Controller {
 		$data['datasourse'] = $this->report_model->all_datasource();
         $data['drops'] 		= $this->enquiry_model->get_drop_list();		
 	    //$data['all_stage_lists'] = $this->Leads_Model->find_stage();
-		$data['all_stage_lists'] = $this->Leads_Model->get_leadstage_list_byprocess1($this->session->process,2);
+		$data['all_stage_lists'] = $this->Leads_Model->get_leadstage_list_byprocess1($this->session->process);
 		
 		// if($this->session->user_id == 286){
 		// 	echo "<pre>";
