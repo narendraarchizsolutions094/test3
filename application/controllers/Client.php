@@ -72,7 +72,7 @@ class Client extends CI_Controller {
             $data['title'] = display('Client');
             $data['data_type'] = 3;
         }
-        $data['all_stage_lists'] = $this->Leads_Model->get_leadstage_list_byprocess1($this->session->process);
+        $data['all_stage_lists'] = $this->Leads_Model->get_leadstage_list_byprocess1($this->session->process,array(1,2,3));
         
         $data['content'] = $this->load->view('enquiry_n', $data, true);
         $this->load->view('layout/main_wrapper', $data);
