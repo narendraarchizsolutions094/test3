@@ -388,8 +388,19 @@ public function all_description($diesc) {
             $id1 = $process_id;
         } 
         $this->db->where('comp_id',$this->session->userdata('companey_id'));
-        if($for)
-            $this->db->where("FIND_IN_SET($for,stage_for) >0");
+        if(!empty($for)){
+            if(is_array($for)){
+                $this->db->group_start();
+                foreach($for as $k=>$v){
+                    $this->db->or_where("FIND_IN_SET($v,stage_for) >0");                    
+                }
+                $this->db->group_end();
+            }            
+            else{
+                $this->db->where("FIND_IN_SET($for,stage_for) >0");
+            }
+                
+        }
 
         $id1    =     array_map('intval', $id1);
         $this->db->where_in("process_id",$id1);
