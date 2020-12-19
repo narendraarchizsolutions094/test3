@@ -224,6 +224,25 @@ class Lead extends CI_Controller
             $data['level'] = $this->location_model->find_level();
             $data['length'] = $this->location_model->find_length();
         }
+
+        if($this->session->companey_id == 65)
+        {
+            $data['branch']=$this->db->where('comp_id',$this->session->companey_id)->get('branch')->result();
+            $data['CommercialInfo'] = $this->enquiry_model->getComInfo($enquiry_id);
+            //print_r($data['CommercialInfo']); exit();
+            //fetch last entry
+            $comm_data=$this->db->where(array('enquiry_id'=>$enquiry_id))->order_by('id',"desc")
+            ->limit(1)->get('commercial_info');
+            $data['commInfoCount']=$comm_data->num_rows();
+            $data['commInfoData']=$comm_data->row();
+        } 
+        else
+        {    $data['CommercialInfo'] =array();
+             $data['branch'] =array();
+            $data['commInfoCount']=0;
+            $data['commInfoData']=array();
+        }
+
         $data['course_list'] = $this->Leads_Model->get_course_list();
         $this->enquiry_model->make_enquiry_read($data['details']->Enquery_id);
         $data['content'] = $this->load->view('enquiry_details1', $data, true);
@@ -718,7 +737,7 @@ class Lead extends CI_Controller
     {
         $enquiry_id = $this->uri->segment('3');
         $lead = $this->Leads_Model->get_leadListDetailsby_id($enquiry_id);
-        // print_r($lead->status); exit;
+         //print_r($lead); exit;
         $leadSataus = $lead->status;
            $Enquery_id = $lead->Enquery_id;
           $stage = $lead->status;
@@ -754,10 +773,14 @@ class Lead extends CI_Controller
             } else {
                 $url = 'led/index';
                 $comment = 'Converted to '.display('Client');
+                //echo $comment ; exit();
                 //insert follow up counter (3 is for client )
+                if(empty($lead->lead_created_date))
+                    $lead->lead_created_date='0000-00-00 00:00:00';
                 $this->enquiry_model->insetFollowupTime($enquiry_id, 3, $lead->lead_created_date, date('Y-m-d H:i:s'));
                 $this->db->set('status', 3);
             }
+            $this->db->set('client_created_date',date('Y-m-d h:i:s'));
             $this->db->set('created_date', date('Y-m-d H:i:s'));
             $this->db->set('update_date', '');
             $this->db->where('enquiry_id', $enquiry_id);

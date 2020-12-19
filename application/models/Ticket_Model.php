@@ -548,7 +548,14 @@ class Ticket_Model extends CI_Model
 	}
 	public function createddatewise($type,$idate)
 	{
-		$count = $this->db->where(array('company'=>$this->session->companey_id,'complaint_type'=>$type))->like('coml_date', $idate)->count_all_results('tbl_ticket');
+		$process	=	$this->session->process[0];		
+		$all_reporting_ids  = $this->common_model->get_categories($this->session->user_id);
+		
+		$where = " ( tbl_ticket.added_by IN (".implode(',', $all_reporting_ids).')';
+		$where .= " OR tbl_ticket.assign_to IN (".implode(',', $all_reporting_ids).'))';  
+		$this->db->where($where);
+		
+		$count = $this->db->where(array('process_id'=>$process,'company'=>$this->session->companey_id,'complaint_type'=>$type))->like('coml_date', $idate)->count_all_results('tbl_ticket');
 		return $count;
 	}
 	
@@ -564,7 +571,15 @@ class Ticket_Model extends CI_Model
 	}
 	public function countrefferedBy($rfid,$fromdate,$todate)
 	{
-		$data= $this->db->where(array('company' => $this->session->companey_id, 'referred_by' => $rfid));
+		$process	=	$this->session->process[0];		
+		$all_reporting_ids  = $this->common_model->get_categories($this->session->user_id);
+		
+		$where = " ( tbl_ticket.added_by IN (".implode(',', $all_reporting_ids).')';
+		$where .= " OR tbl_ticket.assign_to IN (".implode(',', $all_reporting_ids).'))';  
+		$this->db->where($where);
+		
+
+		$data= $this->db->where(array('process_id'=>$process,'company' => $this->session->companey_id, 'referred_by' => $rfid));
 		if($fromdate!='all'){
 					
 			$data=$this->db->where('last_update >=', $fromdate);
@@ -576,7 +591,14 @@ class Ticket_Model extends CI_Model
 	}
 	public function countPriority($type,$fromdate,$todate)
 	{
-		$data = $this->db->where(array('company' => $this->session->companey_id, 'priority' => $type));
+		$process	=	$this->session->process[0];		
+		$all_reporting_ids  = $this->common_model->get_categories($this->session->user_id);
+		
+		$where = " ( tbl_ticket.added_by IN (".implode(',', $all_reporting_ids).')';
+		$where .= " OR tbl_ticket.assign_to IN (".implode(',', $all_reporting_ids).'))';  
+		$this->db->where($where);
+		
+		$data = $this->db->where(array('process_id'=>$process,'company' => $this->session->companey_id, 'priority' => $type));
 		
 		if($fromdate!='all'){
 					
@@ -588,7 +610,15 @@ class Ticket_Model extends CI_Model
 	}
 	public function complaint_type($type,$fromdate,$todate)
 	{
-		$data = $this->db->where(array('company' => $this->session->companey_id, 'complaint_type' => $type));
+		$process	=	$this->session->process[0];		
+		$all_reporting_ids  = $this->common_model->get_categories($this->session->user_id);
+		
+		$where = " ( tbl_ticket.added_by IN (".implode(',', $all_reporting_ids).')';
+		$where .= " OR tbl_ticket.assign_to IN (".implode(',', $all_reporting_ids).'))';  
+		$this->db->where($where);
+		
+
+		$data = $this->db->where(array('process_id'=>$process,'company' => $this->session->companey_id, 'complaint_type' => $type));
 		if($fromdate!='all'){
 					
 			$data=$this->db->where('last_update >=', $fromdate);
@@ -604,7 +634,15 @@ class Ticket_Model extends CI_Model
 	}
 	public function countTSourse($lsid,$fromdate,$todate)
 	{
-		$count = $this->db->where(array('company' => $this->session->companey_id, 'sourse' => $lsid));
+		$process	=	$this->session->process[0];		
+		$all_reporting_ids  = $this->common_model->get_categories($this->session->user_id);
+		
+		$where = " ( tbl_ticket.added_by IN (".implode(',', $all_reporting_ids).')';
+		$where .= " OR tbl_ticket.assign_to IN (".implode(',', $all_reporting_ids).'))';  
+		$this->db->where($where);
+		
+
+		$count = $this->db->where(array('process_id'=>$process,'company' => $this->session->companey_id, 'sourse' => $lsid));
 		if($fromdate!='all'){
 			$count=$this->db->where('last_update >=', $fromdate);
 			$count=$this->db->where('last_update <=', $todate);
@@ -620,7 +658,15 @@ class Ticket_Model extends CI_Model
 
 	public function countTstage($stg_id,$fromdate,$todate)
 	{
-		$count = $this->db->where(array('company' => $this->session->companey_id, 'ticket_stage' => $stg_id));
+		$process	=	$this->session->process[0];		
+		$all_reporting_ids  = $this->common_model->get_categories($this->session->user_id);
+		
+		$where = " ( tbl_ticket.added_by IN (".implode(',', $all_reporting_ids).')';
+		$where .= " OR tbl_ticket.assign_to IN (".implode(',', $all_reporting_ids).'))';  
+		$this->db->where($where);
+		
+
+		$count = $this->db->where(array('process_id'=>$process,'company' => $this->session->companey_id, 'ticket_stage' => $stg_id));
 		if($fromdate!='all'){
 			$count=$this->db->where('last_update >=', $fromdate);
 			$count=$this->db->where('last_update <=', $todate);
@@ -630,13 +676,26 @@ class Ticket_Model extends CI_Model
 	}
 	public function subsource()
 	{
-		$subsource = $this->db->where(array('comp_id' => $this->session->companey_id))->get('lead_description')->result();
+		$process	=	$this->session->process[0];
+
+		$this->db->join('lead_stage','lead_stage.stg_id=lead_description.lead_stage_id');
+		$this->db->where("FIND_IN_SET($process,lead_stage.process_id)>",0);
+		$this->db->where("FIND_IN_SET(4,lead_stage.stage_for)>",0);
+		$subsource = $this->db->where(array('lead_stage.comp_id' => $this->session->companey_id))->get('lead_description')->result();
 		return $subsource;
 	}
 
 	public function countSubsource($stg_id,$fromdate,$todate)
 	{
-		$count = $this->db->where(array('company' => $this->session->companey_id, 'ticket_substage' => $stg_id));
+		$process	=	$this->session->process[0];		
+		$all_reporting_ids  = $this->common_model->get_categories($this->session->user_id);
+		
+		$where = " ( tbl_ticket.added_by IN (".implode(',', $all_reporting_ids).')';
+		$where .= " OR tbl_ticket.assign_to IN (".implode(',', $all_reporting_ids).'))';  
+		$this->db->where($where);
+
+		$count = $this->db->where(array('tbl_ticket.process_id' => $process,'tbl_ticket.company' => $this->session->companey_id, 'tbl_ticket.ticket_substage' => $stg_id));
+		
 		if($fromdate!='all'){
 			$count=$this->db->where('last_update >=', $fromdate);
 			$count=$this->db->where('last_update <=', $todate);
@@ -646,6 +705,14 @@ class Ticket_Model extends CI_Model
 	}
 	public function countproduct_ticket($id,$fromdate,$todate)
 	{
+		$process	=	$this->session->process[0];		
+		$all_reporting_ids  = $this->common_model->get_categories($this->session->user_id);
+		
+		$where = " ( tbl_ticket.added_by IN (".implode(',', $all_reporting_ids).')';
+		$where .= " OR tbl_ticket.assign_to IN (".implode(',', $all_reporting_ids).'))';  
+		$this->db->where($where);
+		
+
 		$count= $this->db->where('product',$id);
 		if($fromdate!='all'){
 			$count=$this->db->where('last_update >=', $fromdate);

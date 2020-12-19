@@ -1497,8 +1497,8 @@ class Ticket extends CI_Controller
 	    $todate=$this->uri->segment(4);
 		$complaint = $this->Ticket_Model->complaint_type(1,$fromdate,$todate);
 		$query = $this->Ticket_Model->complaint_type(2,$fromdate,$todate);
-		$data[] = ['name' => 'complaint', 'value' => $complaint];
-		$data[] = ['name' => 'query', 'value' => $query];
+		$data[] = ['name' => 'Complaint', 'value' => $complaint];
+		$data[] = ['name' => 'Query', 'value' => $query];
 		echo json_encode($data);
 	}
 	public function source_typeJson()
@@ -1517,8 +1517,10 @@ class Ticket extends CI_Controller
 	{
 		$fromdate=$this->uri->segment(3);
 	    $todate=$this->uri->segment(4);
+		$process = $this->session->process[0]??0;
 		$data=[];
-		$getSourse = $this->Ticket_Model->getstage(4);
+
+		$getSourse = $this->Leads_Model->find_estage($process,4);
 		// print_r($getSourse);
 		// die();
 		foreach ($getSourse as $key => $value) {
@@ -1546,10 +1548,10 @@ class Ticket extends CI_Controller
 	    $todate=$this->uri->segment(4);
 		$data=[];
 		//fetch products
-		$products=$this->db->where('comp_id',$this->session->companey_id)->get('tbl_product')->result();
+		$products=$this->db->where('comp_id',$this->session->companey_id)->get('tbl_product_country')->result();
 		foreach ($products as $key => $value) {
-		$count = $this->Ticket_Model->countproduct_ticket($value->sb_id,$fromdate,$todate);
-		$data[] = ['name' => $value->product_name, 'value' => $count];
+		$count = $this->Ticket_Model->countproduct_ticket($value->id,$fromdate,$todate);
+		$data[] = ['name' => $value->country_name, 'value' => $count];
 		}
 		echo json_encode($data);
 	}

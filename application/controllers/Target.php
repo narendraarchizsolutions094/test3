@@ -31,7 +31,7 @@ class Target extends CI_controller
 		$data['users'] = json_encode($u);
 
 
-		$data['all_goals'] = $this->Target_Model->getGoals()->result();
+		$data['all_goals'] = $this->Target_Model->getGoals();
 		
 		$data['content'] = $this->load->view('target/goal_list',$data,true);
 		$this->load->view('layout/main_wrapper',$data);
@@ -188,6 +188,16 @@ class Target extends CI_controller
 			echo'<center>Empty Team</center>';
 		}
 
+	}
+
+	public function goal_details($goal_id)
+	{
+		$this->load->model('Target_Model');
+
+		$data['title'] = 'Goal Details';
+		$data['goal'] = $this->Target_Model->getGoals(array('goals.goal_id'=>$goal_id))[0];
+		$data['content'] = $this->load->view('target/goal_details',$data,true);
+		$this->load->view('layout/main_wrapper',$data);
 	}
 
 }

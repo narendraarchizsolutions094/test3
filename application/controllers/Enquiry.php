@@ -120,6 +120,7 @@ class Enquiry extends CI_Controller
                         'ld_status' => '1'
                     );
                     $this->db->set('status', 3);
+                    $this->db->set('client_created_date',date('Y-m-d h:i:s'));
                     $this->db->where('enquiry_id', $key);
                     $this->db->update('enquiry');
                     $this->load->model('rule_model');
@@ -1350,7 +1351,7 @@ class Enquiry extends CI_Controller
             $data['length'] = $this->location_model->find_length();
         } 
         if ($this->session->companey_id == 65) {
-            $data['branch']=$this->db->where('comp_id',65)->get('branch')->result();
+            $data['branch']=$this->db->where('comp_id',$this->session->companey_id)->get('branch')->result();
             $data['CommercialInfo'] = $this->enquiry_model->getComInfo($enquiry_id);
             //fetch last entry
             $comm_data=$this->db->where(array('enquiry_id'=>$enquiry_id))->order_by('id',"desc")
@@ -1842,6 +1843,9 @@ Array
             $lead_discription = $this->input->post('lead_description');
             $comment = $this->input->post('comment');
             $expected_date = $this->input->post('expected_date');
+            if(!empty($expected_date))
+                $expected_date = date('Y-m-d h:i:s',strtotime($expected_date));
+
             if (!empty($lead_score)) {
                 $lead_score = $this->input->post('lead_score');
             }
@@ -1890,7 +1894,7 @@ Array
             $this->db->set('update_date', date('Y-m-d H:i:s'));
             $this->db->where('enquiry_id', $move_enquiry);
             $this->db->update('enquiry');
-
+           // echo $this->db->last_query(); exit();
             $this->load->model('rule_model');
             $this->rule_model->execute_rules($enquiry->row()->Enquery_id, array(1, 2, 3, 6, 7));
             $this->Leads_Model->add_comment_for_events('Enquiry Moved ', $enquiry->row()->Enquery_id);
@@ -3307,6 +3311,17 @@ public function timelinePopup()
             redirect($url);
             } 
     }
+ }
+
+ public function update_info_status()
+ {
+    $commerical_id = $this->input->post('id');
+    $status = $this->input->post('status');
+     $this->db->where('id',$commerical_id);
+     $this->db->where('comp_id',$this->session->companey_id);
+     $this->db->set('status',$status);
+     $this->db->update('commercial_info');
+     echo '1';
  }
     public function get_rate()
     {

@@ -34,6 +34,13 @@ class Enq extends CI_Controller
 		if (!empty($this->session->enq_type)) {
 			$this->session->unset_userdata('enq_type', $this->session->enq_type);
 		}
+		
+		if(!empty($_GET) && !empty($_GET['desposition'])){
+            $desp = $this->db->where('stg_id',$_GET['desposition'])->get('lead_stage')->row();        
+			$data['desp'] = $desp;			
+			$this->session->set_userdata('enquiry_filters_sess',array('stage'=>$_GET['desposition']));
+		}
+		
 		// $process =  0;
 		// if(!empty($this->session->process))
 		// 	$process = implode(',', $this->session->process);
@@ -43,7 +50,11 @@ class Enq extends CI_Controller
 		$data['created_bylist'] = $this->User_model->read();
 		$data['products'] = $this->dash_model->get_user_product_list();
 		$data['drops'] = $this->enquiry_model->get_drop_list();
-		$data['all_stage_lists'] = $this->Leads_Model->get_leadstage_list_byprocess1($this->session->process,1);
+		$data['all_stage_lists'] = $this->Leads_Model->get_leadstage_list_byprocess1($this->session->process,array(1,2,3));
+		
+		// if($this->session->user_id == 286){
+		// 	echo $this->db->last_query();
+		// }
 		$data['prodcntry_list'] = $this->enquiry_model->get_user_productcntry_list();
 		$data['state_list'] = $this->enquiry_model->get_user_state_list();
 		$data['city_list'] = $this->enquiry_model->get_user_city_list();
