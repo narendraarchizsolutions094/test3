@@ -1612,8 +1612,8 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                           $des_title = $desp->lead_stage_name;
                         
                         ?>
-                         <li class="<?php echo (($segment1 == "client") && (!empty($_GET['desposition']) && $_GET['desposition'] == $des->stage_id) ) ? "active" : null ?>">                           
-                          <a href="<?php echo base_url("client/desposition?desposition=").$des->stage_id; ?>">
+                         <li class="<?php echo (($segment1 == "enq") && (!empty($_GET['desposition']) && $_GET['desposition'] == $des->stage_id) ) ? "active" : null ?>">                           
+                          <a href="<?php echo base_url("enq/index?desposition=").$des->stage_id; ?>">
                               <i class="<?=$des->icon;?>" style="color:#fff;font-size:20px;background:#3498db;padding:7px;border-radius:4px;width:30px;"></i> &nbsp;<?=$des_title?>                 
                           </a>
                          </li>
@@ -1652,8 +1652,8 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                         {
                           $des_title = $desp->lead_stage_name;
                           ?>
-                         <li class="<?php echo (($segment1 == "client") && (!empty($_GET['desposition']) && $_GET['desposition'] == $des->stage_id) ) ? "active" : null ?>">                           
-                          <a href="<?php echo base_url("client/desposition?desposition=").$des->stage_id; ?>">
+                         <li class="<?php echo (($segment1 == "led") && (!empty($_GET['desposition']) && $_GET['desposition'] == $des->stage_id) ) ? "active" : null ?>">                           
+                          <a href="<?php echo base_url("led/index?desposition=").$des->stage_id; ?>">
                               <i class="<?=$des->icon;?>" style="color:#fff;font-size:20px;background:#3498db;padding:7px;border-radius:4px;width:30px;"></i> &nbsp;<?=$des_title?>                 
                           </a>
                          </li>
