@@ -28,8 +28,21 @@ class Led extends CI_Controller {
         $data['sourse'] = $this->report_model->all_source();
 		$data['datasourse'] = $this->report_model->all_datasource();
         $data['drops'] 		= $this->enquiry_model->get_drop_list();		
-	    $data['all_stage_lists'] = $this->Leads_Model->find_stage();
-        
+	    //$data['all_stage_lists'] = $this->Leads_Model->find_stage();
+		$data['all_stage_lists'] = $this->Leads_Model->get_leadstage_list_byprocess1($this->session->process,array(1,2,3));
+		
+		// if($this->session->user_id == 286){
+		// 	echo "<pre>";
+		// 	print_r($data['all_stage_lists']);
+		// 	echo "</pre>";
+		// 	echo $this->db->last_query();
+		// }
+		if(!empty($_GET) && !empty($_GET['desposition'])){
+            $desp = $this->db->where('stg_id',$_GET['desposition'])->get('lead_stage')->row();        
+			$data['desp'] = $desp;			
+			$this->session->set_userdata('enquiry_filters_sess',array('stage'=>$_GET['desposition']));
+		}
+		
 		$data['lead_score'] = $this->enquiry_model->get_leadscore_list();	
 		$data['created_bylist'] = $this->User_model->user_list();	
 		$data['data_type'] = 2;

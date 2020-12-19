@@ -34,6 +34,13 @@ class Enq extends CI_Controller
 		if (!empty($this->session->enq_type)) {
 			$this->session->unset_userdata('enq_type', $this->session->enq_type);
 		}
+		
+		if(!empty($_GET) && !empty($_GET['desposition'])){
+            $desp = $this->db->where('stg_id',$_GET['desposition'])->get('lead_stage')->row();        
+			$data['desp'] = $desp;			
+			$this->session->set_userdata('enquiry_filters_sess',array('stage'=>$_GET['desposition']));
+		}
+		
 		// $process =  0;
 		// if(!empty($this->session->process))
 		// 	$process = implode(',', $this->session->process);

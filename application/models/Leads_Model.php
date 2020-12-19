@@ -390,18 +390,46 @@ public function all_description($diesc) {
               $this->db->or_where('FIND_IN_SET('.$value.',process_id) >0');
             }
            // $id = implode(',',$process_id);
-            $id1 = '';
+           // $id1 = '';
         }
         else
         {
          $id1 = $process_id;
 
-         $this->db->where_in("process_id",$id1);
+         $this->db->where("FIND_IN_SET(".$id1.",process_id)");
         } 
         $this->db->where('comp_id',$this->session->userdata('companey_id'));
-        if($for)
-            $this->db->where("FIND_IN_SET(".$for.",stage_for) >0");
+        // if($for)
+        //     $this->db->where("FIND_IN_SET(".$for.",stage_for) >0");
 
+        // if(empty($process_id)){        
+        //     $id1 = '';
+        // }
+        // if(is_array($process_id))
+        // {
+        //    $id = implode(',',$process_id);
+        //    $id1 = explode(",", $id);
+        // }   
+        // else{       
+        //     $id1 = $process_id;
+        // } 
+        // $this->db->where('comp_id',$this->session->userdata('companey_id'));
+        if(!empty($for)){
+            if(is_array($for)){
+                $this->db->group_start();
+                foreach($for as $k=>$v){
+                    $this->db->or_where("FIND_IN_SET($v,stage_for) >0");                    
+                }
+                $this->db->group_end();
+            }            
+            else{
+                $this->db->where("FIND_IN_SET($for,stage_for) >0");
+            }
+                
+        }
+
+        // $id1    =     array_map('intval', $id1);
+        // $this->db->where_in("process_id",$id1);
         // $this->db->order_by("stg_id", "asc");
         $query = $this->db->get('lead_stage');
         //echo $this->db->last_query(); exit();

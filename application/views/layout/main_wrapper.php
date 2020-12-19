@@ -1578,6 +1578,9 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                         </ul>
 
                     </li>
+                    <?php
+                        $disposition_in_menu  = get_sys_parameter('disposition_in_menu','COMPANY_SETTING');                        
+                    ?>
 
                     <?php
                     /*

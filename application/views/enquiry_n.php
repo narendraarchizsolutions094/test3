@@ -285,13 +285,11 @@ $stage_pipeline  = get_sys_parameter('stage_pipeline','COMPANY_SETTING');
 if(!empty($stage_pipeline) && $stage_pipeline=='1')
 {
 ?>
-
 <div class="row">
   <div class="col-lg-12 " style="padding-top: 5px;">
     <div id="crumbs">
     <ul>
     <?php
-
       if(!empty($all_stage_lists))
       {
         foreach ($all_stage_lists as $stage) 
@@ -1444,7 +1442,12 @@ $(document).on('click',".top_pill",function(){
         
         //update_top_filter_counter(); 
         var form_data = $("#enq_filter").serialize();  
-
+        <?php
+          if(!empty($_GET['desposition']))
+          {
+            echo'form_data+="&stage="+'.$_GET['desposition'].';';
+          }
+        ?>
         //alert(form_data);
 
         $.ajax({
