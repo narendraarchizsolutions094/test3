@@ -62,7 +62,7 @@ class Client extends CI_Controller {
         $data['datasourse'] = $this->report_model->all_datasource(); 
         $data['dfields']  = $this->enquiry_model-> getformfield();		 
         
-        if(!empty($_GET['desposition'])){
+        if(!empty($_GET) && !empty($_GET['desposition'])){
             $desp = $this->db->where('stg_id',$_GET['desposition'])->get('lead_stage')->row();        
 			$data[$desp] = $desp;			
 			$this->session->set_userdata('enquiry_filters_sess',array('stage'=>$_GET['desposition']));

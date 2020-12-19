@@ -37,7 +37,7 @@ class Led extends CI_Controller {
 		// 	echo "</pre>";
 		// 	echo $this->db->last_query();
 		// }
-		if(!empty($_GET['desposition'])){
+		if(!empty($_GET) && !empty($_GET['desposition'])){
             $desp = $this->db->where('stg_id',$_GET['desposition'])->get('lead_stage')->row();        
 			$data[$desp] = $desp;			
 			$this->session->set_userdata('enquiry_filters_sess',array('stage'=>$_GET['desposition']));
