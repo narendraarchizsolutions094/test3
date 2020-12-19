@@ -288,6 +288,9 @@ $route['edit-userrights/(:any)']   = 'userrights/userrights_edit/$1';
 $route['document-templates'] = 'setting/document_templates';
 $route['master_lead_search'] = 'lead/lead_search';
 $route['lead'] = 'led';
+$route['feedback'] = 'Dashboard/feedback';
+$route['edit-feedback/(:any)'] = 'Dashboard/edit_feedback/$i';
+$route['feedback/create'] = 'Dashboard/create';
 
 $route['404_override']            = '';
 

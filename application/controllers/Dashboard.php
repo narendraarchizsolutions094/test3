@@ -811,15 +811,21 @@ $data['clientsum']=$this->dashboard_model->dataLead(3);
     //     }
     $enquiry_separation  = get_sys_parameter('enquiry_separation', 'COMPANY_SETTING');
  $data=[];
+ if(user_access(60)) {
  $count1 = $this->enquiry_model->DyenquiryLeadClientChart($this->session->user_id,$this->session->companey_id,1);
  $enq=display("enquiry");
  $data[]=['name'=>$enq,'value'=>$count1];
+ }
+ if(user_access(70)) {
  $count2 = $this->enquiry_model->DyenquiryLeadClientChart($this->session->user_id,$this->session->companey_id,2);
  $lead=display("lead");
  $data[]=['name'=>$lead,'value'=>$count2];
+ }
+ if(user_access(80)) {
  $count3 = $this->enquiry_model->DyenquiryLeadClientChart($this->session->user_id,$this->session->companey_id,3);
  $client=display("client");
  $data[]=['name'=>$client,'value'=>$count3];
+ }
 if (!empty($enquiry_separation)) {
     $enquiry_separation = json_decode($enquiry_separation, true);
         foreach ($enquiry_separation as $key => $value) {
@@ -2799,4 +2805,22 @@ public function set_layout_to_session() {
         
     }
 }
+
+public function feedback() 
+{
+   
+        $comp_id=$this->session->companey_id;
+        $data['feedbacks']=$this->db->where('comp_id',$comp_id)->get('feedback')->result();
+        $data['content'] = $this->load->view('ticket/feedback', $data, true);	     
+        $this->load->view('layout/main_wrapper', $data);
+}
+public function create() 
+{
+   
+        $comp_id=$this->session->companey_id;
+        $data['feedbacks']=$this->db->where('comp_id',$comp_id)->get('feedback')->result();
+        $data['content'] = $this->load->view('ticket/add-feedback', $data, true);	     
+        $this->load->view('layout/main_wrapper', $data);
+}
+
 }

@@ -133,11 +133,9 @@ Ticket Dashboard
 </div>
 <?php } ?>
 </div>
-
  <div class="row">
-
-
-<div class="col-md-4 col-sm-6 col-xs-12">
+<?php  if(user_access(60)){ ?>
+       <div class="col-md-4 col-sm-6 col-xs-12">
           <div class="info-box bg-purple">
             <span class="info-box-icon"><i class="fa fa-question-circle-o" style="color:#fff;"></i></span>
             <div class="info-box-content1">
@@ -154,11 +152,10 @@ Ticket Dashboard
             </div>
           </div>
             </div>
-            <!-- /.info-box-content -->
           </div>
-          <!-- /.info-box -->
         </div>
-    
+    <?php } ?>
+<?php  if(user_access(70)){ ?>
 <div class="col-md-4 col-sm-6 col-xs-12">
           <div class="info-box bg-green">
             <span class="info-box-icon"><i class="fa fa-line-chart" style="color:#fff;"></i></span>
@@ -176,10 +173,10 @@ Ticket Dashboard
             </div>
           </div>
             </div>
-            <!-- /.info-box-content -->
           </div>
-          <!-- /.info-box -->
         </div>
+<?php } ?>
+<?php  if(user_access(80)){ ?>
 
 <div class="col-md-4 col-sm-6 col-xs-12">
           <div class="info-box bg-aqua">
@@ -199,12 +196,9 @@ Ticket Dashboard
             </div>
           </div>
             </div>
-            <!-- /.info-box-content -->
           </div>
-          <!-- /.info-box -->
         </div>
-
-
+<?php } ?>
   <?php
 
 if (!empty($enquiry_separation)) {
@@ -410,6 +404,8 @@ if (!empty($enquiry_separation)) {
           </div>
           <div style="display:inline-block;width:100%;overflow-y:auto;">
           <ul class="timeline timeline-horizontal">
+          <?php   if(user_access(60)){  ?>
+
             <li class="timeline-item">
               <div class="timeline-badge primary" style="width:150px !important;border-radius: 30px;">
                   <?php echo display("enquiry"); ?>
@@ -420,6 +416,7 @@ if (!empty($enquiry_separation)) {
               <div class="timeline-panel" style="width:100px !important;border-radius: 30px;">
                 <div class="timeline-heading">
                   <!--<h4 class="timeline-title">Average</h4>-->
+                 
                   <p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>&nbsp;
                   <?php $leadTime=$leadSum->row()->time;
                     if ($leadTime!=0) {
@@ -428,6 +425,9 @@ if (!empty($enquiry_separation)) {
                 </div>
               </div>
             </li>
+            <?php } ?>
+            <?php   if(user_access(70)){  ?>
+
             <li class="timeline-item">
               <div class="timeline-badge info" style="width:150px !important;border-radius: 30px;">
                  <?php echo display("lead"); ?>
@@ -446,11 +446,14 @@ if (!empty($enquiry_separation)) {
                 </div>
               </div>
             </li>
+            <?php } ?>
+            <?php   if(user_access(80)){  ?>
             <li class="timeline-item">
               <div class="timeline-badge warning" style="width:150px !important;border-radius: 30px;">
                   <?php echo display("Client"); ?>
               </div>
             </li>
+            <?php } ?>
 <!-- //dynamic case -->
 <?php
         $enquiry_separation  = get_sys_parameter('enquiry_separation', 'COMPANY_SETTING');
@@ -941,19 +944,21 @@ $(document).ready(function(){
             data: {
               labels: ["JUN", "FEB", "MAR", "APR","MAY","JUNE","JULY","AUG","SEP","OCT","NOV","DEC"],
               datasets: [
-                  {
+                 <?php if(user_access(60)){ ?> {
                   label: "<?=display("enquiry") ?>",
                   backgroundColor: "#3e95cd",
                   data: [ parseInt(data.data.ejan), parseInt(data.data.efeb), parseInt(data.data.emar), parseInt(data.data.eapr), parseInt(data.data.emay), parseInt(data.data.ejun), parseInt(data.data.ejuly), parseInt(data.data.eaug), parseInt(data.data.esep), parseInt(data.data.eoct), parseInt(data.data.enov), parseInt(data.data.edec)]
-                }, {
+                }, <?php } if(user_access(70)){ ?> {
                   label: "<?=display("lead") ?>",
                   backgroundColor: "#8e5ea2",
                   data: [ parseInt(data.data.ljan), parseInt(data.data.lfeb), parseInt(data.data.lmar), parseInt(data.data.lapr), parseInt(data.data.lmay), parseInt(data.data.ljun), parseInt(data.datajuly), parseInt(data.data.laug), parseInt(data.data.lsep), parseInt(data.data.loct), parseInt(data.data.lnov), parseInt(data.data.ldec)]
-                }, {
+                },<?php } 
+                 if(user_access(80)){
+                ?> {
                   label: "<?=display("client") ?>",
                   backgroundColor: "#c45850",
                   data: [ parseInt(data.data.cjan), parseInt(data.data.cfeb), parseInt(data.data.cmar), parseInt(data.data.capr), parseInt(data.data.cmay), parseInt(data.data.cjun), parseInt(data.data.cjuly), parseInt(data.data.caug), parseInt(data.data.csep), parseInt(data.data.coct), parseInt(data.data.cnov), parseInt(data.data.cdec)]
-                },
+                },<?php } ?> 
                 <?php 
         $enquiry_separation  = get_sys_parameter('enquiry_separation', 'COMPANY_SETTING');
 
@@ -1331,9 +1336,8 @@ function updateHands() {
                    name: "<?= $count[0]->product_name ?>",
                    data: [<?= $count[0]->counter ?>],
                      },
-        <?php } }  ?>
-
-
+        <?php }
+              }  ?>
             ]
           });
         
@@ -1695,17 +1699,26 @@ $(document).ready(function(){
             borderWidth: 0
           }
         },
-        series: [{
+        series: [
+          <?php if(user_access(60)){ ?>
+          {
           name: '<?php echo display("enquiry"); ?>',
           data: data1,
 
-        }, {
+        }, 
+        <?php } 
+        if(user_access(70)){ ?>
+        {
           name: '<?php echo display("lead"); ?>',
           data: data2,
-        },{
+        },
+        <?php } 
+        if(user_access(80)){
+        ?>
+        {
           name: '<?php echo display("Client"); ?>',
           data: data3,
-        },
+        }, <?php } ?>
         <?php   $enquiry_separation  = get_sys_parameter('enquiry_separation', 'COMPANY_SETTING');
                  if (!empty($enquiry_separation)) {
                   $enquiry_separation = json_decode($enquiry_separation, true);

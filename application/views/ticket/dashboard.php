@@ -120,11 +120,10 @@
 <br>
 <br>
 
-<center><h3>Substage Vs Ticket</h3></center>
-
+<!-- <center><h3>Substage Vs Ticket</h3></center> -->
 
 <!-- HTML -->
-<div id="chartdiv_substage"></div>
+<!-- <div id="chartdiv_substage"></div> -->
 <br>
 <br>
 
