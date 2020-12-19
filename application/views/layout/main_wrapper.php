@@ -1604,12 +1604,13 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                         $ci->load->database();
 
                         $desp = $ci->db->where(array('stg_id'=>$des->stage_id,"FIND_IN_SET(1,stage_for)>"=>0))->get('lead_stage')->row();
+                    
                         
                         $des_title = '';
                         if(!empty($desp))
                         {
                           $des_title = $desp->lead_stage_name;
-                        }
+                        
                         ?>
                          <li class="<?php echo (($segment1 == "client") && (!empty($_GET['desposition']) && $_GET['desposition'] == $des->stage_id) ) ? "active" : null ?>">                           
                           <a href="<?php echo base_url("client/desposition?desposition=").$des->stage_id; ?>">
@@ -1617,6 +1618,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                           </a>
                          </li>
                         <?php
+                        }
                       }
                     }
                     ?>
@@ -1649,8 +1651,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                         if(!empty($desp))
                         {
                           $des_title = $desp->lead_stage_name;
-                        }
-                        ?>
+                          ?>
                          <li class="<?php echo (($segment1 == "client") && (!empty($_GET['desposition']) && $_GET['desposition'] == $des->stage_id) ) ? "active" : null ?>">                           
                           <a href="<?php echo base_url("client/desposition?desposition=").$des->stage_id; ?>">
                               <i class="<?=$des->icon;?>" style="color:#fff;font-size:20px;background:#3498db;padding:7px;border-radius:4px;width:30px;"></i> &nbsp;<?=$des_title?>                 
@@ -1658,6 +1659,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                          </li>
                         <?php
                       }
+                    }
                     }
                     ?>
 
@@ -1688,14 +1690,14 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                         if(!empty($desp))
                         {
                           $des_title = $desp->lead_stage_name;
-                        }
-                        ?>
+                          ?>
                          <li class="<?php echo (($segment1 == "client") && (!empty($_GET['desposition']) && $_GET['desposition'] == $des->stage_id) ) ? "active" : null ?>">                           
                           <a href="<?php echo base_url("client/desposition?desposition=").$des->stage_id; ?>">
                               <i class="<?=$des->icon;?>" style="color:#fff;font-size:20px;background:#3498db;padding:7px;border-radius:4px;width:30px;"></i> &nbsp;<?=$des_title?>                 
                           </a>
                          </li>
                         <?php
+                        }
                       }
                     }
                     ?>
