@@ -344,7 +344,7 @@ echo'<div class="trackingDetails"></div>';
                           <?php
                            if(!empty($source)) {
                             foreach($source as $ind => $prblm){
-                              if(!empty($_GET['phone']) && $prblm->lsid == 134){
+                              if(!empty($_GET['phone']) && $prblm->lsid == 134 && $this->session->companey_id == 65){
                                 $sel = 'selected';
                               }else{
                                 $sel = '';
