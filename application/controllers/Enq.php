@@ -37,7 +37,7 @@ class Enq extends CI_Controller
 		
 		if(!empty($_GET) && !empty($_GET['desposition'])){
             $desp = $this->db->where('stg_id',$_GET['desposition'])->get('lead_stage')->row();        
-			$data[$desp] = $desp;			
+			$data['desp'] = $desp;			
 			$this->session->set_userdata('enquiry_filters_sess',array('stage'=>$_GET['desposition']));
 		}
 		
