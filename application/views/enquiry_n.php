@@ -280,16 +280,18 @@ input[name=lead_stages]{
       </div>
 </div>
 
-
-
+<?php
+$stage_pipeline  = get_sys_parameter('stage_pipeline','COMPANY_SETTING');
+if(!empty($stage_pipeline) && $stage_pipeline=='1')
+{
+?>
 
 <div class="row">
   <div class="col-lg-12 " style="padding-top: 5px;">
     <div id="crumbs">
     <ul>
     <?php
-    if($this->session->companey_id==1)
-    {
+
       if(!empty($all_stage_lists))
       {
         foreach ($all_stage_lists as $stage) 
@@ -298,7 +300,6 @@ input[name=lead_stages]{
         }
                 
       }
-    }
     ?>  
 
     </ul></div>
@@ -400,53 +401,19 @@ display: block;
   </div>
 </div>
 
-<div class="row"  id="active_class">                   
-            <div class="col-xs-12 col-sm-12  col-md-2 col-lg-2 col-half-offset" style="">
-            <div  class="col-12 border_bottom" >
-                <p style="margin-top: 2vh;font-weight:bold;">
-                  <input id='created_today_radio' value="created_today" type="radio" name="top_filter" class="enq_form_filters"><i class="fa fa-edit" ></i><label for="created_today_radio">&nbsp;&nbsp;<?php echo display('created_today'); ?></label>
-                  <span  style="float:right;" class="badge badge-pill badge-primary " id="today_created"><i class="fa fa-spinner fa-spin"></i></span>
-                </p>
-            </div>
-            </div>
-            <div class="col-xs-12 col-sm-12  col-md-2 col-lg-2 col-half-offset">
-              <div class="col-12 border_bottom">
-                  <p style="margin-top: 2vh;font-weight:bold;" >
-                    <input type="radio" name="top_filter" value="updated_today" class="enq_form_filters" id="updated_today_radio"><i class="fa fa-pencil"></i><label for="updated_today_radio">&nbsp;&nbsp;<?php echo display('updated_today'); ?></label><span style="float:right;background:#ffc107" class="badge badge-pill badge-warning badge badge-dark " id="today_updated"><i class="fa fa-spinner fa-spin"></i></span>
-                  </p>
-              </div>
-            </div>
-            
-            <div class="col-xs-12 col-sm-12  col-md-2 col-lg-2 col-half-offset">
-            <div  class="col-12 border_bottom border_bottom_active" >
-                  <p style="margin-top: 2vh;font-weight:bold;"  title="<?php echo display('active'); ?>"> 
-                    <input type="radio" name="top_filter" value="active" checked="checked" class="enq_form_filters" id="active_radio"><i class="fa fa-file" ></i><label for="active_radio">&nbsp;&nbsp;<?php echo display('active'); ?></label><span style="float:right;" class="badge badge-pill badge-primary " id="active_all"><i class="fa fa-spinner fa-spin"></i></span>
-                  </p>
-              </div>
-            </div>
-                  
-            <div class="col-xs-12 col-sm-12  col-md-2 col-lg-2 col-half-offset">
-              <div  class="col-12 border_bottom" >
-                  <p style="margin-top: 2vh;font-weight:bold;"   title="<?php echo display('droped'); ?>">
-                      <input type="radio" name="top_filter" value="droped" class="enq_form_filters" id="droped_radio">
-                      <i class="fa fa-thumbs-down" ></i><label for="droped_radio">&nbsp;&nbsp;<?php echo display('droped'); ?></label><span style="float:right;background:#E5343D" class="badge badge-danger" id="active_drop"><i class="fa fa-spinner fa-spin"></i></span>                   
-                  </p>
-              </div>
-            </div>
-            <div class="col-xs-12 col-sm-12  col-md-2 col-lg-2 col-half-offset">
-              <div class="col-12 border_bottom" >
-
-                  <p style="margin-top: 2vh;font-weight:bold;"  title="<?php echo display('total'); ?>">
-                    <input type="radio" name="top_filter" value="all" class="enq_form_filters" id="total_active_radio">
-                    <i class="fa fa-list"></i><label for="total_active_radio">&nbsp;&nbsp;<?php echo display('total'); ?></label><span style="float:right;background:#000" class="badge badge-pill badge-dark " id="total_active"><i class="fa fa-spinner fa-spin"></i></span>
-                  </p>
-              </div>
-          </div>   
-    </div>
-</div>
-
+<?php
+}
+?>
+<style type="text/css">
+  #filter_pannel .col-md-3
+  {
+    height: 63px; 
+    font-size: 12px!important;
+    margin: 0px;
+  }
+</style>
 <!------ Filter Div ---------->
- <div class="row" id="filter_pannel">
+<div class="row" id="filter_pannel" style="margin-top: 15px;">
         <div class="col-lg-12">
             <div class="panel panel-default">
                
@@ -606,6 +573,84 @@ display: block;
     </div>   
 </form>
 
+
+
+<div class="row row text-center short_dashboard" id="active_class">   
+
+        <div class="wd-14" style="">
+            <div  class="col-12 border_bottom border_bottom_active" >
+                <p style="margin-top: 2vh;font-weight:bold;">
+                  <input id='created_today_radio' value="created_today" type="radio" name="top_filter" class="enq_form_filters"><i class="fa fa-edit" ></i><label for="created_today_radio">&nbsp;&nbsp;<?php echo display('created'); ?></label>
+                  <span  style="float:right;" class="badge badge-pill badge-primary " id="today_created"><i class="fa fa-spinner fa-spin"></i></span>
+                </p>
+            </div>
+        </div>
+        <div class="wd-14" style="">
+            <div  class="col-12 border_bottom" >
+                <p style="margin-top: 2vh;font-weight:bold;">
+                  <input id='assigned_radio' value="assigned" type="radio" name="top_filter" class="enq_form_filters"><i class="fa fa-edit" ></i><label for="assigned_radio">&nbsp;&nbsp;<?php echo display('assigned'); ?></label>
+                  <span  style="float:right;" class="badge badge-pill badge-primary " id="assigned"><i class="fa fa-spinner fa-spin"></i></span>
+                </p>
+            </div>
+        </div>
+        <div class="wd-14">
+              <div class="col-12 border_bottom">
+                  <p style="margin-top: 2vh;font-weight:bold;" >
+                    <input type="radio" name="top_filter" value="updated_today" class="enq_form_filters" id="updated_today_radio"><i class="fa fa-pencil"></i><label for="updated_today_radio">&nbsp;&nbsp;<?php echo display('updated'); ?></label><span style="float:right;background:#ffc107" class="badge badge-pill badge-warning badge badge-dark " id="today_updated"><i class="fa fa-spinner fa-spin"></i></span>
+                  </p>
+              </div>
+        </div>
+            
+        <div class="wd-14">
+            <div  class="col-12 border_bottom" >
+                  <p style="margin-top: 2vh;font-weight:bold;"  title="<?php echo display('active'); ?>"> 
+                    <input type="radio" name="top_filter" value="active" checked="checked" class="enq_form_filters" id="active_radio"><i class="fa fa-file" ></i><label for="active_radio">&nbsp;&nbsp;<?php echo display('active'); ?></label><span style="float:right;" class="badge badge-pill badge-primary " id="active_all"><i class="fa fa-spinner fa-spin"></i></span>
+                  </p>
+              </div>
+        </div>
+                  
+        <div class="wd-14">
+              <div  class="col-12 border_bottom" >
+                  <p style="margin-top: 2vh;font-weight:bold;"   title="<?php echo display('droped'); ?>">
+                      <input type="radio" name="top_filter" value="droped" class="enq_form_filters" id="droped_radio">
+                      <i class="fa fa-thumbs-down" ></i><label for="droped_radio">&nbsp;&nbsp;<?php echo display('droped'); ?></label><span style="float:right;background:#E5343D" class="badge badge-danger" id="active_drop"><i class="fa fa-spinner fa-spin"></i></span>                   
+                  </p>
+              </div>
+        </div>
+         <div class="wd-14 " style="">
+            <div  class="col-12 border_bottom" >
+                <p style="margin-top: 2vh;font-weight:bold;">
+                  <input id='pending_radio' value="pending" type="radio" name="top_filter" class="enq_form_filters"><i class="fa fa-edit" ></i><label for="pending_radio">&nbsp;&nbsp;<?php echo display('pending_enquiry'); ?></label>
+                  <span  style="float:right;" class="badge badge-pill badge-primary " id="pending"><i class="fa fa-spinner fa-spin"></i></span>
+                </p>
+            </div>
+        </div>
+        <div class="wd-14">
+              <div class="col-12 border_bottom" >
+
+                  <p style="margin-top: 2vh;font-weight:bold;"  title="<?php echo display('total'); ?>">
+                    <input type="radio" name="top_filter" value="all" class="enq_form_filters" id="total_active_radio">
+                    <i class="fa fa-list"></i><label for="total_active_radio">&nbsp;&nbsp;<?php echo display('total'); ?></label><span style="float:right;background:#000" class="badge badge-pill badge-dark " id="total_active"><i class="fa fa-spinner fa-spin"></i></span>
+                  </p>
+              </div>
+      </div>   
+    </div>
+</div>
+
+<style type="text/css">
+  .wd-14{
+    width: 13.2%;
+    display: inline-block;
+  }
+
+.short_dashboard button{
+  margin:4px;
+}
+.short_dashboard
+{
+  margin-bottom: 15px;
+}
+</style>
 
 <form class="form-inner" method="post" id="enquery_assing_from" >  
 <div class="card-body">
@@ -1205,7 +1250,12 @@ if(!empty($_GET['desposition']))
           "ajax": {
               "url": "<?=base_url().'Enq/enq_load_data'?>",
               "type": "POST",
-              "data":{'data_type':"<?=$data_type?>"}
+              "data":function(d){
+                d.data_type = "<?=$data_type?>";
+               //document.write(JSON.stringify(d));
+                return d;
+              }
+              //"data":{'data_type':"<?=$data_type?>"}
           },
         <?php if(user_access(500)) { ?>
           dom: "<'row text-center'<'col-sm-12 col-xs-12 col-md-4'l><'col-sm-12 col-xs-12 col-md-4 text-center'B><'col-sm-12 col-xs-12 col-md-4'f>>tp", 
@@ -1241,6 +1291,8 @@ if(!empty($_GET['desposition']))
             }                       
         }
       });
+
+     update_top_filter_counter();
     //   $('#enq_table').DataTable({ 
     //     //responsive: true, 
     //     scrollX: true,
@@ -1258,24 +1310,24 @@ if(!empty($_GET['desposition']))
 
 
 
-      $.ajax({
-      url: "<?=base_url().'enq/stages_of_enq/'.$data_type?>",
-      type: 'get',
-      dataType: 'json',
-      success: function(responseData){
-      $('#today_created').html(responseData.all_creaed_today_num);
-      $('#active_all').html(responseData.all_active_num);
-      $('#today_updated').html(responseData.all_today_update_num);
-      $('#active_drop').html(responseData.all_drop_num);
-      $('#total_active').html(responseData.all_enquery_num);
+    //   $.ajax({
+    //   url: "<?=base_url().'enq/stages_of_enq/'.$data_type?>",
+    //   type: 'get',
+    //   dataType: 'json',
+    //   success: function(responseData){
+    //   $('#today_created').html(responseData.all_creaed_today_num);
+    //   $('#active_all').html(responseData.all_active_num);
+    //   $('#today_updated').html(responseData.all_today_update_num);
+    //   $('#active_drop').html(responseData.all_drop_num);
+    //   $('#total_active').html(responseData.all_enquery_num);
       
-      all_lead_stage_c  = $("input[name='top_filter']:checked").next().next().next().html();
+    //   all_lead_stage_c  = $("input[name='top_filter']:checked").next().next().next().html();
 
-     //console.log(all_lead_stage_c);
+    //  //console.log(all_lead_stage_c);
       
-      $('#lead_stage_-1').text(all_lead_stage_c);     
-      }
-    });
+    //   $('#lead_stage_-1').text(all_lead_stage_c);     
+    //   }
+    // });
 
 $(document).on('click',".top_pill",function(){
 
@@ -1359,16 +1411,20 @@ $(document).on('click',".top_pill",function(){
         //alert("dd");
         $.ajax({
         //url: "<?=base_url().'enq/stages_of_enq/'.$data_type?>",
-        url: "<?=base_url().'enq/short_dashboard_count/'.$data_type?>",
+        url: "<?=base_url().'enq/short_dashboard_count'?>",
         type: 'post',
+        data:{data_type:"<?=$data_type?>"},
         dataType: 'json',
         success: function(responseData){
          //alert(JSON.stringify(responseData));
-        $('#today_created').html(responseData.all_creaed_today_num);
+        $('#today_created').html(responseData.all_enquery_num);
         $('#active_all').html(responseData.all_active_num);
-        $('#today_updated').html(responseData.all_today_update_num);
+        $('#today_updated').html(responseData.all_update_num);
         $('#active_drop').html(responseData.all_drop_num);
         $('#total_active').html(responseData.all_enquery_num);
+        $('#pending').html(responseData.all_no_activity_num);
+        $('#assigned').html(responseData.all_assigned_num);
+        $('#un_assigned').html(responseData.all_unassigned_num);
         
         all_lead_stage_c  = $("input[name='top_filter']:checked").next().next().next().html();
 
@@ -1387,7 +1443,10 @@ $(document).on('click',".top_pill",function(){
       $('#enq_filter').change(function() {
         
         //update_top_filter_counter(); 
-        var form_data = $("#enq_filter").serialize();       
+        var form_data = $("#enq_filter").serialize();  
+
+        //alert(form_data);
+
         $.ajax({
         url: '<?=base_url()?>enq/enquiry_set_filters_session',
         type: 'post',
@@ -1793,6 +1852,8 @@ $(window).load(function(){
 $("#active_class p").click(function() {
     $('.border_bottom_active').removeClass('border_bottom_active');
     $(this).addClass("border_bottom_active");
+
+    $(this).find('label').trigger('click');
 });
 });  
 </script>

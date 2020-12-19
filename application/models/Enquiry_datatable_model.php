@@ -9,14 +9,33 @@ class Enquiry_datatable_model extends CI_Model {
 
     var $column_search = array('enquiry.name_prefix','enquiry.enquiry_id','enquiry.company','enquiry.org_name','enquiry.name','enquiry.lastname','enquiry.email','enquiry.phone','enquiry.address','enquiry.created_date','enquiry.enquiry_source','lead_source.icon_url','lead_source.lsid','lead_source.score_count','lead_source.lead_name','tbl_datasource.datasource_name','tbl_product.product_name',"CONCAT(tbl_admin.s_display_name,' ',tbl_admin.last_name )","CONCAT(tbl_admin2.s_display_name,' ',tbl_admin2.last_name)"); //set column field database for datatable searchable 
 
-    var $order = array('enquiry.enquiry_id' => 'desc'); // default order 
+    var $order = array(); // default order 
  
     public function __construct()
     {
         parent::__construct();    
         $this->load->model('common_model');
+        
+        if(!empty($_POST['data_type']) && $_POST['data_type']=='1')
+        {
+            $this->order = array('enquiry.enquiry_id' => 'desc'); // default order 
+        }
+        else if(!empty($_POST['data_type']) && $_POST['data_type']=='2')
+        {
+            $this->order = array('enquiry.lead_created_date' => 'desc'); 
+        }
+        else if(!empty($_POST['data_type']) && $_POST['data_type']=='3')
+        {
+           $this->order = array('enquiry.client_created_date' => 'desc'); 
+        }
+        else
+        {
+           $this->order = array('enquiry.enquiry_id' => 'desc');
+        }
+
     }
- 
+    
+
     private function _get_datatables_query(){    
        $all_reporting_ids    =   $this->common_model->get_categories($this->session->user_id);
        $this->db->from($this->table);       
@@ -74,27 +93,50 @@ class Enquiry_datatable_model extends CI_Model {
         $this->db->join('tbl_admin as tbl_admin', 'tbl_admin.pk_i_admin_id = enquiry.created_by', 'left');
         $this->db->join('tbl_admin as tbl_admin2', 'tbl_admin2.pk_i_admin_id = enquiry.aasign_to', 'left');        
         
-        
+    // echo $top_filter; exit();
 
-        if($top_filter=='all'){            
+        if($top_filter=='all')
+        {            
             $where.="  enquiry.status=$data_type";
-        }elseif($top_filter=='droped'){            
+        }
+        else if($top_filter=='droped')
+        {            
             $where.="  enquiry.status=$data_type";
             $where.=" AND enquiry.drop_status>0";
-        }elseif($top_filter=='created_today'){
-            $date=date('Y-m-d');
-            $where.="enquiry.created_date LIKE '%$date%'";
-            $where.=" AND enquiry.status=$data_type";
+        }else if($top_filter=='created_today'){
+           // $date=date('Y-m-d');
+            //  $where.="enquiry.created_date LIKE '%$date%'";
+            $where.=" enquiry.status=$data_type";
             $where.=" AND enquiry.drop_status=0";
-        }elseif($top_filter=='updated_today'){
-            $date=date('Y-m-d');
-            $where.="enquiry.update_date LIKE '%$date%'";        
-            $where.=" AND enquiry.status=$data_type";
-            $where.=" AND enquiry.drop_status=0";
-        }elseif($top_filter=='active'){            
+        }else if($top_filter=='updated_today'){
+            // $date=date('Y-m-d');
+            // $where.="enquiry.update_date LIKE '%$date%'";        
+            $where.=" enquiry.status=$data_type";
+            $where.=" AND enquiry.drop_status=0 and enquiry.update_date is not NULL";
+
+            //this->db->where('');
+
+        }else if($top_filter=='active'){            
             $where.="  enquiry.status=$data_type";
             $where.=" AND enquiry.drop_status=0";
-        }else{                        
+        }
+        else if($top_filter == 'assigned')
+        {   
+            $where.=" enquiry.status=$data_type";
+            $where.=" AND enquiry.aasign_to is not NULL";
+
+        }
+        else if($top_filter == 'unassigned')
+        {
+            $where.="enquiry.status=$data_type";
+            $where.=" AND enquiry.aasign_to is NULL";
+        }
+        else if($top_filter == 'pending')
+        {
+            $where.="  enquiry.status=$data_type";
+            $where.=" AND enquiry.update_date is NULL";
+        }
+        else{                        
             $where.="  enquiry.status=$data_type";
             $where.=" AND enquiry.drop_status=0";
         }                   
@@ -113,19 +155,47 @@ class Enquiry_datatable_model extends CI_Model {
         }else if (!empty($this->session->process) && !empty($product_filter)) {
             $where.=" AND enquiry.product_id IN (".implode(',', $product_filter).')';            
         }
+
+
+        // if(!empty($from_created) && !empty($to_created)){
+        //     $from_created = date("Y-m-d",strtotime($from_created));
+        //     $to_created = date("Y-m-d",strtotime($to_created));
+        //     $where .= " AND DATE(enquiry.created_date) >= '".$from_created."' AND DATE(enquiry.created_date) <= '".$to_created."'";
+        // }
+        // if(!empty($from_created) && empty($to_created)){
+        //     $from_created = date("Y-m-d",strtotime($from_created));
+        //     $where .= " AND DATE(enquiry.created_date) >=  '".$from_created."'";                        
+        // }
+        // if(empty($from_created) && !empty($to_created)){            
+        //     $to_created = date("Y-m-d",strtotime($to_created));
+        //     $where .= " AND DATE(enquiry.created_date) <=  '".$to_created."'";                                    
+        // }
+
+
+         if($data_type=='1')
+            $enq_date_fld = 'created_date';
+        else if($data_type=='2')
+            $enq_date_fld = 'lead_created_date';
+        else if($data_type=='3')
+            $enq_date_fld = 'client_created_date';
+        else 
+            $enq_date_fld = 'created_date';
+
         if(!empty($from_created) && !empty($to_created)){
             $from_created = date("Y-m-d",strtotime($from_created));
             $to_created = date("Y-m-d",strtotime($to_created));
-            $where .= " AND DATE(enquiry.created_date) >= '".$from_created."' AND DATE(enquiry.created_date) <= '".$to_created."'";
+            $where .= " AND DATE(enquiry.".$enq_date_fld.") >= '".$from_created."' AND DATE(enquiry.".$enq_date_fld.") <= '".$to_created."'";
         }
         if(!empty($from_created) && empty($to_created)){
             $from_created = date("Y-m-d",strtotime($from_created));
-            $where .= " AND DATE(enquiry.created_date) >=  '".$from_created."'";                        
+            $where .= " AND DATE(enquiry.".$enq_date_fld.") >=  '".$from_created."'";                        
         }
         if(empty($from_created) && !empty($to_created)){            
             $to_created = date("Y-m-d",strtotime($to_created));
-            $where .= " AND DATE(enquiry.created_date) <=  '".$to_created."'";                                    
+            $where .= " AND DATE(enquiry.".$enq_date_fld.") <=  '".$to_created."'";                                    
         }
+
+
         if(!empty($company)){                    
             $where .= " AND enquiry.company =  '".$company."'";                                    
         }
@@ -241,8 +311,9 @@ class Enquiry_datatable_model extends CI_Model {
         } 
         else if(isset($this->order))
         {
-
             $order = $this->order;
+
+
             $this->db->order_by(key($order), $order[key($order)]);
         }
     }
