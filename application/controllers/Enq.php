@@ -43,8 +43,11 @@ class Enq extends CI_Controller
 		$data['created_bylist'] = $this->User_model->read();
 		$data['products'] = $this->dash_model->get_user_product_list();
 		$data['drops'] = $this->enquiry_model->get_drop_list();
-		$data['all_stage_lists'] = $this->Leads_Model->get_leadstage_list_byprocess1($this->session->process,array());
+		$data['all_stage_lists'] = $this->Leads_Model->get_leadstage_list_byprocess1($this->session->process,array(1,2,3));
 		
+		// if($this->session->user_id == 286){
+		// 	echo $this->db->last_query();
+		// }
 		$data['prodcntry_list'] = $this->enquiry_model->get_user_productcntry_list();
 		$data['state_list'] = $this->enquiry_model->get_user_state_list();
 		$data['city_list'] = $this->enquiry_model->get_user_city_list();
