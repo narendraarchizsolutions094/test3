@@ -395,8 +395,9 @@ public function all_description($diesc) {
         else
         {
          $id1 = $process_id;
-
-         $this->db->where("FIND_IN_SET(".$id1.",process_id)");
+            if($process_id){
+                $this->db->where("FIND_IN_SET(".$id1.",process_id)");
+            }
         } 
         $this->db->where('comp_id',$this->session->userdata('companey_id'));
         // if($for)
