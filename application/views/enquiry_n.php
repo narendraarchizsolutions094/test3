@@ -267,7 +267,7 @@ input[name=lead_stages]{
               <?php
                   }
               }else if ($data_type == 2) { 
-                <?php if (user_access(67)==true) { ?>
+                 if (user_access(67)==true) { ?>
                   <a class="btn" data-toggle="modal" data-target="#AssignSelected" style="color:#000;cursor:pointer;border-radius: 2px;border-bottom :1px solid #fff;"><?php echo display('assign_selected'); ?></a>
                   <?php }   if (user_access(77)==true) {  ?>
                   <a class="btn" data-toggle="modal" data-target="#genclient" style="color:#000;cursor:pointer;border-radius: 2px;border-bottom :1px solid #fff;">Move To <?=display('Client')?> </a>

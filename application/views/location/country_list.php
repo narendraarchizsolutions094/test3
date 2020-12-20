@@ -5,7 +5,7 @@
  
             <div class="panel-heading no-print">
             <?php if (user_access(10)==true) { 
-                echo 'echo';?>
+                ?>
                 <div class="btn-group"> 
                     <a class="btn btn-success" href="<?php echo base_url("location/create") ?>"> <i class="fa fa-plus"></i>  <?php echo display('add_country') ?> </a>  
                 </div>
