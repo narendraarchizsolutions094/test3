@@ -688,7 +688,7 @@ class User extends CI_Controller
     }
     public function delete_userrole($user_role = null)
     {
-        if (user_role('142') == true) {
+        if (user_role('142') == true) { }
         if ($this->User_model->delete_userrole($user_role)) {
             #set success message
             $this->session->set_flashdata('message', display('delete_successfully'));
