@@ -280,7 +280,7 @@ class User extends CI_Controller
             $this->form_validation->set_rules('user_type', 'user_role', 'required');
             if ($this->form_validation->run() == FALSE) {
                 $this->session->set_flashdata('FAILMSG', 'User role already exists in the table');
-                redirect('user/permissions');
+                redirect('userrights');
             } else {
                 $data = array(
                     'user_role' => $user_type,
@@ -291,7 +291,7 @@ class User extends CI_Controller
                 );
                 $this->db->insert('tbl_user_role', $data);
                 $this->session->set_flashdata('SUCCESSMSG', 'User Role Created Successfully');
-                redirect('user/permissions');
+                redirect('userrights');
             }
         } else {
             $data['page_title'] = display('user_function');
@@ -756,7 +756,7 @@ class User extends CI_Controller
         );
         $this->User_model->update_user_role($id, $data);
         $this->session->set_flashdata('SUCCESSMSG', 'Update Successfully');
-        redirect('user/edit_user_role/' . $id);
+        redirect('userrights/userrights_edit/' . $id);
     }
 
     public function upload_users()
