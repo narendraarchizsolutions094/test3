@@ -24,7 +24,7 @@ class Userrights extends CI_Controller {
     }
     
     public function userrights_edit() {
-        $role_id=$this->uri->segment(2);
+        $role_id=$this->uri->segment(3);
         // if (!empty($_GET['user_role'])) {
         //     $data['title'] = $this->User_model->get_role_name_by_id($_GET['user_role']).' List';            
         // }else{
@@ -35,8 +35,7 @@ class Userrights extends CI_Controller {
         $data['user_role'] = $this->db->get('all_modules')->result();
         $data['userRole'] = $this->User_model->get_user_role($role_id);
         // print_r($user_role->user_permissions);
-        echo $this->db->last_query();
-            print_r($data['userRole']);die;
+       
         $data['content'] = $this->load->view('userrights-edit', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }
