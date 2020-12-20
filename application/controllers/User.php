@@ -735,7 +735,7 @@ class User extends CI_Controller
     //Open Edit user role form
     public function edit_user_role($role_id)
     {
-        if (user_role('141') == true) {
+        if (user_role('141') == true) {}
         $data['title'] = display('user_list');
         $data['user_role'] = $this->User_model->get_user_role($role_id);
         $this->db->select('id,title');
