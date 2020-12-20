@@ -6,6 +6,8 @@ class Chat extends CI_Controller {
 		$this->load->model('enquiry_model');	
 	}
 	public function index($comp_id=0,$created_by=154){
+		if (user_role('290') == true) {}
+
 		$data['comp_id'] = $comp_id;
 		$data['created_by'] = $created_by;
 		if ($comp_id) {
@@ -15,6 +17,7 @@ class Chat extends CI_Controller {
 		}
 	}
 	public function agent_chat(){				
+		if (user_role('291') == true) {}
 		$data = array();
 		$this->load->view('chats/agent_chat',$data);	
 	}

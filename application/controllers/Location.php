@@ -8,7 +8,7 @@ class location extends CI_Controller {
         ));
     }
     function country() {
-        if (user_role('13') == true) {
+        if (user_role('12') == true) {
         }
         $data['title'] = display('country_list');
         $data['country'] = $this->location_model->country();
@@ -16,7 +16,7 @@ class location extends CI_Controller {
         $this->load->view('layout/main_wrapper', $data);
     }
     function region() {
-        if (user_role('13') == true) {
+        if (user_role('15') == true) {
         }
         $data['title'] = display('region_list');
         $data['country'] = $this->location_model->region_list();
@@ -25,8 +25,9 @@ class location extends CI_Controller {
         $this->load->view('layout/main_wrapper', $data);
     }
     function territory() {
-        if (user_role('13') == true) {
+        if (user_role('113') == true) {
         }
+
         $data['title'] = display('territory_lsit');
         $data['country'] = $this->location_model->territory_lsit();
         $data['content'] = $this->load->view('location/territory_list', $data, true);
@@ -40,11 +41,13 @@ class location extends CI_Controller {
             echo '<option value="' . $r->region_id . '">' . $r->region_name . '</option>';
         }
     }
+
      public function find_state_country() {
         $country = $this->input->post('country');
         $data = $this->location_model->get_state($country);
         echo json_encode($data);
     }
+
   public function select_city_by_state() {
         $state_id = $this->input->post('state_id');
         echo json_encode($this->location_model->all_city_state($state_id));
@@ -60,8 +63,10 @@ class location extends CI_Controller {
         }
     }
      public function select_city_bystate(){
+
         $stateid = $this->input->post('state_id');
         echo json_encode($this->location_model->all_city_bystate($stateid));
+
 
     }
     function get_state_byid() {
@@ -83,7 +88,7 @@ class location extends CI_Controller {
         }
     }
     function state() {
-        if (user_role('13') == true) {
+        if (user_role('19') == true) {
         }
         $data['title'] = display('country_list');
         $data['country'] = $this->location_model->state_list();
@@ -92,7 +97,7 @@ class location extends CI_Controller {
         $this->load->view('layout/main_wrapper', $data);
     }
     function city() {
-        if (user_role('13') == true) {
+        if (user_role('117') == true) {
         }
         $data['title'] = display('country_list');
         $data['country'] = $this->location_model->city_list();
@@ -100,6 +105,8 @@ class location extends CI_Controller {
         $this->load->view('layout/main_wrapper', $data);
     }
     public function create() {
+        if (user_role('10') == true) {
+        }
         $data['title'] = display('add_country');
         if (empty($this->input->post('user_id'))) {
             $this->form_validation->set_rules('country_name', display('country_name'), 'required|max_length[50]');
@@ -152,6 +159,8 @@ class location extends CI_Controller {
     }
 	
     public function add_region() {
+        if (user_role('14') == true) {
+        }
         $data['title'] = display('add_region');
         $data['doctor'] = '';
         #-------------------------------#
@@ -183,6 +192,7 @@ class location extends CI_Controller {
                 'created_by' => $this->session->userdata('user_id'),
                 'created_date' => date('Y-m-d'),
             ];
+
 
         }
         #-------------------------------#
@@ -228,6 +238,8 @@ class location extends CI_Controller {
         }
     }
     public function add_territory() {
+        if (user_role('111') == true) {
+        }
         $data['title'] = display('add_teretory');
         $data['doctor'] = '';
         $data['states'] = $this->location_model->all_states();
@@ -312,6 +324,8 @@ class location extends CI_Controller {
         }
     }
     public function add_state() {
+        if (user_role('17') == true) {
+        }
         $data['title'] = display('add_state');
         $data['doctor'] = '';
         #-------------------------------#
@@ -394,6 +408,8 @@ class location extends CI_Controller {
         }
     }
     public function add_city() {
+        if (user_role('115') == true) {
+        }
         $data['title'] = display('add_city');
         $data['doctor'] = '';
         #-------------------------------#
@@ -485,7 +501,7 @@ class location extends CI_Controller {
         $this->load->view('layout/main_wrapper', $data);
     }
     public function edit_territory($user_id = null) {
-        if (user_role('11') == true) {
+        if (user_role('112') == true) {
         }
         $data['doctor'] = $this->location_model->read_by_territory($user_id);
         $data['state'] = $this->location_model->Find_state($territory_id = $user_id);
@@ -495,7 +511,7 @@ class location extends CI_Controller {
         $this->load->view('layout/main_wrapper', $data);
     }
     public function edit_state($user_id = null) {
-        if (user_role('11') == true) {
+        if (user_role('18') == true) {
         }
         $data['doctor'] = $this->location_model->read_by_state($user_id);
         $data['country'] = $this->location_model->country();
@@ -505,7 +521,7 @@ class location extends CI_Controller {
         $this->load->view('layout/main_wrapper', $data);
     }
     public function edit_city($user_id = null) {
-        if (user_role('11') == true) {
+        if (user_role('116') == true) {
         }
         $data['doctor'] = $this->location_model->read_by_city($user_id);
         $data['country'] = $this->location_model->country();
@@ -516,7 +532,7 @@ class location extends CI_Controller {
         $this->load->view('layout/main_wrapper', $data);
     }
     public function delete($user_id = null) {
-        if (user_role('12') == true) {
+        if (user_role('13') == true) {
         }
         if ($this->location_model->delete($user_id)) {
             #set success message
@@ -528,7 +544,7 @@ class location extends CI_Controller {
         redirect('location/country');
     }
     public function delete_region($user_id = null) {
-        if (user_role('12') == true) {
+        if (user_role('16') == true) {
         }
         if ($this->location_model->delete_region($user_id)) {
             #set success message
@@ -540,7 +556,7 @@ class location extends CI_Controller {
         redirect('location/region');
     }
     public function delete_territory($user_id = null) {
-        if (user_role('12') == true) {
+        if (user_role('114') == true) {
         }
         if ($this->location_model->delete_territory($user_id)) {
             #set success message
@@ -552,7 +568,7 @@ class location extends CI_Controller {
         redirect('location/territory');
     }
     public function delete_state($user_id = null) {
-        if (user_role('12') == true) {
+        if (user_role('110') == true) {
         }
         if ($this->location_model->delete_state($user_id)) {
             #set success message
@@ -564,7 +580,7 @@ class location extends CI_Controller {
         redirect('location/state');
     }
     public function delete_city($user_id = null) {
-        if (user_role('12') == true) {
+        if (user_role('118') == true) {
         }
         if ($this->location_model->delete_city($user_id)) {
             #set success message
@@ -576,7 +592,7 @@ class location extends CI_Controller {
         redirect('location/state');
     }
     function import() {
-        if (user_role('10') == true) {
+        if (user_role('119') == true) {
         }
         $data['title'] = display('import');
         $data['content'] = $this->load->view('location/import', $data, true);

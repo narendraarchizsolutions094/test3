@@ -75,6 +75,8 @@ class Enquiry extends CI_Controller
     }
     public function move_to_client()
     {
+        if (user_role('77') == true) {
+        }
         if (!empty($_POST)) {
             $move_enquiry = $this->input->post('enquiry_id');
             $date = date('d-m-Y H:i:s');
@@ -435,6 +437,8 @@ class Enquiry extends CI_Controller
 
     public function create()
     {
+        if (user_role('60') == true) {
+        }
         //print_r($_POST);die;
         $process = $this->session->userdata('process');
         $data['leadsource'] = $this->Leads_Model->get_leadsource_list();
@@ -777,6 +781,8 @@ class Enquiry extends CI_Controller
     }
     public function create1()
     {
+        if (user_role('60') == true) {
+        }
         $process = $this->session->userdata('process');
         // print_r($process);
         $data['leadsource'] = $this->Leads_Model->get_leadsource_list();
@@ -1021,6 +1027,8 @@ class Enquiry extends CI_Controller
     }
     public function assign_enquiry()
     {
+        if (user_role('67') == true) {
+        }
         if (!empty($_POST)) {
             $move_enquiry = $this->input->post('enquiry_id[]');
             // echo json_encode($move_enquiry);
@@ -1764,6 +1772,8 @@ Array
     }
     public function move_to_lead()
     {
+        if (user_role('68') == true) {
+        }
         if (!empty($_POST)) {
             $move_enquiry = $this->input->post('enquiry_id');
             $date = date('d-m-Y H:i:s');
@@ -1946,6 +1956,8 @@ Array
     }
     public function drop_enquiry()
     {
+        if (user_role('62') == true) {
+        }
         $data['title'] = 'Drop Reasons';
         $enquiryid = $this->uri->segment(3);
         if (!empty($_POST)) {
@@ -1985,6 +1997,8 @@ Array
     }
     public function drop_enquiries()
     {
+        if (user_role('62') == true) {
+        }
         if (!empty($_POST)) {
             $reason = $this->input->post('reason');
             $drop_status = $this->input->post('drop_status');
@@ -2008,6 +2022,8 @@ Array
     }
     public function delete_recorde()
     {
+        if (user_role('62') == true) {
+        }
         if (!empty($_POST)) {
             $move_enquiry = $this->input->post('enquiry_id');
             if (!empty($move_enquiry)) {

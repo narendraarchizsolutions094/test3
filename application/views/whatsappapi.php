@@ -62,9 +62,12 @@
 		
 		<div class="tab-content clearfix">
 		<div class="tab-pane active" id="tab-integration">
-		    <br>
+    <?php if (user_access(50)==true) { ?>
+      
+    <br>
 		 <button class="btn btn-sm btn-success" style="float: left" type="button" data-toggle="modal" data-target="#createnewintegration"><i class="fa fa-plus"></i> Add New Integration</button>
         <br>
+    <?php } ?>
 		<br>
 		<form  action='' method="post" id="apitable">
 	<table width="100%" class="datatable1 table table-striped table-bordered table-hover">
@@ -101,13 +104,16 @@
                         <?php } ?> 
                     </tbody>
                 </table> 
+                <?php if (user_access(53)==true) { ?>
 		
 	<button class="btn btn-danger" type="button" onclick="return is_delete()" >
                                              <i class="ion-close-circled"></i>
                                                    Delete
                                             </button>
+                <?php } ?>
                                       </form>
                                       
+                                      <?php if (user_access(51)==true) { ?>
                                       
       <?php foreach ($api_list as $list) { ?>                
 <div id="createnewintegration<?php echo $list->api_id;?>" class="modal fade" role="dialog">
@@ -162,14 +168,18 @@
                                 
                                 
                             
-            <?php } ?>
+            <?php }  }?>
 		</div>
 	
 		<div class="tab-pane" id="tab-templates">
-		     <br>
+         <br>
+         <?php if (user_access(50)==true) { ?>
+         
 		 <button class="btn btn-sm btn-success" style="float: left" type="button" data-toggle="modal" data-target="#createnewtemplate"><i class="fa fa-plus"></i> Add New Template</button>
-        <br>
-		<br>
+        
+     <br>
+    <br>
+         <?php } ?>
 		<form   action='' method="post" id="temptable">
 			<table width="100%" class="datatable table table-striped table-bordered table-hover">
                     <thead>
@@ -191,6 +201,7 @@
                                     <td class="th1"><?php echo $tlist->template_name; ?></td>
                                     <td class="th2"><?php echo $tlist->template_content; ?></td>
                                     <td class="th3">
+                                      
                                         <?php if(!empty($tlist->media)){ ?>
                                         <a href="<?php echo base_url($tlist->media); ?>" target="_blank"><i class="fa fa-eye" aria-hidden="true"></i></a>
                                     <?php } ?>
@@ -211,6 +222,7 @@
                                                    Delete
                                             </button>
 		</form>
+    
 		
 		<?php foreach ($temp_list as $tlist) { ?>
 		<div id="createnewtemplate<?php echo $tlist->temp_id;?>" class="modal fade" role="dialog">

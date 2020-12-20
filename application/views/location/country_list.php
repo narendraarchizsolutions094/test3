@@ -4,9 +4,12 @@
         <div  class="panel panel-default thumbnail">
  
             <div class="panel-heading no-print">
+            <?php if (user_access(10)==true) { 
+                echo 'echo';?>
                 <div class="btn-group"> 
                     <a class="btn btn-success" href="<?php echo base_url("location/create") ?>"> <i class="fa fa-plus"></i>  <?php echo display('add_country') ?> </a>  
                 </div>
+            <?php } ?>
             </div>
             <div class="panel-body">
                 <table class="add-data-table table table-striped table-bordered" cellspacing="0" width="100%">
@@ -28,9 +31,13 @@
                                    
                                     <td><?php echo (($department->c_status==1)?display('active'):display('inactive')); ?></td>
                                     <td class="center">
-                                        <a href="<?php echo base_url("location/edit/$department->id_c") ?>" class="btn btn-xs  btn-primary"><i class="fa fa-edit"></i></a> 
+                                    <?php if (user_access(11)==true) { ?>
+                                        <a href="<?php echo base_url("location/edit/$department->id_c") ?>" class="btn btn-xs  btn-primary"><i class="fa fa-edit"></i></a>  <?php }
+                             if (user_access(13)==true) {  
+                                        ?>
                                         <a href="<?php echo base_url("location/delete/$department->id_c") ?>" onclick="return confirm('<?php echo display("are_you_sure") ?>')" class="btn btn-xs  btn-danger"><i class="fa fa-trash"></i></a> 
-                                    </td>
+                                    <?php } ?>
+                                        </td>
                                 </tr>
                                 <?php $sl++; ?>
                             <?php } ?> 

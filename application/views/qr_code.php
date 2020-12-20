@@ -6,7 +6,10 @@
             <div class="panel-body">
                <div class="col-sm-12">
                   <!--<img src="https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl=http%3A%2F%2Fwww.google.com%2F&choe=UTF-8" title="Link to Google.com" />-->
+                <?php if (user_access(512)==true) { ?>
+                 
                   <button class="btn btn-sm btn-success" style="float: left" type="button" data-toggle="modal" data-target="#createnewintegration"><i class="fa fa-plus"></i> <?php echo display('add_new_integration');?></button>
+                <?php } ?>
                </div>
                <br><br>
                <table width="100%" class="datatable1 table table-striped table-bordered table-hover">
@@ -39,6 +42,7 @@
                         <td class="th2"><?php echo !empty($name)?$name:''; ?></td>
                         <td class="th3"><a href="<?php echo $list->capture_link; ?>"><img  id="<?php echo $list->wid; ?>" src="https://chart.googleapis.com/chart?chs=200x200&cht=qr&chl=<?php echo $list->capture_link?>&choe=UTF-8" /></a></td>
                         <td class="center">
+                           
                            <a onclick="Popup('https://chart.googleapis.com/chart?chs=200x200&cht=qr&chl=<?php echo $list->capture_link?>&choe=UTF-8')" class="btn btn-xs  btn-warning"><i class="fa fa-print"></i></a>  
                            <!-- <a href="<?php echo base_url("configurations/delete_integration/$list->wid") ?>" onclick="return confirm('<?php echo display("are_you_sure") ?>')" class="btn btn-xs  btn-danger"><i class="fa fa-trash"></i></a>--> 
                         </td>

@@ -42,9 +42,12 @@
                </ul>
                <div class="tab-content clearfix">
                   <div class="tab-pane active" id="tab-integration">
-                     <br>
+                <?php if (user_access(58)==true) { ?>
+                    
+                  <br>
                      <button class="btn btn-sm btn-success" style="float: left" type="button" data-toggle="modal" data-target="#createnewintegration"><i class="fa fa-plus"></i> Add New Integration</button>
                      <br>
+                <?php } ?>
                      <br>
                      <form action='' method="post" id="apitable">
                         <table width="100%" class="datatable1 table table-striped table-bordered table-hover">
@@ -71,12 +74,16 @@
                               <?php } ?> 
                            </tbody>
                         </table>
+                <?php if (user_access(511)==true) { ?>
+                              
                         <button class="btn btn-danger" type="button" onclick="return delete_emailapi()" >
                         <i class="ion-close-circled"></i>
                         Delete
                         </button>
+                <?php } ?>
                      </form>
                      <!--------------- EDIT API ------------->
+                <?php if (user_access(58)==true OR user_access(59)) { ?>
                      <?php foreach ($api_list as $list) { ?>
                      <div id="createnewintegration<?php echo $list['id'];?>" class="modal fade" role="dialog">
                         <div class="modal-dialog">
@@ -99,28 +106,23 @@
                                        <label>Protocol*</label>
                                        <input class="form-control" name="protocol" value="<?php echo $list['protocol'];?>" type="text" required="">  
                                     </div>
-
                                     <div class="form-group col-sm-6"> 
                                        <label>SMTP HOST*</label>
                                        <input class="form-control" name="smtp_host" value="<?php echo $list['smtp_host'];?>" type="text" required="">  
                                     </div>
 
-
                                     <div class="form-group col-sm-6"> 
                                        <label>SMTP User*</label>
                                        <input class="form-control" name="smtp_user" value="<?php echo $list['smtp_user'];?>" type="text" required="">  
                                     </div>
-
                                     <div class="form-group col-sm-6"> 
                                        <label>SMTP Password*</label>
                                        <input class="form-control" name="smtp_password" value="<?php echo $list['smtp_pass'];?>" type="text" required="">  
                                     </div>
-
                                     <div class="form-group col-sm-6"> 
                                        <label>SMTP Port*</label>
                                        <input class="form-control" name="smtp_port" value="<?php echo $list['smtp_port'];?>" type="text" required>  
                                     </div>
-
 
                                  </div>
                                  <div class="col-12" style="padding: 0px;">
@@ -139,7 +141,7 @@
                         </div>
                      </div>
                      <!---------------------------------------------------------------->
-                     <?php } ?>                  
+                     <?php }  } ?>                  
                   </div>
                   <div class="tab-pane" id="tab-templates">
                      <br>
@@ -190,11 +192,14 @@
                               <?php } ?> 
                            </tbody>
                         </table>
+                <?php if (user_access(511)==true) { ?>
                         <button class="btn btn-danger" type="button" onclick="return is_deleteTemp()" >
                         <i class="ion-close-circled"></i>
                         Delete
                         </button>
+                <?php } ?>
                      </form>
+                
                      <?php foreach ($temp_list as $tlist) { ?>
                      <div id="createnewtemplate<?php echo $tlist->temp_id;?>" class="modal fade" role="dialog">
                         <div class="modal-dialog modal-lg">
@@ -369,28 +374,23 @@
                   <label>Protocol*</label>
                   <input class="form-control" name="protocol" type="text" required="">  
                </div>
-
                <div class="form-group col-sm-6"> 
                   <label>SMTP HOST*</label>
                   <input class="form-control" name="smtp_host" type="text" required="">  
                </div>
 
-
                <div class="form-group col-sm-6"> 
                   <label>SMTP User*</label>
                   <input class="form-control" name="smtp_user" type="text" required="">  
                </div>
-
                <div class="form-group col-sm-6"> 
                   <label>SMTP Password*</label>
                   <input class="form-control" name="smtp_password" type="text" required="">  
                </div>
-
                <div class="form-group col-sm-6"> 
                   <label>SMTP Port*</label>
                   <input class="form-control" name="smtp_port" type="text" required>  
                </div>
-
 
             </div>
             <div class="col-12" style="padding: 0px;">

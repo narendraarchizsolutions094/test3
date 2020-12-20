@@ -10,7 +10,8 @@ class Order extends CI_Controller {
 	}
 	
 	public function index(){
-		
+		if (user_role('460') == true) {}
+		 
 		if(isset($_POST["downloadexel"])){
 			
 			$this->downloadexel();
@@ -31,6 +32,7 @@ class Order extends CI_Controller {
 	}
 	
 	public function add(){
+		if (user_role('460') == true) {}
 		
 		if(isset($_POST["product"])){
 			$this->saveorder2();
@@ -53,6 +55,7 @@ class Order extends CI_Controller {
 	}
 	public function addorder(){
 		
+		if (user_role('460') == true) {}
 		
 		if(isset($_POST["proname"])){
 			
@@ -76,6 +79,7 @@ class Order extends CI_Controller {
 		
 	}
 	public function saveorder(){
+		if (user_role('460') == true) {}
 		
 		$price 	  = $this->input->post("rate", true);
 		$discount = $this->input->post("discount", true);
@@ -340,6 +344,7 @@ class Order extends CI_Controller {
 	
 	
 	public function view($ordno = ""){
+		if (user_role('460') == true) {}
 		$this->load->model("location_model");
 		if(isset($_POST["orderno"])){
 			$this->updatedelivery();
@@ -480,6 +485,7 @@ class Order extends CI_Controller {
 	}
 	
 	public function invoice($ordno = "",$type = ""){ 
+		if (user_role('462') == true) {}
 		
 		////$this->load->model("payment_model");
 		if((base64_decode($type))=='tax'){
@@ -672,6 +678,7 @@ class Order extends CI_Controller {
 	
 	public function updateorders(){
 		
+		if (user_role('460') == true) {}
 		$confqty = $this->input->post("confirmqty",true);
 		$totqty  = $this->input->post("quantity",true);
 		

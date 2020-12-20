@@ -10,6 +10,7 @@ class Holiday extends CI_controller
 	}
 	public function index()
 	{
+		if (user_role('531') == true) {}
 		if ($_POST) {
 			$data = $_POST;
 			foreach ($_POST['city'] as $city) {
@@ -28,6 +29,7 @@ class Holiday extends CI_controller
 	}
 	public function add_festival()
 	{
+		if (user_role('530') == true) {}
 		$this->load->model('User_model');
 		$this->load->model('Holiday_Model');
 		if ($_POST) {
@@ -52,6 +54,7 @@ class Holiday extends CI_controller
 	}
 	public function edit_festival($fest_id)
 	{
+		if (user_role('530') == true) {}
 		$this->load->model('User_model');
 		$this->load->model('Holiday_Model');
 		if ($_POST) {
@@ -73,6 +76,7 @@ class Holiday extends CI_controller
 	}
 	public function edit_holiday($holi_id)
 	{
+		if (user_role('531') == true) {}
 		$this->load->model('User_model');
 		$this->load->model('Holiday_Model');
 		if ($_POST) { 	//print_r($_POST); exit();
@@ -93,11 +97,13 @@ class Holiday extends CI_controller
 
 	public function delete_festival($id)
 	{
+		if (user_role('530') == true) {}
 		$this->Holiday_Model->delete_festival($id);
 		redirect(base_url('holiday/add-festival'));
 	}
 	public function delete_holiday($id)
 	{
+		if (user_role('531') == true) {}
 		$this->Holiday_Model->delete_holiday($id);
 		redirect(base_url('holiday/index'));
 	}

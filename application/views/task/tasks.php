@@ -39,10 +39,12 @@
   }
 </style>
 <br>
-<div class="col-md-12 text-center">     
+<div class="col-md-12 text-center">  
+<?php  if(user_access(90)==true){ ?>
     <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#exampleModal">
       Add Reminder
     </button>
+<?php }?>
    </div>
 <div class="col-md-12">
    <br>
@@ -63,6 +65,7 @@
 <br>
 
 
+<?php  if(user_access(90)==true){ ?>
 
 
 <!-- Modal -->
@@ -105,7 +108,7 @@
       </form>
   </div>
 </div>
-
+<?php } ?>
 
 <div class="card-body">
       <div class="col-md-12">

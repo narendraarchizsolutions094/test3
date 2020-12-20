@@ -309,6 +309,7 @@ class Payment extends CI_Controller {
 	
 	public function paylist()
 	{
+		if (user_role('440') == true) {}
 		if(isset($_POST["downloadexel"])){
             $sdate = $this->common_model->cleandate('startdate');
             $edate = $this->common_model->cleandate('enddate');

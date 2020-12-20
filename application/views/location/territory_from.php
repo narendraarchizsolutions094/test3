@@ -5,8 +5,10 @@
  
             <div class="panel-heading no-print">
                 <div class="btn-group"> 
+                <?php if (user_access(113)==true) {  ?>
                     <a class="btn btn-primary" href="<?php echo base_url("location/territory") ?>"> <i class="fa fa-list"></i>  <?php echo display('territory_list') ?> </a>  
-                </div>
+              <?php } ?>
+                    </div>
             </div> 
 
             <div class="panel-body panel-form">

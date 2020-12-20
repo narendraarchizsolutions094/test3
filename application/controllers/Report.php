@@ -15,12 +15,14 @@ class Report extends CI_Controller {
         $this->load->library('pagination');
     }
         public function index(){
+          if (user_role('120') == true) {}
             $data['title'] = display('reports_list');
             $data['reports'] = $this->report_model->get_all_reports();
             $data['content'] = $this->load->view('reports/index', $data, true);        
             $this->load->view('layout/main_wrapper', $data);
         }
         public function view($id){ 
+          if (user_role('120') == true) {}
             $data['rid'] = $id;
             $this->session->set_userdata('reportid',$id);
             $this->db->where('id',$id);
@@ -37,6 +39,7 @@ class Report extends CI_Controller {
             $this->load->view('layout/main_wrapper', $data);
         }
          public function report_view_data(){
+            if (user_role('120') == true) {}
              $fieldsval  = $this->report_model->getdynfielsval();  
              $dfields    = $this->report_model->get_dynfields("");
             $this->load->model('report_datatable_model');            

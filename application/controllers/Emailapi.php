@@ -19,6 +19,8 @@ class Emailapi extends CI_Controller {
     
          
 	public function index(){
+        if (user_role('510') == true) {
+        }
 		$data['nav1']='nav6';
 		$aid = $this->session->userdata('user_id');		
 		$data['title'] = 'Email Integration';
@@ -33,6 +35,8 @@ class Emailapi extends CI_Controller {
 	
 	public function api_details()
     {  
+        if (user_role('510') == true) {
+        }
     //$data['title'] = display('Enquiry Details');
     #------------------------------# 
     //$leadid = $this->uri->segment(3);
@@ -69,6 +73,8 @@ class Emailapi extends CI_Controller {
     
     public function template_details()
     {  
+        if (user_role('510') == true) {
+        }
     //$data['title'] = display('Enquiry Details');
     #------------------------------# 
     //$leadid = $this->uri->segment(3);
@@ -107,6 +113,8 @@ class Emailapi extends CI_Controller {
 	
     
         public function createapi(){
+            if (user_role('58') == true) {
+            }
             if(!empty($_POST)){
                 $api_name = $this->input->post('api_name');
                 $api_type = $this->input->post('api_type');
@@ -126,6 +134,8 @@ class Emailapi extends CI_Controller {
         }
 
         public function create_email_conf(){
+            if (user_role('58') == true) {
+            }
             if(!empty($_POST)){
              
                 $title              = $this->input->post('title');
@@ -158,6 +168,8 @@ class Emailapi extends CI_Controller {
         }
     
         public function delete_emailapi(){
+            if (user_role('511') == true) {
+            }
             if(!empty($_POST)){
                 $user_status=$this->input->post('user_status');
                 foreach($user_status as $key){
@@ -169,6 +181,8 @@ class Emailapi extends CI_Controller {
             
         public function createtemplate()
         {
+            if (user_role('58') == true) {
+            }
             if(!empty($_POST)){
             
             $template_name = $this->input->post('template_name');
@@ -238,6 +252,8 @@ class Emailapi extends CI_Controller {
     
     
     public function delete_api(){
+        if (user_role('511') == true) {
+        }
         if(!empty($_POST)){
         $user_status=$this->input->post('user_status');
         foreach($user_status as $key){
@@ -248,6 +264,8 @@ class Emailapi extends CI_Controller {
         }
         
         public function delete_template(){
+            if (user_role('511') == true) {
+            }
         if(!empty($_POST)){
         $user_status=$this->input->post('sel_temp');
         foreach($user_status as $key){
