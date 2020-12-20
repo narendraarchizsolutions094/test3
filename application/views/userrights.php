@@ -10,7 +10,7 @@
 
             <div class="panel-heading no-print">
 
-                <?php if(user_access(130)){ ?>
+                <?php if(0 && user_access(130)){ ?>
                     <div class="btn-group"> 
 
                         <a class="btn btn-success" href="<?php echo base_url("userrights/create") ?>"> <i class="fa fa-plus"></i>  <?php echo "Add Module Rights" ?> </a>  
