@@ -37,12 +37,9 @@
 
                             <?php $sl = 1; ?>
 
-                            <?php foreach ($user_role as $department) { ?>
-
-                            
-
-                             
-
+                            <?php foreach ($user_role as $department) { 
+                                if($this->user_model->check_user_has_right($department->id,$this->session->user_right)){
+                                ?>
                               <tr style="<?php if($department->status==0){echo 'color:red';} ?>" style="cursor: pointer;">
 
                                     <!-- <td style="<?php if($department->status==0){echo 'color:red';} ?>"><?php echo $sl; ?></td> -->
@@ -58,7 +55,7 @@
 
                                 
 
-                                <?php $sl++; ?>
+                                <?php $sl++; } ?>
 
                             <?php } ?> 
 
