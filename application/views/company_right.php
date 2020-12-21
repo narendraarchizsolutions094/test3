@@ -11,9 +11,9 @@
                         <label for="inputText"
                             class="col-sm-1 col-form-label"><?php echo display('user_function') ?></label>
                         <div class="col-sm-4">
-                            <input type="hidden" name="role_id" value="<?= $userRole->use_id ?>">
+                            <input type="hidden" name="role_id" value="<?= $user_role->use_id ?>">
                             <input type="text" class="form-control" id="inputText" name="user_type"
-                                placeholder="<?php echo display('user_function') ?>" value="<?= $userRole->user_role ?>"
+                                placeholder="<?php echo display('user_function') ?>" value="<?= $user_role->user_role ?>"
                                 required>
                         </div>
                     </div>
@@ -32,7 +32,7 @@
                         if (!empty($user_role)) { ?>
                             <?php $sl = 1; ?>
                             <?php foreach ($user_role as $department) { 
-                                if($this->user_model->check_user_has_module($department->id,$this->session->user_right)){
+                                if($this->user_model->check_user_has_module($department->id,1)){
                                 ?>
                             <tr style="<?php if($department->status==0){echo 'color:red';} ?>" style="cursor: pointer;">
                                 <td style="<?php if($department->status==0){echo 'color:red';} ?>">
