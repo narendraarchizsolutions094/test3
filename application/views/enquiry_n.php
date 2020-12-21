@@ -792,7 +792,7 @@ display: block;
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Drop Lead</h4>
+        <h4 class="modal-title">Drop <?=display('lead')?></h4>
       </div>
       <div class="modal-body">
                         
@@ -913,7 +913,7 @@ display: block;
             </div>
           
             <div class="form-group col-sm-12">        
-            <button class="btn btn-success" type="button" onclick="moveto_lead();" >Move to Lead</button>        
+            <button class="btn btn-success" type="button" onclick="moveto_lead();" >Move to <?=display('lead')?></button>        
             </div>
           
      
@@ -940,7 +940,7 @@ display: block;
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Enter info and Move to client</h4>
+        <h4 class="modal-title">Enter info and Move to <?=display('client') ?></h4>
       </div>
       <div class="modal-body">        
           <div class="row">
@@ -964,7 +964,7 @@ display: block;
           </div>          
       </div>
       <div class="modal-footer">
-        <button class="btn btn-success" type="button" onclick="moveto_client();" >Move to Client</button> 
+        <button class="btn btn-success" type="button" onclick="moveto_client();" >Move to <?=display('client')?></button> 
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
       </div>
     </div>
@@ -980,7 +980,7 @@ display: block;
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Enquiry Assignment</h4>
+        <h4 class="modal-title"><?=display('enquiry')?> Assignment</h4>
       </div>
       <div class="modal-body">
       
@@ -1540,7 +1540,7 @@ $('.checked_all1').on('change', function() {
 
 function  send_sms(){
   if($('.checkbox1:checked').size() > 1000){
-    alert('You can not send more that 1000 sms at once');
+    alert('You can not send more than 1000 sms at once');
   }else{
     var sms_type = $("#mesge_type").val();
     //var enquiry_ids = $('#enquery_assing_from').serialize();
@@ -1643,7 +1643,7 @@ function save_enquery(){
 
 function autoDial(){
   if($('.checkbox1:checked').size() > 1000){
-    alert('You can not dial more that 1000 enquiry at once');
+    alert('You can not dial more than 1000 <?=display('enquiry')?> at once');
   }else{
     data_type = "<?=$data_type?>";
     data_type = parseInt(data_type);
@@ -1681,7 +1681,7 @@ function autoDial(){
 
 function assign_enquiry(){
   if($('.checkbox1:checked').size() > 1000){
-    alert('You can not assign more that 1000 enquiry at once');
+    alert('You can not assign more than 1000 <?=display('enquiry')?> at once');
   }else{
     data_type = "<?=$data_type?>";
     data_type = parseInt(data_type);
@@ -1716,7 +1716,7 @@ function assign_enquiry(){
 
 function moveto_lead(){
   if($('.checkbox1:checked').size() > 1000){
-    alert('You can not move more that 1000 enquiry at once');
+    alert('You can not move more than 1000 <?=display('enquiry')?> at once');
   }else{
   $.ajax({
   type: 'POST',
@@ -1724,7 +1724,7 @@ function moveto_lead(){
   data: $('#enquery_assing_from').serialize(),
   success:function(data){
       if(data=='1'){
-           alert('Successfully Moved in Leads'); 
+           alert('Successfully Moved in <?=display('lead')?>s'); 
         window.location.href='<?php echo base_url();?>enquiry'
       }else{
        alert(data);
@@ -1735,7 +1735,7 @@ function moveto_lead(){
 
 function drop_enquiry(){
 if($('.checkbox1:checked').size() > 1000){
-    alert('You can not drop more that 1000 enquiry at once');
+    alert('You can not drop more than 1000 <?=display('enquiry')?> at once');
   }else{
 
      data_type = "<?=$data_type?>";
@@ -1758,7 +1758,7 @@ if($('.checkbox1:checked').size() > 1000){
   data: $('#enquery_assing_from').serialize(),
   success:function(data){
           if(data=='1'){
-         alert('Successfully Droped Enquiry'); 
+         alert('Successfully Droped <?=display('enquiry')?>'); 
         window.location.href=re_url;
       }else{
         alert(data); 
@@ -2213,8 +2213,8 @@ $('#city_name').select2({});
 $('#state').select2({});
 
 function moveto_client(){
-  if($('.checkbox1:checked').size() > 1000){
-    alert('You can not move more that 1000 enquiry at once');
+  if($('.checkbox1:checked').size() > 1){
+    alert('You can not move more than 1000 <?=display('lead')?> at once');
   }else{
   $.ajax({
   type: 'POST',
@@ -2222,7 +2222,7 @@ function moveto_client(){
   data: $('#enquery_assing_from').serialize(),
   success:function(data){
       if(data=='1'){
-           alert('Successfully Moved in Clients'); 
+           alert('Successfully Moved in <?=display('client')?>s'); 
         window.location.href='<?php echo base_url();?>led/index'
       }else{
        alert(data);

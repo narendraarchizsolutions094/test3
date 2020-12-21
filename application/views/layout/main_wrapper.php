@@ -1730,6 +1730,18 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                                 border-radius:4px;width:30px;"></i>
                          Visits</a>
                         </li>';
+
+                    echo' <li class="'.($segment1=='client' && $segment2=='deals'?'active':'').'" >
+                        <a href="'.base_url("client/deals").'">
+                        <i class="fa fa-handshake-o"
+                                style="color:#fff;
+                                font-size:20px;
+                                background:#c715b1;
+                                padding:7px;
+                                padding-left:4px;
+                                border-radius:4px;width:30px;"></i>
+                         Deals</a>
+                        </li>';
                 }
                 ?>
 
