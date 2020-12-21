@@ -4,8 +4,10 @@
         <div  class="panel panel-default thumbnail">
  
             <div class="panel-heading no-print">
-                <div class="btn-group"> 
+                <div class="btn-group">
+                <?php if (user_access(111)==true) {   ?>
                     <a class="btn btn-success" href="<?php echo base_url("location/add_territory") ?>"> <i class="fa fa-plus"></i>  <?php echo display('add_teretory') ?> </a>  
+                    <?php } ?>
                 </div>
             </div>
             <div class="panel-body">
@@ -34,8 +36,11 @@
                                  
                                     <td><?php echo (($department->tstatus==1)?display('active'):display('inactive')); ?></td>
                                     <td class="center">
+                                    <?php if (user_access(112)==true) {  ?>
                                         <a href="<?php echo base_url("location/edit_territory/$department->territory_id") ?>" class="btn btn-xs  btn-primary"><i class="fa fa-edit"></i></a> 
+                                    <?php } if (user_access(114)==true) {  ?>
                                         <a href="<?php echo base_url("location/delete_territory/$department->territory_id") ?>" onclick="return confirm('<?php echo display("are_you_sure") ?>')" class="btn btn-xs  btn-danger"><i class="fa fa-trash"></i></a> 
+                                    <?php } ?>
                                     </td>
                                 </tr>
                                 <?php $sl++; ?>

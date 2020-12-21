@@ -8,6 +8,7 @@ class Buy extends CI_Controller {
         ));
 		$this->load->model("sell_model");
 		$this->load->library('cart');
+		if (user_role('480') == true) {}
     }
 	public function thankyou(){
 		$res = $_GET;

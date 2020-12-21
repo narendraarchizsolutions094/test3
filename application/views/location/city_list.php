@@ -4,9 +4,12 @@
         <div  class="panel panel-default thumbnail">
  
             <div class="panel-heading no-print">
+            <?php if (user_access(115)==true) { ?>
+
                 <div class="btn-group"> 
                     <a class="btn btn-success" href="<?php echo base_url("location/add_city") ?>"> <i class="fa fa-plus"></i>  <?php echo display('add_city') ?> </a>  
                 </div>
+            <?php } ?>
             </div>
             <div class="panel-body">
                 <table class="add-data-table table table-striped table-bordered" cellspacing="0" width="100%">
@@ -37,9 +40,14 @@
                                  
                                     <td><?php echo (($department->status==1)?display('active'):display('inactive')); ?></td>
                                     <td class="center">
-                                        <a href="<?php echo base_url("location/edit_city/$department->id") ?>" class="btn btn-xs  btn-primary"><i class="fa fa-edit"></i></a> 
-                                        <a href="<?php echo base_url("location/delete_city/$department->id") ?>" onclick="return confirm('<?php echo display("are_you_sure") ?>')" class="btn btn-xs  btn-danger"><i class="fa fa-trash"></i></a> 
-                                    </td>
+                <?php if (user_access(116)==true) { ?>
+                                      
+                                    <a href="<?php echo base_url("location/edit_city/$department->id") ?>" class="btn btn-xs  btn-primary"><i class="fa fa-edit"></i></a> 
+                <?php } if (user_access(118)==true) { ?>
+                                     
+                                    <a href="<?php echo base_url("location/delete_city/$department->id") ?>" onclick="return confirm('<?php echo display("are_you_sure") ?>')" class="btn btn-xs  btn-danger"><i class="fa fa-trash"></i></a> 
+                <?php } ?>  
+                                </td>
                                 </tr>
                                 <?php $sl++; ?>
                             <?php } ?> 

@@ -151,7 +151,9 @@ input[name=lead_stages]{
  <div class="row" style="background-color: #fff;padding:7px;border-bottom: 1px solid #C8CED3;">  
         <div class="col-md-4 col-sm-4 col-xs-4" > 
           <a class="pull-left fa fa-arrow-left btn btn-circle btn-default btn-sm" onclick="history.back(-1)" title="Back"></a>        
+          <?php if (user_access(60)==true OR user_access(70)==true OR user_access(80)==true) { ?> 
           <a class="dropdown-toggle btn btn-danger btn-circle btn-sm fa fa-plus" id="enq-create" href="<?php echo base_url()?>enquiry/create" title="<?php echo display('add_new_enquiry');?>"></a>         
+          <?php } ?>
         </div>
          <div class="col-md-4 col-sm-8 col-xs-8 pull-right" >  
           <div style="float: right;">     
@@ -245,25 +247,48 @@ input[name=lead_stages]{
               </a>  
             <div class="dropdown-menu dropdown_css" style="max-height: 400px;overflow: auto;">
               <?php
-              if ($data_type == 1) { ?>                                
+              if ($data_type == 1) { ?>
+                <?php if (user_access(67)==true) { ?>                                
                 <a class="btn" data-toggle="modal" data-target="#AssignSelected" style="color:#000;cursor:pointer;border-radius: 2px;border-bottom :1px solid #fff;"><?php echo display('assign_selected'); ?></a>
+                <?php }
+                if (user_access(68)==true) {
+                ?>
                 <a class="btn" data-toggle="modal" data-target="#genLead" style="color:#000;cursor:pointer;border-radius: 2px;border-bottom :1px solid #fff;"><?php echo display('move_to_lead'); ?> </a>
-                <a class="btn" data-toggle="modal" data-target="#dropEnquiry" style="color:#000;cursor:pointer;border-radius: 2px;border-bottom: 1px solid #fff;"><?php echo display('drop_enquiry'); ?></a>      
+                <?php } ?>
+                <a class="btn" data-toggle="modal" data-target="#dropEnquiry" style="color:#000;cursor:pointer;border-radius: 2px;border-bottom: 1px solid #fff;"><?php echo display('drop_enquiry'); ?></a>  
+                <?php 
+                if (user_access(65)==true) {?>    
                 <a class="btn"  data-target="#sendsms" data-toggle="modal"  onclick="getTemplates('1','Send Whatssp');"  style="color:#000;cursor:pointer;border-radius: 2px;border-bottom: 1px solid #fff;"><?php echo display('send_whatsapp'); ?> </a>
+                <?php }
+                  if (user_access(64)==true) {
+                  ?>
+
                 <a class="btn " data-target="#sendsms" data-toggle="modal"  onclick="getTemplates('2','Send Sms');" style="color:#000;cursor:pointer;border-radius: 2px;border-bottom: 1px solid #fff;"><?php echo display('send_bulk_sms'); ?></a>               
               <?php
-              }else if ($data_type == 2) { ?>
+                  }
+              }else if ($data_type == 2) { 
+                 if (user_access(67)==true) { ?>
                   <a class="btn" data-toggle="modal" data-target="#AssignSelected" style="color:#000;cursor:pointer;border-radius: 2px;border-bottom :1px solid #fff;"><?php echo display('assign_selected'); ?></a>
+                  <?php }   if (user_access(77)==true) {  ?>
                   <a class="btn" data-toggle="modal" data-target="#genclient" style="color:#000;cursor:pointer;border-radius: 2px;border-bottom :1px solid #fff;">Move To <?=display('Client')?> </a>
+                  <?php } ?>
+
                   <a class="btn" data-toggle="modal" data-target="#dropEnquiry" style="color:#000;cursor:pointer;border-radius: 2px;border-bottom: 1px solid #fff;"><?php echo display('drop_lead'); ?></a>
+                  <?php  if (user_access(75)==true) {  ?>
                   <a class="btn"  data-target="#sendsms" data-toggle="modal"  onclick="getTemplates('1','Send Whatssp');"  style="color:#000;cursor:pointer;border-radius: 2px;border-bottom: 1px solid #fff;"><?php echo display('send_whatsapp'); ?> </a>
+                  <?php }    if (user_access(74)==true) {   ?>
                   <a class="btn " data-target="#sendsms" data-toggle="modal"  onclick="getTemplates('2','Send Sms');" style="color:#000;cursor:pointer;border-radius: 2px;border-bottom: 1px solid #fff;"><?php echo display('send_bulk_sms'); ?></a>
               <?php
+                  }
               }else if ($data_type == 3) { ?>
+                <?php if (user_access(67)==true) { ?>
                   <a class="btn" data-toggle="modal" data-target="#AssignSelected" style="color:#000;cursor:pointer;border-radius: 2px;border-bottom :1px solid #fff;"><?php echo display('assign_selected'); ?></a>
+                  <?php } if (user_access(64)==true) {  ?>
                   <a class="btn"  data-target="#sendsms" data-toggle="modal"  onclick="getTemplates('1','Send Whatssp');"  style="color:#000;cursor:pointer;border-radius: 2px;border-bottom: 1px solid #fff;"><?php echo display('send_whatsapp'); ?> </a>
+                  <?php }   if (user_access(65)==true) {   ?>
                   <a class="btn " data-target="#sendsms" data-toggle="modal"  onclick="getTemplates('2','Send Sms');" style="color:#000;cursor:pointer;border-radius: 2px;border-bottom: 1px solid #fff;"><?php echo display('send_bulk_sms'); ?></a>
               <?php
+                  }
               }
               ?>
               

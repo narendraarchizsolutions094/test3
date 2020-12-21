@@ -165,6 +165,7 @@ class User extends CI_Controller
     }
     function upload_user()
     {
+        if (user_role('120') == true) {}
         if (!is_dir('assets/csv')) {
             mkdir('assets/csv', 0777, TRUE);
         }
@@ -280,7 +281,7 @@ class User extends CI_Controller
             $this->form_validation->set_rules('user_type', 'user_role', 'required');
             if ($this->form_validation->run() == FALSE) {
                 $this->session->set_flashdata('FAILMSG', 'User role already exists in the table');
-                redirect('user/permissions');
+                redirect('userrights');
             } else {
                 $data = array(
                     'user_role' => $user_type,
@@ -291,7 +292,7 @@ class User extends CI_Controller
                 );
                 $this->db->insert('tbl_user_role', $data);
                 $this->session->set_flashdata('SUCCESSMSG', 'User Role Created Successfully');
-                redirect('user/permissions');
+                redirect('userrights');
             }
         } else {
             $data['page_title'] = display('user_function');
@@ -342,8 +343,7 @@ class User extends CI_Controller
     }
     public function create()
     {
-        // if (user_role('131') == true || user_role('130') == true) {
-        // } 
+        if (user_role('120') == true) {}
         $data['page_title'] = display('add_user');
         $this->form_validation->set_rules('Name', display('disolay_name'), 'required');
         $this->form_validation->set_rules('designation', 'designation', 'required');
@@ -646,6 +646,7 @@ class User extends CI_Controller
     }
     public function edit($id = null)
     {
+        if (user_role('131') == true) {}
         $data['title'] = display('edit_user');
         #-------------------------------#
         $data['state_list'] = $this->location_model->state_list();
@@ -687,8 +688,7 @@ class User extends CI_Controller
     }
     public function delete_userrole($user_role = null)
     {
-        if (user_role('141') == true) {
-        }
+        if (user_role('142') == true) { }
         if ($this->User_model->delete_userrole($user_role)) {
             #set success message
             $this->session->set_flashdata('message', display('delete_successfully'));
@@ -725,6 +725,7 @@ class User extends CI_Controller
     //Define user Permissions..
     public function permissions()
     {
+        if (user_role('140') == true) {}
         $data['title'] = display('user_list');
         $this->db->select('id,title');
         $data['modules']    =   $this->db->get('all_modules')->result_array();
@@ -734,8 +735,7 @@ class User extends CI_Controller
     //Open Edit user role form
     public function edit_user_role($role_id)
     {
-        if (user_role('142') == true) {
-        }
+        if (user_role('141') == true) {}
         $data['title'] = display('user_list');
         $data['user_role'] = $this->User_model->get_user_role($role_id);
         $this->db->select('id,title');
@@ -756,7 +756,7 @@ class User extends CI_Controller
         );
         $this->User_model->update_user_role($id, $data);
         $this->session->set_flashdata('SUCCESSMSG', 'Update Successfully');
-        redirect('user/edit_user_role/' . $id);
+        redirect('userrights/userrights_edit/' . $id);
     }
 
     public function upload_users()

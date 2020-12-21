@@ -31,6 +31,7 @@ class Product extends CI_Controller
 	}
 	function addproduct()
 	{
+		if (user_role('470') == true) {}
 		if (isset($_POST['proname'])) {
 			$this->saveProduct();
 		}
@@ -49,6 +50,7 @@ class Product extends CI_Controller
 	}
 	function editproduct($prodno)
 	{
+		if (user_role('471') == true) {}
 		if (isset($_POST['proname'])) {
 			$this->saveProduct();
 		}
@@ -86,6 +88,7 @@ class Product extends CI_Controller
 	}
 	public function orderlist()
 	{
+		if (user_role('460') == true) {}
 		$data['title'] = 'Order List';
 		$data['content'] = $this->load->view('order/order-list', $data, true);
 		$this->load->view('layout/main_wrapper', $data);
@@ -731,6 +734,7 @@ class Product extends CI_Controller
 	}
 	public function add_product()
 	{
+		if (user_role('470') == true) {}
 		$this->load->model("location_model");
 		$data['title'] = display('add_product');
 		$data['product'] = '';
@@ -790,8 +794,7 @@ class Product extends CI_Controller
 	}
 	public function edit_product($product_id = null)
 	{
-		if (user_role('21') == true) {
-		}
+		if (user_role('471') == true) {
 		$data['title'] = display('update_product');
 		$data['product'] = $this->Product_model->readRow($product_id);
 		$data['city_list'] = $this->location_model->city_list();
@@ -836,6 +839,7 @@ class Product extends CI_Controller
 	}
 	public function measurement_unit()
 	{
+		if (user_role('440') == true) {}
 		if (!empty($_POST)) {
 			$unit	=	$this->input->post('unit');
 			$insarr = array(

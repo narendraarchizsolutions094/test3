@@ -24,7 +24,7 @@ public function auto_logout(){
     // }
 }
 public function warehouse(){
-
+    if (user_role('440') == true) {}
         $data['title'] = 'Warehouse List';
         $data['warehouse_list'] = $this->warehouse_model->warehouse_list();
         $data['content'] = $this->load->view('warehouse/warehouse_list', $data, true);
@@ -32,6 +32,7 @@ public function warehouse(){
 
 }
 public function get_product_stock(){
+    if (user_role('440') == true) {}
     $pid    =   $this->input->post('pid');
     $comp_id = $this->session->companey_id;
     $this->db->where('comp_id',$comp_id);
@@ -44,6 +45,7 @@ public function get_product_stock(){
     }
 }
 public function addwarehouse(){
+    if (user_role('440') == true) {}
 
       $data['title'] = 'Add Warehouse';
         if (empty($this->input->post('user_id'))) {
@@ -92,7 +94,7 @@ public function addwarehouse(){
 }
 
 public function editwarehouse($id){
-
+    if (user_role('440') == true) {}
      if (user_role('31') == true) {}
         $data['title'] = 'Edit Product';
         $data['formdata'] = $this->warehouse_model->readwarehouse($id);
@@ -101,6 +103,7 @@ public function editwarehouse($id){
         $this->load->view('layout/main_wrapper', $data);
 }
 public function deletewarehouse($id){
+    if (user_role('440') == true) {}
    $res = $this->db->where('id',$id)->delete('tbl_warehouse');
    if($res){
              redirect('warehouse/warehouse');
@@ -109,12 +112,14 @@ public function deletewarehouse($id){
 
 
 public function typeofproduct(){
+    if (user_role('440') == true) {}
         $data['title'] = 'Product Type';
         $data['protype_list'] = $this->warehouse_model->protype_list();
         $data['content'] = $this->load->view('warehouse/typeofproduct', $data, true);
         $this->load->view('layout/main_wrapper', $data);
 }
 public function deletetypeofproduct($id){
+    if (user_role('440') == true) {}
    $res = $this->db->where('id',$id)->delete('tbl_typeofproduct');
    if($res){
              redirect('warehouse/typeofproduct');
@@ -122,6 +127,7 @@ public function deletetypeofproduct($id){
 }
 
 public function addtypeofproduct(){
+    if (user_role('440') == true) {}
       $data['title'] = 'Add Product Type';
         if (empty($this->input->post('user_id'))) {
           $this->form_validation->set_rules('name', display('name'), 'required|max_length[50]');
@@ -164,6 +170,7 @@ public function addtypeofproduct(){
 }
 
 public function edittypeofproduct($id){
+    if (user_role('440') == true) {}
      if (user_role('31') == true) {}
         $data['title'] = 'Edit Product';
         $data['formdata'] = $this->warehouse_model->readtypeofproduct($id);
@@ -172,18 +179,21 @@ public function edittypeofproduct($id){
         $this->load->view('layout/main_wrapper', $data);
 }
 public function brand(){
+    if (user_role('440') == true) {}
         $data['title'] = 'Brand List';
         $data['brand_list'] = $this->warehouse_model->brand_list();
         $data['content'] = $this->load->view('warehouse/brand', $data, true);
         $this->load->view('layout/main_wrapper', $data);
 }
 public function deletebrand($id){
+    if (user_role('440') == true) {}
      $res = $this->db->where('id',$id)->delete('tbl_brand');
    if($res){
              redirect('warehouse/brand');
    }
 }
 public function addbrand(){
+    if (user_role('440') == true) {}
      $data['title'] = 'Add Brand';
         if (empty($this->input->post('user_id'))) {
           $this->form_validation->set_rules('name', display('name'), 'required|max_length[50]');
@@ -225,6 +235,7 @@ public function addbrand(){
         }
 }
 public function editbrand($id){
+    if (user_role('440') == true) {}
         if (user_role('31') == true) {}
         $data['title'] = 'Edit Brand';
         $data['formdata'] = $this->warehouse_model->readbrandlist($id);
@@ -244,6 +255,7 @@ public function inventory(){
         $this->load->view('layout/main_wrapper', $data);
 }
 public function upload_inventory(){
+    if (user_role('301') == true) {}
     $this->load->library('upload');
  // echo  $_FILES['imgfile']['tmp_name'];exit();
       $count=0;
@@ -306,6 +318,7 @@ public function upload_inventory(){
 
 
 public function add_inventory(){
+    if (user_role('300') == true) {}
          $data['title'] = 'Add Warehouse';
         if (empty($this->input->post('user_id'))) {
           $this->form_validation->set_rules('proname', display('name'), 'required|max_length[50]');

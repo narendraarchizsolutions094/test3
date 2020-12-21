@@ -144,6 +144,7 @@ class LeadRules extends CI_Controller {
         echo json_encode(array('status'=>$status,'msg'=>$msg));
     }    
     public function create_rule($id=0){
+        if (user_role('100') == true) {}
         $data['title'] = display('leadrules');
         $data['id'] = $id;
         $this->load->model('Leads_Model');

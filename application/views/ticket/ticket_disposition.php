@@ -139,7 +139,26 @@
     var response_id = writeUserData(uid,msg,ticketno,task_date,time);
     $("input[name=dis_notification_id]").val(response_id);
     //alert(name);
-    $("#ticket_disposition_form").submit();
+    if("<?=$this->session->companey_id?>" == 82 && "<?=!empty($this->session->ameyo)?>"){
+      var phone = $("input[name='phone']").val();
+      var campaignId = "<?=$this->session->ameyo['campaignId']?>";
+      var crtObjectId = "<?=$this->session->ameyo['crtObjectId']?>";
+      var userCrtObjectId = "<?=$this->session->ameyo['userCrtObjectId']?>";
+      var userId = "<?=$this->session->ameyo['userId']?>";
+      var customerId = "<?=$this->session->ameyo['customerId']?>";
+      var sessionId = "<?=$this->session->ameyo['sessionId']?>";
+      var disposition  = $("#lead_stage_change option:selected").text();
+
+      $.ajax({
+        url:'https://emergems.ameyo.net:8443/dacx/dispose?phone='+phone+'&campaignId='+campaignId+'&crtObjectId='+crtObjectId+'&userCrtObjectId='+userCrtObjectId+'customerId='+customerId+'&dispositionCode='+disposition+'&sessionId='+sessionId,
+        type:'get',
+        success:function(q){                               
+          console.log(q);
+        }
+      });
+    }else{
+      $("#ticket_disposition_form").submit();
+    }
   });
 
   <?php

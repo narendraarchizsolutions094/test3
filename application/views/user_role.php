@@ -23,7 +23,7 @@
                 <?php if(user_access(140)) { ?>
     				 <div class="btn-group"> 
 
-                       <a href="<?php echo base_url('user/permissions') ?>" class="btn btn-raised btn-success"><i class="ti-plus text-white"></i> &nbsp;Add New</a> 
+                       <a href="<?php echo base_url('userrights') ?>" class="btn btn-raised btn-success"><i class="ti-plus text-white"></i> &nbsp;Add New</a> 
 
                     </div>
                 <?php } ?>
@@ -186,7 +186,7 @@
 
                                         <!--<a href="<?php //echo base_url("user/edit/$score->use_id") ?>" class="btn btn-xs  btn-primary" data-toggle="modal" data-target="#EditRole<?php echo $score->use_id;?>"><i class="fa fa-edit"></i></a>-->
                                         <?php if(user_access(141)) { ?>
-                                            <a href="<?php echo base_url("user/edit_user_role/$score->use_id") ?>" class="btn btn-xs  btn-primary"><i class="fa fa-edit"></i></a>
+                                            <a href="<?php echo base_url("userrights/userrights_edit/$score->use_id") ?>" class="btn btn-xs  btn-primary"><i class="fa fa-edit"></i></a>
                                         <?php }  if(user_access(142)) { ?>
                                             <a href="<?php echo base_url("user/delete_userrole/$score->use_id") ?>" onclick="return confirm('<?php echo display("are_you_sure") ?>')" class="btn btn-xs  btn-danger"><i class="fa fa-trash"></i></a> 
                                         <?php } ?>

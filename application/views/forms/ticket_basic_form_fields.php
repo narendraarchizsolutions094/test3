@@ -344,7 +344,12 @@ echo'<div class="trackingDetails"></div>';
                           <?php
                            if(!empty($source)) {
                             foreach($source as $ind => $prblm){
-                              ?><option value = "<?php echo $prblm->lsid ?>"><?php echo $prblm->lead_name ?> </option><?php
+                              if(!empty($_GET['phone']) && $prblm->lsid == 134 && $this->session->companey_id == 65){
+                                $sel = 'selected';
+                              }else{
+                                $sel = '';
+                              }
+                              ?><option <?=$sel?> value = "<?php echo $prblm->lsid ?>"><?php echo $prblm->lead_name ?> </option><?php
                             } 
                           } ?>
                         </select>

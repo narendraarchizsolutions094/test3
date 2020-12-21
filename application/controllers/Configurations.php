@@ -18,6 +18,8 @@ class Configurations extends CI_Controller {
          
 	public function index()
 	{	
+        if (user_role('514') == true) {}
+        
         if(empty($this->session->user_id)){
 		 redirect('login');   
 		}
@@ -34,7 +36,8 @@ class Configurations extends CI_Controller {
 	
 	public function qr_code()
 	{
-	    $aid = 10;
+        if (user_role('516') == true) {}
+        $aid = 10;
 		$data['title'] = 'QR-Code Integration'  ;	
 		$data['web_intergrationlist'] = $this->Configuration_Model->get_integration_list($aid);
 	    $data['user_list'] = $this->User_model->read();
@@ -47,6 +50,8 @@ class Configurations extends CI_Controller {
 	
         public function createwebsiteintegration()
         {
+            if (user_role('512') == true) {
+            } 
         if(!empty($_POST)){
         
         $integration_name = $this->input->post('integration_name');
@@ -155,6 +160,8 @@ class Configurations extends CI_Controller {
         //////////////// QR CODE //////////////////////////
         
         public function create_qr_code(){
+            if (user_role('516') == true) {
+            }
             if(!empty($_POST)){            
                 $integration_name = $this->input->post('integration_name');
                 $source_name = $this->input->post('source_name');
@@ -296,6 +303,8 @@ public function facebook()
 //////////////////////////////////////////////////////////////
  public function delete_integration($integration = null) 
         { 
+            if (user_role('515') == true) {
+            }
         if ($this->Configuration_Model->delete_integration($integration)) {
         #set success message
         $this->session->set_flashdata('message',display('delete_successfully'));

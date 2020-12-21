@@ -113,7 +113,7 @@ class Attendance extends CI_Controller {
 	
 	
 	public function mark_attendance(){
-		
+		if (user_role('200') == true) {}
 		$atID 	=	!empty($_POST['atID'])?$_POST['atID']:'';
 		
 		$user_id	=	$this->session->user_id;		
