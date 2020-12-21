@@ -28,7 +28,8 @@
                         </thead>
                         <tbody>
                             <?php
-                        $permission =  explode(',',$userRole->user_permissions);
+                        $permission =  explode(',',$user_role->user_permissions);
+                        $user_role = $this->db->get('all_modules')->result();
                         if (!empty($user_role)) { ?>
                             <?php $sl = 1; ?>
                             <?php foreach ($user_role as $department) { 
