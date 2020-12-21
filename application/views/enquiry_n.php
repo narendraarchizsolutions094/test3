@@ -656,7 +656,7 @@ display: block;
                     <i class="fa fa-list"></i><label for="total_active_radio">&nbsp;&nbsp;<?php echo display('total'); ?></label><span style="float:right;background:#000" class="badge badge-pill badge-dark " id="total_active"><i class="fa fa-spinner fa-spin"></i></span>
                   </p>
               </div>
-      </div>   
+        </div>   
     </div>
 </div>
 

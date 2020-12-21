@@ -5,7 +5,7 @@ class Enquiry_datatable_model extends CI_Model {
  
     var $table = 'enquiry';
 
-    var $column_order = array('','enquiry.enquiry_id','lead_source.lead_name', 'enquiry.company','enquiry.name','enquiry.enquiry_source','enquiry.email','enquiry.phone','enquiry.address','enquiry.created_date','enquiry.created_by','enquiry.aasign_to','tbl_datasource.datasource_name'); //set column field database for datatable orderable
+    var $column_order = array('','enquiry.enquiry_id','enquiry.enquiry_source','','enquiry.company','enquiry.name','enquiry.email','enquiry.phone','enquiry.address','','','enquiry.created_date','enquiry.created_by','enquiry.aasign_to','tbl_datasource.datasource_name','tbl_product.product_name','enquiry.Enquery_id','enquiry.score','enquiry.enquiry'); //set column field database for datatable orderable
 
     var $column_search = array('enquiry.name_prefix','enquiry.enquiry_id','enquiry.company','enquiry.org_name','enquiry.name','enquiry.lastname','enquiry.email','enquiry.phone','enquiry.address','enquiry.created_date','enquiry.enquiry_source','lead_source.icon_url','lead_source.lsid','lead_source.score_count','lead_source.lead_name','tbl_datasource.datasource_name','tbl_product.product_name',"CONCAT(tbl_admin.s_display_name,' ',tbl_admin.last_name )","CONCAT(tbl_admin2.s_display_name,' ',tbl_admin2.last_name)"); //set column field database for datatable searchable 
 
@@ -289,23 +289,29 @@ class Enquiry_datatable_model extends CI_Model {
         }
         
         
-            if(!empty($_POST['search']['value'])) // if datatable send POST for search
-            {
-                $compid = $this->session->companey_id;
-                $val = $_POST['search']['value'];
-                $this->db->or_where("enquiry.enquiry_id IN (SELECT parent FROM extra_enquery WHERE cmp_no = '$compid' AND fvalue LIKE '%{$val}%')");
-                
-            }   
-        
-       
+        if(!empty($_POST['search']['value'])) // if datatable send POST for search
+        {
+            $compid = $this->session->companey_id;
+            $val = $_POST['search']['value'];
+            $this->db->or_where("enquiry.enquiry_id IN (SELECT parent FROM extra_enquery WHERE cmp_no = '$compid' AND fvalue LIKE '%{$val}%')");
+            
+        }   
+    
         if(isset($_POST['order'])) // here order processing
         {
-            if(!empty($this->column_order[$_POST['order']['0']['column']]) and $this->column_order[$_POST['order']['0']['column']] < count($this->column_order)){
+            //print_r($_POST['order']); exit();
+
+            //if(!empty($this->column_order[$_POST['order']['0']['column']]) and $this->column_order[$_POST['order']['0']['column']] < count($this->column_order)){
+            if(!empty($this->column_order[$_POST['order']['0']['column']]) and $_POST['order']['0']['column'] < count($this->column_order))    
+            {
+                $this->db->order_by($this->column_order[$_POST['order']['0']['column']], $_POST['order']['0']['dir']); 
+                //echo  $this->column_order[$_POST['order']['0']['column']].' -> '.$_POST['order']['0']['dir'];
+                //exit();
+            }
+            else
+            {
                 
-                $this->db->order_by($this->column_order[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);  
-            }else{
-                
-                //$this->db->order_by($this->column_order[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);
+                $this->db->order_by($this->column_order[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);
             }
             
         } 
@@ -315,7 +321,7 @@ class Enquiry_datatable_model extends CI_Model {
 
 
             $this->db->order_by(key($order), $order[key($order)]);
-        }
+       }
     }
  
     function get_datatables(){
