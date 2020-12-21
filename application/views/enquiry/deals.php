@@ -1,0 +1,470 @@
+<link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+
+
+
+<div class="row" style="background-color: #fff;padding:7px;border-bottom: 1px solid #C8CED3;">
+  <div class="col-md-4 col-sm-4 col-xs-4"> 
+          <a class="pull-left fa fa-arrow-left btn btn-circle btn-default btn-sm" onclick="history.back(-1)" title="Back"></a>        
+          <a class="dropdown-toggle btn btn-danger btn-circle btn-sm fa fa-plus" data-toggle="modal" data-target="#Save_Deal" title="Add Deal"></a>         
+        </div>
+</div>
+
+
+<div class="row" style=" margin: 15px 0px; padding: 15px 0px; display: none;">
+	<div class="col-lg-3">
+        <div class="form-group">
+          <label>From</label>
+          <input type="date" class="v_filter form-control" name="v_from_date">
+        <!--   <div class="pull-left">
+            <div style="top: 0px;
+                          margin-top: 0px;
+                          float: left;
+                          height: 51px;
+                          line-height: 50px;
+                          padding-right: 5px;" >
+            <label>From</label>
+            </div>
+            <div style="height: 51px;
+                        float: left;">
+              <input type="date" class="v_filter" name="v_from_date" style="width: 145px"><br>
+              <input type="time" class="v_filter" name="v_from_time" style="width: 145px;">
+            </div>
+          </div> -->
+        </div>
+    </div>
+
+      <div class="col-lg-3">
+        <div class="form-group">
+          <label>To</label>
+           <input type="date" class="v_filter form-control" name="v_to_date">
+        </div>
+      </div>
+
+    <div class="col-lg-3">
+        <div class="form-group">
+        	<label>For</label>
+        	<select class="v_filter form-control" name="enquiry_id">
+        		<option value="">Select</option>
+        		<?php
+        		if(!empty($all_enquiry))
+        		{
+        			foreach ($all_enquiry as $row) 
+        			{  
+                $row  = (array)$row;
+        				echo'<option value="'.$row['enquiry_id'].'">'.$row['name_prefix'].' '.$row['name'].' '.$row['lastname'].'</option>';
+        			}
+        		}
+        		?>
+        	</select>
+        </div>
+    </div>
+     <div class="col-lg-3">
+        <div class="form-group">
+        	<label>Rating</label>
+       	<select class="form-control v_filter" name="rating">
+              <option value="">Select</option>
+              <option value="1 star">1 star</option>
+              <option value="2 star"> 2 star</option>
+              <option value="3 star"> 3 star</option>
+              <option value="4 star"> 4 star</option>
+              <option value="5 star"> 5 star</option>
+            </select>
+        </div>
+    </div>
+</div>
+
+<div class="row" style="margin-top: 10px;">
+				<table id="deals_table" class="table table-bordered table-hover mobile-optimised" style="width:100%;">
+				     <thead class="thead-light">
+               <tr>                              
+                  <th>S.N.</th>
+                  <th>Name</th>
+                  <th>Branch Type</th>
+                  <th>Business Type</th>
+                  <th>Booking Type</th>
+                  <th>Booking Branch</th>
+                  <th>Delivery Branch</th>
+                  <th>Rate</th>
+                  <th>Discount</th>
+                  <th>Insurance</th>
+                  <th>Paymode</th>
+                  <th>Potential Tonnage</th>
+                  <th>Potential Amount</th>
+                  <th>Expected  Tonnage</th>
+                  <th>Expected  Amount</th>
+                  <th>Vehicle Type</th>
+                  <th>Vehicle Carrying Capacity</th>
+                  <th>Invoice Value</th>
+                  <th>Create Date</th>
+                  <th>Status</th>
+                  <th>Action</th>
+               </tr>
+            </thead>
+				      <tbody>
+		     		 </tbody>
+    			</table>
+
+</div>
+
+<script type="text/javascript">
+//var Data = {"from_data":"","to_date":"","from_time":"","to_time":""};
+
+// $(".v_filter").change(function(){
+//  $("#visit_table").DataTable().ajax.reload(); 
+
+// });
+
+$(document).ready(function(){
+
+  $('#deals_table').DataTable({ 
+
+          "processing": true,
+          "scrollX": true,
+          "serverSide": true,          
+          "lengthMenu": [ [10,30, 50,100,500,1000, -1], [10,30, 50,100,500,1000, "All"] ],
+          "ajax": {
+              "url": "<?=base_url().'enquiry/deals_load_data'?>",
+              "type": "POST",
+              "data":function(d){
+                      var obj = $(".v_filter:input").serializeArray();
+
+                     
+                     d.from_date = obj[0]['value'];
+                     d.from_time = '';//obj[1]["value"];
+                     d.enquiry_id =obj[2]["value"];
+                     d.rating = obj[3]["value"];
+                     d.to_date = obj[1]['value'];
+                     d.to_time = '';//obj[5]['value'];
+                     d.view_all=true;
+                     console.log(JSON.stringify(d));
+                    return d;
+              }
+          },
+  });
+
+});
+
+$("select").select2();
+
+</script>
+<script>
+   $(document).ready(function(){
+
+
+    $('#booking_type').on('change', function() {
+      if ( this.value == '1')
+      {
+        $("#ftl").show();
+        $("#sundry").hide();
+      }  else {
+        $("#sundry").show();
+        $("#ftl").hide();
+      }
+    });
+
+
+    $('#delivery_branch').on('change', function() {
+            var delivery_branch = $("select[name='delivery_branch']").val();
+            var booking_branch = $("select[name='booking_branch']").val();
+            $.ajax({
+            type: 'POST',
+            url: '<?php echo base_url();?>enquiry/get_rate',
+            data: {delivery_branch:delivery_branch,booking_branch:booking_branch},
+            success:function(data){
+                var obj = JSON.parse(data);
+                $("#rate").val(obj.rate);
+            }
+            });
+            });
+
+$('#potential_tonnage').on('change', function() {
+                var rate = document.getElementById('rate').value;           
+                var potential_tonnage = document.getElementById('potential_tonnage').value;    
+                var weightinKg= potential_tonnage*1000;       
+               var total_ptAmount=weightinKg*rate;
+               // alert(total_ptAmount);
+                        $("#potential_amount").val(total_ptAmount);
+                    });
+                    $('#expected_tonnage').on('change', function() {
+                var rate = document.getElementById('rate').value;           
+                var expected_tonnage = document.getElementById('expected_tonnage').value;    
+                var weightinKg= expected_tonnage*1000;       
+               var total_extAmount=weightinKg*rate;
+               // alert(total_ptAmount);
+                        $("#expected_amount").val(total_extAmount);
+                    });
+
+$('#infotype').on('change', function() {
+            var infotype = $("select[name='type']").val();
+            if(infotype==1){
+               $("#textdisplay").html('Booking Branch');
+               $("#textdisplay2").html('Delivery Branch');
+            }else if(infotype==2){
+               $("#textdisplay").html('Booking Zone');
+               $("#textdisplay2").html('Delivery Zone');
+
+            }else if(infotype==3){
+               $("#textdisplay").html('Booking Area');
+               $("#textdisplay2").html('Delivery Area');
+
+            }else{
+               $("#textdisplay").html('Booking Branch');
+               $("#textdisplay2").html('Delivery Branch');
+
+            }
+});
+
+
+});
+
+</script> 
+
+
+<div id="Save_Deal" class="modal fade" role="dialog">
+   <div class="modal-dialog">
+      <!-- Modal content-->
+      <div class="modal-content">
+         <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Commercial Info</h4>
+         </div>
+         <div class="modal-body">
+            <div class="row" >
+<form class="form-inner" action="<?=  base_url('enquiry/insertCommercialInfo/') ?>" method="POST">
+               
+            <div class="row">
+
+              <div class="form-group col-md-6">
+                  <label>Related To</label>
+                  <select class="form-control" name="enquiry_id">
+                    <option value="">Select</option>
+                    <?php
+                  if(!empty($all_enquiry))
+                  {
+                    foreach ($all_enquiry as $row)
+                    {
+                      echo'<option value="'.$row->enquiry_id.'">'.$row->name.'</option>';
+                    }
+                  }
+                    ?>
+                  </select>
+               </div>
+
+               <div class=" col-sm-6">
+                    <div class="form-group"  > 
+                        <label>Info Type</label>
+                        <select class="form-control" name="type" id="infotype">
+                        <?php
+                        $branch_type=0;
+                        if($commInfoCount==1){
+                               $branch_type=$commInfoData->branch_type;
+                            }
+                            $booking_type=0;
+                            if($commInfoCount==1){
+                                   $booking_type=$commInfoData->booking_type;
+                                }
+                                $business_type=0;
+                                if($commInfoCount==1){
+                                       $business_type=$commInfoData->business_type;
+                                    }
+                                    $insurance=0;
+                                    if($commInfoCount==1){
+                                           $insurance=$commInfoData->insurance;
+                                        }
+                                        $paymode=0;
+                                        if($commInfoCount==1){
+                                               $paymode=$commInfoData->paymode;
+                                            } 
+                                            $booking_branch=0;
+                                        if($commInfoCount==1){
+                                               $booking_branch=$commInfoData->booking_branch;
+                                            }
+                                            $delivery_branch=0;
+                                            if($commInfoCount==1){
+                                                   $delivery_branch=$commInfoData->delivery_branch;
+                                                } 
+                                                 $rate=0;
+                                                    if($commInfoCount==1){
+                                                           $rate=$commInfoData->rate;
+                                                        }
+
+                                                ?>
+                            <option value="">-Select-</option> 
+                            <option value="1" <?php if($branch_type==1){ echo'selected';} ?>>Branch</option>
+                            <option value="2" <?php if($branch_type==2){ echo'selected';} ?>>Zone</option>
+                            <option value="3" <?php if($branch_type==3){ echo'selected';} ?>>Areawise</option>
+                        </select>
+                     </div>
+                </div>
+            </div>
+              <br>
+             <center><h5><u>DISPTACH LOCATION</u></h5></center>
+             <br>
+             <div class="form-group col-sm-6"> 
+                <label>Booking Type</label>
+               
+                <select class="form-control" name="booking_type" id="booking_type">
+                    <option value="">-Select-</option>
+                    <option value="0" <?php if($booking_type==0){ echo'selected';} ?>>Sundry</option>
+                    <option value="1" <?php if($booking_type==1){ echo'selected';} ?>>FTL</option>
+                </select>
+             </div>
+             <div class="form-group col-sm-6"> 
+                <label>Business Type</label>
+                <select class="form-control" name="business_type" id="business_type">
+                    <option value="">-Select-</option>
+                    <option value="0" <?php if($business_type==0){ echo'selected';} ?>>Inward</option>
+                    <option value="1" <?php if($business_type==1){ echo'selected';} ?>>outward</option>
+                </select>
+             </div>
+              <div class="form-group col-sm-6"> 
+                 <label>Insurance</label>
+                 <select class="form-control" name="insurance" id="insurance">
+                    <option value="0" <?php if($insurance==0){ echo'selected';} ?>>Carrier</option>
+                    <option value="1" <?php if($insurance==0){ echo'selected';} ?>>Owner risk</option>
+                 </select>
+              </div>
+            <div class="form-group col-sm-6"> 
+                <label>Pay Mode</label>
+                <select class="form-control" name="paymode" id="paymode">
+                   <option value="1" <?php if($paymode==1){ echo'selected';} ?>>paid</option>
+                   <option value="2" <?php if($paymode==2){ echo'selected';} ?>>To-Pay</option>
+                   <option value="3" <?php if($paymode==3){ echo'selected';} ?>>Tbb</option>
+                </select>
+            </div>
+            <div class="form-group col-sm-6"> 
+               <label id="textdisplay">Booking Branch</label>
+               <select class="form-control" name="booking_branch" id="booking_branch">
+                  <option value="">-Select-</option>
+                <?php 
+                foreach($branch as $dbranch){ ?>
+                      <option value="<?= $dbranch->branch_id ?>" <?php if($booking_branch==$dbranch->branch_id){ echo'selected';} ?>><?= $dbranch->branch_name ?></option>
+                     <?php }  ?>
+               </select>
+            </div>
+            <div class="form-group col-sm-6"> 
+               <label id="textdisplay2">Delivery Branch</label>
+               <select class="form-control" name="delivery_branch" id="delivery_branch" >
+                  <option value="">-Select-</option>
+                  <?php  
+                  foreach($branch as $dbranch){ ?>
+                      <option value="<?= $dbranch->branch_id ?>" <?php if($delivery_branch==$dbranch->branch_id){ echo'selected';} ?>><?= $dbranch->branch_name ?></option>
+                     <?php }  ?>
+               </select>
+            </div>
+                            
+            <div class="sundry" id="sundry" <?php if($booking_type==1){ echo'style="display:none"';} ?>>
+                <div class="form-group col-sm-6"> 
+                   <label>Rate</label>
+                   <input class="form-control rate" readonly name="rate" id="rate" type="text" value="<?=$rate?>"  >  
+                </div>
+                <div class="form-group col-sm-6"> 
+                   <label>Discount</label>
+                   <input class="form-control" name="discount" id="discount" type="number" step="0.00"  >  
+                </div>
+                             
+                <div class="form-group col-sm-6"> 
+                   <label>Potential Tonnage</label>
+                   <input class="form-control" name="potential_tonnage" id="potential_tonnage" type="text"  >  
+                </div>
+                <div class="form-group col-sm-6"> 
+                   <label>Potential Amount</label>
+                   <input class="form-control" readonly name="potential_amount" id="potential_amount" type="text"  >  
+                </div>
+                <div class="form-group col-sm-6"> 
+                   <label>Expected Tonnage</label>
+                   <input class="form-control" name="expected_tonnage" id="expected_tonnage" type="text"  >  
+                </div>
+                <div class="form-group col-sm-6"> 
+                   <label>Expected Amount</label>
+                   <input class="form-control"  name="expected_amount" id="expected_amount" type="text"  >  
+                </div>
+            </div>
+                              
+            <div class="ftl" id="ftl" <?php if($booking_type==0){ echo'style="display:none"';} ?>>
+               <div class="form-group col-sm-6"> 
+                  <label>Vehicle type</label>
+                  <input class="form-control" name="vehicle_type" id="Vehicle_type" type="text"  >  
+               </div>
+               <div class="form-group col-sm-6"> 
+                  <label>Vehicle Carrying Capacity</label>
+                  <input class="form-control" name="capacity" id="capacity" type="text"  >  
+               </div>
+            
+               <div class="form-group col-sm-6"> 
+                  <label>Invoice Value</label>
+                  <input class="form-control" name="invoice_value" id="invoice_value" type="text"  >  
+               </div>
+              
+               <div class="form-group col-sm-6"> 
+                  <label>Potential Amount</label>
+                  <input class="form-control" name="ftlpotential_amount" id="ftlpotential_amount" type="text"  >  
+               </div>
+               <div class="form-group col-sm-6"> 
+                  <label>Expected Amount</label>
+                  <input class="form-control" name="ftlexpected_amount" id="ftlexpected_amount" type="text"  >  
+               </div>
+            </div>
+
+
+         <div class="row" id="save_button">
+            <div class="col-md-12 text-center">
+               <input type="submit" name="submit_only" class="btn btn-primary" value="Save">
+            </div>
+         </div>
+
+</form>
+            </div>
+         </div>
+         <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+         </div>
+      </div>
+   </div>
+</div>   
+
+<div id="downloadQuatation" class="modal fade" role="dialog">
+   <div class="modal-dialog modal-lg">
+      <!-- Modal content-->
+      <div class="modal-content">
+         <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Download</h4>
+         </div>
+         <form action="<?= base_url('dashboard/pdf_gen/') ?>" method="POST">
+
+         <div class="modal-body">
+            <!-- <input name="idType" hidden class="idType" id="idType"> -->
+            <input id="enq_id_for_download" name="enquiry_id" type="hidden" value="">
+             <div id="data_value" class="data_value" style="padding:10px;"></div>
+         </div>
+         <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <input type="submit" name="download" class="btn btn-primary" value="Download">
+            <input type="submit" name="email" class="btn btn-primary" value="Email">
+         </div>
+         </form> 
+
+      </div>
+   </div>
+</div>
+
+<script>
+
+function quotation_pdf(typeId,enqid) {
+  $(".data_value").empty();
+  
+ $("#enq_id_for_download").val(enqid);
+ 
+   var elem = document.getElementById('view_sdatas');
+  $.ajax({
+            type: 'POST',
+            url: '<?php echo base_url();?>dashboard/printPdf_gen',
+            data: {typeId:typeId,enqid:enqid},
+            success:function(data){
+                $(".data_value").html(data);
+            }
+            });
+}
+</script>

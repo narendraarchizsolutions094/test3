@@ -580,14 +580,14 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                 </a>
                 <?php if($enquiry->status==1){ ?>
                 
-                <a class="btn  btn-info btn-sm"  type="button" title="Mark as Lead"  data-target="#genLead" data-toggle="modal">
+                <a class="btn  btn-info btn-sm"  type="button" title="Mark as <?=display('lead')?>"  data-target="#genLead" data-toggle="modal">
                 <i class="fa fa-thumbs-o-up"></i>
                 </a>
-                <a class="btn btn-danger btn-sm"  type="button" title="Drop Enquiry" data-target="#dropEnquiry" data-toggle="modal">
+                <a class="btn btn-danger btn-sm"  type="button" title="Drop <?=display('enquiry')?>" data-target="#dropEnquiry" data-toggle="modal">
                 <i class="fa fa-thumbs-o-down"></i>
                 </a>
                 <?php }elseif ($enquiry->status==2) { ?>
-                  <a class="btn  btn-info btn-sm" title="Mark as Client" href="<?=base_url().'lead/convert_to_lead/'.$enquiry->enquiry_id?>" onclick="return confirm('Are you sure you want to Mark this lead as client ?')" >
+                  <a class="btn  btn-info btn-sm" title="Mark as <?=display('client')?>" href="<?=base_url().'lead/convert_to_lead/'.$enquiry->enquiry_id?>" onclick="return confirm('Are you sure you want to Mark this <?=display('lead')?> as <?=display('client')?> ?')" >
                   <i class="fa fa-user"></i>
                 </a>
                   <a class="btn btn-danger btn-sm"  type="button" title="Drop Lead" data-target="#dropEnquiry" data-toggle="modal">
@@ -604,7 +604,7 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                     }
                   }
                   ?>
-                  <a class="btn btn-danger btn-sm"  type="button" title="Drop Client" data-target="#dropEnquiry" data-toggle="modal">
+                  <a class="btn btn-danger btn-sm"  type="button" title="Drop <?=display('client')?>" data-target="#dropEnquiry" data-toggle="modal">
                     <i class="fa fa-thumbs-o-down"></i>
                   </a>
                   <?php
@@ -1794,8 +1794,7 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                   <hr>
                   <form class="form-inner" action="<?=  base_url('enquiry/insertCommercialInfo/') ?>" method="POST">
                   <input type="hidden" name="enquiry_id" value="<?= $details->enquiry_id ?>">
-                    <!--------------------------------------------------start----------------------------->
-                    
+                    <!--------------------------------------------------start-----------------------------> 
                     <div class="row">
 
                     <div class=" col-sm-3">
@@ -2084,7 +2083,7 @@ $.ajax({
 }
 </script>
 <?php
-if($this->session->companey_id == 65){
+if($this->session->companey_id==65){
 ?>
 <div class="tab-pane" id="vtran_visit">
  <hr>
@@ -2187,7 +2186,7 @@ $(document).ready(function(){
   
   
 });
-      $(document).delegate('.visit-delete', 'click', function() {    
+  $(document).delegate('.visit-delete', 'click', function() {    
         vid =  $(this).data('id');      
         if(confirm('Are you sure?')){      
            $.ajax({
@@ -2671,7 +2670,7 @@ if (document.getElementById('agg_same').checked)
                            <div class="card"   style="margin-top:10px;">
                               <div class="card-body">   
                                  <span style="font-size: 14px;font-weight: bold;">
-                                 Enquiry Details: 
+                                 <?=display('enquiry')?> Details: 
                                  </span>
                                  <button class="btn btn-sm btn-primary" style="float: right"  type="button" data-toggle="modal" data-target="#Coment">
                                  <i class="fa fa-dot-circle-o"></i> Add Comment</button>                    
@@ -3418,7 +3417,7 @@ if (document.getElementById('agg_same').checked)
             <div class="modal-content">
                <div class="modal-header">
                   <button type="button" class="close" data-dismiss="modal">&times;</button>
-                  <h4 class="modal-title">Enter info and Move to lead</h4>
+                  <h4 class="modal-title">Enter info and Move to <?=display('lead')?></h4>
                </div>
                <div class="modal-body">
                   <!--<form method="post" action="">-->
@@ -3440,7 +3439,7 @@ if (document.getElementById('agg_same').checked)
                      <div class="form-group col-md-6">
                         <label><?php echo display('lead_stage') ?> <i class="text-danger">*</i></label>                  
                         <select class="form-control" id="move_lead_stage_change" name="move_lead_stage" onchange="find_description1()" required>
-                           <option value="">-- Select Lead Stage --</option>
+                           <option value="">-- Select <?=display('lead')?> Stage --</option>
                              
                               <?php foreach ($all_stage_lists as $stage) {  ?>
                               <option value="<?= $stage->stg_id?>" <?php if ($stage->stg_id == $details->lead_stage) {echo 'selected';}?>><?php echo $stage->lead_stage_name; ?></option>
@@ -3450,7 +3449,7 @@ if (document.getElementById('agg_same').checked)
                      <div class="form-group col-md-6">
                         <label><?php echo display('lead_description') ?></label>                  
                         <select class="form-control" name="lead_description" id="lead_description1">
-                           <option value="">Lead Description</option>
+                           <option value=""><?=display('lead')?> Description</option>
                           <?php foreach($all_description_lists as $discription){ ?>
                                    
                                    <option value="<?php echo $discription->id; ?>"><?php echo $discription->description; ?></option>
@@ -3562,7 +3561,7 @@ if (document.getElementById('agg_same').checked)
       <div class="modal-content">
          <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <h4 class="modal-title">Update Enquiry Details</h4>
+            <h4 class="modal-title">Update <?=display('enquiry')?> Details</h4>
          </div>
          <div class="modal-body">
             <?php echo form_open_multipart('enquiry/view/'.$enquiry->enquiry_id,'class="form-inner"') ?>
@@ -3705,11 +3704,11 @@ if (document.getElementById('agg_same').checked)
             <?php
             $drop_title = 'Drop';
             if ($enquiry->status == 1) {
-              $drop_title = 'Drop Enquiry';
+              $drop_title = 'Drop '.display('enquiry');
             }else if ($enquiry->status == 2) {
-              $drop_title = 'Drop Lead';
+              $drop_title = 'Drop '.display('lead');
             }else if ($enquiry->status == 3) {
-              $drop_title = 'Drop Client';
+              $drop_title = 'Drop '.display('client');
             }
             ?>
             <h4 class="modal-title"><?=$drop_title?> <?= ucfirst($enquiry->name); ?></h4>
