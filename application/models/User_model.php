@@ -276,7 +276,7 @@ class User_model extends CI_Model {
         }
     }
 
-    public function check_user_has_right($mid,$rid){
+    public function check_user_has_module($mid,$rid){
         $this->db->where('use_id',$rid);
         $this->db->where('comp_id',$this->session->companey_id);
         $row  = $this->db->get('tbl_user_role')->row_array();
@@ -296,6 +296,21 @@ class User_model extends CI_Model {
         }
         return $return;        
     }
+
+    public function check_user_has_right($mid,$right_id,$rid){
+        $this->db->where('use_id',$rid);
+        $this->db->where('comp_id',$this->session->companey_id);
+        $row  = $this->db->get('tbl_user_role')->row_array();
+        $perm = $row['user_permissions'];                
+        $perm = explode(',',$perm);        
+        $return = 0;
+        if(in_array($right_id,$perm)){
+            $return = 1;
+        }        
+        return $return;        
+    }
+
+
     //Select user to update..
     public function get_user_role($role_id) {
 
