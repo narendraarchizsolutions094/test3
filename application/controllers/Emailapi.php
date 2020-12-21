@@ -8,7 +8,7 @@ class Emailapi extends CI_Controller {
 		parent::__construct();
 		
 		$this->load->model(array(
-			'Client_Model','Apiintegration_Model'
+			'Client_Model','Apiintegration_Model','dash_model'
 		));
 		$panel_menu = $this->db->select("modules")
     ->where('pk_i_admin_id',$this->session->user_id)
@@ -25,6 +25,7 @@ class Emailapi extends CI_Controller {
 	    $data['page_title'] = 'Email Integration';
 		$data['api_list'] = $this->Apiintegration_Model->get_email_list();
         $api_for = 3;
+        $data['products'] = $this->dash_model->get_user_product_list();
 		$data['temp_list'] = $this->Apiintegration_Model->get_template_list($api_for);
 		$data['content'] = $this->load->view('emailapi',$data,true);
 		$this->load->view('layout/main_wrapper',$data);
@@ -215,8 +216,14 @@ class Emailapi extends CI_Controller {
                 }
                 
             }
-            
+            $process=$this->input->post('process');
+            $stage=$this->input->post('stage');
+            $process =implode(',',$process);
+            $stage =implode(',',$stage);
+    
             $data = array(
+             'stage'=>$stage,
+             'process'=>$process,
             'template_name' => $template_name,
             'mail_subject'  =>$mail_subject,
             'template_content' => $template_content,

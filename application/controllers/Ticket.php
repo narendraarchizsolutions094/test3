@@ -406,6 +406,26 @@ class Ticket extends CI_Controller
 			}
 		}
 	}
+	public function get_tracking()
+	{
+		if ($post = $this->input->post()) {
+			$url = base_url('ticket/gc_vtrans_api/'.$post['trackingno'].'');
+			
+			if ($post['trackingno']) {
+				$ch = curl_init();
+				curl_setopt($ch, CURLOPT_URL, $url);
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+				$output = curl_exec($ch);
+				curl_close($ch);
+				if ($output == '') {
+					echo '0';
+					exit();
+				}
+				echo $a = json_decode($output);
+				
+			}
+		}
+	}
 	public function view1($tckt = "")
 	{
 		if (isset($_POST["reply"])) {

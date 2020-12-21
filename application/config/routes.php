@@ -277,13 +277,8 @@ $route['customer/logged-in-as-user/(:any)'] = 'customer/logged_in_as_user/$1';
 $route['customer/update-billing-date'] = 'customer/update_billing_date';
 
 //inactive all users(users)
-
 $route['user/inactive-all'] = 'user/inactiveAlluser';
-
 $route['edit-userrights/(:any)']   = 'userrights/userrights_edit/$1'; 
-
-
-
 // master lead search
 $route['document-templates'] = 'setting/document_templates';
 $route['master_lead_search'] = 'lead/lead_search';
@@ -291,6 +286,7 @@ $route['lead'] = 'led';
 $route['feedback'] = 'Dashboard/feedback';
 $route['edit-feedback/(:any)'] = 'Dashboard/edit_feedback/$i';
 $route['feedback/create'] = 'Dashboard/create';
+$route['feedback/insert'] = 'Dashboard/insert';
 
 $route['404_override']            = '';
 

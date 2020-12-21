@@ -211,7 +211,8 @@
                                                    Delete
                                             </button>
 		</form>
-		
+    
+    
 		<?php foreach ($temp_list as $tlist) { ?>
 		<div id="createnewtemplate<?php echo $tlist->temp_id;?>" class="modal fade" role="dialog">
   <div class="modal-dialog modal-lg">
@@ -228,7 +229,35 @@
                                        
            
               <div class="row">
+              <div class="form-group col-sm-6">
+                <div class="form-group">
+                <label>Process</label>
+              <select  class="form-control process multiple" name="process[]" multiple required>        
+                <?php foreach($products as $product){?>
+                <option value="<?=$product->sb_id ?>"><?=$product->product_name ?></option>
+                <?php } ?>
+              </select>
+                   </div>
+                </div>
+                <div class="form-group col-sm-6">
+                <div class="form-group">
+                <label>Stage</label>
+        <select  class="form-control process multiple" name="stage[]" multiple required>   
+          <option value="1" <?php if(in_array('1', $tlist->stage)){echo'stage';} ?>><?=display("enquiry") ?></option>     
+          <option value="2" <?php if(in_array('2', $tlist->stage)){echo'stage';}?>><?=display("lead") ?></option>     
+          <option value="3" <?php if(in_array('3', $tlist->stage)){echo'stage';}?>><?=display("client") ?></option>     
+        <?php 
+         $enquiry_separation  = get_sys_parameter('enquiry_separation', 'COMPANY_SETTING');
+         if (!empty($enquiry_separation)) {
+          $enquiry_separation = json_decode($enquiry_separation, true);
+            foreach ($enquiry_separation as $key => $value) { ?>
+           <option value="<?= $key ?>" <?php if(in_array($key, $tlist->stage)){echo'stage';}?>> <?= $ctitle = $enquiry_separation[$key]['title'];  ?></option>
+        <?php } } ?>
+             </select> 
+                </div>
+                </div>
                 <input type="hidden" name="template_id" value="<?php echo $tlist->temp_id; ?>">
+                   
                 <div class="form-group   col-sm-12">
                     <label>Template Name*</label>
                             
@@ -431,28 +460,46 @@ input[type=number]::-webkit-outer-spin-button {
       <div class="modal-body">
         <!--<form>-->
             <?php echo form_open_multipart('whatsappapi/createtemplate','class="form-inner"') ?>                      
-                                       
-           
               <div class="row">
-                
+                <div class="form-group col-sm-12">
+                <div class="form-group">
+                <label>Process</label>
+              <select  class="form-control process multiple" name="process[]" multiple required>        
+                <?php foreach($products as $product){?>
+                <option value="<?=$product->sb_id ?>"><?=$product->product_name ?></option>
+                <?php } ?>
+              </select>
+                   </div>
+                </div>
+                <div class="form-group col-sm-12">
+                <div class="form-group">
+                <label>Stage</label>
+        <select  class="form-control process multiple" name="stage[]" multiple required>   
+          <option value="1"><?=display("enquiry") ?></option>     
+          <option value="2"><?=display("lead") ?></option>     
+          <option value="3"><?=display("client") ?></option>     
+        <?php 
+         $enquiry_separation  = get_sys_parameter('enquiry_separation', 'COMPANY_SETTING');
+         if (!empty($enquiry_separation)) {
+          $enquiry_separation = json_decode($enquiry_separation, true);
+            foreach ($enquiry_separation as $key => $value) { ?>
+           <option value="<?= $key ?>"> <?= $ctitle = $enquiry_separation[$key]['title'];  ?></option>
+        <?php } } ?>
+             </select> 
+                </div>
+                </div>
                 <div class="form-group   col-sm-12">
                     <label>Template Name*</label>
-                            
                 <input class="form-control" name="template_name" type="text" required=""> 
-                
                 </div>  
                  <div class="form-group   col-sm-12">
                     <label>Media Upload*</label>
-                            
                 <input class="form-control" name="media" type="file" > 
-                
                 </div>
-                
                 <div class="form-group col-sm-12"> 
                   <label>Template Content</label>
                   <textarea class="form-control" name="template_content" rows="10"></textarea>
                 </div> 
-                
                </div>          
               <div class="col-12" style="padding: 0px;">
                 <div class="row">              
@@ -461,8 +508,6 @@ input[type=number]::-webkit-outer-spin-button {
                   </div>
                 </div>                                   
               </div> 
-                  
-         
       </form> 
       </div>
       <div class="modal-footer">
@@ -474,11 +519,14 @@ input[type=number]::-webkit-outer-spin-button {
 </div>
         
         
- 
-
+<link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>   
 <script>
+    $('.multiple').select2({});  
     
+   
 function hide_td(id,id2){
+
  var a=   document.getElementById(id2);
  if(a.checked==true){   
   $('.'+id).css('visibility','visible');
@@ -546,6 +594,7 @@ alert( "fail!" );
 
 
 function is_deleteTemp(){
+    
   var x=  confirm('Are you sure want to delete ? ');
   if(x==true){
 $.ajax({
