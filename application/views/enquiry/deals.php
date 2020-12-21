@@ -182,12 +182,7 @@ input[name=top_filter]{
 </div>
 
 <script type="text/javascript">
-//var Data = {"from_data":"","to_date":"","from_time":"","to_time":""};
 
-// $(".v_filter").change(function(){
-//  $("#visit_table").DataTable().ajax.reload(); 
-
-// });
 var TempData = {};
 $(".d_filter").on('change',function(){
 
@@ -195,8 +190,6 @@ $(".d_filter").on('change',function(){
  
 });
 $(document).ready(function(){
-
-
 
   $('#deals_table').DataTable({ 
 
@@ -228,7 +221,10 @@ $(document).ready(function(){
           },
           "drawCallback":function(settings ){
             update_top_filter();
-          }
+          },
+          columnDefs: [
+                       { orderable: false, targets: -1 }
+                    ]
   });
 
 });
@@ -270,14 +266,13 @@ $(window).load(function(){
   $("#active_class p").click(function() {
       $('.border_bottom_active').removeClass('border_bottom_active');
       $(this).addClass("border_bottom_active");
-      $(this).find('label').trigger('click');
+      //$(this).find('input[type=radio]').attr('checked','checked');
   });
 });  
 </script>
 
 <script>
    $(document).ready(function(){
-
 
     $('#booking_type').on('change', function() {
       if ( this.value == '1')

@@ -1303,8 +1303,8 @@ if(!empty($_GET['desposition']))
         <?php
         }
         ?>
-          "columnDefs": [{ "orderable": false, "targets": 0 }],
-              "order": [[ 1, "desc" ]],
+          "columnDefs": [{ "orderable": false, "targets":0 }],
+           "order": [[ 1, "desc" ]],
           createdRow: function( row, data, dataIndex ) {            
             var th = $("table>th");            
             l = $("table").find('th').length;

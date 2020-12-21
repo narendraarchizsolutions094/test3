@@ -3579,7 +3579,7 @@ public function timelinePopup()
             $sub[] = $value->vehicle_type??'NA';
             $sub[] = $value->carrying_capacity??'NA';
             $sub[] = $value->invoice_value??'NA';
-            $sub[] = !empty($value->creation_date)?date('d-M-Y H:i A'):'NA';
+            $sub[] = !empty($value->creation_date)?date('d-M-Y H:i:s A',strtotime($value->creation_date)):'NA';
             $stts = $value->status;
             $sub[] = '<label class="label label-'.($stts?($stts==1?'success"> Done':'danger">Deferred'):'warning">Pending').'</label>';
 
