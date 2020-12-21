@@ -794,7 +794,7 @@ class Product extends CI_Controller
 	}
 	public function edit_product($product_id = null)
 	{
-		if (user_role('471') == true) {
+		if (user_role('471') == true) {}
 		$data['title'] = display('update_product');
 		$data['product'] = $this->Product_model->readRow($product_id);
 		$data['city_list'] = $this->location_model->city_list();
