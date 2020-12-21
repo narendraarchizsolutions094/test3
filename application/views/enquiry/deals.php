@@ -2,6 +2,42 @@
 <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
 
 
+<style type="text/css">
+  .wd-14{
+    /*width: 18%;
+    display: inline-block;
+    margin: 9px;*/
+  }
+.wd-14 p{
+  text-align: left;
+}
+.short_dashboard button{
+  margin:4px;
+}
+.short_dashboard
+{
+  margin: 0px 5px;
+}
+input[name=top_filter]{
+  visibility: hidden;
+}
+#active_class{
+  font-size: 12px;
+}
+
+
+.border_bottom{
+  border-bottom:2px solid #E4E5E6;min-height: 7vh;margin-bottom: 1vh;cursor:pointer;
+}  
+.border_bottom_active{
+  border-bottom:2px solid #20A8D8;min-height: 7vh;margin-bottom: 1vh;cursor:pointer;
+} 
+@media screen and (max-width: 900px) {
+  #active_class{
+    display: none;
+  }
+}
+</style>
 
 <div class="row" style="background-color: #fff;padding:7px;border-bottom: 1px solid #C8CED3;">
   <div class="col-md-4 col-sm-4 col-xs-4"> 
@@ -11,11 +47,11 @@
 </div>
 
 
-<div class="row" style=" margin: 15px 0px; padding: 15px 0px; display: none;">
-	<div class="col-lg-3">
+<div class="row" style=" padding: 5px 0px; ">
+	<div class="col-lg-4">
         <div class="form-group">
           <label>From</label>
-          <input type="date" class="v_filter form-control" name="v_from_date">
+          <input type="date" class="d_filter form-control" name="d_from_date">
         <!--   <div class="pull-left">
             <div style="top: 0px;
                           margin-top: 0px;
@@ -34,17 +70,17 @@
         </div>
     </div>
 
-      <div class="col-lg-3">
+      <div class="col-lg-4">
         <div class="form-group">
           <label>To</label>
-           <input type="date" class="v_filter form-control" name="v_to_date">
+           <input type="date" class="d_filter form-control" name="d_to_date">
         </div>
       </div>
 
-    <div class="col-lg-3">
+    <div class="col-lg-4">
         <div class="form-group">
         	<label>For</label>
-        	<select class="v_filter form-control" name="enquiry_id">
+        	<select class="d_filter form-control" name="d_enquiry_id">
         		<option value="">Select</option>
         		<?php
         		if(!empty($all_enquiry))
@@ -59,7 +95,7 @@
         	</select>
         </div>
     </div>
-     <div class="col-lg-3">
+     <!-- <div class="col-lg-3">
         <div class="form-group">
         	<label>Rating</label>
        	<select class="form-control v_filter" name="rating">
@@ -71,7 +107,45 @@
               <option value="5 star"> 5 star</option>
             </select>
         </div>
+    </div> -->
+</div>
+
+
+<div class="row row text-center short_dashboard" id="active_class">
+    <div class="wd-14 col-sm-3" style="">
+        <div  class="col-12 border_bottom border_bottom_active" >
+            <p style="margin-top: 2vh;font-weight:bold;">
+              <input id='all_deals_radio' value="all" type="radio" name="top_filter" class="d_filter " checked="checked"><i class="fa fa-list" ></i><label for="all_deals_radio">&nbsp;&nbsp;<?php echo display('all_deals'); ?></label>
+              <span  style="float:right;" class="badge badge-pill badge-primary " id="all_deals"><i class="fa fa-spinner fa-spin"></i></span>
+            </p>
+        </div>
     </div>
+   <div class="wd-14 col-sm-3">
+      <div  class="col-12 border_bottom" >
+            <p style="margin-top: 2vh;font-weight:bold;"  title="<?php echo display('done_deals'); ?>"> 
+              <input type="radio" name="top_filter" value="done" class="d_filter" id="done_deals_radio"><i class="fa fa-check" ></i><label for="done_deals_radio">&nbsp;&nbsp;<?php echo display('done_deals'); ?></label><span style="float:right;" class="badge badge-pill badge-success " id="all_done"><i class="fa fa-spinner fa-spin"></i></span>
+            </p>
+        </div>
+    </div>
+   
+    <div class="wd-14 col-sm-3" style="">
+            <div  class="col-12 border_bottom" >
+                <p style="margin-top: 2vh;font-weight:bold;">
+                  <input id='pending_radio' value="pending" type="radio" name="top_filter" class="d_filter"><i class="fa fa-times" ></i><label for="pending_radio">&nbsp;&nbsp;<?php echo display('pending_deals'); ?></label>
+                  <span  style="float:right;" class="badge badge-pill badge-warning " id="all_pending"><i class="fa fa-spinner fa-spin"></i></span>
+                </p>
+            </div>
+    </div>
+
+     <div class="wd-14 col-sm-3">
+              <div  class="col-12 border_bottom" >
+                  <p style="margin-top: 2vh;font-weight:bold;"   title="<?php echo display('deferred_deals'); ?>">
+                      <input type="radio" name="top_filter" value="deferred" class="d_filter" id="deferred_deals_radio">
+                      <i class="fa fa-warning" ></i><label for="deferred_deals_radio">&nbsp;&nbsp;<?php echo display('deferred_deals'); ?></label><span style="float:right;background:#E5343D" class="badge badge-danger" id="all_deferred"><i class="fa fa-spinner fa-spin"></i></span>              
+                  </p>
+              </div>
+    </div>
+
 </div>
 
 <div class="row" style="margin-top: 10px;">
@@ -108,13 +182,13 @@
 </div>
 
 <script type="text/javascript">
-//var Data = {"from_data":"","to_date":"","from_time":"","to_time":""};
 
-// $(".v_filter").change(function(){
-//  $("#visit_table").DataTable().ajax.reload(); 
+var TempData = {};
+$(".d_filter").on('change',function(){
 
-// });
-
+  $('#deals_table').DataTable().ajax.reload();
+ 
+});
 $(document).ready(function(){
 
   $('#deals_table').DataTable({ 
@@ -127,30 +201,78 @@ $(document).ready(function(){
               "url": "<?=base_url().'enquiry/deals_load_data'?>",
               "type": "POST",
               "data":function(d){
-                      var obj = $(".v_filter:input").serializeArray();
+                     //  var obj = $(".v_filter:input").serializeArray();
 
-                     
-                     d.from_date = obj[0]['value'];
-                     d.from_time = '';//obj[1]["value"];
-                     d.enquiry_id =obj[2]["value"];
-                     d.rating = obj[3]["value"];
-                     d.to_date = obj[1]['value'];
-                     d.to_time = '';//obj[5]['value'];
+                     d.top_filter = $("input[name=top_filter]:checked").val();
+                     d.date_from = $("input[name=d_from_date]").val();
+                     d.date_to = $("input[name=d_to_date]").val();
+                     d.enq_for = $("select[name=d_enquiry_id]").val();
+                     // d.from_date = obj[0]['value'];
+                     // d.from_time = '';//obj[1]["value"];
+                     // d.enquiry_id =obj[2]["value"];
+                     // d.rating = obj[3]["value"];
+                     // d.to_date = obj[1]['value'];
+                     // d.to_time = '';//obj[5]['value'];
                      d.view_all=true;
+                     TempData = d;
                      console.log(JSON.stringify(d));
                     return d;
               }
           },
+          "drawCallback":function(settings ){
+            update_top_filter();
+          },
+          columnDefs: [
+                       { orderable: false, targets: -1 }
+                    ]
   });
 
 });
 
 $("select").select2();
 
+
+function update_top_filter()
+{
+  TempData.top_filter='';
+    $.ajax({
+       
+        url: "<?=base_url().'client/short_dashboard_count_deals'?>",
+        type: 'post',
+        data:TempData,
+        dataType: 'json',
+        success: function(responseData){
+          //console.log(responseData);
+       //alert(JSON.stringify(responseData));
+        $('#all_deals').html(responseData.all_deals_num);
+        $('#all_done').html(responseData.all_done_num);
+        $('#all_pending').html(responseData.all_pending_num);
+        $('#all_deferred').html(responseData.all_deferred_num);
+        // $('#today_updated').html(responseData.all_update_num);
+        // $('#active_drop').html(responseData.all_drop_num);
+        // $('#total_active').html(responseData.all_enquery_num);
+        // $('#pending').html(responseData.all_no_activity_num);
+        // $('#assigned').html(responseData.all_assigned_num);
+        // $('#un_assigned').html(responseData.all_unassigned_num);
+      }
+    });
+}
+
 </script>
+
+<script type='text/javascript'>
+$(window).load(function(){
+  //stage_counter();
+  $("#active_class p").click(function() {
+      $('.border_bottom_active').removeClass('border_bottom_active');
+      $(this).addClass("border_bottom_active");
+      //$(this).find('input[type=radio]').attr('checked','checked');
+  });
+});  
+</script>
+
 <script>
    $(document).ready(function(){
-
 
     $('#booking_type').on('change', function() {
       if ( this.value == '1')
