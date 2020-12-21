@@ -32,9 +32,7 @@
                         $user_role = $this->db->get('all_modules')->result();
                         if (!empty($user_role)) { ?>
                             <?php $sl = 1; ?>
-                            <?php foreach ($user_role as $department) { 
-                                if($this->user_model->check_user_has_module($department->id,1)){
-                                ?>
+                            <?php foreach ($user_role as $department) { ?>
                             <tr style="<?php if($department->status==0){echo 'color:red';} ?>" style="cursor: pointer;">
                                 <td style="<?php if($department->status==0){echo 'color:red';} ?>">
                                     <?php echo $department->title; ?></td>
@@ -42,9 +40,6 @@
                                             echo getRightsByid($department->id,$permission);
                                             ?>
                                 </td>
-                                <?php
-                                    }
-                                    ?>
                             </tr>
                             <?php $sl++; } ?>
                             <?php } ?>
