@@ -1350,7 +1350,7 @@ class Enquiry extends CI_Controller
             $data['level'] = $this->location_model->find_level();
             $data['length'] = $this->location_model->find_length();
         } 
-        if ($this->session->companey_id == 65) {
+        if ($this->session->companey_id==65) {
             $data['branch']=$this->db->where('comp_id',$this->session->companey_id)->get('branch')->result();
             $data['CommercialInfo'] = $this->enquiry_model->getComInfo($enquiry_id);
             //fetch last entry
@@ -3557,6 +3557,8 @@ public function timelinePopup()
                 else if($value->enq_type=='2')
                     $url = base_url('lead/lead_details/').$value->enquiry_id;
                 else if($value->enq_type=='3')
+                    $url = base_url('client/view/').$value->enquiry_id;
+                else
                     $url = base_url('client/view/').$value->enquiry_id;
 
                 $sub[] = '<a href="'.$url.'">'.$value->name.'</a>'??'NA';
