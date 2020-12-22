@@ -50,11 +50,9 @@ class Enq extends CI_Controller
 		$data['created_bylist'] = $this->User_model->read();
 		$data['products'] = $this->dash_model->get_user_product_list();
 		$data['drops'] = $this->enquiry_model->get_drop_list();
-		$data['all_stage_lists'] = $this->Leads_Model->get_leadstage_list_byprocess1($this->session->process,array(1,2,3));
+
+		$data['all_stage_lists'] = $this->Leads_Model->get_leadstage_list_byprocess1($this->session->process,1);
 		
-		// if($this->session->user_id == 286){
-		// 	echo $this->db->last_query();
-		// }
 		$data['prodcntry_list'] = $this->enquiry_model->get_user_productcntry_list();
 		$data['state_list'] = $this->enquiry_model->get_user_state_list();
 		$data['city_list'] = $this->enquiry_model->get_user_city_list();
@@ -195,10 +193,17 @@ class Enq extends CI_Controller
 		);
 		echo json_encode($output);
 	}
+
+	public function chk()
+	{
+		//print_r($this->session->enquiry_filters_sess);
+	}
+
 	public function enq_load_data()
 	{
 		$this->load->model('enquiry_datatable_model');
 		$list = $this->enquiry_datatable_model->get_datatables();
+		//echo $this->db->last_query(); exit();
 		/*echo "<pre>";
         print_r($list);
         echo "</pre>";*/
@@ -455,25 +460,43 @@ class Enq extends CI_Controller
 		$data['all_creaed_today_num'] = $this->enquiry_model->all_creaed_today($data_type);
 		echo json_encode($data);
 	}
-	public function short_dashboard_count($data_type)
+	public function short_dashboard_count()
 	{
 		$this->common_query_short_dashboard();
-		$this->db->where('enquiry.status='.$data_type);
 		$data['all_enquery_num'] = $this->db->count_all_results();
+
+
 		$this->common_query_short_dashboard();
-		$this->db->where('enquiry.status='.$data_type.' and enquiry.drop_status>0');
+		$this->db->where('enquiry.drop_status>0');
 		$data['all_drop_num'] = $this->db->count_all_results();
+
+
 		$this->common_query_short_dashboard();
-		$this->db->where('enquiry.status='.$data_type.' and enquiry.drop_status=0');
+		$this->db->where(' enquiry.drop_status=0');
 		$data['all_active_num']= $this->db->count_all_results();
+
 		$this->common_query_short_dashboard();
-		$date=date('Y-m-d');
-		$this->db->where('enquiry.status='.$data_type.' and enquiry.update_date like "%$date%" ');
-		$data['all_today_update_num']=$this->db->count_all_results();
+		//$date=date('Y-m-d');
+		//$this->db->where('enquiry.update_date like "%$date%" '); update today
+		$this->db->where('enquiry.update_date is not NULL'); //anyhow updated
+		$data['all_update_num']=$this->db->count_all_results();
+
+
 		$this->common_query_short_dashboard();
-		$date=date('Y-m-d');
-		$this->db->where('enquiry.status='.$data_type.' and enquiry.created_date LIKE "%$date%" ');
-		$data['all_today_update_num']=$this->db->count_all_results();
+		//$date=date('Y-m-d');
+		$this->db->where('enquiry.update_date is NULL ');
+		$data['all_no_activity_num']=$this->db->count_all_results();
+
+		$this->common_query_short_dashboard();
+		//$date=date('Y-m-d');
+		$this->db->where('enquiry.aasign_to is not NULL ');
+		$data['all_assigned_num']=$this->db->count_all_results();
+
+		$this->common_query_short_dashboard();
+		//$date=date('Y-m-d');
+		$this->db->where('enquiry.aasign_to is NULL ');
+		$data['all_unassigned_num']=$this->db->count_all_results();
+
 		echo json_encode($data);
 	}
 	public function count_stages($data_type = 2)
@@ -637,6 +660,7 @@ class Enq extends CI_Controller
 	public function common_query_short_dashboard()
 	{
 		$this->load->model('common_model');
+
 		$_POST['search']['value']='';
 		$table = 'enquiry';
 	    $column_order = array('','enquiry.enquiry_id','lead_source.lead_name', 'enquiry.company','enquiry.name','enquiry.enquiry_source','enquiry.email','enquiry.phone','enquiry.address','enquiry.created_date','enquiry.created_by','enquiry.aasign_to','tbl_datasource.datasource_name'); //set column field database for datatable orderable
@@ -676,7 +700,11 @@ class Enq extends CI_Controller
             $this->db->join('tbl_newdeal ', 'tbl_newdeal.enq_id = enquiry.Enquery_id', 'left');
             $this->db->join('tbl_bank ', 'tbl_bank.id = tbl_newdeal.bank', 'left');
         }
-        $data_type = 1; //$_POST['data_type'];    
+       
+
+        $data_type = $_POST['data_type']; 
+
+
         $this->db->select($select);                
         $this->db->join('lead_source','enquiry.enquiry_source = lead_source.lsid','left');
         $this->db->join('tbl_product','enquiry.product_id = tbl_product.sb_id','left');
@@ -688,28 +716,28 @@ class Enq extends CI_Controller
         $this->db->join('tbl_admin as tbl_admin2', 'tbl_admin2.pk_i_admin_id = enquiry.aasign_to', 'left');        
         
         
-        if($top_filter=='all'){            
+        // if($top_filter=='all'){            
+        //     $where.="  enquiry.status=$data_type";
+        // }elseif($top_filter=='droped'){            
+        //     $where.="  enquiry.status=$data_type";
+        //     $where.=" AND enquiry.drop_status>0";
+        // }elseif($top_filter=='created_today'){
+        //     // $date=date('Y-m-d');
+        //     // $where.="enquiry.created_date LIKE '%$date%'";
+        //     $where.=" AND enquiry.status=$data_type";
+        //     $where.=" AND enquiry.drop_status=0";
+        // }elseif($top_filter=='updated_today'){
+        //     $date=date('Y-m-d');
+        //     $where.="enquiry.update_date LIKE '%$date%'";        
+        //     $where.=" AND enquiry.status=$data_type";
+        //     $where.=" AND enquiry.drop_status=0";
+        // }elseif($top_filter=='active'){            
+        //     $where.="  enquiry.status=$data_type";
+        //     $where.=" AND enquiry.drop_status=0";
+        // }else{                        
             $where.="  enquiry.status=$data_type";
-        }elseif($top_filter=='droped'){            
-            $where.="  enquiry.status=$data_type";
-            $where.=" AND enquiry.drop_status>0";
-        }elseif($top_filter=='created_today'){
-            $date=date('Y-m-d');
-            $where.="enquiry.created_date LIKE '%$date%'";
-            $where.=" AND enquiry.status=$data_type";
             $where.=" AND enquiry.drop_status=0";
-        }elseif($top_filter=='updated_today'){
-            $date=date('Y-m-d');
-            $where.="enquiry.update_date LIKE '%$date%'";        
-            $where.=" AND enquiry.status=$data_type";
-            $where.=" AND enquiry.drop_status=0";
-        }elseif($top_filter=='active'){            
-            $where.="  enquiry.status=$data_type";
-            $where.=" AND enquiry.drop_status=0";
-        }else{                        
-            $where.="  enquiry.status=$data_type";
-            $where.=" AND enquiry.drop_status=0";
-        }                   
+       // }                   
         if(isset($enquiry_filters_sess['lead_stages']) && $enquiry_filters_sess['lead_stages'] !=-1){
             $stage  =   $enquiry_filters_sess['lead_stages'];
             $where .= " AND enquiry.lead_stage=$stage";
@@ -724,18 +752,28 @@ class Enq extends CI_Controller
         }else if (!empty($this->session->process) && !empty($product_filter)) {
             $where.=" AND enquiry.product_id IN (".implode(',', $product_filter).')';            
         }
+
+        if($data_type=='1')
+        	$enq_date_fld = 'created_date';
+        else if($data_type=='2')
+        	$enq_date_fld = 'lead_created_date';
+        else if($data_type=='3')
+        	$enq_date_fld = 'client_created_date';
+        else 
+        	$enq_date_fld = 'created_date';
+
         if(!empty($from_created) && !empty($to_created)){
             $from_created = date("Y-m-d",strtotime($from_created));
             $to_created = date("Y-m-d",strtotime($to_created));
-            $where .= " AND DATE(enquiry.created_date) >= '".$from_created."' AND DATE(enquiry.created_date) <= '".$to_created."'";
+            $where .= " AND DATE(enquiry.".$enq_date_fld.") >= '".$from_created."' AND DATE(enquiry.".$enq_date_fld.") <= '".$to_created."'";
         }
         if(!empty($from_created) && empty($to_created)){
             $from_created = date("Y-m-d",strtotime($from_created));
-            $where .= " AND DATE(enquiry.created_date) >=  '".$from_created."'";                        
+            $where .= " AND DATE(enquiry.".$enq_date_fld.") >=  '".$from_created."'";                        
         }
         if(empty($from_created) && !empty($to_created)){            
             $to_created = date("Y-m-d",strtotime($to_created));
-            $where .= " AND DATE(enquiry.created_date) <=  '".$to_created."'";                                    
+            $where .= " AND DATE(enquiry.".$enq_date_fld.") <=  '".$to_created."'";                                    
         }
         if(!empty($company)){                    
             $where .= " AND enquiry.company =  '".$company."'";                                    

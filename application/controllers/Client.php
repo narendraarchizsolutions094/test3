@@ -276,7 +276,7 @@ class Client extends CI_Controller {
     }
     public function create_newcontact() 
     {
-        $this->load->model('Client_Model');
+        $this->load->model(array('Enquiry_Model','Client_Model'));
         $clientid = $this->input->post('enquiry_id');
         if (!empty($_POST)) {
             $name = $this->input->post('name');
@@ -292,8 +292,8 @@ class Client extends CI_Controller {
                 'designation' => $this->input->post('designation'),
                 'other_detail' => $otherdetails
             );
-           // $clientDetails = $this->Client_Model->clientdetail_by_id($clientid);
-            $enquiry_code = $this->input->post('enquiry_code');
+           $enq = $this->Enquiry_Model->getEnquiry(array('enquiry_id'=>$clientid));
+            $enquiry_code = $enq->row()->Enquery_id;
             $this->Leads_Model->add_comment_for_events($this->lang->line("new_contact_detail_added") , $enquiry_code);
             $insert_id = $this->Client_Model->clientContact($data);
             $this->session->set_flashdata('message', 'Client Contact Add Successfully');
@@ -316,7 +316,7 @@ class Client extends CI_Controller {
         if($this->input->post('task')=='view')
         {
             $cc_id = $this->input->post('cc_id');
-            $this->load->model('Client_Model');
+            $this->load->model(array('Client_Model','Enquiry_Model'));
             $res = $this->Client_Model->getContactWhere(array('cc_id'=>$cc_id,'comp_id'=>$this->session->companey_id));
             if(!$res->num_rows())
             {
@@ -327,8 +327,29 @@ class Client extends CI_Controller {
         <form method="post" action="'.base_url('client/edit_contact/').'" class="form-inner">
         <input type="hidden" name="cc_id" value="'.$row->cc_id.'">
         <input type="hidden" name="client_id" value="'.$row->client_id.'">
-            <input type="hidden" name="task" value="save">
-               <div class="form-group col-md-6">
+            <input type="hidden" name="task" value="save">';
+
+            if(!empty($_POST['direct_create']))
+            {
+                echo'<div class="form-group col-md-12">
+                  <label>Related To</label>
+                  <select class="form-control" name="client_id" readonly>';
+                  $enquiry_list = $this->Enquiry_Model->all_enqueries();
+                    if(!empty($enquiry_list))
+                    {
+                        foreach ($enquiry_list as $row2)
+                        {
+                            //echo'<option value="'.$row2->enquiry_id.'" '.($row->client_id==$row2->enquiry_id?'selected':'').'>'.$row2->name.'</option>';
+                            if($row->client_id==$row2->enquiry_id)
+                                echo'<option value="'.$row->client_id.'">'.$row2->name.'</option>';
+                        }
+                    }
+
+                  echo'
+                  </select>
+               </div>';
+           }
+               echo'<div class="form-group col-md-6">
                   <label>Designation</label>
                   <input class="form-control" name="designation" placeholder="Designation"  type="text" value="'.$row->designation.'" required>
                </div>
@@ -349,13 +370,14 @@ class Client extends CI_Controller {
                   <textarea class="form-control" name="otherdetails" rows="8">'.$row->other_detail.'</textarea>
                </div>
                <div class="sgnbtnmn form-group col-md-12">
-                  <div class="sgnbtn">
+                  <div class="sgnbtn" align="center">
                      <input id="signupbtn" type="submit" value="Save" class="btn btn-primary"  name="Save">
                   </div>
                </div>
                <input type="hidden" name="redirect_url" value="'.$this->agent->referrer().'#company_contacts" />
             </form>
-            </div>';
+            </div>
+            ';
         }
         else if($this->input->post('task')=='save')
         {
@@ -383,10 +405,11 @@ class Client extends CI_Controller {
     }
     public function contacts()
     {
-        $this->load->model('Client_Model');
+        $this->load->model(array('Client_Model','Enquiry_Model'));
         $data['title'] = display('contacts');
         $data['contact_list'] = $this->Client_Model->getContactList();//contacts.*,enquiry.---
        // print_r($data['contact_list']->result_array()); exit();
+        $data['enquiry_list'] = $this->Enquiry_Model->all_enqueries();
         $data['content'] = $this->load->view('enquiry/contacts', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }
@@ -1608,8 +1631,167 @@ public function view_editable_aggrement()
         $this->load->model('Enquiry_Model');
         $data['title'] = display('visit_list');
        // print_r($data['contact_list']->result_array()); exit();
-        $data['all_enquiry'] = $this->Enquiry_Model->getEnquiry()->result_array();
+        $data['all_enquiry'] = $this->Enquiry_Model->all_enqueries();
         $data['content'] = $this->load->view('enquiry/visits', $data, true);
         $this->load->view('layout/main_wrapper', $data);
+    }
+
+    public function deals()
+    {
+        $this->load->model('Client_Model');
+        $this->load->model('Enquiry_Model');
+        $data['title'] = 'Deals'; //display('deal_list');
+       // print_r($data['contact_list']->result_array()); exit();
+        $data['all_enquiry'] = $this->Enquiry_Model->all_enqueries();
+
+        $data['branch']=$this->db->where('comp_id',$this->session->companey_id)->get('branch')->result();
+
+        //fetch last entry
+        $comm_data=$this->db->where(array('comp_id'=>$this->session->companey_id))->order_by('id',"desc")
+        ->limit(1)->get('commercial_info');
+        $data['commInfoCount']=$comm_data->num_rows();
+        $data['commInfoData']=$comm_data->row();
+
+        $data['content'] = $this->load->view('enquiry/deals', $data, true);
+        $this->load->view('layout/main_wrapper', $data);
+    }
+    public function short_dashboard_count_deals()
+    {
+        //print_r($_POST); exit();
+        $this->common_query_short_dashboard_deals();
+        $data['all_deals_num'] = $this->db->count_all_results();
+
+        $this->common_query_short_dashboard_deals();
+        $this->db->where('info.status=1');
+        $data['all_done_num'] = $this->db->count_all_results();
+
+        $this->common_query_short_dashboard_deals();
+        $this->db->where('info.status=0');
+        $data['all_pending_num'] = $this->db->count_all_results();
+
+        $this->common_query_short_dashboard_deals();
+        $this->db->where('info.status=2');
+        $data['all_deferred_num'] = $this->db->count_all_results();
+
+        echo json_encode($data);
+    }
+
+    public function common_query_short_dashboard_deals()
+    {
+        $table = 'commercial_info';
+        // Set orderable column fields
+        $column_order = array('info.id','enq.name','info.branch_type','info.booking_type','info.business_type','book.branch_name','deliver.branch_name','info.rate','info.discount','info.insurance','info.paymode','info.potential_tonnage','info.potential_amount','info.expected_tonnage','info.expected_amount','info.vechicle_type','info.carrying_capacity','info.invoice_value','info.creation_date','info.updation_date','info.status');
+
+        // Set searchable column fields
+
+        $column_search = array('enq.name','book.branch_name','deliver.branch_name');
+
+        // $this->column_search = array('tck.ticketno','tck.id','tck.category','tck.name','tck.email','tck.product','tck.message','tck.issue','tck.solution','tck.sourse','tck.ticket_stage','tck.review','tck.status','tck.priority','tck.complaint_type','tck.coml_date','tck.last_update','tck.send_date','tck.client','tck.assign_to','tck.company','tck.added_by','enq.phone','enq.gender','prd.country_name');
+        
+        // Set default order
+        
+        $order = array('id' => 'desc');
+
+        $this->db->select('info.*,enq.name,enq.Enquery_id,enq.status as enq_type, book.branch_name as booking_branch_name, deliver.branch_name as delivery_branch_name');
+        $this->db->from($table.' info');
+        $this->db->join('enquiry enq','enq.enquiry_id=info.enquiry_id','left');
+        $this->db->join('branch book','book.branch_id=info.booking_branch','left');
+        $this->db->join('branch deliver','deliver.branch_id=info.delivery_branch','left');
+        $this->db->where("info.comp_id",$this->session->companey_id);
+
+        $where='';
+        $and =0;
+
+        if(!empty($_POST['date_from']) && !empty($_POST['date_to']))
+        {   
+            if($and)
+                $where.=" and ";
+
+            $where.=" (info.creation_date >='".$_POST['date_from']."' and info.creation_date <='".$_POST['date_to']."' ) ";
+            $and =1;
+        }
+        else if(!empty($_POST['date_from']))
+        {
+             if($and)
+                $where.=" and ";
+
+            $where.=" (info.creation_date >='".$_POST['date_from']."' ) ";
+            $and =1;
+        }
+        else if(!empty($_POST['date_to']))
+        {
+              if($and)
+                $where.=" and ";
+
+            $where.=" (info.creation_date <='".$_POST['date_to']."' ) ";
+            $and =1;
+        }
+
+        if(!empty($_POST['enq_for']))
+        {
+              if($and)
+                $where.=" and ";
+
+            $where.=" (info.enquiry_id ='".$_POST['enq_for']."' ) ";
+            $and =1;
+        }
+
+
+        if(!empty($_POST['top_filter']))
+        {   
+            if($and && $_POST['top_filter']!='all')
+                $where.=" and ";
+            if($_POST['top_filter']=='all')
+            {
+
+            }
+            else if($_POST['top_filter']=='done')
+            {
+                 $where.=" info.status = 1";
+                 $and =1;
+            }
+            else if($_POST['top_filter']=='pending')
+            {
+                $where.=" info.status = 0";
+                 $and =1;
+            }
+            else if ($_POST['top_filter']=='deferred')
+            {
+                $where.=" info.status = 2";
+                 $and =1;
+            }
+            
+        }
+
+        if($where!='')
+            $this->db->where($where);
+        //echo $where; exit();
+
+        $i = 0;
+
+        if(empty($postData['search']['value']))
+            $postData['search']['value']='';
+
+        // loop searchable columns 
+        foreach($column_search as $item){
+            // if datatable send POST for search
+            if($postData['search']['value']){
+                // first loop
+                if($i===0){
+                    // open bracket
+                    $this->db->group_start();
+                    $this->db->like($item, $postData['search']['value']);
+                }else{
+                    $this->db->or_like($item, $postData['search']['value']);
+                }
+                
+                // last loop
+                if(count($column_search) - 1 == $i){
+                    // close bracket
+                    $this->db->group_end();
+                }
+            }
+            $i++;
+        }
     }
 }

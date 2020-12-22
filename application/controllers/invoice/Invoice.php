@@ -11,6 +11,7 @@ class Invoice extends CI_Controller {
         if (empty($this->session->user_id)) {
             redirect('login');
         }
+        if (user_role('180') == true) {}
     }
 	
 	public function index() {

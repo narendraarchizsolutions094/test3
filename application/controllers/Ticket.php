@@ -843,6 +843,7 @@ class Ticket extends CI_Controller
 	}
 	public function assign_tickets()
 	{
+		if (user_role('313') == true) {}
 		$assign_to_date = date('Y-m-d H:i:s');
 		if (!empty($_POST))
 		{
@@ -898,6 +899,7 @@ class Ticket extends CI_Controller
 	}
 	public function update_ticket($tckt = "")
 	{
+		if (user_role('311') == true) {}
 		//print_r($_POST); exit();
 		if (isset($_POST["ticketno"])) {
 			//echo $_POST['']
@@ -924,6 +926,7 @@ class Ticket extends CI_Controller
 	}
 	public function edit($tckt = "")
 	{
+		if (user_role('311') == true) {}
 		if (isset($_POST["ticketno"])) {
 			$res = $this->Ticket_Model->save($this->session->companey_id, $this->session->user_id);
 			if ($res) {
@@ -949,6 +952,7 @@ class Ticket extends CI_Controller
 	}
 	public function delete_ticket()
 	{
+		if (user_role('312') == true) {}
 		foreach ($this->input->post('ticket_list') as $key => $value) {
 			$this->db->where('id', $value);
 			$this->db->delete('tbl_ticket');
@@ -1082,6 +1086,7 @@ class Ticket extends CI_Controller
 	}
 	public function add()
 	{
+		if (user_role('310') == true) {}
 		$this->load->model('Enquiry_model');
 		$this->form_validation->set_rules('name','Name','required');
 		$this->form_validation->set_rules('phone','Mobile No','required');

@@ -672,7 +672,7 @@ input[name=lead_stages]{
       dataType: 'json',
       success: function(responseData){
         //alert(JSON.stringify(responseData));
-       $('#today_created').html(responseData.created_today);
+      $('#today_created').html(responseData.created_today);
       $('#today_updated').html(responseData.updated_today);
       $('#today_close').html(responseData.closed_today);
       $('#today_total').html(responseData.all_today);

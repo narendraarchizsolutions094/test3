@@ -1660,6 +1660,7 @@ if (!empty($enquiry_separation)) {
     }
 		
 public function user_profile() {
+    if (user_role('349') == true) {}
 		$data['title'] = display('user_profile');
         $user_id = $this->session->userdata('user_id');
 		$stu_phone=$this->session->userdata('phone');
@@ -1751,6 +1752,7 @@ public function user_profile() {
     }
  } 
   public function delete_course($id){
+    if (user_role('350') == true) {}
     $res = $this->db->where('id',$id)->delete('tbl_course');
     if($res){
     
@@ -1910,6 +1912,7 @@ public function user_profile() {
     }
 
     public function add_course() {
+        if (user_role('350') == true) {}
         $data['title'] = display('add_course');
         $data['institute'] = '';       
         $this->form_validation->set_rules('course_name', display('Course_name'), 'required');
@@ -2319,6 +2322,7 @@ $newdt = date('Y-m-d',strtotime($tempdate));
         
     }
 public function my_applications() {
+    if (user_role('400') == true) {}
 	$data['title'] = display('my_applications');
     $user_id = $this->session->userdata('user_id');
 	$data['my_app'] = $this->location_model->get_wislist($user_id);
@@ -2362,6 +2366,7 @@ public function set_layout_to_session() {
     }
 	
 	public function course_details() {
+        if (user_role('350') == true) {}
 		$ins=$this->uri->segment(3);
 		$crs=$this->uri->segment(4);
 		$data['title'] = display('course_details');

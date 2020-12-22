@@ -1168,7 +1168,7 @@ class Enquiry extends CI_Controller
             $this->db->set('lastname', $this->input->post('lastname'));
             $this->db->where('enquiry_id', $enquiry_id);
             $this->db->update('enquiry');
-            $this->Leads_Model->add_comment_for_events('Enquiry Updated', $en_comments);
+            $this->Leads_Model->add_comment_for_events(display('enquiry').' Updated', $en_comments);
             $this->session->set_flashdata('message', 'Save successfully');
             redirect('enquiry/view/' . $enquiry_id);
         }
@@ -1264,7 +1264,7 @@ class Enquiry extends CI_Controller
             $this->db->set('lastname', $this->input->post('lastname'));
             $this->db->where('enquiry_id', $enquiry_id);
             $this->db->update('enquiry');
-            $this->Leads_Model->add_comment_for_events('Enquiry Updated', $en_comments);
+            $this->Leads_Model->add_comment_for_events(display('enquiry').' Updated', $en_comments);
             $this->session->set_flashdata('message', 'Save successfully');
             redirect('enquiry/view/' . $enquiry_id);
         }
@@ -1350,7 +1350,7 @@ class Enquiry extends CI_Controller
             $data['level'] = $this->location_model->find_level();
             $data['length'] = $this->location_model->find_length();
         } 
-        if ($this->session->companey_id == 65) {
+        if ($this->session->companey_id==65) {
             $data['branch']=$this->db->where('comp_id',$this->session->companey_id)->get('branch')->result();
             $data['CommercialInfo'] = $this->enquiry_model->getComInfo($enquiry_id);
             //fetch last entry
@@ -1541,7 +1541,7 @@ class Enquiry extends CI_Controller
                     unlink($k['fvalue']);
                 }
             }
-            $this->Leads_Model->add_comment_for_events("$tabname Deleted  From This Enquiry", $enqcode);
+            $this->Leads_Model->add_comment_for_events("$tabname Deleted From This Enquiry", $enqcode);
         }
         redirect($this->agent->referrer());
     }
@@ -1581,7 +1581,7 @@ class Enquiry extends CI_Controller
             $this->db->set('lastname', $this->input->post('lastname'));
             $this->db->where('Enquery_id', $enquiry_id);
             $this->db->update('enquiry');
-            $this->Leads_Model->add_comment_for_events('Enquiry Updated', $en_comments);
+            $this->Leads_Model->add_comment_for_events(display('enquiry').' Updated', $en_comments);
             $this->session->set_flashdata('message', 'Save successfully');
             redirect('enquiry/view2/' . $enquiry_id);
         }
@@ -1897,7 +1897,7 @@ Array
            // echo $this->db->last_query(); exit();
             $this->load->model('rule_model');
             $this->rule_model->execute_rules($enquiry->row()->Enquery_id, array(1, 2, 3, 6, 7));
-            $this->Leads_Model->add_comment_for_events('Enquiry Moved ', $enquiry->row()->Enquery_id);
+            $this->Leads_Model->add_comment_for_events($this->lang->line("move_to_lead"), $enquiry->row()->Enquery_id);
            
             //insert follow up counter (2 is for lead )
             $this->enquiry_model->insetFollowupTime($move_enquiry,2,$enquiry->row()->created_date,date('Y-m-d H:i:s'));
@@ -3427,7 +3427,7 @@ public function timelinePopup()
  
     public function add_visit()
     {   
-        $this->load->model('Client_Model');
+        $this->load->model(array('Client_Model','Enquiry_model'));
         if($post = $this->input->post())
         {
             //print_r($_POST); exit();
@@ -3442,8 +3442,11 @@ public function timelinePopup()
                             'comp_id'=>$this->session->companey_id,
                             'user_id'=>$this->session->user_id,
                         );
+            $res = $this->Enquiry_model->getEnquiry(array('enquiry_id'=>$data['enquiry_id']))->row();
+
             $this->Client_Model->add_visit($data);
-            $this->Leads_Model->add_comment_for_events('Visit Added', $this->input->post('enq_code'));
+            $this->Leads_Model->add_comment_for_events('Visit Added',$res->Enquery_id);
+
             $this->session->set_flashdata('SUCCESSMSG','Visit Saved Successfully');            
             if($this->input->post('redirect_url')){
                 redirect($this->input->post('redirect_url')); //updateclient                
@@ -3491,7 +3494,7 @@ public function timelinePopup()
             $sub[] = $res->rating!=''?$res->rating:'NA';
             $sub[] = $res->next_date!='0000-00-00'?$res->next_date:'NA';
             $sub[] = $res->next_location?$res->next_location:'NA';
-            $sub[] = "<a class='btn btn-xs btn-danger fa fa-trash visit-delete' href='javascript:void(0)' data-id='$res->id' ></a>";
+            $sub[] = "<a class='btn btn-xs btn-danger fa fa-trash visit-delete' href='javascript:void(0)' data-id='$res->id' data-ecode='$res->Enquery_id' ></a>";
             $data[] =$sub;
         }
     
@@ -3499,6 +3502,102 @@ public function timelinePopup()
             "draw" => $_POST['draw'],
             "recordsTotal" =>$this->visit_datatable_model->countAll(),
             "recordsFiltered" => $this->visit_datatable_model->countFiltered($_POST),
+            "data" => $data,
+        );
+        echo json_encode($output);
+    }
+
+    public function deals_load_data()
+    {
+        $this->load->model('Deals_datatable_model');
+        $result = $this->Deals_datatable_model->getRows($_POST);
+        //echo $this->db->last_query(); exit();
+        $data = array();
+        foreach ($result as $value)
+        {
+            $sub = array();
+
+                if($value->branch_type==1){
+                $branch_type='Branch';
+               }elseif($value->branch_type==2){
+                $branch_type='Zone';
+               }elseif($value->branch_type==3){
+                $branch_type='Area wise';
+               }
+               if($value->business_type==0){
+                $business_type='Inward';
+               }elseif($value->business_type==1){
+                $business_type='Outword';
+               }
+               if($value->insurance==0){
+                $insurance='Carrier';
+               }elseif($value->insurance==1){
+                $insurance='Owner Risk';
+               }
+               if($value->booking_type==0){
+                $booking_type='Sundy';
+               }elseif($value->booking_type==1){
+                $booking_type='FTL';
+               }
+               
+               if($value->paymode==1){
+                $paymode='Paid';
+               }elseif($value->paymode==2){
+                $paymode='To-Pay';
+               }elseif($value->paymode==3){
+                $paymode='Tbb';
+               }
+
+            $sub[] = $value->id;
+
+             if(!empty($_POST['view_all']))
+             {
+                if($value->enq_type=='1')
+                    $url = base_url('enquiry/view/').$value->enquiry_id;
+                else if($value->enq_type=='2')
+                    $url = base_url('lead/lead_details/').$value->enquiry_id;
+                else if($value->enq_type=='3')
+                    $url = base_url('client/view/').$value->enquiry_id;
+                else
+                    $url = base_url('client/view/').$value->enquiry_id;
+
+                $sub[] = '<a href="'.$url.'">'.$value->name.'</a>'??'NA';
+            }
+
+            $sub[] = $branch_type??'NA';
+            $sub[] = $booking_type??'NA';
+            $sub[] = $business_type??'NA';
+            $sub[] = $value->booking_branch_name??'NA';
+            $sub[] = $value->delivery_branch_name??'NA';
+            $sub[] = $value->rate??'NA';
+            $sub[] = $value->discount??'NA';
+            $sub[] = $insurance??'NA';
+            $sub[] = $paymode??'NA';
+            $sub[] = $value->potential_tonnage??'NA';
+            
+            $sub[] = $value->potential_amount??'NA';
+            $sub[] = $value->expected_tonnage??'NA';
+            $sub[] = $value->expected_amount??'NA';
+            $sub[] = $value->vehicle_type??'NA';
+            $sub[] = $value->carrying_capacity??'NA';
+            $sub[] = $value->invoice_value??'NA';
+            $sub[] = !empty($value->creation_date)?date('d-M-Y H:i:s A',strtotime($value->creation_date)):'NA';
+            $stts = $value->status;
+            $sub[] = '<label class="label label-'.($stts?($stts==1?'success"> Done':'danger">Deferred'):'warning">Pending').'</label>';
+
+            $sub[] = "
+            <a class='btn btn-xs btn-primary fa fa-edit' href='".base_url('enquiry/editinfo/' . $value->id)."'></a>
+            <a class='btn btn-xs btn-danger fa fa-trash' onclick='return confirm(\"Are you sure ?\")' href='".base_url('enquiry/deleteInfo/' . $value->id . '/'.$value->enquiry_id.'/')."'></a>
+            <a class='btn btn-primary btn-xs' onclick='quotation_pdf(".$value->booking_type.",".$value->enquiry_id.")' style='cursor: pointer;' data-toggle='modal'  data-target='#downloadQuatation'><i class='fa fa-download'></i></a>
+            ";
+
+            $data[] =$sub;
+        }
+    
+        $output = array(
+            "draw" => $_POST['draw'],
+            "recordsTotal" =>$this->Deals_datatable_model->countAll(),
+            "recordsFiltered" => $this->Deals_datatable_model->countFiltered($_POST),
             "data" => $data,
         );
         echo json_encode($output);

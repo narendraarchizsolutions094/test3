@@ -4,9 +4,12 @@
         <div  class="panel panel-default thumbnail">
  
             <div class="panel-heading no-print">
+            <?php if (user_access(117)==true) { ?>
+
                 <div class="btn-group"> 
                     <a class="btn btn-primary" href="<?php echo base_url("location/city") ?>"> <i class="fa fa-list"></i>  <?php echo display('city_list') ?> </a>  
                 </div>
+            <?php } ?>
             </div> 
 
              <div class="panel-body panel-form">

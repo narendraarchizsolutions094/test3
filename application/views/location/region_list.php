@@ -4,9 +4,12 @@
         <div  class="panel panel-default thumbnail">
  
             <div class="panel-heading no-print">
-                <div class="btn-group"> 
+            <?php if (user_access(14)==true) { ?>
+
+            <div class="btn-group"> 
                     <a class="btn btn-success" href="<?php echo base_url("location/add_region") ?>"> <i class="fa fa-plus"></i>  <?php echo display('add_region') ?> </a>  
                 </div>
+            <?php } ?>
             </div>
             <div class="panel-body">
                 <table class="add-data-table table table-striped table-bordered" cellspacing="0" width="100%">
@@ -31,8 +34,11 @@
                                  
                                     <td><?php echo (($department->status==1)?display('active'):display('inactive')); ?></td>
                                     <td class="center">
+                <?php if (user_access(16)==true) { ?>
+                                        
                                         <a href="<?php echo base_url("location/edit_region/$department->region_id") ?>" class="btn btn-xs  btn-primary"><i class="fa fa-edit"></i></a> 
                                         <a href="<?php echo base_url("location/delete_region/$department->region_id") ?>" onclick="return confirm('<?php echo display("are_you_sure") ?>')" class="btn btn-xs  btn-danger"><i class="fa fa-trash"></i></a> 
+                <?php } ?>
                                     </td>
                                 </tr>
                                 <?php $sl++; ?>

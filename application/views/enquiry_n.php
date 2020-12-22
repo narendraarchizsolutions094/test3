@@ -151,7 +151,9 @@ input[name=lead_stages]{
  <div class="row" style="background-color: #fff;padding:7px;border-bottom: 1px solid #C8CED3;">  
         <div class="col-md-4 col-sm-4 col-xs-4" > 
           <a class="pull-left fa fa-arrow-left btn btn-circle btn-default btn-sm" onclick="history.back(-1)" title="Back"></a>        
+          <?php if (user_access(60)==true OR user_access(70)==true OR user_access(80)==true) { ?> 
           <a class="dropdown-toggle btn btn-danger btn-circle btn-sm fa fa-plus" id="enq-create" href="<?php echo base_url()?>enquiry/create" title="<?php echo display('add_new_enquiry');?>"></a>         
+          <?php } ?>
         </div>
          <div class="col-md-4 col-sm-8 col-xs-8 pull-right" >  
           <div style="float: right;">     
@@ -245,25 +247,48 @@ input[name=lead_stages]{
               </a>  
             <div class="dropdown-menu dropdown_css" style="max-height: 400px;overflow: auto;">
               <?php
-              if ($data_type == 1) { ?>                                
+              if ($data_type == 1) { ?>
+                <?php if (user_access(67)==true) { ?>                                
                 <a class="btn" data-toggle="modal" data-target="#AssignSelected" style="color:#000;cursor:pointer;border-radius: 2px;border-bottom :1px solid #fff;"><?php echo display('assign_selected'); ?></a>
+                <?php }
+                if (user_access(68)==true) {
+                ?>
                 <a class="btn" data-toggle="modal" data-target="#genLead" style="color:#000;cursor:pointer;border-radius: 2px;border-bottom :1px solid #fff;"><?php echo display('move_to_lead'); ?> </a>
-                <a class="btn" data-toggle="modal" data-target="#dropEnquiry" style="color:#000;cursor:pointer;border-radius: 2px;border-bottom: 1px solid #fff;"><?php echo display('drop_enquiry'); ?></a>      
+                <?php } ?>
+                <a class="btn" data-toggle="modal" data-target="#dropEnquiry" style="color:#000;cursor:pointer;border-radius: 2px;border-bottom: 1px solid #fff;"><?php echo display('drop_enquiry'); ?></a>  
+                <?php 
+                if (user_access(65)==true) {?>    
                 <a class="btn"  data-target="#sendsms" data-toggle="modal"  onclick="getTemplates('1','Send Whatssp');"  style="color:#000;cursor:pointer;border-radius: 2px;border-bottom: 1px solid #fff;"><?php echo display('send_whatsapp'); ?> </a>
+                <?php }
+                  if (user_access(64)==true) {
+                  ?>
+
                 <a class="btn " data-target="#sendsms" data-toggle="modal"  onclick="getTemplates('2','Send Sms');" style="color:#000;cursor:pointer;border-radius: 2px;border-bottom: 1px solid #fff;"><?php echo display('send_bulk_sms'); ?></a>               
               <?php
-              }else if ($data_type == 2) { ?>
+                  }
+              }else if ($data_type == 2) { 
+                 if (user_access(67)==true) { ?>
                   <a class="btn" data-toggle="modal" data-target="#AssignSelected" style="color:#000;cursor:pointer;border-radius: 2px;border-bottom :1px solid #fff;"><?php echo display('assign_selected'); ?></a>
+                  <?php }   if (user_access(77)==true) {  ?>
                   <a class="btn" data-toggle="modal" data-target="#genclient" style="color:#000;cursor:pointer;border-radius: 2px;border-bottom :1px solid #fff;">Move To <?=display('Client')?> </a>
+                  <?php } ?>
+
                   <a class="btn" data-toggle="modal" data-target="#dropEnquiry" style="color:#000;cursor:pointer;border-radius: 2px;border-bottom: 1px solid #fff;"><?php echo display('drop_lead'); ?></a>
+                  <?php  if (user_access(75)==true) {  ?>
                   <a class="btn"  data-target="#sendsms" data-toggle="modal"  onclick="getTemplates('1','Send Whatssp');"  style="color:#000;cursor:pointer;border-radius: 2px;border-bottom: 1px solid #fff;"><?php echo display('send_whatsapp'); ?> </a>
+                  <?php }    if (user_access(74)==true) {   ?>
                   <a class="btn " data-target="#sendsms" data-toggle="modal"  onclick="getTemplates('2','Send Sms');" style="color:#000;cursor:pointer;border-radius: 2px;border-bottom: 1px solid #fff;"><?php echo display('send_bulk_sms'); ?></a>
               <?php
+                  }
               }else if ($data_type == 3) { ?>
+                <?php if (user_access(67)==true) { ?>
                   <a class="btn" data-toggle="modal" data-target="#AssignSelected" style="color:#000;cursor:pointer;border-radius: 2px;border-bottom :1px solid #fff;"><?php echo display('assign_selected'); ?></a>
+                  <?php } if (user_access(64)==true) {  ?>
                   <a class="btn"  data-target="#sendsms" data-toggle="modal"  onclick="getTemplates('1','Send Whatssp');"  style="color:#000;cursor:pointer;border-radius: 2px;border-bottom: 1px solid #fff;"><?php echo display('send_whatsapp'); ?> </a>
+                  <?php }   if (user_access(65)==true) {   ?>
                   <a class="btn " data-target="#sendsms" data-toggle="modal"  onclick="getTemplates('2','Send Sms');" style="color:#000;cursor:pointer;border-radius: 2px;border-bottom: 1px solid #fff;"><?php echo display('send_bulk_sms'); ?></a>
               <?php
+                  }
               }
               ?>
               
@@ -280,16 +305,16 @@ input[name=lead_stages]{
       </div>
 </div>
 
-
-
-
+<?php
+$stage_pipeline  = get_sys_parameter('stage_pipeline','COMPANY_SETTING');
+if(!empty($stage_pipeline) && $stage_pipeline=='1')
+{
+?>
 <div class="row">
   <div class="col-lg-12 " style="padding-top: 5px;">
     <div id="crumbs">
     <ul>
     <?php
-    if($this->session->companey_id==1 || $this->session->companey_id==65)
-    {
       if(!empty($all_stage_lists))
       {
         foreach ($all_stage_lists as $stage) 
@@ -298,7 +323,6 @@ input[name=lead_stages]{
         }
                 
       }
-    }
     ?>  
 
     </ul></div>
@@ -400,53 +424,19 @@ display: block;
   </div>
 </div>
 
-<div class="row"  id="active_class">                   
-            <div class="col-xs-12 col-sm-12  col-md-2 col-lg-2 col-half-offset" style="">
-            <div  class="col-12 border_bottom" >
-                <p style="margin-top: 2vh;font-weight:bold;">
-                  <input id='created_today_radio' value="created_today" type="radio" name="top_filter" class="enq_form_filters"><i class="fa fa-edit" ></i><label for="created_today_radio">&nbsp;&nbsp;<?php echo display('created_today'); ?></label>
-                  <span  style="float:right;" class="badge badge-pill badge-primary " id="today_created"><i class="fa fa-spinner fa-spin"></i></span>
-                </p>
-            </div>
-            </div>
-            <div class="col-xs-12 col-sm-12  col-md-2 col-lg-2 col-half-offset">
-              <div class="col-12 border_bottom">
-                  <p style="margin-top: 2vh;font-weight:bold;" >
-                    <input type="radio" name="top_filter" value="updated_today" class="enq_form_filters" id="updated_today_radio"><i class="fa fa-pencil"></i><label for="updated_today_radio">&nbsp;&nbsp;<?php echo display('updated_today'); ?></label><span style="float:right;background:#ffc107" class="badge badge-pill badge-warning badge badge-dark " id="today_updated"><i class="fa fa-spinner fa-spin"></i></span>
-                  </p>
-              </div>
-            </div>
-            
-            <div class="col-xs-12 col-sm-12  col-md-2 col-lg-2 col-half-offset">
-            <div  class="col-12 border_bottom border_bottom_active" >
-                  <p style="margin-top: 2vh;font-weight:bold;"  title="<?php echo display('active'); ?>"> 
-                    <input type="radio" name="top_filter" value="active" checked="checked" class="enq_form_filters" id="active_radio"><i class="fa fa-file" ></i><label for="active_radio">&nbsp;&nbsp;<?php echo display('active'); ?></label><span style="float:right;" class="badge badge-pill badge-primary " id="active_all"><i class="fa fa-spinner fa-spin"></i></span>
-                  </p>
-              </div>
-            </div>
-                  
-            <div class="col-xs-12 col-sm-12  col-md-2 col-lg-2 col-half-offset">
-              <div  class="col-12 border_bottom" >
-                  <p style="margin-top: 2vh;font-weight:bold;"   title="<?php echo display('droped'); ?>">
-                      <input type="radio" name="top_filter" value="droped" class="enq_form_filters" id="droped_radio">
-                      <i class="fa fa-thumbs-down" ></i><label for="droped_radio">&nbsp;&nbsp;<?php echo display('droped'); ?></label><span style="float:right;background:#E5343D" class="badge badge-danger" id="active_drop"><i class="fa fa-spinner fa-spin"></i></span>                   
-                  </p>
-              </div>
-            </div>
-            <div class="col-xs-12 col-sm-12  col-md-2 col-lg-2 col-half-offset">
-              <div class="col-12 border_bottom" >
-
-                  <p style="margin-top: 2vh;font-weight:bold;"  title="<?php echo display('total'); ?>">
-                    <input type="radio" name="top_filter" value="all" class="enq_form_filters" id="total_active_radio">
-                    <i class="fa fa-list"></i><label for="total_active_radio">&nbsp;&nbsp;<?php echo display('total'); ?></label><span style="float:right;background:#000" class="badge badge-pill badge-dark " id="total_active"><i class="fa fa-spinner fa-spin"></i></span>
-                  </p>
-              </div>
-          </div>   
-    </div>
-</div>
-
+<?php
+}
+?>
+<style type="text/css">
+  #filter_pannel .col-md-3
+  {
+    height: 63px; 
+    font-size: 12px!important;
+    margin: 0px;
+  }
+</style>
 <!------ Filter Div ---------->
- <div class="row" id="filter_pannel">
+<div class="row" id="filter_pannel" style="margin-top: 15px;">
         <div class="col-lg-12">
             <div class="panel panel-default">
                
@@ -607,6 +597,84 @@ display: block;
 </form>
 
 
+
+<div class="row row text-center short_dashboard" id="active_class">   
+
+        <div class="wd-14" style="">
+            <div  class="col-12 border_bottom border_bottom_active" >
+                <p style="margin-top: 2vh;font-weight:bold;">
+                  <input id='created_today_radio' value="created_today" type="radio" name="top_filter" class="enq_form_filters"><i class="fa fa-edit" ></i><label for="created_today_radio">&nbsp;&nbsp;<?php echo display('created'); ?></label>
+                  <span  style="float:right;" class="badge badge-pill badge-primary " id="today_created"><i class="fa fa-spinner fa-spin"></i></span>
+                </p>
+            </div>
+        </div>
+        <div class="wd-14" style="">
+            <div  class="col-12 border_bottom" >
+                <p style="margin-top: 2vh;font-weight:bold;">
+                  <input id='assigned_radio' value="assigned" type="radio" name="top_filter" class="enq_form_filters"><i class="fa fa-edit" ></i><label for="assigned_radio">&nbsp;&nbsp;<?php echo display('assigned'); ?></label>
+                  <span  style="float:right;" class="badge badge-pill badge-primary " id="assigned"><i class="fa fa-spinner fa-spin"></i></span>
+                </p>
+            </div>
+        </div>
+        <div class="wd-14">
+              <div class="col-12 border_bottom">
+                  <p style="margin-top: 2vh;font-weight:bold;" >
+                    <input type="radio" name="top_filter" value="updated_today" class="enq_form_filters" id="updated_today_radio"><i class="fa fa-pencil"></i><label for="updated_today_radio">&nbsp;&nbsp;<?php echo display('updated'); ?></label><span style="float:right;background:#ffc107" class="badge badge-pill badge-warning badge badge-dark " id="today_updated"><i class="fa fa-spinner fa-spin"></i></span>
+                  </p>
+              </div>
+        </div>
+            
+        <div class="wd-14">
+            <div  class="col-12 border_bottom" >
+                  <p style="margin-top: 2vh;font-weight:bold;"  title="<?php echo display('active'); ?>"> 
+                    <input type="radio" name="top_filter" value="active" checked="checked" class="enq_form_filters" id="active_radio"><i class="fa fa-file" ></i><label for="active_radio">&nbsp;&nbsp;<?php echo display('active'); ?></label><span style="float:right;" class="badge badge-pill badge-primary " id="active_all"><i class="fa fa-spinner fa-spin"></i></span>
+                  </p>
+              </div>
+        </div>
+                  
+        <div class="wd-14">
+              <div  class="col-12 border_bottom" >
+                  <p style="margin-top: 2vh;font-weight:bold;"   title="<?php echo display('droped'); ?>">
+                      <input type="radio" name="top_filter" value="droped" class="enq_form_filters" id="droped_radio">
+                      <i class="fa fa-thumbs-down" ></i><label for="droped_radio">&nbsp;&nbsp;<?php echo display('droped'); ?></label><span style="float:right;background:#E5343D" class="badge badge-danger" id="active_drop"><i class="fa fa-spinner fa-spin"></i></span>                   
+                  </p>
+              </div>
+        </div>
+         <div class="wd-14 " style="">
+            <div  class="col-12 border_bottom" >
+                <p style="margin-top: 2vh;font-weight:bold;">
+                  <input id='pending_radio' value="pending" type="radio" name="top_filter" class="enq_form_filters"><i class="fa fa-edit" ></i><label for="pending_radio">&nbsp;&nbsp;<?php echo display('pending_enquiry'); ?></label>
+                  <span  style="float:right;" class="badge badge-pill badge-primary " id="pending"><i class="fa fa-spinner fa-spin"></i></span>
+                </p>
+            </div>
+        </div>
+        <div class="wd-14">
+              <div class="col-12 border_bottom" >
+
+                  <p style="margin-top: 2vh;font-weight:bold;"  title="<?php echo display('total'); ?>">
+                    <input type="radio" name="top_filter" value="all" class="enq_form_filters" id="total_active_radio">
+                    <i class="fa fa-list"></i><label for="total_active_radio">&nbsp;&nbsp;<?php echo display('total'); ?></label><span style="float:right;background:#000" class="badge badge-pill badge-dark " id="total_active"><i class="fa fa-spinner fa-spin"></i></span>
+                  </p>
+              </div>
+        </div>   
+    </div>
+</div>
+
+<style type="text/css">
+  .wd-14{
+    width: 13.2%;
+    display: inline-block;
+  }
+
+.short_dashboard button{
+  margin:4px;
+}
+.short_dashboard
+{
+  margin-bottom: 15px;
+}
+</style>
+
 <form class="form-inner" method="post" id="enquery_assing_from" >  
 <div class="card-body">
       <?php 
@@ -724,7 +792,7 @@ display: block;
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Drop Lead</h4>
+        <h4 class="modal-title">Drop <?=display('lead')?></h4>
       </div>
       <div class="modal-body">
                         
@@ -845,7 +913,7 @@ display: block;
             </div>
           
             <div class="form-group col-sm-12">        
-            <button class="btn btn-success" type="button" onclick="moveto_lead();" >Move to Lead</button>        
+            <button class="btn btn-success" type="button" onclick="moveto_lead();" >Move to <?=display('lead')?></button>        
             </div>
           
      
@@ -872,7 +940,7 @@ display: block;
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Enter info and Move to client</h4>
+        <h4 class="modal-title">Enter info and Move to <?=display('client') ?></h4>
       </div>
       <div class="modal-body">        
           <div class="row">
@@ -896,7 +964,7 @@ display: block;
           </div>          
       </div>
       <div class="modal-footer">
-        <button class="btn btn-success" type="button" onclick="moveto_client();" >Move to Client</button> 
+        <button class="btn btn-success" type="button" onclick="moveto_client();" >Move to <?=display('client')?></button> 
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
       </div>
     </div>
@@ -912,7 +980,7 @@ display: block;
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Enquiry Assignment</h4>
+        <h4 class="modal-title"><?=display('enquiry')?> Assignment</h4>
       </div>
       <div class="modal-body">
       
@@ -1205,7 +1273,12 @@ if(!empty($_GET['desposition']))
           "ajax": {
               "url": "<?=base_url().'Enq/enq_load_data'?>",
               "type": "POST",
-              "data":{'data_type':"<?=$data_type?>"}
+              "data":function(d){
+                d.data_type = "<?=$data_type?>";
+               //document.write(JSON.stringify(d));
+                return d;
+              }
+              //"data":{'data_type':"<?=$data_type?>"}
           },
         <?php if(user_access(500)) { ?>
           dom: "<'row text-center'<'col-sm-12 col-xs-12 col-md-4'l><'col-sm-12 col-xs-12 col-md-4 text-center'B><'col-sm-12 col-xs-12 col-md-4'f>>tp", 
@@ -1230,8 +1303,8 @@ if(!empty($_GET['desposition']))
         <?php
         }
         ?>
-          "columnDefs": [{ "orderable": false, "targets": 0 }],
-              "order": [[ 1, "desc" ]],
+          "columnDefs": [{ "orderable": false, "targets":0 }],
+           "order": [[ 1, "desc" ]],
           createdRow: function( row, data, dataIndex ) {            
             var th = $("table>th");            
             l = $("table").find('th').length;
@@ -1241,6 +1314,8 @@ if(!empty($_GET['desposition']))
             }                       
         }
       });
+
+     update_top_filter_counter();
     //   $('#enq_table').DataTable({ 
     //     //responsive: true, 
     //     scrollX: true,
@@ -1258,24 +1333,24 @@ if(!empty($_GET['desposition']))
 
 
 
-      $.ajax({
-      url: "<?=base_url().'enq/stages_of_enq/'.$data_type?>",
-      type: 'get',
-      dataType: 'json',
-      success: function(responseData){
-      $('#today_created').html(responseData.all_creaed_today_num);
-      $('#active_all').html(responseData.all_active_num);
-      $('#today_updated').html(responseData.all_today_update_num);
-      $('#active_drop').html(responseData.all_drop_num);
-      $('#total_active').html(responseData.all_enquery_num);
+    //   $.ajax({
+    //   url: "<?=base_url().'enq/stages_of_enq/'.$data_type?>",
+    //   type: 'get',
+    //   dataType: 'json',
+    //   success: function(responseData){
+    //   $('#today_created').html(responseData.all_creaed_today_num);
+    //   $('#active_all').html(responseData.all_active_num);
+    //   $('#today_updated').html(responseData.all_today_update_num);
+    //   $('#active_drop').html(responseData.all_drop_num);
+    //   $('#total_active').html(responseData.all_enquery_num);
       
-      all_lead_stage_c  = $("input[name='top_filter']:checked").next().next().next().html();
+    //   all_lead_stage_c  = $("input[name='top_filter']:checked").next().next().next().html();
 
-     //console.log(all_lead_stage_c);
+    //  //console.log(all_lead_stage_c);
       
-      $('#lead_stage_-1').text(all_lead_stage_c);     
-      }
-    });
+    //   $('#lead_stage_-1').text(all_lead_stage_c);     
+    //   }
+    // });
 
 $(document).on('click',".top_pill",function(){
 
@@ -1359,16 +1434,20 @@ $(document).on('click',".top_pill",function(){
         //alert("dd");
         $.ajax({
         //url: "<?=base_url().'enq/stages_of_enq/'.$data_type?>",
-        url: "<?=base_url().'enq/short_dashboard_count/'.$data_type?>",
+        url: "<?=base_url().'enq/short_dashboard_count'?>",
         type: 'post',
+        data:{data_type:"<?=$data_type?>"},
         dataType: 'json',
         success: function(responseData){
          //alert(JSON.stringify(responseData));
-        $('#today_created').html(responseData.all_creaed_today_num);
+        $('#today_created').html(responseData.all_enquery_num);
         $('#active_all').html(responseData.all_active_num);
-        $('#today_updated').html(responseData.all_today_update_num);
+        $('#today_updated').html(responseData.all_update_num);
         $('#active_drop').html(responseData.all_drop_num);
         $('#total_active').html(responseData.all_enquery_num);
+        $('#pending').html(responseData.all_no_activity_num);
+        $('#assigned').html(responseData.all_assigned_num);
+        $('#un_assigned').html(responseData.all_unassigned_num);
         
         all_lead_stage_c  = $("input[name='top_filter']:checked").next().next().next().html();
 
@@ -1387,7 +1466,15 @@ $(document).on('click',".top_pill",function(){
       $('#enq_filter').change(function() {
         
         //update_top_filter_counter(); 
-        var form_data = $("#enq_filter").serialize();       
+        var form_data = $("#enq_filter").serialize();  
+        <?php
+          if(!empty($_GET['desposition']))
+          {
+            echo'form_data+="&stage="+'.$_GET['desposition'].';';
+          }
+        ?>
+        //alert(form_data);
+
         $.ajax({
         url: '<?=base_url()?>enq/enquiry_set_filters_session',
         type: 'post',
@@ -1453,7 +1540,7 @@ $('.checked_all1').on('change', function() {
 
 function  send_sms(){
   if($('.checkbox1:checked').size() > 1000){
-    alert('You can not send more that 1000 sms at once');
+    alert('You can not send more than 1000 sms at once');
   }else{
     var sms_type = $("#mesge_type").val();
     //var enquiry_ids = $('#enquery_assing_from').serialize();
@@ -1556,7 +1643,7 @@ function save_enquery(){
 
 function autoDial(){
   if($('.checkbox1:checked').size() > 1000){
-    alert('You can not dial more that 1000 enquiry at once');
+    alert('You can not dial more than 1000 <?=display('enquiry')?> at once');
   }else{
     data_type = "<?=$data_type?>";
     data_type = parseInt(data_type);
@@ -1594,7 +1681,7 @@ function autoDial(){
 
 function assign_enquiry(){
   if($('.checkbox1:checked').size() > 1000){
-    alert('You can not assign more that 1000 enquiry at once');
+    alert('You can not assign more than 1000 <?=display('enquiry')?> at once');
   }else{
     data_type = "<?=$data_type?>";
     data_type = parseInt(data_type);
@@ -1629,7 +1716,7 @@ function assign_enquiry(){
 
 function moveto_lead(){
   if($('.checkbox1:checked').size() > 1000){
-    alert('You can not move more that 1000 enquiry at once');
+    alert('You can not move more than 1000 <?=display('enquiry')?> at once');
   }else{
   $.ajax({
   type: 'POST',
@@ -1637,7 +1724,7 @@ function moveto_lead(){
   data: $('#enquery_assing_from').serialize(),
   success:function(data){
       if(data=='1'){
-           alert('Successfully Moved in Leads'); 
+           alert('Successfully Moved in <?=display('lead')?>s'); 
         window.location.href='<?php echo base_url();?>enquiry'
       }else{
        alert(data);
@@ -1648,7 +1735,7 @@ function moveto_lead(){
 
 function drop_enquiry(){
 if($('.checkbox1:checked').size() > 1000){
-    alert('You can not drop more that 1000 enquiry at once');
+    alert('You can not drop more than 1000 <?=display('enquiry')?> at once');
   }else{
 
      data_type = "<?=$data_type?>";
@@ -1671,7 +1758,7 @@ if($('.checkbox1:checked').size() > 1000){
   data: $('#enquery_assing_from').serialize(),
   success:function(data){
           if(data=='1'){
-         alert('Successfully Droped Enquiry'); 
+         alert('Successfully Droped <?=display('enquiry')?>'); 
         window.location.href=re_url;
       }else{
         alert(data); 
@@ -1793,6 +1880,8 @@ $(window).load(function(){
 $("#active_class p").click(function() {
     $('.border_bottom_active').removeClass('border_bottom_active');
     $(this).addClass("border_bottom_active");
+
+    $(this).find('label').trigger('click');
 });
 });  
 </script>
@@ -2124,8 +2213,8 @@ $('#city_name').select2({});
 $('#state').select2({});
 
 function moveto_client(){
-  if($('.checkbox1:checked').size() > 1000){
-    alert('You can not move more that 1000 enquiry at once');
+  if($('.checkbox1:checked').size() > 1){
+    alert('You can not move more than 1000 <?=display('lead')?> at once');
   }else{
   $.ajax({
   type: 'POST',
@@ -2133,7 +2222,7 @@ function moveto_client(){
   data: $('#enquery_assing_from').serialize(),
   success:function(data){
       if(data=='1'){
-           alert('Successfully Moved in Clients'); 
+           alert('Successfully Moved in <?=display('client')?>s'); 
         window.location.href='<?php echo base_url();?>led/index'
       }else{
        alert(data);

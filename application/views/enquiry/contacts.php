@@ -1,5 +1,13 @@
 
-<div class="row p-5">
+
+<div class="row" style="background-color: #fff;padding:7px;border-bottom: 1px solid #C8CED3;">
+	<div class="col-md-4 col-sm-4 col-xs-4"> 
+          <a class="pull-left fa fa-arrow-left btn btn-circle btn-default btn-sm" onclick="history.back(-1)" title="Back"></a>        
+          <a class="dropdown-toggle btn btn-danger btn-circle btn-sm fa fa-plus" data-toggle="modal" data-target="#Save_Contact" title="Add Contact"></a>         
+        </div>
+</div>
+
+<div class="row p-5" style="margin-top: 20px;">
 	<div class="col-lg-12">
 		<div class="panel panel-success">
 			<div class="panel-body">
@@ -65,7 +73,7 @@ function edit_contact(t)
   $.ajax({
         url:"<?=base_url('client/edit_contact/')?>",
         type:"post",
-        data:{cc_id:contact_id,task:'view'},
+        data:{cc_id:contact_id,task:'view',direct_create:1},
         success:function(res)
         {
           Swal.fire({
@@ -75,7 +83,11 @@ function edit_contact(t)
                 showConfirmButton:false,
                 showCancelButton:true,
                 cancelButtonText:'Close',
-                cancelButtonColor:'#E5343D'
+                cancelButtonColor:'#E5343D',
+                onOpen: () => {
+				   $('.select2').select2();
+				   //alert("Dk");
+				},
               });
         },
         error:function(u,v,w)
@@ -115,10 +127,73 @@ function deleteContact(t)
                         }
                 });
         }
-      });
-   
-                
-          
+      });         
 }
-
 </script>
+
+<div id="Save_Contact" class="modal fade" role="dialog">
+   <div class="modal-dialog">
+      <!-- Modal content-->
+      <div class="modal-content">
+         <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Contacts</h4>
+         </div>
+         <div class="modal-body">
+            <div class="row" >
+               <?php echo form_open_multipart('client/create_newcontact/','class="form-inner"') ?> 
+<!--                <input type="hidden" name="enquiry_id" value="<?=$details->enquiry_id?>">
+               <input type="hidden" name="enquiry_code" value="<?=$details->Enquery_id?>"> -->
+
+
+               <div class="form-group col-md-12">
+                  <label>Related To</label>
+                  <select class="form-control" name="enquiry_id">
+                  	<option value="">Select</option>
+                  	<?php
+                 	if(!empty($enquiry_list))
+                 	{
+                 		foreach ($enquiry_list as $row)
+                 		{
+                 			echo'<option value="'.$row->enquiry_id.'">'.$row->name.'</option>';
+                 		}
+                 	}
+                  	?>
+                  </select>
+                  
+               </div>
+
+               <div class="form-group col-md-6">
+                  <label>Designation</label>
+                  <input class="form-control" name="designation" placeholder="Designation"  type="text" required>
+               </div>
+               <div class="form-group col-md-6">
+                  <label>Name</label>
+                  <input class="form-control" name="name" placeholder="Contact Name"  type="text"  required>
+               </div>
+               <div class="form-group col-md-6">
+                  <label>Contact No.</label>
+                  <input class="form-control" name="mobileno" placeholder="Mobile No." maxlength="10"  type="text"  required>
+               </div>
+               <div class="form-group col-md-6">
+                  <label>Email</label>
+                  <input class="form-control" name="email" placeholder="Email"  type="text"  required>
+               </div>
+               <div class="form-group col-md-12">
+                  <label>Other Details</label>
+                  <textarea class="form-control" name="otherdetails" rows="8"></textarea>
+               </div>
+               <div class="sgnbtnmn form-group col-md-12">
+                  <div class="sgnbtn">
+                     <input id="signupbtn" type="submit" value="Add Contact" class="btn btn-primary"  name="Add Contact">
+                  </div>
+               </div>
+               <?php echo form_close()?>
+            </div>
+         </div>
+         <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+         </div>
+      </div>
+   </div>
+</div>   

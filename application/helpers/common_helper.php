@@ -211,30 +211,33 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         }
         return (!empty($Ary)) ? "yes" : 'no';
     }
-    function getRightsByid($id,$data)
+    function getRightsByid($id,$data,$utype='')
     {
         $ci =& get_instance();
+        $ci->load->model('user_model');
         $ci->load->database();
         $Ary = $ci->db->select('right_id,name')->from('modulewise_right')->where('module_id',$id)->get()->result();
         $str = '<div>';
+        $rid = $ci->session->user_right;
         foreach ($Ary as $key => $value) 
         {   
-            if(empty($data))
-            {
-                $str.='<div class="col-md-3"><input type="checkbox" name="permissions[]"  value="'.$value->right_id.'" id="rid_'.$value->right_id.'"><label for="rid_'.$value->right_id.'" class="" >'.ucwords($value->name).'</label></div>';  
-            }
-            else
-            {   //print_r($data);
-                if(in_array($value->right_id,$data))
+            if($ci->user_model->check_user_has_right($id,$value->right_id,$rid) || $utype == 'su'){
+                if(empty($data))
                 {
-                    $str.='<div class="col-md-3"><input id="rid_'.$value->right_id.'" type="checkbox" name="permissions[]" checked value="'.$value->right_id.'"  ><label for="rid_'.$value->right_id.'" class="" >'.ucwords($value->name).'</label></div>';    
+                    $str.='<div class="col-md-3"><input type="checkbox" name="permissions[]"  value="'.$value->right_id.'" id="rid_'.$value->right_id.'"><label for="rid_'.$value->right_id.'" class="" >'.ucwords($value->name).'</label></div>';  
                 }
                 else
-                {
-                    $str.='<div class="col-md-3"><input id="rid_'.$value->right_id.'" type="checkbox" name="permissions[]"  value="'.$value->right_id.'"  ><label for="rid_'.$value->right_id.'" class="" >'.ucwords($value->name).'</label></div>';
-                }
-                  
-            } 
+                {   
+                    if(in_array($value->right_id,$data))
+                    {
+                        $str.='<div class="col-md-3"><input id="rid_'.$value->right_id.'" type="checkbox" name="permissions[]" checked value="'.$value->right_id.'"  ><label for="rid_'.$value->right_id.'" class="" >'.ucwords($value->name).'</label></div>';    
+                    }
+                    else
+                    {
+                        $str.='<div class="col-md-3"><input id="rid_'.$value->right_id.'" type="checkbox" name="permissions[]"  value="'.$value->right_id.'"  ><label for="rid_'.$value->right_id.'" class="" >'.ucwords($value->name).'</label></div>';
+                    }                    
+                } 
+            }
         }
         $str.= '</div>';
         return $str;

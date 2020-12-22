@@ -779,7 +779,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
                     cancelButtonColor: '#d33',
-                    confirmButtonText: 'Shooze!',
+                    confirmButtonText: 'Snooze!',
                     cancelButtonText: 'Ok!'
                   }).then((result) => {
                       if (result.value) { (async () => {

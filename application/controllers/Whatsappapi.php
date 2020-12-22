@@ -22,7 +22,9 @@ class Whatsappapi extends CI_Controller {
          
 	public function index()
 	{
-	
+        if (user_role('52') == true) {
+        }
+        
 		//$data['nav1']='nav5';
 		$aid = $this->session->userdata('user_id');
 			$api_for = 1;
@@ -39,6 +41,9 @@ class Whatsappapi extends CI_Controller {
 	
     public function api_details()
     {  
+        if (user_role('52') == true) {
+        
+        }
     //$data['title'] = display('Enquiry Details');
     #------------------------------# 
     //$leadid = $this->uri->segment(3);
@@ -74,6 +79,8 @@ class Whatsappapi extends CI_Controller {
     
     
     public function template_details(){  
+        if (user_role('52') == true) {
+        }
         //$data['title'] = display('Enquiry Details');
         #------------------------------# 
         //$leadid = $this->uri->segment(3);
@@ -84,8 +91,13 @@ class Whatsappapi extends CI_Controller {
             
             $template_name = $this->input->post('template_name');
             $template_content = $this->input->post('template_content');
-            
-            
+            $process=$this->input->post('process');
+            $stage=$this->input->post('stage');
+            $process =implode(',',$process);
+            $stage =implode(',',$stage);
+            // die();
+            $this->db->set('stage',$stage);
+            $this->db->set('process',$process);
             $this->db->set('template_name',$template_name);
             $this->db->set('template_content',$template_content);
             
@@ -107,6 +119,8 @@ class Whatsappapi extends CI_Controller {
     
         public function createapi()
         {
+            if (user_role('51') == true) {
+            }
         if(!empty($_POST)){
         
         $api_name = $this->input->post('api_name');
@@ -133,6 +147,8 @@ class Whatsappapi extends CI_Controller {
         
         public function createtemplate()
         {
+            if (user_role('50') == true) {
+            }
         if(!empty($_POST)){
         
         $template_name = $this->input->post('template_name');
@@ -168,6 +184,8 @@ class Whatsappapi extends CI_Controller {
         }
 
         public function delete_api(){
+            if (user_role('53') == true) {
+            }
         if(!empty($_POST)){
         $user_status=$this->input->post('user_status');
         foreach($user_status as $key){
@@ -178,6 +196,8 @@ class Whatsappapi extends CI_Controller {
         }
         
         public function delete_template(){
+            if (user_role('53') == true) {
+            }
         if(!empty($_POST)){
         $user_status=$this->input->post('sel_temp');
         foreach($user_status as $key){

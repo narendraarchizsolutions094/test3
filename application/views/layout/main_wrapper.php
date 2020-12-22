@@ -1579,9 +1579,21 @@ if($root=='https://student.spaceinternationals.com'){  ?>
 
                     </li>
                     <?php
-                        $disposition_in_menu  = get_sys_parameter('disposition_in_menu','COMPANY_SETTING');                        
-                    ?>
+                    /*
+                        Enquiry -> 1
+                        Lead    -> 10
+                        Client  -> 20
+                        End  
+                    */
+                    $menu_count = 1;
+                    $flag = 0;
+                    $main_flag =0;
+                    for($menu_count=1; $menu_count <=21; $menu_count++)
+                    {
 
+                        if($menu_count==1)
+                        {
+                    ?>
                     <li class="treeview <?php echo (($segment1 == "enq" || ($segment1 == "enquiry" && $segment2 == "view")) ? "active" : null) ?>"
                         style="<?php if(in_array(60,$module) || in_array(61,$module) || in_array(62,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
                         <a href="<?php echo base_url("enq/index") ?>">
@@ -1593,36 +1605,11 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                                 <?php echo display('enquiry') ?></p> <?php } ?>
                         </a>
                     </li>
-                    
                     <?php
-                    if (!empty($disposition_in_menu)) 
-                    { 
-                      $x = json_decode($disposition_in_menu);
-                      foreach ($x as $des)
-                      { 
-                        $ci = &get_instance();
-                        $ci->load->database();
-
-                        $desp = $ci->db->where(array('stg_id'=>$des->stage_id,"FIND_IN_SET(1,stage_for)>"=>0))->get('lead_stage')->row();
-                    
-                        
-                        $des_title = '';
-                        if(!empty($desp))
-                        {
-                          $des_title = $desp->lead_stage_name;                        
-                        ?>
-                         <li class="<?php echo (($segment1 == "enq") && (!empty($_GET['desposition']) && $_GET['desposition'] == $des->stage_id) ) ? "active" : null ?>">                           
-                          <a href="<?php echo base_url("enq/index?desposition=").$des->stage_id; ?>">
-                              <i class="<?=$des->icon;?>" style="color:#fff;font-size:20px;background:#3498db;padding:7px;border-radius:4px;width:30px;"></i> &nbsp;<?=$des_title?>                 
-                          </a>
-                         </li>
-                        <?php
                         }
-                      }
-                    }
+                        else if($menu_count==10)
+                        {
                     ?>
-
-
                     <li class="<?php echo ($segment1 == "led" || $segment2 == 'lead_details') ? "active" : null ?>"
                         style="<?php if(in_array(70,$module) || in_array(71,$module) || in_array(72,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
 
@@ -1637,31 +1624,10 @@ if($root=='https://student.spaceinternationals.com'){  ?>
 
                     </li>
                     <?php
-                    if (!empty($disposition_in_menu)) 
-                    { 
-                      $x = json_decode($disposition_in_menu);
-                      foreach ($x as $des)
-                      { 
-                        $ci = &get_instance();
-                        $ci->load->database();
-
-                        $desp = $ci->db->where(array('stg_id'=>$des->stage_id,"FIND_IN_SET(2,stage_for)>"=>0))->get('lead_stage')->row();
-                        $des_title = '';
-                        if(!empty($desp))
+                        }
+                        else if($menu_count==20)
                         {
-                          $des_title = $desp->lead_stage_name;
-                          ?>
-                         <li class="<?php echo (($segment1 == "led") && (!empty($_GET['desposition']) && $_GET['desposition'] == $des->stage_id) ) ? "active" : null ?>">                           
-                          <a href="<?php echo base_url("led/index?desposition=").$des->stage_id; ?>">
-                              <i class="<?=$des->icon;?>" style="color:#fff;font-size:20px;background:#3498db;padding:7px;border-radius:4px;width:30px;"></i> &nbsp;<?=$des_title?>                 
-                          </a>
-                         </li>
-                        <?php
-                      }
-                    }
-                    }
                     ?>
-
                     <li class="<?php echo (($segment1 == "client" && empty($_GET['stage'])) && $segment2!='visits'? "active" : null) ?>"
                         style="<?php if(in_array(80,$module) || in_array(81,$module) || in_array(82,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
                         <a href="<?php echo base_url("client/index") ?>">
@@ -1676,56 +1642,79 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                     </li>
 
                     <?php
-                    if (!empty($disposition_in_menu)) 
-                    { 
-                      $x = json_decode($disposition_in_menu);
-                      foreach ($x as $des)
-                      { 
-                        $ci = &get_instance();
-                        $ci->load->database();
-
-                        $desp = $ci->db->where(array('stg_id'=>$des->stage_id,"FIND_IN_SET(3,stage_for)>"=>0))->get('lead_stage')->row();
-                        $des_title = '';
-                        if(!empty($desp))
-                        {
-                          $des_title = $desp->lead_stage_name;
-                          ?>
-                         <li class="<?php echo (($segment1 == "client") && (!empty($_GET['desposition']) && $_GET['desposition'] == $des->stage_id) ) ? "active" : null ?>">                           
-                          <a href="<?php echo base_url("client/index?desposition=").$des->stage_id; ?>">
-                              <i class="<?=$des->icon;?>" style="color:#fff;font-size:20px;background:#3498db;padding:7px;border-radius:4px;width:30px;"></i> &nbsp;<?=$des_title?>                 
-                          </a>
-                         </li>
-                        <?php
-                        }
-                      }
                     }
-                    ?>
 
-                    <?php
                   $enquiry_separation  = get_sys_parameter('enquiry_separation','COMPANY_SETTING');                  
-                  if (!empty($enquiry_separation)) {                    
+                  if (!empty($enquiry_separation)) { 
+
                     $enquiry_separation = json_decode($enquiry_separation,true);
-                     foreach ($enquiry_separation as $key => $value) { ?>
-                    <li class="<?php echo (($segment1 == "client") && (!empty($_GET['stage']) && $_GET['stage'] == $key) ) ? "active" : null ?>"
-                        style="<?php if(in_array(80,$module) || in_array(81,$module) || in_array(82,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
-                        <a href="<?php echo base_url("client/index?stage=").$key ?>">
-                            <i class="<?=$value['icon']?>"
-                                style="color:#fff;font-size:20px;background:#3498db;padding:7px;border-radius:4px;width:30px;"></i>
-                            &nbsp;<?php echo $value['title'] ?>
-                            <?php  
-                            if($this->session->menu==1){ ?></br>
-                            <p style="color:#fff;font-size:9px;margin-left:-12px;padding-top:10px;">
-                                <?php echo $value['title']; ?></p>
-                            <?php 
-                            } 
-                            ?>
-                        </a>
-                    </li>
+                     foreach ($enquiry_separation as $key => $value) { 
+
+                        if($main_flag == 1 or (!empty($value['order']) && $value['order']==$menu_count))
+                        {
+                            $flag=1;
+                        ?>
+                        <li class="<?php echo (($segment1 == "client") && (!empty($_GET['stage']) && $_GET['stage'] == $key) ) ? "active" : null ?>"
+                            style="<?php if(in_array(80,$module) || in_array(81,$module) || in_array(82,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
+                            <a href="<?php echo base_url("client/index?stage=").$key ?>">
+                                <i class="<?=$value['icon']?>"
+                                    style="color:#fff;font-size:20px;background:#3498db;padding:7px;border-radius:4px;width:30px;"></i>
+                                &nbsp;<?php echo $value['title'] ?>
+                                <?php  
+                                if($this->session->menu==1){ ?></br>
+                                <p style="color:#fff;font-size:9px;margin-left:-12px;padding-top:10px;">
+                                    <?php echo $value['title']; ?></p>
+                                <?php 
+                                } 
+                                ?>
+                            </a>
+                        </li>
                     <?php
+                        }//order count if
                     }
                   }
 
-                  
+                  $disposition_in_menu  = get_sys_parameter('disposition_in_menu','COMPANY_SETTING');    
+
+                  if(!empty($disposition_in_menu)) 
+                  { 
+                    //echo json_encode(array(array('stage_id'=>299,'icon'=>'<i class="fa fa-user"></i>')));
+                    //echo $disposition_in_menu; exit();
+                    $x = json_decode($disposition_in_menu);
+                  //print_r($x); exit();
+                    foreach ($x as $des)
+                    {   
+                        if($main_flag == 1 or (!empty($des->order) && $des->order==$menu_count))
+                        {
+                            $flag =1;
+                          $ci = &get_instance();
+                          $ci->load->database();
+                          $desp = $ci->db->where('stg_id',$des->stage_id)->get('lead_stage')->row();
+                          $des_title = '';
+                          if(!empty($desp))
+                          {
+                            $des_title = $desp->lead_stage_name;
+                          }
+                      ?>
+                       <li class="<?php echo (($segment1 == "client") && (!empty($_GET['desposition']) && $_GET['desposition'] == $des->stage_id) ) ? "active" : null ?>">
+                         
+                        <a href="<?php echo base_url("client/desposition?desposition=").$des->stage_id; ?>">
+                            <i class="<?=$des->icon;?>" style="color:#fff;font-size:20px;background:#3498db;padding:7px;border-radius:4px;width:30px;"></i> &nbsp;<?=$des_title?>                 
+                        </a>
+
+                       </li>
+                      <?php
+                        }//main flag
+                    }
+
+                  }
+
+                  if($menu_count==20 and $flag==0)
+                  {
+                     $main_flag = 1;
+                  }
+
+                }//menucount end
 
 
                 if($this->session->companey_id==65)
@@ -1740,6 +1729,18 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                                 padding-left:4px;
                                 border-radius:4px;width:30px;"></i>
                          Visits</a>
+                        </li>';
+
+                    echo' <li class="'.($segment1=='client' && $segment2=='deals'?'active':'').'" >
+                        <a href="'.base_url("client/deals").'">
+                        <i class="fa fa-handshake-o"
+                                style="color:#fff;
+                                font-size:20px;
+                                background:#c715b1;
+                                padding:7px;
+                                padding-left:4px;
+                                border-radius:4px;width:30px;"></i>
+                         Deals</a>
                         </li>';
                 }
                 ?>
@@ -2409,7 +2410,7 @@ if($this->session->companey_id==65)
                                         showCancelButton: true,
                                         confirmButtonColor: '#3085d6',
                                         cancelButtonColor: '#d33',
-                                        confirmButtonText: 'Shooze!',
+                                        confirmButtonText: 'Snooze!',
                                         cancelButtonText: 'Ok!'
                                     }).then((result) => {
                                         if (result.value) {

@@ -10,7 +10,7 @@
 
             <div class="panel-heading no-print">
 
-                <?php if(user_access(130)){ ?>
+                <?php if(0 && user_access(130)){ ?>
                     <div class="btn-group"> 
 
                         <a class="btn btn-success" href="<?php echo base_url("userrights/create") ?>"> <i class="fa fa-plus"></i>  <?php echo "Add Module Rights" ?> </a>  
@@ -49,13 +49,9 @@
 
                             <?php $sl = 1; ?>
 
-                            <?php foreach ($user_role as $department) { ?>
-
-                            
-                                
-
-                             
-
+                            <?php foreach ($user_role as $department) { 
+                                 if($this->user_model->check_user_has_module($department->id,$this->session->user_right)){
+                                ?> 
                               <tr style="<?php if($department->status==0){echo 'color:red';} ?>" style="cursor: pointer;">
 
                                     <!-- <td style="<?php if($department->status==0){echo 'color:red';} ?>"><?php echo $sl; ?></td> -->
@@ -72,7 +68,7 @@
 
                                 
 
-                                <?php $sl++; ?>
+                                <?php $sl++; } ?>
 
                             <?php } ?> 
 

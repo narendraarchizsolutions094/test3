@@ -1,17 +1,17 @@
 <?php
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Visit_datatable_model extends CI_Model{
+class Deals_datatable_model extends CI_Model{
     
     function __construct() {
   
-        $this->table = 'tbl_visit';
+        $this->table = 'commercial_info';
         // Set orderable column fields
-        $this->column_order = array('id','visit_date','visit_time','travelled','travelled_type','rating','next_date','next_location');
+        $this->column_order = array('info.id','enq.name','info.branch_type','info.booking_type','info.business_type','book.branch_name','deliver.branch_name','info.rate','info.discount','info.insurance','info.paymode','info.potential_tonnage','info.potential_amount','info.expected_tonnage','info.expected_amount','info.vechicle_type','info.carrying_capacity','info.invoice_value','info.creation_date','info.status','');
 
         // Set searchable column fields
 
-        $this->column_search = array('travelled','travelled_type','next_location');
+        $this->column_search = array('enq.name','book.branch_name','deliver.branch_name','info.potential_amount','info.potential_tonnage','info.expected_amount','info.expected_tonnage','info.creation_date');
 
         // $this->column_search = array('tck.ticketno','tck.id','tck.category','tck.name','tck.email','tck.product','tck.message','tck.issue','tck.solution','tck.sourse','tck.ticket_stage','tck.review','tck.status','tck.priority','tck.complaint_type','tck.coml_date','tck.last_update','tck.send_date','tck.client','tck.assign_to','tck.company','tck.added_by','enq.phone','enq.gender','prd.country_name');
         
@@ -58,63 +58,75 @@ class Visit_datatable_model extends CI_Model{
      */
     public function _get_datatables_query($postData){
 
-        $this->db->select($this->table.'.*,enquiry.name,enquiry.status as enq_type,enquiry.Enquery_id');
-        $this->db->from($this->table);
-        $this->db->join('enquiry','enquiry.enquiry_id=tbl_visit.enquiry_id','left');
-        $this->db->where("tbl_visit.comp_id",$this->session->companey_id);
+        $this->db->select('info.*,enq.name,enq.Enquery_id,enq.status as enq_type, book.branch_name as booking_branch_name, deliver.branch_name as delivery_branch_name');
+        $this->db->from($this->table.' info');
+        $this->db->join('enquiry enq','enq.enquiry_id=info.enquiry_id','left');
+        $this->db->join('branch book','book.branch_id=info.booking_branch','left');
+        $this->db->join('branch deliver','deliver.branch_id=info.delivery_branch','left');
+        $this->db->where("info.comp_id",$this->session->companey_id);
 
         $where="";
         $and =0;
-        if(!empty($_POST['from_date']))
+      
+        if(!empty($_POST['date_from']) && !empty($_POST['date_to']))
+        {   
+            if($and)
+                $where.=" and ";
+
+            $where.=" (info.creation_date >='".$_POST['date_from']."' and info.creation_date <='".$_POST['date_to']."' ) ";
+            $and =1;
+        }
+        else if(!empty($_POST['date_from']))
         {
-            $where.=" visit_date >= '".$_POST['from_date']."'";
+             if($and)
+                $where.=" and ";
+
+            $where.=" (info.creation_date >='".$_POST['date_from']."' ) ";
+            $and =1;
+        }
+        else if(!empty($_POST['date_to']))
+        {
+              if($and)
+                $where.=" and ";
+
+            $where.=" (info.creation_date <='".$_POST['date_to']."' ) ";
             $and =1;
         }
 
-        if(!empty($_POST['to_date']))
-        {   
-            if($and)
+        if(!empty($_POST['enq_for']))
+        {
+              if($and)
                 $where.=" and ";
 
-            $where.=" visit_date <= '".$_POST['to_date']."'";
-            $and =1;
-        }
-
-        if(!empty($_POST['from_time']))
-        {   
-            if($and)
-                $where.=" and ";
-
-            $where.=" visit_time >= '".$_POST['from_time']."'";
-            $and =1;
-        }
-
-        if(!empty($_POST['to_time']))
-        {   
-            if($and)
-                $where.=" and ";
-
-            $where.=" visit_time <= '".$_POST['to_time']."'";
+            $where.=" (info.enquiry_id ='".$_POST['enq_for']."' ) ";
             $and =1;
         }
 
 
-        if(!empty($_POST['enquiry_id']))
+        if(!empty($_POST['top_filter']))
         {   
-            if($and)
+            if($and && $_POST['top_filter']!='all')
                 $where.=" and ";
+            if($_POST['top_filter']=='all')
+            {
 
-            $where.=" tbl_visit.enquiry_id = '".$_POST['enquiry_id']."'";
-            $and =1;
-        }
-
-        if(!empty($_POST['rating']))
-        {   
-            if($and)
-                $where.=" and ";
-
-            $where.=" tbl_visit.rating LIKE '%".$_POST['rating']."%'";
-            $and =1;
+            }
+            else if($_POST['top_filter']=='done')
+            {
+                 $where.=" info.status = 1";
+                 $and =1;
+            }
+            else if($_POST['top_filter']=='pending')
+            {
+                $where.=" info.status = 0";
+                 $and =1;
+            }
+            else if ($_POST['top_filter']=='deferred')
+            {
+                $where.=" info.status = 2";
+                 $and =1;
+            }
+            
         }
 
         if($where!='')

@@ -16,6 +16,7 @@ class Task extends CI_Controller {
         //$this->load->view('test');
     } 
     public function index() {
+        if (user_role('90') == true) {}  
         $this->session->unset_userdata('filter_user_id');
         $aid = $this->session->userdata('user_id');
         
