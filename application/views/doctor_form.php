@@ -233,6 +233,16 @@
                                         </div>
 									  </div>
 									  
+									  <div id="cmp-right"  class="tab-pane fade">
+											<div class="row">
+                                                <?php
+                                                echo $user_right_content;
+                                                ?>
+												<div class="col-md-12">
+													<h4>Company Right</h4>
+												</div>
+											</div>
+                                      </div>
                                     
                                     
 
@@ -307,16 +317,6 @@
 								</div>
 							</div>
                         </form>
-                            <div id="cmp-right"  class="tab-pane fade">
-                                <div class="row">
-                                    <?php
-                                    echo $user_right_content;
-                                    ?>
-                                    <div class="col-md-12">
-                                        <h4>Company Right</h4>
-                                    </div>
-                                </div>
-                            </div>
                     </div>
              
    
