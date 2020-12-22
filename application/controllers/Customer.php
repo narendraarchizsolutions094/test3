@@ -237,6 +237,7 @@ class Customer extends CI_Controller
                 'email' => $this->input->post('email', true),
                 'password' => md5($this->input->post('password', true)),
                 'user_role' => 2,
+                'company_rights' => '10,11,12,13,30,31,32,33,60,61,62,63,70,71,72,73,80,81,82,83,90,91,92,93,120,121,122,123,130,131,132,133,140,141,142,143',
                 'designation' => $this->input->post('designation', true),
                 'department_id' => $this->input->post('department_id', true),
                 'address' => $this->input->post('address', true),
@@ -321,10 +322,13 @@ class Customer extends CI_Controller
                 }
                 redirect('customer/create');
             } else {
+                $permissions = $this->input->post('permissions');
+                $permissions_str = implode(',', $permissions);
+                $postData['company_rights'] = $permissions_str;
+                
                 if ($this->doctor_model->update($postData)) {
                     $id = $this->input->post('role_id');
                     $user_role = $this->input->post('user_type');
-                    $permissions = $this->input->post('permissions');
 
                     if (in_array(230, $permissions) || in_array(231, $permissions) || in_array(232, $permissions) || in_array(233, $permissions) || in_array(234, $permissions) || in_array(235, $permissions) || in_array(236, $permissions)) {
                         $this->db->where('comp_id', $this->input->post('user_id', true));
@@ -348,10 +352,9 @@ class Customer extends CI_Controller
                         }
                     }
 
-                    $permissions = implode(',', $permissions);
                     $data = array(
                         'user_role' => $user_role,
-                        'user_permissions' => $permissions
+                        'user_permissions' => $permissions_str
                     );
                     $this->User_model->update_user_role($id, $data);
 

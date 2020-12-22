@@ -57,7 +57,7 @@ class Client extends CI_Controller {
         $data['products'] = $this->dash_model->get_user_product_list();        
         $data['drops']      = $this->enquiry_model->get_drop_list();        
         $data['lead_score'] = $this->enquiry_model->get_leadscore_list(); 
-        $data['created_bylist'] = $this->User_model->user_list();
+        $data['created_bylist'] = $this->User_model->read();
         $data['sourse'] = $this->report_model->all_source();
         $data['datasourse'] = $this->report_model->all_datasource(); 
         $data['dfields']  = $this->enquiry_model-> getformfield();		 

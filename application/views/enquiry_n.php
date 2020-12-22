@@ -991,7 +991,7 @@ display: block;
             <label>Select Employee</label> 
             <div id="imgBack"></div>
             <select class="form-control"  name="assign_employee">                    
-            <?php foreach ($user_list as $user) { 
+            <?php foreach ($created_bylist as $user) { 
                             
                           if (!empty($user->user_permissions)) {
                             $module=explode(',',$user->user_permissions);

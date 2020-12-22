@@ -747,6 +747,10 @@ public function login_in_process(){
         
         if ($this->session->userdata('user_right') == 200) // lalantop user
         redirect('product');        
+
+        if(user_access('541') && !user_access('540')){
+            redirect('ticket/dashboard');
+        }
         $data = array();
         $this->load->model('dash_model');
         if($this->session->userdata('user_right')==151 || $this->session->userdata('user_right')==180 || $this->session->userdata('user_right')==183)

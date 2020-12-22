@@ -3483,12 +3483,13 @@ if (document.getElementById('agg_same').checked)
                            <?php } ?>
                         </select>
                      </div>
+
                      <div class="form-group col-md-6">
                         <label><?php echo display('lead_stage') ?> <i class="text-danger">*</i></label>                  
                         <select class="form-control" id="move_lead_stage_change" name="move_lead_stage" onchange="find_description1()" required>
                            <option value="">-- Select <?=display('lead')?> Stage --</option>
                              
-                              <?php foreach ($all_stage_lists as $stage) {  ?>
+                              <?php foreach ($all_estage_lists as $stage) {  ?>
                               <option value="<?= $stage->stg_id?>" <?php if ($stage->stg_id == $details->lead_stage) {echo 'selected';}?>><?php echo $stage->lead_stage_name; ?></option>
                               <?php } ?>                                        
                         </select>

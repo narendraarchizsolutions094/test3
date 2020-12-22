@@ -477,7 +477,7 @@ class User extends CI_Controller
             $this->db->where('use_id!=', 1);
             $this->db->where('comp_id', $this->session->companey_id);
             $data['user_role'] = $this->db->get('tbl_user_role')->result();
-            $data['user_list'] = $this->User_model->user_list();
+            $data['user_list'] = $this->User_model->read();
             $data['companey_list'] = $this->User_model->companyList();
             $this->load->model('dash_model');
             $data['products'] = $this->dash_model->all_process_list();

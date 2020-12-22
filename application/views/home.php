@@ -44,7 +44,7 @@
 </style> 
   </head>
   <body class="page-profile" style="background-color:#fff;" >
-  <?php if(user_access(310)) { ?>
+  <?php if(user_access(541)) { ?>
 
 <div class="row">
   <a href="<?= base_url('ticket/dashboard') ?>"><button style=" float:right" class="btn btn-primary">
