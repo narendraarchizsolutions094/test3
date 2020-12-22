@@ -37,7 +37,7 @@
                                 <td style="<?php if($department->status==0){echo 'color:red';} ?>">
                                     <?php echo $department->title; ?></td>
                                 <td style="<?php if($department->status==0){echo 'color:red';} ?>"><?php
-                                            echo getRightsByid($department->id,$permission);
+                                            echo getRightsByid($department->id,$permission,'su');
                                             ?>
                                 </td>
                             </tr>
