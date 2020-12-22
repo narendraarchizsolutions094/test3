@@ -292,7 +292,7 @@ class User_model extends CI_Model {
             $this->db->select('company_rights');
             $this->db->where('user_id',$this->session->companey_id);
             $row    =   $this->db->get('user')->row_array();
-            $perm = $row['user_permissions'];
+            $perm = $row['company_rights'];
         }else{
             $this->db->where('use_id',$rid);
             $this->db->where('comp_id',$this->session->companey_id);
@@ -319,7 +319,7 @@ class User_model extends CI_Model {
             $this->db->select('company_rights');
             $this->db->where('user_id',$this->session->companey_id);
             $row    =   $this->db->get('user')->row_array();
-            $perm = $row['user_permissions'];
+            $perm = $row['company_rights'];
         }else{
             $this->db->where('use_id',$rid);
             $this->db->where('comp_id',$this->session->companey_id);
