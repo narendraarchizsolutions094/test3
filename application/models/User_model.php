@@ -47,21 +47,30 @@ class User_model extends CI_Model {
     
 
     public function read($user_right='') {        
+        $user_separation  = get_sys_parameter('user_separation','COMPANY_SETTING');
+        $sep_arr=array();
+        if (!empty($user_separation)) {
+            $user_separation = json_decode($user_separation,true);
+            foreach ($user_separation as $key => $value) { 
+                $sep_arr[] = $key;
+            }
+        }
+
         $this->load->model('common_model');
         $all_reporting_ids    =   $this->common_model->get_categories($this->session->user_id);                      
         $this->db->select("*");
-        $this->db->from($this->table); 
-        // $this->db->join('user', 'user.user_id = tbl_admin.companey_id');
+        $this->db->from($this->table);         
         $this->db->join('tbl_user_role', 'tbl_user_role.use_id=tbl_admin.user_permissions', 'left');
         $where = "  tbl_admin.pk_i_admin_id IN (".implode(',', $all_reporting_ids).')';                
         $where .= "  AND tbl_admin.b_status=1";                                
         if (!empty($user_right)) {
             $where .= "  AND tbl_admin.user_permissions='".$user_right."'";                                            
         }
-
         $exclude = array();
         if($this->session->companey_id == 57){
             $exclude = array(200,201);
+        }else{
+            $exclude = $sep_arr;
         }
         if(!empty($exclude) && empty($user_right)){
             foreach($exclude as $rid){
@@ -73,13 +82,13 @@ class User_model extends CI_Model {
     }
 
 
-    public function companey_users() {                
+    public function companey_users() {   
         $user_id = $this->session->user_id;
         $this->db->select("*");
         $this->db->from($this->table);        
         $this->db->join('tbl_user_role', 'tbl_user_role.use_id=tbl_admin.user_permissions', 'left');        
         $this->db->where('tbl_admin.companey_id',$this->session->companey_id); 
-        $this->db->where('tbl_admin.b_status',1);                                                
+        $this->db->where('tbl_admin.b_status',1);                              
         return $this->db->get()->result();
     }
 	
@@ -275,13 +284,30 @@ class User_model extends CI_Model {
             return false;
         }
     }
+    
+    public function is_company_admin($id){
+        if(!empty($this->session->email)){
+            $this->db->join('user','user.email=tbl_admin.s_user_email');
+            $this->db->where('user.email',$this->session->email);
+            $this->db->where('tbl_admin.pk_i_admin_id',$id);
+            return  $this->db->get('tbl_admin')->num_rows();
+        }else{
+            return false;
+        }        
+    }
 
     public function check_user_has_module($mid,$rid){
-        $this->db->where('use_id',$rid);
-        $this->db->where('comp_id',$this->session->companey_id);
-        $row  = $this->db->get('tbl_user_role')->row_array();
-        $perm = $row['user_permissions'];
-        
+        if($this->is_company_admin($this->session->user_id)){
+            $this->db->select('company_rights');
+            $this->db->where('user_id',$this->session->companey_id);
+            $row    =   $this->db->get('user')->row_array();
+            $perm = $row['company_rights'];
+        }else{
+            $this->db->where('use_id',$rid);
+            $this->db->where('comp_id',$this->session->companey_id);
+            $row  = $this->db->get('tbl_user_role')->row_array();
+            $perm = $row['user_permissions'];
+        }
         $this->db->where('module_id',$mid);
         $m_row    =   $this->db->get('modulewise_right')->result_array();
         $perm = explode(',',$perm);
@@ -298,10 +324,17 @@ class User_model extends CI_Model {
     }
 
     public function check_user_has_right($mid,$right_id,$rid){
-        $this->db->where('use_id',$rid);
-        $this->db->where('comp_id',$this->session->companey_id);
-        $row  = $this->db->get('tbl_user_role')->row_array();
-        $perm = $row['user_permissions'];                
+        if($this->is_company_admin($this->session->user_id)){
+            $this->db->select('company_rights');
+            $this->db->where('user_id',$this->session->companey_id);
+            $row    =   $this->db->get('user')->row_array();
+            $perm = $row['company_rights'];
+        }else{
+            $this->db->where('use_id',$rid);
+            $this->db->where('comp_id',$this->session->companey_id);
+            $row  = $this->db->get('tbl_user_role')->row_array();
+            $perm = $row['user_permissions'];                
+        }
         $perm = explode(',',$perm);        
         $return = 0;
         if(in_array($right_id,$perm)){

@@ -6,7 +6,7 @@
             <div class="panel-heading no-print">
             </div>
             <div class="panel-body">
-                <form action="<?php echo base_url('user/update_user_role')?>" method="post">
+                
                     <div class="form-group row">
                         <label for="inputText"
                             class="col-sm-1 col-form-label"><?php echo display('user_function') ?></label>
@@ -46,10 +46,10 @@
 
                         </tbody>
                     </table> <!-- /.table-responsive -->
-                    <div class="row text-center">
+                    <!-- <div class="row text-center">
                         <button type="submit" class="btn btn-primary">Save</button>
-                    </div>
-                </form>
+                    </div> -->
+                
             </div>
         </div>
     </div>

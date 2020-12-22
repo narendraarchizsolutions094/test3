@@ -28,6 +28,7 @@
                         </thead>
                         <tbody>
                             <?php
+                            
                         $permission =  explode(',',$userRole->user_permissions);
                         if (!empty($user_role)) { ?>
                             <?php $sl = 1; ?>

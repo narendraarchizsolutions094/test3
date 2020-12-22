@@ -1232,7 +1232,7 @@ class Enquiry extends CI_Controller
     {
         $compid = $this->session->userdata('companey_id');
         $this->load->model('Client_Model');
-        if (user_role('63') == true) {
+        if (user_role('61') == true) {
         }
         $data['title'] = display('information');
         if (!empty($_POST)) {
