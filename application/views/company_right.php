@@ -46,9 +46,9 @@
 
                         </tbody>
                     </table> <!-- /.table-responsive -->
-                    <div class="row text-center">
+                    <!-- <div class="row text-center">
                         <button type="submit" class="btn btn-primary">Save</button>
-                    </div>
+                    </div> -->
                 </form>
             </div>
         </div>
