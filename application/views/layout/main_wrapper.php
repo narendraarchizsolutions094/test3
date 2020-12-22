@@ -1281,7 +1281,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
 
                   </li>  -->
                     <?php
-          if($this->session->companey_id == 65){ ?>
+          if(user_access('1013')){ ?>
                     <li class="<?=($segment2=='contacts')?'active':''?>">
                         <a href="<?=base_url('client/contacts')?>">
                             <i class="fa fa-address-book"
@@ -1717,7 +1717,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                 }//menucount end
 
 
-                if($this->session->companey_id==65)
+                if(user_access('1023'))
                 {
                     echo' <li class="'.($segment1=='client' && $segment2=='visits'?'active':'').'" >
                         <a href="'.base_url("client/visits").'">
@@ -1730,19 +1730,23 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                                 border-radius:4px;width:30px;"></i>
                          Visits</a>
                         </li>';
+                }
 
+                if(user_access('1003'))
+                {
                     echo' <li class="'.($segment1=='client' && $segment2=='deals'?'active':'').'" >
                         <a href="'.base_url("client/deals").'">
                         <i class="fa fa-handshake-o"
                                 style="color:#fff;
                                 font-size:20px;
-                                background:#c715b1;
+                                background:#22944b;
                                 padding:7px;
                                 padding-left:4px;
                                 border-radius:4px;width:30px;"></i>
                          Deals</a>
                         </li>';
                 }
+
                 ?>
 
 
