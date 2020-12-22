@@ -3436,14 +3436,6 @@ if (document.getElementById('agg_same').checked)
                            <?php } ?>
                         </select>
                      </div>
-                     
-                     <?php                     
-                     if(!empty($_GET['test'])){
-                        echo "<pre>";
-                        print_r($all_estage_lists);
-                        echo "</pre>";
-                     }
-                     ?>
 
                      <div class="form-group col-md-6">
                         <label><?php echo display('lead_stage') ?> <i class="text-danger">*</i></label>                  
