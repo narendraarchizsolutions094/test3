@@ -276,7 +276,7 @@ $type="text";
                <input type="hidden"  name="enqueryfield[]"  id="multi-<?=$fld['input_name']?>"  value ="<?php echo  (!empty($fld["fvalue"])) ? $fld["fvalue"] : ""; ?>">
                <select class="multiple-select" name='multi[]' multiple onchange="changeSelect(this)" id="<?=$fld['input_name']?>">
                   <?php  foreach($optarr as $key => $val){                  
-                    $fvalues  = explode(',', $fld['fvalue']);
+                    $fvalues  = explode('|', $fld['fvalue']);
                     ?>
                     <option value = "<?php echo $val; ?>" <?php echo (!empty($fld["fvalue"]) and in_array($val, $fvalues)) ? "selected" : ""; ?>><?php echo $val; ?></option>
                   <?php
@@ -437,6 +437,8 @@ $type="text";
                             else
                             {
                               $d = end($d);
+                              $multi = explode('|', $d);
+                              $d = implode(',', $multi);
                             }                              
                             
                             break;
@@ -587,10 +589,31 @@ $type="text";
                <?php if($fld['input_type']==18){?>
                <label><?php echo(!empty($fld["input_label"])) ?  ucwords($fld["input_label"]) : ""; ?></label>
                <input type="tel"  name="enqueryfield[<?=$fld_id?>]"  class="form-control" >
-               <?php }?>                 
+               <?php }?>  
+
+
+               <?php
+               if($fld['input_type']==20){?>
+               <label><?php echo(!empty($fld["input_label"])) ?  ucwords($fld["input_label"]) : ""; ?></label>
+               <?php $optarr = (!empty($fld['input_values'])) ? explode(",",$fld['input_values']) : array(); 
+               ?>
+               <input type="hidden"  name="enqueryfield[<?=$fld_id?>]"  id="multi-<?=$fld['input_name']?>"  value ="">
+               <select class="multiple-select" name='multi[]' multiple onchange="changeSelect(this)" id="<?=$fld['input_name']?>">
+                  <?php  foreach($optarr as $key => $val){                  
+                    $fvalues  = explode(',', $fld['fvalue']);
+                    ?>
+                    <option value = "<?php echo $val; ?>" <?php echo (!empty($fld["fvalue"]) and in_array($val, $fvalues)) ? "selected" : ""; ?>><?php echo $val; ?></option>
+                  <?php
+                     } 
+                  ?>
+               </select>
+               <?php }
+               ?>
+
                <input type="hidden" name= "inputfieldno[]" value = "<?=$fld['input_id']; ?>">
                <input type="hidden" name= "inputtype[]" value = "<?=$fld['input_type']?>">
             </div>
+
 <?php } ?>
       <?php  }
          } ?>
@@ -721,10 +744,10 @@ $type="text";
                <label><?php echo(!empty($fld["input_label"])) ?  ucwords($fld["input_label"]) : ""; ?></label>
                <?php $optarr = (!empty($fld['input_values'])) ? explode(",",$fld['input_values']) : array(); 
                ?>
-               <input type="hidden"  name="enqueryfield[]"  id="multi-<?=$fld['input_name']?>"  value ="<?php echo  (!empty($fld["fvalue"])) ? $fld["fvalue"] : ""; ?>">
+               <input type="hidden"  name="enqueryfield[<?=$fld_id?>]"  id="multi-<?=$fld['input_name']?>"  value ="<?php echo  (!empty($fld["fvalue"])) ? $fld["fvalue"] : ""; ?>">
                <select class="multiple-select" name='multi[]' multiple onchange="changeSelect(this)" id="<?=$fld['input_name']?>">
                   <?php  foreach($optarr as $key => $val){                  
-                    $fvalues  = explode(',', $fld['fvalue']);
+                    $fvalues  = explode('|', $fld['fvalue']);
                     ?>
                     <option value = "<?php echo $val; ?>" <?php echo (!empty($fld["fvalue"]) and in_array($val, $fvalues)) ? "selected" : ""; ?>><?php echo $val; ?></option>
                   <?php
@@ -778,14 +801,21 @@ $type="text";
   }
 </script>
 <script>
-  $(function() {
+  $(function(){
     $('.multiple-select').select2();
   });
+
   function changeSelect(e){        
     var input_name = e.id;
-    var data = $("#"+input_name).val();    
+    var data = $("#"+input_name).val();
+    // var z = data.toString();
+    //  alert(z);
+    data = data.join('|');
+    alert(data);
+
     $("#multi-"+input_name).val(data);
   }
+  
   function share_form(f_url,email){    
     if (confirm('Are you sure ?')) {
       $.ajax({

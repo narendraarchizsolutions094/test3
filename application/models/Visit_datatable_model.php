@@ -39,6 +39,7 @@ class Visit_datatable_model extends CI_Model{
     public function countAll(){
 
         $this->db->from($this->table);
+        $this->db->where("comp_id",$this->session->companey_id);
         return $this->db->count_all_results();
     }
     

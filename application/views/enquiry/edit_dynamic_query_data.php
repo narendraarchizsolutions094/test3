@@ -114,10 +114,10 @@
                <label><?php echo(!empty($fld["input_label"])) ?  ucwords($fld["input_label"]) : ""; ?></label>
                <?php $optarr = (!empty($fld['input_values'])) ? explode(",",$fld['input_values']) : array(); 
                ?>
-               <input type="hidden"  name="enqueryfield[]"  id="multi-<?=$fld['input_name']?>"  value ="<?php echo  (!empty($fld["fvalue"])) ? $fld["fvalue"] : ""; ?>">
+               <input type="hidden"  name="enqueryfield[<?=$fld_id?>]"  id="multi-<?=$fld['input_name']?>"  value ="<?php echo  (!empty($fld["fvalue"])) ? $fld["fvalue"] : ""; ?>">
                <select class="multiple-select" name='multi[]' multiple onchange="changeSelect(this)" id="<?=$fld['input_name']?>">
                   <?php  foreach($optarr as $key => $val){                  
-                    $fvalues  = explode(',', $fld['fvalue']);
+                    $fvalues  = explode('|', $fld['fvalue']);
                     ?>
                     <option value = "<?php echo $val; ?>" <?php echo (!empty($fld["fvalue"]) and in_array($val, $fvalues)) ? "selected" : ""; ?>><?php echo $val; ?></option>
                   <?php
@@ -144,3 +144,9 @@
    <?php
    echo form_close(); 
 ?>
+<script type="text/javascript">
+   $(function() {
+      alert("d");
+    $('.multiple-select').select2();
+  });
+</script>

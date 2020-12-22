@@ -3427,6 +3427,10 @@ public function timelinePopup()
  
     public function add_visit()
     {   
+        if(user_role('1020')==true)
+        {
+
+        }
         $this->load->model(array('Client_Model','Enquiry_model'));
         if($post = $this->input->post())
         {
@@ -3456,6 +3460,10 @@ public function timelinePopup()
         }
     }
     public function delete_visit(){
+        if(user_role('1021')==true)
+        {
+            
+        }
         $this->Leads_Model->add_comment_for_events('Visit Deleted', $this->input->post('enq_code'));
         $id    =   $this->input->post('vid',true);
         $this->db->where('id',$id);
@@ -3494,7 +3502,8 @@ public function timelinePopup()
             $sub[] = $res->rating!=''?$res->rating:'NA';
             $sub[] = $res->next_date!='0000-00-00'?$res->next_date:'NA';
             $sub[] = $res->next_location?$res->next_location:'NA';
-            $sub[] = "<a class='btn btn-xs btn-danger fa fa-trash visit-delete' href='javascript:void(0)' data-id='$res->id' data-ecode='$res->Enquery_id' ></a>";
+
+            $sub[] = user_access('1021')?"<a class='btn btn-xs btn-danger fa fa-trash visit-delete' href='javascript:void(0)' data-id='$res->id' data-ecode='$res->Enquery_id' ></a>":'';
             $data[] =$sub;
         }
     

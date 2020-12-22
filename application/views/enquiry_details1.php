@@ -793,12 +793,29 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
             <?php if($this->session->companey_id=='83'){ ?>
             <li href="#login-tab" data-toggle="tab" >Login Trail</li>
             <?php } ?>
-            <?php if($this->session->companey_id==65){ ?>
+            <?php 
+            if(user_access('1000'))
+            {  ?>
             <li href="#COMMERCIAL_INFORMATION" data-toggle="tab" >Commercial Information</li>
+            <?php }  ?>
+            <?php 
+            if(user_access('1020'))
+            {  ?>
             <li href="#vtran_visit" data-toggle="tab" >Visit Details</li>
+            <?php
+            }
+            if(user_access('1030'))
+            {
+            ?>
             <li href="#vtransaggrement" data-toggle="tab" >Agreement</li>
-            <?php } ?>
+            <?php 
+            } 
+            if(user_access('1010'))
+            { ?>
             <li href="#company_contacts" data-toggle="tab">Contacts</li> 
+            <?php
+            }
+            ?>
             <span class="scrollTab" style="position: absolute; right: 0; font-size: 22px; line-height: 40px; z-index: 999"><i class="fa fa-caret-right"  onclick="tabScroll('right')"></i></span>
             </ul>
             <div class="tab-content clearfix">
@@ -1689,7 +1706,8 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                      </div>
                   </form>
                </div>
-               <?php if($this->session->companey_id==65){ ?>
+               <?php if(user_access('1000'))
+               { ?>
               <div class="tab-pane" id="COMMERCIAL_INFORMATION" >
             <!-- <div class="col-md-12"><a class="btn btn-primary" style="cursor: pointer;" data-toggle="modal" data-target="#downloadQuatation">Download Quatation</a></div> -->
                  <div  style="overflow-x:auto;">
@@ -2042,6 +2060,7 @@ $('#infotype').on('change', function() {
 });
 
 </script>
+
 <div id="downloadQuatation" class="modal fade" role="dialog">
    <div class="modal-dialog modal-lg">
       <!-- Modal content-->
@@ -2083,7 +2102,9 @@ $.ajax({
 }
 </script>
 <?php
-if($this->session->companey_id==65){
+}
+if(user_access('1020'))
+{
 ?>
 <div class="tab-pane" id="vtran_visit">
  <hr>
@@ -2210,7 +2231,9 @@ $(document).ready(function(){
 
 </div>
 <?php
-   }
+}
+if(user_access('1030'))
+{
 ?>
 
 <div class="tab-pane" id="vtransaggrement">
@@ -2753,7 +2776,11 @@ if (document.getElementById('agg_same').checked)
                         </div>
                      </div>
                   </div>
-               </div>               
+               </div>     
+
+               <?php
+               if(user_access('1010'))
+               {?>          
                <div class="tab-pane" id="company_contacts">
                   <hr>
                   <div class="row" style="overflow-x: auto;">
@@ -2782,12 +2809,24 @@ if (document.getElementById('agg_same').checked)
                               <td ><?php echo $contact->emailid; ?></td>
                               <td ><?php echo $contact->other_detail; ?></td>
                               <td style="width:50px;">
+                                 <?php
+                                if(user_access('1012'))
+                                {
+                                  ?>
                                 <button class="btn btn-warning btn-xs" data-cc-id="<?=$contact->cc_id?>" onclick="edit_contact(this)">
                                   <i class="fa fa-edit"></i>
                                 </button>
+                                <?php
+                                }
+                                
+                                if(user_access('1011'))
+                                {
+                                  ?>
                                 <button class="btn btn-danger btn-xs" data-cc-id="<?=$contact->cc_id?>" onclick="deleteContact(this)">
                                   <i class="fa fa-trash"></i>
                                 </button>
+                                <?php
+                                } ?>
                               </td>
                            </tr>
                            <?php $sl++; }} ?>
@@ -2795,12 +2834,20 @@ if (document.getElementById('agg_same').checked)
                      </table>
                      <br>
                      <center>
-                        <h5><a style="cursor: pointer;" data-toggle="modal" data-target="#Save_Contact" class="btn btn-primary">Add Contact</a></h5>
+                      <?php
+                      if(user_access('1010'))
+                      {
+                      ?>
+                       <h5><a style="cursor: pointer;" data-toggle="modal" data-target="#Save_Contact" class="btn btn-primary">Add Contact</a></h5>
+                      <?php
+                      }
+                      ?>
                      </center>
                      <br>              
                   </div>
                </div>
-
+               <?php
+              } ?>
               <div class="tab-pane" id="related_enquiry">                  
               </div>
              <!--  <div class="tab-pane" id="company_contacts">  
@@ -4517,7 +4564,10 @@ function edit_dynamic_query(t)
                 showConfirmButton:false,
                 showCancelButton:true,
                 cancelButtonText:'Close',
-                cancelButtonColor:'#E5343D'
+                cancelButtonColor:'#E5343D',
+                onOpen:function(){
+                    $('.multiple-select').select2();  
+                }
               });
             },
             error:function(u,v,w)

@@ -44,15 +44,22 @@
 											<td>'.$row['other_detail'].'</td>
 											<td>'.$row['created_at'].'</td>
 											<td style="width:50px;">
-											<div class="btn-group">
-				                                <button class="btn btn-warning btn-xs" data-cc-id="'.$row['cc_id'].'" onclick="edit_contact(this)">
-				                                  <i class="fa fa-edit"></i>
-				                                </button>
-				                                <button class="btn btn-danger btn-xs"  data-cc-id="'.$row['cc_id'].'" onclick="deleteContact(this)">
-				                                  <i class="fa fa-trash"></i>
-				                                </button>
-				                              </div>
-				                             </td>
+											<div class="btn-group">';
+                      if(user_access('1012'))
+                      {
+                        echo'<button class="btn btn-warning btn-xs" data-cc-id="'.$row['cc_id'].'" onclick="edit_contact(this)">
+                          <i class="fa fa-edit"></i>
+                        </button>';
+                      }
+                      if(user_access('1011'))
+                      {
+                        echo'<button class="btn btn-danger btn-xs"  data-cc-id="'.$row['cc_id'].'" onclick="deleteContact(this)">
+                          <i class="fa fa-trash"></i>
+                        </button>';
+                      }
+
+                     echo' </div>
+                     </td>
 									</tr>';
 								}
 							}
@@ -117,7 +124,7 @@ function deleteContact(t)
                         type:"post",
                         data:{cc_id:contact_id},
                         success:function(res)
-                        {
+                        { 
                           Swal.fire('Done!', '', 'success');
                           $(t).closest('tr').remove();
                         },

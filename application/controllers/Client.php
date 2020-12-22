@@ -276,6 +276,10 @@ class Client extends CI_Controller {
     }
     public function create_newcontact() 
     {
+        if(user_role('1010')==true){
+
+        }
+
         $this->load->model(array('Enquiry_Model','Client_Model'));
         $clientid = $this->input->post('enquiry_id');
         if (!empty($_POST)) {
@@ -307,12 +311,18 @@ class Client extends CI_Controller {
     }
     public function delete_contact()
     {
+        if(user_role('1011')==true){
+            
+        }
          $cc_id = $this->input->post('cc_id');
           $this->db->where(array('cc_id'=>$cc_id,'comp_id'=>$this->session->companey_id));
           $this->db->delete('tbl_client_contacts');
     }
     public function edit_contact()
     {
+        if(user_role('1012')==true){
+            
+        }
         if($this->input->post('task')=='view')
         {
             $cc_id = $this->input->post('cc_id');
@@ -405,6 +415,9 @@ class Client extends CI_Controller {
     }
     public function contacts()
     {
+        if(user_role('1013')==true){
+            
+        }
         $this->load->model(array('Client_Model','Enquiry_Model'));
         $data['title'] = display('contacts');
         $data['contact_list'] = $this->Client_Model->getContactList();//contacts.*,enquiry.---
@@ -1521,6 +1534,9 @@ public function desposition()
 }
 public function view_editable_aggrement()
 {
+    if(user_role('1030')==true){
+            
+        }
     //print_r($_POST);
     //$data['customer_name']  = $this->input->post()
     //$_POST['customer_name']  = 'Shivam Gautam';
@@ -1554,6 +1570,10 @@ public function view_editable_aggrement()
         // $_POST['branch_name']  = 'Noida';
         // $_POST['customer_code']  = '00283';
         //print_r($_POST);
+
+         if(user_role('1031')==true){
+            
+        }
         if(!empty($_POST))
         {   // exit();
             foreach ($_POST as $key => $v)
@@ -1627,6 +1647,9 @@ public function view_editable_aggrement()
     /***********************end Generate aggriment*****************************/
     public function visits()
     {
+         if(user_role('1023')==true){
+            
+        }
         $this->load->model('Client_Model');
         $this->load->model('Enquiry_Model');
         $data['title'] = display('visit_list');
@@ -1638,6 +1661,10 @@ public function view_editable_aggrement()
 
     public function deals()
     {
+         if(user_role('1003')==true){
+            
+        }
+
         $this->load->model('Client_Model');
         $this->load->model('Enquiry_Model');
         $data['title'] = 'Deals'; //display('deal_list');
