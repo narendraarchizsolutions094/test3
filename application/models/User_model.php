@@ -73,13 +73,24 @@ class User_model extends CI_Model {
     }
 
 
-    public function companey_users() {                
+    public function companey_users() {   
+        $user_separation  = get_sys_parameter('user_separation','COMPANY_SETTING');
+        $sep_arr=array();
+        if (!empty($user_separation)) {
+            $user_separation = json_decode($user_separation,true);
+            foreach ($user_separation as $key => $value) { 
+                $sep_arr[] = $key;
+            }
+        }               
         $user_id = $this->session->user_id;
         $this->db->select("*");
         $this->db->from($this->table);        
         $this->db->join('tbl_user_role', 'tbl_user_role.use_id=tbl_admin.user_permissions', 'left');        
         $this->db->where('tbl_admin.companey_id',$this->session->companey_id); 
-        $this->db->where('tbl_admin.b_status',1);                                                
+        $this->db->where('tbl_admin.b_status',1);                              
+        if (!empty($sep_arr)) {
+            $this->db->where_in("tbl_admin.user_type NOT", $sep_arr);
+        }                  
         return $this->db->get()->result();
     }
 	
