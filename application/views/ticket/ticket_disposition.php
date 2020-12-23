@@ -127,6 +127,14 @@
          
 
 <script type="text/javascript">
+  $("#lead_stage_change").on('change',function(){
+    if($(this).val() == 27){
+      $("#lead_description").prop('required',true);
+    }else{
+      $("#lead_description").prop('required',false);
+    }    
+  });
+
   $("#ticket_disposition_save").on('click',function(e){
     e.preventDefault();
     var disposition = getSelectedText('lead_stage_change');
