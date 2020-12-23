@@ -22,6 +22,9 @@ class Telephony extends CI_Controller {
         $this->db->insert('telephony_log',$insert_arr);
     }
     public function forword_to($phone=''){
+        if(!empty($_GET) && $this->session->companey_id == 82){
+            $this->session->set_userdata('call_parameters',$_GET);
+        }
         if(!empty($_GET['phone'])){
             $phone=$_GET['phone'];
         }else{

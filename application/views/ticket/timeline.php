@@ -155,9 +155,11 @@
     }
    $.ajax({
    type: 'POST',
-   url: '<?php echo base_url();?>message/get_templates/'+SMS,
+  url: '<?php echo base_url();?>message/get_templates/<?php echo $ticket->product ?>/0/'+SMS,
+
    })
    .done(function(data){
+
        $('#modal-titlesms').html(type);
        $('#mesge_type').val(SMS);       
        $('#templates').html(data);
@@ -168,7 +170,7 @@
    } 
    function  send_sms(){   
      var sms_type = $("#mesge_type").val();
-      if ("<?=$this->session->companey_id?>" == 81 && sms_type!=1) {
+      if ("<?= $this->session->companey_id ?>" == 81 && sms_type!=1) {
         url =  '<?php echo base_url();?>message/send_sms_career_ex';
       }else{
        url =  '<?php echo base_url();?>message/send_sms';
