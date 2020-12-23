@@ -285,6 +285,14 @@ class Ticket_datatable_model extends CI_Model{
          $this->db->join("tbl_admin assign_by","tck.assigned_by=assign_by.pk_i_admin_id","LEFT");
         } 
          $this->db->where("tck.company",$this->session->companey_id);
+
+         if(!empty($this->session->process)){              
+            $arr = $this->session->process;           
+            if(is_array($arr)){
+                $this->db->where_in("tck.process_id",$arr);
+            }                       
+        }
+
          $this->db->group_by("tck.id");
 
 
