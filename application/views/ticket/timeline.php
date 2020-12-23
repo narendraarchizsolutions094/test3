@@ -155,7 +155,8 @@
     }
    $.ajax({
    type: 'POST',
-   url: '<?php echo base_url();?>message/get_templates/'+SMS,
+  url: '<?php echo base_url();?>message/get_templates/<?php echo $enquiry->product ?>/0/'+SMS,
+
    })
    .done(function(data){
        $('#modal-titlesms').html(type);

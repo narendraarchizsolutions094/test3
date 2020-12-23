@@ -3718,8 +3718,7 @@ if (document.getElementById('agg_same').checked)
             <div class="form-group col-sm-12">
                <label>Template</label>
                <select class="form-control" name="templates" required id="templates"  onchange="getMessage(),this.form.reset();">
-                <!--  -->
-               </select>\
+               </select>
             </div>
             <div class="form-group col-sm-12">
                <label><?php echo display('subject') ?></label>
