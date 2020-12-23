@@ -2828,40 +2828,68 @@ public function create()
     $this->load->model(array('User_model' ));
         $comp_id=$this->session->companey_id;
         $data['user_list'] = $this->User_model->companey_users();
-        $data['feedbacks']=$this->db->where('comp_id',$comp_id)->get('feedback')->result();
         $data['content'] = $this->load->view('ticket/add-feedback', $data, true);	     
         $this->load->view('layout/main_wrapper', $data);
 }
 public function loadFeedback()
 {
     $comp_id=$this->session->companey_id;
-
     $feedbacks=$this->db->where(array('comp_id'=>$comp_id,'feedback_by'=>$this->session->user_id))
                         ->join('tbl_admin as tbl_admin2','tbl_admin2.pk_i_admin_id=feedback.lead_pass_to')->get('feedback')->result();
 $no=0;
-    foreach ($feedbacks as $key => $each) {
+$data=array();
+    foreach ($feedbacks as $key => $value) {
+        
+        $each=json_decode($value->feedback);
+        // print_r($each);
         $no++;
            $row = array();
-            $row['gc'] = $each->gc_no;
-            $row['vc'] = $each->vehicle_no;
-            $row['type'] = $each->user_type;
-            $row['cso'] = $each->cso;
-            $row['name'] = $each->person;
-            $row['username'] = $each->s_display_name . " " . $each->last_name;
-            $row['feedback'] = $each->customer_feedback;
-            $row['feedback_on'] = $each->feedback_on;
-            $row['actions'] ='<a class="btn btn-xs  btn-primary" href="'.base_url('feedbak-edit/'.$each->id.'').'" ><i class="fa fa-edit"></i></a> 
-           <a btn-primary" href="'.base_url('feedbak-delete/'.$each->id.'').'" onclick="return confirm('.display("are_you_sure").'")" class="btn btn-xs  btn-danger"><i class="fa fa-trash"></i></a>&nbsp; 
+            $row[] = $each->gc_no;
+            $row[] = $each->gc_date;
+            $row[] = $each->BookingBranch;
+            $row[] = $each->DeliveryBranch;
+            $row[] = $each->DeliveryType;
+            $row[] = $each->PaymentType;
+            $row[] = $each->Articles;
+            $row[] = $each->ActualWeight;
+            $row[] = $each->ChargedWeight;
+            $row[] = $each->Consignor;
+            $row[] = $each->Consignee;
+            $row[] = $each->ConsignorContactNo;
+            $row[] = $each->ConsigneeContactNo;
+            $row[] = $each->CurrentStatus;
+            $row[] = $each->vehicle_no;
+            $row[] = $each->cso;
+            $row[] = $each->user_type;
+            $row[] = $each->person;
+            $row[] = $each->contact;
+            $row[] = $value->s_display_name . " " . $value->last_name;
+            $row[] = $each->lead_pass_on;
+
+            $row[] = $each->customer_feedback;
+            $row[] = $each->How_are_the_services;
+            $row[] = $each->Is_this_first_FTL_or_No;
+            $row[] = $each->Other_locations_where_FTL_service_is_required;
+            $row[] = $each->If_using_any_other_transporter;
+            $row[] = $each->Remarks_on_improvement_required;
+            $row[] = $each->Response_By;
+            $row[] = $each->Action_Taken;
+            $row[] = $each->customer_feedback;
+            $row[] = $value->created_on;
+            $row[] ='<a class="btn btn-xs  btn-primary" href="'.base_url('feedback-edit/'.$value->id.'').'" ><i class="fa fa-edit"></i></a> 
+           <a btn-primary" href="'.base_url('dashboard/delete_feedback/'.$value->id.'').'" onclick="return confirm('.display("are_you_sure").'")" class="btn btn-xs  btn-danger"><i class="fa fa-trash"></i></a>&nbsp; 
            ';
     $data[] = $row;
  }
- $output = array(  "data" =>$data );
- echo json_encode($output); 
+//  $output = array($data);
+ echo json_encode(array('data'=>$data)); 
 }
+
 public function insert() 
 {
      $feedback=[
                 'gc_no'=>$this->input->post('gc_no'),
+                'gc_date'=>$this->input->post('gc_date'),
                 'BookingBranch'=>$this->input->post('BookingBranch'),
                 'DeliveryBranch'=>$this->input->post('DeliveryBranch'),
                 'BookingType'=>$this->input->post('BookingType'),
@@ -2885,94 +2913,111 @@ public function insert()
                 'lead_pass_to'=>$this->input->post('assign_employee'),
                 'lead_pass_on'=>date('Y-m-d H:i:s'),
                 'customer_feedback'=>$this->input->post('Customer_Feedback'),
-            'How_are_the_services'=>$this->input->post('How_are_the_services'),
-            'Is_this_first_FTL_or_No'=>$this->input->post('Is_this_first_FTL_or_No'),
-            'Other_locations_where_FTL_service_is_required'=>$this->input->post('Other_locations_where_FTL_service_is_required'),
-            'If_using_any_other_transporter'=>$this->input->post('If_using_any_other_transporter'),
-            'Remarks_on_improvement_required'=>$this->input->post('Remarks_on_improvement_required'),
-            'Other_locations_where_FTL_service_is_required'=>$this->input->post('Other_locations_where_FTL_service_is_required'),
-            'Response_By'=>$this->input->post('Response_By'),
-            'Response_Remark'=>$this->input->post('Response_Remark'),
-            'Action_Taken'=>$this->input->post('Action_Taken'),
-
+                'How_are_the_services'=>$this->input->post('How_are_the_services'),
+                'Is_this_first_FTL_or_No'=>$this->input->post('Is_this_first_FTL_or_No'),
+                'Other_locations_where_FTL_service_is_required'=>$this->input->post('Other_locations_where_FTL_service_is_required'),
+                'If_using_any_other_transporter'=>$this->input->post('If_using_any_other_transporter'),
+                'Remarks_on_improvement_required'=>$this->input->post('Remarks_on_improvement_required'),
+                'Other_locations_where_FTL_service_is_required'=>$this->input->post('Other_locations_where_FTL_service_is_required'),
+                'Response_By'=>$this->input->post('Response_By'),
+                'Response_Remark'=>$this->input->post('Response_Remark'),
+                'Action_Taken'=>$this->input->post('Action_Taken'),
              ];
      $data=[
              'gc_no'=>$this->input->post('gc_no'),
-             'vehicle_no'=>$this->input->post('vehicle_no'),
-             'cso'=>$this->input->post('cso'),
-             'user_type'=>$this->input->post('user_type'),
-             'person'=>$this->input->post('person'),
-             'contact'=>$this->input->post('contact'),
              'feedback'=>json_encode($feedback),
              'comp_id'=>$this->session->companey_id,
              'feedback_by'=>$this->session->user_id,
              'lead_pass_to'=>$this->input->post('assign_employee'),
-             'lead_pass_on'=>date('Y-m-d H:i:s'),
-             'customer_feedback'=>$this->input->post('Customer_Feedback'),
                  ];
                  $this->db->insert('feedback',$data);
+                 $this->session->set_flashdata('form-data','<div class="alert alert-success alert-dismissable">
+                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                 Feedback Added Successfully!                </div>');
                  redirect('feedback');
 }
+
 public function edit_feedback() 
 {
-    $feedback_id=$this->input->post('feedback_id');
-    $lead_pass_to=$this->input->post('assign_employee');
-    $lead_pass_to_old=$this->input->post('assign_employee_old');
-    if ($lead_pass_to==$lead_pass_to_old) {
-       $lead_pass_on=date('Y-m-d H:i:s');
-    }else{
-        $lead_pass_on=$this->input->post('lead_pass_on');
-
-    }
-     $feedback=[
-                'gc_no'=>$this->input->post('gc_no'),
-                'BookingBranch'=>$this->input->post('BookingBranch'),
-                'DeliveryBranch'=>$this->input->post('DeliveryBranch'),
-                'BookingType'=>$this->input->post('BookingType'),
-                'DeliveryType'=>$this->input->post('DeliveryType'),
-                'PaymentType'=>$this->input->post('PaymentType'),
-                'Articles'=>$this->input->post('Articles'),
-                'ActualWeight'=>$this->input->post('ActualWeight'),
-                'ChargedWeight'=>$this->input->post('ChargedWeight'),
-                'Consignor'=>$this->input->post('Consignor'),
-                'Consignee'=>$this->input->post('Consignee'),
-                'ConsignorContactNo'=>$this->input->post('ConsignorContactNo'),
-                'ConsigneeContactNo'=>$this->input->post('ConsigneeContactNo'),
-                'CurrentStatus'=>$this->input->post('CurrentStatus'),
-                'vehicle_no'=>$this->input->post('vehicle_no'),
-                'cso'=>$this->input->post('cso'),
-                'user_type'=>$this->input->post('user_type'),
-                'person'=>$this->input->post('person'),
-                'contact'=>$this->input->post('contact'),
-                'lead_pass_to'=>$this->input->post('assign_employee'),
-                'lead_pass_on'=>$lead_pass_on,
-                'customer_feedback'=>$this->input->post('Customer_Feedback'),
-            'How_are_the_services'=>$this->input->post('How_are_the_services'),
-            'Is_this_first_FTL_or_No'=>$this->input->post('Is_this_first_FTL_or_No'),
-            'Other_locations_where_FTL_service_is_required'=>$this->input->post('Other_locations_where_FTL_service_is_required'),
-            'If_using_any_other_transporter'=>$this->input->post('If_using_any_other_transporter'),
-            'Remarks_on_improvement_required'=>$this->input->post('Remarks_on_improvement_required'),
-            'Other_locations_where_FTL_service_is_required'=>$this->input->post('Other_locations_where_FTL_service_is_required'),
-            'Response_By'=>$this->input->post('Response_By'),
-            'Response_Remark'=>$this->input->post('Response_Remark'),
-            'Action_Taken'=>$this->input->post('Action_Taken'),
-
-             ];
-     $data=[
-             'gc_no'=>$this->input->post('gc_no'),
-             'vehicle_no'=>$this->input->post('vehicle_no'),
-             'cso'=>$this->input->post('cso'),
-             'user_type'=>$this->input->post('user_type'),
-             'person'=>$this->input->post('person'),
-             'contact'=>$this->input->post('contact'),
-             'feedback'=>json_encode($feedback),
-             'lead_pass_to'=>$this->input->post('assign_employee'),
-             'lead_pass_on'=>$lead_pass_on,
-             'updated_on'=>date('Y-m-d H:i:s'),
-             'customer_feedback'=>$this->input->post('Customer_Feedback'),
+        $this->load->model(array('User_model' ));
+        $comp_id=$this->session->companey_id;
+        $feedback_id=$this->uri->segment('2');
+        $data['title']='Edit Feedback';
+        $data['user_list'] = $this->User_model->companey_users();
+        $data['feedbacks']=$this->db->where(array('comp_id'=>$comp_id,'id'=>$feedback_id))->get('feedback')->result();
+        $data['content'] = $this->load->view('edit-feedback', $data, true);	     
+        $this->load->view('layout/main_wrapper', $data);
+}
+public function delete_feedback() 
+{
+        $comp_id=$this->session->companey_id;
+        $feedback_id=$this->uri->segment('2');
+        $this->db->where(array('comp_id'=>$comp_id,'id'=>$feedback_id))->delete('feedback');
+        $this->session->set_flashdata('form-data','<div class="alert alert-success alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        Deleted Successfully!                </div>');
+        redirect('feedback');
+}
+public function editinsert_feedback() 
+{
+    if ($_POST) {
+        $feedback_id=$this->input->post('feedback_id');
+        $lead_pass_to=$this->input->post('assign_employee');
+        $lead_pass_to_old=$this->input->post('assign_employee_old');
+        if ($lead_pass_to==$lead_pass_to_old) {
+           $lead_pass_on=date('Y-m-d H:i:s');
+        }else{  $lead_pass_on=$this->input->post('lead_pass_on');  }
+         $feedback=[
+                    'gc_no'=>$this->input->post('gc_no'),
+                    'gc_date'=>$this->input->post('gc_date'),
+                    'BookingBranch'=>$this->input->post('BookingBranch'),
+                    'DeliveryBranch'=>$this->input->post('DeliveryBranch'),
+                    'BookingType'=>$this->input->post('BookingType'),
+                    'DeliveryType'=>$this->input->post('DeliveryType'),
+                    'PaymentType'=>$this->input->post('PaymentType'),
+                    'Articles'=>$this->input->post('Articles'),
+                    'ActualWeight'=>$this->input->post('ActualWeight'),
+                    'ChargedWeight'=>$this->input->post('ChargedWeight'),
+                    'Consignor'=>$this->input->post('Consignor'),
+                    'Consignee'=>$this->input->post('Consignee'),
+                    'ConsignorContactNo'=>$this->input->post('ConsignorContactNo'),
+                    'ConsigneeContactNo'=>$this->input->post('ConsigneeContactNo'),
+                    'CurrentStatus'=>$this->input->post('CurrentStatus'),
+                    'vehicle_no'=>$this->input->post('vehicle_no'),
+                    'cso'=>$this->input->post('cso'),
+                    'user_type'=>$this->input->post('user_type'),
+                    'person'=>$this->input->post('person'),
+                    'contact'=>$this->input->post('contact'),
+                    'lead_pass_to'=>$this->input->post('assign_employee'),
+                    'lead_pass_on'=>$lead_pass_on,
+                    'customer_feedback'=>$this->input->post('Customer_Feedback'),
+                    'How_are_the_services'=>$this->input->post('How_are_the_services'),
+                    'Is_this_first_FTL_or_No'=>$this->input->post('Is_this_first_FTL_or_No'),
+                    'Other_locations_where_FTL_service_is_required'=>$this->input->post('Other_locations_where_FTL_service_is_required'),
+                    'If_using_any_other_transporter'=>$this->input->post('If_using_any_other_transporter'),
+                    'Remarks_on_improvement_required'=>$this->input->post('Remarks_on_improvement_required'),
+                    'Other_locations_where_FTL_service_is_required'=>$this->input->post('Other_locations_where_FTL_service_is_required'),
+                    'Response_By'=>$this->input->post('Response_By'),
+                    'Response_Remark'=>$this->input->post('Response_Remark'),
+                    'Action_Taken'=>$this->input->post('Action_Taken'),
                  ];
-                 $this->db->where('id',$feedback_id)->update('feedback',$data);
-                 redirect('edit-feedback/'.$feedback_id.'');
+         $data=[
+            'gc_no'=>$this->input->post('gc_no'),
+            'feedback'=>json_encode($feedback),
+            'comp_id'=>$this->session->companey_id,
+            'feedback_by'=>$this->session->user_id,
+            'lead_pass_to'=>$this->input->post('assign_employee'),
+              'updated_on'=>date('Y-m-d H:i:s'),
+
+
+                     ];
+                     $this->db->where('id',$feedback_id)->insert('feedback',$data);
+                     $this->session->set_flashdata('form-data','<div class="alert alert-success alert-dismissable">
+                     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                     Feedback Updated Successfully!   </div>');
+                     redirect('feedback-edit/'.$feedback_id.'');
+    }
+    
 }
 
 
