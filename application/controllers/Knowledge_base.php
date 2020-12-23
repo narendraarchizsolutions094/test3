@@ -57,11 +57,12 @@ class Knowledge_base extends CI_Controller {
 	} 
 
 	public function create_article($id=0){
-        if (user_role('170') == true) {}
+       
 
 		$data['title'] = 'Created Articles';
 		#-------------------------------#			
-		if($id){
+		if($id)
+		{
 			$articles_details	=	$this->knowledge_base_model->get_article_by_id($id);						
 			if(!$articles_details){
 				echo "Not allowed here!";
@@ -69,6 +70,12 @@ class Knowledge_base extends CI_Controller {
 				$data['articles_details'] = $articles_details;
 				$data['id'] = $id;
 			}
+
+			if (user_role('172') == true) {}
+		}
+		else
+		{
+			 if (user_role('171') == true) {}
 		}
 		$data['categories'] = $this->knowledge_base_model->get_all_category();		
 		$data['content'] = $this->load->view('knowledge_base/create_article',$data,true);
@@ -233,7 +240,11 @@ class Knowledge_base extends CI_Controller {
 	}
 
 	public function category(){
-        if (user_role('170') == true) {}
+        if (!(user_access('174') || user_access('175') || user_access('176')))
+        {
+        	echo'unauthorised access';
+        	exit();
+        }
 
 		$data['title'] = 'Category';
 		#-------------------------------#	
@@ -244,6 +255,8 @@ class Knowledge_base extends CI_Controller {
 	
 	public function saved_categories(){
 		
+		if(user_role('174')){}
+
 		$this->form_validation->set_rules('category', 'Category', 'trim|required');
 		$this->form_validation->set_rules('status', 'Status', 'trim|required');		
 
@@ -279,7 +292,17 @@ class Knowledge_base extends CI_Controller {
 		redirect('Knowledge_base/category','refresh');
 	}	
 	public function delete_row(){
-        if (user_role('170') == true) {}
+
+		if($_POST['table']=='tbl_category')
+		{
+			if (user_role('175') == true) {}
+		}
+		else if($_POST['table']=='articles')
+		{
+			if (user_role('173') == true) {}
+		}
+
+        
 
 		$this->form_validation->set_rules('id','Id','required');
 		$this->form_validation->set_rules('table','Table','required');
@@ -316,7 +339,7 @@ class Knowledge_base extends CI_Controller {
 	}
 
 	public function category_details(){
-        if (user_role('170') == true) {}
+        if (user_role('175') == true) {}
 
 		$this->form_validation->set_rules('id','Id','required');		
 		$res = array();		
@@ -327,5 +350,4 @@ class Knowledge_base extends CI_Controller {
 		}
 		echo json_encode($res);
 	}
-
 }

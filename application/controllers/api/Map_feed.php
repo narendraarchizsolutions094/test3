@@ -91,18 +91,23 @@ class Map_feed extends REST_Controller {
     if ($this->form_validation->run() == TRUE) {      
       
       $user_id  = $this->input->post('user_id');      
-      $where = " uid=$user_id AND status='in' AND DATE(created_date)=CURDATE()";      
+      $where = " uid=$user_id AND status='in' AND DATE(created_date)=CURDATE() order by created_date desc limit 1";      
       $this->db->where($where);   
       $res_row  = $this->db->get('map_attendance')->row_array();      
       if(!empty($res_row)){
-      	$where = " uid=$user_id AND status='out' AND DATE(created_date)=CURDATE()";      
+        $in_row = $res_row;
+      	$where = " uid=$user_id AND status='out' AND DATE(created_date)=CURDATE() order by created_date desc limit 1";      
       	$this->db->where($where);    
       	$res_row  = $this->db->get('map_attendance')->row_array();      
       	
       	if(empty($res_row)){
         	$att_arr  = array('message'=>'in');
       	}else{
-        	$att_arr  = array('message'=>'out');
+          if($in_row['id'] > $res_row['id'])
+              $att_arr  = array('message'=>'in');
+          else
+        	   $att_arr  = array('message'=>'out');
+
       	}
         $this->set_response([
                     'status' => true,

@@ -4,7 +4,14 @@
         <div  class="panel panel-default thumbnail">
             <div class="panel-heading no-print">
                 <div class="btn-group"> 
+                  <?php
+                  if(user_access('171'))
+                  {
+                    ?>
                      <a href="<?=base_url().'knowledge_base/create_article'?>" class="btn btn-success"> <i class="fa fa-plus "></i> New Article</a>
+                  <?php
+                  }
+                  ?>
                 </div>
             </div>
             <div class="panel-body">
@@ -53,10 +60,20 @@
                               <td><?=$value['created_date']?></td>
                               <td><?=$value['updated_date']?></td>
                               <td>
+                                <?php
+                                if(user_access('172'))
+                                {
+                                  ?>
                                 <a href="<?=base_url().'knowledge_base/create_article/'.$value['id']?>" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i></a> 
-                                
+                                  <?php
+                                }
+                                if(user_access('173'))
+                                {
+                                  ?>
                                 <a href="javascript:void(0)" onclick="delete_article(<?=$value['id']?>)" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></a> 
-
+                                <?php
+                                }
+                                ?>
                               </td>
                             </tr>                          
                             <?php

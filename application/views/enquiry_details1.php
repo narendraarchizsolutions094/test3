@@ -804,7 +804,7 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
             <li href="#vtran_visit" data-toggle="tab" >Visit Details</li>
             <?php
             }
-            if(user_access('1030'))
+            if(user_access('1004'))
             {
             ?>
             <li href="#vtransaggrement" data-toggle="tab" >Agreement</li>
@@ -2232,7 +2232,7 @@ $(document).ready(function(){
 </div>
 <?php
 }
-if(user_access('1030'))
+if(user_access('1004'))
 {
 ?>
 
