@@ -13,9 +13,7 @@
             </div> 
 
             <div class="panel-body">
-            <div>
-        Toggle column: <a class="toggle-vis" data-column="0">G C Number</a> - <a class="toggle-vis" data-column="1">Position</a> - <a class="toggle-vis" data-column="2">Office</a> - <a class="toggle-vis" data-column="3">Age</a> - <a class="toggle-vis" data-column="4">Start date</a> - <a class="toggle-vis" data-column="5">Salary</a>
-    </div>
+         
                 <table id="enq_table2" class="datatable table table-striped table-bordered" cellspacing="0" width="100%">
                     <thead>
                         <tr>
