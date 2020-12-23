@@ -15,25 +15,21 @@ class Message extends CI_Controller {
 	}
     
     	public function get_templates($for,$ins=''){
-		echo	$product_id=$this->uri->segment(3);
-		echo	$stage_id=$this->uri->segment(4);
-		echo	$for=$this->uri->segment(5);
-			echo$for;
+			$product_id=$this->uri->segment(3);
+			$stage_id=$this->uri->segment(4);
+			$for=$this->uri->segment(5);
+			// echo$for;
     	    $this->db->where('temp_for',$for);
     	    $this->db->where('comp_id',$this->session->companey_id);
     	    $res=$this->db->get('api_templates');
 			$q=$res->result();
-			// print_r($q);
     	    if(!empty($q)){
     	        echo '<option value="0" selected style="display:none">Select Templates</option>';
     	    foreach($q as $value){
-				$stage = explode(',', $value->stage);
-                                         $process = explode(',', $value->process); 
+				 $stage = explode(',', $value->stage);
+										 $process = explode(',', $value->process); 
 				if(in_array($stage_id,$stage) AND in_array($product_id,$process)){
     	        echo '<option value="'.$value->temp_id.'">'.$value->template_name.'</option>';
-				}else{
-					// echo '<option value="'.$value->temp_id.'">'.$value->template_name.'</option>';
-
 				}
     	    		}
     	    
