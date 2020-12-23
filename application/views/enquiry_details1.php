@@ -3719,7 +3719,7 @@ if (document.getElementById('agg_same').checked)
                <label>Template</label>
                <select class="form-control" name="templates" required id="templates"  onchange="getMessage(),this.form.reset();">
                 <!--  -->
-               </select>
+               </select>\
             </div>
             <div class="form-group col-sm-12">
                <label><?php echo display('subject') ?></label>
@@ -4326,15 +4326,16 @@ $(".toogle-timeline").click(function(){
         minHeight: null,             // set minimum height of editor
         maxHeight: null,             // set maximum height of editor
         focus: false                 // set focus to editable area after initializing summernote
-      });
+       });
       $("#email_subject").show();
       $("#email_subject").prev().show();
     }
    $.ajax({
    type: 'POST',
-   url: '<?php echo base_url();?>message/get_templates/'+SMS,
+   url: '<?php echo base_url();?>message/get_templates/<?php echo $enquiry->product_id ?>/<?php echo $enquiry->status ?>/'+SMS,
    })
    .done(function(data){
+
        $('#modal-titlesms').html(type);
        $('#mesge_type').val(SMS);       
        $('#templates').html(data);

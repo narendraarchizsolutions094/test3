@@ -7,7 +7,7 @@ class Smsapi extends CI_Controller {
 	{
 		parent::__construct();
 		$this->load->model(array(
-			'Client_Model','Apiintegration_Model'
+			'Client_Model','Apiintegration_Model','dash_model'
 		));
 	}
     
@@ -24,6 +24,8 @@ class Smsapi extends CI_Controller {
 		$data['api_list'] = $this->Apiintegration_Model->get_api_list($api_for);
         /*print_r($data['api_list']);
         exit();*/
+        $data['products'] = $this->dash_model->get_user_product_list();
+
 		$data['temp_list'] = $this->Apiintegration_Model->get_template_list($api_for);
 		$data['content'] = $this->load->view('smsapi',$data,true);
 		//$this->load->view('leads',$data);
@@ -95,7 +97,13 @@ class Smsapi extends CI_Controller {
     
     $template_name = $this->input->post('template_name');
     $template_content = $this->input->post('template_content');
-    
+    $process=$this->input->post('process');
+    $stage=$this->input->post('stage');
+    $process =implode(',',$process);
+    $stage =implode(',',$stage);
+    // die();
+    $this->db->set('stage',$stage);
+    $this->db->set('process',$process);
     
     $this->db->set('template_name',$template_name);
     $this->db->set('template_content',$template_content);
@@ -173,9 +181,14 @@ class Smsapi extends CI_Controller {
         
         $template_name = $this->input->post('template_name');
         $template_content = $this->input->post('template_content');
-        
-        
+        $process=$this->input->post('process');
+        $stage=$this->input->post('stage');
+        $process =implode(',',$process);
+        $stage =implode(',',$stage);
+
         $data = array(
+         'stage'=>$stage,
+         'process'=>$process,
         'template_name' => $template_name,
         'template_content' => $template_content,
         //'api_type' => $api_type,

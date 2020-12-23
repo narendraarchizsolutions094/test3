@@ -8,7 +8,7 @@ class Whatsappapi extends CI_Controller {
             //$this->load->helper('url');
 		
 		$this->load->model(array(
-			'Client_Model','Apiintegration_Model'
+			'Client_Model','Apiintegration_Model','Leads_Model','dash_model'
 		));
 		$panel_menu = $this->db->select("modules")
     ->where('pk_i_admin_id',$this->session->user_id)
@@ -31,7 +31,9 @@ class Whatsappapi extends CI_Controller {
 		$data['title'] = 'Whatsapp Api Integration';
 		$data['page_title'] = 'Whatsapp API';
 		$data['api_list'] = $this->Apiintegration_Model->get_api_list($api_for);
-		$data['temp_list'] = $this->Apiintegration_Model->get_template_list($api_for);
+        $data['temp_list'] = $this->Apiintegration_Model->get_template_list($api_for);
+        
+        $data['products'] = $this->dash_model->get_user_product_list();
 		$data['content'] = $this->load->view('whatsappapi',$data,true);
 		//$this->load->view('leads',$data);
 		$this->load->view('layout/main_wrapper',$data);
@@ -40,6 +42,7 @@ class Whatsappapi extends CI_Controller {
     public function api_details()
     {  
         if (user_role('52') == true) {
+        
         }
     //$data['title'] = display('Enquiry Details');
     #------------------------------# 
@@ -88,8 +91,13 @@ class Whatsappapi extends CI_Controller {
             
             $template_name = $this->input->post('template_name');
             $template_content = $this->input->post('template_content');
-            
-            
+            $process=$this->input->post('process');
+            $stage=$this->input->post('stage');
+            $process =implode(',',$process);
+            $stage =implode(',',$stage);
+            // die();
+            $this->db->set('stage',$stage);
+            $this->db->set('process',$process);
             $this->db->set('template_name',$template_name);
             $this->db->set('template_content',$template_content);
             
@@ -152,8 +160,13 @@ class Whatsappapi extends CI_Controller {
             $path= "uploads/media/".$image;
             move_uploaded_file($_FILES['media']['tmp_name'],$path);
         }
-        
+        $process=$this->input->post('process');
+        $stage=$this->input->post('stage');
+        $process =implode(',',$process);
+        $stage =implode(',',$stage);
         $data = array(
+        'stage'=>$stage,
+        'process'=>$process,
         'template_name'     => $template_name,
         'template_content'  => $template_content,
         'media'             => $path,

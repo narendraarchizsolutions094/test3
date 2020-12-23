@@ -2815,21 +2815,4 @@ public function set_layout_to_session() {
     }
 }
 
-public function feedback() 
-{
-   
-        $comp_id=$this->session->companey_id;
-        $data['feedbacks']=$this->db->where('comp_id',$comp_id)->get('feedback')->result();
-        $data['content'] = $this->load->view('ticket/feedback', $data, true);	     
-        $this->load->view('layout/main_wrapper', $data);
-}
-public function create() 
-{
-   
-        $comp_id=$this->session->companey_id;
-        $data['feedbacks']=$this->db->where('comp_id',$comp_id)->get('feedback')->result();
-        $data['content'] = $this->load->view('ticket/add-feedback', $data, true);	     
-        $this->load->view('layout/main_wrapper', $data);
-}
-
 }
