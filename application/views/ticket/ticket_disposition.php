@@ -129,12 +129,11 @@
 <script type="text/javascript">
   $("#lead_stage_change").on('change',function(){
     var v  = $(this).val();
-    if(v == 27){
+    if(v == 2 && "<?=$this->session->companey_id?>" == 65)){
       $("#lead_description").prop('required',true);
     }else{
       $("#lead_description").prop('required',false);
     }    
-    console.log(v);
   });
 
   $("#ticket_disposition_save").on('click',function(e){
