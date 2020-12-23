@@ -178,6 +178,7 @@
                                                                                           } } ?></td>
                                                                                           
                                               <td class="th3">
+                                              <?php  if (in_array('0', $stage)) { echo 'Ticket'.','; } ?></option>
                                                  <?php if (in_array('1', $stage)) {  echo display("enquiry").','; }?>
                                                      <?php  if (in_array('2', $stage)) { echo display("lead").','; } ?>
                                                      <?php  if (in_array('3', $stage)) { echo display("client").','; } ?></option>
@@ -258,7 +259,10 @@
                                           <div class="form-group">
                                              <label>Stage</label>
                                              <select class="form-control process multiple" name="stage[]" multiple required>
-                                                <option value="1" <?php if (in_array('1', $stage)) {
+                                                <option value="0" <?php if (in_array('0', $stage)) {
+                                                                     echo 'selected';
+                                                                  } ?>>Ticket</option>
+                                                                  <option value="1" <?php if (in_array('1', $stage)) {
                                                                      echo 'selected';
                                                                   } ?>><?= display("enquiry") ?></option>
                                                 <option value="2" <?php if (in_array('2', $stage)) {
@@ -518,6 +522,8 @@
                               <option value="<?= $key ?>"> <?= $ctitle = $enquiry_separation[$key]['title'];  ?></option>
                         <?php }
                         } ?>
+                        <option value="0">Ticket</option>
+
                      </select>
                   </div>
                </div>

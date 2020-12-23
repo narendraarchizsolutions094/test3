@@ -209,6 +209,7 @@
                             <?php } ?>
                           </td>
                           <td class="th3"><?php
+                          
                                          $stage = explode(',', $tlist->stage);
                                          $process = explode(',', $tlist->process); 
                                         foreach ($products as $product) { 
@@ -217,6 +218,7 @@
                                                                                           } } ?></td>
                                                                                           
                                               <td class="th3">
+                                                 <?php if (in_array('0', $stage)) {  echo 'Ticket'.','; }?>
                                                  <?php if (in_array('1', $stage)) {  echo display("enquiry").','; }?>
                                                      <?php  if (in_array('2', $stage)) { echo display("lead").','; } ?>
                                                      <?php  if (in_array('3', $stage)) { echo display("client").','; } ?></option>
@@ -302,6 +304,9 @@
                                                                 } ?>> <?= $ctitle = $enquiry_separation[$key]['title'];  ?></option>
                                 <?php }
                                 } ?>
+                                 <option value="0" <?php if (in_array('0', $stage)) {
+                                                    echo 'selected';
+                                                  } ?>>Ticket</option>
                               </select>
                             </div>
                           </div>
@@ -530,6 +535,8 @@
                     <option value="<?= $key ?>"> <?= $ctitle = $enquiry_separation[$key]['title'];  ?></option>
                 <?php }
                 } ?>
+                <option value="0">Ticket</option>
+
               </select>
             </div>
           </div>
