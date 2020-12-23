@@ -128,11 +128,13 @@
 
 <script type="text/javascript">
   $("#lead_stage_change").on('change',function(){
-    if($(this).val() == 27){
+    var v  = $(this).val();
+    if(v == 27){
       $("#lead_description").prop('required',true);
     }else{
       $("#lead_description").prop('required',false);
     }    
+    console.log(v);
   });
 
   $("#ticket_disposition_save").on('click',function(e){
