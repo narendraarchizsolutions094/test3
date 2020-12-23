@@ -81,7 +81,7 @@
                     </div>
                     <div class="form-group">                           
                        <select class="form-control" id="lead_description" name="lead_description">
-                           <option>---Select Description---</option>
+                           <option value=''>---Select Description---</option>
                           <?php// foreach($all_description_lists as $discription){ ?>                                   
                                <!-- <option value="<?php// echo $discription->id; ?>"><?php //echo $discription->description; ?></option> -->
                                <?php //} ?>
