@@ -12,6 +12,8 @@ class Ticket extends CI_Controller
 	}
 	public function natureOfComplaintList()
 	{
+		if(user_role('523')){}
+
 		$data['title'] = "Nature Of Complaint List";
 		$data["tickets"] = $this->db->select('*')->from('tbl_nature_of_complaint')->where('comp_id', $this->session->companey_id)->get()->result();
 		$data['content'] = $this->load->view('ticket/natureofcomplain-list', $data, true);
@@ -19,6 +21,8 @@ class Ticket extends CI_Controller
 	}
 	public function addNatureOfComplaint()
 	{
+		if(user_role('527')){}
+
 		$data['title'] = "Add Nature Of Complaint";
 		if (!empty($_POST)) {
 			if (empty($this->input->post('complainid'))) {
@@ -55,6 +59,8 @@ class Ticket extends CI_Controller
 	}
 	public function editNatureOfComplaint($id)
 	{
+		if(user_role('528')){}
+
 		$data['title'] 	= "Edit Nature Of Complaint";
 		$data['detail'] = $this->db->select('*')->from('tbl_nature_of_complaint')->where('id', $id)->get()->row();
 		$data['content'] = $this->load->view('ticket/addNatureof_complaint', $data, true);
@@ -62,6 +68,8 @@ class Ticket extends CI_Controller
 	}
 	public function deleteNatureOfComplaint($id)
 	{
+		if(user_role('529')){}
+
 		$this->db->where('id', $id);
 		$this->db->delete('tbl_nature_of_complaint');
 		$this->session->set_flashdata('message', 'Deleted successfully');
@@ -69,6 +77,7 @@ class Ticket extends CI_Controller
 	}
 	public function index()
 	{
+
 		$this->load->model('Datasource_model');
 		$this->load->model('dash_model');
 		$this->load->model('enquiry_model');
@@ -1225,14 +1234,25 @@ class Ticket extends CI_Controller
 	}
 	public function referred_by($id = 0)
 	{
+		if(user_role('521')){}
+
 		$data['nav1'] = 'nav2';
 		$data['title']    = display('Lead Details');
 		$data['header'] = ($id ? ' Edit ' : ' Add ') . 'Referred By';
 		$data['table'] = $this->Leads_Model->get_referred_by();
 		if ($id) {
 			$data['data'] = $this->Leads_Model->get_referred_by(array('id' => $id));
+			if(user_role('5211')){}
 		}
 		if ($_POST) {
+
+			if ($id) {
+				if(user_role('5211')){}
+			}else 
+			{
+				if(user_role('5210')){}
+			}	
+
 			$_POST['company_id'] = $this->session->companey_id;
 			$_POST['created_by'] = $this->session->userdata('user_id');
 			$this->Leads_Model->save_referred_by($_POST, $id);
@@ -1243,6 +1263,7 @@ class Ticket extends CI_Controller
 	}
 	public function delete_referred_by($id)
 	{
+		if(user_role('5212')){}
 		$this->Leads_Model->delete_referred_by($id);
 		redirect(base_url('ticket/referred_by'));
 	}
@@ -1301,6 +1322,8 @@ class Ticket extends CI_Controller
 	}
 	public function addproblems($prblm = "")
 	{
+		if(user_role('522')){}
+
 		$this->saveticket();
 		if (empty($prblm)) {
 			$data['title'] = "Add Problems";
@@ -1336,11 +1359,16 @@ class Ticket extends CI_Controller
 	}
 	public function add_subject()
 	{
+		if(user_role('522')){}
+
 		$data['title'] = display('ticket_problem_master');
 		$data['nav1'] = 'nav2';
 		#------------------------------# 
 		$leadid = $this->uri->segment(3);
 		if (!empty($_POST)) {
+
+			if(user_role('524')){}
+
 			$reason = $this->input->post('subject');
 			$data = array(
 				'subject_title' => $reason,
@@ -1358,6 +1386,8 @@ class Ticket extends CI_Controller
 	}
 	public function update_subject()
 	{
+		if(user_role('525')){}
+
 		if (!empty($_POST)) {
 			$drop_id = $this->input->post('drop_id');
 			$reason = $this->input->post('subject');
@@ -1371,6 +1401,8 @@ class Ticket extends CI_Controller
 	}
 	public function delete_subject($drop = null)
 	{
+		if(user_role('526')){}
+
 		if ($this->Ticket_Model->delete_subject($drop)) {
 			#set success message
 			$this->session->set_flashdata('message', display('delete_successfully'));

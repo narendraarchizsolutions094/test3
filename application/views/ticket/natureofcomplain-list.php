@@ -3,8 +3,15 @@
 					<div class="panel-heading no-print" style ="background-color: #fff;padding:7px;border-bottom: 1px solid #C8CED3;">
 						<div class="row">
 							<div class="btn-group"> 
-				                <a class="pull-left fa fa-arrow-left btn btn-circle btn-default btn-sm" onclick="history.back(-1)" title="Back"></a>        
-				                <a class="dropdown-toggle btn btn-danger btn-circle btn-sm fa fa-plus" href="<?=base_url().'ticket/addNatureOfComplaint'?>" title="New Ticket"></a>                       
+				                <a class="pull-left fa fa-arrow-left btn btn-circle btn-default btn-sm" onclick="history.back(-1)" title="Back"></a>    
+				                <?php
+				                if(user_access('527'))
+				                {
+				                ?>    
+				                <a class="dropdown-toggle btn btn-danger btn-circle btn-sm fa fa-plus" href="<?=base_url().'ticket/addNatureOfComplaint'?>" title="New Ticket"></a>   
+				                <?php
+				                }
+				                ?>                    
 				            </div>
 							<div class="col-md-2 col-sm-2 col-xs-2 pull-right" >  
 					          <div style="float: left;">     
@@ -44,11 +51,23 @@
 														<td><?= $sl;?></td>
 														<td><?php echo $tck->title; ?></td>
 														<td><?php echo ($tck->status == 1) ? "Active" : "InActive"; ?></td>
-														<td style ="min-width:125px;"><?php if($this->session->user_right!=214){ ?>
-															 <a class="btn  btn-success btn-sm" href="<?php echo base_url("ticket/editNatureOfComplaint/".$tck->id) ?>"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a><?php } ?>
+														<td style ="min-width:125px;">
+												<?php 
+												if(user_access('528'))
+												{ ?>
+												<a class="btn  btn-success btn-sm" href="<?php echo base_url("ticket/editNatureOfComplaint/".$tck->id) ?>"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+
+												<?php } 
+												if(user_access('529'))
+												{
+												?>
 														<!--<a class="btn  btn-default btn-sm" href="<?php echo base_url("ticket/edit/".$tck->ticketno) ?>"><i class="fa fa-pencil-square-o" aria-hidden="true"> </i> </a>-->
 														
 														<a class="btn  btn-danger btn-sm"   href="<?php echo base_url("ticket/deleteNatureOfComplaint/$tck->id") ?>"><i class="fa fa-trash-o"></i></a> 
+
+												<?php
+												}	
+												?>
 														</td>
 													</tr>
 													<?php

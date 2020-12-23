@@ -6,8 +6,14 @@
       <div  class="panel panel-default thumbnail">
          <div class="panel-heading no-print">
             <div class="btn-group"> 
-                <a class="pull-left fa fa-arrow-left btn btn-circle btn-default btn-sm" onclick="history.back(-1)" title="Back"></a>        
-                <a class="dropdown-toggle btn btn-danger btn-circle btn-sm fa fa-plus" href="<?=base_url().'ticket/add'?>" title="New Ticket"></a>                       
+                <a class="pull-left fa fa-arrow-left btn btn-circle btn-default btn-sm" onclick="history.back(-1)" title="Back"></a> 
+                <?php
+                if(user_access('310'))
+                { ?>
+                <a class="dropdown-toggle btn btn-danger btn-circle btn-sm fa fa-plus" href="<?=base_url().'ticket/add'?>" title="New Ticket"></a>
+                <?php
+                }
+                ?>
             </div>
          </div>
          <div class="panel-body">
@@ -45,15 +51,32 @@
             ?>            
          </h5>
          <div class="row text-center">
+            <?php
+            if(user_access('314'))
+            {
+            ?>
               <a class="btn btn-primary btn-sm"  data-toggle="modal" type="button" title="Send SMS" data-target="#sendsms" data-toggle="modal"  onclick="getTemplates('2','Send SMS')">
                 <i class="fa fa-paper-plane-o"></i>
               </a>
+              <?php
+            }
+            if(user_access('316'))
+              {
+                ?>
               <a class="btn btn-info btn-sm"  data-toggle="modal" type="button" title="Send Email" data-target="#sendsms" data-toggle="modal"  onclick="getTemplates('3','Send Email')">
                 <i class="fa fa-envelope"></i>
               </a>
+              <?php
+            }
+            if(user_access('315'))
+            {
+            ?>
               <a class="btn btn-primary btn-sm"  data-toggle="modal" type="button" title="Send Whatsapp" data-target="#sendsms" data-toggle="modal"  onclick="getTemplates('1','Send Whatsapp')">
                 <i class="fa fa-whatsapp"></i>
               </a>
+              <?php
+            }
+            ?>
          </div>
               <button class="btn btn-basic" type="button" style="width: 100%; margin-top: 5px;margin-bottom: 5px;">Disposition</button>
             
@@ -81,7 +104,7 @@
                     </div>
                     <div class="form-group">                           
                        <select class="form-control" id="lead_description" name="lead_description">
-                           <option>---Select Description---</option>
+                           <option value=''>---Select Description---</option>
                           <?php// foreach($all_description_lists as $discription){ ?>                                   
                                <!-- <option value="<?php// echo $discription->id; ?>"><?php //echo $discription->description; ?></option> -->
                                <?php //} ?>
@@ -129,6 +152,10 @@
 <script type="text/javascript">
   $("#ticket_disposition_save").on('click',function(e){
     e.preventDefault();
+    if($("#lead_stage_change").val() == 2 && "<?=$this->session->companey_id?>"==65 && $("#lead_description").val() == ''){
+      alert('Please select nature of complaint.');
+      return;
+    }
     var disposition = getSelectedText('lead_stage_change');
     var name = $("#ticket_holder").val();
     var time  =   $("#disposition_c_time").val();      

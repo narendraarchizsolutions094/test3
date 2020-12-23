@@ -154,8 +154,13 @@ input[name=lead_stages]{
 					<div class="panel-heading no-print" style ="background-color: #fff;padding:7px;border-bottom: 1px solid #C8CED3;">
 						<div class="row">
 							<div class="btn-group"> 
-				                <a class="pull-left fa fa-arrow-left btn btn-circle btn-default btn-sm" onclick="history.back(-1)" title="Back"></a>        
-				                <a class="dropdown-toggle btn btn-danger btn-circle btn-sm fa fa-plus" href="<?=base_url().'ticket/add'?>" title="New Ticket"></a>                       
+				                <a class="pull-left fa fa-arrow-left btn btn-circle btn-default btn-sm" onclick="history.back(-1)" title="Back"></a> 
+
+                        <?php
+                        if(user_access('310'))
+                          { ?>
+				                <a class="dropdown-toggle btn btn-danger btn-circle btn-sm fa fa-plus" href="<?=base_url().'ticket/add'?>" title="New Ticket"></a>  
+                        <?php } ?>
 				            </div>
 							<div class="col-md-4 col-sm-4 col-xs-4 pull-right" >  
 					          <div style="float: right;">   
@@ -234,7 +239,8 @@ input[name=lead_stages]{
                       <?php if(user_access(313)) { ?>
                             <a class="btn" data-toggle="modal" data-target="#AssignSelected" style="color:#000;cursor:pointer;border-radius: 2px;border-bottom :1px solid #ccc; width: 100%; text-align: left"><?php echo display('assign_selected'); ?></a>                                        
                       <?php } 
-                      if(user_access(312)){                      
+                      if(user_access(312))
+                      {                      
                       ?>
                             <a class="btn" data-toggle="modal" data-target="#DeleteSelected" style="color:#000;cursor:pointer;border-radius: 2px;border-bottom :1px solid #ccc; width: 100%; text-align: left"><?php echo display('delete'); ?></a>
                       <?php

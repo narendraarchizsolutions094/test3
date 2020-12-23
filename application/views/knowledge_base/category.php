@@ -4,7 +4,15 @@
         <div  class="panel panel-default thumbnail">
             <div class="panel-heading no-print">
                 <div class="btn-group"> 
+                  <?php
+                  if(user_access('174'))
+                  {
+                  ?>
                      <a href="javascript:void(0)" class="btn btn-success" data-toggle="modal" data-placement="top" data-target="#myModal" id="create_cat"> <i class="fa fa-plus "></i> New Category</a>
+                  
+                  <?php
+                  }
+                  ?>
                 </div>
             </div>
             <div class="panel-body">
@@ -38,8 +46,19 @@
                                 </td>
 
                                 <td>
+                                  <?php
+                                  if(user_access('175'))
+                                  {?>
                                     <a href="javascript:void(0)" onclick="edit_category(<?=$value['id']?>)" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i></a> 
+                                    <?php
+                                  }
+                                  if(user_access('176'))
+                                  {
+                                  ?>
                                     <a href="javascript:void(0)" onclick="delete_category(<?=$value['id']?>)" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></a> 
+                                  <?php
+                                  }
+                                  ?>
                                 </td>
                             </tr>                            
                         <?php

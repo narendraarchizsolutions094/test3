@@ -9,18 +9,24 @@
                             class="sr-only">Close</span></button>
                     <?=$this->session->flashdata('SUCCESSMSG')?>
                 </div>
-                <?php } ?>
+                <?php } 
+                if(user_access('524'))
+                {
+                ?>
                 <button class="btn btn-sm btn-success" style="float: left" type="button" data-toggle="modal"
                     data-target="#createnewReason"><i class="fa fa-plus"></i>
                     <?=display('add_ticket_problem_master')?></button>
+                <?php
+                }
+                ?>
             </div>
             <br>
             <div class="panel-body">
                 <table width="100%" class="datatable1 table table-striped table-bordered table-hover">
                     <thead>
                         <tr>
-                            <th class="sorting_asc wid-20 th0" tabindex="0" rowspan="1" colspan="1"><input
-                                    type='checkbox' class="checked_all" value="check all">&nbsp;
+                            <th class="sorting_asc wid-20 th0" tabindex="0" rowspan="1" colspan="1">
+                                <input type='checkbox' class="checked_all" value="check all">&nbsp;
                                 <?php echo display('serial') ?></th>
                             <th class="th1">Title</th>
                             <th class="th1"><?=display('proccess')?></th>
@@ -53,11 +59,23 @@
                             ?>
                             </td>
                             <td class="center">
+                                <?php
+                                if(user_access('525'))
+                                {
+                                    ?>
                                 <a class="btn btn-xs  btn-primary" data-toggle="modal"
                                     data-target="#Editreason<?php echo $sub->id;?>"><i class="fa fa-edit"></i></a>
+                                <?php
+                                }
+                                if(user_access('526'))
+                                {
+                                ?>
                                 <a href="<?php echo base_url("ticket/delete_subject/$sub->id") ?>"
                                     onclick="return confirm('<?php echo display("are_you_sure") ?>')"
                                     class="btn btn-xs  btn-danger"><i class="fa fa-trash"></i></a>
+                                <?php
+                                }
+                                ?>
                             </td>
                         </tr>
                         <div id="Editreason<?php echo $sub->id;?>" class="modal fade" role="dialog">

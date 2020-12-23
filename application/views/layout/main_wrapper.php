@@ -1281,7 +1281,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
 
                   </li>  -->
                     <?php
-          if(user_access('1013')){ ?>
+          if(user_access('1010') || user_access('1011') || user_access('1012')){ ?>
                     <li class="<?=($segment2=='contacts')?'active':''?>">
                         <a href="<?=base_url('client/contacts')?>">
                             <i class="fa fa-address-book"
@@ -1717,7 +1717,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                 }//menucount end
 
 
-                if(user_access('1023'))
+                if(user_access('1020') || user_access('1021') || user_access('1022'))
                 {
                     echo' <li class="'.($segment1=='client' && $segment2=='visits'?'active':'').'" >
                         <a href="'.base_url("client/visits").'">
@@ -1732,7 +1732,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                         </li>';
                 }
 
-                if(user_access('1003'))
+                if(user_access('1000') || user_access('1001') || user_access('1002') || user_access('1004') || user_access('1005'))
                 {
                     echo' <li class="'.($segment1=='client' && $segment2=='deals'?'active':'').'" >
                         <a href="'.base_url("client/deals").'">
@@ -1800,11 +1800,8 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                         </ul>
                     </li>
 
-
-
-
                     <li class="treeview <?php echo (($segment1 == "report") ? "active" : null) ?>"
-                        style="<?php if(in_array(120,$module) || in_array(121,$module) || in_array(122,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
+                        style="<?php if(in_array(120,$module) || in_array(121,$module) || in_array(122,$module) || in_array(123,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
                         <a href="<?php echo base_url('report/index')?>">
                             <i class="fa fa-bar-chart"
                                 style="color:#fff;font-size:15px;background:#69f794;padding:7px;border-radius:4px;width:30px;"></i>
@@ -1812,7 +1809,31 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                             <?php  if($this->session->menu==1){ ?></br>
                             <p style="color:#fff;font-size:9px;margin-left:-12px;padding-top:10px;">
                                 <?php echo display('report') ?></p> <?php } ?>
+                                <span class="pull-right-container">
+                                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
                         </a>
+                         <ul class="treeview-menu">
+                            <?php
+                           
+                            if(user_access('120'))
+                            {
+                            ?>
+                             <li class="<?php echo (($segment1 == "report") && $segment2=='' ? "active" : null) ?>">
+                                <a href="<?=base_url("report/") ?>">Sales Report </a>
+                            </li>
+                            <?php
+                            }
+                            if(user_access('121'))
+                            {
+                            ?>
+                            <li class="<?php echo (($segment1 == "report") && $segment2=='ticket_report' ? "active" : null) ?>">
+                                <a href="<?=base_url("report/ticket_report") ?>">Ticket Report </a>
+                            </li>
+                            <?php
+                            } 
+                            ?>
+                         </ul>
                     </li>
 
                     <?php if(in_array(200,$module) || in_array(201,$module) || in_array(202,$module) || in_array(203,$module)) { ?>
@@ -1840,10 +1861,11 @@ if($root=='https://student.spaceinternationals.com'){  ?>
 
                     </li>
                     <?php
-              }
+                }
+               
                 ?>
                     <li class="treeview <?php echo (($this->uri->segment(1) == "knowledge_base") ? "active" : null) ?>"
-                        style="<?php if(in_array(170,$module) || in_array(171,$module) || in_array(172,$module) || in_array(173,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
+                        style="<?php if(in_array(170,$module) || in_array(171,$module) || in_array(172,$module) || in_array(173,$module) || in_array(174,$module)|| in_array(175,$module)|| in_array(176,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
                         <a href="<?=base_url().'leave'?>">
                             <i class="fa fa-quora"
                                 style="color:#fff;font-size:18px;background:#fe1a88;padding:7px;border-radius:4px;width:30px;"></i>
@@ -1851,14 +1873,28 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                             <?php  if($this->session->menu==1){ ?></br>
                             <p style="color:#fff;font-size:9px;margin-left:-12px;padding-top:10px;">
                                 <?php echo 'Knowledge Base' ?></p> <?php } ?>
+                                <span class="pull-right-container">
+                                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
                         </a>
                         <ul
                             class="treeview-menu <?php echo (($this->uri->segment(1) == "knowledge_base") ? "active" : null) ?>">
-                            <?php if(user_access('170')==true||user_access('171')==true||user_access('172')==true||user_access('173')==true){?>
+                            <?php if(user_access('170')==true||user_access('171')==true||user_access('172')==true||user_access('173')==true||user_access('174')==true||user_access('175')==true||user_access('176')==true){?>
                             <li class=""><a href="<?=base_url('knowledge_base/index')?>">Knowledge Base</a></li>
+                            <?php
+                            if(user_access('171') || user_access('172') || user_access('173'))
+                            {
+                            ?>
                             <li class=""><a href="<?php echo base_url('knowledge_base/articles')?>">Articles</a></li>
+                            <?php
+                            }
+                            if(user_access('174') || user_access('175') || user_access('176'))
+                            {
+                            ?>
                             <li class=""><a href="<?php echo base_url('knowledge_base/category')?>">Category</a></li>
-                            <?php }?>
+                            <?php 
+                            }
+                            }?>
                         </ul>
                     </li>
 
@@ -1882,8 +1918,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                             <li
                                 class="<?php echo (($segment2 == "invoice" && $segment3 == "create") ? "active" : null) ?>">
                                 <a href="<?php echo base_url('invoice/invoice/create')?>">Create Invoice</a></li>
-                            <li
-                                class="<?php echo (($segment2 == "invoice" && $segment3 == "report") ? "active" : null) ?>">
+                            <li class="<?php echo (($segment2 == "invoice" && $segment3 == "report") ? "active" : null) ?>">
                                 <a href="<?php echo base_url('invoice/invoice/report')?>">Invoice Report</a></li>
                             <li
                                 class="<?php echo (($segment2 == "invoice" && $segment3 == "settings") ? "active" : null) ?>">
@@ -1914,7 +1949,9 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                                 <?php echo display('schedule') ?></p> <?php } ?>
                         </a>
                     </li>
-                    <?php if($this->session->userdata('user_right')==214){ ?>
+                    <?php if($this->session->userdata('user_right')==214)
+                    { 
+                    ?>
                     <li class="treeview <?php echo (($segment1 == "ticket") ? "active" : null) ?>"
                         style="<?php if(in_array(310,$module) || in_array(311,$module) || in_array(312,$module) || in_array(313,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
                         <a href="<?php echo base_url("ticket/index") ?>"><i class="fa fa-tasks"
@@ -1927,23 +1964,24 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                     </li>
 
                     <?php           
-if($this->session->companey_id==65)
-  {
-  ?>
-
+                    if(user_access('530'))
+                      {
+                      ?>
                     <li class="">
                         <a href="<?php echo base_url("holiday/add-festival") ?>">Add Festival</a>
                     </li>
 
+                    <?php
+                    }
+                    if(user_access('531'))
+                    {
+                    ?>
                     <li class="">
                         <a href="<?php echo base_url("holiday/add-holiday") ?>">Add Holiday</a>
                     </li>
-
-
                     <?php
-}
-
- ?>
+                    }
+                    ?>
 
                     <?php }else{ ?>
                     <li class="treeview <?php echo (($segment1 == "ticket") ? "active" : null) ?>"
@@ -1971,13 +2009,17 @@ if($this->session->companey_id==65)
                             </li>
                             <?php
                          }
+                         if(user_access('310'))
+                         {
                          ?>
                             <li
                                 class="<?php echo (($segment1 == "ticket" && $segment2 == "index") ? "active" : null) ?>">
                                 <a href="<?php echo base_url("ticket/index") ?>"><?php echo display('ticketing') ?></a>
                             </li>
                             <?php
-                        if($this->session->companey_id!=65 && 0){ ?>
+                        }
+
+                        if(user_access('523')){ ?>
                             <li
                                 class="<?php echo (($segment1 == "ticket" && $segment2 == "natureOfComplaintList") ? "active" : null) ?>">
                                 <a
@@ -1985,34 +2027,39 @@ if($this->session->companey_id==65)
                             </li>
                             <?php
                         }
+                        if(user_access('521'))
+                        {
                         ?>
                             <li class="<?php echo (in_array($segment2,array('referred_by')) ?"active":'') ?>">
                                 <a href="<?php echo base_url(); ?>ticket/referred_by"> <?php echo 'Referred By'; ?> </a>
                             </li>
-                            <?php						
-if($this->session->companey_id==65)
-  {
-  ?>
-
-                            <li class="">
-                                <a href="<?php echo base_url("holiday/add-festival") ?>">Add Festival</a>
-                            </li>
-
-                            <li class="">
-                                <a href="<?php echo base_url("holiday") ?>">Add Holiday</a>
-                            </li>
-
-
                             <?php
-}
+                        }						
+                        ?>
 
- ?>
-
-                        </ul>
-
+                    <?php           
+                    if(user_access('530'))
+                    {
+                      ?>
+                    <li class="">
+                        <a href="<?php echo base_url("holiday/add-festival") ?>">Add Festival</a>
                     </li>
-                    <?php }
-?>
+
+                    <?php
+                    }
+                    if(user_access('531'))
+                    {
+                    ?>
+                    <li class="">
+                        <a href="<?php echo base_url("holiday/add-holiday") ?>">Add Holiday</a>
+                    </li>
+                    <?php
+                    }
+                    ?>
+                 </ul>
+            </li>
+             <?php }
+            ?>
                     <li class="treeview <?php echo (($segment1 == "appointment") ? "active" : null) ?>"
                         style="<?php if(in_array(330,$module) || in_array(331,$module) || in_array(332,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
                         <a href="<?php echo base_url("appointment/index") ?>"><i class="fa fa-language"

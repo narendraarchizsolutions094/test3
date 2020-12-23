@@ -17,7 +17,6 @@ class User extends REST_Controller
     	$this->form_validation->set_rules('company_id','company_id','trim|required',array('required'=>'You have note provided %s'));
     	// $this->form_validation->set_rules('process_id','process_id','trim|required',array('required'=>'You have note provided %s'));
     	
-
     	if($this->form_validation->run()==true)
     	{	
     		$this->load->model(array('location_model','Modules_model'));
@@ -123,7 +122,7 @@ class User extends REST_Controller
 	        {
 	        	$this->set_response([
                 'status' => TRUE,
-                'data' => 'Done'
+                'data' => 'Profile Updated Successfully.'
             	], REST_Controller::HTTP_OK);
 	        }
 	        else
@@ -178,14 +177,15 @@ class User extends REST_Controller
 
 		      	$this->set_response([
 	            'status' => TRUE,
-	            'data' => 'Done'
+	            'data' => 'Profile Image Updated Successfully.'
 	        	], REST_Controller::HTTP_OK);
 	      	}
 		    else
 			{
+                $reason = $this->upload->display_errors();
 					$this->set_response([
-	                'status' => TRUE,
-	                'data' => 'Unable to Upload.'
+	                'status' => FALSE,
+	                'data' => strip_tags($reason),
 	            	], REST_Controller::HTTP_OK);
 			}   		 
     	} 

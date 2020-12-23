@@ -350,6 +350,7 @@ function get_basic_field() {
      	alert(w);
      }
     });
+    disableForm();
   }
 
 function get_custom_field() { 
@@ -368,9 +369,11 @@ function get_custom_field() {
       {
       	//alert(data);
         $("#basic_field_data").append(data);
+        disableForm();
         //hide_all_dependent_field();
       }
     });
+    
   }
 
 get_basic_field();
@@ -412,5 +415,18 @@ function tabchange(t,key)
 		$("#ticket_details").show();
 	}
 }
+function disableForm()
+{
+<?php
+if(!user_access('311'))
+{
+?>
 
+$(document).find('input,select,textarea').attr('disabled','disabled');
+$(document).find('form').removeAttr('action');
+$(document).find('button[type=submit],input[type=submit]').remove();
+<?php
+}
+?>
+}
 </script>

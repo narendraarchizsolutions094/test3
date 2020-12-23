@@ -8,6 +8,9 @@
 	if(!empty($data))
 		$old_data = $data[0];
 	//print_r($old_data); exit();
+
+	if(user_access('5210'))
+	{
 	?>
 	<div class="col-lg-12" style="padding:10px;">
 		<div class="panel panel-default">
@@ -40,11 +43,12 @@
 			<div class="panel-footer">
 			</div>
 		</div>
-
 	</div>
-	
+	<?php
+	}
+	?>
 	<div class="col-lg-12">
-		<table class="table table-responsive table-bordered">
+		<table class="table table-responsive table-bordered datatable1">
 			<tr>
 				<th>SR</th>
 				<th>Name</th>
@@ -58,7 +62,16 @@
 					echo'<tr>
 						<td>'.$i++.'</td>
 						<td>'.$res->name.'</td>
-						<td><a href="'.base_url('ticket/referred_by/').$res->id.'"><i class="fa fa-edit"></i></a> &nbsp; <a onclick="delete_refer('.$res->id.')"><i class="fa fa-trash text-danger"></i></a></td>
+						<td>';
+						if(user_access('5211'))
+						{
+						echo'<a href="'.base_url('ticket/referred_by/').$res->id.'"><i class="fa fa-edit"></i></a> &nbsp;';
+						}
+						if(user_access('5212'))
+						{
+						echo' <a onclick="delete_refer('.$res->id.')"><i class="fa fa-trash text-danger"></i></a>';
+						}
+						echo'</td>
 						</tr>';
 				}
 			}

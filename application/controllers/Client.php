@@ -1534,7 +1534,7 @@ public function desposition()
 }
 public function view_editable_aggrement()
 {
-    if(user_role('1030')==true){
+    if(user_role('1004')==true){
             
         }
     //print_r($_POST);
@@ -1571,7 +1571,7 @@ public function view_editable_aggrement()
         // $_POST['customer_code']  = '00283';
         //print_r($_POST);
 
-         if(user_role('1031')==true){
+         if(user_role('1004')==true){
             
         }
         if(!empty($_POST))
@@ -1647,7 +1647,7 @@ public function view_editable_aggrement()
     /***********************end Generate aggriment*****************************/
     public function visits()
     {
-         if(user_role('1023')==true){
+         if(user_role('1020') || user_role('1021') || user_role('1022')){
             
         }
         $this->load->model('Client_Model');

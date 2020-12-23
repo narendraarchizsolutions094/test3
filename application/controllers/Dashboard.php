@@ -1664,7 +1664,7 @@ if (!empty($enquiry_separation)) {
     }
 		
 public function user_profile() {
-    if (user_role('349') == true) {}
+    if (user_role('340') == true) {}
 		$data['title'] = display('user_profile');
         $user_id = $this->session->userdata('user_id');
 		$stu_phone=$this->session->userdata('phone');
