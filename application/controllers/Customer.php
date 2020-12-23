@@ -455,7 +455,13 @@ class Customer extends CI_Controller
             $this->load->model('User_model');
             /*echo $user_row[0]['user_permissions'];
              exit();*/
-            $data['user_role'] = $this->User_model->get_user_role($user_row[0]['user_permissions']);
+            
+            $user_role = $this->User_model->get_user_role($user_row[0]['user_permissions']);            
+            
+            if(!empty($data['doctor']->company_rights)){
+                $user_role->user_permissions = $data['doctor']->company_rights;
+            }
+            $data['user_role'] = $user_role;
             $data['user_right_content'] = $this->load->view('company_right', $data, true);
             $data['comp_id'] = $user_id;
             $data['content'] = $this->load->view('doctor_form', $data, true);
