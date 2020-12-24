@@ -1,6 +1,7 @@
 <hr>
          <?php echo form_open_multipart('client/update_enquiry_tab/'.$details->enquiry_id,'class="form-inner tabbed_form"') ?>           
-         <input name="en_comments" type="hidden" value="<?=$details->Enquery_id?>" >    
+         <input name="en_comments" type="hidden" value="<?=$details->Enquery_id?>" >
+         <input name="cmnt_id" value="<?=$cmnt_id?>" type="hidden">    
          <div class="row">
          <?php
          if(!empty($dynamic_field)) {       
@@ -115,7 +116,7 @@
                <?php $optarr = (!empty($fld['input_values'])) ? explode(",",$fld['input_values']) : array(); 
                ?>
                <input type="hidden"  name="enqueryfield[<?=$fld_id?>]"  id="multi-<?=$fld['input_name']?>"  value ="<?php echo  (!empty($fld["fvalue"])) ? $fld["fvalue"] : ""; ?>">
-               <select class="multiple-select" name='multi[]' multiple onchange="changeSelect(this)" id="<?=$fld['input_name']?>">
+               <select class="edit-multiple-select" name='multi[]' multiple onchange="changeSelect(this)" id="<?=$fld['input_name']?>">
                   <?php  foreach($optarr as $key => $val){                  
                     $fvalues  = explode('|', $fld['fvalue']);
                     ?>
@@ -124,6 +125,12 @@
                      } 
                   ?>
                </select>
+               <script type="text/javascript">
+
+                    $("#<?=$fld['input_name']?>").select2();
+
+               </script>
+
                <?php }
                ?>
                
@@ -144,9 +151,3 @@
    <?php
    echo form_close(); 
 ?>
-<script type="text/javascript">
-   $(function() {
-      alert("d");
-    $('.multiple-select').select2();
-  });
-</script>

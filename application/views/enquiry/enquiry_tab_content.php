@@ -457,7 +457,7 @@ $type="text";
 
                        ?>
                       <td>
-                        <?=$action['edit']? "<a data-cmnt='".$arr1[3]."' data-tab-id='".$tid."' data-enq-code='".$details->Enquery_id."' data-comp-id='".$comp_id."' data-tab-name='".$tabname."' class='btn btn-primary btn-xs' onclick='edit_dynamic_query(this)'><i class='fa fa-edit'></i></a> " :''?>
+                        <?=$action['edit']? "<a data-cmnt='".$arr1[3]."' data-tab-id='".$tid."' data-enq-code='".$details->Enquery_id."' data-comp-id='".$comp_id."' data-tab-name='".$tabname."' class='btn btn-primary btn-xs' onclick='edit_dynamic_query(this)'  data-toggle='modal' data-target='#edit_dynamic_query'><i class='fa fa-edit'></i></a> " :''?>
 
                         <?=$action['delete']? "<a class='btn btn-danger btn-xs' href='".base_url("enquiry/deleteDocument/$arr1[3]/$details->Enquery_id/").base64_encode($tabname)."' onclick='return alert(\'are you sure\')'><i class='fa fa-trash'></i></a> " :''?>
                         
@@ -601,8 +601,9 @@ $type="text";
                <select class="multiple-select" name='multi[]' multiple onchange="changeSelect(this)" id="<?=$fld['input_name']?>">
                   <?php  foreach($optarr as $key => $val){                  
                     $fvalues  = explode(',', $fld['fvalue']);
+                    //<?php echo (!empty($fld["fvalue"]) and in_array($val, $fvalues)) ? "selected" : ""; ?>
                     ?>
-                    <option value = "<?php echo $val; ?>" <?php echo (!empty($fld["fvalue"]) and in_array($val, $fvalues)) ? "selected" : ""; ?>><?php echo $val; ?></option>
+                    <option value = "<?php echo $val; ?>" ><?php echo $val; ?></option>
                   <?php
                      } 
                   ?>
@@ -811,7 +812,7 @@ $type="text";
     // var z = data.toString();
     //  alert(z);
     data = data.join('|');
-    alert(data);
+    //alert(data);
 
     $("#multi-"+input_name).val(data);
   }

@@ -395,6 +395,30 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
          </div>
       </div>
    </div>
+
+<!-- Edit dynamic query -->
+
+<div id="edit_dynamic_query" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title"></h4>
+      </div>
+      <div class="modal-body">
+          <div id="edit_dynamic_query_data" class="row">
+           
+            </div>
+      
+      </div>
+      <div class="modal-footer">
+        <!-- <button type="button" class="btn btn-default" data-dismiss="modal">Close</button> -->
+      </div>
+    </div>
+  </div>
+</div>
+<!--  -->
 <!-- For Invnetory COmpany -->
   <div id="addnewdeal" class="modal fade" role="dialog">
   <div class="modal-dialog">
@@ -4543,13 +4567,25 @@ $(".toogle-timeline").click(function(){
 
 
 <script type="text/javascript">
+  makeMultiselect();
+
+$('#edit_dynamic_query').on('hidden.bs.modal', function () {
+   makeMultiselect();
+});
+
+function makeMultiselect()
+{
+$(document).ready(function() {
+     $('.multiple-select').select2();
+});
+}
 function edit_dynamic_query(t)
 {
         var tab_id = $(t).data('tab-id');
         var cmnt_id = $(t).data('cmnt');
         var enq_code = $(t).data('enq-code');
         var comp_id = $(t).data('comp-id');
-        var tabname = $(t).data('tab-name')
+        var tabname = $(t).data('tab-name');
         if(cmnt_id!='')
         {
           $.ajax({
@@ -4558,18 +4594,21 @@ function edit_dynamic_query(t)
             type:'post',
             success:function(res)
             {
-              Swal.fire({
-                title:'Edit '+tabname,
-                html:res,
-                with:'100%',
-                showConfirmButton:false,
-                showCancelButton:true,
-                cancelButtonText:'Close',
-                cancelButtonColor:'#E5343D',
-                onOpen:function(){
-                    $('.multiple-select').select2();  
-                }
-              });
+              // Swal.fire({
+              //   title:'Edit '+tabname,
+              //   html:res,
+              //   with:'100%',
+              //   showConfirmButton:false,
+              //   showCancelButton:true,
+              //   cancelButtonText:'Close',
+              //   cancelButtonColor:'#E5343D',
+              //   onOpen:function(){
+              //       $('.multiple-select').select2();  
+
+              //   }
+              // });
+              $("#edit_dynamic_query .modal-title").html(tabname);
+              $("#edit_dynamic_query_data").html(res);
             },
             error:function(u,v,w)
             {
@@ -5566,6 +5605,8 @@ $("a[href$='#related_enquiry']").on('click',function(){
 <?php
 }
 ?>
+
+
 <!-- <script>
 jQuery(document).ready(function(){
    $('#main_tab a').click(function(e) {

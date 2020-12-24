@@ -1017,6 +1017,15 @@ class Client extends CI_Controller {
         }
         return $data;
     }
+
+    public function update_dynamic_query()
+    {
+        // if(isset($_POST))
+        // {
+        //     $this->load->
+        // }
+    }
+
 public function updateclientpersonel() {  
                 $unique_number = $this->input->post('unique_number');
             if(empty($unique_number)){
