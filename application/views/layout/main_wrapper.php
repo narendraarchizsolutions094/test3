@@ -1981,8 +1981,9 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                     </li>
                     <?php
                     }
+// if($this->session->companey_id=='65')
                     ?>
-
+                    
                     <?php }else{ ?>
                     <li class="treeview <?php echo (($segment1 == "ticket") ? "active" : null) ?>"
                         style="<?php if(in_array(310,$module) || in_array(311,$module) || in_array(312,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">

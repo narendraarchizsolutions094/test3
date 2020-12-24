@@ -10,7 +10,6 @@ class Target_Model extends CI_model
 		parent::__construct();
 		$this->load->database();
 	}
-
 	public function save_goal($data,$id=0)
 	{
 		if($id)
@@ -24,15 +23,12 @@ class Target_Model extends CI_model
 			return $this->db->insert_id();
 		}
 	}
-
 	public function getGoals($where=0)
 	{	
 		$this->load->model('common_model');
 		
 		$all_reporting_ids    =   $this->common_model->get_categories($this->session->user_id);
-
 		//print_r($all_reporting_ids); exit();
-
 		$this->db->select('goals.*,role.user_role');
 		$this->db->from('tbl_goals goals');
 		$this->db->join('tbl_user_role role','role.use_id=goals.team_id','left');
@@ -40,13 +36,10 @@ class Target_Model extends CI_model
 			$this->db->where($where);
 		$this->db->where('goals.comp_id',$this->session->companey_id);
 		$res =  $this->db->get();
-
 		$data = array();
-
 		foreach ($res->result() as $row)
 		{
 			$a = explode(',', $row->goal_for);
-
 			$inter = array_intersect($all_reporting_ids, $a);
 			if(count($inter))
 			{
@@ -61,14 +54,12 @@ class Target_Model extends CI_model
 					}
 					$row->target_value = $sum;
 				}
-
 				$data[] = $row;
 			}
 		}
 		//print_r($data); exit();
 		return $data;
 	}
-
 
 	public function getForecast($goal_id)
 	{	
@@ -87,7 +78,6 @@ class Target_Model extends CI_model
 			return false;
 	
 	}
-
 	public function getAchieved($goal_id)
 	{
 		$goal  = $this->getGoals(array('goal_id'=>$goal_id))[0];
@@ -104,11 +94,9 @@ class Target_Model extends CI_model
 		else
 			return false;
 	}
-
 	public function getUserWiseForecast($goal_id,$user_id)
 	{
 		$goal  = $this->getGoals(array('goal_id'=>$goal_id))[0];
-
 		$res =$this->db->select('*, sum(info.expected_amount) as e_amnt,sum(info.potential_amount) as p_amnt ')
 					->from('tbl_admin admin')
 					->join('commercial_info info','info.createdby=admin.pk_i_admin_id and info.status IN (0,1)','inner')
@@ -120,7 +108,6 @@ class Target_Model extends CI_model
 		//print_r($res); exit();
 		return $res;
 	}
-
 	public function getUserWiseAchieved($goal_id,$user_id)
 	{
 		$goal  = $this->getGoals(array('goal_id'=>$goal_id))[0];
@@ -137,5 +124,4 @@ class Target_Model extends CI_model
 		else
 			return false;
 	}
-
 }

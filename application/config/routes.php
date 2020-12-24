@@ -284,10 +284,9 @@ $route['document-templates'] = 'setting/document_templates';
 $route['master_lead_search'] = 'lead/lead_search';
 $route['lead'] = 'led';
 $route['feedback'] = 'Dashboard/feedback';
-$route['edit-feedback/(:any)'] = 'Dashboard/edit_feedback/$i';
+$route['feedback-edit/(:any)'] = 'Dashboard/edit_feedback/$i';
 $route['feedback/create'] = 'Dashboard/create';
 $route['feedback/insert'] = 'Dashboard/insert';
-
 $route['404_override']            = '';
 
 $route['translate_uri_dashes']    = true;
