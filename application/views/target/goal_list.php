@@ -31,19 +31,15 @@ var Ignore = new Array();
 				{
 					foreach ($all_goals as $goal)
 					{
-
 						$target = $goal->target_value;
 						if($goal->goal_type=='user')
 							$target *=count(explode(',', $goal->goal_for));
-
 						$ci = &get_instance();
 						$ci->load->model('Target_Model');
 						$Forecast = $ci->Target_Model->getForecast($goal->goal_id,$goal->goal_for);
 						$Achieved = $ci->Target_Model->getAchieved($goal->goal_id,$goal->goal_for);
-
 						$forecast_value =(int)($goal->metric_type=='deal'?$Forecast->p_amnt:$Forecast->e_amnt);
 						$achieved_value =(int)($goal->metric_type=='deal'?$Achieved->p_amnt:$Achieved->e_amnt);
-
 						$percent=0;
 						if($target)
 								$percent = round(($achieved_value/$target)*100,2);
