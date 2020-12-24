@@ -269,7 +269,7 @@
 
       .message {
           border: 1px solid #bababa;
-          resize:vertical !important;
+          resize:none;
       }
 
       .msg_time {
