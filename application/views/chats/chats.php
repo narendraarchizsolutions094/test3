@@ -867,7 +867,7 @@
 
               var messageTxt = tbobj.val().trim();
 
-              tbobj.html('');
+              tbobj.val('');
               if (messageTxt != '') {
 
                   //console.log(message);
@@ -894,7 +894,7 @@
 
                   tbobj.closest('.user-conv-area').scrollTop($(this).closest('.user-conv-area')[0].scrollHeight);
                   //ScrollDown();
-                  $(tbobj).html('');
+                  $(tbobj).val('');
                   $(tbobj).focus();
               } else {
                   $(tbobj).focus();
