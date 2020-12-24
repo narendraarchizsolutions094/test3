@@ -6,8 +6,15 @@ var Ignore = new Array();
 
 <div class="row" style="background-color: #fff;padding:7px;border-bottom: 1px solid #C8CED3;">
 	<div class="col-md-4 col-sm-4 col-xs-4"> 
-          <a class="pull-left fa fa-arrow-left btn btn-circle btn-default btn-sm" onclick="history.back(-1)" title="Back"></a>        
-          <a class="dropdown-toggle btn btn-danger btn-circle btn-sm fa fa-plus" data-toggle="modal" data-target="#add_goal" title="Add Goal"></a>         
+          <a class="pull-left fa fa-arrow-left btn btn-circle btn-default btn-sm" onclick="history.back(-1)" title="Back"></a> 
+          <?php
+          if(!empty($this->session->process) && (is_array($this->session->process)?(count($this->session->process)==1?true:false):true))
+			{
+				?>
+          <a class="dropdown-toggle btn btn-danger btn-circle btn-sm fa fa-plus" data-toggle="modal" data-target="#add_goal" title="Add Goal"></a>       
+          <?php
+          }
+          ?>  
         </div>
 </div>
 
@@ -21,7 +28,9 @@ var Ignore = new Array();
 						<th rowspan="2">METRIC</th>
 						<th rowspan="2">For</th>
 						<th colspan="3">ATTAINMENT</th>
-						<th rowspan="2" align="center"></th>
+						<th rowspan="2" align="center">Status</th>
+						<th rowspan="2">Created By</th>
+						<th rowspan="2">Created At</th>
 					</tr>
 					<tr><th>T</th><th>F</th><th>A</th></tr>
 				</thead>
@@ -38,8 +47,8 @@ var Ignore = new Array();
 						$ci->load->model('Target_Model');
 						$Forecast = $ci->Target_Model->getForecast($goal->goal_id,$goal->goal_for);
 						$Achieved = $ci->Target_Model->getAchieved($goal->goal_id,$goal->goal_for);
-						$forecast_value =(int)($goal->metric_type=='deal'?$Forecast->p_amnt:$Forecast->e_amnt);
-						$achieved_value =(int)($goal->metric_type=='deal'?$Achieved->p_amnt:$Achieved->e_amnt);
+						$forecast_value =(int)($goal->metric_type=='deal'?$Forecast->p_amnt:$Forecast->num_value);
+						$achieved_value =(int)($goal->metric_type=='deal'?$Achieved->p_amnt:$Achieved->num_value);
 						$percent=0;
 						if($target)
 								$percent = round(($achieved_value/$target)*100,2);
@@ -61,13 +70,15 @@ var Ignore = new Array();
 							<td>'.$achieved_value.'</td>
 							<td style="text-align:center">
 								'.$achieved_value.'/'.$target.'<br>
-								<div class="progress">
+								<div class="progress" style="border:1px solid #cccccc;">
 									  <div class="progress-bar progress-bar-'.$barcolor.' progress-bar-striped" role="progressbar"
 									  aria-valuenow="'.$percent.'" aria-valuemin="0" aria-valuemax="100" style="width:'.$percent.'%; max-width:100%;">
 									  </div>
 								</div>
 
 								</td>
+							<td>'.$goal->added_by.'</td>
+							<td>'.(date('d-M-Y',strtotime($goal->created_at)).'<br>'.date('H:i A',strtotime($goal->created_at))).'</td>
 							</tr>';
 					}
 					
@@ -103,6 +114,20 @@ var Ignore = new Array();
 	            	<option value="yearly">Yearly</option>
 	            </select>         
 		    </div>  
+		    <div class="col-sm-8" style="padding: 4px">
+				<label>Products</label>
+				<select name="products[]" class="select2" multiple>
+					<?php
+					if(!empty($product_list))
+					{
+						foreach ($product_list as $row)
+						{
+							echo'<option value="'.$row->id.'">'.$row->country_name.'</option>';
+						}
+					}	
+					?>
+				</select>
+			</div>
 		</div>
 		<div class="row">
             <div class="form-group">
@@ -149,6 +174,7 @@ var Ignore = new Array();
 					<input type="number" name="target_value" class="form-control" onchange="viewTeamTable()" required>
 			</div>
 		</div>
+
 		<div class="row TeamTableBox" style="display: none; padding:15px 0px;">
 			<div class="form-group">
 				<label>TARGETS BY TEAM MEMBERS</label>
@@ -166,6 +192,10 @@ var Ignore = new Array();
   </div>
 </div>
 <script type="text/javascript">
+$(document).ready(function(){
+	$(".select2").select2();
+});	
+
 
 load_range('weekly');
 function load_range(v)

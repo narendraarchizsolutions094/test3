@@ -225,7 +225,7 @@ class Lead extends CI_Controller
             $data['length'] = $this->location_model->find_length();
         }
 
-        if($this->session->companey_id == 65)
+        if(user_access('1000') || user_access('1001') || user_access('1002'))
         {
             $data['branch']=$this->db->where('comp_id',$this->session->companey_id)->get('branch')->result();
             $data['CommercialInfo'] = $this->enquiry_model->getComInfo($enquiry_id);

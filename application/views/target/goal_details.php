@@ -34,7 +34,9 @@
 					<th>Target</th>
 					<th>Forecast</th>
 					<th>Achieved</th>
-					<th>%</th>
+					<th>Status</th>
+					<th>Created By</th>
+					<th>Created At</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -63,9 +65,9 @@
 							}
 							
 
-							$foracast_value =(int) ($goal->metric_type=='deal'?$user_forecast->p_amnt:$user_forecast->e_amnt);
+							$foracast_value =(int) ($goal->metric_type=='deal'?$user_forecast->p_amnt:$user_forecast->num_value);
 
-							$achieved_value =(int) ($goal->metric_type=='deal'?$user_achieved->p_amnt:$user_achieved->e_amnt);
+							$achieved_value =(int) ($goal->metric_type=='deal'?$user_achieved->p_amnt:$user_achieved->num_value);
 							
 
 							if($target)
@@ -90,8 +92,9 @@
 									  aria-valuenow="'.$percent.'" aria-valuemin="0" aria-valuemax="100" style="width:'.$percent.'%; max-width:100%;">
 									  </div>
 								</div>
-
 								</td>
+								<td>'.$goal->added_by.'</td>
+								<td>'.(date('d-M-Y',strtotime($goal->created_at)).'<br>'.date('H:i A',strtotime($goal->created_at))).'</td>
 							</tr>';
 						}
 					}

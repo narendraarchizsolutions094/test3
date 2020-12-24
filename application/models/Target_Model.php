@@ -25,16 +25,19 @@ class Target_Model extends CI_model
 	}
 	public function getGoals($where=0)
 	{	
-		$this->load->model('common_model');
-		
+		$this->load->model('common_model');	
 		$all_reporting_ids    =   $this->common_model->get_categories($this->session->user_id);
-		//print_r($all_reporting_ids); exit();
-		$this->db->select('goals.*,role.user_role');
+		
+		$process = $this->session->process;
+
+		$this->db->select('goals.*,role.user_role,added.s_display_name as added_by');
 		$this->db->from('tbl_goals goals');
 		$this->db->join('tbl_user_role role','role.use_id=goals.team_id','left');
+		$this->db->join('tbl_admin added','added.pk_i_admin_id=goals.created_by','left');
 		if($where)
 			$this->db->where($where);
 		$this->db->where('goals.comp_id',$this->session->companey_id);
+		$this->db->where('goals.process_id IN ('.implode(',',$process).')');
 		$res =  $this->db->get();
 		$data = array();
 		foreach ($res->result() as $row)
@@ -63,13 +66,17 @@ class Target_Model extends CI_model
 
 	public function getForecast($goal_id)
 	{	
-		$goal  = $this->getGoals(array('goal_id'=>$goal_id))[0];
+		$goal  = @$this->getGoals(array('goal_id'=>$goal_id))[0];
 		if(!empty($goal))
-		{
-			$this->db->select('sum(info.expected_amount) as e_amnt,sum(info.potential_amount) as p_amnt')
-				->from('enquiry')
+		{	
+			if($goal->metric_type=='deal')
+				$this->db->select('sum(info.expected_amount) as e_amnt,sum(info.potential_amount) as p_amnt');
+			else
+				$this->db->select('count(id) as num_value');
+
+			$this->db->from('enquiry')
 				->join('commercial_info info','info.enquiry_id = enquiry.enquiry_id and info.createdby IN ('.$goal->goal_for.') and info.status IN (0,1)','inner');
-			$this->db->where('enquiry.lead_expected_date BETWEEN "'.$goal->date_from.'" and "'.$goal->date_to.'"');
+			$this->db->where('enquiry.lead_expected_date BETWEEN "'.$goal->date_from.'" and "'.$goal->date_to.'"');	
 			//$this->db->where('enquiry.status=2');
 			return $this->db->get()->row();
 			//echo $this->db->last_query(); exit();
@@ -80,11 +87,17 @@ class Target_Model extends CI_model
 	}
 	public function getAchieved($goal_id)
 	{
-		$goal  = $this->getGoals(array('goal_id'=>$goal_id))[0];
+		$goal  = @$this->getGoals(array('goal_id'=>$goal_id))[0];
 		if(!empty($goal))
 		{
-			$this->db->select('sum(info.expected_amount) as e_amnt,sum(info.potential_amount) as p_amnt')
-				->from('enquiry')
+			if($goal->metric_type=='deal')
+				$this->db->select('sum(info.expected_amount) as e_amnt,sum(info.potential_amount) as p_amnt');
+			else
+				$this->db->select('count(id) as num_value');
+
+			
+
+			$this->db->from('enquiry')
 				->join('commercial_info info','info.enquiry_id=enquiry.enquiry_id and info.createdby IN ('.$goal->goal_for.') and info.status=1	','inner');
 			$this->db->where('enquiry.client_created_date BETWEEN "'.$goal->date_from.'" and "'.$goal->date_to.'" ');
 			//$this->db->where('enquiry.status=3');
@@ -97,8 +110,12 @@ class Target_Model extends CI_model
 	public function getUserWiseForecast($goal_id,$user_id)
 	{
 		$goal  = $this->getGoals(array('goal_id'=>$goal_id))[0];
-		$res =$this->db->select('*, sum(info.expected_amount) as e_amnt,sum(info.potential_amount) as p_amnt ')
-					->from('tbl_admin admin')
+		if($goal->metric_type=='deal')
+		$this->db->select('*, sum(info.expected_amount) as e_amnt,sum(info.potential_amount) as p_amnt ');
+		else
+			$this->db->select('*, count(*) as num_value');
+
+	$res =	$this->db->from('tbl_admin admin')
 					->join('commercial_info info','info.createdby=admin.pk_i_admin_id and info.status IN (0,1)','inner')
 					->join('enquiry','enquiry.enquiry_id=info.enquiry_id','inner')
 					->where('enquiry.lead_expected_date BETWEEN "'.$goal->date_from.'" and "'.$goal->date_to.'"')
@@ -113,8 +130,13 @@ class Target_Model extends CI_model
 		$goal  = $this->getGoals(array('goal_id'=>$goal_id))[0];
 		if(!empty($goal))
 		{
-			$this->db->select('sum(info.expected_amount) as e_amnt,sum(info.potential_amount) as p_amnt')
-				->from('enquiry')
+			
+			if($goal->metric_type=='deal')
+				$this->db->select('sum(info.expected_amount) as e_amnt,sum(info.potential_amount) as p_amnt');
+			else
+				$this->db->select('*, count(*) as num_value');
+
+			$this->db->from('enquiry')
 				->join('commercial_info info','info.enquiry_id=enquiry.enquiry_id and info.createdby = '.$user_id.' and info.status =1 ','inner');
 			$this->db->where('enquiry.client_created_date BETWEEN "'.$goal->date_from.'" and "'.$goal->date_to.'"');
 			//$this->db->where('enquiry.status=3');

@@ -9,7 +9,9 @@ class Target extends CI_controller
 
 	public function index()
 	{
-		$data['title'] = 'Goals';
+		//$this->session->process = array(197);
+		$this->load->model('location_model');
+		$data['title'] = display('all_goals');
 
 		$roles = $this->db->where('comp_id',$this->session->companey_id)->get('tbl_user_role')->result();
 		$r = array();
@@ -30,6 +32,7 @@ class Target extends CI_controller
 		}
 		$data['users'] = json_encode($u);
 
+		$data['product_list'] = $this->location_model->productcountry();
 
 		$data['all_goals'] = $this->Target_Model->getGoals();
 		
@@ -42,6 +45,29 @@ class Target extends CI_controller
 
 		if($this->input->post())
 		{
+			$process = $this->session->process;
+			if(!empty($process))
+			{
+				if(is_array($process))
+				{
+					if(count($process)==1)
+						$process_id = $process[0];
+					else
+					{
+						$this->session->set_flashdata('message','Selected Only one Process.');
+					redirect($_SERVER['HTTP_REFERER']);
+					}
+				}
+				else
+				{
+					$process_id = $process;
+				}
+			}
+			else 
+			{
+				$this->session->set_flashdata('message','No process is Selected.');
+				redirect($_SERVER['HTTP_REFERER']);
+			}
 			$target_list = implode(',', $this->input->post('target_list[]'));
 			$data = array('goal_period'=>$this->input->post('goal_period'),
 							'time_range' =>$this->input->post('time_range'),
@@ -51,9 +77,12 @@ class Target extends CI_controller
 							'goal_for' =>$target_list,
 							'metric_type' =>$this->input->post('metric_type'),
 							'target_value' =>$this->input->post('target_value'),
+							'products' => implode(',',$this->input->post('products')),
 							'comp_id' =>$this->session->companey_id,
+							'process_id' =>$process_id,
+							'created_by'=>$this->session->user_id,
 						);
-			//print_r($this->input->post()); exit();
+			
 			if($data['goal_type']=='team')
 			{	
 				$data['custom_target'] = json_encode($this->input->post('user_target_value'));

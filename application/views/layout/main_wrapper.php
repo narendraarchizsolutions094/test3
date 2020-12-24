@@ -1783,7 +1783,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
 
                             <li class="<?php echo (($segment2 == "target") ? "active" : null) ?>"
                                 style="<?php if(in_array(250,$module) || in_array(251,$module) || in_array(252,$module) || in_array(253,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
-                                <a href="<?php echo base_url("forecasting/target") ?>">Set Target</a>
+                                <a href="<?php echo base_url("target") ?>"><?=display('all_goals')?></a>
                             </li>
 
                             <li class="<?php echo (($segment2 == "target_view") ? "active" : null) ?>"

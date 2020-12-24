@@ -652,8 +652,8 @@ class Ticket extends CI_Controller
 	{
 		$this->load->library('user_agent');
 		$cmnt_id = $this->input->post('cmnt_id');
-		$tid    =   $this->input->post('tid');
-        $form_type    =   $this->input->post('form_type');
+		// $tid    =   $this->input->post('tid');
+  //       $form_type    =   $this->input->post('form_type');
         $enqarr = $this->db->select('*')->where('id',$tck_id)->get('tbl_ticket')->row();
         $en_comments = $enqarr->ticketno;
         $type = $enqarr->status;

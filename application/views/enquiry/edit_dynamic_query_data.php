@@ -1,7 +1,8 @@
 <hr>
-         <?php echo form_open_multipart('client/update_enquiry_tab/'.$details->enquiry_id,'class="form-inner tabbed_form"') ?>           
+         <?php echo form_open_multipart('client/update_dynamic_query/'.$details->enquiry_id,'class="form-inner tabbed_form"') ?>           
          <input name="en_comments" type="hidden" value="<?=$details->Enquery_id?>" >
          <input name="cmnt_id" value="<?=$cmnt_id?>" type="hidden">    
+         <input type="hidden" name="enquiry_id" value="<?=$details->enquiry_id?>">
          <div class="row">
          <?php
          if(!empty($dynamic_field)) {       

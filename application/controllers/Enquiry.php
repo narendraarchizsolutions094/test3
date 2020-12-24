@@ -1351,7 +1351,7 @@ class Enquiry extends CI_Controller
             $data['level'] = $this->location_model->find_level();
             $data['length'] = $this->location_model->find_length();
         } 
-        if ($this->session->companey_id==65) {
+        if (user_access('1000') || user_access('1001') || user_access('1002')) {
             $data['branch']=$this->db->where('comp_id',$this->session->companey_id)->get('branch')->result();
             $data['CommercialInfo'] = $this->enquiry_model->getComInfo($enquiry_id);
             //fetch last entry
@@ -3338,8 +3338,10 @@ public function timelinePopup()
     }
     public function editinfo()
     {
-      $id=$this->uri->segment('3');
-    $comp_id=$this->session->companey_id;
+        if(user_role('1002')){}
+
+         $id=$this->uri->segment('3');
+        $comp_id=$this->session->companey_id;
    
       $count=$this->db->where(array('id'=>$id,'comp_id'=>$comp_id))->get('commercial_info');
       //check exist of not
@@ -3355,6 +3357,7 @@ public function timelinePopup()
        }
        public function deleteInfo()
        {
+            if(user_role('1001')){}
         $id=$this->uri->segment('3');
         $enquiry_id=$this->uri->segment(4);
         $comp_id=$this->session->companey_id;
@@ -3594,13 +3597,21 @@ public function timelinePopup()
             $sub[] = !empty($value->creation_date)?date('d-M-Y H:i:s A',strtotime($value->creation_date)):'NA';
             $stts = $value->status;
             $sub[] = '<label class="label label-'.($stts?($stts==1?'success"> Done':'danger">Deferred'):'warning">Pending').'</label>';
+            $part2 = "";
+            if(user_access('1002'))
+            {
+                $part2.= "
+            <a class='btn btn-xs btn-primary fa fa-edit' href='".base_url('enquiry/editinfo/' . $value->id)."'></a>";
+            }
+            
+            if(user_access('1001'))
+            {
+            $part2.="<a class='btn btn-xs btn-danger fa fa-trash' onclick='return confirm(\"Are you sure ?\")' href='".base_url('enquiry/deleteInfo/' . $value->id . '/'.$value->enquiry_id.'/')."'></a>";
+            }
 
-            $sub[] = "
-            <a class='btn btn-xs btn-primary fa fa-edit' href='".base_url('enquiry/editinfo/' . $value->id)."'></a>
-            <a class='btn btn-xs btn-danger fa fa-trash' onclick='return confirm(\"Are you sure ?\")' href='".base_url('enquiry/deleteInfo/' . $value->id . '/'.$value->enquiry_id.'/')."'></a>
-            <a class='btn btn-primary btn-xs' onclick='quotation_pdf(".$value->booking_type.",".$value->enquiry_id.")' style='cursor: pointer;' data-toggle='modal'  data-target='#downloadQuatation'><i class='fa fa-download'></i></a>
+            $part2.="<a class='btn btn-primary btn-xs' onclick='quotation_pdf(".$value->booking_type.",".$value->enquiry_id.")' style='cursor: pointer;' data-toggle='modal'  data-target='#downloadQuatation'><i class='fa fa-download'></i></a>
             ";
-
+            $sub[] =$part2;
             $data[] =$sub;
         }
     

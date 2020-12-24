@@ -211,7 +211,7 @@ class Client extends CI_Controller {
             $data['length'] = $this->location_model->find_length();
         }
 
-         if ($this->session->companey_id == 65) {
+         if (user_access('1000') || user_access('1001') || user_access('1002')) {
             $data['branch']=$this->db->where('comp_id',$this->session->companey_id)->get('branch')->result();
             $data['CommercialInfo'] = $this->enquiry_model->getComInfo($enquiry_id);
             //fetch last entry
@@ -1020,10 +1020,12 @@ class Client extends CI_Controller {
 
     public function update_dynamic_query()
     {
-        // if(isset($_POST))
-        // {
-        //     $this->load->
-        // }
+        $this->load->model('Enquiry_model');
+
+         $res = $this->Enquiry_model->update_dynamic_query();
+         $this->session->set_flashdata('message', 'Save successfully');
+
+         redirect($_SERVER['HTTP_REFERER']);
     }
 
 public function updateclientpersonel() {  
@@ -1669,9 +1671,12 @@ public function view_editable_aggrement()
     }
 
     public function deals()
-    {
-         if(user_role('1003')==true){
+    { 
+         if(user_access('1000') || user_access('1001') || user_access('1002')){
             
+        }else {
+            redirect('restrected');
+            exit();
         }
 
         $this->load->model('Client_Model');

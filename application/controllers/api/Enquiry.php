@@ -518,7 +518,7 @@ public function updateEnquiryTab_post()
               $msg = str_replace('@name',$name1,str_replace('@org',$user_row['orgisation_name'],str_replace('@desg',$user_row['designation'],str_replace('@phone',$user_row['contact_phone'],str_replace('@desg',$user_row['designation'],str_replace('@user',$user_row['s_display_name'].' '.$user_row['last_name'],$message_name))))));
                      //str_replace('@web',$user_row['website'], 
               $Templat_subject = str_replace('@name',$name1,str_replace('@org',$user_row['orgisation_name'],str_replace('@desg',$user_row['designation'],str_replace('@phone',$user_row['contact_phone'],str_replace('@desg',$user_row['designation'],str_replace('@user',$user_row['s_display_name'].' '.$user_row['last_name'],$Templat_subject))))));
-
+              $send_result=0;
               if($msg_type=='1')
               {
                 $phone = '91'.$enq->phone;
@@ -527,13 +527,16 @@ public function updateEnquiryTab_post()
                     if($template_row['media'])
                     {            
                       $media_url = $template_row['media'];    
-                      $this->Message_models->sendwhatsapp($phone,base_url().$media_url);              
+                      $this->Message_models->sendwhatsapp($phone,base_url().$media_url); 
+                      
                     }
+                  $send_result =1;
               }
               else if($msg_type=='2')
               {
                  $phone = '91'.$enq->phone;
                   $this->Message_models->smssend($phone,$msg);
+                  $send_result =1;
               }
               else if($msg_type=='3')
                 $send_result = $this->Message_models->send_email($to,$msg,$Templat_subject,$company_id,$cc);

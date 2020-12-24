@@ -59,6 +59,7 @@ class Deals_datatable_model extends CI_Model{
      */
     public function _get_datatables_query($postData){
 
+
         $this->db->select('info.*,enq.name,enq.Enquery_id,enq.status as enq_type, book.branch_name as booking_branch_name, deliver.branch_name as delivery_branch_name');
         $this->db->from($this->table.' info');
         $this->db->join('enquiry enq','enq.enquiry_id=info.enquiry_id','left');

@@ -42,8 +42,11 @@
                           <select data-placeholder="Begin typing a name to filter..." multiple class="form-control" name="filter[]"   id = "selected-col">
                              <?php $criteria=json_decode($source)->filters;
                // print_r($criteria);
-               foreach($criteria as $c){?>
-                              <option value="<?php echo $c->id; ?>" ><?php echo $c->name; ?></option>
+                             $pfilter = $this->input->get('filter')??array();
+               foreach($criteria as $c)
+               {
+                ?>
+                              <option value="<?php echo $c->id; ?>" <?=in_array($c->id,$pfilter)?'selected':''?> ><?php echo $c->name; ?></option>
                <?php } ?>
                           </select>                          
                         </div>
