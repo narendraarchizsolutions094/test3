@@ -269,6 +269,7 @@
 
       .message {
           border: 1px solid #bababa;
+          resize:none;
       }
 
       .msg_time {
@@ -505,8 +506,8 @@
                               <input type="file" name="file" class="upload_attachmentfile" />
                           </div>
                           <!--<input type="text" name="message" placeholder="Type Message press enter..." class="form-control message" style="width:70%"> -->
-                          <div placeholder="Type Message press enter..." class="form-control message" style="width:70%"
-                              contenteditable="true"></div>
+                          <textarea placeholder="Type Message press enter..." class="form-control message" style="width:70%;height:38px;overflow-y:auto;"
+                              contenteditable="true"></textarea>
 
                           <div class="dropup">
                               <a class="btn btn-emoji dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
@@ -865,9 +866,9 @@
 
           function sendTxtMessage(tbobj) {
 
-              var messageTxt = tbobj.html().trim();
+              var messageTxt = tbobj.val().trim();
 
-              tbobj.html('');
+              tbobj.val('');
               if (messageTxt != '') {
 
                   //console.log(message);
@@ -894,7 +895,7 @@
 
                   tbobj.closest('.user-conv-area').scrollTop($(this).closest('.user-conv-area')[0].scrollHeight);
                   //ScrollDown();
-                  $(tbobj).html('');
+                  $(tbobj).val('');
                   $(tbobj).focus();
               } else {
                   $(tbobj).focus();
