@@ -4,6 +4,11 @@
 <script src="<?=base_url()?>/assets/summernote/summernote-bs4.min.js"></script>
 <link href="<?=base_url()?>/assets/summernote/summernote-bs4.css" rel="stylesheet" />
 
+<?php
+echo $data_type;
+print_r($this->session->userdata());
+// die();
+?>
 
 <style>
   /*TAG STYLE START*/
@@ -1522,10 +1527,10 @@ $('.checked_all1').on('change', function() {
     }
   $.ajax({
   type: 'POST',
-  url: '<?php echo base_url();?>message/get_templates/'+SMS,
+  url: '<?php echo base_url();?>message/get_templates/0/<?= $data_type ?>/'+SMS,
   })
   .done(function(data){
-      
+      alert(data);
        $('#modal-titlesms').html(type);
        $('#mesge_type').val(SMS);       
        $('#templates').html(data);
