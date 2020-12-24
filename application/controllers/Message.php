@@ -16,9 +16,8 @@ class Message extends CI_Controller {
     
     	public function get_templates($for,$ins=''){
 			$product_id=$this->uri->segment(3);
-			$stage_id=$this->uri->segment(4);
-			$for=$this->uri->segment(5);
-			// echo$for;
+			 $stage_id=$this->uri->segment(4);
+			 $for=$this->uri->segment(5);
     	    $this->db->where('temp_for',$for);
     	    $this->db->where('comp_id',$this->session->companey_id);
     	    $res=$this->db->get('api_templates');
@@ -27,10 +26,21 @@ class Message extends CI_Controller {
     	        echo '<option value="0" selected style="display:none">Select Templates</option>';
     	    foreach($q as $value){
 				 $stage = explode(',', $value->stage);
-										 $process = explode(',', $value->process); 
-				if(in_array($stage_id,$stage) AND in_array($product_id,$process)){
-    	        echo '<option value="'.$value->temp_id.'">'.$value->template_name.'</option>';
+				 $process = explode(',', $value->process); 
+				 if ($product_id==0) {
+				$extprocess=$this->session->userdata('process');
+				 $count_array=count(array_intersect($extprocess,$process));
+				if(in_array($stage_id,$stage) AND $count_array!=0){
+					echo '<option value="'.$value->temp_id.'">'.$value->template_name.'</option>';
+					}
+				}else{
+					$process = explode(',', $value->process); 
+					if(in_array($stage_id,$stage) AND in_array($product_id,$process)){
+						echo '<option value="'.$value->temp_id.'">'.$value->template_name.'</option>';
+						}
+
 				}
+				
     	    		}
     	    
     	    }

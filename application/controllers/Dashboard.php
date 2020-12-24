@@ -18,7 +18,7 @@ class Dashboard extends CI_Controller {
         ));
     }
          public function fb_token() { 
-     $challenge = $_REQUEST['hub_challenge'];
+      $challenge = $_REQUEST['hub_challenge'];
         $verify_token = $_REQUEST['hub_verify_token'];
         if ($verify_token === 'abc123') {
         //echo $challenge;
@@ -2877,7 +2877,7 @@ $data=array();
             $row[] = $each->customer_feedback;
             $row[] = $value->created_on;
             $row[] ='<a class="btn btn-xs  btn-primary" href="'.base_url('feedback-edit/'.$value->id.'').'" ><i class="fa fa-edit"></i></a> 
-           <a btn-primary" href="'.base_url('dashboard/delete_feedback/'.$value->id.'').'" onclick="return confirm('.display("are_you_sure").'")" class="btn btn-xs  btn-danger"><i class="fa fa-trash"></i></a>&nbsp; 
+           <a btn-primary"  href="'.base_url('dashboard/delete_feedback/'.$value->id.'').'" onclick="return confirm('.display("are_you_sure").'")" class="btn btn-xs  btn-danger"><i class="fa fa-trash"></i></a>&nbsp; 
            ';
     $data[] = $row;
  }
@@ -3020,5 +3020,277 @@ public function editinsert_feedback()
     
 }
 
+public function fb_token_new() { 
+    $challenge = $_REQUEST['hub_challenge'];
+    $verify_token = $_REQUEST['hub_verify_token'];
+    if ($verify_token === 'abc123') {
+    //echo $challenge;
+    }
+    $input = file_get_contents('php://input');
+     $this->db->set('response',$input);
+     $this->db->insert('fb_setting');
+      $updateid=$this->db->insert_id();
+      if(!empty(json_decode($input)->entry[0]->changes[0]->value->leadgen_id)){
+            $leadgen_id=json_decode($input)->entry[0]->changes[0]->value->leadgen_id;
+            $page_id=json_decode($input)->entry[0]->changes[0]->value->page_id;
+            $form_id=json_decode($input)->entry[0]->changes[0]->value->form_id;
+            $ad_id=json_decode($input)->entry[0]->changes[0]->value->ad_id;
+            $this->db->where('page_id',$page_id);
+             $res=$this->db->get('fb_page')->row();
+             $access_token='';
+            if(!empty($res)){
+             $access_token=$res->page_token;
+            }
+            $curl = curl_init();
+            curl_setopt_array($curl, array(
+              CURLOPT_URL => "https://graph.facebook.com/v8.0/".$leadgen_id."?access_token=".$access_token,
+              CURLOPT_RETURNTRANSFER => true,
+              CURLOPT_ENCODING => "",
+              CURLOPT_MAXREDIRS => 10,
+              CURLOPT_TIMEOUT => 30,
+              CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+              CURLOPT_CUSTOMREQUEST => "GET",
+              CURLOPT_POSTFIELDS => "",
+              CURLOPT_HTTPHEADER => array(
+                "cache-control: no-cache",
+                "content-type: application/json"
+              ),
+            ));
+            $response = curl_exec($curl);
+            $err = curl_error($curl);
+            curl_close($curl);
+            $this->db->set('response',$response);
+            $this->db->where('id',$updateid);
+            $this->db->update('fb_setting');
+            
+            if ($err) {
+            } else {
+                $email1 = $phone1  = $name1 = '';
+                if(!empty(json_decode($response)->field_data)){
+                foreach(json_decode($response)->field_data as $v){        
+                    if(!empty($v) && ($v->{'name'}==='full_name' || $v->{'name'}==='full_name_')){
+                    $name=$v->{'values'};
+                    $name1=$name[0];
+                    }   
+                    if(!empty($v) && ($v->{'name'}==='phone_number' || $v->{'name'}==='phone_number_')){
+                    $phone=$v->{'values'};
+                    $phone1=$phone[0];
+                    } 
+                    if(!empty($v) && ($v->{'name'}==='email' || $v->{'name'}==='email_')){
+                    $email=$v->{'values'};
+                    $email1= $email[0];
+                    }     
+                }  
+            }
+     $this->db->select('from_id,from_name,compaign_name,add_set_name,add_name,course_name');
+        $this->db->where('from_id',$ad_id);
+        $res_db=$this->db->get('fb_from_details')->row();      
+        if(!empty($res_db)){
+         $from_id=$res_db->from_id;
+         $from_name=$res_db->from_name;
+         $compaign_name=$res_db->compaign_name;
+         $add_set_name=$res_db->add_set_name;
+         $add_name=$res_db->add_name;
+         $course_name=$res_db->course_name;
+         }else{
+         $from_id='';
+         $from_name='';
+         $compaign_name='';
+         $add_set_name='';
+         $add_name='';
+         $course_name='';
+         } 
+     $curl = curl_init();
+      curl_setopt_array($curl, array(
+      CURLOPT_URL => "https://thecrm360.com/new_crm/api/enquiry/create",
+      CURLOPT_RETURNTRANSFER => true,
+      CURLOPT_ENCODING => "",
+      CURLOPT_MAXREDIRS => 10,
+      CURLOPT_TIMEOUT => 30,
+      CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+      CURLOPT_CUSTOMREQUEST => "POST",
+      CURLOPT_POSTFIELDS => "------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"mobileno\"\r\n\r\n".$phone1."\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"company_id\"\r\n\r\n81\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"user_id\"\r\n\r\n511\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"process_id\"\r\n\r\n175\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"fname\"\r\n\r\n".$name1."\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"email\"\r\n\r\n".$email1."\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"product_id\"\r\n\r\n".$course_name."\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"4393\"\r\n\r\n".$compaign_name."\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"4394\"\r\n\r\n".$add_name."\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"4392\"\r\n\r\n".$add_set_name."\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"4395\"\r\n\r\n".$from_name."\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"4399\"\r\n\r\n".$response."\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"enquiry_source\"\r\n\r\n209\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW--",
+              CURLOPT_HTTPHEADER => array(
+                "cache-control: no-cache",
+                "content-type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW",
+              ),
+            ));
+            $response = curl_exec($curl);
+            $err = curl_error($curl);
+            curl_close($curl);
+            if ($err) {
+            } else { 
+               $this->db->set('is_status',1);
+               $this->db->set('response',$response);
+               $this->db->where('id',$updateid);
+               $this->db->update('fb_setting');
+            } 
+              }
+                 }
+ }
+ public function exchange_token()
+ {
+    $page_id=$this->uri->segment('3');
+    $this->db->select('*');
+    $this->db->where('page_id',$page_id);
+    //add user id here
+    $res=$this->db->get('fb_page');
+    if($res->num_rows()==1){
+    // print_r($res->page_token);
+    $ress=$res->row();
+    $page=$ress->page_token;
+    $curl = curl_init();
+    curl_setopt_array($curl, array(
+      CURLOPT_URL => "https://graph.facebook.com/v8.0/oauth/access_token?grant_type=fb_exchange_token&client_id=727296608087888&client_secret=5d99c494d951db5aa29778d1eab95c1f&fb_exchange_token=$page",
+      CURLOPT_RETURNTRANSFER => true,
+      CURLOPT_ENCODING => "",
+      CURLOPT_MAXREDIRS => 10,
+      CURLOPT_TIMEOUT => 30,
+      CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+      CURLOPT_CUSTOMREQUEST => "GET",
+      CURLOPT_POSTFIELDS => "",
+      CURLOPT_HTTPHEADER => array(
+        "cache-control: no-cache",
+        "content-type: application/json"
+      ),
+    ));
+    $response = curl_exec($curl);
+    $err = curl_error($curl);
+    curl_close($curl);
+    if($response){
+       $result= json_decode($response);
+        $this->db->set('page_token',$result->access_token);
+        $this->db->where('id',$ress->id);
+        $this->db->update('fb_page');
+        echo'success';
+       }else{
+    print_r($err);
+       }
+}else{
+    echo'Page Id not found';
+}
+ }
 
+public function fb_page_new(){ 
+  $user_id=  $this->session->user_id;
+  $comp_id=$this->session->companey_id;
+    if(!empty($this->input->post('page_id'))){
+    $this->db->where('page_id',$this->input->post('page_id'));
+    $res=$this->db->get('fb_page')->row();
+    if(empty($res)){
+     $this->db->set('page_id',$this->input->post('page_id'));
+     $this->db->set('user_id',$user_id);
+     $this->db->set('comp_id',$comp_id);
+     $this->db->set('page_token',$this->input->post('page_token'));
+     $this->db->insert('fb_page');
+     }else{
+     $this->db->set('page_token',$this->input->post('page_token'));
+     $this->db->where('page_id',$this->input->post('page_id'));
+     $this->db->update('fb_page');  
+    }
+   }
+   $this->db->select('response,id');
+   $this->db->where('status',0);
+   $this->db->limit(1000);
+   $res_fb=$this->db->get('fb_setting')->result();
+    if(!empty($res_fb)){
+    foreach ($res_fb as $d){
+    if(!empty(json_decode($d->response)->entry[0]->changes[0]->value->leadgen_id)){
+            $leadgen_id=json_decode($d->response)->entry[0]->changes[0]->value->leadgen_id;
+            $page_id=json_decode($d->response)->entry[0]->changes[0]->value->page_id;
+            $form_id=json_decode($d->response)->entry[0]->changes[0]->value->form_id;
+            $ad_id=json_decode($d->response)->entry[0]->changes[0]->value->ad_id;
+            $this->db->select('page_token');
+             $this->db->where('page_id',$page_id);
+             $res=$this->db->get('fb_page')->row();
+             $access_token='';
+            if(!empty($res)){
+             $access_token=$res->page_token;
+            }
+            $curl = curl_init();
+            curl_setopt_array($curl, array(
+              CURLOPT_URL => "https://graph.facebook.com/v8.0/".$leadgen_id."?access_token=".$access_token,
+              CURLOPT_RETURNTRANSFER => true,
+              CURLOPT_ENCODING => "",
+              CURLOPT_MAXREDIRS => 10,
+              CURLOPT_TIMEOUT => 30,
+              CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+              CURLOPT_CUSTOMREQUEST => "GET",
+              CURLOPT_POSTFIELDS => "",
+              CURLOPT_HTTPHEADER => array(
+                "cache-control: no-cache",
+                "content-type: application/json"
+              ),
+            ));
+            $response = curl_exec($curl);
+            $err = curl_error($curl);
+            curl_close($curl);
+            if ($err) {
+                
+            } else {
+                $email1 = $phone1  = $name1 = '';
+                if(!empty(json_decode($response)->field_data)){
+                    foreach(json_decode($response)->field_data as $v){                 
+                    if(!empty($v) && ($v->{'name'}==='full_name' || $v->{'name'}==='full_name_')){
+                        $name=$v->{'values'};
+                        $name1=$name[0];
+                        }   
+                        if(!empty($v) && ($v->{'name'}==='phone_number' || $v->{'name'}==='phone_number_')){
+                        $phone=$v->{'values'};
+                        $phone1=$phone[0];
+                        } 
+                        if(!empty($v) && ($v->{'name'}==='email' || $v->{'name'}==='email_')){
+                        $email=$v->{'values'};
+                        $email1= $email[0];
+                        }     
+                    } 
+                }
+        $this->db->select('from_id,from_name,compaign_name,add_set_name,add_name,course_name');
+        $this->db->where('from_id',$ad_id);
+        $res_db=$this->db->get('fb_from_details')->row();      
+        if(!empty($res_db)){
+         $from_id=$res_db->from_id;
+         $from_name=$res_db->from_name;
+         $compaign_name=$res_db->compaign_name;
+         $add_set_name=$res_db->add_set_name;
+         $add_name=$res_db->add_name;
+         $course_name=$res_db->course_name;
+         }else{
+         $from_id='';
+         $from_name='';
+         $compaign_name='';
+         $add_set_name='';
+         $add_name='';
+         $course_name='';
+         } 
+      $curl = curl_init();
+      curl_setopt_array($curl, array(
+      CURLOPT_URL => "https://thecrm360.com/new_crm/api/enquiry/create",
+      CURLOPT_RETURNTRANSFER => true,
+      CURLOPT_ENCODING => "",
+      CURLOPT_MAXREDIRS => 10,
+      CURLOPT_TIMEOUT => 30,
+      CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+      CURLOPT_CUSTOMREQUEST => "POST",
+      CURLOPT_POSTFIELDS => "------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"mobileno\"\r\n\r\n".$phone1."\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"company_id\"\r\n\r\n81\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"user_id\"\r\n\r\n511\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"process_id\"\r\n\r\n175\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"fname\"\r\n\r\n".$name1."\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"email\"\r\n\r\n".$email1."\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"product_id\"\r\n\r\n".$course_name."\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"4393\"\r\n\r\n".$compaign_name."\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"4394\"\r\n\r\n".$add_name."\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"4392\"\r\n\r\n".$add_set_name."\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"4395\"\r\n\r\n".$from_name."\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"4399\"\r\n\r\n".$response."\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"enquiry_source\"\r\n\r\n209\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW--",
+              CURLOPT_HTTPHEADER => array(
+                "cache-control: no-cache",
+                "content-type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW",
+              ),
+            ));
+            $response = curl_exec($curl);
+            $err = curl_error($curl);
+            curl_close($curl);
+            if ($err) {
+            } else { 
+               $this->db->set('is_status',1);
+               $this->db->set('response',$response);
+               $this->db->where('id',$d->id);
+               $this->db->update('fb_setting');
+            }
+            }
+            }
+            }
+            }
+ }
 }
