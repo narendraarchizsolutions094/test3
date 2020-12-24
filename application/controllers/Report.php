@@ -696,7 +696,7 @@ class Report extends CI_Controller {
     }
     public function ticket_report()
     {
-      if(user_role(123)){}
+      if(user_role(122)){}
         $this->load->model(array('Ticket_Model','Datasource_model','dash_model','enquiry_model','report_model','Leads_Model','User_model'));
     
         if (isset($_SESSION['ticket_filters_sess']) && empty($_POST))
