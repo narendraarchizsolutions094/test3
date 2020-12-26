@@ -4,7 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 require APPPATH . 'libraries/REST_Controller.php';
 require APPPATH . 'libraries/Format.php';
 class Ticket extends REST_Controller {
-  function __construct()
+  function __construct() 
   {
       parent::__construct();
       $this->load->library('form_validation');
@@ -380,7 +380,7 @@ class Ticket extends REST_Controller {
 /// api for updating an existing ticket
   public function updateTicket_post()
   {      
-    //echo "string;";die;
+
     $company_id   = $this->input->post('company_id'); //mandatory to passs
     $user_id      = $this->input->post('user_id'); //mandatory to passs
     $ticketno     = $this->input->post('ticketno'); //mandatory to passs

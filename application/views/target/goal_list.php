@@ -17,79 +17,74 @@ var Ignore = new Array();
           ?>  
         </div>
 </div>
-
-<div class="panel">
-	<div class="panel-body">
-			<table class="table table-bordered table-striped table-hover">
-				<thead>
-					<tr>
-						<th rowspan="2">#</th>
-						<th rowspan="2">GOAL PERIOD</th>
-						<th rowspan="2">METRIC</th>
-						<th rowspan="2">For</th>
-						<th colspan="3">ATTAINMENT</th>
-						<th rowspan="2" align="center">Status</th>
-						<th rowspan="2">Created By</th>
-						<th rowspan="2">Created At</th>
-					</tr>
-					<tr><th>T</th><th>F</th><th>A</th></tr>
-				</thead>
-				<tbody>
-				<?php
-				if(!empty($all_goals))
-				{
-					foreach ($all_goals as $goal)
-					{
-						$target = $goal->target_value;
-						if($goal->goal_type=='user')
-							$target *=count(explode(',', $goal->goal_for));
-						$ci = &get_instance();
-						$ci->load->model('Target_Model');
-						$Forecast = $ci->Target_Model->getForecast($goal->goal_id,$goal->goal_for);
-						$Achieved = $ci->Target_Model->getAchieved($goal->goal_id,$goal->goal_for);
-						$forecast_value =(int)($goal->metric_type=='deal'?$Forecast->p_amnt:$Forecast->num_value);
-						$achieved_value =(int)($goal->metric_type=='deal'?$Achieved->p_amnt:$Achieved->num_value);
-						$percent=0;
-						if($target)
-								$percent = round(($achieved_value/$target)*100,2);
-						if($percent<30)
-								$barcolor='danger';
-							else if($percent>=30 && $percent<60)
-								$barcolor='warning';
-							else
-								$barcolor='success';
-
-						echo'<tr>
-							<td>'.$goal->goal_id.'</td>
-							<td>'.ucwords($goal->goal_period).' <br>
-							<a href="'.base_url('target/goal_details/'.$goal->goal_id).'"><b>'.date('d/m/Y',strtotime($goal->date_from)).' - '.date('d/m/Y',strtotime($goal->date_to)).'</b></a></td>
-							<td>'.($goal->metric_type=='deal'?'Deal value':'Won deals').'</td>
-							<td>'.($goal->goal_type=='team'?'Role':'User').'</td>
-							<td>'.$target.'</td>
-							<td>'.$forecast_value.'</td>
-							<td>'.$achieved_value.'</td>
-							<td style="text-align:center">
-								'.$achieved_value.'/'.$target.'<br>
-								<div class="progress" style="border:1px solid #cccccc;">
-									  <div class="progress-bar progress-bar-'.$barcolor.' progress-bar-striped" role="progressbar"
-									  aria-valuenow="'.$percent.'" aria-valuemin="0" aria-valuemax="100" style="width:'.$percent.'%; max-width:100%;">
-									  </div>
-								</div>
-
-								</td>
-							<td>'.$goal->added_by.'</td>
-							<td>'.(date('d-M-Y',strtotime($goal->created_at)).'<br>'.date('H:i A',strtotime($goal->created_at))).'</td>
-							</tr>';
-					}
-					
-				}	
-				?>
-			</tbody>
-		</table>
+<div class="row" style="margin: 15px;">
+	<div class="col-sm-4">
+		<div class="form-group">
+			<label>From - To</label>
+			<div class="input-group">
+				<input type="date" name="from_date" class="form-control" style="width: 50%">
+				<input type="date" name="from_to" class="form-control" style="width:50%">
+			</div>
+		</div>
+	</div>
+	<div class="col-sm-3">
+		<div class="form-group">
+			<label>For Role</label>
+			<select class="form-control" name="for_role">
+				
+			</select>
+		</div>
+	</div>
+	<div class="col-sm-3">
+		<div class="form-group">
+			<label>For User</label>
+			<select class="form-control" name="for_role">
+				
+			</select>
+		</div>
+	</div>
+	<div class="col-sm-2">
+		<div class="form-group">
+			<label>Metric</label>
+			<select class="form-control" name="for_role">
+				<option value="won">Won Deals</option>
+				<option value="deal">Deal Value</option>
+			</select>
+		</div>
 	</div>
 </div>
 
+<div class="panel">
+	<div class="panel-body" id="goal_table">
 
+	</div>
+</div>
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		load_table();
+	});
+
+	function load_table()
+	{
+		$.ajax({
+			url:"<?=base_url('Target/load_goal_table')?>",
+			type:'post',
+			data:{},
+			beforeSend:function(){
+				$("#goal_table").html('<center><i class="fa fa-spinner fa-spin" style="font-size:77px;"></i><center>');
+			},
+			success:function(res){
+				//alert(res);
+				$("#goal_table").html(res);
+			},
+			error:function(u,v,w)
+			{
+				alert(w);
+			}
+		});
+	}
+</script>
 
 
 

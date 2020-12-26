@@ -1518,4 +1518,44 @@ class Ticket_Model extends CI_Model
 		return ($a+$b+$c);
 	}
 
+
+	public function TicketDashboard($user_id,$comp_id,$process)
+	{
+		$this->load->model('common_model');
+
+		$all_reporting_ids    =   $this->common_model->get_categories($user_id);
+
+		$where = "( tck.added_by IN (".implode(',', $all_reporting_ids).')';
+    	$where .= " OR tck.assign_to IN (".implode(',', $all_reporting_ids).'))';
+        $where.=" AND tck.process_id IN (".$process.") AND tck.company=".$comp_id;
+
+		$created = $this->db->from('tbl_ticket tck')->where($where)->count_all_results();
+
+		$assigned = $this->db->from('tbl_ticket tck')->where($where.' AND tck.assign_to != 0')->count_all_results();
+
+		$updated = $this->db->from('tbl_ticket tck')->where($where.' AND tck.last_update != tck.coml_date')->count_all_results();
+
+		//echo $this->db->last_query(); exit();
+
+		$closed = $this->db->from('tbl_ticket tck')->where($where.' AND tck.ticket_status =3')->count_all_results();
+
+		$pending = $this->db->from('tbl_ticket tck')->where($where.' AND tck.coml_date = tck.last_update')->count_all_results();		
+
+		$this->db->from('tbl_ticket tck')->where($where)->get();
+
+		$res = $this->db->last_query();
+
+		$followup = $this->db->query("SELECT count(*) as num from tbl_ticket_conv inner join ($res) chk on chk.id= tbl_ticket_conv.tck_id")->row()->num;
+
+		$data['created']= $created;
+		$data['assigned'] = $assigned;
+		$data['updated'] = $updated;
+		$data['followup'] = $followup;
+		$data['closed'] = $closed;
+		$data['pending'] = $pending;
+
+		return $data; 
+
+	}
+
 }

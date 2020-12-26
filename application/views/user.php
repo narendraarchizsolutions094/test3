@@ -17,7 +17,14 @@
                 <i class="fa fa-sliders"></i>
               </a>  
             <div class="dropdown-menu dropdown_css" style="max-height: 400px;overflow: auto; margin-left: -131px;">
+              <?php
+              if(user_access('131'))
+              {
+              ?>
                 <a  class="btn" id="saveButton" style="color:#000;cursor:pointer;border-radius: 2px;border-bottom :1px solid #fff;">Inactive Selected</a>
+                <?php
+              }
+              ?>
             </div>                                         
           </div>  
         </div>       

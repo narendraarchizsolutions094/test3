@@ -1975,9 +1975,11 @@ class Ticket extends CI_Controller
 				$data['assigned'] = $this->db->count_all_results();
 				//echo $this->db->last_query(); exit();
 				$this->common_query_short_dashboard();
-				$this->db->where('tck.last_update!=','tck.coml_date');
+				$this->db->where('tck.last_update != tck.coml_date');
 				$data['updated'] = $this->db->count_all_results();
 				
+				//echo $this->db->last_query(); exit();
+
 				$this->common_query_short_dashboard();
 				$this->db->where('tck.ticket_status','3');
 				$data['closed'] = $this->db->count_all_results();

@@ -5,7 +5,7 @@ require APPPATH . 'libraries/REST_Controller.php';
 require APPPATH . 'libraries/Format.php';
 class Enquiry extends REST_Controller {
     function __construct() 
-    {
+    { 
         parent::__construct();
            $this->load->database();
            $this->load->library('form_validation');

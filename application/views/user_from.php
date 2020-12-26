@@ -404,6 +404,10 @@
                                     <input name="a_branch" type="text" class="form-control" id="firstname" placeholder="Branch Name" value="">
                                 </div>
                             </div>
+                            <?php
+                            if(user_access('131'))
+                            {
+                              ?>
                             <div class="form-group row">
                                  <label class="col-xs-3 col-form-label"><?php echo display('status') ?></label>
                                  <div class="col-xs-9">
@@ -411,7 +415,9 @@
                                     <label class="radio-inline"><input type="radio" name="status" value="0" <?php if($department->b_status==0){echo 'checked';}?> ><?php echo display('inactive') ?></label>
                                 </div>
                             </div>
-                            
+                            <?php
+                            }
+                            ?>
                             <div class="form-group row">
                                 <div class="col-sm-offset-3 col-sm-6">
                                     <div class="ui buttons">

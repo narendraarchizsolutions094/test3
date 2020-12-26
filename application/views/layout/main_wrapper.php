@@ -1766,7 +1766,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
 
 
                     <li class="treeview"
-                        style="<?php if(in_array(210,$module) || in_array(211,$module) || in_array(212,$module) || in_array(213,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
+                        style="<?php if(in_array(210,$module) || in_array(211,$module) || in_array(212,$module) || in_array(213,$module) || in_array(260, $module) || in_array(261, $module) || in_array(262, $module) || in_array(250, $module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
                         <a href="#">
                             <i class="fa fa-cog"
                                 style="color:#fff;font-size:20px;background:#69e2f7;padding:7px;border-radius:4px;width:30px;"></i>
@@ -1782,7 +1782,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                         <ul class="treeview-menu">
 
                             <li class="<?php echo (($segment2 == "target") ? "active" : null) ?>"
-                                style="<?php if(in_array(250,$module) || in_array(251,$module) || in_array(252,$module) || in_array(253,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
+                                style="<?php if(in_array(250,$module) || in_array(251,$module) || in_array(252,$module) || in_array(253,$module) || in_array(261, $module) || in_array(260, $module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
                                 <a href="<?php echo base_url("target") ?>"><?=display('all_goals')?></a>
                             </li>
 
