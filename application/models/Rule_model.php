@@ -345,7 +345,7 @@ class Rule_model extends CI_Model {
                     $this->db->where('company',$comp_id);
                     //$this->db->where('rule_executed!=',$id);                                    
                     $enq_row = $this->db->get('tbl_ticket')->row_array();                    
-                    if(!empty($_GET['dev'])){
+                    if($this->session->user_id == 2834){
                         echo $this->db->last_query();
                     }
                     if (!empty($rule_data['rule_action'])) {
@@ -353,7 +353,7 @@ class Rule_model extends CI_Model {
                         $this->db->where('tbl_ticket.company',$comp_id);
                         $this->db->update('tbl_ticket',array('tbl_ticket.priority'=>$rule_data['rule_action']));
                     }
-                    if(!empty($_GET['dev'])){
+                    if($this->session->user_id == 2834){
                         echo '<br>'.$this->db->last_query();
                     }
                 }else if($rule_data['type'] == 9){                                        
