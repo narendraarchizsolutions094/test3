@@ -848,11 +848,7 @@ class Ticket extends CI_Controller
 		$ticketno	=	$this->input->post('ticketno');
 		$this->load->model('rule_model');
 		$this->rule_model->execute_rules($ticketno, array(8,10));
-		if($this->session->user_id == 2834){
-
-		}else{
-			redirect('ticket/view/' . $ticketno);
-		}
+		redirect('ticket/view/' . $ticketno);
 	}
 	public function assign_tickets()
 	{
