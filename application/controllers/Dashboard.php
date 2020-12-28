@@ -1668,7 +1668,7 @@ public function user_profile() {
     if (user_role('340') == true) {}
 		$data['title'] = display('user_profile');
         $user_id = $this->session->userdata('user_id');
-		$stu_phone=$this->session->userdata('phone');
+		 $stu_phone=$this->session->userdata('phone');
         $data['student_Details'] = $this->home_model->studentdetail($stu_phone);
        // print_r($data['student_Details']);die;
         $studetails = $this->home_model->studentdetail($stu_phone);

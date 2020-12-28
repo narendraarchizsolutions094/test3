@@ -34,6 +34,8 @@ $type="text";
   define('SUB_SOURCE',15);
   ?>
 <hr>
+<?php $viewpro=$this->uri->segment(2); ?>
+
 <?php echo form_open_multipart('client/updateclient/'.$details->enquiry_id,'class="form-inner tabbed_form" autocomplete="off"') ?>  
 <input type="hidden" name="form" value="client">  
 <input name="en_comments" type="hidden" value="<?=$details->Enquery_id?>" >    
@@ -67,8 +69,14 @@ $type="text";
    <?php  if(is_active_field(MOBILE,$process_id)){  ?>
    <div class="form-group col-sm-6 col-md-6"> 
       <label><?php echo display('mobile') ?></label>
+      <?php    if ($viewpro!='viewpro') {   ?>
       <input class="form-control mask-number" name="mobileno" type="<?= $type ?>" maxlength='10' value="<?php echo $details->phone ?>" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" >
       <i class="fa fa-plus" onclick="add_more_phone('add_more_phone')" style="float:right;margin-top:-25px;margin-right:10px;color:red"></i>
+      <?php }else{ ?>
+         <input class="form-control mask-number" hidden name="mobileno" type="<?= $type ?>" maxlength='10' value="<?php echo $details->phone ?>" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" >
+      <input class="form-control mask-number" disabled  type="<?= $type ?>" maxlength='10' value="<?php echo $details->phone ?>" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" >
+      <i class="fa fa-plus" onclick="add_more_phone('add_more_phone')" style="float:right;margin-top:-25px;margin-right:10px;color:red"></i>
+         <?php } ?>
    </div>
    <?php }?>
    <?php
@@ -94,7 +102,13 @@ $type="text";
       ?>
    <div class="form-group col-sm-6 col-md-6"> 
       <label><?php echo display('email') ?></label>
+      <?php    if ($viewpro!='viewpro') {   ?>
       <input class="form-control" name="email" type="email" value="<?php echo $details->email ?>">  
+      <?php }else{ ?>
+         <input class="form-control" name="email" hidden type="email" value="<?php echo $details->email ?>">  
+         <input class="form-control" disabled type="email" value="<?php echo $details->email ?>">  
+
+     <?php }  ?>
    </div>
    <?php }?>
    <?php
@@ -102,12 +116,20 @@ $type="text";
       ?>
    <div class="form-group col-sm-6 col-md-6">
       <label>Process <i class="text-danger"></i></label>
+      <?php    if ($viewpro!='viewpro') {   ?>
       <select name="product_id" class="form-control">
          <option value="" style="display:none;">Select</option>
          <?php foreach($products as $product){?>
          <option value="<?=$product->sb_id ?>" <?php if($product->sb_id==$details->product_id){ echo 'selected';}?>><?=$product->product_name ?></option>
          <?php } ?>
       </select>
+      <?php }else{ ?>
+         <?php foreach($products as $product){?>
+            <?php if($product->sb_id==$details->product_id){?>
+         <input class="form-control" disabled type="text" value="<?=$product->product_name ?>">  
+         <input class="form-control" name="product_id" hidden type="text" value="<?=$product->sb_id ?>"> 
+
+     <?php } } }?>
    </div>
    <?php
       }

@@ -436,7 +436,7 @@ height:auto;
   }
 }
  .step__title {
-   height: 2rem;
+   height: 5rem;
    line-height: 2rem;
    padding: 0 1rem;
    text-align: center;
@@ -449,27 +449,34 @@ height:auto;
             <div class="container-fluid">
               <br>
               <br>
+           
                 <div class="col-md-12">
                   <?php
                   if ($this->session->companey_id == 76) {
                     $s  = $lead_stage;
+                    // print_r($s);
                     if (!empty($s)) {
                     ?>
                     <ul class="step-bar">
                       <?php 
                         $i = 1;
                         $stud_details = $student_Details;
-                        // print_r($stud_details);
-                        // die();
+                       
                         ?>
                         <?php
                         if (!empty($s)) {                          
-                        foreach ($s as $key => $value) {  ?>
-                        <li class="step <?=(!empty($stud_details->lead_stage) && $value->stg_id==$stud_details->lead_stage)?'step--current':''?>">
-                          <span class="step__bullet"><?=$i?></span>
-                          <span class="step__title"><?=$value->lead_stage_name?></span>
+                        foreach ($s as $key => $value) {  
+                        $process = explode(',', $value->process_id);
+                        // print_r($process);
+                          if (in_array($stud_details['product_id'],$process)) {
+                          
+                          ?>
+                        <li class="step data-toggle="tooltip" data-placement="top" title="Hooray!" <?=(!empty($stud_details['lead_stage']) && $value->stg_id==$stud_details['lead_stage'])?'step--current':''?>">
+             <span class="step__bullet"><?=$i?></span>
+                          <span class="step__title" ><?=$value->lead_stage_name?></span>
                         </li>                        
                         <?php
+                          }
                         $i++;
                         }
                       }

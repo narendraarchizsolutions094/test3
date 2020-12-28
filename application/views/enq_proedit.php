@@ -375,6 +375,7 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
 			<?php } ?>
             </ul>
             <div class="tab-content clearfix">
+             
                 <div class="tab-pane active" id="basic">
                   <?php echo tab_content(1,$this->session->companey_id,$enquiry_id); ?>
                </div>
@@ -2354,7 +2355,7 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                </div>
                <div class="form-group col-sm-6"> 
                   <label><?php echo display('mobile') ?></label>
-                  <input class="form-control" name="mobileno" type="text" maxlength='10' value="<?php echo $enquiry->phone ?>" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" >  
+                  <input  class="form-control" name="mobileno" type="text" maxlength='10' value="<?php echo $enquiry->phone ?>" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" >  
                </div>
                <div class="form-group col-sm-6"> 
                   <label><?php echo display('email') ?></label>
