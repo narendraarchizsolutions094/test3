@@ -239,7 +239,7 @@ class Ticket extends CI_Controller
 			}
 			
 			if ($showall or in_array(8, $acolarr)) {
-				$sub[] = '<span class="label label-' . ($point->priority == 1 ? 'success">Low' : ($point->priority == 2 ? 'warning">Medium' : 'danger">High')) . '</span>';
+				$sub[] = '<span class="label label-' . ($point->priority == 1 ? 'success">Low' : ($point->priority == 2 ? 'warning">Medium' : ($point->priority == 3 ? 'danger">High' :'primary">NA'))) . '</span>';
 			}
 			
 			
@@ -2283,7 +2283,9 @@ class Ticket extends CI_Controller
 				}
 				$where .= " tck.assign_to IN (".implode(',', $all_reporting_ids).'))';
 			}
-			
+			if(!empty($this->session->process)){
+				$this->db->where_in('tck.process_id',$this->session->process);
+			}
 			$this->db->where($where);
 			
 		}

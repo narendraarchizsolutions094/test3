@@ -324,6 +324,7 @@ echo'
                       <label>Priority</label>
                       <select class="form-control add-select2" name = "priority">
 
+                        <option value = "">Select</option>
                         <option value = "1" <?php echo (1 == $ticket->priority) ? "selected" : ""; ?>>Low</option>
                     
                         <option value = "2" <?php echo (2 == $ticket->priority) ? "selected" : ""; ?>>Medium</option>
