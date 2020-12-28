@@ -116,7 +116,6 @@
 }
 
 
-
 /*tab*/
 .tab-panel-main{
   width: 75%;
@@ -453,26 +452,22 @@ height:auto;
                 <div class="col-md-12">
                   <?php
                   if ($this->session->companey_id == 76) {
-                    $s  = $all_description_lists;
+                    $s  = $lead_stage;
                     if (!empty($s)) {
                     ?>
                     <ul class="step-bar">
-                      <?php
+                      <?php 
                         $i = 1;
                         $stud_details = $student_Details;
-                        if (empty($stud_details->lead_stage)) { ?>
-                          <li class="step step--current">
-                            <span class="step__bullet">0</span>
-                            <span class="step__title">Nothing</span>
-                          </li>
-                        <?php
-                        }
-                        if (!empty($s)) {                          
-                        foreach ($s as $key => $value) {                      
+                        // print_r($stud_details);
+                        // die();
                         ?>
-                        <li class="step <?=(!empty($stud_details->lead_description) && $value->id==$stud_details->lead_description)?'step--current':''?>">
+                        <?php
+                        if (!empty($s)) {                          
+                        foreach ($s as $key => $value) {  ?>
+                        <li class="step <?=(!empty($stud_details->lead_stage) && $value->stg_id==$stud_details->lead_stage)?'step--current':''?>">
                           <span class="step__bullet"><?=$i?></span>
-                          <span class="step__title"><?=$value->description?></span>
+                          <span class="step__title"><?=$value->lead_stage_name?></span>
                         </li>                        
                         <?php
                         $i++;

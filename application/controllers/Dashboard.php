@@ -463,6 +463,7 @@ $this->load->library('zip');
         if ($this->form_validation->run() === true) {
             $check_user = $this->dashboard_model->check_user($postData);                       
            
+            
             $active = 1;
             $validity_msg="";
             $validity_status=0;

@@ -378,6 +378,7 @@ public function all_description($diesc) {
     public function get_leadstage_list_byprocess1($process_id,$for=0) {
         //print_r($process_id);exit();
         // print_r($this->session->userdata('companey_id'));
+        // $process_id=200;
         if(empty($process_id)){
         
            $id1 = '';

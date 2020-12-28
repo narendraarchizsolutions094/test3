@@ -340,9 +340,11 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
          <div id="exTab3" class="">
             <ul  class="nav nav-tabs" role="tablist">              
               <li class="active"><a  href="#basic" data-toggle="tab" style="padding: 10px 10px; font-size:10px;">Basic</a></li>
-			  <?php if($this->session->userdata('user_right')!=151){ ?>
-              <li><a href="#task" data-toggle="tab" style="padding: 10px 10px; font-size:10px;">Task</a></li>
-			  <?php } ?>			  
+			  <?php if($this->session->userdata('user_right')!=151){
+                  if ($this->session->companey_id != 76) {
+              ?>
+            <li><a href="#task" data-toggle="tab" style="padding: 10px 10px; font-size:10px;">Task</a></li>
+			  <?php } } ?>			  
              <?php if($this->session->userdata('companey_id')==292) {  if($enquiry->status==3) {?>
               <li><a href="#followup" data-toggle="tab" style="padding: 10px 10px; font-size:10px;">AMC</a></li>
 
@@ -355,21 +357,18 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                  }?>     
                  <?php if($this->session->userdata('companey_id')==29){?>  
                 <li><a href="#amount" data-toggle="tab" style="padding: 10px 10px; font-size:10px;">Amount</a></li> 
-                <?php }?>      
+                <?php } ?>      
               <?php
               if (user_access('240')===true || $this->session->userdata('user_right')==151) { ?>
                <li><a href="#institute" data-toggle="tab" style="padding: 10px 10px; font-size:10px;">Institute</a></li>
-                <?php
-              }
+                <?php  }
               if(!empty($tab_list)){
                 foreach ($tab_list as $key => $value) { 
-                  if ($value['id'] != 1) { ?>
+                  if ($value['id'] != 1  ) {
+                     if ($this->session->companey_id == 76) {
+                        if ($value['title']!='Related Data' ) {  ?>
                     <li><a href="#<?=str_replace(' ', '_', $value['title'])?>" data-toggle="tab" style="padding: 10px 10px; font-size:10px;"><?=$value['title']?></a></li>
-                <?php
-                  }
-                }
-              }
-              ?>
+                <?php  }  }  } }  }  ?>
 			<?php if ($this->session->companey_id=='67') { ?>			  
 			  <li><a href="#payment" data-toggle="tab" style="padding: 10px 10px; font-size:10px;">Payment</a></li>
               <li><a href="#aggrement" data-toggle="tab" style="padding: 10px 10px; font-size:10px;">Aggrement</a></li>
@@ -1446,6 +1445,8 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                      <br>              
                   </div>
                </div>
+            <?php 
+             if ($this->session->companey_id != 76) { ?>
                <div class="tab-pane" id="task">
                    <hr>
                 <div   style="overflow-x: hidden;overflow-y: auto;" onscroll="scrolled(this)">
@@ -1456,7 +1457,6 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                   <hr>
                   <div class="col-md-12" style="border:none!important;border-radius:0px!important;">
                      <div  style="overflow-x: hidden;overflow-y: auto;" onscroll="scrolled(this)">
-                        <!----------------- Calender View ------------>
                         <link href="<?php echo base_url();?>assets/css/fullcalendar.min.css" rel="stylesheet">
                         <link href="<?php echo base_url();?>assets/css/fullcalendar.print.min.css" media="print">
                         <div id="calendar4"></div>
@@ -1552,6 +1552,7 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                      </div>
                   </div>
                </div>               
+               <?php } ?>
                <div class="tab-pane" id="contacts">
                   <hr>
                   <div class="row">
