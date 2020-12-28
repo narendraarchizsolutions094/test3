@@ -31,16 +31,18 @@ class Dashboard extends REST_Controller {
         $user_id = $this->input->post('user_id');
         $company_id = $this->input->post('company_id');
         $process =  $this->input->post('process');//can be multiple
-
+        $date_from = $this->input->post('date_from')??0;
+        $date_to = $this->input->post('date_to')??0;
+        
         $this->form_validation->set_rules('user_id','user_id', 'trim|required');
         $this->form_validation->set_rules('company_id','company_id', 'trim|required');
         $this->form_validation->set_rules('process','process', 'trim|required');
         if($this->form_validation->run()==true)
         {
             $this->load->model('Ticket_Model');
-
-           $res =  $this->Ticket_Model->TicketDashboard($user_id,$company_id,$process);
-
+            //print_r($_POST); exit();    
+          $res =  $this->Ticket_Model->TicketDashboardAPI($user_id,$company_id,$process,$date_from,$date_to);
+            //$res=0;
            if(!empty($res))
            {
              $this->set_response([

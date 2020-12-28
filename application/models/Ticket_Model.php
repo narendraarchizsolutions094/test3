@@ -546,40 +546,46 @@ class Ticket_Model extends CI_Model
 		$this->db->where('company_id', $this->session->companey_id);
 		return $this->db->get('tbl_ticket_status')->result();
 	}
-	public function createddatewise($type,$idate)
+	public function createddatewise($type,$idate,$process='',$user_id='',$comp_id='')
 	{
-		$process	=	$this->session->process[0];		
-		$all_reporting_ids  = $this->common_model->get_categories($this->session->user_id);
+		$process	=	$this->session->process[0]??$process;		
+		$user_id    =   $this->session->user_id??$user_id;
+		$comp_id    =   $this->session->companey_id??$comp_id;
+		$all_reporting_ids  = $this->common_model->get_categories($user_id);
 		
 		$where = " ( tbl_ticket.added_by IN (".implode(',', $all_reporting_ids).')';
 		$where .= " OR tbl_ticket.assign_to IN (".implode(',', $all_reporting_ids).'))';  
 		$this->db->where($where);
 		
-		$count = $this->db->where(array('process_id'=>$process,'company'=>$this->session->companey_id,'complaint_type'=>$type))->like('coml_date', $idate)->count_all_results('tbl_ticket');
+		$count = $this->db->where('process_id IN ('.$process.')')->where(array('company'=>$comp_id,'complaint_type'=>$type))->like('coml_date', $idate)->count_all_results('tbl_ticket');
 		return $count;
 	}
 	
-	public function getfistDate()
+	public function getfistDate($comp_id='')
 	{
-		return $this->db->where('company', $this->session->companey_id)->limit(1)->get('tbl_ticket')->row()->coml_date;
+		$comp_id    =   $this->session->companey_id??$comp_id;
+		return $this->db->where('company', $comp_id)->limit(1)->get('tbl_ticket')->row()->coml_date;
 	}
 
-	public function refferedBy()
+	public function refferedBy($comp_id='')
 	{
-
-		return $this->db->where('company_id', $this->session->companey_id)->get('tbl_referred_by')->result();
+		$comp_id    =   $this->session->companey_id??$comp_id;
+		return $this->db->where('company_id', $comp_id)->get('tbl_referred_by')->result();
 	}
-	public function countrefferedBy($rfid,$fromdate,$todate)
+	public function countrefferedBy($rfid,$fromdate,$todate,$process='',$user_id='',$comp_id='')
 	{
-		$process	=	$this->session->process[0];		
-		$all_reporting_ids  = $this->common_model->get_categories($this->session->user_id);
+		$process	=	$this->session->process[0]??$process;	
+		$user_id  	=  $this->session->user_id??$user_id;
+		$comp_id = $this->session->companey_id??$comp_id;
+		$all_reporting_ids  = $this->common_model->get_categories($user_id);
 		
 		$where = " ( tbl_ticket.added_by IN (".implode(',', $all_reporting_ids).')';
 		$where .= " OR tbl_ticket.assign_to IN (".implode(',', $all_reporting_ids).'))';  
 		$this->db->where($where);
 		
 
-		$data= $this->db->where(array('process_id'=>$process,'company' => $this->session->companey_id, 'referred_by' => $rfid));
+		$data= $this->db->where('process_id IN ('.$process.')')->where(array('company' => $comp_id, 'referred_by' => $rfid));
+
 		if($fromdate!='all'){
 					
 			$data=$this->db->where('last_update >=', $fromdate);
@@ -589,16 +595,18 @@ class Ticket_Model extends CI_Model
 						 $data= $this->db->count_all_results('tbl_ticket');
 						return $data;
 	}
-	public function countPriority($type,$fromdate,$todate)
+	public function countPriority($type,$fromdate,$todate,$process='',$user_id='',$comp_id='')
 	{
-		$process	=	$this->session->process[0];		
-		$all_reporting_ids  = $this->common_model->get_categories($this->session->user_id);
+		$process	=	$this->session->process[0]??$process;	
+		$user_id  	=  $this->session->user_id??$user_id;
+		$comp_id = $this->session->companey_id??$comp_id;	
+		$all_reporting_ids  = $this->common_model->get_categories($user_id);
 		
 		$where = " ( tbl_ticket.added_by IN (".implode(',', $all_reporting_ids).')';
 		$where .= " OR tbl_ticket.assign_to IN (".implode(',', $all_reporting_ids).'))';  
 		$this->db->where($where);
 		
-		$data = $this->db->where(array('process_id'=>$process,'company' => $this->session->companey_id, 'priority' => $type));
+		$data = $this->db->where('process_id IN ('.$process.')')->where(array('company' => $comp_id, 'priority' => $type));
 		
 		if($fromdate!='all'){
 					
@@ -608,17 +616,20 @@ class Ticket_Model extends CI_Model
 		$data = $this->db->count_all_results('tbl_ticket');
 		return $data;
 	}
-	public function complaint_type($type,$fromdate,$todate)
+	public function complaint_type($type,$fromdate,$todate,$process='',$user_id='',$comp_id='')
 	{
-		$process	=	$this->session->process[0];		
-		$all_reporting_ids  = $this->common_model->get_categories($this->session->user_id);
+		$process	=	$this->session->process[0]??$process;	
+		$user_id  	=  $this->session->user_id??$user_id;
+		$comp_id = $this->session->companey_id??$comp_id;	
+
+		$all_reporting_ids  = $this->common_model->get_categories($user_id);
 		
 		$where = " ( tbl_ticket.added_by IN (".implode(',', $all_reporting_ids).')';
 		$where .= " OR tbl_ticket.assign_to IN (".implode(',', $all_reporting_ids).'))';  
 		$this->db->where($where);
 		
 
-		$data = $this->db->where(array('process_id'=>$process,'company' => $this->session->companey_id, 'complaint_type' => $type));
+		$data = $this->db->where('process_id IN ('.$process.')')->where(array('company' => $comp_id, 'complaint_type' => $type));
 		if($fromdate!='all'){
 					
 			$data=$this->db->where('last_update >=', $fromdate);
@@ -627,22 +638,26 @@ class Ticket_Model extends CI_Model
 						 $data = $this->db->count_all_results('tbl_ticket');
 		return $data;
 	}
-	public function getSourse()
+	public function getSourse($comp_id='')
 	{
-		$stage = $this->db->where(array('comp_id' => $this->session->companey_id))->get('lead_source')->result();
+		$comp_id = $this->session->companey_id??$comp_id;
+		$stage = $this->db->where(array('comp_id' => $comp_id))->get('lead_source')->result();
 		return $stage;
 	}
-	public function countTSourse($lsid,$fromdate,$todate)
+	public function countTSourse($lsid,$fromdate,$todate,$process='',$user_id='',$comp_id='')
 	{
-		$process	=	$this->session->process[0];		
-		$all_reporting_ids  = $this->common_model->get_categories($this->session->user_id);
+		$process	=	$this->session->process[0]??$process;	
+		$user_id  	=  $this->session->user_id??$user_id;
+		$comp_id = $this->session->companey_id??$comp_id;	
+
+		$all_reporting_ids  = $this->common_model->get_categories($user_id);
 		
 		$where = " ( tbl_ticket.added_by IN (".implode(',', $all_reporting_ids).')';
 		$where .= " OR tbl_ticket.assign_to IN (".implode(',', $all_reporting_ids).'))';  
 		$this->db->where($where);
 		
 
-		$count = $this->db->where(array('process_id'=>$process,'company' => $this->session->companey_id, 'sourse' => $lsid));
+		$count = $this->db->where('process_id IN ('.$process.')')->where(array('company' => $comp_id, 'sourse' => $lsid));
 		if($fromdate!='all'){
 			$count=$this->db->where('last_update >=', $fromdate);
 			$count=$this->db->where('last_update <=', $todate);
@@ -656,17 +671,20 @@ class Ticket_Model extends CI_Model
 		return $stage;
 	}
 
-	public function countTstage($stg_id,$fromdate,$todate)
+	public function countTstage($stg_id,$fromdate,$todate,$process='',$user_id='',$comp_id='')
 	{
-		$process	=	$this->session->process[0];		
-		$all_reporting_ids  = $this->common_model->get_categories($this->session->user_id);
+		$process	=	$this->session->process[0]??$process;	
+		$user_id  	=  $this->session->user_id??$user_id;
+		$comp_id = $this->session->companey_id??$comp_id;	
+
+		$all_reporting_ids  = $this->common_model->get_categories($user_id);
 		
 		$where = " ( tbl_ticket.added_by IN (".implode(',', $all_reporting_ids).')';
 		$where .= " OR tbl_ticket.assign_to IN (".implode(',', $all_reporting_ids).'))';  
 		$this->db->where($where);
 		
 
-		$count = $this->db->where(array('process_id'=>$process,'company' => $this->session->companey_id, 'ticket_stage' => $stg_id));
+		$count = $this->db->where('process_id IN ('.$process.')')->where(array('company' => $comp_id, 'ticket_stage' => $stg_id));
 		if($fromdate!='all'){
 			$count=$this->db->where('last_update >=', $fromdate);
 			$count=$this->db->where('last_update <=', $todate);
@@ -703,17 +721,19 @@ class Ticket_Model extends CI_Model
 							$count= $this->db->count_all_results('tbl_ticket');
 		return $count;
 	}
-	public function countproduct_ticket($id,$fromdate,$todate)
+	public function countproduct_ticket($id,$fromdate,$todate,$process='',$user_id='',$comp_id='')
 	{
-		$process	=	$this->session->process[0];		
-		$all_reporting_ids  = $this->common_model->get_categories($this->session->user_id);
+		$process	=	$this->session->process[0]??$process;	
+		$user_id  	=  $this->session->user_id??$user_id;
+		$comp_id = $this->session->companey_id??$comp_id;		
+		$all_reporting_ids  = $this->common_model->get_categories($user_id);
 		
 		$where = " ( tbl_ticket.added_by IN (".implode(',', $all_reporting_ids).')';
 		$where .= " OR tbl_ticket.assign_to IN (".implode(',', $all_reporting_ids).'))';  
 		$this->db->where($where);
 		
 
-		$count= $this->db->where('product',$id);
+		$count= $this->db->where('process_id IN ('.$process.')')->where(array('product'=>$id,'company'=>$comp_id));
 		if($fromdate!='all'){
 			$count=$this->db->where('last_update >=', $fromdate);
 			$count=$this->db->where('last_update <=', $todate);
@@ -1519,42 +1539,108 @@ class Ticket_Model extends CI_Model
 	}
 
 
-	public function TicketDashboard($user_id,$comp_id,$process)
+	public function TicketDashboardAPI($user_id,$comp_id,$process,$date_from,$date_to)
 	{
-		$this->load->model('common_model');
 
-		$all_reporting_ids    =   $this->common_model->get_categories($user_id);
+		$this->load->model(array('common_model','Ticket_Model','Leads_Model'));
 
-		$where = "( tck.added_by IN (".implode(',', $all_reporting_ids).')';
-    	$where .= " OR tck.assign_to IN (".implode(',', $all_reporting_ids).'))';
-        $where.=" AND tck.process_id IN (".$process.") AND tck.company=".$comp_id;
+		if(empty($date_from))
+		{
+		$get = $this->Ticket_Model->getfistDate($comp_id);
+			$date = date('Y-m-d', strtotime($get));
+			if(empty($date_to))
+				$date2 = date('Y-m-d');
+			else 
+				$date2 = $date_to;
+			$begin = new DateTime($date);
+			$end   = new DateTime($date2);
+		}else{
 
-		$created = $this->db->from('tbl_ticket tck')->where($where)->count_all_results();
+			if(empty($date_to))
+				$date2 = date('Y-m-d');
+			else 
+				$date2 = $date_to;
 
-		$assigned = $this->db->from('tbl_ticket tck')->where($where.' AND tck.assign_to != 0')->count_all_results();
+			 $begin = new DateTime(date('Y-m-d', strtotime($date_from)));
+			 $end   = new DateTime(date('Y-m-d', strtotime($date2)));
+		     }
+		// echo $begin.'<br>'.$end;exit();
 
-		$updated = $this->db->from('tbl_ticket tck')->where($where.' AND tck.last_update != tck.coml_date')->count_all_results();
+		$data = [];
+			
+			for ($i = $begin; $i <= $end; $i->modify('+1 day')) {
+				$idate = $i->format("Y-m-d");
+				$count_1 = $this->Ticket_Model->createddatewise(1,$idate,$process,$user_id,$comp_id);				
+				$count_2 = $this->Ticket_Model->createddatewise(2,$idate,$process,$user_id,$comp_id);				
+				$data[] = [
+							'date'  => $idate,
+							'complaint'=>$count_1,
+							'query'=>$count_2,
+						  ];
+			}
 
-		//echo $this->db->last_query(); exit();
+		$final['datewise']= $data;
+		
 
-		$closed = $this->db->from('tbl_ticket tck')->where($where.' AND tck.ticket_status =3')->count_all_results();
+		$data =array();
+		$refData = $this->Ticket_Model->refferedBy($comp_id);
+		$datefrom = $date_from==0 ?'all':$date_from;
+		//echo $datefrom; exit();
+		foreach ($refData as $key => $value) {
+			$count = $this->Ticket_Model->countrefferedBy($value->id,$datefrom,$date_to,$process,$user_id,$comp_id);
+			$data[] = ['name' => $value->name, 'value' => $count];
+		}
 
-		$pending = $this->db->from('tbl_ticket tck')->where($where.' AND tck.coml_date = tck.last_update')->count_all_results();		
+		$final['referred_by'] = $data;
 
-		$this->db->from('tbl_ticket tck')->where($where)->get();
+		$data =array();
+		$low = $this->Ticket_Model->countPriority(1,$datefrom,$date_to,$process,$user_id,$comp_id);
+		$medium = $this->Ticket_Model->countPriority(2,$datefrom,$date_to,$process,$user_id,$comp_id);
+		$high = $this->Ticket_Model->countPriority(3,$datefrom,$date_to,$process,$user_id,$comp_id);
+		$data[] = ['name' => 'High', 'value' => $high];
+		$data[] = ['name' => 'Medium', 'value' => $medium];
+		$data[] = ['name' => 'Low', 'value' => $low];
 
-		$res = $this->db->last_query();
+		$final['priority_wise'] = $data;
 
-		$followup = $this->db->query("SELECT count(*) as num from tbl_ticket_conv inner join ($res) chk on chk.id= tbl_ticket_conv.tck_id")->row()->num;
+		$data= array();
+		$complaint = $this->Ticket_Model->complaint_type(1,$datefrom,$date_to,$process,$user_id,$comp_id);
+		$query = $this->Ticket_Model->complaint_type(2,$datefrom,$date_to,$process,$user_id,$comp_id);
+		$data[] = ['name' => 'Complaint', 'value' => $complaint];
+		$data[] = ['name' => 'Query', 'value' => $query];
 
-		$data['created']= $created;
-		$data['assigned'] = $assigned;
-		$data['updated'] = $updated;
-		$data['followup'] = $followup;
-		$data['closed'] = $closed;
-		$data['pending'] = $pending;
+		$final['type_wise'] = $data;
 
-		return $data; 
+		$data=[];
+
+		$all_process = explode(',', $process);
+
+		$getSourse = $this->Leads_Model->get_leadstage_list_byprocess1($all_process,4,$comp_id);
+		
+		foreach ($getSourse as $key => $value) {
+			$count = $this->Ticket_Model->countTstage($value->stg_id,$datefrom,$date_to,$process,$user_id,$comp_id);
+			$data[] = ['name' => $value->lead_stage_name, 'value' => $count];
+		}
+		$final['stage_wise'] = $data;
+
+		$getSourse = $this->Ticket_Model->getSourse($comp_id);
+		$data=[];
+		foreach ($getSourse as $key => $value) {
+			$count = $this->Ticket_Model->countTSourse($value->lsid,$datefrom,$date_to,$process,$user_id,$comp_id);
+			$data[] = ['name' => $value->lead_name, 'value' => $count];
+		}
+		$final['source_wise'] = $data;
+
+
+		$data =array();
+		
+		$products=$this->db->where('comp_id',$comp_id)->get('tbl_product_country')->result();
+		foreach ($products as $key => $value) {
+		$count = $this->Ticket_Model->countproduct_ticket($value->id,$datefrom,$date_to,$process,$user_id,$comp_id);
+		$data[] = ['name' => $value->country_name, 'value' => $count];
+		}
+		$final['product_wise'] = $data;
+		return $final; 
 
 	}
 

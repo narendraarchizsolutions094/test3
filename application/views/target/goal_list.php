@@ -11,47 +11,71 @@ var Ignore = new Array();
           if(!empty($this->session->process) && (is_array($this->session->process)?(count($this->session->process)==1?true:false):true))
 			{
 				?>
-          <a class="dropdown-toggle btn btn-danger btn-circle btn-sm fa fa-plus" data-toggle="modal" data-target="#add_goal" title="Add Goal"></a>       
+          <a class="dropdown-toggle btn btn-danger btn-circle btn-sm fa fa-plus" data-toggle="modal" data-target="#add_goal" title="Add Goal"></a>    
+
           <?php
           }
           ?>  
         </div>
 </div>
 <div class="row" style="margin: 15px;">
+<form id="filter_form">
 	<div class="col-sm-4">
 		<div class="form-group">
 			<label>From - To</label>
 			<div class="input-group">
-				<input type="date" name="from_date" class="form-control" style="width: 50%">
-				<input type="date" name="from_to" class="form-control" style="width:50%">
+				<input type="date" name="date_from" class="form-control" style="width: 50%">
+				<input type="date" name="date_to" class="form-control" style="width:50%">
 			</div>
 		</div>
 	</div>
 	<div class="col-sm-3">
 		<div class="form-group">
 			<label>For Role</label>
-			<select class="form-control" name="for_role">
-				
+			<select class="form-control" name="role_for">
+				<option value="">Select</option>
+				<?php
+				if(!empty($roles))
+				{
+					$rol = json_decode($roles);
+					foreach ($rol as $row)
+					{
+						echo'<option value="'.$row->id.'">'.$row->role_name.'</option>';
+					}
+				}
+				?>
 			</select>
 		</div>
 	</div>
 	<div class="col-sm-3">
 		<div class="form-group">
 			<label>For User</label>
-			<select class="form-control" name="for_role">
-				
+			<select class="form-control" name="user_for">
+				<option value="">Select</option>
+				<?php
+				if(!empty($users))
+				{
+					$rol = json_decode($users);
+					foreach ($rol as $row)
+					{
+						echo'<option value="'.$row->id.'">'.$row->user_name.'</option>';
+					}
+				}
+				?>
 			</select>
 		</div>
 	</div>
 	<div class="col-sm-2">
 		<div class="form-group">
 			<label>Metric</label>
-			<select class="form-control" name="for_role">
+			<select class="form-control" name="metric_type">
+				<option value="">Select</option>
 				<option value="won">Won Deals</option>
 				<option value="deal">Deal Value</option>
 			</select>
 		</div>
 	</div>
+</form>
 </div>
 
 <div class="panel">
@@ -64,18 +88,21 @@ var Ignore = new Array();
 	$(document).ready(function(){
 		load_table();
 	});
-
+$("#filter_form").change(function(){
+			load_table();
+		});
 	function load_table()
 	{
+		var custom_filter = $("#filter_form").serialize();
+		//alert(custom_filter);
 		$.ajax({
 			url:"<?=base_url('Target/load_goal_table')?>",
 			type:'post',
-			data:{},
+			data:custom_filter,
 			beforeSend:function(){
 				$("#goal_table").html('<center><i class="fa fa-spinner fa-spin" style="font-size:77px;"></i><center>');
 			},
 			success:function(res){
-				//alert(res);
 				$("#goal_table").html(res);
 			},
 			error:function(u,v,w)
