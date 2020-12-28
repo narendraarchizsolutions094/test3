@@ -104,7 +104,38 @@ class Target extends CI_controller
 
 	public function load_goal_table()
 	{
-		$all_goals = $this->Target_Model->getGoals();
+		$date_from = $this->input->post('date_from')??0;
+		$date_to = $this->input->post('date_to')??0;
+		$role  = $this->input->post('role_for')??0;
+		$user = $this->input->post('user_for')??0;
+		$metric_type = $this->input->post('metric_type')??0;
+		$where =array();
+		if($date_from)
+		{
+			$where[] = " (goals.date_from >= '".$date_from."')";
+ 		}
+
+ 		if($date_to)
+ 		{
+ 			$where[] = " goals.date_to <= '".$date_to."'";
+ 		}
+
+ 		if($role)
+ 		{
+ 			$where[] = " goals.team_id = '".$role."'";
+ 		}
+ 		if($user)
+ 		{
+ 			$where[] = "( FIND_IN_SET(".$user.",goals.goal_for) > 0 )";
+ 		}
+ 		if($metric_type)
+ 		{
+ 			$where[] = " goals.metric_type = '".$metric_type."'";
+ 		}
+ 		//print_r($where); 
+		$all_goals = $this->Target_Model->getGoals(implode(' AND ',$where));
+		// echo count($all_goals);
+		// echo $this->db->last_query(); exit();
 			echo'<table class="table table-bordered table-striped table-hover">
 				<thead>
 					<tr>
