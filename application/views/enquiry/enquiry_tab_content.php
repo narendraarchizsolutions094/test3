@@ -69,7 +69,7 @@ $type="text";
    <?php  if(is_active_field(MOBILE,$process_id)){  ?>
    <div class="form-group col-sm-6 col-md-6"> 
       <label><?php echo display('mobile') ?></label>
-      <?php    if ($viewpro!='viewpro') {   ?>
+      <?php    if ($viewpro!='viewpro' && $this->session->companey_id == 76) {   ?>
       <input class="form-control mask-number" name="mobileno" type="<?= $type ?>" maxlength='10' value="<?php echo $details->phone ?>" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" >
       <i class="fa fa-plus" onclick="add_more_phone('add_more_phone')" style="float:right;margin-top:-25px;margin-right:10px;color:red"></i>
       <?php }else{ ?>
@@ -102,7 +102,8 @@ $type="text";
       ?>
    <div class="form-group col-sm-6 col-md-6"> 
       <label><?php echo display('email') ?></label>
-      <?php    if ($viewpro!='viewpro') {   ?>
+      <?php    if ($viewpro!='viewpro' && $this->session->companey_id == 76) {   ?>
+
       <input class="form-control" name="email" type="email" value="<?php echo $details->email ?>">  
       <?php }else{ ?>
          <input class="form-control" name="email" hidden type="email" value="<?php echo $details->email ?>">  
@@ -116,7 +117,8 @@ $type="text";
       ?>
    <div class="form-group col-sm-6 col-md-6">
       <label>Process <i class="text-danger"></i></label>
-      <?php    if ($viewpro!='viewpro') {   ?>
+      <?php    if ($viewpro!='viewpro' && $this->session->companey_id == 76) {   ?>
+
       <select name="product_id" class="form-control">
          <option value="" style="display:none;">Select</option>
          <?php foreach($products as $product){?>
