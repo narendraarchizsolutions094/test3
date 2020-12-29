@@ -2154,13 +2154,14 @@ $(document).ready(function(){
 
 $(document).on('mouseover','.change_dispositions',function(e){
   var enq  = $(this).data('id');
+  var stage  = $(this).data('stages');
   var dis  = $(this).val();
   var post_url = "<?=base_url().'enq/enquiry_disposition/'?>"+enq;
   $.ajax({
       url: post_url,
       type: 'post',      
       data:{
-        disposition:dis
+        disposition:dis,stages:stage
       },
       success: function(res){
         $("select[data-id="+enq+"]").html(res);

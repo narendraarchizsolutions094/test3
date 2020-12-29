@@ -234,12 +234,13 @@ class Client extends CI_Controller {
             $stage    =   $_GET['stage'];
             $data['title'] = $enquiry_separation[$stage]['title'];            
         }else{
-            $data['title'] = 'Client';        
+            $data['title'] =display('client');
         }
         $data['content'] = $this->load->view('enquiry_details1', $data, true);
         $this->enquiry_model->assign_notification_update($enquiry_code);
         $this->load->view('layout/main_wrapper', $data);
     }
+
     public function views() {
         $leadid = $this->uri->segment(3);
         $data['details'] = $this->Client_Model->get_clientid_bycustomerCODE($leadid);
