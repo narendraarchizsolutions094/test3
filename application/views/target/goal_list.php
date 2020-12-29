@@ -1,5 +1,14 @@
 <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
 <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+<script src="https://cdn.amcharts.com/lib/4/core.js"></script>
+<script src="https://cdn.amcharts.com/lib/4/charts.js"></script>
+<script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
+<style type="text/css">
+	#graph1,#graph2
+	{
+		height: 500px;
+	}
+</style>
 <script type="text/javascript">
 var Ignore = new Array();
 </script>
@@ -8,6 +17,8 @@ var Ignore = new Array();
 	<div class="col-md-4 col-sm-4 col-xs-4"> 
           <a class="pull-left fa fa-arrow-left btn btn-circle btn-default btn-sm" onclick="history.back(-1)" title="Back"></a> 
           <?php
+      if(user_access('260'))
+      {
           if(!empty($this->session->process) && (is_array($this->session->process)?(count($this->session->process)==1?true:false):true))
 			{
 				?>
@@ -15,6 +26,7 @@ var Ignore = new Array();
 
           <?php
           }
+      }
           ?>  
         </div>
 </div>
@@ -22,10 +34,17 @@ var Ignore = new Array();
 <form id="filter_form">
 	<div class="col-sm-4">
 		<div class="form-group">
-			<label>From - To</label>
+			<label>Start From - To</label>
 			<div class="input-group">
-				<input type="date" name="date_from" class="form-control" style="width: 50%">
-				<input type="date" name="date_to" class="form-control" style="width:50%">
+				<input type="date" name="start_date_from" class="form-control" style="width: 50%">
+				<input type="date" name="start_date_to" class="form-control" style="width:50%">
+			</div>
+		</div>
+		<div class="form-group">
+			<label>End From - To</label>
+			<div class="input-group">
+				<input type="date" name="end_ate_from" class="form-control" style="width: 50%">
+				<input type="date" name="end_date_to" class="form-control" style="width:50%">
 			</div>
 		</div>
 	</div>
@@ -46,19 +65,21 @@ var Ignore = new Array();
 				?>
 			</select>
 		</div>
+		<div class="form-group"><br>
+			<label><input type="checkbox" name="graph" value="1"> Goal Analytics</label>
+		</div>
 	</div>
 	<div class="col-sm-3">
 		<div class="form-group">
-			<label>For User</label>
+			<label>For User &nbsp;<small><input type="checkbox" name="fetch_type" value="1" checked> Hierarchy wise</small></label>
 			<select class="form-control" name="user_for">
-				<option value="">Select</option>
 				<?php
 				if(!empty($users))
 				{
 					$rol = json_decode($users);
 					foreach ($rol as $row)
 					{
-						echo'<option value="'.$row->id.'">'.$row->user_name.'</option>';
+						echo'<option value="'.$row->id.'" '.($row->id==$this->session->user_id?'selected':'').'>'.$row->user_name.'</option>';
 					}
 				}
 				?>
@@ -77,7 +98,18 @@ var Ignore = new Array();
 	</div>
 </form>
 </div>
-
+<div class="panel">
+	<div class="panel-body" id="goal_graph">
+		<div class="row">
+			<div class="col-sm-6">
+				<div id="graph1"></div>
+			</div>
+			<div class="col-sm-6">
+				<div id="graph2"></div>
+			</div>
+		</div>
+	</div>
+</div>
 <div class="panel">
 	<div class="panel-body" id="goal_table">
 
@@ -100,10 +132,150 @@ $("#filter_form").change(function(){
 			type:'post',
 			data:custom_filter,
 			beforeSend:function(){
-				$("#goal_table").html('<center><i class="fa fa-spinner fa-spin" style="font-size:77px;"></i><center>');
+				$("#goal_table,#graph1,#graph2").html('<center><i class="fa fa-spinner fa-spin" style="font-size:77px;"></i><center>');
 			},
 			success:function(res){
-				$("#goal_table").html(res);
+				var p = JSON.parse(res);
+				$("#goal_graph").hide();
+				$("#goal_table").html(p.code);
+				console.log(p.count_goals);
+				if(p.graph)
+				{
+					$("#goal_graph").show();
+					// =================================================
+					res = p.gval;
+					//alert(res);
+					am4core.ready(function() {
+
+			// Themes begin
+			am4core.useTheme(am4themes_animated);
+			// Themes end
+			var chart = am4core.create('graph1', am4charts.XYChart)
+
+			chart.colors.step = 2;
+
+			chart.legend = new am4charts.Legend()
+			chart.legend.position = 'top'
+			chart.legend.paddingBottom = 20
+			chart.legend.labels.template.maxWidth = 95
+
+			var xAxis = chart.xAxes.push(new am4charts.CategoryAxis())
+			xAxis.dataFields.category = 'category'
+			xAxis.renderer.cellStartLocation = 0.1
+			xAxis.renderer.cellEndLocation = 0.9
+			xAxis.renderer.grid.template.location = 0;
+
+			var yAxis = chart.yAxes.push(new am4charts.ValueAxis());
+			yAxis.min = 0;
+
+			function createSeries(value, name) {
+			    var series = chart.series.push(new am4charts.ColumnSeries())
+			    series.dataFields.valueY = value
+			    series.dataFields.categoryX = 'category'
+			    series.name = name
+
+			    series.events.on("hidden", arrangeColumns);
+			    series.events.on("shown", arrangeColumns);
+
+			    var bullet = series.bullets.push(new am4charts.LabelBullet())
+			    bullet.interactionsEnabled = false
+			    bullet.dy = 30;
+			    bullet.label.text = '{valueY}'
+			    bullet.label.fill = am4core.color('#ffffff')
+
+			    return series;
+			}
+
+			chart.data = [
+			    {
+			        category: 'Deal Values',
+			        first:res.deal.target,
+			        second: res.deal.forecast,
+			        third: res.deal.achieved,
+			    },
+			]
+
+
+			createSeries('first', 'Target');
+			createSeries('second', 'Forecast');
+			createSeries('third', 'Achieved');
+
+			function arrangeColumns() {
+
+			    var series = chart.series.getIndex(0);
+
+			    var w = 1 - xAxis.renderer.cellStartLocation - (1 - xAxis.renderer.cellEndLocation);
+			    if (series.dataItems.length > 1) {
+			        var x0 = xAxis.getX(series.dataItems.getIndex(0), "categoryX");
+			        var x1 = xAxis.getX(series.dataItems.getIndex(1), "categoryX");
+			        var delta = ((x1 - x0) / chart.series.length) * w;
+			        if (am4core.isNumber(delta)) {
+			            var middle = chart.series.length / 2;
+
+			            var newIndex = 0;
+			            chart.series.each(function(series) {
+			                if (!series.isHidden && !series.isHiding) {
+			                    series.dummyData = newIndex;
+			                    newIndex++;
+			                }
+			                else {
+			                    series.dummyData = chart.series.indexOf(series);
+			                }
+			            })
+			            var visibleCount = newIndex;
+			            var newMiddle = visibleCount / 2;
+
+			            chart.series.each(function(series) {
+			                var trueIndex = chart.series.indexOf(series);
+			                var newIndex = series.dummyData;
+
+			                var dx = (newIndex - trueIndex + middle - newMiddle) * delta
+
+			                series.animate({ property: "dx", to: dx }, series.interpolationDuration, series.interpolationEasing);
+			                series.bulletsContainer.animate({ property: "dx", to: dx }, series.interpolationDuration, series.interpolationEasing);
+			            })
+			        }
+			    }
+			}
+			//================================
+			var chart = am4core.create('graph2', am4charts.XYChart)
+
+			chart.colors.step = 2;
+
+			chart.legend = new am4charts.Legend()
+			chart.legend.position = 'top'
+			chart.legend.paddingBottom = 20
+			chart.legend.labels.template.maxWidth = 95
+
+			var xAxis = chart.xAxes.push(new am4charts.CategoryAxis())
+			xAxis.dataFields.category = 'category'
+			xAxis.renderer.cellStartLocation = 0.1
+			xAxis.renderer.cellEndLocation = 0.9
+			xAxis.renderer.grid.template.location = 0;
+
+			var yAxis = chart.yAxes.push(new am4charts.ValueAxis());
+			yAxis.min = 0;
+
+
+			chart.data = [
+			    {
+			        category: 'Won Values',
+			        first:res.won.target,
+			        second: res.won.forecast,
+			        third: res.won.achieved,
+			    },
+			]
+
+
+			createSeries('first', 'Target');
+			createSeries('second', 'Forecast');
+			createSeries('third', 'Achieved');
+
+			}); // end am4core.ready()
+
+					// ==================================================
+				}
+
 			},
 			error:function(u,v,w)
 			{
@@ -213,6 +385,12 @@ $("#filter_form").change(function(){
     </div>
   </div>
 </div>
+
+<div id="edit_goal" class="modal" role="dialog">
+  <div class="modal-dialog">
+  </div>
+</div>
+<button id="editGoal" data-toggle="modal" data-target="#edit_goal" style="display: none;"></button>
 <script type="text/javascript">
 $(document).ready(function(){
 	$(".select2").select2();
@@ -225,16 +403,19 @@ function load_range(v)
 	var range_list = '';
 		if(v=='weekly')
 		{
-			range_list+="<option value='1'>This Week </option><option value='2'>Next Week</option><option value='3'>All weeks this month </option><option value='4'>All weeks this quarter</option><option value='custom'>Custom period</option>";
+			range_list+="<option value='1'>This Week </option><option value='2'>Next Week</option><option value='custom'>Custom period</option>";
+			//<option value='3'>All weeks this month </option><option value='4'>All weeks this quarter</option>
 		}
 		else if(v=='monthly')
 		{
-			range_list+="<option value='1'>This Month </option><option value='2'>Next Month</option><option value='3'>All month this quarter </option><option value='4'>All months this year</option><option value='custom'>Custom period</option>";
+			range_list+="<option value='1'>This Month </option><option value='2'>Next Month</option><option value='custom'>Custom period</option>";
+			//<option value='3'>All month this quarter </option><option value='4'>All months this year</option>
 
 		}
 		else if(v=='quarterly')
 		{
-			range_list+="<option value='1'>This Quarter </option><option value='2'>Next Quarter</option><option value='3'>All quarter this year </option><option value='4'>All weeks this quarter</option><option value='custom'>Custom period</option>";
+			range_list+="<option value='1'>This Quarter </option><option value='2'>Next Quarter</option><option value='custom'>Custom period</option>";
+			//<option value='3'>All quarter this year </option><option value='4'>All weeks this quarter</option>
 		}
 		else if(v=='yearly')
 		{
@@ -300,10 +481,8 @@ function viewTeamTable()
 				$(".TeamTableBox").show();
 				$(".TeamTable").html(q);
 				$('input[type=checkbox]').bootstrapToggle();
-				$('input[type=checkbox]').on('change',function(){
-					
-				
-					
+				$(document).on('change','input[type=checkbox]',function(){
+
 					if(this.checked)
 					{
 						if(Ignore.indexOf(this.value) > -1)

@@ -23,6 +23,13 @@
 			<label>Role : '.ucwords($goal->user_role).'</label>
 			</div>';
 		}
+		//print_r($products);
+		if(!empty($goal->products))
+		{
+			echo'<div class="form-group">
+			<label>Prodcuts : '.implode(' , ',$products).'</label>
+			</div>';
+		}
 		?>
 
 		<br>

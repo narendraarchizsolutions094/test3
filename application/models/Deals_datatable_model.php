@@ -17,6 +17,8 @@ class Deals_datatable_model extends CI_Model{
         
         // Set default order
         $this->order = array('id' => 'desc');
+
+        $this->load->model('common_model');
     }
     
     /*
@@ -37,9 +39,14 @@ class Deals_datatable_model extends CI_Model{
      * Count all records
      */
     public function countAll(){
-
-        $this->db->from($this->table);
-        $this->db->where("comp_id",$this->session->companey_id);
+        $all_reporting_ids    =   $this->common_model->get_categories($this->session->user_id);
+        $this->db->from($this->table.' info');
+        $this->db->join('enquiry enq','enq.enquiry_id=info.enquiry_id','left');
+        $this->db->where("enq.comp_id",$this->session->companey_id);
+        $where="";
+        $where .= "( enq.created_by IN (".implode(',', $all_reporting_ids).')';
+        $where .= " OR enq.aasign_to IN (".implode(',', $all_reporting_ids).'))';   
+        $this->db->where($where);
         return $this->db->count_all_results();
     }
     
@@ -60,6 +67,8 @@ class Deals_datatable_model extends CI_Model{
     public function _get_datatables_query($postData){
 
 
+        $all_reporting_ids    =   $this->common_model->get_categories($this->session->user_id);
+
         $this->db->select('info.*,enq.name,enq.Enquery_id,enq.status as enq_type, book.branch_name as booking_branch_name, deliver.branch_name as delivery_branch_name');
         $this->db->from($this->table.' info');
         $this->db->join('enquiry enq','enq.enquiry_id=info.enquiry_id','left');
@@ -68,7 +77,9 @@ class Deals_datatable_model extends CI_Model{
         $this->db->where("info.comp_id",$this->session->companey_id);
 
         $where="";
-        $and =0;
+        $where .= "( enq.created_by IN (".implode(',', $all_reporting_ids).')';
+        $where .= " OR enq.aasign_to IN (".implode(',', $all_reporting_ids).'))';   
+        $and =1;
       
         if(!empty($_POST['date_from']) && !empty($_POST['date_to']))
         {   
@@ -130,6 +141,8 @@ class Deals_datatable_model extends CI_Model{
             }
             
         }
+
+
 
         if($where!='')
         $this->db->where($where);
