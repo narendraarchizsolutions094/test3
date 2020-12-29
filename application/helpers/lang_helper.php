@@ -179,11 +179,11 @@ if (!function_exists('display')) {
         }
     } 
 
-    function get_sys_parameter($sys_para,$type){
+    function get_sys_parameter($sys_para,$type,$comp_id=0){
         $ci =& get_instance();
         $ci->load->database();
-
-        $ci->db->where('comp_id',$ci->session->companey_id);
+        $comp_id = $ci->session->companey_id??$comp_id;
+        $ci->db->where('comp_id',$comp_id);
         $ci->db->where('sys_para',$sys_para);
         $ci->db->where('type',$type);
         $row_array = $ci->db->get('sys_parameters')->row_array();        

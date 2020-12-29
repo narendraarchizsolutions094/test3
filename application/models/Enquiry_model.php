@@ -2813,17 +2813,75 @@ $cpny_id=$this->session->companey_id;
 
         $client_drop = $this->db->query("SELECT count(enquiry.enquiry_id)counter,tp.drop_reason FROM enquiry  LEFT JOIN tbl_drop as tp ON tp.d_id = enquiry.drop_status WHERE $where AND enquiry.status = 3  AND tp.drop_reason IS NOT NULL GROUP BY tp.drop_reason");
 
-        $client_dropWise = $client_drop->result();
+      $client_dropWise = $client_drop->result();
+
+      $enq_count = $this->dashboard_model->countLead(2,$companyid);
+      $enq_Sum = $this->dashboard_model->dataLead(2,$companyid);
+
+      $enqTime=$enq_Sum->row()->time;
+      if ($enqTime!=0)
+      {
+        $enq_value = round(($enqTime/$enq_count),2);
+      }
+      else 
+        $enq_value = 0;
+
+      $lead_count = $this->dashboard_model->countLead(3,$companyid);
+      $lead_Sum = $this->dashboard_model->dataLead(3,$companyid);
+
+      $leadTime=$lead_Sum->row()->time;
+      if ($leadTime!=0)
+      {
+        $lead_value = round(($leadTime/$lead_count),2);
+      }
+      else 
+        $lead_value = 0;
+
+      $followup = array(
+                    array(
+                      'key'=>display('enquiry'),
+                      'time'=> $enq_value,
+                    ),
+                    array(
+                      'key'=>display('lead'),
+                      'time'=> $lead_value,
+                    ),
+                );
+
+    $enquiry_separation  = get_sys_parameter('enquiry_separation', 'COMPANY_SETTING',$companyid);
+    if(!empty($enquiry_separation))
+    {
+        $enquiry_separation = json_decode($enquiry_separation, true);
+        foreach ($enquiry_separation as $key => $value) 
+        {
+                  $ctitle = $enquiry_separation[$key]['title']; 
+                  $Count=$this->dashboard_model->countLead($key,$companyid);
+                  $sum=$this->dashboard_model->dataLead($key,$companyid);
+                  $stime= $sum->row()->time;
+
+                  if($stime!=0)
+                  {
+                    $vvalue = round(($stime/$Count),2);
+                  }
+                  else 
+                    $vvalue = 0;
 
 
-
+                 $followup[]  = array(
+                                  'key'=>$ctitle,
+                                  'time'=>$vvalue,
+                                );
+        }
+    }
         // $query14 = $this->db->query("SELECT enquiry_id FROM `lead_stage` WHERE comp_id = $cpny_id ORDER BY stg_id ASC");
         // $pbc = $query14->num_rows(); 
+
+ 
 
         $indiamap= array('upe'=>$upe,'upl'=>$upl,'upc'=>$upc,'pbe'=>$pbe,'pbl'=>$pbl,'pbc'=>$pbc);
 
         $funnelchartAry = array('enquiry'=>$enquiry,'lead'=>$lead,"client"=>$client,'enq_ct'=>$enq_ct,'lead_ct'=>$lead_ct,'client_ct'=>$client_ct,'enq_ut'=>$enq_ut,'lead_ut'=>$lead_ut,'client_ut'=>$client_ut,'enq_drp'=>$enq_drp,'lead_drp'=>$lead_drp,'client_drp'=>$client_drp,'enq_active'=>$enq_active,'lead_active'=>$lead_active,'client_active'=>$client_active,'enq_assign'=>$enq_assign,'lead_assign'=>$lead_assign,'client_assign'=>$client_assign,'hot'=>$hot,'warm'=>$warm,'cold'=>$cold,'ejan'=>$ejan,'ljan'=>$ljan,'cjan'=>$cjan,'efeb'=>$efeb,'lfeb'=>$lfeb,'cfeb'=>$cfeb,'emar'=>$emar,'lmar'=>$lmar,'cmar'=>$cmar,'eapr'=>$eapr,'lapr'=>$lapr,'capr'=>$capr,'emay'=>$emay,'lmay'=>$lmay,'cmay'=>$cmay,'ejun'=>$ejun,'ljun'=>$ljun,'cjun'=>$cjun,'ejuly'=>$ejuly,'ljuly'=>$ljuly,'cjuly'=>$cjuly,'eaug'=>$eaug,'laug'=>$laug,'caug'=>$caug,'esep'=>$esep,'lsep'=>$lsep,'csep'=>$csep,'eoct'=>$eoct,'loct'=>$loct,'coct'=>$coct,'enov'=>$enov,'lnov'=>$lnov,'cnov'=>$cnov,'edec'=>$edec,'ldec'=>$ldec,'cdec'=>$cdec,'raw'=>$raw,'indiamap'=>$indiamap,'desposition_enquiry'=>$despenq,'desposition_lead'=>$desplead,'desposition_client'=>$despcli,'EnquirySrc'=>$EnquirySrc,'leadSrc'=>$leadSrc,'ClientSrc'=>$ClientSrc,'enquiry_processWise'=>$enquiry_processWise,'lead_processWise'=>$lead_processWise,'client_processWise'=>$client_processWise,'enquiry_dropWise'=>$enquiry_dropWise,'lead_dropWise'=>$lead_dropWise,'client_dropWise'=>$client_dropWise);
-
+        $funnelchartAry['followup'] = $followup;
         return $funnelchartAry;
     }
 

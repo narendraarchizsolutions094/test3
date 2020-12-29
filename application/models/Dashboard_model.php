@@ -1067,14 +1067,15 @@ class Dashboard_model extends CI_Model {
                         ->row();
 
     }
-    public function countLead($type){
+    public function countLead($type,$comp_id=0){
 	
-		
-		return $this->db->where(array('comp_id' => $this->session->userdata('companey_id'),'type'=>$type))->count_all_results('tbl_followupAvgtime');
+		$comp_id = $this->session->userdata('companey_id')??$comp_id;
+		return $this->db->where(array('comp_id' => $comp_id,'type'=>$type))->count_all_results('tbl_followupAvgtime');
 
     }
-	public function dataLead($type){
-		return $this->db->select_sum('time')->where(array('comp_id' => $this->session->userdata('companey_id'),'type'=>$type))->get('tbl_followupAvgtime');
+	public function dataLead($type,$comp_id=0){
+		$comp_id = $this->session->userdata('companey_id')??$comp_id;
+		return $this->db->select_sum('time')->where(array('comp_id' =>$comp_id,'type'=>$type))->get('tbl_followupAvgtime');
 		
 
 	}
