@@ -3294,4 +3294,12 @@ public function fb_page_new(){
             }
             }
  }
+
+ function import_feedback() {
+    // if (user_role('1133') == true) {
+    // }
+    $data['title'] = display('import');
+    $data['content'] = $this->load->view('feedback/import', $data, true);
+    $this->load->view('layout/main_wrapper', $data);
+}
 }

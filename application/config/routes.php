@@ -287,6 +287,8 @@ $route['feedback'] = 'Dashboard/feedback';
 $route['feedback-edit/(:any)'] = 'Dashboard/edit_feedback/$i';
 $route['feedback/create'] = 'Dashboard/create';
 $route['feedback/insert'] = 'Dashboard/insert';
+$route['import-feedback'] = 'Dashboard/import_feedback';
+
 $route['404_override']            = '';
 
 $route['translate_uri_dashes']    = true;

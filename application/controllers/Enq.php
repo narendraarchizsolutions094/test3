@@ -485,7 +485,8 @@ class Enq extends CI_Controller
 
 		$this->common_query_short_dashboard();
 		//$date=date('Y-m-d');
-		$this->db->where('enquiry.update_date is NULL ');
+		$this->db->where('enquiry.lead_stage',0);
+		//now check empty dispositon
 		$data['all_no_activity_num']=$this->db->count_all_results();
 
 		$this->common_query_short_dashboard();
