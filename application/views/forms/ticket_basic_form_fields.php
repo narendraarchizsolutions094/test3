@@ -320,6 +320,7 @@ echo'<div class="trackingDetails"></div>';
                       <div class="form-group">
                         <label>Priority</label>
                         <select class="form-control " name = "priority">
+                          <option value = "">Select</option>
                           <option value = "1">Low</option>
                           <option value = "2">Medium</option>
                           <option value = "3">High</option>
