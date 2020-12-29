@@ -134,7 +134,7 @@ class Enquiry_datatable_model extends CI_Model {
         else if($top_filter == 'pending')
         {
             $where.="  enquiry.status=$data_type";
-            $where.=" AND enquiry.update_date is NULL";
+            $where.=" AND enquiry.lead_stage=0";
         }
         else{                        
             $where.="  enquiry.status=$data_type";
