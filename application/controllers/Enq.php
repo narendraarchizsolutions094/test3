@@ -60,7 +60,6 @@ class Enq extends CI_Controller
 		$data['content'] = $this->load->view('enquiry_n', $data, true);
 		$this->load->view('layout/main_wrapper', $data);
 	}
-
 	public function ___enq_load_data()
 	{
 		$this->load->model('enquiry_datatable_model');
@@ -127,7 +126,9 @@ class Enq extends CI_Controller
 				$row[] = $each->product_name;
 			}
 			if ($showall == true or in_array(8, $acolarr)) {
+				
 				if ($each->lead_stage_name) {
+					// if(in_array())
 					$option = '<option value="' . $each->lead_stage_name . '">' . $each->lead_stage_name . '</option>';
 				} else {
 					$option = '<option value="0">Select Disposition</option>';
@@ -277,7 +278,7 @@ class Enq extends CI_Controller
 				} else {
 					$option = '<option value="0">Select Disposition</option>';
 				}
-				$row[] = '<select class="form-control change_dispositions" style="height: 11px;width: 60%;font-size: smaller;padding: 4px;" data-id=' . $each->enquiry_id . '>' . $option . '</select>';
+				$row[] = '<select class="form-control change_dispositions" style="height: 11px;width: 60%;font-size: smaller;padding: 4px;" data-id="' . $each->enquiry_id . '" data-stages="'.$each->status .'" >' . $option . '</select>';
 			}
 			if ($this->session->companey_id == 29) {
 				//$row[] = (!empty($each->reference_name)) ? $each->reference_name : "NA";
@@ -484,7 +485,8 @@ class Enq extends CI_Controller
 
 		$this->common_query_short_dashboard();
 		//$date=date('Y-m-d');
-		$this->db->where('enquiry.update_date is NULL ');
+		$this->db->where('enquiry.lead_stage',0);
+		//now check empty dispositon
 		$data['all_no_activity_num']=$this->db->count_all_results();
 
 		$this->common_query_short_dashboard();
@@ -565,15 +567,25 @@ class Enq extends CI_Controller
 	}
 	public function enquiry_disposition($enq)
 	{
+
 		$lead_stages = $this->Leads_Model->find_stage();
+		// print_r($lead_stages);
 		$dis	=	$this->input->post('disposition');
+		 $for	=	$this->input->post('stages');
+		if($for > 3){ echo $for=3; }
 		$option = '<option value="0">Select Disposition</option>';
 		if (!empty($lead_stages)) {
 			foreach ($lead_stages as $key => $value) {
 				if (trim($dis) == trim($value->lead_stage_name)) {
 					$option .= "<option selected value='" . $value->lead_stage_name . "'>" . $value->lead_stage_name . "</option>";
 				} else {
+					$process = explode(',', $value->process_id);    
+					$stage = explode(',', $value->stage_for);    
+					$extprocess=$this->session->userdata('process');
+				     $count_array=count(array_intersect($extprocess,$process));
+				if(in_array($for,$stage) AND $count_array!=0){
 					$option .= "<option value='" . $value->lead_stage_name . "'>" . $value->lead_stage_name . "</option>";
+					}
 				}
 			}
 		}

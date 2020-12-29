@@ -3522,10 +3522,7 @@ if (document.getElementById('agg_same').checked)
                         <label><?php echo display('lead_description') ?></label>                  
                         <select class="form-control" name="lead_description" id="lead_description1">
                            <option value=""><?=display('lead')?> Description</option>
-                          <?php foreach($all_description_lists as $discription){ ?>
-                                   
-                                   <option value="<?php echo $discription->id; ?>"><?php echo $discription->description; ?></option>
-                                   <?php } ?>                                             
+                                                                   
                         </select>
                      </div>
                      <div class="form-group col-sm-12">  

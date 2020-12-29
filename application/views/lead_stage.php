@@ -77,13 +77,16 @@
                             <th><?php echo display('serial') ?></th>
                             <th>Lead Stages</th>
                             <th>Process</th>
+                            <th>Stages</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         
                             <?php $sl = 1; ?>
-                            <?php foreach ($lead_stages as $stage) {  ?>
+                            <?php foreach ($lead_stages as $stage) {
+                                         $stages = explode(',', $stage->stage_for);
+                                         ?>
                                 <tr class="<?php echo ($sl & 1)?"odd gradeX":"even gradeC" ?> clickable-row" style="cursor:pointer;"  >
                                     <!--<td ><input type='checkbox' name='user_status[]' class="checkbox" value='<?php echo $stage->stg_id;?>'>&nbsp; <?php echo $sl;?></td>-->
                                     <td><?php echo $sl;?></td>
@@ -97,6 +100,12 @@
                                             echo "NA";
                                         }
                                         ?>                                        
+                                    </td>
+                                    <td>
+                                    <?php if (in_array('4', $stages)) {  echo 'Support'.','; }?>
+                                                 <?php if (in_array('1', $stages)) {  echo display("enquiry").','; }?>
+                                                     <?php  if (in_array('2', $stages)) { echo display("lead").','; } ?>
+                                                     <?php  if (in_array('3', $stages)) { echo display("client").','; } ?></option>                                       
                                     </td>
                                      <td class="center">
                                         <a href="<?php //echo base_url("user/edit/$score->use_id") ?>" class="btn btn-xs  btn-primary" data-toggle="modal" data-target="#Editstage<?php echo $stage->stg_id;?>"><i class="fa fa-edit"></i></a> 
