@@ -8,7 +8,7 @@ class Target extends CI_controller
 	}
 
 	public function index()
-	{
+	{	$this->load->model('common_model');
 		//$this->session->process = array(197);
 		$this->load->model('location_model');
 		$data['title'] = display('all_goals');
@@ -22,7 +22,7 @@ class Target extends CI_controller
 		}
 		$data['roles'] = json_encode($r);
 
-		$users  = $this->db->where('companey_id',$this->session->companey_id)->get('tbl_admin')->result();
+		$users  = $this->common_model->getUsers($this->session->user_id,$this->session->companey_id);
 		
 		$u = array();
 		foreach ($users as $user)
@@ -104,39 +104,61 @@ class Target extends CI_controller
 
 	public function load_goal_table()
 	{
-		$date_from = $this->input->post('date_from')??0;
-		$date_to = $this->input->post('date_to')??0;
+		$start_date_from = $this->input->post('start_date_from')??0;
+		$start_date_to = $this->input->post('start_date_to')??0;
+
+		$end_date_from = $this->input->post('end_date_from')??0;
+		$end_date_to = $this->input->post('end_date_to')??0;
+
 		$role  = $this->input->post('role_for')??0;
-		$user = $this->input->post('user_for')??0;
+		$user = $this->input->post('user_for')==''?0:$this->input->post('user_for');
 		$metric_type = $this->input->post('metric_type')??0;
+		$fetch_type = $this->input->post('fetch_type')?2:1;
+
+		$graph = $this->input->post('graph')??0;
+
 		$where =array();
-		if($date_from)
+		if($start_date_from)
 		{
-			$where[] = " (goals.date_from >= '".$date_from."')";
+			$where[] = " (goals.date_from >= '".$start_date_from."')";
  		}
 
- 		if($date_to)
+ 		if($start_date_to)
  		{
- 			$where[] = " goals.date_to <= '".$date_to."'";
+ 			$where[] = " (goals.date_from <= '".$start_date_to."')";
+ 		}
+
+ 		if($end_date_from)
+		{
+			$where[] = " (goals.date_to >= '".$end_date_from."')";
+ 		}
+
+ 		if($end_date_to)
+ 		{
+ 			$where[] = " (goals.date_to <= '".$end_date_to."')";
  		}
 
  		if($role)
  		{
  			$where[] = " goals.team_id = '".$role."'";
  		}
- 		if($user)
- 		{
- 			$where[] = "( FIND_IN_SET(".$user.",goals.goal_for) > 0 )";
- 		}
+ 		
  		if($metric_type)
  		{
  			$where[] = " goals.metric_type = '".$metric_type."'";
  		}
  		//print_r($where); 
-		$all_goals = $this->Target_Model->getGoals(implode(' AND ',$where));
+		$all_goals = $this->Target_Model->getGoals(implode(' AND ',$where),$fetch_type,$user);
+		//print_r($all_goals); exit();
 		// echo count($all_goals);
 		// echo $this->db->last_query(); exit();
-			echo'<table class="table table-bordered table-striped table-hover">
+		$gval =array();
+		if($graph=='1')
+		{
+			$gval =$this->target_graph(implode(' AND ',$where),$fetch_type,$user);
+		}
+		$code = '';
+			$code.='<table class="table table-bordered table-striped table-hover">
 				<thead>
 					<tr>
 						<th rowspan="2">#</th>
@@ -147,6 +169,7 @@ class Target extends CI_controller
 						<th rowspan="2" align="center">Status</th>
 						<th rowspan="2">Created By</th>
 						<th rowspan="2">Created At</th>
+						<th rowspan="2">Action</th>
 					</tr>
 					<tr><th>T</th><th>F</th><th>A</th></tr>
 				</thead>
@@ -158,21 +181,39 @@ class Target extends CI_controller
 					{
 						$target = $goal->target_value;
 
+						$for_list = $this->get_userdata($goal->goal_for);
+						$html = "<ul class='list-group'>";
+						foreach ($for_list as $r)
+						{
+							$html.="
+							<li class='list-group-itme'>".$r->s_display_name."</li>
+							";
+						}
+						$html.="</ul>";
+
 						if($goal->goal_type=='team'){
 
-							$goal_for_list = '<center>'.$goal->user_role.'</center>';
+							$goal_for_list = '<span data-toggle="tooltip" data-html="true" title="'.$html.'">
+							<center>'.$goal->user_role.'</center>
+							</span>';
 						}
 						else
 						{
-							$goal_for_list = 'Custom Users';
+							$goal_for_list = '<span data-toggle="tooltip" data-html="true" title="'.$html.'">
+								<center>Custom Users</center>
+								</span>';
 						}
 
 						if($goal->goal_type=='user')
 							$target *=count(explode(',', $goal->goal_for));
 						$ci = &get_instance();
 						$ci->load->model('Target_Model');
-						$Forecast = $ci->Target_Model->getForecast($goal->goal_id,$goal->goal_for);
-						$Achieved = $ci->Target_Model->getAchieved($goal->goal_id,$goal->goal_for);
+						//echo $fetch_type.' '.$user.'|201';exit();
+						$Forecast = $ci->Target_Model->getForecast($goal->goal_id,$fetch_type,$user);
+						$Achieved = $ci->Target_Model->getAchieved($goal->goal_id,$fetch_type,$user);
+
+						//print_r($Forecast); exit();
+
 						$forecast_value =(int)($goal->metric_type=='deal'?$Forecast->p_amnt:$Forecast->num_value);
 						$achieved_value =(int)($goal->metric_type=='deal'?$Achieved->p_amnt:$Achieved->num_value);
 						$percent=0;
@@ -185,12 +226,26 @@ class Target extends CI_controller
 							else
 								$barcolor='success';
 
-						echo'<tr>
+
+						$prd = array();
+		
+						if(!empty($goal->products))
+						{
+							foreach (explode(',',$goal->products) as $p)
+							{
+								$sub = $this->db->where('id',$p)->get('tbl_product_country')->row();
+								$prd[] = '<label class="label label-success">'.$sub->country_name.'</label>';
+							}
+						}
+
+						$code.='<tr>
 							<td>'.$goal->goal_id.'</td>
 							<td>'.ucwords($goal->goal_period).' <br>
-							<a href="'.base_url('target/goal_details/'.$goal->goal_id).'"><b>'.date('d/m/Y',strtotime($goal->date_from)).' - '.date('d/m/Y',strtotime($goal->date_to)).'</b></a></td>
+							<a href="'.base_url('target/goal_details/'.$goal->goal_id).'"><b><big>'.date('d/m/Y',strtotime($goal->date_from)).' - '.date('d/m/Y',strtotime($goal->date_to)).'</big></b></a><br>
+							'.implode(' ',$prd).'
+							</td>
 							<td>'.($goal->metric_type=='deal'?'Deal value':'Won deals').'</td>
-							<td>'.$goal_for_list.'</td>
+							<td style="cursor:pointer;">'.$goal_for_list.'</td>
 							<td>'.$target.'</td>
 							<td>'.$forecast_value.'</td>
 							<td>'.$achieved_value.'</td>
@@ -205,12 +260,26 @@ class Target extends CI_controller
 								</td>
 							<td>'.$goal->added_by.'</td>
 							<td>'.(date('d-M-Y',strtotime($goal->created_at)).'<br>'.date('H:i A',strtotime($goal->created_at))).'</td>
+							<td>
+							<div class="btn-group">
+							';
+							if(user_access('263'))
+							{
+							$code.='<a href="'.base_url('target/edit_goal/'.$goal->goal_id).'"><span class="btn btn-xs btn-primary"><i class="fa fa-edit"></i> </span></a>';
+							}
+							if(user_access('264'))
+							{
+							$code.='<a onclick="return confirm(\'Are you sure?\')" href="'.base_url('target/delete_goal/'.$goal->goal_id).'"><span class="btn btn-xs btn-danger"><i class="fa fa-trash"></i> </span></a>';
+							}
+							$code.='</td>
 							</tr>';
 					}
 					
 				}	
-		echo'</tbody>
+		$code.='</tbody>
 		</table>';
+
+		echo json_encode(array('code'=>$code,'graph'=>$graph,'gval'=>$gval));
 	}
 
 	public function divide_target()
@@ -262,9 +331,195 @@ class Target extends CI_controller
 		$this->load->model('Target_Model');
 
 		$data['title'] = 'Goal Details';
-		$data['goal'] = $this->Target_Model->getGoals(array('goals.goal_id'=>$goal_id))[0];
+
+		
+	
+		$goal  = $data['goal'] = $this->Target_Model->getGoals(array('goals.goal_id'=>$goal_id))[0];
+		
+		$prd = array();
+		
+		if(!empty($goal->products))
+		{
+			foreach (explode(',',$goal->products) as $p)
+			{
+				$sub = $this->db->where('id',$p)->get('tbl_product_country')->row();
+				$prd[] = $sub->country_name;
+			}
+		}
+		$data['products'] = $prd;
 		$data['content'] = $this->load->view('target/goal_details',$data,true);
 		$this->load->view('layout/main_wrapper',$data);
+	}
+
+	public function get_userdata($list)
+	{
+		$this->load->model('User_model');
+		$data =array();
+		foreach (explode(',', $list) as $user_id)
+		{
+			$data[] = $this->User_model->get_user_by_id($user_id);
+		}
+		return $data;
+	}
+
+
+	public function edit_goal($goal_id)
+	{
+		if(user_role('263')){
+
+		}
+		$this->load->model(array('location_model'));
+
+		$data['title'] = display('edit_goal');
+
+		$roles = $this->db->where('comp_id',$this->session->companey_id)->get('tbl_user_role')->result();
+		$r = array();
+		foreach ($roles as $role)
+		{
+			$r[] =array('id'=>$role->use_id,
+						'role_name'=>$role->user_role);
+		}
+		$data['roles'] = json_encode($r);
+
+		$users  = $this->db->where('companey_id',$this->session->companey_id)->get('tbl_admin')->result();
+		
+		$u = array();
+		foreach ($users as $user)
+		{
+			$u[] =array('id'=>$user->pk_i_admin_id,
+						'user_name'=>$user->s_display_name);
+		}
+		$data['users'] = json_encode($u);
+
+		$data['product_list'] = $this->location_model->productcountry();
+		
+		$data['goal'] = $this->Target_Model->getGoals(array('goals.goal_id'=>$goal_id))[0];
+
+		$data['content'] = $this->load->view('target/edit_goal',$data,true);
+		$this->load->view('layout/main_wrapper',$data);
+	}
+
+	public function update_goal()
+	{
+		if(user_role('263')){}
+		$this->load->model('Target_Model');
+
+		if($this->input->post())
+		{	
+			$goal_id = $this->input->post('goal_id');
+
+			$target_list = implode(',', $this->input->post('target_list[]'));
+
+			$prod = $this->input->post('products')??array();
+			$data = array('goal_period'=>$this->input->post('goal_period'),
+							'time_range' =>$this->input->post('time_range'),
+							'date_from' =>$this->input->post('period_from'),
+							'date_to' =>$this->input->post('period_to'),
+							'goal_type' =>$this->input->post('goal_type'),
+							'goal_for' =>$target_list,
+							'metric_type' =>$this->input->post('metric_type'),
+							'target_value' =>$this->input->post('target_value'),
+							'products' => implode(',',$prod),
+						);
+			
+			if($data['goal_type']=='team')
+			{	
+				$data['custom_target'] = json_encode($this->input->post('user_target_value'));
+				$keys = array();
+				foreach ($this->input->post('user_target_value') as $key => $value)
+				{
+					if($value>0)
+						$keys[] = $key;
+				}
+				//exit();
+				$data['team_id'] =$target_list;
+				$data['goal_for'] = implode(',', $keys);
+			}
+
+			$this->Target_Model->update_goal(array('goal_id'=>$goal_id),$data);
+			$this->session->set_flashdata('SUCCESSMSG','Goal Successfully Updated.');
+			redirect(base_url('Target/index'));
+		}	
+	}
+	public function delete_goal($gaol_id)
+	{
+		if(user_role('264')){}
+		$this->db->where('goal_id',$goal_id)->delete('tbl_goals');
+		$this->session->set_flashdata('message','Deleted Successfully');
+		redirect(site_url('target'));
+	}
+	public function graphs($chk=0)
+	{
+		$this->load->model('common_model');
+		// print_r($this->common_model->get_categories($chk));
+
+		// exit();
+		$data['title'] = 'Target & Forecasting';
+
+		$users  =$this->common_model->getUsers($this->session->user_id,$this->session->companey_id);
+		
+		$u = array();
+		foreach ($users as $user)
+		{
+			$u[] =array('id'=>$user->pk_i_admin_id,
+						'user_name'=>$user->s_display_name);
+		}
+		$data['users'] = json_encode($u);
+		$data['content'] = $this->load->view('target/target_graphs',$data,true);
+		$this->load->view('layout/main_wrapper',$data);
+	}
+
+	public function target_graph($where,$fetch_type,$user)
+	{
+		// $fetch_type = $this->input->post('fetch_type');
+		// $user = $this->input->post('user_for')==''?0:$this->input->post('user_for');
+		//echo $user; exit();
+		$all_goals = $this->Target_Model->getGoals($where,$fetch_type,$user);
+		//print_r($all_goals); exit();
+		$total_target['deal'] = 0;
+		$total_forecast['deal'] = 0;
+		$total_achieved['deal'] = 0;
+
+		$total_target['won'] = 0;
+		$total_forecast['won'] = 0;
+		$total_achieved['won'] = 0;
+		
+		foreach ($all_goals as $goal)
+		{
+			$count_goals[] = $goal->goal_id;
+ 			$target = $goal->target_value;
+
+			if($goal->goal_type=='user')
+				$target *=count(explode(',', $goal->goal_for));
+			$ci = &get_instance();
+			$ci->load->model('Target_Model');
+			
+			$Forecast = $ci->Target_Model->getForecast($goal->goal_id,$fetch_type,$user);
+			$Achieved = $ci->Target_Model->getAchieved($goal->goal_id,$fetch_type,$user);
+
+			$forecast_value =(int)($goal->metric_type=='deal'?$Forecast->p_amnt:$Forecast->num_value);
+			$achieved_value =(int)($goal->metric_type=='deal'?$Achieved->p_amnt:$Achieved->num_value);
+
+			
+				$total_target[$goal->metric_type] 	+= $target;
+				$total_forecast[$goal->metric_type] += $forecast_value;
+				$total_achieved[$goal->metric_type] += $achieved_value; 
+	
+		}
+
+		$final = array('deal'=>array('target'=>$total_target['deal'],
+										'forecast'=>$total_forecast['deal'],
+										'achieved'=>$total_achieved['deal'],
+									),
+						'won'=>array('target'=>$total_target['won'],
+										'forecast'=>$total_forecast['won'],
+										'achieved'=>$total_achieved['won'],
+									),
+					
+					);
+
+		return $final;
+
 	}
 
 }

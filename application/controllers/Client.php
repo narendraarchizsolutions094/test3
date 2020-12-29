@@ -1719,6 +1719,8 @@ public function view_editable_aggrement()
 
     public function common_query_short_dashboard_deals()
     {
+        $all_reporting_ids    =   $this->common_model->get_categories($this->session->user_id);
+
         $table = 'commercial_info';
         // Set orderable column fields
         $column_order = array('info.id','enq.name','info.branch_type','info.booking_type','info.business_type','book.branch_name','deliver.branch_name','info.rate','info.discount','info.insurance','info.paymode','info.potential_tonnage','info.potential_amount','info.expected_tonnage','info.expected_amount','info.vechicle_type','info.carrying_capacity','info.invoice_value','info.creation_date','info.updation_date','info.status');
@@ -1741,7 +1743,9 @@ public function view_editable_aggrement()
         $this->db->where("info.comp_id",$this->session->companey_id);
 
         $where='';
-        $and =0;
+        $where .= "( enq.created_by IN (".implode(',', $all_reporting_ids).')';
+        $where .= " OR enq.aasign_to IN (".implode(',', $all_reporting_ids).'))'; 
+        $and =1;
 
         if(!empty($_POST['date_from']) && !empty($_POST['date_to']))
         {   

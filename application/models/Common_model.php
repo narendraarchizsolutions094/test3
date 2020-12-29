@@ -9,7 +9,7 @@ class Common_model extends CI_Model {
     private $list = array();
 
     function fetch_recursive($tree){
-        
+
         foreach($tree as $k => $v){
             
             $this->list[] = $v->pk_i_admin_id;
@@ -23,7 +23,7 @@ class Common_model extends CI_Model {
     }
     
     public function get_categories($user_id){   
-
+        $this->list = array();
         $categories = array();
         $this->db->select('pk_i_admin_id');
         $this->db->from('tbl_admin');
@@ -113,5 +113,14 @@ class Common_model extends CI_Model {
         $this->db->where('sb_id',$id);
         $row = $this->db->get('tbl_product')->row_array();
         return $row['process_name']??false;
+    }
+
+    public function getUsers($main_uid,$comp_id)
+    {
+        $all_ids = $this->get_categories($main_uid);
+
+        $this->db->where('pk_i_admin_id IN ('.implode(',',$all_ids).')');
+        $res = $this->db->where('companey_id',$comp_id)->get('tbl_admin')->result();
+        return $res;
     }
 }

@@ -1786,16 +1786,16 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                                 <a href="<?php echo base_url("target") ?>"><?=display('all_goals')?></a>
                             </li>
 
-                            <li class="<?php echo (($segment2 == "target_view") ? "active" : null) ?>"
-                                style="<?php if(in_array(250,$module) || in_array(251,$module) || in_array(252,$module) || in_array(253,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
-                                <a href="<?php echo base_url("forecasting/target_view") ?>">View Target</a>
-                            </li>
+                        <!-- <li class="<?php echo (($segment2 == "target_view") ? "active" : null) ?>"
+                                style="<?php if(in_array(261,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
+                                <a href="<?php echo base_url("target/graphs") ?>">View Targets</a>
+                            </li>  -->
 
 
-                            <li class="<?php echo (($segment2 == "user_target") ? "active" : null) ?>"
+                           <!--  <li class="<?php echo (($segment2 == "user_target") ? "active" : null) ?>"
                                 style="<?php if(in_array(260,$module) || in_array(261,$module) || in_array(262,$module) || in_array(263,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
                                 <a href="<?php echo base_url("forecasting/user_target") ?>">User Forecasting</a>
-                            </li>
+                            </li> -->
 
                         </ul>
                     </li>
