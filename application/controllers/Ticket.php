@@ -2284,7 +2284,7 @@ class Ticket extends CI_Controller
 				$where .= " tck.assign_to IN (".implode(',', $all_reporting_ids).'))';
 			}
 			if(!empty($this->session->process)){
-				$this->db->where_in('tbl_ticket.process_id',$this->session->process);
+				$this->db->where_in('tck.process_id',$this->session->process);
 			}
 			$this->db->where($where);
 			
