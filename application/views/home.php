@@ -328,7 +328,7 @@ if (!empty($enquiry_separation)) {
                             <h3 class="tx-uppercase tx-11 tx-spacing-1 tx-color-02 tx-semibold mg-b-8"
                                 style="font-size:14px"><?php echo display("conversion_probability"); ?></h3>
                         </div>
-                       <div id="chartdiv2"></div>
+                       <div id="chartdiv2" style="margin-top:100px;"></div>
                     </div>
                 </div>
 
