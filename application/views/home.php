@@ -651,13 +651,7 @@ $sum=$this->dashboard_model->dataLead($key);
             function getEventTarget(e) {
                 e = e || window.event;
                 return e.target || e.srcElement;
-            }
-
-            var ul = document.getElementById('droupdown-value');
-            ul.onclick = function(event) {
-                var target = getEventTarget(event);
-                document.getElementById("selectedcountry").innerHTML = target.innerText;
-            };
+            }         
 
             var My_ul = document.getElementById('selecteddashboard');
             My_ul.onclick = function(event) {
