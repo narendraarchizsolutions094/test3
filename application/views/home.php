@@ -1316,7 +1316,7 @@ $sum=$this->dashboard_model->dataLead($key);
                             var chart = am4core.create("chartdiv2", am4charts.PieChart);
 
                             // Add data
-                            chart.data = res;
+                            chart.data = res.data;
 
                             // Add and configure Series
                             var pieSeries = chart.series.push(new am4charts.PieSeries());
