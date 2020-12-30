@@ -2921,6 +2921,12 @@ $cpny_id=$this->session->companey_id;
     	$where = "( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
     	$where .= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';
         $where.=" AND enquiry.comp_id=$cpny_id";
+        
+        $arr = $this->session->process;           
+        if(is_array($arr)){
+            $where.=" AND enquiry.product_id IN (".implode(',', $arr).')';
+        }          
+
 
         $enquiry = $lead = $client = $enq_ct = $lead_ct = $client_ct = $enq_ut = $lead_ut = $client_ut = $enq_drp = $lead_drp = $client_drp = $enq_active = $lead_active = $client_active = $enq_assign = $lead_assign = $client_assign = 0;
 
@@ -3050,6 +3056,11 @@ $cpny_id=$this->session->companey_id;
     	$where = "( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
     	$where .= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';
         $where.=" AND enquiry.comp_id=$cpny_id";
+        $arr = $this->session->process;           
+        if(is_array($arr)){
+            $where.=" AND enquiry.product_id IN (".implode(',', $arr).')';
+        }          
+
 
         $enquiry = $lead = $client = $enq_ct = $lead_ct = $client_ct = $enq_ut = $lead_ut = $client_ut = $enq_drp = $lead_drp = $client_drp = $enq_active = $lead_active = $client_active = $enq_assign = $lead_assign = $client_assign = 0;
 
@@ -3247,6 +3258,10 @@ $cpny_id=$this->session->companey_id;
     	$where = "( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
     	$where .= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';
         $where.=" AND enquiry.comp_id=$cpny_id";
+        $arr = $this->session->process;           
+        if(is_array($arr)){
+            $where.=" AND enquiry.product_id IN (".implode(',', $arr).')';
+        }
         $ejan = $ljan = $cjan = $efeb = $lfeb = $cfeb = $emar = $lmar = $cmar = $eapr = $lapr = $capr = $emay = $lmay = $cmay = $ejun = $ljun = $cjun = $ejuly = $ljuly = $cjuly = $eaug = $laug = $caug = $esep = $lsep = $csep = $eoct = $loct = $coct = $enov = $lnov = $cnov = $edec = $ldec = $cdec = 0;
    if(user_access(60)) {
 
@@ -3539,28 +3554,30 @@ $cpny_id=$this->session->companey_id;
     	$where = "( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
     	$where .= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';
         $where.=" AND enquiry.comp_id=$cpny_id";
-
+        $arr = $this->session->process;           
+        if(is_array($arr)){
+            $where.=" AND enquiry.product_id IN (".implode(',', $arr).')';
+        }
         $hot = $warm = $cold = 0; 
     	$query7 = $this->db->query("SELECT count(enquiry_id) counter,enquiry.lead_score FROM `enquiry` WHERE $where GROUP BY enquiry.lead_score");
 
         $result7 = $query7->result();
+        $res = array();
         foreach($result7 as $r)
         {
-            if($r->lead_score == 1)
-            {
-                $hot = (!empty($r->counter)) ? $r->counter : 0;
+            $this->db->select('score_name');
+            $this->db->where('comp_id',$cpny_id);
+            $this->db->where('sc_id',$r->lead_score);
+            $row    =   $this->db->get('lead_score')->row_array();
+            
+            if(!empty($row['score_name'])){
+                $res[] = array(
+                    'country' => (!empty($row['score_name'])) ? $row['score_name'] : 'NA',
+                    'litres' => (!empty($r->counter)) ? $r->counter : 0,
+                );
             }
-            if($r->lead_score == 2)
-            {
-                $warm = (!empty($r->counter)) ? $r->counter : 0;
-            }
-            if($r->lead_score == 3)
-            {
-                $cold = (!empty($r->counter)) ? $r->counter : 0;
-            }
-        }
-        $dataAry = array('hot'=>$hot,'warm'=>$warm,'cold'=>$cold);
-        return $dataAry;
+        }        
+        return $res;
     }
    
     public function processWiseChart($userid,$companyid,$process)
@@ -3623,6 +3640,10 @@ $cpny_id=$this->session->companey_id;
     	$where = "( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
     	$where .= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';
         $where.=" AND enquiry.comp_id=$cpny_id";
+        $arr = $this->session->process;           
+        if(is_array($arr)){
+            $where.=" AND enquiry.product_id IN (".implode(',', $arr).')';
+        } 
 
     	$query = $this->db->query("SELECT count(enquiry.enquiry_id)counter,enquiry.status FROM enquiry WHERE $where GROUP BY enquiry.status");
         $result = $query->result();
