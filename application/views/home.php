@@ -243,7 +243,7 @@
 
 if (!empty($enquiry_separation)) {
   $enquiry_separation = json_decode($enquiry_separation, true);
-      foreach ($enquiry_separation as $key => $value) {
+      foreach ($enquiry_separation as $key => $value) {   
         
               $ctitle = $enquiry_separation[$key]['title']; 
               $data_s = $this->enquiry_model->Dy_enquiryLeadClientCount($this->session->user_id,$this->session->companey_id,$key);
@@ -322,7 +322,7 @@ if (!empty($enquiry_separation)) {
                         <canvas id="bar-chart-grouped" width="800" height="450"></canvas>
                     </div><!-- card -->
                 </div>
-                <div class="col-lg-4 col-xl-5 mg-t-10">
+                <div class="col-lg-4 col-xl-4 mg-t-10">
                     <div class="card" style="height:100%;">
                         <div class="card-header pd-y-20 d-md-flex align-items-center">
                             <h3 class="tx-uppercase tx-11 tx-spacing-1 tx-color-02 tx-semibold mg-b-8"
@@ -331,7 +331,7 @@ if (!empty($enquiry_separation)) {
 
                         <style>
                         #chartdiv2 {
-                            width: 100%;
+                            width: 80%;
                             height: 400px;
                         }
                         </style>
