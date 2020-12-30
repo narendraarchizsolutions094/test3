@@ -479,11 +479,19 @@ class Target extends CI_controller
 		$total_target['deal'] = 0;
 		$total_forecast['deal'] = 0;
 		$total_achieved['deal'] = 0;
+		$total_info_count_forecast['deal'] = 0;
+		$total_enq_count_forecast['deal'] = 0;
+		$total_info_count_achieved['deal'] = 0;
+		$total_enq_count_achieved['deal'] = 0;
 
 		$total_target['won'] = 0;
 		$total_forecast['won'] = 0;
 		$total_achieved['won'] = 0;
-		
+		$total_info_count_forecast['won'] = 0;
+		$total_enq_count_forecast['won'] = 0;
+		$total_info_count_achieved['won'] = 0;
+		$total_enq_count_achieved['won'] = 0;
+
 		foreach ($all_goals as $goal)
 		{
 			$count_goals[] = $goal->goal_id;
@@ -500,20 +508,44 @@ class Target extends CI_controller
 			$forecast_value =(int)($goal->metric_type=='deal'?$Forecast->p_amnt:$Forecast->num_value);
 			$achieved_value =(int)($goal->metric_type=='deal'?$Achieved->p_amnt:$Achieved->num_value);
 
-			
+			//print_r($Forecast);exit();
 				$total_target[$goal->metric_type] 	+= $target;
 				$total_forecast[$goal->metric_type] += $forecast_value;
 				$total_achieved[$goal->metric_type] += $achieved_value; 
-	
+
+				$total_info_count_forecast[$goal->metric_type]+=$Forecast->info_count;
+				$total_enq_count_forecast[$goal->metric_type]+= $Forecast->enq_count;
+
+				$total_info_count_achieved[$goal->metric_type]+=$Achieved->info_count;
+				$total_enq_count_achieved[$goal->metric_type]+= $Achieved->enq_count;
+
 		}
 
 		$final = array('deal'=>array('target'=>$total_target['deal'],
-										'forecast'=>$total_forecast['deal'],
-										'achieved'=>$total_achieved['deal'],
+										'forecast'=>array(
+															'value'=>$total_forecast['deal'],
+															'info_count'=>$total_info_count_forecast['deal'],
+															'enq_count'=>$total_enq_count_forecast['deal'],
+													),
+										'achieved'=>array(
+													'value'=>$total_achieved['deal'],
+													'info_count'=>$total_info_count_achieved['deal'],
+													'enq_count'=>$total_enq_count_achieved['deal'],
+										),
+
 									),
 						'won'=>array('target'=>$total_target['won'],
-										'forecast'=>$total_forecast['won'],
-										'achieved'=>$total_achieved['won'],
+										'forecast'=>array(
+															'value'=>$total_forecast['won'],
+															'info_count'=>$total_info_count_forecast['won'],
+															'enq_count'=>$total_enq_count_forecast['won'],
+													),
+										'achieved'=>array(
+													'value'=>$total_achieved['won'],
+													'info_count'=>$total_info_count_achieved['won'],
+													'enq_count'=>$total_enq_count_achieved['won'],
+												),
+
 									),
 					
 					);

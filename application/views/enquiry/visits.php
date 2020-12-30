@@ -204,7 +204,23 @@ $(document).delegate('.visit-delete', 'click', function() {
 
 <form action="<?=base_url('enquiry/add_visit')?>" class="form-inner" enctype="multipart/form-data" method="post" accept-charset="utf-8" autocomplete="off">
 
-               <div class="form-group col-md-12">
+                <div class="form-group col-md-6">
+                    <label>Company</label>
+                    <select class="form-control" name="company" onchange="filter_related_to(this.value)">
+                      <option value="-1">Select</option>
+                      <?php
+                      if(!empty($company_list))
+                      {
+                        foreach ($company_list as $key =>  $row)
+                        {
+                          echo '<option value="'.$key.'">'.$row->company.'</option>';
+                        }
+                      }
+                      ?>
+                    </select>
+                </div>
+
+               <div class="form-group col-md-6">
                   <label>Related To</label>
                   <select class="form-control" name="enquiry_id">
                     <option value="">Select</option>
@@ -283,3 +299,29 @@ $(document).delegate('.visit-delete', 'click', function() {
       </div>
    </div>
 </div>   
+<script type="text/javascript">
+  var LIST = <?php echo !empty($company_list)? json_encode($company_list): '{}'?>;
+  var OLD_LIST  = <?=!empty($all_enquiry) ? json_encode($all_enquiry):'{}'?>;
+  function filter_related_to(v)
+  {
+      if(Object.keys(LIST).length>0 && v!='-1')
+      { 
+        var l = '';
+        var y = LIST[v];
+        var ids = y.enq_ids.split(',');
+        var names = y.enq_names.split(',');
+        $(ids).each(function(k,id){
+            l+="<option value='"+id+"'>"+names[k]+"</option>";
+        });
+        //alert(l);
+        $("select[name=enquiry_id]").html(l);
+      }
+      else
+      { var l = '';
+          $(OLD_LIST).each(function(k,v){
+            l+="<option value='"+v.enquiry_id+"'>"+v.name_prefix+" "+v.name+" "+v.lastname+"</option>";
+          });
+          $("select[name=enquiry_id]").html(l);
+      }
+  }
+</script>

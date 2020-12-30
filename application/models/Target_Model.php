@@ -112,9 +112,9 @@ class Target_Model extends CI_model
 		if(!empty($goal))
 		{	
 			if($goal->metric_type=='deal')
-				$this->db->select('sum(info.expected_amount) as e_amnt,sum(info.potential_amount) as p_amnt');
+				$this->db->select('sum(info.expected_amount) as e_amnt,sum(info.potential_amount) as p_amnt,COUNT(DISTINCT(info.id)) as info_count,GROUP_CONCAT(info.id) as info_ids,COUNT(DISTINCT(enquiry.enquiry_id)) as enq_count,GROUP_CONCAT(DISTINCT(enquiry.enquiry_id)) as enq_ids');
 			else
-				$this->db->select('count(id) as num_value');
+				$this->db->select('count(id) as num_value,COUNT(DISTINCT(info.id)) as info_count,GROUP_CONCAT(info.id) as info_ids,COUNT(DISTINCT(enquiry.enquiry_id)) as enq_count,GROUP_CONCAT(DISTINCT(enquiry.enquiry_id)) as enq_ids');
 
 			if(!empty($goal->products))
 				$this->db->where('enquiry.enquiry_source IN ('.$goal->products.')');
@@ -123,8 +123,11 @@ class Target_Model extends CI_model
 				->join('commercial_info info','info.enquiry_id = enquiry.enquiry_id and info.createdby IN ('.$goal->goal_for.') and info.status IN (0,1)','inner');
 			$this->db->where('enquiry.lead_expected_date BETWEEN "'.$goal->date_from.'" and "'.$goal->date_to.'"');	
 			//$this->db->where('enquiry.status=2');
-			return $this->db->get()->row();
-			//echo $this->db->last_query(); exit();
+
+			 $res =$this->db->get()->row();
+			//if($goal_id!=38)
+			 return $res;
+			echo $this->db->last_query(); exit();
 		}
 		else
 			return false;
@@ -136,9 +139,9 @@ class Target_Model extends CI_model
 		if(!empty($goal))
 		{
 			if($goal->metric_type=='deal')
-				$this->db->select('sum(info.expected_amount) as e_amnt,sum(info.potential_amount) as p_amnt');
+				$this->db->select('sum(info.expected_amount) as e_amnt,sum(info.potential_amount) as p_amnt,COUNT(DISTINCT(info.id)) as info_count,GROUP_CONCAT(info.id) as info_ids,COUNT(DISTINCT(enquiry.enquiry_id)) as enq_count,GROUP_CONCAT(DISTINCT(enquiry.enquiry_id)) as enq_ids');
 			else
-				$this->db->select('count(id) as num_value');
+				$this->db->select('count(id) as num_value,COUNT(DISTINCT(info.id)) as info_count,GROUP_CONCAT(info.id) as info_ids,COUNT(DISTINCT(enquiry.enquiry_id)) as enq_count,GROUP_CONCAT(DISTINCT(enquiry.enquiry_id)) as enq_ids');
 
 			
 			if(!empty($goal->products))
@@ -148,8 +151,10 @@ class Target_Model extends CI_model
 				->join('commercial_info info','info.enquiry_id=enquiry.enquiry_id and info.createdby IN ('.$goal->goal_for.') and info.status=1	','inner');
 			$this->db->where('enquiry.client_created_date BETWEEN "'.$goal->date_from.'" and "'.$goal->date_to.'" ');
 			//$this->db->where('enquiry.status=3');
-			return $this->db->get()->row();
-				//echo $this->db->last_query(); exit();
+			$res = $this->db->get()->row();
+			//if($goal_id!=38)
+			return  $res;
+				echo $this->db->last_query(); exit();
 		}
 		else
 			return false;
@@ -203,8 +208,8 @@ class Target_Model extends CI_model
 	public function update_goal($where,$data)
 	{
 		$this->db->where($where)->update('tbl_goals',$data);
-		echo $this->db->last_query();
-		echo $this->db->affected_rows(); exit();
+		// echo $this->db->last_query();
+		// echo $this->db->affected_rows(); exit();
 	}
 
 }

@@ -156,13 +156,25 @@ function deleteContact(t)
          <div class="modal-body">
             <div class="row" >
                <?php echo form_open_multipart('client/create_newcontact/','class="form-inner"') ?> 
-<!--                <input type="hidden" name="enquiry_id" value="<?=$details->enquiry_id?>">
-               <input type="hidden" name="enquiry_code" value="<?=$details->Enquery_id?>"> -->
+                <div class="form-group col-md-6">
+                    <label>Company</label>
+                    <select class="form-control" name="company" onchange="filter_related_to(this.value)">
+                      <option value="-1">Select</option>
+                      <?php
+                      if(!empty($company_list))
+                      {
+                        foreach ($company_list as $key =>  $row)
+                        {
+                          echo '<option value="'.$key.'">'.$row->company.'</option>';
+                        }
+                      }
+                      ?>
+                    </select>
+                </div>
 
-               <div class="form-group col-md-12">
+               <div class="form-group col-md-6">
                   <label>Related To</label>
                   <select class="form-control" name="enquiry_id">
-                  	<option value="">Select</option>
                   	<?php
                  	if(!empty($enquiry_list))
                  	{
@@ -210,3 +222,29 @@ function deleteContact(t)
       </div>
    </div>
 </div>   
+<script type="text/javascript">
+  var LIST = <?php echo !empty($company_list)? json_encode($company_list): '{}'?>;
+  var OLD_LIST  = <?=!empty($enquiry_list) ? json_encode($enquiry_list):'{}'?>;
+  function filter_related_to(v)
+  {
+      if(Object.keys(LIST).length>0 && v!='-1')
+      { 
+        var l = '';
+        var y = LIST[v];
+        var ids = y.enq_ids.split(',');
+        var names = y.enq_names.split(',');
+        $(ids).each(function(k,id){
+            l+="<option value='"+id+"'>"+names[k]+"</option>";
+        });
+        //alert(l);
+        $("select[name=enquiry_id]").html(l);
+      }
+      else
+      { var l = '';
+          $(OLD_LIST).each(function(k,v){
+            l+="<option value='"+v.enquiry_id+"'>"+v.name_prefix+" "+v.name+" "+v.lastname+"</option>";
+          });
+          $("select[name=enquiry_id]").html(l);
+      }
+  }
+</script>

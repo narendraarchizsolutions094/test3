@@ -1281,7 +1281,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
 
                   </li>  -->
                     <?php
-          if(user_access('1010') || user_access('1011') || user_access('1012')){ ?>
+                    if(user_access('1010') || user_access('1011') || user_access('1012')){ ?>
                     <li class="<?=($segment2=='contacts')?'active':''?>">
                         <a href="<?=base_url('client/contacts')?>">
                             <i class="fa fa-address-book"
@@ -1290,8 +1290,22 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                         </a>
                     </li>
                     <?php
-          }
-          ?>
+                    }
+
+                    if(user_access('1060'))
+                    {
+                    ?>
+
+                     <li class="<?=($segment2=='company_list')?'active':''?>">
+                        <a href="<?=base_url('client/company_list')?>">
+                            <i class="fa fa-building"
+                                style="color:#fff;font-size:20px;background:#cb6161;padding:7px;border-radius:4px;width:30px;"></i>
+                            <?=display('comany_list')?>
+                        </a>
+                    </li>
+                    <?php
+                    }
+                    ?>
 
                     <li class="treeview"
                         style="<?php if(in_array(440,$module) || in_array(441,$module) || in_array(442,$module) || in_array(443,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
