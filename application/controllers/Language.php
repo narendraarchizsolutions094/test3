@@ -143,7 +143,7 @@ class Language extends CI_Controller {
 				
 				
 				
-				if($phrs->comp_id == $cmpno and $phrs->comp_id > 0){
+				if(!empty($phrs->comp_id) && ($phrs->comp_id == $cmpno and $phrs->comp_id > 0)){
 					
 					$temparr[$phrs->phrase] = $phrs;
 					$newphrsarr[$phrs->phrase] =$phrs;
