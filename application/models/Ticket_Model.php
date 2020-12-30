@@ -254,7 +254,7 @@ class Ticket_Model extends CI_Model
 		if ($where)
 			$this->db->where($where);
 
-		$this->db->where('comp_id',$this->session->companey_id);
+		$this->db->where('company_id',$this->session->companey_id);
 		return $this->db->get('tbl_ticket_status');
 	}
 
