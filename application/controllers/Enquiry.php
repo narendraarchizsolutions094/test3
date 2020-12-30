@@ -2806,6 +2806,10 @@ Array
     {
         $compid = $this->session->userdata('companey_id');
         $data['title'] = display('information');
+        if(empty($enquiry_id)){
+            $this->session->set_flashdata('message', 'User Profile not Found');
+            redirect('dashboard/user_profile');
+        }
         if (!empty($_POST)) {
             $name = $this->input->post('enquirername');
             $email = $this->input->post('email');

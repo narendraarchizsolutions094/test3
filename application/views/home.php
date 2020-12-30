@@ -418,9 +418,11 @@ if (!empty($enquiry_separation)) {
                   <!--<h4 class="timeline-title">Average</h4>-->
                  
                   <p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>&nbsp;
-                  <?php $leadTime=$leadSum->row()->time;
+                  <?php
+                   $leadTime=$leadSum->row()->time;
                     if ($leadTime!=0) {
-                echo  round(($leadTime/$leadCount),2).' Minutes';}else{echo 'N/A';} ?> 
+                echo  round(($leadTime/$leadCount),2).' Minutes';}else{echo 'N/A';
+                } ?> 
                   </small></p>
                 </div>
               </div>
