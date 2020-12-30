@@ -3570,7 +3570,7 @@ $cpny_id=$this->session->companey_id;
             $this->db->where('sc_id',$r->lead_score);
             $row    =   $this->db->get('lead_score')->row_array();
             $res[] = array(
-                    'country' => (!empty($row['score_name'])) ? $r['score_name'] : 'NA',
+                    'country' => (!empty($row['score_name'])) ? $row['score_name'] : 'NA',
                     'litres' => (!empty($r->counter)) ? $r->counter : 0,
                 );
         }        
