@@ -328,6 +328,8 @@ if (!empty($enquiry_separation)) {
                     <hr style="border: 1px solid #3a95e4 !important">
                 </div>
                 <div class='row'>
+                  <div class="col-lg-2 col-xl-2 ">
+                  </div>
                   <div class="col-lg-4 col-xl-4 mg-t-10">
                       <div class="card" style="height:100%;">
                           <div class="card-header pd-y-20 d-md-flex align-items-center">
