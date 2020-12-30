@@ -1305,7 +1305,7 @@ $sum=$this->dashboard_model->dataLead($key);
                     dataType: "json",
                     processData: false,
                     contentType: false,
-                    success: function(data) {
+                    success: function(res) {
                         am4core.ready(function() {
 
                             // Themes begin
@@ -1316,16 +1316,7 @@ $sum=$this->dashboard_model->dataLead($key);
                             var chart = am4core.create("chartdiv2", am4charts.PieChart);
 
                             // Add data
-                            chart.data = [{
-                                "country": "<?php echo display("hot"); ?>",
-                                "litres": parseInt(data.data.hot),
-                            }, {
-                                "country": "<?php echo display("warm"); ?>",
-                                "litres": parseInt(data.data.warm),
-                            }, {
-                                "country": "<?php echo display("cold"); ?>",
-                                "litres": parseInt(data.data.cold),
-                            }];
+                            chart.data = res;
 
                             // Add and configure Series
                             var pieSeries = chart.series.push(new am4charts.PieSeries());

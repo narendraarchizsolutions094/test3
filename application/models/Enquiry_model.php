@@ -3562,23 +3562,19 @@ $cpny_id=$this->session->companey_id;
     	$query7 = $this->db->query("SELECT count(enquiry_id) counter,enquiry.lead_score FROM `enquiry` WHERE $where GROUP BY enquiry.lead_score");
 
         $result7 = $query7->result();
+        $res = array();
         foreach($result7 as $r)
         {
-            if($r->lead_score == 1)
-            {
-                $hot = (!empty($r->counter)) ? $r->counter : 0;
-            }
-            if($r->lead_score == 2)
-            {
-                $warm = (!empty($r->counter)) ? $r->counter : 0;
-            }
-            if($r->lead_score == 3)
-            {
-                $cold = (!empty($r->counter)) ? $r->counter : 0;
-            }
-        }
-        $dataAry = array('hot'=>$hot,'warm'=>$warm,'cold'=>$cold);
-        return $dataAry;
+            $this->db->select('score_name');
+            $this->db->where('comp_id',$cpny_id);
+            $this->db->where('sc_id',$r->lead_score);
+            $row    =   $this->db->get('lead_score')->row_array();
+            $res[] = array(
+                    'country' => (!empty($row->score_name)) ? $r->score_name : 'NA',
+                    'litres' => (!empty($r->counter)) ? $r->counter : 0,
+                );
+        }        
+        return $res;
     }
    
     public function processWiseChart($userid,$companyid,$process)
