@@ -331,7 +331,7 @@ if (!empty($enquiry_separation)) {
 
                         <style>
                         #chartdiv2 {
-                            width: 80%;
+                            width: 580px;
                             height: 400px;
                         }
                         </style>
