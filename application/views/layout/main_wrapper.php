@@ -1836,7 +1836,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                             {
                             ?>
                             <li class="<?php echo (($segment1 == "call_report") && $segment2=='index' ? "active" : null) ?>">
-                                <a href="<?=base_url("call_report/index") ?>">Ticket Report </a>
+                                <a href="<?=base_url("call_report/index") ?>">Telephony Report </a>
                             </li>
                             <?php
                             } 
