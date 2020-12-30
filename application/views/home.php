@@ -313,33 +313,36 @@ if (!empty($enquiry_separation)) {
                 <div class="col-lg-12 col-xl-12 mg-t-10">
                     <hr style="border: 1px solid #3a95e4 !important">
                 </div>
-                <div class="col-lg-8 col-xl-7 mg-t-10">
-                    <div class="card" style="height:100% !important;">
-                        <div class="card-header pd-y-20 d-md-flex align-items-center justify-content-between">
-                            <h3 class="tx-uppercase tx-11 tx-spacing-1 tx-color-02 tx-semibold mg-b-8"
-                                style="font-size:14px"><?php echo display("enquiries"); ?></h3>
-                        </div><!-- card-header -->
-                        <canvas id="bar-chart-grouped" width="800" height="450"></canvas>
-                    </div><!-- card -->
+                <div class='row'>
+                  <div class="col-lg-8 col-xl-7 mg-t-10">
+                      <div class="card" style="height:100% !important;">
+                          <div class="card-header pd-y-20 d-md-flex align-items-center justify-content-between">
+                              <h3 class="tx-uppercase tx-11 tx-spacing-1 tx-color-02 tx-semibold mg-b-8"
+                                  style="font-size:14px"><?php echo display("enquiries"); ?></h3>
+                          </div><!-- card-header -->
+                          <canvas id="bar-chart-grouped" width="800" height="450"></canvas>
+                      </div><!-- card -->
+                  </div>
                 </div>
-                <div class="col-lg-4 col-xl-4 mg-t-10">
-                    <div class="card" style="height:100%;">
-                        <div class="card-header pd-y-20 d-md-flex align-items-center">
-                            <h3 class="tx-uppercase tx-11 tx-spacing-1 tx-color-02 tx-semibold mg-b-8"
-                                style="font-size:14px"><?php echo display("conversion_probability"); ?></h3>
-                        </div>
-
-                        <style>
-                        #chartdiv2 {
-                            width: 580px;
-                            height: 400px;
-                        }
-                        </style>
-                        <div id="chartdiv2"></div>
-
-                    </div>
-
-
+                <div class="col-lg-12 col-xl-12 mg-t-10">
+                    <hr style="border: 1px solid #3a95e4 !important">
+                </div>
+                <div class='row'>
+                  <div class="col-lg-4 col-xl-4 mg-t-10">
+                      <div class="card" style="height:100%;">
+                          <div class="card-header pd-y-20 d-md-flex align-items-center">
+                              <h3 class="tx-uppercase tx-11 tx-spacing-1 tx-color-02 tx-semibold mg-b-8"
+                                  style="font-size:14px"><?php echo display("conversion_probability"); ?></h3>
+                          </div>
+                          <style>
+                          #chartdiv2 {
+                              width: 100%;
+                              height: 400px;
+                          }
+                          </style>
+                          <div id="chartdiv2"></div>
+                      </div>
+                  </div>
                 </div>
 
                 <!----------------------------------------------------------------------Process wise charts------------------------------------------>
