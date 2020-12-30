@@ -4,7 +4,7 @@
 <script src="https://cdn.amcharts.com/lib/4/charts.js"></script>
 <script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
 <style type="text/css">
-	#graph1,#graph2
+	#graph1,#graph2,#graph3,#graph4
 	{
 		height: 500px;
 	}
@@ -101,11 +101,22 @@ var Ignore = new Array();
 <div class="panel">
 	<div class="panel-body" id="goal_graph">
 		<div class="row">
+			<center><label>Metric Type : Deal Value</label></center>
 			<div class="col-sm-6">
 				<div id="graph1"></div>
 			</div>
 			<div class="col-sm-6">
+				<div id="graph3"></div>
+			</div>
+		</div>
+		<hr>
+		<div class="row">
+			<center><label>Metric Type :Won Deals</label></center>
+			<div class="col-sm-6">
 				<div id="graph2"></div>
+			</div>
+			<div class="col-sm-6">
+				<div id="graph4"></div>
 			</div>
 		</div>
 	</div>
@@ -132,7 +143,7 @@ $("#filter_form").change(function(){
 			type:'post',
 			data:custom_filter,
 			beforeSend:function(){
-				$("#goal_table,#graph1,#graph2").html('<center><i class="fa fa-spinner fa-spin" style="font-size:77px;"></i><center>');
+				$("#goal_table,#graph1,#graph2,#graph3,#graph4").html('<center><i class="fa fa-spinner fa-spin" style="font-size:77px;"></i><center>');
 			},
 			success:function(res){
 				var p = JSON.parse(res);
@@ -143,7 +154,9 @@ $("#filter_form").change(function(){
 				{
 					$("#goal_graph").show();
 					// =================================================
+
 					res = p.gval;
+					//document.write(JSON.stringify(res));
 					//alert(res);
 					am4core.ready(function() {
 
@@ -190,8 +203,8 @@ $("#filter_form").change(function(){
 			    {
 			        category: 'Deal Values',
 			        first:res.deal.target,
-			        second: res.deal.forecast,
-			        third: res.deal.achieved,
+			        second: res.deal.forecast.value,
+			        third: res.deal.achieved.value,
 			    },
 			]
 
@@ -261,8 +274,8 @@ $("#filter_form").change(function(){
 			    {
 			        category: 'Won Values',
 			        first:res.won.target,
-			        second: res.won.forecast,
-			        third: res.won.achieved,
+			        second: res.won.forecast.value,
+			        third: res.won.achieved.value,
 			    },
 			]
 
@@ -271,7 +284,119 @@ $("#filter_form").change(function(){
 			createSeries('second', 'Forecast');
 			createSeries('third', 'Achieved');
 
-			}); // end am4core.ready()
+			//================= 3rd graph
+
+
+// Themes begin
+am4core.useTheme(am4themes_animated);
+// Themes end
+
+// Create chart instance
+var chart = am4core.create("graph3", am4charts.XYChart);
+
+// Add percent sign to all numbers
+chart.numberFormatter.numberFormat = "#";
+
+// Add data
+chart.data = [{
+    "country": "Deals",
+    "forecast": res.deal.forecast.info_count,
+    "achieved": res.deal.achieved.info_count
+}, {
+    "country": "<?=display('lead')?>",
+    "forecast": res.deal.forecast.enq_count,
+    "achieved": res.deal.achieved.enq_count
+}];
+
+// Create axes
+var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
+categoryAxis.dataFields.category = "country";
+categoryAxis.renderer.grid.template.location = 0;
+categoryAxis.renderer.minGridDistance = 30;
+
+var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+valueAxis.title.text = "Forecast vs Achieved";
+valueAxis.title.fontWeight = 800;
+valueAxis.min = 0;
+// Create series
+var series = chart.series.push(new am4charts.ColumnSeries());
+series.dataFields.valueY = "forecast";
+series.dataFields.categoryX = "country";
+series.clustered = false;
+series.tooltipText = "Forecast {categoryX}: [bold]{valueY}[/]";
+series.columns.template.fill = am4core.color("#6771dc");
+
+var series2 = chart.series.push(new am4charts.ColumnSeries());
+series2.dataFields.valueY = "achieved";
+series2.dataFields.categoryX = "country";
+series2.clustered = false;
+series2.columns.template.width = am4core.percent(50);
+series2.tooltipText = "Achieved {categoryX}: [bold]{valueY}[/]";
+series2.columns.template.fill = am4core.color("#a367dc");
+series2.columns.template.stroke = am4core.color("#ffffff");
+
+chart.cursor = new am4charts.XYCursor();
+chart.cursor.lineX.disabled = true;
+chart.cursor.lineY.disabled = true;
+
+
+//============chart 4
+
+
+
+// Create chart instance
+var chart = am4core.create("graph4", am4charts.XYChart);
+
+// Add percent sign to all numbers
+chart.numberFormatter.numberFormat = "#";
+
+// Add data
+chart.data = [{
+    "country": "Deals",
+    "forecast": res.won.forecast.info_count,
+    "achieved": res.won.achieved.info_count
+}, {
+    "country": "<?=display('lead')?>",
+    "forecast": res.won.forecast.enq_count,
+    "achieved": res.won.achieved.enq_count
+}];
+
+// Create axes
+var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
+categoryAxis.dataFields.category = "country";
+categoryAxis.renderer.grid.template.location = 0;
+categoryAxis.renderer.minGridDistance = 30;
+
+var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+valueAxis.title.text = "Forecast vs Achieved";
+valueAxis.title.fontWeight = 800;
+valueAxis.min = 0;
+// Create series
+var series = chart.series.push(new am4charts.ColumnSeries());
+series.dataFields.valueY = "forecast";
+series.dataFields.categoryX = "country";
+series.clustered = false;
+series.tooltipText = "Forecast {categoryX}: [bold]{valueY}[/]";
+series.columns.template.fill = am4core.color("#6771dc");
+
+
+var series2 = chart.series.push(new am4charts.ColumnSeries());
+series2.dataFields.valueY = "achieved";
+series2.dataFields.categoryX = "country";
+series2.clustered = false;
+series2.columns.template.width = am4core.percent(50);
+series2.tooltipText = "Achieved {categoryX}: [bold]{valueY}[/]";
+series2.columns.template.fill = am4core.color("#a367dc");
+series2.columns.template.stroke = am4core.color("#ffffff");
+
+chart.cursor = new am4charts.XYCursor();
+chart.cursor.lineX.disabled = true;
+chart.cursor.lineY.disabled = true;
+
+
+			// ===========================
+
+		}); // end am4core.ready()
 
 					// ==================================================
 				}
