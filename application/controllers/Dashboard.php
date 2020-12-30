@@ -739,8 +739,7 @@ public function login_in_process(){
     }
 	
 	public function home() 
-    {
-       
+    {      
         if ($this->session->userdata('isLogIn') == false)
         redirect('login');
         if ($this->session->userdata('user_right') == 201 || $this->session->app_type == 'buyer') // lalantop user
@@ -772,14 +771,14 @@ public function login_in_process(){
             $data['cmtdata'] = $this->dash_model->all_comments();
         }
 
-//lead
-$data['leadCount']=$this->dashboard_model->countLead(2);
-$data['leadSum']=$this->dashboard_model->dataLead(2);
-//client
-$data['clientCount2']=$this->dashboard_model->countLead(3);
-$data['clientsum']=$this->dashboard_model->dataLead(3);
+        //lead
+        $data['leadCount']=$this->dashboard_model->countLead(2);
+        $data['leadSum']=$this->dashboard_model->dataLead(2);
+        //client
+        $data['clientCount2']=$this->dashboard_model->countLead(3);
+        $data['clientsum']=$this->dashboard_model->dataLead(3);
 
-    $data['enquiry_separation']  = get_sys_parameter('enquiry_separation', 'COMPANY_SETTING');
+        $data['enquiry_separation']  = get_sys_parameter('enquiry_separation', 'COMPANY_SETTING');
         $data['lead_score'] = $this->db->query('select * from lead_score limit 3')->result();
         // $data['content'] = $this->load->view('msg-log-dashboard-enquiry', $data, true);
         $data['content'] = $this->load->view('home', $data, true);	     

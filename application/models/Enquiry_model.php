@@ -2921,6 +2921,12 @@ $cpny_id=$this->session->companey_id;
     	$where = "( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
     	$where .= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';
         $where.=" AND enquiry.comp_id=$cpny_id";
+        
+        $arr = $this->session->process;           
+        if(is_array($arr)){
+            $where.=" AND enquiry.product_id IN (".implode(',', $arr).')';
+        }          
+
 
         $enquiry = $lead = $client = $enq_ct = $lead_ct = $client_ct = $enq_ut = $lead_ut = $client_ut = $enq_drp = $lead_drp = $client_drp = $enq_active = $lead_active = $client_active = $enq_assign = $lead_assign = $client_assign = 0;
 
