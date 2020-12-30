@@ -3569,10 +3569,13 @@ $cpny_id=$this->session->companey_id;
             $this->db->where('comp_id',$cpny_id);
             $this->db->where('sc_id',$r->lead_score);
             $row    =   $this->db->get('lead_score')->row_array();
-            $res[] = array(
+            
+            if(!empty($row['score_name'])){
+                $res[] = array(
                     'country' => (!empty($row['score_name'])) ? $row['score_name'] : 'NA',
                     'litres' => (!empty($r->counter)) ? $r->counter : 0,
                 );
+            }
         }        
         return $res;
     }
