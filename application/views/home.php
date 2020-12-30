@@ -653,12 +653,7 @@ $sum=$this->dashboard_model->dataLead($key);
                 return e.target || e.srcElement;
             }         
 
-            var My_ul = document.getElementById('selecteddashboard');
-            My_ul.onclick = function(event) {
-
-                var mytarget = getEventTarget(event);
-                document.getElementById("selectdashboard").innerHTML = mytarget.innerText;
-            }
+          
             </script>
             <!------------------------------------------------------------------knob js Start---------------------------------------------->
             <script>
