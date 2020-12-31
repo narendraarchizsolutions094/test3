@@ -303,10 +303,10 @@ class Ticket extends CI_Controller
 	}
 	public function view_tracking()
 	{
-		echo "<pre>";
-		print_r($_SESSION);
-		print_r($_POST);
-		echo "</pre>";
+		// echo "<pre>";
+		// print_r($_SESSION);
+		// print_r($_POST);
+		// echo "</pre>";
 		
 		$process = $this->session->process[0];
 
@@ -421,7 +421,7 @@ class Ticket extends CI_Controller
 				echo '</div>
 		        ';
 			}
-		}else if($post['trackingno'] && $process == 198 && $this->session->companey_id == 65){
+		}elseif($post['trackingno'] && $process == 198 && $this->session->companey_id == 65){
 			echo 2;
 			$curl = curl_init();
 			curl_setopt_array($curl, array(
