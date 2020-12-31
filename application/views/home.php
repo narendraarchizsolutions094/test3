@@ -1076,8 +1076,6 @@ $sum=$this->dashboard_model->dataLead($key);
                         var data4 = [];
 
                         if (data.status == 'success') {
-                            //response = JSON.parse(data);
-                            console.log(data.enquiryChartData[0]);
                             for (var i = 0; i < data.enquiryChartData.length; i++) {
                                 data1.push(parseInt(data.enquiryChartData[i]));
                                 data2.push(parseInt(data.leadChartData[i]));
