@@ -804,19 +804,17 @@ public function login_in_process(){
         //         'counter'
         //     ])],
         // } ,
-        $r = array();
-        if(!empty($chartData)){
-            if(!empty($process_arr)){
-                foreach($process_arr as $proc){
-                    
-                    $d = array('name'=>$v['product_name']);
-                    
-                    foreach($chartData as $k=>$v){
-                        $r[] = array('name'=>$v['product_name'],'data'=>array($v));
-                    }
-                }
-            }
-        }
+        // $r = array();
+        // if(!empty($chartData)){
+        //     if(!empty($process_arr)){
+        //         foreach($process_arr as $proc){                    
+        //             $d = $v['product_name'];                    
+        //             foreach($chartData as $k=>$v){
+        //                 $r[] = array('name'=>$v['product_name'],'data'=>array($v));
+        //             }
+        //         }
+        //     }
+        // }
 
         // $enquiry_separation  = get_sys_parameter('enquiry_separation', 'COMPANY_SETTING');
         
