@@ -1271,7 +1271,7 @@ $sum=$this->dashboard_model->dataLead($key);
                                         borderWidth: 0
                                     }
                                 },
-                                series: data.series
+                                series: data.data
                             });
 
                         }
