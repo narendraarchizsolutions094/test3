@@ -3156,7 +3156,8 @@ $cpny_id=$this->session->companey_id;
         }          
 
         $enqAyr = array(); 
-        $desplst_query = $this->db->query("SELECT lead_stage_name FROM lead_stage WHERE lead_stage.comp_id = $cpny_id");
+      
+        $desplst_query = $this->db->query("SELECT lead_stage_name FROM lead_stage WHERE FIND_IN_SET(4,stage_for)=0 AND lead_stage.comp_id = $cpny_id");
         $desplst = $desplst_query->result_array();
       
     	$despenqqry = $this->db->query("SELECT lead_stage_name,(SELECT COUNT(enquiry_id) FROM enquiry WHERE $where AND enquiry.lead_stage =  lead_stage.stg_id AND enquiry.status = 1)counternow FROM lead_stage WHERE lead_stage.comp_id = $cpny_id");
