@@ -205,7 +205,7 @@ if($this->session->companey_id == 65){ ?>
   <script>
   if(<?=$ticket->complaint_type?>==2){
     if("<?=empty($ticket->ticket_stage)?>"){
-      $("select[name=lead_description]").load("<?=base_url('message/find_substage/2')?>");    
+      $("select[name=lead_description]").load("<?=base_url('message/find_substage/1')?>");    
     }
     $("#lead_stage_change").val('1');
 
