@@ -191,7 +191,12 @@
 
   <?php
 if(!empty($ticket->ticket_stage))
-echo'$("select[name=lead_description]").load("'.base_url('message/find_substage/').$ticket->ticket_stage.'/'.$ticket->ticket_substage.'");';
+  if(!empty($ticket->ticket_substage)){
+    echo'$("select[name=lead_description]").load("'.base_url('message/find_substage/').$ticket->ticket_stage.'/'.$ticket->ticket_substage.'");';
+  }else{
+    echo'$("select[name=lead_description]").load("'.base_url('message/find_substage/').$ticket->ticket_stage.'");';
+
+  }
 ?>
 </script>
 <?php
