@@ -775,8 +775,7 @@ class Lead extends CI_Controller
                 $comment = 'Converted to '.display('Client');
                 //echo $comment ; exit();
                 //insert follow up counter (3 is for client )
-                if(empty($lead->lead_created_date))
-                    $lead->lead_created_date='0000-00-00 00:00:00';
+                if(empty($lead->lead_created_date))$lead->lead_created_date=$lead->created_date;
                 $this->enquiry_model->insetFollowupTime($enquiry_id, 3, $lead->lead_created_date, date('Y-m-d H:i:s'));
                 $this->db->set('status', 3);
             }

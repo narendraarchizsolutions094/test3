@@ -429,7 +429,9 @@ if (!empty($enquiry_separation)) {
                                                                 <?php
                    $leadTime=$leadSum->row()->time;
                     if ($leadTime!=0) {
-                echo  round(($leadTime/$leadCount),2).' Minutes';}else{echo 'N/A';
+                $minutes=  round(($leadTime/$leadCount),0);
+                echo $this->enquiry_model->secsToStr($minutes);
+            }else{echo 'N/A';
                 } ?>
                                                             </small></p>
                                                     </div>
@@ -455,7 +457,9 @@ if (!empty($enquiry_separation)) {
                                                         <p><small class="text-muted"><i
                                                                     class="glyphicon glyphicon-time"></i> &nbsp;
                                                                 <?php  if ($clientsum->row()->time!=0) {
-                echo  round(($clientsum->row()->time)/$clientCount2,2).' Minutes';}else{echo 'N/A';} ?>
+                 $minutes= round(($clientsum->row()->time)/$clientCount2,0);
+                echo $this->enquiry_model->secsToStr($minutes);
+            }else{echo 'N/A';} ?>
                                                             </small></p>
                                                     </div>
                                                 </div>
@@ -478,7 +482,7 @@ $enquiry_separation = json_decode($enquiry_separation, true);
     foreach ($enquiry_separation as $key => $value) {
             $ctitle = $enquiry_separation[$key]['title']; 
             $Count=$this->dashboard_model->countLead($key);
-$sum=$this->dashboard_model->dataLead($key);
+            $sum=$this->dashboard_model->dataLead($key);
             $stime= $sum->row()->time;
            
            ?>
@@ -491,7 +495,10 @@ $sum=$this->dashboard_model->dataLead($key);
                                                         <!--<h4 class="timeline-title">Average</h4>-->
                                                         <p><small class="text-muted"><i
                                                                     class="glyphicon glyphicon-time"></i> &nbsp;<?php  if ($stime!=0) {
-                echo  round(($stime)/$Count,2).' Minutes';}else{echo 'N/A';} ?> </small></p>
+                 $minutes= round(($stime)/$Count,0);
+                echo $this->enquiry_model->secsToStr($minutes);
+                 
+                 }else{echo 'N/A';} ?> </small></p>
                                                     </div>
                                                 </div>
                                             </li>
