@@ -1282,31 +1282,7 @@ $sum=$this->dashboard_model->dataLead($key);
                                             'client_processWise'][0][
                                             'counter'
                                         ])],
-                                    },
-                                    {
-                                        name: data.data['enquiry_processWise'][1][
-                                            'product_name'
-                                        ],
-                                        data: [parseInt(data.data['enquiry_processWise']
-                                            [1]['counter']), parseInt(data.data[
-                                            'lead_processWise'][1][
-                                            'counter']), parseInt(data.data[
-                                            'client_processWise'][1][
-                                            'counter'
-                                        ])],
-                                    },
-                                    {
-                                        name: data.data['enquiry_processWise'][2][
-                                            'product_name'
-                                        ],
-                                        data: [parseInt(data.data['enquiry_processWise']
-                                            [2]['counter']), parseInt(data.data[
-                                            'lead_processWise'][2][
-                                            'counter']), parseInt(data.data[
-                                            'client_processWise'][2][
-                                            'counter'
-                                        ])],
-                                    },
+                                    } ,
                                     <?php   $enquiry_separation  = get_sys_parameter('enquiry_separation', 'COMPANY_SETTING');
                  if (!empty($enquiry_separation)) {
         $process = implode(',',$this->session->process);
