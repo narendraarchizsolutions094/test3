@@ -303,7 +303,10 @@ class Ticket extends CI_Controller
 	}
 	public function view_tracking()
 	{
-		//print_r($_SESSION);
+		echo "<pre>";
+		print_r($_SESSION);
+		print_r($_POST);
+		echo "</pre>";
 		
 		$process = $this->session->process[0];
 
