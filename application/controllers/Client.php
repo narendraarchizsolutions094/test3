@@ -423,8 +423,21 @@ class Client extends CI_Controller {
         $data['title'] = display('contacts');
         $data['contact_list'] = $this->Client_Model->getContactList();//contacts.*,enquiry.---
        // print_r($data['contact_list']->result_array()); exit();
+        $data['company_list'] = $this->Client_Model->getCompanyList()->result();
         $data['enquiry_list'] = $this->Enquiry_Model->all_enqueries();
         $data['content'] = $this->load->view('enquiry/contacts', $data, true);
+        $this->load->view('layout/main_wrapper', $data);
+    }
+    public function company_list()
+    {
+        if(user_role('1060')){}
+
+        $this->load->model(array('Client_Model','Enquiry_Model'));
+        $data['title'] = display('company_list');
+        $data['company_list'] = $this->Client_Model->getCompanyList()->result();
+        //print_r($data['company_list']); exit();
+        //$data['enquiry_list'] = $this->Enquiry_Model->all_enqueries();
+        $data['content'] = $this->load->view('enquiry/company_list', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }
     public function create_Invoice() {
@@ -1667,6 +1680,7 @@ public function view_editable_aggrement()
         $data['title'] = display('visit_list');
        // print_r($data['contact_list']->result_array()); exit();
         $data['all_enquiry'] = $this->Enquiry_Model->all_enqueries();
+        $data['company_list'] = $this->Client_Model->getCompanyList()->result();
         $data['content'] = $this->load->view('enquiry/visits', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }
@@ -1687,7 +1701,7 @@ public function view_editable_aggrement()
         $data['all_enquiry'] = $this->Enquiry_Model->all_enqueries();
 
         $data['branch']=$this->db->where('comp_id',$this->session->companey_id)->get('branch')->result();
-
+        $data['company_list'] = $this->Client_Model->getCompanyList()->result();
         //fetch last entry
         $comm_data=$this->db->where(array('comp_id'=>$this->session->companey_id))->order_by('id',"desc")
         ->limit(1)->get('commercial_info');

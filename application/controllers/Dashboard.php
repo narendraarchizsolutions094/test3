@@ -739,8 +739,7 @@ public function login_in_process(){
     }
 	
 	public function home() 
-    {
-       
+    {      
         if ($this->session->userdata('isLogIn') == false)
         redirect('login');
         if ($this->session->userdata('user_right') == 201 || $this->session->app_type == 'buyer') // lalantop user
@@ -772,25 +771,64 @@ public function login_in_process(){
             $data['cmtdata'] = $this->dash_model->all_comments();
         }
 
-//lead
-$data['leadCount']=$this->dashboard_model->countLead(2);
-$data['leadSum']=$this->dashboard_model->dataLead(2);
-//client
-$data['clientCount2']=$this->dashboard_model->countLead(3);
-$data['clientsum']=$this->dashboard_model->dataLead(3);
+        //lead
+        $data['leadCount']=$this->dashboard_model->countLead(2);
+        $data['leadSum']=$this->dashboard_model->dataLead(2);
+        //client
+        $data['clientCount2']=$this->dashboard_model->countLead(3);
+        $data['clientsum']=$this->dashboard_model->dataLead(3);
 
-    $data['enquiry_separation']  = get_sys_parameter('enquiry_separation', 'COMPANY_SETTING');
+        $data['enquiry_separation']  = get_sys_parameter('enquiry_separation', 'COMPANY_SETTING');
         $data['lead_score'] = $this->db->query('select * from lead_score limit 3')->result();
         // $data['content'] = $this->load->view('msg-log-dashboard-enquiry', $data, true);
         $data['content'] = $this->load->view('home', $data, true);	     
         $this->load->view('layout/main_wrapper', $data);
     }
     public function processWiseChart()
-    {   
-       // echo "string";die;
+    {         
+        $process_arr = $this->session->process;
         $process = implode(',',$this->session->process);
         $chartData = $this->enquiry_model->processWiseChart($this->session->user_id,$this->session->companey_id,$process);
         //print_r($chartData);die;
+    
+    
+        // [{
+        //     name: data.data['enquiry_processWise'][0][
+        //         'product_name'
+        //     ],
+        //     data: [parseInt(data.data['enquiry_processWise']
+        //         [0]['counter']), parseInt(data.data[
+        //         'lead_processWise'][0][
+        //         'counter']), parseInt(data.data[
+        //         'client_processWise'][0][
+        //         'counter'
+        //     ])],
+        // } ,
+        // $r = array();
+        // if(!empty($chartData)){
+        //     if(!empty($process_arr)){
+        //         foreach($process_arr as $proc){                    
+        //             $d = $v['product_name'];                    
+        //             foreach($chartData as $k=>$v){
+        //                 $r[] = array('name'=>$v['product_name'],'data'=>array($v));
+        //             }
+        //         }
+        //     }
+        // }
+
+        // $enquiry_separation  = get_sys_parameter('enquiry_separation', 'COMPANY_SETTING');
+        
+        // if (!empty($enquiry_separation)) {
+        //     $process = implode(',',$this->session->process);
+        //     $enquiry_separation = json_decode($enquiry_separation, true);
+        //     foreach ($enquiry_separation as $key => $value) {
+        //         $count = $this->enquiry_model->DYprocessWiseChart($this->session->user_id,$this->session->companey_id,$process,$key);
+        //     }  
+        // }
+
+
+
+
         if(!empty($chartData))
         {
             echo json_encode(array('data'=>$chartData,'status'=>'success'));
@@ -1008,10 +1046,7 @@ if (!empty($enquiry_separation)) {
         
         if(!empty($enquiryChartData))
         {
-            echo $this->output
-            ->set_content_type('application/json')
-            ->set_status_header(200)
-            ->set_output(json_encode(array('enquiryChartData'=>$enquiryChartData,'leadChartData'=>$leadChartData,'clientChartData'=>$clientChartData,'status'=>'success','desplst'=>$desplst)));
+            echo json_encode(array('enquiryChartData'=>$enquiryChartData,'leadChartData'=>$leadChartData,'clientChartData'=>$clientChartData,'status'=>'success','desplst'=>$desplst));
              
         }
         else

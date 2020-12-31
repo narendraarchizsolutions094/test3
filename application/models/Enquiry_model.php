@@ -2813,17 +2813,75 @@ $cpny_id=$this->session->companey_id;
 
         $client_drop = $this->db->query("SELECT count(enquiry.enquiry_id)counter,tp.drop_reason FROM enquiry  LEFT JOIN tbl_drop as tp ON tp.d_id = enquiry.drop_status WHERE $where AND enquiry.status = 3  AND tp.drop_reason IS NOT NULL GROUP BY tp.drop_reason");
 
-        $client_dropWise = $client_drop->result();
+      $client_dropWise = $client_drop->result();
+
+      $enq_count = $this->dashboard_model->countLead(2,$companyid);
+      $enq_Sum = $this->dashboard_model->dataLead(2,$companyid);
+
+      $enqTime=$enq_Sum->row()->time;
+      if ($enqTime!=0)
+      {
+        $enq_value = round(($enqTime/$enq_count),2);
+      }
+      else 
+        $enq_value = 0;
+
+      $lead_count = $this->dashboard_model->countLead(3,$companyid);
+      $lead_Sum = $this->dashboard_model->dataLead(3,$companyid);
+
+      $leadTime=$lead_Sum->row()->time;
+      if ($leadTime!=0)
+      {
+        $lead_value = round(($leadTime/$lead_count),2);
+      }
+      else 
+        $lead_value = 0;
+
+      $followup = array(
+                    array(
+                      'key'=>display('enquiry'),
+                      'time'=> $enq_value,
+                    ),
+                    array(
+                      'key'=>display('lead'),
+                      'time'=> $lead_value,
+                    ),
+                );
+
+    $enquiry_separation  = get_sys_parameter('enquiry_separation', 'COMPANY_SETTING',$companyid);
+    if(!empty($enquiry_separation))
+    {
+        $enquiry_separation = json_decode($enquiry_separation, true);
+        foreach ($enquiry_separation as $key => $value) 
+        {
+                  $ctitle = $enquiry_separation[$key]['title']; 
+                  $Count=$this->dashboard_model->countLead($key,$companyid);
+                  $sum=$this->dashboard_model->dataLead($key,$companyid);
+                  $stime= $sum->row()->time;
+
+                  if($stime!=0)
+                  {
+                    $vvalue = round(($stime/$Count),2);
+                  }
+                  else 
+                    $vvalue = 0;
 
 
-
+                 $followup[]  = array(
+                                  'key'=>$ctitle,
+                                  'time'=>$vvalue,
+                                );
+        }
+    }
         // $query14 = $this->db->query("SELECT enquiry_id FROM `lead_stage` WHERE comp_id = $cpny_id ORDER BY stg_id ASC");
         // $pbc = $query14->num_rows(); 
+
+ 
 
         $indiamap= array('upe'=>$upe,'upl'=>$upl,'upc'=>$upc,'pbe'=>$pbe,'pbl'=>$pbl,'pbc'=>$pbc);
 
         $funnelchartAry = array('enquiry'=>$enquiry,'lead'=>$lead,"client"=>$client,'enq_ct'=>$enq_ct,'lead_ct'=>$lead_ct,'client_ct'=>$client_ct,'enq_ut'=>$enq_ut,'lead_ut'=>$lead_ut,'client_ut'=>$client_ut,'enq_drp'=>$enq_drp,'lead_drp'=>$lead_drp,'client_drp'=>$client_drp,'enq_active'=>$enq_active,'lead_active'=>$lead_active,'client_active'=>$client_active,'enq_assign'=>$enq_assign,'lead_assign'=>$lead_assign,'client_assign'=>$client_assign,'hot'=>$hot,'warm'=>$warm,'cold'=>$cold,'ejan'=>$ejan,'ljan'=>$ljan,'cjan'=>$cjan,'efeb'=>$efeb,'lfeb'=>$lfeb,'cfeb'=>$cfeb,'emar'=>$emar,'lmar'=>$lmar,'cmar'=>$cmar,'eapr'=>$eapr,'lapr'=>$lapr,'capr'=>$capr,'emay'=>$emay,'lmay'=>$lmay,'cmay'=>$cmay,'ejun'=>$ejun,'ljun'=>$ljun,'cjun'=>$cjun,'ejuly'=>$ejuly,'ljuly'=>$ljuly,'cjuly'=>$cjuly,'eaug'=>$eaug,'laug'=>$laug,'caug'=>$caug,'esep'=>$esep,'lsep'=>$lsep,'csep'=>$csep,'eoct'=>$eoct,'loct'=>$loct,'coct'=>$coct,'enov'=>$enov,'lnov'=>$lnov,'cnov'=>$cnov,'edec'=>$edec,'ldec'=>$ldec,'cdec'=>$cdec,'raw'=>$raw,'indiamap'=>$indiamap,'desposition_enquiry'=>$despenq,'desposition_lead'=>$desplead,'desposition_client'=>$despcli,'EnquirySrc'=>$EnquirySrc,'leadSrc'=>$leadSrc,'ClientSrc'=>$ClientSrc,'enquiry_processWise'=>$enquiry_processWise,'lead_processWise'=>$lead_processWise,'client_processWise'=>$client_processWise,'enquiry_dropWise'=>$enquiry_dropWise,'lead_dropWise'=>$lead_dropWise,'client_dropWise'=>$client_dropWise);
-
+        $funnelchartAry['followup'] = $followup;
         return $funnelchartAry;
     }
 
@@ -2834,7 +2892,10 @@ $cpny_id=$this->session->companey_id;
     	$where = "( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
     	$where .= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';
         $where.=" AND enquiry.comp_id=$cpny_id";
-
+        $arr = $this->session->process;           
+        if(is_array($arr)){
+            $where.=" AND enquiry.product_id IN (".implode(',', $arr).')';
+        } 
         $enqAyr = array(); 
         $srclst_query = $this->db->query("SELECT lead_name FROM lead_source WHERE lead_source.comp_id = $cpny_id");
         $srclst = $srclst_query->result_array();
@@ -2863,6 +2924,12 @@ $cpny_id=$this->session->companey_id;
     	$where = "( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
     	$where .= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';
         $where.=" AND enquiry.comp_id=$cpny_id";
+        
+        $arr = $this->session->process;           
+        if(is_array($arr)){
+            $where.=" AND enquiry.product_id IN (".implode(',', $arr).')';
+        }          
+
 
         $enquiry = $lead = $client = $enq_ct = $lead_ct = $client_ct = $enq_ut = $lead_ut = $client_ut = $enq_drp = $lead_drp = $client_drp = $enq_active = $lead_active = $client_active = $enq_assign = $lead_assign = $client_assign = 0;
 
@@ -2992,6 +3059,11 @@ $cpny_id=$this->session->companey_id;
     	$where = "( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
     	$where .= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';
         $where.=" AND enquiry.comp_id=$cpny_id";
+        $arr = $this->session->process;           
+        if(is_array($arr)){
+            $where.=" AND enquiry.product_id IN (".implode(',', $arr).')';
+        }          
+
 
         $enquiry = $lead = $client = $enq_ct = $lead_ct = $client_ct = $enq_ut = $lead_ut = $client_ut = $enq_drp = $lead_drp = $client_drp = $enq_active = $lead_active = $client_active = $enq_assign = $lead_assign = $client_assign = 0;
 
@@ -3081,9 +3153,14 @@ $cpny_id=$this->session->companey_id;
     	$where = "( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
     	$where .= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';        
         $where.=" AND enquiry.comp_id=$cpny_id";
+        $arr = $this->session->process;           
+        if(is_array($arr)){
+            $where.=" AND enquiry.product_id IN (".implode(',', $arr).')';
+        }          
 
         $enqAyr = array(); 
-        $desplst_query = $this->db->query("SELECT lead_stage_name FROM lead_stage WHERE lead_stage.comp_id = $cpny_id");
+      
+        $desplst_query = $this->db->query("SELECT lead_stage_name FROM lead_stage WHERE FIND_IN_SET(4,stage_for)=0 AND lead_stage.comp_id = $cpny_id");
         $desplst = $desplst_query->result_array();
       
     	$despenqqry = $this->db->query("SELECT lead_stage_name,(SELECT COUNT(enquiry_id) FROM enquiry WHERE $where AND enquiry.lead_stage =  lead_stage.stg_id AND enquiry.status = 1)counternow FROM lead_stage WHERE lead_stage.comp_id = $cpny_id");
@@ -3137,6 +3214,11 @@ $cpny_id=$this->session->companey_id;
     	$where .= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';
         $where.=" AND enquiry.comp_id=$cpny_id";
 
+        $arr = $this->session->process;           
+        if(is_array($arr)){
+            $where.=" AND enquiry.product_id IN (".implode(',', $arr).')';
+        }
+
     	$enquiry_drop = $this->db->query("SELECT count(enquiry.enquiry_id)counter,tp.drop_reason FROM enquiry  right JOIN tbl_drop as tp ON tp.d_id = enquiry.drop_status WHERE $where AND enquiry.status = $status  AND tp.drop_reason IS NOT NULL GROUP BY tp.drop_reason");
         $enquiry_dropWise = $enquiry_drop->result_array();
         foreach ($enquiry_dropWise as $key => $value) {
@@ -3189,6 +3271,10 @@ $cpny_id=$this->session->companey_id;
     	$where = "( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
     	$where .= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';
         $where.=" AND enquiry.comp_id=$cpny_id";
+        $arr = $this->session->process;           
+        if(is_array($arr)){
+            $where.=" AND enquiry.product_id IN (".implode(',', $arr).')';
+        }
         $ejan = $ljan = $cjan = $efeb = $lfeb = $cfeb = $emar = $lmar = $cmar = $eapr = $lapr = $capr = $emay = $lmay = $cmay = $ejun = $ljun = $cjun = $ejuly = $ljuly = $cjuly = $eaug = $laug = $caug = $esep = $lsep = $csep = $eoct = $loct = $coct = $enov = $lnov = $cnov = $edec = $ldec = $cdec = 0;
    if(user_access(60)) {
 
@@ -3454,6 +3540,11 @@ $cpny_id=$this->session->companey_id;
     	$where = "( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
     	$where .= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';
         $where.=" AND enquiry.comp_id=$cpny_id";
+        
+        $arr = $this->session->process;           
+        if(is_array($arr)){
+            $where.=" AND enquiry.product_id IN (".implode(',', $arr).')';
+        }
 
         $enqAyr = array(); 
         $droplst_query = $this->db->query("SELECT drop_reason FROM tbl_drop WHERE tbl_drop.comp_id = $cpny_id");
@@ -3481,28 +3572,30 @@ $cpny_id=$this->session->companey_id;
     	$where = "( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
     	$where .= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';
         $where.=" AND enquiry.comp_id=$cpny_id";
-
+        $arr = $this->session->process;           
+        if(is_array($arr)){
+            $where.=" AND enquiry.product_id IN (".implode(',', $arr).')';
+        }
         $hot = $warm = $cold = 0; 
     	$query7 = $this->db->query("SELECT count(enquiry_id) counter,enquiry.lead_score FROM `enquiry` WHERE $where GROUP BY enquiry.lead_score");
 
         $result7 = $query7->result();
+        $res = array();
         foreach($result7 as $r)
         {
-            if($r->lead_score == 1)
-            {
-                $hot = (!empty($r->counter)) ? $r->counter : 0;
+            $this->db->select('score_name');
+            $this->db->where('comp_id',$cpny_id);
+            $this->db->where('sc_id',$r->lead_score);
+            $row    =   $this->db->get('lead_score')->row_array();
+            
+            if(!empty($row['score_name'])){
+                $res[] = array(
+                    'country' => (!empty($row['score_name'])) ? $row['score_name'] : 'NA',
+                    'litres' => (!empty($r->counter)) ? $r->counter : 0,
+                );
             }
-            if($r->lead_score == 2)
-            {
-                $warm = (!empty($r->counter)) ? $r->counter : 0;
-            }
-            if($r->lead_score == 3)
-            {
-                $cold = (!empty($r->counter)) ? $r->counter : 0;
-            }
-        }
-        $dataAry = array('hot'=>$hot,'warm'=>$warm,'cold'=>$cold);
-        return $dataAry;
+        }        
+        return $res;
     }
    
     public function processWiseChart($userid,$companyid,$process)
@@ -3513,18 +3606,47 @@ $cpny_id=$this->session->companey_id;
     	$where .= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';
         $where.=" AND enquiry.comp_id=$cpny_id";
 
-    	$enquiry_process = $this->db->query("SELECT count(enquiry.enquiry_id)counter,tp.product_name FROM enquiry  LEFT JOIN tbl_product as tp ON tp.sb_id = enquiry.product_id WHERE $where AND enquiry.status = 1 AND tp.sb_id In ($process) GROUP BY tp.sb_id");
-        $enquiry_processWise = $enquiry_process->result();
+    	$enquiry_process = $this->db->query("SELECT count(enquiry.enquiry_id)counter,tp.product_name,tp.sb_id FROM enquiry  LEFT JOIN tbl_product as tp ON tp.sb_id = enquiry.product_id WHERE $where AND enquiry.status = 1 AND tp.sb_id In ($process) GROUP BY tp.sb_id");
+        $enquiry_processWise = $enquiry_process->result_array();
+        $arr1 =$arr2 = $arr3 = array();
         
-        $lead_process = $this->db->query("SELECT count(enquiry.enquiry_id)counter,tp.product_name FROM enquiry  LEFT JOIN tbl_product as tp ON tp.sb_id = enquiry.product_id WHERE $where AND enquiry.status = 2 AND tp.sb_id In ($process) GROUP BY tp.sb_id");
+        if(!empty($enquiry_processWise)){
+            foreach($enquiry_processWise as $k=>$v){
+                $pid    =   $v['sb_id'];
+                $arr1[$pid] = array('name'=>$v['product_name'],'data'=>array((int)$v['counter']));
+            }
+        }
+        
+        $lead_process = $this->db->query("SELECT count(enquiry.enquiry_id)counter,tp.product_name,tp.sb_id FROM enquiry  LEFT JOIN tbl_product as tp ON tp.sb_id = enquiry.product_id WHERE $where AND enquiry.status = 2 AND tp.sb_id In ($process) GROUP BY tp.sb_id");
 
-        $lead_processWise = $lead_process->result();
+        $lead_processWise = $lead_process->result_array();
+        if(!empty($lead_processWise)){
+            foreach($lead_processWise as $k=>$v){
+                $pid    =   $v['sb_id'];
+                if(!empty($arr1[$pid])){
+                    $arr1[$pid]['data'][1] = (int)$v['counter'];
+                }else{
+                    $arr1[$pid] = array('name'=>$v['product_name'],'data'=>array(0,(int)$v['counter']));                    
+                }
+            }
+        }
+        $client_process = $this->db->query("SELECT count(enquiry.enquiry_id)counter,tp.product_name,tp.sb_id FROM enquiry  LEFT JOIN tbl_product as tp ON tp.sb_id = enquiry.product_id WHERE $where AND enquiry.status = 3 AND tp.sb_id In ($process) GROUP BY tp.sb_id");
 
-        $client_process = $this->db->query("SELECT count(enquiry.enquiry_id)counter,tp.product_name FROM enquiry  LEFT JOIN tbl_product as tp ON tp.sb_id = enquiry.product_id WHERE $where AND enquiry.status = 3 AND tp.sb_id In ($process) GROUP BY tp.sb_id");
 
-        $client_processWise = $client_process->result();
-        $dataAry = array('enquiry_processWise'=>$enquiry_processWise,'lead_processWise'=>$lead_processWise,'client_processWise'=>$client_processWise);
-        return $dataAry;
+        
+        $client_processWise = $client_process->result_array();
+        if(!empty($client_processWise)){
+            foreach($client_processWise as $k=>$v){
+                $pid    =   $v['sb_id'];
+                if(!empty($arr1[$pid])){
+                    $arr1[$pid]['data'][2] = (int)$v['counter'];
+                }else{
+                    $arr1[$pid] = array('name'=>$v['product_name'],'data'=>array(0,0,(int)$v['counter']));                    
+                }
+            }
+        }
+        
+        return array_values($arr1);
     }
 
     public function enquiryLeadClientChart($userid,$companyid)
@@ -3565,6 +3687,10 @@ $cpny_id=$this->session->companey_id;
     	$where = "( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
     	$where .= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';
         $where.=" AND enquiry.comp_id=$cpny_id";
+        $arr = $this->session->process;           
+        if(is_array($arr)){
+            $where.=" AND enquiry.product_id IN (".implode(',', $arr).')';
+        } 
 
     	$query = $this->db->query("SELECT count(enquiry.enquiry_id)counter,enquiry.status FROM enquiry WHERE $where GROUP BY enquiry.status");
         $result = $query->result();

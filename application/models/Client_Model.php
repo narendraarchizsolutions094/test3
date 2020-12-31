@@ -115,9 +115,28 @@ class Client_Model extends CI_Model
         $this->db->select('contacts.*,enquiry.company,enquiry.enquiry_id,concat_ws(" ",name_prefix,name,lastname) as enq_name');
         $this->db->from('tbl_client_contacts contacts');
         $this->db->join('enquiry','enquiry.enquiry_id=contacts.client_id','inner');
+        $this->db->order_by('contacts.cc_id desc');
         return $this->db->get();
         //echo $this->db->last_query(); exit();
     }
+
+     public function getCompanyList()
+    {
+        $where = 'enquiry.comp_id='.$this->session->companey_id;
+        $all_reporting_ids    =   $this->common_model->get_categories($this->session->user_id);
+        $where .= " AND ( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
+        $where .= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';          
+        if($where)
+            $this->db->where($where);
+        $this->db->select('count(enquiry_id) as num, company , GROUP_CONCAT(enquiry_id) as enq_ids,GROUP_CONCAT(status) as enq_status,GROUP_CONCAT(CONCAT(name_prefix,\' \',name,\' \',lastname)) as enq_names ');
+        $this->db->from('enquiry');
+        $this->db->where('enquiry.company IS NOT NULL and CHAR_LENGTH(REPLACE(`enquiry`.company, " ", ""))>0');
+        $this->db->group_by('REPLACE(`enquiry`.company, " ", "")');
+        //$this->db->join('enquiry','enquiry.enquiry_id=contacts.client_id','inner');
+        return $this->db->get();
+        //echo $this->db->last_query(); exit();
+    }
+
 
     public function all_created_today()
     {

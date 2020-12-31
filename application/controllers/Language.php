@@ -140,29 +140,21 @@ class Language extends CI_Controller {
 			
 			$cmpno = $this->session->companey_id;
 			foreach( $phrsearr  as $ind => $phrs){
-				
-				
-				
-				if($phrs->comp_id == $cmpno and $phrs->comp_id > 0){
-					
-					$temparr[$phrs->phrase] = $phrs;
-					$newphrsarr[$phrs->phrase] =$phrs;
-				}else{
-					$newphrsarr[$phrs->phrase] =$phrs;
-				}
-					 	
-			}
-			
-		}
-	
-		if(!empty($temparr)){
-			
-			foreach($temparr as $ind => $phrs){
-				
+				if(!empty($phrs)){				
+					if(!empty($phrs->comp_id) && ($phrs->comp_id == $cmpno and $phrs->comp_id > 0)){						
+						$temparr[$phrs->phrase] = $phrs;
+						$newphrsarr[$phrs->phrase] =$phrs;
+					}else{
+						$newphrsarr[$phrs->phrase] =$phrs;
+					}
+				}	 	
+			}			
+		}	
+		if(!empty($temparr)){			
+			foreach($temparr as $ind => $phrs){				
 				$newphrsarr[$phrs->phrase] = $phrs;
 			} 
-		}
-		
+		}		
 		$data['phrases']  = $newphrsarr; 
 		$data['filter']   = $filter;
         $data['content']  = $this->load->view('language/phrase_edit', $data, true); 
