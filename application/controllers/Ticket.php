@@ -303,15 +303,7 @@ class Ticket extends CI_Controller
 	}
 	public function view_tracking()
 	{
-		// echo "<pre>";
-		// print_r($_SESSION);
-		// print_r($_POST);
-		// echo "</pre>";
-		
-		$process = $this->session->process[0];
-
-		if ($post = $this->input->post() && $process == 141) {
-			echo '1';
+		if ($post = $this->input->post()) {
 			$url = "https://thecrm360.com/new_crm/ticket/gc_vtrans_api/" . $post['trackingno'];
 			
 			if ($post['trackingno']) {
@@ -421,28 +413,6 @@ class Ticket extends CI_Controller
 				echo '</div>
 		        ';
 			}
-		}elseif($post['trackingno'] && $process == 198 && $this->session->companey_id == 65){
-			echo 2;
-			$curl = curl_init();
-			curl_setopt_array($curl, array(
-			CURLOPT_URL => 'https://www.vxpress.in/DocketTraceNew.php',
-			CURLOPT_RETURNTRANSFER => true,
-			CURLOPT_ENCODING => '',
-			CURLOPT_MAXREDIRS => 10,
-			CURLOPT_TIMEOUT => 0,
-			CURLOPT_FOLLOWLOCATION => true,
-			CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-			CURLOPT_CUSTOMREQUEST => 'POST',
-			CURLOPT_POSTFIELDS => array('name' => $post['trackingno'],'isTrace' => '1'),
-			CURLOPT_HTTPHEADER => array(
-				'Cookie: PHPSESSID=373fd1d1879b95e2ac28d5ecafe2952c'
-			),
-			));
-
-			$response = curl_exec($curl);
-
-			curl_close($curl);
-			echo $response;
 		}
 	}
 	public function get_tracking()
