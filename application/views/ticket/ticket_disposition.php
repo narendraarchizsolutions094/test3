@@ -152,8 +152,8 @@
 <script type="text/javascript">
   $("#ticket_disposition_save").on('click',function(e){
     e.preventDefault();
-    if($("#lead_stage_change").val() == 2 && "<?=$this->session->companey_id?>"==65 && $("#lead_description").val() == ''){
-      alert('Please select nature of complaint.');
+    if($("<?=$this->session->companey_id?>"==65 && $("#lead_description").val() == ''){
+      alert('Please select sub stage.');
       return;
     }
     var disposition = getSelectedText('lead_stage_change');
