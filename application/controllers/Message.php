@@ -44,6 +44,19 @@ class Message extends CI_Controller {
     	    		}
     	    
     	    }
+		}
+		
+		public function get_templates_without_process($for,$module){			
+			$this->db->where('temp_for',$for);			
+    	    $this->db->where('comp_id',$this->session->companey_id);
+    	    $res=$this->db->get('api_templates');
+			$q=$res->result();
+    	    if(!empty($q)){
+				echo '<option value="0" selected style="display:none">Select Templates</option>';
+				foreach($q as $value){
+				   echo '<option value="'.$value->temp_id.'">'.$value->template_name.'</option>';
+				}
+    	    }
 	    }
 	    public function all_description()
 	    {
