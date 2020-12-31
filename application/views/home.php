@@ -1495,10 +1495,7 @@ $newDate = date("Y-m-d", strtotime($t_date));
                         var data2 = [];
                         var data3 = [];
                         var data4 = [];
-
-                        if (data.status == 'success') {
-                            //response = JSON.parse(data);
-                            console.log(data.enquiryChartData[0]);
+                        if (data.status == 'success') {                            
                             for (var i = 0; i < data.enquiryChartData.length; i++) {
                                 data1.push(parseInt(data.enquiryChartData[i]));
                                 data2.push(parseInt(data.leadChartData[i]));
