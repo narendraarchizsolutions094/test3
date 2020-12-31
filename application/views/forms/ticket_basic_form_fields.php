@@ -89,6 +89,9 @@ echo'<div class="trackingDetails"></div>';
                             var dataString = 'name='+ that.value +'&isTrace=1';
                             jQuery.ajax({
                               type: "POST",
+                              headers: {
+                                  'Content-Type': 'application/x-www-form-urlencoded'
+                              },
                               url: "https://www.vxpress.in/DocketTraceNew.php",
                               data: dataString,
                               cache: false,
