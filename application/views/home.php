@@ -294,7 +294,7 @@ if (!empty($enquiry_separation)) {
                     <hr style="border: 1px solid #3a95e4 !important">
                 </div>
 
-                <div class="col-lg-4 col-xl-6 mg-t-10">
+                <div class="col-lg-4 col-xl-4 mg-t-10">
                     <div class="card" style="height:100%;">
                         <figure class="highcharts-figure">
                             <div id="containersss"></div>
@@ -305,7 +305,7 @@ if (!empty($enquiry_separation)) {
 
                 </div>
 
-                <div class="col-lg-4 col-xl-6 mg-t-10">
+                <div class="col-lg-8 col-xl-8 mg-t-10">
                     <div class="card" style="height:100%;">
 
                         <figure class="highcharts-figure">
@@ -316,8 +316,8 @@ if (!empty($enquiry_separation)) {
 
 
                 </div>
-                <!-------------------------------------------------------------Process wise charts End------------------------------------------->
-                <!------------------------------------------------------------------html FUNNEL START END-------------------------------------------->
+                <!------------------------Process wise charts End------------------------------------------->
+                <!--------------------------------html FUNNEL START END-------------------------------------------->
                 <div class="col-lg-12 col-xl-12 mg-t-10">
                     <hr style="border: 1px solid red !important">
                 </div>
