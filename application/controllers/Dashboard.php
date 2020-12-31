@@ -3129,9 +3129,9 @@ public function fb_token_new() {
               }
                  }
  }
- public function exchange_token()
+ public function exchange_token($page_id)
  {
-    $page_id=$this->uri->segment('3');
+    // $page_id=$this->uri->segment('3');
     $this->db->select('*');
     $this->db->where('page_id',$page_id);
     //add user id here
@@ -3161,7 +3161,7 @@ public function fb_token_new() {
     if($response){
        $result= json_decode($response);
         $this->db->set('page_token',$result->access_token);
-        $this->db->where('id',$ress->id);
+        $this->db->where('page_id',$ress->id);
         $this->db->update('fb_page');
         echo'success';
        }else{
@@ -3185,9 +3185,11 @@ public function fb_page_new(){
      $this->db->set('page_token',$this->input->post('page_token'));
      $this->db->insert('fb_page');
      }else{
-     $this->db->set('page_token',$this->input->post('page_token'));
-     $this->db->where('page_id',$this->input->post('page_id'));
-     $this->db->update('fb_page');  
+         $page_id=$this->input->post('page_id');
+        $this->exchange_token($page_id);
+    //  $this->db->set('page_token',$this->input->post('page_token'));
+    //  $this->db->where('page_id',);
+    //  $this->db->update('fb_page');  
     }
    }
    $this->db->select('response,id');

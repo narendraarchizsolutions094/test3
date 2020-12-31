@@ -3749,6 +3749,7 @@ public function insetFollowupTime($enquiry_id,$stageType,$oldTime,$newTime)
 {
 // get the type of stage
 //  $time=$oldTime-$newTime;
+// if(!empty($oldTime) AND !empty($newTime) AND $oldTime!=NULL AND $oldTime!='0000-00-00 00:00:00'){
  $datetime1 = strtotime($oldTime);
  $datetime2 = strtotime($newTime);
   $secs = $datetime2 - $datetime1; // == return sec in difference
@@ -3756,8 +3757,22 @@ public function insetFollowupTime($enquiry_id,$stageType,$oldTime,$newTime)
 // old enq time and stage
   $data=['enq_id'=>$enquiry_id,'time'=>$minutes,'type'=>$stageType,'date1'=>$oldTime,'date2'=>$newTime,'comp_id' => $this->session->userdata('companey_id'),];
   $this->db->insert('tbl_followupAvgtime',$data);
+// }
 }
-
+public function secsToStr($minutes)
+{
+    $d = floor ($minutes / 1440);
+    $h = floor (($minutes - $d * 1440) / 60);
+    $m = $minutes - ($d * 1440) - ($h * 60);
+    if($d!=0){
+        echo  $d.' days '.$h.' hours'.$m.' minutes';
+    }elseif($h!=0){
+        echo $h.' hours'.$m.' minutes';
+    }else{
+        echo $m.' minutes';
+    }
+    
+}
 
 public function getComInfo($enquiry_id)
 {

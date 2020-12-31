@@ -420,7 +420,9 @@ if (!empty($enquiry_separation)) {
                   <p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>&nbsp;
                   <?php $leadTime=$leadSum->row()->time;
                     if ($leadTime!=0) {
-                echo  round(($leadTime/$leadCount),2).' Minutes';}else{echo 'N/A';} ?> 
+                $minutes=  round(($leadTime/$leadCount),0);
+                echo $this->enquiry_model->secsToStr($minutes);
+              }else{echo 'N/A';} ?> 
                   </small></p>
                 </div>
               </div>
@@ -440,8 +442,19 @@ if (!empty($enquiry_separation)) {
                 <div class="timeline-heading">
                   <!--<h4 class="timeline-title">Average</h4>-->
                   <p><small class="text-muted"><i class="glyphicon glyphicon-time"></i> &nbsp;
-                  <?php  if ($clientsum->row()->time!=0) {
-                echo  round(($clientsum->row()->time)/$clientCount2,2).' Minutes';}else{echo 'N/A';} ?>
+                  <?php 
+                  
+                  if ($clientsum->row()->time!=0) {
+                    $minutes= round(($clientsum->row()->time)/$clientCount2,0);
+                    echo $this->enquiry_model->secsToStr($minutes);
+//                     $d = floor ($minutes / 1440);
+// $h = floor (($minutes - $d * 1440) / 60);
+// $m = $minutes - ($d * 1440) - ($h * 60);
+// //
+// // Then you can output it like so...
+// //
+// echo "{$minutes}min converts to {$d}d {$h}h {$m}m";
+                 }else{echo 'N/A';} ?>
                   </small></p>
                 </div>
               </div>
@@ -463,17 +476,20 @@ $enquiry_separation = json_decode($enquiry_separation, true);
     foreach ($enquiry_separation as $key => $value) {
             $ctitle = $enquiry_separation[$key]['title']; 
             $Count=$this->dashboard_model->countLead($key);
-$sum=$this->dashboard_model->dataLead($key);
+            $sum=$this->dashboard_model->dataLead($key);
             $stime= $sum->row()->time;
            
            ?>
-<li class="timeline-item" style="left:40px !important;">
+             <li class="timeline-item" style="left:40px !important;">
               <div class="timeline-badge danger"><i class="glyphicon glyphicon-check"></i></div>
               <div class="timeline-panel" style="width:100px !important;border-radius: 30px;">
                 <div class="timeline-heading">
                   <!--<h4 class="timeline-title">Average</h4>-->
                   <p><small class="text-muted"><i class="glyphicon glyphicon-time"></i> &nbsp;<?php  if ($stime!=0) {
-                echo  round(($stime)/$Count,2).' Minutes';}else{echo 'N/A';} ?> </small></p>
+                 $minutes= round(($stime)/$Count,0);
+                echo $this->enquiry_model->secsToStr($minutes);
+                
+                }else{echo 'N/A';} ?> </small></p>
                 </div>
               </div>
             </li>
