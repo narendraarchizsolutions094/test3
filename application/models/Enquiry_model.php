@@ -3606,7 +3606,7 @@ $cpny_id=$this->session->companey_id;
             foreach($lead_processWise as $k=>$v){
                 $pid    =   $v['sb_id'];
                 if(!empty($arr1[$pid])){
-                    $arr1[$pid]['data'][1] = $v['counter'];
+                    $arr1[$pid]['data'][1] = (int)$v['counter'];
                 }else{
                     $arr1[$pid] = array('name'=>$v['product_name'],'data'=>array(0,(int)$v['counter']));                    
                 }
@@ -3621,7 +3621,7 @@ $cpny_id=$this->session->companey_id;
             foreach($client_processWise as $k=>$v){
                 $pid    =   $v['sb_id'];
                 if(!empty($arr1[$pid])){
-                    $arr1[$pid]['data'][2] = $v['counter'];
+                    $arr1[$pid]['data'][2] = (int)$v['counter'];
                 }else{
                     $arr1[$pid] = array('name'=>$v['product_name'],'data'=>array(0,0,(int)$v['counter']));                    
                 }
