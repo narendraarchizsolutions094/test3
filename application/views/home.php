@@ -9,6 +9,9 @@
 
 
 <style>
+.highcharts-credits{
+  display:none !important;
+}
 .wd-10 {
     width: 58px !important;
 }
