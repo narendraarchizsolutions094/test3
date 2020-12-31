@@ -3595,7 +3595,7 @@ $cpny_id=$this->session->companey_id;
         if(!empty($enquiry_processWise)){
             foreach($enquiry_processWise as $k=>$v){
                 $pid    =   $v['sb_id'];
-                $arr1[$pid] = array('name'=>$v['product_name'],'data'=>array($v['counter']));
+                $arr1[$pid] = array('name'=>$v['product_name'],'data'=>array((int)$v['counter']));
             }
         }
         
@@ -3608,7 +3608,7 @@ $cpny_id=$this->session->companey_id;
                 if(!empty($arr1[$pid])){
                     $arr1[$pid]['data'][1] = $v['counter'];
                 }else{
-                    $arr1[$pid] = array('name'=>$v['product_name'],'data'=>array(0,$v['counter']));                    
+                    $arr1[$pid] = array('name'=>$v['product_name'],'data'=>array(0,(int)$v['counter']));                    
                 }
             }
         }
@@ -3623,7 +3623,7 @@ $cpny_id=$this->session->companey_id;
                 if(!empty($arr1[$pid])){
                     $arr1[$pid]['data'][2] = $v['counter'];
                 }else{
-                    $arr1[$pid] = array('name'=>$v['product_name'],'data'=>array(0,0,$v['counter']));                    
+                    $arr1[$pid] = array('name'=>$v['product_name'],'data'=>array(0,0,(int)$v['counter']));                    
                 }
             }
         }
