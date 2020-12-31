@@ -60,50 +60,7 @@
     <?php }else{ ?>
 
     <div class="col-md-6">
-        <div style="float:right">
-            <?php
-            if(user_access(230) || user_access(231) || user_access(232) || user_access(233) || user_access(234) || user_access(235) || user_access(236)){                          
-            ?>
-            <div class="btn-group dropdown-filter">
-                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
-                    aria-haspopup="true" aria-expanded="false">
-                    Filter by Process<span class="caret"></span>
-                </button>
-                <ul class="filter-dropdown-menu dropdown-menu">
-                    <?php
-
-                if(!empty($products)){
-                $process_list  = $this->session->process??array();
-          if(user_access(270)){
-                  foreach ($products as $product) { ?>
-                    <li>
-                        <label>
-                            <input type="checkbox" name='product_filter[]' value="<?=$product->sb_id ?>" <?php if (in_array($product->sb_id, $process_list)) { echo "checked";                         
-                        }?>> <?=$product->product_name ?>
-                        </label>
-                    </li>
-                    <?php                             
-                  }
-                }else{
-        foreach ($products as $product) { ?>
-                    <li>
-                        <label>
-                            <input type="radio" name='product_filter[]' value="<?=$product->sb_id ?>" <?php if (in_array($product->sb_id, $process_list)) { echo "checked";                         
-                        }?>> <?=$product->product_name ?>
-                        </label>
-                    </li>
-                    <?php                             
-                  } 
-        }
-        }
-                ?>
-                </ul>
-            </div>
-
-            <?php
-            }
-            ?>
-
+        <div style="float:right">           
         </div>
     </div>
 
@@ -603,8 +560,9 @@ $sum=$this->dashboard_model->dataLead($key);
             <!--------------End here -------------------------------------------------------------->
 
             <!------------------------------high chart---------------------------------------------->
-            
-            <script src="https://code.highcharts.com/maps/modules/exporting.js"></script>           
+            <script src="https://code.highcharts.com/maps/highmaps.js"></script>
+            <script src="https://code.highcharts.com/maps/modules/exporting.js"></script>
+            <script src="https://code.highcharts.com/mapdata/countries/in/in-all.js"></script>
 
             <script src="https://code.highcharts.com/highcharts.js"></script>
             <script src="https://code.highcharts.com/modules/exporting.js"></script>
@@ -1852,12 +1810,6 @@ $newDate = date("Y-m-d", strtotime($t_date));
             <script src="<?php echo base_url()?>custom_dashboard/assets/js/amcharts/moment.min.js"></script>
             <script src="<?php echo base_url()?>custom_dashboard/assets/js/amcharts/fullcalendar.min.js"></script>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
-       
+            <script src="<?php echo base_url(); ?>assets/js/knob.js"></script>
             <?php } ?>
 
-
-
-
-</body>
-
-</html>
