@@ -3150,6 +3150,10 @@ $cpny_id=$this->session->companey_id;
     	$where = "( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
     	$where .= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';        
         $where.=" AND enquiry.comp_id=$cpny_id";
+        $arr = $this->session->process;           
+        if(is_array($arr)){
+            $where.=" AND enquiry.product_id IN (".implode(',', $arr).')';
+        }          
 
         $enqAyr = array(); 
         $desplst_query = $this->db->query("SELECT lead_stage_name FROM lead_stage WHERE lead_stage.comp_id = $cpny_id");
@@ -3210,7 +3214,7 @@ $cpny_id=$this->session->companey_id;
         if(is_array($arr)){
             $where.=" AND enquiry.product_id IN (".implode(',', $arr).')';
         }
-        
+
     	$enquiry_drop = $this->db->query("SELECT count(enquiry.enquiry_id)counter,tp.drop_reason FROM enquiry  right JOIN tbl_drop as tp ON tp.d_id = enquiry.drop_status WHERE $where AND enquiry.status = $status  AND tp.drop_reason IS NOT NULL GROUP BY tp.drop_reason");
         $enquiry_dropWise = $enquiry_drop->result_array();
         foreach ($enquiry_dropWise as $key => $value) {
