@@ -46,7 +46,7 @@ class Message extends CI_Controller {
     	    }
 		}
 		
-		public function get_templates_without_process($for,$module){			
+		public function get_templates_without_process($for){			
 			$this->db->where('temp_for',$for);			
     	    $this->db->where('comp_id',$this->session->companey_id);
     	    $res=$this->db->get('api_templates');
