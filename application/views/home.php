@@ -603,9 +603,8 @@ $sum=$this->dashboard_model->dataLead($key);
             <!--------------End here -------------------------------------------------------------->
 
             <!------------------------------high chart---------------------------------------------->
-            <script src="https://code.highcharts.com/maps/highmaps.js"></script>
-            <script src="https://code.highcharts.com/maps/modules/exporting.js"></script>
-            <script src="https://code.highcharts.com/mapdata/countries/in/in-all.js"></script>
+            
+            <script src="https://code.highcharts.com/maps/modules/exporting.js"></script>           
 
             <script src="https://code.highcharts.com/highcharts.js"></script>
             <script src="https://code.highcharts.com/modules/exporting.js"></script>
@@ -1853,7 +1852,7 @@ $newDate = date("Y-m-d", strtotime($t_date));
             <script src="<?php echo base_url()?>custom_dashboard/assets/js/amcharts/moment.min.js"></script>
             <script src="<?php echo base_url()?>custom_dashboard/assets/js/amcharts/fullcalendar.min.js"></script>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
-            <script src="<?php echo base_url(); ?>assets/js/knob.js"></script>
+       
             <?php } ?>
 
 
