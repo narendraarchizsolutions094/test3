@@ -303,115 +303,136 @@ class Ticket extends CI_Controller
 	}
 	public function view_tracking()
 	{
-		if ($post = $this->input->post()) {
-			$url = "https://thecrm360.com/new_crm/ticket/gc_vtrans_api/" . $post['trackingno'];
-			
-			if ($post['trackingno']) {
-				$ch = curl_init();
-				curl_setopt($ch, CURLOPT_URL, $url);
-				curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-				$output = curl_exec($ch);
-				curl_close($ch);
-				if ($output == '') {
-					echo '0';
-					exit();
-				}
-				$a = json_decode($output);
+		if($this->session->process[0] == 198){
+			$curl = curl_init();
+			curl_setopt_array($curl, array(
+			CURLOPT_URL => 'https://www.vxpress.in/DocketTraceNew.php',
+			CURLOPT_RETURNTRANSFER => true,
+			CURLOPT_ENCODING => '',
+			CURLOPT_MAXREDIRS => 10,
+			CURLOPT_TIMEOUT => 0,
+			CURLOPT_FOLLOWLOCATION => true,
+			CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+			CURLOPT_CUSTOMREQUEST => 'POST',
+			CURLOPT_POSTFIELDS => array('name' => '2023000879','isTrace' => '1'),
+			CURLOPT_HTTPHEADER => array(
+				'Cookie: PHPSESSID=373fd1d1879b95e2ac28d5ecafe2952c'
+			),
+			));
+			$response = curl_exec($curl);
+			curl_close($curl);
+			echo $response;
+		}else{
+			if ($post = $this->input->post()) {
+				$url = "https://thecrm360.com/new_crm/ticket/gc_vtrans_api/" . $post['trackingno'];
 				
-				$table  = empty($a->Table) ? '' : $a->Table;
-				$table1 = empty($a->Table1) ? '' : $a->Table1;
-				$table2 = empty($a->Table2) ? '' : $a->Table2;
-				$table3 = empty($a->Table3) ? '' : $a->Table3;
-				
-				//  echo "<pre>";
-				//  print_r($a);
-				//  echo "</pre>";
-				
-				$extra  = empty($a->extra) ? '' : $a->extra;
-				//print_r($extra);
-				if (!empty($extra) ) {
-					$gc_data = (array) $extra->gcDdata;
-					?>
-					<table class='table table-bordered'>
-					<tr><th colspan="4" style="text-align:center;">GC Data
-					</td></tr>
-						<?php
-						$i = 0; 
-						foreach($gc_data as $key=>$value){
-							if($i==2){
-								$i = 0;
+				if ($post['trackingno']) {
+					$ch = curl_init();
+					curl_setopt($ch, CURLOPT_URL, $url);
+					curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+					$output = curl_exec($ch);
+					curl_close($ch);
+					if ($output == '') {
+						echo '0';
+						exit();
+					}
+					$a = json_decode($output);
+					
+					$table  = empty($a->Table) ? '' : $a->Table;
+					$table1 = empty($a->Table1) ? '' : $a->Table1;
+					$table2 = empty($a->Table2) ? '' : $a->Table2;
+					$table3 = empty($a->Table3) ? '' : $a->Table3;
+					
+					//  echo "<pre>";
+					//  print_r($a);
+					//  echo "</pre>";
+					
+					$extra  = empty($a->extra) ? '' : $a->extra;
+					//print_r($extra);
+					if (!empty($extra) ) {
+						$gc_data = (array) $extra->gcDdata;
+						?>
+						<table class='table table-bordered'>
+						<tr><th colspan="4" style="text-align:center;">GC Data
+						</td></tr>
+							<?php
+							$i = 0; 
+							foreach($gc_data as $key=>$value){
+								if($i==2){
+									$i = 0;
+								}
+								if($i == 0){
+									echo '<tr>';
+								}
+								echo '<td>';
+								echo '<b>'.$key.'</b>';
+								echo '</td>';
+								echo '<td>';
+								echo $value;
+								echo '</td>';
+								if($i == 1){
+									echo '</tr>';
+								}										
+								$i++;							
 							}
-							if($i == 0){
-								echo '<tr>';
-							}
-							echo '<td>';
-							echo '<b>'.$key.'</b>';
-							echo '</td>';
-							echo '<td>';
-							echo $value;
-							echo '</td>';
-							if($i == 1){
-								echo '</tr>';
-							}										
-							$i++;							
-						}
-						
-				}
-				if (!empty($a->Table)) {
-					echo '<table class="table table-bordered">		        		        
-				 <tr><th>Delivery Location:</th><td  colspan="3">' . (empty($table->DeliveryLocation) ? '' : $table->DeliveryLocation) . '</td></tr>';				 
-					if (sizeof((array)$table->EDD))
-						echo ' <tr><th>EDD</th><td colspan="3">' . print_r($table->EDD) . '</td></tr>';
+							
+					}
+					if (!empty($a->Table)) {
+						echo '<table class="table table-bordered">		        		        
+					<tr><th>Delivery Location:</th><td  colspan="3">' . (empty($table->DeliveryLocation) ? '' : $table->DeliveryLocation) . '</td></tr>';				 
+						if (sizeof((array)$table->EDD))
+							echo ' <tr><th>EDD</th><td colspan="3">' . print_r($table->EDD) . '</td></tr>';
 
-					echo '<tr><th>Delivery Date:</th><td>' . (empty($table->DeliveryDate) ? '' : $table->DeliveryDate) . '</td></tr>
-		         <tr><th>CRNO:</th><td>' . (empty($table->CRNO) ? '' : $table->CRNO) . '</td></tr>
-		        </table>';
-				}
-				if (!empty($a->Table1)) {
-					echo '<center style="color:red; padding:0px 0px 0px 10px; cursor:pointer;" onclick="$(this).hide(),$(\'.hiddenTrackingDetails\').show();">View More</center>
-		        <div class="hiddenTrackingDetails" style="display:none;">
-	        	<table class="table table-bordered">
-		        	<tr><th colspan="4" style="text-align:center;">Branch Details</th></tr>
-		        	<tr><th>Branch Name:</th><td>' . (empty($table1->Branch_Name) ? '' : $table1->Branch_Name) . '</td><th>Contact Person:</th><td>' . (empty($table1->Contact_Person) ? '' : $table1->Contact_Person) . '</td></tr>	
-		        	<tr><th>Branch Address:</th><td colspan="3">' . (empty($table1->Address) ? '' : $table1->Address) . '</td></tr>
-		        	<tr><th>City Name:</th><td>' . (empty($table1->City_name) ? '' : $table1->City_name) . '</td><th>Pincode:</th><td>' . (empty($table1->Pin_Code) ? '' : $table1->Pin_Code) . '</td></tr>
-		        	<tr><th>STD Code:</th><td>' . (empty($table1->Std_Code) ? '' : $table1->Std_Code) . '</td><th>Mobile:</th><td>' . (empty($table1->mobileno) ? '' : $table1->mobileno) . '</td></tr>
-		        	<tr><th>Phone No:</th><td>' . (empty($table1->phoneno) ? '' : $table1->phoneno) . '</td><th>Email:</th><td>' . (empty($table1->EMail_Id) ? '' : $table1->EMail_Id) . '</td></tr>
-		        	<tr><th>Latitude:</th><td>' . (empty($table1->Latitude) ? '' : $table1->Latitude) . '</td><th>Longitude:</th><td>' . (empty($table1->Longitude) ? '' : $table1->Longitude) . '</td></tr>
-	        	</table>';
-				}
-				if (!empty($a->Table2)) {
-					echo '<table class="table table-bordered">
-		        	<tr><th colspan="4" style="text-align:center;">Delivery Details</th></tr>
-		        	<tr><th>Branch Name:</th><td>' . (empty($table2->Branch_Name) ? '' : $table2->Branch_Name) . '</td><th>Contact Person:</th><td>' . (empty($table2->Contact_Person) ? '' : $table2->Contact_Person) . '</td></tr>	
-		        	<tr><th>Branch Address:</th><td colspan="3">' . (empty($table2->Address) ? '' : $table2->Address) . '</td></tr>
-		        	<tr><th>City Name:</th><td>' . (empty($table2->City_name) ? '' : $table2->City_name) . '</td><th>Pincode:</th><td>' . (empty($table2->Pin_Code) ? '' : $table2->Pin_Code) . '</td></tr>
-		        	<tr><th>STD Code:</th><td>' . (empty($table2->Std_Code) ? '' : $table2->Std_Code) . '</td><th>Mobile:</th><td>' . (empty($table2->mobileno) ? '' : $table2->mobileno) . '</td></tr>
-		        	<tr><th>Phone No:</th><td>' . (empty($table2->phoneno) ? '' : $table2->phoneno) . '</td><th>Email:</th><td>' . (empty($table2->EMail_Id) ? '' : $table2->EMail_Id) . '</td></tr>
-		        	<tr><th>Latitude:</th><td>' . (empty($table2->Latitude) ? '' : $table2->Latitude) . '</td><th>Longitude:</th><td>' . (empty($table2->Longitude) ? '' : $table2->Longitude) . '</td></tr>
-	        	</table>';
-				}
-				if (!empty($table3)) {
-					echo '<table class="table table-bordered">
-	        	<tr><th colspan="5" style="text-align:center;">Status</th></tr>
-	        	<tr><th>From</th><th>To</th><th>Dep. Date</th><th>Arr. Date</th><th>Status</th></tr>
-	        	';
-					if(!empty($table3->From_Station) || !empty($table3->From_Station) || !empty($table3->From_Station) || !empty($table3->From_Station)){
-						$table3 = array($table3);						
+						echo '<tr><th>Delivery Date:</th><td>' . (empty($table->DeliveryDate) ? '' : $table->DeliveryDate) . '</td></tr>
+					<tr><th>CRNO:</th><td>' . (empty($table->CRNO) ? '' : $table->CRNO) . '</td></tr>
+					</table>';
 					}
-					foreach ($table3 as $res) {
-						echo '<tr>
-	        				<td>' . (!empty($res->From_Station) ? $res->From_Station : '') . '</td>
-	        				<td>' . (!empty($res->To_Station) ? $res->To_Station : '') . '</td>
-	        				<td>' . (!empty($res->Depature_Date) ? $res->Depature_Date : '') . '</td>
-	        				<td>' . (!empty($res->Arrival_Date) ? $res->Arrival_Date : '') . '</td>
-	        				<td>' . (!empty($res->Status_Name) ? $res->Status_Name : '') . '</td>
-	        			</tr>';
+					if (!empty($a->Table1)) {
+						echo '<center style="color:red; padding:0px 0px 0px 10px; cursor:pointer;" onclick="$(this).hide(),$(\'.hiddenTrackingDetails\').show();">View More</center>
+					<div class="hiddenTrackingDetails" style="display:none;">
+					<table class="table table-bordered">
+						<tr><th colspan="4" style="text-align:center;">Branch Details</th></tr>
+						<tr><th>Branch Name:</th><td>' . (empty($table1->Branch_Name) ? '' : $table1->Branch_Name) . '</td><th>Contact Person:</th><td>' . (empty($table1->Contact_Person) ? '' : $table1->Contact_Person) . '</td></tr>	
+						<tr><th>Branch Address:</th><td colspan="3">' . (empty($table1->Address) ? '' : $table1->Address) . '</td></tr>
+						<tr><th>City Name:</th><td>' . (empty($table1->City_name) ? '' : $table1->City_name) . '</td><th>Pincode:</th><td>' . (empty($table1->Pin_Code) ? '' : $table1->Pin_Code) . '</td></tr>
+						<tr><th>STD Code:</th><td>' . (empty($table1->Std_Code) ? '' : $table1->Std_Code) . '</td><th>Mobile:</th><td>' . (empty($table1->mobileno) ? '' : $table1->mobileno) . '</td></tr>
+						<tr><th>Phone No:</th><td>' . (empty($table1->phoneno) ? '' : $table1->phoneno) . '</td><th>Email:</th><td>' . (empty($table1->EMail_Id) ? '' : $table1->EMail_Id) . '</td></tr>
+						<tr><th>Latitude:</th><td>' . (empty($table1->Latitude) ? '' : $table1->Latitude) . '</td><th>Longitude:</th><td>' . (empty($table1->Longitude) ? '' : $table1->Longitude) . '</td></tr>
+					</table>';
 					}
-					echo '</table>';
+					if (!empty($a->Table2)) {
+						echo '<table class="table table-bordered">
+						<tr><th colspan="4" style="text-align:center;">Delivery Details</th></tr>
+						<tr><th>Branch Name:</th><td>' . (empty($table2->Branch_Name) ? '' : $table2->Branch_Name) . '</td><th>Contact Person:</th><td>' . (empty($table2->Contact_Person) ? '' : $table2->Contact_Person) . '</td></tr>	
+						<tr><th>Branch Address:</th><td colspan="3">' . (empty($table2->Address) ? '' : $table2->Address) . '</td></tr>
+						<tr><th>City Name:</th><td>' . (empty($table2->City_name) ? '' : $table2->City_name) . '</td><th>Pincode:</th><td>' . (empty($table2->Pin_Code) ? '' : $table2->Pin_Code) . '</td></tr>
+						<tr><th>STD Code:</th><td>' . (empty($table2->Std_Code) ? '' : $table2->Std_Code) . '</td><th>Mobile:</th><td>' . (empty($table2->mobileno) ? '' : $table2->mobileno) . '</td></tr>
+						<tr><th>Phone No:</th><td>' . (empty($table2->phoneno) ? '' : $table2->phoneno) . '</td><th>Email:</th><td>' . (empty($table2->EMail_Id) ? '' : $table2->EMail_Id) . '</td></tr>
+						<tr><th>Latitude:</th><td>' . (empty($table2->Latitude) ? '' : $table2->Latitude) . '</td><th>Longitude:</th><td>' . (empty($table2->Longitude) ? '' : $table2->Longitude) . '</td></tr>
+					</table>';
+					}
+					if (!empty($table3)) {
+						echo '<table class="table table-bordered">
+					<tr><th colspan="5" style="text-align:center;">Status</th></tr>
+					<tr><th>From</th><th>To</th><th>Dep. Date</th><th>Arr. Date</th><th>Status</th></tr>
+					';
+						if(!empty($table3->From_Station) || !empty($table3->From_Station) || !empty($table3->From_Station) || !empty($table3->From_Station)){
+							$table3 = array($table3);						
+						}
+						foreach ($table3 as $res) {
+							echo '<tr>
+								<td>' . (!empty($res->From_Station) ? $res->From_Station : '') . '</td>
+								<td>' . (!empty($res->To_Station) ? $res->To_Station : '') . '</td>
+								<td>' . (!empty($res->Depature_Date) ? $res->Depature_Date : '') . '</td>
+								<td>' . (!empty($res->Arrival_Date) ? $res->Arrival_Date : '') . '</td>
+								<td>' . (!empty($res->Status_Name) ? $res->Status_Name : '') . '</td>
+							</tr>';
+						}
+						echo '</table>';
+					}
+					echo '</div>
+					';
 				}
-				echo '</div>
-		        ';
 			}
 		}
 	}
