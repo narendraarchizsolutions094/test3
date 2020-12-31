@@ -303,8 +303,9 @@ class Ticket extends CI_Controller
 	}
 	public function view_tracking()
 	{
-		print_r($_SESSION);
+		//print_r($_SESSION);
 		if ($post = $this->input->post() && $this->session->process[0] == 141) {
+			echo '1';
 			$url = "https://thecrm360.com/new_crm/ticket/gc_vtrans_api/" . $post['trackingno'];
 			
 			if ($post['trackingno']) {
@@ -415,6 +416,7 @@ class Ticket extends CI_Controller
 		        ';
 			}
 		}else if($post['trackingno'] && $this->session->process[0] == 198 && $this->session->companey_id == 65){
+			echo 2;
 			$curl = curl_init();
 			curl_setopt_array($curl, array(
 			CURLOPT_URL => 'https://www.vxpress.in/DocketTraceNew.php',
