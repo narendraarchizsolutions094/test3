@@ -303,6 +303,7 @@ class Ticket extends CI_Controller
 	}
 	public function view_tracking()
 	{
+		print_r($_SESSION);
 		if ($post = $this->input->post() && $this->session->process[0] == 141) {
 			$url = "https://thecrm360.com/new_crm/ticket/gc_vtrans_api/" . $post['trackingno'];
 			
