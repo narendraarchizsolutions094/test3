@@ -785,11 +785,52 @@ public function login_in_process(){
         $this->load->view('layout/main_wrapper', $data);
     }
     public function processWiseChart()
-    {   
-       // echo "string";die;
+    {         
+        $process_arr = $this->session->process;
         $process = implode(',',$this->session->process);
         $chartData = $this->enquiry_model->processWiseChart($this->session->user_id,$this->session->companey_id,$process);
         //print_r($chartData);die;
+    
+    
+        // [{
+        //     name: data.data['enquiry_processWise'][0][
+        //         'product_name'
+        //     ],
+        //     data: [parseInt(data.data['enquiry_processWise']
+        //         [0]['counter']), parseInt(data.data[
+        //         'lead_processWise'][0][
+        //         'counter']), parseInt(data.data[
+        //         'client_processWise'][0][
+        //         'counter'
+        //     ])],
+        // } ,
+        $r = array();
+        if(!empty($chartData)){
+            if(!empty($process_arr)){
+                foreach($process_arr as $proc){
+                    
+                    $d = array('name'=>$v['product_name']);
+                    
+                    foreach($chartData as $k=>$v){
+                        $r[] = array('name'=>$v['product_name'],'data'=>array($v));
+                    }
+                }
+            }
+        }
+
+        // $enquiry_separation  = get_sys_parameter('enquiry_separation', 'COMPANY_SETTING');
+        
+        // if (!empty($enquiry_separation)) {
+        //     $process = implode(',',$this->session->process);
+        //     $enquiry_separation = json_decode($enquiry_separation, true);
+        //     foreach ($enquiry_separation as $key => $value) {
+        //         $count = $this->enquiry_model->DYprocessWiseChart($this->session->user_id,$this->session->companey_id,$process,$key);
+        //     }  
+        // }
+
+
+
+
         if(!empty($chartData))
         {
             echo json_encode(array('data'=>$chartData,'status'=>'success'));

@@ -3588,18 +3588,47 @@ $cpny_id=$this->session->companey_id;
     	$where .= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';
         $where.=" AND enquiry.comp_id=$cpny_id";
 
-    	$enquiry_process = $this->db->query("SELECT count(enquiry.enquiry_id)counter,tp.product_name FROM enquiry  LEFT JOIN tbl_product as tp ON tp.sb_id = enquiry.product_id WHERE $where AND enquiry.status = 1 AND tp.sb_id In ($process) GROUP BY tp.sb_id");
+    	$enquiry_process = $this->db->query("SELECT count(enquiry.enquiry_id)counter,tp.product_name,tp.sb_id FROM enquiry  LEFT JOIN tbl_product as tp ON tp.sb_id = enquiry.product_id WHERE $where AND enquiry.status = 1 AND tp.sb_id In ($process) GROUP BY tp.sb_id");
         $enquiry_processWise = $enquiry_process->result();
+        $arr1 =$arr2 = $arr3 = array();
         
-        $lead_process = $this->db->query("SELECT count(enquiry.enquiry_id)counter,tp.product_name FROM enquiry  LEFT JOIN tbl_product as tp ON tp.sb_id = enquiry.product_id WHERE $where AND enquiry.status = 2 AND tp.sb_id In ($process) GROUP BY tp.sb_id");
+        if(!empty($enquiry_processWise)){
+            foreach($enquiry_processWise as $k=>$v){
+                $pid    =   $v['sb_id'];
+                $arr1[$pid] = array('name'=>$v['product_name'],'data'=>array($v['counter']));
+            }
+        }
+        
+        $lead_process = $this->db->query("SELECT count(enquiry.enquiry_id)counter,tp.product_name,tp.sb_id FROM enquiry  LEFT JOIN tbl_product as tp ON tp.sb_id = enquiry.product_id WHERE $where AND enquiry.status = 2 AND tp.sb_id In ($process) GROUP BY tp.sb_id");
 
         $lead_processWise = $lead_process->result();
+        if(!empty($lead_processWise)){
+            foreach($lead_processWise as $k=>$v){
+                $pid    =   $v['sb_id'];
+                if(!empty($arr1[$pid])){
+                    $arr1[$pid]['data'][1] = $v['counter'];
+                }else{
+                    $arr1[$pid] = array('name'=>$v['product_name'],'data'=>array(0,$v['counter']));                    
+                }
+            }
+        }
+        $client_process = $this->db->query("SELECT count(enquiry.enquiry_id)counter,tp.product_name,tp.sb_id FROM enquiry  LEFT JOIN tbl_product as tp ON tp.sb_id = enquiry.product_id WHERE $where AND enquiry.status = 3 AND tp.sb_id In ($process) GROUP BY tp.sb_id");
 
-        $client_process = $this->db->query("SELECT count(enquiry.enquiry_id)counter,tp.product_name FROM enquiry  LEFT JOIN tbl_product as tp ON tp.sb_id = enquiry.product_id WHERE $where AND enquiry.status = 3 AND tp.sb_id In ($process) GROUP BY tp.sb_id");
 
+        
         $client_processWise = $client_process->result();
-        $dataAry = array('enquiry_processWise'=>$enquiry_processWise,'lead_processWise'=>$lead_processWise,'client_processWise'=>$client_processWise);
-        return $dataAry;
+        if(!empty($client_processWise)){
+            foreach($$client_processWise as $k=>$v){
+                $pid    =   $v['sb_id'];
+                if(!empty($arr1[$pid])){
+                    $arr1[$pid]['data'][2] = $v['counter'];
+                }else{
+                    $arr1[$pid] = array('name'=>$v['product_name'],'data'=>array(0,0,$v['counter']));                    
+                }
+            }
+        }
+        //$dataAry = array('enquiry_processWise'=>$enquiry_processWise,'lead_processWise'=>$lead_processWise,'client_processWise'=>$client_processWise);
+        return $arr1;
     }
 
     public function enquiryLeadClientChart($userid,$companyid)

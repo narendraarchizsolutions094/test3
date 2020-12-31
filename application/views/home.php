@@ -1271,31 +1271,7 @@ $sum=$this->dashboard_model->dataLead($key);
                                         borderWidth: 0
                                     }
                                 },
-                                series: [{
-                                        name: data.data['enquiry_processWise'][0][
-                                            'product_name'
-                                        ],
-                                        data: [parseInt(data.data['enquiry_processWise']
-                                            [0]['counter']), parseInt(data.data[
-                                            'lead_processWise'][0][
-                                            'counter']), parseInt(data.data[
-                                            'client_processWise'][0][
-                                            'counter'
-                                        ])],
-                                    } ,
-                                    <?php   $enquiry_separation  = get_sys_parameter('enquiry_separation', 'COMPANY_SETTING');
-                 if (!empty($enquiry_separation)) {
-        $process = implode(',',$this->session->process);
-                  $enquiry_separation = json_decode($enquiry_separation, true);
-                      foreach ($enquiry_separation as $key => $value) {
-                               $count = $this->enquiry_model->DYprocessWiseChart($this->session->user_id,$this->session->companey_id,$process,$key);
-                        ?> {
-                                        name: "<?= $count[0]->product_name ?>",
-                                        data: [<?= $count[0]->counter ?>],
-                                    },
-                                    <?php }
-              }  ?>
-                                ]
+                                series: data.series
                             });
 
                         }
