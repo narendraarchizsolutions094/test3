@@ -152,7 +152,7 @@
 <script type="text/javascript">
   $("#ticket_disposition_save").on('click',function(e){
     e.preventDefault();
-    if($("<?=$this->session->companey_id?>"==65 && $("#lead_description").val() == ''){
+    if("<?=$this->session->companey_id?>"==65 && $("#lead_description").val() == ''){
       alert('Please select sub stage.');
       return;
     }
@@ -190,13 +190,14 @@
   });
 
   <?php
-if(!empty($ticket->ticket_stage))
+if(!empty($ticket->ticket_stage)){
   if(!empty($ticket->ticket_substage)){
     echo'$("select[name=lead_description]").load("'.base_url('message/find_substage/').$ticket->ticket_stage.'/'.$ticket->ticket_substage.'");';
   }else{
     echo'$("select[name=lead_description]").load("'.base_url('message/find_substage/').$ticket->ticket_stage.'");';
 
   }
+}
 ?>
 </script>
 <?php
