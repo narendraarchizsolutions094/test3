@@ -83,58 +83,33 @@ echo'<div class="trackingDetails"></div>';
                       { //alert(key);
                         if(that.value=='')
                         {
+
                         }else{
-                          if("<?=$this->session->process[0]?>==198"){
-                            
-                            var dataString = 'name='+ that.value +'&isTrace=1';
-                            jQuery.ajax({
-                              type: "POST",
-                              headers: {
-                                  'Content-Type': 'application/x-www-form-urlencoded'
-                              },
-                              url: "https://www.vxpress.in/DocketTraceNew.php",
-                              data: dataString,
-                              cache: false,
-                              success: function(result){
-                                var result=result;
-                                if(result.length>0){
-                                  jQuery(".trackingDetails").html(result);				
-                                }else{
-                                  Swal.fire({
-                                    title: 'GC. No. Not Found!',
-                                    cancelButtonText: 'Ok!'
-                                    });
-                                }
-                              }
-                            });
+                          $.ajax({
+                            url:'<?=base_url('ticket/view_tracking')?>',
+                            type:'post',
+                            data:{trackingno:that.value},
+                            beforeSend:function(){
 
-                          }else if("<?=$this->session->process[0]?>==141"){
-                            $.ajax({
-                              url:'<?=base_url('ticket/view_tracking')?>',
-                              type:'post',
-                              data:{trackingno:that.value},
-                              beforeSend:function(){
-
-                                $(that).parents('form').find('input,select,button').attr('disabled','disabled');
-                              },
-                              success:function(q)
-                              { $(that).parents('form').find('input,select,button').removeAttr('disabled');
-                                if(q!='0')
-                                  $(".trackingDetails").html(q);
-                                else
-                                {
-                                  Swal.fire({
-                                              title: 'GC. No. Not Found!',
-                                              cancelButtonText: 'Ok!'
-                                              });
-                                }
-                              },
-                              error:function(u,v,w)
+                              $(that).parents('form').find('input,select,button').attr('disabled','disabled');
+                            },
+                            success:function(q)
+                            { $(that).parents('form').find('input,select,button').removeAttr('disabled');
+                              if(q!='0')
+                                $(".trackingDetails").html(q);
+                              else
                               {
-                                console.info(w);
+                                Swal.fire({
+                                            title: 'GC. No. Not Found!',
+                                            cancelButtonText: 'Ok!'
+                                            });
                               }
-                            });
-                          }
+                            },
+                            error:function(u,v,w)
+                            {
+                              console.info(w);
+                            }
+                          });
                           tracking_no_check(that.value);
                         }
                       }
