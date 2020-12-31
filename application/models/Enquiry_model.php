@@ -3627,8 +3627,8 @@ $cpny_id=$this->session->companey_id;
                 }
             }
         }
-        //$dataAry = array('enquiry_processWise'=>$enquiry_processWise,'lead_processWise'=>$lead_processWise,'client_processWise'=>$client_processWise);
-        return $arr1;
+        
+        return array_values($arr1);
     }
 
     public function enquiryLeadClientChart($userid,$companyid)
