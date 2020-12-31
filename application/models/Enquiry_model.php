@@ -3589,7 +3589,7 @@ $cpny_id=$this->session->companey_id;
         $where.=" AND enquiry.comp_id=$cpny_id";
 
     	$enquiry_process = $this->db->query("SELECT count(enquiry.enquiry_id)counter,tp.product_name,tp.sb_id FROM enquiry  LEFT JOIN tbl_product as tp ON tp.sb_id = enquiry.product_id WHERE $where AND enquiry.status = 1 AND tp.sb_id In ($process) GROUP BY tp.sb_id");
-        $enquiry_processWise = $enquiry_process->result();
+        $enquiry_processWise = $enquiry_process->result_array();
         $arr1 =$arr2 = $arr3 = array();
         
         if(!empty($enquiry_processWise)){
@@ -3601,7 +3601,7 @@ $cpny_id=$this->session->companey_id;
         
         $lead_process = $this->db->query("SELECT count(enquiry.enquiry_id)counter,tp.product_name,tp.sb_id FROM enquiry  LEFT JOIN tbl_product as tp ON tp.sb_id = enquiry.product_id WHERE $where AND enquiry.status = 2 AND tp.sb_id In ($process) GROUP BY tp.sb_id");
 
-        $lead_processWise = $lead_process->result();
+        $lead_processWise = $lead_process->result_array();
         if(!empty($lead_processWise)){
             foreach($lead_processWise as $k=>$v){
                 $pid    =   $v['sb_id'];
@@ -3616,7 +3616,7 @@ $cpny_id=$this->session->companey_id;
 
 
         
-        $client_processWise = $client_process->result();
+        $client_processWise = $client_process->result_array();
         if(!empty($client_processWise)){
             foreach($$client_processWise as $k=>$v){
                 $pid    =   $v['sb_id'];
