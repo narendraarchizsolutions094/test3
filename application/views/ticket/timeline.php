@@ -222,7 +222,7 @@
          }               
      });        
     } 
-    find_description();
+    //find_description();
      function find_description() { 
         var l_stage = $("#lead_stage_change").val();
         $.ajax({
