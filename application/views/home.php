@@ -431,53 +431,50 @@ if (!empty($enquiry_separation)) {
                     if ($leadTime!=0) {
                 $minutes=  round(($leadTime/$leadCount),0);
                 echo $this->enquiry_model->secsToStr($minutes);
-              }else{echo 'N/A';} ?> 
-                  </small></p>
-                </div>
-              </div>
-            </li>
-            <?php } ?>
-            <?php   if(user_access(70)){  ?>
+            }else{echo 'N/A';
+                } ?>
+                                                            </small></p>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <?php } ?>
+                                            <?php   if(user_access(70)){  ?>
 
-            <li class="timeline-item">
-              <div class="timeline-badge info" style="width:150px !important;border-radius: 30px;">
-                 <?php echo display("lead"); ?>
-              </div>
-              
-            </li>
-            <li class="timeline-item" style="left:40px !important;">
-              <div class="timeline-badge danger"><i class="glyphicon glyphicon-check"></i></div>
-              <div class="timeline-panel" style="width:100px !important;border-radius: 30px;">
-                <div class="timeline-heading">
-                  <!--<h4 class="timeline-title">Average</h4>-->
-                  <p><small class="text-muted"><i class="glyphicon glyphicon-time"></i> &nbsp;
-                  <?php 
-                  
-                  if ($clientsum->row()->time!=0) {
-                    $minutes= round(($clientsum->row()->time)/$clientCount2,0);
-                    echo $this->enquiry_model->secsToStr($minutes);
-//                     $d = floor ($minutes / 1440);
-// $h = floor (($minutes - $d * 1440) / 60);
-// $m = $minutes - ($d * 1440) - ($h * 60);
-// //
-// // Then you can output it like so...
-// //
-// echo "{$minutes}min converts to {$d}d {$h}h {$m}m";
-                 }else{echo 'N/A';} ?>
-                  </small></p>
-                </div>
-              </div>
-            </li>
-            <?php } ?>
-            <?php   if(user_access(80)){  ?>
-            <li class="timeline-item">
-              <div class="timeline-badge warning" style="width:150px !important;border-radius: 30px;">
-                  <?php echo display("Client"); ?>
-              </div>
-            </li>
-            <?php } ?>
-<!-- //dynamic case -->
-<?php
+                                            <li class="timeline-item">
+                                                <div class="timeline-badge info"
+                                                    style="width:150px !important;border-radius: 30px;">
+                                                    <?php echo display("lead"); ?>
+                                                </div>
+
+                                            </li>
+                                            <li class="timeline-item" style="left:40px !important;">
+                                                <div class="timeline-badge danger"><i
+                                                        class="glyphicon glyphicon-check"></i></div>
+                                                <div class="timeline-panel"
+                                                    style="width:100px !important;border-radius: 30px;">
+                                                    <div class="timeline-heading">
+                                                        <!--<h4 class="timeline-title">Average</h4>-->
+                                                        <p><small class="text-muted"><i
+                                                                    class="glyphicon glyphicon-time"></i> &nbsp;
+                                                                <?php  if ($clientsum->row()->time!=0) {
+                 $minutes= round(($clientsum->row()->time)/$clientCount2,0);
+                echo $this->enquiry_model->secsToStr($minutes);
+            }else{echo 'N/A';} ?>
+                                                            </small></p>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <?php } ?>
+                                            <?php   if(user_access(80)){  ?>
+                                            <li class="timeline-item">
+                                                <div class="timeline-badge warning"
+                                                    style="width:150px !important;border-radius: 30px;">
+                                                    <?php echo display("Client"); ?>
+                                                </div>
+                                            </li>
+                                            <?php } ?>
+                                            <!-- //dynamic case -->
+                                            <?php
         $enquiry_separation  = get_sys_parameter('enquiry_separation', 'COMPANY_SETTING');
 
     if (!empty($enquiry_separation)) {
@@ -489,16 +486,39 @@ $enquiry_separation = json_decode($enquiry_separation, true);
             $stime= $sum->row()->time;
            
            ?>
-             <li class="timeline-item" style="left:40px !important;">
-              <div class="timeline-badge danger"><i class="glyphicon glyphicon-check"></i></div>
-              <div class="timeline-panel" style="width:100px !important;border-radius: 30px;">
-                <div class="timeline-heading">
-                  <!--<h4 class="timeline-title">Average</h4>-->
-                  <p><small class="text-muted"><i class="glyphicon glyphicon-time"></i> &nbsp;<?php  if ($stime!=0) {
+                                            <li class="timeline-item" style="left:40px !important;">
+                                                <div class="timeline-badge danger"><i
+                                                        class="glyphicon glyphicon-check"></i></div>
+                                                <div class="timeline-panel"
+                                                    style="width:100px !important;border-radius: 30px;">
+                                                    <div class="timeline-heading">
+                                                        <!--<h4 class="timeline-title">Average</h4>-->
+                                                        <p><small class="text-muted"><i
+                                                                    class="glyphicon glyphicon-time"></i> &nbsp;<?php  if ($stime!=0) {
                  $minutes= round(($stime)/$Count,0);
                 echo $this->enquiry_model->secsToStr($minutes);
-                
-                }else{echo 'N/A';} ?> </small></p>
+                 
+                 }else{echo 'N/A';} ?> </small></p>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li class="timeline-item">
+                                                <div class="timeline-badge warning"
+                                                    style="width:150px !important;border-radius: 30px;">
+                                                    <?= $ctitle ?>
+                                                </div>
+                                            </li>
+                                            <?php } } ?>
+
+
+                                            <!-- // dynamic case end -->
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
                 <!------------------------------------------------------------------Timeline END-------------------------------------------->
                 <div class="col-lg-12 col-xl-12 mg-t-10">

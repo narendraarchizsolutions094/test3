@@ -3891,11 +3891,11 @@ public function secsToStr($minutes)
     $h = floor (($minutes - $d * 1440) / 60);
     $m = $minutes - ($d * 1440) - ($h * 60);
     if($d!=0){
-        echo  $d.' days '.$h.' hours'.$m.' minutes';
+        echo  $d.' days '.$h.' hours '.$m.' minutes ';
     }elseif($h!=0){
-        echo $h.' hours'.$m.' minutes';
+        echo $h.' hours '.$m.' minutes ';
     }else{
-        echo $m.' minutes';
+        echo $m.' minutes ';
     }
     
 }
