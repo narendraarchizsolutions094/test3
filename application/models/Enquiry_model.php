@@ -3618,7 +3618,7 @@ $cpny_id=$this->session->companey_id;
         
         $client_processWise = $client_process->result_array();
         if(!empty($client_processWise)){
-            foreach($$client_processWise as $k=>$v){
+            foreach($client_processWise as $k=>$v){
                 $pid    =   $v['sb_id'];
                 if(!empty($arr1[$pid])){
                     $arr1[$pid]['data'][2] = $v['counter'];
