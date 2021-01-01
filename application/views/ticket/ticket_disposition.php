@@ -176,7 +176,7 @@
       var sessionId         =   "<?=$this->session->call_parameters['sessionId']??''?>";
       var disposition       =   $("#lead_stage_change option:selected").text();
       //alert(phone);
-      u = 'https://emergems.ameyo.net:8443/dacx/dispose?phone='+phone+'&campaignId='+campaignId+'&crtObjectId='+crtObjectId+'&userCrtObjectId='+userCrtObjectId+'customerId='+customerId+'&dispositionCode='+disposition+'&sessionId='+sessionId;
+      u = 'https://emergems.ameyo.net:8443/dacx/dispose?phone='+phone+'&campaignId='+campaignId+'&crtObjectId='+crtObjectId+'&userCrtObjectId='+userCrtObjectId+'&customerId='+customerId+'&dispositionCode='+disposition+'&sessionId='+sessionId;
       
       $.ajax({
         url:u,
