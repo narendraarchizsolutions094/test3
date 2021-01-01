@@ -151,7 +151,7 @@
 
 <script type="text/javascript">
   $("#ticket_disposition_save").on('click',function(e){
-    alert('name');
+    //alert('name');
     e.preventDefault();
     if("<?=$this->session->companey_id?>"==65 && $("#lead_description").val() == ''){
       alert('Please select sub stage.');
@@ -175,13 +175,14 @@
       var customerId        =   "<?=$this->session->call_parameters['customerId']??''?>";
       var sessionId         =   "<?=$this->session->call_parameters['sessionId']??''?>";
       var disposition       =   $("#lead_stage_change option:selected").text();
-      alert(phone);
-
+      //alert(phone);
+      u = 'https://emergems.ameyo.net:8443/dacx/dispose?phone='+phone+'&campaignId='+campaignId+'&crtObjectId='+crtObjectId+'&userCrtObjectId='+userCrtObjectId+'customerId='+customerId+'&dispositionCode='+disposition+'&sessionId='+sessionId;
+      
       $.ajax({
-        url:'https://emergems.ameyo.net:8443/dacx/dispose?phone='+phone+'&campaignId='+campaignId+'&crtObjectId='+crtObjectId+'&userCrtObjectId='+userCrtObjectId+'customerId='+customerId+'&dispositionCode='+disposition+'&sessionId='+sessionId,
+        url:u,
         type:'get',
         success:function(q){                               
-          console.log(q);
+          alert('url '+u+" response "+q);
         }
       });
       
