@@ -167,13 +167,13 @@
     var response_id = writeUserData(uid,msg,ticketno,task_date,time);
     $("input[name=dis_notification_id]").val(response_id);
     if("<?=$this->session->companey_id?>" == 82 && "<?=!empty($this->session->call_parameters['phone'])?>"){
-      var phone             =   "<?=$this->session->call_parameters['phone']?>";
-      var campaignId        =   "<?=$this->session->call_parameters['campaignId']?>";
-      var crtObjectId       =   "<?=$this->session->call_parameters['crtObjectId']?>";
-      var userCrtObjectId   =   "<?=$this->session->call_parameters['userCrtObjectId']?>";
-      var userId            =   "<?=$this->session->call_parameters['userId']?>";
-      var customerId        =   "<?=$this->session->call_parameters['customerId']?>";
-      var sessionId         =   "<?=$this->session->call_parameters['sessionId']?>";
+      var phone             =   "<?=$this->session->call_parameters['phone']??''?>";
+      var campaignId        =   "<?=$this->session->call_parameters['campaignId']??''?>";
+      var crtObjectId       =   "<?=$this->session->call_parameters['crtObjectId']??''?>";
+      var userCrtObjectId   =   "<?=$this->session->call_parameters['userCrtObjectId']??''?>";
+      var userId            =   "<?=$this->session->call_parameters['userId']??''?>";
+      var customerId        =   "<?=$this->session->call_parameters['customerId']??''?>";
+      var sessionId         =   "<?=$this->session->call_parameters['sessionId']??''?>";
       var disposition       =   $("#lead_stage_change option:selected").text();
       alert(phone);
 
