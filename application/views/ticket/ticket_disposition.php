@@ -165,7 +165,7 @@
     var ticketno = $("input[name=ticketno]").val();
     var response_id = writeUserData(uid,msg,ticketno,task_date,time);
     $("input[name=dis_notification_id]").val(response_id);
-    //alert(name);
+    alert(name);
     if("<?=$this->session->companey_id?>" == 82 && "<?=!empty($this->session->call_parameters['phone'])?>"){
       var phone             =   "<?=$this->session->call_parameters['phone']?>";
       var campaignId        =   "<?=$this->session->call_parameters['campaignId']?>";
