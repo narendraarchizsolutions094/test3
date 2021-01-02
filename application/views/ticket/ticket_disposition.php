@@ -151,9 +151,10 @@
 
 <script type="text/javascript">
   $("#ticket_disposition_save").on('click',function(e){
+    //alert('name');
     e.preventDefault();
-    if($("#lead_stage_change").val() == 2 && "<?=$this->session->companey_id?>"==65 && $("#lead_description").val() == ''){
-      alert('Please select nature of complaint.');
+    if("<?=$this->session->companey_id?>"==65 && $("#lead_description").val() == ''){
+      alert('Please select sub stage.');
       return;
     }
     var disposition = getSelectedText('lead_stage_change');
@@ -165,22 +166,23 @@
     var ticketno = $("input[name=ticketno]").val();
     var response_id = writeUserData(uid,msg,ticketno,task_date,time);
     $("input[name=dis_notification_id]").val(response_id);
-    //alert(name);
     if("<?=$this->session->companey_id?>" == 82 && "<?=!empty($this->session->call_parameters['phone'])?>"){
-      var phone             =   "<?=$this->session->call_parameters['phone']?>";
-      var campaignId        =   "<?=$this->session->call_parameters['campaignId']?>";
-      var crtObjectId       =   "<?=$this->session->call_parameters['crtObjectId']?>";
-      var userCrtObjectId   =   "<?=$this->session->call_parameters['userCrtObjectId']?>";
-      var userId            =   "<?=$this->session->call_parameters['userId']?>";
-      var customerId        =   "<?=$this->session->call_parameters['customerId']?>";
-      var sessionId         =   "<?=$this->session->call_parameters['sessionId']?>";
+      var phone             =   "<?=$this->session->call_parameters['phone']??''?>";
+      var campaignId        =   "<?=$this->session->call_parameters['campaignId']??''?>";
+      var crtObjectId       =   "<?=$this->session->call_parameters['crtObjectId']??''?>";
+      var userCrtObjectId   =   "<?=$this->session->call_parameters['userCrtObjectId']??''?>";
+      var userId            =   "<?=$this->session->call_parameters['userId']??''?>";
+      var customerId        =   "<?=$this->session->call_parameters['customerId']??''?>";
+      var sessionId         =   "<?=$this->session->call_parameters['sessionId']??''?>";
       var disposition       =   $("#lead_stage_change option:selected").text();
-
+      //alert(phone);
+      u = 'https://emergems.ameyo.net:8443/dacx/dispose?phone='+phone+'&campaignId='+campaignId+'&crtObjectId='+crtObjectId+'&userCrtObjectId='+userCrtObjectId+'&customerId='+customerId+'&dispositionCode='+disposition+'&sessionId='+sessionId;
+      
       $.ajax({
-        url:'https://emergems.ameyo.net:8443/dacx/dispose?phone='+phone+'&campaignId='+campaignId+'&crtObjectId='+crtObjectId+'&userCrtObjectId='+userCrtObjectId+'customerId='+customerId+'&dispositionCode='+disposition+'&sessionId='+sessionId,
+        url:u,
         type:'get',
         success:function(q){                               
-          console.log(q);
+          alert('url '+u+" response "+q);
         }
       });
       
@@ -190,15 +192,25 @@
   });
 
   <?php
-if(!empty($ticket->ticket_stage) && !empty($ticket->ticket_substage))
-echo'$("select[name=lead_description]").load("'.base_url('message/find_substage/').$ticket->ticket_stage.'/'.$ticket->ticket_substage.'");';
+if(!empty($ticket->ticket_stage)){
+  if(!empty($ticket->ticket_substage)){
+    echo'$("select[name=lead_description]").load("'.base_url('message/find_substage/').$ticket->ticket_stage.'/'.$ticket->ticket_substage.'");';
+  }else{
+    echo'$("select[name=lead_description]").load("'.base_url('message/find_substage/').$ticket->ticket_stage.'");';
+
+  }
+}
 ?>
 </script>
 <?php
 if($this->session->companey_id == 65){ ?>
   <script>
   if(<?=$ticket->complaint_type?>==2){
+    if("<?=empty($ticket->ticket_stage)?>"){
+      $("select[name=lead_description]").load("<?=base_url('message/find_substage/1')?>");    
+    }
     $("#lead_stage_change").val('1');
+
     $("select[name='ticket_status']").val('3');
   }  
   </script>

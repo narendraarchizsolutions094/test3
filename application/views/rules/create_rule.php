@@ -626,9 +626,9 @@ function builder_fun(rule_type)
 				
 			}
 		}
-		$("#email_template").load("<?=base_url().'message/get_templates/3'?>");
-		$("#sms_template").load("<?=base_url().'message/get_templates/2'?>");
-		$("#whatsapp_template").load("<?=base_url().'message/get_templates/1'?>");
+		$("#email_template").load("<?=base_url().'message/get_templates_without_process/3'?>");
+		$("#sms_template").load("<?=base_url().'message/get_templates_without_process/2'?>");
+		$("#whatsapp_template").load("<?=base_url().'message/get_templates_without_process/1'?>");
 	});
 	$(document).ajaxComplete(function() {
 		if ("<?=!empty($rule_data['type'])?>") {
