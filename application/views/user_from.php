@@ -108,15 +108,15 @@
                             <div class="form-row">                                
                                 <div class="form-group col-md-4">
                                     <label for="description">Date of birth </label>
-                                    <input type="date" class="form-control" name="dob" id="dob" value="<?php echo $department->date_of_birth;?>" >                                    
+                                    <input  class="form-control form-date" name="dob" id="dob" value="<?php echo $department->date_of_birth;?>" >                                    
                                 </div>                                
                                 <div class="form-group col-md-4">
                                     <label for="description">Joining Date</label>
-                                    <input type="date" class="form-control" name="joining_date" id="joining_date" value="<?php echo $department->joining_date;?>" >                                    
+                                    <input  class="form-control form-date" name="joining_date" id="joining_date" value="<?php echo $department->joining_date;?>" >                                    
                                 </div>                                
                                  <div class="form-group col-md-4">
                                     <label for="description">Anniversary </label>
-                                    <input name="anniversary" id="anniversary"  type="date" class="form-control"  value="<?php echo $department->anniversary;?>">
+                                    <input name="anniversary" id="anniversary"   class="form-control form-date"  value="<?php echo $department->anniversary;?>">
                                     
                                 </div>
                                 

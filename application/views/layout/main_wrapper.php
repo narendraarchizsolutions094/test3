@@ -1024,7 +1024,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                         </a>
                         <ul class="treeview-menu <?php echo (($segment1 == "location") ?"menu-open":'') ?>">
                             <li
-                                class="<?php echo (in_array($segment2,array('create','country','edit')) ?"active":'') ?>">
+                                class="<?php echo (in_array($segment2,array('country','edit'))?"active":'') ?> <?= ($segment1=='location' && $segment2=='create')?"active":'' ?> ">
                                 <a
                                     href="<?php echo base_url("location/country") ?>"><?php echo display('country_list') ?></a>
                             </li>
@@ -1496,7 +1496,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                           if (!empty($user_separation)) {
                             $user_separation = json_decode($user_separation,true);
                             foreach ($user_separation as $key => $value) { ?>
-                            <li class="<?php echo ($segment1=='user' && (!empty($_GET['user_role']) && $_GET['user_role']==$key) && in_array($segment2,array('index','create','edit')) ?"active":'') ?>"
+                            <li class="<?php echo ($segment1=='user' && (!empty($_GET['user_role']) && $_GET['user_role']==$key) && in_array($segment2,array('index','create','edit')) || ($segment1=='user'& $segment2=='create') ?"active":'') ?>"
                                 style="<?php if(in_array(130,$module)||in_array(131,$module)){ echo 'display:block';}else{echo 'display:none;';}?>">
                                 <a
                                     href="<?php echo base_url("user/index?user_role=").$key; ?>"><?php echo $value.' List'; ?></a>

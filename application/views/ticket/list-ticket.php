@@ -731,7 +731,14 @@ $('.checked_all1').on('change', function() {
 <script>
 function assign_tickets(){
   if($('.checkbox1:checked').size() > 1000){
-    alert('You can not assign more that 1000 enquiry at once');
+    // alert('You can not assign more that 1000 enquiry at once');
+    Swal.fire({
+  position: 'top-end',
+  icon: 'success',
+  title: 'You can not assign more that 1000 enquiry at once',
+  showConfirmButton: false,
+  timer: 1000
+}); 
   }else{
       var p_url = '<?php echo base_url();?>ticket/assign_tickets';
       var re_url = '<?php echo base_url();?>ticket'; 
