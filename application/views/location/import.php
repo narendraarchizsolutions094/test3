@@ -33,7 +33,7 @@
                             </div>
                         </form>
                     </div>
-                    <div class="col-md-3"><span><a href="<?php echo base_url(); ?>assets/csv/location.csv">Download sample(.csv only)</a></span></div>
+                    <div class="col-md-3"><span><a download="<?php echo base_url(); ?>assets/csv/location.csv" href="<?php echo base_url(); ?>assets/csv/location.csv">Download sample(.csv only)</a></span></div>
                 </div>
             </div>
         </div>

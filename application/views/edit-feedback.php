@@ -248,7 +248,7 @@ foreach ($feedbacks as $key => $values) {
                   <div class="col-md-6">
                     <div class="form-group">
                       <label>Action Taken</label>
-                      <input type="date"  class="form-control" name="Action_Taken" value="<?php if(!empty($data->Action_Taken)){echo$data->Action_Taken; } ?>"> 
+                      <input  class="form-control form-date" name="Action_Taken" value="<?php if(!empty($data->Action_Taken)){echo$data->Action_Taken; } ?>"> 
                     </div>
                   </div> 
                   <div class="col-md-6">

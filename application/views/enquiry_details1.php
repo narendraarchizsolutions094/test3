@@ -714,7 +714,7 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
 
                 <div class="" id="otherTypev">
                     <div class="form-group col-sm-12">
-                    <input type="date" name="c_date" id='disposition_c_date' class="form-control" placeholder=""  >
+                    <input   name="c_date" id='disposition_c_date' class="form-control form-date" placeholder=""  >
                     </div>
                     <div class="form-group col-sm-12">
                         <input type="time" name="c_time" id='disposition_c_time' class="form-control" placeholder=""  >
@@ -973,12 +973,12 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
 
             <div class="form-group col-md-6">  
             <label>From Date</label>    
-            <input type="date" name="fromdate" class="form-control" id="fromdate">       
+            <input  name="fromdate" class="form-control form-date" id="fromdate">       
             </div>
 
             <div class="form-group col-md-6">  
             <label>To Date</label>    
-            <input type="date" name="todate" class="form-control" id="todate">       
+            <input   name="todate" class="form-control form-date" id="todate">       
             </div>
 
             <div class="form-group col-md-12" style="display: none">  
@@ -1086,13 +1086,13 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
 
                        <div class="form-group col-sm-4"> 
                           <label>Date of payment</label>
-                          <input class="form-control" name="dateofpay" type="date" required>  
+                          <input class="form-control form-date" name="dateofpay"   required>  
                        </div>
                       </div>
                       <div class="row">                                          
                        <div class="form-group col-sm-4"> 
                           <label>TDS</label>
-                          <input class="form-control" name="tds" type="text" placeholder="TDS" required>  
+                          <input class="form-control " name="tds" type="text" placeholder="TDS" required>  
                        </div>
                                                                
                        <div class="form-group col-sm-4"> 
@@ -1457,7 +1457,7 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                         <input class="form-control" name="unique_number" type="hidden" value="<?php echo $alldetails->unique_number; ?>">                      
                      <div class="form-group col-sm-4"> 
                         <label>Date of Birth</label>
-                        <input class="form-control" name="date_of_birth" type="date" value="<?php echo $alldetails->date_of_birth; ?>" >  
+                        <input class="form-control form-date" name="date_of_birth"   value="<?php echo $alldetails->date_of_birth; ?>" >  
                      </div>
                      <div class="form-group col-sm-4"> 
                         <label>Marital status</label>
@@ -1472,7 +1472,7 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                      </div>
                      <div class="form-group col-sm-4"> 
                         <label>Last Communication</label>
-                        <input class="form-control" name="last_comm" type="date" value="<?php echo $alldetails->last_comm; ?>" >  
+                        <input class="form-control form-date" name="last_comm"   value="<?php echo $alldetails->last_comm; ?>" >  
                      </div>
                      <div class="form-group col-sm-4"> 
                         <label>Mode Of Communication</label>
@@ -1593,7 +1593,7 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                     
                      <div class="form-group col-sm-4"> 
                         <label>Date of Birth</label>
-                        <input class="form-control" name="date_of_birth" type="date" value="" >  
+                        <input class="form-control form-date" name="date_of_birth"   value="" >  
                      </div>
                      <div class="form-group col-sm-4"> 
                         <label>Marital status</label>
@@ -1608,7 +1608,7 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                      </div>
                      <div class="form-group col-sm-4"> 
                         <label>Last Communication</label>
-                        <input class="form-control" name="last_comm" type="date" value="" >  
+                        <input class="form-control form-date" name="last_comm" value="" >  
                      </div>
                      <div class="form-group col-sm-4"> 
                         <label>Mode Of Communication</label>
@@ -2158,7 +2158,7 @@ if(user_access('1020'))
     </div>
         <div class="form-group col-md-6 visit-date col-md-6">     
           <label>Visit Date</label>
-          <input type="date" name="visit_date" class="form-control">
+          <input   name="visit_date" class="form-control form-date">
         </div>
     
         <div class="form-group col-md-6 visit-time col-md-6">     
@@ -2196,7 +2196,7 @@ if(user_access('1020'))
         
           <div class="form-group col-md-6 next-visit-date col-md-6">      
             <label>Next Visit Date</label>
-             <input type="date" name="next_visit_date" class="form-control">
+             <input  name="next_visit_date" class="form-control form-date">
           </div>
       
           <div class="form-group col-md-6 next-visit-location col-md-6">      
@@ -2386,7 +2386,7 @@ if(user_access('1004'))
            
            <div class="form-group col-sm-6">
                         <label>Agreement Date <i class="text-danger"></i></label>
-                        <input type="date" id="agg_date" name="agg_date" value="" class="form-control"> 
+                        <input  id="agg_date" name="agg_date" value="" class="form-control form-date"> 
                      </div>
 
 <div class="col-md-12" style="padding:20px;">                                                

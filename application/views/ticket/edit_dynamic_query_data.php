@@ -52,7 +52,7 @@
                <?php }?>
                <?php if($fld['input_type']==6){?>
                <label><?php echo(!empty($fld["input_label"])) ?  ucwords($fld["input_label"]) : ""; ?></label>
-               <input type="date"  name="enqueryfield[<?=$fld_id?>]" class="form-control" value ="<?php echo  (!empty($fld["fvalue"])) ? $fld["fvalue"] : ""; ?>">
+               <input   name="enqueryfield[<?=$fld_id?>]" class="form-control form-date" value ="<?php echo  (!empty($fld["fvalue"])) ? $fld["fvalue"] : ""; ?>">
                <?php }?>
                <?php if($fld['input_type']==7){?>
                <label><?php echo(!empty($fld["input_label"])) ?  ucwords($fld["input_label"]) : ""; ?></label>

@@ -36,15 +36,15 @@ var Ignore = new Array();
 		<div class="form-group">
 			<label>Start From - To</label>
 			<div class="input-group">
-				<input type="date" name="start_date_from" class="form-control" style="width: 50%">
-				<input type="date" name="start_date_to" class="form-control" style="width:50%">
+				<input   name="start_date_from" class="form-control form-date" style="width: 50%">
+				<input   name="start_date_to" class="form-control form-date" style="width:50%">
 			</div>
 		</div>
 		<div class="form-group">
 			<label>End From - To</label>
 			<div class="input-group">
-				<input type="date" name="end_ate_from" class="form-control" style="width: 50%">
-				<input type="date" name="end_date_to" class="form-control" style="width:50%">
+				<input   name="end_ate_from" class="form-control form-date" style="width: 50%">
+				<input  name="end_date_to" class="form-control form-date" style="width:50%">
 			</div>
 		</div>
 	</div>

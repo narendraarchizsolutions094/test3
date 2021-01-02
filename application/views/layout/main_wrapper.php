@@ -3055,3 +3055,8 @@ $("#cart-nav-menu").load("<?=base_url().'buy/cart'?>", function() {
 
 });
 </script>
+<script>
+jQuery(function($){ //on document.ready
+  $('.form-date').datepicker({ dateFormat: 'yy-mm-dd' });
+})
+</script>

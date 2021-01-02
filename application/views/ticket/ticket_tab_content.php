@@ -188,7 +188,7 @@ if($form_type == 1)
                <?php }?>
                <?php if($fld['input_type']==6){?>
                <label><?php echo(!empty($fld["input_label"])) ?  ucwords($fld["input_label"]) : ""; ?></label>
-               <input type="date"  name="enqueryfield[<?=$fld_id?>]" class="form-control">
+               <input    name="enqueryfield[<?=$fld_id?>]" class="form-control form-date">
                <?php }?>
                <?php if($fld['input_type']==7){?>
                <label><?php echo(!empty($fld["input_label"])) ?  ucwords($fld["input_label"]) : ""; ?></label>

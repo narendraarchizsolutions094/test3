@@ -28,12 +28,12 @@
 				</div>
 				<div class="form-group col-lg-4">
 					<label>Date From</label>
-					<input type="date" name="datefrom" class="form-control" value="<?=date('Y-m-d')?>" required>
+					<input   name="datefrom" class="form-control form-date" value="<?=date('Y-m-d')?>" required>
 				</div>
 
 				<div class="form-group col-lg-4">
 					<label>Date To</label>
-					<input type="date" name="dateto" class="form-control" value="<?=date('Y-m-d')?>" required>
+					<input name="dateto" class="form-control form-date" value="<?=date('Y-m-d')?>" required>
 				</div>
 
 				

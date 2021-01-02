@@ -30,11 +30,11 @@
 					     
                         <div class="form-group col-md-3">
                           <label for="inputEmail4"><?php echo display("from_date"); ?></label>
-                          <input type="date" class="form-control" id="from-date" value="<?php  if(!empty($_GET['from_exp'])){echo $_GET['from_exp'];} ?>"  name="from_exp" style="padding-top:0px;">
+                          <input  class="form-control form-date" id="from-date" value="<?php  if(!empty($_GET['from_exp'])){echo $_GET['from_exp'];} ?>"  name="from_exp" style="padding-top:0px;">
                         </div>
                         <div class="form-group col-md-3">
                           <label for="inputPassword4"><?php echo display("to_date"); ?></label>
-                          <input type="date" class="form-control" id="" value="<?php  if(!empty($_GET['to_exp'])){echo $_GET['to_exp'];} ?>" name="to_exp" style="padding-top:0px;">
+                          <input   class="form-control form-date" id="" value="<?php  if(!empty($_GET['to_exp'])){echo $_GET['to_exp'];} ?>" name="to_exp" style="padding-top:0px;">
                         </div>
                        
 			            <div class="form-group col-md-6">

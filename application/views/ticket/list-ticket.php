@@ -270,20 +270,20 @@ input[name=lead_stages]{
                        
                         <div class="form-group col-md-3" id="fromdatefilter">
                           <label for="from-date"><?php echo display("from_date"); ?></label>
-                          <input type="date" class="form-control" id="from-date" name="from_created" style="padding-top:0px;">
+                          <input   class="form-control form-date" id="from-date" name="from_created" style="padding-top:0px;">
                         </div>
                         <div class="form-group col-md-3" id="todatefilter">
                           <label for="to-date"><?php echo display("to_date"); ?></label>
-                          <input type="date" class="form-control" id="to-date" name="to_created" style="padding-top:0px;">
+                          <input   class="form-control form-date" id="to-date" name="to_created" style="padding-top:0px;">
                         </div>
                         
                         <div class="form-group col-md-3" id="update_fromdatefilter">
                           <label for="update-from-date"><?php echo display("update_from_date"); ?></label>
-                          <input type="date" class="form-control" id="update-from-date" name="update_from_created" style="padding-top:0px;">
+                          <input  class="form-control form-date" id="update-from-date" name="update_from_created" style="padding-top:0px;">
                         </div>
                         <div class="form-group col-md-3" id="update_todatefilter">
                           <label for="update-to-date"><?php echo display("update_to_date"); ?></label>
-                          <input type="date" class="form-control" id="update-to-date" name="update_to_created" style="padding-top:0px;">
+                          <input class="form-control form-date" id="update-to-date" name="update_to_created" style="padding-top:0px;">
                         </div>
 
 

@@ -468,12 +468,12 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
 
             <div class="form-group col-md-6">  
             <label>From Date</label>    
-            <input type="date" name="fromdate" class="form-control" id="fromdate">       
+            <input   name="fromdate" class="form-control form-date" id="fromdate">       
             </div>
 
             <div class="form-group col-md-6">  
             <label>To Date</label>    
-            <input type="date" name="todate" class="form-control" id="todate">       
+            <input   name="todate" class="form-control form-date" id="todate">       
             </div>
 
             <div class="form-group col-md-12" style="display: none">  
@@ -581,7 +581,7 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
 
                        <div class="form-group col-sm-4"> 
                           <label>Date of payment</label>
-                          <input class="form-control" name="dateofpay" type="date" required>  
+                          <input class="form-control form-date" name="dateofpay"  required>  
                        </div>
                       </div>
                       <div class="row">                                          
@@ -944,7 +944,7 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                         <input class="form-control" name="unique_number" type="hidden" value="<?php echo $alldetails->unique_number; ?>">                      
                      <div class="form-group col-sm-4"> 
                         <label>Date of Birth</label>
-                        <input class="form-control" name="date_of_birth" type="date" value="<?php echo $alldetails->date_of_birth; ?>" style="padding:0px !important;">  
+                        <input class="form-control form-date" name="date_of_birth"   value="<?php echo $alldetails->date_of_birth; ?>" style="padding:0px !important;">  
                      </div>
                      <div class="form-group col-sm-4"> 
                         <label>Marital status</label>
@@ -959,7 +959,7 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                      </div>
                      <div class="form-group col-sm-4"> 
                         <label>Last Communication</label>
-                        <input class="form-control" name="last_comm" type="date" value="<?php echo $alldetails->last_comm; ?>" style="padding:0px !important;">  
+                        <input class="form-control form-date" name="last_comm"  value="<?php echo $alldetails->last_comm; ?>" style="padding:0px !important;">  
                      </div>
                      <div class="form-group col-sm-4"> 
                         <label>Mode Of Communication</label>
@@ -1080,7 +1080,7 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                     
                      <div class="form-group col-sm-4"> 
                         <label>Date of Birth</label>
-                        <input class="form-control" name="date_of_birth" type="date" value="" style="padding:0px !important;">  
+                        <input class="form-control form-date" name="date_of_birth"   value="" style="padding:0px !important;">  
                      </div>
                      <div class="form-group col-sm-4"> 
                         <label>Marital status</label>
@@ -1095,7 +1095,7 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                      </div>
                      <div class="form-group col-sm-4"> 
                         <label>Last Communication</label>
-                        <input class="form-control" name="last_comm" type="date" value="" style="padding:0px !important;">  
+                        <input class="form-control form-date" name="last_comm"   value="" style="padding:0px !important;">  
                      </div>
                      <div class="form-group col-sm-4"> 
                         <label>Mode Of Communication</label>
@@ -2039,7 +2039,7 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                </div>
                <div class="form-group col-md-6">
                   <label>Due Date</label>
-                  <input class="form-control" name="due_date" placeholder="Due Date"  type="date" value="" required>
+                  <input class="form-control form-date" name="due_date" placeholder="Due Date"    value="" required>
                </div>
                <div class="sgnbtnmn form-group col-md-12">
                   <div class="sgnbtn">

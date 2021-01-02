@@ -423,7 +423,7 @@
 
                      <div class="form-group col-sm-12" id="otherTypev">
                                     <div class="form-group col-sm-12">
-                                    <input type="date" name="c_date" class="form-control" placeholder="" >
+                                    <input name="c_date" class="form-control form-date" placeholder="" >
                                 </div>
                                 <div class="form-group col-sm-12">
                                     <input type="time" name="c_time" class="form-control" placeholder="" >
