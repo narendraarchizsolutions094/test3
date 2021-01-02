@@ -892,6 +892,8 @@ $('#buttongroup').hide();
         }
       
         if($('#sourcecheckbox').is(":checked")){
+         $('#save_filterbutton').show();
+
           $('#sourcefilter').show();
           $("#buttongroup").show();
         }
@@ -901,6 +903,8 @@ $('#buttongroup').hide();
         }
 
         if($('#problemcheckbox').is(":checked")){
+         $('#save_filterbutton').show();
+
           $('#problemfilter').show();
           $("#buttongroup").show();
         }
@@ -910,18 +914,24 @@ $('#buttongroup').hide();
         }
 
         if($('#createdbycheckbox').is(":checked")){
+         $('#save_filterbutton').show();
+
           $('#createdbyfilter').show();
         }
         else{
           $('#createdbyfilter').hide();
         }
         if($('#assigncheckbox').is(":checked")){
+         $('#save_filterbutton').show();
+
           $('#assignfilter').show();
         }
         else{
           $('#assignfilter').hide();
         }
         if($('#assign_bycheckbox').is(":checked")){
+         $('#save_filterbutton').show();
+
           $('#assign_byfilter').show();
         }
         else{
@@ -929,18 +939,25 @@ $('#buttongroup').hide();
         }
 
         if($('#issuecheckbox').is(":checked")){
+        $('#save_filterbutton').show();
+
+         $('#save_filterbutton').show();
+
           $('#issuefilter').show();
         }
         else{
           $('#issuefilter').hide();
         }
         if($('#prioritycheckbox').is(":checked")){
+        $('#save_filterbutton').show();
+
           $('#priorityfilter').show();
         }
         else{
           $('#priorityfilter').hide();
         }
        if($('#prodcheckbox').is(":checked")){
+        $('#save_filterbutton').show();
          $('#prodfilter').show();
          //alert("check");
        }
@@ -948,18 +965,21 @@ $('#buttongroup').hide();
          $('#prodfilter').hide();
        }
       if($('#stagecheckbox').is(":checked")){
+        $('#save_filterbutton').show();
           $('#stagefilter').show();
         }
         else{
           $('#stagefilter').hide();
         }
         if($('#sub_stagecheckbox').is(":checked")){
+         $('#save_filterbutton').show();
           $('#sub_stagefilter').show();
         }
         else{
           $('#sub_stagefilter').hide();
         }
         if($('#statuscheckbox').is(":checked")){
+         $('#save_filterbutton').show();
           $('#statusfilter').show();
         }
         else{
@@ -1327,13 +1347,21 @@ url: '<?=base_url()?>ticket/ticket_save_filter',
 type: 'post',
 data: form_data,
 success: function(responseData){
-  
-   }
+  Swal.fire({
+  position: 'top-end',
+  icon: 'success',
+  title: 'filted data saved',
+  showConfirmButton: false,
+  timer: 500
 });
+
+
 }
+});
+  }
 jQuery(function($){ //on document.ready
         $('.form-date').datepicker({ dateFormat: 'yy-mm-dd' });
-      })
+      });
 </script>
 
 
