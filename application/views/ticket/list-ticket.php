@@ -438,10 +438,10 @@ input[name=lead_stages]{
                         ?>     
                     </select> 
                     </div> 
+                  
                     <div class="form-group col-md-3">
-  <button style="margin: 20px;" class="btn btn-success" id="save_filterbutton" type="button" onclick="ticket_save_filter();">Save</button>        
-    
-</div>           
+                    <button class="btn btn-success" id="save_filterbutton" type="button" onclick="ticket_save_filter();" style="margin: 20px;">Save</button>        
+                        </div>           
                     <!-- </div> -->
           
             </div>
@@ -779,8 +779,15 @@ $(document).ready(function(){
     $("input[name='filter_checkbox']:checked").each(function(){
       arr.push($(this).val());
     });        
-    setCookie('ticket_filter_setting',arr,365);      
-    alert('Your custom filters saved successfully.');
+    setCookie('ticket_filter_setting',arr,365);    
+    Swal.fire({
+  position: 'top-end',
+  icon: 'success',
+  title: 'Your custom filters saved successfully.',
+  showConfirmButton: false,
+  timer: 1000
+});  
+    // alert('Your custom filters saved successfully.');
   }) 
 
 
@@ -790,7 +797,7 @@ if (!enq_filters.includes('date')) {
   $('#fromdatefilter').hide();
   $('#todatefilter').hide();
   $('#update_fromdatefilter').hide();
-         $('#update_todatefilter').hide();
+  $('#update_todatefilter').hide();
 }else{
   $("input[value='date']").prop('checked', true);
 }
@@ -864,15 +871,33 @@ if (!enq_filters.includes('sub_stage')) {
 
 if (!enq_filters.includes('status')) {
   $('#statusfilter').hide();
-  $('#save_filterbutton').hide();
 
 }else{
   $("input[value='status']").prop('checked', true);
 }
 
 $('#buttongroup').hide();
- $('input[name="filter_checkbox"]').click(function(){   
+if($('#datecheckbox').is(":checked")||$('#sourcecheckbox').is(":checked")||$('#sourcecheckbox').is(":checked")||
+  $('#problemcheckbox').is(":checked")){
+    $('#save_filterbutton').show();
 
+  }else{
+    $('#save_filterbutton').hide();
+
+  }
+ $('input[name="filter_checkbox"]').click(function(){  
+  if($('#datecheckbox').is(":checked")||$('#sourcecheckbox').is(":checked")||$('#sourcecheckbox').is(":checked")||
+  $('#problemcheckbox').is(":checked")||$('#createdbycheckbox').is(":checked")||$('#assigncheckbox').is(":checked")||
+  $('#assign_bycheckbox').is(":checked")||$('#issuecheckbox').is(":checked")||$('#prioritycheckbox').is(":checked")||
+  $('#prodcheckbox').is(":checked")||$('#stagecheckbox').is(":checked")||$('#sub_stagecheckbox').is(":checked")||
+  $('#statuscheckbox').is(":checked")){
+    $('#save_filterbutton').show();
+
+  }else{
+    $('#save_filterbutton').hide();
+
+  }
+ 
         if($('#datecheckbox').is(":checked")){
          $('#fromdatefilter').show();
          $('#todatefilter').show();
@@ -970,6 +995,7 @@ $('#buttongroup').hide();
         }
         else{
           $('#stagefilter').hide();
+
         }
         if($('#sub_stagecheckbox').is(":checked")){
          $('#save_filterbutton').show();
@@ -1339,7 +1365,6 @@ for (var i = 0; i < checkboxes.length; i++) {
   });
 
   function ticket_save_filter(){
-
 var form_data = $("#ticket_filter").serialize();       
 // alert(form_data);
 $.ajax({
@@ -1359,6 +1384,7 @@ success: function(responseData){
 }
 });
   }
+
 jQuery(function($){ //on document.ready
         $('.form-date').datepicker({ dateFormat: 'yy-mm-dd' });
       });

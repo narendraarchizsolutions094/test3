@@ -95,7 +95,9 @@ class Ticket_Model extends CI_Model
    {
 	   $comp_id=$this->session->companey_id;
 	   $user_id=$this->session->user_id;
-		$value=$this->db->where(array('user_id'=>$user_id,'comp_id'=>$comp_id,'type'=>2))->get('tbl_filterdata')->row();
+		$values=$this->db->where(array('user_id'=>$user_id,'comp_id'=>$comp_id,'type'=>2))->get('tbl_filterdata');
+		$value=$values->row();
+		// print_r($value);
 			$pdata=[
 					'from_created' =>$value->from_created??NULL,
 					'to_created' =>$value->to_created??NULL,
@@ -112,6 +114,7 @@ class Ticket_Model extends CI_Model
 					'stage' =>$value->stage??NULL,
 					'sub_stage' =>$value->sub_stage??NULL,
 					'ticket_status' =>$value->ticket_status??NULL,
+					'rows'=>$values->num_rows()??0,
 		];
 		return $pdata;
    }
