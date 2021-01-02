@@ -145,7 +145,7 @@ a:hover, a:focus {
       </div>
         <form action="<?=base_url().'lead/upload_course'?>" enctype="multipart/form-data" method='post'>
           <div class="modal-body">
-                <a href="<?=base_url().'docs/course_sample.csv'?>" class='pull-right'>Download Sample</a>
+                <a href="<?=base_url().'docs/course_sample.csv'?>" class='pull-right' download>Download Sample</a>
 
                 <label>Select File</label>
                 <input type="file" name="course_file" class="form-control">            

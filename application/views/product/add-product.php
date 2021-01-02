@@ -102,8 +102,8 @@
 						</div>
 						<div class = "col-md-4">
 							<div class = "form-group">
-								<label>Seller</label>
-								<select class = "form-control" name = "seller" onchange="checkProductDuplicacy(this.value)">
+								<label>Seller<i class="text-danger">*</i></label>
+								<select class = "form-control" name = "seller" onchange="checkProductDuplicacy(this.value)" required>
 									<option value="">Select Seller</option>
 								<?php if(!empty($seller_list)) {
 										if($isedit == true) {

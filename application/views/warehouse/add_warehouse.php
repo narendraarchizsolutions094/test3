@@ -20,7 +20,7 @@
 
                                 <label for="country_name" class="col-xs-3 col-form-label">Email<i class="text-danger">*</i></label>
                                 <div class="col-xs-3">
-                                    <input name="email" type="text" class="form-control" id="email" placeholder="Email" value="<?= $formdata->email?>" required>
+                                    <input name="email" type="email" class="form-control" id="email" placeholder="Email" value="<?= $formdata->email?>" required>
                                 </div>
 
                             </div>

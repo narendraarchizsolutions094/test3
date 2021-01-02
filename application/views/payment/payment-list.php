@@ -46,7 +46,7 @@
 															<i class="fa fa-calendar tx-16 lh-0 op-6"></i>
 														</div>
 													</div>
-													<input class="form-control" name="startdate" id = "start-date" placeholder="DD/MM/YYYY" value="" type="date" autocomplete = "off">
+													<input class="form-control form-date" name="startdate" id = "start-date" placeholder="DD/MM/YYYY" value="" type="date" autocomplete = "off">
 												</div>
 										</div>
 										<div class = "form-group col-3">
@@ -56,7 +56,7 @@
 														<div class="input-group-text">
 															<i class="fa fa-calendar tx-16 lh-0 op-6"></i>
 														</div>
-													</div><input class="form-control" name="enddate" id = "end-date" placeholder="DD/MM/YYYY" value="" type="text" autocomplete = "off">
+													</div><input class="form-control form-date" name="enddate" id = "end-date" placeholder="DD/MM/YYYY" value="" type="text" autocomplete = "off">
 												</div>
 										</div>
 										<div class = "form-group col-3">
@@ -97,22 +97,22 @@
 								</div>
 								<div class="card-body">
 								
-                                	<div class="table-responsive">
-										<table class="table table-striped datatable1 table-bordered">
+                                	<div class="">
+										<table class="table table-striped datatable1 table-bordered" style="width: 100%;">
 											<thead>
 												<tr>
-													<th class="wd-15p">S.No.</th>
+													<th >S.No.</th>
 												
-													<th class="wd-15p">Order</th>
+													<th >Order</th>
 											
 													<!-- <th class="wd-15p">Product</th> -->
-													<th class="wd-15p">Total Pay</th>
-													<th class="wd-15p">Paid</th>
-													<th class="wd-15p">Balance</th>
-													<th class="wd-15p">Mode</th>
-													<th class="wd-15p">Transaction No</th>
+													<th >Total Pay</th>
+													<th >Paid</th>
+													<th >Balance</th>
+													<th >Mode</th>
+													<th >Transaction No</th>
 													<!-- <th class="wd-15p">Status</th> -->
-													<th class="wd-15p">Payment Date</th>
+													<th >Payment Date</th>
 													<!-- <th class="wd-15p">Action</th> -->
 													
 												</tr>

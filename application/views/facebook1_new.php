@@ -97,16 +97,17 @@ $pages=$this->db->where(array('comp_id'=>$comp_id,'user_id'=>$user_id))->get('fb
                     <td><?= $i++ ?></td>
                     <td><?= $value->page_id ?></td>
                     <td><?= $value->timestamp ?></td>
-                    <td><a class="btn-primary btn"  data-toggle="modal" data-target="#genLead<?= $value->page_id ?>" >Edit</a> <a class="btn-primary btn">Renew Token</a>
+                    <td><a class="btn-primary btn"  data-toggle="modal" data-target="#updatepage<?= $value->page_id ?>" >Edit</a>
+                     <a href="<?= base_url('dashboard/renameFacebookToken/'.$value->page_id.'') ?>" class="btn-primary btn">Renew Token</a>
                    
-<div id="genLead<?= $value->page_id ?>" class="modal fade" role="dialog">
+<div id="updatepage<?= $value->page_id ?>" class="modal fade" role="dialog">
   <div class="modal-dialog">
 
     <!-- Modal content-->
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title"></h4>
+        <h4 class="modal-title">Set Your facebook data with Enquiry  fields</h4>
       </div>
       <div class="modal-body">
         <form action="<?= base_url('dashboard/update_fbpage') ?>" method="POST" >
@@ -125,6 +126,7 @@ $pages=$this->db->where(array('comp_id'=>$comp_id,'user_id'=>$user_id))->get('fb
             </div>
             <br>
           </div>
+          
           <?php 
           $this->db->select('*,input_types.title as input_type_title,'); 		
           $this->db->where('tbl_input.page_id',0);  			
@@ -135,19 +137,8 @@ $pages=$this->db->where(array('comp_id'=>$comp_id,'user_id'=>$user_id))->get('fb
             // print_r($data['form_fields']); 
             // exit();
             ?>
+          
           <div class="row">
-            <div class="form-group col-sm-6">  
-        <label>Form Id</label>                  
-             <select name="form_id" class="form-control">
-            <option value="0">Select</option>
-
-             <?php   
-            foreach ($data['form_fields'] as $key => $fivalue) {    ?>
-            <option value="<?= $fivalue['input_id']; ?>" <?php if($value->form_id==$fivalue['input_id']){echo'selected';} ?>><?= $fivalue['input_label']; ?></option>
-                    <?php } ?>
-             </select>               
-            </div>
-            
             <div class="form-group col-sm-6">  
             <label>Form Name</label>                  
              <select name="form_name" class="form-control" >
@@ -203,6 +194,17 @@ $pages=$this->db->where(array('comp_id'=>$comp_id,'user_id'=>$user_id))->get('fb
             <option value="<?= $cvalue['input_id']; ?>" <?php if($value->course_name==$cvalue['input_id']){echo'selected';} ?>><?= $cvalue['input_label']; ?></option>
                     <?php } ?>
              </select>               
+            </div>
+            <div class="form-group col-sm-6">
+            <label class="col-form-label">Response</label>
+            <select name="response" class="form-control" >
+            <option value="0">Select</option>
+
+             <?php   
+            foreach ($data['form_fields'] as $key => $fvalue) {    ?>
+            <option value="<?= $fvalue['input_id']; ?>" <?php if($value->response==$fvalue['input_id']){echo'selected';} ?>><?= $fvalue['input_label']; ?></option>
+                    <?php } ?>
+             </select>  
             </div>
           </div>
           <div class="row">

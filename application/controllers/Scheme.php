@@ -42,7 +42,7 @@ public function __construct() {
         $this->load->view('layout/main_wrapper', $data);
 	  
   }	
-  public function edit($cpn = ""){
+  public function edit_scheme($cpn = ""){
 	  
 	  if(isset($_POST["fromdate"])){
 		   
@@ -58,7 +58,8 @@ public function __construct() {
 	 //$data["schemes"] = $this->scheme_model->getSchemeByCoupan($cpn);
 	 
 	 $data["schm"]    = (!empty($data["schemes"][0])) ? $data["schemes"][0] : ""; 
-	    $data['content'] = '';//$this->load->view('scheme/update-scheme',true,$data);
+      $data['content'] = '';
+      //$this->load->view('scheme/update-scheme',true,$data);
       $this->load->view('layout/main_wrapper',$data);
   } 
 	public function updatescheme(){
@@ -396,10 +397,10 @@ public function __construct() {
 public function update_region_scheme(){
     $this->form_validation->set_rules('fromdate', "From Date", 'required');
     $this->form_validation->set_rules('todate', "To Date", 'required');
+    $id = $this->input->post('pscheme_id');
     
     if($this->form_validation->run()==true){
        
-       $id = $this->input->post('pscheme_id');
         $data = array(
         
         'from_date'=>$this->input->post('fromdate'),
@@ -429,10 +430,10 @@ public function update_region_scheme(){
   public function update_pay_scheme(){
     $this->form_validation->set_rules('fromdate', "From Date", 'required');
     $this->form_validation->set_rules('todate', "To Date", 'required');
+    $id = $this->input->post('pscheme_id');
     
     if($this->form_validation->run()==true){
        
-       $id = $this->input->post('pscheme_id');
         $data = array(
         
         'from_date'=>$this->input->post('fromdate'),

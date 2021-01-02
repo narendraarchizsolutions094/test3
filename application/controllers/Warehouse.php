@@ -76,7 +76,7 @@ public function addwarehouse(){
                 }
                 redirect('warehouse/warehouse');
             } else {
-                if (user_role('31') == true) {                    
+                if (user_role('30') == true) {                    
                 }
                 if ($this->location_model->updateProductCountry($postData)) {
                     $this->session->set_flashdata('message', display('update_successfully'));
@@ -95,7 +95,6 @@ public function addwarehouse(){
 
 public function editwarehouse($id){
     if (user_role('440') == true) {}
-     if (user_role('31') == true) {}
         $data['title'] = 'Edit Product';
         $data['formdata'] = $this->warehouse_model->readwarehouse($id);
         $data['country_list'] = $this->location_model->country();
@@ -152,7 +151,7 @@ public function addtypeofproduct(){
                 }
                 redirect('warehouse/typeofproduct');
             } else {
-                if (user_role('31') == true) {                    
+                if (user_role('30') == true) {                    
                 }
                 if ($this->warehouse_model->updatetypeofproduct($postData)) {
                     $this->session->set_flashdata('message', display('update_successfully'));
@@ -171,7 +170,6 @@ public function addtypeofproduct(){
 
 public function edittypeofproduct($id){
     if (user_role('440') == true) {}
-     if (user_role('31') == true) {}
         $data['title'] = 'Edit Product';
         $data['formdata'] = $this->warehouse_model->readtypeofproduct($id);
         $data['warehouse_list'] = $this->warehouse_model->warehouse_list1();
@@ -218,7 +216,7 @@ public function addbrand(){
                 }
                 redirect('warehouse/brand');
             } else {
-                if (user_role('31') == true) {                    
+                if (user_role('30') == true) {                    
                 }
                 if ($this->warehouse_model->updatebrand($postData)) {
                     $this->session->set_flashdata('message', display('update_successfully'));
@@ -236,7 +234,6 @@ public function addbrand(){
 }
 public function editbrand($id){
     if (user_role('440') == true) {}
-        if (user_role('31') == true) {}
         $data['title'] = 'Edit Brand';
         $data['formdata'] = $this->warehouse_model->readbrandlist($id);
        $data['typeofpro_list'] = $this->warehouse_model->typeofproduct_list();

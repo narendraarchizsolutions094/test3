@@ -3078,14 +3078,16 @@ public function fb_token_new() {
             if(!empty($res)){
              $access_token=$res->page_token;
              $user_id=$res->user_id;
-             $fprocess_id=$res->process_id;
-             $fpage_id=$res->page_id;
-             $fform_id=$res->form_id;
+             $comp_id=$res->comp_id;
+             $process_id=$res->process_id;
+            //  $fpage_id=$res->page_id;
+            //  $fform_id=$res->form_id;
              $fform_name=$res->form_name;
              $fcompaign_name=$res->compaign_name;
              $fadd_set_name=$res->add_set_name;
              $fadd_name=$res->add_name;
              $fcourse_name=$res->course_name;
+             $fresponse=$res->response;
             }
             $curl = curl_init();
             curl_setopt_array($curl, array(
@@ -3141,6 +3143,7 @@ public function fb_token_new() {
          $add_set_name=$res_db->add_set_name;
          $add_name=$res_db->add_name;
          $course_name=$res_db->course_name;
+
          }else{
          $from_id='';
          $from_name='';
@@ -3159,7 +3162,7 @@ public function fb_token_new() {
       CURLOPT_TIMEOUT => 30,
       CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
       CURLOPT_CUSTOMREQUEST => "POST",
-      CURLOPT_POSTFIELDS => "------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"mobileno\"\r\n\r\n".$phone1."\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"company_id\"\r\n\r\n".$comp_id."\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"user_id\"\r\n\r\n".$user_id."\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"process_id\"\r\n\r\n175\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"fname\"\r\n\r\n".$name1."\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"email\"\r\n\r\n".$email1."\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"product_id\"\r\n\r\n".$course_name."\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"4393\"\r\n\r\n".$compaign_name."\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"4394\"\r\n\r\n".$add_name."\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"4392\"\r\n\r\n".$add_set_name."\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"4395\"\r\n\r\n".$from_name."\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"4399\"\r\n\r\n".$response."\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"enquiry_source\"\r\n\r\n209\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW--",
+      CURLOPT_POSTFIELDS => "------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"mobileno\"\r\n\r\n".$phone1."\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"company_id\"\r\n\r\n".$comp_id."\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"user_id\"\r\n\r\n".$user_id."\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"process_id\"\r\n\r\n'.$process_id.'\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"fname\"\r\n\r\n".$name1."\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"email\"\r\n\r\n".$email1."\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"'.$fcourse_name.'\"\r\n\r\n".$course_name."\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"'.$fcompaign_name.'\"\r\n\r\n".$compaign_name."\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"'.$fadd_name.'\"\r\n\r\n".$add_name."\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"'.$fadd_set_name.'\"\r\n\r\n".$add_set_name."\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"'.$fform_name.'\"\r\n\r\n".$from_name."\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"'.$fresponse.'\"\r\n\r\n".$response."\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"enquiry_source\"\r\n\r\n209\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW--",
               CURLOPT_HTTPHEADER => array(
                 "cache-control: no-cache",
                 "content-type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW",
@@ -3251,42 +3254,91 @@ public function fb_page_new(){
 
     $process_id= $this->input->post('process_id');
     $page_id= $this->input->post('page_id');
-    $form_id= $this->input->post('form_id');
-    $form_name= $this->input->post('from_name');
+    $response= $this->input->post('response');
+    $form_name= $this->input->post('form_name');
     $compaign_name= $this->input->post('compaign_name');
     $add_set_name= $this->input->post('add_set_name');
     $add_name= $this->input->post('add_name');
     $course_name= $this->input->post('course_name');
 
     $this->db->set('process_id',$process_id);
-    $this->db->set('form_id',$form_id);
+    $this->db->set('response',$response);
     $this->db->set('form_name',$form_name);
     $this->db->set('compaign_name',$compaign_name);
     $this->db->set('add_set_name',$add_set_name);
     $this->db->set('add_name',$add_name);
     $this->db->set('course_name',$course_name);
+    $this->db->set('updated_at',date('Y-m-d H:i:s'));
     $this->db->where('page_id',$page_id);
     $this->db->where('comp_id',$comp_id);
     $this->db->update('fb_page');
     $this->session->set_flashdata('form-data','<div class="alert alert-success alert-dismissable">
                  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                 Feedback Added Successfully!</div>');
-                //  redirect('dashboard/facbookData');
+                 Facebook Page Data  Added Successfully!</div>');
+                 redirect('facebook-pages');
+
 
  }
  function facbookData() {
     // if (user_role('1133') == true) {
     // }
-    $data['title'] = display('import');
+    $data['title'] = display('Facebook Pages');
     $data['content'] = $this->load->view('facebook1_new', $data, true);
     $this->load->view('layout/main_wrapper', $data);
 
 }
- function import_feedback() {
-    // if (user_role('1133') == true) {
-    // }
-    $data['title'] = display('import');
-    $data['content'] = $this->load->view('feedback/import', $data, true);
-    $this->load->view('layout/main_wrapper', $data);
-}
+ public function renameFacebookToken()
+ {
+      $page_id=$this->uri->segment('3');
+      $this->db->select('*');
+      $this->db->where('page_id',$page_id);
+      //add user id here
+      $res=$this->db->get('fb_page');
+      if($res->num_rows()==1){
+      // print_r($res->page_token);
+      $ress=$res->row();
+      $page=$ress->page_token;
+      $curl = curl_init();
+      curl_setopt_array($curl, array(
+        CURLOPT_URL => "https://graph.facebook.com/v8.0/oauth/access_token?grant_type=fb_exchange_token&client_id=727296608087888&client_secret=5d99c494d951db5aa29778d1eab95c1f&fb_exchange_token=$page",
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => "",
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 30,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => "GET",
+        CURLOPT_POSTFIELDS => "",
+        CURLOPT_HTTPHEADER => array(
+          "cache-control: no-cache",
+          "content-type: application/json"
+        ),
+      ));
+      $response = curl_exec($curl);
+      $err = curl_error($curl);
+      curl_close($curl);
+      if($response){
+         $result= json_decode($response);
+          $this->db->set('page_token',$result->access_token);
+          $this->db->set('updated_at',date('Y-m-d H:i:s'));
+          $this->db->where('page_id',$ress->id);
+          $this->db->update('fb_page');
+          $this->session->set_flashdata('form-data','<div class="alert alert-success alert-dismissable">
+          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+          Facebook Token Updated!</div>');
+      redirect('facebook-pages');
+
+         }else{
+            $this->session->set_flashdata('form-data','<div class="alert alert-warning alert-dismissable">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            response not found</div>');
+          redirect('facebook-pages');
+
+         }
+  }else{
+    $this->session->set_flashdata('form-data','<div class="alert alert-warning alert-dismissable">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+    page id not found</div>');
+redirect('facebook-pages');
+  }
+ }
 }

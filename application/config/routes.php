@@ -283,11 +283,11 @@ $route['edit-userrights/(:any)']   = 'userrights/userrights_edit/$1';
 $route['document-templates'] = 'setting/document_templates';
 $route['master_lead_search'] = 'lead/lead_search';
 $route['lead'] = 'led';
-$route['feedback'] = 'Dashboard/feedback';
-$route['feedback-edit/(:any)'] = 'Dashboard/edit_feedback/$i';
-$route['feedback/create'] = 'Dashboard/create';
-$route['feedback/insert'] = 'Dashboard/insert';
-$route['import-feedback'] = 'Dashboard/import_feedback';
+// $route['feedback'] = 'Dashboard/feedback';
+// $route['feedback-edit/(:any)'] = 'Dashboard/edit_feedback/$i';
+// $route['feedback/create'] = 'Dashboard/create';
+// $route['feedback/insert'] = 'Dashboard/insert';
+$route['facebook-pages'] = 'dashboard/facbookData';
 
 $route['404_override']            = '';
 
