@@ -1101,7 +1101,7 @@ $(document).ready(function() {
                         columns: "thead th:not(.noExport)"
                     }} 
              ] ,  <?php  } ?>               
-            'drawCallback': function (settings) {   
+            drawCallback: function (settings) {   
               var api = this.api();
             var $table = $(api.table().node());  
               console.log(settings);               
@@ -1112,7 +1112,7 @@ $(document).ready(function() {
                   $('#ticket_table_next').addClass('disabled');
                 }
                 $('#ticket_table_previous').after('<li><a class="btn btn-secondary btn-sm" href="javascript:void(0)">'+info.page+'</a></li>');
-         }
+            }
          });
 
 
