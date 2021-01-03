@@ -43,7 +43,7 @@
 													</div>
 												</div>
 												
-												<input class="form-control" type="date" id="fromdate" name="fromdate" required="" style = "width:100%;">
+												<input class="form-control form-date" type="date" id="fromdate" name="fromdate" required="" style = "width:100%;">
 											</div>
 											</div>
 												<div class="form-group col-md-3">
@@ -55,7 +55,7 @@
 													</div>
 												</div>
 												
-												<input class="form-control" type="date" id="todate" name="todate" required="" style = "width:100%;">
+												<input class="form-control form-date" type="date" id="todate" name="todate" required="" style = "width:100%;">
 											</div>
 											</div>
 											<div class = "col-md-3">
@@ -193,20 +193,20 @@
 												<div class="col-md-2 add-quantity-area" style = "display:none;">
 													<div class="form-group">
 														<label>From (QTY)</label>
-														<input type="text" class="form-control" id="fromqty" name="fromqty[]">
+														<input type="number" class="form-control" id="fromqty" name="fromqty[]" >
 													</div>
 													
 												</div>
 												<div class="col-md-2 add-quantity-area" style = "display:none;">
 													<div class="form-group">
 														<label>To(QTY)</label>
-														<input type="text" class="form-control" id="toqty" name="toqty[]">
+														<input type="number" class="form-control" id="toqty" name="toqty[]">
 														</div>
 												</div>
 											<div class="col-md-2">
 											<div class="form-group">
 											 <label>Discount(%)</label>
-											 <input type="text" class="form-control" id="discount" name="discount[]">
+											 <input type="number" class="form-control" id="discount" name="discount[]">
 											 </div>	
 											</div>
                                             <div class="col-md-2 add-quantity-area" style = "display:none;">
@@ -431,7 +431,7 @@
 		  if(i< max_fields){
 			i++;
 		
-			$('#addrow').append('<div class="row" id="row'+i+'"><div class="col-md-2"><div class="form-group"><label>From (QTY)</label><input type="text" class="form-control" id="fromqty" name="fromqty[]"></div></div><div class="col-md-2"><div class="form-group"><label>To(QTY)</label><input type="text" class="form-control" id="toqty" name="toqty[]"></div></div><div class="col-md-2"><div class="form-group"><label>Discount(%)</label><input type="text" class="form-control" id="discount" name="discount[]"></div></div><div class="form-group col-md-2" style="margin-top: 22px;"><button name="remove" id="'+i+'" class="btn btn-danger btn_remove">X</button></div></div>');
+			$('#addrow').append('<div class="row" id="row'+i+'"><div class="col-md-2"><div class="form-group"><label>From (QTY)</label><input type="number" class="form-control" id="fromqty" name="fromqty[]"></div></div><div class="col-md-2"><div class="form-group"><label>To(QTY)</label><input type="number" class="form-control" id="toqty" name="toqty[]"></div></div><div class="col-md-2"><div class="form-group"><label>Discount(%)</label><input type="number" class="form-control" id="discount" name="discount[]"></div></div><div class="form-group col-md-2" style="margin-top: 22px;"><button name="remove" id="'+i+'" class="btn btn-danger btn_remove">X</button></div></div>');
 
 			} 
 		

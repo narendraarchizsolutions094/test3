@@ -502,7 +502,7 @@
                     
                      <div class="form-group col-sm-4"> 
                         <label>Date of Birth</label>
-                        <input class="form-control" name="date_of_birth" type="date" value="<?php echo $alldetails->date_of_birth; ?>" style="padding:0px !important;">  
+                        <input class="form-control form-date" name="date_of_birth"   value="<?php echo $alldetails->date_of_birth; ?>" style="padding:0px !important;">  
                      </div>
                      <div class="form-group col-sm-4"> 
                         <label>Marital status</label>
@@ -517,7 +517,7 @@
                      </div>
                      <div class="form-group col-sm-4"> 
                         <label>Last Communication</label>
-                        <input class="form-control" name="last_comm" type="date" value="<?php echo $alldetails->last_comm; ?>" style="padding:0px !important;">  
+                        <input class="form-control form-date" name="last_comm"   value="<?php echo $alldetails->last_comm; ?>" style="padding:0px !important;">  
                      </div>
                      <div class="form-group col-sm-4"> 
                         <label>Mode Of Communication</label>
@@ -638,7 +638,7 @@
                     
                      <div class="form-group col-sm-4"> 
                         <label>Date of Birth</label>
-                        <input class="form-control" name="date_of_birth" type="date" value="" style="padding:0px !important;">  
+                        <input class="form-control form-date" name="date_of_birth"  value="" style="padding:0px !important;">  
                      </div>
                      <div class="form-group col-sm-4"> 
                         <label>Marital status</label>
@@ -653,7 +653,7 @@
                      </div>
                      <div class="form-group col-sm-4"> 
                         <label>Last Communication</label>
-                        <input class="form-control" name="last_comm" type="date" value="" style="padding:0px !important;">  
+                        <input class="form-control form-date" name="last_comm"   value="" style="padding:0px !important;">  
                      </div>
                      <div class="form-group col-sm-4"> 
                         <label>Mode Of Communication</label>
@@ -1488,7 +1488,7 @@
                   <label>
                      Task Date <!-----Demo Plan Date--->
                   </label>
-                  <input class="form-control" name="task_date"  type="date" placeholder="Task date" >
+                  <input class="form-control form-date" name="task_date"   placeholder="Task date" >
                </div>
                <div class="form-group col-sm-6">
                   <label>

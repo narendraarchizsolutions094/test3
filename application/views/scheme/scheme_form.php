@@ -64,7 +64,7 @@
 													</div>
 												</div>
 												
-												<input class="form-control fc-datepicker" placeholder="MM/DD/YYYY" type="text" id="fromdate" name="fromdate" required="" style = "width:100%;">
+												<input class="form-control fc-datepicker form-date" placeholder="MM/DD/YYYY" type="text" id="fromdate" name="fromdate" required="" style = "width:100%;">
 											</div>
 											</div>
 												<div class="col-md-6">
@@ -76,7 +76,7 @@
 													</div>
 												</div>
 												
-												<input class="form-control fc-datepicker" placeholder="MM/DD/YYYY" type="text" id="todate" name="todate" required=""   style = "width:100%;">
+												<input class="form-control fc-datepicker form-date" placeholder="MM/DD/YYYY" type="text" id="todate" name="todate" required=""   style = "width:100%;">
 											</div>
 											</div>
 											

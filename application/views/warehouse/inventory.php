@@ -74,7 +74,7 @@
                 </div>              
       </div>
       <div>
-          <a href="<?php echo base_url('uploads/csv/') ?>Inventory.csv" type="submit" class="" style="width: 150px;height: 26px;font-size: 12px;">Download Sample</a>
+          <a href="<?php echo base_url('uploads/csv/') ?>Inventory.csv" type="submit" class="" style="width: 150px;height: 26px;font-size: 12px;" download="">Download Sample</a>
       </div>
       <br>
 

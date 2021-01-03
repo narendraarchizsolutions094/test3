@@ -28,12 +28,12 @@
 				</div>
 				<div class="form-group col-lg-4">
 					<label>Date</label>
-					<input type="date" name="datefrom" class="form-control" value="<?=$holiday['datefrom']?>" required>
+					<input  name="datefrom" class="form-control form-date" value="<?=$holiday['datefrom']?>" required>
 				</div>
 
 				<div class="form-group col-lg-4">
 					<label>Date To</label>
-					<input type="date" name="dateto" class="form-control" value="<?=$holiday['dateto']?>" required>
+					<input   name="dateto" class="form-control form-date" value="<?=$holiday['dateto']?>" required>
 				</div>
 
 				<div class="form-group col-lg-3">

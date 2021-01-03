@@ -1024,7 +1024,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                         </a>
                         <ul class="treeview-menu <?php echo (($segment1 == "location") ?"menu-open":'') ?>">
                             <li
-                                class="<?php echo (in_array($segment2,array('create','country','edit')) ?"active":'') ?>">
+                                class="<?php echo (in_array($segment2,array('country','edit'))?"active":'') ?> <?= ($segment1=='location' && $segment2=='create')?"active":'' ?> ">
                                 <a
                                     href="<?php echo base_url("location/country") ?>"><?php echo display('country_list') ?></a>
                             </li>
@@ -1359,7 +1359,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                     <?php
                   }
                   if (user_access('300')) { ?>
-                    <li class="<?php echo (($segment1 == "inventory") ? "active" : null) ?>">
+                    <li class="<?php echo (($segment2 == "inventory") ? "active" : null) ?>">
                         <a href="<?php echo base_url("warehouse/inventory") ?>">
                             <i class="fa fa-object-group"
                                 style="color:#fff;font-size:20px;background:#008080;padding:7px;border-radius:4px;width:30px;"></i>
@@ -1444,7 +1444,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                    } ?>
 
                     <!-- start  super admin -->
-                    <li class="treeview <?php echo in_array($segment1, array('user','customer')) ? "active" : null ?>"
+                    <li class="treeview <?php echo in_array($segment1, array('user','customer','userrights')) ? "active" : null ?>"
                         style="<?php if(in_array(130,$module) || in_array(131,$module) || in_array(132,$module) || in_array(133,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
                         <a href="#">
                             <i class="fa fa-user-plus"
@@ -1459,12 +1459,12 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                         </a>
                         <!-- <?=$segment1?> -->
                         <ul
-                            class="treeview-menu <?php echo in_array($segment1, array('user','customer')) ? "menu-open" : null ?>">
+                            class="treeview-menu <?php echo in_array($segment1, array('user','customer','userrights')) ? "menu-open" : null ?>">
                             <?php
                         if ($this->session->user_right == 1) {                        
                         ?>
                             <li
-                                class="<?php echo (in_array($segment2,array('customer','create','edit','')) ?"active":'') ?>">
+                                class="<?php echo (in_array($segment2,array('customer','create','edit')) ?"active":'') ?>">
                                 <a href="<?php echo base_url("customer"); ?>"><?php echo display('company_list'); ?></a>
                             </li>
 
@@ -1486,7 +1486,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                             </li>
                             <?php
                         }else{ ?>
-                            <li class="<?php echo ($segment1=='user' && in_array($segment2,array('user_type','edit_user_role','permissions')) ?"active":'') ?>"
+                            <li class="<?php echo (in_array($segment1,array('user','userrights')) && in_array($segment2,array('user_type','edit_user_role','permissions','userrights')) ?"active":'') ?>"
                                 style="<?php if(in_array(140,$module) || in_array(141,$module) || in_array(142,$module)|| in_array(143,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
                                 <a
                                     href="<?php echo base_url(); ?>user/user_type"><?php echo display('user_function') ?></a>
@@ -1496,7 +1496,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                           if (!empty($user_separation)) {
                             $user_separation = json_decode($user_separation,true);
                             foreach ($user_separation as $key => $value) { ?>
-                            <li class="<?php echo ($segment1=='user' && (!empty($_GET['user_role']) && $_GET['user_role']==$key) && in_array($segment2,array('index','create','edit')) ?"active":'') ?>"
+                            <li class="<?php echo ($segment1=='user' && (!empty($_GET['user_role']) && $_GET['user_role']==$key) && in_array($segment2,array('index','create','edit')) || ($segment1=='user'& $segment2=='create') ?"active":'') ?>"
                                 style="<?php if(in_array(130,$module)||in_array(131,$module)){ echo 'display:block';}else{echo 'display:none;';}?>">
                                 <a
                                     href="<?php echo base_url("user/index?user_role=").$key; ?>"><?php echo $value.' List'; ?></a>
@@ -1642,7 +1642,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                         else if($menu_count==20)
                         {
                     ?>
-                    <li class="<?php echo (($segment1 == "client" && empty($_GET['stage'])) && $segment2!='visits'? "active" : null) ?>"
+                    <li class="<?php echo (($segment1 == "client"   || $segment2 == ""|| $segment1 == "index" && empty($_GET['stage'] ))  && $segment2!='deals' && $segment2!='visits'? "active" : null) ?>"
                         style="<?php if(in_array(80,$module) || in_array(81,$module) || in_array(82,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
                         <a href="<?php echo base_url("client/index") ?>">
                             <i class="fa fa-user-circle-o"
@@ -1733,7 +1733,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
 
                 if(user_access('1020') || user_access('1021') || user_access('1022'))
                 {
-                    echo' <li class="'.($segment1=='client' && $segment2=='visits'?'active':'').'" >
+                    echo' <li class="'.($segment2=='visits'?'active':'').'" >
                         <a href="'.base_url("client/visits").'">
                         <i class="fa fa-car"
                                 style="color:#fff;
@@ -1748,7 +1748,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
 
                 if(user_access('1000') || user_access('1001') || user_access('1002') || user_access('1004') || user_access('1005'))
                 {
-                    echo' <li class="'.($segment1=='client' && $segment2=='deals'?'active':'').'" >
+                    echo' <li class="'.($segment2=='deals'?'active':'').'" >
                         <a href="'.base_url("client/deals").'">
                         <i class="fa fa-handshake-o"
                                 style="color:#fff;
@@ -3054,4 +3054,7 @@ $("#cart-nav-menu").load("<?=base_url().'buy/cart'?>", function() {
     });
 
 });
+jQuery(function($){ //on document.ready
+        $('.form-date').datepicker({ dateFormat: 'yy-mm-dd' });
+      })
 </script>

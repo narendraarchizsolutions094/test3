@@ -77,7 +77,7 @@ class Ticket extends CI_Controller
 	}
 	public function index()
 	{
-
+	
 		$this->load->model('Datasource_model');
 		$this->load->model('dash_model');
 		$this->load->model('enquiry_model');
@@ -102,10 +102,14 @@ class Ticket extends CI_Controller
 		
 		//print_r($data["tickets"]);die;
 		$data['issues'] = $this->Ticket_Model->get_issue_list();
+		$data['filterData'] = $this->Ticket_Model->get_filterData();
+		// print_r($data);
+		// die();
 		$data['user_list'] = $this->User_model->companey_users();
 		$data['content'] = $this->load->view('ticket/list-ticket', $data, true);
 		$this->load->view('layout/main_wrapper', $data);
 	}
+
 	public function is_open_ticket($tracking_no){
 		$comp_id = $this->session->companey_id;
 		$this->db->where('tbl_ticket.ticket_status!=',3);
@@ -117,6 +121,59 @@ class Ticket extends CI_Controller
 	{
 		$this->session->set_userdata('ticket_filters_sess', $_POST);
 		//print_r($_SESSION);
+	}
+	public function ticket_save_filter()
+	{
+		$user_id=$this->session->user_id;
+		$comp_id=$this->session->companey_id;
+		//check already exist or not
+		$count=$this->db->where(array('user_id'=>$user_id,'comp_id'=>$comp_id,'type'=>2))->count_all_results('tbl_filterdata');
+		
+		if($count==0){
+			$data= 
+		['from_created' =>$this->input->post('from_created'),
+		'to_created' =>$this->input->post('to_created'),
+		'update_from_created' =>$this->input->post('update_from_created'),
+		'update_to_created' =>$this->input->post('update_to_created'),
+		'source' =>$this->input->post('source'),
+		'problem' => $this->input->post('problem'),
+		'priority' =>$this->input->post('priority'),
+		'issue' =>$this->input->post('issue'),
+		'createdby' =>$this->input->post('createdby'), 
+		'assign' => $this->input->post('assign'),
+		'assign_by' => $this->input->post('assign_by'),
+		'prodcntry' => $this->input->post('prodcntry'),
+		'stage' => $this->input->post('stage'),
+		'sub_stage' => $this->input->post('sub_stage'),
+		'ticket_status' =>$this->input->post('ticket_status'),
+		'user_id'=>$user_id,
+		'comp_id'=>$comp_id,
+		'type'=>2
+	    ];
+			$this->db->insert('tbl_filterdata',$data);
+			echo'inserted';
+		}else{
+			$data= 
+			['from_created' =>$this->input->post('from_created'),
+			'to_created' =>$this->input->post('to_created'),
+			'update_from_created' =>$this->input->post('update_from_created'),
+			'update_to_created' =>$this->input->post('update_to_created'),
+			'source' =>$this->input->post('source'),
+			'problem' => $this->input->post('problem'),
+			'priority' =>$this->input->post('priority'),
+			'issue' =>$this->input->post('issue'),
+			'createdby' =>$this->input->post('createdby'), 
+			'assign' => $this->input->post('assign'),
+			'assign_by' => $this->input->post('assign_by'),
+			'prodcntry' => $this->input->post('prodcntry'),
+			'stage' => $this->input->post('stage'),
+			'sub_stage' => $this->input->post('sub_stage'),
+			'ticket_status' =>$this->input->post('ticket_status'),
+	    ];
+			$this->db->where(array('user_id'=>$user_id,'comp_id'=>$comp_id,'type'=>2))->update('tbl_filterdata',$data);
+			echo'updated';
+		}
+		
 	}
 	public function autofill()
 	{

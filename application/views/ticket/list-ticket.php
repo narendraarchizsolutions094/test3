@@ -270,30 +270,30 @@ input[name=lead_stages]{
                        
                         <div class="form-group col-md-3" id="fromdatefilter">
                           <label for="from-date"><?php echo display("from_date"); ?></label>
-                          <input type="date" class="form-control" id="from-date" name="from_created" style="padding-top:0px;">
+                          <input   class="form-control form-date" id="from-date" name="from_created" style="padding-top:0px;" value="<?= $filterData['from_created'] ?>">
                         </div>
                         <div class="form-group col-md-3" id="todatefilter">
                           <label for="to-date"><?php echo display("to_date"); ?></label>
-                          <input type="date" class="form-control" id="to-date" name="to_created" style="padding-top:0px;">
+                          <input   class="form-control form-date" id="to-date" name="to_created" style="padding-top:0px;" value="<?= $filterData['to_created'] ?>">
                         </div>
                         
                         <div class="form-group col-md-3" id="update_fromdatefilter">
                           <label for="update-from-date"><?php echo display("update_from_date"); ?></label>
-                          <input type="date" class="form-control" id="update-from-date" name="update_from_created" style="padding-top:0px;">
+                          <input  class="form-control form-date" id="update-from-date" name="update_from_created" style="padding-top:0px;" value="<?= $filterData['update_from_created'] ?>">
                         </div>
                         <div class="form-group col-md-3" id="update_todatefilter">
                           <label for="update-to-date"><?php echo display("update_to_date"); ?></label>
-                          <input type="date" class="form-control" id="update-to-date" name="update_to_created" style="padding-top:0px;">
+                          <input class="form-control form-date" id="update-to-date" name="update_to_created" style="padding-top:0px;" value="<?= $filterData['update_to_created'] ?>">
                         </div>
 
 
-                         <div class="form-group col-md-3" id="sourcefilter">
+                         <div class="col-md-3" id="sourcefilter">
                           <label for="source"><?php echo display("source"); ?></label>
                           <select class="form-control" name="source" id="source">
                               <option value="" style="display:">---Select Source---</option>
                                <?php foreach ($sourse as $row) {?>
                                 
-                                 <option value="<?=$row->lsid?>" <?php if(!empty(set_value('source'))){if (in_array($row->lsid,set_value('source'))) {echo 'selected';}}?>><?=$row->lead_name?></option>
+                                 <option value="<?=$row->lsid?>" <?php if($row->lsid==$filterData['source']) {echo 'selected';}?>  <?php if(!empty(set_value('source'))){if (in_array($row->lsid,set_value('source'))) {echo 'selected';}}?>><?=$row->lead_name?></option>
                               <?php }?>
 
                           </select>
@@ -308,7 +308,7 @@ input[name=lead_stages]{
                               <option value="" style="display:">---Select Problem---</option>
                                <?php foreach ($problem as $row) {?>
                                 
-                                 <option value="<?=$row->id?>"><?=$row->subject_title?></option>
+                                 <option value="<?=$row->id?>"  <?php if($row->id==$filterData['problem']) {echo 'selected';}?>><?=$row->subject_title?></option>
                               <?php 
 	                          }
 	                          ?>
@@ -320,9 +320,9 @@ input[name=lead_stages]{
                           <label for="priority">Priority</label>
                           <select class="form-control" name="priority" id="priority">
               <option value="" style="display:">---Select Priority---</option>
-              <option value="1">Low</option>
-							<option value="2">Medium</option>
-							<option value="3">High</option>n>
+              <option value="1"  <?php if(1==$filterData['priority']) {echo 'selected';}?>>Low</option>
+							<option value="2"  <?php if(2==$filterData['priority']) {echo 'selected';}?>>Medium</option>
+							<option value="3"  <?php if(3==$filterData['priority']) {echo 'selected';}?>>High</option>n>
                            </select>
                         </div>
 
@@ -332,7 +332,7 @@ input[name=lead_stages]{
                               <option value="" style="display:">---Select Issue---</option>
                                <?php  if(!empty($issues)) {
 								foreach($issues as $ind => $issue){
-									?><option value = "<?php echo $issue->id ?>"><?php echo ucfirst($issue->title) ?> </option>
+									?><option value = "<?php echo $issue->id ?>" <?php if(3==$filterData['priority']) {echo 'selected';}?>><?php echo ucfirst($issue->title) ?> </option>
 								<?php
 								}	
 							} ?>
@@ -341,7 +341,7 @@ input[name=lead_stages]{
                         </div>
                         <!-- ======================= -->
                      </div>
-                    <div class="form-row">                      
+                    <!-- <div class="form-row">                       -->
                         
                          <div class="form-group col-md-3" id="createdbyfilter">
                           <label for="">Created By</label>
@@ -350,7 +350,7 @@ input[name=lead_stages]{
                          <?php 
                           if (!empty($created_bylist)) {
                               foreach ($created_bylist as $createdbylist) {?>
-                              <option value="<?=$createdbylist->pk_i_admin_id;?>" <?php if(!empty(set_value('createdby'))){if (in_array($product->sb_id,set_value('createdby'))) {echo 'selected';}}?>><?=$createdbylist->s_display_name.' '.$createdbylist->last_name;?> -  <?=$createdbylist->s_user_email?$createdbylist->s_user_email:$createdbylist->s_phoneno;?>                               
+                              <option value="<?=$createdbylist->pk_i_admin_id;?>" <?php if($createdbylist->pk_i_admin_id==$filterData['createdby']) {echo 'selected';}?> <?php if(!empty(set_value('createdby'))){if (in_array($product->sb_id,set_value('createdby'))) {echo 'selected';}}?> <?php if(3==$filterData['priority']) {echo 'selected';}?>><?=$createdbylist->s_display_name.' '.$createdbylist->last_name;?> -  <?=$createdbylist->s_user_email?$createdbylist->s_user_email:$createdbylist->s_phoneno;?>                               
                               </option>
                               <?php }}?>    
                          </select>                       
@@ -362,7 +362,7 @@ input[name=lead_stages]{
                          <?php 
                               if (!empty($created_bylist)) {
                               foreach ($created_bylist as $createdbylist) {?>
-                              <option value="<?=$createdbylist->pk_i_admin_id;?>" <?php if(!empty(set_value('assign'))){if (in_array($product->sb_id,set_value('assign'))) {echo 'selected';}}?>><?=$createdbylist->s_display_name.' '.$createdbylist->last_name;?> -  <?=$createdbylist->s_user_email?$createdbylist->s_user_email:$createdbylist->s_phoneno;?></option>
+                              <option value="<?=$createdbylist->pk_i_admin_id;?>" <?php if($createdbylist->pk_i_admin_id==$filterData['assign']) {echo 'selected';}?> <?php if(!empty(set_value('assign'))){if (in_array($product->sb_id,set_value('assign'))) {echo 'selected';}}?>><?=$createdbylist->s_display_name.' '.$createdbylist->last_name;?> -  <?=$createdbylist->s_user_email?$createdbylist->s_user_email:$createdbylist->s_phoneno;?></option>
                               <?php }}?>    
                          </select>                          
                         </div>
@@ -374,14 +374,14 @@ input[name=lead_stages]{
                          <?php 
                               if (!empty($created_bylist)) {
                               foreach ($created_bylist as $createdbylist) {?>
-                              <option value="<?=$createdbylist->pk_i_admin_id;?>" <?php if(!empty(set_value('assign'))){if (in_array($product->sb_id,set_value('assign'))) {echo 'selected';}}?>><?=$createdbylist->s_display_name.' '.$createdbylist->last_name;?> -  <?=$createdbylist->s_user_email?$createdbylist->s_user_email:$createdbylist->s_phoneno;?></option>
+                              <option value="<?=$createdbylist->pk_i_admin_id;?>" <?php if($createdbylist->pk_i_admin_id==$filterData['assign_by']) {echo 'selected';}?>  <?php if(!empty(set_value('assign'))){if (in_array($product->sb_id,set_value('assign'))) {echo 'selected';}}?>><?=$createdbylist->s_display_name.' '.$createdbylist->last_name;?> -  <?=$createdbylist->s_user_email?$createdbylist->s_user_email:$createdbylist->s_phoneno;?></option>
                               <?php }}?>    
                          </select>                          
                         </div>
                         
-                    </div>
+                    <!-- </div> -->
 
-                    <div class="row">
+                    <!-- <div class="row"> -->
                     <div class="form-group col-md-3" id="prodfilter">
                     <label for="">Products</label>  
                     <select name="prodcntry" class="form-control"> 
@@ -389,7 +389,7 @@ input[name=lead_stages]{
                          <?php 
                               if (!empty($prodcntry_list)) {
                               foreach ($prodcntry_list as $prodcntrylist) {?>
-                              <option value="<?=$prodcntrylist->id;?>" <?php if(!empty(set_value('prodcntry'))){if (in_array($prodcntrylist->id,set_value('prodcntry'))) {echo 'selected';}}?>><?= $prodcntrylist->country_name ?></option>
+                              <option value="<?=$prodcntrylist->id;?>" <?php if($prodcntrylist->id==$filterData['prodcntry']) {echo 'selected';}?> <?php if(!empty(set_value('prodcntry'))){if (in_array($prodcntrylist->id,set_value('prodcntry'))) {echo 'selected';}}?>><?= $prodcntrylist->country_name ?></option>
                               <?php }}?>    
                     </select> 
                     </div> 
@@ -401,7 +401,7 @@ input[name=lead_stages]{
                          <?php 
                               if (!empty($stage)) {
                               foreach ($stage as $stage_list) {?>
-                              <option value="<?=$stage_list->stg_id?>"><?=$stage_list->lead_stage_name?> </option>
+                              <option value="<?=$stage_list->stg_id?>" <?php if($stage_list->stg_id==$filterData['stage']) {echo 'selected';}?>><?=$stage_list->lead_stage_name?> </option>
                               <?php 
                               }
                             }
@@ -416,7 +416,7 @@ input[name=lead_stages]{
                          <?php 
                               if (!empty($sub_stage)) {
                               foreach ($sub_stage as $sub_stage_list) {?>
-                              <option value="<?=$sub_stage_list->id?>"><?=$sub_stage_list->description?> </option>
+                              <option value="<?=$sub_stage_list->id?>" <?php if($sub_stage_list->id==$filterData['sub_stage']) {echo 'selected';}?>><?=$sub_stage_list->description?> </option>
                               <?php 
                               }
                             }
@@ -431,19 +431,23 @@ input[name=lead_stages]{
                          <?php 
                               if (!empty($ticket_status)) {
                               foreach ($ticket_status as $sub_stage_list) {?>
-                              <option value="<?=$sub_stage_list->id?>"><?=$sub_stage_list->status_name?> </option>
+                              <option value="<?=$sub_stage_list->id?>" <?php if($sub_stage_list->id==$filterData['ticket_status']) {echo 'selected';}?>><?=$sub_stage_list->status_name?> </option>
                               <?php 
                               }
                             }
                         ?>     
                     </select> 
                     </div> 
-
-                    </div>
+                  
+                    <div class="form-group col-md-3">
+                    <button class="btn btn-success" id="save_filterbutton" type="button" onclick="ticket_save_filter();" style="margin: 20px;">Save</button>        
+                        </div>           
+                    <!-- </div> -->
           
             </div>
         </div>
     </div>  
+    
 
 <style>
   .wd-14{
@@ -727,7 +731,14 @@ $('.checked_all1').on('change', function() {
 <script>
 function assign_tickets(){
   if($('.checkbox1:checked').size() > 1000){
-    alert('You can not assign more that 1000 enquiry at once');
+    // alert('You can not assign more that 1000 enquiry at once');
+    Swal.fire({
+  position: 'top-end',
+  icon: 'success',
+  title: 'You can not assign more that 1000 enquiry at once',
+  showConfirmButton: false,
+  timer: 1000
+}); 
   }else{
       var p_url = '<?php echo base_url();?>ticket/assign_tickets';
       var re_url = '<?php echo base_url();?>ticket'; 
@@ -775,8 +786,15 @@ $(document).ready(function(){
     $("input[name='filter_checkbox']:checked").each(function(){
       arr.push($(this).val());
     });        
-    setCookie('ticket_filter_setting',arr,365);      
-    alert('Your custom filters saved successfully.');
+    setCookie('ticket_filter_setting',arr,365);    
+    Swal.fire({
+  position: 'top-end',
+  icon: 'success',
+  title: 'Your custom filters saved successfully.',
+  showConfirmButton: false,
+  timer: 1000
+});  
+    // alert('Your custom filters saved successfully.');
   }) 
 
 
@@ -785,6 +803,8 @@ var enq_filters  = getCookie('ticket_filter_setting');
 if (!enq_filters.includes('date')) {
   $('#fromdatefilter').hide();
   $('#todatefilter').hide();
+  $('#update_fromdatefilter').hide();
+  $('#update_todatefilter').hide();
 }else{
   $("input[value='date']").prop('checked', true);
 }
@@ -858,16 +878,38 @@ if (!enq_filters.includes('sub_stage')) {
 
 if (!enq_filters.includes('status')) {
   $('#statusfilter').hide();
+
 }else{
   $("input[value='status']").prop('checked', true);
 }
 
 $('#buttongroup').hide();
- $('input[name="filter_checkbox"]').click(function(){              
+if($('#datecheckbox').is(":checked")||$('#sourcecheckbox').is(":checked")||$('#sourcecheckbox').is(":checked")||
+  $('#problemcheckbox').is(":checked")){
+    $('#save_filterbutton').show();
+
+  }else{
+    $('#save_filterbutton').hide();
+
+  }
+ $('input[name="filter_checkbox"]').click(function(){  
+  if($('#datecheckbox').is(":checked")||$('#sourcecheckbox').is(":checked")||$('#sourcecheckbox').is(":checked")||
+  $('#problemcheckbox').is(":checked")||$('#createdbycheckbox').is(":checked")||$('#assigncheckbox').is(":checked")||
+  $('#assign_bycheckbox').is(":checked")||$('#issuecheckbox').is(":checked")||$('#prioritycheckbox').is(":checked")||
+  $('#prodcheckbox').is(":checked")||$('#stagecheckbox').is(":checked")||$('#sub_stagecheckbox').is(":checked")||
+  $('#statuscheckbox').is(":checked")){
+    $('#save_filterbutton').show();
+
+  }else{
+    $('#save_filterbutton').hide();
+
+  }
+ 
         if($('#datecheckbox').is(":checked")){
          $('#fromdatefilter').show();
          $('#todatefilter').show();
-
+         $('#save_filterbutton').show();
+         
          $('#update_fromdatefilter').show();
          $('#update_todatefilter').show();
 
@@ -882,6 +924,8 @@ $('#buttongroup').hide();
         }
       
         if($('#sourcecheckbox').is(":checked")){
+         $('#save_filterbutton').show();
+
           $('#sourcefilter').show();
           $("#buttongroup").show();
         }
@@ -891,6 +935,8 @@ $('#buttongroup').hide();
         }
 
         if($('#problemcheckbox').is(":checked")){
+         $('#save_filterbutton').show();
+
           $('#problemfilter').show();
           $("#buttongroup").show();
         }
@@ -900,18 +946,24 @@ $('#buttongroup').hide();
         }
 
         if($('#createdbycheckbox').is(":checked")){
+         $('#save_filterbutton').show();
+
           $('#createdbyfilter').show();
         }
         else{
           $('#createdbyfilter').hide();
         }
         if($('#assigncheckbox').is(":checked")){
+         $('#save_filterbutton').show();
+
           $('#assignfilter').show();
         }
         else{
           $('#assignfilter').hide();
         }
         if($('#assign_bycheckbox').is(":checked")){
+         $('#save_filterbutton').show();
+
           $('#assign_byfilter').show();
         }
         else{
@@ -919,18 +971,25 @@ $('#buttongroup').hide();
         }
 
         if($('#issuecheckbox').is(":checked")){
+        $('#save_filterbutton').show();
+
+         $('#save_filterbutton').show();
+
           $('#issuefilter').show();
         }
         else{
           $('#issuefilter').hide();
         }
         if($('#prioritycheckbox').is(":checked")){
+        $('#save_filterbutton').show();
+
           $('#priorityfilter').show();
         }
         else{
           $('#priorityfilter').hide();
         }
        if($('#prodcheckbox').is(":checked")){
+        $('#save_filterbutton').show();
          $('#prodfilter').show();
          //alert("check");
        }
@@ -938,18 +997,22 @@ $('#buttongroup').hide();
          $('#prodfilter').hide();
        }
       if($('#stagecheckbox').is(":checked")){
+        $('#save_filterbutton').show();
           $('#stagefilter').show();
         }
         else{
           $('#stagefilter').hide();
+
         }
         if($('#sub_stagecheckbox').is(":checked")){
+         $('#save_filterbutton').show();
           $('#sub_stagefilter').show();
         }
         else{
           $('#sub_stagefilter').hide();
         }
         if($('#statuscheckbox').is(":checked")){
+         $('#save_filterbutton').show();
           $('#statusfilter').show();
         }
         else{
@@ -1307,6 +1370,31 @@ for (var i = 0; i < checkboxes.length; i++) {
    // alert("C");
     location.reload();    
   });
+
+  function ticket_save_filter(){
+var form_data = $("#ticket_filter").serialize();       
+// alert(form_data);
+$.ajax({
+url: '<?=base_url()?>ticket/ticket_save_filter',
+type: 'post',
+data: form_data,
+success: function(responseData){
+  Swal.fire({
+  position: 'top-end',
+  icon: 'success',
+  title: 'filted data saved',
+  showConfirmButton: false,
+  timer: 500
+});
+
+
+}
+});
+  }
+
+jQuery(function($){ //on document.ready
+        $('.form-date').datepicker({ dateFormat: 'yy-mm-dd' });
+      });
 </script>
 
 

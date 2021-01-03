@@ -122,7 +122,7 @@
                             <div class="form-group row">
                                 <label for="date_of_birth" class="col-xs-3 col-form-label"><?php echo display('date_of_birth') ?></label>
                                 <div class="col-xs-9">
-                                    <input name="date_of_birth" class="datepicker form-control" type="date" placeholder="<?php echo display('date_of_birth') ?>" id="date_of_birth" value="<?php echo $doctor->date_of_birth ?>" >
+                                    <input name="date_of_birth" class="form-control form-date"  placeholder="<?php echo display('date_of_birth') ?>" id="date_of_birth" value="<?php echo $doctor->date_of_birth ?>" >
                                 </div>
                             </div>
 
@@ -228,7 +228,7 @@
                                         <div class="form-group row">
                                             <label for="a_companyaddress" class="col-xs-3 col-form-label">Valid Upto : </label>
                                             <div class="col-xs-9">
-                                                <input name="a_validupto" type="date" value="<?=date('Y-m-d', strtotime($doctor->valid_upto));?>" class="form-control"  placeholder="Valid Upto"  id="validupto"/>
+                                                <input name="a_validupto"  value="<?=date('Y-m-d', strtotime($doctor->valid_upto));?>" class="form-control form-date"  placeholder="Valid Upto"  id="validupto"/>
                                            </div>
                                         </div>
 									  </div>

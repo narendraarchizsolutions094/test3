@@ -510,7 +510,7 @@ class Customer extends CI_Controller
                      <div class="form-row">                
                         <div class="form-group col-md-6 col-md-offset-2">
                             <label for="stdate">Billing Start Date<i class="text-danger">*</i></label>
-                              <input type="date" id="stdate" class="form-control"  value="'.$user->start_billing_date.'" name="start_billing_date" required="">
+                              <input id="stdate" class="form-control form-date"  value="'.$user->start_billing_date.'" name="start_billing_date" required="">
                         </div>
                      
                     </div>

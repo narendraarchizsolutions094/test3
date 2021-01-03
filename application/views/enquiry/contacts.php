@@ -202,7 +202,7 @@ function deleteContact(t)
                </div>
                <div class="form-group col-md-6">
                   <label>Email</label>
-                  <input class="form-control" name="email" placeholder="Email"  type="text"  required>
+                  <input class="form-control" name="email" placeholder="Email"  type="email"  required>
                </div>
                <div class="form-group col-md-12">
                   <label>Other Details</label>

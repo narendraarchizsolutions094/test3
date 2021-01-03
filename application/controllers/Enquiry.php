@@ -2474,7 +2474,7 @@ Array
         );
         $this->enquiry_model->add_customer_type($data);
         $this->session->set_flashdata('message', 'Customer type added successfully');
-        return redirect('Enquiry/load_customer_channel_mater');
+        return redirect('lead/load_customer_channel_mater');
     }
     public function edit_customer_types()
     {
@@ -2491,7 +2491,7 @@ Array
         );
         $this->enquiry_model->update_customer_type($data, $id);
         $this->session->set_flashdata('message', 'Customer type updated successfully');
-        return redirect('Enquiry/load_customer_channel_mater');
+        return redirect('lead/load_customer_channel_mater');
     }
     public function delete_customer_type()
     {
@@ -2512,7 +2512,7 @@ Array
         );
         $this->enquiry_model->add_channel_partner($data);
         $this->session->set_flashdata('message', 'Channel partner added successfully');
-        return redirect('Enquiry/load_customer_channel_mater');
+        return redirect('lead/load_customer_channel_mater');
     }
     public function update_channel_partner()
     {
@@ -2529,7 +2529,7 @@ Array
         );
         $this->enquiry_model->update_channel_partner($data, $id);
         $this->session->set_flashdata('message', 'Channel partner updated successfully');
-        return redirect('Enquiry/load_customer_channel_mater');
+        return redirect('lead/load_customer_channel_mater');
     }
     public function delete_channel_partner()
     {

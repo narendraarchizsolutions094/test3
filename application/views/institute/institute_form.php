@@ -39,11 +39,11 @@
                   
                   <div class="form-group col-sm-6">
                     <label for="from_date"><?php echo display('from_date')?> <i class="text-danger">*</i></label>
-                    <input name="from_date" type="date" class="form-control" placeholder="<?php echo display('from_date')?>" value="<?php echo $institute->from_date ?>" >
+                    <input name="from_date"  class="form-control form-date" id="form-date"  placeholder="<?php echo display('from_date')?>" value="<?php echo $institute->from_date ?>" >
                   </div>
                   <div class="form-group col-sm-6">
                     <label for="to_date"><?php echo display('to_date')?> <i class="text-danger">*</i></label>
-                    <input name="to_date" type="date" class="form-control" placeholder="<?php echo display('to_date')?>" value="<?php echo $institute->to_date ?>" >
+                    <input name="to_date"  class="form-control form-date" placeholder="<?php echo display('to_date')?>" value="<?php echo $institute->to_date ?>" >
                   </div>
 				  
 				  
@@ -118,3 +118,4 @@ function find_state() {
 
             }	
 </script>
+

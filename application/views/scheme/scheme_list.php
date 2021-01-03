@@ -59,7 +59,7 @@
 
 													</td>
 													<td>
-														<a href="<?= base_url('scheme/edit/'.$pschemelist->coupan); ?>" class="btn btn-info">
+														<a href="<?= base_url('scheme/edit_scheme/'.$pschemelist->coupan); ?>" class="btn btn-info">
 														<i class="fa fa-pencil" data-toggle="tooltip" title="" data-original-title="Edit"></i></a>
 														<a href="<?php echo base_url("scheme/delete_scheme/$pschemelist->sid") ?>" onclick="return confirm('<?php echo "are you sure" ?>')" class="btn btn-danger">
 														<i class="fa fa-trash" data-toggle="tooltip" title="" data-original-title="Delete"></i></a>

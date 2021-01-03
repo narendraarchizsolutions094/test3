@@ -462,7 +462,7 @@
 
                      <div class="form-group col-sm-12" id="otherTypev">
                                     <div class="form-group col-sm-12">
-                                    <input type="date" name="c_date" id='disposition_c_date' class="form-control" placeholder=""  >
+                                    <input   name="c_date" id='disposition_c_date' class="form-control form-date" placeholder=""  >
                                 </div>
                                 <div class="form-group col-sm-12">
                                     <input type="time" name="c_time" id='disposition_c_time' class="form-control" placeholder=""  >
@@ -778,7 +778,7 @@
 
                  <?php if($fld['input_type']==6){?>
                           <label><?php echo(!empty($fld["input_label"])) ?  ucwords($fld["input_label"]) : ""; ?></label>
-                         <input type="date"  name="enqueryfield[]" class="form-control" value ="<?php echo  (!empty($fld["fvalue"])) ? $fld["fvalue"] : ""; ?>">                         
+                         <input   name="enqueryfield[]" class="form-control form-date" value ="<?php echo  (!empty($fld["fvalue"])) ? $fld["fvalue"] : ""; ?>">                         
            
                     <?php }?>
 
@@ -1096,7 +1096,7 @@
                         <input class="form-control" name="unique_number" type="hidden" value="<?php echo $alldetails->unique_number; ?>">                      
                      <div class="form-group col-sm-4"> 
                         <label>Date of Birth</label>
-                        <input class="form-control" name="date_of_birth" type="date" value="<?php echo $alldetails->date_of_birth; ?>" style="padding:0px !important;">  
+                        <input class="form-control form-date" name="date_of_birth"  value="<?php echo $alldetails->date_of_birth; ?>" style="padding:0px !important;">  
                      </div>
                      <div class="form-group col-sm-4"> 
                         <label>Marital status</label>
@@ -1111,7 +1111,7 @@
                      </div>
                      <div class="form-group col-sm-4"> 
                         <label>Last Communication</label>
-                        <input class="form-control" name="last_comm" type="date" value="<?php echo $alldetails->last_comm; ?>" style="padding:0px !important;">  
+                        <input class="form-control form-date" name="last_comm"   value="<?php echo $alldetails->last_comm; ?>" style="padding:0px !important;">  
                      </div>
                      <div class="form-group col-sm-4"> 
                         <label>Mode Of Communication</label>
@@ -1232,7 +1232,7 @@
                     
                      <div class="form-group col-sm-4"> 
                         <label>Date of Birth</label>
-                        <input class="form-control" name="date_of_birth" type="date" value="" style="padding:0px !important;">  
+                        <input class="form-control form-date" name="date_of_birth"   value="" style="padding:0px !important;">  
                      </div>
                      <div class="form-group col-sm-4"> 
                         <label>Marital status</label>
@@ -1247,7 +1247,7 @@
                      </div>
                      <div class="form-group col-sm-4"> 
                         <label>Last Communication</label>
-                        <input class="form-control" name="last_comm" type="date" value="" style="padding:0px !important;">  
+                        <input class="form-control form-date" name="last_comm"  value="" style="padding:0px !important;">  
                      </div>
                      <div class="form-group col-sm-4"> 
                         <label>Mode Of Communication</label>
@@ -2264,7 +2264,7 @@
                </div>
                <div class="form-group col-md-6">
                   <label>Due Date</label>
-                  <input class="form-control" name="due_date" placeholder="Due Date"  type="date" value="" required>
+                  <input class="form-control form-date" name="due_date" placeholder="Due Date"   value="" required>
                </div>
                <div class="sgnbtnmn form-group col-md-12">
                   <div class="sgnbtn">
