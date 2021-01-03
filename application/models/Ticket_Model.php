@@ -161,7 +161,7 @@ class Ticket_Model extends CI_Model
 			"sourse"     => ($this->input->post("source", true)) ? $this->input->post("source", true) : "",
 			"complaint_type" => $this->input->post("complaint_type", true),
 			//"coml_date"	 => $ndate,
-			"last_update" => date("Y-m-d h:i:s"),
+			//"last_update" => date("Y-m-d h:i:s"),
 			"priority"	 => ($this->input->post("priority", true)) ? $this->input->post("priority", true) : "",
 			"issue"	 => ($this->input->post("issue", true)) ? $this->input->post("issue", true) : "",
 			"tracking_no"   => ($this->input->post("tracking_no", true)) ? $this->input->post("tracking_no", true) : "",
