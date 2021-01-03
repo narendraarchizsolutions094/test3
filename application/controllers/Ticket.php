@@ -87,7 +87,7 @@ class Ticket extends CI_Controller
 			unset($_SESSION['ticket_filters_sess']);
 		$data['sourse'] = $this->report_model->all_source();
 		$data['title'] = "All Ticket";
-		$data["tickets"] = $this->Ticket_Model->getall();
+		//$data["tickets"] = $this->Ticket_Model->getall();
 		//print_r($data['tickets']); exit();
 		$data['created_bylist'] = $this->User_model->read();
 		$data['products'] = $this->dash_model->get_user_product_list();
