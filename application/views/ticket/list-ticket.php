@@ -1101,7 +1101,8 @@ $(document).ready(function() {
                         columns: "thead th:not(.noExport)"
                     }} 
              ] ,  <?php  } ?>               
-            'drawCallback': function (settings) {            
+            'drawCallback': function (settings) {    
+              var api = this.api();        
             var $table = $(api.table().node());  
             var info = table.page.info();
             returned_rows = table.rows().count();
