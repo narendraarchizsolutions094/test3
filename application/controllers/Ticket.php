@@ -295,8 +295,8 @@ class Ticket extends CI_Controller
 		//print_r($res);
 		$output = array(
 			"draw" => $_POST['draw'],
-			"recordsTotal" => $this->Ticket_datatable_model->countAll(),
-			"recordsFiltered" => $this->Ticket_datatable_model->countFiltered($_POST),
+			"recordsTotal" => 0,//$this->Ticket_datatable_model->countAll(),
+			"recordsFiltered" => 0,//$this->Ticket_datatable_model->countFiltered($_POST),
 			"data" => $data,
 		);
 		echo json_encode($output);
