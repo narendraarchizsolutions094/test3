@@ -1101,7 +1101,9 @@ $(document).ready(function() {
                         columns: "thead th:not(.noExport)"
                     }} 
              ] ,  <?php  } ?>               
-            'drawCallback': function (settings) {                  
+            'drawCallback': function (settings) {   
+              console.log(settings);               
+              console.log(table);               
                 var info = table.page.info();
                 returned_rows = table.rows().count();
                 if(returned_rows == 0 || returned_rows < info.length){
