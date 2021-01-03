@@ -1061,7 +1061,7 @@ $(document).ready(function(){
 // }
 
 $(document).ready(function() {
-      $('#ticket_table').DataTable({         
+  var table =+  $('#ticket_table').DataTable({         
           "processing": true,
           "scrollX": true,
           "scrollY": 520,
@@ -1101,15 +1101,13 @@ $(document).ready(function() {
                         columns: "thead th:not(.noExport)"
                     }} 
              ] ,  <?php  } ?>               
-            'drawCallback': function (settings) {    
-              var api = this.api();        
-            var $table = $(api.table().node());  
-            var info = table.page.info();
-            returned_rows = table.rows().count();
-            if(returned_rows == 0 || returned_rows < info.length){
-              $('#ticket_table_next').addClass('disabled');
-            }
-            $('#ticket_table_previous').after('<li><a class="btn btn-secondary btn-sm" href="javascript:void(0)">'+info.page+'</a></li>');
+            'drawCallback': function (settings) {                  
+                var info = table.page.info();
+                returned_rows = table.rows().count();
+                if(returned_rows == 0 || returned_rows < info.length){
+                  $('#ticket_table_next').addClass('disabled');
+                }
+                $('#ticket_table_previous').after('<li><a class="btn btn-secondary btn-sm" href="javascript:void(0)">'+info.page+'</a></li>');
          }
          });
 
