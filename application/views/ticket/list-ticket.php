@@ -1061,7 +1061,7 @@ $(document).ready(function(){
 // }
 
 $(document).ready(function() {
-  var table =+  $('#ticket_table').DataTable({         
+  var table = $('#ticket_table').DataTable({         
           "processing": true,
           "scrollX": true,
           "scrollY": 520,
