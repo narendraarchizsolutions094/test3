@@ -1128,11 +1128,11 @@ $(document).ready(function() {
          // document.write(responseData);
           $('#ticket_table').DataTable().ajax.reload();
           //stage_counter(); 
-           //return update_short_dashboard(); 
+           return update_short_dashboard(); 
            }
         });
     });
-   // update_short_dashboard(); 
+    update_short_dashboard(); 
 });
 
 function update_short_dashboard()
