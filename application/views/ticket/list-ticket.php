@@ -1101,17 +1101,14 @@ $(document).ready(function() {
                         columns: "thead th:not(.noExport)"
                     }} 
              ] ,  <?php  } ?>               
-            'drawCallback': function (settings) {
-            var api = this.api();
-            var $table = $(api.table().node());            
-            list_view($table);      
+            'drawCallback': function (settings) {            
+            var $table = $(api.table().node());  
             var info = table.page.info();
-            returned_rows = table.rows().count();            
-            //console.log(returned_rows+' '+info.page.length);
+            returned_rows = table.rows().count();
             if(returned_rows == 0 || returned_rows < info.length){
-              $('#enq_table_next').addClass('disabled');
+              $('#ticket_table_next').addClass('disabled');
             }
-            $('#enq_table_previous').after('<li><a class="btn btn-secondary btn-sm" href="javascript:void(0)">'+info.page+'</a></li>');
+            $('#ticket_table_previous').after('<li><a class="btn btn-secondary btn-sm" href="javascript:void(0)">'+info.page+'</a></li>');
          }
          });
 
