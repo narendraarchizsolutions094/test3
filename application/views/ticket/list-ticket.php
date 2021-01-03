@@ -1102,6 +1102,8 @@ $(document).ready(function() {
                     }} 
              ] ,  <?php  } ?>               
             'drawCallback': function (settings) {   
+              var api = this.api();
+            var $table = $(api.table().node());  
               console.log(settings);               
               console.log(table);               
                 var info = table.page.info();
