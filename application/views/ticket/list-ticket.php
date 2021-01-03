@@ -683,6 +683,7 @@ input[name=lead_stages]{
    $("#show_quick_counts").on('click',function(){
         $(this).hide();
         $("#active_class").removeClass('hide_countings');
+        $("select[name='ticket_status']").change();
         update_short_dashboard();
       });
 //    $.ajax({
