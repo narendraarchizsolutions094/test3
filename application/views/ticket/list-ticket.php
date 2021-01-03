@@ -676,24 +676,24 @@ input[name=lead_stages]{
 
 <script type="text/javascript">
   
-   $.ajax({
-      url: "<?=base_url().'ticket/list_short_details/'?>",
-      type: 'get',
-      dataType: 'json',
-      success: function(responseData){
-        //alert(JSON.stringify(responseData));
-      $('#today_created').html(responseData.created_today);
-      $('#today_updated').html(responseData.updated_today);
-      $('#today_close').html(responseData.closed_today);
-      $('#today_total').html(responseData.all_today);
+//    $.ajax({
+//       url: "<?=base_url().'ticket/list_short_details/'?>",
+//       type: 'get',
+//       dataType: 'json',
+//       success: function(responseData){
+//         //alert(JSON.stringify(responseData));
+//       $('#today_created').html(responseData.created_today);
+//       $('#today_updated').html(responseData.updated_today);
+//       $('#today_close').html(responseData.closed_today);
+//       $('#today_total').html(responseData.all_today);
       
-     // all_lead_stage_c  = $("input[name='top_filter']:checked").next().next().next().html();
+//      // all_lead_stage_c  = $("input[name='top_filter']:checked").next().next().next().html();
 
-//      console.log(all_lead_stage_c);
+// //      console.log(all_lead_stage_c);
       
-      //$('#lead_stage_-1').text(all_lead_stage_c);     
-      }
-    });
+//       //$('#lead_stage_-1').text(all_lead_stage_c);     
+//       }
+//     });
 
 </script>
 
@@ -1128,11 +1128,11 @@ $(document).ready(function() {
          // document.write(responseData);
           $('#ticket_table').DataTable().ajax.reload();
           //stage_counter(); 
-           return update_short_dashboard(); 
+           //return update_short_dashboard(); 
            }
         });
     });
-    update_short_dashboard(); 
+   // update_short_dashboard(); 
 });
 
 function update_short_dashboard()
