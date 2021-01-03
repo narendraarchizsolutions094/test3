@@ -147,6 +147,9 @@ input[name=lead_stages]{
 .short_dashboard button{
   margin:4px;
 }
+.hide_countings{
+   display:none !important;    
+ }
   </style>
 
     <div class="row">
@@ -255,7 +258,9 @@ input[name=lead_stages]{
 					</div>
 
 
-
+          <div style="float:right;">
+            <a class='btn btn-xs  btn-primary' href='javascript:void(0)' id='show_quick_counts' title='Show Quick Dashboard'><i class='fa fa-bar-chart'></i></a>
+          </div>
 					<div class="row">
 						<div class="">
 							<div class="panel-body">
@@ -455,7 +460,7 @@ input[name=lead_stages]{
     display:inline-block;
   }
 </style>
-<div class="row text-center short_dashboard" style="padding-bottom: 15px">    
+<div class="row text-center short_dashboard hide_countings" id='active_class' style="padding-bottom: 15px">    
     <div class="wd-14">
       <div  class="col-12 border_bottom" >
           <p style="margin-top: 2vh;font-weight:bold;">
@@ -1128,11 +1133,15 @@ $(document).ready(function() {
          // document.write(responseData);
           $('#ticket_table').DataTable().ajax.reload();
           //stage_counter(); 
+          if(!$("#active_class").hasClass('hide_countings')){
            return update_short_dashboard(); 
+          }
            }
         });
     });
-    update_short_dashboard(); 
+    if(!$("#active_class").hasClass('hide_countings')){
+      update_short_dashboard(); 
+    }
 });
 
 function update_short_dashboard()
