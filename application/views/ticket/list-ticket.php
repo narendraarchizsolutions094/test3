@@ -681,10 +681,10 @@ input[name=lead_stages]{
 
 <script type="text/javascript">
    $("#show_quick_counts").on('click',function(){
-    $[(this).hide();
-    $("#active_class").removeClass('hide_countings');
-    update_top_filter_counter();
-  });]
+        $(this).hide();
+        $("#active_class").removeClass('hide_countings');
+        update_top_filter_counter();
+      });
 //    $.ajax({
 //       url: "<?=base_url().'ticket/list_short_details/'?>",
 //       type: 'get',
