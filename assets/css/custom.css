@@ -6221,3 +6221,6 @@ a:hover{
 .badge-danger{
     background-color: #d9534f !important;
 }
+.table > thead > tr{
+    background-color: #d9edf7 !important;
+}
