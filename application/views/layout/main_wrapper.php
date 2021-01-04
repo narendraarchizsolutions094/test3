@@ -1188,12 +1188,16 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                             <?php
                         }
                         ?>
-                            <li
+                            <?php if(user_access('A61')) { ?>
+                           <li
                                 class="<?php echo (in_array($segment2,array('datasourcelist','add_datasource','edit_datasource')) ?"active":'') ?>">
                                 <a href="<?php echo base_url() ?>lead/datasourcelist">
                                     <?php echo display('datasource_management');?>
                                 </a>
                             </li>
+                            <?php
+                            }
+                            ?>
 
                             <li
                                 class="<?php echo (in_array($segment2,array('taskstatuslist','add_taskstatus','edit_taskstatus')) ?"active":'') ?>">

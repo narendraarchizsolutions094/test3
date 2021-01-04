@@ -296,7 +296,12 @@ input[name=lead_stages]{
               <?php if(user_access(221)) { if(!empty($this->session->telephony_token)){ ?>
                 <a class="btn "  onclick="autoDial()" style="color:#000;cursor:pointer;border-radius: 2px;border-bottom: 1px solid #fff;"><?php echo display('bulk_autodial'); ?></a> 
               <?php } } ?>
-              <a class="btn" data-toggle="modal" data-target="#table-col-conf" style="color:#000;cursor:pointer;border-radius: 2px;border-bottom: 1px solid #fff;"><?php echo display('table_config'); ?></a>                         
+              <a class="btn" data-toggle="modal" data-target="#table-col-conf" style="color:#000;cursor:pointer;border-radius: 2px;border-bottom: 1px solid #fff;"><?php echo display('table_config'); ?></a>      
+              
+              <?php if(user_access('A61')) { ?>
+                <a class="btn" style="color:#000;cursor:pointer;border-radius: 2px;border-bottom: 1px solid #fff;" href="<?=base_url().'lead/datasourcelist'?>"><?php echo display('datasource_management'); ?></a>      
+              }
+           
               <a class="btn" data-toggle="modal" data-target="#deleteselected" style="color:#000;cursor:pointer;border-radius: 2px;border-bottom: 1px solid #fff; display: none;"><?php echo 'Delete Data'; ?></a>                         
             </div>                                         
           </div>  
