@@ -1058,7 +1058,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
 
                         </ul>
                     </li>
-                    <li class="treeview <?php echo (($segment1 == "lead" && $segment2 != "index" && $segment2 != "lead_details") ? "active" : null) ?>"
+                    <li class="treeview <?php echo (($segment1 == "lead" && $segment2 != "index" && $segment2 != "datasourcelist" && $segment2 != "lead_details") ? "active" : null) ?>"
                         style="<?php if(in_array(30,$module) || in_array(31,$module) || in_array(32,$module) || in_array(33,$module) ){ echo 'display:block;';}else{echo 'display:none;';}?>">
                         <a href="#">
                             <i class="fa fa-line-chart"
@@ -1187,18 +1187,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                             </li>
                             <?php
                         }
-                        ?>
-                            <?php if(user_access('A61')) { ?>
-                           <li
-                                class="<?php echo (in_array($segment2,array('datasourcelist','add_datasource','edit_datasource')) ?"active":'') ?>">
-                                <a href="<?php echo base_url() ?>lead/datasourcelist">
-                                    <?php echo display('datasource_management');?>
-                                </a>
-                            </li>
-                            <?php
-                            }
-                            ?>
-
+                        ?>                            
                             <li
                                 class="<?php echo (in_array($segment2,array('taskstatuslist','add_taskstatus','edit_taskstatus')) ?"active":'') ?>">
                                 <a href="<?php echo base_url() ?>lead/taskstatuslist">
