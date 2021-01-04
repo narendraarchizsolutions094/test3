@@ -48,7 +48,7 @@ class Enq extends CI_Controller
 		$data['subsource_list'] = $this->Datasource_model->subsourcelist();
 		$data['user_list'] = $this->User_model->companey_users();
 		if($this->session->companey_id == 65 && $this->session->user_right == 215){
-			$data['created_bylist'] = $this->User_model->read(147);
+			$data['created_bylist'] = $this->User_model->read(147,false);
 		}else{
 			$data['created_bylist'] = $this->User_model->read();
 		}
