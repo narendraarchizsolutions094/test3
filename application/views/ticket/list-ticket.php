@@ -1074,7 +1074,7 @@ $(document).ready(function() {
   var table = $('#ticket_table').DataTable({         
           "processing": true,
           "scrollX": true,
-          "scrollY": 520,
+          // "scrollY": 520,
           "pagingType": "simple",
           "bInfo": false,
           "serverSide": true,          
