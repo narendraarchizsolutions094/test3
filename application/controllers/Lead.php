@@ -1796,7 +1796,7 @@ class Lead extends CI_Controller
     }*/
     public function datasourcelist()
     {
-        if (user_role('30') == true) {
+        if (user_role('A61') == true) {
         }
         $data['title'] = display('datasource_list');
         $data['all_user'] = $this->User_model->all_user();
