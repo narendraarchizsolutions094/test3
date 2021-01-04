@@ -47,7 +47,11 @@ class Enq extends CI_Controller
 		$data['title'] = display('enquiry_list');
 		$data['subsource_list'] = $this->Datasource_model->subsourcelist();
 		$data['user_list'] = $this->User_model->companey_users();
-		$data['created_bylist'] = $this->User_model->read();
+		if($this->session->companey_id == 65 && $this->session->user_right == 215){
+			$data['created_bylist'] = $this->User_model->read(147);
+		}else{
+			$data['created_bylist'] = $this->User_model->read();
+		}
 		$data['products'] = $this->dash_model->get_user_product_list();
 		$data['drops'] = $this->enquiry_model->get_drop_list();
 
