@@ -300,8 +300,9 @@ input[name=lead_stages]{
               
               <?php if(user_access('A61')) { ?>
                 <a class="btn" style="color:#000;cursor:pointer;border-radius: 2px;border-bottom: 1px solid #fff;" href="<?=base_url().'lead/datasourcelist'?>"><?php echo display('datasource_management'); ?></a>      
+            <?php
               }
-           
+?>           
               <a class="btn" data-toggle="modal" data-target="#deleteselected" style="color:#000;cursor:pointer;border-radius: 2px;border-bottom: 1px solid #fff; display: none;"><?php echo 'Delete Data'; ?></a>                         
             </div>                                         
           </div>  
