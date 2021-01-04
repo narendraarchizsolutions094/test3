@@ -65,7 +65,7 @@ class User_model extends CI_Model {
             $where = "  tbl_admin.pk_i_admin_id IN (".implode(',', $all_reporting_ids).')';               
             $where .= "  AND tbl_admin.b_status=1";                                
         }else{
-            $where .= "  tbl_admin.b_status=1";                                
+            $where = "  tbl_admin.b_status=1";                                
         }
         if (!empty($user_right)) {
             $where .= "  AND tbl_admin.user_permissions='".$user_right."'";                                            
