@@ -1635,7 +1635,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                         else if($menu_count==20)
                         {
                     ?>
-                    <li class="<?php echo (($segment1 == "client"   || $segment2 == ""|| $segment1 == "index" && empty($_GET['stage'] ))  && $segment2!='deals' && $segment2!='visits'? "active" : null) ?>"
+                    <li class="<?php echo (($segment1 == "client"   || $segment2 == ""|| $segment1 == "index" ) && empty($_GET['stage'] )  && $segment2!='deals' && $segment2!='visits'? "active" : null) ?>"
                         style="<?php if(in_array(80,$module) || in_array(81,$module) || in_array(82,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
                         <a href="<?php echo base_url("client/index") ?>">
                             <i class="fa fa-user-circle-o"
