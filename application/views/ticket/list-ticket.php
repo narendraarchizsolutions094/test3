@@ -1121,7 +1121,7 @@ $(document).ready(function() {
                 if(returned_rows == 0 || returned_rows < info.length){
                   $('#ticket_table_next').addClass('disabled');
                 }
-                $('#ticket_table_previous').after('<li><a class="btn btn-secondary btn-sm" href="javascript:void(0)">'+info.page+'</a></li>');
+                $('#ticket_table_previous').after('<li><a class="btn btn-secondary btn-sm" style="padding: 4px;line-height: 2;" href="javascript:void(0)">'+info.page+'</a></li>');
             }
          });
 
