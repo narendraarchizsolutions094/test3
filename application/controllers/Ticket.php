@@ -452,7 +452,115 @@ class Ticket extends CI_Controller
 			));
 			$response = curl_exec($curl);
 			curl_close($curl);
+<<<<<<< HEAD
 			echo '  <link rel="stylesheet" href="https://www.vxpress.in/trackship/css/style3.css">'.$response;
+=======
+			
+			$response = json_decode($response,true);
+
+			if(!empty($response)){
+				$response = $response['NewDataSet'];
+				$table = $response['Table'];
+				$table1 = $response['Table1'];
+				$table2 = $response['Table2'];
+				$table3 = $response['Table3'];
+
+				if(!empty($table)){
+					echo "<table class='table table-bordered'>";
+					$i = 1;
+					foreach($table as $k=>$v){
+						if($i==3){
+							$i = 1;
+						}		
+						if($i==1){
+							echo '<tr>';
+						}			
+						echo '<td>'.$k.'</td>';				
+						echo '<td>'.$v.'</td>';				
+						if($i==2){
+							echo '</tr>';
+						}
+						$i++;
+					}
+					echo "</table>";
+				}				
+				if(!empty($table1)){
+					echo "<table class='table table-bordered'>";
+					$i = 1;
+					foreach($table1 as $k=>$v){
+						if($i==3){
+							$i = 1;
+						}		
+						if($i==1){
+							echo '<tr>';
+						}			
+						echo '<td>'.$k.'</td>';				
+						if(is_array($v)){
+							echo '<td>'.json_encode($v).'</td>';				
+						}else{
+							echo '<td>'.$v.'</td>';				
+						}
+						if($i==2){
+							echo '</tr>';
+						}
+						$i++;
+					}
+					echo "</table>";
+				}				
+				if(!empty($table2)){
+					echo "<table class='table table-bordered'>";
+					$i = 1;
+					foreach($table2 as $k=>$v){
+						if($i==3){
+							$i = 1;
+						}		
+						if($i==1){
+							echo '<tr>';
+						}			
+						echo '<td>'.$k.'</td>';				
+						if(is_array($v)){
+							echo '<td>'.json_encode($v).'</td>';				
+						}else{
+							echo '<td>'.$v.'</td>';				
+						}			
+						if($i==2){
+							echo '</tr>';
+						}
+						$i++;
+					}
+					echo "</table>";
+				}				
+				if(!empty($table3)){
+					foreach($table3 as $key=>$value){
+						echo "<table class='table table-bordered'>";
+						$i = 1;
+						foreach($value as $k=>$v){
+							if($i==3){
+								$i = 1;
+							}		
+							if($i==1){
+								echo '<tr>';
+							}			
+							echo '<td>'.$k.'</td>';				
+							if(is_array($v)){
+								echo '<td>'.json_encode($v).'</td>';				
+							}else{
+								echo '<td>'.$v.'</td>';				
+							}			
+							if($i==2){
+								echo '</tr>';
+							}
+							$i++;
+						}
+						echo "</table>";
+					}
+				}
+			}
+			
+			?>
+
+			<?php
+>>>>>>> 8ea6190e916340e4d408e93d0fc1c305c7405846
 		}else{
 			if ($post = $this->input->post()) {
 				$url = "https://thecrm360.com/new_crm/ticket/gc_vtrans_api/" . $post['trackingno'];
