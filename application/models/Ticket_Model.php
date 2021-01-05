@@ -100,7 +100,7 @@ class Ticket_Model extends CI_Model
 		if(!empty($filter)){
 			
 		$value=json_decode($filter->filter_data);
-		if($type=1){
+		if($type==1){
 			$pdata=[
 				'from_created' =>$value->from_created??NULL,
 					'to_created' =>$value->to_created??NULL,
