@@ -452,9 +452,6 @@ class Ticket extends CI_Controller
 			));
 			$response = curl_exec($curl);
 			curl_close($curl);
-<<<<<<< HEAD
-			echo '  <link rel="stylesheet" href="https://www.vxpress.in/trackship/css/style3.css">'.$response;
-=======
 			
 			$response = json_decode($response,true);
 
@@ -560,7 +557,6 @@ class Ticket extends CI_Controller
 			?>
 
 			<?php
->>>>>>> 8ea6190e916340e4d408e93d0fc1c305c7405846
 		}else{
 			if ($post = $this->input->post()) {
 				$url = "https://thecrm360.com/new_crm/ticket/gc_vtrans_api/" . $post['trackingno'];
