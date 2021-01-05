@@ -436,23 +436,23 @@ class Ticket extends CI_Controller
 	{
 		if($this->session->process[0] == 198){
 			$curl = curl_init();
+
 			curl_setopt_array($curl, array(
-			CURLOPT_URL => 'https://www.vxpress.in/DocketTraceNew.php',
+			CURLOPT_URL => 'https://www.vxpress.in/external-asset-erp/Tracking_API.php?docket_no='.$_POST['trackingno'],
 			CURLOPT_RETURNTRANSFER => true,
 			CURLOPT_ENCODING => '',
 			CURLOPT_MAXREDIRS => 10,
 			CURLOPT_TIMEOUT => 0,
 			CURLOPT_FOLLOWLOCATION => true,
 			CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-			CURLOPT_CUSTOMREQUEST => 'POST',
-			CURLOPT_POSTFIELDS => array('name' => '2023000879','isTrace' => '1'),
+			CURLOPT_CUSTOMREQUEST => 'GET',
 			CURLOPT_HTTPHEADER => array(
-				'Cookie: PHPSESSID=373fd1d1879b95e2ac28d5ecafe2952c'
+				'Cookie: PHPSESSID=a30762c8840f37bd19ffd33208bed43a'
 			),
 			));
 			$response = curl_exec($curl);
 			curl_close($curl);
-			
+
 			$response = json_decode($response,true);
 
 			if(!empty($response)){
