@@ -391,12 +391,12 @@ class Ticket extends CI_Controller
 
 				if(!empty($table)){
 					echo "<table class='table table-bordered'>";
-					$i = 0;
+					$i = 1;
 					foreach($table as $k=>$v){
 						if($i==3){
-							$i = 0;
+							$i = 1;
 						}		
-						if($i==0){
+						if($i==1){
 							echo '<tr>';
 						}			
 						echo '<td>'.$k.'</td>';				
