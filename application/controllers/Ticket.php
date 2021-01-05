@@ -102,7 +102,7 @@ class Ticket extends CI_Controller
 		
 		//print_r($data["tickets"]);die;
 		$data['issues'] = $this->Ticket_Model->get_issue_list();
-		$data['filterData'] = $this->Ticket_Model->get_filterData();
+		$data['filterData'] = $this->Ticket_Model->get_filterData(2);
 		// print_r($data);
 		// die();
 		$data['user_list'] = $this->User_model->companey_users();
