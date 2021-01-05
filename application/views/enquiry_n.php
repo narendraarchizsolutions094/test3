@@ -472,7 +472,7 @@ display: block;
                           <select class="form-control" name="subsource" id="subsource">
                               <option value="" style="display:">---Select Sub Source---</option>
                                <?php foreach ($subsource_list as $row) {?>                                
-                                 <option value="<?=$row->subsource_id?>" <?php if(!empty(set_value('subsource'))){if (in_array($row->subsource_id,set_value('subsource'))) {echo 'selected';}}?> <?php if($row->subsource_id==$filterData['source']) {echo 'selected';}?>><?=$row->subsource_name?></option>
+                                 <option value="<?=$row->subsource_id?>" <?php if(!empty(set_value('subsource'))){if (in_array($row->subsource_id,set_value('subsource'))) {echo 'selected';}}?> <?php if($row->subsource_id==$filterData['subsource']) {echo 'selected';}?>><?=$row->subsource_name?></option>
                               <?php }?>
 
                           </select>

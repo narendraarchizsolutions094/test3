@@ -166,6 +166,7 @@ class Ticket extends CI_Controller
 				'update_from_created' =>$this->input->post('update_from_created'),
 				'update_to_created' =>$this->input->post('update_to_created'),
 				'source' =>$this->input->post('source'),
+
 				'problem' => $this->input->post('problem'),
 				'priority' =>$this->input->post('priority'),
 				'issue' =>$this->input->post('issue'),
