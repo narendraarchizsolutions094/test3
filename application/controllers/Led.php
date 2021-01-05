@@ -5,7 +5,7 @@ class Led extends CI_Controller {
         parent::__construct();
        
          $this->load->model(
-                array('Leads_Model','User_model','dash_model','enquiry_model','report_model')
+                array('Leads_Model','User_model','dash_model','enquiry_model','report_model','Ticket_Model')
                 );
         $this->load->library('email');
 		$this->load->library('pagination');
@@ -47,7 +47,9 @@ class Led extends CI_Controller {
 		$data['created_bylist'] = $this->User_model->read();	
 		$data['data_type'] = 2;
 		$data['dfields']  = $this->enquiry_model-> getformfield();
-		$data['subsource_list'] = $this->Datasource_model->subsourcelist();		
+		$data['subsource_list'] = $this->Datasource_model->subsourcelist();	
+		$data['filterData'] = $this->Ticket_Model->get_filterData(1);
+
         $data['content'] = $this->load->view('enquiry_n', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }
