@@ -364,22 +364,64 @@ class Ticket extends CI_Controller
 		if($this->session->process[0] == 198){
 			$curl = curl_init();
 			curl_setopt_array($curl, array(
-			CURLOPT_URL => 'https://www.vxpress.in/DocketTraceNew.php',
+			CURLOPT_URL => 'https://www.vxpress.in/external-asset-erp/Tracking_API.php?docket_no='.$post['trackingno'],
 			CURLOPT_RETURNTRANSFER => true,
 			CURLOPT_ENCODING => '',
 			CURLOPT_MAXREDIRS => 10,
 			CURLOPT_TIMEOUT => 0,
 			CURLOPT_FOLLOWLOCATION => true,
 			CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-			CURLOPT_CUSTOMREQUEST => 'POST',
-			CURLOPT_POSTFIELDS => array('name' => '2023000879','isTrace' => '1'),
+			CURLOPT_CUSTOMREQUEST => 'GET',
 			CURLOPT_HTTPHEADER => array(
-				'Cookie: PHPSESSID=373fd1d1879b95e2ac28d5ecafe2952c'
+				'Cookie: PHPSESSID=a30762c8840f37bd19ffd33208bed43a'
 			),
 			));
+			
 			$response = curl_exec($curl);
 			curl_close($curl);
-			echo '  <link rel="stylesheet" href="https://www.vxpress.in/trackship/css/style3.css">'.$response;
+			
+			$response = json_decode($response,true);
+
+			if(!empty($response)){
+				$response = $response['NewDataSet'];
+				$table = $response['Table'];
+				$table1 = $response['Table1'];
+				$table2 = $response['Table2'];
+				$table3 = $response['Table3'];
+
+				if(!empty($table)){
+					echo "<table class='table table-bordered'>";
+					$i = 0;
+					foreach($table as $k=>$v){
+						if($i==3){
+							$i = 0;
+						}		
+						if($i==0){
+							echo '<tr>';
+						}			
+						echo '<td>'.$k.'</td>';				
+						echo '<td>'.$v.'</td>';				
+						if($i==2){
+							echo '</tr>';
+						}
+						$i++;
+					}
+					echo "</table>";
+				}				
+				if(!empty($table1)){
+
+				}				
+				if(!empty($table2)){
+
+				}				
+				if(!empty($table3)){
+
+				}
+			}
+			
+			?>
+
+			<?php
 		}else{
 			if ($post = $this->input->post()) {
 				$url = "https://thecrm360.com/new_crm/ticket/gc_vtrans_api/" . $post['trackingno'];
