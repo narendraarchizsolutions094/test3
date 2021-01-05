@@ -121,8 +121,8 @@ class Ticket extends CI_Controller
 
 	public function ticket_save_filter()
 	{
-		 $type=$this->uri->segment(3);
-		$user_id=$this->session->user_id;
+		  $type=$this->uri->segment(3);
+		 $user_id=$this->session->user_id;
 		$comp_id=$this->session->companey_id;
 		// print_r($this->input->post());
 		// die();
