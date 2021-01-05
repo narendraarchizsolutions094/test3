@@ -216,7 +216,7 @@ class Ticket extends CI_Controller
 				'comp_id'=>$comp_id,
 				'type'=>$type,
 				'filter_data'=>json_encode($filterData)];
-				$this->db->where(array('user_id'=>$user_id,'comp_id'=>$comp_id,'type'=>2))->update('tbl_filterdata',$data);
+				$this->db->where(array('user_id'=>$user_id,'comp_id'=>$comp_id,'type'=>$type))->update('tbl_filterdata',$data);
 			echo'updated';
 			}else{
 			$filterData=['from_created' =>$this->input->post('from_created'),
@@ -238,9 +238,9 @@ class Ticket extends CI_Controller
 		$data=[
 			'user_id'=>$user_id,
 			'comp_id'=>$comp_id,
-			'type'=>2,
+			'type'=>$type,
 			'filter_data'=>json_encode($filterData)];
-			$this->db->where(array('user_id'=>$user_id,'comp_id'=>$comp_id,'type'=>2))->update('tbl_filterdata',$data);
+			$this->db->where(array('user_id'=>$user_id,'comp_id'=>$comp_id,'type'=>$type))->update('tbl_filterdata',$data);
 			echo'updated';
 		}
 			
