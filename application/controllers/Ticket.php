@@ -87,7 +87,7 @@ class Ticket extends CI_Controller
 			unset($_SESSION['ticket_filters_sess']);
 		$data['sourse'] = $this->report_model->all_source();
 		$data['title'] = "All Ticket";
-		$data["tickets"] = $this->Ticket_Model->getall();
+		//$data["tickets"] = $this->Ticket_Model->getall();
 		//print_r($data['tickets']); exit();
 		$data['created_bylist'] = $this->User_model->read();
 		$data['products'] = $this->dash_model->get_user_product_list();
@@ -99,7 +99,7 @@ class Ticket extends CI_Controller
 		$data['dfields'] = $this->enquiry_model->getformfield(2);
 		//print_r($data["tickets"]);die;
 		$data['issues'] = $this->Ticket_Model->get_issue_list();
-		$data['filterData'] = $this->Ticket_Model->get_filterData();
+		$data['filterData'] = $this->Ticket_Model->get_filterData(2);
 		$data['user_list'] = $this->User_model->companey_users();
 		$data['content'] = $this->load->view('ticket/list-ticket', $data, true);
 		$this->load->view('layout/main_wrapper', $data);
@@ -117,15 +117,51 @@ class Ticket extends CI_Controller
 		$this->session->set_userdata('ticket_filters_sess', $_POST);
 		//print_r($_SESSION);
 	}
+
 	public function ticket_save_filter()
 	{
+		 $type=$this->uri->segment(3);
 		$user_id=$this->session->user_id;
 		$comp_id=$this->session->companey_id;
+		// print_r($this->input->post());
+		// die();
 		//check already exist or not
-		$count=$this->db->where(array('user_id'=>$user_id,'comp_id'=>$comp_id,'type'=>2))->count_all_results('tbl_filterdata');
+		$count=$this->db->where(array('user_id'=>$user_id,'comp_id'=>$comp_id,'type'=>$type))->count_all_results('tbl_filterdata');
 		
 		if($count==0){
-			$filterData=['from_created' =>$this->input->post('from_created'),
+			if($type==1){
+				$filterData=[
+					'from_created' =>$this->input->post('from_created'),
+					'to_created' =>$this->input->post('to_created'),
+					'source' =>$this->input->post('source'),
+					'filter_checkbox' => $this->input->post('filter_checkbox'),
+					'subsource' =>$this->input->post('subsource'),
+					'email' =>$this->input->post('email'),
+					'employee' =>$this->input->post('employee'), 
+					'datasource' => $this->input->post('datasource'),
+					'company' => $this->input->post('company'),
+					'enq_product' => $this->input->post('enq_product'),
+					'phone' => $this->input->post('phone'),
+					'createdby' => $this->input->post('createdby'),
+					'assign' =>$this->input->post('assign'),
+					'address' =>$this->input->post('address'),
+					'prodcntry' =>$this->input->post('prodcntry'),
+					'state' =>$this->input->post('state'),
+					'city' =>$this->input->post('city'),
+					'stage' =>$this->input->post('stage'),
+					'top_filter' =>$this->input->post('top_filter'),
+					];
+			$data=[
+				'user_id'=>$user_id,
+				'comp_id'=>$comp_id,
+				'type'=>$type,
+				'filter_data'=>json_encode($filterData)];
+				$this->db->insert('tbl_filterdata',$data);
+			echo'inserted';
+			}else{
+				
+			$filterData=[
+				'from_created' =>$this->input->post('from_created'),
 				'to_created' =>$this->input->post('to_created'),
 				'update_from_created' =>$this->input->post('update_from_created'),
 				'update_to_created' =>$this->input->post('update_to_created'),
@@ -144,12 +180,43 @@ class Ticket extends CI_Controller
 		$data=[
 			'user_id'=>$user_id,
 			'comp_id'=>$comp_id,
-			'type'=>2,
+			'type'=>$type,
 			'filter_data'=>json_encode($filterData)];
-			
 			$this->db->insert('tbl_filterdata',$data);
 			echo'inserted';
+		}
+			
 		}else{
+			if($type==1){
+				$filterData=[
+					'from_created' =>$this->input->post('from_created'),
+					'to_created' =>$this->input->post('to_created'),
+					'source' =>$this->input->post('source'),
+					'filter_checkbox' => $this->input->post('filter_checkbox'),
+					'subsource' =>$this->input->post('subsource'),
+					'email' =>$this->input->post('email'),
+					'employee' =>$this->input->post('employee'), 
+					'datasource' => $this->input->post('datasource'),
+					'company' => $this->input->post('company'),
+					'enq_product' => $this->input->post('enq_product'),
+					'phone' => $this->input->post('phone'),
+					'createdby' => $this->input->post('createdby'),
+					'assign' =>$this->input->post('assign'),
+					'address' =>$this->input->post('address'),
+					'prodcntry' =>$this->input->post('prodcntry'),
+					'state' =>$this->input->post('state'),
+					'city' =>$this->input->post('city'),
+					'stage' =>$this->input->post('stage'),
+					'top_filter' =>$this->input->post('top_filter'),
+					];
+			$data=[
+				'user_id'=>$user_id,
+				'comp_id'=>$comp_id,
+				'type'=>$type,
+				'filter_data'=>json_encode($filterData)];
+				$this->db->where(array('user_id'=>$user_id,'comp_id'=>$comp_id,'type'=>2))->update('tbl_filterdata',$data);
+			echo'updated';
+			}else{
 			$filterData=['from_created' =>$this->input->post('from_created'),
 				'to_created' =>$this->input->post('to_created'),
 				'update_from_created' =>$this->input->post('update_from_created'),
@@ -174,6 +241,9 @@ class Ticket extends CI_Controller
 			$this->db->where(array('user_id'=>$user_id,'comp_id'=>$comp_id,'type'=>2))->update('tbl_filterdata',$data);
 			echo'updated';
 		}
+			
+		}
+
 		
 	}
 	public function autofill()
@@ -351,10 +421,11 @@ class Ticket extends CI_Controller
 			$data[] = $sub;
 		}
 		//print_r($res);
+		$countAll = $this->Ticket_datatable_model->countAll();
 		$output = array(
 			"draw" => $_POST['draw'],
-			"recordsTotal" => $this->Ticket_datatable_model->countAll(),
-			"recordsFiltered" => $this->Ticket_datatable_model->countFiltered($_POST),
+			"recordsTotal" => $countAll,
+			"recordsFiltered" => $countAll,
 			"data" => $data,
 		);
 		echo json_encode($output);
@@ -901,6 +972,29 @@ class Ticket extends CI_Controller
 			$pass .= $chars[mt_rand(0, count($chars) - 1)];
 		}
 		return $pass;
+	}
+
+	public function update_date(){
+		$this->db->where('company',65);
+		//$this->db->limit(1,1000);
+		$res = $this->db->get('tbl_ticket')->result_array();
+
+		if(!empty($res)){
+			foreach($res as $key=>$r){
+				$this->db->where('tck_id',$r['id']);
+				$this->db->order_by('id','desc');
+				$this->db->limit(1);
+				$last_conv	=	$this->db->get('tbl_ticket_conv')->row_array();
+				
+				
+				if(!empty($last_conv)){
+					$this->db->where('id',$r['id']);					
+					$this->db->set('last_update',$last_conv['send_date']);
+					$this->db->update('tbl_ticket');				}
+			}
+		}
+
+
 	}
 	public function ticket_disposition($ticketno)
 	{

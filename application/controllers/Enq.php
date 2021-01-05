@@ -7,7 +7,7 @@ class Enq extends CI_Controller
 		parent::__construct();
  
 		$this->load->model(
-			array('enquiry_model', 'User_model', 'dash_model', 'common_model', 'report_model', 'Leads_Model')
+			array('enquiry_model', 'User_model', 'dash_model', 'common_model', 'report_model', 'Leads_Model','Ticket_Model')
 		);
 		$this->load->library('email');
 		$this->load->library('pagination');
@@ -47,7 +47,11 @@ class Enq extends CI_Controller
 		$data['title'] = display('enquiry_list');
 		$data['subsource_list'] = $this->Datasource_model->subsourcelist();
 		$data['user_list'] = $this->User_model->companey_users();
-		$data['created_bylist'] = $this->User_model->read();
+		if($this->session->companey_id == 65 && $this->session->user_right == 215){
+			$data['created_bylist'] = $this->User_model->read(147,false);
+		}else{
+			$data['created_bylist'] = $this->User_model->read();
+		}
 		$data['products'] = $this->dash_model->get_user_product_list();
 		$data['drops'] = $this->enquiry_model->get_drop_list();
 
@@ -56,7 +60,10 @@ class Enq extends CI_Controller
 		$data['prodcntry_list'] = $this->enquiry_model->get_user_productcntry_list();
 		$data['state_list'] = $this->enquiry_model->get_user_state_list();
 		$data['city_list'] = $this->enquiry_model->get_user_city_list();
- 
+		$data['filterData'] = $this->Ticket_Model->get_filterData(1);
+		// print_r($data); 
+		// die();
+		
 		$data['content'] = $this->load->view('enquiry_n', $data, true);
 		$this->load->view('layout/main_wrapper', $data);
 	}

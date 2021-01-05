@@ -46,7 +46,7 @@ class User_model extends CI_Model {
 
     
 
-    public function read($user_right='') {        
+    public function read($user_right='',$hier_wise=true) {        
         $user_separation  = get_sys_parameter('user_separation','COMPANY_SETTING');
         $sep_arr=array();
         if (!empty($user_separation)) {
@@ -61,8 +61,12 @@ class User_model extends CI_Model {
         $this->db->select("*");
         $this->db->from($this->table);         
         $this->db->join('tbl_user_role', 'tbl_user_role.use_id=tbl_admin.user_permissions', 'left');
-        $where = "  tbl_admin.pk_i_admin_id IN (".implode(',', $all_reporting_ids).')';                
-        $where .= "  AND tbl_admin.b_status=1";                                
+        if($hier_wise){
+            $where = "  tbl_admin.pk_i_admin_id IN (".implode(',', $all_reporting_ids).')';               
+            $where .= "  AND tbl_admin.b_status=1";                                
+        }else{
+            $where = "  tbl_admin.b_status=1";                                
+        }
         if (!empty($user_right)) {
             $where .= "  AND tbl_admin.user_permissions='".$user_right."'";                                            
         }

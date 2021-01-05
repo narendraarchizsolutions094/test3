@@ -213,6 +213,9 @@ if($this->session->companey_id == 65){ ?>
 
     $("select[name='ticket_status']").val('3');
   }  
+  if(<?=$ticket->ticket_status?>==3){
+    $("#ticket_disposition_save").attr('disabled',true);
+  }
   </script>
 <?php
 }

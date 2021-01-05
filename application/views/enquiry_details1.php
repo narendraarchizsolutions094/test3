@@ -3496,7 +3496,7 @@ if (document.getElementById('agg_same').checked)
                   <div class="row">
                      <div class="form-group col-sm-6">  
                         <label>Expected Closer Date <i class="text-danger">*</i></label>                  
-                        <input class="form-control date2"  name="expected_date" type="text" placeholder="Expected Closer Date" readonly required>                
+                        <input class="form-control date2"  name="expected_date" type="text" placeholder="Expected Closer Date" required>                
                      </div>
                      <div class="form-group col-sm-6">
                         <label class="col-form-label">Conversion Probability</label>

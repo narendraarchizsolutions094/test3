@@ -147,6 +147,9 @@ input[name=lead_stages]{
 .short_dashboard button{
   margin:4px;
 }
+.hide_countings{
+   display:none !important;    
+ }
   </style>
 
     <div class="row">
@@ -255,7 +258,9 @@ input[name=lead_stages]{
 					</div>
 
 
-
+          <div style="float:right;">
+            <a class='btn btn-xs  btn-primary' href='javascript:void(0)' id='show_quick_counts' title='Show Quick Dashboard'><i class='fa fa-bar-chart'></i></a>
+          </div>
 					<div class="row">
 						<div class="">
 							<div class="panel-body">
@@ -264,26 +269,27 @@ input[name=lead_stages]{
 <form id="ticket_filter">
 	<div class="row" id="filter_pannel">
         <div class="col-lg-12">
+          
             <div class="panel panel-default">
                
                       <div class="form-row">
                        
                         <div class="form-group col-md-3" id="fromdatefilter">
                           <label for="from-date"><?php echo display("from_date"); ?></label>
-                          <input   class="form-control form-date" id="from-date" name="from_created" style="padding-top:0px;" value="<?= $filterData['from_created'] ?>">
+                          <input   class="form-control form-date" id="from-date" name="from_created" style="padding-top:0px;" value="<?=$filterData['from_created']=='' || $filterData['from_created']=='0000-00-00'?'':$filterData['from_created'] ?>">
                         </div>
                         <div class="form-group col-md-3" id="todatefilter">
                           <label for="to-date"><?php echo display("to_date"); ?></label>
-                          <input   class="form-control form-date" id="to-date" name="to_created" style="padding-top:0px;" value="<?= $filterData['to_created'] ?>">
+                          <input   class="form-control form-date" id="to-date" name="to_created" style="padding-top:0px;" value="<?=$filterData['to_created']==''||$filterData['to_created']=='0000-00-00'?'':$filterData['to_created']?>">
                         </div>
                         
                         <div class="form-group col-md-3" id="update_fromdatefilter">
                           <label for="update-from-date"><?php echo display("update_from_date"); ?></label>
-                          <input  class="form-control form-date" id="update-from-date" name="update_from_created" style="padding-top:0px;" value="<?= $filterData['update_from_created'] ?>">
+                          <input  class="form-control form-date" id="update-from-date" name="update_from_created" style="padding-top:0px;" value="<?= $filterData['update_from_created']=='' || $filterData['update_from_created']== '0000-00-00' ?'':$filterData['update_from_created'] ?>">
                         </div>
                         <div class="form-group col-md-3" id="update_todatefilter">
                           <label for="update-to-date"><?php echo display("update_to_date"); ?></label>
-                          <input class="form-control form-date" id="update-to-date" name="update_to_created" style="padding-top:0px;" value="<?= $filterData['update_to_created'] ?>">
+                          <input class="form-control form-date" id="update-to-date" name="update_to_created" style="padding-top:0px;" value="<?= $filterData['update_to_created']=='' || $filterData['update_to_created']== '0000-00-00' ?'':$filterData['update_to_created'] ?>">
                         </div>
 
 
@@ -350,7 +356,7 @@ input[name=lead_stages]{
                          <?php 
                           if (!empty($created_bylist)) {
                               foreach ($created_bylist as $createdbylist) {?>
-                              <option value="<?=$createdbylist->pk_i_admin_id;?>" <?php if($createdbylist->pk_i_admin_id==$filterData['createdby']) {echo 'selected';}?> <?php if(!empty(set_value('createdby'))){if (in_array($product->sb_id,set_value('createdby'))) {echo 'selected';}}?> <?php if(3==$filterData['priority']) {echo 'selected';}?>><?=$createdbylist->s_display_name.' '.$createdbylist->last_name;?> -  <?=$createdbylist->s_user_email?$createdbylist->s_user_email:$createdbylist->s_phoneno;?>                               
+                              <option value="<?=$createdbylist->pk_i_admin_id;?>" <?php if($createdbylist->pk_i_admin_id==$filterData['createdby']) {echo 'selected';}?> <?php if(!empty(set_value('createdby'))){if (in_array($product->sb_id,set_value('createdby'))) {echo 'selected';}}?> ><?=$createdbylist->s_display_name.' '.$createdbylist->last_name;?> -  <?=$createdbylist->s_user_email?$createdbylist->s_user_email:$createdbylist->s_phoneno;?>                               
                               </option>
                               <?php }}?>    
                          </select>                       
@@ -455,7 +461,7 @@ input[name=lead_stages]{
     display:inline-block;
   }
 </style>
-<div class="row text-center short_dashboard" style="padding-bottom: 15px">    
+<div class="row text-center short_dashboard hide_countings" id='active_class' style="padding-bottom: 15px">    
     <div class="wd-14">
       <div  class="col-12 border_bottom" >
           <p style="margin-top: 2vh;font-weight:bold;">
@@ -675,25 +681,30 @@ input[name=lead_stages]{
 </div>
 
 <script type="text/javascript">
-  
-   $.ajax({
-      url: "<?=base_url().'ticket/list_short_details/'?>",
-      type: 'get',
-      dataType: 'json',
-      success: function(responseData){
-        //alert(JSON.stringify(responseData));
-      $('#today_created').html(responseData.created_today);
-      $('#today_updated').html(responseData.updated_today);
-      $('#today_close').html(responseData.closed_today);
-      $('#today_total').html(responseData.all_today);
+   $("#show_quick_counts").on('click',function(){
+        $(this).hide();
+        $("#active_class").removeClass('hide_countings');
+        $("select[name='ticket_status']").change();
+        update_short_dashboard();
+      });
+//    $.ajax({
+//       url: "<?=base_url().'ticket/list_short_details/'?>",
+//       type: 'get',
+//       dataType: 'json',
+//       success: function(responseData){
+//         //alert(JSON.stringify(responseData));
+//       $('#today_created').html(responseData.created_today);
+//       $('#today_updated').html(responseData.updated_today);
+//       $('#today_close').html(responseData.closed_today);
+//       $('#today_total').html(responseData.all_today);
       
-     // all_lead_stage_c  = $("input[name='top_filter']:checked").next().next().next().html();
+//      // all_lead_stage_c  = $("input[name='top_filter']:checked").next().next().next().html();
 
-//      console.log(all_lead_stage_c);
+// //      console.log(all_lead_stage_c);
       
-      //$('#lead_stage_-1').text(all_lead_stage_c);     
-      }
-    });
+//       //$('#lead_stage_-1').text(all_lead_stage_c);     
+//       }
+//     });
 
 </script>
 
@@ -800,6 +811,15 @@ $(document).ready(function(){
 
 
 var enq_filters  = getCookie('ticket_filter_setting');
+if (enq_filters=='') {
+    $('#filter_pannel').hide();
+    $('#save_filterbutton').hide();
+
+}else{
+  $('#filter_pannel').show();
+  $('#save_filterbutton').show();
+
+}
 if (!enq_filters.includes('date')) {
   $('#fromdatefilter').hide();
   $('#todatefilter').hide();
@@ -884,14 +904,7 @@ if (!enq_filters.includes('status')) {
 }
 
 $('#buttongroup').hide();
-if($('#datecheckbox').is(":checked")||$('#sourcecheckbox').is(":checked")||$('#sourcecheckbox').is(":checked")||
-  $('#problemcheckbox').is(":checked")){
-    $('#save_filterbutton').show();
 
-  }else{
-    $('#save_filterbutton').hide();
-
-  }
  $('input[name="filter_checkbox"]').click(function(){  
   if($('#datecheckbox').is(":checked")||$('#sourcecheckbox').is(":checked")||$('#sourcecheckbox').is(":checked")||
   $('#problemcheckbox').is(":checked")||$('#createdbycheckbox').is(":checked")||$('#assigncheckbox').is(":checked")||
@@ -899,9 +912,12 @@ if($('#datecheckbox').is(":checked")||$('#sourcecheckbox').is(":checked")||$('#s
   $('#prodcheckbox').is(":checked")||$('#stagecheckbox').is(":checked")||$('#sub_stagecheckbox').is(":checked")||
   $('#statuscheckbox').is(":checked")){
     $('#save_filterbutton').show();
+    $('#filter_pannel').show();
 
   }else{
     $('#save_filterbutton').hide();
+    $('#filter_pannel').hide();
+
 
   }
  
@@ -1061,10 +1077,12 @@ $(document).ready(function(){
 // }
 
 $(document).ready(function() {
-      $('#ticket_table').DataTable({         
+  var table = $('#ticket_table').DataTable({         
           "processing": true,
           "scrollX": true,
           "scrollY": 520,
+          "pagingType": "simple",
+          "bInfo": false,
           "serverSide": true,          
           "lengthMenu": [ [10,30, 50,100,500,1000, -1], [10,30, 50,100,500,1000, "All"] ],
           "columnDefs": [{ "orderable": false, "targets": 0 }],
@@ -1098,7 +1116,20 @@ $(document).ready(function() {
             {extend: 'print', className: 'btn-xs btn',exportOptions: {
                         columns: "thead th:not(.noExport)"
                     }} 
-             ] ,  <?php  } ?>  });
+             ] ,  <?php  } ?>               
+            drawCallback: function (settings) {   
+              var api = this.api();
+            var $table = $(api.table().node());  
+              console.log(settings);               
+              console.log(table);               
+                var info = table.page.info();
+                returned_rows = table.rows().count();
+                if(returned_rows == 0 || returned_rows < info.length){
+                  $('#ticket_table_next').addClass('disabled');
+                }
+                $('#ticket_table_previous').after('<li><a class="btn btn-secondary btn-sm" style="padding: 4px;line-height: 2;" href="javascript:void(0)">'+info.page+'</a></li>');
+            }
+         });
 
 
     $('#ticket_filter').change(function() {
@@ -1113,11 +1144,15 @@ $(document).ready(function() {
          // document.write(responseData);
           $('#ticket_table').DataTable().ajax.reload();
           //stage_counter(); 
+          if(!$("#active_class").hasClass('hide_countings')){
            return update_short_dashboard(); 
+          }
            }
         });
     });
-    update_short_dashboard(); 
+    if(!$("#active_class").hasClass('hide_countings')){
+      update_short_dashboard(); 
+    }
 });
 
 function update_short_dashboard()
@@ -1375,7 +1410,7 @@ for (var i = 0; i < checkboxes.length; i++) {
 var form_data = $("#ticket_filter").serialize();       
 // alert(form_data);
 $.ajax({
-url: '<?=base_url()?>ticket/ticket_save_filter',
+url: '<?=base_url()?>ticket/ticket_save_filter/2',
 type: 'post',
 data: form_data,
 success: function(responseData){

@@ -461,10 +461,10 @@
 
       <section id="bottom-section">
           <div class="minimize-chatbox"
-              style="position:fixed;z-index:200;float:right;right:70px;bottom:0px;display:block;" id="maxmize_chates">
+              style="position:fixed;z-index:200;float:right;right:11px;bottom:0px;display:block;" id="maxmize_chates">
               <span class="badge badge-danger" id="totat-chat-unread">0</span>
               <div>
-                  <span class="btn btn-success" style="bottom:0px;z-index:300;" onclick="open_chates()">
+                  <span class="btn btn-success btn-xs" style="bottom:0px;z-index:300;" onclick="open_chates()">
                       <i class="fa fa-commenting" style="font-size:30px;"></i>
                   </span>
               </div>
