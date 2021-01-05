@@ -140,15 +140,7 @@ class Lead extends REST_Controller {
   }
 
   public function update_post(){
-      
-      /*echo "<pre>";
-      print_r($_POST);
-      echo "</pre>"; 
-      exit();
-      */
-      
-      $lead_code = $this->input->post('lead_code');
-      
+      $lead_code = $this->input->post('lead_code');      
       $this->form_validation->set_rules('lead_code','Lead Code','required');
       $this->form_validation->set_rules('enquiry_type','Enquiry Type','required');
       $this->form_validation->set_rules('customer_types','Customer Type','required');
@@ -165,22 +157,14 @@ class Lead extends REST_Controller {
       $this->form_validation->set_rules('lead_source','Source','required');
       $this->form_validation->set_rules('enquiry','Requirement/Product','required');
       $this->form_validation->set_rules('lead_score','Conversion Probability','required');
-      $this->form_validation->set_rules('lead_stage','Lead Stage','required');
-      
-      if($this->form_validation->run() == true){
-      
-        if($this->input->post('referredby')!=''){
-      
-          $ref=$this->input->post('referredby');
-      
-        }else{
-      
-            $ref='';
-      
-        }
-          
-          $name             = $this->input->post('enquirername');
-      
+      $this->form_validation->set_rules('lead_stage','Lead Stage','required');      
+      if($this->form_validation->run() == true){      
+        if($this->input->post('referredby')!=''){      
+          $ref=$this->input->post('referredby');      
+        }else{      
+            $ref='';      
+        }          
+          $name             = $this->input->post('enquirername');      
           $email            = $this->input->post('email');
       
           $mobile           = $this->input->post('mobileno');

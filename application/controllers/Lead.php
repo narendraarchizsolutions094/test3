@@ -156,10 +156,7 @@ class Lead extends CI_Controller
             $this->Leads_Model->add_comment_for_events('Update Leads', $lead_code, $stage_code);
             redirect('lead/lead_details/' . $enquiry_id);
         }
-
         $data['details'] = $this->Leads_Model->get_leadListDetailsby_id($enquiry_id);
-        //$data['state_city_list'] = $this->location_model->get_city_by_state_id($data['details']->enquiry_state_id);
-        //$data['state_city_list'] = $this->location_model->ecity_list();
 
         $data['allleads'] = $this->Leads_Model->get_leadList();
         if (!empty($data['details'])) {
@@ -1087,26 +1084,12 @@ class Lead extends CI_Controller
             $drop_status = $this->input->post('drop_status');
             $move_enquiry = $this->input->post('enquiry_id');
             if (!empty($move_enquiry)) {
-                foreach ($move_enquiry as $key) {
-                    /*    $this->db->set('drop_status', $drop_status);
-                    $this->db->set('drop_reason', $reason);
-                    $this->db->set('update_date', date('Y-m-d H:i:s'));
-                    $this->db->set('ld_status', 0);
-                    $this->db->where('lid', $key);
-                    $this->db->update('allleads');
-                */
-
+                foreach ($move_enquiry as $key) {             
                     $this->db->set('drop_status', $drop_status);
                     $this->db->set('drop_reason', $reason);
-                    //$this->db->set('update_date', date('Y-m-d H:i:s'));
                     $this->db->where('enquiry_id', $key);
                     $this->db->update('enquiry');
-
                     $data['enquiry'] = $this->Leads_Model->get_leadListDetailsby_ledsonly($key);
-                    /*echo "<pre>";
-                    print_r($_POST);
-                    exit();*/
-                    //$lead_code = $data['enquiry']->lead_code;
                     $lead_code = $data['enquiry']->Enquery_id;
                     $this->Leads_Model->add_comment_for_events('Dropped Leads', $lead_code);
                 }
@@ -1280,8 +1263,6 @@ class Lead extends CI_Controller
         }
         $data['title'] = display('institute_list');
         $data['institute_list'] = $this->Institute_model->institutelist();
-        /*echo $this->db->last_query();
-        print_r($data['institute_list']);*/
         $data['content'] = $this->load->view('institute/institute_list', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }
@@ -1299,8 +1280,6 @@ class Lead extends CI_Controller
         $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
         $data["links"]          = $this->pagination->create_links();
         $data['course_list']    = $this->Institute_model->courselist($config["per_page"], $page);
-        /*echo $this->db->last_query();
-        print_r($data['institute_list']);*/
         $data['courses']        = $this->Institute_model->findcourse();
         $data['discipline']     = $this->location_model->find_discipline();
         $data['level']          = $this->location_model->find_level();
@@ -1310,9 +1289,6 @@ class Lead extends CI_Controller
     }
     public function upload_course()
     {
-        /*echo "<pre>";    
-        print_r($_FILES);
-        echo "</pre>";   */
         $comp_id = $this->session->companey_id;
         $user_id = $this->session->user_id;
         $filename = $_FILES["course_file"]["tmp_name"];
@@ -1332,9 +1308,6 @@ class Lead extends CI_Controller
                     $tuition_fees   = $courseData[7];
                     $description    = $courseData[8];
                     $status         = $courseData[9];
-                    /*echo "<pre>";
-                    print_r($courseData);
-                    echo "</pre>";*/
                     $this->db->select('id');
                     $this->db->where('course_name', $course_name);
                     $this->db->where('comp_id', $comp_id);
@@ -1424,8 +1397,6 @@ class Lead extends CI_Controller
         $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
         $data["links"] = $this->pagination->create_links();
         $data['course_list'] = $this->Institute_model->crslist($config["per_page"], $page);
-        /*echo $this->db->last_query();
-        print_r($data['institute_list']);*/
         $data['content'] = $this->load->view('institute/crs_list', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }
@@ -1444,8 +1415,6 @@ class Lead extends CI_Controller
         $data["links"] = $this->pagination->create_links();
         $data['course_list'] = $this->Institute_model->sub_course($config["per_page"], $page);
         $data['cource'] = $this->Institute_model->crsmstrlist();
-        /*echo $this->db->last_query();
-        print_r($data['institute_list']);*/
         $data['content'] = $this->load->view('institute/sub_crs_list', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }
@@ -1455,8 +1424,6 @@ class Lead extends CI_Controller
         }
         $data['title'] = display('vedio_list');
         $data['vid_list'] = $this->Institute_model->vidlist();
-        /*echo $this->db->last_query();
-        print_r($data['institute_list']);*/
         $data['content'] = $this->load->view('institute/vid_list', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }
@@ -1467,8 +1434,6 @@ class Lead extends CI_Controller
         }
         $data['title'] = display('program_discipline');
         $data['discipline_list'] = $this->Institute_model->disciplinelist();
-        /*echo $this->db->last_query();
-        print_r($data['institute_list']);*/
         $data['content'] = $this->load->view('institute/discipline_list', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }
@@ -1486,7 +1451,6 @@ class Lead extends CI_Controller
             'create_date' => date('Y-m-d')
         ];
         if ($this->form_validation->run() === true) {
-            // print_r($postData);exit;
             if (empty($this->input->post('discipline_id'))) {
                 if (user_role('30') == true) {
                 }
