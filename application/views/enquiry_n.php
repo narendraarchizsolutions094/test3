@@ -1441,7 +1441,11 @@ $(document).on('click',".top_pill",function(){
         $('#enq_table').DataTable().ajax.reload();
         process_change_fun();
       });
-
+      $("#show_quick_counts").on('click',function(){
+        $(this).hide();
+        $("#active_class").removeClass('hide_countings');    
+        update_top_filter_counter();      
+      });
       function update_top_filter_counter(){
         //alert("dd");
         $.ajax({
@@ -2314,9 +2318,5 @@ success: function(responseData){
 }
 });
   }
-  $("#show_quick_counts").on('click',function(){
-    $(this).hide();
-    $("#active_class").removeClass('hide_countings');    
-    update_top_filter_counter();      
-  });
+  
 </script>
