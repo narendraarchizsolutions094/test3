@@ -1275,7 +1275,7 @@ if(!empty($_GET['desposition']))
 
   $(document).ready(function() {
        
-   vat table  = $('#enq_table').DataTable(
+   var table  = $('#enq_table').DataTable(
         {         
           "processing": true,
           "scrollX": true,
