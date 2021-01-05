@@ -31,11 +31,11 @@
               </div>
               <div class="col-sm-3">
                 <label>From</label>
-                 <input type="date" class="form-control" name="from">
+                 <input  class="form-control form-date" name="from">
               </div>
               <div class="col-sm-3">
                  <label>To</label>
-                 <input type="date" class="form-control" name="to">
+                 <input  class="form-control form-date" name="to">
               </div>
               <br>
               <div class="col-sm-2">

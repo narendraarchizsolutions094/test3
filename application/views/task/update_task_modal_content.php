@@ -30,7 +30,7 @@
       
       <div class="form-group col-sm-6" style="">
          <label>Task Date</label>
-         <input type="date" class="form-control" name="task_date" value="<?= date("Y-m-d",strtotime($task->task_date)) ?>" id='task_update_enq_task_date'>
+         <input  class="form-control form-date" name="task_date" value="<?= date("Y-m-d",strtotime($task->task_date)) ?>" id='task_update_enq_task_date'>
       </div>
       <div class="form-group col-sm-6" style="">
          <label>Task Time</label>

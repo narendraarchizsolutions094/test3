@@ -1642,7 +1642,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                         else if($menu_count==20)
                         {
                     ?>
-                    <li class="<?php echo (($segment1 == "client"   || $segment2 == ""|| $segment1 == "index" && empty($_GET['stage'] ))  && $segment2!='deals' && $segment2!='visits'? "active" : null) ?>"
+                    <li class="<?php echo (($segment1 == "client" && $segment2 == ""|| $segment1 == "index" && empty($_GET['stage'] ))  && $segment2!='deals' && $segment2!='visits'? "active" : null) ?>"
                         style="<?php if(in_array(80,$module) || in_array(81,$module) || in_array(82,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
                         <a href="<?php echo base_url("client/index") ?>">
                             <i class="fa fa-user-circle-o"
@@ -1779,7 +1779,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
 
 
 
-                    <li class="treeview"
+                    <li class="treeview <?php echo (($segment1 == "target") || ($segment1 == "forecasting" && $segment1=='target_view') ) ? "active" : null ?>"
                         style="<?php if(in_array(210,$module) || in_array(211,$module) || in_array(212,$module) || in_array(213,$module) || in_array(260, $module) || in_array(261, $module) || in_array(262, $module) || in_array(250, $module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
                         <a href="#">
                             <i class="fa fa-cog"
@@ -1795,7 +1795,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
 
                         <ul class="treeview-menu">
 
-                            <li class="<?php echo (($segment2 == "target") ? "active" : null) ?>"
+                            <li class="<?php echo (($segment1 == "target") ? "active" : null) ?>"
                                 style="<?php if(in_array(250,$module) || in_array(251,$module) || in_array(252,$module) || in_array(253,$module) || in_array(261, $module) || in_array(260, $module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
                                 <a href="<?php echo base_url("target") ?>"><?=display('all_goals')?></a>
                             </li>
@@ -1833,7 +1833,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                             if(user_access('120'))
                             {
                             ?>
-                             <li class="<?php echo (($segment1 == "report") && $segment2=='' ? "active" : null) ?>">
+                             <li class="<?php echo (($segment1 == "report" & $segment2=='' ) || ( $segment1 == "report" && $segment2=='view_details' ) ? "active" : null) ?>">
                                 <a href="<?=base_url("report/") ?>">Sales Report </a>
                             </li>
                             <?php
@@ -1875,7 +1875,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
 
                         <ul class="treeview-menu">
                             <li
-                                class="<?php echo (($segment1 == "attendence" && in_array($segment2, array('logs'))) ? "active" : null) ?>">
+                                class="<?php echo (($segment1 == "attendance" && in_array($segment2, array('logs'))) ? "active" : null) ?>">
                                 <a
                                     href="<?php echo base_url("attendance/logs") ?>"><?php echo display('attendence') ?></a>
                             </li>
@@ -1902,18 +1902,18 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                         <ul
                             class="treeview-menu <?php echo (($this->uri->segment(1) == "knowledge_base") ? "active" : null) ?>">
                             <?php if(user_access('170')==true||user_access('171')==true||user_access('172')==true||user_access('173')==true||user_access('174')==true||user_access('175')==true||user_access('176')==true){?>
-                            <li class=""><a href="<?=base_url('knowledge_base/index')?>">Knowledge Base</a></li>
+                            <li class="<?php echo (($segment1 == "knowledge_base" && in_array($segment2, array('index'))) ? "active" : null) ?>"><a href="<?=base_url('knowledge_base/index')?>">Knowledge Base</a></li>
                             <?php
                             if(user_access('171') || user_access('172') || user_access('173'))
                             {
                             ?>
-                            <li class=""><a href="<?php echo base_url('knowledge_base/articles')?>">Articles</a></li>
+                            <li class="<?php echo (($segment1 == "knowledge_base" && in_array($segment2, array('articles'))) ? "active" : null) ?>"><a href="<?php echo base_url('knowledge_base/articles')?>">Articles</a></li>
                             <?php
                             }
                             if(user_access('174') || user_access('175') || user_access('176'))
                             {
                             ?>
-                            <li class=""><a href="<?php echo base_url('knowledge_base/category')?>">Category</a></li>
+                            <li class="<?php echo (($segment1 == "knowledge_base" && in_array($segment2, array('category'))) ? "active" : null) ?>"><a href="<?php echo base_url('knowledge_base/category')?>">Category</a></li>
                             <?php 
                             }
                             }?>
@@ -3056,5 +3056,5 @@ $("#cart-nav-menu").load("<?=base_url().'buy/cart'?>", function() {
 });
 jQuery(function($){ //on document.ready
         $('.form-date').datepicker({ dateFormat: 'yy-mm-dd' });
-      })
+      });
 </script>
