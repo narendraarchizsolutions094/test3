@@ -447,23 +447,25 @@ class Ticket extends CI_Controller
 					echo "</table>";
 				}				
 				if(!empty($table3)){
-					echo "<table class='table table-bordered'>";
-					$i = 1;
-					foreach($table3 as $k=>$v){
-						if($i==3){
-							$i = 1;
-						}		
-						if($i==1){
-							echo '<tr>';
-						}			
-						echo '<td>'.$k.'</td>';				
-						echo '<td>'.$v.'</td>';				
-						if($i==2){
-							echo '</tr>';
+					foreach($table3 as $key=>$value){
+						echo "<table class='table table-bordered'>";
+						$i = 1;
+						foreach($value as $k=>$v){
+							if($i==3){
+								$i = 1;
+							}		
+							if($i==1){
+								echo '<tr>';
+							}			
+							echo '<td>'.$k.'</td>';				
+							echo '<td>'.$v.'</td>';				
+							if($i==2){
+								echo '</tr>';
+							}
+							$i++;
 						}
-						$i++;
+						echo "</table>";
 					}
-					echo "</table>";
 				}
 			}
 			
