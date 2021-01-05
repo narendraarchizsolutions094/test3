@@ -1275,26 +1275,25 @@ if(!empty($_GET['desposition']))
 
   $(document).ready(function() {
        
-      $('#enq_table').DataTable(
+   vat table  = $('#enq_table').DataTable(
         {         
           "processing": true,
           "scrollX": true,
           "scrollY": 520,
+          "pagingType": "simple",
           "serverSide": true,          
           "lengthMenu": [ [10,30, 50,100,500,1000, -1], [10,30, 50,100,500,1000, "All"] ],
           "ajax": {
               "url": "<?=base_url().'Enq/enq_load_data'?>",
               "type": "POST",
               "data":function(d){
-                d.data_type = "<?=$data_type?>";
-               //document.write(JSON.stringify(d));
+                d.data_type = "<?=$data_type?>";               
                 return d;
               }
               //"data":{'data_type':"<?=$data_type?>"}
           },
         <?php if(user_access(500)) { ?>
-          dom: "<'row text-center'<'col-sm-12 col-xs-12 col-md-4'l><'col-sm-12 col-xs-12 col-md-4 text-center'B><'col-sm-12 col-xs-12 col-md-4'f>>tp", 
-        // "lengthMenu": [[30, 60, 90, -1], [30, 60, 90, "All"]], 
+          dom: "<'row text-center'<'col-sm-12 col-xs-12 col-md-4'l><'col-sm-12 col-xs-12 col-md-4 text-center'B><'col-sm-12 col-xs-12 col-md-4'f>>tp",         
         buttons: [  
             {extend: 'copy', className: 'btn-xs btn',exportOptions: {
                         columns: "thead th:not(.noExport)"
@@ -1324,11 +1323,24 @@ if(!empty($_GET['desposition']))
               h = $("table").find('th:eq('+j+')').html();
               $(row).find('td:eq('+j+')').attr('data-th',h);
             }                       
+        },
+        drawCallback: function (settings) {
+          var api = this.api();
+          var $table = $(api.table().node());  
+          var info = table.page.info();
+          
+          returned_rows = table.rows().count();
+          
+          if(returned_rows == 0 || returned_rows < info.length){
+            $('#enq_table_next').addClass('disabled');
+          }
+          
+          $('#enq_table_previous').after('<li><a class="btn btn-secondary btn-sm" style="padding: 4px;line-height: 2;" href="javascript:void(0)">'+info.page+'</a></li>');
         }
       });
 
     // update_top_filter_counter();
-    //   $('#enq_table').DataTable({ 
+    //   $('#enq_table').DataTable({  
     //     //responsive: true, 
     //     scrollX: true,
     //     scrollY: 800,

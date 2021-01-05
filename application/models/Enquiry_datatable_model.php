@@ -361,37 +361,15 @@ class Enquiry_datatable_model extends CI_Model {
  
     public function count_all()
     {
-        $all_reporting_ids    =   $this->common_model->get_categories($this->session->user_id);
-
         $this->db->from($this->table);        
         $where = "";
         $datatype = $_POST['data_type'];
-        $where .= " enquiry.status=$datatype ";
-        $user_id   = $this->session->user_id;
-        $user_role = $this->session->user_role;
-
-        $where .= " AND ( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
-        $where .= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';  
-
-        $enquiry_filters_sess    =   $this->session->enquiry_filters_sess;        
-        $product_filter = !empty($enquiry_filters_sess['product_filter'])?$enquiry_filters_sess['product_filter']:'';
-
-        if(!empty($this->session->process) && empty($product_filter)){   
-        $arr = $this->session->process; 
-        if(is_array($arr)){
-            $where.=" AND enquiry.product_id IN (".implode(',', $arr).')';
-        }            
-        }else if (!empty($this->session->process) && !empty($product_filter)) {
-            $where.=" AND enquiry.product_id IN (".implode(',', $product_filter).')';            
-        }
-
-
-        $this->db->where($where);
-        $data_type = $_POST['data_type'];    
         
+        $compid = $this->session->companey_id;
+        $where .= " enquiry.status=$datatype AND comp_id=$compid";
+
+        $this->db->where($where);        
         $this->db->group_by('enquiry.Enquery_id');
-        
-
         return $this->db->count_all_results();
     }
  

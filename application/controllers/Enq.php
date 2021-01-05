@@ -374,10 +374,11 @@ class Enq extends CI_Controller
 			}
 			$data[] = $row;
 		}
+		$c = $this->enquiry_datatable_model->count_all();
 		$output = array(
 			"draw" => $_POST['draw'],
-			"recordsTotal" => $this->enquiry_datatable_model->count_all(),
-			"recordsFiltered" => $this->enquiry_datatable_model->count_filtered(),
+			"recordsTotal" => $c,
+			"recordsFiltered" => $c,
 			"data" => $data,
 		);
 		echo json_encode($output);
