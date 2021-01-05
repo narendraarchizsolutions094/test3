@@ -905,7 +905,7 @@ class Ticket extends CI_Controller
 
 	public function update_date(){
 		$this->db->where('company',65);
-		$this->db->limit(1,1000);
+		//$this->db->limit(1,1000);
 		$res = $this->db->get('tbl_ticket')->result_array();
 
 		if(!empty($res)){
