@@ -902,6 +902,29 @@ class Ticket extends CI_Controller
 		}
 		return $pass;
 	}
+
+	public function update_date(){
+		$this->db->where('company',65);
+		$this->db->limit(1,1000);
+		$res = $this->db->get('tbl_ticket')->result_array();
+
+		if(!empty($res)){
+			foreach($res as $key=>$r){
+				$this->db->where('tck_id',$r['id']);
+				$this->db->order_by('id','desc');
+				$this->db->limit(1);
+				$last_conv	=	$this->db->get('tbl_ticket_conv')->row_array();
+				
+				
+				if(!empty($last_conv)){
+					$this->db->where('id',$r['id']);					
+					$this->db->set('last_update',$last_conv['send_date']);
+					$this->db->update('tbl_ticket');				}
+			}
+		}
+
+
+	}
 	public function ticket_disposition($ticketno)
 	{
 		//print_r($_POST); exit();
