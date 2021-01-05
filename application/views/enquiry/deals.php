@@ -58,7 +58,7 @@ input[name=top_filter]{
 	<div class="col-lg-4">
         <div class="form-group">
           <label>From</label>
-          <input type="date" class="d_filter form-control" name="d_from_date">
+          <input class="d_filter form-control form-date" name="d_from_date">
         <!--   <div class="pull-left">
             <div style="top: 0px;
                           margin-top: 0px;
@@ -80,7 +80,7 @@ input[name=top_filter]{
       <div class="col-lg-4">
         <div class="form-group">
           <label>To</label>
-           <input type="date" class="d_filter form-control" name="d_to_date">
+           <input  class="d_filter form-control form-date" name="d_to_date">
         </div>
       </div>
 

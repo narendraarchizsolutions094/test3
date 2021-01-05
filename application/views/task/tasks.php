@@ -91,11 +91,11 @@
             <div class="row">
               <div class="col-md-6">
                 <label>Reminder Date</label>
-                <input type="date" name="reminder_date" class="form-control">                            
+                <input   name="reminder_date" class="form-control form-date">                            
               </div>
               <div class="col-md-6">
                 <label>Reminder Time</label>
-                <input type="time" name="reminder_time" class="form-control">                            
+                <input type="time" placeholder="12:00:00" name="reminder_time" class="form-control">                            
               </div>
             </div>
         </div>

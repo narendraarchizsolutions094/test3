@@ -93,18 +93,13 @@ class Ticket extends CI_Controller
 		$data['products'] = $this->dash_model->get_user_product_list();
 		$data['prodcntry_list'] = $this->enquiry_model->get_user_productcntry_list();
 		$data['problem'] = $this->Ticket_Model->get_sub_list();
-		
 		$data['stage'] =  $this->Leads_Model->stage_by_type(4);
 		$data['sub_stage'] = $this->Leads_Model->find_description();
 		$data['ticket_status'] = $this->Ticket_Model->ticket_status()->result();
-		
 		$data['dfields'] = $this->enquiry_model->getformfield(2);
-		
 		//print_r($data["tickets"]);die;
 		$data['issues'] = $this->Ticket_Model->get_issue_list();
-		$data['filterData'] = $this->Ticket_Model->get_filterData();
-		// print_r($data);
-		// die();
+		$data['filterData'] = $this->Ticket_Model->get_filterData(2);
 		$data['user_list'] = $this->User_model->companey_users();
 		$data['content'] = $this->load->view('ticket/list-ticket', $data, true);
 		$this->load->view('layout/main_wrapper', $data);
@@ -122,57 +117,134 @@ class Ticket extends CI_Controller
 		$this->session->set_userdata('ticket_filters_sess', $_POST);
 		//print_r($_SESSION);
 	}
+
 	public function ticket_save_filter()
 	{
+		 $type=$this->uri->segment(3);
 		$user_id=$this->session->user_id;
 		$comp_id=$this->session->companey_id;
+		// print_r($this->input->post());
+		// die();
 		//check already exist or not
-		$count=$this->db->where(array('user_id'=>$user_id,'comp_id'=>$comp_id,'type'=>2))->count_all_results('tbl_filterdata');
+		$count=$this->db->where(array('user_id'=>$user_id,'comp_id'=>$comp_id,'type'=>$type))->count_all_results('tbl_filterdata');
 		
 		if($count==0){
-			$data= 
-		['from_created' =>$this->input->post('from_created'),
-		'to_created' =>$this->input->post('to_created'),
-		'update_from_created' =>$this->input->post('update_from_created'),
-		'update_to_created' =>$this->input->post('update_to_created'),
-		'source' =>$this->input->post('source'),
-		'problem' => $this->input->post('problem'),
-		'priority' =>$this->input->post('priority'),
-		'issue' =>$this->input->post('issue'),
-		'createdby' =>$this->input->post('createdby'), 
-		'assign' => $this->input->post('assign'),
-		'assign_by' => $this->input->post('assign_by'),
-		'prodcntry' => $this->input->post('prodcntry'),
-		'stage' => $this->input->post('stage'),
-		'sub_stage' => $this->input->post('sub_stage'),
-		'ticket_status' =>$this->input->post('ticket_status'),
-		'user_id'=>$user_id,
-		'comp_id'=>$comp_id,
-		'type'=>2
-	    ];
+			if($type==1){
+				$filterData=[
+					'from_created' =>$this->input->post('from_created'),
+					'to_created' =>$this->input->post('to_created'),
+					'source' =>$this->input->post('source'),
+					'filter_checkbox' => $this->input->post('filter_checkbox'),
+					'subsource' =>$this->input->post('subsource'),
+					'email' =>$this->input->post('email'),
+					'employee' =>$this->input->post('employee'), 
+					'datasource' => $this->input->post('datasource'),
+					'company' => $this->input->post('company'),
+					'enq_product' => $this->input->post('enq_product'),
+					'phone' => $this->input->post('phone'),
+					'createdby' => $this->input->post('createdby'),
+					'assign' =>$this->input->post('assign'),
+					'address' =>$this->input->post('address'),
+					'prodcntry' =>$this->input->post('prodcntry'),
+					'state' =>$this->input->post('state'),
+					'city' =>$this->input->post('city'),
+					'stage' =>$this->input->post('stage'),
+					'top_filter' =>$this->input->post('top_filter'),
+					];
+			$data=[
+				'user_id'=>$user_id,
+				'comp_id'=>$comp_id,
+				'type'=>$type,
+				'filter_data'=>json_encode($filterData)];
+				$this->db->insert('tbl_filterdata',$data);
+			echo'inserted';
+			}else{
+				
+			$filterData=[
+				'from_created' =>$this->input->post('from_created'),
+				'to_created' =>$this->input->post('to_created'),
+				'update_from_created' =>$this->input->post('update_from_created'),
+				'update_to_created' =>$this->input->post('update_to_created'),
+				'source' =>$this->input->post('source'),
+
+				'problem' => $this->input->post('problem'),
+				'priority' =>$this->input->post('priority'),
+				'issue' =>$this->input->post('issue'),
+				'createdby' =>$this->input->post('createdby'), 
+				'assign' => $this->input->post('assign'),
+				'assign_by' => $this->input->post('assign_by'),
+				'prodcntry' => $this->input->post('prodcntry'),
+				'stage' => $this->input->post('stage'),
+				'sub_stage' => $this->input->post('sub_stage'),
+				'ticket_status' =>$this->input->post('ticket_status'),
+				];
+		$data=[
+			'user_id'=>$user_id,
+			'comp_id'=>$comp_id,
+			'type'=>$type,
+			'filter_data'=>json_encode($filterData)];
 			$this->db->insert('tbl_filterdata',$data);
 			echo'inserted';
+		}
+			
 		}else{
-			$data= 
-			['from_created' =>$this->input->post('from_created'),
-			'to_created' =>$this->input->post('to_created'),
-			'update_from_created' =>$this->input->post('update_from_created'),
-			'update_to_created' =>$this->input->post('update_to_created'),
-			'source' =>$this->input->post('source'),
-			'problem' => $this->input->post('problem'),
-			'priority' =>$this->input->post('priority'),
-			'issue' =>$this->input->post('issue'),
-			'createdby' =>$this->input->post('createdby'), 
-			'assign' => $this->input->post('assign'),
-			'assign_by' => $this->input->post('assign_by'),
-			'prodcntry' => $this->input->post('prodcntry'),
-			'stage' => $this->input->post('stage'),
-			'sub_stage' => $this->input->post('sub_stage'),
-			'ticket_status' =>$this->input->post('ticket_status'),
-	    ];
+			if($type==1){
+				$filterData=[
+					'from_created' =>$this->input->post('from_created'),
+					'to_created' =>$this->input->post('to_created'),
+					'source' =>$this->input->post('source'),
+					'filter_checkbox' => $this->input->post('filter_checkbox'),
+					'subsource' =>$this->input->post('subsource'),
+					'email' =>$this->input->post('email'),
+					'employee' =>$this->input->post('employee'), 
+					'datasource' => $this->input->post('datasource'),
+					'company' => $this->input->post('company'),
+					'enq_product' => $this->input->post('enq_product'),
+					'phone' => $this->input->post('phone'),
+					'createdby' => $this->input->post('createdby'),
+					'assign' =>$this->input->post('assign'),
+					'address' =>$this->input->post('address'),
+					'prodcntry' =>$this->input->post('prodcntry'),
+					'state' =>$this->input->post('state'),
+					'city' =>$this->input->post('city'),
+					'stage' =>$this->input->post('stage'),
+					'top_filter' =>$this->input->post('top_filter'),
+					];
+			$data=[
+				'user_id'=>$user_id,
+				'comp_id'=>$comp_id,
+				'type'=>$type,
+				'filter_data'=>json_encode($filterData)];
+				$this->db->where(array('user_id'=>$user_id,'comp_id'=>$comp_id,'type'=>2))->update('tbl_filterdata',$data);
+			echo'updated';
+			}else{
+			$filterData=['from_created' =>$this->input->post('from_created'),
+				'to_created' =>$this->input->post('to_created'),
+				'update_from_created' =>$this->input->post('update_from_created'),
+				'update_to_created' =>$this->input->post('update_to_created'),
+				'source' =>$this->input->post('source'),
+				'problem' => $this->input->post('problem'),
+				'priority' =>$this->input->post('priority'),
+				'issue' =>$this->input->post('issue'),
+				'createdby' =>$this->input->post('createdby'), 
+				'assign' => $this->input->post('assign'),
+				'assign_by' => $this->input->post('assign_by'),
+				'prodcntry' => $this->input->post('prodcntry'),
+				'stage' => $this->input->post('stage'),
+				'sub_stage' => $this->input->post('sub_stage'),
+				'ticket_status' =>$this->input->post('ticket_status'),
+				];
+		$data=[
+			'user_id'=>$user_id,
+			'comp_id'=>$comp_id,
+			'type'=>2,
+			'filter_data'=>json_encode($filterData)];
 			$this->db->where(array('user_id'=>$user_id,'comp_id'=>$comp_id,'type'=>2))->update('tbl_filterdata',$data);
 			echo'updated';
 		}
+			
+		}
+
 		
 	}
 	public function autofill()

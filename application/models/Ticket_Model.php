@@ -91,13 +91,39 @@ class Ticket_Model extends CI_Model
 				}	
 			}	
 		}*/
-   public function get_filterData()
+   public function get_filterData($type)
    {
 	   $comp_id=$this->session->companey_id;
 	   $user_id=$this->session->user_id;
-		$values=$this->db->where(array('user_id'=>$user_id,'comp_id'=>$comp_id,'type'=>2))->get('tbl_filterdata');
-		$value=$values->row();
-		// print_r($value);
+		$values=$this->db->where(array('user_id'=>$user_id,'comp_id'=>$comp_id,'type'=>$type))->get('tbl_filterdata');
+		$filter=$values->row();
+		if(!empty($filter)){
+			
+		$value=json_decode($filter->filter_data);
+		if($type=1){
+			$pdata=[
+				'from_created' =>$value->from_created??NULL,
+					'to_created' =>$value->to_created??NULL,
+					'source' =>$value->source??NULL,
+					'filter_checkbox' => $value->filter_checkbox??NULL,
+					'subsource' =>$value->subsource??NULL,
+					'email' =>$value->email??NULL,
+					'employee' =>$value->employee??NULL, 
+					'datasource' => $value->datasource??NULL,
+					'company' =>$value->company??NULL,
+					'enq_product' => $value->enq_product??NULL,
+					'phone' =>$value->phone??NULL,
+					'createdby' =>$value->createdby??NULL,
+					'assign' =>$value->assign??NULL,
+					'address' =>$value->address??NULL,
+					'prodcntry' =>$value->prodcntry??NULL,
+					'state' =>$value->state??NULL,
+					'city' =>$value->city??NULL,
+					'stage' =>$value->stage??NULL,
+					'top_filter' =>$value->top_filter??NULL,
+					
+			];
+		}else{
 			$pdata=[
 					'from_created' =>$value->from_created??NULL,
 					'to_created' =>$value->to_created??NULL,
@@ -114,9 +140,10 @@ class Ticket_Model extends CI_Model
 					'stage' =>$value->stage??NULL,
 					'sub_stage' =>$value->sub_stage??NULL,
 					'ticket_status' =>$value->ticket_status??NULL,
-					'rows'=>$values->num_rows()??0,
 		];
+	}
 		return $pdata;
+	}
    }
 	public function save($companey_id = '', $user_id = '')
 	{

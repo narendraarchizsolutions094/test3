@@ -113,21 +113,21 @@
                        
                         <div class="form-group col-md-3" id="fromdatefilter">
                           <label for="from-date"><?php echo display("from_date"); ?></label>
-                          <input type="date" class="form-control" id="from-date" name="from_created" style="padding-top:0px;" value="<?=$this->input->post('from_created')?>">
+                          <input class="form-control form-date" id="from-date" name="from_created" style="padding-top:0px;" value="<?=$this->input->post('from_created')?>">
                         </div>
                         <div class="form-group col-md-3" id="todatefilter">
                           <label for="to-date"><?php echo display("to_date"); ?></label>
-                          <input type="date" class="form-control" id="to-date" name="to_created" style="padding-top:0px;" value="<?=$this->input->post('to_created')?>">
+                          <input  class="form-control form-date" id="to-date" name="to_created" style="padding-top:0px;" value="<?=$this->input->post('to_created')?>">
                         </div> 
 
 
                         <div class="form-group col-md-3" id="update_fromdatefilter">
                           <label for="update-from-date"><?php echo display("update_from_date"); ?></label>
-                          <input type="date" class="form-control" id="update-from-date" name="update_from_created" style="padding-top:0px;" value="<?=$this->input->post('update_from_created')?>">
+                          <input  class="form-control form-date" id="update-from-date" name="update_from_created" style="padding-top:0px;" value="<?=$this->input->post('update_from_created')?>">
                         </div>
                         <div class="form-group col-md-3" id="update_todatefilter">
                           <label for="update-to-date"><?php echo display("update_to_date"); ?></label>
-                          <input type="date" class="form-control" id="update-to-date" name="update_to_created" style="padding-top:0px;" value="<?=$this->input->post('update_to_created')?>">
+                          <input  class="form-control form-date" id="update-to-date" name="update_to_created" style="padding-top:0px;" value="<?=$this->input->post('update_to_created')?>">
                         </div>
 
 

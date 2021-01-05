@@ -449,11 +449,11 @@ display: block;
                        
                         <div class="form-group col-md-3" id="fromdatefilter">
                           <label for="from-date"><?php echo display("from_date"); ?></label>
-                          <input   class="form-control form-date" id="from-date" name="from_created" style="padding-top:0px;">
+                          <input   class="form-control form-date" id="from-date" name="from_created" style="padding-top:0px;" value="<?=$filterData['from_created']=='' || $filterData['from_created']=='0000-00-00'?'':$filterData['from_created'] ?>">
                         </div>
                         <div class="form-group col-md-3" id="todatefilter">
                           <label for="to-date"><?php echo display("to_date"); ?></label>
-                          <input   class="form-control form-date" id="to-date" name="to_created" style="padding-top:0px;">
+                          <input   class="form-control form-date" id="to-date" name="to_created" style="padding-top:0px;" value="<?=$filterData['to_created']=='' || $filterData['from_created']=='0000-00-00'?'':$filterData['from_created'] ?>">
                         </div> 
                          <div class="form-group col-md-3" id="sourcefilter">
                           <label for="source"><?php echo display("source"); ?></label>
@@ -461,7 +461,7 @@ display: block;
                               <option value="" style="display:">---Select Source---</option>
                                <?php foreach ($sourse as $row) {?>
                                 
-                                 <option value="<?=$row->lsid?>" <?php if(!empty(set_value('source'))){if (in_array($row->lsid,set_value('source'))) {echo 'selected';}}?>><?=$row->lead_name?></option>
+                                 <option value="<?=$row->lsid?>" <?php if($row->lsid==$filterData['source']) {echo 'selected';}?> <?php if(!empty(set_value('source'))){if (in_array($row->lsid,set_value('source'))) {echo 'selected';}}?> ><?=$row->lead_name?></option>
                               <?php }?>
 
                           </select>
@@ -472,7 +472,7 @@ display: block;
                           <select class="form-control" name="subsource" id="subsource">
                               <option value="" style="display:">---Select Sub Source---</option>
                                <?php foreach ($subsource_list as $row) {?>                                
-                                 <option value="<?=$row->subsource_id?>" <?php if(!empty(set_value('subsource'))){if (in_array($row->lsid,set_value('subsource'))) {echo 'selected';}}?>><?=$row->subsource_name?></option>
+                                 <option value="<?=$row->subsource_id?>" <?php if(!empty(set_value('subsource'))){if (in_array($row->subsource_id,set_value('subsource'))) {echo 'selected';}}?> <?php if($row->subsource_id==$filterData['subsource']) {echo 'selected';}?>><?=$row->subsource_name?></option>
                               <?php }?>
 
                           </select>
@@ -481,13 +481,13 @@ display: block;
 
                         <div class="form-group col-md-3" id="emailfilter">
                           <label for=""><?php echo display("email"); ?></label>
-                          <input type="text" name="email" class="form-control">
+                          <input type="text" name="email" class="form-control" value="<?= $filterData['email'] ?>">
                         </div>
                       </div>
                      <div class="form-row">
                          <div class="form-group col-md-3" id="empfilter">
                           <label for=""><?php echo 'Name'; ?></label>
-                          <input type="text" class="form-control chosen-select" name="employee" id="employee">
+                          <input type="text" class="form-control chosen-select" name="employee" id="employee" value="<?= $filterData['employee'] ?>">
                              
                         </div>
                         <div class="form-group col-md-3" id="datasourcefilter">
@@ -495,13 +495,13 @@ display: block;
                           <select  class="form-control" name="datasource" id="datasource">
                               <option value="" style="display:">---Select Datasource---</option>
                                <?php foreach ($datasourse as $row) {?>
-                                 <option value="<?=$row->datasource_id?>" <?php if(!empty(set_value('datasource_id'))){if (in_array($row->datasource,set_value('datasource_id'))) {echo 'selected';}}?>><?=$row->datasource_name?></option>
+                                 <option value="<?=$row->datasource_id?>" <?php if(!empty(set_value('datasource_id'))){if (in_array($row->datasource,set_value('datasource_id'))) {echo 'selected';}}?> <?php if($row->datasource_id==$filterData['datasource']) {echo 'selected';}?>><?=$row->datasource_name?></option>
                               <?php }?>
                           </select>
                         </div>
                         <div class="form-group col-md-3" id="companyfilter">
                           <label for="">Company Name</label>
-                          <input type="text" name="company" class="form-control">
+                          <input type="text" name="company" class="form-control" id="company" value="<?= $filterData['company'] ?>">
                         </div>
                         <div class="form-group col-md-3" id="proccessfilter">
                           <label for="enq_product"><?php echo display("proccess"); ?></label>
@@ -510,7 +510,7 @@ display: block;
                               <?php 
                               if (!empty($products)) {
                               foreach ($products as $product) {?>
-                              <option value="<?=$product->sb_id;?>" <?php if(!empty(set_value('enq_product'))){if (in_array($product->sb_id,set_value('enq_product'))) {echo 'selected';}}?>><?=$product->product_name;?></option>
+                              <option value="<?=$product->sb_id;?>" <?php if(!empty(set_value('enq_product'))){if (in_array($product->sb_id,set_value('enq_product'))) {echo 'selected';}}?> <?php if($product->sb_id==$filterData['enq_product']) {echo 'selected';}?>><?=$product->product_name;?></option>
                               <?php }}?>                              
                           </select>
                         </div>
@@ -518,7 +518,7 @@ display: block;
                     <div class="form-row">                      
                         <div class="form-group col-md-3" id="phonefilter">
                           <label for="">Phone</label>
-                         <input type="text" name="phone" class="form-control">                        
+                         <input type="text" name="phone" class="form-control" value="<?= $filterData['enq_product'] ?>">                        
                         </div>
                          <div class="form-group col-md-3" id="createdbyfilter">
                           <label for="">Created By</label>
@@ -527,7 +527,7 @@ display: block;
                          <?php 
                           if (!empty($created_bylist)) {
                               foreach ($created_bylist as $createdbylist) {?>
-                              <option value="<?=$createdbylist->pk_i_admin_id;?>" <?php if(!empty(set_value('createdby'))){if (in_array($product->sb_id,set_value('createdby'))) {echo 'selected';}}?>><?=$createdbylist->s_display_name.' '.$createdbylist->last_name;?> -  <?=$createdbylist->s_user_email?$createdbylist->s_user_email:$createdbylist->s_phoneno;?>                               
+                              <option value="<?=$createdbylist->pk_i_admin_id;?>" <?php if($createdbylist->pk_i_admin_id==$filterData['createdby']) {echo 'selected';}?> <?php if(!empty(set_value('createdby'))){if (in_array($product->sb_id,set_value('createdby'))) {echo 'selected';}}?> ><?=$createdbylist->s_display_name.' '.$createdbylist->last_name;?> -  <?=$createdbylist->s_user_email?$createdbylist->s_user_email:$createdbylist->s_phoneno;?>                               
                               </option>
                               <?php }}?>    
                          </select>                       
@@ -539,13 +539,13 @@ display: block;
                          <?php 
                               if (!empty($created_bylist)) {
                               foreach ($created_bylist as $createdbylist) {?>
-                              <option value="<?=$createdbylist->pk_i_admin_id;?>" <?php if(!empty(set_value('assign'))){if (in_array($product->sb_id,set_value('assign'))) {echo 'selected';}}?>><?=$createdbylist->s_display_name.' '.$createdbylist->last_name;?> -  <?=$createdbylist->s_user_email?$createdbylist->s_user_email:$createdbylist->s_phoneno;?></option>
+                              <option value="<?=$createdbylist->pk_i_admin_id;?>" <?php if($createdbylist->pk_i_admin_id==$filterData['assign']) {echo 'selected';}?> <?php if(!empty(set_value('assign'))){if (in_array($product->sb_id,set_value('assign'))) {echo 'selected';}}?>><?=$createdbylist->s_display_name.' '.$createdbylist->last_name;?> -  <?=$createdbylist->s_user_email?$createdbylist->s_user_email:$createdbylist->s_phoneno;?></option>
                               <?php }}?>    
                          </select>                          
                         </div>
                          <div class="form-group col-md-3" id="addfilter">
                           <label for="">Address</label>
-                         <input type="text" name="address" class="form-control">                        
+                         <input type="text" name="address" class="form-control" value="<?= $filterData['address'] ?>">                        
                         </div>
                     </div>
 
@@ -557,7 +557,7 @@ display: block;
                          <?php 
                               if (!empty($prodcntry_list)) {
                               foreach ($prodcntry_list as $prodcntrylist) {?>
-                              <option value="<?=$prodcntrylist->id;?>" <?php if(!empty(set_value('prodcntry'))){if (in_array($prodcntrylist->id,set_value('prodcntry'))) {echo 'selected';}}?>><?= $prodcntrylist->country_name ?></option>
+                              <option value="<?=$prodcntrylist->id;?>"  <?php if($prodcntrylist->id==$filterData['prodcntry']) {echo 'selected';}?> <?php if(!empty(set_value('prodcntry'))){if (in_array($prodcntrylist->id,set_value('prodcntry'))) {echo 'selected';}}?>><?= $prodcntrylist->country_name ?></option>
                               <?php }}?>    
                     </select> 
                     </div> 
@@ -568,7 +568,7 @@ display: block;
                          <?php 
                               if (!empty($state_list)) {
                               foreach ($state_list as $statelist) {?>
-                              <option value="<?=$statelist->id;?>" <?php if(!empty(set_value('state'))){if (in_array($statelist->id,set_value('state'))) {echo 'selected';}}?>><?= $statelist->state ?></option>
+                              <option value="<?=$statelist->id;?>" <?php if($statelist->id==$filterData['state']) {echo 'selected';}?> <?php if(!empty(set_value('state'))){if (in_array($statelist->id,set_value('state'))) {echo 'selected';}}?>><?= $statelist->state ?></option>
                               <?php }}?>    
                     </select> 
                     </div> 
@@ -579,7 +579,7 @@ display: block;
                            <?php 
                               if (!empty($city_list)) {
                               foreach ($city_list as $citylist) {?>
-                              <option value="<?=$citylist->id;?>" <?php if(!empty(set_value('city'))){if (in_array($citylist->id,set_value('city'))) {echo 'selected';}}?>><?= $citylist->city ?></option>
+                              <option value="<?=$citylist->id;?>" <?php if($citylist->id==$filterData['city']) {echo 'selected';}?> <?php if(!empty(set_value('city'))){if (in_array($citylist->id,set_value('city'))) {echo 'selected';}}?>><?= $citylist->city ?></option>
                               <?php }}?>   
                     </select> 
                     </div> 
@@ -589,11 +589,13 @@ display: block;
                         <select name="stage" class="form-control">
                           <option value="">Select</option>
                           <?php foreach ($all_stage_lists as $stage) {  ?>
-                              <option value="<?= $stage->stg_id?>" ><?php echo $stage->lead_stage_name; ?></option>
+                              <option value="<?= $stage->stg_id ?>"  <?php if($stage->stg_id==$filterData['city']) {echo 'selected';}?>><?php echo $stage->lead_stage_name; ?></option>
                               <?php } ?>
                         </select>
                       </div>
-
+                      <div class="form-group col-md-3">
+                    <button class="btn btn-success" id="save_filterbutton" type="button" onclick="ticket_save_filter();" style="margin: 20px;">Save</button>        
+                        </div>  
                     </div>
           
             </div>
@@ -1927,12 +1929,28 @@ $(document).ready(function(){
       arr.push($(this).val());
     });        
     setCookie('enquiry_filter_setting',arr,365);      
-    alert('Your custom filters saved successfully.');
+    // alert('Your custom filters saved successfully.');
+    Swal.fire({
+  position: 'top-end',
+  icon: 'success',
+  title: 'Your custom filters saved successfully.',
+  showConfirmButton: false,
+  timer: 1000
+});
   }) 
 
 
 
 var enq_filters  = getCookie('enquiry_filter_setting');
+if (enq_filters=='') {
+    $('#filter_pannel').hide();
+    $('#save_filterbutton').hide();
+
+}else{
+  $('#filter_pannel').show();
+  $('#save_filterbutton').show();
+
+}
 if (!enq_filters.includes('date')) {
   $('#fromdatefilter').hide();
   $('#todatefilter').hide();
@@ -2009,9 +2027,43 @@ if (!enq_filters.includes('assign_to')) {
 }else{
   $("input[value='assign_to']").prop('checked', true);
 }
+if (!enq_filters.includes('state')) {
+  $('#state').hide();
+}else{
+  $("input[value='state']").prop('checked', true);
+}
+if (!enq_filters.includes('city')) {
+  $('#city').hide();
+}else{
+  $("input[value='city']").prop('checked', true);
+}
+if (!enq_filters.includes('stage')) {
+  $('#stage').hide();
+}else{
+  $("input[value='stage']").prop('checked', true);
+}
 
+$('input[name="filter_checkbox"]').click(function(){  
+  if($('#datecheckbox').is(":checked")||$('#empcheckbox').is(":checked")||$('#sourcecheckbox').is(":checked")||
+  $('#subsourcecheckbox').is(":checked")||$('#emailcheckbox').is(":checked")||$('#companycheckbox').is(":checked")||
+  $('#phonecheckbox').is(":checked")||$('#assigncheckbox').is(":checked")||$('#addcheckbox').is(":checked")||
+  $('#stageheckbox').is(":checked")||$('#prodcheckbox').is(":checked")||$('#statecheckbox').is(":checked")||
+  $('#citycheckbox').is(":checked")||$('#datasrccheckbox').is(":checked")||$('#createdbycheckbox').is(":checked")||
+  $('#proccheckbox').is(":checked")){ 
+    $('#save_filterbutton').show();
+    $('#filter_pannel').show();
+          // alert('test');
+          
+  }else{
+    $('#save_filterbutton').hide();
+    $('#filter_pannel').hide();
+    
+
+  }
+});
 
 $('#buttongroup').hide();
+
  $('input[name="filter_checkbox"]').click(function(){              
         if($('#datecheckbox').is(":checked")){
          $('#fromdatefilter').show();
@@ -2236,4 +2288,24 @@ function moveto_client(){
   }});
   }
 }
+function ticket_save_filter(){
+var form_data = $("#enq_filter").serialize();       
+// alert(form_data);
+$.ajax({
+url: '<?=base_url()?>ticket/ticket_save_filter/1',
+type: 'post',
+data: form_data,
+success: function(responseData){
+  Swal.fire({
+  position: 'top-end',
+  icon: 'success',
+  title: 'filted data saved',
+  showConfirmButton: false,
+  timer: 500
+});
+
+
+}
+});
+  }
 </script>

@@ -23,7 +23,7 @@
 	<div class="col-lg-3">
         <div class="form-group">
           <label>From</label>
-          <input type="date" class="v_filter form-control" name="v_from_date">
+          <input class="v_filter form-control form-date" name="v_from_date">
         <!--   <div class="pull-left">
             <div style="top: 0px;
                           margin-top: 0px;
@@ -45,7 +45,7 @@
       <div class="col-lg-3">
         <div class="form-group">
           <label>To</label>
-           <input type="date" class="v_filter form-control" name="v_to_date">
+           <input  class="v_filter form-control form-date" name="v_to_date">
         </div>
       </div>
 

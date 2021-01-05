@@ -269,6 +269,7 @@ input[name=lead_stages]{
 <form id="ticket_filter">
 	<div class="row" id="filter_pannel">
         <div class="col-lg-12">
+          
             <div class="panel panel-default">
                
                       <div class="form-row">
@@ -355,7 +356,7 @@ input[name=lead_stages]{
                          <?php 
                           if (!empty($created_bylist)) {
                               foreach ($created_bylist as $createdbylist) {?>
-                              <option value="<?=$createdbylist->pk_i_admin_id;?>" <?php if($createdbylist->pk_i_admin_id==$filterData['createdby']) {echo 'selected';}?> <?php if(!empty(set_value('createdby'))){if (in_array($product->sb_id,set_value('createdby'))) {echo 'selected';}}?> <?php if(3==$filterData['priority']) {echo 'selected';}?>><?=$createdbylist->s_display_name.' '.$createdbylist->last_name;?> -  <?=$createdbylist->s_user_email?$createdbylist->s_user_email:$createdbylist->s_phoneno;?>                               
+                              <option value="<?=$createdbylist->pk_i_admin_id;?>" <?php if($createdbylist->pk_i_admin_id==$filterData['createdby']) {echo 'selected';}?> <?php if(!empty(set_value('createdby'))){if (in_array($product->sb_id,set_value('createdby'))) {echo 'selected';}}?> ><?=$createdbylist->s_display_name.' '.$createdbylist->last_name;?> -  <?=$createdbylist->s_user_email?$createdbylist->s_user_email:$createdbylist->s_phoneno;?>                               
                               </option>
                               <?php }}?>    
                          </select>                       
@@ -810,6 +811,15 @@ $(document).ready(function(){
 
 
 var enq_filters  = getCookie('ticket_filter_setting');
+if (enq_filters=='') {
+    $('#filter_pannel').hide();
+    $('#save_filterbutton').hide();
+
+}else{
+  $('#filter_pannel').show();
+  $('#save_filterbutton').show();
+
+}
 if (!enq_filters.includes('date')) {
   $('#fromdatefilter').hide();
   $('#todatefilter').hide();
@@ -894,14 +904,7 @@ if (!enq_filters.includes('status')) {
 }
 
 $('#buttongroup').hide();
-if($('#datecheckbox').is(":checked")||$('#sourcecheckbox').is(":checked")||$('#sourcecheckbox').is(":checked")||
-  $('#problemcheckbox').is(":checked")){
-    $('#save_filterbutton').show();
 
-  }else{
-    $('#save_filterbutton').hide();
-
-  }
  $('input[name="filter_checkbox"]').click(function(){  
   if($('#datecheckbox').is(":checked")||$('#sourcecheckbox').is(":checked")||$('#sourcecheckbox').is(":checked")||
   $('#problemcheckbox').is(":checked")||$('#createdbycheckbox').is(":checked")||$('#assigncheckbox').is(":checked")||
@@ -909,9 +912,12 @@ if($('#datecheckbox').is(":checked")||$('#sourcecheckbox').is(":checked")||$('#s
   $('#prodcheckbox').is(":checked")||$('#stagecheckbox').is(":checked")||$('#sub_stagecheckbox').is(":checked")||
   $('#statuscheckbox').is(":checked")){
     $('#save_filterbutton').show();
+    $('#filter_pannel').show();
 
   }else{
     $('#save_filterbutton').hide();
+    $('#filter_pannel').hide();
+
 
   }
  
@@ -1404,7 +1410,7 @@ for (var i = 0; i < checkboxes.length; i++) {
 var form_data = $("#ticket_filter").serialize();       
 // alert(form_data);
 $.ajax({
-url: '<?=base_url()?>ticket/ticket_save_filter',
+url: '<?=base_url()?>ticket/ticket_save_filter/2',
 type: 'post',
 data: form_data,
 success: function(responseData){
