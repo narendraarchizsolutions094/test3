@@ -63,6 +63,9 @@
 #active_class{
   font-size: 12px;
 }
+.hide_countings{
+   display:none !important;    
+ }
 .lead_stage_filter{
   padding: 6px;
   background-color: #e6e9ed;
@@ -604,8 +607,10 @@ display: block;
 </form>
 
 
-
-<div class="row row text-center short_dashboard" id="active_class">   
+<div style="float:right;">
+  <a class='btn btn-xs  btn-primary' href='javascript:void(0)' id='show_quick_counts' title='Show Quick Dashboard'><i class='fa fa-bar-chart'></i></a>
+</div>
+<div class="row row text-center short_dashboard hide_countings" id="active_class">   
 
         <div class="wd-14" style="">
             <div  class="col-12 border_bottom border_bottom_active" >
@@ -1322,7 +1327,7 @@ if(!empty($_GET['desposition']))
         }
       });
 
-     update_top_filter_counter();
+    // update_top_filter_counter();
     //   $('#enq_table').DataTable({ 
     //     //responsive: true, 
     //     scrollX: true,
@@ -1374,7 +1379,7 @@ $(document).on('click',".top_pill",function(){
             data: form_data,
             success: function(responseData){
               $('#enq_table').DataTable().ajax.reload();   
-              update_top_filter_counter(); 
+             // update_top_filter_counter(); 
           }
         });
         
@@ -1390,7 +1395,7 @@ $(document).on('click',".top_pill",function(){
             data: form_data,
             success: function(responseData){
               $('#enq_table').DataTable().ajax.reload();    
-               update_top_filter_counter();
+               //update_top_filter_counter();
           }
         });
      }
@@ -1398,7 +1403,7 @@ $(document).on('click',".top_pill",function(){
 });
 
       function process_change_fun(){
-        update_top_filter_counter();
+        //update_top_filter_counter();
         var count=0;
         var checkboxes = document.getElementsByName('product_filter[]');
         var id = [];
@@ -1487,9 +1492,10 @@ $(document).on('click',".top_pill",function(){
         type: 'post',
         data: form_data,
         success: function(responseData){
-          $('#enq_table').DataTable().ajax.reload();
-         // alert('done');
-          update_top_filter_counter();      
+          $('#enq_table').DataTable().ajax.reload();         
+         if(!$("#active_class").hasClass('hide_countings')){
+           update_top_filter_counter();      
+         }
         }
       });
       });
@@ -2308,4 +2314,9 @@ success: function(responseData){
 }
 });
   }
+  $("#show_quick_counts").on('click',function(){
+    $(this).hide();
+    $("#active_class").removeClass('hide_countings');    
+    update_top_filter_counter();      
+  });
 </script>
