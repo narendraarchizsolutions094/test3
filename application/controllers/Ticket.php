@@ -419,7 +419,11 @@ class Ticket extends CI_Controller
 							echo '<tr>';
 						}			
 						echo '<td>'.$k.'</td>';				
-						echo '<td>'.$v.'</td>';				
+						if(is_array($v)){
+							echo '<td>'.json_encode($v).'</td>';				
+						}else{
+							echo '<td>'.$v.'</td>';				
+						}
 						if($i==2){
 							echo '</tr>';
 						}
