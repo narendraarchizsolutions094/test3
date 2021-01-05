@@ -457,10 +457,10 @@ class Ticket extends CI_Controller
 
 			if(!empty($response)){
 				$response = $response['NewDataSet'];
-				$table = $response['Table'];
-				$table1 = $response['Table1'];
-				$table2 = $response['Table2'];
-				$table3 = $response['Table3'];
+				$table = $response['Table']??array();
+				$table1 = $response['Table1']??array();
+				$table2 = $response['Table2']??array();
+				$table3 = $response['Table3']??array();
 
 				if(!empty($table)){
 					echo "<table class='table table-bordered'>";
