@@ -344,6 +344,7 @@ class Ticket_Model extends CI_Model
 				$this->db->set('tbl_ticket.ticket_status', $ticket_status);
 			}
 			if ($stage || $sub_stage || $ticket_status) {
+				$this->db->set('last_update',date('Y-m-d H:i:s'));
 				$this->db->where('tbl_ticket.company', $this->session->companey_id??$comp_id);
 				$this->db->where('tbl_ticket.id', $tckno);
 				$this->db->update('tbl_ticket');
