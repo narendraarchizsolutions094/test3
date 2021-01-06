@@ -117,14 +117,26 @@
 
                                 <option value="1"
                                     <?php if(!empty(set_value('state'))){ if (in_array('1',set_value('state'))) {echo 'selected';}}?>>
-                                    Enquiry</option>
+                                    <?=display('enquiry')?></option>
                                 <option value="2"
                                     <?php if(!empty(set_value('state'))){ if (in_array('2',set_value('state'))) {echo 'selected';}}?>>
-                                    Lead</option>
+                                    <?=display('lead')?></option>
                                 <option value="3"
                                     <?php if(!empty(set_value('state'))){ if (in_array('3',set_value('state'))) {echo 'selected';}}?>>
-                                    Client</option>
-                            </select>
+                                    <?=display('client')?></option>
+                                    <?php
+        $enquiry_separation  = get_sys_parameter('enquiry_separation', 'COMPANY_SETTING');
+
+    if (!empty($enquiry_separation)) {
+$enquiry_separation = json_decode($enquiry_separation, true);
+    foreach ($enquiry_separation as $key => $value) {
+            $ctitle = $enquiry_separation[$key]['title']; 
+           
+           ?>
+           <option <?php if(!empty(set_value('state'))){ if (in_array($key,set_value('state'))) {echo 'selected';}}?>><?= $ctitle ?></option>
+        <?php }
+        } ?>         
+        </select>
                         </div>
                         <div class="form-group col-md-3 lead_subsource_class">
                             <label for="lead_source">Disposition</label>
