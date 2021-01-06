@@ -39,11 +39,7 @@ class Enq extends CI_Controller
             $desp = $this->db->where('stg_id',$_GET['desposition'])->get('lead_stage')->row();        
 			$data['desp'] = $desp;			
 			$this->session->set_userdata('enquiry_filters_sess',array('stage'=>$_GET['desposition']));
-		}
-		
-		// $process =  0;
-		// if(!empty($this->session->process))
-		// 	$process = implode(',', $this->session->process);
+		}		
 		$data['title'] = display('enquiry_list');
 		$data['subsource_list'] = $this->Datasource_model->subsourcelist();
 		$data['user_list'] = $this->User_model->companey_users();
@@ -54,154 +50,14 @@ class Enq extends CI_Controller
 		}
 		$data['products'] = $this->dash_model->get_user_product_list();
 		$data['drops'] = $this->enquiry_model->get_drop_list();
-
-		$data['all_stage_lists'] = $this->Leads_Model->get_leadstage_list_byprocess1($this->session->process,1);
-		
+		$data['all_stage_lists'] = $this->Leads_Model->get_leadstage_list_byprocess1($this->session->process,1);		
 		$data['prodcntry_list'] = $this->enquiry_model->get_user_productcntry_list();
 		$data['state_list'] = $this->enquiry_model->get_user_state_list();
 		$data['city_list'] = $this->enquiry_model->get_user_city_list();
 		$data['filterData'] = $this->Ticket_Model->get_filterData(1);
-		// print_r($data); 
-		// die();
-		
 		$data['content'] = $this->load->view('enquiry_n', $data, true);
 		$this->load->view('layout/main_wrapper', $data);
-	}
-	public function ___enq_load_data()
-	{
-		$this->load->model('enquiry_datatable_model');
-		$list = $this->enquiry_datatable_model->get_datatables();
-		// echo $this->db->last_query();
-		$data = array();
-		$no = $_POST['start'];
-		$acolarr = $dacolarr = array();
-		if (isset($_COOKIE["allowcols"])) {
-			$showall = false;
-			$acolarr  = explode(",", trim($_COOKIE["allowcols"], ","));
-		} else {
-			$showall = true;
-		}
-		if (isset($_COOKIE["dallowcols"])) {
-			$dshowall = false;
-			$dacolarr  = explode(",", trim($_COOKIE["dallowcols"], ","));
-		}
-		$enqarr = array();
-		foreach ($list as $each) {
-			$enqarr[] = $each->enquiry_id;
-		}
-		if (!empty($enqarr) and !empty($dacolarr)) {
-			//    $fieldval =  $this->enquiry_model->getfieldvalue($enqarr);
-			//	$dfields  = $this->enquiry_model-> getformfield();
-		}
-		foreach ($list as $each) {
-			$no++;
-			$row = array();
-			$row[] = "<input onclick='event.stopPropagation();'' type='checkbox' name='enquiry_id[]'' class='checkbox1' value=" . $each->enquiry_id . ">";
-			if ($_POST['data_type'] == 1) {
-				$url = base_url('enquiry/view/') . $each->enquiry_id;
-			} else if ($_POST['data_type'] == 2) {
-				$url = base_url('lead/lead_details/') . $each->enquiry_id;
-			} else if ($_POST['data_type'] == 3) {
-				$url = base_url('client/view/') . $each->enquiry_id;
-			}
-			$row[] = '<a href="' . $url . '">' . $no/*$each->enquiry_id*/ . '</a>';
-			if ($showall == true or in_array(1, $acolarr)) {
-				$row[] = (!empty($each->lead_name)) ? ucwords($each->lead_name) : "NA";
-			}
-			if ($showall == true or in_array(2, $acolarr)) {
-				$row[] = $each->company;
-			}
-			if ($showall == true or in_array(3, $acolarr)) {
-				$row[] = '<a href="' . $url . '">' . $each->name_prefix . " " . $each->name . " " . $each->lastname . '</a>';
-			}
-			if ($showall == true or in_array(4, $acolarr)) {
-				$row[] = $each->email;
-				//user_access(220)?'onclick=send_parameters('+$enquiry->phone+')':''
-			}
-			if ($showall == true or in_array(5, $acolarr)) {
-				$c = $this->session->companey_id;
-				if (user_access(220) && $c!=65) {
-					$row[] = "<a href='javascript:void(0)' onclick='send_parameters(".$each->phone.")'>" . $each->phone . "</a>";
-				} else {
-					$row[] = $each->phone;
-				}
-			}
-			if ($showall == true or in_array(6, $acolarr)) {
-				$row[] = $each->address;
-			}
-			if ($showall == true or in_array(7, $acolarr)) {
-				$row[] = $each->product_name;
-			}
-			if ($showall == true or in_array(8, $acolarr)) {
-				
-				if ($each->lead_stage_name) {
-					// if(in_array())
-					$option = '<option value="' . $each->lead_stage_name . '">' . $each->lead_stage_name . '</option>';
-				} else {
-					$option = '<option value="0">Select Disposition</option>';
-				}
-				$row[] = '<select class="form-control change_dispositions" style="height: 11px;width: 97%;font-size: smaller;padding: 4px;" data-id=' . $each->enquiry_id . '>' . $option . '</select>';
-			}
-			/*  if($_POST['data_type'] == 2){
-            	$row[] = $each->tbro_date;
-            }*/
-
-			if ($this->session->companey_id == 29) {
-				$row[] = $each->reference_name;
-			}
-			if ($showall == true or in_array(10, $acolarr)) {
-				$row[] = $each->created_date;
-			}
-			if ($showall == true or in_array(11, $acolarr)) {
-				$row[] = $each->created_by_name;
-			}
-			if ($showall == true or in_array(12, $acolarr)) {
-				$row[] = $each->assign_to_name;
-			}
-			if ($showall == true or in_array(13, $acolarr)) {
-				$row[] = $each->datasource_name;
-			}
-			if ($showall == true or in_array(18, $acolarr)) {
-				$row[] = $each->score;
-			}
-			if ($showall == true or in_array(19, $acolarr)) {
-				$row[] = $each->enquiry;
-			}
-			if ($showall == true or in_array(17, $acolarr)) {
-				$row[] = $each->EnquiryId;
-			}
-
-			$enqid = $each->enquiry_id;
-			if (!empty($dacolarr) and !empty($dfields)) {
-				foreach ($dfields as $ind => $flds) {
-					if (in_array($flds->input_id, $dacolarr)) {
-						$row[] = (!empty($fieldval[$enqid][$flds->input_id])) ? $fieldval[$enqid][$flds->input_id]->fvalue : "";
-					}
-				}
-			}
-			/*		if(!empty($dacolarr)){
-				
-				foreach($dacolarr as $ind => $col){
-					
-					if(!empty($fieldval[$enqid][$col])){
-						
-						 $row[] = $fieldval[$enqid][$col]->fvalue;
-					}
-					
-				}
-				
-			} */
-			$data[] = $row;
-		}
-		$output = array(
-			"draw" => $_POST['draw'],
-			"recordsTotal" => $this->enquiry_datatable_model->count_all(),
-			"recordsFiltered" => $this->enquiry_datatable_model->count_filtered(),
-			"data" => $data,
-		);
-		echo json_encode($output);
-	}
-
+	}	
 	public function chk()
 	{
 		//print_r($this->session->enquiry_filters_sess);
@@ -211,10 +67,6 @@ class Enq extends CI_Controller
 	{
 		$this->load->model('enquiry_datatable_model');
 		$list = $this->enquiry_datatable_model->get_datatables();
-		//echo $this->db->last_query(); exit();
-		/*echo "<pre>";
-        print_r($list);
-        echo "</pre>";*/
 		$dfields = $this->enquiry_model->getformfield(0); //0 for enquiry
 		$data = array();
 		$no = $_POST['start'];
@@ -383,83 +235,6 @@ class Enq extends CI_Controller
 		);
 		echo json_encode($output);
 	}
-	// this is not being  used
-	public function index1($all = '')
-	{
-		if (user_role('60') == true) {
-		}
-		if (!empty($this->session->enq_type)) {
-			$this->session->unset_userdata('enq_type', $this->session->enq_type);
-		}
-		$data['title'] = display('enquiry_list');
-		$data['user_list'] = $this->User_model->read();
-		$data['drops'] = $this->enquiry_model->get_drop_list();
-		$data['lead_score'] = $this->enquiry_model->get_leadscore_list();
-		$record = 0;
-		$num_of_rows = 30;
-		$recordPerPage = $num_of_rows;
-		$data['all_active'] = $this->enquiry_model->active_enqueries('0', '*');
-		$recordCount = $data['all_active']->num_rows();
-		$empRecord = $this->enquiry_model->active_enqueries($record, $recordPerPage);
-		//	print_r($this->db->last_query());exit();
-		$type = 0;
-		$config['base_url'] = base_url() . 'enq/loadData' . $num_of_rows . '/' . $type;
-		$config['use_page_numbers'] = TRUE;
-		$config['next_link'] = 'Next';
-		$config['prev_link'] = 'Previous';
-		$config['total_rows'] = $recordCount;
-		$config['per_page'] = $recordPerPage;
-		$this->pagination->initialize($config);
-		$data['pagination'] = $this->pagination->create_links();
-		$data['empData'] = $empRecord->result();
-		$data['content'] = $this->load->view('enquiry', $data, true);
-		$this->load->view('layout/main_wrapper', $data);
-	}
-	public function loaddata($num_of_rows = 30, $type, $record)
-	{
-		//echo $type;
-		if (isset($type) && !empty($type)) {
-			//	echo $type.'inner';
-			$this->session->set_userdata('enq_type', $type);
-		} else {
-			$this->session->unset_userdata('enq_type');
-		}
-		$data['all_active'] = $this->enquiry_model->active_enqueries('0', '*');
-		$recordCount = $data['all_active']->num_rows();
-		if ($num_of_rows == 'all') {
-			$num_of_rows = $recordCount;
-		}
-		$recordPerPage = $num_of_rows;
-		if ($record != 0) {
-			$record = ($record - 1) * $recordPerPage;
-		}
-		//echo $this->db->last_query();
-		$empRecord = $this->enquiry_model->active_enqueries($record, $recordPerPage);
-		/*echo "session type:".$this->session->userdata('enq_type');*/
-		/*
-		echo "<pre>";
-		echo $this->db->last_query();
-		echo "</pre>";*/
-		//$curr_page = intdiv($recordPerPage,$recordCount);
-		$config['base_url'] = base_url() . 'enq/loadData/' . $num_of_rows . '/' . $type;
-		$config['use_page_numbers'] = TRUE;
-		$config['next_link'] = 'Next';
-		$config['prev_link'] = 'Previous';
-		$config['total_rows'] = $recordCount;
-		$config['per_page'] = $recordPerPage;
-		/*$config['page_query_string'] = TRUE;
-	    
-	    $config['uri_segment'] = 2;*/
-
-		//print_r($config);
-		$this->pagination->initialize($config);
-		$data['pagination'] = $this->pagination->create_links();
-		$data['empData'] = $empRecord->result_array();
-		/*echo "<pre>";
-		print_r($data['empData']);
-		echo "<pre>";*/
-		echo json_encode($data);
-	}
 	public function stages_of_enq($data_type = 1)
 	{
 		$data['all_enquery_num'] = $this->enquiry_model->all_enquery($data_type);
@@ -485,14 +260,12 @@ class Enq extends CI_Controller
 		$data['all_active_num']= $this->db->count_all_results();
 
 		$this->common_query_short_dashboard();
-		//$date=date('Y-m-d');
-		//$this->db->where('enquiry.update_date like "%$date%" '); update today
 		$this->db->where('enquiry.update_date is not NULL'); //anyhow updated
 		$data['all_update_num']=$this->db->count_all_results();
 
 
 		$this->common_query_short_dashboard();
-		//$date=date('Y-m-d');
+	
 		$this->db->where('enquiry.lead_stage',0);
 		//now check empty dispositon
 		$data['all_no_activity_num']=$this->db->count_all_results();
@@ -672,9 +445,6 @@ class Enq extends CI_Controller
 			$this->db->where($where);
 			$this->db->set('created_date', $r1['created_date']);
 			$this->db->update('enquiry');
-			echo "<pre>";
-			print_r($r1);
-			echo "</pre>";
 		}
 	}
 	public function common_query_short_dashboard()
@@ -734,30 +504,10 @@ class Enq extends CI_Controller
         $this->db->join('tbl_datasource','enquiry.datasource_id = tbl_datasource.datasource_id','left');
         $this->db->join('tbl_admin as tbl_admin', 'tbl_admin.pk_i_admin_id = enquiry.created_by', 'left');
         $this->db->join('tbl_admin as tbl_admin2', 'tbl_admin2.pk_i_admin_id = enquiry.aasign_to', 'left');        
-        
-        
-        // if($top_filter=='all'){            
-        //     $where.="  enquiry.status=$data_type";
-        // }elseif($top_filter=='droped'){            
-        //     $where.="  enquiry.status=$data_type";
-        //     $where.=" AND enquiry.drop_status>0";
-        // }elseif($top_filter=='created_today'){
-        //     // $date=date('Y-m-d');
-        //     // $where.="enquiry.created_date LIKE '%$date%'";
-        //     $where.=" AND enquiry.status=$data_type";
-        //     $where.=" AND enquiry.drop_status=0";
-        // }elseif($top_filter=='updated_today'){
-        //     $date=date('Y-m-d');
-        //     $where.="enquiry.update_date LIKE '%$date%'";        
-        //     $where.=" AND enquiry.status=$data_type";
-        //     $where.=" AND enquiry.drop_status=0";
-        // }elseif($top_filter=='active'){            
-        //     $where.="  enquiry.status=$data_type";
-        //     $where.=" AND enquiry.drop_status=0";
-        // }else{                        
-            $where.="  enquiry.status=$data_type";
-            $where.=" AND enquiry.drop_status=0";
-       // }                   
+	
+		$where.="  enquiry.status=$data_type";
+		$where.=" AND enquiry.drop_status=0";
+
         if(isset($enquiry_filters_sess['lead_stages']) && $enquiry_filters_sess['lead_stages'] !=-1){
             $stage  =   $enquiry_filters_sess['lead_stages'];
             $where .= " AND enquiry.lead_stage=$stage";
@@ -852,7 +602,7 @@ class Enq extends CI_Controller
             $where .= " AND enquiry.state_id='".$state."' AND enquiry.city_id='".$city."'"; 
         }
         $this->db->where($where);
-        //$this->db->group_by('enquiry.Enquery_id');
+    
             
         $i = 0;
      

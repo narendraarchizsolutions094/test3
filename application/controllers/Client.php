@@ -6,44 +6,13 @@ class Client extends CI_Controller {
         $this->load->library('user_agent');
 		$this->load->library('aws');
 		$this->load->library('upload');
-		$this->lang->load("activitylogmsg","english");;
-        
+		$this->lang->load("activitylogmsg","english");;        
 		$this->load->model(
                 array('Ticket_Model','Leads_Model','common_model','enquiry_model', 'dashboard_model', 'Task_Model', 'User_model', 'location_model', 'Message_models','Institute_model','Datasource_model','Taskstatus_model','dash_model','Center_model','SubSource_model','Kyc_model','Education_model','SocialProfile_model','Closefemily_model','form_model','report_model','Configuration_Model','Doctor_model')
                 );
-/*'dashboard_model', 'Installation_Model', 'Message_models','Institute_model','Datasource_model','Taskstatus_model','Center_model','SubSource_model','Kyc_model','Education_model','SocialProfile_model','Closefemily_model'*/
         if (empty($this->session->user_id)) {
             redirect('login');
         }
-    }
-    public function index1() {
-        $aid = $this->session->userdata('user_id');
-        $data['title'] = display('client_list');
-        $data['user_list'] = $this->User_model->read();
-        $data['clients'] = $this->Client_Model->get_Client_list();
-        $data['all_clients'] = $this->Client_Model->all_clients();
-        
-        $data['all_created_today'] = $this->Client_Model->all_created_today();
-        
-        $data['all_Updated_today'] = $this->Client_Model->all_Updated_today();
-        
-        $data['all_Active_clients'] = $this->Client_Model->all_Active_clients();
-        
-        $data['all_InActive_clients'] = $this->Client_Model->all_InActive_clients();
-        
-        $data['all_clients_Tickets'] = $this->Client_Model->all_clients_Tickets();
-        
-        $data['state_list'] = $this->location_model->state_list();
-        
-        $data['customer_types'] = $this->enquiry_model->customers_types();
-       
-        
-        $data['channel_p_type'] = $this->enquiry_model->channel_partner_type_list();
-        
-        
-        //echo '<pre>';print_r($data);die;
-        $data['content'] = $this->load->view('clients', $data, true);
-        $this->load->view('layout/main_wrapper', $data);
     }
     public function index() {
         $this->session->unset_userdata('enquiry_filters_sess');        
@@ -99,18 +68,10 @@ class Client extends CI_Controller {
         
         if ($id == 1) {
             $data['all_clients'] = $this->Client_Model->all_created_today();
-        } elseif ($id == 2) {
-            
+        } elseif ($id == 2) {            
             $data['all_clients'] = $this->Client_Model->all_Updated_today();
-			
-			/*
-            echo "<pre>";
-            print_r($data['all_clients']->result_array());
-            */
-
         } elseif ($id == 3) {
             $data['all_clients'] = $this->Client_Model->all_Active_clients();
-
         } elseif ($id == 4) {
             $data['all_clients'] = $this->Client_Model->all_InActive_clients();
         } elseif ($id == 5) {
@@ -816,11 +777,7 @@ class Client extends CI_Controller {
               
             }
             
-            /*echo "<pre>";
-            print_r($_POST);
-            echo "</pre>";
-            exit();*/
-            
+      
 			if(!empty($enqarr)){                
                 if(isset($_POST['inputfieldno'])) {                    
                     $inputno   = $this->input->post("inputfieldno", true);
@@ -1145,26 +1102,7 @@ public function updateclientpersonel() {
     }
      public function add_amc(){
         $enqid = $this->input->post('enqid');
-        // echo $enqid;exit();
-         // $path = './uploads/amc_po/';
-         //    if(!file_exists($path))
-         //    {
-         //      mkdir($path);
-         //    }
-         //     $config['upload_path']   = $path; 
-         //    $config['allowed_types'] = 'jpeg|jpg|png|pdf'; 
-         //    $config['max_size']      = 3486000; 
-         //    $config['encrypt_name'] = true; 
-         //    $this->load->library('upload', $config);
-        // if ( !$this->upload->do_upload('po')) {
-        //     // echo "string";exit();
-        //    // $this->session->set_flashdata('message', "Upload Failed");
-        //    $error = array('error' => $this->upload->display_errors());
-        //     $this->session->set_flashdata('message',$error['error']);
-        //    redirect(base_url('client/view/'.$enqid), 'refresh');
-        //  }
-        //  else{
-        //     $fileData = $this->upload->data();
+    
             $arr = array(
            
                  'enq_id'       =>  $enqid,
@@ -1564,16 +1502,7 @@ public function view_editable_aggrement()
     if(user_role('1004')==true){
             
         }
-    //print_r($_POST);
-    //$data['customer_name']  = $this->input->post()
-    //$_POST['customer_name']  = 'Shivam Gautam';
-    //$_POST['region_name']  = 'south';
-    //$_POST['branch_name']  = 'Noida';
-    //$_POST['customer_code']  = '00283';
-   // echo'<form action="'.base_url('client/generate_aggrement').'" method="post" style="padding:20px;">';
-    // if(!empty($_POST['agg_frmt']))
-    // {
-    //     if($_POST['agg_frmt']=='vtrans')
+   
   
     if(empty($_POST))
         $_POST = array();
@@ -1585,19 +1514,11 @@ public function view_editable_aggrement()
         else
             echo'No Agrrement';
     }
-    //echo'No Agrrement';
-    //echo'';
-    //$data['content'] = $this->load->view('aggrement/editable_vtrans',$data,TRUE);
-    //$this->load->view('layout/main_wrapper',$data);
+ 
 }
     /**************************Grenerate aggriment**************************/
     public function generate_aggrement() {
-        // $_POST['customer_name']  = 'Shivam Gautam';
-        // $_POST['region_name']  = 'south';
-        // $_POST['branch_name']  = 'Noida';
-        // $_POST['customer_code']  = '00283';
-        //print_r($_POST);
-
+      
          if(user_role('1004')==true){
             
         }
@@ -1625,28 +1546,12 @@ public function view_editable_aggrement()
                 $_POST['checkss'] = array();
             if(empty($_POST['ip'][14]))
                     $_POST['ip'][14] = 'none';
-            //$this->load->helpers('dompdf');
-            //$data['title'] = 'Agrrement';
-            // if($_POST['format_for']=='vtrans')
+          
             $viewfile = $this->load->view('aggrement/input-vtrans',$_POST,TRUE);
           
-           //echo $viewfile;
             $this->load->library('pdf');
             $this->pdf->create($viewfile,'Agreement.pdf');
-            //$this->pdf->load_view('aggrement/input-vtrans',$_POST,array(),'.');
-            //echo $viewfile; 
-           //pdf_create($viewfile,'Demo Aggrement',true,'1');
         }
-        // $abc = !empty($_POST['aggrement_data']) ? $_POST['aggrement_data'] : '';
-        
-        // echo $abc;
-         //$data['title'] = 'Bangalore-Australia-Agreement';
-         //$data['customer_name'] = 'Shivam Gautam';
-           //
-            // echo $viewfile;
-            //pdf_create($viewfile,'Bangalore-Australia-Agreement'.$this->session->user_id);
-            //pdf_create($abc,'vtrans-Agreement');
-            //redirect($this->agent->referrer());
         exit();
         $pdf_name = $this->input->post('agg_frmt');
         if($pdf_name=='BAA'){
@@ -1699,7 +1604,7 @@ public function view_editable_aggrement()
         $this->load->model('Client_Model');
         $this->load->model('Enquiry_Model');
         $data['title'] = 'Deals'; //display('deal_list');
-       // print_r($data['contact_list']->result_array()); exit();
+       
         $data['all_enquiry'] = $this->Enquiry_Model->all_enqueries();
 
         $data['branch']=$this->db->where('comp_id',$this->session->companey_id)->get('branch')->result();
@@ -1746,9 +1651,7 @@ public function view_editable_aggrement()
 
         $column_search = array('enq.name','book.branch_name','deliver.branch_name');
 
-        // $this->column_search = array('tck.ticketno','tck.id','tck.category','tck.name','tck.email','tck.product','tck.message','tck.issue','tck.solution','tck.sourse','tck.ticket_stage','tck.review','tck.status','tck.priority','tck.complaint_type','tck.coml_date','tck.last_update','tck.send_date','tck.client','tck.assign_to','tck.company','tck.added_by','enq.phone','enq.gender','prd.country_name');
-        
-        // Set default order
+    
         
         $order = array('id' => 'desc');
 
