@@ -2018,16 +2018,22 @@ if (!enq_filters.includes('assign_to')) {
 if (!enq_filters.includes('state')) {
   $('#state').hide();
 }else{
+  $('#statefilter').show();
+
   $("input[value='state']").prop('checked', true);
 }
 if (!enq_filters.includes('city')) {
   $('#city').hide();
 }else{
+  $('#cityfilter').show();
+
   $("input[value='city']").prop('checked', true);
 }
 if (!enq_filters.includes('stage')) {
   $('#stage').hide();
 }else{
+  $('#stagefilter').show();
+
   $("input[value='stage']").prop('checked', true);
 }
 
@@ -2169,11 +2175,11 @@ $('#buttongroup').hide();
 })
 
 $(document).ready(function(){
-    $('#newenqfilter').hide();
-    $('#cityfilter').hide();
-    $('#statefilter').hide();
-    $('#prodfilter').hide();
-    $('#stagefilter').hide();
+    // $('#newenqfilter').hide();
+    // $('#cityfilter').hide();
+    // $('#statefilter').hide();
+    // $('#prodfilter').hide();
+    // $('#stagefilter').hide();
 });
 $(document).ready(function(){
   $(".lead_stage_filter").click(function(){

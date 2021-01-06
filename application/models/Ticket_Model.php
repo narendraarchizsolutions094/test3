@@ -97,6 +97,8 @@ class Ticket_Model extends CI_Model
 	   $user_id=$this->session->user_id;
 		$values=$this->db->where(array('user_id'=>$user_id,'comp_id'=>$comp_id,'type'=>$type))->get('tbl_filterdata');
 		$filter=$values->row();
+		 $pdata=[];
+		
 		if(!empty($filter)){
 			
 		$value=json_decode($filter->filter_data);
@@ -142,8 +144,15 @@ class Ticket_Model extends CI_Model
 					'ticket_status' =>$value->ticket_status??NULL,
 		];
 	}
-		return $pdata;
+	}else{
+		if($type==1){
+			$pdata=[ 'from_created' =>'', 'to_created' =>'', 'source' =>'','filter_checkbox' =>'','subsource' =>'','email' =>'','employee' =>'','datasource' => '','company' =>'','enq_product' => '','phone' =>'','createdby' =>'','assign' =>'','address' =>'','prodcntry' =>'','state' =>'','city' =>'','stage' =>'','top_filter' =>''];
+		}else{
+			$pdata=[ 'from_created' =>'', 'to_created' =>'','update_from_created' =>'','update_to_created' =>'','source' =>'','problem' =>'','priority' =>'','issue' =>'','createdby' =>'','assign' =>'', 'assign_by' =>'','prodcntry' =>'', 'stage' =>'', 'sub_stage' =>'', 'ticket_status' =>''];
+	       }
 	}
+	return $pdata;
+
    }
 	public function save($companey_id = '', $user_id = '')
 	{
