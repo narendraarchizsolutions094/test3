@@ -8,7 +8,7 @@ class Setting extends REST_Controller {
         parent::__construct();
         $this->load->library('form_validation');
     }
-    public function get_all_labels(){
+    public function get_all_labels_post(){
         $comp_id = $this->input->post('comp_id');
         $this->db->where('comp_id',$comp_id);
         $this->db->or_where('comp_id',0);
