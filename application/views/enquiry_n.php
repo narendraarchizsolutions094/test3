@@ -1340,42 +1340,7 @@ if(!empty($_GET['desposition']))
         }
       });
 
-    // update_top_filter_counter();
-    //   $('#enq_table').DataTable({  
-    //     //responsive: true, 
-    //     scrollX: true,
-    //     scrollY: 800,
-    //     dom: "<'row'<'col-sm-4'l><'col-sm-4 text-center'B><'col-sm-4'f>>tp", 
-    //     "lengthMenu": [[30, 60, 90, -1], [30, 60, 90, "All"]], 
-    //     buttons: [  
-    //         {extend: 'copy', className: 'btn-sm'}, 
-    //         {extend: 'csv', title: 'ExampleFile', className: 'btn-sm'}, 
-    //         {extend: 'excel', title: 'ExampleFile', className: 'btn-sm', title: 'exportTitle'}, 
-    //         {extend: 'pdf', title: 'ExampleFile', className: 'btn-sm'}, 
-    //         {extend: 'print', className: 'btn-sm'} 
-    //     ] 
-    // });
-
-
-
-    //   $.ajax({
-    //   url: "<?=base_url().'enq/stages_of_enq/'.$data_type?>",
-    //   type: 'get',
-    //   dataType: 'json',
-    //   success: function(responseData){
-    //   $('#today_created').html(responseData.all_creaed_today_num);
-    //   $('#active_all').html(responseData.all_active_num);
-    //   $('#today_updated').html(responseData.all_today_update_num);
-    //   $('#active_drop').html(responseData.all_drop_num);
-    //   $('#total_active').html(responseData.all_enquery_num);
-      
-    //   all_lead_stage_c  = $("input[name='top_filter']:checked").next().next().next().html();
-
-    //  //console.log(all_lead_stage_c);
-      
-    //   $('#lead_stage_-1').text(all_lead_stage_c);     
-    //   }
-    // });
+  
 
 $(document).on('click',".top_pill",function(){
 

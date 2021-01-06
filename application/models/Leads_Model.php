@@ -650,106 +650,47 @@ public function all_description($diesc) {
 
     }
 
-    public function all_Updated_today() {
-        
-        $user_id = $this->session->user_id;
-        
-        $user_role = $this->session->user_role;
-        
+    public function all_Updated_today() {        
+        $user_id = $this->session->user_id;        
+        $user_role = $this->session->user_role;        
         $assign_country = $this->session->country_id;
-
-        $this->db->select("enquiry.*,lead_source.icon_url,lead_source.lsid,lead_source.score_count,lead_source.lead_name,tbl_product.product_name,tbl_product_country.country_name,tbl_product_country.id as country_id,tbl_datasource.datasource_name");
-        
-        $this->db->from('enquiry');
-        
-        $this->db->join('lead_source', 'lead_source.lsid = enquiry.enquiry_source', 'left');
-        
-        $this->db->join('lead_stage', 'lead_stage.stg_id = enquiry.lead_stage', 'left');
-        
-        $this->db->join('lead_score', 'lead_score.sc_id = enquiry.lead_score', 'left');
-        
-        $this->db->join('tbl_product', 'tbl_product.sb_id = enquiry.product_id', 'left');
-        
+        $this->db->select("enquiry.*,lead_source.icon_url,lead_source.lsid,lead_source.score_count,lead_source.lead_name,tbl_product.product_name,tbl_product_country.country_name,tbl_product_country.id as country_id,tbl_datasource.datasource_name");        
+        $this->db->from('enquiry');        
+        $this->db->join('lead_source', 'lead_source.lsid = enquiry.enquiry_source', 'left');        
+        $this->db->join('lead_stage', 'lead_stage.stg_id = enquiry.lead_stage', 'left');        
+        $this->db->join('lead_score', 'lead_score.sc_id = enquiry.lead_score', 'left');        
+        $this->db->join('tbl_product', 'tbl_product.sb_id = enquiry.product_id', 'left');        
         $this->db->join('tbl_product_country', 'tbl_product_country.id=enquiry.country_id', 'left');
         $this->db->join('tbl_datasource', 'enquiry.datasource_id=tbl_datasource.datasource_id', 'left');
+        $date=date('Y-m-d');
+        $where = '';            
+        $where.=" enquiry.status=2";            
+        $where.=" AND enquiry.drop_status=0";
+        if($user_role==3){  
+            $where.=" AND enquiry.country_id=$assign_country";
+        }else if($user_role==4){
+            $where.=" AND enquiry.region_id=$assign_region";
+
+            }else if($user_role==5){
+        $where.=" AND enquiry.territory_id=$assign_territory";
+
+            }else if($user_role==6){
+        $where.=" AND enquiry.state_id=$assign_state";
         
-        //$this->db->like('enquiry.lead_updated_date', date('Y-m-d'));
-
-            $date=date('Y-m-d');
-            
-        
-
-
-
-            $where = '';
-            
-            $where.=" enquiry.status=2";
-            
-            $where.=" AND enquiry.drop_status=0";
-            
-
-            //$where.=" enquiry.lead_stage!=Account";
-
-            
-
-            if($user_role==3){  
-                $where.=" AND enquiry.country_id=$assign_country";
-            }else if($user_role==4){
-               $where.=" AND enquiry.region_id=$assign_region";
-
-             }else if($user_role==5){
-            $where.=" AND enquiry.territory_id=$assign_territory";
+            }else if($user_role==7){
+        $where.=" AND enquiry.city_id=$assign_city";
     
-             }else if($user_role==6){
-            $where.=" AND enquiry.state_id=$assign_state";
+            }elseif($user_role==8||$user_role==9){
+            $where.=" AND (enquiry.aasign_to=$user_id OR (enquiry.created_by=$user_id AND  enquiry.aasign_to IS NULL))";
             
-             }else if($user_role==7){
-            $where.=" AND enquiry.city_id=$assign_city";
-        
-             }elseif($user_role==8||$user_role==9){
-                $where.=" AND (enquiry.aasign_to=$user_id OR (enquiry.created_by=$user_id AND  enquiry.aasign_to IS NULL))";
-              
-              $process = $this->session->process;
-              $where.= " AND enquiry.product_id=$process";
-             }
-           //  echo $where;
-
-            $where.=" AND enquiry.status=2";
-
-            $where.=" AND enquiry.update_date LIKE '%$date%'";
-
-            $this->db->where($where);
-
-
-
-
-
-
-        //$this->db->where('enquiry.lead_stage!=', 'Account');
-        //$this->db->where('enquiry.lead_drop_status', 0);
-        //$this->db->where('enquiry.status',2);        
-
-        /*if ($user_role == 3) {
-            $this->db->where('enquiry.country_id', $assign_country);
-        } else if ($user_role == 4) {
-            $this->db->where('enquiry.region_id', $assign_region);
-        } else if ($user_role == 5) {
-            $this->db->where('enquiry.territory_id', $assign_territory);
-        } else if ($user_role == 6) {
-            $this->db->where('enquiry.state_id', $assign_state);
-        } else if ($user_role == 7) {
-            $this->db->where('enquiry.city_id', $assign_city);
-        } elseif ($user_role == 8 || $user_role == 9) {
-            $this->db->where('enquiry.aasign_to', $user_id);
-            $this->db->or_where('enquiry.created_by', $user_id);
-        } else {
-            
-        }*/
-
-        $this->db->order_by(' enquiry.enquiry_id', 'desc');
-        
+            $process = $this->session->process;
+            $where.= " AND enquiry.product_id=$process";
+            }
+        $where.=" AND enquiry.status=2";
+        $where.=" AND enquiry.update_date LIKE '%$date%'";
+        $this->db->where($where);
+        $this->db->order_by(' enquiry.enquiry_id', 'desc');        
         return $this->db->get();
-
     }
 
     public function all_Active_lead($rowperpage, $rowno){
