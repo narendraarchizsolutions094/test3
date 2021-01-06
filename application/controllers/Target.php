@@ -212,10 +212,10 @@ class Target extends CI_controller
 						$Forecast = $ci->Target_Model->getForecast($goal->goal_id,$fetch_type,$user);
 						$Achieved = $ci->Target_Model->getAchieved($goal->goal_id,$fetch_type,$user);
 
-						//print_r($Forecast); exit();
 
 						$forecast_value =(int)($goal->metric_type=='deal'?$Forecast->p_amnt:$Forecast->num_value);
 						$achieved_value =(int)($goal->metric_type=='deal'?$Achieved->p_amnt:$Achieved->num_value);
+
 						$percent=0;
 						if($target)
 								$percent = round(($achieved_value/$target)*100,2);
@@ -247,8 +247,8 @@ class Target extends CI_controller
 							<td>'.($goal->metric_type=='deal'?'Deal value':'Won deals').'</td>
 							<td style="cursor:pointer;">'.$goal_for_list.'</td>
 							<td>'.$target.'</td>
-							<td>'.$forecast_value.'</td>
-							<td>'.$achieved_value.'</td>
+							<td> <span data-ids="'.$Forecast->info_ids.'" onclick="view_source(this)" style="cursor:pointer">'.$forecast_value.'</span></td>
+							<td> <span data-ids="'.$Achieved->info_ids.'" onclick="view_source(this)" data-toggle="tooltip" data-title="'.($goal->metric_type=='won'?(float)$Achieved->p_amnt:'').'" style="cursor:pointer;">'.$achieved_value.'</span></td>
 							<td style="text-align:center">
 								'.$achieved_value.'/'.$target.'<br>
 								<div class="progress" style="border:1px solid #cccccc;">
@@ -553,6 +553,28 @@ class Target extends CI_controller
 		return $final;
 
 	}
+
+	// public function view_source()
+	// {
+	// 	$list = $this->input->post('source_list');
+	// 	echo'<hr>
+
+	// 	<table class="table table-bordered table-hover">
+	// 		<thead>
+	// 			<tr>
+	// 				<th>#</th>
+	// 				<th>Enquiry ID</th>
+	// 				<th>Name</th>
+	// 				<th></th>
+	// 			</tr>
+	// 		</thead>
+	// 	<tbody>
+	// 	';
+	// 	foreach (explode(',',$list) as $id)
+	// 	{
+			
+	// 	}
+	// }
 
 }
 ?>

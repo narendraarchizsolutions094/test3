@@ -1592,7 +1592,7 @@ public function view_editable_aggrement()
         $this->load->view('layout/main_wrapper', $data);
     }
 
-    public function deals()
+    public function deals($specific=0)
     { 
          if(user_access('1000') || user_access('1001') || user_access('1002')){
             
@@ -1727,6 +1727,16 @@ public function view_editable_aggrement()
             }
             
         }
+
+        if(!empty($_POST['specific_list']))
+        {
+            if($and)
+                $where.=" and ";
+
+            $where.=" ( info.id IN (".$_POST['specific_list'].") ) ";
+            $and =1;
+        }
+
 
         if($where!='')
             $this->db->where($where);
