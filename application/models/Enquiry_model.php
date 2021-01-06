@@ -220,7 +220,31 @@ class Enquiry_model extends CI_Model {
                   $dynamic[$key]['input_values'] = $reshape;
               }
           }
-          $dynamic[$key]['parameter_name'] = $value['input_id'];
+
+
+          if($value['input_type']=='8')
+          {
+            $ary =array(
+                      array(
+                            'key'=>'inputtype['.$value['input_id'].']',
+                            'value' =>'8',
+                          ),
+                      array(
+                            'key'=>$value['input_id'].'[]',
+                            'value' =>'',
+                          ),
+            );
+                   
+          }
+          else
+          {
+            $ary = $value['input_id'];
+          }
+          $dynamic[$key]['parameter_name'] = $ary;
+
+          // $dynamic[$key]['parameter_name'] = $value['input_id'];
+
+
           $dynamic[$key]['current_value'] = $value['fvalue'];
          // $dynamic[$key]['parameter_name'] = array(
          //                                      array('key'=>'enqueryfield['.$value['input_id'].']',

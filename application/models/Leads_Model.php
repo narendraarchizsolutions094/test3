@@ -1221,9 +1221,10 @@ public function all_description($diesc) {
 	 public function select_des_by_stage_api($diesc) {
        $this->db->select("*");
         $this->db->from('lead_description');
-		$this->db->where('lead_stage_id',$diesc);
+		$this->db->where('FIND_IN_SET('.$diesc.',lead_stage_id) >0');
 		//$this->db->where('comp_id', $this->session->userdata('companey_id'));
         $query = $this->db->get();
+        //echo $this->db->last_query(); exit();
         return $query->result();
 	 }
    /******************************************************End api*****************************************************/
