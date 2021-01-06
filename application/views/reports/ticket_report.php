@@ -17,80 +17,11 @@
 					          <div style="float: right;">   
 
 
-		<!-- <div class="btn-group dropdown-filter">
-              <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Filter by <span class="caret"></span>
-              </button>              
-              <ul class="filter-dropdown-menu dropdown-menu">   
-                    <li>
-                      <label>
-                      <input type="checkbox" value="date" id="datecheckbox" name="filter_checkbox"> Date </label>
-                    </li>  
-                    
-                    <li>
-                      <label>
-                      <input type="checkbox" value="source" id="sourcecheckbox" name="filter_checkbox"> Source</label>
-                    </li>                
-                    
-                     <li>
-                      <label>
-                      <input type="checkbox" value="problem" id="problemcheckbox" name="filter_checkbox"> Problem</label>
-                    </li>
-
-                     <li>
-                      <label>
-                      <input type="checkbox" value="priority" id="prioritycheckbox" name="filter_checkbox"> Priority</label>
-                    </li>    
-
-                     <li>
-                      <label>
-                      <input type="checkbox" value="issue" id="issuecheckbox" name="filter_checkbox"> Issue</label>
-                    </li>    
-
-                    <li>
-                      <label>
-                      <input type="checkbox" value="created_by" id="createdbycheckbox" name="filter_checkbox"> Created By</label>
-                    </li> 
-                    <li>
-                      <label>
-                      <input type="checkbox" value="assign_to" id="assigncheckbox" name="filter_checkbox"> Assign To</label>
-                    </li>
-                   
-                   <li>
-                      <label>
-                      <input type="checkbox" value="assign_by" id="assign_bycheckbox" name="filter_checkbox"> Assign By</label>
-                    </li>
-
-                    <li>
-                      <label>
-                      <input type="checkbox" value="product" id="prodcheckbox" name="filter_checkbox"> Product</label>
-                    </li> 
-                    <li>
-                      <label>
-                      <input type="checkbox" value="stage" id="stagecheckbox" name="filter_checkbox"> Stage</label>
-                    </li> 
-                   <li>
-                      <label>
-                      <input type="checkbox" value="sub_stage" id="sub_stagecheckbox" name="filter_checkbox"> Sub Stage</label>
-                    </li> 
-                    <li>
-                      <label>
-                      <input type="checkbox" value="status" id="statuscheckbox" name="filter_checkbox"> Status</label>
-                    </li> 
-                    <li class="text-center">
-                      <a href="javascript:void(0)" class="btn btn-sm btn-primary " id='save_advance_filters' title="Save Filters Settings"><i class="fa fa-save"></i></a>
-                    </li>                   
-                </ul>                
-            </div> -->
 					          <div class="btn-group" role="group" aria-label="Button group">
 					              <a class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-expanded="false" title="Actions">
 					                <i class="fa fa-sliders"></i>
 					              </a>  
 					            <div class="dropdown-menu dropdown_css" style="max-height: 400px;overflow: auto; left: unset; right: 0!important;">
-                      <?php if(user_access(317)) { ?>
-                           <!--  <a class="btn" data-toggle="modal" data-target="#AssignSelected" style="color:#000;cursor:pointer;border-radius: 2px;border-bottom :1px solid #ccc; width: 100%; text-align: left"><?php echo display('assign_selected'); ?></a> -->                                        
-                      <?php } ?>
-                           <!--  <a class="btn" data-toggle="modal" data-target="#DeleteSelected" style="color:#000;cursor:pointer;border-radius: 2px;border-bottom :1px solid #ccc; width: 100%; text-align: left"><?php echo display('delete'); ?></a> -->
 
                             <a class="btn" data-toggle="modal" data-target="#table-col-conf" style="color:#000;cursor:pointer;border-radius: 2px;border-bottom :1px solid #ccc; width: 100%; text-align: left"><?php echo display('table_config'); ?></a>
 					            </div>                                         
@@ -395,141 +326,11 @@
 		</div>
 
 
- <div id="AssignSelected" class="modal fade" role="dialog">
-  <div class="modal-dialog">
-    <!-- Modal content-->
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Ticket Assignment</h4>
-      </div>
-      <div class="modal-body">
-      
-                <div class="row">
-                  
-            
-            <div class="form-group col-md-12">  
-            <label>Select Employee</label> 
-            <div id="imgBack"></div>
-            <select class="form-control"  name="assign_employee" id="emply">                    
-            <?php foreach ($user_list as $user) { 
-                            
-                          if (!empty($user->user_permissions)) {
-                            $module=explode(',',$user->user_permissions);
-                          }                           
-                            
-                            ?>
-                            <option value="<?php echo $user->pk_i_admin_id; ?>">
-                              <?=$user->s_display_name ?>&nbsp;<?=$user->last_name; ?>                                
-                            </option>
-                            <?php 
-                          //}
-                        } ?>                                                      
-            </select> 
-            </div>
-            
-          <input type="hidden" value="" class="enquiry_id_input" >
-          
-            <div class="form-group col-sm-12">        
-            <button class="btn btn-success" type="button" onclick="assign_tickets();">Assign</button>        
-            </div>
-    
-                </div>          
-    </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-      </div>
-    </div>
-
-  </div>
-</div>
-
-
-<div id="DeleteSelected" class="modal fade" role="dialog">
-  <div class="modal-dialog">
-
-    <!-- Modal content-->
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Ticket Assignment</h4>
-      </div>
-      <div class="modal-body">
-          <i class="fa fa-question-circle" style="font-size:100px;"></i><br><h1>Are you sure, you want to permanently delete selected record?</h1>
-        </div>
-      <div class="modal-footer">
-            <button type="button" class="btn btn-success" onclick="delete_recorde()">Ok</button>
-          <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-        </div>
-    </div>
-
-  </div>
-</div>
-
-
-<script>
-	$(document).on("click", ".delete-ticket", function(e){
-		e.preventDefault();
-		var r = confirm("Are you sure to delete");
-		if (r == true) {
-		} else {
-		  return false;
-		}
-		$.ajax({
-			url  	: $(this).attr("href"),
-			type 	: "post",
-			data 	: {content : $(this).data("ticket")},
-			success : function(resp){
-					var jresp = JSON.parse(resp);
-					if(jresp.status == "success"){
-						location.reload();
-					}else{						
-					}
-			}
-		});
-	});
-</script>
 <script>
 function reset_input(){
 $('input:checkbox').removeAttr('checked');
 }
-
-$('.checked_all1').on('change', function() {     
-    $('.checkbox1').prop('checked', $(this).prop("checked"));    
-}); 
 </script>
-<script>
-function assign_tickets(){
-  if($('.checkbox1:checked').size() > 1000){
-    alert('You can not assign more that 1000 enquiry at once');
-  }else{
-      var p_url = '<?php echo base_url();?>ticket/assign_tickets';
-      var re_url = '<?php echo base_url();?>ticket'; 
-		var epid = $("#emply").val();	  
-
-    var x = $(".checkbox1:checked");
-    var Arr = new Array();
-    $(x).each(function(k,v){
-      Arr.push($(this).val());
-    });
-
-  $.ajax({
-    type: 'POST',
-    url: p_url,
-    data: {tickets:Arr,epid:epid},  //+ "&epid="+epid+"",
-    beforeSend: function(){
-                 $("#imgBack").html('uploading').show();
-    },
-    success:function(data){
-         alert(data);
-         //document.getElementById('testdata').innerHTML =data;
-          window.location.href=re_url;
-    }});
-  }
-}
-</script>
-
-
 
 <script>
   
@@ -544,227 +345,6 @@ $(document).ready(function(){
     alert('Your custom filters saved successfully.');
   }) 
 
-
-
-  // var enq_filters  = getCookie('ticket_filter_setting');
-  // if (!enq_filters.includes('date')) {
-  //   $('#fromdatefilter').hide();
-  //   $('#todatefilter').hide();
-  // }else{
-  //   $("input[value='date']").prop('checked', true);
-  // }
-
-  // if (!enq_filters.includes('emp')) {
-  //   $('#empfilter').hide();
-  // }else{
-  //   $("input[value='emp']").prop('checked', true);
-  // }
-
-  // if (!enq_filters.includes('source')) {
-  //   $('#sourcefilter').hide();
-  // }else{
-  //   $("input[value='source']").prop('checked', true);
-  // }
-
-  // if (!enq_filters.includes('problem')) {
-  //   $('#problemfilter').hide();
-  // }else{
-  //   $("input[value='problem']").prop('checked', true);
-  // }
-
-  // if (!enq_filters.includes('priority')) {
-  //   $('#priorityfilter').hide();
-  // }else{
-  //   $("input[value='priority']").prop('checked', true);
-  // }
-
-  // if (!enq_filters.includes('issue')) {
-  //   $('#issuefilter').hide();
-  // }else{
-  //   $("input[value='issue']").prop('checked', true);
-  // }
-
-  // if (!enq_filters.includes('product')) {
-  //   $('#prodfilter').hide();
-  // }else{
-  //   $("input[value='product']").prop('checked', true);
-  // }
-
-
-  // if (!enq_filters.includes('created_by')) {
-  //   $('#createdbyfilter').hide();
-  // }else{
-  //   $("input[value='created_by']").prop('checked', true);
-  // }
-
-  // if (!enq_filters.includes('assign_to')) {
-  //   $('#assignfilter').hide();
-  // }else{
-  //   $("input[value='assign_to']").prop('checked', true);
-  // }
-
-  // if (!enq_filters.includes('assign_by')) {
-  //   $('#assign_byfilter').hide();
-  // }else{
-  //   $("input[value='assign_by']").prop('checked', true);
-  // }
-
-  // if (!enq_filters.includes('stage')) {
-  //   $('#stagefilter').hide();
-  // }else{
-  //   $("input[value='stage']").prop('checked', true);
-  // }
-
-  // if (!enq_filters.includes('sub_stage')) {
-  //   $('#sub_stagefilter').hide();
-  // }else{
-  //   $("input[value='sub_stage']").prop('checked', true);
-  // }
-
-  // if (!enq_filters.includes('status')) {
-  //   $('#statusfilter').hide();
-  // }else{
-  //   $("input[value='status']").prop('checked', true);
-  // }
-
-$('#buttongroup').hide();
- $('input[name="filter_checkbox"]').click(function(){              
-        if($('#datecheckbox').is(":checked")){
-         $('#fromdatefilter').show();
-         $('#todatefilter').show();
-
-         $('#update_fromdatefilter').show();
-         $('#update_todatefilter').show();
-
-
-         $("#buttongroup").show();
-        }
-        else{
-
-          $('#update_fromdatefilter').hide();
-          $('#update_todatefilter').hide();
-
-
-           $('#fromdatefilter').hide();
-           $('#todatefilter').hide();
-           $("#buttongroup").hide();
-        }
-      
-        if($('#sourcecheckbox').is(":checked")){
-          $('#sourcefilter').show();
-          $("#buttongroup").show();
-        }
-        else{
-          $('#sourcefilter').hide();
-          $("#buttongroup").hide();
-        }
-
-        if($('#problemcheckbox').is(":checked")){
-          $('#problemfilter').show();
-          $("#buttongroup").show();
-        }
-        else{
-          $('#problemfilter').hide();
-          $("#buttongroup").hide();
-        }
-
-        if($('#createdbycheckbox').is(":checked")){
-          $('#createdbyfilter').show();
-        }
-        else{
-          $('#createdbyfilter').hide();
-        }
-        if($('#assigncheckbox').is(":checked")){
-          $('#assignfilter').show();
-        }
-        else{
-          $('#assignfilter').hide();
-        }
-        if($('#assign_bycheckbox').is(":checked")){
-          $('#assign_byfilter').show();
-        }
-        else{
-          $('#assign_byfilter').hide();
-        }
-
-        if($('#issuecheckbox').is(":checked")){
-          $('#issuefilter').show();
-        }
-        else{
-          $('#issuefilter').hide();
-        }
-        if($('#prioritycheckbox').is(":checked")){
-          $('#priorityfilter').show();
-        }
-        else{
-          $('#priorityfilter').hide();
-        }
-       if($('#prodcheckbox').is(":checked")){
-         $('#prodfilter').show();
-         //alert("check");
-       }
-       else{
-         $('#prodfilter').hide();
-       }
-      if($('#stagecheckbox').is(":checked")){
-          $('#stagefilter').show();
-        }
-        else{
-          $('#stagefilter').hide();
-        }
-        if($('#sub_stagecheckbox').is(":checked")){
-          $('#sub_stagefilter').show();
-        }
-        else{
-          $('#sub_stagefilter').hide();
-        }
-        if($('#statuscheckbox').is(":checked")){
-          $('#statusfilter').show();
-        }
-        else{
-          $('#statusfilter').hide();
-        }
-    });
-})
-
-$(document).ready(function(){
- 
-  var count=0;
-  var checkboxes = document.getElementsByName('product_filter[]');
-  var id = [];
-  // loop over them all
-  for (var i=0; i<checkboxes.length; i++) {     
-     if (checkboxes[i].checked) {
-        id.push(checkboxes[i].value);
-        count++;
-     }
-  }
-  if(count>1){
-   $("#enq-create").hide();
-  } 
-  else{
-    $("#enq-create").show();
-  }  
-});
-
-// function moveto_client(){
-//   if($('.checkbox1:checked').size() > 1000){
-//     alert('You can not move more that 1000 enquiry at once');
-//   }else{
-//   $.ajax({
-//   type: 'POST',
-//   url: '<?php echo base_url();?>enquiry/move_to_client',
-//   data: $('#enquery_assing_from').serialize(),
-//   success:function(data){
-//       if(data=='1'){
-//            alert('Successfully Moved in Clients'); 
-//         window.location.href='<?php echo base_url();?>led/index'
-//       }else{
-//        alert(data);
-//       }
-//   }});
-//   }
-// }
 var run = 0 ;
 $(document).ready(function() {
 
@@ -778,11 +358,6 @@ $(document).ready(function() {
         type: 'post',
         data: form_data,
         success: function(responseData){
-            // document.write(responseData);
-            // if(run==0)
-            //   table_filter();
-            // else
-            //   $('#ticket_table').DataTable().ajax.reload();         
         }
         });
         $("#ticket_filter").submit();
@@ -806,16 +381,12 @@ $(document).ready(function() {
           "ajax": {
               "url": "<?=base_url().'Ticket/ticket_load_data'?>",
               "type": "POST",
-              //"dataType":"html",
-              //success:function(q){ //alert(q); //document.write(q);},
               error:function(u,v,w) 
               {
                 alert(w);
               }
-              },
-              
+              },              
               <?php if(user_access(317)) { ?>
-        // "lengthMenu": [[30, 60, 90, -1], [30, 60, 90, "All"]], 
         dom: "<'row text-center'<'col-sm-12 col-xs-12 col-md-4'l><'col-sm-12 col-xs-12 col-md-4 text-center'B><'col-sm-12 col-xs-12 col-md-4'f>>tp", 
         buttons: [  
             {extend: 'copy', className: 'btn-xs btn',exportOptions: {
@@ -974,36 +545,28 @@ $(document).ready(function() {
 
 <script>
   function select_all(){
-
-var select_all = document.getElementById("selectall"); //select all checkbox
-var checkboxes = document.getElementsByClassName("choose-col"); //checkbox items
-var dcheckboxes = document.getElementsByClassName("dchoose-col"); //checkbox items
-
-//select all checkboxes
-select_all.addEventListener("change", function(e){
-
-  for (i = 0; i < checkboxes.length; i++) { 
-    checkboxes[i].checked = select_all.checked;
+    var select_all = document.getElementById("selectall"); //select all checkbox
+    var checkboxes = document.getElementsByClassName("choose-col"); //checkbox items
+    var dcheckboxes = document.getElementsByClassName("dchoose-col"); //checkbox items
+    //select all checkboxes
+    select_all.addEventListener("change", function(e){
+      for (i = 0; i < checkboxes.length; i++) { 
+        checkboxes[i].checked = select_all.checked;
+      }
+      for (i = 0; i < dcheckboxes.length; i++) { 
+        dcheckboxes[i].checked = select_all.checked;
+      }
+    });
+    for (var i = 0; i < checkboxes.length; i++) {
+      checkboxes[i].addEventListener('change', function(e){ 
+        if(this.checked == false){
+          select_all.checked = false;
+        }
+        if(document.querySelectorAll('.choose-col:checked').length == checkboxes.length){
+          select_all.checked = true;
+        }
+      });
   }
-  for (i = 0; i < dcheckboxes.length; i++) { 
-    dcheckboxes[i].checked = select_all.checked;
-  }
-});
-
-
-for (var i = 0; i < checkboxes.length; i++) {
-
-  checkboxes[i].addEventListener('change', function(e){ //".checkbox" change 
-    //uncheck "select all", if one of the listed checkbox item is unchecked
-    if(this.checked == false){
-      select_all.checked = false;
-    }
-    //check "select all" if all checkbox items are checked
-    if(document.querySelectorAll('.choose-col:checked').length == checkboxes.length){
-      select_all.checked = true;
-    }
-  });
-}
 
 for (var i = 0; i < dcheckboxes.length; i++) {
   
@@ -1026,28 +589,21 @@ for (var i = 0; i < dcheckboxes.length; i++) {
 </script>
 
 <script type="text/javascript">
-
-  $(document).on("click", ".set-col-table", function(e){
-    
+  $(document).on("click", ".set-col-table", function(e){    
     e.preventDefault();
-    if($(".choose-col:checked").length == 0 && $(".dchoose-col:checked").length == 0 ){
-      
+    if($(".choose-col:checked").length == 0 && $(".dchoose-col:checked").length == 0 ){      
       return false;
     }
     var chkval = "";
-    $(".choose-col:checked").each(function(){
-      
+    $(".choose-col:checked").each(function(){      
       chkval += $(this).val()+",";
     });
     var dchkval = "";
-    $(".dchoose-col:checked").each(function(){
-      
+    $(".dchoose-col:checked").each(function(){      
       dchkval += $(this).val()+",";
-    });
-    
+    });    
     document.cookie = "ticket_allowcols="+chkval+"; expires=Thu, 18 Dec 2053 12:00:00 UTC; path=/";
-    document.cookie = "ticket_dallowcols="+dchkval+"; expires=Thu, 18 Dec 2053 12:00:00 UTC; path=/";
-   // alert("C");
+    document.cookie = "ticket_dallowcols="+dchkval+"; expires=Thu, 18 Dec 2053 12:00:00 UTC; path=/";   
     location.reload();    
   });
 </script>

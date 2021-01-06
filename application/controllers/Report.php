@@ -718,7 +718,7 @@ class Report extends CI_Controller {
         
         //print_r($data["tickets"]);die;
         $data['issues'] = $this->Ticket_Model->get_issue_list();
-        $data['user_list'] = $this->User_model->companey_users();
+        //$data['user_list'] = $this->User_model->companey_users();
         $data['content'] = $this->load->view('reports/ticket_report', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }
