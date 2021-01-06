@@ -1517,7 +1517,7 @@ $newDate = date("Y-m-d", strtotime($t_date));
                                     type: 'column'
                                 },
                                 title: {
-                                    text: '<?php echo display("disposition_data"); ?>'
+                                    text: 'Lead Stage'
                                 },
                                 subtitle: {
                                     //text: 'Source: WorldClimate.com'
