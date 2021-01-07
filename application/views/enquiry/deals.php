@@ -54,7 +54,7 @@ input[name=top_filter]{
 </div>
 
 
-<div class="row" style=" padding: 5px 0px; ">
+<div class="row" style=" padding: 5px 0px; <?=!empty($this->uri->segment(3))?'display: none;':''?>">
 	<div class="col-lg-4">
         <div class="form-group">
           <label>From</label>
@@ -118,7 +118,7 @@ input[name=top_filter]{
 </div>
 
 
-<div class="row row text-center short_dashboard" id="active_class">
+<div class="row row text-center short_dashboard" id="active_class" style="<?=!empty($this->uri->segment(3))?'display: none;':''?>">
     <div class="wd-14 col-sm-3" style="">
         <div  class="col-12 border_bottom border_bottom_active" >
             <p style="margin-top: 2vh;font-weight:bold;">
@@ -190,6 +190,10 @@ input[name=top_filter]{
 
 <script type="text/javascript">
 
+var specific_list = "<?=!empty($this->uri->segment(3))?$this->uri->segment(3):''?>";
+
+specific_list = atob(specific_list);
+
 var TempData = {};
 $(".d_filter").on('change',function(){
 
@@ -221,6 +225,7 @@ $(document).ready(function(){
                      // d.to_date = obj[1]['value'];
                      // d.to_time = '';//obj[5]['value'];
                      d.view_all=true;
+                     d.specific_list = specific_list;
                      TempData = d;
                      console.log(JSON.stringify(d));
                     return d;

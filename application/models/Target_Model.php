@@ -141,7 +141,7 @@ class Target_Model extends CI_model
 			if($goal->metric_type=='deal')
 				$this->db->select('sum(info.expected_amount) as e_amnt,sum(info.potential_amount) as p_amnt,COUNT(DISTINCT(info.id)) as info_count,GROUP_CONCAT(info.id) as info_ids,COUNT(DISTINCT(enquiry.enquiry_id)) as enq_count,GROUP_CONCAT(DISTINCT(enquiry.enquiry_id)) as enq_ids');
 			else
-				$this->db->select('count(id) as num_value,COUNT(DISTINCT(info.id)) as info_count,GROUP_CONCAT(info.id) as info_ids,COUNT(DISTINCT(enquiry.enquiry_id)) as enq_count,GROUP_CONCAT(DISTINCT(enquiry.enquiry_id)) as enq_ids');
+				$this->db->select('count(id) as num_value,sum(info.expected_amount) as e_amnt,sum(info.potential_amount) as p_amnt,COUNT(DISTINCT(info.id)) as info_count,GROUP_CONCAT(info.id) as info_ids,COUNT(DISTINCT(enquiry.enquiry_id)) as enq_count,GROUP_CONCAT(DISTINCT(enquiry.enquiry_id)) as enq_ids');
 
 			
 			if(!empty($goal->products))
@@ -154,7 +154,7 @@ class Target_Model extends CI_model
 			$res = $this->db->get()->row();
 			//if($goal_id!=38)
 			return  $res;
-				echo $this->db->last_query(); exit();
+				//echo $this->db->last_query(); exit();
 		}
 		else
 			return false;
@@ -163,9 +163,9 @@ class Target_Model extends CI_model
 	{
 		$goal  = $this->getGoals(array('goal_id'=>$goal_id))[0];
 		if($goal->metric_type=='deal')
-		$this->db->select('*, sum(info.expected_amount) as e_amnt,sum(info.potential_amount) as p_amnt ');
+		$this->db->select('*, sum(info.expected_amount) as e_amnt,sum(info.potential_amount) as p_amnt,GROUP_CONCAT(info.id) as info_ids, ');
 		else
-			$this->db->select('*, count(*) as num_value');
+			$this->db->select('*, count(*) as num_value,GROUP_CONCAT(info.id) as info_ids,');
 
 		if(!empty($goal->products))
 				$this->db->where('enquiry.enquiry_source IN ('.$goal->products.')');
@@ -187,9 +187,9 @@ class Target_Model extends CI_model
 		{
 			
 			if($goal->metric_type=='deal')
-				$this->db->select('sum(info.expected_amount) as e_amnt,sum(info.potential_amount) as p_amnt');
+				$this->db->select('sum(info.expected_amount) as e_amnt,sum(info.potential_amount) as p_amnt,GROUP_CONCAT(info.id) as info_ids,');
 			else
-				$this->db->select('*, count(*) as num_value');
+				$this->db->select('*, count(*) as num_value,sum(info.expected_amount) as e_amnt,sum(info.potential_amount) as p_amnt,GROUP_CONCAT(info.id) as info_ids,');
 
 			if(!empty($goal->products))
 				$this->db->where('enquiry.enquiry_source IN ('.$goal->products.')');

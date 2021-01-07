@@ -30,6 +30,13 @@ class Enquiry extends REST_Controller {
             $this->form_validation->set_message('phone_check', 'The Process field can not be the empty');
             return false;
         }else{
+
+          if(empty($phone))
+          {
+            $this->form_validation->set_message('phone_check', 'The Mobile no field is required');
+            return false;
+          }
+
             $query = $this->db->query("select phone from enquiry where product_id=$product_id AND phone=$phone");
             if ($query->num_rows()>0) {
                 $this->form_validation->set_message('phone_check', 'The Mobile no field can not be dublicate in current process');
@@ -41,16 +48,17 @@ class Enquiry extends REST_Controller {
     }
     public function create_post()
     { 	
-    	
+    	   $file = @$_FILES; 
+
         	$upd =$this->input->post('update');		
     		  $comp_id	=	$this->input->post('company_id');		
           $process_id =  $this->input->post('process_id');
           $user_id = $this->input->post('user_id');
           $this->form_validation->set_rules('user_id','user_id', 'trim|required');
           $this->form_validation->set_rules('company_id','comp_id', 'trim|required');
-          if(!$upd)
-          {
-          	$this->form_validation->set_rules('mobileno', 'mobileno', 'max_length[20]|callback_phone_check|required', array('is_unique' => 'Duplicate   Entery for phone'));
+          if(empty($upd))
+          { 
+          	$this->form_validation->set_rules('mobileno', 'mobileno', 'required|max_length[20]|callback_phone_check', array('is_unique' => 'Duplicate   Entery for phone'));
            $this->form_validation->set_rules('company_id','company_id', 'trim|required');
             $this->form_validation->set_rules('process_id','process_id', 'trim|required');
           }
@@ -133,9 +141,10 @@ class Enquiry extends REST_Controller {
             }
             if($insert_id)
             {
-                foreach($this->input->post() as $ind => $val){         
+                foreach($this->input->post() as $ind => $val)
+                {         
                     if(is_int($ind))
-                    {                    
+                    {    
                         $biarr = array( 
                                       "enq_no"  => $e_row['Enquery_id'],
                                       "input"   => $ind,
@@ -154,13 +163,54 @@ class Enquiry extends REST_Controller {
                               $this->db->where('parent',$e_row['enquiry_id']);
                               $this->db->set('fvalue',$val);
                               $this->db->update('extra_enquery');
+                        }else
+                        {
+                              $this->db->insert('extra_enquery',$biarr);
+                        }
+                    }
+                  } 
+              if(!empty($this->input->post('inputtype')))
+              {
+                foreach($this->input->post('inputtype') as $ind => $val)
+                {         
+                    if(is_int($ind) && $val=='8')
+                    { 
+                     $file_data =  $this->enquiry_model->doupload($file[$ind],0,$comp_id);
+
+                      if (!empty($file_data['imageDetailArray']['file_name']))
+                      {
+                        $file_path = base_url().'uploads/enquiry_documents/'.$comp_id.'/'.$file_data['imageDetailArray']['file_name'];
+                       
+                        $biarr = array( 
+                                        "enq_no"  => $e_row['Enquery_id'],
+                                        "input"   => $ind,
+                                        "parent"  => $e_row['enquiry_id'], 
+                                        "fvalue"  => $file_path,
+                                        "cmp_no"  => $comp_id,
+                                       );     
+                          $this->db->where('enq_no',$e_row['Enquery_id']);        
+                          $this->db->where('input',$ind);        
+                          $this->db->where('parent',$e_row['enquiry_id']);
+
+                          if($this->db->get('extra_enquery')->num_rows())
+                          {                        
+                                $this->db->where('enq_no',$e_row['Enquery_id']);        
+                                $this->db->where('input',$ind);        
+                                $this->db->where('parent',$e_row['enquiry_id']);
+                                $this->db->set('fvalue',$file_path);
+                                $this->db->update('extra_enquery');
                           }else
                           {
-                              $this->db->insert('extra_enquery',$biarr);
+                                $this->db->insert('extra_enquery',$biarr);
                           }
+
+                      }
+
                     }
-                  }
+                } 
               }
+            }
+              
             // if(isset($_POST['inputfieldno'])) 
             // {
             //   $inputno   = $this->input->post("inputfieldno", true);
@@ -336,7 +386,25 @@ class Enquiry extends REST_Controller {
                   $dynamic[$key]['input_values'] = $reshape;
               }
           }
-          $dynamic[$key]['parameter_name'] = $value['input_id'];
+          if($value['input_type']=='8')
+          {
+            $ary =array(
+                      array(
+                            'key'=>'inputtype['.$value['input_id'].']',
+                            'value' =>'8',
+                          ),
+                      array(
+                            'key'=>$value['input_id'].'[]',
+                            'value' =>'',
+                          ),
+            );
+                   
+          }
+          else
+          {
+            $ary = $value['input_id'];
+          }
+          $dynamic[$key]['parameter_name'] = $ary;
           // $dynamic[$key]['parameter_name'] = array(
           //                     array('key'=>($value['input_type']=='8'?'enqueryfiles['.$value['input_id'].']':'enqueryfield['.$value['input_id'].']'),
           //                           'value'=>''),

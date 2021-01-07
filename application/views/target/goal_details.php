@@ -11,12 +11,15 @@
 		<small><b><?=$goal->date_from.' - '.$goal->date_to?></b></small>
 	</div>
 	<div class="panel-body">
-
+		<div class="form-group">
+			<label>Metric Type: <?=($goal->metric_type=='deal')?'Deal Value':'Won Deals'?></label>
+		</div>
 		<div class="form-group">
 			<label>Goal For: <?=($goal->goal_type=='user')?'User':'Role'?></label>
 		</div>
-
+		
 		<?php
+
 		if($goal->goal_type=='team')
 		{
 			echo'<div class="form-group">
@@ -90,12 +93,14 @@
 							echo'<tr>
 								<td>'.$user_forecast->s_display_name.'</td>
 								<td>'.$target.'</td>
-								<td>'.$foracast_value.'</td>
-								<td>'.$achieved_value.'</td>
+								<td> <span data-ids="'.$user_forecast->info_ids.'" onclick="view_source(this)" style="cursor:pointer">'.$foracast_value.'</span></td>
+								<td>  <span data-ids="'.$user_achieved->info_ids.'" onclick="view_source(this)" style="cursor:pointer">'.$achieved_value.'</span>
+									'.($goal->metric_type=='won'?'<br>Deal Value: '.(float)$user_achieved->p_amnt:'').'
+								</td>
 								<td style="text-align:center">
 								'.$achieved_value.'/'.$target.'<br>
-								<div class="progress">
-									  <div class="progress-bar progress-bar-'.$barcolor.' progress-bar-striped" role="progressbar"
+								<div class="progress" style="border:1px solid #cccccc;">
+									  <div class="progress-bar progress-bar-'.$barcolor.' progress-bar-striped"  role="progressbar"
 									  aria-valuenow="'.$percent.'" aria-valuemin="0" aria-valuemax="100" style="width:'.$percent.'%; max-width:100%;">
 									  </div>
 								</div>
@@ -110,3 +115,14 @@
 		</table>
 	</div>
 </div>
+<script type="text/javascript">
+function view_source(t)
+{
+	var list = $(t).data('ids');
+	if(list!='')
+	{
+		var url ="<?=base_url('client/deals/')?>"+btoa(list);
+		window.open(url,'_blank');
+	}
+}
+</script>
