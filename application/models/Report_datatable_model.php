@@ -235,8 +235,8 @@ class Report_datatable_model extends CI_Model {
             $select = 'count(enquiry.enquiry_id) as count,tbl_product_country.country_name as title';
             $group_by = 'enquiry.enquiry_subsource';
         }else if($for == 'status_chart' && 0){
-            $select = 'count(enquiry.enquiry_id) as count,tbl_product_country.country_name as title';
-            $group_by = 'enquiry.enquiry_subsource';
+            $select = 'count(enquiry.enquiry_id) as count,enquiry.status as title';
+            $group_by = 'enquiry.status';
         }else{
             $select = 'count(enquiry.enquiry_id) as count,lead_source.lead_name as title';
             $group_by = 'enquiry.enquiry_source';
