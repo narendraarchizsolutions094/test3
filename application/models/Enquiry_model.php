@@ -2065,18 +2065,7 @@ class Enquiry_model extends CI_Model {
                         ->get()
                         ->result();
     }
-    public function countLead_api($type,$comp_id=0){
-	
-		$comp_id = $this->session->userdata('companey_id')??$comp_id;
-		return $this->db->where(array('comp_id' => $comp_id,'type'=>$type))->count_all_results('tbl_followupAvgtime');
-
-    }
-	public function dataLead_api($type,$comp_id=0){
-		$comp_id = $this->session->userdata('companey_id')??$comp_id;
-		return $this->db->select_sum('time')->where(array('comp_id' =>$comp_id,'type'=>$type))->get('tbl_followupAvgtime');
-		
-
-	}
+ 
     public function assign_enquery_api($key,$assign_employee,$enquiry_code,$user_id){
                         $this->db->set('aasign_to',$assign_employee);
 			            $this->db->set('assign_by',$user_id);

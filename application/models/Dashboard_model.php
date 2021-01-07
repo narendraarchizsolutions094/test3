@@ -339,7 +339,19 @@ class Dashboard_model extends CI_Model {
 
                         ->row();
 
+	}
+	public function countLead_api($type,$comp_id=0){
+	
+		$comp_id = $this->session->userdata('companey_id')??$comp_id;
+		return $this->db->where(array('comp_id' => $comp_id,'type'=>$type))->count_all_results('tbl_followupAvgtime');
+
     }
+	public function dataLead_api($type,$comp_id=0){
+		$comp_id = $this->session->userdata('companey_id')??$comp_id;
+		return $this->db->select_sum('time')->where(array('comp_id' =>$comp_id,'type'=>$type))->get('tbl_followupAvgtime');
+		
+
+	}
     public function countLead($type,$comp_id=0){
 		$userid=$this->session->user_id;
 

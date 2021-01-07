@@ -38,7 +38,13 @@ input[name=top_filter]{
   }
 }
 </style>
-
+<?php
+if(empty($_COOKIE['deals_filter_setting'])) {
+	$variable=[];
+} else {
+$variable=explode(',',$_COOKIE['deals_filter_setting']);
+}
+?>   
 <div class="row" style="background-color: #fff;padding:7px;border-bottom: 1px solid #C8CED3;">
   <div class="col-md-4 col-sm-4 col-xs-4"> 
           <a class="pull-left fa fa-arrow-left btn btn-circle btn-default btn-sm" onclick="history.back(-1)" title="Back"></a>
@@ -51,29 +57,38 @@ input[name=top_filter]{
           }
           ?>        
         </div>
+        <div class="col-md-2" style="float: right;">
+		<div class="btn-group dropdown-filter">
+              <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Filter by <span class="caret"></span>
+              </button>              
+              <ul class="filter-dropdown-menu dropdown-menu">   
+                    <li>
+                      <label>
+                      <input type="checkbox" value="date" id="datecheckbox" name="filter_checkbox" <?php if(in_array('date',$variable)){echo'checked';} ?>> Date </label>
+                    </li>  
+                    <li>
+                      <label>
+                      <input type="checkbox" value="for" id="forcheckbox" name="filter_checkbox" <?php if(in_array('for',$variable)){echo'checked';} ?>> For</label>
+                    </li> 
+                                  
+                    <li class="text-center">
+                      <a href="javascript:void(0)" class="btn btn-sm btn-primary " id='save_advance_filters' title="Save Filters Settings"><i class="fa fa-save"></i></a>
+                    </li>                   
+                </ul>                
+            </div>
+
+		</div>
 </div>
 
 
-<div class="row" style=" padding: 5px 0px; <?=!empty($this->uri->segment(3))?'display: none;':''?>">
+
+<div class="row" style=" padding: 5px 0px; <?=!empty($this->uri->segment(3))?'display: none;':''?> <?php if(empty($_COOKIE['deals_filter_setting'])){ echo'display:none'; }  ?>" id="filter_pannel">
+ <div id="datefilter" style="<?php if(!in_array('date',$variable)){echo'display:none';} ?>" >
 	<div class="col-lg-4">
         <div class="form-group">
           <label>From</label>
           <input class="d_filter form-control form-date" name="d_from_date">
-        <!--   <div class="pull-left">
-            <div style="top: 0px;
-                          margin-top: 0px;
-                          float: left;
-                          height: 51px;
-                          line-height: 50px;
-                          padding-right: 5px;" >
-            <label>From</label>
-            </div>
-            <div style="height: 51px;
-                        float: left;">
-              <input type="date" class="v_filter" name="v_from_date" style="width: 145px"><br>
-              <input type="time" class="v_filter" name="v_from_time" style="width: 145px;">
-            </div>
-          </div> -->
         </div>
     </div>
 
@@ -83,8 +98,8 @@ input[name=top_filter]{
            <input  class="d_filter form-control form-date" name="d_to_date">
         </div>
       </div>
-
-    <div class="col-lg-4">
+ </div>
+    <div class="col-lg-4"  id="forfilter" style="<?php if(!in_array('for',$variable)){echo'display:none';} ?>">
         <div class="form-group">
         	<label>For</label>
         	<select class="d_filter form-control" name="d_enquiry_id">
@@ -102,21 +117,54 @@ input[name=top_filter]{
         	</select>
         </div>
     </div>
-     <!-- <div class="col-lg-3">
-        <div class="form-group">
-        	<label>Rating</label>
-       	<select class="form-control v_filter" name="rating">
-              <option value="">Select</option>
-              <option value="1 star">1 star</option>
-              <option value="2 star"> 2 star</option>
-              <option value="3 star"> 3 star</option>
-              <option value="4 star"> 4 star</option>
-              <option value="5 star"> 5 star</option>
-            </select>
-        </div>
-    </div> -->
 </div>
+<script>
+  $(document).ready(function(){
+	 $("#save_advance_filters").on('click',function(e){
+	  e.preventDefault();
+	  var arr = Array();  
+	  $("input[name='filter_checkbox']:checked").each(function(){
+		arr.push($(this).val());
+	  });        
+	  setCookie('deals_filter_setting',arr,365);      
+	  // alert('Your custom filters saved successfully.');
+	  Swal.fire({
+	position: 'top-end',
+	icon: 'success',
+	title: 'Your custom filters saved successfully.',
+	showConfirmButton: false,
+	timer: 1000
+  });
+	});
 
+
+});
+$('input[name="filter_checkbox"]').click(function(){  
+  if($('#datecheckbox').is(":checked")||$('#forcheckbox').is(":checked")){ 
+    $('#filter_pannel').show();
+  }else{
+    $('#filter_pannel').hide();
+  }
+});
+$('input[name="filter_checkbox"]').click(function(){              
+        if($('#datecheckbox').is(":checked")){
+         $('#datefilter').show();
+        } else{
+           $('#datefilter').hide();
+             }
+      
+		if($('#forcheckbox').is(":checked")){
+        $('#forfilter').show();
+            }
+        else{
+          $('#forfilter').hide();
+		}
+		
+		
+});
+		
+
+</script>
 
 <div class="row row text-center short_dashboard" id="active_class" style="<?=!empty($this->uri->segment(3))?'display: none;':''?>">
     <div class="wd-14 col-sm-3" style="">
