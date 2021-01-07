@@ -715,4 +715,5 @@ class Report extends CI_Controller {
         $data['content'] = $this->load->view('reports/ticket_report', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }
+    
 }

@@ -1,5 +1,27 @@
-<script src="https://cdn.rawgit.com/harvesthq/chosen/gh-pages/chosen.jquery.min.js"></script>
-<link href="https://cdn.rawgit.com/harvesthq/chosen/gh-pages/chosen.min.css" rel="stylesheet" />
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/highcharts-3d.js"></script>
+<script src="https://code.highcharts.com/modules/cylinder.js"></script>
+<script src="https://code.highcharts.com/modules/funnel3d.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
+<script src="https://code.highcharts.com/modules/accessibility.js"></script>
+
+<style>
+.card-graph{
+    min-height:250px;
+    max-height:400px;
+    border:1px solid;
+    width:32%;
+    margin:2px;
+    box-shadow: 0px 0px 7px -1px;
+    border-radius: 6px;
+    border-color: transparent;
+    overflow: hidden;
+}
+.hide_graph{
+   display:none !important;    
+ }
+</style>
 <!------ Filter Div ---------->
 <div class="row" id="filter_pannel">
     <div class="col-lg-12">
@@ -362,6 +384,46 @@ $enquiry_separation = json_decode($enquiry_separation, true);
                     </div>
                     <br>
                 </form>
+                <?php
+                if(!empty($post_report_columns)){ ?>
+                <div style="float:right;">
+                    <a class='btn btn-xs  btn-primary' href='javascript:void(0)' id='show_analytics' title='Show report analytics'><i class='fa fa-bar-chart'></i></a>
+                </div>
+                <?php
+                }
+                ?>
+                <div class='show_graphs hide_graph'>
+                    <div class='row'>
+                        
+                        <div class='col-md-4 card-graph'>
+                            <div id='source_chart' >
+                            </div>
+                        </div>
+                        <div class='col-md-4 card-graph'>
+                            <div id='process_chart' >
+                            </div>                
+                        </div>
+                        <div class='col-md-4 card-graph'>
+                            <div id='stage_chart' >
+                            </div>                        
+                        </div>
+                    </div>
+                    <div class='row'>
+                        <div class='col-md-4 card-graph'>
+                            <div id='status_chart' >
+                            </div>
+                        </div>
+                        <div class='col-md-4 card-graph'>
+                            <div id='user_chart' >
+                            </div>
+                        </div>
+                        <div class='col-md-4 card-graph'>
+                            <div id='product_chart' >
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
                 <div class="form-group col-md-12 table-responsive" id="showResult">
                     <table id="example" class=" table table-striped table-bordered" style="width:100%">
                         <thead>
@@ -388,6 +450,134 @@ $enquiry_separation = json_decode($enquiry_separation, true);
 
 <!---------------------------->
 <script type="text/javascript">
+    $("#show_analytics").on('click',function(){
+        $(this).hide();
+        $(".show_graphs").removeClass('hide_graph');
+        show_report_graph();
+    });
+    function show_report_graph(){
+        if(!$(".show_graphs").hasClass('hide_graph')){    
+            generate_pie_graph('source_chart','Source Wise');
+            generate_pie_graph('process_chart','Process Wise');
+            generate_pie_graph('stage_chart','Sales Stage Wise');
+            generate_pie_graph('user_chart','Employee Wise');    
+            generate_pie_graph('product_chart','Product/Service Wise');
+            funnel_chart('status_chart','Sales Pipeline Wise');
+        }    
+    }
+    function generate_pie_graph(elm,title){
+        Highcharts.chart(elm, {            
+            chart: {
+                type: 'pie',
+                    options3d: {
+                        enabled: true,
+                        alpha: 45                        
+                    },
+                margin: [0, 0, 0, 0],
+                spacingTop: 0,
+                spacingBottom: 0,
+                spacingLeft: 0,
+                spacingRight: 0
+            },
+            title: {
+                    text: ''
+                },
+            exporting: {
+                buttons: {
+                    contextButton: {
+                        menuItems: ["viewFullscreen", "printChart", "downloadPNG"]
+                    }
+                }
+            },
+            subtitle: {
+                text: title
+            },
+            plotOptions: {            
+                pie: {
+                    //size:'40%',
+                    // dataLabels: {
+                    //     enabled: false
+                    // },
+                    innerSize: 50,
+                    depth: 45
+                }
+            },
+            credits: {
+                enabled: false
+            },
+            series: [{
+                name: 'Count',
+                data: [
+                ['Bananas', 8],
+                ['Kiwi', 3],
+                ['Mixed nuts', 1],
+                ['Oranges', 6],
+                ['Apples', 8],
+                ['Pears', 4],
+                ['Clementines', 4],
+                ['Reddish (bag)', 1],
+                ['Grapes (bunch)', 1]
+                ]
+            }]
+        });
+    }
+
+function funnel_chart(elm,title){
+    Highcharts.chart(elm, {
+    chart: {
+        type: 'funnel3d',
+        options3d: {
+            enabled: true,
+            alpha: 10,
+            depth: 50,
+            viewDistance: 50
+        },
+        margin: [0, 0, 0, 0],
+        spacingTop: 0,
+        spacingBottom: 0,
+        spacingLeft: 0,
+        spacingRight: 0
+    },
+    title: {
+        text: ''
+    },
+    subtitle: {
+        text: title
+    },
+    exporting: {
+        buttons: {
+            contextButton: {
+                menuItems: ["viewFullscreen", "printChart", "downloadPNG"]
+            }
+        }
+    },
+    plotOptions: {
+        series: {
+        dataLabels: {
+            enabled: true,
+            format: '<b>{point.name}</b> ({point.y:,.0f})',
+            allowOverlap: false,
+            y: 10
+        },
+        neckWidth: '30%',
+        neckHeight: '25%',
+        width: '80%',
+        height: '80%'
+        }
+    },
+    series: [{
+        name: 'Count',
+        data: [
+        ['Website visits', 15654],
+        ['Downloads', 4064],
+        ['Requested price list', 1987],
+        ['Invoice sent', 976],
+        ['Finalized', 846]
+        ]
+    }]
+    });
+}
+
 $("#filter_and_save_form").on('submit', function(e) {
     //alert($("input[name='hier_wise']").is(":checked"));
     if ($("input[name='hier_wise']").is(":checked") && $("#employee").select2('data').length != 1) {
@@ -468,8 +658,7 @@ $(document).ready(function() {
         } else {
             alert("Report not saved");
         }
-    });
-
+    });   
 
 });
 jQuery(function($){ //on document.ready
