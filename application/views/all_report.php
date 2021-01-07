@@ -464,7 +464,7 @@ $enquiry_separation = json_decode($enquiry_separation, true);
             generate_pie_graph('source_chart','Source Wise');
             generate_pie_graph('process_chart','Process Wise');
             generate_pie_graph('stage_chart','Sales Stage Wise');
-            generate_pie_graph('user_chart','Employee Wise');    
+            generate_pie_graph('user_chart','Employee Wise Assigned Data');    
             generate_pie_graph('product_chart','Product/Service Wise');
             funnel_chart('status_chart','Sales Pipeline Wise');
         }    
