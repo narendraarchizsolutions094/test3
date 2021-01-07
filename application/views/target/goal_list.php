@@ -34,26 +34,83 @@ var Ignore = new Array();
       }
           ?>  
         </div>
+
+<?php
+if(!isset($_COOKIE['goal_filter_setting'])) {
+	$variable='';
+} else {
+$variable=explode(',',$_COOKIE['goal_filter_setting']);
+}
+?>
+		<div class="col-md-2" style="float: right;">
+		<div class="btn-group dropdown-filter">
+              <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Filter by <span class="caret"></span>
+              </button>              
+              <ul class="filter-dropdown-menu dropdown-menu">   
+                    <li>
+                      <label>
+                      <input type="checkbox" value="date" id="datecheckbox" name="filter_checkbox" <?php if(in_array('date',$variable)){echo'checked';} ?>> Date </label>
+                    </li>  
+                    <li>
+                      <label>
+                      <input type="checkbox" value="role" id="rolecheckbox" name="filter_checkbox" <?php if(in_array('role',$variable)){echo'checked';} ?>> For Role</label>
+                    </li> 
+                    <li>
+                      <label>
+                      <input type="checkbox" value="user" id="usercheckbox" name="filter_checkbox" <?php if(in_array('user',$variable)){echo'checked';} ?>> For User</label>
+                    </li>                
+                    <li>
+                      <label>
+                      <input type="checkbox" value="matric" id="matriccheckbox" name="filter_checkbox" <?php if(in_array('matric',$variable)){echo'checked';} ?>>Matric</label>
+                    </li>                
+                   <li>
+                      <label>
+                      <input type="checkbox" value="goals" id="goalcheckbox" name="filter_checkbox" <?php if(in_array('goals',$variable)){echo'checked';} ?>> Goal Analytics</label>
+                    </li> 
+                   
+                    <li class="text-center">
+                      <a href="javascript:void(0)" class="btn btn-sm btn-primary " id='save_advance_filters' title="Save Filters Settings"><i class="fa fa-save"></i></a>
+                    </li>                   
+                </ul>                
+            </div>
+
+		</div>
 </div>
-<div class="row" style="margin: 15px;">
+
+
+<div class="row" style="margin: 15px; <?php if(empty($_COOKIE['goal_filter_setting'])){ echo'display:none'; }  ?>" id="filter_pannel">
+
 <form id="filter_form">
-	<div class="col-sm-4">
-		<div class="form-group">
-			<label>Start From - To</label>
-			<div class="input-group">
-				<input   name="start_date_from" class="form-control form-date" style="width: 50%">
-				<input   name="start_date_to" class="form-control form-date" style="width:50%">
+	<div class="row"  id="datefilter" style="<?php if(!in_array('date',$variable)){echo'display:none';} ?>">
+			<div class="col-md-3">
+			<div class="form-group">
+			<label>Start From</label>
+				<input   name="start_date_from" class="form-control form-date" >
 			</div>
-		</div>
-		<div class="form-group">
-			<label>End From - To</label>
-			<div class="input-group">
-				<input   name="end_ate_from" class="form-control form-date" style="width: 50%">
-				<input  name="end_date_to" class="form-control form-date" style="width:50%">
 			</div>
+		<div class="col-md-3">
+		<div class="form-group">
+		
+		<label>Start To</label>
+				<input   name="start_date_to" class="form-control form-date" >
 		</div>
-	</div>
-	<div class="col-sm-3">
+		</div>
+		<div class="col-md-3">
+		<div class="form-group">
+			<label>End From </label>
+				<input   name="end_ate_from" class="form-control form-date" >
+		</div>
+		</div>
+		<div class="col-md-3">
+		<div class="form-group">
+		<label>End To</label>
+				<input  name="end_date_to" class="form-control form-date" >
+		</div>
+		</div>
+        </div>
+
+	<div class="col-md-3" id="rolefilter" style="<?php if(!in_array('role',$variable)){echo'display:none';} ?>">
 		<div class="form-group">
 			<label>For Role</label>
 			<select class="form-control" name="role_for">
@@ -70,11 +127,10 @@ var Ignore = new Array();
 				?>
 			</select>
 		</div>
-		<div class="form-group"><br>
-			<label><input type="checkbox" name="graph" value="1"> Goal Analytics</label>
-		</div>
+		
 	</div>
-	<div class="col-sm-3">
+	
+	<div class="col-md-3" id="userfilter" style="<?php if(!in_array('user',$variable)){echo'display:none';} ?>">
 		<div class="form-group">
 			<label>For User &nbsp;<small><input type="checkbox" name="fetch_type" value="1" checked> Hierarchy wise</small></label>
 			<select class="form-control" name="user_for">
@@ -91,7 +147,7 @@ var Ignore = new Array();
 			</select>
 		</div>
 	</div>
-	<div class="col-sm-2">
+	<div class="col-md-3" id="matricfilter" style="<?php if(!in_array('matric',$variable)){echo'display:none';} ?>">
 		<div class="form-group">
 			<label>Metric</label>
 			<select class="form-control" name="metric_type">
@@ -101,8 +157,78 @@ var Ignore = new Array();
 			</select>
 		</div>
 	</div>
+	<div class="col-md-3" id="goalfilter" style="<?php if(!in_array('goals',$variable)){echo'display:none';} ?>">
+	<div class="form-group" ><br>
+			<label><input type="checkbox" name="graph" value="1"> Goal Analytics</label>
+		</div>
+		</div>
 </form>
 </div>
+<script>
+  $(document).ready(function(){
+	 $("#save_advance_filters").on('click',function(e){
+	  e.preventDefault();
+	  var arr = Array();  
+	  $("input[name='filter_checkbox']:checked").each(function(){
+		arr.push($(this).val());
+	  });        
+	  setCookie('goal_filter_setting',arr,365);      
+	  // alert('Your custom filters saved successfully.');
+	  Swal.fire({
+	position: 'top-end',
+	icon: 'success',
+	title: 'Your custom filters saved successfully.',
+	showConfirmButton: false,
+	timer: 1000
+  });
+	});
+
+
+});
+$('input[name="filter_checkbox"]').click(function(){  
+  if($('#datecheckbox').is(":checked")||$('#rolecheckbox').is(":checked")||$('#usercheckbox').is(":checked")||
+  $('#golecheckbox').is(":checked")||$('#matriccheckbox').is(":checked")){ 
+    $('#filter_pannel').show();
+  }else{
+    $('#filter_pannel').hide();
+  }
+});
+$('input[name="filter_checkbox"]').click(function(){              
+        if($('#datecheckbox').is(":checked")){
+         $('#datefilter').show();
+        }
+        else{
+           $('#datefilter').hide();
+             }
+      
+		if($('#rolecheckbox').is(":checked")){
+        $('#rolefilter').show();
+            }
+        else{
+          $('#rolefilter').hide();
+		}
+		if($('#matriccheckbox').is(":checked")){
+        $('#matricfilter').show();
+            }
+        else{
+          $('#matricfilter').hide();
+		}
+		if($('#usercheckbox').is(":checked")){
+        $('#userfilter').show();
+            }
+        else{
+          $('#userfilter').hide();
+		}
+		if($('#goalcheckbox').is(":checked")){
+        $('#goalfilter').show();
+            }
+        else{
+          $('#goalfilter').hide();
+		}
+});
+		
+
+</script>
 <div class="panel">
 	<div class="panel-body" id="goal_graph">
 		<div class="row">

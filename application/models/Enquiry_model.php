@@ -607,7 +607,9 @@ class Enquiry_model extends CI_Model {
         $this->db->where_in('product_id',$process);
 
     	if($where)
-    		$this->db->where($where);
+            $this->db->where($where);
+            
+
     	$this->db->where('comp_id',$this->session->companey_id);
     	return $this->db->get('enquiry');
     }
@@ -2917,9 +2919,40 @@ $cpny_id=$this->session->companey_id;
     {	
     	$all_reporting_ids    =   $this->common_model->get_categories($userid);
         $cpny_id=$companyid;
-    	$where = "( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
-    	$where .= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';
-        $where.=" AND enquiry.comp_id=$cpny_id";
+    	// $where = "( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
+    	// $where .= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';
+        // $where.=" AND enquiry.comp_id=$cpny_id";
+
+        $where="enquiry.comp_id=$cpny_id";
+        if($_POST){
+            $filter=json_decode($_POST['datas']);
+            if(!empty($filter->from_date) AND !empty($filter->to_date)){
+                $from_date=$filter->from_date;
+                $to_date=$filter->to_date;
+                $where.=" AND enquiry.created_date >= $to_date";
+                $where.=" AND enquiry.created_date <=$to_date";
+                
+            }
+            if(!empty($filter->users)){
+                $users=$filter->users;
+                 $where.=" AND enquiry.created_by=$users";
+                 $where.=" OR enquiry.aasign_to=$users";
+            }else{
+                $where.= " AND ( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
+                $where.= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';
+            }
+            if(!empty($filter->state_id)){
+                $state_id=$filter->state_id;
+                     $where.=" AND enquiry.state_id=$state_id";
+                                        }
+            if(!empty($filter->city_id)){
+                $city_id=$filter->city_id;
+                $where.=" AND enquiry.city_id=$city_id";
+               }
+        }else{
+            $where.= " AND ( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
+            $where.= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';
+        }
         $arr = $this->session->process;           
         if(is_array($arr)){
             $where.=" AND enquiry.product_id IN (".implode(',', $arr).')';
@@ -2949,10 +2982,46 @@ $cpny_id=$this->session->companey_id;
     {	
     	$all_reporting_ids    =   $this->common_model->get_categories($userid);
         $cpny_id=$companyid;
-    	$where = "( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
-    	$where .= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';
-        $where.=" AND enquiry.comp_id=$cpny_id";
-        
+    	// $where = "( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
+    	// $where .= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';
+        // $where.=" AND enquiry.comp_id=$cpny_id";
+        $where="enquiry.comp_id=$cpny_id";
+        if($_POST){
+            // $filter=json_encode(array(
+            //     'from_date'=>$_POST['from_date'],
+            //     'to_date'=>$_POST['to_date'],
+            //     'users'=>$_POST['users'],
+            //     'state_id'=>$_POST['state_id'],
+            //     'city_id'=>$_POST['city_id'],
+            //                   ));
+            if(!empty($_POST['from_date']) AND !empty($_POST['to_date'])){
+                $from_date=$_POST['from_date'];
+                $to_date=$_POST['to_date'];
+                $where.=" AND enquiry.created_date >= $from_date";
+                $where.=" AND enquiry.created_date <=$to_date";
+                
+            }
+            if(!empty($_POST['users'])){
+                $users=$_POST['users'];
+                 $where.=" AND enquiry.created_by=$users";
+                 $where.=" OR enquiry.aasign_to=$users";
+            }else{
+                $where.= " AND ( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
+                $where.= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';
+            }
+            if(!empty($_POST['state_id'])){
+                $state_id=$_POST['state_id'];
+                     $where.=" AND enquiry.state_id=$state_id";
+                                        }
+            if(!empty($_POST['city_id'])){
+                $city_id=$_POST['city_id'];
+                $where.=" AND enquiry.city_id=$city_id";
+               }
+        }else{
+            $where.= " AND ( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
+            $where.= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';
+        }
+
         $arr = $this->session->process;           
         if(is_array($arr)){
             $where.=" AND enquiry.product_id IN (".implode(',', $arr).')';
@@ -3084,9 +3153,45 @@ $cpny_id=$this->session->companey_id;
     {	
     	$all_reporting_ids    =   $this->common_model->get_categories($userid);
         $cpny_id=$companyid;
-    	$where = "( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
-    	$where .= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';
-        $where.=" AND enquiry.comp_id=$cpny_id";
+    	// $where = "( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
+    	// $where .= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';
+        // $where.=" AND enquiry.comp_id=$cpny_id";
+        $where="enquiry.comp_id=$cpny_id";
+        if($_POST){
+            // $filter=json_encode(array(
+            //     'from_date'=>$_POST['from_date'],
+            //     'to_date'=>$_POST['to_date'],
+            //     'users'=>$_POST['users'],
+            //     'state_id'=>$_POST['state_id'],
+            //     'city_id'=>$_POST['city_id'],
+            //                   ));
+            if(!empty($_POST['from_date']) AND !empty($_POST['to_date'])){
+                $from_date=$_POST['from_date'];
+                $to_date=$_POST['to_date'];
+                $where.=" AND enquiry.created_date >= $from_date";
+                $where.=" AND enquiry.created_date <=$to_date";
+                
+            }
+            if(!empty($_POST['users'])){
+                $users=$_POST['users'];
+                 $where.=" AND enquiry.created_by=$users";
+                 $where.=" OR enquiry.aasign_to=$users";
+            }else{
+                $where.= " AND ( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
+                $where.= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';
+            }
+            if(!empty($_POST['state_id'])){
+                $state_id=$_POST['state_id'];
+                     $where.=" AND enquiry.state_id=$state_id";
+                                        }
+            if(!empty($_POST['city_id'])){
+                $city_id=$_POST['city_id'];
+                $where.=" AND enquiry.city_id=$city_id";
+               }
+        }else{
+            $where.= " AND ( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
+            $where.= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';
+        }
         $arr = $this->session->process;           
         if(is_array($arr)){
             $where.=" AND enquiry.product_id IN (".implode(',', $arr).')';
@@ -3178,9 +3283,42 @@ $cpny_id=$this->session->companey_id;
     	$all_reporting_ids    =   $this->common_model->get_categories($userid);
         $cpny_id=$companyid;
     	
-    	$where = "( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
-    	$where .= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';        
-        $where.=" AND enquiry.comp_id=$cpny_id";
+    	// $where = "( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
+    	// $where .= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';        
+        // $where.=" AND enquiry.comp_id=$cpny_id";
+
+
+        $where="enquiry.comp_id=$cpny_id";
+        if($_POST){
+            $filter=json_decode($_POST['datas']);
+            if(!empty($filter->from_date) AND !empty($filter->to_date)){
+                $from_date=$filter->from_date;
+                $to_date=$filter->to_date;
+                $where.=" AND enquiry.created_date >= $from_date";
+                $where.=" AND enquiry.created_date <=$to_date";
+                
+            }
+            if(!empty($filter->users)){
+                $users=$filter->users;
+                 $where.=" AND enquiry.created_by=$users";
+                 $where.=" OR enquiry.aasign_to=$users";
+            }else{
+                $where.= " AND ( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
+                $where.= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';
+            }
+            if(!empty($filter->state_id)){
+                $state_id=$filter->state_id;
+                     $where.=" AND enquiry.state_id=$state_id";
+                                        }
+            if(!empty($filter->city_id)){
+                $city_id=$filter->city_id;
+                $where.=" AND enquiry.city_id=$city_id";
+               }
+        }else{
+            $where.= " AND ( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
+            $where.= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';
+        }
+        
         $arr = $this->session->process;           
         if(is_array($arr)){
             $where.=" AND enquiry.product_id IN (".implode(',', $arr).')';
@@ -3215,14 +3353,51 @@ $cpny_id=$this->session->companey_id;
     	$all_reporting_ids    =   $this->common_model->get_categories($userid);
         $cpny_id=$companyid;
     	
-    	$where = "( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
-    	$where .= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';        
-        $where.=" AND enquiry.comp_id=$cpny_id";
+    	// $where = "( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
+    	// $where .= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';        
+        // $where.=" AND enquiry.comp_id=$cpny_id";
+
+        $where="enquiry.comp_id=$cpny_id";
+        if($_POST){
+            // $filter=json_encode(array(
+            //     'from_date'=>$_POST['from_date'],
+            //     'to_date'=>$_POST['to_date'],
+            //     'users'=>$_POST['users'],
+            //     'state_id'=>$_POST['state_id'],
+            //     'city_id'=>$_POST['city_id'],
+            //                   ));
+            if(!empty($_POST['from_date']) AND !empty($_POST['to_date'])){
+                $from_date=$_POST['from_date'];
+                $to_date=$_POST['to_date'];
+                $where.=" AND enquiry.created_date >= $from_date";
+                $where.=" AND enquiry.created_date <=$to_date";
+                
+            }
+            if(!empty($_POST['users'])){
+                $users=$_POST['users'];
+                 $where.=" AND enquiry.created_by=$users";
+                 $where.=" OR enquiry.aasign_to=$users";
+            }else{
+                $where.= " AND ( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
+                $where.= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';
+            }
+            if(!empty($_POST['state_id'])){
+                $state_id=$_POST['state_id'];
+                     $where.=" AND enquiry.state_id=$state_id";
+                                        }
+            if(!empty($_POST['city_id'])){
+                $city_id=$_POST['city_id'];
+                $where.=" AND enquiry.city_id=$city_id";
+               }
+        }else{
+            $where.= " AND ( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
+            $where.= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';
+        }
 
         $enqAyr = array(); 
        
       
-    	$despenqqry = $this->db->query("SELECT (SELECT COUNT(enquiry_id) FROM enquiry WHERE $where AND enquiry.lead_stage =  lead_stage.stg_id AND enquiry.status = $status)counternow FROM lead_stage WHERE lead_stage.comp_id = $cpny_id");
+    	$despenqqry = $this->db->query("SELECT (SELECT COUNT(enquiry_id) FROM enquiry WHERE $where AND enquiry.lead_stage =  lead_stage.stg_id AND enquiry.status = $status)counternow FROM lead_stage WHERE  lead_stage.comp_id = $cpny_id");
 
         $despenq = $despenqqry->result_array();
 
@@ -3238,10 +3413,44 @@ $cpny_id=$this->session->companey_id;
 
     	$all_reporting_ids    =   $this->common_model->get_categories($userid);
         $cpny_id=$companyid;
-    	$where = "( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
-    	$where .= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';
-        $where.=" AND enquiry.comp_id=$cpny_id";
-
+    	// $where = "( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
+    	// $where .= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';
+        $where="enquiry.comp_id=$cpny_id";
+        if($_POST){
+            // $filter=json_encode(array(
+            //     'from_date'=>$_POST['from_date'],
+            //     'to_date'=>$_POST['to_date'],
+            //     'users'=>$_POST['users'],
+            //     'state_id'=>$_POST['state_id'],
+            //     'city_id'=>$_POST['city_id'],
+            // 
+        if(!empty($_POST['from_date']) AND !empty($_POST['to_date'])){
+            $from_date=$_POST['from_date'];
+            $to_date=$_POST['to_date'];
+            $where.=" AND enquiry.created_date >= $from_date";
+            $where.=" AND enquiry.created_date <=$to_date";
+            
+        }
+        if(!empty($_POST['users'])){
+            $users=$_POST['users'];
+             $where.=" AND enquiry.created_by=$users";
+             $where.=" OR enquiry.aasign_to=$users";
+        }else{
+            $where.= " AND ( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
+            $where.= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';
+        }
+        if(!empty($_POST['state_id'])){
+            $state_id=$_POST['state_id'];
+                 $where.=" AND enquiry.state_id=$state_id";
+                                    }
+        if(!empty($_POST['city_id'])){
+            $city_id=$_POST['city_id'];
+            $where.=" AND enquiry.city_id=$city_id";
+           }
+    }else{
+        $where.= " AND ( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
+        $where.= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';
+    }
         $arr = $this->session->process;           
         if(is_array($arr)){
             $where.=" AND enquiry.product_id IN (".implode(',', $arr).')';
@@ -3276,9 +3485,45 @@ $cpny_id=$this->session->companey_id;
 
     	$all_reporting_ids    =   $this->common_model->get_categories($userid);
         $cpny_id=$companyid;
-    	$where = "( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
-    	$where .= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';
-        $where.=" AND enquiry.comp_id=$cpny_id";
+    	// $where = "( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
+    	// $where .= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';
+        // $where.=" AND enquiry.comp_id=$cpny_id";
+        $where="enquiry.comp_id=$cpny_id";
+        if($_POST){
+            // $filter=json_encode(array(
+            //     'from_date'=>$_POST['from_date'],
+            //     'to_date'=>$_POST['to_date'],
+            //     'users'=>$_POST['users'],
+            //     'state_id'=>$_POST['state_id'],
+            //     'city_id'=>$_POST['city_id'],
+            //                   ));
+            if(!empty($_POST['from_date']) AND !empty($_POST['to_date'])){
+                $from_date=$_POST['from_date'];
+                $to_date=$_POST['to_date'];
+                $where.=" AND enquiry.created_date >= $to_date";
+                $where.=" AND enquiry.created_date <=$to_date";
+                
+            }
+            if(!empty($_POST['users'])){
+                $users=$_POST['users'];
+                 $where.=" AND enquiry.created_by=$users";
+                 $where.=" OR enquiry.aasign_to=$users";
+            }else{
+                $where.= " AND ( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
+                $where.= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';
+            }
+            if(!empty($_POST['state_id'])){
+                $state_id=$_POST['state_id'];
+                     $where.=" AND enquiry.state_id=$state_id";
+                                        }
+            if(!empty($_POST['city_id'])){
+                $city_id=$_POST['city_id'];
+                $where.=" AND enquiry.city_id=$city_id";
+               }
+        }else{
+            $where.= " AND ( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
+            $where.= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';
+        }
 
         $enqAyr = array(); 
         
@@ -3296,9 +3541,40 @@ $cpny_id=$this->session->companey_id;
     {	
     	$all_reporting_ids    =   $this->common_model->get_categories($userid);
         $cpny_id=$companyid;
-    	$where = "( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
-    	$where .= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';
-        $where.=" AND enquiry.comp_id=$cpny_id";
+
+    	// $where = "( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
+    	// $where .= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';
+        $where="enquiry.comp_id=$cpny_id";
+        if($_POST){
+            $filter=json_decode($_POST['datas']);
+            if(!empty($filter->from_date) AND !empty($filter->to_date)){
+                $from_date=$filter->from_date;
+                $to_date=$filter->to_date;
+                $where.=" AND enquiry.created_date >= $from_date";
+                $where.=" AND enquiry.created_date <=$to_date";
+                
+            }
+            if(!empty($filter->users)){
+                $users=$filter->users;
+                 $where.=" AND enquiry.created_by=$users";
+                 $where.=" OR enquiry.aasign_to=$users";
+            }else{
+                $where.= " AND ( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
+                $where.= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';
+            }
+            if(!empty($filter->state_id)){
+                $state_id=$filter->state_id;
+                     $where.=" AND enquiry.state_id=$state_id";
+                                        }
+            if(!empty($filter->city_id)){
+                $city_id=$filter->city_id;
+                $where.=" AND enquiry.city_id=$city_id";
+               }
+        }else{
+            $where.= " AND ( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
+            $where.= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';
+        }
+        
         $arr = $this->session->process;           
         if(is_array($arr)){
             $where.=" AND enquiry.product_id IN (".implode(',', $arr).')';
@@ -3489,9 +3765,42 @@ $cpny_id=$this->session->companey_id;
     {	
     	$all_reporting_ids    =   $this->common_model->get_categories($userid);
         $cpny_id=$companyid;
-    	$where = "( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
-    	$where .= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';
-        $where.=" AND enquiry.comp_id=$cpny_id";
+    	$where="enquiry.comp_id=$cpny_id";
+        if($_POST){
+            // $filter=json_encode(array(
+            //     'from_date'=>$_POST['from_date'],
+            //     'to_date'=>$_POST['to_date'],
+            //     'users'=>$_POST['users'],
+            //     'state_id'=>$_POST['state_id'],
+            //     'city_id'=>$_POST['city_id'],
+            //                   ));
+            if(!empty($_POST['from_date']) AND !empty($_POST['to_date'])){
+                $from_date=$_POST['from_date'];
+                $to_date=$_POST['to_date'];
+                $where.=" AND enquiry.created_date >= $from_date";
+                $where.=" AND enquiry.created_date <=$to_date";
+                
+            }
+            if(!empty($_POST['users'])){
+                $users=$_POST['users'];
+                 $where.=" AND enquiry.created_by=$users";
+                 $where.=" OR enquiry.aasign_to=$users";
+            }else{
+                $where.= " AND ( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
+                $where.= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';
+            }
+            if(!empty($_POST['state_id'])){
+                $state_id=$_POST['state_id'];
+                     $where.=" AND enquiry.state_id=$state_id";
+                                        }
+            if(!empty($_POST['city_id'])){
+                $city_id=$_POST['city_id'];
+                $where.=" AND enquiry.city_id=$city_id";
+               }
+        }else{
+            $where.= " AND ( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
+            $where.= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';
+        }
         $ejan = $ljan = $cjan = $efeb = $lfeb = $cfeb = $emar = $lmar = $cmar = $eapr = $lapr = $capr = $emay = $lmay = $cmay = $ejun = $ljun = $cjun = $ejuly = $ljuly = $cjuly = $eaug = $laug = $caug = $esep = $lsep = $csep = $eoct = $loct = $coct = $enov = $lnov = $cnov = $edec = $ldec = $cdec = 0;
 
         $query8 = $this->db->query("SELECT count(enquiry_id) counter,month(DATE(created_date)) month  FROM `enquiry` WHERE $where AND status = $status GROUP BY month(DATE(created_date))");
@@ -3565,9 +3874,38 @@ $cpny_id=$this->session->companey_id;
     {	
     	$all_reporting_ids    =   $this->common_model->get_categories($userid);
         $cpny_id=$companyid;
-    	$where = "( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
-    	$where .= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';
-        $where.=" AND enquiry.comp_id=$cpny_id";
+    	// $where = "( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
+    	// $where .= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';
+        $where="enquiry.comp_id=$cpny_id";
+        if($_POST){
+            $filter=json_decode($_POST['datas']);
+            if(!empty($filter->from_date) AND !empty($filter->to_date)){
+                $from_date=$filter->from_date;
+                $to_date=$filter->to_date;
+                $where.=" AND enquiry.created_date >= $from_date";
+                $where.=" AND enquiry.created_date <=$to_date";
+                
+            }
+            if(!empty($filter->users)){
+                $users=$filter->users;
+                 $where.=" AND enquiry.created_by=$users";
+                 $where.=" OR enquiry.aasign_to=$users";
+            }else{
+                $where.= " AND ( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
+                $where.= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';
+            }
+            if(!empty($filter->state_id)){
+                $state_id=$filter->state_id;
+                     $where.=" AND enquiry.state_id=$state_id";
+                                        }
+            if(!empty($filter->city_id)){
+                $city_id=$filter->city_id;
+                $where.=" AND enquiry.city_id=$city_id";
+               }
+        }else{
+            $where.= " AND ( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
+            $where.= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';
+        }
         
         $arr = $this->session->process;           
         if(is_array($arr)){
@@ -3597,9 +3935,40 @@ $cpny_id=$this->session->companey_id;
         // not in use
     	$all_reporting_ids    =   $this->common_model->get_categories($userid);
         $cpny_id=$companyid;
-    	$where = "( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
-    	$where .= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';
-        $where.=" AND enquiry.comp_id=$cpny_id";
+    	// $where = "( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
+        // $where .= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';
+        $where="enquiry.comp_id=$cpny_id";
+        if($_POST){
+            $filter=json_decode($_POST['datas']);
+            if(!empty($filter->from_date) AND !empty($filter->to_date)){
+                $from_date=$filter->from_date;
+                $to_date=$filter->to_date;
+                $where.=" AND enquiry.created_date >= $from_date";
+                $where.=" AND enquiry.created_date <=$to_date";
+                
+            }
+            if(!empty($filter->users)){
+                $users=$filter->users;
+                 $where.=" AND enquiry.created_by=$users";
+                 $where.=" OR enquiry.aasign_to=$users";
+            }else{
+                $where.= " AND ( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
+                $where.= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';
+            }
+            if(!empty($filter->state_id)){
+                $state_id=$filter->state_id;
+                     $where.=" AND enquiry.state_id=$state_id";
+                                        }
+            if(!empty($filter->city_id)){
+                $city_id=$filter->city_id;
+                $where.=" AND enquiry.city_id=$city_id";
+               }
+        }else{
+            $where.= " AND ( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
+            $where.= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';
+        }
+        
+
         $arr = $this->session->process;           
         if(is_array($arr)){
             $where.=" AND enquiry.product_id IN (".implode(',', $arr).')';
@@ -3630,10 +3999,42 @@ $cpny_id=$this->session->companey_id;
     {	
     	$all_reporting_ids    =   $this->common_model->get_categories($userid);
         $cpny_id=$companyid;
-    	$where = "( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
-    	$where .= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';
-        $where.=" AND enquiry.comp_id=$cpny_id";
+    	// $where = "( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
+    	// $where .= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';
+        // $where.=" AND enquiry.comp_id=$cpny_id";
 
+
+        $where="enquiry.comp_id=$cpny_id";
+        if($_POST){
+            $filter=json_decode($_POST['datas']);
+            if(!empty($filter->from_date) AND !empty($filter->to_date)){
+                $from_date=$filter->from_date;
+                $to_date=$filter->to_date;
+                $where.=" AND enquiry.created_date >= $from_date";
+                $where.=" AND enquiry.created_date <=$to_date";
+                
+            }
+            if(!empty($filter->users)){
+                $users=$filter->users;
+                 $where.=" AND enquiry.created_by=$users";
+                 $where.=" OR enquiry.aasign_to=$users";
+            }else{
+                $where.= " AND ( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
+                $where.= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';
+            }
+            if(!empty($filter->state_id)){
+                $state_id=$filter->state_id;
+                     $where.=" AND enquiry.state_id=$state_id";
+                                        }
+            if(!empty($filter->city_id)){
+                $city_id=$filter->city_id;
+                $where.=" AND enquiry.city_id=$city_id";
+               }
+        }else{
+            $where.= " AND ( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
+            $where.= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';
+        }
+        
     	$enquiry_process = $this->db->query("SELECT count(enquiry.enquiry_id)counter,tp.product_name,tp.sb_id FROM tbl_product as tp  LEFT JOIN enquiry ON tp.sb_id = enquiry.product_id WHERE $where AND enquiry.status = 1 AND tp.sb_id In ($process) GROUP BY tp.sb_id");
         $enquiry_processWise = $enquiry_process->result_array();
         $arr1 =$arr2 = $arr3 = array();
@@ -3712,22 +4113,60 @@ $cpny_id=$this->session->companey_id;
     {	
     	$all_reporting_ids    =   $this->common_model->get_categories($userid);
         $cpny_id=$companyid;
-    	$where = "( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
-    	$where .= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';
-        $where.=" AND enquiry.comp_id=$cpny_id";
         $arr = $this->session->process;           
         if(is_array($arr)){
-            $where.=" AND enquiry.product_id IN (".implode(',', $arr).')';
-        } 
+            $where="enquiry.product_id IN (".implode(',', $arr).')';
+           $querys = $this->db->where($where);
 
-    	$query = $this->db->query("SELECT count(enquiry.enquiry_id)counter,enquiry.status FROM enquiry WHERE $where GROUP BY enquiry.status");
-        $result = $query->result();
+        } 
+        $querys = $this->db->where("enquiry.comp_id",$cpny_id);
+        if($_POST){
+        $filter=json_decode($_POST['datas']);
+
+        if(!empty($filter->from_date) AND !empty($filter->to_date)){
+            $from_date=$filter->from_date;
+            $to_date=$filter->to_date;
+            $querys = $this->db->where('enquiry.created_date >=', $from_date);
+            $querys = $this->db->where('enquiry.created_date <=', $to_date);
+        }
+        
+        if(!empty($filter->users)){
+            $users=$filter->users;
+            $querys = $this->db->where("enquiry.created_by",$users);
+            $querys = $this->db->or_where("enquiry.aasign_to",$users);
+           
+        }else{
+            $where.= " AND ( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
+            $where.= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';
+            $querys = $this->db->where($where);
+            
+        }
+        if(!empty($filter->state_id)){
+            $state_id=$filter->state_id;
+            $querys = $this->db->where("enquiry.state_id",$state_id);
+
+
+        }
+        if(!empty($filter->city_id)){
+            $city_id=$filter->city_id;
+            $querys = $this->db->where("enquiry.city_id",$city_id);
+
+        }
+    }else{
+        $where.= " AND ( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
+    	$where.= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';
+        $querys = $this->db->where($where);
+    }
+        $querys = $this->db->select("enquiry.created_date,enquiry.status,enquiry.aasign_to,enquiry.state_id,enquiry.city_id,enquiry.created_by,enquiry.product_id");
+        $querys =    $this->db->group_by("enquiry.status");
+        $querys =    $this->db->get('enquiry');
+                   $result = $querys->result();
         $enquiry =0;
         foreach($result as $r)
         { 
             if($r->status == $status)
             {
-                $enquiry = (!empty($r->counter)) ? $r->counter : 0;
+                $enquiry = (!empty($querys->num_rows())) ? $querys->num_rows() : 0;
             }
         }
        
