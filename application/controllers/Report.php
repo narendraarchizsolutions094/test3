@@ -728,7 +728,7 @@ class Report extends CI_Controller {
       $res = array();
 
       if(!empty($result)){
-        foreach($result[0] as $value){
+        foreach($result as $value){          
           if($value[0] == 1){            
             array_push($res,array(display('enquiry'),$value[1]));
           }else if($value[0] == 2){
