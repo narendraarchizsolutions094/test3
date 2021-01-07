@@ -726,14 +726,15 @@ class Report extends CI_Controller {
       $this->load->model('report_datatable_model');
       $result  = $this->report_datatable_model->report_analitics($for);      
       $res = array();
+
       if(!empty($result)){
-        foreach($result[0] as $key=>$value){
-          if($key == 1){            
-            array_push($res,array(display('enquiry'),$value));
-          }else if($key == 2){
-            array_push($res,array(display('lead'),$value));
-          }else if($key == 3){
-            array_push($res,array(display('client'),$value));
+        foreach($result[0] as $value){
+          if($value[0] == 1){            
+            array_push($res,array(display('enquiry'),$value[1]));
+          }else if($value[0] == 2){
+            array_push($res,array(display('lead'),$value[1]));
+          }else if($value[0] == 3){
+            array_push($res,array(display('Client'),$value[1]));
           }
         }
         $result = $res;
