@@ -718,27 +718,23 @@ class Report extends CI_Controller {
 
     public function report_analitics($for){
       $this->load->model('report_datatable_model');
-      $result  = $this->report_datatable_model->report_analitics($for);
-      if($for == 'user_chart' || $for == 'status_chart'){
-        $result = array(array('Bananas',8),array('Kiwi', 3),array('Mixed nuts', 1),array('Oranges', 6),array('Apples', 8),array('Pears', 4));
-        
-      }
+      $result  = $this->report_datatable_model->report_analitics($for);      
       echo json_encode($result);      
     }
     
     public function report_analitics_pipeline($for){
       $this->load->model('report_datatable_model');
-      $result  = $this->report_datatable_model->report_analitics($for);
-      print_r($result);
+      $result  = $this->report_datatable_model->report_analitics($for);      
       $res = array();
+
       if(!empty($result)){
-        foreach($result[0] as $key=>$value){
-          if($key == 1){            
-            array_push($res,array(display('enquiry'),$value));
-          }else if($key == 2){
-            array_push($res,array(display('lead'),$value));
-          }else if($key == 3){
-            array_push($res,array(display('client'),$value));
+        foreach($result as $value){          
+          if($value[0] == 1){            
+            array_push($res,array(display('enquiry'),$value[1]));
+          }else if($value[0] == 2){
+            array_push($res,array(display('lead'),$value[1]));
+          }else if($value[0] == 3){
+            array_push($res,array(display('Client'),$value[1]));
           }
         }
         $result = $res;
