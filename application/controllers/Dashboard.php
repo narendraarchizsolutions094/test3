@@ -800,7 +800,7 @@ public function login_in_process(){
         $data['lead_score'] = $this->db->query('select * from lead_score limit 3')->result();
         // $data['content'] = $this->load->view('msg-log-dashboard-enquiry', $data, true);
         
-       print_r($data['filterData']);
+    //    print_r($data['filterData']);
     //    exit;
         $data['content'] = $this->load->view('home', $data, true);	     
         $this->load->view('layout/main_wrapper', $data);
