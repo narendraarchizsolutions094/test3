@@ -718,11 +718,7 @@ class Report extends CI_Controller {
 
     public function report_analitics($for){
       $this->load->model('report_datatable_model');
-      $result  = $this->report_datatable_model->report_analitics($for);
-      if($for == 'user_chart' || $for == 'status_chart'){
-        $result = array(array('Bananas',8),array('Kiwi', 3),array('Mixed nuts', 1),array('Oranges', 6),array('Apples', 8),array('Pears', 4));
-        
-      }
+      $result  = $this->report_datatable_model->report_analitics($for);      
       echo json_encode($result);      
     }
     
