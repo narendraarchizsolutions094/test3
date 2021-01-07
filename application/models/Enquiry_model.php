@@ -2856,8 +2856,8 @@ $cpny_id=$this->session->companey_id;
 
       $client_dropWise = $client_drop->result();
 
-      $enq_count = $this->dashboard_model->countLead(2,$companyid);
-      $enq_Sum = $this->dashboard_model->dataLead(2,$companyid);
+      $enq_count = $this->dashboard_model->countLead_api(2,$companyid);
+      $enq_Sum = $this->dashboard_model->dataLead_api(2,$companyid);
 
       $enqTime=$enq_Sum->row()->time;
       if ($enqTime!=0)
@@ -2867,8 +2867,8 @@ $cpny_id=$this->session->companey_id;
       else 
         $enq_value = 0;
 
-      $lead_count = $this->dashboard_model->countLead(3,$companyid);
-      $lead_Sum = $this->dashboard_model->dataLead(3,$companyid);
+      $lead_count = $this->dashboard_model->countLead_api(3,$companyid);
+      $lead_Sum = $this->dashboard_model->dataLead_api(3,$companyid);
 
       $leadTime=$lead_Sum->row()->time;
       if ($leadTime!=0)
@@ -2896,8 +2896,8 @@ $cpny_id=$this->session->companey_id;
         foreach ($enquiry_separation as $key => $value) 
         {
                   $ctitle = $enquiry_separation[$key]['title']; 
-                  $Count=$this->dashboard_model->countLead($key,$companyid);
-                  $sum=$this->dashboard_model->dataLead($key,$companyid);
+                  $Count=$this->dashboard_model->countLead_api($key,$companyid);
+                  $sum=$this->dashboard_model->dataLead_api($key,$companyid);
                   $stime= $sum->row()->time;
 
                   if($stime!=0)
