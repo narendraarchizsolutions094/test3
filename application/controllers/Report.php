@@ -725,5 +725,24 @@ class Report extends CI_Controller {
       }
       echo json_encode($result);      
     }
+    
+    public function report_analitics_pipeline($for){
+      $this->load->model('report_datatable_model');
+      $result  = $this->report_datatable_model->report_analitics($for);
+      $res = array();
+      if(!empty($result)){
+        foreach($result as $key=>$value){
+          if($key == 1){
+            $res[] = array(display('enquiry'),$value);
+          }else if($key == 2){
+            $res[] = array(display('lead'),$value);
+          }else if($key == 3){
+            $res[] = array(display('client'),$value);
+          }
+        }
+        $result = $res;
+      }      
+      echo json_encode($result);      
+    }
 
 }

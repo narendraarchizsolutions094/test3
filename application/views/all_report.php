@@ -526,7 +526,7 @@ $enquiry_separation = json_decode($enquiry_separation, true);
     }
 
 function funnel_chart(elm,title){
-    var url = "<?=base_url().'report/report_analitics/'?>"+elm;
+    var url = "<?=base_url().'report/report_analitics_pipeline/'?>"+elm;
         $.ajax({
             url: url,
             type: 'POST',                    
