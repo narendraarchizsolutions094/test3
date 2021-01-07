@@ -226,12 +226,12 @@ class Enquiry_model extends CI_Model {
           {
             $ary =array(
                       array(
-                            'key'=>'inputtype['.$value['input_id'].']',
-                            'value' =>'8',
-                          ),
-                      array(
                             'key'=>$value['input_id'].'[]',
                             'value' =>'',
+                          ),
+                      array(
+                            'key'=>'inputtype['.$value['input_id'].']',
+                            'value' =>'8',
                           ),
             );
                    
@@ -602,6 +602,10 @@ class Enquiry_model extends CI_Model {
 
     public function getEnquiry($where=0)
     {
+      
+      $process = $this->session->userdata('process');
+        $this->db->where_in('product_id',$process);
+
     	if($where)
     		$this->db->where($where);
     	$this->db->where('comp_id',$this->session->companey_id);

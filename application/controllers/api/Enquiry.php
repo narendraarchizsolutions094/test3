@@ -390,13 +390,14 @@ class Enquiry extends REST_Controller {
           {
             $ary =array(
                       array(
-                            'key'=>'inputtype['.$value['input_id'].']',
-                            'value' =>'8',
-                          ),
-                      array(
                             'key'=>$value['input_id'].'[]',
                             'value' =>'',
                           ),
+                      array(
+                            'key'=>'inputtype['.$value['input_id'].']',
+                            'value' =>'8',
+                          ),
+                      
             );
                    
           }

@@ -189,7 +189,7 @@ echo'<div class="trackingDetails"></div>';
                             foreach($clients as $ind => $clt){
                               $n = $clt->company;
                               if(!empty($n)){
-                              ?><option value ="<?php echo $clt->enquiry_id ?>"><?php echo $n; ?> </option><?php
+                              ?><option value ="<?php echo $clt->enquiry_id ?>"><?php echo $n; ?> (<?= $clt->name ?>) </option><?php
                               }
                             }
                           } ?>
