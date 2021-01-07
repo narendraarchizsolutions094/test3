@@ -139,7 +139,7 @@
                             <label for="inputPassword4"><?php echo display("status"); ?></label>
                             <select data-placeholder="Begin typing a name to filter..." multiple
                                 class="form-control chosen-select" name="state[]" id="state"
-                                onchange="lead_fields(this)">
+                                >
 
                                 <option value="1"
                                     <?php if(!empty(set_value('state'))){ if (in_array('1',set_value('state'))) {echo 'selected';}}?>>
@@ -159,7 +159,7 @@ $enquiry_separation = json_decode($enquiry_separation, true);
             $ctitle = $enquiry_separation[$key]['title']; 
            
            ?>
-           <option <?php if(!empty(set_value('state'))){ if (in_array($key,set_value('state'))) {echo 'selected';}}?>><?= $ctitle ?></option>
+           <option value="<?=$key?>" <?php if(!empty(set_value('state'))){ if (in_array($key,set_value('state'))) {echo 'selected';}}?>><?= $ctitle ?></option>
         <?php }
         } ?>         
         </select>
