@@ -59,26 +59,26 @@
                             <label for="inputEmail4"><?php echo display("from_date"); ?></label>
                             <input  class="form-control form-dates" id="from-date"
                                 value="<?php if (!empty(set_value('from_exp'))) {echo set_value('from_exp');}?>"
-                                name="from_exp" style="padding-top:0px;">
+                                name="from_exp" style="padding-top:0px;" type="date">
                         </div>
                         <div class="form-group col-md-3">
                             <label for="inputPassword4"><?php echo display("to_date"); ?></label>
                             <input   class="form-control form-dates" id="to-date"
                                 value="<?php if (!empty(set_value('to_exp'))) {echo set_value('to_exp');}?>"
-                                name="to_exp" style="padding-top:0px;">
+                                name="to_exp" style="padding-top:0px;" type="date">
                         </div>
 
                         <div class="form-group col-md-3">
                             <label for="inputEmail4"><?php echo display("update_from_date"); ?></label>
                             <input  class="form-control form-dates" id="from-date"
                                 value="<?php if (!empty(set_value('updated_from_exp'))) {echo set_value('updated_from_exp');}?>"
-                                name="updated_from_exp" style="padding-top:0px;">
+                                name="updated_from_exp" style="padding-top:0px;" type="date">
                         </div>
                         <div class="form-group col-md-3">
                             <label for="inputPassword4"><?php echo display("update_to_date"); ?></label>
                             <input  class="form-control form-dates" id="to-date"
                                 value="<?php if (!empty(set_value('updated_to_exp'))) {echo set_value('updated_to_exp');}?>"
-                                name="updated_to_exp" style="padding-top:0px;">
+                                name="updated_to_exp" style="padding-top:0px;" type="date">
                         </div>
 
                         <div class="form-group col-md-3">

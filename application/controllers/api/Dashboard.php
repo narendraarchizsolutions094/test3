@@ -26,8 +26,6 @@ class Dashboard extends REST_Controller {
     }
     public function ticket_dashboard_post()
     {
-
-
         $user_id = $this->input->post('user_id');
         $company_id = $this->input->post('company_id');
         $process =  $this->input->post('process');//can be multiple

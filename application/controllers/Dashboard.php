@@ -803,6 +803,12 @@ public function login_in_process(){
         $data['content'] = $this->load->view('home', $data, true);	     
         $this->load->view('layout/main_wrapper', $data);
     }
+    public function master()
+    {
+      $data['title'] = 'Master';
+      $data['content'] = $this->load->view('main-master', $data, true);       
+        $this->load->view('layout/main_wrapper', $data);
+    }
     public function processWiseChart()
     {         
         $process_arr = $this->session->process;
