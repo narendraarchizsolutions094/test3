@@ -66,8 +66,82 @@
         <div style="float:right">           
         </div>
     </div>
+    </br>
+    <div class="row"  style="margin-top: 15px;">
+    <form method="POST" >
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                      <div class="form-row" style="padding: 10px;">
+	<div class="col-lg-2">
+        <div class="form-group">
+          <label>From</label>
+          <input class="d_filter form-control form-date" name="from_date" id="from_date" value="<?php if(!empty($_POST['from_date'])){ echo $this->input->post('from_date'); }?>">
+        
+        </div>
+    </div>
 
-    </br></br></br>
+      <div class="col-lg-2">
+        <div class="form-group">
+          <label>To</label>
+           <input  class="d_filter form-control form-date" name="to_date" value="<?php if(!empty($_POST['to_date'])){ echo $this->input->post('to_date'); }?>">
+        </div>
+      </div>
+
+    <div class="col-lg-2">
+        <div class="form-group">
+            <label>User</label>
+            <?php 
+        $all_reporting_ids    =   $this->common_model->get_categories($this->session->user_id);
+            $where = "pk_i_admin_id IN (".implode(',', $all_reporting_ids).")";
+               $users =$this->db->where($where)->get('tbl_admin');
+            ?>
+            <select name="users" class="form-control">
+                <?php   foreach ($users->result() as $key => $value) {  ?>
+                    <option value="<?= $value->pk_i_admin_id ?>"><?= $value->s_display_name ?></option>
+                <?php } ?>
+            </select>
+        </div>
+    </div>
+     <div class="col-lg-2">
+        <div class="form-group">
+
+        	<label>State</label>
+                        <label> <?php echo display("state"); ?> <i class="text-danger"></i></label>
+                        <select name="state_id" class="form-control" id="fstate">
+                           <option value="" >--Select--</option>
+                           <?php foreach($state_list as $state){?>
+                           <option  value="<?php echo $state->id ?>" <?php if(!empty($_POST['city_id'])){ if($_POST['state_id']==$state->id){echo'selected';} }?>><?php echo $state->state; ?></option>
+                           <?php } ?>
+                        </select>
+                     </div>
+                      </div>
+                      <div class=" col-lg-2">
+                          <div class="form-group">
+                        <label><?php echo display("city"); ?> <i class="text-danger"></i></label>
+                        <select name="city_id" class="form-control" id="fcity">
+                           <option value="" style="display:none;">--Select--</option>
+                            <?php if($_POST['city_id']){?>
+                                <?php foreach($city_list as $city){?>
+                           <option  value="<?php echo $city->id ?>" <?php if(!empty($_POST['city_id'])){if($_POST['city_id']==$city->id){echo'selected';} }?>><?php echo $city->city; ?></option>
+                           <?php } ?>
+                                
+                            <?php } ?>
+                        </select>
+                     </div>
+                     </div>
+                     <div class=" col-lg-2">
+                          <div class="form-group" style="padding:20px;">
+                         <button name="submit" type="submit" class="btn btn-primary" >Filter</button>
+                     </div>
+                     </div>
+                      </div>
+                      
+            </div>
+            
+        </div>
+        
+    </form>
+</div>
     <div class="content">
         <?php 
       
@@ -908,12 +982,13 @@ $enquiry_separation = json_decode($enquiry_separation, true);
             <!-- funnel chart Chart code start -->
             <script>
             $(document).ready(function() {
+                var data_s= '<?php  if(!empty($filterData)){ echo $filterData; } ?>';
+                // alert(data_s);
                 $.ajax({
                     url: "<?=base_url('Dashboard/enquiryLeadClientChart')?>",
                     type: "post",
+                    data:{datas:data_s},
                     dataType: "json",
-                    processData: false,
-                    contentType: false,
                     success: function(data) {
                         if (data.status == 'success') {
                             am4core.ready(function() {
@@ -957,12 +1032,14 @@ $enquiry_separation = json_decode($enquiry_separation, true);
             <!-- monthwise chart starts -->
             <script>
             $(document).ready(function() {
+                var data_s= '<?php  if(!empty($filterData)){ echo $filterData; } ?>';
+
+
                 $.ajax({
                     url: "<?=base_url('Dashboard/monthWiseChart')?>",
                     type: "post",
+                    data:{datas:data_s},
                     dataType: "json",
-                    processData: false,
-                    contentType: false,
                     success: function(data) {
                         if (data.status == 'success') {
                             new Chart(document.getElementById("bar-chart-grouped"), {
@@ -1073,12 +1150,14 @@ $enquiry_separation = json_decode($enquiry_separation, true);
             <!-- drop wise chart start here -->
             <script>
             $(document).ready(function() {
+                var data_s= '<?php  if(!empty($filterData)){ echo $filterData; } ?>';
+
+
                 $.ajax({
                     url: "<?=base_url('Dashboard/dropDataChart')?>",
                     type: "post",
+                    data:{datas:data_s},
                     dataType: "json",
-                    processData: false,
-                    contentType: false,
                     success: function(data) {
                         var data1 = [];
                         var data2 = [];
@@ -1179,12 +1258,14 @@ $enquiry_separation = json_decode($enquiry_separation, true);
             <!-- conversion probability chart starts-->
             <script>
             $(document).ready(function() {
+                var data_s= '<?php  if(!empty($filterData)){ echo $filterData; } ?>';
+
+
                 $.ajax({
                     url: "<?=base_url('Dashboard/conversionProbabilityChart')?>",
                     type: "post",
+                    data:{datas:data_s},
                     dataType: "json",
-                    processData: false,
-                    contentType: false,
                     success: function(res) {
                         am4core.ready(function() {
 
@@ -1224,12 +1305,14 @@ $enquiry_separation = json_decode($enquiry_separation, true);
 
             <script>
             $(document).ready(function(e) {
+                var data_s= '<?php  if(!empty($filterData)){ echo $filterData; } ?>';
+
+
                 $.ajax({
                     url: "<?=base_url('Dashboard/processWiseChart')?>",
                     type: "post",
+                    data:{datas:data_s},
                     dataType: "json",
-                    processData: false,
-                    contentType: false,
                     success: function(data) {
                         //response = JSON.parse(data);
 
@@ -1494,12 +1577,14 @@ $newDate = date("Y-m-d", strtotime($t_date));
             <!-- desposition graph start here -->
             <script>
             $(document).ready(function() {
+                var data_s= '<?php  if(!empty($filterData)){ echo $filterData; } ?>';
+
+
                 $.ajax({
                     url: "<?=base_url('Dashboard/despositionDataChart')?>",
                     type: "post",
+                    data:{datas:data_s},
                     dataType: "json",
-                    processData: false,
-                    contentType: false,
                     success: function(data) {
                         var data1 = [];
                         var data2 = [];
@@ -1581,12 +1666,13 @@ $newDate = date("Y-m-d", strtotime($t_date));
             <!-- source graph start here -->
             <script>
             $(document).ready(function() {
+                var data_s= '<?php  if(!empty($filterData)){ echo $filterData; } ?>';
                 $.ajax({
                     url: "<?=base_url('Dashboard/sourceDataChart')?>",
                     type: "post",
+                    data:{datas:data_s},
+
                     dataType: "json",
-                    processData: false,
-                    contentType: false,
                     success: function(data) {
                         var data1 = [];
                         var data2 = [];

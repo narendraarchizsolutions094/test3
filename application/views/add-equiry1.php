@@ -24,6 +24,9 @@
           <form method="post" action="<?= base_url() ?>enquiry/create" id="enquiry_form" autocomplete="off">
             <?php $process_id = $this->session->process[0]; ?>
             <input type="hidden" name="product_id" value="<?= $process_id ?>">
+            <input type="hidden" name="status" value="<?php  if(!empty($this->input->get('status'))){   $status=$this->input->get('status');  }else{  $status=1; }
+           echo $status;
+               ?>">
             <div id="process_basic_fields" class="row">
             </div>
             <div class="row">

@@ -740,6 +740,21 @@ public function login_in_process(){
 	
 	public function home() 
     {      
+        $data['filterData']=json_encode([]); 
+
+        if(!empty($_POST)){
+            
+            $data['filterData']=json_encode(array(
+                'from_date'=>$_POST['from_date'],
+                'to_date'=>$_POST['to_date'],
+                'users'=>$_POST['users'],
+                'state_id'=>$_POST['state_id'],
+                'city_id'=>$_POST['city_id'],
+                              ));
+                  }else{
+                     $data['filterData']=json_encode(array()); 
+                  }
+        // unset($_POST);
         if ($this->session->userdata('isLogIn') == false)
         redirect('login');
         if ($this->session->userdata('user_right') == 201 || $this->session->app_type == 'buyer') // lalantop user
@@ -751,6 +766,7 @@ public function login_in_process(){
         if(user_access('541') && !user_access('540')){
             redirect('ticket/dashboard');
         }
+       
         $data = array();
         $this->load->model('dash_model');
         if($this->session->userdata('user_right')==151 || $this->session->userdata('user_right')==180 || $this->session->userdata('user_right')==183)
@@ -770,17 +786,20 @@ public function login_in_process(){
             $data['taskdata'] = $this->dash_model->task_list();
             $data['cmtdata'] = $this->dash_model->all_comments();
         }
-
         //lead
         $data['leadCount']=$this->dashboard_model->countLead(2);
         $data['leadSum']=$this->dashboard_model->dataLead(2);
         //client
         $data['clientCount2']=$this->dashboard_model->countLead(3);
         $data['clientsum']=$this->dashboard_model->dataLead(3);
+        $data['state_list'] = $this->location_model->estate_list();
+        $data['city_list'] = $this->location_model->city_list();
 
         $data['enquiry_separation']  = get_sys_parameter('enquiry_separation', 'COMPANY_SETTING');
         $data['lead_score'] = $this->db->query('select * from lead_score limit 3')->result();
         // $data['content'] = $this->load->view('msg-log-dashboard-enquiry', $data, true);
+        
+    //    print_r($data['filterData']);
         $data['content'] = $this->load->view('home', $data, true);	     
         $this->load->view('layout/main_wrapper', $data);
     }

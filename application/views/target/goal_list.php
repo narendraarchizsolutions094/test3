@@ -29,18 +29,103 @@ var Ignore = new Array();
       }
           ?>  
         </div>
+		<div class="col-md-4" style="float: right;">
+		<div class="btn-group dropdown-filter">
+              <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Filter by <span class="caret"></span>
+              </button>              
+              <ul class="filter-dropdown-menu dropdown-menu">   
+                    <li>
+                      <label>
+                      <input type="checkbox" value="date" id="datecheckbox" name="filter_checkbox"> Date </label>
+                    </li>  
+                    <li>
+                      <label>
+                      <input type="checkbox" value="role" id="empcheckbox" name="filter_checkbox"> For Role</label>
+                    </li> 
+                    <li>
+                      <label>
+                      <input type="checkbox" value="user" id="usercheckbox" name="filter_checkbox"> For User</label>
+                    </li>                
+                    <li>
+                      <label>
+                      <input type="checkbox" value="matric" id="matriccheckbox" name="filter_checkbox">Matric</label>
+                    </li>                
+                   <li>
+                      <label>
+                      <input type="checkbox" value="goal" id="goalcheckbox" name="filter_checkbox"> Goal Analytics</label>
+                    </li> 
+                   
+                    <li class="text-center">
+                      <a href="javascript:void(0)" class="btn btn-sm btn-primary " id='save_advance_filters' title="Save Filters Settings"><i class="fa fa-save"></i></a>
+                    </li>                   
+                </ul>                
+            </div>
+
+		</div>
 </div>
-<div class="row" style="margin: 15px;">
+<script>
+  $(document).ready(function(){
+	 $("#save_advance_filters").on('click',function(e){
+	  e.preventDefault();
+	  var arr = Array();  
+	  $("input[name='filter_checkbox']:checked").each(function(){
+		arr.push($(this).val());
+	  });        
+	  setCookie('goal_filter_setting',arr,365);      
+	  // alert('Your custom filters saved successfully.');
+	  Swal.fire({
+	position: 'top-end',
+	icon: 'success',
+	title: 'Your custom filters saved successfully.',
+	showConfirmButton: false,
+	timer: 1000
+  });
+	});
+
+
+
+	var enq_filters  = getCookie('goal_filter_setting');
+if (enq_filters=='') {
+    $('#filter_pannel').hide();
+    $('#save_filterbutton').hide();
+
+}else{
+  $('#filter_pannel').show();
+  $('#save_filterbutton').show();
+
+}
+
+
+
+});
+  
+</script>
+
+<?php
+if(!isset($_COOKIE['goal_filter_setting'])) {
+  echo "Cookie named '" . $cookie_name . "' is not set!";
+} else {
+print_r(explode(',',$_COOKIE['goal_filter_setting']));
+$variable=explode(',',$_COOKIE['goal_filter_setting']);
+in_array('date',$variable);
+print_r(in_array('date1',$variable));
+foreach ($variable as $key => $value) {
+  print_r($value);
+}
+}
+?>
+<div class="row" style="margin: 15px; <?php if(empty($_COOKIE['goal_filter_setting'])){ echo'display:none'; }  ?>" id="filter_pannel">
 <form id="filter_form">
 	<div class="col-sm-4">
-		<div class="form-group">
+		<div class="form-group" id="fromdatefilter">
 			<label>Start From - To</label>
 			<div class="input-group">
 				<input   name="start_date_from" class="form-control form-date" style="width: 50%">
 				<input   name="start_date_to" class="form-control form-date" style="width:50%">
 			</div>
 		</div>
-		<div class="form-group">
+		<div class="form-group" id="todatefilter">
 			<label>End From - To</label>
 			<div class="input-group">
 				<input   name="end_ate_from" class="form-control form-date" style="width: 50%">

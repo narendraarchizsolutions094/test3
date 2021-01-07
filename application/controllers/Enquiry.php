@@ -440,6 +440,7 @@ class Enquiry extends CI_Controller
         $data['leadsource'] = $this->Leads_Model->get_leadsource_list();
         $data['lead_score'] = $this->Leads_Model->get_leadscore_list();
         $data['title'] = display('new_enquiry');
+    
         // $ruledata   = $this->db->select("*")->from("tbl_new_settings")->where('comp_id',$this->session->companey_id)->get()->row();
         // if($ruledata->duplicacy_status == 0)
         // { 
@@ -507,6 +508,13 @@ class Enquiry extends CI_Controller
             } else {
                 $other_phone = '';
             }
+            $status=1;
+            if(!empty($this->input->post('status'))){
+                $status=$this->input->post('status');
+            }else{
+                 $status=1;
+            }
+           
             $postData = [
                 'Enquery_id' => $encode,
                 'comp_id' => $this->session->userdata('companey_id'),
@@ -539,7 +547,7 @@ class Enquiry extends CI_Controller
                 'region_id'  => !empty($city_id->row()->region_id) ? $city_id->row()->region_id : '',
                 'territory_id'  => !empty($city_id->row()->territory_id) ? $city_id->row()->territory_id : '',
                 //'created_date' =>$enquiry_date, 
-                'status' => 1
+                'status' => $status
             ];
             $insert_id    =   $this->enquiry_model->create($postData);
             if ($this->input->post('apply_with')) {
