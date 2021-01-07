@@ -706,11 +706,16 @@ class Ticket extends REST_Controller {
     $sub_stage = $this->input->post('sub_stage')??'';
     $status = $this->input->post('status')??'';
     $message = $this->input->post('conversation')??'';
+    $stage_date  = $this->input->post('date')??'';
+    $stage_time = $this->input->post('time')??'';
+
+
     $this->form_validation->set_rules('company_id','company_id','trim|required',array('required'=>'You have note provided %s'));
     $this->form_validation->set_rules('ticketno','ticketno','trim|required',array('required'=>'You have note provided %s'));
     $this->form_validation->set_rules('user_id','user_id','trim|required',array('required'=>'You have note provided %s'));
     if($this->form_validation->run() == true)
     {
+      $this->load->model('Leads_Model');
       $session_backup = $this->session->userdata()??'';
       $this->session->companey_id = $company_id;
       $this->session->user_id = $user_id;
@@ -718,7 +723,18 @@ class Ticket extends REST_Controller {
       $tck = $this->Ticket_Model->get($ticketno);
       if(!empty($tck))
       {
-        $res = $this->Ticket_Model->saveconv($tck->id, 'Stage Updated', $message,0, $user_id, $stage,$sub_stage,$status);
+        $res = $this->Ticket_Model->saveconv($tck->id, 'Stage Updated', $message,0, $user_id, $stage,$sub_stage,$status); 
+
+        $stage_remark = $message;
+
+        $contact_person = '';
+        $mobileno = '';
+        $email = '';
+        $designation = '';
+        $enq_code = $ticketno;
+        $notification_id = '';//To be filled after firebase entry
+        $dis_subject = '';
+        $this->Leads_Model->add_comment_for_events_popup($stage_remark, $stage_date, $contact_person, $mobileno, $email, $designation, $stage_time, $enq_code, $notification_id, $dis_subject, 17);
       }
       
       if($res)

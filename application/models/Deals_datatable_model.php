@@ -143,6 +143,15 @@ class Deals_datatable_model extends CI_Model{
         }
 
 
+        if(!empty($_POST['specific_list']))
+        {
+            if($and)
+                $where.=" and ";
+
+            $where.=" ( info.id IN (".$_POST['specific_list'].") ) ";
+            $and =1;
+        }
+
 
         if($where!='')
         $this->db->where($where);

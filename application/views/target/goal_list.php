@@ -8,6 +8,11 @@
 	{
 		height: 500px;
 	}
+	table span:hover
+	{
+		color: black;
+		font-weight: 800;
+	}
 </style>
 <script type="text/javascript">
 var Ignore = new Array();
@@ -231,6 +236,7 @@ $("#filter_form").change(function(){
 				$("#goal_table,#graph1,#graph2,#graph3,#graph4").html('<center><i class="fa fa-spinner fa-spin" style="font-size:77px;"></i><center>');
 			},
 			success:function(res){
+				//alert(res);
 				var p = JSON.parse(res);
 				$("#goal_graph").hide();
 				$("#goal_table").html(p.code);
@@ -846,5 +852,15 @@ function manageDate(cur_date,day,month,year)
 	        day = '0' + day;
 
 		return [year,month,day].join('-');
+}
+
+function view_source(t)
+{
+	var list = $(t).data('ids');
+	if(list!='')
+	{
+		var url ="<?=base_url('client/deals/')?>"+btoa(list);
+		window.open(url,'_blank');
+	}
 }
 </script>
