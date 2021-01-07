@@ -729,17 +729,30 @@ class Report extends CI_Controller {
 
       if(!empty($result)){
         foreach($result as $value){          
-          if($value[0] == 1){            
-            array_push($res,array(display('enquiry'),$value[1]));
-          }else if($value[0] == 2){
-            array_push($res,array(display('lead'),$value[1]));
-          }else if($value[0] == 3){
-            array_push($res,array(display('Client'),$value[1]));
-          }
+          $title = $this->get_sale_pipeline_name_byId($value[0]);          
+          array_push($res,array($title,$value[1]));          
         }
         $result = $res;
-      }      
+      }
       echo json_encode($result);      
     }
 
+    function get_sale_pipeline_name_byId($id){      
+      if($id == 1){
+        $name = display('enquiry');
+      }else if($id == 2){
+        $name = display('lead');
+      }else if($id == 3){
+        $name = display('client');
+      }else{
+        $enquiry_separation  = get_sys_parameter('enquiry_separation', 'COMPANY_SETTING');
+        if (!empty($enquiry_separation)) {
+          $enquiry_separation = json_decode($enquiry_separation, true);
+          $name = $enquiry_separation[$id]['title'];     
+        }else{
+          $name = 'NA';
+        }
+      }
+      return $name;
+    }
 }
