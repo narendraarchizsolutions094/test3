@@ -731,7 +731,7 @@ class Report extends CI_Controller {
       $result  = $this->report_datatable_model->report_analitics($for);
       $res = array();
       if(!empty($result)){
-        foreach($result as $key=>$value){
+        foreach($result[0] as $key=>$value){
           if($key == 1){
             $res[] = array(display('enquiry'),$value['count']);
           }else if($key == 2){
