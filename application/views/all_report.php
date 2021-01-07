@@ -470,119 +470,120 @@ $enquiry_separation = json_decode($enquiry_separation, true);
         }    
     }
     function generate_pie_graph(elm,title){
-        Highcharts.chart(elm, {            
-            chart: {
-                type: 'pie',
-                    options3d: {
-                        enabled: true,
-                        alpha: 45                        
+        var url = "<?=base_url().'report/report_analitics/'?>"+elm;
+        $.ajax({
+            url: url,
+            type: 'POST',                    
+            success: function(result) {      
+                result = JSON.parse(result);
+
+                Highcharts.chart(elm, {            
+                    chart: {
+                        type: 'pie',
+                            options3d: {
+                                enabled: true,
+                                alpha: 45                        
+                            },
+                        margin: [0, 0, 0, 0],
+                        spacingTop: 0,
+                        spacingBottom: 0,
+                        spacingLeft: 0,
+                        spacingRight: 0
                     },
-                margin: [0, 0, 0, 0],
-                spacingTop: 0,
-                spacingBottom: 0,
-                spacingLeft: 0,
-                spacingRight: 0
-            },
-            title: {
-                    text: ''
-                },
-            exporting: {
-                buttons: {
-                    contextButton: {
-                        menuItems: ["viewFullscreen", "printChart", "downloadPNG"]
-                    }
-                }
-            },
-            subtitle: {
-                text: title
-            },
-            plotOptions: {            
-                pie: {
-                    //size:'40%',
-                    // dataLabels: {
-                    //     enabled: false
-                    // },
-                    innerSize: 50,
-                    depth: 45
-                }
-            },
-            credits: {
-                enabled: false
-            },
-            series: [{
-                name: 'Count',
-                data: [
-                ['Bananas', 8],
-                ['Kiwi', 3],
-                ['Mixed nuts', 1],
-                ['Oranges', 6],
-                ['Apples', 8],
-                ['Pears', 4],
-                ['Clementines', 4],
-                ['Reddish (bag)', 1],
-                ['Grapes (bunch)', 1]
-                ]
-            }]
+                    title: {
+                            text: ''
+                        },
+                    exporting: {
+                        buttons: {
+                            contextButton: {
+                                menuItems: ["viewFullscreen", "printChart", "downloadPNG"]
+                            }
+                        }
+                    },
+                    subtitle: {
+                        text: title
+                    },
+                    plotOptions: {            
+                        pie: {
+                            //size:'40%',
+                            // dataLabels: {
+                            //     enabled: false
+                            // },
+                            innerSize: 50,
+                            depth: 45
+                        }
+                    },
+                    credits: {
+                        enabled: false
+                    },
+                    series: [{
+                        name: 'Count',                
+                        data: result
+                    }]
+                });
+            }
         });
     }
 
 function funnel_chart(elm,title){
-    Highcharts.chart(elm, {
-    chart: {
-        type: 'funnel3d',
-        options3d: {
-            enabled: true,
-            alpha: 10,
-            depth: 50,
-            viewDistance: 50
-        },
-        margin: [0, 0, 0, 0],
-        spacingTop: 0,
-        spacingBottom: 0,
-        spacingLeft: 0,
-        spacingRight: 0
-    },
-    title: {
-        text: ''
-    },
-    subtitle: {
-        text: title
-    },
-    exporting: {
-        buttons: {
-            contextButton: {
-                menuItems: ["viewFullscreen", "printChart", "downloadPNG"]
+    var url = "<?=base_url().'report/report_analitics/'?>"+elm;
+        $.ajax({
+            url: url,
+            type: 'POST',                    
+            success: function(result) {      
+                result = JSON.parse(result);
+                Highcharts.chart(elm, {
+                chart: {
+                    type: 'funnel3d',
+                    options3d: {
+                        enabled: true,
+                        alpha: 10,
+                        depth: 50,
+                        viewDistance: 50
+                    },
+                    margin: [0, 0, 0, 0],
+                    spacingTop: 0,
+                    spacingBottom: 0,
+                    spacingLeft: 0,
+                    spacingRight: 0
+                },
+                title: {
+                    text: ''
+                },
+                subtitle: {
+                    text: title
+                },
+                exporting: {
+                    buttons: {
+                        contextButton: {
+                            menuItems: ["viewFullscreen", "printChart", "downloadPNG"]
+                        }
+                    }
+                },
+                credits: {
+                    enabled: false
+                },
+                plotOptions: {
+                    series: {
+                    dataLabels: {
+                        enabled: true,
+                        format: '<b>{point.name}</b> ({point.y:,.0f})',
+                        allowOverlap: false,
+                        y: 10
+                    },
+                    neckWidth: '30%',
+                    neckHeight: '25%',
+                    width: '80%',
+                    height: '80%'
+                    }
+                },
+                series: [{
+                    name: 'Count',
+                    data: result
+                }]
+                });
             }
-        }
-    },
-    credits: {
-        enabled: false
-    },
-    plotOptions: {
-        series: {
-        dataLabels: {
-            enabled: true,
-            format: '<b>{point.name}</b> ({point.y:,.0f})',
-            allowOverlap: false,
-            y: 10
-        },
-        neckWidth: '30%',
-        neckHeight: '25%',
-        width: '80%',
-        height: '80%'
-        }
-    },
-    series: [{
-        name: 'Count',
-        data: [
-        ['Website visits', 15654],
-        ['Downloads', 4064],
-        ['Requested price list', 1987],
-        ['Invoice sent', 976],
-        ['Finalized', 846]
-        ]
-    }]
-    });
+        });
 }
 
 $("#filter_and_save_form").on('submit', function(e) {
