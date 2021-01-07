@@ -159,7 +159,7 @@ $enquiry_separation = json_decode($enquiry_separation, true);
             $ctitle = $enquiry_separation[$key]['title']; 
            
            ?>
-           <option <?php if(!empty(set_value('state'))){ if (in_array($key,set_value('state'))) {echo 'selected';}}?>><?= $ctitle ?></option>
+           <option value="<?=$key?>" <?php if(!empty(set_value('state'))){ if (in_array($key,set_value('state'))) {echo 'selected';}}?>><?= $ctitle ?></option>
         <?php }
         } ?>         
         </select>
