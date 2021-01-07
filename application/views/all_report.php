@@ -10,13 +10,17 @@
 .card-graph{
     min-height:250px;
     max-height:400px;
-    border:1px solid;
-    width:32%;
+    border:1px solid;    
     margin:2px;
     box-shadow: 0px 0px 7px -1px;
     border-radius: 6px;
     border-color: transparent;
     overflow: hidden;
+}
+@media (min-width: 992px){
+    .card-graph {
+        width:32%;
+    }
 }
 .hide_graph{
    display:none !important;    
@@ -550,6 +554,9 @@ function funnel_chart(elm,title){
                 menuItems: ["viewFullscreen", "printChart", "downloadPNG"]
             }
         }
+    },
+    credits: {
+        enabled: false
     },
     plotOptions: {
         series: {
