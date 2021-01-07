@@ -733,12 +733,12 @@ class Report extends CI_Controller {
       $res = array();
       if(!empty($result)){
         foreach($result[0] as $key=>$value){
-          if($key == 1){
-            $res[] = array(display('enquiry'),$value);
+          if($key == 1){            
+            array_push($res,array(display('enquiry'),$value));
           }else if($key == 2){
-            $res[] = array(display('lead'),$value);
+            array_push($res,array(display('lead'),$value));
           }else if($key == 3){
-            $res[] = array(display('client'),$value);
+            array_push($res,array(display('client'),$value));
           }
         }
         $result = $res;
