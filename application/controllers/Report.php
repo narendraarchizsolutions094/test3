@@ -729,6 +729,7 @@ class Report extends CI_Controller {
     public function report_analitics_pipeline($for){
       $this->load->model('report_datatable_model');
       $result  = $this->report_datatable_model->report_analitics($for);
+      print_r($result);
       $res = array();
       if(!empty($result)){
         foreach($result[0] as $key=>$value){
