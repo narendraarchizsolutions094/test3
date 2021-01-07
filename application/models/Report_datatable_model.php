@@ -231,7 +231,7 @@ class Report_datatable_model extends CI_Model {
             $group_by = 'enquiry.lead_stage';
         }else if($for == 'user_chart' && 0){
            
-        }else if($for == 'product_chart' && 0){
+        }else if($for == 'product_chart'){
             $select = 'count(enquiry.enquiry_id) as count,tbl_product_country.country_name as title';
             $group_by = 'enquiry.enquiry_subsource';
         }else if($for == 'status_chart'){
