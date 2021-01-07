@@ -728,21 +728,20 @@ class Report extends CI_Controller {
     
     public function report_analitics_pipeline($for){
       $this->load->model('report_datatable_model');
-      $result  = $this->report_datatable_model->report_analitics($for);
-      // print_r($result);
-      // $res = array();
-      // if(!empty($result)){
-      //   foreach($result[0] as $key=>$value){
-      //     if($key == 1){            
-      //       array_push($res,array(display('enquiry'),$value));
-      //     }else if($key == 2){
-      //       array_push($res,array(display('lead'),$value));
-      //     }else if($key == 3){
-      //       array_push($res,array(display('client'),$value));
-      //     }
-      //   }
-      //   $result = $res;
-      // }      
+      $result  = $this->report_datatable_model->report_analitics($for);      
+      $res = array();
+      if(!empty($result)){
+        foreach($result[0] as $key=>$value){
+          if($key == 1){            
+            array_push($res,array(display('enquiry'),$value));
+          }else if($key == 2){
+            array_push($res,array(display('lead'),$value));
+          }else if($key == 3){
+            array_push($res,array(display('client'),$value));
+          }
+        }
+        $result = $res;
+      }      
       echo json_encode($result);      
     }
 
