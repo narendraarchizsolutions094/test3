@@ -36,8 +36,8 @@ var Ignore = new Array();
         </div>
 
 <?php
-if(!isset($_COOKIE['goal_filter_setting'])) {
-	$variable='';
+if(empty($_COOKIE['goal_filter_setting'])) {
+	$variable=[];
 } else {
 $variable=explode(',',$_COOKIE['goal_filter_setting']);
 }
@@ -62,7 +62,7 @@ $variable=explode(',',$_COOKIE['goal_filter_setting']);
                     </li>                
                     <li>
                       <label>
-                      <input type="checkbox" value="matric" id="matriccheckbox" name="filter_checkbox" <?php if(in_array('matric',$variable)){echo'checked';} ?>>Matric</label>
+                      <input type="checkbox" value="matric" id="matriccheckbox" name="filter_checkbox" <?php if(in_array('matric',$variable)){echo'checked';} ?>> Matric</label>
                     </li>                
                    <li>
                       <label>
