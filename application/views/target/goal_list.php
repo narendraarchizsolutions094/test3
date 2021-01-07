@@ -110,7 +110,7 @@ $variable=explode(',',$_COOKIE['goal_filter_setting']);
 		</div>
         </div>
 
-	<div class="col-sm-3" id="rolefilter" style="<?php if(!in_array('role',$variable)){echo'display:none';} ?>">
+	<div class="col-md-3" id="rolefilter" style="<?php if(!in_array('role',$variable)){echo'display:none';} ?>">
 		<div class="form-group">
 			<label>For Role</label>
 			<select class="form-control" name="role_for">
@@ -130,7 +130,7 @@ $variable=explode(',',$_COOKIE['goal_filter_setting']);
 		
 	</div>
 	
-	<div class="col-sm-3" id="userfilter" style="<?php if(!in_array('user',$variable)){echo'display:none';} ?>">
+	<div class="col-md-3" id="userfilter" style="<?php if(!in_array('user',$variable)){echo'display:none';} ?>">
 		<div class="form-group">
 			<label>For User &nbsp;<small><input type="checkbox" name="fetch_type" value="1" checked> Hierarchy wise</small></label>
 			<select class="form-control" name="user_for">
@@ -147,7 +147,7 @@ $variable=explode(',',$_COOKIE['goal_filter_setting']);
 			</select>
 		</div>
 	</div>
-	<div class="col-sm-3" id="matricfilter" style="<?php if(!in_array('matric',$variable)){echo'display:none';} ?>">
+	<div class="col-md-3" id="matricfilter" style="<?php if(!in_array('matric',$variable)){echo'display:none';} ?>">
 		<div class="form-group">
 			<label>Metric</label>
 			<select class="form-control" name="metric_type">
@@ -157,7 +157,7 @@ $variable=explode(',',$_COOKIE['goal_filter_setting']);
 			</select>
 		</div>
 	</div>
-	<div class="col-sm-3" id="goalfilter" style="<?php if(!in_array('goals',$variable)){echo'display:none';} ?>">
+	<div class="col-md-3" id="goalfilter" style="<?php if(!in_array('goals',$variable)){echo'display:none';} ?>">
 	<div class="form-group" ><br>
 			<label><input type="checkbox" name="graph" value="1"> Goal Analytics</label>
 		</div>
@@ -182,20 +182,6 @@ $variable=explode(',',$_COOKIE['goal_filter_setting']);
 	timer: 1000
   });
 	});
-
-
-
-// 	var enq_filters  = getCookie('goal_filter_setting');
-// if (enq_filters=='') {
-//     $('#filter_pannel').hide();
-//     $('#save_filterbutton').hide();
-
-// }else{
-//   $('#filter_pannel').show();
-//   $('#save_filterbutton').show();
-
-// }
-
 
 
 });

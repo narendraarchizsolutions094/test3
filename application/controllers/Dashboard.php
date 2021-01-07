@@ -740,21 +740,7 @@ public function login_in_process(){
 	
 	public function home() 
     {      
-        $data['filterData']=json_encode([]); 
-
-        if(!empty($_POST)){
-            
-            $data['filterData']=json_encode(array(
-                'from_date'=>$_POST['from_date'],
-                'to_date'=>$_POST['to_date'],
-                'users'=>$_POST['users'],
-                'state_id'=>$_POST['state_id'],
-                'city_id'=>$_POST['city_id'],
-                              ));
-                  }else{
-                     $data['filterData']=json_encode(array()); 
-                  }
-        // unset($_POST);
+         
         if ($this->session->userdata('isLogIn') == false)
         redirect('login');
         if ($this->session->userdata('user_right') == 201 || $this->session->app_type == 'buyer') // lalantop user
@@ -786,6 +772,21 @@ public function login_in_process(){
             $data['taskdata'] = $this->dash_model->task_list();
             $data['cmtdata'] = $this->dash_model->all_comments();
         }
+        // $data['filterData']=json_encode(array()); 
+
+        if(!empty($_POST)){
+            
+            $data['filterData']=json_encode(array(
+                'from_date'=>$_POST['from_date'],
+                'to_date'=>$_POST['to_date'],
+                'users'=>$_POST['users'],
+                'state_id'=>$_POST['state_id'],
+                'city_id'=>$_POST['city_id'],
+                              ));
+                  }else{
+                     $data['filterData']=json_encode(array()); 
+                  }
+                  
         //lead
         $data['leadCount']=$this->dashboard_model->countLead(2);
         $data['leadSum']=$this->dashboard_model->dataLead(2);
@@ -799,7 +800,8 @@ public function login_in_process(){
         $data['lead_score'] = $this->db->query('select * from lead_score limit 3')->result();
         // $data['content'] = $this->load->view('msg-log-dashboard-enquiry', $data, true);
         
-    //    print_r($data['filterData']);
+       print_r($data['filterData']);
+    //    exit;
         $data['content'] = $this->load->view('home', $data, true);	     
         $this->load->view('layout/main_wrapper', $data);
     }

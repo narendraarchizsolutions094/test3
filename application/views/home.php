@@ -1,4 +1,5 @@
-<?php         $enquiry_separation  = get_sys_parameter('enquiry_separation', 'COMPANY_SETTING'); ?>
+<?php   
+                       $enquiry_separation  = get_sys_parameter('enquiry_separation', 'COMPANY_SETTING'); ?>
 <!-- <link rel="stylesheet" href="<?php echo base_url()?>custom_dashboard/assets/css/dashforge.css"> -->
 <link rel="stylesheet" href="<?php echo base_url()?>custom_dashboard/assets/css/dashforge.dashboard.css">
 <link href="<?php echo base_url()?>custom_dashboard/lib/morris.js/morris.css" rel="stylesheet">
