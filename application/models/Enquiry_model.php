@@ -2065,7 +2065,18 @@ class Enquiry_model extends CI_Model {
                         ->get()
                         ->result();
     }
+    public function countLead_api($type,$comp_id=0){
+	
+		$comp_id = $this->session->userdata('companey_id')??$comp_id;
+		return $this->db->where(array('comp_id' => $comp_id,'type'=>$type))->count_all_results('tbl_followupAvgtime');
 
+    }
+	public function dataLead_api($type,$comp_id=0){
+		$comp_id = $this->session->userdata('companey_id')??$comp_id;
+		return $this->db->select_sum('time')->where(array('comp_id' =>$comp_id,'type'=>$type))->get('tbl_followupAvgtime');
+		
+
+	}
     public function assign_enquery_api($key,$assign_employee,$enquiry_code,$user_id){
                         $this->db->set('aasign_to',$assign_employee);
 			            $this->db->set('assign_by',$user_id);
@@ -2845,8 +2856,8 @@ $cpny_id=$this->session->companey_id;
 
       $client_dropWise = $client_drop->result();
 
-      $enq_count = $this->dashboard_model->countLead(2,$companyid);
-      $enq_Sum = $this->dashboard_model->dataLead(2,$companyid);
+      $enq_count = $this->dashboard_model->countLead_api(2,$companyid);
+      $enq_Sum = $this->dashboard_model->dataLead_api(2,$companyid);
 
       $enqTime=$enq_Sum->row()->time;
       if ($enqTime!=0)
@@ -2856,8 +2867,8 @@ $cpny_id=$this->session->companey_id;
       else 
         $enq_value = 0;
 
-      $lead_count = $this->dashboard_model->countLead(3,$companyid);
-      $lead_Sum = $this->dashboard_model->dataLead(3,$companyid);
+      $lead_count = $this->dashboard_model->countLead_api(3,$companyid);
+      $lead_Sum = $this->dashboard_model->dataLead_api(3,$companyid);
 
       $leadTime=$lead_Sum->row()->time;
       if ($leadTime!=0)
@@ -2885,8 +2896,8 @@ $cpny_id=$this->session->companey_id;
         foreach ($enquiry_separation as $key => $value) 
         {
                   $ctitle = $enquiry_separation[$key]['title']; 
-                  $Count=$this->dashboard_model->countLead($key,$companyid);
-                  $sum=$this->dashboard_model->dataLead($key,$companyid);
+                  $Count=$this->dashboard_model->countLead_api($key,$companyid);
+                  $sum=$this->dashboard_model->dataLead_api($key,$companyid);
                   $stime= $sum->row()->time;
 
                   if($stime!=0)
