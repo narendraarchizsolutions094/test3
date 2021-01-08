@@ -321,7 +321,7 @@ if($this->session->companey_id == 65){ ?>
             'Status Changed Successfully!',
             'success'
           ).then((result)=>{
-            location.reload();
+            //location.reload();
           });
         }
       });
