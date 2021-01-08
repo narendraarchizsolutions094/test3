@@ -203,7 +203,6 @@ if(!empty($ticket->ticket_stage)){
 <?php
 if($this->session->companey_id == 65){ ?>
   <script>
-  has_close_authority();
   $("select[name='ticket_status']").on('change',function(){    
     has_close_authority();
   });
@@ -238,6 +237,9 @@ if($this->session->companey_id == 65){ ?>
   if(<?=$ticket->ticket_status?>==3){
     $("#ticket_disposition_save").attr('disabled',true);
   }
+
+  has_close_authority();
+
   </script>
 <?php
 }
