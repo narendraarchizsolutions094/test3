@@ -76,7 +76,7 @@
             }
             ?>
             <a class="btn btn-default btn-sm"  data-toggle="modal" type="button" title="Change Status">            
-            <i class='fa fa-ticket-alt'></i>
+            <i class='fa fa-ticket'></i>
             </a>
          </div>
               <button class="btn btn-basic" type="button" style="width: 100%; margin-top: 5px;margin-bottom: 5px;">Disposition</button>
