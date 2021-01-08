@@ -220,16 +220,12 @@ if($this->session->companey_id == 65){ ?>
         success: function(result) {
           if(result == 0){
             $("#ticket_disposition_save").attr('disabled',true);
-            if("<?=$ticket->ticket_status?>"){
-              $("select[name='ticket_status']").val("<?=$ticket->ticket_status?>");
-            }else{
-              $("select[name='ticket_status']").val('');
-            }
             Swal.fire({
               icon: 'error',
               title: 'Oops...',
               text: 'You can not close this ticket!'              
             })
+            $("select[name='ticket_status']").val("<?=$ticket->ticket_status?>");
           }else{
             if(!auto){
               change_ticket_status();
