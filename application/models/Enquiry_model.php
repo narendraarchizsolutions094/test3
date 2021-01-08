@@ -2870,11 +2870,11 @@ $cpny_id=$this->session->companey_id;
       $followup = array(
                     array(
                       'key'=>display('enquiry'),
-                      'time'=> $enq_value,
+                      'time'=> $this->dashboard_model->secsToStr_api($enq_value),
                     ),
                     array(
                       'key'=>display('lead'),
-                      'time'=> $lead_value,
+                      'time'=> $this->dashboard_model->secsToStr_api($lead_value),
                     ),
                 );
 
@@ -2899,7 +2899,7 @@ $cpny_id=$this->session->companey_id;
 
                  $followup[]  = array(
                                   'key'=>$ctitle,
-                                  'time'=>$vvalue,
+                                  'time'=>$this->dashboard_model->secsToStr_api($vvalue),
                                 );
         }
     }
@@ -4357,6 +4357,7 @@ public function secsToStr($minutes)
     $d = floor ($minutes / 1440);
     $h = floor (($minutes - $d * 1440) / 60);
     $m = $minutes - ($d * 1440) - ($h * 60);
+     $m = round($m);
     if($d!=0){
         echo  $d.' days '.$h.' hours '.$m.' minutes ';
     }elseif($h!=0){

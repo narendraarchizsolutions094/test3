@@ -2531,4 +2531,42 @@ public function get_enq_list_post(){
       }
   }
 
+  function getEnquiryById_post()
+  {
+      $enq_id  = $this->input->post('enquiry_id');
+      // $enquiry_code  = $this->input->post('enquiry_id');
+      // $tabname =$this->input->post('tabname');
+      $comp_id = $this->input->post('company_id');
+      $this->form_validation->set_rules('company_id','comp_id','trim|required');
+      if($this->form_validation->run()==true)
+      {
+
+        $this->db->where('comp_id',$comp_id);
+        $this->db->where('enquiry_id',$enq_id);
+        $data = $this->db->get('enquiry')->row();
+
+         if(!empty($data))
+          {
+            $this->set_response([
+            'status'      => TRUE,           
+            'msg'  => $data,
+            ], REST_Controller::HTTP_OK);   
+          }
+          else
+          {
+            $this->set_response([
+            'status'  => false,           
+            'msg'     => "Unable to Find",
+            ], REST_Controller::HTTP_OK); 
+          }
+
+      }else
+      {
+        $msg = strip_tags(validation_errors());
+        $this->set_response([
+          'status'  => false,
+          'msg'     => $msg,//"Please provide a company id"
+        ],REST_Controller::HTTP_OK);
+      }
+  }
 }

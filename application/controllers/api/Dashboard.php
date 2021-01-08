@@ -12,9 +12,13 @@ class Dashboard extends REST_Controller {
         $user_id = $this->input->post('user_id');
         $company_id = $this->input->post('company_id');
         $process_id =  $this->input->post('process_id');//can be multiple
+        $process = 0;
         if(!empty($process_id))
         {
-            $process = implode(',',$process_id);
+            if(is_array($process_id))
+                $process = implode(',',$process_id);
+            else 
+                $process = $process_id;
         }
 
         $this->load->model('enquiry_model');
