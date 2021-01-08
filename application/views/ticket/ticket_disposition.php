@@ -225,7 +225,7 @@ if($this->session->companey_id == 65){ ?>
               title: 'Oops...',
               text: 'You can not close this ticket!'              
             }).then((result) => {
-              $("select[name='ticket_status']").val(0);
+              location.reload();
             });
           }else{
             if(!auto){
