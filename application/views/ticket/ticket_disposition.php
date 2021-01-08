@@ -111,7 +111,7 @@
 
                     <div class="form-group">                           
                        <select class="form-control" id="" name="ticket_status">
-                           <option>---Select Status---</option>
+                           <option value='0'>---Select Status---</option>
                           <?php
                            if(!empty($ticket_status))
                           {
@@ -225,7 +225,7 @@ if($this->session->companey_id == 65){ ?>
               title: 'Oops...',
               text: 'You can not close this ticket!'              
             }).then((result) => {
-              $("select[name='ticket_status']").val("<?=$ticket->ticket_status?>");
+              $("select[name='ticket_status']").val(0);
             });
           }else{
             if(!auto){
