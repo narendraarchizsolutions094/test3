@@ -75,7 +75,7 @@
               <?php
             }
             ?>
-            <select name='quick_ticket_status' class="btn btn-success btn-sm class='fa fa-ticket'"  type="button" title="Change Status">                       
+            <select name='quick_ticket_status' class="btn btn-success btn-sm quick_btn fa fa-ticket"  type="button" title="Change Status">                       
             <?php
               if(!empty($ticket_status))
               {
@@ -272,7 +272,7 @@ if($this->session->companey_id == 65){ ?>
 
   
   
-  if(<?=$ticket->complaint_type?>==2){
+  if("<?=$ticket->complaint_type?>"==2){
     if("<?=empty($ticket->ticket_stage)?>"){
       $("select[name=lead_description]").load("<?=base_url('message/find_substage/1')?>");    
     }
@@ -321,7 +321,9 @@ if($this->session->companey_id == 65){ ?>
             'Status Changed Successfully!',
             'success'
           ).then((result)=>{
-            //location.reload();
+            if(e.hasClass('quick_btn')){
+              location.reload();
+            }
           });
         }
       });
