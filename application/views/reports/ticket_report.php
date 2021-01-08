@@ -326,94 +326,6 @@
 		</div>
 
 
-<script>
-function reset_input(){
-$('input:checkbox').removeAttr('checked');
-}
-</script>
-
-<script>
-  
-$(document).ready(function(){
-   $("#save_advance_filters").on('click',function(e){
-    e.preventDefault();
-    var arr = Array();  
-    $("input[name='filter_checkbox']:checked").each(function(){
-      arr.push($(this).val());
-    });        
-    setCookie('ticket_filter_setting',arr,365);      
-    alert('Your custom filters saved successfully.');
-  }) 
-
-var run = 0 ;
-$(document).ready(function() {
-
-
-  $('#go_filter').click(function(e) {
-        e.preventDefault();
-        var form_data = $("#ticket_filter").serialize();       
-       // alert(form_data);
-        $.ajax({
-        url: '<?=base_url()?>ticket/ticket_set_filters_session',
-        type: 'post',
-        data: form_data,
-        success: function(responseData){
-        }
-        });
-        $("#ticket_filter").submit();
-    });
-});
-
-
-  <?php  
-  if(!empty($_POST)){
-  ?>
-
-  $(document).ready(function() {
-  $('#ticket_table').DataTable({         
-          "processing": true,
-          "scrollX": true,
-          "scrollY": 520,
-          "serverSide": true,          
-          "lengthMenu": [ [10,30, 50,100,500,1000, -1], [10,30, 50,100,500,1000, "All"] ],
-          "columnDefs": [{ "orderable": false, "targets": 0 }],
-           "order": [[ 1, "desc" ]],
-          "ajax": {
-              "url": "<?=base_url().'Ticket/ticket_load_data'?>",
-              "type": "POST",
-              error:function(u,v,w) 
-              {
-                alert(w);
-              }
-              },              
-              <?php if(user_access(317)) { ?>
-        dom: "<'row text-center'<'col-sm-12 col-xs-12 col-md-4'l><'col-sm-12 col-xs-12 col-md-4 text-center'B><'col-sm-12 col-xs-12 col-md-4'f>>tp", 
-        buttons: [  
-            {extend: 'copy', className: 'btn-xs btn',exportOptions: {
-                        columns: "thead th:not(.noExport)"
-                    }}, 
-            {extend: 'csv', title: 'list<?=date("Y-m-d H:i:s")?>', className: 'btn-xs btn',exportOptions: {
-                        columns: "thead th:not(.noExport)"
-                    }}, 
-            {extend: 'excel', title: 'list<?=date("Y-m-d H:i:s")?>', className: 'btn-xs btn', title: 'exportTitle',exportOptions: {
-                        columns: "thead th:not(.noExport)"
-                    }}, 
-            {extend: 'pdf', title: 'list<?=date("Y-m-d H:i:s")?>', className: 'btn-xs btn',exportOptions: {
-                        columns: "thead th:not(.noExport)"
-                    }}, 
-            {extend: 'print', className: 'btn-xs btn',exportOptions: {
-                        columns: "thead th:not(.noExport)"
-                    }} 
-             ] ,  <?php  } ?>  
-    });
-  });
-
-  
-  <?php
-  }
-  ?>
-  </script>
-
 <!--------------------TABLE COLOUMN CONFIG----------------------------------------------->
 <div id="table-col-conf" class="modal fade" role="dialog">
   <div class="modal-dialog modal-lg" style="width: 96%;">
@@ -606,6 +518,93 @@ for (var i = 0; i < dcheckboxes.length; i++) {
     document.cookie = "ticket_dallowcols="+dchkval+"; expires=Thu, 18 Dec 2053 12:00:00 UTC; path=/";   
     location.reload();    
   });
+
+
+
+
+  function reset_input(){
+$('input:checkbox').removeAttr('checked');
+}
+</script>
+
+<script>
+  
+$(document).ready(function(){
+   $("#save_advance_filters").on('click',function(e){
+    e.preventDefault();
+    var arr = Array();  
+    $("input[name='filter_checkbox']:checked").each(function(){
+      arr.push($(this).val());
+    });        
+    setCookie('ticket_filter_setting',arr,365);      
+    alert('Your custom filters saved successfully.');
+  }) 
+
+var run = 0 ;
+$(document).ready(function() {
+
+
+  $('#go_filter').click(function(e) {
+        e.preventDefault();
+        var form_data = $("#ticket_filter").serialize();       
+       // alert(form_data);
+        $.ajax({
+        url: '<?=base_url()?>ticket/ticket_set_filters_session',
+        type: 'post',
+        data: form_data,
+        success: function(responseData){
+        }
+        });
+        $("#ticket_filter").submit();
+    });
+});
+
+
+  <?php  
+  if(!empty($_POST)){
+  ?>
+  $(document).ready(function() {
+    $('#ticket_table').DataTable({         
+            "processing": true,
+            "scrollX": true,
+            "scrollY": 520,
+            "serverSide": true,          
+            "lengthMenu": [ [10,30, 50,100,500,1000, -1], [10,30, 50,100,500,1000, "All"] ],
+            "columnDefs": [{ "orderable": false, "targets": 0 }],
+            "order": [[ 1, "desc" ]],
+            "ajax": {
+                "url": "<?=base_url().'Ticket/ticket_load_data'?>",
+                "type": "POST",
+                error:function(u,v,w) 
+                {
+                  alert(w);
+                }
+                },              
+                <?php if(user_access(317)) { ?>
+          dom: "<'row text-center'<'col-sm-12 col-xs-12 col-md-4'l><'col-sm-12 col-xs-12 col-md-4 text-center'B><'col-sm-12 col-xs-12 col-md-4'f>>tp", 
+          buttons: [  
+              {extend: 'copy', className: 'btn-xs btn',exportOptions: {
+                          columns: "thead th:not(.noExport)"
+                      }}, 
+              {extend: 'csv', title: 'list<?=date("Y-m-d H:i:s")?>', className: 'btn-xs btn',exportOptions: {
+                          columns: "thead th:not(.noExport)"
+                      }}, 
+              {extend: 'excel', title: 'list<?=date("Y-m-d H:i:s")?>', className: 'btn-xs btn', title: 'exportTitle',exportOptions: {
+                          columns: "thead th:not(.noExport)"
+                      }}, 
+              {extend: 'pdf', title: 'list<?=date("Y-m-d H:i:s")?>', className: 'btn-xs btn',exportOptions: {
+                          columns: "thead th:not(.noExport)"
+                      }}, 
+              {extend: 'print', className: 'btn-xs btn',exportOptions: {
+                          columns: "thead th:not(.noExport)"
+                      }} 
+              ]   <?php  } ?>  
+      });
+  });
+  <?php
+  }
+  ?>
+
 </script>
 
 
