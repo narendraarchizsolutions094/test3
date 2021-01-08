@@ -221,6 +221,8 @@ if($this->session->companey_id == 65){ ?>
           }
         }
       });
+    }else{
+      $("#ticket_disposition_save").removeAttr('disabled');
     }
   }
   
