@@ -601,6 +601,7 @@ $(document).ready(function() {
               ]   <?php  } ?>  
       });
   });
+  });
   <?php
   }
   ?>
