@@ -207,7 +207,7 @@ if($this->session->companey_id == 65){ ?>
     if(confirm('Are you sure ?')){
       has_close_authority(false);
     }else{
-      e.preventDefault();
+      $("select[name='ticket_status']").val("<?=$ticket->ticket_status?>");
     }  
   });
 
@@ -220,6 +220,7 @@ if($this->session->companey_id == 65){ ?>
         success: function(result) {
           if(result == 0){
             $("#ticket_disposition_save").attr('disabled',true);
+            $("select[name='ticket_status']").val("<?=$ticket->ticket_status?>");
             Swal.fire({
               icon: 'error',
               title: 'Oops...',
