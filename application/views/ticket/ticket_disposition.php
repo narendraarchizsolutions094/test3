@@ -244,7 +244,7 @@ if($this->session->companey_id == 65){ ?>
         data:{
           ticket_status:status,
           client:"<?=$ticket->client?>"
-        }
+        },
         success: function(result) {
           Swal.fire(
             'Good job!',
