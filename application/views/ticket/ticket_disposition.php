@@ -204,11 +204,16 @@ if(!empty($ticket->ticket_stage)){
 <?php
 if($this->session->companey_id == 65){ ?>
   $("select[name='ticket_status']").on('change',function(e){  
-    if(confirm('Are you sure ?')){
-      has_close_authority(false);
+    if("<?=$ticket->ticket_status?>" == 3){
+      alert('Can not change. Ticket is closed');
     }else{
+      if(confirm('Are you sure ?')){
+        has_close_authority(false);
+      }else{
       $("select[name='ticket_status']").val("<?=$ticket->ticket_status?>");
     }  
+
+    }
   });
 
   function has_close_authority(auto=true){
@@ -239,7 +244,9 @@ if($this->session->companey_id == 65){ ?>
       if(!auto){
         change_ticket_status();
       }
-      $("#ticket_disposition_save").removeAttr('disabled');
+      if("<?=$ticket->ticket_status?>" !=3 ){
+        $("#ticket_disposition_save").removeAttr('disabled');
+      }
     }
   }
 
