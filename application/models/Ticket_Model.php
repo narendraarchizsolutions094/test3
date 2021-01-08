@@ -543,7 +543,7 @@ class Ticket_Model extends CI_Model
 	public function get($tctno)
 	{
 
-		return $this->db->select("tck.*,tck.email as tck_email,tbl_ticket_subject.subject_title,lead_source.lead_name as ticket_source,enq.gender,prd.country_name, concat(enq.name,' ', enq.lastname) as clientname")
+		return $this->db->select("tck.*,tck.process as tck_process,tck.email as tck_email,tbl_ticket_subject.subject_title,lead_source.lead_name as ticket_source,enq.gender,prd.country_name, concat(enq.name,' ', enq.lastname) as clientname")
 			->where("tck.ticketno", $tctno)
 			->where("tck.company", $this->session->companey_id)
 			->from("tbl_ticket tck")
