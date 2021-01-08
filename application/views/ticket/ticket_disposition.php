@@ -220,7 +220,11 @@ if($this->session->companey_id == 65){ ?>
         success: function(result) {
           if(result == 0){
             $("#ticket_disposition_save").attr('disabled',true);
-            $("select[name='ticket_status']").val("<?=$ticket->ticket_status?>");
+            if("<?=$ticket->ticket_status?>"){
+              $("select[name='ticket_status']").val("<?=$ticket->ticket_status?>");
+            }else{
+              $("select[name='ticket_status']").val('');
+            }
             Swal.fire({
               icon: 'error',
               title: 'Oops...',
