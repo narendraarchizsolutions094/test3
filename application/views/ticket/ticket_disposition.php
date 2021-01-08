@@ -236,7 +236,9 @@ if($this->session->companey_id == 65){ ?>
             if(!auto){
               change_ticket_status();
             }
-            $("#ticket_disposition_save").removeAttr('disabled');
+            if("<?=$ticket->ticket_status?>" !=3 ){
+              $("#ticket_disposition_save").removeAttr('disabled');
+            }
           }
         }
       });
