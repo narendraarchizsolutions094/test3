@@ -604,6 +604,7 @@ class Enquiry_model extends CI_Model {
     {
       
       $process = $this->session->userdata('process');
+      
         $this->db->where_in('product_id',$process);
 
     	if($where)
@@ -2079,7 +2080,7 @@ class Enquiry_model extends CI_Model {
 			             $this->db->set('enq_code',$enquiry_code);
 			            
 			             $this->db->set('assign_status',0);
-			            $this->db->insert('tbl_assign_notification');
+			             $this->db->insert('tbl_assign_notification');
 
                        }
 
@@ -2198,12 +2199,16 @@ $cpny_id=$this->session->companey_id;
 		$where .= " AND ( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
     	$where .= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';
         $where.=" AND enquiry.comp_id=$cpny_id";
+        $process = $this->session->userdata('process');
+      
         return $this->db->select('*')
                         ->from('enquiry')
                         ->where($where)
+                        ->where_in('product_id',$process)
 						->group_by('enquiry.enquiry_id')
                         ->get()
                         ->result();
+                        // print_r($this->db->last_query());
     }
     
     

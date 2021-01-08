@@ -387,9 +387,12 @@ class Client extends CI_Controller {
        // print_r($data['contact_list']->result_array()); exit();
         $data['company_list'] = $this->Client_Model->getCompanyList()->result();
         $data['enquiry_list'] = $this->Enquiry_Model->all_enqueries();
+        // print_r($data['enquiry_list']);
+        // die();
         $data['content'] = $this->load->view('enquiry/contacts', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }
+
     public function company_list()
     {
         if(user_role('1060')){}

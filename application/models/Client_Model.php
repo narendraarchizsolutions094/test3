@@ -122,6 +122,8 @@ class Client_Model extends CI_Model
 
      public function getCompanyList()
     {
+        $process = $this->session->userdata('process');
+
         $where = 'enquiry.comp_id='.$this->session->companey_id;
         $all_reporting_ids    =   $this->common_model->get_categories($this->session->user_id);
         $where .= " AND ( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
@@ -131,6 +133,7 @@ class Client_Model extends CI_Model
         $this->db->select('count(enquiry_id) as num, company , GROUP_CONCAT(enquiry_id) as enq_ids,GROUP_CONCAT(status) as enq_status,GROUP_CONCAT(CONCAT(name_prefix,\' \',name,\' \',lastname)) as enq_names ');
         $this->db->from('enquiry');
         $this->db->where('enquiry.company IS NOT NULL and CHAR_LENGTH(REPLACE(`enquiry`.company, " ", ""))>0');
+        $this->db->where_in('enquiry.product_id',$process);
         $this->db->group_by('REPLACE(`enquiry`.company, " ", "")');
         //$this->db->join('enquiry','enquiry.enquiry_id=contacts.client_id','inner');
         return $this->db->get();

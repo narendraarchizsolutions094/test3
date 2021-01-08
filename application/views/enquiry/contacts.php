@@ -173,9 +173,12 @@ function deleteContact(t)
                 </div>
 
                <div class="form-group col-md-6">
-                  <label>Related To</label>
+                  <label>Related To (Primary Contact)</label>
                   <select class="form-control" name="enquiry_id">
-                  	<?php
+                  <option value="0">Select </option>
+
+                    <?php
+                    print_r($enquiry_list);
                  	if(!empty($enquiry_list))
                  	{
                  		foreach ($enquiry_list as $row)
@@ -227,12 +230,13 @@ function deleteContact(t)
   var OLD_LIST  = <?=!empty($enquiry_list) ? json_encode($enquiry_list):'{}'?>;
   function filter_related_to(v)
   {
-      if(Object.keys(LIST).length>0 && v!='-1')
+      if(Object.keys(LIST).length>0 && v!='-1' )
       { 
         var l = '';
         var y = LIST[v];
         var ids = y.enq_ids.split(',');
         var names = y.enq_names.split(',');
+
         $(ids).each(function(k,id){
             l+="<option value='"+id+"'>"+names[k]+"</option>";
         });
