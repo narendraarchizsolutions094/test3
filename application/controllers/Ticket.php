@@ -2568,4 +2568,17 @@ class Ticket extends CI_Controller
 			$this->db->where($where);
 			
 		}
+		public function has_close_authority($created_by){
+			$cuid = $this->session->user_id;
+			$res = 0;
+			if($cuid == $created_by){
+				$res = 1;
+			}else{
+				$all_reporting_ids    =   $this->common_model->get_categories($this->session->user_id);
+				if(in_array($created_by,$all_reporting_ids)){
+					$res = 1;
+				}
+			}
+			echo $res;
+		}
 }

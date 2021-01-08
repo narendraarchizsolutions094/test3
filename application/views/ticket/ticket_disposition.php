@@ -1,7 +1,5 @@
 <script src="<?=base_url()?>/assets/summernote/summernote-bs4.min.js"></script>
 <link href="<?=base_url()?>/assets/summernote/summernote-bs4.css" rel="stylesheet" />
-
-
 <div class="row">   
       <div  class="panel panel-default thumbnail">
          <div class="panel-heading no-print">
@@ -205,6 +203,27 @@ if(!empty($ticket->ticket_stage)){
 <?php
 if($this->session->companey_id == 65){ ?>
   <script>
+  $("select[name='ticket_status']").on('change',function(){    
+    has_close_authority();
+  });
+
+  function has_close_authority(){
+    if($("select[name='ticket_status']").val() == 3){
+      var url = "<?=base_url().'ticket/has_close_authority/'.$ticket->added_by?>";    
+      $.ajax({
+        url: url,
+        type: 'POST',
+        success: function(result) {
+          if(!result){
+            $("#ticket_disposition_save").attr('disabled',true);
+          }else{
+            $("#ticket_disposition_save").removeAttr('disabled');
+          }
+        }
+      });
+    }
+  }
+  
   if(<?=$ticket->complaint_type?>==2){
     if("<?=empty($ticket->ticket_stage)?>"){
       $("select[name=lead_description]").load("<?=base_url('message/find_substage/1')?>");    
