@@ -2581,4 +2581,17 @@ class Ticket extends CI_Controller
 			}
 			echo $res;
 		}
+
+		public function change_ticket_status($tid){
+			$status	=	$this->input->post('ticket_status');
+			$comp_id = $this->session->companey_id;
+			if($status){
+				$this->db->where('id',$tid);
+				$this->db->where('company',$comp_id);
+				$this->db->set('ticket_status',$status);
+				if($this->db->update('tbl_ticket')){
+					$comment_id = $this->Ticket_Model->saveconv($tid,'Ticket Status Changed','', $this->input->post('client'),$this->session->user_id,0,0,$status,$comp_id);
+				}
+			}
+		}
 }

@@ -216,14 +216,45 @@ if($this->session->companey_id == 65){ ?>
         success: function(result) {
           if(result == 0){
             $("#ticket_disposition_save").attr('disabled',true);
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: 'You can not close this ticket!'              
+            })
           }else{
+            change_ticket_status();
             $("#ticket_disposition_save").removeAttr('disabled');
           }
         }
       });
     }else{
+      change_ticket_status();
       $("#ticket_disposition_save").removeAttr('disabled');
     }
+  }
+
+
+  function change_ticket_status(){
+    var status = $("select[name='ticket_status']").val();    
+    if(status){
+      var url = "<?=base_url().'ticket/change_ticket_status/'.$ticket->id?>";    
+      $.ajax({
+        url: url,
+        type: 'POST',
+        data:{
+          ticket_status:status,
+          client:"<?=$ticket->client?>"
+        }
+        success: function(result) {
+          Swal.fire(
+            'Good job!',
+            'Status Changed Successfully!',
+            'success'
+          )
+        }
+      });
+    }
+
   }
   
   if(<?=$ticket->complaint_type?>==2){
