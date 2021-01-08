@@ -1,7 +1,4 @@
 <?php
-/**
- * 
- */
 class Target_Model extends CI_model
 {
 

@@ -3231,14 +3231,20 @@ public function timelinePopup()
     }
  }
 
- public function update_info_status()
+ public function update_info_status($enqno=0)
  {
     $commerical_id = $this->input->post('id');
     $status = $this->input->post('status');
      $this->db->where('id',$commerical_id);
      $this->db->where('comp_id',$this->session->companey_id);
      $this->db->set('status',$status);
-     $this->db->update('commercial_info');
+     $res = $this->db->update('commercial_info');
+
+     if($res)
+     {
+        $this->load->model('Leads_Model');
+        $this->Leads_Model->add_comment_for_events('Commercial Info Status Updated',$enqno);
+     }
      echo '1';
  }
     public function get_rate()
