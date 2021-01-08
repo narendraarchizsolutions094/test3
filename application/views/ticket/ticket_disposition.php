@@ -214,7 +214,7 @@ if($this->session->companey_id == 65){ ?>
         url: url,
         type: 'POST',
         success: function(result) {
-          if(!result){
+          if(result == 0){
             $("#ticket_disposition_save").attr('disabled',true);
           }else{
             $("#ticket_disposition_save").removeAttr('disabled');
