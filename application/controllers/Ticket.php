@@ -2568,4 +2568,33 @@ class Ticket extends CI_Controller
 			$this->db->where($where);
 			
 		}
+		public function has_close_authority($created_by){
+			$cuid = $this->session->user_id;
+			$res = 0;
+			if($cuid == $created_by){
+				$res = 1;
+			}else{
+				$all_reporting_ids    =   $this->common_model->get_categories($this->session->user_id);
+				if(in_array($created_by,$all_reporting_ids)){
+					$res = 1;
+				}
+			}
+			echo $res;
+		}
+
+		public function change_ticket_status($tid){
+			$status	=	$this->input->post('ticket_status');
+			$comp_id = $this->session->companey_id;
+			if($status){
+				$this->db->where('id',$tid);
+				$this->db->where('company',$comp_id);
+				$this->db->set('ticket_status',$status);
+				if($this->db->update('tbl_ticket')){
+					$comment_id = $this->Ticket_Model->saveconv($tid,'Ticket Status Changed','', $this->input->post('client'),$this->session->user_id,0,0,$status,$comp_id);
+					$ticketno = $this->input->post('ticketno');
+					$this->load->model('rule_model');
+					$this->rule_model->execute_rules($ticketno, array(3,6,7));
+				}
+			}
+		}
 }

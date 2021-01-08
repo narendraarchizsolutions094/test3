@@ -155,7 +155,7 @@
     }
    $.ajax({
    type: 'POST',
-  url: '<?php echo base_url();?>message/get_templates/<?php echo $ticket->product ?>/0/'+SMS,
+  url: '<?php echo base_url();?>message/get_templates/<?php echo $ticket->process ?>/0/'+SMS,
 
    })
    .done(function(data){
