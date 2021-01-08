@@ -224,8 +224,9 @@ if($this->session->companey_id == 65){ ?>
               icon: 'error',
               title: 'Oops...',
               text: 'You can not close this ticket!'              
-            })
-            $("select[name='ticket_status']").val("<?=$ticket->ticket_status?>");
+            }).then((result) => {
+              $("select[name='ticket_status']").val("<?=$ticket->ticket_status?>");
+            });
           }else{
             if(!auto){
               change_ticket_status();
