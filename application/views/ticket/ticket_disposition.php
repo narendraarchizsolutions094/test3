@@ -75,6 +75,21 @@
               <?php
             }
             ?>
+            <select name='quick_ticket_status' class="btn btn-success btn-sm quick_btn fa fa-ticket"  type="button" title="Change Status">                       
+            <?php
+              if(!empty($ticket_status))
+              {
+                ?>
+                <option value=''>- Select -</option>
+                <?php
+                foreach($ticket_status as $status)
+                {  
+                  ?>                              
+                  <option value="<?=$status->id?>" <?=($status->id==$ticket->ticket_status?'selected':'')?>><?php echo $status->status_name; ?></option>
+                  <?php 
+                }
+              }?>
+            </select>
          </div>
               <button class="btn btn-basic" type="button" style="width: 100%; margin-top: 5px;margin-bottom: 5px;">Disposition</button>
             
@@ -200,19 +215,26 @@ if(!empty($ticket->ticket_stage)){
 }
 ?>
 </script>
+<script>
 <?php
 if($this->session->companey_id == 65){ ?>
-  <script>
-  $("select[name='ticket_status']").on('change',function(e){  
-    if(confirm('Are you sure ?')){
-      has_close_authority(false);
+  $("select[name='ticket_status'],select[name='quick_ticket_status']").on('change',function(e){  
+    if("<?=$ticket->ticket_status?>" == 3){
+      alert('Can not change. Ticket is closed');
+      $(this).val("<?=$ticket->ticket_status?>");
     }else{
-      $("select[name='ticket_status']").val("<?=$ticket->ticket_status?>");
+      if(confirm('Are you sure ?')){
+        has_close_authority(false,$(this));
+      }else{
+      $(this).val("<?=$ticket->ticket_status?>");
     }  
+
+    }
+
   });
 
-  function has_close_authority(auto=true){
-    if($("select[name='ticket_status']").val() == 3){
+  function has_close_authority(auto=true,e){
+    if(e.val() == 3){
       var url = "<?=base_url().'ticket/has_close_authority/'.$ticket->added_by?>";    
       $.ajax({
         url: url,
@@ -229,23 +251,58 @@ if($this->session->companey_id == 65){ ?>
             });
           }else{
             if(!auto){
-              change_ticket_status();
+              change_ticket_status(e);
             }
-            $("#ticket_disposition_save").removeAttr('disabled');
+            if("<?=$ticket->ticket_status?>" !=3 ){
+              $("#ticket_disposition_save").removeAttr('disabled');
+            }
           }
         }
       });
     }else{
       if(!auto){
-        change_ticket_status();
+        change_ticket_status(e);
       }
-      $("#ticket_disposition_save").removeAttr('disabled');
+      if("<?=$ticket->ticket_status?>" !=3 ){
+        $("#ticket_disposition_save").removeAttr('disabled');
+      }
     }
   }
 
 
-  function change_ticket_status(){
-    var status = $("select[name='ticket_status']").val();    
+  
+  
+  if("<?=$ticket->complaint_type?>"==2){
+    if("<?=empty($ticket->ticket_stage)?>"){
+      $("select[name=lead_description]").load("<?=base_url('message/find_substage/1')?>");    
+    }
+    $("#lead_stage_change").val('1');    
+    if("<?=$ticket->ticket_status?>" == 0){
+      $("select[name='ticket_status']").val('3');
+      $("select[name='quick_ticket_status']").val('3');
+    }
+  }  
+  if(<?=$ticket->ticket_status?>==3){
+    $("#ticket_disposition_save").attr('disabled',true);
+  }
+  has_close_authority(true,$("select[name='ticket_status']"));
+<?php
+}else{
+ ?>  
+  $("select[name='ticket_status'],select[name='quick_ticket_status']").on('change',function(e){  
+    if(confirm('Are you sure ?')){
+      change_ticket_status($(this));
+    }else{
+      $("select[name='ticket_status']").val("<?=$ticket->ticket_status?>");
+      $("select[name='quick_ticket_status']").val("<?=$ticket->ticket_status?>");
+    } 
+  });
+ <?php
+}
+?>
+
+  function change_ticket_status(e){
+    var status = e.val();    
     if(status){
       var url = "<?=base_url().'ticket/change_ticket_status/'.$ticket->id?>";    
       $.ajax({
@@ -253,36 +310,24 @@ if($this->session->companey_id == 65){ ?>
         type: 'POST',
         data:{
           ticket_status:status,
+          ticketno:"<?=$ticket->ticketno?>",
           client:"<?=$ticket->client?>"
         },
         success: function(result) {
+          $("select[name='ticket_status']").val(status);
+          $("select[name='quick_ticket_status']").val(status);
           Swal.fire(
             'Good job!',
             'Status Changed Successfully!',
             'success'
-          )
+          ).then((result)=>{
+            if(e.hasClass('quick_btn')){
+              location.reload();
+            }
+          });
         }
       });
     }
 
   }
-  
-  if(<?=$ticket->complaint_type?>==2){
-    if("<?=empty($ticket->ticket_stage)?>"){
-      $("select[name=lead_description]").load("<?=base_url('message/find_substage/1')?>");    
-    }
-    $("#lead_stage_change").val('1');    
-    if("<?=$ticket->ticket_status?>" == 0){
-      $("select[name='ticket_status']").val('3');
-    }
-  }  
-  if(<?=$ticket->ticket_status?>==3){
-    $("#ticket_disposition_save").attr('disabled',true);
-  }
-
-  has_close_authority();
-
-  </script>
-<?php
-}
-?>
+</script>
