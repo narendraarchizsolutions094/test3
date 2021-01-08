@@ -363,12 +363,12 @@ $(document).ready(function() {
         $("#ticket_filter").submit();
     });
 });
-</script>
+
 
   <?php  
   if(!empty($_POST)){
   ?>
-  <script>
+
   $(document).ready(function() {
   $('#ticket_table').DataTable({         
           "processing": true,
@@ -408,11 +408,11 @@ $(document).ready(function() {
     });
   });
 
-</script>
-
+  
   <?php
   }
   ?>
+  </script>
 
 <!--------------------TABLE COLOUMN CONFIG----------------------------------------------->
 <div id="table-col-conf" class="modal fade" role="dialog">
