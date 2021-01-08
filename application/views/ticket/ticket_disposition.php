@@ -244,28 +244,7 @@ if($this->session->companey_id == 65){ ?>
   }
 
 
-  function change_ticket_status(){
-    var status = $("select[name='ticket_status']").val();    
-    if(status){
-      var url = "<?=base_url().'ticket/change_ticket_status/'.$ticket->id?>";    
-      $.ajax({
-        url: url,
-        type: 'POST',
-        data:{
-          ticket_status:status,
-          client:"<?=$ticket->client?>"
-        },
-        success: function(result) {
-          Swal.fire(
-            'Good job!',
-            'Status Changed Successfully!',
-            'success'
-          )
-        }
-      });
-    }
-
-  }
+  
   
   if(<?=$ticket->complaint_type?>==2){
     if("<?=empty($ticket->ticket_stage)?>"){
@@ -282,7 +261,41 @@ if($this->session->companey_id == 65){ ?>
 
   has_close_authority();
 
-  </script>
 <?php
+}else{
+ ?>  
+  $("select[name='ticket_status']").on('change',function(e){  
+    if(confirm('Are you sure ?')){
+      change_ticket_status();
+    }else{
+      $("select[name='ticket_status']").val("<?=$ticket->ticket_status?>");
+    } 
+  });
+ <?php
 }
 ?>
+
+  function change_ticket_status(){
+    var status = $("select[name='ticket_status']").val();    
+    if(status){
+      var url = "<?=base_url().'ticket/change_ticket_status/'.$ticket->id?>";    
+      $.ajax({
+        url: url,
+        type: 'POST',
+        data:{
+          ticket_status:status,
+          ticketno:"<?=$ticket->ticketno?>",
+          client:"<?=$ticket->client?>"
+        },
+        success: function(result) {
+          Swal.fire(
+            'Good job!',
+            'Status Changed Successfully!',
+            'success'
+          )
+        }
+      });
+    }
+
+  }
+</script>
