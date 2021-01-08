@@ -204,10 +204,10 @@ if(!empty($ticket->ticket_stage)){
 if($this->session->companey_id == 65){ ?>
   <script>
   $("select[name='ticket_status']").on('change',function(){    
-    has_close_authority();
+    has_close_authority(false);
   });
 
-  function has_close_authority(){
+  function has_close_authority(auto=true){
     if($("select[name='ticket_status']").val() == 3){
       var url = "<?=base_url().'ticket/has_close_authority/'.$ticket->added_by?>";    
       $.ajax({
@@ -222,13 +222,17 @@ if($this->session->companey_id == 65){ ?>
               text: 'You can not close this ticket!'              
             })
           }else{
-            change_ticket_status();
+            if(!auto){
+              change_ticket_status();
+            }
             $("#ticket_disposition_save").removeAttr('disabled');
           }
         }
       });
     }else{
-      change_ticket_status();
+      if(!auto){
+        change_ticket_status();
+      }
       $("#ticket_disposition_save").removeAttr('disabled');
     }
   }
