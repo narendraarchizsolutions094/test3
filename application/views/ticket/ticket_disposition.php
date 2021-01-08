@@ -203,9 +203,11 @@ if(!empty($ticket->ticket_stage)){
 <?php
 if($this->session->companey_id == 65){ ?>
   <script>
-  $("select[name='ticket_status']").on('change',function(){  
+  $("select[name='ticket_status']").on('change',function(e){  
     if(confirm('Are you sure ?')){
       has_close_authority(false);
+    }else{
+      e.preventDefault();
     }  
   });
 
