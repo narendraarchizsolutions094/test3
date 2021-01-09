@@ -107,6 +107,7 @@ class Enquiry_model extends CI_Model {
             break;
 
             case 4:
+            $basic[$key]['other_phone'] = $enquiry->other_phone;
             $basic[$key]['parameter_name'] = 'mobileno';
             $basic[$key]['current_value'] = $enquiry->phone;
             break;
@@ -1482,6 +1483,8 @@ class Enquiry_model extends CI_Model {
         $this->db->where('Enquery_id', $code);
         return $this->db->get('enquiry')->row();
     }
+
+    
 
 
     /* -----------------------search Start---------------------- */
