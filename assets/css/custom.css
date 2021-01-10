@@ -5251,17 +5251,11 @@ pre .arg {
 .ui-widget.ui-widget-content {
     font-size: 14px;
     color: #374767;
-    border: 1;
+    border: 0;
     -webkit-box-shadow: 0px 0px 15px 1px rgba(113, 106, 202, 0.2);
     -moz-box-shadow: 0px 0px 15px 1px rgba(113, 106, 202, 0.2);
     box-shadow: 0px 0px 15px 1px rgba(113, 106, 202, 0.2);
     font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-}
-.ui-slider-horizontal {
-    height: 1.3em;
-}
-.ui-slider .ui-slider-handle {
-    height: 1.6em;
 }
 .ui-datepicker.ui-widget.ui-widget-content {
     font-size: 17px;
@@ -5279,9 +5273,10 @@ pre .arg {
     background: transparent;
 }
 .ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default, .ui-button, html .ui-button.ui-state-disabled:hover, html .ui-button.ui-state-disabled:active {
-    border: 1px solid ;
+    /*border: 1px solid #e1e6ef;*/
     border: 0;
-    background: #007fff;
+    /*background: #f1f3f6;*/
+    background: transparent;
     font-weight: 500;
     color: #374767;
 }

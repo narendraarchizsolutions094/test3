@@ -50,7 +50,7 @@ class Client extends CI_Controller {
         }
         $data['all_stage_lists'] = $this->Leads_Model->get_leadstage_list_byprocess1($this->session->process,array(1,2,3));
 		$data['filterData'] = $this->Ticket_Model->get_filterData(1);
-        
+        $data['lead_score'] = $this->Leads_Model->get_leadscore_list();
         $data['content'] = $this->load->view('enquiry_n', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }

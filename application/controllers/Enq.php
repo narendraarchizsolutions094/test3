@@ -55,6 +55,7 @@ class Enq extends CI_Controller
 		$data['state_list'] = $this->enquiry_model->get_user_state_list();
 		$data['city_list'] = $this->enquiry_model->get_user_city_list();
 		$data['filterData'] = $this->Ticket_Model->get_filterData(1);
+		$data['lead_score'] = $this->Leads_Model->get_leadscore_list();
 		//print_r($data['filterData']); exit();
 		$data['content'] = $this->load->view('enquiry_n', $data, true);
 		$this->load->view('layout/main_wrapper', $data);
