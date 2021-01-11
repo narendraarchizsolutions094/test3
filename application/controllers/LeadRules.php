@@ -162,6 +162,7 @@ class LeadRules extends CI_Controller {
         $country   =   $this->location_model->country();
         $state     =   $this->location_model->estate_list();
         $city      =   $this->location_model->ecity_list();
+		$lead_score = $this->Leads_Model->get_leadscore_list();
         
         $process_list = $this->dash_model->get_user_product_list();        
         $sub_source = $this->Datasource_model->subsourcelist();             
@@ -236,13 +237,21 @@ class LeadRules extends CI_Controller {
             }
         }  
 
+        $rule_lead_score = array();
+        if (!empty($lead_score)) {
+            foreach ($lead_score as $key => $value) {
+                $rule_lead_score[$value->sc_id] = $value->score_name. ' '.$value->probability;
+            }
+        }  
+
         $data['lead_stages'] = $this->Leads_Model->getStageJson(array(1,2,3));
         $data['ticket_stages'] = $this->Leads_Model->getStageJson(array(4));
-        
         $data['lead_description'] = $this->Leads_Model->getSubStageJson(array(1,2,3));
         $data['ticket_description'] = $this->Leads_Model->getSubStageJson(array(4));
         $data['rule_ticket_status'] = json_encode($rule_ticket_status);
         $data['rule_enquiry_status'] = json_encode(array(1=>'Enquiry',2=>'Lead',3=>'Client'));
+        
+        $data['rule_lead_score'] = json_encode($rule_lead_score);
         $data['lead_source'] = json_encode($rule_source);
         $data['country']     = json_encode($rule_country);
         $data['state']       = json_encode($rule_state);
