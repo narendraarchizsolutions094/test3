@@ -261,6 +261,10 @@ class Enquiry extends REST_Controller {
       $basic= $this->location_model->get_company_list1($process_id);
       foreach ($basic as $key => $input)
       {
+
+        if($input['field_id']==13)
+          unset($basic[$key]);
+
           switch($input['field_id'])
           { 
             case 1:
@@ -325,7 +329,7 @@ class Enquiry extends REST_Controller {
                               );
             }
             $basic[$key]['input_values'] = $values;
-            $basic[$key]['parameter_name'] = 'product_id';
+            $basic[$key]['parameter_name'] = 'sub_source';
             break;
             case 9:
             $state_list = $this->location_model->estate_list();
