@@ -216,8 +216,14 @@ class Enq extends CI_Controller
 				$row[] = (!empty($each->Enquery_id)) ? $each->Enquery_id : "NA";
 			}
 			if ($showall == true or in_array(18, $acolarr)) {
-				$sc = (!empty($each->score)) ? $each->score : "NA";
-				$row[] = $sc.' '.$each->score_name;
+				$sc = (!empty($each->score)) ? $each->score : "NA";				
+				
+				if(!empty($each->score_name)){
+					$row[] = $sc.' <span class="label label-primary">'.$each->score_name.'</span';
+				}else{					
+					$row[] = $sc;
+				}
+
 			}
 			if ($showall == true or in_array(19, $acolarr)) {
 				$row[] = (!empty($each->enquiry)) ? $each->enquiry : "NA";
