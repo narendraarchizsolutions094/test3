@@ -69,6 +69,9 @@ class Enq extends CI_Controller
 	{
 		$this->load->model('enquiry_datatable_model');
 		$list = $this->enquiry_datatable_model->get_datatables();
+		if($this->session->companey_id == 1){
+			echo $this->db->last_query();
+		}
 		$dfields = $this->enquiry_model->getformfield(0); //0 for enquiry
 		$data = array();
 		$no = $_POST['start'];
