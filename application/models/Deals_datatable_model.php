@@ -142,7 +142,7 @@ class Deals_datatable_model extends CI_Model{
             
         }
 
-
+        //echo $_POST['specific_list']; exit();
         if(!empty($_POST['specific_list']))
         {
             if($and)
@@ -152,7 +152,7 @@ class Deals_datatable_model extends CI_Model{
             $and =1;
         }
 
-
+        //echo $where; exit();
         if($where!='')
         $this->db->where($where);
  

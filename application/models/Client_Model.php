@@ -104,7 +104,7 @@ class Client_Model extends CI_Model
     }
     
     
-    public function getContactList()
+    public function getContactList($specific=array())
     {
         $where = 'enquiry.comp_id='.$this->session->companey_id;
         $all_reporting_ids    =   $this->common_model->get_categories($this->session->user_id);
@@ -112,6 +112,10 @@ class Client_Model extends CI_Model
         $where .= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';          
         if($where)
             $this->db->where($where);
+
+        if(!empty($specific))
+            $this->where_in('cc_id',$specific);
+
         $this->db->select('contacts.*,enquiry.company,enquiry.enquiry_id,concat_ws(" ",name_prefix,name,lastname) as enq_name');
         $this->db->from('tbl_client_contacts contacts');
         $this->db->join('enquiry','enquiry.enquiry_id=contacts.client_id','inner');
@@ -120,7 +124,7 @@ class Client_Model extends CI_Model
         //echo $this->db->last_query(); exit();
     }
 
-     public function getCompanyList()
+    public function getCompanyList($match = '')
     {
         $where = 'enquiry.comp_id='.$this->session->companey_id;
         $all_reporting_ids    =   $this->common_model->get_categories($this->session->user_id);
@@ -128,15 +132,50 @@ class Client_Model extends CI_Model
         $where .= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';          
         if($where)
             $this->db->where($where);
+
         $this->db->select('count(enquiry_id) as num, company , GROUP_CONCAT(enquiry_id) as enq_ids,GROUP_CONCAT(status) as enq_status,GROUP_CONCAT(CONCAT(name_prefix,\' \',name,\' \',lastname)) as enq_names ');
         $this->db->from('enquiry');
         $this->db->where('enquiry.company IS NOT NULL and CHAR_LENGTH(REPLACE(`enquiry`.company, " ", ""))>0');
+
+        if($match)
+            $this->db->where('REPLACE(`enquiry`.company, " ", "") = ',str_replace(' ','',$match));
         $this->db->group_by('REPLACE(`enquiry`.company, " ", "")');
         //$this->db->join('enquiry','enquiry.enquiry_id=contacts.client_id','inner');
         return $this->db->get();
         //echo $this->db->last_query(); exit();
     }
 
+    public function getCompanyData($enquires=array(),$datatype)
+    {
+        if(!is_array($enquires))
+            $enquires=array($enquires);
+
+       if($datatype=='deals')
+       {
+            $this->db->select('*');
+            $this->db->where_in('enquiry_id',$enquires);
+          return  $this->db->get('commercial_info');
+       }
+       else if($datatype=='contacts')
+       {
+            $this->db->select('*');
+            $this->db->where_in('client_id',$enquires);
+          return  $this->db->get('tbl_client_contacts');
+       }
+       else if($datatype=='tickets')
+       {
+            $this->db->select('*');
+            $this->db->where_in('client',$enquires);
+          return  $this->db->get('tbl_ticket');
+       }
+       else if($datatype=='visits')
+       {
+            $this->db->select('*');
+            $this->db->where_in('enquiry_id',$enquires);
+          return  $this->db->get('tbl_visit');
+       }
+
+    }
 
     public function all_created_today()
     {

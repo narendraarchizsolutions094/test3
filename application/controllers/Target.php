@@ -112,6 +112,7 @@ class Target extends CI_controller
 
 		$role  = $this->input->post('role_for')??0;
 		$user = $this->input->post('user_for')==''?0:$this->input->post('user_for');
+
 		$metric_type = $this->input->post('metric_type')??0;
 		$fetch_type = $this->input->post('fetch_type')?2:1;
 
@@ -210,8 +211,10 @@ class Target extends CI_controller
 						$ci->load->model('Target_Model');
 						//echo $fetch_type.' '.$user.'|201';exit();
 						$Forecast = $ci->Target_Model->getForecast($goal->goal_id,$fetch_type,$user);
+						
 						$Achieved = $ci->Target_Model->getAchieved($goal->goal_id,$fetch_type,$user);
-
+						// echo $this->db->last_query();
+						// print_r($Achieved); exit();
 
 						$forecast_value =(int)($goal->metric_type=='deal'?$Forecast->p_amnt:$Forecast->num_value);
 						$achieved_value =(int)($goal->metric_type=='deal'?$Achieved->p_amnt:$Achieved->num_value);
@@ -554,27 +557,132 @@ class Target extends CI_controller
 
 	}
 
-	// public function view_source()
-	// {
-	// 	$list = $this->input->post('source_list');
-	// 	echo'<hr>
+	public function current_year_target_forecast()
+	{
+		$this->load->model('common_model');
 
-	// 	<table class="table table-bordered table-hover">
-	// 		<thead>
-	// 			<tr>
-	// 				<th>#</th>
-	// 				<th>Enquiry ID</th>
-	// 				<th>Name</th>
-	// 				<th></th>
-	// 			</tr>
-	// 		</thead>
-	// 	<tbody>
-	// 	';
-	// 	foreach (explode(',',$list) as $id)
-	// 	{
+		$post = array();
+		if(!empty($_POST['datas']))
+			$post  =(array) json_decode($_POST['datas']);
+
+
+		if(!empty($post['users']))
+		{
+		$all_reporting_ids = $this->common_model->get_categories($post['users']);
+		}
+		else
+		{	
+		$all_reporting_ids = $this->common_model->get_categories($this->session->user_id);
+		}
+
+
+		$data = array();
+		for($i=1; $i<=12;$i++)
+		{
+			if($i<10)
+			{
+				$date = date('Y').'-0'.$i;
+				$prev  = ((int)date('Y')-1).'-0'.$i;
+			}
+			else
+			{
+				$date = date('Y').'-'.$i;
+				$prev  = ((int)date('Y')-1).'-'.$i;
+			}
+
+			//this year forecast
+			$this->db->select('sum(info.expected_amount) as e_amnt,sum(info.potential_amount) as p_amnt,COUNT(DISTINCT(info.id)) as info_count,GROUP_CONCAT(info.id) as info_ids,COUNT(DISTINCT(enquiry.enquiry_id)) as enq_count,GROUP_CONCAT(DISTINCT(enquiry.enquiry_id)) as enq_ids');
+
+			$this->db->from('enquiry')
+				->join('commercial_info info','info.enquiry_id = enquiry.enquiry_id and info.status IN (0,1)','inner');
+
+			$this->db->where('enquiry.lead_expected_date LIKE "%'.$date.'%"');
+
+			if(!empty($post['from_date']))
+				$this->db->where('enquiry.lead_expected_date >= "'.$post['from_date'].'"');
+
+			if(!empty($post['to_date']))
+				$this->db->where('enquiry.lead_expected_date <= "'.$post['to_date'].'"');
+
+			$this->db->where_in('info.createdby ',$all_reporting_ids);
+			$this->db->where_in('enquiry.product_id',$this->session->process);
+			//$this->db->where('enquiry.status=2');
+			$res = $this->db->get()->row();
+			//echo $this->db->last_query(); exit();
+			$data[0]['forecast'][]  = (float)$res->p_amnt;
+
+			//prev year forecast
+
+			$this->db->select('sum(info.expected_amount) as e_amnt,sum(info.potential_amount) as p_amnt,COUNT(DISTINCT(info.id)) as info_count,GROUP_CONCAT(info.id) as info_ids,COUNT(DISTINCT(enquiry.enquiry_id)) as enq_count,GROUP_CONCAT(DISTINCT(enquiry.enquiry_id)) as enq_ids');
+
+			$this->db->from('enquiry')
+				->join('commercial_info info','info.enquiry_id = enquiry.enquiry_id and info.status IN (0,1)','inner');
+			$this->db->where('enquiry.lead_expected_date LIKE "%'.$prev.'%"');	
 			
-	// 	}
-	// }
+			if(!empty($post['from_date']))
+				$this->db->where('enquiry.lead_expected_date >= "'.$post['from_date'].'"');
 
+			if(!empty($post['to_date']))
+				$this->db->where('enquiry.lead_expected_date <= "'.$post['to_date'].'"');
+
+			$this->db->where_in('info.createdby',$all_reporting_ids);
+			$this->db->where_in('enquiry.product_id',$this->session->process);
+
+			$res = $this->db->get()->row();
+
+			$data[1]['forecast'][]  = (float)$res->p_amnt;
+
+
+			// this year achieved
+
+			$this->db->select('sum(info.expected_amount) as e_amnt,sum(info.potential_amount) as p_amnt,COUNT(DISTINCT(info.id)) as info_count,GROUP_CONCAT(info.id) as info_ids,COUNT(DISTINCT(enquiry.enquiry_id)) as enq_count,GROUP_CONCAT(DISTINCT(enquiry.enquiry_id)) as enq_ids');
+			
+		
+			$this->db->from('enquiry')
+				->join('commercial_info info','info.enquiry_id=enquiry.enquiry_id  and info.status=1','inner');
+
+
+			$this->db->where('enquiry.client_created_date LIKE "%'.$date.'%"');
+			
+
+			if(!empty($post['from_date']))
+				$this->db->where('enquiry.client_created_date >= "'.$post['from_date'].'"');
+
+			if(!empty($post['to_date']))
+				$this->db->where('enquiry.client_created_date <= "'.$post['to_date'].'"');
+
+			$this->db->where_in('info.createdby',$all_reporting_ids);
+			$this->db->where_in('enquiry.product_id',$this->session->process);	
+
+			$res = $this->db->get()->row();
+
+			$data[0]['achieved'][]  = (float)$res->p_amnt;
+
+			//prev year achieved
+
+			$this->db->select('sum(info.expected_amount) as e_amnt,sum(info.potential_amount) as p_amnt,COUNT(DISTINCT(info.id)) as info_count,GROUP_CONCAT(info.id) as info_ids,COUNT(DISTINCT(enquiry.enquiry_id)) as enq_count,GROUP_CONCAT(DISTINCT(enquiry.enquiry_id)) as enq_ids');
+			
+		
+			$this->db->from('enquiry')
+				->join('commercial_info info','info.enquiry_id=enquiry.enquiry_id  and info.status=1','inner');
+				
+			$this->db->where('enquiry.client_created_date LIKE "%'.$prev.'%"');
+
+			if(!empty($post['from_date']))
+				$this->db->where('enquiry.client_created_date >= "'.$post['from_date'].'"');
+
+			if(!empty($post['to_date']))
+				$this->db->where('enquiry.client_created_date <= "'.$post['to_date'].'"');
+
+			$this->db->where_in('info.createdby',$all_reporting_ids);
+			$this->db->where_in('enquiry.product_id',$this->session->process);
+
+			$res = $this->db->get()->row();
+
+			$data[1]['achieved'][]  = (float)$res->p_amnt;
+
+		}
+		echo json_encode($data);
+	}
 }
 ?>

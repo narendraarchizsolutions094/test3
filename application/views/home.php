@@ -595,6 +595,23 @@ $enquiry_separation = json_decode($enquiry_separation, true);
 
                     </div>
                 </div>
+
+<?php
+if(user_access('260') || user_access('261') || user_access('250'))
+{
+?>
+<div class="col-lg-12 col-xl-12 mg-t-10">
+    <center><label>Year <?=date('Y')?></label></center>
+    <canvas id="target_forecasting" width="800" height="450"></canvas>
+</div>
+
+<div class="col-lg-12 col-xl-12 mg-t-10" style="margin-top: 60px;">
+    <center><label>Year <?=((int)date('Y'))-1?> VS <?=((int)date('Y'))?></label></center>
+    <canvas id="target_forecasting_previous" width="800" height="450"></canvas>
+</div>
+<?php
+}
+?>
                 <!------------------------------------------------------------------Timeline END-------------------------------------------->
                 <div class="col-lg-12 col-xl-12 mg-t-10">
                     <hr style="border: 1px solid #3a95e4 !important">
@@ -1762,6 +1779,110 @@ $newDate = date("Y-m-d", strtotime($t_date));
             <!-- source graph ends here -->
             <!------------------------------------------timline JS---------------------------------------------------->
    
+<!-- Target Forecasting graph sg -->
+
+<?php
+if(user_access('260') || user_access('261') || user_access('250'))
+{
+?>
+<script type="text/javascript">
+$(document).ready(function(){
+
+try{
+var data_s= '<?php  if(!empty($filterData)){ echo $filterData; } ?>';
+
+$.ajax({
+    url:'<?=base_url('target/current_year_target_forecast')?>',
+    type:'post',
+    data:{datas:data_s},
+    success:function(q)
+    {   var j = JSON.parse(q);
+        var fore = j[0].forecast.toString().split(',');
+        var ach = j[0].achieved.toString().split(',');
+       
+         new Chart(document.getElementById("target_forecasting"), {
+                                type: 'bar',
+                                data: {
+                                    labels: ["JAN", "FEB", "MAR", "APR", "MAY", "JUNE",
+                                        "JULY", "AUG", "SEP", "OCT", "NOV", "DEC"
+                                    ],
+                                    datasets: [
+                                        {
+                                            label: "Forecast",
+                                            backgroundColor: "#3e95cd",
+                                            data: fore
+                                        },
+                                        {
+                                            label: "Achieved",
+                                            backgroundColor: "#84edb1",
+                                            data:ach
+                                        },
+
+                                    ]
+                                },
+                                options: {
+                                            title: {
+                                                display: true,
+                                                //text: 'Vertical Bar Graph'
+                                            }
+                                        }
+                            });
+
+        var p_fore = j[1].forecast.toString().split(',');
+        var p_ach = j[1].achieved.toString().split(',');
+
+         new Chart(document.getElementById("target_forecasting_previous"), {
+                                type: 'bar',
+                                data: {
+                                    labels: ["JAN", "FEB", "MAR", "APR", "MAY", "JUNE",
+                                        "JULY", "AUG", "SEP", "OCT", "NOV", "DEC"
+                                    ],
+                                    datasets: [
+                                        {
+                                            label: "Forecast <?=date('Y')?>",
+                                            backgroundColor: "#7c71a5",
+                                            data: fore
+                                        },
+                                        {
+                                            label: "Forecast <?=date('Y')-1?>",
+                                            backgroundColor: "#b0abc0",
+                                            data: p_fore
+                                        },
+                                        {
+                                            label: "Achieved <?=date('Y')?>",
+                                            backgroundColor: "#49d44e",
+                                            data:ach
+                                        },
+                                        {
+                                            label: "Achieved <?=date('Y')-1?>",
+                                            backgroundColor: "#98e1b6",
+                                            data:p_ach
+                                        },
+                                        
+                                    ]
+                                },
+                                options: {
+                                            title: {
+                                                display: true,
+                                                //text: 'Vertical Bar Graph'
+                                            }
+                                        }
+                            });
+    }
+});
+
+}catch(e){alert(e);}
+
+
+});
+
+
+
+</script>
+<?php
+}
+?>
+<!--  -->
             <script src="<?php echo base_url()?>custom_dashboard/assets/js/amcharts/moment.min.js"></script>
             <script src="<?php echo base_url()?>custom_dashboard/assets/js/amcharts/fullcalendar.min.js"></script>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>

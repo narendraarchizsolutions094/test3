@@ -130,6 +130,15 @@ class Visit_datatable_model extends CI_Model{
             $and =1;
         }
 
+        if(!empty($_POST['specific_list']))
+        {
+            if($and)
+                $where.=" and ";
+
+            $where.=" ( tbl_visit.id IN (".$_POST['specific_list'].") ) ";
+            $and =1;
+        }
+
         if($where!='')
         $this->db->where($where);
  

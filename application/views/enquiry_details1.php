@@ -2010,7 +2010,7 @@ function update_info_status(id,status)
 {
      $.ajax({
             type: 'POST',
-            url: '<?php echo base_url();?>enquiry/update_info_status',
+            url: '<?php echo base_url();?>enquiry/update_info_status/<?=$enquiry->Enquery_id?>',
             data: {id:id,status:status},
             success:function(data){
                 Swal.fire('Status Updated');
@@ -4107,6 +4107,10 @@ if (document.getElementById('agg_same').checked)
    z-index: 9090;
     right: 5px;
   }
+  .timeline
+  {
+    padding-left: 0px;
+  }
 </style>
 <script type="text/javascript">
 
@@ -4237,7 +4241,7 @@ $(".toogle-timeline").click(function(){
 <!----------------------------------------------------------chat section end--------------------------------------------------------->
 <script>
     function add_more_phone(add_more_phone) {
-       var html='<div class="form-group col-sm-4"><label>Other No </label><input class="form-control"  name="other_no[]" type="text" placeholder="Other Number"   ></div>';
+       var html='<div class="form-group col-sm-6 col-md-6"><label>Other No </label><input class="form-control"  name="other_no[]" type="text" placeholder="Other Number"   ></div>';
         $('#'+add_more_phone).append(html);          
     }
   function delete_institute(id){
