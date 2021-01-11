@@ -42,7 +42,7 @@ class Led extends CI_Controller {
 		$data['dfields']  = $this->enquiry_model-> getformfield();
 		$data['subsource_list'] = $this->Datasource_model->subsourcelist();	
 		$data['filterData'] = $this->Ticket_Model->get_filterData(1);
-
+		$data['lead_score'] = $this->Leads_Model->get_leadscore_list();
         $data['content'] = $this->load->view('enquiry_n', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }

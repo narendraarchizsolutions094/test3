@@ -236,6 +236,10 @@ input[name=lead_stages]{
                      <li>
                       <label>
                       <input type="checkbox" value="stage" id="stageheckbox" name="filter_checkbox">Stage</label>
+                    </li>
+                    <li>
+                      <label>
+                      <input type="checkbox" value="probability" id="probabilitycheckbox" name="filter_checkbox">Probability</label>
                     </li> 
                     <li class="text-center">
                       <a href="javascript:void(0)" class="btn btn-sm btn-primary " id='save_advance_filters' title="Save Filters Settings"><i class="fa fa-save"></i></a>
@@ -596,6 +600,22 @@ display: block;
                               <?php } ?>
                         </select>
                       </div>
+
+                      <div class="form-group col-md-3" id="probabilityfilter">
+                        <label for="">Probability</label> 
+                        <select name="probability" class="form-control">
+                          <option value="">Select</option>
+                          <?php 
+                          if(!empty($lead_score)){
+                            foreach ($lead_score as $prob) {  ?>
+                              <option value="<?= $prob->sc_id ?>"  <?php if(!empty($filterData['probability']) &&$prob->sc_id==$filterData['probability']) {echo 'selected';}?>><?php echo $prob->score_name; ?></option>
+                              <?php } 
+                              }
+                              ?>
+                        </select>
+                      </div>
+
+                      
                       <div class="form-group col-md-3">
                     <button class="btn btn-success" id="save_filterbutton" type="button" onclick="ticket_save_filter();" style="margin: 20px;">Save</button>        
                         </div>  
@@ -1939,6 +1959,16 @@ if (enq_filters=='') {
   $('#save_filterbutton').show();
 
 }
+
+
+if (!enq_filters.includes('probability')) {
+  $('#probabilityfilter').hide();  
+}else{
+  $("input[value='probability']").prop('checked', true);
+}
+
+
+
 if (!enq_filters.includes('date')) {
   $('#fromdatefilter').hide();
   $('#todatefilter').hide();
@@ -2058,7 +2088,9 @@ $('input[name="filter_checkbox"]').click(function(){
 
 $('#buttongroup').hide();
 
- $('input[name="filter_checkbox"]').click(function(){              
+ $('input[name="filter_checkbox"]').click(function(){   
+   
+  
         if($('#datecheckbox').is(":checked")){
          $('#fromdatefilter').show();
          $('#todatefilter').show();
@@ -2086,6 +2118,14 @@ $('#buttongroup').hide();
           $("#buttongroup").hide();
         }
 
+        if($('#probabilitycheckbox').is(":checked")){
+          $('#probabilityfilter').show();
+          $("#buttongroup").show();
+        }
+        else{
+          $('#probabilityfilter').hide();
+          $("#buttongroup").hide();
+        }
 
         if($('#subsourcecheckbox').is(":checked")){
           $('#subsourcefilter').show();
