@@ -750,4 +750,54 @@ $compid = $this->input->post('comp_id');
     }
 }
 
+  public function active_leads_page_post(){   
+      $user_id= $this->input->post('user_id');
+      $process_id= $this->input->post('process_id');
+      $offset = $this->input->post('offset')??0;
+      $limit = $this->input->post('limit')??10;
+      //for multiprocess id
+      if(!empty($process_id))
+      {
+        $process = implode(',',$process_id);
+      }
+            $res= array();
+            if(!empty($user_id)){
+                    $user_role1 = $this->User_model->read_by_id($user_id); 
+                    if(!empty($user_role1)){
+              $user_role=$user_role1->user_roles;
+
+              $total = $this->enquiry_model->active_enqueries_api($user_id,2,$user_role,$process)->num_rows();
+
+             $data['active_enquiry'] = $this->enquiry_model->active_enqueries_api($user_id,2,$user_role,$process,$offset,$limit);
+    
+               if(!empty($data['active_enquiry']->result()))
+               {
+                    $res['offset'] = $offset;
+                    $res['limit'] = $limit;
+                    $res['total'] = $total;
+                    $res['list'] = array();
+
+                  foreach($data['active_enquiry']->result() as $value){
+                      $customer='';
+                      
+                    array_push($res['list'],array('enquery_id'=>$value->enquiry_id,'enquery_code'=>$value->Enquery_id,'org_name'=>$value->org_name,'customer_name'=>$value->name_prefix.' '.$value->name.' '.$value->lastname,'email'=>$value->email,'phone'=>$value->phone,'state'=>'','source'=>'test','type'=>$customer,'process_id'=>$value->product_id,'lead_stage'=>$value->lead_stage,'lead_description'=>$value->lead_discription));  
+                 } 
+               }
+      }
+      }     
+          if(!empty($res)){   
+          $this->set_response([
+                'status' => TRUE,
+                'leads' =>$res
+                 ], REST_Controller::HTTP_OK);
+        
+        }else{
+  
+     $this->set_response([
+                 'status' => false,
+                'message' => array('error'=>'not found!') 
+                 ], REST_Controller::HTTP_OK);
+        }
+  }
+
 }

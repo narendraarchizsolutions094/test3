@@ -1072,4 +1072,54 @@ class Ticket extends REST_Controller {
              ], REST_Controller::HTTP_OK);
     }
   }
+
+
+  public function getTicketList_page_post()
+  {      
+    $company_id   = $this->input->post('company_id');
+    $user_id      = $this->input->post('user_id');
+    $offset = $this->input->post('offset')??0;
+    $limit = $this->input->post('limit')??10;
+
+    $this->form_validation->set_rules('company_id','Company ID','trim|required',array('required'=>'You have note provided %s'));
+    $this->form_validation->set_rules('user_id','User ID','trim|required',array('required'=>'You have note provided %s'));
+    if($this->form_validation->run() == true)
+    {
+      $this->load->model('Ticket_Model');
+  
+      $total  = $this->Ticket_Model->getTicketListByCompnyID($company_id,$user_id);
+      $total = count($total);
+
+      $res= array();
+      $res['offset'] = $offset;
+      $res['limit'] = $limit;
+      $res['total'] = $total;
+
+      $res['list']  = $this->Ticket_Model->getTicketListByCompnyID($company_id,$user_id,$offset,$limit);
+
+      if(!empty($res))
+      {
+        $this->set_response([
+        'status'      => TRUE,           
+        'tickets'  => $res,
+        ], REST_Controller::HTTP_OK);   
+      }
+      else
+      {
+        $this->set_response([
+        'status'  => false,           
+        'msg'     => "No ticket list found for company id you had provided"
+        ], REST_Controller::HTTP_OK); 
+      }
+    }
+    else
+    {
+      $msg = strip_tags(validation_errors());
+      $this->set_response([
+        'status'  => false,
+        'msg'     => $msg,//"Please provide a company id"
+      ],REST_Controller::HTTP_OK);
+    } 
+  }
+
 }

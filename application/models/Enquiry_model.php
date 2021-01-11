@@ -2020,8 +2020,8 @@ class Enquiry_model extends CI_Model {
                     $this->db->order_by('sb_id','ASC');
                     return $this->db->get()->result();
 		}
-    public function active_enqueries_api($id,$type,$user_role,$process='') 
-    {
+    public function active_enqueries_api($id,$type,$user_role,$process='',$offset=-1,$limit=-1) 
+    { 
         $all_reporting_ids    =   $this->common_model->get_categories($id,$type);
         $this->db->from($this->table);        
         $where  = "";
@@ -2039,6 +2039,13 @@ class Enquiry_model extends CI_Model {
         }
         $this->db->where($where);
 		$this->db->order_by('enquiry.enquiry_id','DESC');
+    //for pagination api
+
+    if($offset!=-1 && $limit!=-1)
+    {  
+        $this->db->limit($limit,$offset);
+    }
+
 		return $query = $this->db->get();
         //return $query->result();
     }
