@@ -28,7 +28,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 					   			<option value="7" <?=(!empty($rule_data['type']) && $rule_data['type']==7)?'selected':''?>>Send WhatsApp</option>
 					   			<option value="8" <?=(!empty($rule_data['type']) && $rule_data['type']==8)?'selected':''?>>Auto Ticket Priority</option>
 					   			<option value="9" <?=(!empty($rule_data['type']) && $rule_data['type']==9)?'selected':''?>>Default Ticket Disposition</option>
-					   			<option value="10" <?=(!empty($rule_data['type']) && $rule_data['type']==10)?'selected':''?>>Ticket move to sales</option>
+								<option value="10" <?=(!empty($rule_data['type']) && $rule_data['type']==10)?'selected':''?>>Ticket move to sales</option>
+								   
+								<!-- <option value="11" <?=(!empty($rule_data['type']) && $rule_data['type']==11)?'selected':''?>>Sales Notifications</option> -->
+
 					   		</select>
 					   	</div>
 					   	<div class="col-sm-3">
@@ -269,7 +272,7 @@ var EnquiryStage = <?=$rule_enquiry_status?>;
 var TicketStatus = <?=$rule_ticket_status?>;
 var TicketDisposition = <?=$ticket_stages?>;
 var TicketSubDisposition  = <?=$ticket_description?>;
-
+var probability = <?=$rule_lead_score?>;
 
 // function manageValues(key)
 // {
@@ -404,12 +407,13 @@ function builder_fun(rule_type)
 						  });
 					filterArray.push({
 						    id: 'product_id',
-						    label: 'Process',
+						    label: 'Sales Process',
 						    type: 'integer',
 						    input: 'select',
 						    values: Process,
 						    operators: ['equal', 'not_equal','is_null', 'is_not_null']
 						  });
+						  
 					filterArray.push({
 						    id: 'enquiry.status',
 						    label: 'Enquiry Stage',
@@ -428,6 +432,15 @@ function builder_fun(rule_type)
 						    values: Country,
 						    operators: ['equal', 'not_equal','is_null', 'is_not_null']
 						  });
+
+					filterArray.push({
+						id: 'lead_score',
+						label: 'Sales Conversion Probability',
+						type: 'integer',
+						input: 'select',
+						values: probability,
+						operators: ['equal', 'not_equal','is_null', 'is_not_null']
+					});
 				}
 
 					if(['3','5','6','7','8','9','10'].includes(rule_type))
@@ -473,6 +486,14 @@ function builder_fun(rule_type)
 						    type: 'integer',
 						    input: 'select',
 						    values: TicketSubDisposition,
+						    operators: ['equal', 'not_equal','is_null', 'is_not_null']
+						  });
+						  filterArray.push({
+						    id: 'process_id',
+						    label: 'Process',
+						    type: 'integer',
+						    input: 'select',
+						    values: Process,
 						    operators: ['equal', 'not_equal','is_null', 'is_not_null']
 						  });
 					}
