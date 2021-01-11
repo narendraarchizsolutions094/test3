@@ -397,11 +397,37 @@ class Client extends CI_Controller {
         $this->load->model(array('Client_Model','Enquiry_Model'));
         $data['title'] = display('company_list');
         $data['company_list'] = $this->Client_Model->getCompanyList()->result();
-        //print_r($data['company_list']); exit();
+
         //$data['enquiry_list'] = $this->Enquiry_Model->all_enqueries();
         $data['content'] = $this->load->view('enquiry/company_list', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }
+
+    public function company_details($company_name)
+    {
+        $this->load->model('Client_Model');
+        $company = base64_decode($company_name);
+        $data['title'] = $company;
+
+    $c =$data['comp'] = $this->Client_Model->getCompanyList($company)->row();
+
+    $deals =   $this->Client_Model->getCompanyData(explode(',',$c->enq_ids),'deals')->result();
+    $deals = array_column((array)$deals, 'id');
+    $data['specific_deals'] = implode(',', $deals);
+
+    $visits =   $this->Client_Model->getCompanyData(explode(',',$c->enq_ids),'visits')->result();
+    $visits = array_column((array)$visits, 'id');
+    $data['specific_visits'] = implode(',', $visits);
+
+    $contacts =   $this->Client_Model->getCompanyData(explode(',',$c->enq_ids),'contacts')->result();
+    $contacts = array_column((array)$visits, 'cc_id');
+
+    $data['contact_list'] = $this->Client_Model->getContactList($contacts);
+
+        $data['content'] = $this->load->view('enquiry/company_details', $data, true);
+        $this->load->view('layout/main_wrapper', $data);
+    }
+
     public function create_Invoice() {
         $clientid = $this->uri->segment(3);
         if (!empty($_POST)) {
