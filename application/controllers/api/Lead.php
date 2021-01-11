@@ -41,7 +41,7 @@ class Lead extends REST_Controller {
                     if(!empty($user_role1)){
               $user_role=$user_role1->user_roles;
              $data['active_enquiry'] = $this->enquiry_model->active_enqueries_api($user_id,2,$user_role,$process);
-    
+               
                if(!empty($data['active_enquiry']->result())){
                   $res= array();
                   foreach($data['active_enquiry']->result() as $value){
@@ -767,9 +767,9 @@ $compid = $this->input->post('comp_id');
               $user_role=$user_role1->user_roles;
 
               $total = $this->enquiry_model->active_enqueries_api($user_id,2,$user_role,$process)->num_rows();
-
+                
              $data['active_enquiry'] = $this->enquiry_model->active_enqueries_api($user_id,2,$user_role,$process,$offset,$limit);
-    
+              
                if(!empty($data['active_enquiry']->result()))
                {
                     $res['offset'] = $offset;

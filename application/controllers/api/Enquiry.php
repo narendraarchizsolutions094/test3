@@ -2597,6 +2597,7 @@ public function get_enq_list_post(){
                 $user_role=$user_role1->user_roles;
 
               $total = $this->enquiry_model->active_enqueries_api($user_id,1,$user_role,$process)->num_rows();
+             
               //echo $offset; exit();
                 $data['active_enquiry'] = $this->enquiry_model->active_enqueries_api($user_id,1,$user_role,$process,$offset,$limit);
                   

@@ -405,27 +405,39 @@ class Client extends CI_Controller {
 
     public function company_details($company_name)
     {
-        $this->load->model('Client_Model');
+        $this->load->model(array('Client_Model','enquiry_model'));
         $company = base64_decode($company_name);
         $data['title'] = $company;
 
     $c =$data['comp'] = $this->Client_Model->getCompanyList($company)->row();
 
     $deals =   $this->Client_Model->getCompanyData(explode(',',$c->enq_ids),'deals')->result();
+   // print_r($c->enq_ids); exit();
     $deals = array_column((array)$deals, 'id');
-    $data['specific_deals'] = implode(',', $deals);
-
+    $data['specific_deals'] = count($deals)?implode(',', $deals):'-1';
+    
     $visits =   $this->Client_Model->getCompanyData(explode(',',$c->enq_ids),'visits')->result();
     $visits = array_column((array)$visits, 'id');
-    $data['specific_visits'] = implode(',', $visits);
+    $data['specific_visits'] = count($visits)? implode(',', $visits):'-1';
 
     $contacts =   $this->Client_Model->getCompanyData(explode(',',$c->enq_ids),'contacts')->result();
     $contacts = array_column((array)$visits, 'cc_id');
-
+    $contacts = count($contacts)?$contacts:array('-1');
     $data['contact_list'] = $this->Client_Model->getContactList($contacts);
 
-        $data['content'] = $this->load->view('enquiry/company_details', $data, true);
-        $this->load->view('layout/main_wrapper', $data);
+
+    $data['specific_accounts'] = $c->enq_ids;
+    $data['dfields']  = $this->enquiry_model->getformfield();
+    $data['ticket_dfields'] = $this->enquiry_model->getformfield(2);
+
+    $tickets =   $this->Client_Model->getCompanyData(explode(',',$c->enq_ids),'tickets')->result();
+    $tickets = array_column((array)$tickets, 'id');
+    $data['specific_tickets'] = count($tickets)? implode(',', $tickets):'-1';
+  
+
+    $data['content'] = $this->load->view('enquiry/company_details', $data, true);
+    $this->load->view('layout/main_wrapper', $data);
+
     }
 
     public function create_Invoice() {

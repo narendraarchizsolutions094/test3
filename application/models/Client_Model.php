@@ -114,7 +114,7 @@ class Client_Model extends CI_Model
             $this->db->where($where);
 
         if(!empty($specific))
-            $this->where_in('cc_id',$specific);
+            $this->db->where_in('cc_id',$specific);
 
         $this->db->select('contacts.*,enquiry.company,enquiry.enquiry_id,concat_ws(" ",name_prefix,name,lastname) as enq_name');
         $this->db->from('tbl_client_contacts contacts');

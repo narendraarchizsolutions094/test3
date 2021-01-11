@@ -16,7 +16,13 @@
          <a class="nav-link" data-toggle="tab" href="#contacts">Contacts</a>
       </li>
       <li class="nav-item">
-         <a class="nav-link" data-toggle="tab" href="#accounts">Accounts</a>
+         <a class="nav-link" data-toggle="tab" href="#accounts" onclick="load_account(1)">Enquiry</a>
+      </li>
+      <li class="nav-item">
+         <a class="nav-link" data-toggle="tab" href="#accounts" onclick="load_account(2)">Lead</a>
+      </li>
+      <li class="nav-item">
+         <a class="nav-link" data-toggle="tab" href="#accounts" onclick="load_account(3)">Client</a>
       </li>
       <li class="nav-item">
          <a class="nav-link" data-toggle="tab" href="#tickets">Tickets</a>
@@ -141,14 +147,179 @@
         </table>
       </div>
       <div id="accounts" class="container tab-pane fade"><br>
-          <table id="enq_table" class="table table-bordered table-hover mobile-optimised" style="width:100%;">
 
+      <?php 
+        $acolarr = array();
+        $dacolarr = array();
+        if(isset($_COOKIE["allowcols"])) {
+          $showall = false;
+          $acolarr  = explode(",", trim($_COOKIE["allowcols"], ","));       
+        }else{          
+          $showall = true;
+        }         
+        if(isset($_COOKIE["dallowcols"])) {
+          $dshowall = false;
+          $dacolarr  = explode(",", trim($_COOKIE["dallowcols"], ","));       
+        }else{
+          $dshowall = false;
+        }       
+      ?>
+
+          <table id="enq_table" class="table table-bordered table-hover mobile-optimised" style="width:100%;">
+            <thead>
+              <tr class="bg-info table_header">
+               <!--  <th class="noExport">
+                  <input type='checkbox' class="checked_all1" value="check all" >
+                </th> -->
+                <th>S.N</th>
+               <?php if ($showall == true or in_array(1, $acolarr)) {  ?>
+                  <th><?php echo display("source"); ?></th>
+             <?php } ?>
+              <?php if ($showall == true or in_array(16, $acolarr)) {  ?>
+                  <th >Sub Source</th>
+            <?php } ?>
+              <?php if ($showall == true or in_array(2, $acolarr)) {  ?>
+                  <th><?php echo display("company_name"); ?></th>
+                   <?php } ?>
+              <?php if ($showall == true or in_array(3, $acolarr)) {  ?>
+            <th>Name</th>
+                   <?php } ?>
+              <?php if ($showall == true or in_array(4, $acolarr)) {  ?>
+            <th>Email </th>
+                   <?php } ?>
+              <?php if ($showall == true or in_array(5, $acolarr)) {  ?>
+            <th>Phone <?=user_access(220)?' (Click to dial)':''?></th>
+                   <?php } ?>
+              <?php if ($showall == true or in_array(6, $acolarr)) {  ?>
+            <th>Address</th>
+                   <?php } ?>
+              <?php if ($showall == true or in_array(7, $acolarr)) {  ?>
+            <th>Process</th>
+             <?php } ?>
+              <?php if ($showall == true or in_array(8, $acolarr)) {  ?>
+                  <th>Disposition</th>
+             <?php } ?>                  
+              <?php
+              if ($this->session->companey_id == 29) {
+                echo "<th>Referred By</th>";
+              }
+              ?>
+            <?php if ($showall == true or in_array(10, $acolarr)) {  ?>
+                  <th ><?php echo display("create_date"); ?></th>
+          <?php } ?>
+              <?php if ($showall == true or in_array(11, $acolarr)) {  ?>
+                  <th ><?php echo display("created_by"); ?></th>
+            <?php } ?>
+             <?php if ($showall == true or in_array(12, $acolarr)) {  ?>
+                  <th ><?php echo display("assign_to"); ?></th>
+                <?php } ?>
+             <?php if ($showall == true or in_array(13, $acolarr)) {  ?>
+                  <th ><?php echo display("data_source"); ?></th>
+            <?php } ?>
+             <?php if ($showall == true or in_array(14, $acolarr)) {  ?>
+                  <th >Product</th>
+            <?php } ?>
+
+            <?php if ($showall == true or in_array(17, $acolarr)) {  ?>
+                  <th>EnquiryId</th>
+             <?php } ?> 
+
+             <?php if ($showall == true or in_array(18, $acolarr)) {  ?>
+                  <th>Score</th>
+             <?php } ?> 
+
+               <?php if ($showall == true or in_array(19, $acolarr)) {  ?>
+                  <th>Remark</th>
+             <?php } ?> 
+              
+            <?php if($this->session->userdata('companey_id')==29) { ?>
+            <?php if ($showall == true or in_array(15, $acolarr)) {  ?>
+                  <th >Bank</th>
+            <?php } }?>
+            
+             <?php if(!empty($dacolarr) and !empty($dfields)){
+              foreach($dfields as $ind => $flds){                
+                if(!empty(in_array($flds->input_id, $dacolarr ))){                  
+                ?><th><?php echo $flds->input_label; ?></th><?php 
+                }
+              }
+            } ?>
+          </tr>
           </table>
       </div>
 
+
+ <?php 
+
+ $dfields = $ticket_dfields;
+        $acolarr = array();
+        $dacolarr = array();
+        if(isset($_COOKIE["ticket_allowcols"])) {
+          $showall = false;
+          $acolarr  = explode(",", trim($_COOKIE["ticket_allowcols"], ","));       
+        }else{          
+          $showall = true;
+        }         
+        if(isset($_COOKIE["ticket_dallowcols"])) {
+          $dshowall = false;
+          $dacolarr  = explode(",", trim($_COOKIE["ticket_dallowcols"], ","));       
+        }else{
+          $dshowall = false;
+        }       
+ ?>
       <div id="tickets" class="container tab-pane fade"><br>
-         <h3>Menu 2</h3>
-         <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.</p>
+         <table id="ticket_table" class=" table table-striped table-bordered" style="width:100%;">
+                    <thead>
+                 <!--    <th class="noExport sorting_disabled">
+                    <input type='checkbox' class="checked_all1" value="check all" >
+                     </th> -->
+                      <th>S.No.</th>
+                      <?=($showall or in_array(1,$acolarr))?'<th>Ticket</th>':''?>
+
+                      <?php
+                      if($this->session->companey_id==65)
+                      {
+                      ?>
+                        <?=($showall or in_array(15,$acolarr))?'<th>'.display('tracking_no').'</th>':''?>
+                      <?php
+                      }
+                      ?>
+                      <?=($showall or in_array(7,$acolarr))?'<th>Created By</th>':''?>
+                      <?=($showall or in_array(9,$acolarr))?'<th>Date</th>':''?>
+                      <?=($showall or in_array(18,$acolarr))?'<th>'.display('last_updated').'</th>':''?>                      
+                      <?=($showall or in_array(2,$acolarr))?'<th>'.display('problem_for').'</th>':''?>
+                      <?=($showall or in_array(3,$acolarr))?'<th>Email</th>':''?>
+                      <?=($showall or in_array(4,$acolarr))?'<th>Phone</th>':''?>
+                      <?=($showall or in_array(5,$acolarr))?'<th>Product</th>':''?>
+                      <?=($showall or in_array(6,$acolarr))?'<th>Assign To</th>':''?>
+                      <?=($showall or in_array(17,$acolarr))?'<th>Assign By</th>':''?>
+                      <?=($showall or in_array(8,$acolarr))?'<th>Priority</th>':''?>
+                      <?=($showall or in_array(19,$acolarr))?'<th>'.display('ticket_problem').'</th>':''?>
+                      <?=($showall or in_array(10,$acolarr))?'<th>Referred By</th>':''?>
+                      <?=($showall or in_array(11,$acolarr))?'<th>'.display('data_source').'</th>':''?>
+                      <?=($showall or in_array(12,$acolarr))?'<th>'.display('stage').'</th>':''?>
+                      <?=($showall or in_array(13,$acolarr))?'<th>Sub Stage</th>':''?>
+                      <?=($showall or in_array(14,$acolarr))?'<th>'.display('ticket_remark').'</th>':''?>
+                      <?=($showall or in_array(16,$acolarr))?'<th>Status</th>':''?>
+
+
+                      <?php 
+                      if(!empty($dacolarr) and !empty($dfields))
+                      {
+                        foreach($dfields as $ind => $flds)
+                        {                
+                          if(!empty(in_array($flds->input_id, $dacolarr )))
+                          {            
+                          ?><th><?php echo $flds->input_label; ?></th><?php 
+                          }
+                        }
+                       } ?>
+
+                    </thead>
+                    <tbody>
+                    </tbody>
+                  </table>
+
       </div>
 
   </div>
@@ -175,6 +346,14 @@
 table th
 {
   width: auto!important;
+}
+#enq_table tbody tr td:nth-child(1)
+{
+  display: none;
+}
+#ticket_table tbody tr td:nth-child(1)
+{
+  display: none;
 }
 </style>
 
@@ -250,27 +429,119 @@ $('#visit_table').DataTable({
           },
 });
 
-// try{
-// $('#enq_table').DataTable(
-//         {         
-//           "processing": true,
-//           "scrollX": true,
-//           // "scrollY": 520,
-//           // "pagingType": "simple",
-//           // "bInfo": false,
-//           "serverSide": true,          
-//           "lengthMenu": [ [10,30, 50,100,500,1000, -1], [10,30, 50,100,500,1000, "All"] ],
-//           "ajax": {
-//               "url": "<?=base_url().'Enq/enq_load_data'?>",
-//               "type": "POST",
-//               "data":function(d){
-//                 d.data_type = 1;               
-//                 return d;
-//               }
-//           },
-//           "columnDefs": [{ "orderable": false, "targets":0 }],
-//            "order": [[ 1, "desc" ]],
-//       });
-// }catch(e){alert(e);}
+
+
+
+var specific_list = "<?=!empty($specific_tickets)?$specific_tickets:''?>";
+
+var table = $('#ticket_table').DataTable({         
+          "processing": true,
+          "scrollX": true,
+          "scrollY": 520,
+          "pagingType": "simple",
+          "bInfo": false,
+          "serverSide": true,          
+          "lengthMenu": [ [10,30, 50,100,500,1000, -1], [10,30, 50,100,500,1000, "All"] ],
+          "columnDefs": [{ "orderable": false, "targets": 0 }],
+          "order": [[ 1, "desc" ]],
+          "ajax": {
+              "url": "<?=base_url().'Ticket/ticket_load_data'?>",
+              "type": "POST",
+              "data":function(d){
+                    d.specific_list = specific_list;
+
+                    },
+              },
+              <?php if(user_access(317)) { ?>
+        // "lengthMenu": [[30, 60, 90, -1], [30, 60, 90, "All"]], 
+        dom: "<'row text-center'<'col-sm-12 col-xs-12 col-md-4'l><'col-sm-12 col-xs-12 col-md-4 text-center'B><'col-sm-12 col-xs-12 col-md-4'f>>tp", 
+        buttons: [  
+            {extend: 'copy', className: 'btn-xs btn',exportOptions: {
+                        columns: "thead th:not(.noExport)"
+                    }}, 
+            {extend: 'csv', title: 'list<?=date("Y-m-d H:i:s")?>', className: 'btn-xs btn',exportOptions: {
+                        columns: "thead th:not(.noExport)"
+                    }}, 
+            {extend: 'excel', title: 'list<?=date("Y-m-d H:i:s")?>', className: 'btn-xs btn', title: 'exportTitle',exportOptions: {
+                        columns: "thead th:not(.noExport)"
+                    }}, 
+            {extend: 'pdf', title: 'list<?=date("Y-m-d H:i:s")?>', className: 'btn-xs btn',exportOptions: {
+                        columns: "thead th:not(.noExport)"
+                    }}, 
+            {extend: 'print', className: 'btn-xs btn',exportOptions: {
+                        columns: "thead th:not(.noExport)"
+                    }} 
+             ] ,  <?php  } ?>               
+            // drawCallback: function (settings) {   
+            //   var api = this.api();
+            // var $table = $(api.table().node());  
+            //   console.log(settings);               
+            //   console.log(table);               
+            //     var info = table.page.info();
+            //     returned_rows = table.rows().count();
+            //     if(returned_rows == 0 || returned_rows < info.length){
+            //       $('#ticket_table_next').addClass('disabled');
+            //     }
+            //     $('#ticket_table_previous').after('<li><a class="btn btn-secondary btn-sm" style="padding: 4px;line-height: 2;" href="javascript:void(0)">'+info.page+'</a></li>');
+            // }
 });
+
+
+
+
+
+});
+
+$('a[data-toggle="tab"]').on('shown.bs.tab', function(e){
+   $($.fn.dataTable.tables(true)).DataTable()
+      .columns.adjust();
+});
+
+var table = false;
+var DataType = 0;
+try{
+function load_account(data_type)
+{
+  DataType = data_type;
+
+  var specific_list = "<?=!empty($specific_accounts)?$specific_accounts:''?>";
+
+    if(table==false)
+    {
+    $('#enq_table').DataTable(
+        {         
+          "processing": true,
+          "scrollX": true,
+          // "scrollY": 520,
+          // "pagingType": "simple",
+          // "bInfo": false,
+          "bFilter": true, 
+          "bInfo": true,
+          "paging": true,
+
+          "serverSide": true,          
+          "lengthMenu": [ [10,30, 50,100,500,1000, -1], [10,30, 50,100,500,1000, "All"] ],
+          "ajax": {
+              "url": "<?=base_url().'Enq/enq_load_data'?>",
+              "type": "POST",
+              "data":function(d){
+                d.data_type = DataType; 
+                d.specific_list = specific_list;
+                return d;
+              }
+            
+          },
+          "columnDefs": [{ "orderable": false, "targets":0 }],
+           // "order": [[ 1, "desc" ]],
+      });
+    }
+    else
+    {
+        $('#enq_table').DataTable().ajax.reload();
+    }
+    table = true;
+}
+}catch(e){alert(e);}
+
+
 </script>

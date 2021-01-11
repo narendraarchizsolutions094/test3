@@ -246,9 +246,13 @@ class Enquiry_datatable_model extends CI_Model {
             $where .= " AND enquiry.state_id='".$state."' AND enquiry.city_id='".$city."'"; 
         }
 
+        if(!empty($_POST['specific_list']))
+        { 
+            $where.=' AND enquiry.enquiry_id IN ('.$_POST['specific_list'].')';
+        }
+        //echo $where; exit();
         $this->db->where($where);
         //$this->db->group_by('enquiry.Enquery_id');
-        
 
         $i = 0;
      
@@ -304,7 +308,6 @@ class Enquiry_datatable_model extends CI_Model {
         {
             $order = $this->order;
 
-
             $this->db->order_by(key($order), $order[key($order)]);
        }
     }
@@ -325,18 +328,18 @@ class Enquiry_datatable_model extends CI_Model {
     {
         $this->_get_datatables_query();
 
-        $where = "";
-        $user_id   = $this->session->user_id;
-        $user_role = $this->session->user_role;
+        // $where = "";
+        // $user_id   = $this->session->user_id;
+        // $user_role = $this->session->user_role;
         
-        /*$all_reporting_ids    =   $this->common_model->get_categories($this->session->user_id);
-        $where .= " AND ( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
-        $where .= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';  
-        $this->db->where($where);*/
+        // $all_reporting_ids    =   $this->common_model->get_categories($this->session->user_id);
+        // $where .= " AND ( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
+        // $where .= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';  
+        // $this->db->where($where);
 
-        $data_type = $_POST['data_type'];    
+        // $data_type = $_POST['data_type'];    
         
-        $this->db->group_by('enquiry.Enquery_id');
+        // $this->db->group_by('enquiry.Enquery_id');
         
 
 
@@ -352,6 +355,11 @@ class Enquiry_datatable_model extends CI_Model {
         
         $compid = $this->session->companey_id;
         $where .= " enquiry.status=$datatype AND comp_id=$compid";
+
+        if(!empty($_POST['specific_list']))
+        { 
+            $where.=' AND enquiry.enquiry_id IN ('.$_POST['specific_list'].')';
+        }
 
         $this->db->where($where);        
         $this->db->group_by('enquiry.Enquery_id');

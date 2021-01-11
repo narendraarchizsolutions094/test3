@@ -365,7 +365,7 @@ public function active_clients_page_post(){
 
 
             $total = $this->enquiry_model->active_enqueries_api($user_id,3,$user_role,$process)->num_rows();
-
+           
              $data['active_enquiry'] = $this->enquiry_model->active_enqueries_api($user_id,3,$user_role,$process,$offset,$limit);
     
                if(!empty($data['active_enquiry']->result())){

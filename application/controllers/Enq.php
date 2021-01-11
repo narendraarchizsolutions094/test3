@@ -67,6 +67,7 @@ class Enq extends CI_Controller
 
 	public function enq_load_data()
 	{
+		
 		$this->load->model('enquiry_datatable_model');
 		$list = $this->enquiry_datatable_model->get_datatables();
 		if($this->session->companey_id == 1){
@@ -242,7 +243,7 @@ class Enq extends CI_Controller
 		$output = array(
 			"draw" => $_POST['draw'],
 			"recordsTotal" => $c,
-			"recordsFiltered" => $c,
+			"recordsFiltered" => $this->enquiry_datatable_model->count_filtered(),
 			"data" => $data,
 		);
 		echo json_encode($output);
