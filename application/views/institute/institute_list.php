@@ -9,13 +9,13 @@
  
 
             <div class="panel-heading no-print">
-
+            <?php if (user_access(3161)) { ?>
                 <div class="btn-group"> 
 
                     <a class="btn btn-success" href="<?php echo base_url("lead/add_institute") ?>"> <i class="fa fa-plus"></i>  <?php echo display('add_institute') ?> </a>  
 
                 </div>
-
+                <?php } ?>
             </div>
 
             <div class="panel-body">
@@ -81,11 +81,13 @@
                             <td><?php echo (($institute->status==1)?display('active'):display('inactive')); ?></td>
 
                             <td class="center">
+                            <?php if (user_access(3162)) { ?>
 
                                 <a href="<?php echo base_url("lead/edit_institute/$institute->institute_id") ?>" class="btn btn-xs  btn-primary"><i class="fa fa-edit"></i></a> 
+                            <?php }  if (user_access(3164)) { ?>
 
                                 <a href="<?php echo base_url("lead/delete_institute/$institute->institute_id") ?>" onclick="return confirm('<?php echo display("are_you_sure") ?>')" class="btn btn-xs  btn-danger"><i class="fa fa-trash"></i></a> 
-
+                                <?php } ?>
                             </td>
 
                         </tr>

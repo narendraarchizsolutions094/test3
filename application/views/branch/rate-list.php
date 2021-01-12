@@ -23,6 +23,7 @@ a:hover, a:focus {
  
 
             <div class="panel-heading no-print">
+            <?php   if (user_access(3131)) { ?>
 
                 <div class="btn-group"> 
 
@@ -30,62 +31,7 @@ a:hover, a:focus {
                     
 
                 </div>
-
-            </div>
-
-            <div class="panel-body">
-                <table id="example" class="table table-striped table-bordered" style="width:100%">
-                <thead>
-                <tr>
-                    <th>S No.</th>
-                    <th>Booking Branch</th>
-                    <th>Delivery Branch</th>
-                    <th>Rate</th>
-                    <th>Status</th>
-                    <th>Created At</th>
-                    <th>Action</th>
-                </tr>
-                </thead>
-                <tbody>
-                <?php $sl=1; foreach ($branch_list as $branch) {?>
-                        <tr >
-                            <td><?php echo $sl; ?></td>
-							<td width=""><?= $branch->branch_name?></td>
-							<td width=""><?= $branch->bn?></td>
-                            <td width=""><?= $branch->rate?></td>
-                            
-                            <td><?php echo (($branch->rate_status==0)?display('active'):display('inactive')); ?></td>
-
-              <td width=""><?= $branch->created_at?></td>
-              <td class="center">
-                  <a href="<?= base_url('setting/editbranchrate/' . $branch->id . '')?>" class="btn btn-xs  btn-primary view_data"><i class="fa fa-edit"></i></a>
-                  <a href="<?= base_url('setting/branchrate_delete/' . $branch->id . '') ?>" onclick="return confirm('Are You Sure ? ')" class="btn btn-xs  btn-danger"><i class="fa fa-trash"></i></a>
-                </td>
-                        </tr>
-
-                        <?php $sl++; ?>
-
-                    <?php } ?> 
-
-                </tbody>
-
-              </table>
-            </div>
-
-            <!-- /.card-body -->
-
-          </div>
-
-          <!-- /.card -->
-
-        </div>
-
-        <!-- /.col -->
-
-      </div>
-
-<!-- Course Upload  -->
-<div class="modal fade" id="AddBranch" tabindex="-1" role="dialog" aria-labelledby="course_upload_label" aria-hidden="true">
+                <div class="modal fade" id="AddBranch" tabindex="-1" role="dialog" aria-labelledby="course_upload_label" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -143,6 +89,66 @@ a:hover, a:focus {
     </div>
   </div>
 </div>
+                <?php }?>
+
+            </div>
+
+            <div class="panel-body">
+                <table id="example" class="table table-striped table-bordered" style="width:100%">
+                <thead>
+                <tr>
+                    <th>S No.</th>
+                    <th>Booking Branch</th>
+                    <th>Delivery Branch</th>
+                    <th>Rate</th>
+                    <th>Status</th>
+                    <th>Created At</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php $sl=1; foreach ($branch_list as $branch) {?>
+                        <tr >
+                            <td><?php echo $sl; ?></td>
+							<td width=""><?= $branch->branch_name?></td>
+							<td width=""><?= $branch->bn?></td>
+                            <td width=""><?= $branch->rate?></td>
+                            
+                            <td><?php echo (($branch->rate_status==0)?display('active'):display('inactive')); ?></td>
+
+              <td width=""><?= $branch->created_at?></td>
+              <td class="center">
+            <?php   if (user_access(3132)) { ?>
+                  <a href="<?= base_url('setting/editbranchrate/' . $branch->id . '')?>" class="btn btn-xs  btn-primary view_data"><i class="fa fa-edit"></i></a>
+            <?php    } if (user_access(3134)) { ?>
+                  <a href="<?= base_url('setting/branchrate_delete/' . $branch->id . '') ?>" onclick="return confirm('Are You Sure ? ')" class="btn btn-xs  btn-danger"><i class="fa fa-trash"></i></a>
+               <?php } ?>
+                </td>
+                        </tr>
+
+                        <?php $sl++; ?>
+
+                    <?php } ?> 
+
+                </tbody>
+
+              </table>
+            </div>
+
+            <!-- /.card-body -->
+
+          </div>
+
+          <!-- /.card -->
+
+        </div>
+
+        <!-- /.col -->
+
+      </div>
+
+<!-- Course Upload  -->
+
 
 <script>
 $(document).ready(function() {

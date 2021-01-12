@@ -83,7 +83,7 @@ $variable=explode(',',$_COOKIE['deals_filter_setting']);
 
 
 
-<div class="row" style=" padding: 5px 0px; <?=!empty($this->uri->segment(3))?'display: none;':''?> <?php if(empty($_COOKIE['deals_filter_setting'])){ echo'display:none'; }  ?>" id="filter_pannel">
+<div class="row" style=" padding: 5px 0px; <?=!empty($this->uri->segment(3))?'display: none;':''?> <?php if(empty($_COOKIE['_filter_setting'])){ echo'display:none'; }  ?>" id="filter_pannel">
  <div id="datefilter" style="<?php if(!in_array('date',$variable)){echo'display:none';} ?>" >
 	<div class="col-lg-4">
         <div class="form-group">
@@ -435,7 +435,7 @@ $('#infotype').on('change', function() {
 
 
               <div class="form-group col-md-6">
-                  <label>Related To</label>
+                  <label>Related To (Primary Contact) <a href="<?= base_url('enquiry/create?status=1') ?>" target="_blank"  style=" float:right;margin-left: 30px;"> <i class="fa fa-plus-square"> </i></a> </label>
                   <select class="form-control" name="enquiry_id">
                     <option value="">Select</option>
                     <?php

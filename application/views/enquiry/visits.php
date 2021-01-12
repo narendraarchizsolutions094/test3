@@ -274,7 +274,7 @@ $(document).delegate('.visit-delete', 'click', function() {
                 </div>
 
                <div class="form-group col-md-6">
-                  <label>Related To</label>
+                  <label>Related To (Primary Contact)</label>
                   <select class="form-control" name="enquiry_id">
                     <option value="">Select</option>
                     <?php

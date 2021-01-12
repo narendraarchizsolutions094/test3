@@ -258,10 +258,13 @@ class Setting extends CI_Controller {
 
 public function addbranch()
 {
+	
 $branch=$this->input->post('branch');
 $status=$this->input->post('status');
 $branch_id=$this->input->post('branch_id');
 if (!empty($branch_id)) {
+	if (user_role('3121') == true) {
+	}
 $count=$this->db->where('branch_name',$branch)->where_not_in('branch_id',$branch_id)->count_all_results('branch');
     if($count==0){
 		$data=['branch_name'=>$branch,'branch_status'=>$status,'updated_at'=>date('Y-m-d H:i:s')];
@@ -273,7 +276,8 @@ $count=$this->db->where('branch_name',$branch)->where_not_in('branch_id',$branch
 			redirect('setting/branchList');
 		}
 }else{
-	
+	if (user_role('3122') == true) {
+	}
 $count=$this->db->where('branch_name',$branch)->count_all_results('branch');
 if($count==0){
 $data=['branch_name'=>$branch,'branch_status'=>$status,'created_by'=>$this->session->user_id,'comp_id'=>$this->session->companey_id];
@@ -288,6 +292,8 @@ $insert=$this->db->insert('branch',$data);
 }
 public function branchList()
 {
+	if (user_role('3123') == true) {
+	}
 	$data['page_title'] = 'Branch List';
 	$data['branch_list']=$this->db->where('comp_id',65)->get('branch')->result();
 	$data['content'] = $this->load->view('branch/list',$data,true);
@@ -295,6 +301,8 @@ public function branchList()
 }
 public function branch_rateList()
 {
+	if (user_role('3133') == true) {
+	}
 	$data['page_title'] = 'Branch Rate List';
 	$data['branch_list']=$this->db->select('bb.*,bs.branch_name as bn,branchwise_rate.*')
 	->join('branch bb','bb.branch_id=branchwise_rate.booking_branch')
@@ -305,6 +313,7 @@ public function branch_rateList()
 }
 public function addbranch_rate()
 {
+
 $bbranch=$this->input->post('bbranch');
 $dbranch=$this->input->post('dbranch');
 $rate=$this->input->post('rate');
@@ -315,6 +324,8 @@ if ($dbranch==$bbranch) {
 	redirect('setting/branch_rateList');
 }
 if(empty($id)){
+	if (user_role('3121') == true) {
+	}
 $count=$this->db->where(array('booking_branch'=>$bbranch,'delivery_branch'=>$dbranch))->count_all_results('branchwise_rate');
 if($count==0){
     $data=['booking_branch'=>$bbranch,'rate'=>$rate,'delivery_branch'=>$dbranch,'rate_status'=>$status,'created_by'=>$this->session->user_id,'comp_id'=>$this->session->companey_id];
@@ -326,7 +337,8 @@ if($count==0){
 	redirect('setting/branch_rateList');
 }
 }else{
-	
+	if (user_role('3132') == true) {
+	}
 		$data=['booking_branch'=>$bbranch,'rate'=>$rate,'delivery_branch'=>$dbranch,'rate_status'=>$status];
     	$this->db->where(array('comp_id'=>$this->session->companey_id,'id'=>$id))->update('branchwise_rate',$data);
 		$this->session->set_flashdata('success','Branch rate updated');
@@ -335,6 +347,7 @@ if($count==0){
 }
 public function editbranch()
 {
+	
 	$branch_id=$this->input->post('branch_id');
 	
 	$get=$this->db->where('branch_id',$branch_id)->get('branch');
@@ -364,6 +377,8 @@ public function editbranch()
 }
 public function editbranchrate()
 {
+	if (user_role('3132') == true) {
+	}
 	$id=$this->uri->segment(3);
 	$get=$this->db->where('id',$id)->get('branchwise_rate');
 	if($get->num_rows()==1){
@@ -377,6 +392,8 @@ public function editbranchrate()
 }
 public function branch_delete()
 {
+	if (user_role('3124') == true) {
+	}
 	$branch_id=$this->uri->segment(3);
 	$get=$this->db->where(array('branch_id'=>$branch_id,'comp_id'=>$this->session->companey_id))->get('branch');
 	if($get->num_rows()==1){
@@ -391,6 +408,8 @@ public function branch_delete()
 }
 public function branchrate_delete()
 {
+	if (user_role('3134') == true) {
+	}
 	$id=$this->uri->segment(3);
 	$get=$this->db->where(array('id'=>$id,'comp_id'=>$this->session->companey_id))->get('branchwise_rate');
 	if($get->num_rows()==1){
@@ -405,6 +424,8 @@ public function branchrate_delete()
 }
 public function document_templates()
 {		
+	if (user_role('3143') == true) {
+	}
 	$data['page_title'] = 'Template List';
 	$data['list']=$this->db->where('comp_id',65)->get('tbl_docTemplate')->result();
 	$data['content'] = $this->load->view('setting/document-templates',$data,true);
@@ -412,6 +433,8 @@ public function document_templates()
 }
 public function createdocument_templates()
 {		
+	if (user_role('3142') == true) {
+	}
 	$id=$this->uri->segment('3');
 	if(!empty($id)){
 	$data['docList']=$this->db->where(array('comp_id'=>65,'id'=>$id))->get('tbl_docTemplate')->result();
@@ -424,6 +447,8 @@ public function createdocument_templates()
 }
 public function Insert_templates()
 {		
+	if (user_role('3142') == true) {
+	}
 	$user_id=$this->session->user_id;
 	 $id=$this->input->post('docId');
 	 $title=$this->input->post('title');

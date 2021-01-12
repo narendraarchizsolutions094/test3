@@ -23,9 +23,12 @@
 
     <div class="panel panel-default thumbnail">
       <div class="panel-heading no-print">
+      <?php if (user_access(3151)) { ?>
+
         <div class="btn-group">
           <a class="btn btn-success btn-sm" data-toggle="modal" data-target="#AddLocation" href="javascript:void(0)"> <i class="fa fa-plus"></i> Add <?=display('reporting_location')?></a>
         </div>
+        <?php } ?>
       </div>
       <div class="panel-body">
         <table id="example" class="table table-striped table-bordered" style="width:100%">
@@ -47,8 +50,15 @@
                 <td><?php echo (($reporting_location->status == 0) ? display('active') : display('inactive')); ?></td>
                 <td width=""><?= $reporting_location->created_at ?></td>
                 <td class="center">
-                  <a data-toggle="modal" data-target="#editLocation" id="<?php echo $reporting_location->id ?>" href="javascript:void(0)" class="btn btn-xs  btn-primary view_data"><i class="fa fa-edit"></i></a>
+                <?php 
+if (user_access(3152)) { ?>
+
+                <a data-toggle="modal" data-target="#editLocation" id="<?php echo $reporting_location->id ?>" href="javascript:void(0)" class="btn btn-xs  btn-primary view_data"><i class="fa fa-edit"></i></a>
+                  <?php 
+} if (user_access(3154)) { ?>
+                   
                   <a href="<?= base_url('users/reportingLocation_delete/' . $reporting_location->id . '') ?>" onclick="return confirm('Are You Sure ? ')" class="btn btn-xs  btn-danger"><i class="fa fa-trash"></i></a>
+               <?php } ?>
                 </td>
 
                 </td>
@@ -75,8 +85,8 @@
   <!-- /.col -->
 
 </div>
+<?php if (user_access(3151)) { ?>
 
-<!-- Course Upload  -->
 <div class="modal fade" id="AddLocation" tabindex="-1" role="dialog" aria-labelledby="course_upload_label" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
@@ -112,6 +122,8 @@
     </div>
   </div>
 </div>
+<?php }
+if (user_access(3152)) { ?>
 <div class="modal fade" id="editLocation" tabindex="-1" role="dialog" aria-labelledby="course_upload_label" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
@@ -133,6 +145,7 @@
     </div>
   </div>
 </div>
+<?php } ?>
 <script>  
   $(document).on('click', '.view_data', function() {
     var location_id = $(this).attr("id");

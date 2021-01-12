@@ -818,17 +818,17 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
             <li href="#login-tab" data-toggle="tab" >Login Trail</li>
             <?php } ?>
             <?php 
-            if(user_access('1000'))
+            if(user_access('1000') && $details->status!='1')
             {  ?>
             <li href="#COMMERCIAL_INFORMATION" data-toggle="tab" >Commercial Information</li>
             <?php }  ?>
             <?php 
-            if(user_access('1020'))
+            if(user_access('1020') && $details->status!='1')
             {  ?>
             <li href="#vtran_visit" data-toggle="tab" >Visit Details</li>
             <?php
             }
-            if(user_access('1004'))
+            if(user_access('1004') && $details->status!='1')
             {
             ?>
             <li href="#vtransaggrement" data-toggle="tab" >Agreement</li>
@@ -2341,7 +2341,6 @@ if(user_access('1004'))
    }
  </script>
 <div class="aggrement_view">
-
 </div>
 <style type="text/css">
   .aggrement_view{
@@ -2816,6 +2815,7 @@ if (document.getElementById('agg_same').checked)
                               <th style="width: 20%;">Name</th>
                               <th style="width: 20%;">Contact Number</th>
                               <th style="width: 20%;">Email ID</th>
+                              <th style="width: 20%">Decision Maker</th>
                               <th style="width: 20%;">Other Detail</th>
                               <th>Action</th>
                            </tr>
@@ -2831,6 +2831,7 @@ if (document.getElementById('agg_same').checked)
                               <td ><?php echo $contact->c_name; ?></td>
                               <td ><?php echo $contact->contact_number; ?></td>
                               <td ><?php echo $contact->emailid; ?></td>
+                              <td ><?php echo $contact->decision_maker?'Yes':'No'; ?></td>
                               <td ><?php echo $contact->other_detail; ?></td>
                               <td style="width:50px;">
                                  <?php
@@ -3386,6 +3387,10 @@ if (document.getElementById('agg_same').checked)
                <div class="form-group col-md-6">
                   <label>Email</label>
                   <input class="form-control" name="email" placeholder="Email"  type="text"  required>
+               </div>
+               <div class="form-group col-md-6">
+                  <label>Decision Maker</label> &nbsp;
+                  <input name="decision_maker" type="checkbox" value="1">
                </div>
                <div class="form-group col-md-12">
                   <label>Other Details</label>
@@ -4725,7 +4730,6 @@ function edit_dynamic_query(t)
         }); 
          
          ser_date = date.format();
-
                      $.ajax({
                       type: 'POST',
                       url: '<?php echo base_url();?>task/search_comment_and_task/'+ser_date,

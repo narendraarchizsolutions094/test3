@@ -35,7 +35,7 @@
                             <?php foreach ($user_role as $department) { ?>
                             <tr style="<?php if($department->status==0){echo 'color:red';} ?>" style="cursor: pointer;">
                                 <td style="<?php if($department->status==0){echo 'color:red';} ?>">
-                                    <?php echo $department->title; ?></td>
+                                <?php echo $department->title; ?></td>
                                 <td style="<?php if($department->status==0){echo 'color:red';} ?>"><?php
                                             echo getRightsByid($department->id,$permission,'su');
                                             ?>

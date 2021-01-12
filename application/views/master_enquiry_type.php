@@ -21,6 +21,7 @@
     <div class="col-sm-12 customer-type">
 
         <div  class="panel panel-default thumbnail">
+        <?php   if (user_access(3071)) { ?>
 
  
 
@@ -33,7 +34,7 @@
                 </div>
 
             </div>
-
+<?php } ?>
             <div class="panel-body">
 
                 <table class="table table-striped table-bordered" cellspacing="0" width="80%" align="center">
@@ -66,11 +67,14 @@
 
                             <td><?= $row->customer_type ?></td>
 
-                            <td><button class="btn btn-default" data-toggle="modal" data-target="#<?= $row->cus_id ?>" type="button"><i class="fa fa-pencil-square-o"></i></button></td>
-
+                            <td>
+                            <?php   if (user_access(3072)) { ?>
+                              <button class="btn btn-default" data-toggle="modal" data-target="#<?= $row->cus_id ?>" type="button"><i class="fa fa-pencil-square-o"></i></button></td>
+                              <?php } ?>
                         </tr>
 
                          <!-- Edit Modal -->
+                         <?php   if (user_access(3072)) { ?>
 
                           <div class="modal fade" id="<?= $row->cus_id ?>" role="dialog">
 
@@ -141,7 +145,7 @@
                             </div>
 
                           </div>
-
+                          <?php } ?>
                         <?php } ?>
 
                     </tbody>
@@ -322,6 +326,7 @@
 
 </div>
 
+<?php   if (user_access(3071)) { ?>
 
 
 <!------------ Modal for customer type--------------->
@@ -403,7 +408,9 @@
 <!------------- customer type modal end here -------->
 
 
+<?php }
 
+?>
 
 
 <!----------------Modal for Channel partner Type ---->
