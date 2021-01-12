@@ -2377,7 +2377,7 @@ Array
     //Insert customer type in table..
     public function add_customer_types()
     {
-        if (user_role('3071') == true) {
+        if (user_role('b35') == true) {
         }
         $customer_type = $this->input->post('input_cus_type');
         $is_active = $this->input->post('status');
@@ -2396,7 +2396,7 @@ Array
     }
     public function edit_customer_types()
     {
-        if (user_role('3072') == true) {
+        if (user_role('b36') == true) {
         }
         $customer_type = $this->input->post('input_cus_type');
         $is_active = $this->input->post('status');
@@ -2415,7 +2415,7 @@ Array
     }
     public function delete_customer_type()
     {
-        if (user_role('3074') == true) {
+        if (user_role('b38') == true) {
         }
         $delete_ids = $this->input->post('favorite');
         $this->enquiry_model->delete_customer_types($delete_ids);

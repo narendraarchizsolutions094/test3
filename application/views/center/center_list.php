@@ -9,7 +9,7 @@
  
 
             <div class="panel-heading no-print">
-<?php   if (user_access(3111)) { ?>
+<?php   if (user_access('d31')) { ?>
                 <div class="btn-group"> 
 
                     <a class="btn btn-success" href="<?php echo base_url("lead/add_center") ?>"> <i class="fa fa-plus"></i>  <?php echo display('add_center') ?> </a>  
@@ -66,9 +66,9 @@
                             <td><?php echo (($center->status==1)?display('active'):display('inactive')); ?></td>
 
                             <td class="center">
-                            <?php   if (user_access(3112)) { ?>
+                            <?php   if (user_access('d32')) { ?>
                                  <a href="<?php echo base_url("lead/edit_center/$center->center_id") ?>" class="btn btn-xs  btn-primary"><i class="fa fa-edit"></i></a> 
-                                <?php }   if (user_access(3114)) { ?>
+                                <?php }   if (user_access('d34')) { ?>
                                 <a href="<?php echo base_url("lead/delete_center/$center->center_id") ?>" onclick="return confirm('<?php echo display("are_you_sure") ?>')" class="btn btn-xs  btn-danger"><i class="fa fa-trash"></i></a> 
                                 <?php } ?>
                             </td>

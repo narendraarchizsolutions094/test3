@@ -23,7 +23,7 @@ a:hover, a:focus {
  
 
             <div class="panel-heading no-print">
-                         <?php  if (user_access(1381)) {  ?>
+                         <?php  if (user_access('f37')) {  ?>
 
                 <div class="btn-group"> 
 
@@ -102,10 +102,10 @@ a:hover, a:focus {
                             <td><?php echo (($course->status==1)?display('active'):display('inactive')); ?></td>
 
                             <td class="center">
-                            <?php  if (user_access(1382)) {  ?>
+                            <?php  if (user_access('f38')) {  ?>
 
                                 <a href="<?php echo base_url("lead/edit_course/$course->crs_id") ?>" class="btn btn-xs  btn-primary"><i class="fa fa-edit"></i></a> 
-                                <?php } if (user_access(1384)) {  ?>
+                                <?php } if (user_access('g30')) {  ?>
 
                                 <a href="<?php echo base_url("lead/delete_course/$course->crs_id") ?>" onclick="return confirm('<?php echo display("are_you_sure") ?>')" class="btn btn-xs  btn-danger"><i class="fa fa-trash"></i></a> 
 <?php } ?>

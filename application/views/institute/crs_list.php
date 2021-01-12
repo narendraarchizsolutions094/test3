@@ -9,7 +9,7 @@
  
 
             <div class="panel-heading no-print">
-            <?php if (user_access(3171)) { ?>
+            <?php if (user_access('f33')) { ?>
 
                 <div class="btn-group"> 
 
@@ -55,10 +55,10 @@
                             <td><?php echo (($course->status==1)?display('active'):display('inactive')); ?></td>
 
                             <td class="center">
-                            <?php if (user_access(3172)) { ?>
+                            <?php if (user_access('f34')) { ?>
 
                                 <a href="<?php echo base_url("lead/edit_crs/$course->id") ?>" class="btn btn-xs  btn-primary"><i class="fa fa-edit"></i></a> 
-                                <?php } if (user_access(3174)) { ?>
+                                <?php } if (user_access('f36')) { ?>
 
                                 <a href="<?php echo base_url("lead/delete_crs/$course->id") ?>" onclick="return confirm('<?php echo display("are_you_sure") ?>')" class="btn btn-xs  btn-danger"><i class="fa fa-trash"></i></a> 
                                     <?php } ?>

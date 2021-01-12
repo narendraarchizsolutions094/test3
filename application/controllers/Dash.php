@@ -484,7 +484,7 @@ public function	edit_floor()
 	}
 	public function deactive_products()
 	{   
-		if (user_role('3084') == true) {
+		if (user_role('c32') == true) {
         }
 		/*print_r($_POST);
 		exit();
@@ -769,7 +769,8 @@ public function	edit_floor()
 	
 		//Insert switch box master data
 	public function add_product(){
-	    
+		if (user_role('b39') == true) {
+        }
 	    $product_name = $this->input->post('product_name');
 	    $main_fun_name=$this->input->post('main_fun_name');
 	    $data = array(
@@ -789,6 +790,9 @@ public function	edit_floor()
 	   }
 	}
 	public function update_product(){	    
+		
+		if (user_role('c30') == true) {
+        }
 	    $product_name = $this->input->post('product_name');
 	     //$main_fun_name =$this->input->post('main_fun_name');
 	     $status = $this->input->post('status');

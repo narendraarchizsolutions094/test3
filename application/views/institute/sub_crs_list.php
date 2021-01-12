@@ -9,12 +9,14 @@
  
 
             <div class="panel-heading no-print">
+            <?php   if (user_access('g31')) { ?>
 
                 <div class="btn-group"> 
 
                     <a class="btn btn-success" href="<?php echo base_url("lead/add_sub_crs") ?>"> <i class="fa fa-plus"></i>  <?php echo display('add_sub_course'); ?> </a>  
 
                 </div>
+                <?php } ?>
 
             </div>
 
@@ -58,11 +60,13 @@
                             <td><?php echo (($course->status==1)?display('active'):display('inactive')); ?></td>
 
                             <td class="center">
+            <?php   if (user_access('g32')) { ?>
 
                                 <a href="<?php echo base_url("lead/edit_sub_crs/$course->id") ?>" class="btn btn-xs  btn-primary"><i class="fa fa-edit"></i></a> 
+                                <?php  } if (user_access('g34')) { ?>
 
                                 <a href="<?php echo base_url("lead/delete_sub_crs/$course->id") ?>" onclick="return confirm('<?php echo display("are_you_sure") ?>')" class="btn btn-xs  btn-danger"><i class="fa fa-trash"></i></a> 
-
+                                    <?php } ?>
                             </td>
 
                         </tr>

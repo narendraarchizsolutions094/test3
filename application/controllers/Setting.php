@@ -263,7 +263,7 @@ $branch=$this->input->post('branch');
 $status=$this->input->post('status');
 $branch_id=$this->input->post('branch_id');
 if (!empty($branch_id)) {
-	if (user_role('3121') == true) {
+	if (user_role('d35') == true) {
 	}
 $count=$this->db->where('branch_name',$branch)->where_not_in('branch_id',$branch_id)->count_all_results('branch');
     if($count==0){
@@ -276,7 +276,7 @@ $count=$this->db->where('branch_name',$branch)->where_not_in('branch_id',$branch
 			redirect('setting/branchList');
 		}
 }else{
-	if (user_role('3122') == true) {
+	if (user_role('d36') == true) {
 	}
 $count=$this->db->where('branch_name',$branch)->count_all_results('branch');
 if($count==0){
@@ -292,7 +292,7 @@ $insert=$this->db->insert('branch',$data);
 }
 public function branchList()
 {
-	if (user_role('3123') == true) {
+	if (user_role('d37') == true) {
 	}
 	$data['page_title'] = 'Branch List';
 	$data['branch_list']=$this->db->where('comp_id',65)->get('branch')->result();
@@ -301,7 +301,7 @@ public function branchList()
 }
 public function branch_rateList()
 {
-	if (user_role('3133') == true) {
+	if (user_role('e30') == true) {
 	}
 	$data['page_title'] = 'Branch Rate List';
 	$data['branch_list']=$this->db->select('bb.*,bs.branch_name as bn,branchwise_rate.*')
@@ -324,7 +324,7 @@ if ($dbranch==$bbranch) {
 	redirect('setting/branch_rateList');
 }
 if(empty($id)){
-	if (user_role('3121') == true) {
+	if (user_role('d39') == true) {
 	}
 $count=$this->db->where(array('booking_branch'=>$bbranch,'delivery_branch'=>$dbranch))->count_all_results('branchwise_rate');
 if($count==0){
@@ -337,7 +337,7 @@ if($count==0){
 	redirect('setting/branch_rateList');
 }
 }else{
-	if (user_role('3132') == true) {
+	if (user_role('e30') == true) {
 	}
 		$data=['booking_branch'=>$bbranch,'rate'=>$rate,'delivery_branch'=>$dbranch,'rate_status'=>$status];
     	$this->db->where(array('comp_id'=>$this->session->companey_id,'id'=>$id))->update('branchwise_rate',$data);
@@ -377,7 +377,7 @@ public function editbranch()
 }
 public function editbranchrate()
 {
-	if (user_role('3132') == true) {
+	if (user_role('e30') == true) {
 	}
 	$id=$this->uri->segment(3);
 	$get=$this->db->where('id',$id)->get('branchwise_rate');
@@ -392,7 +392,7 @@ public function editbranchrate()
 }
 public function branch_delete()
 {
-	if (user_role('3124') == true) {
+	if (user_role('d38') == true) {
 	}
 	$branch_id=$this->uri->segment(3);
 	$get=$this->db->where(array('branch_id'=>$branch_id,'comp_id'=>$this->session->companey_id))->get('branch');
@@ -408,7 +408,7 @@ public function branch_delete()
 }
 public function branchrate_delete()
 {
-	if (user_role('3134') == true) {
+	if (user_role('e32') == true) {
 	}
 	$id=$this->uri->segment(3);
 	$get=$this->db->where(array('id'=>$id,'comp_id'=>$this->session->companey_id))->get('branchwise_rate');
@@ -433,7 +433,7 @@ public function document_templates()
 }
 public function createdocument_templates()
 {		
-	if (user_role('3142') == true) {
+	if (user_role('e33') == true) {
 	}
 	$id=$this->uri->segment('3');
 	if(!empty($id)){
@@ -447,7 +447,7 @@ public function createdocument_templates()
 }
 public function Insert_templates()
 {		
-	if (user_role('3142') == true) {
+	if (user_role('e33') == true) {
 	}
 	$user_id=$this->session->user_id;
 	 $id=$this->input->post('docId');
