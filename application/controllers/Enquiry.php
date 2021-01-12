@@ -3099,68 +3099,104 @@ public function timelinePopup()
 }
  public function insertCommercialInfo()
  {
+    //print_r($_POST); exit();
     $enquiry_id=$this->input->post('enquiry_id');
     $infoid=$this->input->post('infoid');
+
     if(empty($infoid)){
-    $comp_id=$this->session->companey_id;
-    $type=$this->input->post('type');
-    $booking_type=$this->input->post('booking_type');
-    $business_type=$this->input->post('business_type');
-    $booking_branch=$this->input->post('booking_branch');
-    $delivery_branch=$this->input->post('delivery_branch');
-    $insurance=$this->input->post('insurance');
-    $rate=$this->input->post('rate');
-    $discount=$this->input->post('discount');
-    $paymode=$this->input->post('paymode');
-    $potential_tonnage=$this->input->post('potential_tonnage');
-    $potential_amount=$this->input->post('potential_amount');
-    $expected_tonnage=$this->input->post('expected_tonnage');
-    $expected_amount=$this->input->post('expected_amount');
-    $vehicle_type=$this->input->post('vehicle_type');
-    $capacity=$this->input->post('capacity');
-    $invoice_value=$this->input->post('invoice_value');
-    $ftlpotential_amount=$this->input->post('ftlpotential_amount');
-    $ftlexpected_amount=$this->input->post('ftlexpected_amount');
-    $invoice_value=$this->input->post('invoice_value');
-    $url=base_url('enquiry/view/'.$enquiry_id.'');
-    if($booking_type==0){
-     $data=[ 'enquiry_id'=>$enquiry_id,
-            'branch_type'=>$type,
-            'booking_type'=>$booking_type,
-            'business_type'=>$business_type,
-            'booking_branch'=>$booking_branch,
-            'delivery_branch'=>$delivery_branch,
-            'rate'=>$rate,
-            'discount'=>$discount,
-            'insurance'=>$insurance,
-            'paymode'=>$paymode,
-            'potential_tonnage'=>$potential_tonnage,
-            'potential_amount'=>$potential_amount,
-            'expected_tonnage'=>$expected_tonnage,
-            'expected_amount'=>$expected_amount,
-            'createdby'=>$this->session->userdata('user_id'),
-            'comp_id'=>$comp_id
-          ];
-        }elseif($booking_type==1){
-            $data=[ 'enquiry_id'=>$enquiry_id,
-            'branch_type'=>$type,
-            'booking_type'=>$booking_type,
-            'business_type'=>$business_type,
-            'booking_branch'=>$booking_branch,
-            'delivery_branch'=>$delivery_branch,
-            'insurance'=>$insurance,
-            'paymode'=>$paymode,
-            'potential_amount'=>$ftlpotential_amount,
-            'expected_amount'=>$ftlexpected_amount,
-            'vehicle_type'=>$vehicle_type,
-            'carrying_capacity'=>$capacity,
-            'invoice_value'=>$invoice_value,
-            'createdby'=>$this->session->userdata('user_id'),
-            'comp_id'=>$comp_id
-          ]; 
-         
+
+        $delivery_branch=$this->input->post('delivery_branch');
+        $discount=$this->input->post('discount')??0;
+        $potential_tonnage=$this->input->post('potential_tonnage')??0;   
+        $expected_tonnage=$this->input->post('expected_tonnage')??0;
+
+        //print_r($delivery_branch); exit();
+        $del_count = count($delivery_branch);
+        foreach ($delivery_branch as $delivery_branch)
+        {
+            $comp_id=$this->session->companey_id;
+            $type=$this->input->post('type');
+            $booking_type=$this->input->post('booking_type');
+            $business_type=$this->input->post('business_type');
+            $booking_branch=$this->input->post('booking_branch');
+            if($del_count>1)
+            {
+                $rate = 0;
+                $getrate= $this->db->where(array('booking_branch'=>$booking_branch,'delivery_branch'=>$delivery_branch))->get('branchwise_rate')->row();
+                if(!empty($getrate) && !empty($getrate->rate))
+                    $rate = $getrate->rate;
+
+                $x = $rate * $potential_tonnage * 1000;
+                $y = $rate * $expected_tonnage * 1000;
+
+                $potential_amount = round($x - (( $x * $discount )/100),2);
+                $expected_amount = round($y - (( $y * $discount )/100),2);
+
+
+            }
+            else
+            {
+                $rate = $this->input->post('rate');
+                $potential_amount=$this->input->post('potential_amount');
+                $expected_amount=$this->input->post('expected_amount');
+            }
+
+
+
+            $insurance=$this->input->post('insurance');
+            
+
+            $paymode=$this->input->post('paymode');
+                    
+            $vehicle_type=$this->input->post('vehicle_type');
+            $capacity=$this->input->post('capacity');
+            $invoice_value=$this->input->post('invoice_value');
+            $ftlpotential_amount=$this->input->post('ftlpotential_amount');
+            $ftlexpected_amount=$this->input->post('ftlexpected_amount');
+            $invoice_value=$this->input->post('invoice_value');
+            $url=base_url('enquiry/view/'.$enquiry_id.'');
+            if($booking_type==0){
+             $data=[ 'enquiry_id'=>$enquiry_id,
+                    'branch_type'=>$type,
+                    'booking_type'=>$booking_type,
+                    'business_type'=>$business_type,
+                    'booking_branch'=>$booking_branch,
+                    'delivery_branch'=>$delivery_branch,
+                    'rate'=>$rate,
+                    'discount'=>$discount,
+                    'insurance'=>$insurance,
+                    'paymode'=>$paymode,
+                    'potential_tonnage'=>$potential_tonnage,
+                    'potential_amount'=>$potential_amount,
+                    'expected_tonnage'=>$expected_tonnage,
+                    'expected_amount'=>$expected_amount,
+                    'createdby'=>$this->session->userdata('user_id'),
+                    'comp_id'=>$comp_id
+                  ];
+                }elseif($booking_type==1){
+                    $data=[ 'enquiry_id'=>$enquiry_id,
+                    'branch_type'=>$type,
+                    'booking_type'=>$booking_type,
+                    'business_type'=>$business_type,
+                    'booking_branch'=>$booking_branch,
+                    'delivery_branch'=>$delivery_branch,
+                    'insurance'=>$insurance,
+                    'paymode'=>$paymode,
+                    'potential_amount'=>$ftlpotential_amount,
+                    'expected_amount'=>$ftlexpected_amount,
+                    'vehicle_type'=>$vehicle_type,
+                    'carrying_capacity'=>$capacity,
+                    'invoice_value'=>$invoice_value,
+                    'createdby'=>$this->session->userdata('user_id'),
+                    'comp_id'=>$comp_id
+                  ]; 
+                 
+                }
+                $insert=$this->enquiry_model->insertComInfo($data);
         }
-          $insert=$this->enquiry_model->insertComInfo($data);
+
+        //exit();
+
         if($insert){
         $this->session->set_flashdata('message', 'Commercial information inserted successfully');
         
@@ -3230,6 +3266,8 @@ public function timelinePopup()
              
             }
               $insert=$this->db->where(array('comp_id'=>$comp_id,'id'=>$infoid))->update('commercial_info',$data);
+
+
             if($insert){
             $this->session->set_flashdata('message', 'Commercial information Updated successfully');
             redirect($url);
