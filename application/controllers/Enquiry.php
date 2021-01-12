@@ -1742,7 +1742,7 @@ Array
                     //insert follow up counter (2 is for lead )
                     $this->enquiry_model->insetFollowupTime($key, 2, $enq->created_date, date('Y-m-d H:i:s'));
                 }
-                echo '1';
+                echo 1;
             } else {
                 echo "Please Check Enquiry";
             }
