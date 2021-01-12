@@ -1319,11 +1319,14 @@ class Enquiry extends CI_Controller
                    <div class="cbp_tmlabel"  style="background:#95a5a6;">
                     <span style="font-weight:900;font-size:15px;">' . ucfirst($comments->comment_msg) . '</span></br>';
                 if ($comments->comment_msg == 'Stage Updated') {
-                    $html .=  '<span style="font-weight:900;font-size:12px;">' . ucfirst($comments->lead_stage_name) . '</span>
-                    </br>
-                    <span style="font-weight:900;font-size:10px;">' . ucfirst($comments->description) . '</span>
-                    </br>
-                    <span style="font-weight:900;font-size:10px;">' . ucfirst($comments->remark) . '</span>';
+                    $html .=  '<span style="font-weight:900;font-size:12px;"> ' . ucfirst($comments->lead_stage_name) . '</span>';
+                    if(trim($comments->description))
+                    $html.='</br>
+                    <span style="font-weight:900;font-size:10px;">' . ucfirst($comments->description) . '</span>';
+                     if(trim($comments->remark))
+                    $html.='</br>
+                    <span style="font-weight:900;font-size:10px;"><big>Remarks:</big> ' . ucfirst($comments->remark) . '</span>';
+
                 }
                 $html .= '<p>' . date("j-M-Y h:i:s a", strtotime($comments->ddate)) . '<br>
                     Updated By : <strong>' . ucfirst($comments->comment_created_by . ' ' . $comments->lastname) . '</strong></p>
