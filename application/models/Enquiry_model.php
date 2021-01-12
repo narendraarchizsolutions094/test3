@@ -4219,17 +4219,17 @@ $cpny_id=$this->session->companey_id;
     	$where.= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';
         //$querys = $this->db->where($where);
     }
-        $querys = $this->db->select("enquiry.created_date,enquiry.status,enquiry.aasign_to,enquiry.state_id,enquiry.city_id,enquiry.created_by,enquiry.product_id");
+        $querys = $this->db->select("enquiry.created_date,enquiry.status,enquiry.aasign_to,enquiry.state_id,enquiry.city_id,enquiry.created_by,enquiry.product_id,count(enquiry.status) as c");
         $this->db->where($where);
         $this->db->group_by("enquiry.status");
         $querys = $this->db->get('enquiry');         
-        $result = $querys->result();
+        $result = $querys->result();        
         $enquiry =0;
         foreach($result as $r)
         { 
             if($r->status == $status)
             {
-                $enquiry = (!empty($querys->num_rows())) ? $querys->num_rows() : 0;
+                $enquiry = (!empty($r->c)) ? $r->c : 0;
             }
         }
        //echo $this->db->last_query();
