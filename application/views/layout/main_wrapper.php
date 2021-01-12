@@ -1082,46 +1082,46 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                                 <a href="<?php echo base_url(); ?>leadRules"> <?php echo display('lead_rules'); ?> </a>
                             </li>
                             
-                            <?php  } if (user_access(3011)) { ?>
+                            <?php  } if (user_access(31)) { ?>
                             <li class="<?php echo (in_array($segment2,array('stage')) ?"active":'') ?>">
                                 <a href="<?php echo base_url(); ?>lead/stage"> <?php echo display("lead_stage"); ?> </a>
                             </li>
-                            <?php }   if (user_access(3021)) {   ?>
+                            <?php }   if (user_access(35)) {   ?>
                             <li class="<?php echo (in_array($segment2,array('description')) ?"active":'') ?>">
                                 <a href="<?php echo base_url(); ?>lead/description">
                                     <?php echo display("lead_description"); ?> </a>
                             </li>
-                            <?php } if (user_access(3031)) {  ?>
+                            <?php } if (user_access(39)) {  ?>
                             <li class="<?php echo (in_array($segment2,array('lead_score')) ?"active":'') ?>">
                                 <a href="<?php echo base_url(); ?>lead/lead_score">
                                     <?php echo display('conversion_probability'); ?></a>
                             </li>
-                                <?php }  if (user_access(3043)) {   ?>
+                                <?php }  if (user_access('a35')) {   ?>
                             <li class="<?php echo (in_array($segment2,array('lead_source')) ?"active":'') ?>">
                                 <a
                                     href="<?php echo base_url(); ?>lead/lead_source"><?php echo display('lead_source'); ?></a>
                             </li>
-                            <?php }  if (user_access(3053)) {   ?>
+                            <?php }  if (user_access('a39')) {   ?>
 
                             <li
                                 class="<?php echo (in_array($segment2,array('subsourcelist','add_subsource','edit_subsource')) ?"active":'') ?>">
                                 <a href="<?php echo base_url() ?>lead/subsourcelist">
                                     <?php echo display('subsource_management');?></a>
                             </li>
-                            <?php }  if (user_access(3063)) {   ?>
+                            <?php }  if (user_access('b33')) {   ?>
 
                             <li class="<?php echo (in_array($segment2,array('add_drop')) ?"active":'') ?>">
                                 <a
                                     href="<?php echo base_url(); ?>lead/add_drop"><?php echo display('drop_reason'); ?></a>
                             </li>
-                            <?php }  if (user_access(3073)) {   ?>
+                            <?php }  if (user_access('b37')) {   ?>
 
                             <li
                                 class="<?php echo (in_array($segment2,array('load_customer_channel_mater')) ?"active":'') ?>">
                                 <a
                                     href="<?php echo base_url('lead/load_customer_channel_mater'); ?>"><?php echo display('enquiry_type'); ?></a>
                             </li>
-                            <?php }    if (user_access(3083)) {   ?>
+                            <?php }    if (user_access('c31')) {   ?>
 
                             <li class="<?php echo (in_array($segment2,array('product-list')) ?"active":'') ?>">
                                 <a href="<?php echo base_url('lead/product-list'); ?>">
@@ -1129,7 +1129,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                                 </a>
                             </li>
 
-                            <?php }    if (user_access(3093)) {   ?>
+                            <?php }    if (user_access('c35')) {   ?>
                             <li
                                 class="<?php echo (in_array($segment2,array('productcountry','addproductcountry','edit_institute')) ?"active":'') ?>">
                                 <a href="<?php echo base_url() ?>lead/productcountry">
@@ -1158,7 +1158,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                                 </a>
                             </li>
                             <?php } ?>
-                        <?php  if (user_access(3163)) {  ?>
+                        <?php  if (user_access('f31')) {  ?>
 
                             <li class="<?php echo (in_array($segment2,array('institutelist','add_institute','edit_institute')) ?"active":'') ?>"
                                 style="<?php if(in_array(240,$module) || in_array(241,$module) || in_array(242,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
@@ -1166,7 +1166,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                                     <?php echo display('institute_management');?>
                                 </a>
                             </li>
-                        <?php } if (user_access(3173)) {  ?>
+                        <?php } if (user_access('f35')) {  ?>
 
                             <li class="<?php echo (in_array($segment2,array('crslist','add_crs','edit_crs')) ?"active":'') ?>"
                                 style="<?php if(in_array(350,$module) || in_array(351,$module) || in_array(352,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
@@ -1175,7 +1175,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                                 </a>
                             </li>
                         <?php } 
-                        if (user_access(3193)) { 
+                        if (user_access('g33')) { 
                         ?>
 
                             <li class="<?php echo (in_array($segment2,array('sub_course','add_sub_course','edit_sub_course')) ?"active":'') ?>"
@@ -1184,7 +1184,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                                     <?php echo display('sub_course');?>
                                 </a>
                             </li>
-                         <?php   } if (user_access(3183)) {  ?>
+                         <?php   } if (user_access('f39')) {  ?>
                             <li class="<?php echo (in_array($segment2,array('courselist','add_course','edit_course')) ?"active":'') ?>"
                                 style="<?php if(in_array(350,$module) || in_array(351,$module) || in_array(352,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
                                 <a href="<?php echo base_url() ?>lead/courselist">
@@ -1194,7 +1194,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
 <?php }?>
                             <?php
                             if ($this->session->companey_id == 67) {
-                        if (user_access(3201)) {  ?>
+                        if (user_access('g37')) {  ?>
 
                         ?>
                             <li
@@ -1207,14 +1207,14 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                         }
                     }
                         ?> 
-                        <?php  if (user_access(3103)) {  ?>
+                        <?php  if (user_access('c39')) {  ?>
                             <li
                                 class="<?php echo (in_array($segment2,array('taskstatuslist','add_taskstatus','edit_taskstatus')) ?"active":'') ?>">
                                 <a href="<?php echo base_url() ?>lead/taskstatuslist">
                                     <?php echo display('taskstatus_management');?>
                                 </a>
                             </li>
-                        <?php }  if (user_access(3113)) {  ?>
+                        <?php }  if (user_access('d33')) {  ?>
 
                             <li class="<?php echo (in_array($segment2,array('centerlist','add_center','edit_center')) ?"active":'') ?>"
                                 style="<?php if(in_array(430,$module) || in_array(431,$module) || in_array(432,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
@@ -1224,7 +1224,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                             </li>
                             <?php }
                             if ($this->session->companey_id == 83) { 
-                            if (user_access(3213)) {  ?>
+                            if (user_access('h31')) {  ?>
                             <li class="<?php echo (in_array($segment2,array('faq','add_faq','edit_faq')) ?"active":'') ?>"
                                 style="">
                                 <a href="<?php echo base_url() ?>lead/faq">
@@ -1239,7 +1239,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                             <?php
                         if ($this->session->companey_id == 65) {
                         ?>
-                        <?php  if (user_access(3123)) {  ?>
+                        <?php  if (user_access('d37')) {  ?>
 
 
                             <li class="<?php echo (in_array($segment2,array('branchList')) ?"active":'') ?>">
@@ -1247,7 +1247,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                                     Branch List
                                 </a>
                             </li>
-                        <?php }  if (user_access(3133)) {  ?>
+                        <?php }  if (user_access('e31')) {  ?>
 
                             <li
                                 class="<?php echo (in_array($segment2,array('branch_ratelist','editbranchrate')) ?"active":'') ?>">
@@ -1255,7 +1255,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                                     Branch Rate List
                                 </a>
                             </li>
-                            <?php }  if (user_access(3143)) {  ?>
+                            <?php }  if (user_access('e34')) {  ?>
 
                             <li
                                 class="<?php echo (in_array($segment2,array('document-templates','createdocument_templates')) ?"active":'') ?>">
@@ -1263,7 +1263,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                                     Document Templates
                                 </a>
                             </li>
-                            <?php }  if (user_access(3153)) {  ?>
+                            <?php }  if (user_access('e37')) {  ?>
 
                             <li
                                 class="<?php echo (in_array($segment2,array('reportingList')) ?"active":'') ?>">

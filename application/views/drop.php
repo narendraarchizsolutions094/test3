@@ -31,7 +31,7 @@
            
 
            
-                           <?php   if (user_access(3061)) { ?>
+                           <?php   if (user_access('b31')) { ?>
 
            <button class="btn btn-sm btn-success" style="float: left" type="button" data-toggle="modal" data-target="#createnewReason"><i class="fa fa-plus"></i> Add New Drop Reason</button>
 
@@ -226,10 +226,10 @@
                                     <td class="th1"><?php echo $drop->drop_reason; ?></td>
 
                                     <td class="center">
-                                    <?php   if (user_access(3062)) { ?>
+                                    <?php   if (user_access('b32')) { ?>
 
                                         <a  class="btn btn-xs  btn-primary" data-toggle="modal" data-target="#Editreason<?php echo $drop->d_id;?>"><i class="fa fa-edit"></i></a> 
-<?php  } if (user_access(3064)) { ?>
+<?php  } if (user_access('b34')) { ?>
 
                                         <a href="<?php echo base_url("lead/delete_dropReason/$drop->d_id") ?>" onclick="return confirm('<?php echo display("are_you_sure") ?>')" class="btn btn-xs  btn-danger"><i class="fa fa-trash"></i></a> 
 <?php } ?>
@@ -243,7 +243,7 @@
 
                                 
 
-                                <?php   if (user_access(3062)) { ?>
+                                <?php   if (user_access('b32')) { ?>
         
 
 <div id="Editreason<?php echo $drop->d_id;?>" class="modal fade" role="dialog">

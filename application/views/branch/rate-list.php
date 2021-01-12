@@ -23,7 +23,7 @@ a:hover, a:focus {
  
 
             <div class="panel-heading no-print">
-            <?php   if (user_access(3131)) { ?>
+            <?php   if (user_access('d39')) { ?>
 
                 <div class="btn-group"> 
 
@@ -118,9 +118,9 @@ a:hover, a:focus {
 
               <td width=""><?= $branch->created_at?></td>
               <td class="center">
-            <?php   if (user_access(3132)) { ?>
+            <?php   if (user_access('e30')) { ?>
                   <a href="<?= base_url('setting/editbranchrate/' . $branch->id . '')?>" class="btn btn-xs  btn-primary view_data"><i class="fa fa-edit"></i></a>
-            <?php    } if (user_access(3134)) { ?>
+            <?php    } if (user_access('e31')) { ?>
                   <a href="<?= base_url('setting/branchrate_delete/' . $branch->id . '') ?>" onclick="return confirm('Are You Sure ? ')" class="btn btn-xs  btn-danger"><i class="fa fa-trash"></i></a>
                <?php } ?>
                 </td>

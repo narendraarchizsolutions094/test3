@@ -5,7 +5,7 @@
             <div class="panel-body">
 <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>                     
-<?php  if (user_access(3012)) { ?>
+<?php  if (user_access(31)) { ?>
 <div class="col-12">
                 <a href="#" class="btn btn-raised btn-success" data-toggle="modal" data-target="#createLead"><i class="ti-plus text-white"></i> &nbsp;Add New Lead Stage</a>
                 </div>
@@ -102,15 +102,15 @@
                                                      <?php  if (in_array('3', $stages)) { echo display("client").','; } ?></option>                                       
                                     </td>
                                      <td class="center">
-<?php  if (user_access(3012)) { ?> <a  class="btn btn-xs  btn-primary" data-toggle="modal" data-target="#Editstage<?php echo $stage->stg_id;?>"><i class="fa fa-edit"></i></a> <?php } 
-       if (user_access(3014)) { ?> 
+<?php  if (user_access(32)) { ?> <a  class="btn btn-xs  btn-primary" data-toggle="modal" data-target="#Editstage<?php echo $stage->stg_id;?>"><i class="fa fa-edit"></i></a> <?php } 
+       if (user_access(34)) { ?> 
                                         <a href="<?php echo base_url("lead/delete_stage/$stage->stg_id") ?>" onclick="return confirm('<?php echo display("are_you_sure") ?>')" class="btn btn-xs  btn-danger"><i class="fa fa-trash"></i></a> 
                                    <?php } ?>
                                       </td>
                                     
                                 </tr>
                                 
-<?php  if (user_access(3013)) { ?>
+<?php  if (user_access(33)) { ?>
         
         <div id="Editstage<?php echo $stage->stg_id;?>" class="modal fade" role="dialog">
         <div class="modal-dialog">

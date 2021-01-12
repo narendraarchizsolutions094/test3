@@ -21,7 +21,7 @@
     <div class="col-sm-12 customer-type">
 
         <div  class="panel panel-default thumbnail">
-        <?php   if (user_access(3071)) { ?>
+        <?php   if (user_access('b35')) { ?>
 
  
 
@@ -68,13 +68,13 @@
                             <td><?= $row->customer_type ?></td>
 
                             <td>
-                            <?php   if (user_access(3072)) { ?>
+                            <?php   if (user_access('b36')) { ?>
                               <button class="btn btn-default" data-toggle="modal" data-target="#<?= $row->cus_id ?>" type="button"><i class="fa fa-pencil-square-o"></i></button></td>
                               <?php } ?>
                         </tr>
 
                          <!-- Edit Modal -->
-                         <?php   if (user_access(3072)) { ?>
+                         <?php   if (user_access('b36')) { ?>
 
                           <div class="modal fade" id="<?= $row->cus_id ?>" role="dialog">
 
@@ -326,7 +326,7 @@
 
 </div>
 
-<?php   if (user_access(3071)) { ?>
+<?php   if (user_access('b35')) { ?>
 
 
 <!------------ Modal for customer type--------------->

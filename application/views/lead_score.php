@@ -10,7 +10,7 @@
 
             <div class="panel-body">
 
-            <?php  if (user_access(3032)) { ?> 
+            <?php  if (user_access('a30')) { ?> 
                 <div class="col-12">
                                     <a href="#" class="btn btn-raised btn-success" 	data-toggle="modal" data-target="#createLead"><i class="ti-plus text-white"></i> &nbsp;Add New Lead Probability</a>
                                 </div>
@@ -105,10 +105,10 @@
                                     <td><?php echo $score->probability; ?></td>
 
                                     <td class="center">
-            <?php  if (user_access(3033)) { ?> 
+            <?php  if (user_access('a31')) { ?> 
 
                                         <a  class="btn btn-xs  btn-primary" data-toggle="modal" data-target="#Editscore<?php echo $score->sc_id;?>"><i class="fa fa-edit"></i></a> 
-            <?php } if (user_access(3034)) { ?> 
+            <?php } if (user_access('a32')) { ?> 
               
                                         <a href="<?php echo base_url("lead/delete_score/$score->sc_id") ?>" onclick="return confirm('<?php echo display("are_you_sure") ?>')" class="btn btn-xs  btn-danger"><i class="fa fa-trash"></i></a> 
               <?php } ?>
@@ -119,7 +119,7 @@
                                 
 
                                 
-                                <?php  if (user_access(3033)) { ?> 
+                                <?php  if (user_access('a31')) { ?> 
 
 <div id="Editscore<?php echo $score->sc_id;?>" class="modal fade" role="dialog">
 
