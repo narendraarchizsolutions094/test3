@@ -2010,7 +2010,7 @@ function update_info_status(id,status)
 {
      $.ajax({
             type: 'POST',
-            url: '<?php echo base_url();?>enquiry/update_info_status',
+            url: '<?php echo base_url();?>enquiry/update_info_status/<?=$enquiry->Enquery_id?>',
             data: {id:id,status:status},
             success:function(data){
                 Swal.fire('Status Updated');
@@ -2341,7 +2341,6 @@ if(user_access('1004'))
    }
  </script>
 <div class="aggrement_view">
-
 </div>
 <style type="text/css">
   .aggrement_view{
@@ -4107,6 +4106,10 @@ if (document.getElementById('agg_same').checked)
    z-index: 9090;
     right: 5px;
   }
+  .timeline
+  {
+    padding-left: 0px;
+  }
 </style>
 <script type="text/javascript">
 
@@ -4237,7 +4240,7 @@ $(".toogle-timeline").click(function(){
 <!----------------------------------------------------------chat section end--------------------------------------------------------->
 <script>
     function add_more_phone(add_more_phone) {
-       var html='<div class="form-group col-sm-4"><label>Other No </label><input class="form-control"  name="other_no[]" type="text" placeholder="Other Number"   ></div>';
+       var html='<div class="form-group col-sm-6 col-md-6"><label>Other No </label><input class="form-control"  name="other_no[]" type="text" placeholder="Other Number"   ></div>';
         $('#'+add_more_phone).append(html);          
     }
   function delete_institute(id){
@@ -4721,7 +4724,6 @@ function edit_dynamic_query(t)
         }); 
          
          ser_date = date.format();
-
                      $.ajax({
                       type: 'POST',
                       url: '<?php echo base_url();?>task/search_comment_and_task/'+ser_date,
@@ -5604,7 +5606,7 @@ $("a[href$='#related_enquiry']").on('click',function(){
 ?>
 
 
-<!-- <script>
+ <script>
 jQuery(document).ready(function(){
    $('#main_tab a').click(function(e) {
       e.preventDefault();
@@ -5633,4 +5635,4 @@ jQuery(document).ready(function(){
       }
    })
 });
-</script> -->
+</script>
