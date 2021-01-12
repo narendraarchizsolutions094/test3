@@ -793,7 +793,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                     <style>
                     #center_logoimg {
                         position: absolute;
-                        top: -100px;
+                        top: -50px;
                         right: -440px;
                         width: 200px;
                     }

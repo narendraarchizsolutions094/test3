@@ -4174,10 +4174,11 @@ $cpny_id=$this->session->companey_id;
     {	
     	$all_reporting_ids    =   $this->common_model->get_categories($userid);
         $cpny_id=$companyid;
-        $arr = $this->session->process;           
+        $arr = $this->session->process;  
+        $where = '';
         if(is_array($arr)){
             $where="enquiry.product_id IN (".implode(',', $arr).')';
-           $querys = $this->db->where($where);
+           //$querys = $this->db->where($where);
 
         } 
         $querys = $this->db->where("enquiry.comp_id",$cpny_id);
@@ -4199,7 +4200,7 @@ $cpny_id=$this->session->companey_id;
         }else{
             $where.= " AND ( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
             $where.= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';
-            $querys = $this->db->where($where);
+            //$querys = $this->db->where($where);
             
         }
         if(!empty($filter->state_id)){
@@ -4216,21 +4217,22 @@ $cpny_id=$this->session->companey_id;
     }else{
         $where.= " AND ( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
     	$where.= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';
-        $querys = $this->db->where($where);
+        //$querys = $this->db->where($where);
     }
-        $querys = $this->db->select("enquiry.created_date,enquiry.status,enquiry.aasign_to,enquiry.state_id,enquiry.city_id,enquiry.created_by,enquiry.product_id");
-        $querys =    $this->db->group_by("enquiry.status");
-        $querys =    $this->db->get('enquiry');
-                   $result = $querys->result();
+        $querys = $this->db->select("enquiry.created_date,enquiry.status,enquiry.aasign_to,enquiry.state_id,enquiry.city_id,enquiry.created_by,enquiry.product_id,count(enquiry.status) as c");
+        $this->db->where($where);
+        $this->db->group_by("enquiry.status");
+        $querys = $this->db->get('enquiry');         
+        $result = $querys->result();        
         $enquiry =0;
         foreach($result as $r)
         { 
             if($r->status == $status)
             {
-                $enquiry = (!empty($querys->num_rows())) ? $querys->num_rows() : 0;
+                $enquiry = (!empty($r->c)) ? $r->c : 0;
             }
         }
-       
+       //echo $this->db->last_query();
         return $enquiry;
     }
 
