@@ -1738,7 +1738,7 @@ function moveto_lead(){
   url: '<?php echo base_url();?>enquiry/move_to_lead',
   data: $('#enquery_assing_from').serialize(),
   success:function(data){
-      if(data==1){
+      if(trim(data)==1){
            alert('Successfully Moved in <?=display('lead')?>s'); 
         window.location.href='<?php echo base_url();?>enquiry'
       }else{
