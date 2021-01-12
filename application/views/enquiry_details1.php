@@ -5614,7 +5614,7 @@ $("a[href$='#related_enquiry']").on('click',function(){
 ?>
 
 
-<!-- <script>
+ <script>
 jQuery(document).ready(function(){
    $('#main_tab a').click(function(e) {
       e.preventDefault();
@@ -5643,4 +5643,4 @@ jQuery(document).ready(function(){
       }
    })
 });
-</script> -->
+</script> 
