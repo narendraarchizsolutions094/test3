@@ -4,7 +4,7 @@
         <div  class="panel panel-default thumbnail">
  
             <div class="panel-heading no-print">
-            <?php  if (user_access(3022)) { ?> 
+            <?php  if (user_access(36)) { ?> 
                 <div class="btn-group"> 
                     <a class="btn btn-success" href="<?php echo base_url("lead/add_description") ?>"> <i class="fa fa-plus"></i>  <?php echo display('add_lead_description') ?> </a>  
                 </div>
@@ -32,9 +32,9 @@
                             <td><?php echo !empty($description->product_name)?$description->product_name:'NA';?></td>                    
                             <td><?php echo (($description->status==1)?display('active'):display('inactive')); ?></td>
                             <td class="subsource">
-            <?php  if (user_access(3023)) { ?> 
+            <?php  if (user_access(37)) { ?> 
                                 <a href="<?php echo base_url("lead/edit_discription/$description->id") ?>" class="btn btn-xs  btn-primary"><i class="fa fa-edit"></i></a> 
-            <?php  } if (user_access(3024)) { ?> 
+            <?php  } if (user_access(38)) { ?> 
                                 <a href="<?php echo base_url("lead/delete_description/$description->id") ?>" onclick="return confirm('<?php echo display("are_you_sure") ?>')" class="btn btn-xs  btn-danger"><i class="fa fa-trash"></i></a> 
             <?php } ?> 
                             </td>

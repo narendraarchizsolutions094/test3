@@ -45,7 +45,7 @@
                 <td width=""><?= $docList->title ?></td>
                 <td width=""><?= $docList->created_date ?></td>
                 <td class="center">
-            <?php if (user_access(3142)) { ?>
+            <?php if (user_access('e33')) { ?>
                   <a href="<?= base_url('setting/createdocument_templates/' . $docList->id . '') ?>"  class="btn btn-xs  btn-primary"><i class="fa fa-pencil"></i></a>
                <?php } ?>
                 </td>

@@ -403,7 +403,7 @@ class Lead extends CI_Controller
 
         $data['nav1'] = 'nav2';
         if (!empty($_POST)) {
-           if (user_role('3012') == true) {
+           if (user_role('32') == true) {
         }
             $lead_stage_name = $this->input->post('stage_name');
             $process = $this->input->post('process');
@@ -431,7 +431,7 @@ class Lead extends CI_Controller
             $this->session->set_flashdata('SUCCESSMSG', 'Lead Stage Add Successfully');
             redirect('lead/stage');
         }
-        if (user_role('3011') == true) {
+        if (user_role('31') == true) {
         }
         $data['lead_stages'] = $this->Leads_Model->get_leadstage_list();
         // echo $this->db->last_query();
@@ -445,7 +445,7 @@ class Lead extends CI_Controller
     }
     public function delete_stage($stage = null)
     {
-        if (user_role('3014') == true) {
+        if (user_role('34') == true) {
         }
         if ($this->Leads_Model->delete_stage($stage)) {
             #set success message
@@ -458,7 +458,7 @@ class Lead extends CI_Controller
     }
     public function update_stage()
     {
-        if (user_role('3013') == true) {
+        if (user_role('33') == true) {
         }
         if (!empty($_POST)) {
             $stage_name = $this->input->post('stage_name');
@@ -548,7 +548,7 @@ class Lead extends CI_Controller
     }
     public function delete_score($score = null)
     {
-        if (user_role('3034') == true) {
+        if (user_role('a32') == true) {
         }
         if ($this->Leads_Model->delete_score($score)) {
             #set success message
@@ -561,7 +561,7 @@ class Lead extends CI_Controller
     }
     public function update_score()
     {
-        if (user_role('3033') == true) {
+        if (user_role('a31') == true) {
         }
         if (!empty($_POST)) {
             $score_name = $this->input->post('score_name');
@@ -583,7 +583,7 @@ class Lead extends CI_Controller
     }
     public function delete_source($source = null)
     {
-        if (user_role('3044') == true) {
+        if (user_role('a36') == true) {
         }
         if ($this->Leads_Model->delete_source($source)) {
             #set success message
@@ -597,7 +597,7 @@ class Lead extends CI_Controller
     public function update_source()
     {
         if (!empty($_POST)) {
-            if (user_role('3042') == true) {
+            if (user_role('a34') == true) {
             }
             $source_id = $this->input->post('source_id');
             $source_name = $this->input->post('source_name');
@@ -610,7 +610,7 @@ class Lead extends CI_Controller
     }
     public function delete_dropReason($drop = null)
     {
-        if (user_role('3064') == true) {
+        if (user_role('b34') == true) {
         }
         if ($this->Leads_Model->delete_dropReason($drop)) {
             #set success message
@@ -624,7 +624,7 @@ class Lead extends CI_Controller
     public function update_drop()
     {
         if (!empty($_POST)) {
-            if (user_role('3062') == true) {
+            if (user_role('b32') == true) {
             }
             $drop_id = $this->input->post('drop_id');
             $reason = $this->input->post('reason');
@@ -668,7 +668,7 @@ class Lead extends CI_Controller
        
         $data['nav1'] = 'nav2';
         if (!empty($_POST)) {
-            if (user_role('3041') == true) {
+            if (user_role('a33') == true) {
             }
             $lead_source_name = $this->input->post('source_name');
             $data = array(
@@ -679,7 +679,7 @@ class Lead extends CI_Controller
             $this->session->set_flashdata('SUCCESSMSG', 'Lead Source Add Successfully');
             redirect('lead/lead_source');
         }
-        if (user_role('3043') == true) {
+        if (user_role('a35') == true) {
         }
         $data['lead_source'] = $this->Leads_Model->get_leadsource_list();
         $data['content'] = $this->load->view('lead_source', $data, true);
@@ -690,7 +690,7 @@ class Lead extends CI_Controller
        
         $data['nav1'] = 'nav2';
         if (!empty($_POST)) {
-            if (user_role('3032') == true) {
+            if (user_role('a30') == true) {
             }
             $score_name = $this->input->post('score_name');
             $score_rate = $this->input->post('score_rate');
@@ -709,7 +709,7 @@ class Lead extends CI_Controller
             $this->session->set_flashdata('SUCCESSMSG', 'Lead Score Add Successfully');
             redirect('lead/lead_score');
         }
-        if (user_role('3031') == true) {
+        if (user_role('39') == true) {
         }
         $data['lead_score'] = $this->Leads_Model->get_leadscore_list();
         $data['title'] = 'Lead Probability';
@@ -937,7 +937,7 @@ class Lead extends CI_Controller
         $leadid = $this->uri->segment(3);
         //////////////////////////////////////////////////////
         if (!empty($_POST)) {
-            if (user_role('3061') == true) {
+            if (user_role('b31') == true) {
             }
             $reason = $this->input->post('reason');
             $data = array(
@@ -948,7 +948,7 @@ class Lead extends CI_Controller
             redirect('lead/add_drop');
         }
         //////////////////////////////////////////////////////
-        if (user_role('3063') == true) {
+        if (user_role('b33') == true) {
         }
         $data['drops'] = $this->Leads_Model->get_drop_list();
         $data['content'] = $this->load->view('drop', $data, true);
@@ -961,6 +961,8 @@ class Lead extends CI_Controller
         $leadid = $this->uri->segment(3);
         // print_r($this->input->post('drop_status'));exit;
         if (!empty($_POST)) {
+            if (user_role('b31') == true) {
+            }
             $reason = $this->input->post('reason');
             $drop_status = $this->input->post('drop_status');
             $this->db->set('drop_status', $drop_status);
@@ -969,6 +971,8 @@ class Lead extends CI_Controller
             $this->db->update('enquiry');
             $this->Leads_Model->add_comment_for_events('Dropped Leads', $leadid);
             redirect('led/index');
+        }
+        if (user_role('b33') == true) {
         }
         $data['drops'] = $this->Leads_Model->get_drop_list();
         $data['content'] = $this->load->view('drop', $data, true);
@@ -1166,7 +1170,7 @@ class Lead extends CI_Controller
     }
     function productcountry()
     {
-        if (user_role('3093') == true) {
+        if (user_role('c35') == true) {
         }
         $data['title'] = 'Product List';
         $data['country'] = $this->location_model->productcountry();
@@ -1197,7 +1201,7 @@ class Lead extends CI_Controller
         ];
         if ($this->form_validation->run() === true) {
             if (empty($this->input->post('id'))) {
-                if (user_role('3091') == true) {
+                if (user_role('c33') == true) {
                 }
                 if ($this->location_model->addproductcountry($postData)) {
                     $this->session->set_flashdata('message', display('save_successfully'));
@@ -1206,7 +1210,7 @@ class Lead extends CI_Controller
                 }
                 redirect('lead/productcountry');
             } else {
-                if (user_role('3092') == true) {
+                if (user_role('c34') == true) {
                 }
                 if ($this->location_model->updateProductCountry($postData)) {
                     $this->session->set_flashdata('message', display('update_successfully'));
@@ -1216,7 +1220,7 @@ class Lead extends CI_Controller
                 redirect('lead/productcountry');
             }
         } else {
-            if (user_role('3091') == true) {
+            if (user_role('c33') == true) {
             }
             $data['typeofpro_list'] = $this->warehouse_model->typeofproduct_list();
             $data['brand_list'] = $this->warehouse_model->brand_list();
@@ -1248,7 +1252,7 @@ class Lead extends CI_Controller
         ];
         if ($this->form_validation->run() === true) {
             if (empty($this->input->post('id'))) {
-                if (user_role('30') == true) {
+                if (user_role('c33') == true) {
                 }
                 if ($this->location_model->addproductcountry($postData)) {
                     $this->session->set_flashdata('message', display('save_successfully'));
@@ -1257,7 +1261,7 @@ class Lead extends CI_Controller
                 }
                 redirect('lead/productcountry');
             } else {
-                if (user_role('31') == true) {
+                if (user_role('c34') == true) {
                 }
                 if ($this->location_model->updateProductCountry($postData)) {
                     $this->session->set_flashdata('message', display('update_successfully'));
@@ -1267,6 +1271,8 @@ class Lead extends CI_Controller
                 redirect('lead/productcountry');
             }
         } else {
+            if (user_role('c35') == true) {
+            }
             $data['typeofpro_list'] = $this->warehouse_model->typeofproduct_list();
             $data['brand_list'] = $this->warehouse_model->brand_list();
             $data['content'] = $this->load->view('location/product_country_form', $data, true);
@@ -1275,7 +1281,7 @@ class Lead extends CI_Controller
     }
     public function editproductcountry($param_id = null)
     {
-        if (user_role('31') == true) {
+        if (user_role('c34') == true) {
         }
         $data['title'] = 'Edit Product';
         $data['formdata'] = $this->location_model->readProductCountry($param_id);
@@ -1284,7 +1290,7 @@ class Lead extends CI_Controller
     }
     public function editproductcountry1($param_id = null)
     {
-        if (user_role('3092') == true) {
+        if (user_role('c34') == true) {
         }
         $data['title'] = 'Edit Product';
         $data['formdata'] = $this->location_model->readProductCountry($param_id);
@@ -1296,7 +1302,7 @@ class Lead extends CI_Controller
 
     public function deleteproductcountry($paramId = null)
     {
-        if (user_role('3094') == true) {
+        if (user_role('c36') == true) {
         }
         if ($this->location_model->deleteproductcountry($paramId)) {
             $this->session->set_flashdata('message', display('delete_successfully'));
@@ -1308,7 +1314,7 @@ class Lead extends CI_Controller
 
     public function institutelist()
     {
-        if (user_role('3163') == true) {
+        if (user_role('f31') == true) {
         }
         $data['title'] = display('institute_list');
         $data['institute_list'] = $this->Institute_model->institutelist();
@@ -1317,7 +1323,7 @@ class Lead extends CI_Controller
     }
     public function courselist()
     {
-        if (user_role('3183') == true) {
+        if (user_role('f39') == true) {
         }
         $data['title']          = display('course_list');
         $this->load->library('pagination');
@@ -1434,7 +1440,7 @@ class Lead extends CI_Controller
     }
     public function crslist()
     {
-        if (user_role('3173') == true) {
+        if (user_role('f35') == true) {
         }
         $data['title'] = display('course_master');
         $this->load->library('pagination');
@@ -1451,7 +1457,7 @@ class Lead extends CI_Controller
     }
     public function sub_course()
     {
-        if (user_role('3193') == true) {
+        if (user_role('g33') == true) {
         }
         $data['title'] = display('sub_course');
         $this->load->library('pagination');
@@ -1469,7 +1475,7 @@ class Lead extends CI_Controller
     }
     public function vidlist()
     {
-        if (user_role('3203') == true) {
+        if (user_role('g37') == true) {
         }
         $data['title'] = display('vedio_list');
         $data['vid_list'] = $this->Institute_model->vidlist();
@@ -1525,7 +1531,7 @@ class Lead extends CI_Controller
     }
     public function edit_discipline($id = null)
     {
-        if (user_role('31') == true) {
+        if (user_role('30') == true) {
         }
         $data['title'] = display('update_discipline');
         $data['discipline'] = $this->Institute_model->readRowdisci($id);
@@ -1534,7 +1540,7 @@ class Lead extends CI_Controller
     }
     public function delete_discipline($paramId = null)
     {
-        if (user_role('32') == true) {
+        if (user_role('30') == true) {
         }
         if ($this->Institute_model->deletediscipline($paramId)) {
             $this->session->set_flashdata('message', display('delete_successfully'));
@@ -1580,7 +1586,7 @@ class Lead extends CI_Controller
                     $this->session->set_flashdata('exception', display('please_try_again'));
                 }
             } else {
-                if (user_role('31') == true) {
+                if (user_role('30') == true) {
                 }
                 if ($this->Institute_model->updateRowlvl($postData)) {
                     $this->session->set_flashdata('message', display('update_successfully'));
@@ -1596,7 +1602,7 @@ class Lead extends CI_Controller
     }
     public function edit_level($id = null)
     {
-        if (user_role('31') == true) {
+        if (user_role('30') == true) {
         }
         $data['title'] = display('update_level');
         $data['level'] = $this->Institute_model->readRowlvl($id);
@@ -1605,7 +1611,7 @@ class Lead extends CI_Controller
     }
     public function delete_level($paramId = null)
     {
-        if (user_role('32') == true) {
+        if (user_role('30') == true) {
         }
         if ($this->Institute_model->deletelevel($paramId)) {
             $this->session->set_flashdata('message', display('delete_successfully'));
@@ -1756,7 +1762,7 @@ class Lead extends CI_Controller
         if ($this->form_validation->run() === true) {
             // print_r($postData);exit;
             if (empty($this->input->post('institute_id'))) {
-                if (user_role('3161') == true) {
+                if (user_role('e39') == true) {
                 }
                 if ($this->Institute_model->insertRow($postData)) {
                     $this->session->set_flashdata('message', display('save_successfully'));
@@ -1764,7 +1770,7 @@ class Lead extends CI_Controller
                     $this->session->set_flashdata('exception', display('please_try_again'));
                 }
             } else {
-                if (user_role('3162') == true) {
+                if (user_role('f30') == true) {
                 }
                 if ($this->Institute_model->updateRow($postData)) {
                     $this->session->set_flashdata('message', display('update_successfully'));
@@ -1774,7 +1780,7 @@ class Lead extends CI_Controller
             }
             redirect('lead/institutelist');
         } else {
-            if (user_role('3161') == true) {
+            if (user_role('f31') == true) {
             }
             $data['country'] = $this->location_model->country();
             $data['content'] = $this->load->view('institute/institute_form', $data, true);
@@ -1783,7 +1789,7 @@ class Lead extends CI_Controller
     }
     public function edit_institute($institute_id = null)
     {
-        if (user_role('3162') == true) {
+        if (user_role('f30') == true) {
         }
         $data['title'] = display('update_institute');
         $data['institute'] = $this->Institute_model->readRow($institute_id);
@@ -1793,7 +1799,7 @@ class Lead extends CI_Controller
     }
     public function delete_institute($paramId = null)
     {
-        if (user_role('3164') == true) {
+        if (user_role('f32') == true) {
         }
         if ($this->Institute_model->deleteInstitute($paramId)) {
             $this->session->set_flashdata('message', display('delete_successfully'));
@@ -1915,7 +1921,7 @@ class Lead extends CI_Controller
     }
     public function taskstatuslist()
     {
-        if (user_role('3103') == true) {
+        if (user_role('c39') == true) {
         }
         $data['title'] = display('taskstatus_list');
         $data['taskstatus_list'] = $this->Taskstatus_model->taskstatuslist();
@@ -1939,7 +1945,7 @@ class Lead extends CI_Controller
         ];
         if ($this->form_validation->run() === true) {
             if (empty($this->input->post('taskstatus_id'))) {
-                if (user_role('3101') == true) {
+                if (user_role('c37') == true) {
                 }
                 if ($this->Taskstatus_model->insertRow($postData)) {
                     $this->session->set_flashdata('message', display('save_successfully'));
@@ -1947,7 +1953,7 @@ class Lead extends CI_Controller
                     $this->session->set_flashdata('exception', display('please_try_again'));
                 }
             } else {
-                if (user_role('3102') == true) {
+                if (user_role('c38') == true) {
                 }
                 if ($this->Taskstatus_model->updateRow($postData)) {
                     $this->session->set_flashdata('message', display('update_successfully'));
@@ -1957,7 +1963,7 @@ class Lead extends CI_Controller
             }
             redirect('lead/taskstatuslist');
         } else {
-            if (user_role('3103') == true) {
+            if (user_role('c39') == true) {
             }
             $data['content'] = $this->load->view('taskstatus/taskstatus_form', $data, true);
             $this->load->view('layout/main_wrapper', $data);
@@ -1965,7 +1971,7 @@ class Lead extends CI_Controller
     }
     public function edit_taskstatus($taskstatus_id = null)
     {
-        if (user_role('3102') == true) {
+        if (user_role('c38') == true) {
         }
         $data['title'] = display('update_taskstatus');
         $data['formdata'] = $this->Taskstatus_model->readRow($taskstatus_id);
@@ -1974,7 +1980,7 @@ class Lead extends CI_Controller
     }
     public function delete_taskstatus($paramId = null)
     {
-        if (user_role('3104') == true) {
+        if (user_role('d30') == true) {
         }
         if ($this->Taskstatus_model->deleteTaskstatus($paramId)) {
             $this->session->set_flashdata('message', display('delete_successfully'));
@@ -1985,7 +1991,7 @@ class Lead extends CI_Controller
     }
     public function centerlist()
     {
-        if (user_role('3113') == true) {
+        if (user_role('d33') == true) {
         }
         $data['title'] = display('center_list');
         $data['center_list'] = $this->Center_model->centerlist();
@@ -2014,7 +2020,7 @@ class Lead extends CI_Controller
         ];
         if ($this->form_validation->run() === true) {
             if (empty($this->input->post('center_id'))) {
-                if (user_role('3111') == true) {
+                if (user_role('d31') == true) {
                 }
                 if ($this->Center_model->insertRow($postData)) {
                     $this->session->set_flashdata('message', display('save_successfully'));
@@ -2022,7 +2028,7 @@ class Lead extends CI_Controller
                     $this->session->set_flashdata('exception', display('please_try_again'));
                 }
             } else {
-                if (user_role('3112') == true) {
+                if (user_role('d32') == true) {
                 }
                 if ($this->Center_model->updateRow($postData)) {
                     $this->session->set_flashdata('message', display('update_successfully'));
@@ -2033,7 +2039,7 @@ class Lead extends CI_Controller
             
             redirect('lead/centerlist');
         } else {
-            if (user_role('3113') == true) {
+            if (user_role('d33') == true) {
             }
             $data['country'] = $this->location_model->country();
             $data['content'] = $this->load->view('center/center_form', $data, true);
@@ -2042,7 +2048,7 @@ class Lead extends CI_Controller
     }
     public function edit_center($center_id = null)
     {
-        if (user_role('3112') == true) {
+        if (user_role('d32') == true) {
         }
         $data['title'] = display('update_center');
         $data['center'] = $this->Center_model->readRow($center_id);
@@ -2052,7 +2058,7 @@ class Lead extends CI_Controller
     }
     public function delete_center($paramId = null)
     {
-        if (user_role('3114') == true) {
+        if (user_role('d34') == true) {
         }
         if ($this->Center_model->deleteCenter($paramId)) {
             $this->session->set_flashdata('message', display('delete_successfully'));
@@ -2063,7 +2069,7 @@ class Lead extends CI_Controller
     }
     public function subsourcelist()
     {
-        if (user_role('3053') == true) {
+        if (user_role('a39') == true) {
         }
         $data['title'] = display('subsource_list');
         $data['subsource_list'] = $this->SubSource_model->subsourcelist();
@@ -2087,7 +2093,7 @@ class Lead extends CI_Controller
     }
     public function description()
     {
-        if (user_role('3021') == true) {
+        if (user_role('35') == true) {
         }
         $data['title'] = display('Description_list');
         $data['description_list'] = $this->SubSource_model->descriptionlist();
@@ -2115,7 +2121,7 @@ class Lead extends CI_Controller
         ];
         if ($this->form_validation->run() === true) {
             if (empty($this->input->post('subsource_id'))) {
-                if (user_role('3051') == true) {
+                if (user_role('a37') == true) {
                 }
                 if ($this->SubSource_model->insertRow($postData)) {
                     $this->session->set_flashdata('message', display('save_successfully'));
@@ -2123,7 +2129,7 @@ class Lead extends CI_Controller
                     $this->session->set_flashdata('exception', display('please_try_again'));
                 }
             } else {
-                if (user_role('3052') == true) {
+                if (user_role('a38') == true) {
                 }
                 if ($this->SubSource_model->updateRow($postData)) {
                     $this->session->set_flashdata('message', display('update_successfully'));
@@ -2133,7 +2139,7 @@ class Lead extends CI_Controller
             }
             redirect('lead/subsourcelist');
         } else {
-            if (user_role('3051') == true) {
+            if (user_role('a37') == true) {
             }
             $data['lead_source_list'] = $this->SubSource_model->all_lead_source();
             $data['content'] = $this->load->view('subsource/subsource_form', $data, true);
@@ -2167,7 +2173,7 @@ class Lead extends CI_Controller
         //print_r($postData);exit;
         if ($this->form_validation->run() === true) {
             if (empty($this->input->post('description_id'))) {
-                if (user_role('3022') == true) {
+                if (user_role('36') == true) {
                 }
                 if ($this->SubSource_model->insertRowdeis($postData)) {
                     $this->session->set_flashdata('message', display('save_successfully'));
@@ -2175,7 +2181,7 @@ class Lead extends CI_Controller
                     $this->session->set_flashdata('exception', display('please_try_again'));
                 }
             } else {
-                if (user_role('3023') == true) {
+                if (user_role('37') == true) {
                 }
             
                 if ($this->SubSource_model->updateRowdes($postData)) {
@@ -2186,7 +2192,7 @@ class Lead extends CI_Controller
             }
             redirect('lead/description');
         } else {
-            if (user_role('3022') == true) {
+            if (user_role('36') == true) {
             }
         
             $data['lead_description_list'] = $this->SubSource_model->all_stage_list();
@@ -2208,7 +2214,7 @@ class Lead extends CI_Controller
     }
     public function edit_subsource($subsource_id = null)
     {
-        if (user_role('3052') == true) {
+        if (user_role('a38') == true) {
         }
         $data['title'] = display('update_subsource');
         $data['subsource'] = $this->SubSource_model->readRow($subsource_id);
@@ -2218,7 +2224,7 @@ class Lead extends CI_Controller
     }
     public function edit_discription($description_id = null)
     {
-        if (user_role('3023') == true) {
+        if (user_role('37') == true) {
         }
         $data['title'] = display('update_deiscription');
         $data['description'] = $this->SubSource_model->readRowdes($description_id);
@@ -2229,7 +2235,7 @@ class Lead extends CI_Controller
     }
     public function delete_subsource($paramId = null)
     {
-        if (user_role('3054') == true) {
+        if (user_role('b30') == true) {
         }
         if ($this->SubSource_model->deleteSubsource($paramId)) {
             $this->session->set_flashdata('message', display('delete_successfully'));
@@ -2240,7 +2246,7 @@ class Lead extends CI_Controller
     }
     public function delete_description($paramId = null)
     {
-        if (user_role('3024') == true) {
+        if (user_role('38') == true) {
         }
         if ($this->SubSource_model->delete_description($paramId)) {
             $this->session->set_flashdata('message', display('delete_successfully'));
@@ -2584,7 +2590,7 @@ class Lead extends CI_Controller
     //Switch box master....
     public function product_list()
     {
-        if (user_role('3083') == true) {
+        if (user_role('c31') == true) {
         }
         $data['title'] = 'Process';
         $data['nav1'] = 'nav1';
@@ -2596,7 +2602,7 @@ class Lead extends CI_Controller
     //Master setup for Customer type or channel partner..
     public function load_customer_channel_mater()
     {
-        if (user_role('3073') == true) {
+        if (user_role('b37') == true) {
         }
         $data['page_title'] = 'Customer type';
         $data['nav1'] = 'nav2';
@@ -2710,7 +2716,7 @@ class Lead extends CI_Controller
         //print_r($postData);exit;
         if ($this->form_validation->run() === true) {
             if (empty($this->input->post('crs_id'))) {
-                if (user_role('3181') == true) {
+                if (user_role('f37') == true) {
                 }
                 if ($this->Institute_model->insertcrs($postData)) {
                     $this->session->set_flashdata('message', display('save_successfully'));
@@ -2718,7 +2724,7 @@ class Lead extends CI_Controller
                     $this->session->set_flashdata('exception', display('please_try_again'));
                 }
             } else {
-                if (user_role('3182') == true) {
+                if (user_role('f38') == true) {
                 }
                 if ($this->Institute_model->updatecrs($postData)) {
                     $this->session->set_flashdata('message', display('update_successfully'));
@@ -2728,7 +2734,7 @@ class Lead extends CI_Controller
             }
             redirect('lead/crslist');
         } else {
-            if (user_role('3181') == true) {
+            if (user_role('f39') == true) {
             }
             $data['content'] = $this->load->view('institute/crs_form', $data, true);
             $this->load->view('layout/main_wrapper', $data);
@@ -2752,7 +2758,7 @@ class Lead extends CI_Controller
         //print_r($postData);exit;
         if ($this->form_validation->run() === true) {
             if (empty($this->input->post('sub_crs_id'))) {
-                if (user_role('3191') == true) {
+                if (user_role('g31') == true) {
                 }
                 if ($this->Institute_model->insertsubcrs($postData)) {
                     $this->session->set_flashdata('message', display('save_successfully'));
@@ -2760,7 +2766,7 @@ class Lead extends CI_Controller
                     $this->session->set_flashdata('exception', display('please_try_again'));
                 }
             } else {
-                if (user_role('3192') == true) {
+                if (user_role('g32') == true) {
                 }
                 if ($this->Institute_model->updatesubcrs($postData)) {
                     $this->session->set_flashdata('message', display('update_successfully'));
@@ -2770,7 +2776,7 @@ class Lead extends CI_Controller
             }
             redirect('lead/sub_course');
         } else {
-            if (user_role('3191') == true) {
+            if (user_role('g31') == true) {
             }
             $data['cource'] = $this->Institute_model->crsmstrlist();
             $data['content'] = $this->load->view('institute/sub_crs_form', $data, true);
@@ -2779,8 +2785,7 @@ class Lead extends CI_Controller
     }
     public function add_video()
     {
-        if (user_role('3201') == true) {
-        }
+        
         $data['title'] = display('add_course');
         $data['institute'] = '';
         $this->form_validation->set_rules('title_name', 'Title Name', 'required');
@@ -2800,7 +2805,7 @@ class Lead extends CI_Controller
         //print_r($postData);exit;
         if ($this->form_validation->run() === true) {
             if (empty($this->input->post('vid_id'))) {
-                if (user_role('3201') == true) {
+                if (user_role('g35') == true) {
                 }
                 if ($this->Institute_model->insertvid($postData)) {
                     $this->session->set_flashdata('message', display('save_successfully'));
@@ -2808,7 +2813,7 @@ class Lead extends CI_Controller
                     $this->session->set_flashdata('exception', display('please_try_again'));
                 }
             } else {
-                if (user_role('3202') == true) {
+                if (user_role('g36') == true) {
                 }
                 if ($this->Institute_model->updatevid($postData)) {
                     $this->session->set_flashdata('message', display('update_successfully'));
@@ -2818,7 +2823,7 @@ class Lead extends CI_Controller
             }
             redirect('lead/vidlist');
         } else {
-            if (user_role('3201') == true) {
+            if (user_role('g35') == true) {
             }
             $data['title'] = display('add_vid');
             $data['content'] = $this->load->view('institute/vid_form', $data, true);
@@ -2827,7 +2832,7 @@ class Lead extends CI_Controller
     }
     public function edit_course($crs_id = null)
     {
-        if (user_role('3182') == true) {
+        if (user_role('f38') == true) {
         }
         $data['title'] = display('update_course');
         $data['courses'] = $this->Institute_model->findcourse();
@@ -2841,7 +2846,7 @@ class Lead extends CI_Controller
     }
     public function edit_crs($crs_id = null)
     {
-        if (user_role('3172') == true) {
+        if (user_role('f34') == true) {
         }
         $data['title'] = display('update_course');
         $data['crs'] = $this->Institute_model->readcrs($crs_id);
@@ -2850,7 +2855,7 @@ class Lead extends CI_Controller
     }
     public function edit_sub_crs($crs_id = null)
     {
-        if (user_role('3192') == true) {
+        if (user_role('g32') == true) {
         }
         $data['title'] = display('update_Sub_course');
         $data['subcrs'] = $this->Institute_model->readsubcrs($crs_id);
@@ -2860,7 +2865,7 @@ class Lead extends CI_Controller
     }
     public function edit_vid($vid_id = null)
     {
-        if (user_role('3202') == true) {
+        if (user_role('g36') == true) {
         }
         $data['title'] = display('update_vedio');
         $data['vid'] = $this->Institute_model->readvid($vid_id);
@@ -2869,7 +2874,7 @@ class Lead extends CI_Controller
     }
     public function delete_course($paramId = null)
     {
-        if (user_role('3184') == true) {
+        if (user_role('g30') == true) {
         }
         if ($this->Institute_model->deletecourse($paramId)) {
             $this->session->set_flashdata('message', display('delete_successfully'));
@@ -2880,7 +2885,7 @@ class Lead extends CI_Controller
     }
     public function delete_crs($paramId = null)
     {
-        if (user_role('3174') == true) {
+        if (user_role('f36') == true) {
         }
         if ($this->Institute_model->deletecrs($paramId)) {
             $this->session->set_flashdata('message', display('delete_successfully'));
@@ -2891,7 +2896,7 @@ class Lead extends CI_Controller
     }
     public function delete_sub_crs($paramId = null)
     {
-        if (user_role('3194') == true) {
+        if (user_role('g34') == true) {
         }
         if ($this->Institute_model->deletesubcrs($paramId)) {
             $this->session->set_flashdata('message', display('delete_successfully'));
@@ -2917,7 +2922,7 @@ class Lead extends CI_Controller
 
         $data['nav1'] = 'nav2';
         if (!empty($_POST)) {
-            if (user_role('3211') == true) {
+            if (user_role('g39') == true) {
             }
             $faq_title = $this->input->post('faq_title');
             $faq_dscptn = $this->input->post('faq_dscptn');
@@ -2932,7 +2937,7 @@ class Lead extends CI_Controller
             $this->session->set_flashdata('SUCCESSMSG', 'Lead Stage Add Successfully');
             redirect('lead/faq');
         }
-        if (user_role('3213') == true) {
+        if (user_role('h31') == true) {
         }
         $data['all_faq'] = $this->Leads_Model->faq_select();
         $data['title'] = 'FAQ';
@@ -2941,7 +2946,7 @@ class Lead extends CI_Controller
     }
     public function delete_faq($faq_id = null)
     {
-        if (user_role('3214') == true) {
+        if (user_role('h32') == true) {
         }
         if ($this->Leads_Model->delete_faq($faq_id)) {
             #set success message
@@ -2955,7 +2960,7 @@ class Lead extends CI_Controller
     public function update_faq()
     {
         if (!empty($_POST)) {
-            if (user_role('3212') == true) {
+            if (user_role('h30') == true) {
             }
             $faq_title = $this->input->post('faq_title');
             $faq_dscptn = $this->input->post('faq_dscptn');

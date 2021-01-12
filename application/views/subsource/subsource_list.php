@@ -10,7 +10,7 @@
 
             <div class="panel-heading no-print">
             <?php 
-             if (user_access(3051)) {
+             if (user_access('a37')) {
             ?>
                 <div class="btn-group"> 
 
@@ -59,10 +59,10 @@
                             <td><?php echo (($subsource->status==1)?display('active'):display('inactive')); ?></td>
 
                             <td class="subsource">
-<?php   if (user_access(3052)) { ?>
+<?php   if (user_access('a38')) { ?>
 
                                 <a href="<?php echo base_url("lead/edit_subsource/$subsource->subsource_id") ?>" class="btn btn-xs  btn-primary"><i class="fa fa-edit"></i></a> 
-<?php } if (user_access(3054)) { ?>
+<?php } if (user_access('b30')) { ?>
 
                                 <a href="<?php echo base_url("lead/delete_subsource/$subsource->subsource_id") ?>" onclick="return confirm('<?php echo display("are_you_sure") ?>')" class="btn btn-xs  btn-danger"><i class="fa fa-trash"></i></a> 
 <?php } ?>

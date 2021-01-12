@@ -3,7 +3,7 @@
    <div class="col-sm-12">
       <div  class="panel panel-default thumbnail">
          <div class="panel-heading no-print">
-<?php   if (user_access(3081)) { ?>
+<?php   if (user_access('b39')) { ?>
             <div class="btn-group"> 
                <button class="btn btn-success" type="button" data-toggle="modal" data-target="#myModal"><i class="fa fa-plus"></i> <?php echo display('Add_More') ?></button> 
             </div>
@@ -48,14 +48,14 @@
                      <td><?=$row->product_name ?></td>
                      <td><?php echo (($row->status==1)?display('active'):display('inactive')); ?></td>
                      <td class="center">
-<?php   if (user_access(3082)) { ?>
+<?php   if (user_access('c30')) { ?>
 
                         <a  class="edit" data-toggle="modal" data-target="#product_list<?php echo $row->sb_id;?>"><i class="ti-pencil"></i></a> 
                     <?php } ?>
                      </td>
                   </tr>
                   <?php } ?>
-<?php   if (user_access(3082)) { ?>
+<?php   if (user_access('c30')) { ?>
 
                   <?php  foreach($product_list as $rows){?>
                   <div class="modal fade" id="product_list<?php echo $rows->sb_id;?>"  role="dialog">
@@ -93,7 +93,7 @@
                   <?php } } ?>
                </tbody>
             </table>
-<?php   if (user_access(3084)) { ?>
+<?php   if (user_access('c32')) { ?>
             
             <button class="btn btn-danger" type="button" onclick="delete_product()">
             <i class="ti-trash"></i>
@@ -105,7 +105,7 @@
    </div>
 </div>
 <!----- Add switch box modal -------->
-<?php   if (user_access(3081)) { ?>
+<?php   if (user_access('c32')) { ?>
 
 <!-- Modal -->
 <div class="modal fade" id="myModal"  role="dialog">
@@ -151,7 +151,7 @@
    });
    
 </script>
-<?php   if (user_access(3084)) { ?>
+<?php   if (user_access('c32')) { ?>
 
 <script>
    function delete_product(){

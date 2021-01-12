@@ -9,7 +9,7 @@
 
 
             <div class="panel-body">
-            <?php  if (user_access(3041)) { ?> 
+            <?php  if (user_access('a33')) { ?> 
 
                 
 
@@ -158,10 +158,10 @@
                                     <td><?php echo $source->lead_name; ?></td>
 
                                      <td class="center">
-                                     <?php  if (user_access(3042)) { ?> 
+                                     <?php  if (user_access('a34')) { ?> 
 
                                         <a  class="btn btn-xs  btn-primary" data-toggle="modal" data-target="#Editsource<?php echo $source->lsid;?>"><i class="fa fa-edit"></i></a> 
-                                        <?php  } if (user_access(3044)) { ?> 
+                                        <?php  } if (user_access('a36')) { ?> 
 
                                         <a href="<?php echo base_url("lead/delete_source/$source->lsid") ?>" onclick="return confirm('<?php echo display("are_you_sure") ?>')" class="btn btn-xs  btn-danger"><i class="fa fa-trash"></i></a> 
 <?php }?>
@@ -172,7 +172,7 @@
                                 </tr>
 
                                 
-                                <?php  if (user_access(3042)) { ?> 
+                                <?php  if (user_access('a34')) { ?> 
 
                                 
 

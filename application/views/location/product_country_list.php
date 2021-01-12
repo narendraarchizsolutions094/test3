@@ -19,7 +19,7 @@
         <div  class="panel panel-default thumbnail">
              <div class="panel-heading no-print">
                  <?php 
- if (user_access(3091)) {
+ if (user_access('c33')) {
                  
                  ?>
                 <div class="btn-group"> 
@@ -56,10 +56,10 @@
                                     <td><?php  if(!empty($department->brandname)){ echo $department->brandname; } else{ echo 'NA' ; }?></td>                        
                                     <td><?php echo (($department->status==1)?display('active'):display('inactive')); ?></td>
                                     <td class="center">
-<?php   if (user_access(3092)) { ?>
+<?php   if (user_access('c34')) { ?>
 
                                         <a href="<?php echo base_url("lead/editproductcountry1/$department->id") ?>" class="btn btn-xs  btn-primary"><i class="fa fa-edit"></i></a> 
-<?php   } if (user_access(3094)) { ?>
+<?php   } if (user_access('c36')) { ?>
                                       
                                         <a href="<?php echo base_url("lead/deleteproductcountry/$department->id") ?>" onclick="return confirm('<?php echo display("are_you_sure") ?>')" class="btn btn-xs  btn-danger"><i class="fa fa-trash"></i></a> 
                                     <?php } ?>
@@ -92,8 +92,13 @@
                                     <td><?php echo $department->country_name; ?></td>                                   
                                     <td><?php echo (($department->status==1)?display('active'):display('inactive')); ?></td>
                                     <td class="center">
+<?php   if (user_access('c34')) { ?>
+
                                         <a href="<?php echo base_url("lead/editproductcountry/$department->id") ?>" class="btn btn-xs  btn-primary"><i class="fa fa-edit"></i></a> 
+<?php   } if (user_access('c36')) { ?>
+                                      
                                         <a href="<?php echo base_url("lead/deleteproductcountry/$department->id") ?>" onclick="return confirm('<?php echo display("are_you_sure") ?>')" class="btn btn-xs  btn-danger"><i class="fa fa-trash"></i></a> 
+                                   <?php } ?>
                                     </td>
                                 </tr>
                                 <?php $sl++; ?>

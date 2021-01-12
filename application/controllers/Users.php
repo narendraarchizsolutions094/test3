@@ -547,7 +547,7 @@ class Users extends CI_Controller {
 	}
 	
 	function reportingLocation_delete(){
-		if (user_role('3154') == true) {
+		if (user_role('e38') == true) {
 		}
 		$loc_id=$this->uri->segment('3');
 		$count=$this->db->where('id',$loc_id)->count_all_results('reporting_location');
@@ -567,7 +567,7 @@ class Users extends CI_Controller {
 		$status=$this->input->post('status');
 		$loc_id=$this->input->post('loc_id');
 		if (!empty($loc_id)) {
-			if (user_role('3152') == true) {
+			if (user_role('e36') == true) {
 			}
 			$count=$this->db->where('title',$reploc)->where_not_in('id',$loc_id)->count_all_results('reporting_location');
 			if($count==0){
@@ -580,7 +580,7 @@ class Users extends CI_Controller {
 					redirect('users/reportingList');
 				}
 		}else{		
-			if (user_role('3151') == true) {
+			if (user_role('e35') == true) {
 			}	
 			$count=$this->db->where('title',$reploc)->count_all_results('reporting_location');
 			if($count==0){
@@ -596,7 +596,7 @@ class Users extends CI_Controller {
 	}
 	public function reportingList()
 	{
-		if (user_role('3153') == true) {
+		if (user_role('e37') == true) {
 		}
 		$data['title'] = 'Reporting List';
 		$data['reporting_location']=$this->db->where('comp_id',65)->get('reporting_location')->result();
