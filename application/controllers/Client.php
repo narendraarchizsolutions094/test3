@@ -246,6 +246,7 @@ class Client extends CI_Controller {
         $this->load->model(array('Enquiry_Model','Client_Model'));
         $clientid = $this->input->post('enquiry_id');
         if (!empty($_POST)) {
+
             $name = $this->input->post('name');
             $mobile = $this->input->post('mobileno');
             $email = $this->input->post('email');
@@ -257,15 +258,16 @@ class Client extends CI_Controller {
                 'emailid' => $email,
                 'contact_number' => $mobile,
                 'designation' => $this->input->post('designation'),
-                'other_detail' => $otherdetails
+                'other_detail' => $otherdetails,
+                'decision_maker' => $this->input->post('decision_maker')??0,
             );
            $enq = $this->Enquiry_Model->getEnquiry(array('enquiry_id'=>$clientid));
             $enquiry_code = $enq->row()->Enquery_id;
             $this->Leads_Model->add_comment_for_events($this->lang->line("new_contact_detail_added") , $enquiry_code);
             $insert_id = $this->Client_Model->clientContact($data);
             $this->session->set_flashdata('message', 'Client Contact Add Successfully');
-             
         }
+
         if($this->input->post('redirect_url')){
             redirect($this->input->post('redirect_url')); //updateclient                
         }else{
@@ -338,6 +340,10 @@ class Client extends CI_Controller {
                   <label>Email</label>
                   <input class="form-control" name="email" placeholder="Email"  type="text"  value="'.$row->emailid.'" required>
                </div>
+                <div class="form-group col-md-6">
+                  <label>Decision Maker</label> &nbsp;
+                  <input name="decision_maker" type="checkbox" value="1" '.($row->decision_maker?'checked':'').'>
+               </div>
                <div class="form-group col-md-12">
                   <label>Other Details</label>
                   <textarea class="form-control" name="otherdetails" rows="8">'.$row->other_detail.'</textarea>
@@ -365,6 +371,7 @@ class Client extends CI_Controller {
                 'emailid' => $email,
                 'contact_number' => $mobile,
                 'designation' => $this->input->post('designation'),
+                'decision_maker'=>$this->input->post('decision_maker')??0,
                 'other_detail' => $otherdetails
             );
             $this->db->where(array('cc_id'=>$cc_id,'comp_id'=>$this->session->companey_id,'client_id'=>$this->input->post('client_id')));

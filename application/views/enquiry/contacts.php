@@ -29,6 +29,7 @@
 			                      <th style="width: 20%;">Name</th>
 			                      <th style="width: 20%;">Contact Number</th>
 			                      <th style="width: 20%;">Email ID</th>
+                            <th style="width: 20%;">Decision Maker</th>
 			                      <th style="width: 20%;">Other Detail</th>
 			                      <th style="width: 20%;">Created At</th>
 			                      <th>Action</th>
@@ -48,6 +49,7 @@
 											<td>'.$row['c_name'].'</td>
 											<td>'.$row['contact_number'].'</td>
 											<td>'.$row['emailid'].'</td>
+                      <td>'.($row['decision_maker']?'Yes':'No').'</td>
 											<td>'.$row['other_detail'].'</td>
 											<td>'.$row['created_at'].'</td>
 											<td style="width:50px;">
