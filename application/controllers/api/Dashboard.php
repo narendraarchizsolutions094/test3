@@ -69,4 +69,153 @@ class Dashboard extends REST_Controller {
             ], REST_Controller::HTTP_OK); 
         }
     }
+
+    public function getSubSourceList_post()
+    {
+        $company_id = $this->input->post('company_id');
+        //$process =  $this->input->post('process');//can be multiple
+
+        $this->form_validation->set_rules('company_id','company_id', 'trim|required');
+        //$this->form_validation->set_rules('process','process', 'trim|required');
+        if($this->form_validation->run()==true)
+        {
+            $this->db->where('comp_id',$company_id);
+
+            $res = $this->db->get('tbl_subsource')->result();
+
+           if(!empty($res))
+           {
+             $this->set_response([
+                'status' => TRUE,            
+                'data' => $res
+            ], REST_Controller::HTTP_OK); 
+           }
+           else
+           {
+             $this->set_response([
+                'status' => FALSE,            
+                'message' => 'Not Data'
+            ], REST_Controller::HTTP_OK); 
+           }
+        }
+        else
+        {
+                $this->set_response([
+                'status' => FALSE,            
+                'message' => strip_tags(validation_errors()),
+            ], REST_Controller::HTTP_OK); 
+        }
+    }
+
+
+    public function getDataSourceList_post()
+    {
+        $company_id = $this->input->post('company_id');
+        //$process =  $this->input->post('process');//can be multiple
+
+        $this->form_validation->set_rules('company_id','company_id', 'trim|required');
+        //$this->form_validation->set_rules('process','process', 'trim|required');
+        if($this->form_validation->run()==true)
+        {
+            $this->db->where('comp_id',$company_id);
+
+            $res = $this->db->get('tbl_datasource')->result();
+
+           if(!empty($res))
+           {
+             $this->set_response([
+                'status' => TRUE,            
+                'data' => $res
+            ], REST_Controller::HTTP_OK); 
+           }
+           else
+           {
+             $this->set_response([
+                'status' => FALSE,            
+                'message' => 'Not Data'
+            ], REST_Controller::HTTP_OK); 
+           }
+        }
+        else
+        {
+                $this->set_response([
+                'status' => FALSE,            
+                'message' => strip_tags(validation_errors()),
+            ], REST_Controller::HTTP_OK); 
+        }
+    }
+
+    public function getProbabilityList_post()
+    {
+        $company_id = $this->input->post('company_id');
+        //$process =  $this->input->post('process');//can be multiple
+
+        $this->form_validation->set_rules('company_id','company_id', 'trim|required');
+        //$this->form_validation->set_rules('process','process', 'trim|required');
+        if($this->form_validation->run()==true)
+        {
+            $this->db->where('comp_id',$company_id);
+
+            $res = $this->db->get('lead_score')->result();
+
+           if(!empty($res))
+           {
+             $this->set_response([
+                'status' => TRUE,            
+                'data' => $res
+            ], REST_Controller::HTTP_OK); 
+           }
+           else
+           {
+             $this->set_response([
+                'status' => FALSE,            
+                'message' => 'Not Data'
+            ], REST_Controller::HTTP_OK); 
+           }
+        }
+        else
+        {
+                $this->set_response([
+                'status' => FALSE,            
+                'message' => strip_tags(validation_errors()),
+            ], REST_Controller::HTTP_OK); 
+        }
+    }
+
+    public function getIssueList_post()
+    {
+        $company_id = $this->input->post('company_id');
+        //$process =  $this->input->post('process');//can be multiple
+
+        $this->form_validation->set_rules('company_id','company_id', 'trim|required');
+        //$this->form_validation->set_rules('process','process', 'trim|required');
+        if($this->form_validation->run()==true)
+        {
+            $this->db->where('comp_id',$company_id);
+
+            $res = $this->db->get('tbl_nature_of_complaint')->result();
+
+           if(!empty($res))
+           {
+             $this->set_response([
+                'status' => TRUE,            
+                'data' => $res
+            ], REST_Controller::HTTP_OK); 
+           }
+           else
+           {
+             $this->set_response([
+                'status' => FALSE,            
+                'message' => 'Not Data'
+            ], REST_Controller::HTTP_OK); 
+           }
+        }
+        else
+        {
+                $this->set_response([
+                'status' => FALSE,            
+                'message' => strip_tags(validation_errors()),
+            ], REST_Controller::HTTP_OK); 
+        }
+    }
 }

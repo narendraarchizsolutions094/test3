@@ -480,7 +480,7 @@ $CHK = 0;
             if($CHK)
                 $where .= 'AND';
 
-            $where .= " tck.category =  '".$issue."'"; 
+            $where .= " tck.issue =  '".$issue."'"; 
             $CHK =1;                             
         }
 
