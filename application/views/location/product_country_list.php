@@ -18,9 +18,14 @@
     <div class="col-sm-12">
         <div  class="panel panel-default thumbnail">
              <div class="panel-heading no-print">
+                 <?php 
+ if (user_access(3091)) {
+                 
+                 ?>
                 <div class="btn-group"> 
                     <a class="btn btn-success" href="<?php echo base_url("lead/addproductcountry") ?>"> <i class="fa fa-plus"></i>  <?php echo 'Add Product' ?> </a>  
                 </div>
+                <?php } ?>
             </div>
             <div class="panel-body">
              <?php    if(in_array(300,$module) || in_array(301,$module) || in_array(302,$module) || in_array(303,$module) || in_array(304,$module) || in_array(305,$module) || in_array(306,$module)){ ?>
@@ -51,8 +56,13 @@
                                     <td><?php  if(!empty($department->brandname)){ echo $department->brandname; } else{ echo 'NA' ; }?></td>                        
                                     <td><?php echo (($department->status==1)?display('active'):display('inactive')); ?></td>
                                     <td class="center">
+<?php   if (user_access(3092)) { ?>
+
                                         <a href="<?php echo base_url("lead/editproductcountry1/$department->id") ?>" class="btn btn-xs  btn-primary"><i class="fa fa-edit"></i></a> 
+<?php   } if (user_access(3094)) { ?>
+                                      
                                         <a href="<?php echo base_url("lead/deleteproductcountry/$department->id") ?>" onclick="return confirm('<?php echo display("are_you_sure") ?>')" class="btn btn-xs  btn-danger"><i class="fa fa-trash"></i></a> 
+                                    <?php } ?>
                                     </td>
                                 </tr>
                                 <?php $sl++; ?>

@@ -517,6 +517,7 @@ class Users extends CI_Controller {
 
 	public function editlocation()
 	{
+		
 		$location_id=$this->input->post('location_id');
 		
 		$get=$this->db->where('id',$location_id)->get('reporting_location');
@@ -546,14 +547,28 @@ class Users extends CI_Controller {
 	}
 	
 	function reportingLocation_delete(){
-
+		if (user_role('3154') == true) {
+		}
+		$loc_id=$this->uri->segment('3');
+		$count=$this->db->where('id',$loc_id)->count_all_results('reporting_location');
+		if($count==0){
+			$this->db->where('id',$loc_id)->delete('reporting_location');
+			$this->session->set_flashdata('success','Reporting Location Deleted');
+			redirect('users/reportingList');
+		}else{
+			$this->session->set_flashdata('success','Reporting Location not Found');
+			redirect('users/reportingList');	
+		}
 	}
 
 	public function addReportingLocation(){
+	
 		$reploc=$this->input->post('reploc');
 		$status=$this->input->post('status');
 		$loc_id=$this->input->post('loc_id');
 		if (!empty($loc_id)) {
+			if (user_role('3152') == true) {
+			}
 			$count=$this->db->where('title',$reploc)->where_not_in('id',$loc_id)->count_all_results('reporting_location');
 			if($count==0){
 				$data=['title'=>$reploc,'status'=>$status,'updated_at'=>date('Y-m-d H:i:s')];
@@ -564,7 +579,9 @@ class Users extends CI_Controller {
 					$this->session->set_flashdata('error','Reporting Location Already Added');
 					redirect('users/reportingList');
 				}
-		}else{			
+		}else{		
+			if (user_role('3151') == true) {
+			}	
 			$count=$this->db->where('title',$reploc)->count_all_results('reporting_location');
 			if($count==0){
 				$data=['title'=>$reploc,'status'=>$status,'created_by'=>$this->session->user_id,'comp_id'=>$this->session->companey_id];
@@ -579,6 +596,8 @@ class Users extends CI_Controller {
 	}
 	public function reportingList()
 	{
+		if (user_role('3153') == true) {
+		}
 		$data['title'] = 'Reporting List';
 		$data['reporting_location']=$this->db->where('comp_id',65)->get('reporting_location')->result();
 		$data['content'] = $this->load->view('user/reporting_locations',$data,true);

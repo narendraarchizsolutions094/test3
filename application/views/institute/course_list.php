@@ -23,6 +23,7 @@ a:hover, a:focus {
  
 
             <div class="panel-heading no-print">
+                         <?php  if (user_access(1381)) {  ?>
 
                 <div class="btn-group"> 
 
@@ -31,6 +32,7 @@ a:hover, a:focus {
 
                 </div>
                     <a class="btn btn-primary btn-sm" data-toggle="modal" data-target="#course_upload" href="javascript:void(0)"> <i class="fa fa-upload"></i> <?php echo display('upload_course') ?></a>  
+                    <?php } ?>
 
             </div>
 
@@ -100,11 +102,13 @@ a:hover, a:focus {
                             <td><?php echo (($course->status==1)?display('active'):display('inactive')); ?></td>
 
                             <td class="center">
+                            <?php  if (user_access(1382)) {  ?>
 
                                 <a href="<?php echo base_url("lead/edit_course/$course->crs_id") ?>" class="btn btn-xs  btn-primary"><i class="fa fa-edit"></i></a> 
+                                <?php } if (user_access(1384)) {  ?>
 
                                 <a href="<?php echo base_url("lead/delete_course/$course->crs_id") ?>" onclick="return confirm('<?php echo display("are_you_sure") ?>')" class="btn btn-xs  btn-danger"><i class="fa fa-trash"></i></a> 
-
+<?php } ?>
                             </td>
 
                         </tr>

@@ -31,12 +31,99 @@
            
 
            
+                           <?php   if (user_access(3061)) { ?>
 
            <button class="btn btn-sm btn-success" style="float: left" type="button" data-toggle="modal" data-target="#createnewReason"><i class="fa fa-plus"></i> Add New Drop Reason</button>
 
-        
+<!--------------- ADD NEW Drop Reason ------------->
 
-        
+<div id="createnewReason" class="modal fade" role="dialog">
+
+<div class="modal-dialog">
+
+  <!-- Modal content-->
+
+  <div class="modal-content">
+
+    <div class="modal-header">
+
+      <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+      <h4 class="modal-title">Create New Drop Reason</h4>
+
+    </div>
+
+    <div class="modal-body">
+
+      <!--<form>-->
+
+          <?php echo form_open_multipart('lead/add_drop','class="form-inner"') ?>                      
+
+                                     
+
+         
+
+            <div class="row">
+
+              
+
+              <div class="form-group col-sm-12"> 
+
+                <label>Drop Reason*</label>
+
+                <input class="form-control" name="reason" type="text" required="">  
+
+              </div>                
+
+             
+
+              
+
+              
+
+              
+
+              
+
+            </div>          
+
+            <div class="col-12" style="padding: 0px;">
+
+              <div class="row">              
+
+                <div class="col-12" style="text-align:center;">                                                
+
+                  <button class="btn btn-success" type="submit">Save</button>            
+
+                </div>
+
+              </div>                                   
+
+            </div> 
+
+                
+
+       
+
+    </form> 
+
+    </div>
+
+    <div class="modal-footer">
+
+      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+
+    </div>
+
+  </div>
+
+
+
+</div>
+
+</div>
+
+        <?php } ?>
 
         <div class="btn-group col-md-1" role="group" aria-label="Button group" style="float: right">
 
@@ -139,11 +226,13 @@
                                     <td class="th1"><?php echo $drop->drop_reason; ?></td>
 
                                     <td class="center">
+                                    <?php   if (user_access(3062)) { ?>
 
                                         <a  class="btn btn-xs  btn-primary" data-toggle="modal" data-target="#Editreason<?php echo $drop->d_id;?>"><i class="fa fa-edit"></i></a> 
+<?php  } if (user_access(3064)) { ?>
 
                                         <a href="<?php echo base_url("lead/delete_dropReason/$drop->d_id") ?>" onclick="return confirm('<?php echo display("are_you_sure") ?>')" class="btn btn-xs  btn-danger"><i class="fa fa-trash"></i></a> 
-
+<?php } ?>
                                     </td>
 
                                    
@@ -154,6 +243,7 @@
 
                                 
 
+                                <?php   if (user_access(3062)) { ?>
         
 
 <div id="Editreason<?php echo $drop->d_id;?>" class="modal fade" role="dialog">
@@ -245,7 +335,7 @@
   </div>
 
 </div>
-
+<?php } ?>
         
 
    
@@ -383,100 +473,6 @@ input[type=number]::-webkit-outer-spin-button {
 </style>
 
 
-
-<!--------------- ADD NEW Drop Reason ------------->
-
-
-
-        
-
-<div id="createnewReason" class="modal fade" role="dialog">
-
-  <div class="modal-dialog">
-
- 
-
-    <!-- Modal content-->
-
-    <div class="modal-content">
-
-      <div class="modal-header">
-
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-
-        <h4 class="modal-title">Create New Drop Reason</h4>
-
-      </div>
-
-      <div class="modal-body">
-
-        <!--<form>-->
-
-            <?php echo form_open_multipart('lead/add_drop','class="form-inner"') ?>                      
-
-                                       
-
-           
-
-              <div class="row">
-
-                
-
-                <div class="form-group col-sm-12"> 
-
-                  <label>Drop Reason*</label>
-
-                  <input class="form-control" name="reason" type="text" required="">  
-
-                </div>                
-
-               
-
-                
-
-                
-
-                
-
-                
-
-              </div>          
-
-              <div class="col-12" style="padding: 0px;">
-
-                <div class="row">              
-
-                  <div class="col-12" style="text-align:center;">                                                
-
-                    <button class="btn btn-success" type="submit">Save</button>            
-
-                  </div>
-
-                </div>                                   
-
-              </div> 
-
-                  
-
-         
-
-      </form> 
-
-      </div>
-
-      <div class="modal-footer">
-
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-
-      </div>
-
-    </div>
-
-
-
-  </div>
-
-</div>
 
         
 

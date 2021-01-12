@@ -484,6 +484,8 @@ public function	edit_floor()
 	}
 	public function deactive_products()
 	{   
+		if (user_role('3084') == true) {
+        }
 		/*print_r($_POST);
 		exit();
 	    */

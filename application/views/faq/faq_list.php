@@ -5,7 +5,8 @@
             <div class="panel-body">
 <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>                 
-                
+<?php if (user_access(3211)) { ?>
+
                 <div class="col-12">
                 <a href="#" class="btn btn-raised btn-success" data-toggle="modal" data-target="#createLead"><i class="ti-plus text-white"></i> &nbsp;Add New FAQ</a>
                 </div>
@@ -46,15 +47,7 @@
     </div>
   </div>
 </div>
-                                                
-    
-                
-                
-                
-                
-                
-                
-                
+          <?php } ?>      
                 <table width="100%" class="datatable table table-striped table-bordered table-hover">
                     <thead>
                         <tr>
@@ -73,12 +66,18 @@
                                     <td><?php echo $faq->que_type; ?></td>
 									<td><?php echo $faq->answer; ?></td>
                                      <td class="center">
+<?php if (user_access(3212)) { ?>
+                                       
                                         <a href="" class="btn btn-xs  btn-primary" data-toggle="modal" data-target="#Editfaq<?php echo $faq->id;?>"><i class="fa fa-edit"></i></a> 
+<?php  } if (user_access(3214)) { ?>
+                                  
                                         <a href="<?php echo base_url("lead/delete_faq/$faq->id") ?>" onclick="return confirm('<?php echo display("are_you_sure") ?>')" class="btn btn-xs  btn-danger"><i class="fa fa-trash"></i></a> 
-                                    </td>
+                                  <?php } ?>
+                                      </td>
                                     
                                 </tr>
                                 
+<?php if (user_access(3212)) { ?>
         
         <div id="Editfaq<?php echo $faq->id;?>" class="modal fade" role="dialog">
         <div class="modal-dialog">
@@ -119,7 +118,7 @@
         </div> 
         </div>
         </div>
-                                
+                 <?php } ?>               
                                 
                                  <?php $sl++; ?>
                             <?php } ?> 

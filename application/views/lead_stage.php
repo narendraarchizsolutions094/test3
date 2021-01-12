@@ -5,7 +5,8 @@
             <div class="panel-body">
 <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>                     
-                <div class="col-12">
+<?php  if (user_access(3012)) { ?>
+<div class="col-12">
                 <a href="#" class="btn btn-raised btn-success" data-toggle="modal" data-target="#createLead"><i class="ti-plus text-white"></i> &nbsp;Add New Lead Stage</a>
                 </div>
                 <br>
@@ -62,14 +63,7 @@
   </div>
 </div>
                                                 
-    
-                
-                
-                
-                
-                
-                
-                
+<?php } ?>
                 <table width="100%" class="datatable table table-striped table-bordered table-hover">
                     <thead>
                         <tr>
@@ -108,12 +102,15 @@
                                                      <?php  if (in_array('3', $stages)) { echo display("client").','; } ?></option>                                       
                                     </td>
                                      <td class="center">
-                                        <a href="<?php //echo base_url("user/edit/$score->use_id") ?>" class="btn btn-xs  btn-primary" data-toggle="modal" data-target="#Editstage<?php echo $stage->stg_id;?>"><i class="fa fa-edit"></i></a> 
+<?php  if (user_access(3012)) { ?> <a  class="btn btn-xs  btn-primary" data-toggle="modal" data-target="#Editstage<?php echo $stage->stg_id;?>"><i class="fa fa-edit"></i></a> <?php } 
+       if (user_access(3014)) { ?> 
                                         <a href="<?php echo base_url("lead/delete_stage/$stage->stg_id") ?>" onclick="return confirm('<?php echo display("are_you_sure") ?>')" class="btn btn-xs  btn-danger"><i class="fa fa-trash"></i></a> 
-                                    </td>
+                                   <?php } ?>
+                                      </td>
                                     
                                 </tr>
                                 
+<?php  if (user_access(3013)) { ?>
         
         <div id="Editstage<?php echo $stage->stg_id;?>" class="modal fade" role="dialog">
         <div class="modal-dialog">
@@ -185,6 +182,7 @@
         
         </div>
         </div>
+        <?php } ?>
                                 
                                 
                                  <?php $sl++; ?>
