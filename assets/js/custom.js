@@ -110,6 +110,8 @@ $(document).ready(function () {
     // fixed table head
     $("#fixTable").tableHeadFixer();
 });
+
+
 //print a div
 function printContent(el){
     var restorepage  = $('body').html();

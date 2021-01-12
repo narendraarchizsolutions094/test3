@@ -446,13 +446,13 @@ class Ticket_Model extends CI_Model
 		//echo $this->db->last_query(); exit();
 	}
 
-	public function getTicketListByCompnyID($companyid, $userid)
+	public function getTicketListByCompnyID($companyid, $userid,$offset=-1,$limit=-1)
 	{
 		$all_reporting_ids    =   $this->common_model->get_categories($userid);
 		$where = '';
 		$where .= "( tck.added_by IN (" . implode(',', $all_reporting_ids) . ')';
 		$where .= " OR tck.assign_to IN (" . implode(',', $all_reporting_ids) . '))';
-		return $this->db->select("tck.*,enq.gender,prd.country_name, concat(enq.name_prefix,' ' , enq.name,' ', enq.lastname) as clientname , COUNT(cnv.id) as tconv, cnv.msg")
+		 $this->db->select("tck.*,enq.gender,prd.country_name, concat(enq.name_prefix,' ' , enq.name,' ', enq.lastname) as clientname , COUNT(cnv.id) as tconv, cnv.msg")
 			->where($where)
 			->where("tck.company", $companyid)
 
@@ -461,9 +461,60 @@ class Ticket_Model extends CI_Model
 			->join("enquiry enq", "enq.enquiry_id = tck.client", "LEFT")
 			->join("tbl_product_country prd", "prd.id = tck.product", "LEFT")
 			->order_by("tck.id DESC")
-			->group_by("tck.id")
-			->get()
-			->result();
+			->group_by("tck.id");
+
+
+		if(!empty($_POST['filters']))
+        {
+
+            $match_list = array('date_from','date_to','phone');
+
+            $this->db->group_start();
+            foreach ($_POST['filters'] as $key => $value)
+            {
+              if(in_array($key,$match_list) || $this->db->field_exists($key, 'tbl_ticket'))
+              {
+                  if(in_array($key, $match_list))
+                  {
+                      $fld = 'tck.coml_date';
+                      // if($type=='2')
+                      //   $fld = 'lead_created_date';
+                      // else if($type=='3')
+                      //   $fld = 'client_created_date';
+
+                      if($key=='date_from')
+                        $this->db->where($fld.'>=',$value);
+
+                      if($key=='date_to')
+                        $this->db->where($fld.'<=',$value);
+
+                      if($key=='phone')
+                        $this->db->where('phone LIKE "%'.$value.'%"');
+                  }
+                  else
+                  {
+                    if(is_int($value))
+                      $this->db->where('tck.'.$key,$value);
+                    else
+                      $this->db->where('tck.'.$key.' LIKE "%'.$value.'%"');
+                  } 
+              }
+              else
+              {
+                $this->db->where('1=1');
+              }
+            }
+            $this->db->group_end();
+        }
+
+
+
+		if($offset!=-1 && $limit!=-1)
+	    {  
+	        $this->db->limit($limit,$offset);
+	    }
+
+			return $this->db->get()->result();
 	}
 
 	public function getPrimaryTab()

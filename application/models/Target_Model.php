@@ -209,4 +209,84 @@ class Target_Model extends CI_model
 		// echo $this->db->affected_rows(); exit();
 	}
 
+	public function generate_goal_record($comp_id=0,$process=array())
+	{
+		$comp_id = $comp_id??$this->session->companey_id;
+
+		if(!is_array($process))
+			$process = array($process);
+		$this->db->where('comp_id',$comp_id);
+		$this->db->where('process_id IN ('.implode(',', $process).')');
+		$all_goals = $this->db->get('tbl_goals');
+
+		foreach ($all_goals->result() as $goal)
+		{
+			//==========forecast data =============
+			$users = explode(',', $goal->goal_for);
+			$final = array(
+						'target'=>array(),
+						'forecast'=>array(),
+						'achieved'=>array(),
+			);
+			$custom =$goal->custom_target==''?array():(array)json_decode($goal->custom_target);
+			$sum_target = 0;
+			$sum_forecast= 0;
+			$sum_achieved = 0;
+
+			foreach ($users as $user)
+			{
+				if($goal->goal_type=='user')
+				{
+					$target  = $goal->target_value;
+				}
+				else
+				{
+					if(!empty($custom))
+						$target = $custom[$user];
+ 					else
+ 						$target = 0;
+				}
+				$forecast = $this->getUserWiseForecast($goal->goal_id,$user);
+				$achieved = $this->getUserWiseAchieved($goal->goal_id,$user);
+				
+				if($goal->metric_type=='deal')
+				{
+					$forecast = $forecast->p_amnt;
+					$achieved = $achieved->p_amnt;
+				}
+				else
+				{
+					$forecast = $forecast->num_value;
+					$achieved = $achieved->num_value;
+				}
+
+				$final['target'][$user] = $target;
+				$final['forecast'][$user] = (float)$forecast;
+				$final['achieved'][$user]  =(float)$achieved;
+
+				$sum_target += $target;
+				$sum_forecast += $forecast;
+				$sum_achieved += $achieved;
+			}//user end	
+
+			$t = json_encode($final['target']);
+			$f = json_encode($final['forecast']);
+			$a = json_encode($final['achieved']);
+
+			$data  = array(
+							'goal_id'=>$goal->goal_id,
+							'target_value'=>$sum_target,
+							'forecast_value'=>$sum_forecast,
+							'achieved_value'=>$sum_achieved,
+							'target_userwise'=>$t,
+							'forecast_userwise'=>$f,
+							'achieved_userwise'=>$a,
+							'comp_id'=>$comp_id,
+			);
+
+			$this->db->insert('tbl_tracking_goals',$data);
+		}//goal end
+
+			
+	}		
 }

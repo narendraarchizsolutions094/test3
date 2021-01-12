@@ -55,6 +55,7 @@ class Enq extends CI_Controller
 		$data['state_list'] = $this->enquiry_model->get_user_state_list();
 		$data['city_list'] = $this->enquiry_model->get_user_city_list();
 		$data['filterData'] = $this->Ticket_Model->get_filterData(1);
+		$data['lead_score'] = $this->Leads_Model->get_leadscore_list();
 		//print_r($data['filterData']); exit();
 		$data['content'] = $this->load->view('enquiry_n', $data, true);
 		$this->load->view('layout/main_wrapper', $data);
@@ -66,8 +67,12 @@ class Enq extends CI_Controller
 
 	public function enq_load_data()
 	{
+		
 		$this->load->model('enquiry_datatable_model');
 		$list = $this->enquiry_datatable_model->get_datatables();
+		if($this->session->companey_id == 1){
+			//echo $this->db->last_query();
+		}
 		$dfields = $this->enquiry_model->getformfield(0); //0 for enquiry
 		$data = array();
 		$no = $_POST['start'];
@@ -212,7 +217,14 @@ class Enq extends CI_Controller
 				$row[] = (!empty($each->Enquery_id)) ? $each->Enquery_id : "NA";
 			}
 			if ($showall == true or in_array(18, $acolarr)) {
-				$row[] = (!empty($each->score)) ? $each->score : "NA";
+				$sc = (!empty($each->score)) ? $each->score : "NA";				
+				
+				if(!empty($each->score_name)){
+					$row[] = $sc.' <span class="label label-primary">'.$each->score_name.'</span';
+				}else{					
+					$row[] = $sc;
+				}
+
 			}
 			if ($showall == true or in_array(19, $acolarr)) {
 				$row[] = (!empty($each->enquiry)) ? $each->enquiry : "NA";
@@ -231,7 +243,7 @@ class Enq extends CI_Controller
 		$output = array(
 			"draw" => $_POST['draw'],
 			"recordsTotal" => $c,
-			"recordsFiltered" => $c,
+			"recordsFiltered" => $this->enquiry_datatable_model->count_filtered(),
 			"data" => $data,
 		);
 		echo json_encode($output);

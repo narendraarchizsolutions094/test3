@@ -115,6 +115,12 @@ class Ticket_datatable_model extends CI_Model{
     public function countAll(){
 
         $this->db->from($this->table);
+        if(!empty($_POST['specific_list']))
+        {//echo 'infolist'.$_POST['specific_list']; exit();
+           
+            $where="(id IN (".$_POST['specific_list'].") ) ";
+            $this->db->where($where);
+        }
         return $this->db->count_all_results();
     }
     
@@ -556,6 +562,15 @@ $CHK = 0;
             }
             $where .= " tck.assign_to IN (".implode(',', $all_reporting_ids).'))';
         }
+
+
+        if(!empty($_POST['specific_list']))
+        {//echo 'infolist'.$_POST['specific_list']; exit();
+           
+            $where.="AND ( tck.id IN (".$_POST['specific_list'].") ) ";
+            $and =1;
+        }
+
         $this->db->where($where);
         $this->db->group_by('tck.id');
     //}

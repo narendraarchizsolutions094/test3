@@ -21,6 +21,10 @@ class Rule_model extends CI_Model {
         }
         return $this->db->get('leadrules')->result_array();
     }
+    
+    public function get_probability_by_score($score,$comp_id){        
+        return $this->db->query("select * from lead_score where comp_id=$comp_id AND $score between score_from and score_to")->row_array();
+    }
 
 	public function execute_rule($id,$enquiry_code=0,$comp_id=0,$user_id=0){
         if ($comp_id == 0) {
@@ -34,12 +38,22 @@ class Rule_model extends CI_Model {
         $affected = 0;
         if (!empty($rule_data)) {
             if (!empty($rule_data['rule_sql']) && $rule_data['status'] == 1) {
-                if ($rule_data['type'] == 1) {
+                if ($rule_data['type'] == 1) {                    
+                    
+                    $score_name    =   $this->get_probability_by_score($rule_data['rule_action'],$comp_id);                    
+                    $sid = 0;
+                    if(!empty($score_name['score_name'])){
+                        $sid = $score_name['sc_id'];
+                    }
+
                     $this->db->where('('.$rule_data['rule_sql'].')');                    
                     if ($enquiry_code) {
                         $this->db->where('Enquery_id',$enquiry_code);                
                     }
                     $this->db->where('comp_id',$comp_id);                
+                    if(!empty($sid)){
+                        $this->db->set('lead_score',$sid);
+                    }
                     $this->db->set('score',$rule_data['rule_action']);
                     $this->db->update('enquiry');                    
                     $affected = $this->db->affected_rows();

@@ -107,6 +107,7 @@ class Enquiry_model extends CI_Model {
             break;
 
             case 4:
+            $basic[$key]['other_phone'] = $enquiry->other_phone;
             $basic[$key]['parameter_name'] = 'mobileno';
             $basic[$key]['current_value'] = $enquiry->phone;
             break;
@@ -141,7 +142,7 @@ class Enquiry_model extends CI_Model {
                               );
             }
             $basic[$key]['input_values'] = $values;
-            $basic[$key]['parameter_name'] = 'product_id';
+            $basic[$key]['parameter_name'] = 'sub_source';
             $basic[$key]['current_value'] = $enquiry->enquiry_subsource;
             break;
 
@@ -1484,6 +1485,8 @@ class Enquiry_model extends CI_Model {
         return $this->db->get('enquiry')->row();
     }
 
+    
+
 
     /* -----------------------search Start---------------------- */
 
@@ -2018,8 +2021,8 @@ class Enquiry_model extends CI_Model {
                     $this->db->order_by('sb_id','ASC');
                     return $this->db->get()->result();
 		}
-    public function active_enqueries_api($id,$type,$user_role,$process='') 
-    {
+    public function active_enqueries_api($id,$type,$user_role,$process='',$offset=-1,$limit=-1) 
+    { 
         $all_reporting_ids    =   $this->common_model->get_categories($id,$type);
         $this->db->from($this->table);        
         $where  = "";
@@ -2036,7 +2039,60 @@ class Enquiry_model extends CI_Model {
         	$where.=" AND enquiry.product_id IN (".$process.")";		        	
         }
         $this->db->where($where);
+
+        //print_r($_POST['filters']); exit();
+        if(!empty($_POST['filters']))
+        {
+
+            $match_list = array('date_from','date_to','phone');
+
+            $this->db->group_start();
+            foreach ($_POST['filters'] as $key => $value)
+            {
+              if(in_array($key,$match_list) || $this->db->field_exists($key, 'enquiry'))
+              {
+                  if(in_array($key, $match_list))
+                  {
+                      $fld = 'created_date';
+                      if($type=='2')
+                        $fld = 'lead_created_date';
+                      else if($type=='3')
+                        $fld = 'client_created_date';
+
+                      if($key=='date_from')
+                        $this->db->where($fld.'>=',$value);
+
+                      if($key=='date_to')
+                        $this->db->where($fld.'<=',$value);
+
+                      if($key=='phone')
+                        $this->db->where('phone LIKE "%'.$value.'%" OR other_phone LIKE "%'.$value.'%"');
+                  }
+                  else
+                  {
+                    if(is_int($value))
+                      $this->db->where($key,$value);
+                    else
+                      $this->db->where($key.' LIKE "%'.$value.'%"');
+                  } 
+              }
+              else
+              {
+                $this->db->where('1=1');
+              }
+            }
+            $this->db->group_end();
+        }
+
+       
 		$this->db->order_by('enquiry.enquiry_id','DESC');
+    //for pagination api
+
+    if($offset!=-1 && $limit!=-1)
+    {  
+        $this->db->limit($limit,$offset);
+    }
+
 		return $query = $this->db->get();
         //return $query->result();
     }

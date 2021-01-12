@@ -490,4 +490,20 @@ class Dashboard_model extends CI_Model {
 		return $count;
 	}
 
+	public function secsToStr_api($minutes) 
+	{
+	    $d = floor ($minutes / 1440);
+	    $h = floor (($minutes - $d * 1440) / 60);
+	    $m = $minutes - ($d * 1440) - ($h * 60);
+	    $m = round($m);
+	    if($d!=0){
+	        return  $d.' days '.$h.' hours '.$m.' minutes ';
+	    }elseif($h!=0){
+	        return $h.' hours '.$m.' minutes ';
+	    }else{
+	        return  $m.' minutes ';
+	    }
+    
+	}
+
 }

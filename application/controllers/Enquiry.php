@@ -3453,6 +3453,7 @@ public function timelinePopup()
     {
         $this->load->model('Deals_datatable_model');
         $result = $this->Deals_datatable_model->getRows($_POST);
+        //echo count($result); exit();
         //echo $this->db->last_query(); exit();
         $data = array();
         foreach ($result as $value)

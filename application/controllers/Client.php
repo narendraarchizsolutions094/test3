@@ -50,7 +50,7 @@ class Client extends CI_Controller {
         }
         $data['all_stage_lists'] = $this->Leads_Model->get_leadstage_list_byprocess1($this->session->process,array(1,2,3));
 		$data['filterData'] = $this->Ticket_Model->get_filterData(1);
-        
+        $data['lead_score'] = $this->Leads_Model->get_leadscore_list();
         $data['content'] = $this->load->view('enquiry_n', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }
@@ -400,11 +400,49 @@ class Client extends CI_Controller {
         $this->load->model(array('Client_Model','Enquiry_Model'));
         $data['title'] = display('company_list');
         $data['company_list'] = $this->Client_Model->getCompanyList()->result();
-        //print_r($data['company_list']); exit();
+
         //$data['enquiry_list'] = $this->Enquiry_Model->all_enqueries();
         $data['content'] = $this->load->view('enquiry/company_list', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }
+
+    public function company_details($company_name)
+    {
+        $this->load->model(array('Client_Model','enquiry_model'));
+        $company = base64_decode($company_name);
+        $data['title'] = $company;
+
+    $c =$data['comp'] = $this->Client_Model->getCompanyList($company)->row();
+
+    $deals =   $this->Client_Model->getCompanyData(explode(',',$c->enq_ids),'deals')->result();
+   // print_r($c->enq_ids); exit();
+    $deals = array_column((array)$deals, 'id');
+    $data['specific_deals'] = count($deals)?implode(',', $deals):'-1';
+    
+    $visits =   $this->Client_Model->getCompanyData(explode(',',$c->enq_ids),'visits')->result();
+    $visits = array_column((array)$visits, 'id');
+    $data['specific_visits'] = count($visits)? implode(',', $visits):'-1';
+
+    $contacts =   $this->Client_Model->getCompanyData(explode(',',$c->enq_ids),'contacts')->result();
+    $contacts = array_column((array)$visits, 'cc_id');
+    $contacts = count($contacts)?$contacts:array('-1');
+    $data['contact_list'] = $this->Client_Model->getContactList($contacts);
+
+
+    $data['specific_accounts'] = $c->enq_ids;
+    $data['dfields']  = $this->enquiry_model->getformfield();
+    $data['ticket_dfields'] = $this->enquiry_model->getformfield(2);
+
+    $tickets =   $this->Client_Model->getCompanyData(explode(',',$c->enq_ids),'tickets')->result();
+    $tickets = array_column((array)$tickets, 'id');
+    $data['specific_tickets'] = count($tickets)? implode(',', $tickets):'-1';
+  
+
+    $data['content'] = $this->load->view('enquiry/company_details', $data, true);
+    $this->load->view('layout/main_wrapper', $data);
+
+    }
+
     public function create_Invoice() {
         $clientid = $this->uri->segment(3);
         if (!empty($_POST)) {

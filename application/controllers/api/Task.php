@@ -354,7 +354,7 @@ public function create_post(){
     }
     public function get_detail_post(){
 		
-      $enq_code=$this->input->post('enquery_code');
+    $enq_code=$this->input->post('enquery_code');
       
 	  $data=$this->enquiry_model->enquiry_by_code($enq_code);
       

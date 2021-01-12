@@ -45,7 +45,14 @@ class Deals_datatable_model extends CI_Model{
         $this->db->where("enq.comp_id",$this->session->companey_id);
         $where="";
         $where .= "( enq.created_by IN (".implode(',', $all_reporting_ids).')';
-        $where .= " OR enq.aasign_to IN (".implode(',', $all_reporting_ids).'))';   
+        $where .= " OR enq.aasign_to IN (".implode(',', $all_reporting_ids).'))'; 
+
+        if(!empty($_POST['specific_list']))
+        {//echo 'infolist'.$_POST['specific_list']; exit();
+           
+            $where.="AND ( info.id IN (".$_POST['specific_list'].") ) ";
+            $and =1;
+        }
         $this->db->where($where);
         return $this->db->count_all_results();
     }
@@ -142,9 +149,9 @@ class Deals_datatable_model extends CI_Model{
             
         }
 
-
+        
         if(!empty($_POST['specific_list']))
-        {
+        {//echo 'infolist'.$_POST['specific_list']; exit();
             if($and)
                 $where.=" and ";
 
@@ -152,7 +159,7 @@ class Deals_datatable_model extends CI_Model{
             $and =1;
         }
 
-
+        //echo $where; exit();
         if($where!='')
         $this->db->where($where);
  

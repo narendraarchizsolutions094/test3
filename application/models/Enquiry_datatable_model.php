@@ -41,12 +41,7 @@ class Enquiry_datatable_model extends CI_Model {
        $this->db->from($this->table);       
        
        $user_id   = $this->session->user_id;
-       /*$user_role = $this->session->user_role;
-       $assign_country = $this->session->country_id;
-       $assign_region = $this->session->region_id;
-       $assign_territory = $this->session->territory_id;
-       $assign_state = $this->session->state_id;
-       $assign_city = $this->session->city_id;*/       
+    
         $where='';
         $enquiry_filters_sess   =   $this->session->enquiry_filters_sess;
         $top_filter             =   !empty($enquiry_filters_sess['top_filter'])?$enquiry_filters_sess['top_filter']:'';        
@@ -69,8 +64,9 @@ class Enquiry_datatable_model extends CI_Model {
          $productcntry          =   !empty($enquiry_filters_sess['prodcntry'])?$enquiry_filters_sess['prodcntry']:'';
         $state                  =   !empty($enquiry_filters_sess['state'])?$enquiry_filters_sess['state']:'';
         $city                   =   !empty($enquiry_filters_sess['city'])?$enquiry_filters_sess['city']:'';
+        $probability                   =   !empty($enquiry_filters_sess['probability'])?$enquiry_filters_sess['probability']:'';
 
-        $select = "enquiry.status,enquiry.name_prefix,enquiry.enquiry_id,tbl_subsource.subsource_name,enquiry.created_by,enquiry.aasign_to,enquiry.Enquery_id,enquiry.score,enquiry.enquiry,enquiry.company,tbl_product_country.country_name,enquiry.org_name,enquiry.name,enquiry.lastname,enquiry.email,enquiry.phone,enquiry.address,enquiry.reference_name,enquiry.created_date,enquiry.enquiry_source,lead_source.icon_url,lead_source.lsid,lead_source.score_count,lead_source.lead_name,lead_stage.lead_stage_name,tbl_datasource.datasource_name,tbl_product.product_name as product_name,CONCAT(tbl_admin.s_display_name,' ',tbl_admin.last_name) as created_by_name,CONCAT(tbl_admin2.s_display_name,' ',tbl_admin2.last_name) as assign_to_name";
+        $select = "enquiry.status,enquiry.name_prefix,enquiry.enquiry_id,tbl_subsource.subsource_name,enquiry.created_by,enquiry.aasign_to,enquiry.Enquery_id,enquiry.score,enquiry.enquiry,enquiry.company,tbl_product_country.country_name,enquiry.org_name,enquiry.name,enquiry.lastname,enquiry.email,enquiry.phone,enquiry.address,enquiry.reference_name,enquiry.created_date,enquiry.enquiry_source,lead_source.icon_url,lead_source.lsid,lead_source.score_count,lead_source.lead_name,lead_stage.lead_stage_name,tbl_datasource.datasource_name,tbl_product.product_name as product_name,CONCAT(tbl_admin.s_display_name,' ',tbl_admin.last_name) as created_by_name,CONCAT(tbl_admin2.s_display_name,' ',tbl_admin2.last_name) as assign_to_name,lead_score.score_name,lead_score.probability";
 
         if ($this->session->companey_id != 57) {
             /*$select .= " ,GROUP_CONCAT(concat(tbl_enqstatus1.user_id,'#',tbl_enqstatus1.status) SEPARATOR '_') AS t";        
@@ -87,6 +83,7 @@ class Enquiry_datatable_model extends CI_Model {
         $this->db->join('lead_source','enquiry.enquiry_source = lead_source.lsid','left');
         $this->db->join('tbl_product','enquiry.product_id = tbl_product.sb_id','left');
         $this->db->join('lead_stage','lead_stage.stg_id = enquiry.lead_stage','left');   
+        $this->db->join('lead_score','lead_score.sc_id = enquiry.lead_score','left');   
         $this->db->join('tbl_product_country','tbl_product_country.id = enquiry.enquiry_subsource','left');
         $this->db->join('tbl_subsource','tbl_subsource.subsource_id = enquiry.sub_source','left');        
         $this->db->join('tbl_datasource','enquiry.datasource_id = tbl_datasource.datasource_id','left');
@@ -156,22 +153,6 @@ class Enquiry_datatable_model extends CI_Model {
             $where.=" AND enquiry.product_id IN (".implode(',', $product_filter).')';            
         }
 
-
-        // if(!empty($from_created) && !empty($to_created)){
-        //     $from_created = date("Y-m-d",strtotime($from_created));
-        //     $to_created = date("Y-m-d",strtotime($to_created));
-        //     $where .= " AND DATE(enquiry.created_date) >= '".$from_created."' AND DATE(enquiry.created_date) <= '".$to_created."'";
-        // }
-        // if(!empty($from_created) && empty($to_created)){
-        //     $from_created = date("Y-m-d",strtotime($from_created));
-        //     $where .= " AND DATE(enquiry.created_date) >=  '".$from_created."'";                        
-        // }
-        // if(empty($from_created) && !empty($to_created)){            
-        //     $to_created = date("Y-m-d",strtotime($to_created));
-        //     $where .= " AND DATE(enquiry.created_date) <=  '".$to_created."'";                                    
-        // }
-
-
          if($data_type=='1')
             $enq_date_fld = 'created_date';
         else if($data_type=='2')
@@ -201,6 +182,10 @@ class Enquiry_datatable_model extends CI_Model {
         }
         if(!empty($source)){                       
             $where .= " AND enquiry.enquiry_source =  '".$source."'";                                    
+        }
+
+        if(!empty($probability)){                       
+            $where .= " AND enquiry.lead_score =  '".$probability."'";                                    
         }
         
         if(!empty($sub_source)){                       
@@ -261,9 +246,13 @@ class Enquiry_datatable_model extends CI_Model {
             $where .= " AND enquiry.state_id='".$state."' AND enquiry.city_id='".$city."'"; 
         }
 
+        if(!empty($_POST['specific_list']))
+        { 
+            $where.=' AND enquiry.enquiry_id IN ('.$_POST['specific_list'].')';
+        }
+        //echo $where; exit();
         $this->db->where($where);
         //$this->db->group_by('enquiry.Enquery_id');
-        
 
         $i = 0;
      
@@ -319,7 +308,6 @@ class Enquiry_datatable_model extends CI_Model {
         {
             $order = $this->order;
 
-
             $this->db->order_by(key($order), $order[key($order)]);
        }
     }
@@ -340,18 +328,18 @@ class Enquiry_datatable_model extends CI_Model {
     {
         $this->_get_datatables_query();
 
-        $where = "";
-        $user_id   = $this->session->user_id;
-        $user_role = $this->session->user_role;
+        // $where = "";
+        // $user_id   = $this->session->user_id;
+        // $user_role = $this->session->user_role;
         
-        /*$all_reporting_ids    =   $this->common_model->get_categories($this->session->user_id);
-        $where .= " AND ( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
-        $where .= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';  
-        $this->db->where($where);*/
+        // $all_reporting_ids    =   $this->common_model->get_categories($this->session->user_id);
+        // $where .= " AND ( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
+        // $where .= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';  
+        // $this->db->where($where);
 
-        $data_type = $_POST['data_type'];    
+        // $data_type = $_POST['data_type'];    
         
-        $this->db->group_by('enquiry.Enquery_id');
+        // $this->db->group_by('enquiry.Enquery_id');
         
 
 
@@ -367,6 +355,11 @@ class Enquiry_datatable_model extends CI_Model {
         
         $compid = $this->session->companey_id;
         $where .= " enquiry.status=$datatype AND comp_id=$compid";
+
+        if(!empty($_POST['specific_list']))
+        { 
+            $where.=' AND enquiry.enquiry_id IN ('.$_POST['specific_list'].')';
+        }
 
         $this->db->where($where);        
         $this->db->group_by('enquiry.Enquery_id');

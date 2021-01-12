@@ -566,9 +566,15 @@ class Lead extends CI_Controller
         if (!empty($_POST)) {
             $score_name = $this->input->post('score_name');
             $score_rate = $this->input->post('score_rate');
+            
+            $score_from = $this->input->post('score_from');
+            $score_to = $this->input->post('score_to');
+            
             $score_id = $this->input->post('score_id');
             $this->db->set('score_name', $score_name);
             $this->db->set('probability', $score_rate);
+            $this->db->set('score_from', $score_from);
+            $this->db->set('score_to', $score_to);
             $this->db->where('sc_id', $score_id);
             $this->db->update('lead_score');
             $this->session->set_flashdata('SUCCESSMSG', 'Update Successfully');
@@ -688,10 +694,16 @@ class Lead extends CI_Controller
             }
             $score_name = $this->input->post('score_name');
             $score_rate = $this->input->post('score_rate');
+            
+            $score_from = $this->input->post('score_from');
+            $score_to = $this->input->post('score_to');
+            
             $data = array(
                 'score_name' => $score_name,
                 'comp_id' => $this->session->userdata('companey_id'),
-                'probability' => $score_rate
+                'probability' => $score_rate,
+                'score_from' => $score_from,
+                'score_to' => $score_to
             );
             $insert_id = $this->Leads_Model->lead_scoreadd($data);
             $this->session->set_flashdata('SUCCESSMSG', 'Lead Score Add Successfully');

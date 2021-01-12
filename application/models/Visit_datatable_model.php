@@ -46,7 +46,11 @@ class Visit_datatable_model extends CI_Model{
         $this->db->where("enquiry.comp_id",$this->session->companey_id);
         $where="";
         $where .= "( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
-        $where .= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';   
+        $where .= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';
+        if(!empty($_POST['specific_list']))
+        {
+            $where.="AND tbl_visit.id IN (".$_POST['specific_list'].") ";   
+        }
         $this->db->where($where);
         return $this->db->count_all_results();
     }
@@ -127,6 +131,15 @@ class Visit_datatable_model extends CI_Model{
                 $where.=" and ";
 
             $where.=" tbl_visit.rating LIKE '%".$_POST['rating']."%'";
+            $and =1;
+        }
+
+        if(!empty($_POST['specific_list']))
+        {
+            if($and)
+                $where.=" and ";
+
+            $where.=" ( tbl_visit.id IN (".$_POST['specific_list'].") ) ";
             $and =1;
         }
 
