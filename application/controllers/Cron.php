@@ -87,6 +87,7 @@ public function msgsend_app()
     $schedule=$this->db->where('status',0)->get('scheduledata')->result();
     foreach ($schedule as $key => $value) {
         if(date("Y-m-d H:i", strtotime($value->schedule_time))==$currentTime){
+
            $type= $value->message_type;
            $to=$value->send_to;
            $comp_id=$value->comp_id;
@@ -155,9 +156,9 @@ public function msgsend_app()
     $data=['status'=>1,'response'=>$response];
     $this->db->where('id',$id)->update('scheduledata',$data);
                 }
+              
+
         }
-    }else{
-         echo'No Scheduller';
     }
 }
 }
@@ -173,6 +174,14 @@ public function run()
         if($value->running_time==$currentTime){
             $run=$value->url;
             return $run;
+
+            // require_once FCPATH.'third_party/vendor/autoload.php';
+            // date_default_timezone_set("Asia/kolkata");
+            // $cron = Cron\CronExpression::factory($command);
+            // // print_r($cron);
+            // $running_time= $cron->getNextRunDate()->format('Y-m-d H:i');
+            //             $data=['schedule_time'=>$running_time];
+            //             $this->db->where('id',$id)->update('scheduledata',$data);
         }
 
     }
