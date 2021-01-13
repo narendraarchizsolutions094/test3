@@ -67,7 +67,7 @@
 
                                 <img alt="Picture" src="<?php echo (!empty($department->picture)?base_url($department->picture):base_url("assets/images/no-img.png")) ?>" id="picture" width="150" height="150">
 
-                                  <input class="form-control" name="file" type="file" id="file" value="<?= $department->picture ?>" onchange="document.getElementById('picture').src = window.URL.createObjectURL(this.files[0])">
+                                  <input class="form-control" name="file" type="file" id="file"   onchange="document.getElementById('picture').src = window.URL.createObjectURL(this.files[0])">
 
                                     <input type="hidden" name="new_file" value="<?= $department->picture ?>" class="form-control" >
 
@@ -87,7 +87,7 @@
 
                                 <img alt="Picture" src="<?php echo (!empty($department->picture)?base_url($department->picture):base_url("assets/images/no-img.png")) ?>" id="picture" width="150" height="150">
 
-                                  <input class="form-control" name="file" type="file" id="file" value="<?= $department->picture ?>" onchange="document.getElementById('picture').src = window.URL.createObjectURL(this.files[0])">
+                                  <input class="form-control" name="file" type="file" id="file"   onchange="document.getElementById('picture').src = window.URL.createObjectURL(this.files[0])">
 
                                     <input type="hidden" name="new_file" value="<?= $department->picture ?>" class="form-control" >
 
@@ -697,8 +697,19 @@
 
                             </div>
 
-                            
-
+                                    
+                            <?php
+         $user_id=$this->session->user_id;
+        $user_meta = $this->user_model->get_user_meta($user_id,array('visiting_card'));
+        // print_r($user_meta['visiting_card']);
+                           ?>
+<div class="col-sm-4" align="center"> 
+<img alt="Picture" src="<?php echo (!empty($user_meta)?base_url($user_meta):base_url("assets/images/no-img.png")) ?>" id="picture1" width="50" height="50">
+ <input class="form-control" name="vcfile" type="file" id="file" onchange="document.getElementById('picture1').src = window.URL.createObjectURL(this.files[0])">
+   <input type="hidden" name="vc_file" value="<?php if(!empty($user_meta)){echo $user_meta['visiting_card']; }?>" class="form-control" >
+<h3>
+</h3>
+</div>
                             <div class="form-row">
 
                                 

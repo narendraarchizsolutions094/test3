@@ -1255,6 +1255,12 @@ if (!empty($enquiry_separation)) {
         } else {
             $permission = '';
         }
+        if ($this->input->post('user_type')) {
+            $permission = $this->input->post('user_type');
+        } else {
+            $permission = '';
+        }
+
         $path = 'assets/images/user/';
         $config = array(
         'upload_path' => $path,
@@ -1263,8 +1269,26 @@ if (!empty($enquiry_separation)) {
         'encrypt_name' => true
         );
         $this->upload->initialize($config);
-        $img = $this->upload->do_upload('file'
-        );
+        $img = $this->upload->do_upload('file');
+        $imageDetailArray = $this->upload->data();
+        $img =  $path.$imageDetailArray['file_name'];
+        // print_r($_FILES['vcfile']['name']);
+        // die();
+        if (isset($_FILES['vcfile'])) {
+            $path2 = 'assets/images/vc/';
+            $config2 = array(
+            'upload_path' => $path2,
+            'allowed_types' => "gif|jpg|png|jpeg",        
+            'max_size' => "2048000",
+            'encrypt_name' => true
+            );
+            $this->upload->initialize($config2);
+        $vcfile_link = $this->upload->do_upload('vcfile');
+        $imageDetailArray1 = $this->upload->data();
+        $vcfile_link =  $path2.$imageDetailArray1['file_name'];
+        $this->user_model->set_user_meta($user_id,array('visiting_card'=>(!empty($vcfile_link) ? $vcfile_link : $this->input->post('vc_file'))));
+        }
+        
         // if picture is uploaded then resize the picture
         /*if ($img !== false && $img != null) {
             $this->fileupload->do_resize(
@@ -1272,8 +1296,7 @@ if (!empty($enquiry_separation)) {
             );
         }*/
         //echo $this->upload->display_errors();
-        $imageDetailArray = $this->upload->data();
-        $img =  $path.$imageDetailArray['file_name'];
+       
         //print_r($imageDetailArray);
         if ($this->session->user_id == 9) {
             $org = $this->input->post('org_name');

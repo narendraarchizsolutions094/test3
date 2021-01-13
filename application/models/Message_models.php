@@ -302,4 +302,18 @@ class Message_models extends CI_Model
      }  
         return $enqData;
   }
+  public function saveSchedule($message_type,$message_from,$message_data,$send_to,$sending_from,$schedule_time)
+  {
+      //send schedule sms/message/email data in db
+       $data=[ 
+              'message_type'=>$message_type,
+              'message_from'=>$message_from,
+              'message_data'=>$message_data,
+              'send_to'=>$send_to,
+              'created_by'=>$sending_from,
+              'schedule_time'=>$schedule_time,
+              'comp_id'=>$this->session->companey_id,
+               ];
+       $this->db->insert('scheduledata',$data);
+      }
 }

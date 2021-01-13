@@ -223,23 +223,39 @@ class Message extends CI_Controller {
 		// print_r($usermeta);
 		// die();
 		  $signature   = $this->enquiry_model->get_signature();
+		  //schedule 
+		  $message_from=$this->input->post('message_from');
+		  $schedule_time=$this->input->post('schedule_time');
+		  $schedule=$this->input->post('schedule');
+		//   $message_type=$this->input->post('message_type');
+		  //schedule end
+
+
+
 		  $msgType= $this->input->post('mesge_type');
 		  $ticketId= $this->input->post('ticketId');
 		  $msg_from=$this->input->post('msg_from');
 		  $user_id = $this->session->user_id;
 		  $move_enquiry = $this->input->post('enquiry_id');
 		  $message=$this->input->post('message_name');
+
 		  $replaceName='';
 		  $replacePhone='';
 		  $username=$this->session->userdata('fullname');
 		  $userphone=$this->session->userdata('phone');
 		  $designation=$this->session->userdata('designation');
+
+		  //fetch visiting card
+
 		  $media_url='';
 		 $this->db->where('pk_i_admin_id',$this->session->user_id);
               $user_row  = $this->db->get('tbl_admin')->row_array();
 		//   if($this->session->companey_id==65)
 		//   {	
-		  	
+			$user_meta = $this->user_model->get_user_meta($user_id,array('visiting_card'));
+			
+			// print_r($message);
+			// die();
 		  	$email_subject = $this->input->post('email_subject')??'';
 			 
 			if(!empty($move_enquiry) && !is_array($move_enquiry)){
@@ -274,12 +290,14 @@ class Message extends CI_Controller {
 			                $enq_row['ticketno'],
 			                $enq_row['tracking_no'],
 			                );
-		            $message  =str_replace($find, $replace, $message);
+					$message  =str_replace($find, $replace, $message);
+
 		            $email_subject  = str_replace($find, $replace, $email_subject);
 			  }
 			//  echo $message.'<br>'.$email_subject;exit();
 		
         if($this->input->post('mesge_type')== 1){
+
 	      	$templates_id	=	$this->input->post('templates');
 	      	$this->db->where('temp_id',$templates_id);
 			  $template_row	=	$this->db->get('api_templates')->row_array();
@@ -295,11 +313,14 @@ class Message extends CI_Controller {
       	        if($template_row['media']){	      	        	
       	        	$media_url	=	$template_row['media'];
       	        	$this->Message_models->sendwhatsapp($phone,base_url().$media_url);
-      	        }
+				  }
+				  // if visiting card send
 				}
 				
       	       echo "Message sent successfully";
             }else{
+				//check schedule type is or not
+				if($schedule==1){
               	$this->Message_models->sendwhatsapp($phone,$message); 
               	if($template_row['media']){	      	   
 					  $media_url = $template_row['media'];    
@@ -308,7 +329,8 @@ class Message extends CI_Controller {
 						$saveMsgTimelineId=$this->Message_models->AddMsgtimline($msgType,$ticketId,$user_id,$templates_id,$template_name,'Send Whatsapp');
 						//save logs
 						$this->Message_models->saveMsgLogs($msgType,$ticketId,$user_id,$templates_id,$message,$phone,base_url().$media_url,$saveMsgTimelineId,0);
-				  	} 	
+					  } 	
+					  
       	        	$this->Message_models->sendwhatsapp($phone,base_url().$media_url);      	        		      	
 				  }
 				  //only for ticket
@@ -318,19 +340,36 @@ class Message extends CI_Controller {
 					  //save logs
 				      $this->Message_models->saveMsgLogs($msgType,$ticketId,$user_id,$templates_id,$message,$phone,base_url().$media_url,$saveMsgTimelineId,0);
 				}
-              echo "Message sent successfully";
+			  echo "Message sent successfully";
+			}else{
+				$media_url='';
+				if(!empty($template_row['media'])){	      	        	
+					$media_url	=	$template_row['media'];
+					$media_url=     base_url().$media_url;
+											}
+				$scheduleData=['message'=>$message,'media'=>$media_url];
+				$scheduledata=json_encode($scheduleData);
+				$this->Message_models->saveSchedule($msgType,$message_from,$scheduledata,$phone,$user_id,$schedule_time);
+				echo "Message Scheduled successfully";
+			}
            }
         }else if($this->input->post('mesge_type')== 3){
-        	$temp_id = $this->input->post('templates');
+	        $to = $this->input->post('mail');
+			
+			$temp_id = $this->input->post('templates');
         	$rows	=	$this->db->select('*')
                         ->from('api_templates')
                         ->join('mail_template_attachments', 'mail_template_attachments.templt_id=api_templates.temp_id', 'left')                    
                         ->where('temp_id',$temp_id)                        
                         ->get()
-                        ->row();
+						->row();
+						// print_r($rows);
+						
+			if($schedule==1){
+			
+        	
             // $message = $this->input->post('message_name');
             //$email_subject = $this->input->post('email_subject');
-	        $to = $this->input->post('mail');
 	        $move_enquiry = $this->input->post('enquiry_id');
         	$this->db->where('comp_id',$this->session->companey_id);
         	$this->db->where('status',1);
@@ -365,7 +404,7 @@ class Message extends CI_Controller {
 		        //$config['validation']   = TRUE; // bool whether to validate email or not    
         	}
         	//$this->load->library('email');
-
+		}
         	$this->db->where('comp_id',$this->session->companey_id);
             $this->db->where('sys_para','usermail_in_cc');
             $this->db->where('type','COMPANY_SETTING');
@@ -378,13 +417,18 @@ class Message extends CI_Controller {
                if(!empty($cc_user))
                     $cc = $cc_user['s_user_email'];
             }
-           
+		
+	
             if(!empty($move_enquiry)){
+				
 	            	if(is_array($move_enquiry))
 	            	{
+						
 	            		foreach($move_enquiry as $key){
+							
 	            			if($this->session->companey_id==65)
 	            			{
+
 	            				$enq_row=(array)$this->Message_models->fetchenqById('enquiry',$key);
 								//print_r($enqData); exit();;
 								// $replaceName=	$enqData->name_prefix.' '.$enqData->name;
@@ -392,7 +436,8 @@ class Message extends CI_Controller {
 						    $name1 = $enq_row['name_prefix'].' '.$enq_row['name'].' '.$enq_row['lastname'];
 			                $message = str_replace('@name',$name1,str_replace('@org',$user_row['orgisation_name'],str_replace('@desg',$user_row['designation'],str_replace('@phone',$user_row['contact_phone'],str_replace('@desg',$user_row['designation'],str_replace('@user',$user_row['s_display_name'].' '.$user_row['last_name'],$message))))));
 			                $email_subject = str_replace('@name',$name1,str_replace('@org',$user_row['orgisation_name'],str_replace('@desg',$user_row['designation'],str_replace('@phone',$user_row['contact_phone'],str_replace('@desg',$user_row['designation'],str_replace('@user',$user_row['s_display_name'].' '.$user_row['last_name'],$email_subject))))));
-	            			}
+								
+						}
 	            			//echo $to.'|'.$email_subject.'| '.$message.'|'.$cc; exit();	
 			      	        $enq = $this->enquiry_model->enquiry_by_id($key);
 			      	       
@@ -404,7 +449,7 @@ class Message extends CI_Controller {
 			                	$this->email->cc($cc);
 			                $this->email->subject($email_subject); 
 			                $this->email->message($message); 
-			                //$this->email->set_mailtype('html');
+							//$this->email->set_mailtype('html');
 			                if($rows->files!=null || !empty($rows->files==null))
 			                {
 			                    $this->email->attach($rows->files);
@@ -419,29 +464,49 @@ class Message extends CI_Controller {
 	            	}
 	      	    	else
 	      	    	{
-	      	    		$enq = $this->enquiry_model->enquiry_by_id($move_enquiry);
+						// 	$enq = $this->enquiry_model->enquiry_by_id($move_enquiry);
+						// $to=$enq->email;
+						if(!empty($to)){
+
+						if($schedule==1){
+						
 					        $this->email->initialize($config);
 					        $this->email->from($email_row['smtp_user']);
-			                $to=$enq->email;
 			                $this->email->to($to);
 			                if($cc!='')
 			                	$this->email->cc($cc);
 			                $this->email->subject($email_subject); 
 			                $this->email->message($message); 
 			                //echo $message.'<br>'.$email_subject.'<br>'.$cc;
-			                //$this->email->set_mailtype('html');
-			                if($rows->files!=null || !empty($rows->files==null))
-			                {
-			                    $this->email->attach($rows->files);
-			                }
+							//$this->email->set_mailtype('html');
+				  // if visiting card send
+							if($rows->files!=null || !empty($rows->files==null))
+			                { $this->email->attach($rows->files); }
 			                if($this->email->send()){
 									echo "Mail sent successfully";
 			                }else{
 								echo $this->email->print_debugger();
 								echo "Something went wrong";			                	
-			                }
+							}
+						}else{
+							$media_url='';
+							if($rows->files!=null || !empty($rows->files==null))
+							{ $media_url= $rows->files; }
+
+				$scheduleData=['message'=>$message,'media'=>$media_url,'subject'=>$email_subject,'cc'=>$cc];
+				$scheduledata=json_encode($scheduleData);
+				$this->Message_models->saveSchedule($msgType,$message_from,$scheduledata,$to,$user_id,$schedule_time);
+				echo "Email Scheduled successfully";
+						}
+					}else{
+				echo "Email Id not Exist";
+					      }
 	      	    	}
         	}else{
+				// $enq = $this->enquiry_model->enquiry_by_id($move_enquiry);
+				// 		$to=$enq->email;
+				if($schedule==1){
+
         	//echo $to.'|'.$email_subject.'| '.$message.'|'.$cc; exit();			
 		        $this->email->initialize($config);
 		        $this->email->from($email_row['smtp_user']);		                
@@ -454,7 +519,7 @@ class Message extends CI_Controller {
 	            //$this->email->set_mailtype('html');
 	            //if($rows->files!=null || !empty($rows->files==null)){
 	                //$this->email->attach($rows->files);
-	            //}
+				//}
 	            if($this->email->send()){
 						echo "Mail sent successfully";
 						if ($msg_from=='ticket') {
@@ -466,16 +531,28 @@ class Message extends CI_Controller {
 	            }else{
 	            	echo $this->email->print_debugger();
 						echo "Something went wrong!";			                	
-	            }                 
+				}  
+			}else{
+				$media_url='';
+	$scheduleData=['message'=>$message,'media'=>$media_url,'subject'=>$email_subject,'cc'=>$cc];
+	$scheduledata=json_encode($scheduleData);
+	$this->Message_models->saveSchedule($msgType,$message_from,$scheduledata,$to,$user_id,$schedule_time);
+	// echo $this->db->last_query();
+
+	echo "Message Scheduled successfully";
+			}              
     		}	        
     	}else if($this->input->post('mesge_type')== 2){
 	        // $message = $this->input->post('message_name');
 	        $move_enquiry = $this->input->post('enquiry_id');
 	           
 			if(!empty($this->input->post('mobile'))){
-				// echo'test';	              	
 				$phone= '91'.$this->input->post('mobile');
-				
+
+				if($schedule==1){
+				  // if visiting card send
+							$message  =str_replace('@visiting_card',base_url($user_meta['visiting_card']), $message);
+				  // if visiting card send end
 				$this->Message_models->smssend($phone,$message);
 				echo "Message sent successfully";
 				  //only for ticket
@@ -486,10 +563,24 @@ class Message extends CI_Controller {
 					$this->Message_models->saveMsgLogs($msgType,$ticketId,$user_id,0,$message,$phone,$media_url,$saveMsgTimelineId,' ');
 			  }
 			}else{
+				  // if visiting card send
+						$message  =str_replace('@visiting_card',base_url($user_meta['visiting_card']), $message);
+				  // if visiting card send end
+				$media_url='';
+				$scheduleData=['message'=>$message];
+				$scheduledata=json_encode($scheduleData,false);
+				$this->Message_models->saveSchedule($msgType,$message_from,$scheduledata,$phone,$user_id,$schedule_time);
+	           // echo $this->db->last_query();
+				echo "SMS Scheduled successfully";
+			}
+			}else{
 				if(!empty($move_enquiry)){
 				  foreach($move_enquiry as $key){
 				    $enq = $this->enquiry_model->enquiry_by_id($key);
-				    $phone=$enq->phone;
+					$phone=$enq->phone;
+				  // if visiting card send
+							$message  =str_replace('@visiting_card',base_url($user_meta['visiting_card']), $message);
+				  // if visiting card send end
 				    $this->Message_models->smssend($phone,$message);
 				  }
 				  echo "Message sent successfully";
@@ -504,4 +595,10 @@ public function chat_start(){
    	$this->Message_models->sendwhatsapp($phone,$message);
     echo "Message sent successfully";
    }
+
+   public function test_start(){
+	echo $message='test';
+	echo $phone= '91dmnbsdbfsdfs sdfsdf sg dfsgdf';
+     echo "Message sent successfully";
+}
 }

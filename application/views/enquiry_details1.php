@@ -3753,9 +3753,67 @@ if (document.getElementById('agg_same').checked)
                <textarea class="form-control" name="message_name"  rows="10" id="template_message"></textarea>  
             </div>
          </div>
-         <div class="col-md-12">
+         <div class="form-group col-sm-12">
+            <div class="col-md-6">
+            <label>Schedule</label>
+<style>
+.timepicker-picker {
+	height: 240px; 
+	margin: 0 80px; 
+	display: inline-flex; 
+	flex-direction: column;
+	justify-content: center; 
+}
+.calendar {
+	cursor: pointer;
+}
+.timepicker-picker table td {
+    height: 24px;
+    line-height: 24px;
+    width: 24px;
+}
+.bootstrap-datetimepicker-widget table td.separator { 
+	width: 1px;
+	height: 1px;
+	line-height: 1px;
+} 
+.bootstrap-datetimepicker-widget .timepicker-hour,
+.bootstrap-datetimepicker-widget .timepicker-minute,
+.bootstrap-datetimepicker-widget .glyphicon-chevron-up,
+.bootstrap-datetimepicker-widget .glyphicon-chevron-down {
+	width: 20px;
+	height: 15px; 
+	line-height: 1;
+}
+.bootstrap-datetimepicker-widget table td span:hover {
+    background: none;
+}
+/* --o-- */</style>
+            <label class="radio-inline">
+      <input value="1" style="margin-top:25px" class="form-control" type="radio" onclick="handleClick(this);" name="schedule" checked>Send Now
+    </label>
+    <label class="radio-inline">
+      <input value="2" style="margin-top:25px" class="form-control" type="radio" onclick="handleClick(this);" name="schedule">Send Later
+    </label>
+         </div>
+         <div class="col-md-6">
+         <div id="schedule_time" style="display: none;">
+       <div class="col-md-8">
+       <label >Date & Time</label>
+       <div class="input-group input-group-sm" id='datetimepicker'  >
+						<input type="text" class="form-control" style="width: 100%;" name="schedule_time"/>   
+						<span class="input-group-addon calendar">
+							<span class="glyphicon glyphicon-calendar"></span>
+						</span>
+					</div>
+         </div>
+         </div>
+         </div>
+            </div>
+            <div style="margin-top: 20px;" class="form-group col-md-12">
             <input type="hidden"  id="mesge_type" name="mesge_type">
-            <input type="hidden" id="mobile" name="mobile" value="<?php echo $enquiry->phone ?>">
+            <input type="hidden"  id="message_from" name="message_from" value="1">
+            <input  type="hidden" id="mobile" name="mobile" value="<?php echo $enquiry->phone ?>">
             <input type="hidden" id="mail" name="mail" value="<?php echo $enquiry->email ?>">
             <input type="hidden" id="" name="enquiry_id" value="<?php echo $enquiry->enquiry_id ?>">
             <button class="btn btn-primary" onclick="send_sms()" type="button">Send</button>            
@@ -3767,6 +3825,45 @@ if (document.getElementById('agg_same').checked)
       </form>
    </div>
 </div>
+<script>
+   var currentValue = 0;
+function handleClick(myRadio) {
+   if(myRadio.value==1){
+      $('#schedule_time').hide();
+   }else{
+      $('#schedule_time').show();
+   }
+}
+  // jquery
+$(function () {
+		$('#datetimepicker').datetimepicker({ 
+				allowInputToggle: true,
+				showClose: true, //close the picker
+				format: 'YYYY-MM-DD HH:mm', //YYYY-MMM-DD LT
+				calendarWeeks: true,
+				inline: false,
+        sideBySide: true
+		});
+		$('#datetimepicker-sidebyside').datetimepicker({
+				showTodayButton: true,
+				showClose: true, //close the picker
+				showClear: true, //clear selection 
+				format: 'YYYY-MM-DD HH:mm', //YYYY-MMM-DD LT
+				calendarWeeks: true,
+				inline: true,
+				sideBySide: true
+		});
+		$('#datetimepicker-collapse').datetimepicker({
+				showClose: true, //close the picker
+				format: 'YYYY-MM-DD HH:mm', //YYYY-MMM-DD LT
+				calendarWeeks: true,
+				inline: true,
+				collapse: true
+		}); 
+});
+
+</script>
+
 <!---------------------------- DROP Enquiry -------------------------------->
 <div id="dropEnquiry" class="modal fade" role="dialog">
    <div class="modal-dialog">
@@ -4374,7 +4471,11 @@ $(".toogle-timeline").click(function(){
    });
    } 
    function  send_sms(){   
-     var sms_type = $("#mesge_type").val();
+      var sms_type = $("#mesge_type").val();
+     $('#mesge_type').val(sms_type);    
+     var data= $('#whatsaap').serialize();
+
+   //   alert(data);
       //if ("<?=$this->session->companey_id?>" == 81 && sms_type!=1) {
        // url =  '<?php echo base_url();?>message/send_sms_career_ex';
       //}else{

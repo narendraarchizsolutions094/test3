@@ -85,7 +85,64 @@
                <textarea class="form-control summernote" name="message_name"  rows="10" id="template_message"></textarea>  
             </div>
          </div>
-         <div class="col-md-12">
+         <div class="form-group col-sm-12">
+            <div class="col-md-6">
+            <label>Schedule</label>
+<style>
+.timepicker-picker {
+	height: 240px; 
+	margin: 0 80px; 
+	display: inline-flex; 
+	flex-direction: column;
+	justify-content: center; 
+}
+.calendar {
+	cursor: pointer;
+}
+.timepicker-picker table td {
+    height: 24px;
+    line-height: 24px;
+    width: 24px;
+}
+.bootstrap-datetimepicker-widget table td.separator { 
+	width: 1px;
+	height: 1px;
+	line-height: 1px;
+} 
+.bootstrap-datetimepicker-widget .timepicker-hour,
+.bootstrap-datetimepicker-widget .timepicker-minute,
+.bootstrap-datetimepicker-widget .glyphicon-chevron-up,
+.bootstrap-datetimepicker-widget .glyphicon-chevron-down {
+	width: 20px;
+	height: 15px; 
+	line-height: 1;
+}
+.bootstrap-datetimepicker-widget table td span:hover {
+    background: none;
+}
+/* --o-- */</style>
+            <label class="radio-inline">
+      <input value="1" style="margin-top:25px" class="form-control" type="radio" onclick="handleClick(this);" name="schedule" checked>Send Now
+    </label>
+    <label class="radio-inline">
+      <input value="2" style="margin-top:25px" class="form-control" type="radio" onclick="handleClick(this);" name="schedule">Send Later
+    </label>
+         </div>
+         <div class="col-md-6">
+         <div id="schedule_time" style="display: none;">
+       <div class="col-md-8">
+       <label >Date & Time</label>
+       <!-- <div class="input-group input-group-sm" id='datetimepicker'  > -->
+						<input type="datetime-local" class="form-control" style="width: 100%;" name="schedule_time"/>   
+						<!-- <span class="input-group-addon calendar">
+							<span class="glyphicon glyphicon-calendar"></span>
+						</span> -->
+         </div>
+         </div>
+         </div>
+            </div>
+         <div class="col-md-12"  style="margin-top: 20px;">
+           <input type="hidden"  id="message_from" name="message_from" value="2">
             <input type="hidden"  id="mesge_type" name="mesge_type">
             <input type="hidden" name="ticketId" value="<?= $ticketId ?>">
             <input type="hidden"  name="msg_from"  value="ticket">
@@ -100,6 +157,49 @@
       </form>
    </div>
 </div>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/css/bootstrap-datepicker.min.css" rel="stylesheet"/>
+ <script src="http://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/js/bootstrap-datepicker.js"></script>
+<script>
+  // var $j = jQuery.noConflict();
+   var currentValue = 0;
+function handleClick(myRadio) {
+   if(myRadio.value==1){
+      $('#schedule_time').hide();
+   }else{
+      $('#schedule_time').show();
+   }
+}
+  // jquery
+// $(document).ready(function() {
+  jQuery(function($){ 
+		$('#datetimepicker').datetimepicker({ 
+				allowInputToggle: true,
+				showClose: true, //close the picker
+				format: 'YYYY-MM-DD HH:mm', //YYYY-MMM-DD LT
+				calendarWeeks: true,
+				inline: false,
+        sideBySide: true
+		});
+		$('#datetimepicker-sidebyside').datetimepicker({
+				showTodayButton: true,
+				showClose: true, //close the picker
+				showClear: true, //clear selection 
+				format: 'YYYY-MM-DD HH:mm', //YYYY-MMM-DD LT
+				calendarWeeks: true,
+				inline: true,
+				sideBySide: true
+		});
+		$('#datetimepicker-collapse').datetimepicker({
+				showClose: true, //close the picker
+				format: 'YYYY-MM-DD HH:mm', //YYYY-MMM-DD LT
+				calendarWeeks: true,
+				inline: true,
+				collapse: true
+		}); 
+}); 
+
+</script>
+
 <?php 
 // if( $subj=='Send Whatsapp' OR $subj =='Send Mail' OR $subj  =='Send SMS'){
 ?>

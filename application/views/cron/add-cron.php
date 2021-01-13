@@ -4,16 +4,16 @@
         <div  class="panel panel-default thumbnail"> 
             <div class="panel-heading no-print">
                 <div class="btn-group"> 
-                    <a class="btn btn-primary" href="<?php echo base_url("lead/crslist") ?>"> <i class="fa fa-list"></i>  <?php echo display('course_list') ?> </a> 
+                    <a class="btn btn-primary" href="<?php echo base_url("cron") ?>"> <i class="fa fa-list"></i>Cron List</a> 
                 </div>
             </div>
             <div class="panel-body panel-form">
                 <div class="row">
                     <div class="col-md-9 col-sm-12">
                        <div class="card-body">
-
+    <form action="<?= base_url('cron/insertCron/') ?>" method="POST">
                 <div class="card-body">
-                  <div class="form-group col-sm-12">
+                  <!-- <div class="form-group col-sm-12">
                     <label for="common_settings"> <i class="text-danger">*</i></label>
                     <select name="common_settings" class="form-control" id="common_settings" onchange="select_common_option()">
                                     <option value="--">
@@ -50,14 +50,14 @@
                                         Once Per Year(0 0 1 1 *)
                                     </option>
                                 </select>
-                  </div> 
+                  </div>  -->
                   <div class="form-group">
                         <label id="lblMinute" for="minute">
                             Minute:
                         </label>
                         <div class="row">
                             <div class="col-xs-4">
-                                <input id="minute" type="text" class="form-control" size="4">
+                                <input id="minute" type="text" class="form-control" size="4" name="minute">
                             </div>
                             <div class="col-xs-8">
                                 <select id="minute_options" class="form-control" onchange="select_single_option(this.value,'minute')">
@@ -275,7 +275,7 @@
                         </label>
                         <div class="row">
                             <div class="col-xs-4">
-                                <input id="hour" type="text" class="form-control" size="4">
+                                <input id="hour" type="text" class="form-control" size="4" name="hour">
                             </div>
                             <div class="col-xs-8">
                                 <select id="hour_options" class="form-control" onchange="select_single_option(this.value,'hour')">
@@ -399,7 +399,7 @@
                         </label>
                         <div class="row">
                             <div class="col-xs-4">
-                                <input type="text" class="form-control" size="4" id="day">
+                                <input type="text" class="form-control" size="4" id="day" name="day">
                             </div>
                             <div class="col-xs-8">
                                 <select id="day_options" onchange="select_single_option(this.value,'day')" class="form-control">
@@ -526,7 +526,7 @@
                         </label>
                         <div class="row">
                             <div class="col-xs-4">
-                                <input type="text" class="form-control" size="4" id="month">
+                                <input type="text" class="form-control" size="4" id="month" name="month">
                             </div>
                             <div class="col-xs-8">
                                 <select id="month_options" onchange="select_single_option(this.value,'month')" class="form-control">
@@ -610,7 +610,7 @@
                         </label>
                         <div class="row">
                             <div class="col-xs-4">
-                                <input type="text" class="form-control" size="4" id="weekday">
+                                <input type="text" class="form-control" size="4" id="weekday" name="weekday">
                             </div>
                             <div class="col-xs-8">
                                 <select id="weekday_options" class="form-control" onchange="select_single_option(this.value,'weekday')">
@@ -679,28 +679,37 @@
                             Command:
                         </label>
                         <div class="row">
-                            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-                                <input type="text" class="form-control" size="45" id="command">
+                            <div class="col-xs-12 col-sm-6 col-md-12 col-lg-6">
+                                <input type="text" class="form-control" size="45" name="command" id="command">
                             </div>
-                            <div id="command_error" class="col-xs-12 col-sm-6 col-md-6 col-lg-6 cjt_validation_error" style="width: 16px; height: 16px;">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            URL:
+                        </label>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <input type="text" class="form-control" size="45" name="url" >
                             </div>
+                            
                         </div>
                     </div>
                   <div class="form-group col-sm-6">
                     <label for="status"><?php echo display('status') ?></label>
                     <div class="form-check">
                         <label class="radio-inline">
-                        <input type="radio" name="status" value="1" checked><?php echo display('active') ?>
+                        <input type="radio" name="status" value="0" checked><?php echo display('active') ?>
                         </label>
                         <label class="radio-inline">
-                        <input type="radio" name="status" value="0"  ><?php echo display('inactive') ?>
+                        <input type="radio" name="status" value="1"  ><?php echo display('inactive') ?>
                         </label>
                     </div>
                   </div>
                 </div>
                 <!-- /.card-body -->
                 <div class="card-footer col-sm-12">
-                    <button type="reset" class="btn btn-default"><?php echo display('reset') ?></button> &nbsp;<button class="btn btn-primary"><?php echo display('save') ?></button>
+                    <button type="reset" class="btn btn-default"><?php echo display('reset') ?></button> &nbsp;<button type="submit" class="btn btn-primary"><?php echo display('save') ?></button>
                 </div>
               </form>
             </div>
@@ -713,7 +722,12 @@
 </div>
 
 <script>
-    function select_single_option(v,pagevalue){
+    var obj = [];
+    function select_single_option(v,pagevalue)
+    {
+     obj[pagevalue] = v;
      document.getElementById(pagevalue).value = v;
+     document.getElementById('command').value = obj.minute+" "+obj.hour+" "+obj.day+" "+obj.month+" "+obj.weekday;
     }
+
     </script>
