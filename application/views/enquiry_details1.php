@@ -5656,8 +5656,11 @@ jQuery(document).ready(function(){
    $("ul.nav-tabs > li").on("shown.bs.tab", function(e) {
       var id = $(e.target).attr("href").substr(1);
       window.location.hash = id;
+      setTimeout(function() {
+         window.scrollTo(0, 0);           
+         $(".col-height").scrollTop(0);
+      },0);
    });
-
    // on load of the page: switch to the currently selected tab
    var hash = window.location.hash;   
    if(hash==''){
