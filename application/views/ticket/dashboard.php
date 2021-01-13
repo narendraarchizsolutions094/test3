@@ -110,7 +110,7 @@
 <div id="chartdiv_datewise"></div><br>
 <br>
 <center>
-    <h3>Reffered By</h3>
+    <h3>Referred By</h3>
 </center>
 <div id="chartdiv1"></div>
 <div class="row">

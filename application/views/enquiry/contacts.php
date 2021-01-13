@@ -11,68 +11,41 @@
           <?php
           }
           ?>        
-        </div>
+  </div>
+  <div class="col-md-4 pull-right" align="right">
+      <div class="btn-group" role="group" aria-label="Button group">
+              <a class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-expanded="false" title="Actions">
+                <i class="fa fa-sliders"></i>
+              </a>  
+            <div class="dropdown-menu dropdown_css" style="max-height: 400px;overflow: auto; left: -136px;">
+               <a class="btn" data-toggle="modal" data-target="#table-col-conf" style="color:#000;cursor:pointer;border-radius: 2px;border-bottom: 1px solid #fff;">Table Config</a>                        
+            </div>                                         
+          </div>
+  </div>
 </div>
 
 <div class="row p-5" style="margin-top: 20px;">
 	<div class="col-lg-12">
 		<div class="panel panel-success">
 			<div class="panel-body">
-				<table id="contactTable" class="datatable1 table table-bordered table-response">
+				<table id="contactTable" class="table table-bordered table-response">
 					<thead>
 	                             
 				         <tr>
 			                      <th>&nbsp; # &nbsp;</th>
-			                      <th><?=display('enquiry')?></th>
-			                      <th style="width: 20%;">Company</th>
-			                      <th style="width: 20%;">Designation</th>
-			                      <th style="width: 20%;">Name</th>
-			                      <th style="width: 20%;">Contact Number</th>
-			                      <th style="width: 20%;">Email ID</th>
-                            <th style="width: 20%;">Decision Maker</th>
-			                      <th style="width: 20%;">Other Detail</th>
-			                      <th style="width: 20%;">Created At</th>
-			                      <th>Action</th>
+			                      <th id="th-1">Name</th>
+			                      <th id="th-2" style="width: 20%;">Company</th>
+			                      <th id="th-3" style="width: 20%;">Designation</th>
+			                      <th id="th-4" style="width: 20%;">Contact Name</th>
+			                      <th id="th-5" style="width: 20%;">Contact Number</th>
+			                      <th id="th-6" style="width: 20%;">Email ID</th>
+                            <th id="th-7" style="width: 20%;">Decision Maker</th>
+			                      <th id="th-8" style="width: 20%;">Other Detail</th>
+			                      <th id="th-9" style="width: 20%;">Created At</th>
+			                      <th id="th-10" style="width: 50px;">Action</th>
 				         </tr>
 					</thead>
 					<tbody>
-						<?php
-							if(!empty($contact_list))
-							{$i=1;
-								foreach ($contact_list->result_array() as $row)
-								{
-									echo'<tr>
-											<td>'.$i++.'. </td>
-											<td><a href="'.base_url('enquiry/view/').$row['enquiry_id'].'">'.$row['enq_name'].'</a></td>
-											<td>'.$row['company'].'</td>
-											<td>'.$row['designation'].'</td>
-											<td>'.$row['c_name'].'</td>
-											<td>'.$row['contact_number'].'</td>
-											<td>'.$row['emailid'].'</td>
-                      <td>'.($row['decision_maker']?'Yes':'No').'</td>
-											<td>'.$row['other_detail'].'</td>
-											<td>'.$row['created_at'].'</td>
-											<td style="width:50px;">
-											<div class="btn-group">';
-                      if(user_access('1012'))
-                      {
-                        echo'<button class="btn btn-warning btn-xs" data-cc-id="'.$row['cc_id'].'" onclick="edit_contact(this)">
-                          <i class="fa fa-edit"></i>
-                        </button>';
-                      }
-                      if(user_access('1011'))
-                      {
-                        echo'<button class="btn btn-danger btn-xs"  data-cc-id="'.$row['cc_id'].'" onclick="deleteContact(this)">
-                          <i class="fa fa-trash"></i>
-                        </button>';
-                      }
-
-                     echo' </div>
-                     </td>
-									</tr>';
-								}
-							}
-						?>
 					</tbody>
 				</table>
 			</div>
@@ -180,7 +153,7 @@ function deleteContact(t)
                   <option value="0">Select </option>
 
                     <?php
-                    print_r($enquiry_list);
+                    //print_r($enquiry_list);
                  	if(!empty($enquiry_list))
                  	{
                  		foreach ($enquiry_list as $row)
@@ -228,6 +201,8 @@ function deleteContact(t)
    </div>
 </div>   
 <script type="text/javascript">
+var c = getCookie('contact_allowcols');
+
   var LIST = <?php echo !empty($company_list)? json_encode($company_list): '{}'?>;
   var OLD_LIST  = <?=!empty($enquiry_list) ? json_encode($enquiry_list):'{}'?>;
   function filter_related_to(v)
@@ -253,4 +228,180 @@ function deleteContact(t)
           $("select[name=enquiry_id]").html(l);
       }
   }
+</script>
+
+<script type="text/javascript">
+
+var specific_list = "<?=!empty($this->uri->segment(3))?$this->uri->segment(3):''?>";
+
+specific_list = atob(specific_list);
+
+var TempData = {};
+$(".d_filter").on('change',function(){
+
+  $('#deals_table').DataTable().ajax.reload();
+ 
+});
+$(document).ready(function(){
+
+  $('#contactTable').DataTable({ 
+
+          "processing": true,
+          "scrollX": true,
+          "serverSide": true,          
+          "lengthMenu": [ [10,30, 50,100,500,1000, -1], [10,30, 50,100,500,1000, "All"] ],
+          "ajax": {
+              "url": "<?=base_url().'client/contacts_load_data'?>",
+              "type": "POST",
+              "data":function(d){
+                     //  var obj = $(".v_filter:input").serializeArray();
+
+                     // d.top_filter = $("input[name=top_filter]:checked").val();
+                     // d.date_from = $("input[name=d_from_date]").val();
+                     // d.date_to = $("input[name=d_to_date]").val();
+                     // d.enq_for = $("select[name=d_enquiry_id]").val();
+                     // d.from_date = obj[0]['value'];
+                     // d.from_time = '';//obj[1]["value"];
+                     // d.enquiry_id =obj[2]["value"];
+                     // d.rating = obj[3]["value"];
+                     // d.to_date = obj[1]['value'];
+                     // d.to_time = '';//obj[5]['value'];
+                     d.view_all=true;
+                     d.specific_list = specific_list;
+                     //TempData = d;
+
+                      if(c && c!='')
+                      d.allow_cols = c;
+
+                     console.log(JSON.stringify(d));
+                    return d;
+              }
+          },
+          "drawCallback":function(settings ){
+            //update_top_filter();
+          },
+          columnDefs: [
+                       { orderable: false, targets: -1 }
+                    ]
+  });
+
+});
+
+</script>
+<div id="table-col-conf" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-lg" style="width: 96%;">
+ 
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Table Column Configuration</h4>
+      </div>
+       <div class="modal-body">         
+           <div class="row">
+             <div class="col-md-3">
+                <label class=""><input type="checkbox" id="selectall" onclick="select_all()">&nbsp;Select All</label>
+             </div>
+           </div>
+            <hr>
+          <div class="row">
+            <div class="col-md-4">
+              <label class=""><input type="checkbox" class="choose-col" value="1"> Name</label>
+            </div>
+            <div class="col-md-4">
+              <label class=""><input type="checkbox" class="choose-col" value="2"> Company</label>
+            </div>
+            <div class="col-md-4">
+              <label class=""><input type="checkbox" class="choose-col" value="3"> Designation</label>
+            </div>
+            <div class="col-md-4">
+              <label class=""><input type="checkbox" class="choose-col" value="4"> Contact Name</label>
+            </div>
+            <div class="col-md-4">
+              <label class=""><input type="checkbox" class="choose-col" value="5"> Contact Number</label>
+            </div>
+             <div class="col-md-4">
+              <label class=""><input type="checkbox" class="choose-col" value="6"> Email ID</label>
+            </div>
+            <div class="col-md-4">
+              <label class=""><input type="checkbox" class="choose-col" value="7"> Decision Maker</label>
+            </div>
+            <div class="col-md-4">
+              <label class=""><input type="checkbox" class="choose-col" value="8"> Other Detail</label>
+            </div>
+            <div class="col-md-4">
+              <label class=""><input type="checkbox" class="choose-col" value="9"> Created At</label>
+            </div>
+            <div class="col-md-4">
+              <label class=""><input type="checkbox" class="choose-col" value="10"> Action</label>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-success" onclick="save_table_conf()"><i class="fa fa-save"></i> Save</button>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+  
+
+function save_table_conf()
+{
+      var x = $(".choose-col:checked");
+      var Ary = new Array();
+      $(x).each(function(k,v){
+        Ary.push(v.value);
+      });
+      var list = Ary.join(',');
+      //alert(list);
+      document.cookie = "contact_allowcols="+list+"; expires=Thu, 18 Dec 2053 12:00:00 UTC; path=/";
+      Swal.fire({
+        title:'Table Configuration Saved.',
+        icon:'success',
+        type:'success',
+
+      });
+      location.reload();
+}
+
+if(c && c!='')
+{ 
+    var z = c.split(',');
+    //alert(z.length);
+    if($('.choose-col').length == z.length)
+        $('#selectall').prop('checked',true);
+
+    $("th[id*=th-").addClass('rmv');
+    $(z).each(function(k,v){
+        $('.choose-col[value='+v+']').prop('checked',true);
+        $('#th-'+v).removeClass('rmv');
+     });
+    $('.rmv').remove();
+}
+else
+{
+  $('.choose-col').prop('checked',true);
+  $('#selectall').prop('checked',true);
+
+}
+
+$("#selectall").click(function(){
+    if(this.checked)
+    {
+      $('.choose-col').prop('checked',true);
+    }
+    else
+    {
+      $('.choose-col').prop('checked',false);
+    }
+});
+
+$('.choose-col').change(function(){
+    if($('.choose-col').length == $('.choose-col:checked').length)
+        $('#selectall').prop('checked',true);
+    else
+      $('#selectall').prop('checked',false);
+});
+
 </script>

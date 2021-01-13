@@ -3450,14 +3450,27 @@ public function timelinePopup()
         $this->load->model('visit_datatable_model');
         $result = $this->visit_datatable_model->getRows($_POST);
         //echo $this->db->last_query(); exit();
+
+        $colsall  = true;
+        $cols = array();
+        if(!empty($_POST['allow_cols']))
+        {
+            $cols  = explode(',',$_POST['allow_cols']);
+            $colsall = false;
+        }
+        //print_r($cols); exit();
         $data = array();
         foreach ($result as $res)
         {
             $sub = array();
             $time = $res->visit_time=='00:00:00'?null:date("g:i a", strtotime($res->visit_time));
             $sub[] = $res->id;
-            $sub[] = $res->visit_date!='0000-00-00'?$res->visit_date:'NA';
-            $sub[] = $time??'NA';
+
+            if($colsall || in_array(1,$cols))
+                $sub[] = $res->visit_date!='0000-00-00'?$res->visit_date:'NA';
+
+            if($colsall || in_array(2,$cols))
+                $sub[] = $time??'NA';
 
             if(!empty($_POST['view_all']))
             {
@@ -3467,17 +3480,22 @@ public function timelinePopup()
                     $url = base_url('lead/lead_details/').$res->enquiry_id;
                 else if($res->enq_type=='3')
                     $url = base_url('client/view/').$res->enquiry_id;
-
-                $sub[] = '<a href="'.$url.'">'.$res->name.'</a>'??'NA';
+                if($colsall || in_array(3,$cols))
+                    $sub[] = '<a href="'.$url.'">'.$res->name.'</a>'??'NA';
             }
-
-            $sub[] = $res->travelled!=''?$res->travelled:'NA';
-            $sub[] = $res->travelled_type!=''?$res->travelled_type:'NA';
-            $sub[] = $res->rating!=''?$res->rating:'NA';
-            $sub[] = $res->next_date!='0000-00-00'?$res->next_date:'NA';
+            if($colsall || in_array(4,$cols))
+                $sub[] = $res->travelled!=''?$res->travelled:'NA';
+            if($colsall || in_array(5,$cols))
+                $sub[] = $res->travelled_type!=''?$res->travelled_type:'NA';
+            if($colsall || in_array(6,$cols))
+                $sub[] = $res->rating!=''?$res->rating:'NA';
+            if($colsall || in_array(7,$cols))
+                $sub[] = $res->next_date!='0000-00-00'?$res->next_date:'NA';
+            if($colsall || in_array(8,$cols))
             $sub[] = $res->next_location?$res->next_location:'NA';
 
-            $sub[] = user_access('1021')?"<a class='btn btn-xs btn-danger fa fa-trash visit-delete' href='javascript:void(0)' data-id='$res->id' data-ecode='$res->Enquery_id' ></a>":'';
+            if($colsall || in_array(9,$cols))
+                $sub[] = user_access('1021')?"<a class='btn btn-xs btn-danger fa fa-trash visit-delete' href='javascript:void(0)' data-id='$res->id' data-ecode='$res->Enquery_id' ></a>":'';
             $data[] =$sub;
         }
     
@@ -3496,6 +3514,15 @@ public function timelinePopup()
         $result = $this->Deals_datatable_model->getRows($_POST);
         //echo count($result); exit();
         //echo $this->db->last_query(); exit();
+
+        $colsall  = true;
+        $cols = array();
+        if(!empty($_POST['allow_cols']))
+        {
+            $cols  = explode(',',$_POST['allow_cols']);
+            $colsall = false;
+        }
+
         $data = array();
         foreach ($result as $value)
         {
@@ -3545,28 +3572,46 @@ public function timelinePopup()
                 else
                     $url = base_url('client/view/').$value->enquiry_id;
 
-                $sub[] = '<a href="'.$url.'">'.$value->name.'</a>'??'NA';
+                if($colsall || in_array(1,$cols))
+                    $sub[] = '<a href="'.$url.'">'.$value->name.'</a>'??'NA';
             }
-
+            if($colsall || in_array(2,$cols))
             $sub[] = $branch_type??'NA';
+            if($colsall || in_array(3,$cols))
             $sub[] = $booking_type??'NA';
+            if($colsall || in_array(4,$cols))
             $sub[] = $business_type??'NA';
+            if($colsall || in_array(5,$cols))
             $sub[] = $value->booking_branch_name??'NA';
+            if($colsall || in_array(6,$cols))
             $sub[] = $value->delivery_branch_name??'NA';
+            if($colsall || in_array(7,$cols))
             $sub[] = $value->rate??'NA';
+            if($colsall || in_array(8,$cols))
             $sub[] = $value->discount??'NA';
+            if($colsall || in_array(9,$cols))
             $sub[] = $insurance??'NA';
+            if($colsall || in_array(10,$cols))   
             $sub[] = $paymode??'NA';
+            if($colsall || in_array(11,$cols))
             $sub[] = $value->potential_tonnage??'NA';
-            
+            if($colsall || in_array(12,$cols))
             $sub[] = $value->potential_amount??'NA';
+            if($colsall || in_array(13,$cols))
             $sub[] = $value->expected_tonnage??'NA';
+            if($colsall || in_array(14,$cols))
             $sub[] = $value->expected_amount??'NA';
+            if($colsall || in_array(15,$cols))
             $sub[] = $value->vehicle_type??'NA';
+            if($colsall || in_array(16,$cols))
             $sub[] = $value->carrying_capacity??'NA';
+            if($colsall || in_array(17,$cols))
             $sub[] = $value->invoice_value??'NA';
+            if($colsall || in_array(18,$cols))
             $sub[] = !empty($value->creation_date)?date('d-M-Y H:i:s A',strtotime($value->creation_date)):'NA';
+
             $stts = $value->status;
+            if($colsall || in_array(19,$cols))
             $sub[] = '<label class="label label-'.($stts?($stts==1?'success"> Done':'danger">Deferred'):'warning">Pending').'</label>';
             $part2 = "";
             if(user_access('1002'))
@@ -3582,6 +3627,7 @@ public function timelinePopup()
 
             $part2.="<a class='btn btn-primary btn-xs' onclick='quotation_pdf(".$value->booking_type.",".$value->enquiry_id.")' style='cursor: pointer;' data-toggle='modal'  data-target='#downloadQuatation'><i class='fa fa-download'></i></a>
             ";
+            if($colsall || in_array(20,$cols))
             $sub[] =$part2;
             $data[] =$sub;
         }
