@@ -1122,4 +1122,26 @@ class Ticket extends REST_Controller {
     } 
   }
 
+  public function ticket_status_post()
+  { 
+      $comp_id =  $this->input->post('company_id');
+
+      $res = $this->db->where('company_id',$comp_id)->get('tbl_ticket_status')->result();
+      if($res)
+      {
+         $this->set_response([
+        'status'      => TRUE,           
+        'data'  => $res,
+        ], REST_Controller::HTTP_OK);
+      }
+      else
+      {
+        $msg = 'No data';
+        $this->set_response([
+          'status'  => false,
+          'msg'     => $msg,//"Please provide a company id"
+        ],REST_Controller::HTTP_OK);
+      } 
+  }
+
 }
