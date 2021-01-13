@@ -1838,7 +1838,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                     </li>
 
                     <li class="treeview <?php echo (($segment1 == "report") ? "active" : null) ?>"
-                        style="<?php if(in_array(120,$module) || in_array(430,$module) || in_array(123,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
+                        style="<?php if(in_array(120,$module) || in_array(430,$module) || in_array(122,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
                         <a href="<?php echo base_url('report/index')?>">
                             <i class="fa fa-bar-chart"
                                 style="color:#fff;font-size:15px;background:#69f794;padding:7px;border-radius:4px;width:30px;"></i>
