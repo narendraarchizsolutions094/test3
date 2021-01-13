@@ -107,6 +107,14 @@ if($root=='https://student.spaceinternationals.com'){  ?>
 
     <script src="<?php echo base_url('assets/js/jquery.min.js?v=1.0') ?>" type="text/javascript"></script>
 
+<script type="text/javascript">
+  window.getCookie = function(name) {
+  var match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+  if (match) return match[2];
+  else return false;
+}
+</script>
+
 
     <?php //echo $this->session->telephony_token;
       if (!empty($this->session->ameyo['sessionId'])) { ?>
@@ -793,7 +801,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                     <style>
                     #center_logoimg {
                         position: absolute;
-                        top: -100px;
+                        top: -50px;
                         right: -440px;
                         width: 200px;
                     }
@@ -1323,7 +1331,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                         <a href="<?=base_url('client/company_list')?>">
                             <i class="fa fa-building"
                                 style="color:#fff;font-size:20px;background:#cb6161;padding:7px;border-radius:4px;width:30px;"></i>
-                            <?=display('comany_list')?>
+                            <?=display('company_list')?>
                         </a>
                     </li>
                     <?php
@@ -1838,7 +1846,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                     </li>
 
                     <li class="treeview <?php echo (($segment1 == "report") ? "active" : null) ?>"
-                        style="<?php if(in_array(120,$module) || in_array(430,$module) || in_array(123,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
+                        style="<?php if(in_array(120,$module) || in_array(430,$module) || in_array(122,$module)){ echo 'display:block;';}else{echo 'display:none;';}?>">
                         <a href="<?php echo base_url('report/index')?>">
                             <i class="fa fa-bar-chart"
                                 style="color:#fff;font-size:15px;background:#69f794;padding:7px;border-radius:4px;width:30px;"></i>

@@ -311,12 +311,30 @@ if($this->session->companey_id == 65){ ?>
           ticketno:"<?=$ticket->ticketno?>",
           client:"<?=$ticket->client?>"
         },
+        beforeSend:function(){
+          Swal.fire({
+              title:'Please Wait..',
+              imageUrl:'https://mir-s3-cdn-cf.behance.net/project_modules/disp/35771931234507.564a1d2403b3a.gif',
+              imageWidth: 110,
+              imageHeight: 110,
+              showConfirmButton:false,
+              allowEscapeKey : false,
+              allowOutsideClick: false
+
+          });
+        },
         success: function(result) {
+            Swal.close();
           $("select[name='ticket_status']").val(status);
           $("select[name='quick_ticket_status']").val(status);
+          //alert(status);
+          if(status=='3')
+            var msg = 'Ticket Closed Successfully.';
+          else 
+            var msg = 'Status Changed Successfully!';
           Swal.fire(
             'Good job!',
-            'Status Changed Successfully!',
+            msg,
             'success'
           ).then((result)=>{
             if(e.hasClass('quick_btn')){

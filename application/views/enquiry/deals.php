@@ -77,7 +77,14 @@ $variable=explode(',',$_COOKIE['deals_filter_setting']);
                     </li>                   
                 </ul>                
             </div>
-
+           <div class="btn-group" role="group" aria-label="Button group">
+              <a class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-expanded="false" title="Actions">
+                <i class="fa fa-sliders"></i>
+              </a>  
+            <div class="dropdown-menu dropdown_css" style="max-height: 400px;overflow: auto; left: -136px;">
+               <a class="btn" data-toggle="modal" data-target="#table-col-conf" style="color:#000;cursor:pointer;border-radius: 2px;border-bottom: 1px solid #fff;">Table Config</a>                        
+            </div>                                         
+          </div>
 		</div>
 </div>
 
@@ -208,26 +215,26 @@ $('input[name="filter_checkbox"]').click(function(){
 				     <thead class="thead-light">
                <tr>                              
                   <th>S.N.</th>
-                  <th>Name</th>
-                  <th>Branch Type</th>
-                  <th>Business Type</th>
-                  <th>Booking Type</th>
-                  <th>Booking Branch</th>
-                  <th>Delivery Branch</th>
-                  <th>Rate</th>
-                  <th>Discount</th>
-                  <th>Insurance</th>
-                  <th>Paymode</th>
-                  <th>Potential Tonnage</th>
-                  <th>Potential Amount</th>
-                  <th>Expected  Tonnage</th>
-                  <th>Expected  Amount</th>
-                  <th>Vehicle Type</th>
-                  <th>Vehicle Carrying Capacity</th>
-                  <th>Invoice Value</th>
-                  <th>Create Date</th>
-                  <th>Status</th>
-                  <th>Action</th>
+                  <th id="th-1">Name</th>
+                  <th id="th-2">Branch Type</th>
+                  <th id="th-3">Business Type</th>
+                  <th id="th-4">Booking Type</th>
+                  <th id="th-5">Booking Branch</th>
+                  <th id="th-6">Delivery Branch</th>
+                  <th id="th-7">Rate</th>
+                  <th id="th-8">Discount</th>
+                  <th id="th-9">Insurance</th>
+                  <th id="th-10">Paymode</th>
+                  <th id="th-11">Potential Tonnage</th>
+                  <th id="th-12">Potential Amount</th>
+                  <th id="th-13">Expected  Tonnage</th>
+                  <th id="th-14">Expected  Amount</th>
+                  <th id="th-15">Vehicle Type</th>
+                  <th id="th-16">Vehicle Carrying Capacity</th>
+                  <th id="th-17">Invoice Value</th>
+                  <th id="th-18">Create Date</th>
+                  <th id="th-19">Status</th>
+                  <th id="th-20">Action</th>
                </tr>
             </thead>
 				      <tbody>
@@ -237,7 +244,8 @@ $('input[name="filter_checkbox"]').click(function(){
 </div>
 
 <script type="text/javascript">
-
+var c = getCookie('deals_allowcols');
+//alert(c);
 var specific_list = "<?=!empty($this->uri->segment(3))?$this->uri->segment(3):''?>";
 
 specific_list = atob(specific_list);
@@ -275,6 +283,10 @@ $(document).ready(function(){
                      d.view_all=true;
                      d.specific_list = specific_list;
                      TempData = d;
+
+                      if(c && c!='')
+                      d.allow_cols = c;
+
                      console.log(JSON.stringify(d));
                     return d;
               }
@@ -649,6 +661,93 @@ $('#infotype').on('change', function() {
    </div>
 </div>
 
+
+<div id="table-col-conf" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-lg" style="width: 96%;">
+ 
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Table Column Configuration</h4>
+      </div>
+       <div class="modal-body">         
+           <div class="row">
+             <div class="col-md-3">
+                <label class=""><input type="checkbox" id="selectall" onclick="select_all()">&nbsp;Select All</label>
+             </div>
+           </div>
+            <hr>
+          <div class="row">
+            <div class="col-md-4">
+              <label class=""><input type="checkbox" class="choose-col" value="1"> Name</label>
+            </div>
+            <div class="col-md-4">
+              <label class=""><input type="checkbox" class="choose-col" value="2"> Branch Type</label>
+            </div>
+            <div class="col-md-4">
+              <label class=""><input type="checkbox" class="choose-col" value="3"> Business Type</label>
+            </div>
+            <div class="col-md-4">
+              <label class=""><input type="checkbox" class="choose-col" value="4"> Booking Type</label>
+            </div>
+            <div class="col-md-4">
+              <label class=""><input type="checkbox" class="choose-col" value="5"> Booking Branch</label>
+            </div>
+             <div class="col-md-4">
+              <label class=""><input type="checkbox" class="choose-col" value="6"> Delivery Branch</label>
+            </div>
+            <div class="col-md-4">
+              <label class=""><input type="checkbox" class="choose-col" value="7"> Rate</label>
+            </div>
+            <div class="col-md-4">
+              <label class=""><input type="checkbox" class="choose-col" value="8"> Discount</label>
+            </div>
+            <div class="col-md-4">
+              <label class=""><input type="checkbox" class="choose-col" value="9"> Insurance Location</label>
+            </div>
+            <div class="col-md-4">
+              <label class=""><input type="checkbox" class="choose-col" value="10"> Paymode</label>
+            </div>
+
+             <div class="col-md-4">
+              <label class=""><input type="checkbox" class="choose-col" value="11"> Potential Tonnage</label>
+            </div>
+             <div class="col-md-4">
+              <label class=""><input type="checkbox" class="choose-col" value="12"> Potential Amount</label>
+            </div>
+            <div class="col-md-4">
+              <label class=""><input type="checkbox" class="choose-col" value="13"> Expected  Tonnage</label>
+            </div>
+            <div class="col-md-4">
+              <label class=""><input type="checkbox" class="choose-col" value="14"> Expected  Amount</label>
+            </div>
+            <div class="col-md-4">
+              <label class=""><input type="checkbox" class="choose-col" value="15"> Vehicle Type</label>
+            </div>
+            <div class="col-md-4">
+              <label class=""><input type="checkbox" class="choose-col" value="16"> Vehicle Carrying Capacity</label>
+            </div>
+            <div class="col-md-4">
+              <label class=""><input type="checkbox" class="choose-col" value="17"> Invoice Value</label>
+            </div>
+            <div class="col-md-4">
+              <label class=""><input type="checkbox" class="choose-col" value="18"> Create Date</label>
+            </div>
+            <div class="col-md-4">
+              <label class=""><input type="checkbox" class="choose-col" value="19"> Status</label>
+            </div>
+            <div class="col-md-4">
+              <label class=""><input type="checkbox" class="choose-col" value="20"> Action</label>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-success" onclick="save_table_conf()"><i class="fa fa-save"></i> Save</button>
+    </div>
+  </div>
+</div>
+
 <script>
 
 function quotation_pdf(typeId,enqid) {
@@ -693,4 +792,65 @@ function quotation_pdf(typeId,enqid) {
           $("select[name=enquiry_id]").html(l);
       }
   }
+
+
+
+function save_table_conf()
+{
+      var x = $(".choose-col:checked");
+      var Ary = new Array();
+      $(x).each(function(k,v){
+        Ary.push(v.value);
+      });
+      var list = Ary.join(',');
+      //alert(list);
+      document.cookie = "deals_allowcols="+list+"; expires=Thu, 18 Dec 2053 12:00:00 UTC; path=/";
+      Swal.fire({
+        title:'Table Configuration Saved.',
+        icon:'success',
+        type:'success',
+
+      });
+      location.reload();
+}
+
+if(c && c!='')
+{ 
+    var z = c.split(',');
+    //alert(z.length);
+    if($('.choose-col').length == z.length)
+        $('#selectall').prop('checked',true);
+
+    $("th[id*=th-").addClass('rmv');
+    $(z).each(function(k,v){
+        $('.choose-col[value='+v+']').prop('checked',true);
+        $('#th-'+v).removeClass('rmv');
+     });
+    $('.rmv').remove();
+}
+else
+{
+  $('.choose-col').prop('checked',true);
+  $('#selectall').prop('checked',true);
+
+}
+
+$("#selectall").click(function(){
+    if(this.checked)
+    {
+      $('.choose-col').prop('checked',true);
+    }
+    else
+    {
+      $('.choose-col').prop('checked',false);
+    }
+});
+
+$('.choose-col').change(function(){
+    if($('.choose-col').length == $('.choose-col:checked').length)
+        $('#selectall').prop('checked',true);
+    else
+      $('#selectall').prop('checked',false);
+});
+
 </script>

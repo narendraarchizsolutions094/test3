@@ -1817,4 +1817,96 @@ public function view_editable_aggrement()
             $i++;
         }
     }
+
+    public function contacts_load_data()
+    {
+        //print_r($_POST); exit(); 
+        $this->load->model('contacts_datatable_model');
+        $result = $this->contacts_datatable_model->getRows($_POST);
+        //echo $this->db->last_query(); exit();
+        //print_r($result); exit();
+        $colsall  = true;
+        $cols = array();
+        if(!empty($_POST['allow_cols']))
+        {
+            $cols  = explode(',',$_POST['allow_cols']);
+            $colsall = false;
+        }
+        //print_r($cols); exit();
+        $data = array();
+        foreach ($result as $res)
+        {
+            $sub = array();
+
+            $sub[] = $res->sr_no;
+
+            if(!empty($_POST['view_all']))
+            {
+                if($res->status=='1')
+                    $url = base_url('enquiry/view/').$res->enquiry_id;
+                else if($res->status=='2')
+                    $url = base_url('lead/lead_details/').$res->enquiry_id;
+                else if($res->status=='3')
+                    $url = base_url('client/view/').$res->enquiry_id;
+                else
+                    $url = base_url('client/view/').$res->enquiry_id;
+
+                if($colsall || in_array(1,$cols))
+                    $sub[] = '<a href="'.$url.'">'.$res->enq_name.'</a>'??'NA';
+            }
+           
+            if($colsall || in_array(2,$cols))
+                $sub[] = $row->company??'NA';
+
+            if($colsall || in_array(3,$cols))
+                $sub[] = $row->designation??'NA';
+            
+            if($colsall || in_array(4,$cols))
+                $sub[] = $res->cc_name??'NA';
+
+            if($colsall || in_array(5,$cols))
+                $sub[] = trim($res->contact_number)?$res->contact_number:'NA';
+
+            if($colsall || in_array(6,$cols))
+                $sub[] = $res->emailid??'NA';
+
+            if($colsall || in_array(7,$cols))
+                $sub[] = $res->decision_maker?'Yes':'No';
+
+            if($colsall || in_array(8,$cols))
+            $sub[] = trim($res->other_detail)?$res->other_detail:'NA';
+
+            if($colsall || in_array(9,$cols))
+                $sub[] = $res->created_at??'NA';
+
+            if($colsall || in_array(10,$cols))
+            {
+                $html = '';
+                $html.='<td style="width:50px;">
+                                            <div class="btn-group">';
+                  if(user_access('1012'))
+                  {
+                    $html.='<button class="btn btn-warning btn-xs" data-cc-id="'.$res->cc_id.'" onclick="edit_contact(this)">
+                      <i class="fa fa-edit"></i>
+                    </button>';
+                  }
+                  if(user_access('1011'))
+                  {
+                    $html.='<button class="btn btn-danger btn-xs"  data-cc-id="'.$res->cc_id.'" onclick="deleteContact(this)">
+                      <i class="fa fa-trash"></i>
+                    </button>';
+                  }
+                $sub[]=$html;
+            }
+            $data[] =$sub;
+        }
+
+        $output = array(
+            "draw" => $_POST['draw'],
+            "recordsTotal" =>$this->contacts_datatable_model->countAll(),
+            "recordsFiltered" => $this->contacts_datatable_model->countFiltered($_POST),
+            "data" => $data,
+        );
+        echo json_encode($output);
+    }
 }

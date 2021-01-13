@@ -1930,7 +1930,7 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                         </div>
                         <div class="form-group col-sm-6"> 
                            <label id="textdisplay2">Delivery Branch</label>
-                           <select class="form-control" name="delivery_branch" id="delivery_branch" >
+                           <select class="form-control" name="delivery_branch[]" id="delivery_branch" multiple required>
                               <option value="">-Select-</option>
                               <?php  
                               foreach($branch as $dbranch){ ?>
@@ -2018,34 +2018,64 @@ function update_info_status(id,status)
         });
 }
 
+
 $('#delivery_branch').on('change', function() {
-            var delivery_branch = $("select[name='delivery_branch']").val();
+
+            var delivery_branch = $("select[name='delivery_branch[]']").val()??[];
             var booking_branch = $("select[name='booking_branch']").val();
-            $.ajax({
-            type: 'POST',
-            url: '<?php echo base_url();?>enquiry/get_rate',
-            data: {delivery_branch:delivery_branch,booking_branch:booking_branch},
-            success:function(data){
-                var obj = JSON.parse(data);
-                $("#rate").val(obj.rate);
+            
+            delivery_branch =  delivery_branch.join(',');
+
+            if(delivery_branch.includes(',') || delivery_branch=='')
+            {
+                $("#rate").closest('.form-group').hide();
+                $("#potential_amount").closest(".form-group").hide();
+                $("#expected_amount").closest(".form-group").hide();
             }
-            });
+            else
+            { 
+                $("#rate").closest('.form-group').show();
+                $("#potential_amount").closest(".form-group").show();
+                $("#expected_amount").closest(".form-group").show();
+
+                 $.ajax({
+                  type: 'POST',
+                  url: '<?php echo base_url();?>enquiry/get_rate',
+                  data: {delivery_branch:delivery_branch,booking_branch:booking_branch},
+                  success:function(data){
+                      var obj = JSON.parse(data);
+
+                      $("#rate").val(obj.rate);
+                  }
+                  });
+            }
+            
             });
 
 $('#potential_tonnage').on('change', function() {
+                var discount = $("#discount").val();
+
                 var rate = document.getElementById('rate').value;           
                 var potential_tonnage = document.getElementById('potential_tonnage').value;    
                 var weightinKg= potential_tonnage*1000;       
                var total_ptAmount=weightinKg*rate;
                // alert(total_ptAmount);
+                total_ptAmount =  (total_ptAmount - ((total_ptAmount * discount)/100));
+                total_ptAmount = total_ptAmount.toFixed(2);
+
                         $("#potential_amount").val(total_ptAmount);
                     });
-                    $('#expected_tonnage').on('change', function() {
+
+  $('#expected_tonnage').on('change', function() {
+               var discount = $("#discount").val();
                 var rate = document.getElementById('rate').value;           
                 var expected_tonnage = document.getElementById('expected_tonnage').value;    
                 var weightinKg= expected_tonnage*1000;       
                var total_extAmount=weightinKg*rate;
                // alert(total_ptAmount);
+
+                total_extAmount =  (total_extAmount - ((total_extAmount * discount)/100));
+                total_extAmount = total_extAmount.toFixed(2);
                         $("#expected_amount").val(total_extAmount);
                     });
 
@@ -2071,6 +2101,9 @@ $('#infotype').on('change', function() {
   </script>
 <script>
    $(document).ready(function(){
+    var dl = document.getElementById('delivery_branch');
+    var event = new Event('change'); 
+    dl.dispatchEvent(event);
     $('#booking_type').on('change', function() {
       if ( this.value == '1')
       {
@@ -5724,8 +5757,11 @@ jQuery(document).ready(function(){
    $("ul.nav-tabs > li").on("shown.bs.tab", function(e) {
       var id = $(e.target).attr("href").substr(1);
       window.location.hash = id;
+      setTimeout(function() {
+         window.scrollTo(0, 0);           
+         $(".col-height").scrollTop(0);
+      },0);
    });
-
    // on load of the page: switch to the currently selected tab
    var hash = window.location.hash;   
    if(hash==''){

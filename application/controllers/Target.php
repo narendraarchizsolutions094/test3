@@ -444,7 +444,7 @@ class Target extends CI_controller
 			redirect(base_url('Target/index'));
 		}	
 	}
-	public function delete_goal($gaol_id)
+	public function delete_goal($goal_id)
 	{
 		if(user_role('264')){}
 		$this->db->where('goal_id',$goal_id)->delete('tbl_goals');

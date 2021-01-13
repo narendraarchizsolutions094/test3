@@ -1319,11 +1319,14 @@ class Enquiry extends CI_Controller
                    <div class="cbp_tmlabel"  style="background:#95a5a6;">
                     <span style="font-weight:900;font-size:15px;">' . ucfirst($comments->comment_msg) . '</span></br>';
                 if ($comments->comment_msg == 'Stage Updated') {
-                    $html .=  '<span style="font-weight:900;font-size:12px;">' . ucfirst($comments->lead_stage_name) . '</span>
-                    </br>
-                    <span style="font-weight:900;font-size:10px;">' . ucfirst($comments->description) . '</span>
-                    </br>
-                    <span style="font-weight:900;font-size:10px;">' . ucfirst($comments->remark) . '</span>';
+                    $html .=  '<span style="font-weight:900;font-size:12px;"> ' . ucfirst($comments->lead_stage_name) . '</span>';
+                    if(trim($comments->description))
+                    $html.='</br>
+                    <span style="font-weight:900;font-size:10px;">' . ucfirst($comments->description) . '</span>';
+                     if(trim($comments->remark))
+                    $html.='</br>
+                    <span style="font-weight:900;font-size:10px;"><big>Remarks:</big> ' . ucfirst($comments->remark) . '</span>';
+
                 }
                 $html .= '<p>' . date("j-M-Y h:i:s a", strtotime($comments->ddate)) . '<br>
                     Updated By : <strong>' . ucfirst($comments->comment_created_by . ' ' . $comments->lastname) . '</strong></p>
@@ -1739,7 +1742,7 @@ Array
                     //insert follow up counter (2 is for lead )
                     $this->enquiry_model->insetFollowupTime($key, 2, $enq->created_date, date('Y-m-d H:i:s'));
                 }
-                echo '1';
+                echo 1;
             } else {
                 echo "Please Check Enquiry";
             }
@@ -3096,68 +3099,104 @@ public function timelinePopup()
 }
  public function insertCommercialInfo()
  {
+    //print_r($_POST); exit();
     $enquiry_id=$this->input->post('enquiry_id');
     $infoid=$this->input->post('infoid');
+
     if(empty($infoid)){
-    $comp_id=$this->session->companey_id;
-    $type=$this->input->post('type');
-    $booking_type=$this->input->post('booking_type');
-    $business_type=$this->input->post('business_type');
-    $booking_branch=$this->input->post('booking_branch');
-    $delivery_branch=$this->input->post('delivery_branch');
-    $insurance=$this->input->post('insurance');
-    $rate=$this->input->post('rate');
-    $discount=$this->input->post('discount');
-    $paymode=$this->input->post('paymode');
-    $potential_tonnage=$this->input->post('potential_tonnage');
-    $potential_amount=$this->input->post('potential_amount');
-    $expected_tonnage=$this->input->post('expected_tonnage');
-    $expected_amount=$this->input->post('expected_amount');
-    $vehicle_type=$this->input->post('vehicle_type');
-    $capacity=$this->input->post('capacity');
-    $invoice_value=$this->input->post('invoice_value');
-    $ftlpotential_amount=$this->input->post('ftlpotential_amount');
-    $ftlexpected_amount=$this->input->post('ftlexpected_amount');
-    $invoice_value=$this->input->post('invoice_value');
-    $url=base_url('enquiry/view/'.$enquiry_id.'');
-    if($booking_type==0){
-     $data=[ 'enquiry_id'=>$enquiry_id,
-            'branch_type'=>$type,
-            'booking_type'=>$booking_type,
-            'business_type'=>$business_type,
-            'booking_branch'=>$booking_branch,
-            'delivery_branch'=>$delivery_branch,
-            'rate'=>$rate,
-            'discount'=>$discount,
-            'insurance'=>$insurance,
-            'paymode'=>$paymode,
-            'potential_tonnage'=>$potential_tonnage,
-            'potential_amount'=>$potential_amount,
-            'expected_tonnage'=>$expected_tonnage,
-            'expected_amount'=>$expected_amount,
-            'createdby'=>$this->session->userdata('user_id'),
-            'comp_id'=>$comp_id
-          ];
-        }elseif($booking_type==1){
-            $data=[ 'enquiry_id'=>$enquiry_id,
-            'branch_type'=>$type,
-            'booking_type'=>$booking_type,
-            'business_type'=>$business_type,
-            'booking_branch'=>$booking_branch,
-            'delivery_branch'=>$delivery_branch,
-            'insurance'=>$insurance,
-            'paymode'=>$paymode,
-            'potential_amount'=>$ftlpotential_amount,
-            'expected_amount'=>$ftlexpected_amount,
-            'vehicle_type'=>$vehicle_type,
-            'carrying_capacity'=>$capacity,
-            'invoice_value'=>$invoice_value,
-            'createdby'=>$this->session->userdata('user_id'),
-            'comp_id'=>$comp_id
-          ]; 
-         
+
+        $delivery_branch=$this->input->post('delivery_branch');
+        $discount=$this->input->post('discount')??0;
+        $potential_tonnage=$this->input->post('potential_tonnage')??0;   
+        $expected_tonnage=$this->input->post('expected_tonnage')??0;
+
+        //print_r($delivery_branch); exit();
+        $del_count = count($delivery_branch);
+        foreach ($delivery_branch as $delivery_branch)
+        {
+            $comp_id=$this->session->companey_id;
+            $type=$this->input->post('type');
+            $booking_type=$this->input->post('booking_type');
+            $business_type=$this->input->post('business_type');
+            $booking_branch=$this->input->post('booking_branch');
+            if($del_count>1)
+            {
+                $rate = 0;
+                $getrate= $this->db->where(array('booking_branch'=>$booking_branch,'delivery_branch'=>$delivery_branch))->get('branchwise_rate')->row();
+                if(!empty($getrate) && !empty($getrate->rate))
+                    $rate = $getrate->rate;
+
+                $x = $rate * $potential_tonnage * 1000;
+                $y = $rate * $expected_tonnage * 1000;
+
+                $potential_amount = round($x - (( $x * $discount )/100),2);
+                $expected_amount = round($y - (( $y * $discount )/100),2);
+
+
+            }
+            else
+            {
+                $rate = $this->input->post('rate');
+                $potential_amount=$this->input->post('potential_amount');
+                $expected_amount=$this->input->post('expected_amount');
+            }
+
+
+
+            $insurance=$this->input->post('insurance');
+            
+
+            $paymode=$this->input->post('paymode');
+                    
+            $vehicle_type=$this->input->post('vehicle_type');
+            $capacity=$this->input->post('capacity');
+            $invoice_value=$this->input->post('invoice_value');
+            $ftlpotential_amount=$this->input->post('ftlpotential_amount');
+            $ftlexpected_amount=$this->input->post('ftlexpected_amount');
+            $invoice_value=$this->input->post('invoice_value');
+            $url=base_url('enquiry/view/'.$enquiry_id.'');
+            if($booking_type==0){
+             $data=[ 'enquiry_id'=>$enquiry_id,
+                    'branch_type'=>$type,
+                    'booking_type'=>$booking_type,
+                    'business_type'=>$business_type,
+                    'booking_branch'=>$booking_branch,
+                    'delivery_branch'=>$delivery_branch,
+                    'rate'=>$rate,
+                    'discount'=>$discount,
+                    'insurance'=>$insurance,
+                    'paymode'=>$paymode,
+                    'potential_tonnage'=>$potential_tonnage,
+                    'potential_amount'=>$potential_amount,
+                    'expected_tonnage'=>$expected_tonnage,
+                    'expected_amount'=>$expected_amount,
+                    'createdby'=>$this->session->userdata('user_id'),
+                    'comp_id'=>$comp_id
+                  ];
+                }elseif($booking_type==1){
+                    $data=[ 'enquiry_id'=>$enquiry_id,
+                    'branch_type'=>$type,
+                    'booking_type'=>$booking_type,
+                    'business_type'=>$business_type,
+                    'booking_branch'=>$booking_branch,
+                    'delivery_branch'=>$delivery_branch,
+                    'insurance'=>$insurance,
+                    'paymode'=>$paymode,
+                    'potential_amount'=>$ftlpotential_amount,
+                    'expected_amount'=>$ftlexpected_amount,
+                    'vehicle_type'=>$vehicle_type,
+                    'carrying_capacity'=>$capacity,
+                    'invoice_value'=>$invoice_value,
+                    'createdby'=>$this->session->userdata('user_id'),
+                    'comp_id'=>$comp_id
+                  ]; 
+                 
+                }
+                $insert=$this->enquiry_model->insertComInfo($data);
         }
-          $insert=$this->enquiry_model->insertComInfo($data);
+
+        //exit();
+
         if($insert){
         $this->session->set_flashdata('message', 'Commercial information inserted successfully');
         
@@ -3227,6 +3266,8 @@ public function timelinePopup()
              
             }
               $insert=$this->db->where(array('comp_id'=>$comp_id,'id'=>$infoid))->update('commercial_info',$data);
+
+
             if($insert){
             $this->session->set_flashdata('message', 'Commercial information Updated successfully');
             redirect($url);
@@ -3409,14 +3450,27 @@ public function timelinePopup()
         $this->load->model('visit_datatable_model');
         $result = $this->visit_datatable_model->getRows($_POST);
         //echo $this->db->last_query(); exit();
+
+        $colsall  = true;
+        $cols = array();
+        if(!empty($_POST['allow_cols']))
+        {
+            $cols  = explode(',',$_POST['allow_cols']);
+            $colsall = false;
+        }
+        //print_r($cols); exit();
         $data = array();
         foreach ($result as $res)
         {
             $sub = array();
             $time = $res->visit_time=='00:00:00'?null:date("g:i a", strtotime($res->visit_time));
             $sub[] = $res->id;
-            $sub[] = $res->visit_date!='0000-00-00'?$res->visit_date:'NA';
-            $sub[] = $time??'NA';
+
+            if($colsall || in_array(1,$cols))
+                $sub[] = $res->visit_date!='0000-00-00'?$res->visit_date:'NA';
+
+            if($colsall || in_array(2,$cols))
+                $sub[] = $time??'NA';
 
             if(!empty($_POST['view_all']))
             {
@@ -3426,17 +3480,22 @@ public function timelinePopup()
                     $url = base_url('lead/lead_details/').$res->enquiry_id;
                 else if($res->enq_type=='3')
                     $url = base_url('client/view/').$res->enquiry_id;
-
-                $sub[] = '<a href="'.$url.'">'.$res->name.'</a>'??'NA';
+                if($colsall || in_array(3,$cols))
+                    $sub[] = '<a href="'.$url.'">'.$res->name.'</a>'??'NA';
             }
-
-            $sub[] = $res->travelled!=''?$res->travelled:'NA';
-            $sub[] = $res->travelled_type!=''?$res->travelled_type:'NA';
-            $sub[] = $res->rating!=''?$res->rating:'NA';
-            $sub[] = $res->next_date!='0000-00-00'?$res->next_date:'NA';
+            if($colsall || in_array(4,$cols))
+                $sub[] = $res->travelled!=''?$res->travelled:'NA';
+            if($colsall || in_array(5,$cols))
+                $sub[] = $res->travelled_type!=''?$res->travelled_type:'NA';
+            if($colsall || in_array(6,$cols))
+                $sub[] = $res->rating!=''?$res->rating:'NA';
+            if($colsall || in_array(7,$cols))
+                $sub[] = $res->next_date!='0000-00-00'?$res->next_date:'NA';
+            if($colsall || in_array(8,$cols))
             $sub[] = $res->next_location?$res->next_location:'NA';
 
-            $sub[] = user_access('1021')?"<a class='btn btn-xs btn-danger fa fa-trash visit-delete' href='javascript:void(0)' data-id='$res->id' data-ecode='$res->Enquery_id' ></a>":'';
+            if($colsall || in_array(9,$cols))
+                $sub[] = user_access('1021')?"<a class='btn btn-xs btn-danger fa fa-trash visit-delete' href='javascript:void(0)' data-id='$res->id' data-ecode='$res->Enquery_id' ></a>":'';
             $data[] =$sub;
         }
     
@@ -3455,6 +3514,15 @@ public function timelinePopup()
         $result = $this->Deals_datatable_model->getRows($_POST);
         //echo count($result); exit();
         //echo $this->db->last_query(); exit();
+
+        $colsall  = true;
+        $cols = array();
+        if(!empty($_POST['allow_cols']))
+        {
+            $cols  = explode(',',$_POST['allow_cols']);
+            $colsall = false;
+        }
+
         $data = array();
         foreach ($result as $value)
         {
@@ -3504,28 +3572,46 @@ public function timelinePopup()
                 else
                     $url = base_url('client/view/').$value->enquiry_id;
 
-                $sub[] = '<a href="'.$url.'">'.$value->name.'</a>'??'NA';
+                if($colsall || in_array(1,$cols))
+                    $sub[] = '<a href="'.$url.'">'.$value->name.'</a>'??'NA';
             }
-
+            if($colsall || in_array(2,$cols))
             $sub[] = $branch_type??'NA';
+            if($colsall || in_array(3,$cols))
             $sub[] = $booking_type??'NA';
+            if($colsall || in_array(4,$cols))
             $sub[] = $business_type??'NA';
+            if($colsall || in_array(5,$cols))
             $sub[] = $value->booking_branch_name??'NA';
+            if($colsall || in_array(6,$cols))
             $sub[] = $value->delivery_branch_name??'NA';
+            if($colsall || in_array(7,$cols))
             $sub[] = $value->rate??'NA';
+            if($colsall || in_array(8,$cols))
             $sub[] = $value->discount??'NA';
+            if($colsall || in_array(9,$cols))
             $sub[] = $insurance??'NA';
+            if($colsall || in_array(10,$cols))   
             $sub[] = $paymode??'NA';
+            if($colsall || in_array(11,$cols))
             $sub[] = $value->potential_tonnage??'NA';
-            
+            if($colsall || in_array(12,$cols))
             $sub[] = $value->potential_amount??'NA';
+            if($colsall || in_array(13,$cols))
             $sub[] = $value->expected_tonnage??'NA';
+            if($colsall || in_array(14,$cols))
             $sub[] = $value->expected_amount??'NA';
+            if($colsall || in_array(15,$cols))
             $sub[] = $value->vehicle_type??'NA';
+            if($colsall || in_array(16,$cols))
             $sub[] = $value->carrying_capacity??'NA';
+            if($colsall || in_array(17,$cols))
             $sub[] = $value->invoice_value??'NA';
+            if($colsall || in_array(18,$cols))
             $sub[] = !empty($value->creation_date)?date('d-M-Y H:i:s A',strtotime($value->creation_date)):'NA';
+
             $stts = $value->status;
+            if($colsall || in_array(19,$cols))
             $sub[] = '<label class="label label-'.($stts?($stts==1?'success"> Done':'danger">Deferred'):'warning">Pending').'</label>';
             $part2 = "";
             if(user_access('1002'))
@@ -3541,6 +3627,7 @@ public function timelinePopup()
 
             $part2.="<a class='btn btn-primary btn-xs' onclick='quotation_pdf(".$value->booking_type.",".$value->enquiry_id.")' style='cursor: pointer;' data-toggle='modal'  data-target='#downloadQuatation'><i class='fa fa-download'></i></a>
             ";
+            if($colsall || in_array(20,$cols))
             $sub[] =$part2;
             $data[] =$sub;
         }
