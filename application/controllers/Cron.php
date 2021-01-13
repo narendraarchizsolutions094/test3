@@ -79,9 +79,9 @@ redirect('cron');
 
 }
 
-public function msgsend_app($message='')
+public function msgsend_app()
 {
-    echo  $currentTime=date('Y-m-d H:i');
+      $currentTime=date('Y-m-d H:i');
     // if()
     // die();
     $schedule=$this->db->where('status',0)->get('scheduledata')->result();
