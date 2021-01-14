@@ -585,14 +585,15 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
             </a>
             <?php 
             } else { 
+
               $enquiry_separation  = get_sys_parameter('enquiry_separation','COMPANY_SETTING');
               if (!empty($enquiry_separation)) {
                 $enquiry_separation = json_decode($enquiry_separation,true);          
                 $curr_stage  = $enquiry->status;
                 $next_stage = $enquiry->status+1;      
               }
-
-              ?>                
+              ?>
+                             
                 <a class="btn btn-primary btn-sm"  data-toggle="modal" type="button" title="Send SMS" data-target="#sendsms<?php echo $enquiry->enquiry_id ?>" data-toggle="modal"  onclick="getTemplates('2','Send SMS')">
                 <i class="fa fa-paper-plane-o"></i>
                 </a>
@@ -602,7 +603,39 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                 <a class="btn btn-primary btn-sm"  data-toggle="modal" type="button" title="Send Whatsapp" data-target="#sendsms<?php echo $enquiry->enquiry_id ?>" data-toggle="modal"  onclick="getTemplates('1','Send Whatsapp')">
                 <i class="fa fa-whatsapp"></i>
                 </a>
-                <?php if($enquiry->status==1){ ?>
+               <?php   if ($this->session->companey_id==65) {   ?>         
+
+               <!-- // multiple move buttons  -->
+               <div class="dropdown" style="display: inline-block;"> 
+                  <button class="btn  btn-info btn-sm dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                  <i class="fa fa-thumbs-o-up"></i>
+                     <span class="caret"></span>
+                  </button>
+                  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1" style="margin-left: -70px;">
+                    <?php  if($enquiry->status!=2){
+                    ?>  <li><a title="Mark as <?=display('lead')?>"  data-target="#genLead" data-toggle="modal">Mark as <?=display('lead')?></a></li>
+                     <?php } ?>
+                    <?php  if($enquiry->status!=3){ ?>
+
+                     <li><a  title="Mark as <?=display('client')?>" href="<?=base_url().'lead/convert_to_lead/'.$enquiry->enquiry_id?>" onclick="return confirm('Are you sure you want to Mark this <?=display('lead')?> as <?=display('client')?> ?')" >Mark as <?=display('client')?></a></li>
+                    <?php }
+
+                    if (!empty($enquiry_separation)) {
+                     // $enquiry_separation = json_decode($enquiry_separation, true);
+                         foreach ($enquiry_separation as $key => $value) {
+                        if($enquiry->status!=$key){ ?>                   
+                       <li><a  title="" href="<?=base_url().'lead/convert_to_lead/'.$enquiry->enquiry_id?>" onclick="return confirm('Are you sure you want to Mark this <?=display('client')?> as <?=$enquiry_separation[$key]['title']?> ?')" >Mark as <?=$enquiry_separation[$key]['title']?></i>
+                        </a></li>
+                    <?php     } }
+                   }  ?>
+                  </ul>
+                  </div>  
+               <!-- // multiple move buttons end  -->
+               <a class="btn btn-danger btn-sm"  type="button" title="Drop Lead" data-target="#dropEnquiry" data-toggle="modal">
+                  <i class="fa fa-thumbs-o-down"></i>
+                </a>
+                <?php }else{
+                   if($enquiry->status==1){ ?>
                 
                 <a class="btn  btn-info btn-sm"  type="button" title="Mark as <?=display('lead')?>"  data-target="#genLead" data-toggle="modal">
                 <i class="fa fa-thumbs-o-up"></i>
@@ -620,6 +653,7 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                   <?php
                 }elseif ($enquiry->status==3) { 
                   if (!empty($enquiry_separation)) {
+
                     if (!empty($enquiry_separation[$next_stage])) {
                        ?>                   
                         <a class="btn  btn-info btn-sm" title="Mark as <?=$enquiry_separation[$next_stage]['title']?>" href="<?=base_url().'lead/convert_to_lead/'.$enquiry->enquiry_id?>" onclick="return confirm('Are you sure you want to Mark this <?=display('client')?> as <?=$enquiry_separation[$next_stage]['title']?> ?')" > <i class="fa <?=$enquiry_separation[$next_stage]['icon']?>"></i>
@@ -647,11 +681,13 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                     <?php
                   }
                 }
+               }
                 ?>                
                 <?php 
 
             }
             ?>
+       
             <a class="btn btn-sm  btn-info" title="disposition" id="disposition" href="#" data-toggle="modal" data-target="#dispo_modal" onclick="show_disposition();">
             <i class="fa fa-bars"></i>
             </a>
@@ -3563,9 +3599,29 @@ if (document.getElementById('agg_same').checked)
                                                                    
                         </select>
                      </div>
+                     <div class="form-group col-md-6">  
+            <label>Select Employee</label> 
+            <div id="imgBack"></div>
+            <select class="form-control"  name="assign_employee">   
+               <option value="0">--Select--</option>                 
+            <?php foreach ($created_bylist as $user) { 
+                            
+                          if (!empty($user->user_permissions)) {
+                            $module=explode(',',$user->user_permissions);
+                          }                           
+                            
+                            ?>
+                            <option value="<?php echo $user->pk_i_admin_id; ?>">
+                              <?=$user->s_display_name ?>&nbsp;<?=$user->last_name.' - '.$user->s_user_email; ?>                                
+                            </option>
+                            <?php 
+                          //}
+                        } ?>                                                      
+            </select> 
+            </div>
                      <div class="form-group col-sm-12">  
                         <label><?php echo display('comments') ?></label>                  
-                        <input class="form-control" id="LastCommentGen" name="comment" type="text" placeholder="Enter comment">                
+                        <textarea class="form-control" id="LastCommentGen" name="comment" type="text" placeholder="Enter comment"></textarea>               
                      </div>
                      <div class="col-md-6"  id="save_button">
                         <div class="row">

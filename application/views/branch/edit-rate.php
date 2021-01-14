@@ -19,7 +19,7 @@
 
                 <select name="bbranch" class="form-control">
                  <?php
-                $branch= $this->db->where('comp_id',65)->get('branch')->result();
+                $branch= $this->db->where('comp_id',$this->session->companey_id)->get('branch')->result();
                  foreach ($branch as $key => $valueb) { ?>
                     <option value="<?= $valueb->branch_id ?>" <?php if($valueb->branch_id==$value->booking_branch){echo'selected';} ?>><?= $valueb->branch_name ?></option>
                    <?php
