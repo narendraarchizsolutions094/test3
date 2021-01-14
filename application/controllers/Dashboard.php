@@ -773,20 +773,12 @@ public function login_in_process(){
             $data['cmtdata'] = $this->dash_model->all_comments();
         }
         // $data['filterData']=json_encode(array()); 
-
         if(!empty($_POST)){
-            
-            $data['filterData']=json_encode(array(
-                'from_date'=>$_POST['from_date'],
-                'to_date'=>$_POST['to_date'],
-                'users'=>$_POST['users'],
-                'state_id'=>$_POST['state_id'],
-                'city_id'=>$_POST['city_id'],
-                              ));
-                  }else{
-                     $data['filterData']=json_encode(array()); 
-                  }
-                  
+            $filterData=array( 'from_date'=>$_POST['from_date'], 'to_date'=>$_POST['to_date'], 'users'=>$_POST['users'],'state_id'=>$_POST['state_id'],'city_id'=>$_POST['city_id']);
+            $data['filterData']=json_encode($filterData);
+            $this->session->set_userdata('filter',$filterData);
+            }else{   $data['filterData']=json_encode(array()); }
+                
         //lead
         $data['leadCount']=$this->dashboard_model->countLead(2);
         $data['leadSum']=$this->dashboard_model->dataLead(2);
@@ -799,9 +791,9 @@ public function login_in_process(){
         $data['enquiry_separation']  = get_sys_parameter('enquiry_separation', 'COMPANY_SETTING');
         $data['lead_score'] = $this->db->query('select * from lead_score limit 3')->result();
         // $data['content'] = $this->load->view('msg-log-dashboard-enquiry', $data, true);
-        
     //    print_r($data['filterData']);
     //    exit;
+     if($this->session->userdata('filter')){$data['fdata']=$this->session->userdata('filter'); }
         $data['content'] = $this->load->view('home', $data, true);	     
         $this->load->view('layout/main_wrapper', $data);
     }
