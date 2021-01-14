@@ -2686,8 +2686,9 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                     } else {
                         var phone_n = phone;
                     }
-                    console.log(phone_s);
+                    console.log(phone_s+'a');
                     var user_pho = "<?php echo '91'.$this->session->phone;?>";
+                    console.log(user_pho+'b');
                     if (phone_s == user_pho) {
                         $.ajax({
                             type: "POST",

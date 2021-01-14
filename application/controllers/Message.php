@@ -23,7 +23,7 @@ class Message extends CI_Controller {
     	    $res=$this->db->get('api_templates');
 			$q=$res->result();
     	    if(!empty($q)){
-    	        echo '<option value="0" selected style="display:none">Select Templates</option>';
+    	        // echo '<option value="0" selected style="display:none">Select Templates</option>';
     	    foreach($q as $value){
 				 $stage = explode(',', $value->stage);
 				 $process = explode(',', $value->process); 
@@ -321,10 +321,12 @@ class Message extends CI_Controller {
             }else{
 				//check schedule type is or not
 				if($schedule==1){
+					
               	$this->Message_models->sendwhatsapp($phone,$message); 
               	if($template_row['media']){	      	   
 					  $media_url = $template_row['media'];    
 					  if ($msg_from=='ticket') {
+						
 						//timeline add
 						$saveMsgTimelineId=$this->Message_models->AddMsgtimline($msgType,$ticketId,$user_id,$templates_id,$template_name,'Send Whatsapp');
 						//save logs
@@ -335,6 +337,8 @@ class Message extends CI_Controller {
 				  }
 				  //only for ticket
 				  if ($msg_from=='ticket') {
+					// print_r($message);
+					// die();
 					  //timeline add
 					  $saveMsgTimelineId=$this->Message_models->AddMsgtimline($msgType,$ticketId,$user_id,$templates_id,$template_name,'Send Whatsapp');
 					  //save logs
