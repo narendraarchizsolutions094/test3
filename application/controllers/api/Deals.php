@@ -421,6 +421,50 @@ class Deals extends REST_Controller {
   		  }
 
     }
+
+    public function delete_deal_post()
+    {
+    	$deal_id = $this->input->post('deal_id');
+    	$comp_id = $this->input->post('company_id');
+    	$enquiry_code = $this->input->post('enquiry_code');
+    	$user_id = $this->input->post('user_id');
+    	$this->form_validation->set_rules('deal_id','deal_id','required|trim');
+    	$this->form_validation->set_rules('company_id','company_id','required|trim');
+    	$this->form_validation->set_rules('enquiry_code','enquiry_code','required|trim');
+    	$this->form_validation->set_rules('user_id','user_id','required|trim');
+
+    	if($this->form_validation->run()==true)
+    	{
+    		$this->db->where(array('id'=>$deal_id,'comp_id'=>$comp_id));
+    		$this->db->delete('commercial_info');
+
+    		if($this->db->affected_rows())
+    		{
+	    		$this->load->model('Leads_Model');
+	        	$this->Leads_Model->add_comment_for_events('Commercial Info Deleted.',$enquiry_code,0,$user_id);
+
+    			$this->set_response([
+                  'status' => true,
+                  'message' =>'Deleted Successfully.',
+               ], REST_Controller::HTTP_OK);
+    		}
+    		else
+    		{
+    			$this->set_response([
+                  'status' => false,
+                  'message' =>'Deal Not found',
+               ], REST_Controller::HTTP_OK);
+    		}
+    	}
+  		else 
+        {		     
+  		     $this->set_response([
+                  'status' => false,
+                  'message' =>strip_tags(validation_errors())
+               ], REST_Controller::HTTP_OK);
+  		  }
+
+    }
     //===========================================================
    //  public function deals_info_type_post()
    //  {	
