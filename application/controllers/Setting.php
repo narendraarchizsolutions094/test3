@@ -262,30 +262,32 @@ public function addbranch()
 $branch=$this->input->post('branch');
 $status=$this->input->post('status');
 $branch_id=$this->input->post('branch_id');
+
 if (!empty($branch_id)) {
 	if (user_role('d35') == true) {
 	}
-$count=$this->db->where('branch_name',$branch)->where_not_in('branch_id',$branch_id)->count_all_results('branch');
+$count=$this->db->where(array('branch_name'=>$branch,'comp_id'=>$this->session->companey_id))->where_not_in('branch_id',$branch_id)->count_all_results('branch');
     if($count==0){
 		$data=['branch_name'=>$branch,'branch_status'=>$status,'updated_at'=>date('Y-m-d H:i:s')];
 		$insert=$this->db->where('branch_id',$branch_id)->update('branch',$data);
-			$this->session->set_flashdata('success','Branch Added');
+			$this->session->set_flashdata('message','Branch Updated');
 			redirect('setting/branchList');
 		}else{
-			$this->session->set_flashdata('error','Branch Already Added');
+			$this->session->set_flashdata('exception','Branch Already Added');
 			redirect('setting/branchList');
 		}
 }else{
 	if (user_role('d36') == true) {
 	}
-$count=$this->db->where('branch_name',$branch)->count_all_results('branch');
+ $count=$this->db->where(array('branch_name'=>$branch,'comp_id'=>$this->session->companey_id))->count_all_results('branch');
 if($count==0){
+	
 $data=['branch_name'=>$branch,'branch_status'=>$status,'created_by'=>$this->session->user_id,'comp_id'=>$this->session->companey_id];
 $insert=$this->db->insert('branch',$data);
-	$this->session->set_flashdata('success','Branch Added');
+	$this->session->set_flashdata('message','Branch Added');
 	redirect('setting/branchList');
 }else{
-	$this->session->set_flashdata('error','Branch Already Added');
+	$this->session->set_flashdata('exception','Branch Already Added');
 	redirect('setting/branchList');
 }
 }
@@ -295,7 +297,7 @@ public function branchList()
 	if (user_role('d37') == true) {
 	}
 	$data['page_title'] = 'Branch List';
-	$data['branch_list']=$this->db->where('comp_id',65)->get('branch')->result();
+	$data['branch_list']=$this->db->where('comp_id',$this->session->companey_id)->get('branch')->result();
 	$data['content'] = $this->load->view('branch/list',$data,true);
 	$this->load->view('layout/main_wrapper',$data);
 }
@@ -320,26 +322,26 @@ $rate=$this->input->post('rate');
 $status=$this->input->post('status');
 $id=$this->input->post('rateid');
 if ($dbranch==$bbranch) {
-	$this->session->set_flashdata('error','Select Different Delivery Branch');
+	$this->session->set_flashdata('exception','Select Different Delivery Branch');
 	redirect('setting/branch_rateList');
 }
 if(empty($id)){
 	if (user_role('d39') == true) {
 	}
-$count=$this->db->where(array('booking_branch'=>$bbranch,'delivery_branch'=>$dbranch))->count_all_results('branchwise_rate');
+$count=$this->db->where(array('booking_branch'=>$bbranch,'delivery_branch'=>$dbranch,'comp_id'=>$this->session->companey_id))->count_all_results('branchwise_rate');
 if($count==0){
     $data=['booking_branch'=>$bbranch,'rate'=>$rate,'delivery_branch'=>$dbranch,'rate_status'=>$status,'created_by'=>$this->session->user_id,'comp_id'=>$this->session->companey_id];
     $this->db->insert('branchwise_rate',$data);
-	$this->session->set_flashdata('success','Branch rate Added');
+	$this->session->set_flashdata('message','Branch rate Added');
 	redirect('setting/branch_rateList');
 }else{
-	$this->session->set_flashdata('error','Rate Already Added');
+	$this->session->set_flashdata('exception','Rate Already Added');
 	redirect('setting/branch_rateList');
 }
 }else{
 	if (user_role('e30') == true) {
 	}
-		$data=['booking_branch'=>$bbranch,'rate'=>$rate,'delivery_branch'=>$dbranch,'rate_status'=>$status];
+		$data=['booking_branch'=>$bbranch,'rate'=>$rate,'delivery_branch'=>$dbranch,'rate_status'=>$status,'comp_id'=>$this->session->companey_id];
     	$this->db->where(array('comp_id'=>$this->session->companey_id,'id'=>$id))->update('branchwise_rate',$data);
 		$this->session->set_flashdata('success','Branch rate updated');
 		redirect('setting/branch_rateList');
@@ -398,10 +400,10 @@ public function branch_delete()
 	$get=$this->db->where(array('branch_id'=>$branch_id,'comp_id'=>$this->session->companey_id))->get('branch');
 	if($get->num_rows()==1){
 		$this->db->where('branch_id',$branch_id)->delete('branch');
-		$this->session->set_flashdata('success','Branch Deleted');
+		$this->session->set_flashdata('message','Branch Deleted');
 	    redirect('setting/branchList');
 	}else{
-		$this->session->set_flashdata('error','Branch  not found');
+		$this->session->set_flashdata('exception','Branch  not found');
 	    redirect('setting/branchList');
 	}
 	
@@ -414,10 +416,10 @@ public function branchrate_delete()
 	$get=$this->db->where(array('id'=>$id,'comp_id'=>$this->session->companey_id))->get('branchwise_rate');
 	if($get->num_rows()==1){
 		$this->db->where(array('id'=>$id,'comp_id'=>$this->session->companey_id))->delete('branchwise_rate');
-		$this->session->set_flashdata('success','Rate Deleted');
+		$this->session->set_flashdata('message','Rate Deleted');
 	    redirect('setting/branch_rateList');
 	}else{
-		$this->session->set_flashdata('error','Rate  not found');
+		$this->session->set_flashdata('exception','Rate  not found');
 	    redirect('setting/branch_rateList');
 	}
 	
@@ -427,7 +429,7 @@ public function document_templates()
 	if (user_role('3143') == true) {
 	}
 	$data['page_title'] = 'Template List';
-	$data['list']=$this->db->where('comp_id',65)->get('tbl_docTemplate')->result();
+	$data['list']=$this->db->where('comp_id',$this->session->companey_id)->get('tbl_docTemplate')->result();
 	$data['content'] = $this->load->view('setting/document-templates',$data,true);
 	$this->load->view('layout/main_wrapper',$data);
 }
@@ -437,11 +439,11 @@ public function createdocument_templates()
 	}
 	$id=$this->uri->segment('3');
 	if(!empty($id)){
-	$data['docList']=$this->db->where(array('comp_id'=>65,'id'=>$id))->get('tbl_docTemplate')->result();
+	$data['docList']=$this->db->where(array('comp_id'=>$this->session->companey_id,'id'=>$id))->get('tbl_docTemplate')->result();
 	$data['page_title'] = 'Branch List';
 	$data['content'] = $this->load->view('setting/create-document-template',$data,true);
 	$this->load->view('layout/main_wrapper',$data);}else{
-		$this->session->set_flashdata('error','Template not found');
+		$this->session->set_flashdata('exception','Template not found');
 	    redirect('setting/document-templates');
 	}
 }
@@ -453,14 +455,14 @@ public function Insert_templates()
 	 $id=$this->input->post('docId');
 	 $title=$this->input->post('title');
 	$content=$this->input->post('content');
-	$count=$this->db->where(array('comp_id'=>65,'id'=>$id))->get('tbl_docTemplate');
+	$count=$this->db->where(array('comp_id'=>$this->session->companey_id,'id'=>$id))->get('tbl_docTemplate');
 	if($count->num_rows()==1){
-		$data=['title'=>$title,'content'=>$content,'doc_type'=>1,'created_by'=>$user_id,'comp_id'=>65];
-		$this->db->where(array('comp_id'=>65,'id'=>$id))->update('tbl_docTemplate',$data);
-		$this->session->set_flashdata('success','Template updated');
+		$data=['title'=>$title,'content'=>$content,'doc_type'=>1,'created_by'=>$user_id,'comp_id'=>$this->session->companey_id];
+		$this->db->where(array('comp_id'=>$this->session->companey_id,'id'=>$id))->update('tbl_docTemplate',$data);
+		$this->session->set_flashdata('message','Template updated');
 	    redirect('setting/document-templates');
 	}else{
-		$this->session->set_flashdata('error','Template not found');
+		$this->session->set_flashdata('exception','Template not found');
 	    redirect('setting/document-templates');
 	}
 }

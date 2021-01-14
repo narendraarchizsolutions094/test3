@@ -198,6 +198,11 @@ class Client extends CI_Controller {
         }else{
             $data['title'] =display('client');
         }
+        if($this->session->companey_id == 65 && $this->session->user_right == 215){
+			$data['created_bylist'] = $this->User_model->read(147,false);
+		}else{
+			$data['created_bylist'] = $this->User_model->read();
+		}  
         $data['content'] = $this->load->view('enquiry_details1', $data, true);
         $this->enquiry_model->assign_notification_update($enquiry_code);
         $this->load->view('layout/main_wrapper', $data);

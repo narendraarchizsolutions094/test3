@@ -47,7 +47,7 @@ a:hover, a:focus {
                 <label>Booking Branch </label>
                 <select name="bbranch" class="form-control">
                  <?php
-                $branch= $this->db->where('comp_id',65)->get('branch')->result();
+                $branch= $this->db->where('comp_id',$this->session->companey_id)->get('branch')->result();
                  foreach ($branch as $key => $value) { ?>
                     <option value="<?= $value->branch_id ?>"><?= $value->branch_name ?></option>
                    <?php

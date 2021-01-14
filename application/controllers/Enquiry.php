@@ -1279,7 +1279,11 @@ class Enquiry extends CI_Controller
             $data['commInfoCount']=0;
             $data['commInfoData']=array();
         }
-                            
+        if($this->session->companey_id == 65 && $this->session->user_right == 215){
+			$data['created_bylist'] = $this->User_model->read(147,false);
+		}else{
+			$data['created_bylist'] = $this->User_model->read();
+		}              
         $this->enquiry_model->make_enquiry_read($data['details']->Enquery_id);
         //echo"<pre>";print_r($data);die;
         $data['content'] = $this->load->view('enquiry_details1', $data, true);
@@ -1760,6 +1764,8 @@ Array
             $lead_discription = $this->input->post('lead_description');
             $comment = $this->input->post('comment');
             $expected_date = $this->input->post('expected_date');
+            $assign_employee = $this->input->post('assign_employee');
+
             if(!empty($expected_date))
                 $expected_date = date('Y-m-d h:i:s',strtotime($expected_date));
 
@@ -1809,13 +1815,19 @@ Array
             $this->db->set('lead_created_date', date('Y-m-d H:i:s'));
             $this->db->set('status', 2);
             $this->db->set('update_date', date('Y-m-d H:i:s'));
+            if ((!empty($assign_employee)) AND $assign_employee!=0) {
+                $this->db->set('aasign_to', $assign_employee);
+                $this->db->set('assign_by',$this->session->user_id);
+                }
             $this->db->where('enquiry_id', $move_enquiry);
             $this->db->update('enquiry');
            // echo $this->db->last_query(); exit();
             $this->load->model('rule_model');
             $this->rule_model->execute_rules($enquiry->row()->Enquery_id, array(1, 2, 3, 6, 7));
             $this->Leads_Model->add_comment_for_events($this->lang->line("move_to_lead"), $enquiry->row()->Enquery_id);
-           
+            if ((!empty($assign_employee)) AND $assign_employee!=0) {
+            $this->Leads_Model->add_comment_for_events($this->lang->line("enquery_assign"), $enquiry->row()->Enquery_id);
+            }
             //insert follow up counter (2 is for lead )
             $this->enquiry_model->insetFollowupTime($move_enquiry,2,$enquiry->row()->created_date,date('Y-m-d H:i:s'));
             
