@@ -142,7 +142,7 @@ class Enquiry_model extends CI_Model {
                               );
             }
             $basic[$key]['input_values'] = $values;
-            $basic[$key]['parameter_name'] = 'sub_source';
+            $basic[$key]['parameter_name'] = 'product_id';
             $basic[$key]['current_value'] = $enquiry->enquiry_subsource;
             break;
 
