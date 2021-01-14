@@ -467,7 +467,7 @@ class Ticket_Model extends CI_Model
 		if(!empty($_POST['filters']))
         {
 
-            $match_list = array('date_from','date_to','phone');
+            $match_list = array('date_from','date_to','update_from','update_to','phone');
 
             $this->db->group_start();
             foreach ($_POST['filters'] as $key => $value)
@@ -487,6 +487,13 @@ class Ticket_Model extends CI_Model
 
                       if($key=='date_to')
                         $this->db->where($fld.'<=',$value);
+
+                    if($key=='update_from')
+                        $this->db->where('last_update>=',$value);
+
+                      if($key=='update_to')
+                        $this->db->where('last_update<=',$value);
+
 
                       if($key=='phone')
                         $this->db->where('phone LIKE "%'.$value.'%"');

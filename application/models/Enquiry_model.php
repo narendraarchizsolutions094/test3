@@ -4473,6 +4473,7 @@ public function insertComInfo($data)
         $this->db->where("info.comp_id",$company_id);
         $this->db->where($where);
 
+        //echo $where;exit();
 
         if(!empty($_POST['filters']))
           {
@@ -4528,5 +4529,77 @@ public function insertComInfo($data)
         return $this->db->get();
 
   }
+
+
+  public function visit_list_api($company_id,$user_id,$process,$limit=-1,$offset=-1)
+  {
+       $all_reporting_ids    =   $this->common_model->get_categories($user_id);
+       $where = '';
+        $where .= " ( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
+        $where .= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))'; 
+        $where.=" AND enquiry.drop_status=0 and enquiry.product_id IN (".$process.")";
+
+        $this->db->select('tbl_visit.*,enquiry.name,enquiry.status as enq_type,enquiry.Enquery_id');
+        $this->db->from('tbl_visit');
+        $this->db->join('enquiry','enquiry.enquiry_id=tbl_visit.enquiry_id','left');
+        $this->db->where("tbl_visit.comp_id",$company_id);
+        $this->db->where($where);
+
+
+        if(!empty($_POST['filters']))
+          {
+
+              $match_list = array('date_from','date_to','phone');
+
+              $this->db->group_start();
+              foreach ($_POST['filters'] as $key => $value)
+              {
+                if(in_array($key,$match_list) || $this->db->field_exists($key, 'tbl_visit'))
+                {
+                    if(in_array($key, $match_list))
+                    {
+                        $fld = 'visit_date';
+                        // if($type=='2')
+                        //   $fld = 'lead_created_date';
+                        // else if($type=='3')
+                        //   $fld = 'client_created_date';
+
+                        if($key=='date_from')
+                          $this->db->where($fld.'>=',$value);
+
+                        if($key=='date_to')
+                          $this->db->where($fld.'<=',$value);
+
+                        // if($key=='phone')
+                        //   $this->db->where('phone LIKE "%'.$value.'%" OR other_phone LIKE "%'.$value.'%"');
+                    }
+                    else
+                    {
+                      if(is_int($value))
+                        $this->db->where($key,$value);
+                      else
+                        $this->db->where($key.' LIKE "%'.$value.'%"');
+                    } 
+                }
+                else
+                {
+                  $this->db->where('1=1');
+                }
+              }
+              $this->db->group_end();
+          }
+
+          //for pagination api
+
+          if($offset!=-1 && $limit!=-1)
+          {  
+              $this->db->limit($limit,$offset);
+          }
+
+
+        return $this->db->get();
+
+  }
+
 
 }
