@@ -4506,9 +4506,7 @@ $(".toogle-timeline").click(function(){
    function  send_sms(){   
       var sms_type = $("#mesge_type").val();
      $('#mesge_type').val(sms_type);    
-     var data= $('#whatsaap').serialize();
 
-   //   alert(data);
       //if ("<?=$this->session->companey_id?>" == 81 && sms_type!=1) {
        // url =  '<?php echo base_url();?>message/send_sms_career_ex';
       //}else{

@@ -169,35 +169,7 @@ function handleClick(myRadio) {
       $('#schedule_time').show();
    }
 }
-  // jquery
-// $(document).ready(function() {
-  jQuery(function($){ 
-		$('#datetimepicker').datetimepicker({ 
-				allowInputToggle: true,
-				showClose: true, //close the picker
-				format: 'YYYY-MM-DD HH:mm', //YYYY-MMM-DD LT
-				calendarWeeks: true,
-				inline: false,
-        sideBySide: true
-		});
-		$('#datetimepicker-sidebyside').datetimepicker({
-				showTodayButton: true,
-				showClose: true, //close the picker
-				showClear: true, //clear selection 
-				format: 'YYYY-MM-DD HH:mm', //YYYY-MMM-DD LT
-				calendarWeeks: true,
-				inline: true,
-				sideBySide: true
-		});
-		$('#datetimepicker-collapse').datetimepicker({
-				showClose: true, //close the picker
-				format: 'YYYY-MM-DD HH:mm', //YYYY-MMM-DD LT
-				calendarWeeks: true,
-				inline: true,
-				collapse: true
-		}); 
-}); 
-
+  
 </script>
 
 <?php 
@@ -270,6 +242,7 @@ function handleClick(myRadio) {
    } 
    function  send_sms(){   
      var sms_type = $("#mesge_type").val();
+      $('#mesge_type').val(sms_type);    
       if ("<?= $this->session->companey_id ?>" == 81 && sms_type!=1) {
         url =  '<?php echo base_url();?>message/send_sms_career_ex';
       }else{

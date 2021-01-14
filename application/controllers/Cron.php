@@ -67,6 +67,47 @@ redirect('cron');
 }
     
 }
+public function updateCron()
+{
+    if ($this->session->userdata('isLogIn') == false) 
+    redirect('login'); 
+require_once FCPATH.'third_party/vendor/autoload.php';
+date_default_timezone_set("Asia/kolkata");
+if($_POST){
+    $cid=$this->input->post('cid');
+    $minute=$this->input->post('minute');
+    $hour=$this->input->post('hour');
+    $day=$this->input->post('day');
+    $month=$this->input->post('month');
+    $weekday=$this->input->post('weekday');
+    $command=$this->input->post('command');
+    $url=$this->input->post('url');
+    $status=$this->input->post('status');
+    // Works with complex expressions
+    $cron = Cron\CronExpression::factory($command);
+    // print_r($cron);
+    $running_time= $cron->getNextRunDate()->format('Y-m-d H:i');
+    $data=[ 'minute'=>$minute,
+            'hour'=>$hour,
+            'day'=>$day,
+            'month'=>$month,
+            'weekday'=>$weekday,
+            'command'=>$command,
+            'comp_id'=>$this->session->companey_id,
+            'status'=>$status,
+            'created_by'=>$this->session->user_id,
+            'running_time'=>$running_time,
+            'url'=>$url];
+$this->db->where('id',$cid)->update('cronjobs',$data);
+$this->session->set_flashdata('message','Cron updated');
+redirect('cron');
+}else{
+    $data['title'] = 'Update Cron';
+    $data['cron']=$this->db->where('id',$cid)->get('cronjobs')->result();
+    $data['content'] = $this->load->view('cron/add-cron',$data,true);
+    $this->load->view('layout/main_wrapper',$data);
+}
+}
 public function delete_cron()
 {
   $id=$this->uri->segment('3');
@@ -108,7 +149,6 @@ public function msgsend_app()
          $this->db->where('id',$id)->update('scheduledata',$data);
                 }elseif($type==3){
                     //whatsapp send
-
             //    print_r($jsonmsg->message);
             $message=$jsonmsg->message;
             $cc=$jsonmsg->cc;
@@ -120,7 +160,9 @@ public function msgsend_app()
     $this->db->where('status',1);
     $email_row	=	$this->db->get('email_integration')->row_array();
     if(empty($email_row)){
-          echo "Email is not configured";
+        $$response= "Email is not configured";
+          $data=['status'=>1,'response'=>$response];
+          $this->db->where('id',$id)->update('scheduledata',$data);
           exit();
     }else{
         $config['smtp_auth']    = true;
