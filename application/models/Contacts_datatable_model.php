@@ -7,7 +7,7 @@ class Contacts_datatable_model extends CI_Model{
   
         $this->table = 'tbl_client_contacts';
         // Set orderable column fields
-        $this->column_order = array('sr_no','enquiry.name','enquiry.company','contacts.designation','contacts.c_name','contacts.contact_number','contacts.emailid','contacts.decision_maker','contacts.other_details','contacts.created_at');
+        $this->column_order = array('','enquiry.name','enquiry.company','contacts.designation','contacts.c_name','contacts.contact_number','contacts.emailid','contacts.decision_maker','contacts.other_details','contacts.created_at');
 
         // Set searchable column fields
 
@@ -91,7 +91,7 @@ class Contacts_datatable_model extends CI_Model{
         // if($where)
         //     $this->db->where($where);
 
-        $this->db->select('ROW_NUMBER() OVER (ORDER BY contacts.cc_id) as sr_no,contacts.*,enquiry.company,enquiry.enquiry_id,concat_ws(" ",name_prefix,name,lastname) as enq_name,enquiry.status');
+        $this->db->select('contacts.*,enquiry.company,enquiry.enquiry_id,concat_ws(" ",name_prefix,name,lastname) as enq_name,enquiry.status');
         $this->db->from('tbl_client_contacts contacts');
         $this->db->join('enquiry','enquiry.enquiry_id=contacts.client_id','inner');
         // $this->db->order_by('contacts.cc_id desc');
