@@ -195,16 +195,71 @@ class Visits extends REST_Controller {
 
     }
 
-    // public function for_data_list_post()
-    // {
+    public function for_data_list_post()
+    {
+    	$comp_id = $this->input->post('company_id');
+    	$user_id = $this->input->post('user_id');
+    	$this->form_validation->set_rules('company_id','company_id','required|trim');
+    	$this->form_validation->set_rules('user_id','user_id','required|trim');
+        if($this->form_validation->run()==true)
+        {
 
-    // 	$this->db->select('tbl_visit.*,enquiry.name');
-    //     $this->db->from($this->table);
-    //     $this->db->join('enquiry','enquiry.enquiry_id=tbl_visit.enquiry_id','left');
-    //     $this->db->where("tbl_visit.comp_id",$this->session->companey_id);
+        	$all_reporting_ids  = $this->common_model->get_categories($user_id);
 
-    //     $where="";
-    //     $where .= "( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
-    //     $where .= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';
-    // }
+	    	$this->db->select('tbl_visit.enquiry_id,CONCAT(enquiry.name," ",enquiry.lastname) as name');
+	        $this->db->from('tbl_visit');
+	        $this->db->join('enquiry','enquiry.enquiry_id=tbl_visit.enquiry_id','left');
+	        $this->db->where("tbl_visit.comp_id",$comp_id);
+
+	        $where="";
+	        $where .= "( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
+	        $where .= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';
+	        $this->db->where($where);
+	        $res = $this->db->get()->result();
+
+         	if(!empty($res))
+            {
+            	
+            	$this->set_response([
+                  'status' => true,
+                  'data' =>$res,
+               ], REST_Controller::HTTP_OK);
+			}
+            else
+            {
+				$this->set_response([
+                  'status' => FALSE,
+                  'message' =>'No data.',
+               ], REST_Controller::HTTP_OK);
+            }
+    	}
+  		else 
+        {		     
+  		     $this->set_response([
+                  'status' => false,
+                  'message' =>strip_tags(validation_errors())
+               ], REST_Controller::HTTP_OK);
+  		}
+    }
+
+    public function rating_list_post()
+    {
+    	$comp_id = $this->input->post('company_id');
+    	$this->form_validation->set_rules('company_id','company_id','required|trim');
+    	if($this->form_validation->run()==true)
+    	{
+    		$data = array('1 Star','2 Star','3 Star','4 Star','5 Star');
+    		$this->set_response([
+                  'status' => true,
+                  'data' =>$data,
+               ], REST_Controller::HTTP_OK);
+    	}
+    	else
+    	{
+    		$this->set_response([
+                  'status' => false,
+                  'message' =>strip_tags(validation_errors())
+               ], REST_Controller::HTTP_OK);
+    	}
+    }
 }
