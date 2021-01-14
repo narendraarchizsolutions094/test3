@@ -1073,7 +1073,6 @@ class Ticket extends REST_Controller {
     }
   }
 
-
   public function getTicketList_page_post()
   {      
     $company_id   = $this->input->post('company_id');
@@ -1117,7 +1116,7 @@ class Ticket extends REST_Controller {
       $msg = strip_tags(validation_errors());
       $this->set_response([
         'status'  => false,
-        'msg'     => $msg,//"Please provide a company id"
+        'msg'     => $msg,
       ],REST_Controller::HTTP_OK);
     } 
   }

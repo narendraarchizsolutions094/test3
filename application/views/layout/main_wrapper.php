@@ -1244,7 +1244,9 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                     }
                         ?>
 
-                         
+                            <?php
+                        //if ($this->session->companey_id == 65) {
+                        ?>
                         <?php  if (user_access('d37')) {  ?>
 
 
@@ -1277,7 +1279,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
                                     Reporting Location
                                 </a>
                             </li>
-                        <?php }  ?>
+                        <?php } //} ?>
                         </ul>
                     </li>
 

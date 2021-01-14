@@ -2313,8 +2313,8 @@ function moveto_client(){
   url: '<?php echo base_url();?>enquiry/move_to_client',
   data: $('#enquery_assing_from').serialize(),
   success:function(data){
-      if(data=='1'){
-           alert('Successfully Moved in <?=display('client')?>s'); 
+      if(data.trim()==1){
+        alert('Successfully Moved in <?=display('client')?>s'); 
         window.location.href='<?php echo base_url();?>led/index'
       }else{
        alert(data);

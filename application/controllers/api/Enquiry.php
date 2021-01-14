@@ -329,7 +329,7 @@ class Enquiry extends REST_Controller {
                               );
             }
             $basic[$key]['input_values'] = $values;
-            $basic[$key]['parameter_name'] = 'sub_source';
+            $basic[$key]['parameter_name'] = 'product_id';
             break;
             case 9:
             $state_list = $this->location_model->estate_list();

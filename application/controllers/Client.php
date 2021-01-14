@@ -1839,11 +1839,12 @@ public function view_editable_aggrement()
         }
         //print_r($cols); exit();
         $data = array();
+        $i=1;
         foreach ($result as $res)
         {
             $sub = array();
 
-            $sub[] = $res->sr_no;
+            $sub[] = $i++;
 
             if(!empty($_POST['view_all']))
             {

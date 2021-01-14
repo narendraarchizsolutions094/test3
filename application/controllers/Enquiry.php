@@ -199,7 +199,7 @@ class Enquiry extends CI_Controller
                         // $msg .=    " And user created successfully";
                     }
                 } 
-                echo '1';
+                echo 1;
             } else {
                 echo "Please Check Enquiry";
             }
