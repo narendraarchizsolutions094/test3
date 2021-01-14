@@ -480,8 +480,9 @@ class Lead extends REST_Controller {
               $stage_remark     = $this->input->post('remark');
               $en_id            = $this->input->post('enquiry_code');
               $user_id          = $this->input->post('user_id');
-        
-              $stage_date = date("d-m-Y",strtotime(str_replace("/","-",$this->input->post('stage_date'))));
+          
+
+        $stage_date = date("d-m-Y",strtotime(str_replace("/","-",$this->input->post('stage_date'))));
         $stage_time = date("H:i:s",strtotime($this->input->post('stage_time')));  
 			  $rem_time = date("H:i",strtotime($this->input->post('stage_time')));	
 			  
@@ -492,8 +493,14 @@ class Lead extends REST_Controller {
               $this->db->where('Enquery_id', $en_id);
               $this->db->update('enquiry');
               $this->Leads_Model->add_comment_for_events_stage_api('Stage Updated',$en_id,$stage_id,$stage_desc,$stage_remark,$user_id); 
-			  $tid = $this->Leads_Model->add_comment_for_events_popup_api($stage_remark,$stage_date,$stage_time,$en_id,$user_id);
+
+			  
         
+    if(!empty($this->input->post('stage_date')) && !empty($this->input->post('stage_time')))
+    {
+
+      $tid = $this->Leads_Model->add_comment_for_events_popup_api($stage_remark,$stage_date,$stage_time,$en_id,$user_id);
+        //echo 'chla';exit();
         $this->load->model('Notification_model');
         $this->db->select('CONCAT_WS(" ",name_prefix,name,lastname) as enq_name'); 
         $this->db->where('Enquery_id',$en_id);
@@ -509,6 +516,7 @@ class Lead extends REST_Controller {
         $this->db->where('resp_id',$tid);
         $this->db->update('query_response',array('notification_id'=>$nid,'subject'=>$reminder_txt));
 
+    }
              $this->set_response([  
               'status' => true,
               'message' => array(array('error'=>'Successfully Status Changed'))  
