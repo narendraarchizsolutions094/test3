@@ -229,7 +229,7 @@
             "type": "POST",
             "data": {
               "filter_user_id": $("#user_id_fortask").val(),
-              "task_for": "<?=!empty($_GET['for'])?'?for='.$_GET['for']:''?>"
+              "task_for": "<?=!empty($_GET['for'])?$_GET['for']:''?>"
             }
         },
         "columnDefs": [ {
