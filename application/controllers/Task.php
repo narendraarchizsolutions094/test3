@@ -207,6 +207,7 @@ class Task extends CI_Controller {
                            <th>Date</th>
                            <th>Time</th>
                            <th>Task</th>
+                           <th>Task Type</th>
                            <th>Remark</th>
                            <th>Person Name</th>                           
                            <th>Created By</th>
@@ -224,12 +225,7 @@ class Task extends CI_Controller {
 
             if(!empty($task->task_for) && $task->task_for == 2){
                 $this->db->where('ticketno',$task->query_id);
-                $ticket_row   =    $this->db->get('tbl_ticket')->row_array();
-                
-                // echo "<pre>";
-                // print_r($ticket_row);
-                // echo "</pre>";
-
+                $ticket_row   =    $this->db->get('tbl_ticket')->row_array();              
                 $name = '';
                 if (!empty($ticket_row)) {
                     $name = $ticket_row['name'];
@@ -260,12 +256,21 @@ class Task extends CI_Controller {
             }else{
                 $p = $task->mobile;
             }
+            $task_type = '';
+            if($task->task_type == 1){
+                $task_type = 'Task';            
+            }else if($task->task_type == 2){
+                $task_type = 'Follow-Up';            
+            }else if($task->task_type == 3){
+                $task_type = 'Appointment';
+            }
               $details .= '
             <tr>
                 <td>' . $task->task_date . '</td>
                 <td>' . $task->task_time . '</td>
                 <td>'. $task->subject. '</td>
-                <td>'. $task->task_remark. '</td>
+                <td>'. $task->subject. '</td>                
+                <td>'. $task_type. '</td>
                 <td><a href="'.$url.'">' . $name . '</a></td>
                 <td>'.$task->user_name.'</td>
                 <td>' . $p. '</td>
