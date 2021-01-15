@@ -23,7 +23,7 @@
 
         <div class="form-group col-sm-6">
             <label>Task Date <i class="text-danger">*</i></label>
-            <input class="form-control form-date" name="task_date">
+            <input class="form-control form-date" type='date' name="task_date">
         </div>
 
         <div class="form-group col-sm-6">
