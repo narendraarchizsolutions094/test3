@@ -41,7 +41,7 @@
 <br>
 <div class="col-md-12 text-center">  
 <?php  if(user_access(90)==true){ ?>
-    <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#exampleModal">
+    <button type="button" class="btn btn-secondary" data-toggle="modal" id="task_create" data-target="#create_task">
       Add Reminder
     </button>
 <?php }?>
@@ -151,6 +151,18 @@
    </div>
 </div>
 
+<div id="create_task" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-lg">    
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Create Task</h4>
+      </div>
+      <div class="modal-body" id='task_content'>
+      </div>      
+    </div>
+  </div>
+</div>
 <script>
    // delete task
     function delete_row(id){      
@@ -297,7 +309,11 @@
 
    
 </script>
-
+<script>
+$("#task_create").on('click',function(){
+  $("#task_content").load("<?=base_url().'task/create_task_form'?>");
+});
+</script>
 
 
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment-with-locales.min.js"></script>

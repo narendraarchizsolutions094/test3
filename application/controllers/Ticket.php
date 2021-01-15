@@ -1123,7 +1123,7 @@ class Ticket extends CI_Controller
 		$enq_code = $this->input->post('ticketno');
 		$notification_id = $this->input->post('dis_notification_id');
 		$dis_subject = '';
-		$this->Leads_Model->add_comment_for_events_popup($stage_remark, $stage_date, $contact_person, $mobileno, $email, $designation, $stage_time, $enq_code, $notification_id, $dis_subject, 17);
+		$this->Leads_Model->add_comment_for_events_popup($stage_remark, $stage_date, $contact_person, $mobileno, $email, $designation, $stage_time, $enq_code, $notification_id, $dis_subject, 2);
 		$ticketno	=	$this->input->post('ticketno');
 		$this->load->model('rule_model');
 		$this->rule_model->execute_rules($ticketno, array(8,10));

@@ -49,6 +49,11 @@ class Task extends CI_Controller {
             }else if($task->task_type == 3){
                 $color = '#40ff00';
             }
+
+            if($task->related_to){
+
+            }
+
             $this->db->where('Enquery_id',$task->query_id);
             $enquiry_row   =    $this->db->get('enquiry')->row_array();            
             if(!empty($task_date1)){

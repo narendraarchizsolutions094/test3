@@ -155,13 +155,7 @@ input[name=lead_stages]{
           <a class="pull-left fa fa-arrow-left btn btn-circle btn-default btn-sm" onclick="history.back(-1)" title="Back"></a>        
           <?php if (user_access(60)==true OR user_access(70)==true OR user_access(80)==true) { ?> 
           <a class="dropdown-toggle btn btn-danger btn-circle btn-sm fa fa-plus" id="enq-create" href="<?php echo base_url()?>enquiry/create?status=<?= $data_type ?>" title="<?php echo display('add_new_enquiry');?>"></a>         
-          <?php } ?>
-          <?php
-          if($this->session->companey_id  == 1){ ?>
-            <a class="dropdown-toggle btn btn-default btn-circle btn-sm fa fa-calendar" href="javascript:void(0)" title="" data-toggle="modal" id="task_create" data-target="#create_task"></a>         
-          <?php
-          }
-          ?>
+          <?php } ?>          
         </div>
          <div class="col-md-4 col-sm-8 col-xs-8 pull-right" >  
           <div style="float: right;">     
@@ -631,11 +625,7 @@ display: block;
         </div>
     </div>   
 </form>
-<script>
-$("#task_create").on('click',function(){
-  $("#task_content").load("<?=base_url().'task/create_task_form'?>");
-});
-</script>
+
 <div style="float:right;">
   <a class='btn btn-xs  btn-primary' href='javascript:void(0)' id='show_quick_counts' title='Show Quick Dashboard'><i class='fa fa-bar-chart'></i></a>
 </div>
