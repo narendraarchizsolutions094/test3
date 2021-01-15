@@ -277,6 +277,6 @@ class Task extends CI_Controller {
        }else{
             $this->session->set_flashdata('exception',validation_errors());
        }
-       redirect('enq/index');
+       redirect('task/index');
     }
 }
