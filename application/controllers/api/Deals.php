@@ -355,11 +355,14 @@ class Deals extends REST_Controller {
 	            $insert=$this->db->where(array('comp_id'=>$comp_id,'id'=>$infoid))->update('commercial_info',$data);
 	            
 	            //echo $this->db->affected_rows();exit();
-
-	            if($insert){
+	            
+	            if($insert)
+	            {
 	          		$res_status = true;
 	    
-	            }else{
+	            }
+	            else
+	            {
 	           		$res_status = false;
 	            } 
 	    }
