@@ -326,7 +326,7 @@ $("#task_create").on('click',function(){
 });
 $("#for_filter").on('change',function(){
   if($(this).val()==2){
-    window.location = "<?=base_url().'task/index/2'?>"
+    window.location = "<?=base_url().'task/index?for=2'?>"
   }else{
     window.location = "<?=base_url().'task/index'?>"
   }
