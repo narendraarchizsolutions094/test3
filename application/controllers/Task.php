@@ -112,6 +112,17 @@ class Task extends CI_Controller {
             $row[] = $nd;
             $row[] = $each->task_time;
             $row[] = $each->subject;
+            
+            if($each->task_type == 1){
+                $row[] = 'Task';
+            }else if($each->task_type == 2){
+                $row[] = 'Follow Up';
+            }else if($each->task_type == 3){
+                $row[] = 'Appointment';
+            }else{
+                $row[] = 'Task';
+            }
+
             $row[] = $each->task_remark;
          if($each->task_for == 2){
             $this->db->where('ticketno',$each->query_id);

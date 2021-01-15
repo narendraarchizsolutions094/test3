@@ -135,6 +135,7 @@
            <th>Date</th>
            <th>Time</th>
            <th>Task</th>
+           <th>Task Type</th>
            <th>Remark</th>
            <th>Person Name</th>           
            <th>Created By</th>
