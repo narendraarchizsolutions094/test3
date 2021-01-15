@@ -184,10 +184,8 @@ class Task extends CI_Controller {
  
         $date = date_create($date);
         $date = date_format($date,'d-m-Y'); 
-        $recent_tasks = $this->Task_Model->search_taskby_id($date);
-        echo "<pre>";
-        print_r($recent_tasks);
-        echo "</pre>";
+        $recent_tasks = $this->Task_Model->search_taskby_id($date);      
+        
 
         $taskstatus_list = $this->Taskstatus_model->taskstatuslist(); 
         $details .= '<style>.paging_simple_numbers{text-align:center!important;}
@@ -217,9 +215,9 @@ class Task extends CI_Controller {
                 $this->db->where('ticketno',$task->query_id);
                 $ticket_row   =    $this->db->get('tbl_ticket')->row_array();
                 
-                echo "<pre>";
-                print_r($ticket_row);
-                echo "</pre>";
+                // echo "<pre>";
+                // print_r($ticket_row);
+                // echo "</pre>";
 
                 $name = '';
                 if (!empty($ticket_row)) {
