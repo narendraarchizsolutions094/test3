@@ -125,7 +125,7 @@
                     
 
                     <div class="form-group">
-                       <input type="date" name="c_date" id='disposition_c_date' class="form-control" placeholder=""  >
+                       <input type="text" name="c_date" id='disposition_c_date' class="form-control form-date" placeholder=""  >
                     </div>
                     <div class="form-group">
                         <input type="time" name="c_time" id='disposition_c_time' class="form-control" placeholder=""  >
