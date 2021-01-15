@@ -1,11 +1,11 @@
 <form action="<?=base_url().'task/save_task'?>" class="form-inner" enctype="multipart/form-data" method="post">
     <div class="">
         <div class="form-group col-sm-6">
-            <label>Subject</label>
+            <label>Subject <i class="text-danger ">*</i></label>
             <input type="text" class="form-control" name="subject" placeholder="Subject">
         </div>
         <div class="form-group col-sm-6">
-            <label>Task Type</label>
+            <label>Task Type <i class="text-danger ">*</i></label>
             <select class="form-control" name="task_type">
                 <?php
                 $task_type = array('1'=>'Task','2'=>'Follow Up','3'=>'Appointment');
@@ -22,16 +22,16 @@
         </div>
 
         <div class="form-group col-sm-6">
-            <label>Task Date</label>
+            <label>Task Date <i class="text-danger">*</i></label>
             <input class="form-control form-date" name="task_date">
         </div>
 
         <div class="form-group col-sm-6">
-            <label>Task Time</label>
+            <label>Task Time<i class="text-danger">*</i></label>
             <input type="time" class="form-control" name="task_time">
         </div>
         <div class="form-group col-sm-6">
-            <label>Related To</label>
+            <label>Related To<i class="text-danger">*</i></label>
             <select class="form-control" name="related_to">
             <?php
                 if(!empty($related_to)){
@@ -57,7 +57,7 @@
             </select>
         </div>
         <div class="form-group col-sm-6">
-            <label>Status</label>
+            <label>Status<i class="text-danger">*</i></label>
             <select class="form-control" name="task_status">
             <?php
             if(!empty($taskstatus_list)){
@@ -73,7 +73,7 @@
             </select>
         </div>
         <div class="form-group col-sm-12">
-            <label>Description</label>
+            <label>Description<i class="text-danger">*</i></label>
             <textarea rows="6" class="form-control" name="task_remark"
                 placeholder='Start typing the details about the task...'></textarea>
         </div>
