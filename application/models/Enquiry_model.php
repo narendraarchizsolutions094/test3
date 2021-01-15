@@ -1248,210 +1248,6 @@ class Enquiry_model extends CI_Model {
     }
 
  
-
-
-    public function unassigned() {
-        /* user roles
-          3 = Country Head
-          4 = Region Head
-          5 = Territory Head
-          6 = State Head
-          7 = City Head
-          8 = User */
-        $user_id = $this->session->user_id;
-        $user_role = $this->session->user_role;
-        $region_id = $this->session->region_id;
-        $assign_country = $this->session->country_id;
-        $assign_region = $this->session->region_id;
-        $assign_territory = $this->session->territory_id;
-        $assign_state = $this->session->state_id;
-        $assign_city = $this->session->city_id;
-
-        if ($user_role == 3) {
-            return $this->db->select("enquiry.*,lead_source.icon_url,lead_source.lsid,lead_source.score_count,lead_source.lead_name,tbl_product_country.country_name")
-                            ->from($this->table)
-                            ->join('lead_source', 'enquiry.enquiry_source = lead_source.lsid')
-                            ->join('tbl_product_country', 'tbl_product_country.id=enquiry.country_id', 'left')
-                            ->where('enquiry.country_id', $assign_country)
-                            ->where('enquiry.status', '1')
-                            ->where('drop_status', '0')
-                            ->where('enquiry.aasign_to', 0)
-                            ->where('is_delete', '1')
-                            ->order_by('enquiry_id', 'desc')
-                            ->get();
-        } else if ($user_role == 4) {
-            return $this->db->select("enquiry.*,lead_source.icon_url,lead_source.lsid,lead_source.score_count,lead_source.lead_name,tbl_product_country.country_name")
-                            ->from($this->table)
-                            ->join('lead_source', 'enquiry.enquiry_source = lead_source.lsid')
-                            ->join('tbl_product_country', 'tbl_product_country.id=enquiry.country_id', 'left')
-                            //->where('enquiry.region_id',$assign_region)
-                            ->where('enquiry.status', '1')
-                            ->where('drop_status', '0')
-                            ->where('enquiry.aasign_to', 0)
-                            ->where('is_delete', '1')
-                            ->order_by('enquiry_id', 'desc')
-                            ->get();
-        } else if ($user_role == 5) {
-            return $this->db->select("enquiry.*,lead_source.icon_url,lead_source.lsid,lead_source.score_count,lead_source.lead_name,tbl_product_country.country_name")
-                            ->from($this->table)
-                            ->join('lead_source', 'enquiry.enquiry_source = lead_source.lsid')
-                            ->join('tbl_product_country', 'tbl_product_country.id=enquiry.country_id', 'left')
-                            ->where('enquiry.territory_id', $assign_territory)
-                            ->where('enquiry.status', '1')
-                            ->where('drop_status', '0')
-                            ->where('enquiry.aasign_to', 0)
-                            ->where('is_delete', '1')
-                            ->order_by('enquiry_id', 'desc')
-                            ->get();
-        } else if ($user_role == 6) {
-
-            return $this->db->select("enquiry.*,lead_source.icon_url,lead_source.lsid,lead_source.score_count,lead_source.lead_name,tbl_product_country.country_name")
-                            ->from($this->table)
-                            ->join('lead_source', 'enquiry.enquiry_source = lead_source.lsid')
-                            ->join('tbl_product_country', 'tbl_product_country.id=enquiry.country_id', 'left')
-                            ->where('enquiry.state_id', $assign_state)
-                            ->where('enquiry.status', '1')
-                            ->where('drop_status', '0')
-                            ->where('enquiry.aasign_to', 0)
-                            ->where('is_delete', '1')
-                            ->order_by('enquiry_id', 'desc')
-                            ->get();
-        } else if ($user_role == 7) {
-            return $this->db->select("enquiry.*,lead_source.icon_url,lead_source.lsid,lead_source.score_count,lead_source.lead_name,tbl_product_country.country_name")
-                            ->from($this->table)
-                            ->join('lead_source', 'enquiry.enquiry_source = lead_source.lsid')
-                            ->join('tbl_product_country', 'tbl_product_country.id=enquiry.country_id', 'left')
-                            ->where('enquiry.city_id', $assign_city)
-                            ->where('enquiry.status', '1')
-                            ->where('drop_status', '0')
-                            ->where('enquiry.aasign_to', 0)
-                            ->where('is_delete', '1')
-                            ->order_by('enquiry_id', 'desc')
-                            ->get();
-        } elseif ($user_role == 8 || $user_role == 9) {
-            return $this->db->select("enquiry.*,lead_source.icon_url,lead_source.lsid,lead_source.score_count,lead_source.lead_name,tbl_product_country.country_name")
-                            ->from($this->table)
-                            ->join('lead_source', 'enquiry.enquiry_source = lead_source.lsid')
-                            ->join('tbl_product_country', 'tbl_product_country.id=enquiry.country_id', 'left')
-                            ->where('enquiry.aasign_to', $user_id)
-                            ->or_where('enquiry.created_by', $user_id)
-                            ->where('enquiry.status', '1')
-                            ->where('drop_status', '0')
-                            ->where('enquiry.aasign_to', 0)
-                            ->where('is_delete', '1')
-                            ->order_by('enquiry_id', 'desc')
-                            ->get();
-        } else {
-            return $this->db->select("enquiry.*,lead_source.icon_url,lead_source.lsid,lead_source.score_count,lead_source.lead_name,tbl_product_country.country_name")
-                            ->from($this->table)
-                            ->join('lead_source', 'enquiry.enquiry_source = lead_source.lsid')
-                            ->join('tbl_product_country', 'tbl_product_country.id=enquiry.country_id', 'left')
-                            ->where('enquiry.status', '1')
-                            ->where('drop_status', '0')
-                            ->where('enquiry.aasign_to', 0)
-                            ->where('is_delete', '1')
-                            ->order_by('enquiry_id', 'desc')
-                            ->get();
-        }
-    }
-
-    /* -------Alll unsigned------------------ */
-
-    /* -------Alll leads------------------ */
-
-    public function all_leads() {
-        /* user roles
-          3 = Country Head
-          4 = Region Head
-          5 = Territory Head
-          6 = State Head
-          7 = City Head
-          8 = User */
-        $user_id = $this->session->user_id;
-        $user_role = $this->session->user_role;
-        $region_id = $this->session->region_id;
-        $assign_country = $this->session->country_id;
-        $assign_region = $this->session->region_id;
-        $assign_territory = $this->session->territory_id;
-        $assign_state = $this->session->state_id;
-        $assign_city = $this->session->city_id;
-
-        if ($user_role == 3) {
-            $this->db->select("enquiry.*,lead_source.icon_url,lead_source.lsid,lead_source.score_count,lead_source.lead_name,tbl_product.product_name");
-            $this->db->join('lead_source', 'enquiry.enquiry_source = lead_source.lsid', 'left');
-            $this->db->join('allleads', 'allleads.lead_code= enquiry.Enquery_id', 'left');
-            $this->db->join('tbl_product', 'tbl_product.sb_id = enquiry.product_id', 'left');
-            $this->db->where('enquiry.country_id', $assign_country);
-            $this->db->where('enquiry.status', 2);
-            $this->db->where('allleads.lead_stage!=', 'Account');
-            $this->db->where('enquiry.drop_status', 0);
-            $this->db->where('enquiry.is_delete', 1);
-            return $this->db->from("enquiry")->get();
-        } else if ($user_role == 4) {
-            $this->db->select("enquiry.*,lead_source.icon_url,lead_source.lsid,lead_source.score_count,lead_source.lead_name,,tbl_product_country.country_name");
-            $this->db->join('lead_source', 'enquiry.enquiry_source = lead_source.lsid');
-            $this->db->join('allleads', 'allleads.lead_code= enquiry.Enquery_id', 'left');
-            $this->db->join('tbl_product_country', 'tbl_product_country.id=enquiry.country_id', 'left');
-            //$this->db->where('enquiry.region_id',$assign_region);
-            $this->db->where('enquiry.status', 2);
-            $this->db->where('allleads.lead_stage!=', 'Account');
-            $this->db->where('enquiry.drop_status', 0);
-            $this->db->where('enquiry.is_delete', 1);
-            return $this->db->from("enquiry")->get();
-        } else if ($user_role == 5) {
-            $this->db->select("enquiry.*,lead_source.icon_url,lead_source.lsid,lead_source.score_count,lead_source.lead_name");
-            $this->db->join('lead_source', 'enquiry.enquiry_source = lead_source.lsid');
-            $this->db->join('allleads', 'allleads.lead_code= enquiry.Enquery_id', 'left');
-            $this->db->where('enquiry.territory_id', $assign_territory);
-            $this->db->where('enquiry.status', 2);
-            $this->db->where('allleads.lead_stage!=', 'Account');
-            $this->db->where('enquiry.drop_status', 0);
-            $this->db->where('enquiry.is_delete', 1);
-            return $this->db->from("enquiry")->get();
-        } else if ($user_role == 6) {
-            $this->db->select("enquiry.*,lead_source.icon_url,lead_source.lsid,lead_source.score_count,lead_source.lead_name");
-            $this->db->join('lead_source', 'enquiry.enquiry_source = lead_source.lsid');
-            $this->db->join('allleads', 'allleads.lead_code= enquiry.Enquery_id', 'left');
-            $this->db->where('enquiry.state_id', $assign_state);
-            $this->db->where('enquiry.status', 2);
-            $this->db->where('allleads.lead_stage!=', 'Account');
-            $this->db->where('enquiry.drop_status', 0);
-            $this->db->where('enquiry.is_delete', 1);
-            return $this->db->from("enquiry")->get();
-        } else if ($user_role == 7) {
-            $this->db->select("enquiry.*,lead_source.icon_url,lead_source.lsid,lead_source.score_count,lead_source.lead_name");
-            $this->db->join('lead_source', 'enquiry.enquiry_source = lead_source.lsid');
-            $this->db->join('allleads', 'allleads.lead_code= enquiry.Enquery_id', 'left');
-            $this->db->where('enquiry.city_id', $assign_city);
-            $this->db->where('enquiry.status', 2);
-            $this->db->where('allleads.lead_stage!=', 'Account');
-            $this->db->where('enquiry.drop_status', 0);
-            $this->db->where('enquiry.is_delete', 1);
-            return $this->db->from("enquiry")->get();
-        } elseif ($user_role == 8 || $user_role == 9) {
-
-            $this->db->select("enquiry.*,lead_source.icon_url,lead_source.lsid,lead_source.score_count,lead_source.lead_name");
-            $this->db->join('lead_source', 'enquiry.enquiry_source = lead_source.lsid');
-            $this->db->join('allleads', 'allleads.lead_code= enquiry.Enquery_id', 'left');
-            $this->db->where('enquiry.status', 2);
-            $this->db->where('enquiry.drop_status', 0);
-            $this->db->where('allleads.lead_stage!=', 'Account');
-            $this->db->where('enquiry.is_delete', 1);
-            $this->db->where('enquiry.aasign_to', $user_id);
-            $this->db->or_where('enquiry.created_by', $user_id);
-            return $this->db->from("enquiry")->get();
-        } else {
-            $this->db->select("enquiry.*,lead_source.icon_url,lead_source.lsid,lead_source.score_count,lead_source.lead_name");
-            $this->db->join('lead_source', 'enquiry.enquiry_source = lead_source.lsid', 'left');
-            $this->db->join('allleads', 'allleads.lead_code= enquiry.Enquery_id', 'left');
-            $this->db->where('enquiry.status', 2);
-            $this->db->where('allleads.lead_stage!=', 'Account');
-            $this->db->where('enquiry.drop_status', 0);
-            $this->db->where('enquiry.is_delete', 1);
-            return $this->db->from("enquiry")->get();
-        }
-    }
-
     // All duplicate data
     public function all_duplicate() {
 
@@ -1491,13 +1287,7 @@ class Enquiry_model extends CI_Model {
     /* -----------------------search Start---------------------- */
 
     public function search_data($serach_key) {
-        /* user roles
-          3 = Country Head
-          4 = Region Head
-          5 = Territory Head
-          6 = State Head
-          7 = City Head
-          8 = User */
+      
         if ($serach_key != '') {
             $user_id = $this->session->user_id;
             $user_role = $this->session->user_role;
@@ -1812,15 +1602,7 @@ class Enquiry_model extends CI_Model {
         }
     }
 
-    //Osum product lists..
-    public function osum_product_list() {
-
-        return $this->db->select('*')
-                        ->from('tbl_area')
-                        ->get()
-                        ->result();
-    }
-
+  
     //Mail templates access..
     public function access_mail_temp() {
 
@@ -2251,8 +2033,8 @@ class Enquiry_model extends CI_Model {
      public function all_enqueries() {
 $all_reporting_ids    =   $this->common_model->get_categories($this->session->user_id);
 $cpny_id=$this->session->companey_id;
-        $where = "enquiry.is_delete=1";
-		$where .= " AND ( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
+        $where = "";
+		$where .= " ( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
     	$where .= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';
         $where.=" AND enquiry.comp_id=$cpny_id";
         $process = $this->session->userdata('process');
