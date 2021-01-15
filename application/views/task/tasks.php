@@ -305,18 +305,16 @@
         }); 
          
          ser_date = date.format();
-
-                     $.ajax({
-                      type: 'POST',
-                      url: '<?php echo base_url();?>task/search_comment_and_task/'+ser_date,
-                      data:{
-                        task_for:"<?=!empty($_GET['for'])?$_GET['for']:''?>"                        
-                      }
-                     })
-                     .done(function(data){
-                       
-                         $("#task_div1").html(data);
-                     })
+          $.ajax({
+          type: 'POST',
+          url: '<?php echo base_url();?>task/search_comment_and_task/'+ser_date,
+          data:{
+            task_for:"<?=!empty($_GET['for'])?$_GET['for']:''?>"                        
+          }
+          })
+          .done(function(data){                       
+              $("#task_div1").html(data);
+          })
    
         
        },
