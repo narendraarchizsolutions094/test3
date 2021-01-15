@@ -324,7 +324,7 @@
 $("#task_create").on('click',function(){
   $("#task_content").load("<?=base_url().'task/create_task_form'?>");
 });
-$("#for_filter").on('click',function(){
+$("#for_filter").on('change',function(){
   if($(this).val()==2){
     window.location = "<?=base_url().'task/index/2'?>"
   }else{
