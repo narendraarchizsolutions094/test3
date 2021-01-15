@@ -63,12 +63,22 @@ public function __construct()
         $this->db->select("query_response.resp_id,query_response.query_id,query_response.upd_date,query_response.task_date,query_response.task_time,query_response.task_remark,query_response.subject,query_response.task_status,query_response.mobile,tbl_admin.s_display_name as user_name,tbl_taskstatus.taskstatus_name as task_status");
         $this->db->from('query_response');       
         //$this->db->where_in('query_response.create_by',$all_reporting_ids);
-        $where = " (enquiry.created_by=$user_id OR enquiry.aasign_to=$user_id) AND query_response.task_date='".$date."'";
+        
+        if(!empty($_POST['task_for']) && $_POST['task_for'] == 2){
+            $where = " (tbl_ticket.added_by=$user_id OR tbl_ticket.assign_to=$user_id) AND query_response.task_date='".$date."'";
+            $this->db->join('tbl_ticket', 'tbl_ticket.ticketno=query_response.query_id', 'left');    
+        }else{
+            $where = " (enquiry.created_by=$user_id OR enquiry.aasign_to=$user_id) AND query_response.task_date='".$date."'";
+            $this->db->join('enquiry', 'enquiry.Enquery_id=query_response.query_id', 'left');
+        }
+        
 
-        $this->db->join('enquiry', 'enquiry.Enquery_id=query_response.query_id', 'left');
         $this->db->join('tbl_admin', 'tbl_admin.pk_i_admin_id=query_response.create_by', 'left');
         $this->db->join('tbl_taskstatus', 'tbl_taskstatus.taskstatus_id=query_response.task_status', 'left');
         //$this->db->where('query_response.task_date',$date);
+        if(!empty($_POST['task_for']) && $_POST['task_for'] == 2){
+            $where .= " AND query_response.task_for=".$_POST['task_for'];
+        }
         $this->db->where($where);
         $this->db->order_by('query_response.resp_id', 'DESC');
         $query = $this->db->get();

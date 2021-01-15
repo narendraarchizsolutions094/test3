@@ -531,7 +531,7 @@ class Lead extends CI_Controller
                 $this->db->update('query_response');
             } else {
                 if (!empty($this->input->post('c_date'))) {
-                    $this->Leads_Model->add_comment_for_events_popup($stage_remark, $stage_date, $contact_person, $mobileno, $email, $designation, $stage_time, $enq_code, $notification_id, $dis_subject);
+                    $this->Leads_Model->add_comment_for_events_popup($stage_remark, $stage_date, $contact_person, $mobileno, $email, $designation, $stage_time, $enq_code, $notification_id, $dis_subject,1,2);
                 }
             }
             $this->load->model('rule_model');

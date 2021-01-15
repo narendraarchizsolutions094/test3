@@ -92,6 +92,9 @@ class Task extends CI_Controller {
     public function task_load(){
         $this->load->model('task_datatable_model');
         $list = $this->task_datatable_model->get_datatables();
+        
+        //echo $this->db->last_query();
+
         $data = array();
         $no = $_POST['start'];        
         $i = 1;        
