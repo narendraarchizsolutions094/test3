@@ -185,7 +185,10 @@ class Task extends CI_Controller {
         $date = date_create($date);
         $date = date_format($date,'d-m-Y'); 
         $recent_tasks = $this->Task_Model->search_taskby_id($date);
-     
+        echo "<pre>";
+        print_r($recent_tasks);
+        echo "</pre>";
+        
         $taskstatus_list = $this->Taskstatus_model->taskstatuslist(); 
         $details .= '<style>.paging_simple_numbers{text-align:center!important;}
             </style>
@@ -205,6 +208,7 @@ class Task extends CI_Controller {
                        </thead>
                        <tbody>
                           ';
+
         foreach ($recent_tasks as $task) {           
             $taskStatus = 'Pending'; 
             $taskStatus = !empty($task->task_status)?$task->task_status:$taskStatus;
@@ -233,7 +237,7 @@ class Task extends CI_Controller {
                       $url = 'javascript:void(0)';
                   }            
             }
-            if(empty($name) || !isset($name) || $name=='  '){
+            if(empty($name) || $name=='  '){
                 $name = 'NA';
             }
             if (user_access(450)) {
