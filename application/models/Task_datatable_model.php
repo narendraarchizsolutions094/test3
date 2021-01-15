@@ -70,7 +70,7 @@ class Task_datatable_model extends CI_Model {
 		          //$where = "  query_response.create_by IN (".implode(',', $all_reporting_ids).')';                
                 }
                 if(!empty($_POST['task_for']) && $_POST['task_for'] == 2){
-                    $where .= " AND task_for=2";
+                    $where .= " AND query_response.task_for=2";
                 }
                 $this->db->where($where);
   
