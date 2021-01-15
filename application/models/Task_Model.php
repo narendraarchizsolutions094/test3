@@ -60,7 +60,7 @@ public function __construct()
         //$all_reporting_ids    =    $this->common_model->get_categories($user_id);               
 
         $user_role = $this->session->user_role;
-        $this->db->select("query_response.resp_id,query_response.query_id,query_response.upd_date,query_response.task_date,query_response.task_time,query_response.task_remark,query_response.subject,query_response.task_status,query_response.mobile,tbl_admin.s_display_name as user_name,tbl_taskstatus.taskstatus_name as task_status");
+        $this->db->select("query_response.resp_id,query_response.task_for,query_response.query_id,query_response.upd_date,query_response.task_date,query_response.task_time,query_response.task_remark,query_response.subject,query_response.task_status,query_response.mobile,tbl_admin.s_display_name as user_name,tbl_taskstatus.taskstatus_name as task_status");
         $this->db->from('query_response');       
         //$this->db->where_in('query_response.create_by',$all_reporting_ids);
         
