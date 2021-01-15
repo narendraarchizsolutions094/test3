@@ -70,7 +70,7 @@ public function __construct()
         $this->db->join('tbl_taskstatus', 'tbl_taskstatus.taskstatus_id=query_response.task_status', 'left');
         //$this->db->where('query_response.task_date',$date);
         if(!empty($_POST['task_for']) && $_POST['task_for'] == 2){
-            $where .= " AND query_response.task_for=".$task_for;
+            $where .= " AND query_response.task_for=".$_POST['task_for'];
         }
         $this->db->where($where);
         $this->db->order_by('query_response.resp_id', 'DESC');
