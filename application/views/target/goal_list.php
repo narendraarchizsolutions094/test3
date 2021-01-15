@@ -89,24 +89,23 @@ $variable=explode(',',$_COOKIE['goal_filter_setting']);
 				<input   name="start_date_from" class="form-control form-date" >
 			</div>
 			</div>
-		<div class="col-md-3">
-		<div class="form-group">
-		
-		<label>Start To</label>
-				<input   name="start_date_to" class="form-control form-date" >
-		</div>
-		</div>
-		<div class="col-md-3">
-		<div class="form-group">
-			<label>End From </label>
-				<input   name="end_ate_from" class="form-control form-date" >
-		</div>
+		<!-- <div class="col-md-3">
+			<div class="form-group">
+			<label>Start To</label>
+					<input   name="start_date_to" class="form-control form-date" >
+			</div>
 		</div>
 		<div class="col-md-3">
-		<div class="form-group">
-		<label>End To</label>
-				<input  name="end_date_to" class="form-control form-date" >
-		</div>
+			<div class="form-group">
+				<label>End From </label>
+					<input   name="end_ate_from" class="form-control form-date" >
+			</div>
+		</div> -->
+		<div class="col-md-3">
+			<div class="form-group">
+			<label>End To</label>
+					<input  name="end_date_to" class="form-control form-date" >
+			</div>
 		</div>
         </div>
 
