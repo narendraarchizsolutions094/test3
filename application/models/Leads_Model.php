@@ -1135,6 +1135,7 @@ public function all_description($diesc) {
         $ld_updt_by = $this->session->user_id;
         $adt = date("Y-m-d H:i:s");
         $this->db->set('query_id', $enq_code);
+        $this->db->set('comp_id', $this->session->companey_id);
         $this->db->set('contact_person', $contact_person);
         $this->db->set('mobile', $mobileno);
         $this->db->set('email', $email);
