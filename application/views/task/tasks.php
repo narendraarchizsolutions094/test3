@@ -52,7 +52,7 @@
     <option value='1'>
       Sales Related
     </option>
-    <option value='2'>
+    <option value='2' <?=(!empty($_GET['for']) && $_GET['for']==2)??'selected'?>>
       Ticket Related
     </option>
   </select>
