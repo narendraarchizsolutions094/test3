@@ -49,14 +49,15 @@ class Task extends CI_Controller {
             }else if($task->task_type == 3){
                 $color = '#40ff00';
             }
-
-            if($task->related_to){
-
+            $borderColor = "#0073b7";
+            if($task->task_for == 2){
+                $borderColor = "#ffff00";
             }
 
-            $this->db->where('Enquery_id',$task->query_id);
-            $enquiry_row   =    $this->db->get('enquiry')->row_array();            
             if(!empty($task_date1)){
+                if($task->task_for == 1 || $task->task_for == 0){
+                $this->db->where('Enquery_id',$task->query_id);
+                $enquiry_row   =    $this->db->get('enquiry')->row_array();            
                  $name = $enquiry_row['name_prefix'].''.$enquiry_row['name'].''.$enquiry_row['lastname'];
                  if ($name == '') {
                      $name = $task->mobile;
@@ -64,13 +65,16 @@ class Task extends CI_Controller {
                         $name = 'NA';
                      }
                 }
+                }else{
+                    $name = $task->subject;
+                }
                $dt = date_format($task_date1,'Y-m-d'); 
                $feed[] = array(
                    'title' =>   $name,
                    'start' =>   $dt,
                    'backgroundColor' =>$color,
                    'url'    =>  '',
-                   'borderColor'    =>  '#0073b7'
+                   'borderColor'    =>  $borderColor
                );               
             }
         }
