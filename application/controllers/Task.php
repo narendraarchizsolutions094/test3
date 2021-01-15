@@ -208,22 +208,31 @@ class Task extends CI_Controller {
         foreach ($recent_tasks as $task) {           
             $taskStatus = 'Pending'; 
             $taskStatus = !empty($task->task_status)?$task->task_status:$taskStatus;
-            $this->db->where('Enquery_id',$task->query_id);
-            $enquiry_row   =    $this->db->get('enquiry')->row_array();
-            $name = '';
-            if (!empty($enquiry_row)) {
-                if ($enquiry_row['status'] == 1) {
-                    $url = base_url().'enquiry/view/'.$enquiry_row['enquiry_id'];
-                }else if ($enquiry_row['status'] == 2) {
-                    $url = base_url().'lead/lead_details/'.$enquiry_row['enquiry_id'];
-                }else if ($enquiry_row['status'] == 3) {
-                    $url = base_url().'client/view/'.$enquiry_row['enquiry_id'].'/'.$enquiry_row['Enquery_id'];
+            if(!empty($task->task_for) && $task->task_for == 2){
+                $this->db->where('ticketno',$task->query_id);
+                $ticket_row   =    $this->db->get('tbl_ticket')->row_array();
+                $name = '';
+                if (!empty($ticket_row)) {
+                    $name = $ticket_row['name'];
                 }
-                $name = $enquiry_row['name_prefix'].' '.$enquiry_row['name'].' '.$enquiry_row['lastname'];
+                $url = base_url().'ticket/view/'.$ticket_row['ticketno'];
             }else{
-              
-                  $url = 'javascript:void(0)';
-              }            
+                $this->db->where('Enquery_id',$task->query_id);
+                $enquiry_row   =    $this->db->get('enquiry')->row_array();
+                $name = '';
+                if (!empty($enquiry_row)) {
+                    if ($enquiry_row['status'] == 1) {
+                        $url = base_url().'enquiry/view/'.$enquiry_row['enquiry_id'];
+                    }else if ($enquiry_row['status'] == 2) {
+                        $url = base_url().'lead/lead_details/'.$enquiry_row['enquiry_id'];
+                    }else if ($enquiry_row['status'] == 3) {
+                        $url = base_url().'client/view/'.$enquiry_row['enquiry_id'].'/'.$enquiry_row['Enquery_id'];
+                    }
+                    $name = $enquiry_row['name_prefix'].' '.$enquiry_row['name'].' '.$enquiry_row['lastname'];
+                }else{                  
+                      $url = 'javascript:void(0)';
+                  }            
+            }
             if(empty($name) || !isset($name) || $name=='  '){
                 $name = 'NA';
             }
