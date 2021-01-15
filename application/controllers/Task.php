@@ -188,7 +188,7 @@ class Task extends CI_Controller {
         echo "<pre>";
         print_r($recent_tasks);
         echo "</pre>";
-        
+
         $taskstatus_list = $this->Taskstatus_model->taskstatuslist(); 
         $details .= '<style>.paging_simple_numbers{text-align:center!important;}
             </style>
@@ -212,9 +212,15 @@ class Task extends CI_Controller {
         foreach ($recent_tasks as $task) {           
             $taskStatus = 'Pending'; 
             $taskStatus = !empty($task->task_status)?$task->task_status:$taskStatus;
+
             if(!empty($task->task_for) && $task->task_for == 2){
                 $this->db->where('ticketno',$task->query_id);
                 $ticket_row   =    $this->db->get('tbl_ticket')->row_array();
+                
+                echo "<pre>";
+                print_r($ticket_row);
+                echo "</pre>";
+
                 $name = '';
                 if (!empty($ticket_row)) {
                     $name = $ticket_row['name'];
