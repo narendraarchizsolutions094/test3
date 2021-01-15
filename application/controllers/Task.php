@@ -13,27 +13,13 @@ class Task extends CI_Controller {
     }
     public function phpinfo(){
         echo phpinfo();
-        //$this->load->view('test');
     } 
     public function index() {
         if (user_role('90') == true) {}  
         $this->session->unset_userdata('filter_user_id');
-        $aid = $this->session->userdata('user_id');
-        
+        $aid = $this->session->userdata('user_id');        
         $data['title'] = 'Task';
-        $data['recent_tasks'] = '';
-        //$this->Task_Model->get_task_byid();
-        //$data['recent_tasks'] = $this->Task_Model->get_task_level($aid);
-        //$data['totalcount'] = $this->Task_Model->eventCount($aid);
-        
-        /*
-        $data['totalcount'] = $this->Task_Model->eventCount($aid);
-        $data['comment_details'] = $this->Task_Model->get_allcoment();
-        $data['comment_details'] = $this->Task_Model->get_allcoment();
-        $data['all_active'] = $this->enquiry_model->all_enquery();
-        $data['all_mode_type'] = $this->Task_Model->all_mode_type();
-        $data['org_name'] = $this->Task_Model->organisation_list();
-        */
+        $data['recent_tasks'] = '';       
         $data['taskstatus_list'] = $this->Taskstatus_model->taskstatuslist();         
         $data['user_list'] = $this->User_model->read();
         $data['content'] = $this->load->view('task/tasks', $data, true);
@@ -46,23 +32,37 @@ class Task extends CI_Controller {
         $content    = $this->load->view('task/update_task_modal_content',$data,true);
         echo $content;
     }
-    public function get_calandar_feed($enq_id=0){
-        //print_r($_POST);
-        /*if(!empty($_POST['user_id'])){
-        }   */
+    public function get_calandar_feed($enq_id=0){      
         $user_id = $this->input->post('user_id');
         $this->session->set_userdata('filter_user_id',$user_id);
         $start = $this->input->post('start');
         $end = $this->input->post('end');
-        $cal_feed    =   $this->Task_Model->get_task_calandar_feed($start,$end,$user_id,$enq_id);        
-        //echo $this->db->last_query();
-        $feed = array();
-        
+        $for = $_GET['for']??1;
+        if($for == 2){
+            $cal_feed    =   $this->Task_Model->get_task_calandar_feed_ticket($start,$end,$user_id,$enq_id);                
+        }else{
+            $cal_feed    =   $this->Task_Model->get_task_calandar_feed($start,$end,$user_id,$enq_id);                            
+        }
+        $feed = array();        
         foreach ($cal_feed as $task){
             $task_date1   =  date_create($task->task_date);
-            $this->db->where('Enquery_id',$task->query_id);
-            $enquiry_row   =    $this->db->get('enquiry')->row_array();            
+            $color = '#0073b7';
+            if($task->task_type == 1){
+                $color = '#0073b7';
+            }else if($task->task_type == 2){
+                $color = '#ff0000';
+            }else if($task->task_type == 3){
+                $color = '#40ff00';
+            }
+            $borderColor = "#0073b7";
+            if($task->task_for == 2){
+                $borderColor = "#ffff00";
+            }
+
             if(!empty($task_date1)){
+                if($task->task_for == 1 || $task->task_for == 0){
+                $this->db->where('Enquery_id',$task->query_id);
+                $enquiry_row   =    $this->db->get('enquiry')->row_array();            
                  $name = $enquiry_row['name_prefix'].''.$enquiry_row['name'].''.$enquiry_row['lastname'];
                  if ($name == '') {
                      $name = $task->mobile;
@@ -70,37 +70,38 @@ class Task extends CI_Controller {
                         $name = 'NA';
                      }
                 }
+                }else{
+                    $this->db->where('ticketno',$task->query_id);
+                    $ticket_row   =    $this->db->get('tbl_ticket')->row_array();  
+                    $name = $ticket_row['name']??$task->subject;
+                }
                $dt = date_format($task_date1,'Y-m-d'); 
                $feed[] = array(
                    'title' =>   $name,
                    'start' =>   $dt,
-                   'backgroundColor' =>'#0073b7',
+                   'backgroundColor' =>$color,
                    'url'    =>  '',
-                   'borderColor'    =>  '#0073b7'
+                   'borderColor'    =>  $borderColor
                );               
             }
         }
         echo json_encode($feed);
-         /*echo '[{"title":"All Day Event","start":"2020-01-01"},{"title":"Long Event","start":"2020-01-07","end":"2020-01-10"},{"groupId":"999","title":"Repeating Event","start":"2020-01-09T16:00:00+00:00"},{"groupId":"999","title":"Repeating Event","start":"2020-01-16T16:00:00+00:00"},{"title":"Conference","start":"2020-01-15","end":"2020-01-17"},{"title":"Meeting","start":"2020-01-16T10:30:00+00:00","end":"2020-01-16T12:30:00+00:00"},{"title":"Lunch","start":"2020-01-16T12:00:00+00:00"},{"title":"Birthday Party","start":"2020-01-17T07:00:00+00:00"},{"url":"http:\/\/google.com\/","title":"Click for Google","start":"2020-01-28"},{"title":"Meeting","start":"2020-01-16T14:30:00+00:00"},{"title":"Happy Hour","start":"2020-01-16T17:30:00+00:00"},{"title":"Dinner","start":"2020-01-16T20:00:00+00:00"}]'; */
+     
     }
-     // enquiry datatable
+     
     public function task_load(){
         $this->load->model('task_datatable_model');
         $list = $this->task_datatable_model->get_datatables();
-        
-        
         $data = array();
         $no = $_POST['start'];        
         $i = 1;        
         foreach ($list as $each) {        
             $no++;        
             $row = array();        
-
             if(!empty($each->task_date) && $each->task_date!='01-01-1970'){
               $d = strtotime($each->task_date);               
               $nd = date("Y/m/d",$d);               
               $nd = $each->task_date?$nd:'NA';                                 
-              //$nt = date("H:i:s",$d);
             }else{
               $nd = 'NA';
               $nt = 'NA';
@@ -109,23 +110,32 @@ class Task extends CI_Controller {
             $row[] = $each->task_time;
             $row[] = $each->subject;
             $row[] = $each->task_remark;
+         if($each->task_for == 2){
+            $this->db->where('ticketno',$each->query_id);
+            $ticket_row   =    $this->db->get('tbl_ticket')->row_array(); 
+            $name = 'NA';
+            if(!empty($ticket_row)){
+                $url = base_url().'ticket/view/'.$each->query_id;
+                $name = $ticket_row['name']??$ticket_row['ticketno'];
+            }else{
+                $url = "javascript:void(0)";
+            }
+         }else{
             $this->db->where('Enquery_id',$each->query_id);
             $enquiry_row   =    $this->db->get('enquiry')->row_array();
-            if (!empty($enquiry_row)) {
-              
+            if (!empty($enquiry_row)) {                              
               if ($enquiry_row['status'] == 1) {
                  $url = base_url().'enquiry/view/'.$enquiry_row['enquiry_id'];                  
-              }else if ($enquiry_row['status'] == 2) {
-                 
+              }else if ($enquiry_row['status'] == 2) {                 
                  $url = base_url().'lead/lead_details/'.$enquiry_row['enquiry_id'];                  
-              }else if ($enquiry_row['status'] == 3) {
-                 
+              }else if ($enquiry_row['status'] >= 3) {                 
                  $url = base_url().'client/view/'.$enquiry_row['enquiry_id'].'/'.$enquiry_row['Enquery_id'];                  
               }              
             }else{
               $url = 'javascript:void(0)';
             }
             $name = $enquiry_row['name_prefix'].' '.$enquiry_row['name'].' '.$enquiry_row['lastname'];
+        }
             if(empty($name) || !isset($name) || $name=='  '){
                 $name = 'NA';
             }
@@ -135,24 +145,13 @@ class Task extends CI_Controller {
                     $row[] = '##########';                    
                 }else{
                     $row[] = $each->mobile;
-                }
-            
-            $taskStatus = 'Pending';             
-            
-            $taskstatus_list = $this->Taskstatus_model->taskstatuslist(); 
-            /*
-            foreach($taskstatus_list as $val){
-                if($each->task_status == $val->taskstatus_id){
-                    $taskStatus = $val->taskstatus_name;
-                    break;
-                }
-            }*/
-            $row[] =  $each->task_status?$each->task_status:$taskStatus;
-            
+                }            
+            $taskStatus = 'Pending';                         
+            $taskstatus_list = $this->Taskstatus_model->taskstatuslist();          
+            $row[] =  $each->task_status?$each->task_status:$taskStatus;            
                 $actions = '<a data-toggle="modal" type="button" title="Add Target" data-target="#task_edit" onclick="get_modal_content('.$each->resp_id.')" ><i class="fa fa-edit btn btn-primary btn-sm"></i></a>';
                 if(user_access(92)){ 
-                   $actions .=  '<i class="fa fa-trash btn btn-danger btn-sm" onclick="delete_row('.$each->resp_id.')" ></i>';
-                  
+                   $actions .=  '<i class="fa fa-trash btn btn-danger btn-sm" onclick="delete_row('.$each->resp_id.')" ></i>';                  
                 }
                 $row[] = $actions;                
                 $data[] = $row;
@@ -167,18 +166,15 @@ class Task extends CI_Controller {
         echo json_encode($output);
     }
     public function tas_byid($aid = '') {
-        $data['title'] = 'Task';
-        //$data['tasks'] = $this->Task_Model->get_alltask($aid);
+        $data['title'] = 'Task';        
         $data['recent_tasks'] = $this->Task_Model->get_task_level($aid);
-        //echo $this->db->last_query();
-        //$data['comment_details'] = $this->Task_Model->get_allcoment();
-        //$data['comment_details'] = $this->Task_Model->get_allcoment();
-        //$data['all_active'] = $this->enquiry_model->created_byid($aid);
-        //$data['all_mode_type'] = $this->Task_Model->all_mode_type();
-        //$data['org_name'] = $this->Task_Model->organisation_list();
-        //$data['user_list'] = $this->User_model->read();
         $data['taskstatus_list'] = $this->Taskstatus_model->taskstatuslist(); 
         $data['content'] = $this->load->view('task/task_list', $data);
+    }
+    public function create_task_form(){        
+        $data['related_to']    =   $this->enquiry_model->all_enqueries();
+        $data['taskstatus_list'] = $this->Taskstatus_model->taskstatuslist(); 
+        $this->load->view('task/create_task_form',$data);
     }
     public function search_comment_and_task($date = '') {
         $details = '';
@@ -206,24 +202,8 @@ class Task extends CI_Controller {
                        </thead>
                        <tbody>
                           ';
-        foreach ($recent_tasks as $task) {
-            /*$d = date_create($task->upd_date);
-            $nd = date_format($d, "Y/m/d");
-            $nt = date_format($d, "H:i:s");*/
-           
-           /* $amt = explode(',', $task->km);
-            $ttl = 0;
-            for ($i = 0; $i < count($amt); $i++) {
-                $ttl += $amt[$i];
-            }*/
-           
+        foreach ($recent_tasks as $task) {           
             $taskStatus = 'Pending'; 
-          /*  foreach($taskstatus_list as $val){
-                if($task->task_status == $val->taskstatus_id){
-                    $taskStatus = $val->taskstatus_name;
-                    break;
-                }
-            }*/
             $taskStatus = !empty($task->task_status)?$task->task_status:$taskStatus;
             $this->db->where('Enquery_id',$task->query_id);
             $enquiry_row   =    $this->db->get('enquiry')->row_array();
@@ -268,102 +248,7 @@ class Task extends CI_Controller {
         }
         $details .= '</tbody></table><script> $(".datatable1").DataTable(); </script>';
         echo $details;
-    }
-    
-    
-   /*     public function enquiry_response_updatetask() {            
-            $resp_id = $this->input->post('resp_id');
-            $task_type = $this->input->post('task_type');
-            $meeting_date = $this->input->post('meeting_date');
-            $contact_person = $this->input->post('contact_person');
-            $mobileno = $this->input->post('mobileno');
-            $email = $this->input->post('email');
-            $designation = $this->input->post('designation');
-            $task_remark = trim($this->input->post('conversation'));
-            $subject = $this->input->post('subject');
-            $task_status = $this->input->post('task_status');
-            $task_time = $this->input->post('task_time');
-            $org_name = $this->input->post('org_name');           
-            $cdate2 = str_replace('/', '-', $meeting_date);
-            //$adt = date("d-m-Y h:i:s a");           
-            //$this->db->set('upd_date', $adt);
-            $this->db->set('task_date', $cdate2);
-            $this->db->set('task_time', $task_time);
-            $this->db->set('contact_person', $contact_person);
-            $this->db->set('mobile', $mobileno);
-            $this->db->set('task_status', $task_status);
-            $this->db->set('subject', $subject);
-            $this->db->set('org_name', $org_name);            
-            $this->db->set('email', $email);
-            $this->db->set('designation', $designation);
-            $this->db->set('conversation', $task_remark);
-            $this->db->set('task_type', $task_type);
-            $this->db->where('resp_id', $resp_id);
-            $this->db->set('create_by', $this->session->user_id);
-            $this->db->update('query_response');
-            $this->session->set_flashdata('message', 'Task Updated Successfully');            
-            redirect('task');
-    }
-    
-    public function enquiry_response_task() {
-        if (!empty($_POST)) {
-            
-            $ld_updt_by = $this->session->userdata('user_id');
-            
-            $lead_id = $this->input->post('enq_code');
-            
-            $task_type = $this->input->post('task_type');
-            
-            $meeting_date = $this->input->post('meeting_date');
-            $contact_person = $this->input->post('contact_person');
-            $mobileno = $this->input->post('mobileno');
-            
-            $email = $this->input->post('email');
-            
-            $designation = $this->input->post('designation');
-            
-            $conversation = trim($this->input->post('conversation'));
-            
-            $subject = $this->input->post('subject');
-            
-            $task_status = $this->input->post('task_status');
-            if (!empty($this->enquiry_model->enquiry_by_code($lead_id))) {
-                $org_name = $this->enquiry_model->enquiry_by_code($lead_id)->org_name;
-            } else {
-                $org_name = '';
-            }
-            $cdate2 = str_replace('/', '-', $meeting_date);
-            $adt = date("d-m-Y h:i:s a");
-            if (!empty($this->input->post('subject'))) {
-                $this->db->set('query_id', $this->input->post('subject'));
-            }
-            if (!empty($this->input->post('billabled'))) {
-                $this->db->set('bilable', $this->input->post('billabled'));
-                $this->db->set('distance_from', implode(',', $this->input->post('from[]')));
-                $this->db->set('distance_to', implode(',', $this->input->post('to[]')));
-                $this->db->set('mode', implode(',', $this->input->post('mode[]')));
-                $this->db->set('km', implode(',', $this->input->post('km[]')));
-            }
-            $this->db->set('query_id', $lead_id);
-            $this->db->set('subject', $subject);
-            $this->db->set('upd_date', $adt);
-            $this->db->set('nxt_date', $cdate2);
-            $this->db->set('contact_person', $contact_person);
-            $this->db->set('mobile', $mobileno);
-            $this->db->set('email', $email);
-            $this->db->set('designation', $designation);
-            $this->db->set('org_name', $org_name);
-            $this->db->set('conversation', $conversation);
-            $this->db->set('task_type', $task_type);
-            $this->db->set('task_status', $task_status);
-            $this->db->set('create_by', $this->session->user_id);
-            $this->db->insert('query_response');
-            $this->session->set_flashdata('message', 'Task Added Successfully');
-            redirect($this->agent->referrer());
-        } else {
-            redirect('task');
-        }
-    }*/
+    } 
     public function delete_task_row(){
         if (user_access('92') == true) {            
             $id    =   $this->input->post('id');
@@ -376,5 +261,41 @@ class Task extends CI_Controller {
         }else{
             echo json_encode(array('status'=>false,'msg'=>display('access_denied')));            
         }                      
+    }
+    public function save_task(){
+       $subject = $this->input->post('subject',true);
+       $task_type = $this->input->post('task_type',true);
+       $task_date = $this->input->post('task_date',true);
+       $task_time = $this->input->post('task_time',true);
+       $related_to = $this->input->post('related_to',true);
+       $task_status = $this->input->post('task_status',true);
+       $task_remark = $this->input->post('task_remark',true);
+
+       $this->form_validation->set_rules('subject','Subject','required|trim');
+       $this->form_validation->set_rules('task_type','Task Type','required|trim');
+       $this->form_validation->set_rules('task_date','Task Date','required|trim');
+       $this->form_validation->set_rules('task_time','Task Time','required|trim');
+       $this->form_validation->set_rules('related_to','Related To','required|trim');
+       $this->form_validation->set_rules('task_status','Task Status','required|trim');
+       $this->form_validation->set_rules('task_remark','Task Remark','required|trim');
+
+       if ($this->form_validation->run()){
+           $ins_arr = array(
+               'comp_id'        =>  $this->session->companey_id,
+               'subject'        =>  $subject,
+               'task_type'      =>  $task_type,
+               'task_date'      =>  $task_date,
+               'task_time'      =>  $task_time,
+               'query_id'       =>  $related_to,
+               'task_status'    =>  $task_status,
+               'task_remark'    =>  $task_remark,
+               'create_by'      =>  $this->session->user_id
+           );
+           $this->db->insert('query_response',$ins_arr);
+           $this->session->set_flashdata('message','Task Created successfully.');
+       }else{
+            $this->session->set_flashdata('exception',validation_errors());
+       }
+       redirect('task/index');
     }
 }

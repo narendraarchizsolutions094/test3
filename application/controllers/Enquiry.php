@@ -426,12 +426,7 @@ class Enquiry extends CI_Controller
             }
         }
     }
-    // public function test()
-    // {$this->load->model('Enquiry_model');
-    //    $prefix=  $this->Enquiry_model->getEnquiry(array('enquiry_id'=>'192874'))->result();
-    //     //$basic= $this->location_model->get_company_list1(197);
-    //     print_r($prefix);
-    // }
+   
 
     public function create()
     {
@@ -489,7 +484,7 @@ class Enquiry extends CI_Controller
                         $branch_code = $daynamic[$key];
                     }
                 }
-                //print_r($branch_code);exit;
+                
                 $branch = strtoupper($branch_code);
                 $first = substr("$branch", 0, 3);
                 $dt = date('d');
@@ -546,7 +541,7 @@ class Enquiry extends CI_Controller
                 'country_id'  => !empty($city_id->row()->country_id) ? $city_id->row()->country_id : '',
                 'region_id'  => !empty($city_id->row()->region_id) ? $city_id->row()->region_id : '',
                 'territory_id'  => !empty($city_id->row()->territory_id) ? $city_id->row()->territory_id : '',
-                //'created_date' =>$enquiry_date, 
+                
                 'status' => $status
             ];
             $insert_id    =   $this->enquiry_model->create($postData);
@@ -874,15 +869,7 @@ class Enquiry extends CI_Controller
             $this->load->view('layout/main_wrapper', $data);
         }
     }
-    public function attach_po($enquiry_id = null)
-    {
-        $data['page_title'] = 'PO';
-        $data['title'] = 'Attach PO';
-        $data['enquiry_id'] = base64_decode($enquiry_id);
-        $data['state_list'] = $this->location_model->state_list();
-        $data['content'] = $this->load->view('attach_po', $data, true);
-        $this->load->view('layout/main_wrapper', $data);
-    }
+    
     function get_sub_byid()
     {
         $sub_id = $this->input->post('lead_source');
@@ -901,15 +888,6 @@ class Enquiry extends CI_Controller
             echo '<option value="' . $r->subsource_id . '">' . $r->subsource_name . '</option>';
         }
     }
-    public function attach_network($enquiry_id = null)
-    {
-        $data['page_title'] = 'Layout Sheet';
-        $data['title'] = 'Layout Sheet';
-        $data['enquiry_id'] = base64_decode($enquiry_id);
-        $data['state_list'] = $this->location_model->state_list();
-        $data['content'] = $this->load->view('network_diagram', $data, true);
-        $this->load->view('layout/main_wrapper', $data);
-    }
     public function add_invoice($enquiry_id = null)
     {
         $data['page_title'] = 'Add Inovice';
@@ -919,69 +897,12 @@ class Enquiry extends CI_Controller
         $data['content'] = $this->load->view('invoice_add', $data, true);
         $this->load->view('layout/main_wrapper', $data);
     }
-
-    /* public function autoDial()
-    {
-        $allenquiry = $this->input->post('enquiry_id[]');
-        $enq = implode(",", $allenquiry);
-        $res = $this->db->query("SELECT `phone` FROM `enquiry` WHERE enquiry_id IN ( $enq )");
-        $phoneArr = $res->result_array();
-        // $phone           = $this->input->post("phone_no");
-        // $token           = $this->input->post("token");
-        // $support_user_id = $this->input->post("support_user_id");
-        //$url             = "https://developers.myoperator.co/clickOcall";
-        // $data = array(
-        //   'token'=>,
-        //   'customer_number'=>$phone,
-        //   'customer_cc'=>91,
-        //   'support_user_id'=>$this->session->telephony_agent_id,
-        // );
-        foreach ($phoneArr as $key => $value) 
-        {
-            
-        
-        $curl = curl_init();
-          curl_setopt_array($curl, array(  CURLOPT_URL => "https://obd-api.myoperator.co/obd-api-v1",
-          CURLOPT_RETURNTRANSFER => true,  CURLOPT_CUSTOMREQUEST => "POST", 
-          CURLOPT_POSTFIELDS =>'{  "company_id": "5f1545a391ac6734", 
-          "secret_token": "ff0bda40cbdb92a4f1eb7851817de3510a175345a16c59a9d98618a559019f73", 
-          "type": "1", 
-            "user_id": "'.$this->session->telephony_agent_id.'",
-            "number": "+91'.$value['phone'].'",   
-            "public_ivr_id":"5f16e49954ad3197", 
-            "reference_id": "",  
-            "region": "",
-            "caller_id": "",  
-            "group": ""   }', 
-            CURLOPT_HTTPHEADER => array(    "x-api-key:oomfKA3I2K6TCJYistHyb7sDf0l0F6c8AZro5DJh", 
-            "Content-Type: application/json"  ),));
-            $response = curl_exec($curl);
-        
-        // print_r($response);
-      
-        // $this->db->select('phone');
-        // $this->db->from('enquiry');
-        // $this->db->where('enquiry_id IN',"( ".$enq." )");
-        // $arr = $this->db->get()->result_array();
-        print_r($response);
-        }
-    }*/
     public function autoDial()
     {
         $allenquiry = $this->input->post('enquiry_id[]');
         $enq = implode(",", $allenquiry);
         $res = $this->db->query("SELECT aasign_to,phone FROM `enquiry` WHERE enquiry_id IN ( $enq )");
         $phoneArr = $res->result_array();
-        // $phone           = $this->input->post("phone_no");
-        // $token           = $this->input->post("token");
-        // $support_user_id = $this->input->post("support_user_id");
-        //$url             = "https://developers.myoperator.co/clickOcall";
-        // $data = array(
-        //   'token'=>,
-        //   'customer_number'=>$phone,
-        //   'customer_cc'=>91,
-        //   'support_user_id'=>$this->session->telephony_agent_id,
-        // );
         foreach ($phoneArr as $key => $value) {
             $assignto = $value['aasign_to'];
             if (!empty($assignto)) {
@@ -1019,11 +940,6 @@ class Enquiry extends CI_Controller
                 ),
             ));
             $response = curl_exec($curl);
-            // print_r($response);
-            // $this->db->select('phone');
-            // $this->db->from('enquiry');
-            // $this->db->where('enquiry_id IN',"( ".$enq." )");
-            // $arr = $this->db->get()->result_array();
             print_r($response);
         }
     }
@@ -1031,7 +947,7 @@ class Enquiry extends CI_Controller
     {
         if (!empty($_POST)) {
             $move_enquiry = $this->input->post('enquiry_id[]');
-            // echo json_encode($move_enquiry);
+       
             $assign_employee = $this->input->post('assign_employee');
             $user = $this->User_model->read_by_id($assign_employee);
             $notification_data = array();
@@ -1040,7 +956,6 @@ class Enquiry extends CI_Controller
                 foreach ($move_enquiry as $key) {
                     $data['enquiry'] = $this->enquiry_model->enquiry_by_id($key);
                     $enquiry_code = $data['enquiry']->Enquery_id;
-                    // $this->enquiry_model->assign_enquery($key, $assign_employee, $enquiry_code);
                     $assign_data[] = array(
                         'aasign_to' => $assign_employee,
                         'assign_by' => $this->session->user_id,
@@ -1089,22 +1004,8 @@ class Enquiry extends CI_Controller
     }
     public function enquery_detals_by_status($id = '')
     {
-        /*
-        if ($id > 0 and $id <= 20) {
-            $serach_key = '';
-        } else {
-            $id2 = urldecode($id);
-            $serach_key = explode('_', $id2);
-        }
-        */
-        //print_r($id2);exit;
-        //$data['title'] = display('enquiry_list');
         $data['user_list'] = $this->User_model->read();
         $data['leadsource'] = $this->Leads_Model->get_leadsource_list();
-        //$data['lead_score'] = $this->Leads_Model->get_leadscore_list();
-        //$data['lead_stages'] = $this->Leads_Model->get_leadstage_list();
-        //$data['customer_types'] = $this->enquiry_model->customers_types();
-        //$data['channel_p_type'] = $this->enquiry_model->channel_partner_type_list();
         $data['all_user'] = $this->User_model->all_user();
         if ($id == 1) {
             $data['all_active'] = $this->enquiry_model->all_creaed_today();
@@ -1112,10 +1013,6 @@ class Enquiry extends CI_Controller
             $data['all_active'] = $this->enquiry_model->all_today_update();
         } elseif ($id == 3) {
             $data['all_active'] = $this->enquiry_model->active_enqueries();
-            //echo "<pre>";
-            //echo 'fffffffffffffff'.$id;
-            //print_r($data['all_active']->result());
-            //exit();
         } elseif ($id == 4) {
             //$data['all_active'] = $this->enquiry_model->all_leads();
         } elseif ($id == 5) {

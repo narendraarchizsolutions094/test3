@@ -124,16 +124,23 @@ class Client_Model extends CI_Model
         //echo $this->db->last_query(); exit();
     }
 
-    public function getCompanyList($match = '')
+    public function getCompanyList($match = '',$comp_id=0,$user_id=0,$process=0)
     {
-        $process = $this->session->userdata('process');
+        $process = $this->session->process??$process;
+        $comp_id = $this->session->companey_id??$comp_id;
+        $user_id = $this->session->user_id??$user_id;
 
-        $where = 'enquiry.comp_id='.$this->session->companey_id;
-        $all_reporting_ids    =   $this->common_model->get_categories($this->session->user_id);
+        $where = 'enquiry.comp_id='.$comp_id;
+        $all_reporting_ids    =   $this->common_model->get_categories($user_id);
         $where .= " AND ( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
         $where .= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';          
         if($where)
             $this->db->where($where);
+
+        if(is_array($process))
+            $this->db->where_in('enquiry.product_id',$process);
+        else 
+            $this->db->where(' enquiry.product_id IN ('.$process.') ');
 
         $this->db->select('count(enquiry_id) as num, company , GROUP_CONCAT(enquiry_id) as enq_ids,GROUP_CONCAT(status) as enq_status,GROUP_CONCAT(CONCAT(name_prefix,\' \',name,\' \',lastname)) as enq_names ');
         $this->db->from('enquiry');
@@ -143,7 +150,8 @@ class Client_Model extends CI_Model
             $this->db->where('REPLACE(`enquiry`.company, " ", "") = ',str_replace(' ','',$match));
         $this->db->group_by('REPLACE(`enquiry`.company, " ", "")');
         //$this->db->join('enquiry','enquiry.enquiry_id=contacts.client_id','inner');
-        return $this->db->get();
+        $res =  $this->db->get();
+        return $res;
         //echo $this->db->last_query(); exit();
     }
 

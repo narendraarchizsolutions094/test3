@@ -41,11 +41,22 @@
 <br>
 <div class="col-md-12 text-center">  
 <?php  if(user_access(90)==true){ ?>
-    <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#exampleModal">
+    <button type="button" class="btn btn-secondary" data-toggle="modal" id="task_create" data-target="#create_task">
       Add Reminder
     </button>
 <?php }?>
    </div>
+<div class="col-md-12 text-center">    
+<br>
+  <select class='btn btn-sm btn-default text-center' id='for_filter'>
+    <option value='1'>
+      Sales Related
+    </option>
+    <option value='2' <?=(!empty($_GET['for']) && $_GET['for']==2)?'selected':''?>>
+      Ticket Related
+    </option>
+  </select>
+</div>
 <div class="col-md-12">
    <br>
    <div class="col-md-4"></div>   
@@ -151,6 +162,18 @@
    </div>
 </div>
 
+<div id="create_task" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-lg">    
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Create Task</h4>
+      </div>
+      <div class="modal-body" id='task_content'>
+      </div>      
+    </div>
+  </div>
+</div>
 <script>
    // delete task
     function delete_row(id){      
@@ -205,7 +228,8 @@
             "url": "<?=base_url().'task/task_load'?>",
             "type": "POST",
             "data": {
-              "filter_user_id": $("#user_id_fortask").val()
+              "filter_user_id": $("#user_id_fortask").val(),
+              "task_for": "<?=!empty($_GET['for'])?$_GET['for']:''?>"
             }
         },
         "columnDefs": [ {
@@ -224,8 +248,9 @@
 
     $("#user_id_fortask").on('change',function(){
       id = $(this).val();
+      var task_for = "<?=!empty($_GET['for'])?'?for='.$_GET['for']:''?>";
       var events = {
-        url: "<?php echo base_url().'task/get_calandar_feed'?>",
+        url: "<?php echo base_url().'task/get_calandar_feed/'?>"+task_for,
         type: 'POST',
         data: {
             start: $('#calendar').fullCalendar('getView').start,
@@ -259,8 +284,9 @@
        //Random default events
        
        events    : function(start, end, timezone, callback) {
+        var task_for = "<?=!empty($_GET['for'])?'?for='.$_GET['for']:''?>";
         jQuery.ajax({
-            url: "<?php echo base_url().'task/get_calandar_feed'?>",
+            url: "<?php echo base_url().'task/get_calandar_feed'?>"+task_for,
             type: 'POST',
             dataType: 'json',
             data: {
@@ -297,7 +323,18 @@
 
    
 </script>
-
+<script>
+$("#task_create").on('click',function(){
+  $("#task_content").load("<?=base_url().'task/create_task_form'?>");
+});
+$("#for_filter").on('change',function(){
+  if($(this).val()==2){
+    window.location = "<?=base_url().'task/index?for=2'?>"
+  }else{
+    window.location = "<?=base_url().'task/index'?>"
+  }
+})
+</script>
 
 
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment-with-locales.min.js"></script>

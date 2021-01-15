@@ -224,20 +224,17 @@ class Ticket_datatable_model extends CI_Model{
             $sel_string[] = " tbl_ticket_subject.subject_title";    
         }
         
-        
         $select = implode(',', $sel_string);
 
         $this->db->select($select);
         $this->db->from($this->table." tck");
 
+        
         //->join("tbl_ticket_conv cnv", "cnv.tck_id = tck.id", "LEFT")
         if($showall or count(array_intersect(array(2,4),$acolarr))>0)
         {
             $this->db->join("enquiry enq", "enq.enquiry_id = tck.client", "LEFT");
         }
-
-        
-
         
         if($showall or in_array(5, $acolarr))
         {

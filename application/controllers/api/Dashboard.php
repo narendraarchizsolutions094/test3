@@ -218,4 +218,33 @@ class Dashboard extends REST_Controller {
             ], REST_Controller::HTTP_OK); 
         }
     }
+
+    public function unique_company_list_post()
+    {
+        $user_id = $this->input->post('user_id');
+        $company_id = $this->input->post('company_id');
+        $process =  $this->input->post('process');//can be multiple
+        $key = $this->input->post('key')??'';
+        $this->form_validation->set_rules('user_id','user_id', 'trim|required');
+        $this->form_validation->set_rules('company_id','company_id', 'trim|required');
+        $this->form_validation->set_rules('process','process', 'trim|required');
+        if($this->form_validation->run()==true)
+        {
+            $this->load->model('Client_Model');
+            $res = $this->Client_Model->getCompanyList($key,$company_id,$user_id,$process)->result();
+
+            $this->set_response([
+                'status' => TRUE,            
+                'data' => $res
+            ], REST_Controller::HTTP_OK); 
+        }
+        else
+        {
+            $this->set_response([
+                'status' => FALSE,            
+                'message' => strip_tags(validation_errors()),
+            ], REST_Controller::HTTP_OK); 
+        }
+
+    }   
 }

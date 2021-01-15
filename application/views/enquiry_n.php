@@ -155,7 +155,7 @@ input[name=lead_stages]{
           <a class="pull-left fa fa-arrow-left btn btn-circle btn-default btn-sm" onclick="history.back(-1)" title="Back"></a>        
           <?php if (user_access(60)==true OR user_access(70)==true OR user_access(80)==true) { ?> 
           <a class="dropdown-toggle btn btn-danger btn-circle btn-sm fa fa-plus" id="enq-create" href="<?php echo base_url()?>enquiry/create?status=<?= $data_type ?>" title="<?php echo display('add_new_enquiry');?>"></a>         
-          <?php } ?>
+          <?php } ?>          
         </div>
          <div class="col-md-4 col-sm-8 col-xs-8 pull-right" >  
           <div style="float: right;">     
@@ -625,7 +625,6 @@ display: block;
         </div>
     </div>   
 </form>
-
 
 <div style="float:right;">
   <a class='btn btn-xs  btn-primary' href='javascript:void(0)' id='show_quick_counts' title='Show Quick Dashboard'><i class='fa fa-bar-chart'></i></a>
@@ -1686,10 +1685,7 @@ function autoDial(){
             'success',
             'call scheduled successfully',
             'success'
-            );
-         //alert(data);
-         //document.getElementById('testdata').innerHTML =data;
-          //window.location.href=re_url;
+            );       
     }});
   }
 }
@@ -1720,8 +1716,7 @@ function assign_enquiry(){
                  $("#imgBack").html('uploading').show();
     },
     success:function(data){
-         alert(data);
-         //document.getElementById('testdata').innerHTML =data;
+         alert(data);         
           window.location.href=re_url;
     }});
   }
@@ -1890,8 +1885,7 @@ function delete_recorde() {
     */
 </script>
 <script type='text/javascript'>
-$(window).load(function(){
-  //stage_counter();
+$(window).load(function(){  
 $("#active_class p").click(function() {
     $('.border_bottom_active').removeClass('border_bottom_active');
     $(this).addClass("border_bottom_active");
@@ -1919,8 +1913,6 @@ $("#active_class p").click(function() {
           all_lead_stage_c  = $("input[name='top_filter']:checked").next().next().next().html();
           $('#lead_stage_-1').text(all_lead_stage_c);        
 
-          //$("#other_stage_-1"). text(res[0].item.c);
-
           
         }
     });
@@ -1937,7 +1929,7 @@ $(document).ready(function(){
       arr.push($(this).val());
     });        
     setCookie('enquiry_filter_setting',arr,365);      
-    // alert('Your custom filters saved successfully.');
+    
     Swal.fire({
   position: 'top-end',
   icon: 'success',
@@ -2075,9 +2067,7 @@ $('input[name="filter_checkbox"]').click(function(){
   $('#citycheckbox').is(":checked")||$('#datasrccheckbox').is(":checked")||$('#createdbycheckbox').is(":checked")||
   $('#proccheckbox').is(":checked")){ 
     $('#save_filterbutton').show();
-    $('#filter_pannel').show();
-          // alert('test');
-          
+    $('#filter_pannel').show();          
   }else{
     $('#save_filterbutton').hide();
     $('#filter_pannel').hide();
@@ -2215,13 +2205,6 @@ $('#buttongroup').hide();
 })
 
 $(document).ready(function(){
-    // $('#newenqfilter').hide();
-    // $('#cityfilter').hide();
-    // $('#statefilter').hide();
-    // $('#prodfilter').hide();
-    // $('#stagefilter').hide();
-});
-$(document).ready(function(){
   $(".lead_stage_filter").click(function(){
     $(".lead_stage_filter").css("background-color","#e6e9ed");
     $(this).css("background-color","#20a8d8");
@@ -2344,3 +2327,18 @@ success: function(responseData){
   }
   
 </script>
+
+
+
+<div id="create_task" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-lg">    
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Create Task</h4>
+      </div>
+      <div class="modal-body" id='task_content'>
+      </div>      
+    </div>
+  </div>
+</div>
