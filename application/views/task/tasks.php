@@ -46,6 +46,17 @@
     </button>
 <?php }?>
    </div>
+<div class="col-md-12 text-center">    
+<br>
+  <select class='btn btn-sm btn-default text-center' id='for_filter'>
+    <option value='1'>
+      Sales Related
+    </option>
+    <option value='2'>
+      Ticket Related
+    </option>
+  </select>
+</div>
 <div class="col-md-12">
    <br>
    <div class="col-md-4"></div>   
@@ -313,6 +324,13 @@
 $("#task_create").on('click',function(){
   $("#task_content").load("<?=base_url().'task/create_task_form'?>");
 });
+$("#for_filter").on('click',function(){
+  if($(this).val()==2){
+    window.location = "<?=base_url().'task/index/2'?>"
+  }else{
+    window.location = "<?=base_url().'task/index'?>"
+  }
+})
 </script>
 
 

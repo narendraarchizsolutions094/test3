@@ -37,7 +37,12 @@ class Task extends CI_Controller {
         $this->session->set_userdata('filter_user_id',$user_id);
         $start = $this->input->post('start');
         $end = $this->input->post('end');
-        $cal_feed    =   $this->Task_Model->get_task_calandar_feed($start,$end,$user_id,$enq_id);                
+        $for = $_GET['for']??1;
+        if($for == 2){
+            $cal_feed    =   $this->Task_Model->get_task_calandar_feed_ticket($start,$end,$user_id,$enq_id);                
+        }else{
+            $cal_feed    =   $this->Task_Model->get_task_calandar_feed($start,$end,$user_id,$enq_id);                            
+        }
         $feed = array();        
         foreach ($cal_feed as $task){
             $task_date1   =  date_create($task->task_date);
