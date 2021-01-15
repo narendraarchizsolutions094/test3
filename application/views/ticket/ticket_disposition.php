@@ -122,6 +122,18 @@
                        </select>
                     </div>     
 
+                    
+
+                    <div class="form-group">
+                       <input type="date" name="c_date" id='disposition_c_date' class="form-control" placeholder=""  >
+                    </div>
+                    <div class="form-group">
+                        <input type="time" name="c_time" id='disposition_c_time' class="form-control" placeholder=""  >
+                        <input type="hidden" name="dis_notification_id" >
+                    </div>          
+                    <div class="form-group">
+                      <textarea class="form-control" name="conversation"></textarea>
+                    </div>
                     <div class="form-group">                           
                        <select class="form-control" id="" name="ticket_status">
                            <option value='0'>---Select Status---</option>
@@ -136,19 +148,7 @@
                             }
                           }?>
                        </select>
-                    </div>     
-
-                    <div class="form-group">
-                       <input type="date" name="c_date" id='disposition_c_date' class="form-control" placeholder=""  >
-                    </div>
-                    <div class="form-group">
-                        <input type="time" name="c_time" id='disposition_c_time' class="form-control" placeholder=""  >
-                        <input type="hidden" name="dis_notification_id" >
-                    </div>          
-                    <div class="form-group">
-                      <textarea class="form-control" name="conversation"></textarea>
-                    </div>
-
+                    </div>  
                    <div class="sgnbtnmn form-group text-center">
                       <div class="sgnbtn">
                          <input id="ticket_disposition_save" type="button" value="Submit" class="btn btn-primary"  name="Submit">
