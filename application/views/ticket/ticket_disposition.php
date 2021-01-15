@@ -134,6 +134,17 @@
                     <div class="form-group">
                       <textarea class="form-control" name="conversation"></textarea>
                     </div>
+
+
+                  <div style="display:none;">                 
+                    <input type="text" value="<?php if(!empty($ticket->phone)){echo $ticket->phone;} ?>" name="mobile">
+                 </div>
+                 
+                 <div style="display:none;">                 
+                    <input type="text" value="<?php if(!empty($ticket->email)){echo $ticket->email;} ?>" name="email">
+                 </div>
+
+
                     <div class="form-group">                           
                        <select class="form-control" id="" name="ticket_status">
                            <option value='0'>---Select Status---</option>
