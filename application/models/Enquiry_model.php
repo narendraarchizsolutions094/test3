@@ -1822,17 +1822,26 @@ class Enquiry_model extends CI_Model {
         }
         $this->db->where($where);
 
-        //print_r($_POST['filters']); exit();
         if(!empty($_POST['filters']))
         {
+            foreach ($_POST['filters'] as $key => $value)
+            {
+                if($value==''){
+                  unset($_POST['filters'][$key]);
+                  if(!count($_POST['filters']))
+                    unset($_POST['filters']);
+                }
 
+            }
+        }
+        //print_r($_POST);exit();
+        if(!empty($_POST['filters']))
+        {
             $match_list = array('date_from','date_to','phone');
 
             $this->db->group_start();
             foreach ($_POST['filters'] as $key => $value)
             {
-              if($value!='')
-              {
                   if(in_array($key,$match_list) || $this->db->field_exists($key, 'enquiry'))
                   {
                       if(in_array($key, $match_list))
@@ -1864,7 +1873,6 @@ class Enquiry_model extends CI_Model {
                   {
                     $this->db->where('1=1');
                   }
-              }
             }
             $this->db->group_end();
         }

@@ -180,6 +180,66 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         return (!empty($Ary)) ? $Ary->pk_i_admin_id : '';
     }
 
+    function getCountryByName($c)
+    {
+        $ci =& get_instance();
+        $ci->load->database();
+        $Ary = $ci->db->select('id_c')->from('tbl_country')->where('country_name',"$c")
+                                                        ->where('comp_id',$ci->session->companey_id)->get()->row();
+        return (!empty($Ary)) ? $Ary->id_c : '';
+    }
+
+    function getRegionByName($country,$c)
+    {
+        $ci =& get_instance();
+        $ci->load->database();
+        $Ary = $ci->db->select('region_id')->from('tbl_region')->where('region_name',"$c")
+                                                    ->where('country_id',$country)
+                                                    ->where('comp_id',$ci->session->companey_id)->get()->row();
+        return (!empty($Ary)) ? $Ary->id_c : '';
+    }
+
+    function getStateByName($country,$region_id,$c)
+    {
+        $ci =& get_instance();
+        $ci->load->database();
+        $Ary = $ci->db->select('id')->from('state')->where('state',"$c")
+                                                    ->where('country_id',$country)
+                                                    ->where('region_id',$region_id)
+                                                    ->where('comp_id',$ci->session->companey_id)->get()->row();
+        return (!empty($Ary)) ? $Ary->id_c : '';
+    }
+    function getTerritoryByName($country,$region_id,$state,$c)
+    {
+        $ci =& get_instance();
+        $ci->load->database();
+        $Ary = $ci->db->select('territory_id')->from('tbl_territory')->where('territory_name',"$c")
+                                                    ->where('country_id',$country)
+                                                    ->where('region_id',$region_id)
+                                                    ->where('state_id',$state)
+                                                    ->where('comp_id',$ci->session->companey_id)->get()->row();
+        return (!empty($Ary)) ? $Ary->id_c : '';
+    }
+    function getCityByName($country,$region_id,$state,$territory_id,$c)
+    {
+        $ci =& get_instance();
+        $ci->load->database();
+        $Ary = $ci->db->select('id')->from('city')->where('city',"$c")
+                                                    ->where('country_id',$country)
+                                                    ->where('region_id',$region_id)
+                                                    ->where('state_id',$state)
+                                                    ->where('territory_id',$territory_id)
+                                                    ->where('comp_id',$ci->session->companey_id)->get()->row();
+        return (!empty($Ary)) ? $Ary->id_c : '';
+    }
+    function getProductByName($c)
+    {
+        $ci =& get_instance();
+        $ci->load->database();
+        $Ary = $ci->db->select('id')->from('tbl_product_country')->where('country_name',"$c")
+                                                    ->where('comp_id',$ci->session->companey_id)->get()->row();
+        return (!empty($Ary)) ? $Ary->id_c : '';
+    }
     function getUserRight($right)
     {
         $ci =& get_instance();

@@ -179,6 +179,7 @@ class User extends CI_Controller
         );
         $this->load->library('upload', $config);
         // $this->upload->do_upload('file')
+
         if ($this->upload->do_upload('file')) {
             $upload = $this->upload->data();
             $json['success'] = 1;
@@ -189,28 +190,75 @@ class User extends CI_Controller
             $c = 0;
             $exist = array();
             $ic = 0;
-            while (($filesop = fgetcsv($handle, 1000, ",")) !== false) {
+
+            while (($filesop = fgetcsv($handle, 1000, ",")) !== false) 
+            {
+
                 if ($c > 0) {
-                    $firstname  = $filesop[0];
-                    $lastname   = $filesop[1];
-                    $email      = $filesop[2];
-                    $phone      = $filesop[3];
-                    $userright  = getUserRight($filesop[4]);
-                    $report_to  = getUserByName($filesop[5]);
-                    $process    = getProcessBynme($filesop[6]);
+                    $emp_id     = $filesop[0];
+                    $firstname  = $filesop[1];
+                    $lastname   = $filesop[2];
+                    $email      = $filesop[3];
+                    $sec_email  = $filesop[4];
+                    $phone      = $filesop[5];
+                    $sec_phone  = $filesop[6];
+                    $password   = !empty($filesop[7])?md5($filesop[7]):md5('12345678');
+                    $dob        = !empty($filesop[8])?date('Y-m-d',strtotime($filesop[8])):'';
+                    $join_date  = !empty($filesop[9])?date('Y-m-d',strtotime($filesop[9])):'';
+                    $anniversary= $filesop[10];
+                    $address    = $filesop[11];
+                    $blood_group= $filesop[12];
+                    $country_id = getCountryByName($filesop[13]);
+                    $region_id  = getRegionByName($country_id,$filesop[14]);
+                    $state        = getStateByName($country_id,$region_id,$filesop[15]);
+                    $territory    = getTerritoryByName($country_id,$region_id,$state,$filesop[16]);
+                    $product      = getProductByName($filesop[17]);
+                    $city_id    = getCityByName($country_id,$region_id,$state,$territory,$filesop[18]);
+                    $userright  = getUserRight($filesop[19]);
+                    $report_to  = getUserByName($filesop[20]);
+                    $process    = getProcessBynme($filesop[21]);
+                    $designation = $filesop[22];
+                    //echo $country_name;exit();
                     if (checkAlreadyExist($email, 'email') == "no" && checkAlreadyExist($phone, 'phone') == "no") {
                         if ($userright != '' && $report_to != '' && $process != '') {
                             $postData = array(
+                                'employee_id'           => $emp_id,
                                 's_display_name'        => $firstname,
                                 'last_name'             => $lastname,
                                 's_user_email'          => $email,
+                                'second_email'          =>$sec_email,
                                 's_phoneno'             => $phone,
+                                'second_phone'          =>$sec_phone,
                                 'report_to'             => $report_to,
+                                'user_type'             => $userright,
                                 'user_permissions'      => $userright,
                                 'process'               => $process,
-                                's_password'            => md5('12345678'),
-                                'companey_id'           => $this->session->companey_id
+                                's_password'            => $password,
+                                'companey_id'           => $this->session->companey_id,
+                                'date_of_birth'         => $dob,
+                                'joining_date'          => $join_date,
+                                'anniversary'           => $anniversary,
+                                'add_ress'               => $address,
+                                'country'                =>$country_id,
+                                'region'                 =>$region_id,
+                                'state_id'                =>$state,
+                                'territory_name'            =>$territory,
+                                'products'                  =>$product,
+                                'city_id'                   =>$city_id,
+                                'designation'               =>$designation,
                             );
+                        //print_r($postData); exit();
+                        if(empty($postData['s_display_name'])
+                            || empty($postData['last_name'])
+                            || empty($postData['s_user_email'])
+                            || empty($postData['s_phoneno'])
+                            || empty($postData['s_password'])
+                            || empty($postData['user_type'])
+                            )
+                        {
+                            continue;
+                        }
+
                             $this->db->insert('tbl_admin', $postData);
                             $ic++;
                         }
