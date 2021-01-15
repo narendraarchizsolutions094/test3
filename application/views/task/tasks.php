@@ -247,8 +247,9 @@
 
     $("#user_id_fortask").on('change',function(){
       id = $(this).val();
+      var task_for = "<?=!empty($_GET['for'])?'?for='.$_GET['for']:''?>";
       var events = {
-        url: "<?php echo base_url().'task/get_calandar_feed'?>",
+        url: "<?php echo base_url().'task/get_calandar_feed/'?>"+task_for,
         type: 'POST',
         data: {
             start: $('#calendar').fullCalendar('getView').start,
@@ -282,8 +283,9 @@
        //Random default events
        
        events    : function(start, end, timezone, callback) {
+        var task_for = "<?=!empty($_GET['for'])?'?for='.$_GET['for']:''?>";
         jQuery.ajax({
-            url: "<?php echo base_url().'task/get_calandar_feed'?>",
+            url: "<?php echo base_url().'task/get_calandar_feed'?>"+task_for,
             type: 'POST',
             dataType: 'json',
             data: {
