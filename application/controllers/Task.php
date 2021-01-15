@@ -41,6 +41,14 @@ class Task extends CI_Controller {
         $feed = array();        
         foreach ($cal_feed as $task){
             $task_date1   =  date_create($task->task_date);
+            $color = '#0073b7';
+            if($task->task_type == 1){
+                $color = '#0073b7';
+            }else if($task->task_type == 2){
+                $color = '#ff0000';
+            }else if($task->task_type == 3){
+                $color = '#40ff00';
+            }
             $this->db->where('Enquery_id',$task->query_id);
             $enquiry_row   =    $this->db->get('enquiry')->row_array();            
             if(!empty($task_date1)){
@@ -55,7 +63,7 @@ class Task extends CI_Controller {
                $feed[] = array(
                    'title' =>   $name,
                    'start' =>   $dt,
-                   'backgroundColor' =>'#0073b7',
+                   'backgroundColor' =>$color,
                    'url'    =>  '',
                    'borderColor'    =>  '#0073b7'
                );               
