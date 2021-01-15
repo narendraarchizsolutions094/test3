@@ -71,7 +71,9 @@ class Task extends CI_Controller {
                      }
                 }
                 }else{
-                    $name = $task->subject;
+                    $this->db->where('ticketno',$task->query_id);
+                    $ticket_row   =    $this->db->get('tbl_ticket')->row_array();  
+                    $name = $ticket_row['name']??$task->subject;
                 }
                $dt = date_format($task_date1,'Y-m-d'); 
                $feed[] = array(
