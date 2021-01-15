@@ -110,20 +110,32 @@ class Task extends CI_Controller {
             $row[] = $each->task_time;
             $row[] = $each->subject;
             $row[] = $each->task_remark;
+         if($each->task_for == 2){
+            $this->db->where('ticketno',$each->query_id);
+            $ticket_row   =    $this->db->get('tbl_ticket')->row_array(); 
+            $name = 'NA';
+            if(!empty($ticket_row)){
+                $url = base_url().'ticket/view/'.$each->query_id;
+                $name = $ticket_row['name']??$ticket_row['ticketno'];
+            }else{
+                $url = "javascript:void(0)";
+            }
+         }else{
             $this->db->where('Enquery_id',$each->query_id);
             $enquiry_row   =    $this->db->get('enquiry')->row_array();
-            if (!empty($enquiry_row)) {              
+            if (!empty($enquiry_row)) {                              
               if ($enquiry_row['status'] == 1) {
                  $url = base_url().'enquiry/view/'.$enquiry_row['enquiry_id'];                  
               }else if ($enquiry_row['status'] == 2) {                 
                  $url = base_url().'lead/lead_details/'.$enquiry_row['enquiry_id'];                  
-              }else if ($enquiry_row['status'] == 3) {                 
+              }else if ($enquiry_row['status'] >= 3) {                 
                  $url = base_url().'client/view/'.$enquiry_row['enquiry_id'].'/'.$enquiry_row['Enquery_id'];                  
               }              
             }else{
               $url = 'javascript:void(0)';
             }
             $name = $enquiry_row['name_prefix'].' '.$enquiry_row['name'].' '.$enquiry_row['lastname'];
+        }
             if(empty($name) || !isset($name) || $name=='  '){
                 $name = 'NA';
             }
