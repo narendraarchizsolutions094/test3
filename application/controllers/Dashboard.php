@@ -586,12 +586,13 @@ $this->load->library('zip');
                     	   $menu=1;
                     	}else{
                     	   $menu=2;
-                    	}
+                        }
+                        $login_token= random_string('alnum', 30);
                         $data = $this->session->set_userdata([
 						    'menu'                  => $menu,
                             'isLogIn'               => true,
-                            'user_id'               => $user_data->pk_i_admin_id,
-                            'companey_id'           => $user_data->companey_id,
+                            'user_id'               =>$user_data->pk_i_admin_id,
+                            'companey_id'           =>$user_data->companey_id,
                             //'process'               => $check_user->row()->process,
                             'email'                 => $user_data->s_user_email,
                             'designation'           => $user_data->designation,
@@ -615,8 +616,14 @@ $this->load->library('zip');
                             'expiry_date'           => strtotime($user_data->valid_upto),
                             'availability'          => $user_data->availability,
                             'validity_status'       => $validity_status,
-                            'validity_msg'          => $validity_msg
+                            'validity_msg'          => $validity_msg,
+                            'login_token'=>$login_token,
                         ]);
+                            // check device login right
+                            if(user_access(113))
+                            {
+                            $this->user_model->updateLoginToken($user_data->pk_i_admin_id,$login_token);
+                            }
                         if($user_data->companey_id==57){
                             $user_right = $this->session->user_right;
                             $ac_type = $this->input->get('type');
@@ -624,6 +631,7 @@ $this->load->library('zip');
                                 $this->session->sess_destroy();
                                 $res = array('status'=>false,'message'=>display('incorrect_email_password'));
                             }else{
+                               
                                 $this->session->set_userdata('app_type',$ac_type);
                                 $this->user_model->add_login_history();
                                 $res = array('status'=>true,'message'=>'Successfully Logged In');                           
@@ -743,6 +751,7 @@ public function login_in_process(){
          
         if ($this->session->userdata('isLogIn') == false)
         redirect('login');
+     
         if ($this->session->userdata('user_right') == 201 || $this->session->app_type == 'buyer') // lalantop user
         redirect('buy');        
         
@@ -752,6 +761,7 @@ public function login_in_process(){
         if(user_access('541') && !user_access('540')){
             redirect('ticket/dashboard');
         }
+       
        
         $data = array();
         $this->load->model('dash_model');
@@ -844,9 +854,6 @@ public function login_in_process(){
         //         $count = $this->enquiry_model->DYprocessWiseChart($this->session->user_id,$this->session->companey_id,$process,$key);
         //     }  
         // }
-
-
-
 
         if(!empty($chartData))
         {
@@ -3383,4 +3390,30 @@ public function fb_page_new(){
 redirect('facebook-pages');
   }
  }
+
+public function process_Monthwise()
+{
+    $chartData = $this->enquiry_model->DROPmonthWiseChart($this->session->user_id,$this->session->companey_id);
+    // $data[] = $this->enquiry_model->DROPmonthWiseChart($this->session->user_id,$this->session->companey_id,2);
+    // $data[] = $this->enquiry_model->DROPmonthWiseChart($this->session->user_id,$this->session->companey_id,3);
+    // echo json_encode($chartData);
+    // $enquiry_separation  = get_sys_parameter('enquiry_separation', 'COMPANY_SETTING');
+    // // print_r($enquiry_separation);
+    // if (!empty($enquiry_separation)) {
+    //  $enquiry_separation = json_decode($enquiry_separation, true);
+    //      foreach ($enquiry_separation as $key => $value) {
+    //           $ctitle=$value['title'];
+    //         $data[] = $this->enquiry_model->DROPmonthWiseChart($this->session->user_id,$this->session->companey_id,$key);
+    //                    } 
+    //                 } 
+    // echo json_encode($data);
+    if(!empty($chartData))
+    {
+        echo json_encode(array('data'=>$chartData,'status'=>'success'));
+    }
+    else
+    {
+        echo json_encode(array('status'=>'fail'));
+    }
+}
 }

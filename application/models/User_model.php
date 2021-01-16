@@ -530,7 +530,29 @@ public function ChangeStatus($data,$user_id,$com_id)
     return $update;
 
 }
+public function checkLoginToken()
+{
+    $token=$this->session->userdata('login_token');
+    $user_id=$this->session->user_id;
+    $count=$this->db->where(array('uid'=>$user_id,'token'=>$token))->count_all_results('login_log');
+    return $count;
 
+}
+public function updateLoginToken($user_id,$token)
+{
+    $count=$this->db->where(array('uid'=>$user_id))->count_all_results('login_log');
+    if($count==0){
+        $data=['uid'=>$user_id,'token'=>$token];
+        $insert=$this->db->insert('login_log',$data);
+        return $insert;
+    }else{
+        $data=['token'=>$token];
+       
+        $update= $this->db->where(array('uid'=>$user_id));
+        $update=$this->db->update('login_log',$data);
+        return $update;
+    }
+}
 
 }
 

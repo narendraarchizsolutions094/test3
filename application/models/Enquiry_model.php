@@ -3166,10 +3166,9 @@ $cpny_id=$this->session->companey_id;
         if(is_array($arr)){
             $where.=" AND enquiry.product_id IN (".implode(',', $arr).')';
         }          
-
         $enqAyr = array(); 
-      
-        $desplst_query = $this->db->query("SELECT lead_stage_name FROM lead_stage WHERE FIND_IN_SET(4,stage_for)=0 AND lead_stage.comp_id = $cpny_id");
+        $array=[1,2,3];
+        $desplst_query = $this->db->query("SELECT lead_stage_name FROM lead_stage WHERE  stage_for IN (".implode(',', $array).") AND lead_stage.comp_id = $cpny_id");
         $desplst = $desplst_query->result_array();
       
     	$despenqqry = $this->db->query("SELECT lead_stage_name,(SELECT COUNT(enquiry_id) FROM enquiry WHERE $where AND enquiry.lead_stage =  lead_stage.stg_id AND enquiry.status = 1)counternow FROM lead_stage WHERE lead_stage.comp_id = $cpny_id");
@@ -3603,7 +3602,110 @@ $cpny_id=$this->session->companey_id;
         //print_r($dataAry);die;
         return $dataAry;
     }
+    public function DYdropmonthWiseChart($userid,$companyid,$status)
+    {	
+    	$all_reporting_ids    =   $this->common_model->get_categories($userid);
+        $cpny_id=$companyid;
+    	$where="enquiry.comp_id=$cpny_id";
+        if($_POST){
+            // $filter=json_encode(array(
+            //     'from_date'=>$_POST['from_date'],
+            //     'to_date'=>$_POST['to_date'],
+            //     'users'=>$_POST['users'],
+            //     'state_id'=>$_POST['state_id'],
+            //     'city_id'=>$_POST['city_id'],
+            //                   ));
+            if(!empty($_POST['from_date']) AND !empty($_POST['to_date'])){
+                $from_date=$_POST['from_date'];
+                $to_date=$_POST['to_date'];
+                $where.=" AND enquiry.created_date >= $from_date";
+                $where.=" AND enquiry.created_date <=$to_date";
+                
+            }
+            if(!empty($_POST['users'])){
+                $users=$_POST['users'];
+                 $where.=" AND enquiry.created_by=$users";
+                 $where.=" OR enquiry.aasign_to=$users";
+            }else{
+                $where.= " AND ( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
+                $where.= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';
+            }
+            if(!empty($_POST['state_id'])){
+                $state_id=$_POST['state_id'];
+                     $where.=" AND enquiry.state_id=$state_id";
+                                        }
+            if(!empty($_POST['city_id'])){
+                $city_id=$_POST['city_id'];
+                $where.=" AND enquiry.city_id=$city_id";
+               }
+        }else{
+            $where.= " AND ( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
+            $where.= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';
+        }
+        $ejan = $ljan = $cjan = $efeb = $lfeb = $cfeb = $emar = $lmar = $cmar = $eapr = $lapr = $capr = $emay = $lmay = $cmay = $ejun = $ljun = $cjun = $ejuly = $ljuly = $cjuly = $eaug = $laug = $caug = $esep = $lsep = $csep = $eoct = $loct = $coct = $enov = $lnov = $cnov = $edec = $ldec = $cdec = 0;
 
+        $query8 = $this->db->query("SELECT count(enquiry.enquiry_id)counter, month(DATE(tc.created_date)) month  FROM enquiry  JOIN tbl_comment as tc ON tc.lead_id = enquiry.Enquery_id right JOIN tbl_drop as tp ON tp.d_id = enquiry.drop_status  WHERE $where AND enquiry.status = $status AND tc.comment_msg ='Enquiry dropped' AND tp.drop_reason IS NOT NULL GROUP BY  month(DATE(tc.created_date))");
+        $result8 = $query8->result();
+        //print_r($result8);die;
+
+        foreach($result8 as $r)
+        {
+            if($r->month == 1 )
+            {
+                
+                $ejan = $r->counter;
+            }
+            if($r->month == 2 )
+            {
+                $efeb = $r->counter;
+            }
+            if($r->month == 3 )
+            {
+                $emar = $r->counter;
+            }
+            if($r->month == 4 )
+            {
+                $eapr = $r->counter;
+            }
+            if($r->month == 5 )
+            {
+                $emay = $r->counter;
+            }
+            if($r->month == 6 )
+            {
+                $ejun = $r->counter;
+            }
+            if($r->month == 7 )
+            {
+                $ejuly = $r->counter;
+            }
+            if($r->month == 8 )
+            {
+                $eaug = $r->counter;
+            }
+            if($r->month == 9 )
+            {
+                $esep = $r->counter;
+            }
+            if($r->month == 10 )
+            {
+                $eoct = $r->counter;
+            }
+            if($r->month == 11 )
+            {
+                $enov = $r->counter;
+            }
+            if($r->month == 12 )
+            {
+                $edec = $r->counter;
+            }
+        }
+        //echo "string";die;
+
+        $dataAry = array('ejan'=>intval($ejan),'efeb'=>intval($efeb),'emar'=>intval($emar),'eapr'=>intval($eapr),'emay'=>intval($emay),'ejun'=>intval($ejun),'ejuly'=>intval($ejuly),'eaug'=>intval($eaug),'esep'=>intval($esep),'eoct'=>intval($eoct),'enov'=>intval($enov),'edec'=>$edec);
+        //print_r($dataAry);die;
+        return $dataAry;
+    }
     public function DYmonthWiseChart($userid,$companyid,$status)
     {	
     	$all_reporting_ids    =   $this->common_model->get_categories($userid);
@@ -3708,6 +3810,227 @@ $cpny_id=$this->session->companey_id;
         $dataAry = array('ejan'=>intval($ejan),'efeb'=>intval($efeb),'emar'=>intval($emar),'eapr'=>intval($eapr),'emay'=>intval($emay),'ejun'=>intval($ejun),'ejuly'=>intval($ejuly),'eaug'=>intval($eaug),'esep'=>intval($esep),'eoct'=>intval($eoct),'enov'=>intval($enov),'edec'=>$edec);
         //print_r($dataAry);die;
         return $dataAry;
+    }
+    public function DROPmonthWiseChart($userid,$companyid)
+    {	
+    	$all_reporting_ids    =   $this->common_model->get_categories($userid);
+        $cpny_id=$companyid;
+    	$where="enquiry.comp_id=$cpny_id";
+        if($_POST){
+            // $filter=json_encode(array(
+            //     'from_date'=>$_POST['from_date'],
+            //     'to_date'=>$_POST['to_date'],
+            //     'users'=>$_POST['users'],
+            //     'state_id'=>$_POST['state_id'],
+            //     'city_id'=>$_POST['city_id'],
+            //                   ));
+            if(!empty($_POST['from_date']) AND !empty($_POST['to_date'])){
+                $from_date=$_POST['from_date'];
+                $to_date=$_POST['to_date'];
+                $where.=" AND enquiry.created_date >= $from_date";
+                $where.=" AND enquiry.created_date <=$to_date";
+                
+            }
+            if(!empty($_POST['users'])){
+                $users=$_POST['users'];
+                 $where.=" AND enquiry.created_by=$users";
+                 $where.=" OR enquiry.aasign_to=$users";
+            }else{
+                $where.= " AND ( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
+                $where.= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';
+            }
+            if(!empty($_POST['state_id'])){
+                $state_id=$_POST['state_id'];
+                     $where.=" AND enquiry.state_id=$state_id";
+                                        }
+            if(!empty($_POST['city_id'])){
+                $city_id=$_POST['city_id'];
+                $where.=" AND enquiry.city_id=$city_id";
+               }
+        }else{
+            $where.= " AND ( enquiry.created_by IN (".implode(',', $all_reporting_ids).')';
+            $where.= " OR enquiry.aasign_to IN (".implode(',', $all_reporting_ids).'))';
+        }
+       
+      
+    $ejan = $ljan = $cjan = $efeb = $lfeb = $cfeb = $emar = $lmar = $cmar = $eapr = $lapr = $capr = $emay = $lmay = $cmay = $ejun = $ljun = $cjun = $ejuly = $ljuly = $cjuly = $eaug = $laug = $caug = $esep = $lsep = $csep = $eoct = $loct = $coct = $enov = $lnov = $cnov = $edec = $ldec = $cdec = 0;
+    if(user_access(60)) {
+ 
+        $query8 = $this->db->query("SELECT count(enquiry.enquiry_id)counter, month(DATE(tc.created_date)) month  FROM enquiry  JOIN tbl_comment as tc ON tc.lead_id = enquiry.Enquery_id right JOIN tbl_drop as tp ON tp.d_id = enquiry.drop_status  WHERE $where AND enquiry.status = 1 AND tc.comment_msg ='Enquiry dropped' AND tp.drop_reason IS NOT NULL GROUP BY  month(DATE(tc.created_date))");
+        $result8 = $query8->result();
+        
+         //print_r($result8);die;
+ 
+         foreach($result8 as $r)
+         {
+             if($r->month == 1 )
+             {
+                 $ejan = $r->counter;
+             }
+             if($r->month == 2 )
+             {
+                 $efeb = $r->counter;
+             }
+             if($r->month == 3 )
+             {
+                 $emar = $r->counter;
+             }
+             if($r->month == 4 )
+             {
+                 $eapr = $r->counter;
+             }
+             if($r->month == 5 )
+             {
+                 $emay = $r->counter;
+             }
+             if($r->month == 6 )
+             {
+                 $ejun = $r->counter;
+             }
+             if($r->month == 7 )
+             {
+                 $ejuly = $r->counter;
+             }
+             if($r->month == 8 )
+             {
+                 $eaug = $r->counter;
+             }
+             if($r->month == 9 )
+             {
+                 $esep = $r->counter;
+             }
+             if($r->month == 10 )
+             {
+                 $eoct = $r->counter;
+             }
+             if($r->month == 11 )
+             {
+                 $enov = $r->counter;
+             }
+             if($r->month == 12 )
+             {
+                 $edec = $r->counter;
+             }
+         }
+         //echo "string";die;
+     }
+    if(user_access(70)) {
+ 
+        $query9 = $this->db->query("SELECT count(enquiry.enquiry_id)counter, month(DATE(tc.created_date)) month  FROM enquiry  JOIN tbl_comment as tc ON tc.lead_id = enquiry.Enquery_id right JOIN tbl_drop as tp ON tp.d_id = enquiry.drop_status  WHERE $where AND enquiry.status = 2 AND tc.comment_msg ='Enquiry dropped' AND tp.drop_reason IS NOT NULL GROUP BY  month(DATE(tc.created_date))");
+        $result9 = $query9->result();
+ 
+         foreach($result9 as $r)
+         {
+             if($r->month == 1 )
+             {
+                 $ljan = $r->counter;
+             }
+             if($r->month == 2 )
+             {
+                 $lfeb = $r->counter;
+             }
+             if($r->month == 3 )
+             {
+                 $lmar = $r->counter;
+             }
+             if($r->month == 4 )
+             {
+                 $lapr = $r->counter;
+             }
+             if($r->month == 5 )
+             {
+                 $lmay = $r->counter;
+             }
+             if($r->month == 6 )
+             {
+                 $ljun = $r->counter;
+             }
+             if($r->month == 7 )
+             {
+                 $ljuly = $r->counter;
+             }
+             if($r->month == 8 )
+             {
+                 $laug = $r->counter;
+             }
+             if($r->month == 9 )
+             {
+                 $lsep = $r->counter;
+             }
+             if($r->month == 10 )
+             {
+                 $loct = $r->counter;
+             }
+             if($r->month == 11 )
+             {
+                 $lnov = $r->counter;
+             }
+             if($r->month == 12 )
+             {
+                 $ldec = $r->counter;
+             }
+         }
+     }
+    if(user_access(80)) { 
+ 
+        $query10 = $this->db->query("SELECT count(enquiry.enquiry_id)counter, month(DATE(tc.created_date)) month  FROM enquiry  JOIN tbl_comment as tc ON tc.lead_id = enquiry.Enquery_id right JOIN tbl_drop as tp ON tp.d_id = enquiry.drop_status  WHERE $where AND enquiry.status = 3 AND tc.comment_msg ='Enquiry dropped' AND tp.drop_reason IS NOT NULL GROUP BY  month(DATE(tc.created_date))");
+        $result10 = $query10->result();
+ 
+         foreach($result10 as $r)
+         {
+             if($r->month == 1 )
+             {
+                 $cjan = $r->counter;
+             }
+             if($r->month == 2 )
+             {
+                 $cfeb = $r->counter;
+             }
+             if($r->month == 3 )
+             {
+                 $cmar = $r->counter;
+             }
+             if($r->month == 4 )
+             {
+                 $capr = $r->counter;
+             }
+             if($r->month == 5 )
+             {
+                 $cmay = $r->counter;
+             }
+             if($r->month == 6 )
+             {
+                 $cjun = $r->counter;
+             }
+             if($r->month == 7 )
+             {
+                 $cjuly = $r->counter;
+             }
+             if($r->month == 8 )
+             {
+                 $caug = $r->counter;
+             }
+             if($r->month == 9 )
+             {
+                 $csep = $r->counter;
+             }
+             if($r->month == 10 )
+             {
+                 $coct = $r->counter;
+             }
+             if($r->month == 11 )
+             {
+                 $cnov = $r->counter;
+             }
+             if($r->month == 12 )
+             {
+                 $cdec = $r->counter;
+             }
+         }
+     }
+         $dataAry = array('ejan'=>$ejan,'ljan'=>$ljan,'cjan'=>$cjan,'efeb'=>$efeb,'lfeb'=>$lfeb,'cfeb'=>$cfeb,'emar'=>$emar,'lmar'=>$lmar,'cmar'=>$cmar,'eapr'=>$eapr,'lapr'=>$lapr,'capr'=>$capr,'emay'=>$emay,'lmay'=>$lmay,'cmay'=>$cmay,'ejun'=>$ejun,'ljun'=>$ljun,'cjun'=>$cjun,'ejuly'=>$ejuly,'ljuly'=>$ljuly,'cjuly'=>$cjuly,'eaug'=>$eaug,'laug'=>$laug,'caug'=>$caug,'esep'=>$esep,'lsep'=>$lsep,'csep'=>$csep,'eoct'=>$eoct,'loct'=>$loct,'coct'=>$coct,'enov'=>$enov,'lnov'=>$lnov,'cnov'=>$cnov,'edec'=>$edec,'ldec'=>$ldec,'cdec'=>$cdec);
+         //print_r($dataAry);die;
+         return $dataAry;
     }
 
     

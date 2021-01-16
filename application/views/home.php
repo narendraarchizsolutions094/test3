@@ -1,5 +1,4 @@
-<?php   
-                       $enquiry_separation  = get_sys_parameter('enquiry_separation', 'COMPANY_SETTING'); ?>
+<?php $enquiry_separation  = get_sys_parameter('enquiry_separation', 'COMPANY_SETTING'); ?>
 <!-- <link rel="stylesheet" href="<?php echo base_url()?>custom_dashboard/assets/css/dashforge.css"> -->
 <link rel="stylesheet" href="<?php echo base_url()?>custom_dashboard/assets/css/dashforge.dashboard.css">
 <link href="<?php echo base_url()?>custom_dashboard/lib/morris.js/morris.css" rel="stylesheet">
@@ -597,7 +596,15 @@ $enquiry_separation = json_decode($enquiry_separation, true);
 
                     </div>
                 </div>
+      
+<div class="col-lg-12 col-xl-12 mg-t-10">
+    <center><label>Drop Data</label></center>
+    <canvas id="process_Monthwise" width="800" height="450"></canvas>
+</div>
 
+<br>
+<br>
+<br>
 <?php
 if(user_access('260') || user_access('261') || user_access('250'))
 {
@@ -1885,6 +1892,233 @@ $.ajax({
 }
 ?>
 <!--  -->
+  
+<!-- Target Forecasting graph sg -->
+
+<?php
+if(user_access('260') || user_access('261') || user_access('250'))
+{
+?>
+<script type="text/javascript">
+$(document).ready(function(){
+
+try{
+var data_s= '<?php  if(!empty($filterData)){ echo $filterData; } ?>';
+
+$.ajax({
+    url:'<?=base_url('target/current_year_target_forecast')?>',
+    type:'post',
+    data:{datas:data_s},
+    success:function(q)
+    {   var j = JSON.parse(q);
+        var fore = j[0].forecast.toString().split(',');
+        var ach = j[0].achieved.toString().split(',');
+       
+         new Chart(document.getElementById("target_forecasting"), {
+                                type: 'bar',
+                                data: {
+                                    labels: ["JAN", "FEB", "MAR", "APR", "MAY", "JUNE",
+                                        "JULY", "AUG", "SEP", "OCT", "NOV", "DEC"
+                                    ],
+                                    datasets: [
+                                        {
+                                            label: "Forecast",
+                                            backgroundColor: "#3e95cd",
+                                            data: fore
+                                        },
+                                        {
+                                            label: "Achieved",
+                                            backgroundColor: "#84edb1",
+                                            data:ach
+                                        },
+
+                                    ]
+                                },
+                                options: {
+                                            title: {
+                                                display: true,
+                                                //text: 'Vertical Bar Graph'
+                                            }
+                                        }
+                            });
+
+        var p_fore = j[1].forecast.toString().split(',');
+        var p_ach = j[1].achieved.toString().split(',');
+
+         new Chart(document.getElementById("target_forecasting_previous"), {
+                                type: 'bar',
+                                data: {
+                                    labels: ["JAN", "FEB", "MAR", "APR", "MAY", "JUNE",
+                                        "JULY", "AUG", "SEP", "OCT", "NOV", "DEC"
+                                    ],
+                                    datasets: [
+                                        {
+                                            label: "Forecast <?=date('Y')?>",
+                                            backgroundColor: "#7c71a5",
+                                            data: fore
+                                        },
+                                        {
+                                            label: "Forecast <?=date('Y')-1?>",
+                                            backgroundColor: "#b0abc0",
+                                            data: p_fore
+                                        },
+                                        {
+                                            label: "Achieved <?=date('Y')?>",
+                                            backgroundColor: "#49d44e",
+                                            data:ach
+                                        },
+                                        {
+                                            label: "Achieved <?=date('Y')-1?>",
+                                            backgroundColor: "#98e1b6",
+                                            data:p_ach
+                                        },
+                                        
+                                    ]
+                                },
+                                options: {
+                                            title: {
+                                                display: true,
+                                                //text: 'Vertical Bar Graph'
+                                            }
+                                        }
+                            });
+    }
+});
+
+}catch(e){alert(e);}
+
+
+});
+
+
+
+</script>
+<?php
+}
+?>
+<!-- Styles -->
+<style>
+#chartdiv {
+  width: 100%;
+  height: 500px;
+}
+</style>
+
+<script>
+            $(document).ready(function() {
+                var data_s= '<?php  if(!empty($filterData)){ echo $filterData; } ?>';
+
+
+                $.ajax({
+                    url: "<?=base_url('Dashboard/process_Monthwise')?>",
+                    type: "post",
+                    data:{datas:data_s},
+                    dataType: "json",
+                    success: function(data) {
+                        if (data.status == 'success') {
+                            new Chart(document.getElementById("process_Monthwise"), {
+                                type: 'bar',
+                                data: {
+                                    labels: ["JUN", "FEB", "MAR", "APR", "MAY", "JUNE",
+                                        "JULY", "AUG", "SEP", "OCT", "NOV", "DEC"
+                                    ],
+                                    datasets: [
+                                        <?php if(user_access(60)){ ?> {
+                                            label: "<?=display("enquiry") ?>",
+                                            backgroundColor: "#3e95cd",
+                                            data: [parseInt(data.data.ejan), parseInt(
+                                                    data.data.efeb), parseInt(data
+                                                    .data.emar), parseInt(data.data
+                                                    .eapr), parseInt(data.data
+                                                .emay), parseInt(data.data.ejun),
+                                                parseInt(data.data.ejuly), parseInt(
+                                                    data.data.eaug), parseInt(data
+                                                    .data.esep), parseInt(data.data
+                                                    .eoct), parseInt(data.data
+                                                .enov), parseInt(data.data.edec)
+                                            ]
+                                        },
+                                        <?php } if(user_access(70)){ ?> {
+                                            label: "<?=display("lead") ?>",
+                                            backgroundColor: "#8e5ea2",
+                                            data: [parseInt(data.data.ljan), parseInt(
+                                                    data.data.lfeb), parseInt(data
+                                                    .data.lmar), parseInt(data.data
+                                                    .lapr), parseInt(data.data
+                                                .lmay), parseInt(data.data.ljun),
+                                                parseInt(data.datajuly), parseInt(
+                                                    data.data.laug), parseInt(data
+                                                    .data.lsep), parseInt(data.data
+                                                    .loct), parseInt(data.data
+                                                .lnov), parseInt(data.data.ldec)
+                                            ]
+                                        },
+                                        <?php } 
+                 if(user_access(80)){
+                ?> {
+                                            label: "<?=display("client") ?>",
+                                            backgroundColor: "#c45850",
+                                            data: [parseInt(data.data.cjan), parseInt(
+                                                    data.data.cfeb), parseInt(data
+                                                    .data.cmar), parseInt(data.data
+                                                    .capr), parseInt(data.data
+                                                .cmay), parseInt(data.data.cjun),
+                                                parseInt(data.data.cjuly), parseInt(
+                                                    data.data.caug), parseInt(data
+                                                    .data.csep), parseInt(data.data
+                                                    .coct), parseInt(data.data
+                                                .cnov), parseInt(data.data.cdec)
+                                            ]
+                                        },
+                                        <?php } ?>
+                                        <?php 
+        $enquiry_separation  = get_sys_parameter('enquiry_separation', 'COMPANY_SETTING');
+
+                 if (!empty($enquiry_separation)) {
+                  $enquiry_separation = json_decode($enquiry_separation, true);
+
+                      foreach ($enquiry_separation as $key => $value) {
+                              $ctitle = $enquiry_separation[$key]['title']; 
+                        $count = $this->enquiry_model->DYdropmonthWiseChart($this->session->user_id,$this->session->companey_id,$key);
+                            ?> {
+                                            label: "<?= $ctitle ?>",
+                                            backgroundColor: "<?=  sprintf('#%06X', mt_rand(0, 0xFFFFFF)); ?>",
+                                            data: [<?= $count['ejan']?>,
+                                                <?= $count['efeb']?>,
+                                                <?= $count['emar']?>,
+                                                <?= $count['eapr']?>,
+                                                <?= $count['emay']?>,
+                                                <?= $count['ejun']?>,
+                                                <?= $count['ejuly']?>,
+                                                <?= $count['eaug']?>,
+                                                <?= $count['esep']?>,
+                                                <?= $count['eoct']?>,
+                                                <?= $count['enov']?>,
+                                                <?= $count['edec']?>,
+                                            ],
+                                        },
+
+                                        <?php 
+
+                      }
+
+                    }
+                ?>
+                                    ]
+                                },
+                                options: {
+                                    title: {
+                                        display: true,
+                                        //text: 'Vertical Bar Graph'
+                                    }
+                                }
+                            });
+                        }
+                    }
+                })
+            })
+            </script>
+
             <script src="<?php echo base_url()?>custom_dashboard/assets/js/amcharts/moment.min.js"></script>
             <script src="<?php echo base_url()?>custom_dashboard/assets/js/amcharts/fullcalendar.min.js"></script>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>

@@ -3905,6 +3905,7 @@ if (document.getElementById('agg_same').checked)
             <input  type="hidden" id="mobile" name="mobile" value="<?php echo $enquiry->phone ?>">
             <input type="hidden" id="mail" name="mail" value="<?php echo $enquiry->email ?>">
             <input type="hidden" id="" name="enquiry_id" value="<?php echo $enquiry->enquiry_id ?>">
+            <input type="hidden" id="Enquiry_id" name="Enquiry_id" value="<?php echo $enquiry->Enquery_id ?>">
             <button class="btn btn-primary" onclick="send_sms()" type="button">Send</button>            
          </div>
          <div class="modal-footer">
@@ -3913,6 +3914,13 @@ if (document.getElementById('agg_same').checked)
       </div>
       </form>
    </div>
+</div>
+
+<div id="timelineshow_d" class="modal fade" role="dialog">
+<div class="modal-dialog modal-lg">
+            <div class="modal-content card" id="timelinesdata">
+            </div>
+</div>
 </div>
 <script>
    var currentValue = 0;
@@ -3923,6 +3931,19 @@ function handleClick(myRadio) {
       $('#schedule_time').show();
    }
 }
+   function getTimelinestatus(timelineId){ 
+      $.ajax({               
+         url : '<?php echo base_url('enquiry/EnqtimelinePopup') ?>',
+         type: 'POST',
+         data: {timelineId:timelineId},
+         success:function(content){
+         //  var obj = JSON.parse(data);
+            //  $("#timelinesdata").append(obj.msg);
+            $("#timelinesdata").html(content);
+
+         }               
+     });        
+    }
   // jquery
 $(function () {
 		$('#datetimepicker').datetimepicker({ 
@@ -4394,6 +4415,7 @@ $(".toogle-timeline").click(function(){
 
   $(document).ready(function()
   {
+
     $.ajax({
           url: "<?php echo base_url().'enquiry/activityTimeline'?>",
           type: 'POST',          
@@ -4562,7 +4584,6 @@ $(".toogle-timeline").click(function(){
    function  send_sms(){   
       var sms_type = $("#mesge_type").val();
      $('#mesge_type').val(sms_type);    
-
       //if ("<?=$this->session->companey_id?>" == 81 && sms_type!=1) {
        // url =  '<?php echo base_url();?>message/send_sms_career_ex';
       //}else{

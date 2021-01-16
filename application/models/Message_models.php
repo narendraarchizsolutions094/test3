@@ -262,6 +262,22 @@ class Message_models extends CI_Model
      $insert_id = $this->db->insert_id();
     return $insert_id;
   }
+  public function AddMsgtimlineEnquiry($enquiry_id,$message,$user_id,$template_name,$comment_msg)
+  {
+    $message=json_encode($message,false);
+    $insarr = array(
+      "lead_id" => $enquiry_id,
+      "comp_id" => $this->session->companey_id,
+      "comment_msg" =>$comment_msg,
+      'remark'=>$template_name,
+      'msg'=>$message,
+      "created_by" => $user_id,
+    );
+    $insert = $this->db->insert("tbl_comment", $insarr);
+     $insert_id = $this->db->insert_id();
+    return $insert_id;
+  }
+
   public function saveMsgLogs($msgType, $ticketId, $user_id, $templates_id, $message_name, $phone, $media_url,$saveMsgTimelineId,$subject)
   {
     $data = [
