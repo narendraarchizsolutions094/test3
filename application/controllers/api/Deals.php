@@ -71,7 +71,10 @@ class Deals extends REST_Controller {
     {
     	$id = $this->input->post('deal_id');
 
-    	$value = $this->db->where('id',$id)->get('commercial_info')->row();
+    	$value = $this->db->select('commercial_info.*,bb.branch_name as bb_name,db.branch_name as db_name')
+    		->join('branch as bb','bb.branch_id=commercial_info.booking_branch','left')
+    		->join('branch as db','db.branch_id=commercial_info.delivery_branch','left')
+    		->where('commercial_info.id',$id)->get('commercial_info')->row();
 
     	if(!empty($value))
     	{
@@ -113,7 +116,7 @@ class Deals extends REST_Controller {
 	       $extra['insurance_text'] = $insurance;
 	       $extra['booking_type_text'] = $booking_type;
 	       $extra['paymode_text'] = $paymode;
-
+	       
 
     		 $this->set_response([
                 'status' => TRUE,

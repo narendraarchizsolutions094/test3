@@ -224,6 +224,13 @@ class Ticket_datatable_model extends CI_Model{
             $sel_string[] = " tbl_ticket_subject.subject_title";    
         }
         
+        $followup = empty($this->session->ticket_filters_sess['followup'])?0:1;
+
+        if($followup)
+        {
+            $sel_string[] = " conv.subj as tck_subject,for_conv.lead_stage_name as tck_stage,for_conv_desc.description as tck_sub_stage,conv.msg as tck_msg";
+        }
+
         $select = implode(',', $sel_string);
 
         $this->db->select($select);
@@ -287,6 +294,14 @@ class Ticket_datatable_model extends CI_Model{
         {
          $this->db->join("tbl_admin assign_by","tck.assigned_by=assign_by.pk_i_admin_id","LEFT");
         } 
+
+        if($followup)
+        {
+           $this->db->join("tbl_ticket_conv conv","tck.id=conv.tck_id","inner");
+           $this->db->join('lead_stage for_conv','conv.stage=for_conv.stg_id','left');
+           $this->db->join('lead_description for_conv_desc','conv.sub_stage=for_conv_desc.id','left');
+        }
+
          $this->db->where("tck.company",$this->session->companey_id);
 
          if(!empty($this->session->process)){              
@@ -296,7 +311,7 @@ class Ticket_datatable_model extends CI_Model{
             }                       
         }
 
-         $this->db->group_by("tck.id");
+        //$this->db->group_by("tck.id");
 
 
 
@@ -569,7 +584,7 @@ $CHK = 0;
         }
 
         $this->db->where($where);
-        $this->db->group_by('tck.id');
+        //$this->db->group_by('tck.id');
     //}
 
         $i = 0;
