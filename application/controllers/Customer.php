@@ -105,6 +105,8 @@ class Customer extends CI_Controller
                     } else {
                         $menu = 2;
                     }
+                    $login_token= random_string('alnum', 30);
+
                     $data = $this->session->set_userdata([
                         'menu'                  => $menu,
                         'isLogIn'               => true,
@@ -132,7 +134,14 @@ class Customer extends CI_Controller
                         'telephony_token'       => $user_data->telephony_token,
                         'expiry_date'           => strtotime($user_data->valid_upto),
                         'availability'    => $user_data->availability,
+                        'login_token'=>$login_token,
+
                     ]);
+
+                    if(user_access(133))
+                    {
+                    $this->user_model->updateLoginToken($user_data->pk_i_admin_id,$login_token);
+                    }
                     //$this->user_model->add_login_history();
                     $res = array('status' => true, 'message' => 'Successfully Logged In');
                     redirect('dashboard/home');
