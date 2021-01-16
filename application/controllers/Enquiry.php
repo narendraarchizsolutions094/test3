@@ -1331,7 +1331,7 @@ class Enquiry extends CI_Controller
             } else {
                      $html .= '  <li>
                     <div class="cbp_tmicon cbp_tmicon-phone"  style=""></div>
-                    <div class="cbp_tmlabel"  style="background:#95a5a6;">
+                    <div class="cbp_tmlabel"  onclick="getTimelinestatus('.$comments->comm_id.');"  style="background:#95a5a6;" data-toggle="modal" data-target="#timelineshow_d">
                     <span style="font-weight:900;font-size:13px;">' . ucfirst($comments->comment_msg) . ' </span></br>
                     <span style="font-weight:900;font-size:10px;">' . ucfirst($comments->remark) . '</span>';
                 if ($comments->comment_msg == 'Stage Updated') {
@@ -3029,6 +3029,49 @@ public function timelinePopup()
     // }else{
     //     echo json_encode(array('msg'=>'Stage Updated'));
     // }
+}
+public function EnqtimelinePopup()
+{
+    $details1='';
+    $timelineId=$this->input->post('timelineId');
+    $log=$this->db->where('comm_id',$timelineId)->get('tbl_comment');
+    // print_r($log->result());
+    if($log->num_rows()==1){
+        $message='';
+        foreach ($log->result() as $key => $value) {
+            if(!empty($value->msg)){ 
+                $message=json_decode($value->msg);
+                $message=$message->message;
+            } 
+            $remark=$value->remark;
+            if(empty($value->remark) OR $value->remark==' '){ 
+               
+                $remark=$value->comment_msg;
+            } 
+            $details1 = '
+               <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  <h4 class="modal-title" id="timlineTitle">'.$remark.'</h4>
+               </div>
+               <div class="row" style="padding: 50px;">
+               <div id="timelinesdata">'.$message.'</div>
+               </div>
+               <div class="modal-footer">
+                 <div class="row">
+                   <div class="col-md-4">
+                   <h4  id="timeline-cratedate">'.$value->created_date.'</h4>
+                   </div>
+                   <div class="col-md-4">
+                   </div>
+                   <div class="col-md-4">
+                   <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                   </div>
+                 </div>
+               </div>
+          ';
+        }
+    }
+echo  $details1;
 }
  public function insertCommercialInfo()
  {

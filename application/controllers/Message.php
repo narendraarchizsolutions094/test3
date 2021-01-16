@@ -229,24 +229,19 @@ class Message extends CI_Controller {
 		  $schedule=$this->input->post('schedule');
 		//   $message_type=$this->input->post('message_type');
 		  //schedule end
-
-
-
 		  $msgType= $this->input->post('mesge_type');
 		  $ticketId= $this->input->post('ticketId');
 		  $msg_from=$this->input->post('msg_from');
 		  $user_id = $this->session->user_id;
 		  $move_enquiry = $this->input->post('enquiry_id');
 		  $message=$this->input->post('message_name');
-
+			$Enquiry_id=$this->input->post('Enquiry_id');
 		  $replaceName='';
 		  $replacePhone='';
 		  $username=$this->session->userdata('fullname');
 		  $userphone=$this->session->userdata('phone');
 		  $designation=$this->session->userdata('designation');
-
 		  //fetch visiting card
-
 		  $media_url='';
 		 $this->db->where('pk_i_admin_id',$this->session->user_id);
               $user_row  = $this->db->get('tbl_admin')->row_array();
@@ -309,11 +304,16 @@ class Message extends CI_Controller {
       	      foreach($move_enquiry as $key){	
       	        $enq = $this->enquiry_model->enquiry_by_id($key);
       	        $phone='91'.$enq->phone;
-      	        $this->Message_models->sendwhatsapp($phone,$message);
+				  $this->Message_models->sendwhatsapp($phone,$message);
+				  $media_url='';
+				  
       	        if($template_row['media']){	      	        	
       	        	$media_url	=	$template_row['media'];
-      	        	$this->Message_models->sendwhatsapp($phone,base_url().$media_url);
+					  $this->Message_models->sendwhatsapp($phone,base_url().$media_url);
 				  }
+				  $save_message=['message'=>$message,'media'=>$media_url];
+				  $saveMsgTimelineId=$this->Message_models->AddMsgtimlineEnquiry($enq->Enquery_id,$save_message,$user_id,$template_name,'Send Whatsapp');
+
 				  // if visiting card send
 				}
 				
@@ -322,18 +322,17 @@ class Message extends CI_Controller {
 				//check schedule type is or not
 				if($schedule==1){
 					
-              	$this->Message_models->sendwhatsapp($phone,$message); 
+				  $this->Message_models->sendwhatsapp($phone,$message); 
+				  $media_url='';
               	if($template_row['media']){	      	   
 					  $media_url = $template_row['media'];    
 					  if ($msg_from=='ticket') {
-						
 						//timeline add
 						$saveMsgTimelineId=$this->Message_models->AddMsgtimline($msgType,$ticketId,$user_id,$templates_id,$template_name,'Send Whatsapp');
 						//save logs
 						$this->Message_models->saveMsgLogs($msgType,$ticketId,$user_id,$templates_id,$message,$phone,base_url().$media_url,$saveMsgTimelineId,0);
-					  } 	
-					  
-      	        	$this->Message_models->sendwhatsapp($phone,base_url().$media_url);      	        		      	
+					   } 
+					  $this->Message_models->sendwhatsapp($phone,base_url().$media_url);      	        		      	
 				  }
 				  //only for ticket
 				  if ($msg_from=='ticket') {
@@ -343,10 +342,12 @@ class Message extends CI_Controller {
 					  $saveMsgTimelineId=$this->Message_models->AddMsgtimline($msgType,$ticketId,$user_id,$templates_id,$template_name,'Send Whatsapp');
 					  //save logs
 				      $this->Message_models->saveMsgLogs($msgType,$ticketId,$user_id,$templates_id,$message,$phone,base_url().$media_url,$saveMsgTimelineId,0);
-				}
+				}else{
+					$save_message=['message'=>$message,'media'=>$media_url];
+					$saveMsgTimelineId=$this->Message_models->AddMsgtimlineEnquiry($Enquiry_id,$save_message,$user_id,$template_name,'Send Whatsapp');
+				      }
 			  echo "Message sent successfully";
 			}else{
-				$media_url='';
 				if(!empty($template_row['media'])){	      	        	
 					$media_url	=	$template_row['media'];
 					$media_url=     base_url().$media_url;
@@ -442,6 +443,7 @@ class Message extends CI_Controller {
 			                $email_subject = str_replace('@name',$name1,str_replace('@org',$user_row['orgisation_name'],str_replace('@desg',$user_row['designation'],str_replace('@phone',$user_row['contact_phone'],str_replace('@desg',$user_row['designation'],str_replace('@user',$user_row['s_display_name'].' '.$user_row['last_name'],$email_subject))))));
 								
 						}
+						$media_url='';
 	            			//echo $to.'|'.$email_subject.'| '.$message.'|'.$cc; exit();	
 			      	        $enq = $this->enquiry_model->enquiry_by_id($key);
 			      	       
@@ -456,10 +458,13 @@ class Message extends CI_Controller {
 							//$this->email->set_mailtype('html');
 			                if($rows->files!=null || !empty($rows->files==null))
 			                {
-			                    $this->email->attach($rows->files);
+								$this->email->attach($rows->files);
+								$media_url=$rows->files;
 			                }
 			                if($this->email->send()){
 									echo "Mail sent successfully";
+									$save_message=['message'=>$message,'media'=>$media_url];
+				                	$saveMsgTimelineId=$this->Message_models->AddMsgtimlineEnquiry($enq_row->Enquery_id,$save_message,$user_id,$email_subject,'Send Mail');
 			                }else{
 								echo $this->email->print_debugger();
 								echo "Something went wrong";			                	
@@ -485,10 +490,16 @@ class Message extends CI_Controller {
 							//$this->email->set_mailtype('html');
 				  // if visiting card send
 							if($rows->files!=null || !empty($rows->files==null))
-			                { $this->email->attach($rows->files); }
+							{ $this->email->attach($rows->files);
+								$media_url=$rows->files;
+							
+							}
 			                if($this->email->send()){
+									$save_message=['message'=>$message,'media'=>$media_url];
+				                	$saveMsgTimelineId=$this->Message_models->AddMsgtimlineEnquiry($Enquiry_id,$save_message,$user_id,$email_subject,'Send Mail');
 									echo "Mail sent successfully";
-			                }else{
+
+								}else{
 								echo $this->email->print_debugger();
 								echo "Something went wrong";			                	
 							}
@@ -531,6 +542,10 @@ class Message extends CI_Controller {
 							$saveMsgTimelineId=$this->Message_models->AddMsgtimline($msgType,$ticketId,$user_id,$temp_id,$email_subject,'Send Mail');
 							//save logs
 							$this->Message_models->saveMsgLogs($msgType,$ticketId,$user_id,$temp_id,$message,$to,base_url().$media_url,$saveMsgTimelineId,$email_subject);
+					  }else{
+						$save_message=['message'=>$message,'media'=>''];
+						$saveMsgTimelineId=$this->Message_models->AddMsgtimlineEnquiry($Enquiry_id,$save_message,$user_id,$email_subject,'Send Mail');
+						
 					  }
 	            }else{
 	            	echo $this->email->print_debugger();
@@ -565,6 +580,10 @@ class Message extends CI_Controller {
 					$saveMsgTimelineId=$this->Message_models->AddMsgtimline($msgType,$ticketId,$user_id,0,$message,'Send SMS');
 					//save logs
 					$this->Message_models->saveMsgLogs($msgType,$ticketId,$user_id,0,$message,$phone,$media_url,$saveMsgTimelineId,' ');
+			  }else{
+				$save_message=['message'=>$message,'media'=>''];
+				$saveMsgTimelineId=$this->Message_models->AddMsgtimlineEnquiry($Enquiry_id,$save_message,$user_id,' ','Send SMS');
+				
 			  }
 			}else{
 				  // if visiting card send
@@ -585,7 +604,9 @@ class Message extends CI_Controller {
 				  // if visiting card send
 							$message  =str_replace('@visiting_card',base_url($user_meta['visiting_card']), $message);
 				  // if visiting card send end
-				    $this->Message_models->smssend($phone,$message);
+					$this->Message_models->smssend($phone,$message);
+					$save_message=['message'=>$message,'media'=>''];
+				$saveMsgTimelineId=$this->Message_models->AddMsgtimlineEnquiry($enq->Enquery_id,$save_message,$user_id,' ','Send SMS');
 				  }
 				  echo "Message sent successfully";
 				  
