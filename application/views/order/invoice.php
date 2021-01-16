@@ -36,7 +36,7 @@
 												<?php if($this->uri->segment(4)==''){ ?>
 												<h2 class="mb-1" style="font-family: 'Montserrat';">PROFORMA INVOICE</h2>
 											    <?php } ?>
-												<h3 class="mb-1" style="margin:0px;font-family: 'Montserrat';">LALANTOP CONSUMERS PVT. LTD</h3>
+												<h3 class="mb-1" style="margin:0px;font-family: 'Montserrat';">LALANTOP CONSUMER PVT. LTD</h3>
 												<p class="mb-1" style="margin:0px;"><span class="font-weight-semibold">1st Floor,office no.9,D-5,Awadh Complex,Laxmi Nagar , Delhi-110092 </p>
 											    <p class="mb-1" style="margin:0px;"><span class="font-weight-semibold">Corp.Off.at.IHDP Business Park.7 , Sector-127,Noida-201301 </p>
 												<p class="mb-1" style="margin:0px;"><span class="font-weight-semibold">GSTIN/UIN.07AADCL4696D1ZE , CIN:U51909DL2017PTC326524 </p>
@@ -55,7 +55,7 @@
 											<p class="mb-1" style="margin:0px;"><span class="font-weight-semibold" style="font-weight: 700;">Website :</span> www.lalantop.com </p>
 											</div>
 											<div class="text-center ml-auto col-md-4">
-											<p class="mb-1" style="margin:0px;"><span class="font-weight-semibold" style="font-weight: 700;">E-MAIL :</span> accounts@lalantop.com </p>
+											<p class="mb-1" style="margin:0px;"><span class="font-weight-semibold" style="font-weight: 700;">E-MAIL :</span> account@lalantop.com </p>
 											</div>
 										</div>
 										 
@@ -155,7 +155,7 @@
 										
 										<div class="row">
 											<div class="text-left ml-auto col-md-6">
-											<p class="mb-1" style=""><span class="font-weight-semibold" style="font-weight: 700;">Amt.Chargeable (in words) Rs. :</span> 
+											<p class="mb-1" style=""><span class="font-weight-semibold" style="font-weight: 700;">Chargeable Amt.(in words) Rs. :</span> 
 
  <?php
 $number = $total;
@@ -221,7 +221,7 @@ This is Computer generated invoice,so no signature in required. </p>
 											</div>-->
 										</div>
 											<div class="text-center ml-auto col-md-6 pull-right">
-											<p class="mb-1" style=""><span class="font-weight-semibold" style="font-weight: 700;">For Lalantop Consumers Pvt.Ltd. :</span></br></br> Authorised Signatory </p>
+											<p class="mb-1" style=""><span class="font-weight-semibold" style="font-weight: 700;">For Lalantop Consumer Pvt.Ltd. :</span></br></br> Authorised Signatory </p>
 											</div>
 										
 									</br>
