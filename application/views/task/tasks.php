@@ -82,7 +82,7 @@ if(user_access(310)){
 <br>
 
 
-<?php  if(user_access(90)==true){ ?>
+<?php  if(user_access(90)==true && 0){ ?>
 
 
 <!-- Modal -->

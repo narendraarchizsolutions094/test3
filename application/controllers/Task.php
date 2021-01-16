@@ -333,6 +333,7 @@ class Task extends CI_Controller {
                'mobile'         =>  $enq_row['phone']??0,
                'email'          =>  $enq_row['email']??'',
                'task_remark'    =>  $task_remark,
+               'notification_id'=> $this->input->post('task_notification_id'),
                'create_by'      =>  $this->session->user_id
            );
            $this->db->insert('query_response',$ins_arr);

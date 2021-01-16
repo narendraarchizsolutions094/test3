@@ -1,8 +1,9 @@
 <form action="<?=base_url().'task/save_task'?>" class="form-inner" enctype="multipart/form-data" method="post">
+    <input name='task_notification_id' type='hidden'/>
     <div class="">
         <div class="form-group col-sm-6">
             <label>Subject <i class="text-danger ">*</i></label>
-            <input type="text" class="form-control" name="subject" placeholder="Subject">
+            <input type="text" class="form-control" id='task_subject' name="subject" placeholder="Subject">
         </div>
         <div class="form-group col-sm-6">
             <label>Task Type <i class="text-danger ">*</i></label>
@@ -32,7 +33,7 @@
         </div>
         <div class="form-group col-sm-6">
             <label>Related To<i class="text-danger">*</i></label>
-            <select class="form-control" name="related_to">
+            <select class="form-control" name="related_to" id='task_related_to'>
             <?php
                 if(!empty($related_to)){
                     foreach($related_to as $key=>$value){
@@ -74,7 +75,7 @@
         </div>
         <div class="form-group col-sm-12">
             <label>Description<i class="text-danger">*</i></label>
-            <textarea rows="6" class="form-control" name="task_remark"
+            <textarea id='task_description' rows="6" class="form-control" name="task_remark"
                 placeholder='Start typing the details about the task...'></textarea>
         </div>
         <div class="form-group text-center">
