@@ -16,36 +16,36 @@
          
           <div class="cbp_tmlabel"  style="background:#95a5a6;"  <?php 
           if( $subj=='Send Whatsapp' OR $subj =='Send Mail' OR $subj  =='Send SMS'){ ?> onclick="getTimelinestatus('<?= trim($cnv->id) ?>');" data-toggle="modal"  data-target="#timelineshow" data-toggle="modal" <?php } ?> >
-            <span style="font-weight:900;font-size:15px;"><?php echo $cnv->subj; ?></span>
+            <span style="font-weight:900;font-size:13px;"><?php echo $cnv->subj; ?></span>
             <?php
             if (!empty($cnv->lead_stage_name)) { ?>
-              <br><span style="font-weight:900;font-size:12px;">Stage - </span>  <span style="font-weight:900;font-size:12px;"><?php echo $cnv->lead_stage_name; ?></span>
+              <br><span style="font-weight:900;font-size:11px;">Stage - </span>  <span style="font-weight:900;font-size:11px;"><?php echo $cnv->lead_stage_name; ?></span>
               <?php
             }
 
             if (!empty($cnv->sub_stage)) { ?>
-              <br><span style="font-weight:900;font-size:12px;">Sub Stage - </span><span style="font-weight:900;font-size:12px;"><?php echo $cnv->sub_stage; ?></span>
+              <br><span style="font-weight:900;font-size:11px;">Sub Stage - </span><span style="font-weight:900;font-size:11px;"><?php echo $cnv->sub_stage; ?></span>
               <?php
             }
              if (!empty($cnv->status_name)) { ?>
-              <br><span style="font-weight:900;font-size:12px;">Status - </span><span style="font-weight:900;font-size:12px;"><?php echo $cnv->status_name; ?></span><br>
+              <br><span style="font-weight:900;font-size:11px;">Status - </span><span style="font-weight:900;font-size:11px;"><?php echo $cnv->status_name; ?></span>
               <?php
             }
             if (!empty($cnv->msg)) { ?>
-            <br><span style="font-weight:900;font-size:12px;">Remark - </span><span style="font-weight:900;font-size:12px;"><?php echo $cnv->msg; ?></span>               
+            <br><span style="font-weight:900;font-size:11px;">Remark - </span><span style="font-weight:900;font-size:11px;"><?php echo $cnv->msg; ?></span>               
               <?php
             }
 
             if (!empty($cnv->updated_by)) { ?>
-              <br><span style="font-weight:100;font-size:12px;">By - </span><span style="font-weight:100;font-size:12px;"><?php echo $cnv->updated_by; ?></span><br>
+              <br><span style="font-weight:100;font-size:11px;">By - </span><span style="font-weight:100;font-size:11px;"><?php echo $cnv->updated_by; ?></span>
               <?php
             }
             
              if (!empty($cnv->assignedTo)) { ?>
-              <br><span style="font-weight:100;font-size:12px;">To - </span><span style="font-weight:100;font-size:12px;"><?php echo $cnv->assignedTo; ?></span><br>
+              <br><span style="font-weight:100;font-size:11px;">To - </span><span style="font-weight:100;font-size:11px;"><?php echo $cnv->assignedTo; ?></span>
               <?php
             } ?>
-            <p style="font-size: 13px;"> Updated: <?php echo date("j-M-Y h:i:s A",strtotime($cnv->send_date)); ?><br>
+            <p style="font-size: 10px; margin-top: 5px;" align="right"> <span class="fa fa-clock-o"></span> <?php echo date("j-M-Y h:i:s A",strtotime($cnv->send_date)); ?><br>
            </p>
           </div>
         </li>

@@ -233,7 +233,17 @@
                     </div> 
                   <?php
                     }
+
+
+                    $followup = empty($_SESSION['ticket_filters_sess']['followup'])?0:1;
+
                     ?>
+
+                    <div class="form-group col-md-3"><br>
+                    <label for="follow_up">Followup Report</label>  
+                      <input type="checkbox" name="followup" value="1" <?=$followup?'checked':''?>>
+                    </div> 
+
                     </div>
                   <div class="col-md-12" style="border-top: 1px solid #f4f4f4; padding: 8px;">
                     <button class="btn btn-success pull-right" type="submit" id="go_filter">Generate Report</button>
@@ -297,8 +307,6 @@
                       <?=($showall or in_array(13,$acolarr))?'<th>Sub Stage</th>':''?>
                       <?=($showall or in_array(14,$acolarr))?'<th>Review</th>':''?>
                       <?=($showall or in_array(16,$acolarr))?'<th>Status</th>':''?>
-
-
                       <?php 
                       if(!empty($dacolarr) and !empty($dfields))
                       {
@@ -310,6 +318,16 @@
                           }
                         }
                        } ?>
+
+                      <?php
+                      if($followup)
+                      {
+                        echo'<th>Ticket Subject</th>
+                              <th>Ticket Stage</th>
+                              <th>Ticket Sub Stage</th>
+                              <th>Ticket Remark</th>';
+                      }
+                      ?>
 
 										</thead>
 										<tbody>
