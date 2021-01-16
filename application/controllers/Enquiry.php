@@ -3187,11 +3187,11 @@ echo  $details1;
         }
     }else{
         $comp_id=$this->session->companey_id;
-        $type=$this->input->post('type');
+        $type=$this->input->post('type_update');
         $booking_type=$this->input->post('booking_type');
         $business_type=$this->input->post('business_type');
-        $booking_branch=$this->input->post('booking_branch');
-        $delivery_branch=$this->input->post('delivery_branch');
+        $booking_branch=$this->input->post('booking_branch_update');
+        $delivery_branch=$this->input->post('delivery_branch_update');
         $insurance=$this->input->post('insurance');
         $rate=$this->input->post('rate');
         $discount=$this->input->post('discount');
@@ -3207,7 +3207,7 @@ echo  $details1;
         $ftlpotential_amount=$this->input->post('ftlpotential_amount');
         $ftlexpected_amount=$this->input->post('ftlexpected_amount');
         $invoice_value=$this->input->post('invoice_value');
-        $url=base_url('enquiry/view/'.$enquiry_id.'');
+        $url=base_url('enquiry/view/'.$enquiry_id.'#COMMERCIAL_INFORMATION');
         if($booking_type==0){
          $data=[ 
                 'branch_type'=>$type,
@@ -3284,21 +3284,19 @@ echo  $details1;
     }
     public function editinfo()
     {
-        if(user_role('1002')){}
+        // if(user_role('1002')){}
 
          $id=$this->uri->segment('3');
         $comp_id=$this->session->companey_id;
-   
       $count=$this->db->where(array('id'=>$id,'comp_id'=>$comp_id))->get('commercial_info');
       //check exist of not
       if($count->num_rows()==1){
         $data['page_title'] = 'Edit Commercial Info';
         $data['info'] = $count->result();
-        if ($this->session->companey_id == 65) {
-            $data['branch']=$this->db->where('comp_id',65)->get('branch')->result();
-        } 
-		$data['content'] = $this->load->view('enquiry/edit-info',$data,true);
-        $this->load->view('layout/main_wrapper', $data);
+        // if ($this->session->companey_id == 65) {
+            $data['branch']=$this->db->where('comp_id',$comp_id)->get('branch')->result();
+        // } 
+	   echo $this->load->view('enquiry/edit-info',$data,true);
     }
        }
        public function deleteInfo()
