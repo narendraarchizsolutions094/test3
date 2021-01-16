@@ -268,8 +268,7 @@ class Task extends CI_Controller {
             <tr>
                 <td>' . $task->task_date . '</td>
                 <td>' . $task->task_time . '</td>
-                <td>'. $task->subject. '</td>
-                <td>'. $task->subject. '</td>                
+                <td>'. $task->subject. '</td>                               
                 <td>'. $task_type. '</td>
                 <td>'. $task->task_remark. '</td>                
                 <td><a href="'.$url.'">' . $name . '</a></td>
