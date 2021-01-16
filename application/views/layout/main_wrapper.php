@@ -2757,18 +2757,7 @@ if($root=='https://student.spaceinternationals.com'){  ?>
         return firebase.database().ref('reminders/' + userId + '/' + notication_id).update(rem_data);
         //return newPostKey
     }
-
-
-    $('#set_reminder').on('submit', function(e) {
-        e.preventDefault();
-        var uid = "<?=$this->session->user_id?>";
-        var rem_date = $("input[name='reminder_date']").val();
-        var rem_time = $("input[name='reminder_time']").val();
-        var reminder_txt = $("input[name='reminder_txt']").val();
-        var enq_id = '';
-        writeUserData(uid, reminder_txt, enq_id, rem_date, rem_time);
-        location.reload();
-    });
+    
 
     $("#submit_task_btn").on('click', function(e) {
         e.preventDefault();

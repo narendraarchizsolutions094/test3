@@ -1131,7 +1131,7 @@ public function all_description($diesc) {
         return $this->db->insert('tbl_comment');
     }
     
-    public function add_comment_for_events_popup($stage_remark,$stage_date,$contact_person,$mobileno,$email,$designation,$stage_time,$enq_code,$notification_id=0,$dis_subject='',$task_for='') {
+    public function add_comment_for_events_popup($stage_remark,$stage_date,$contact_person,$mobileno,$email,$designation,$stage_time,$enq_code,$notification_id=0,$dis_subject='',$task_for='',$task_type='') {
         $ld_updt_by = $this->session->user_id;
         $adt = date("Y-m-d H:i:s");
         $this->db->set('query_id', $enq_code);
@@ -1147,6 +1147,7 @@ public function all_description($diesc) {
         $this->db->set('notification_id', $notification_id);
         $this->db->set('subject', $dis_subject);
         $this->db->set('task_for',$task_for);
+        $this->db->set('task_type',$task_type);
         $this->db->insert('query_response');
     }
 	public function add_comment_for_events_popup_api($stage_remark,$stage_date,$stage_time,$enq_code,$userno) {

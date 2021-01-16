@@ -48,7 +48,7 @@ class Task_datatable_model extends CI_Model {
         $user_id = $this->session->user_id;      
 
         $where = '';
-        $this->db->select("query_response.resp_id,query_response.task_for,query_response.query_id,query_response.upd_date,query_response.task_date,query_response.task_time,query_response.task_remark,query_response.subject,query_response.task_status,query_response.mobile,tbl_admin.s_display_name as user_name,tbl_taskstatus.taskstatus_name as task_status,");
+        $this->db->select("query_response.resp_id,query_response.task_for,query_response.task_type,query_response.query_id,query_response.upd_date,query_response.task_date,query_response.task_time,query_response.task_remark,query_response.subject,query_response.task_status,query_response.mobile,tbl_admin.s_display_name as user_name,tbl_taskstatus.taskstatus_name as task_status,");
        
             
       

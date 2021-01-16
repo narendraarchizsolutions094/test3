@@ -1117,8 +1117,8 @@ class Ticket extends CI_Controller
 		$this->Ticket_Model->saveconv($ticketno, 'Stage Updated', $stage_remark, $client, $user_id, $lead_stage, $stage_desc);
 
 		$contact_person = '';
-		$mobileno = '';
-		$email = '';
+		$mobileno = $this->input->post('mobile');
+		$email = $this->input->post('email');
 		$designation = '';
 		$enq_code = $this->input->post('ticketno');
 		$notification_id = $this->input->post('dis_notification_id');

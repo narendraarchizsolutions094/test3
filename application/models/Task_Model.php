@@ -60,7 +60,7 @@ public function __construct()
         //$all_reporting_ids    =    $this->common_model->get_categories($user_id);               
 
         $user_role = $this->session->user_role;
-        $this->db->select("query_response.resp_id,query_response.query_id,query_response.upd_date,query_response.task_date,query_response.task_time,query_response.task_remark,query_response.subject,query_response.task_status,query_response.mobile,tbl_admin.s_display_name as user_name,tbl_taskstatus.taskstatus_name as task_status");
+        $this->db->select("query_response.resp_id,query_response.task_for,query_response.task_type,query_response.query_id,query_response.upd_date,query_response.task_date,query_response.task_time,query_response.task_remark,query_response.subject,query_response.task_status,query_response.mobile,tbl_admin.s_display_name as user_name,tbl_taskstatus.taskstatus_name as task_status");
         $this->db->from('query_response');       
         //$this->db->where_in('query_response.create_by',$all_reporting_ids);
         
@@ -154,57 +154,48 @@ public function __construct()
 		    $all_reporting_ids    =   $this->common_model->get_categories($this->session->user_id);              
             $user_id = $this->session->user_id;      
         }
-        $user_role = $this->session->user_role;       
+        
         $start = date("d-m-Y", strtotime($start));  
         $end = date("d-m-Y", strtotime($end));         
 
         $this->db->select("*,tbl_admin.s_display_name as user_name,");       
         $this->db->from('query_response');              
         $this->db->join('tbl_admin', 'tbl_admin.pk_i_admin_id=query_response.create_by', 'left');
+        
 		$this->db->join('enquiry', 'enquiry.Enquery_id=query_response.query_id', 'left');
         $where = '';
-        // if($user_role==3 || $user_role==2){
-        // }else{
-            // $where = ' query_response.create_by='.$user_id;
-            // //$this->db->where('query_response.create_by',$id);
-        // }
+     
 		if(empty($enq_id)){
         if($where){
             $where .= " AND (STR_TO_DATE(query_response.task_date,'%d-%m-%Y') BETWEEN STR_TO_DATE('".$start."','%d-%m-%Y') AND  STR_TO_DATE('".$end."','%d-%m-%Y'))";            
         } else{
-            //$where .= " DATE_FORMAT(query_response.task_date,'%d-%m-%Y') between ".$start." AND `".$end."`";
-
+          
             $where .= " STR_TO_DATE(query_response.task_date,'%d-%m-%Y') BETWEEN STR_TO_DATE('".$start."','%d-%m-%Y') AND  STR_TO_DATE('".$end."','%d-%m-%Y')";
         }
 		if(!$user_id){
             $where .= "  AND query_response.create_by IN (".implode(',', $all_reporting_ids).')';
         }else{
 			$where .= " AND enquiry.created_by=$user_id OR enquiry.aasign_to=$user_id";
-           // $where .= " AND query_response.create_by=$user_id";
+           
         }        
 
         }else if(!empty($enq_id)){
 			if($where){
             $where .= " AND (STR_TO_DATE(query_response.task_date,'%d-%m-%Y') BETWEEN STR_TO_DATE('".$start."','%d-%m-%Y') AND  STR_TO_DATE('".$end."','%d-%m-%Y'))";            
         } else{
-            //$where .= " DATE_FORMAT(query_response.task_date,'%d-%m-%Y') between ".$start." AND `".$end."`";
-
             $where .= " STR_TO_DATE(query_response.task_date,'%d-%m-%Y') BETWEEN STR_TO_DATE('".$start."','%d-%m-%Y') AND  STR_TO_DATE('".$end."','%d-%m-%Y')";
         }
             $where .= " AND query_response.query_id='".$enq_id."'";
         }else{
 			if($where){
             $where .= " AND (STR_TO_DATE(query_response.task_date,'%d-%m-%Y') BETWEEN STR_TO_DATE('".$start."','%d-%m-%Y') AND  STR_TO_DATE('".$end."','%d-%m-%Y'))";            
-        } else{
-            //$where .= " DATE_FORMAT(query_response.task_date,'%d-%m-%Y') between ".$start." AND `".$end."`";
-
+        } else{         
             $where .= " STR_TO_DATE(query_response.task_date,'%d-%m-%Y') BETWEEN STR_TO_DATE('".$start."','%d-%m-%Y') AND  STR_TO_DATE('".$end."','%d-%m-%Y')";
         }
 		if(!$user_id){
             $where .= "  AND query_response.create_by IN (".implode(',', $all_reporting_ids).')';
         }else{
-			$where .= " AND enquiry.created_by=$user_id OR enquiry.aasign_to=$user_id";
-           // $where .= " AND query_response.create_by=$user_id";
+			$where .= " AND enquiry.created_by=$user_id OR enquiry.aasign_to=$user_id";           
         }
 			
 			}
@@ -220,7 +211,7 @@ public function __construct()
 		    $all_reporting_ids    =   $this->common_model->get_categories($this->session->user_id);              
             $user_id = $this->session->user_id;      
         }
-        $user_role = $this->session->user_role;       
+        
         $start = date("d-m-Y", strtotime($start));  
         $end = date("d-m-Y", strtotime($end));         
 
@@ -229,11 +220,7 @@ public function __construct()
         $this->db->join('tbl_admin', 'tbl_admin.pk_i_admin_id=query_response.create_by', 'left');
 		$this->db->join('tbl_ticket', 'tbl_ticket.ticketno=query_response.query_id', 'left');
         $where = '';
-        // if($user_role==3 || $user_role==2){
-        // }else{
-            // $where = ' query_response.create_by='.$user_id;
-            // //$this->db->where('query_response.create_by',$id);
-        // }
+      
 		if(empty($enq_id)){
         if($where){
             $where .= " AND (STR_TO_DATE(query_response.task_date,'%d-%m-%Y') BETWEEN STR_TO_DATE('".$start."','%d-%m-%Y') AND  STR_TO_DATE('".$end."','%d-%m-%Y'))";            

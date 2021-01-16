@@ -9,29 +9,42 @@ class Web extends CI_Controller{
     	$notification_id	=	$this->input->post('notication_id');
     	$enq_id	=	$this->input->post('enq_id');
     	$this->db->where('notification_id',$notification_id);
-    	$res	=	$this->db->get('query_response')->row_array();
-    	$html = '';
+      $res	=	$this->db->get('query_response')->row_array();
+      $task_type = 'Task';
+      if($res['task_type'] == 1){
+        $task_type = 'Task';
+      }else if($res['task_type'] == 2){
+        $task_type = 'Follow Up ';
+      }else if($res['task_type'] == 3){
+        $task_type = 'Appointment';
+      }
+      $html = '';
+      $html = $task_type.'<br>';
     	if(!empty($res)){
             if($res['task_type']!=17)
             {
-    		$this->db->select('enquiry_id,name_prefix,name,lastname,status');
-    		$this->db->where('Enquery_id',$enq_id);
-    		$enq_res	=	$this->db->get('enquiry')->row_array();    		
-    		//echo $this->db->last_query();
-    		if ($enq_res['status'] == 1) {
-		      $url  = base_url().'enquiry/view/'.$enq_res['enquiry_id'];
-		    }else if($enq_res['status'] == 2) {
-		      $url  = base_url().'lead/lead_details/'.$enq_res['enquiry_id'];
-		    }else if($enq_res['status'] == 3) {
-		      $url  = base_url().'client/view/'.$enq_res['enquiry_id'];
-		    }else{
-		      $url  = 'javascript:void(0)';
-		    }
-    		$html .= '<b>Subject :'.$res['subject'].'</b><br>'.$res['task_remark'].'<br><a href="'.$url.'"><b>'.$enq_res['name_prefix'].' '.$enq_res['name'].' '.$enq_res['lastname'].'</b></a><br>';
-            /*$html .= `<div class='col-md-4'>
-                    <label>Snooze Till? (Time)</label>
-                    <input name='snooze_till' type='time' class='form-control'>
-            </div>`;*/
+              if($res['task_for'] == 2){
+                $this->db->where('ticketno',$enq_id);
+                $enq_res    =   $this->db->get('tbl_ticket')->row_array(); 
+                $url  = base_url().'ticket/view/'.$enq_res['ticketno'];
+
+                $html .= '<b>Subject :'.$res['subject'].'</b><br>'.$res['task_remark'].'<br><a href="'.$url.'"><b>'.$enq_res['name'].'</b></a><br>';
+
+              }else{
+                    $this->db->select('enquiry_id,name_prefix,name,lastname,status');
+                    $this->db->where('Enquery_id',$enq_id);
+                    $enq_res	=	$this->db->get('enquiry')->row_array();    	                    
+                    if ($enq_res['status'] == 1) {
+                      $url  = base_url().'enquiry/view/'.$enq_res['enquiry_id'];
+                    }else if($enq_res['status'] == 2) {
+                      $url  = base_url().'lead/lead_details/'.$enq_res['enquiry_id'];
+                    }else if($enq_res['status'] >= 3) {
+                      $url  = base_url().'client/view/'.$enq_res['enquiry_id'];
+                    }else{
+                      $url  = 'javascript:void(0)';
+                    }
+                    $html .= '<b>Subject :'.$res['subject'].'</b><br>'.$res['task_remark'].'<br><a href="'.$url.'"><b>'.$enq_res['name_prefix'].' '.$enq_res['name'].' '.$enq_res['lastname'].'</b></a><br>';
+              }
         }elseif($res['task_type']==50)
         {
            $html .= '<b>'.$res['task_remark'].'</b>';

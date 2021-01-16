@@ -46,6 +46,9 @@
     </button>
 <?php }?>
    </div>
+<?php
+if(user_access(310)){
+?>
 <div class="col-md-12 text-center">    
 <br>
   <select class='btn btn-sm btn-default text-center' id='for_filter'>
@@ -57,6 +60,9 @@
     </option>
   </select>
 </div>
+<?php
+}
+?>
 <div class="col-md-12">
    <br>
    <div class="col-md-4"></div>   
@@ -76,7 +82,7 @@
 <br>
 
 
-<?php  if(user_access(90)==true){ ?>
+<?php  if(user_access(90)==true && 0){ ?>
 
 
 <!-- Modal -->
@@ -135,6 +141,7 @@
            <th>Date</th>
            <th>Time</th>
            <th>Task</th>
+           <th>Task Type</th>
            <th>Remark</th>
            <th>Person Name</th>           
            <th>Created By</th>
@@ -213,6 +220,7 @@
     var table  = $('#content_tabss').DataTable( {         
         "processing": true,
         /*"scrollX": true,*/
+        'searching': false,
         "scrollY": 800,
         "dom": "<'row'<'col-sm-4'l><'col-sm-4 text-center'B><'col-sm-4'f>>tp",         
         "buttons": [  
