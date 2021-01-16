@@ -844,7 +844,7 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
 			<?php if ($this->session->companey_id=='67' || $this->session->companey_id=='83') { ?>
               <!--<li><a href="#qalification" data-toggle="tab" style="padding: 10px 10px; font-size:12px;">Qualifications</a></li>
               <li><a href="#english" data-toggle="tab" style="padding: 10px 10px; font-size:12px;">English Language</a></li>-->			  
-			         <li href="#payment" data-toggle="tab" >Payment</li>
+			    <li href="#payment" data-toggle="tab" >Payment</li>
               <li  href="#aggrement" data-toggle="tab" >Aggrement</li>
 			<?php } ?>
 			<li href="#task" data-toggle="tab" >Task</li>
@@ -1860,7 +1860,8 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                                 </select>
                               </th>
                               <td class="center">
-                  <a href="<?= base_url('enquiry/editinfo/' . $value->id . '')?>" class="btn btn-xs  btn-primary view_data"><i class="fa fa-edit"></i></a>
+                  <a  class="btn btn-xs  btn-primary" data-toggle="modal"  data-target="#editComInfo" onclick="editComInfo(<?= $value->id ?>);" data-bid="<?= $value->id ?>" data-equid=""><i class="fa fa-edit"></i></a>
+                  <!-- <a href="<?= base_url('enquiry/editinfo/' . $value->id . '')?>" class="btn btn-xs  btn-primary view_data"><i class="fa fa-edit"></i></a> -->
                   <a href="<?= base_url('enquiry/deleteInfo/' . $value->id . '/'.$value->enquiry_id.'/') ?>" onclick="return confirm('Are You Sure ? ')" class="btn btn-xs  btn-danger"><i class="fa fa-trash"></i></a>
                   <a class="btn btn-primary btn-xs view_datas" id="view_sdatas" onclick="quotation_pdf(<?= $value->booking_type ?>,<?= $value->enquiry_id ?>)" style="cursor: pointer;" data-toggle="modal"  data-target="#downloadQuatation" data-id="" data-equid=""><i class="fa fa-download"></i></a>
                 </td>
@@ -2040,8 +2041,48 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
                      </div>
                   </form>
                </div>
-               <script>
 
+
+<div id="editComInfo" class="modal fade" role="dialog">
+   <div class="modal-dialog modal-lg">
+      <!-- Modal content-->
+      <div class="modal-content">
+         <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Update </h4>
+         </div>
+      <form class="form-inner" action="<?=  base_url('enquiry/insertCommercialInfo/') ?>" method="POST">
+         <div class="modal-body" >
+         <div  id="editcomInfoData">
+           
+         </div>
+         </div>
+         <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <input type="submit" name="edit" class="btn btn-primary" value="Updatte">
+         </div>
+         </form> 
+
+      </div>
+   </div>
+</div>
+<!-- edit -->
+
+               <script>
+                  
+function editComInfo(id)
+{
+     $.ajax({
+            type: 'POST',
+            url: '<?php echo base_url();?>enquiry/editinfo/'+id,
+            data: {id:id,},
+            success:function(data){
+               //  Swal.fire('Status Updated');
+            $("#editcomInfoData").html(data);
+
+            }
+        });
+}
 function update_info_status(id,status)
 {
      $.ajax({
@@ -2053,8 +2094,6 @@ function update_info_status(id,status)
             }
         });
 }
-
-
 $('#delivery_branch').on('change', function() {
 
             var delivery_branch = $("select[name='delivery_branch[]']").val()??[];
@@ -2085,9 +2124,7 @@ $('#delivery_branch').on('change', function() {
                   }
                   });
             }
-            
             });
-
 $('#potential_tonnage').on('change', function() {
                 var discount = $("#discount").val();
 
@@ -2098,7 +2135,6 @@ $('#potential_tonnage').on('change', function() {
                // alert(total_ptAmount);
                 total_ptAmount =  (total_ptAmount - ((total_ptAmount * discount)/100));
                 total_ptAmount = total_ptAmount.toFixed(2);
-
                         $("#potential_amount").val(total_ptAmount);
                     });
 
@@ -5853,4 +5889,6 @@ jQuery(document).ready(function(){
       }
    })
 });
+
+
 </script> 

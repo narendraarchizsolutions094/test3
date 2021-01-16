@@ -1,4 +1,7 @@
 <?php
+
+use Sabberworm\CSS\Value\Value;
+
 defined('BASEPATH') OR exit('No direct script access allowed');
 class Cron extends CI_Controller {
     public function __construct()
@@ -208,22 +211,30 @@ public function msgsend_app()
 
 public function run()
 {
+    date_default_timezone_set("Asia/kolkata");
     $currentTime=date('Y-m-d H:i');
-    // if()
-    // die();
     $cron=$this->db->where('status',0)->get('cronjobs')->result();
     foreach ($cron as $key => $value) {
-        if($value->running_time==$currentTime){
+        $id=$value->id;
+        $command=$value->command;
+        if(date("Y-m-d H:i", strtotime($value->running_time))==$currentTime){
             $run=$value->url;
-            return $run;
-
-            // require_once FCPATH.'third_party/vendor/autoload.php';
-            // date_default_timezone_set("Asia/kolkata");
-            // $cron = Cron\CronExpression::factory($command);
-            // // print_r($cron);
-            // $running_time= $cron->getNextRunDate()->format('Y-m-d H:i');
-            //             $data=['schedule_time'=>$running_time];
-            //             $this->db->where('id',$id)->update('scheduledata',$data);
+            // create a new cURL resource
+            $ch = curl_init();
+            // set URL and other appropriate options
+            curl_setopt($ch, CURLOPT_URL,$run);
+            curl_setopt($ch, CURLOPT_HEADER, 0);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            // grab URL and pass it to the browser
+            $result = curl_exec($ch);
+            // close cURL resource, and free up system resources
+            require_once FCPATH.'third_party/vendor/autoload.php';
+            $cron = Cron\CronExpression::factory($command);
+            $running_time= $cron->getNextRunDate()->format('Y-m-d H:i');
+            $data=['running_time'=>$running_time];
+                        $this->db->where('id',$id)->update('cronjobs',$data);
+                        curl_close($ch);
+            
         }
 
     }

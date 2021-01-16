@@ -16,6 +16,7 @@ class Lead extends CI_Controller
     }
     public function view_datasource_data($did)
     {
+        
         $data['title'] = 'Datasource raw data';
         $data['datasource_id'] = $did;
         $data['raw_data']    =   $this->db->select('enquiry2.*,tbl_product.product_name')->from('enquiry2')
@@ -29,6 +30,7 @@ class Lead extends CI_Controller
     }
     public function delete_raw_data()
     {
+
         $datasource_id    =   $this->input->post('datasource_id');
         $enq_id    =   $this->input->post('enq_id');
         if ($datasource_id) {
@@ -1861,6 +1863,7 @@ class Lead extends CI_Controller
     /************************************************end CSV create********************************/
     public function add_datasource()
     {
+       
         $data['title'] = display('add_datasource');
         $this->form_validation->set_rules('datasource_name', display('datasource_name'), 'required');
         $data['datasource'] = (object) $postData = [
@@ -1875,16 +1878,14 @@ class Lead extends CI_Controller
         ];
         if ($this->form_validation->run() === true) {
             if (empty($this->input->post('datasource_id'))) {
-                if (user_role('30') == true) {
-                }
+                
                 if ($this->Datasource_model->insertRow($postData)) {
                     $this->session->set_flashdata('message', display('save_successfully'));
                 } else {
                     $this->session->set_flashdata('exception', display('please_try_again'));
                 }
             } else {
-                if (user_role('30') == true) {
-                }
+               
                 if ($this->Datasource_model->updateRow($postData)) {
                     $this->session->set_flashdata('message', display('update_successfully'));
                 } else {
@@ -1900,8 +1901,7 @@ class Lead extends CI_Controller
     }
     public function edit_datasource($datasource_id = null)
     {
-        if (user_role('30') == true) {
-        }
+       
         $data['title'] = display('update_datasource');
         $data['datasource'] = $this->Datasource_model->readRow($datasource_id);
         $data['country'] = $this->location_model->productcountry();
@@ -1910,8 +1910,7 @@ class Lead extends CI_Controller
     }
     public function delete_datasource($paramId = null)
     {
-        if (user_role('30') == true) {
-        }
+       
         if ($this->Datasource_model->deleteDatasource($paramId)) {
             $this->session->set_flashdata('message', display('delete_successfully'));
         } else {

@@ -620,7 +620,7 @@ $this->load->library('zip');
                             'login_token'=>$login_token,
                         ]);
                             // check device login right
-                            if(user_access(113))
+                            if(user_access(133))
                             {
                             $this->user_model->updateLoginToken($user_data->pk_i_admin_id,$login_token);
                             }

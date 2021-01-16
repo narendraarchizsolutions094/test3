@@ -1,6 +1,6 @@
 <?php
    defined('BASEPATH') OR exit('No direct script access allowed');   
-   if(user_access('113')){
+   if(user_access('133')){
     $count=$this->user_model->checkLoginToken();
     // print_r($this->session->userdata('login_token'));
     if($count==0){
