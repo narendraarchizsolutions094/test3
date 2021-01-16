@@ -2778,7 +2778,8 @@ if($root=='https://student.spaceinternationals.com'){  ?>
         var enq_id = $("#task_related_to").val();;
         id = writeUserData(uid, reminder_txt, enq_id, rem_date, rem_time);  
         $("input[name='task_notification_id']").val(id);      
-        $("#set_reminder").submit();
+        alert(id);
+        //$("#set_reminder").submit();
     });
 
     $("#submit_task_btn").on('click', function(e) {
