@@ -302,6 +302,7 @@ class Ticket extends CI_Controller
 		$this->load->model('Ticket_datatable_model');
 		$this->load->model('enquiry_model');
 		$res = $this->Ticket_datatable_model->getRows($_POST);
+
 		//print_r($res); exit();
 		$data  = array();
 		$dfields = $this->enquiry_model->getformfield(2);
@@ -420,6 +421,16 @@ class Ticket extends CI_Controller
 					}
 				}
 			}
+			$followup = empty($this->session->ticket_filters_sess['followup'])?0:1;
+			
+			if($followup)
+			{	//echo 'yes followup'; exit();
+				$sub[] = $point->tck_subject??'NA';
+				$sub[] = $point->tck_stage??'NA';
+				$sub[] = $point->tck_sub_stage??'NA';
+				$sub[] = $point->tck_msg??'NA';
+			}
+
 			$data[] = $sub;
 		}
 		//print_r($res);
@@ -2596,5 +2607,11 @@ class Ticket extends CI_Controller
 					$this->rule_model->execute_rules($ticketno, array(3,6,7));
 				}
 			}
+		}
+
+		public function chk()
+		{
+			if(!empty($this->sessiono->ticket_filters_sess))	
+				print_r($this->session->ticket_filters_sess);
 		}
 }

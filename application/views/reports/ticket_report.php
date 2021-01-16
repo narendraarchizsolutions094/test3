@@ -16,16 +16,17 @@
 							<div class="col-md-4 col-sm-4 col-xs-4 pull-right" >  
 					          <div style="float: right;">   
 
+                      <button class="btn btn-success" data-toggle="modal" data-target="#table-col-conf">Report Header</button>
 
-					          <div class="btn-group" role="group" aria-label="Button group">
+					         <!--  <div class="btn-group" role="group" aria-label="Button group">
 					              <a class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-expanded="false" title="Actions">
 					                <i class="fa fa-sliders"></i>
 					              </a>  
 					            <div class="dropdown-menu dropdown_css" style="max-height: 400px;overflow: auto; left: unset; right: 0!important;">
 
-                            <a class="btn" data-toggle="modal" data-target="#table-col-conf" style="color:#000;cursor:pointer;border-radius: 2px;border-bottom :1px solid #ccc; width: 100%; text-align: left"><?php echo display('table_config'); ?></a>
+                            <a class="btn" data-toggle="modal" data-target="#table-col-conf" style="color:#000;cursor:pointer;border-radius: 2px;border-bottom :1px solid #ccc; width: 100%; text-align: left"><?php echo display('table_config'); ?></a> 
 					            </div>                                         
-					          </div>  
+					          </div>   -->
 					        </div>       
 					      </div>
 						</div>
@@ -233,10 +234,12 @@
                     </div> 
                   <?php
                     }
-
-
-                    $followup = empty($_SESSION['ticket_filters_sess']['followup'])?0:1;
-
+                    $followup = 0;  
+                    if(!empty($_SESSION['ticket_filters_sess']))
+                    {
+                        if(isset($_SESSION['ticket_filters_sess']['followup']) && $_SESSION['ticket_filters_sess']['followup']=='1')
+                          $followup = 1;
+                    }
                     ?>
 
                     <div class="form-group col-md-3"><br>
@@ -442,15 +445,20 @@
           </div>
            
         <?php   
-        if(!empty($dfields)) {           
-            foreach($dfields as $ind => $fld){              
+        if(!empty($dfields)) 
+        {           
+            foreach($dfields as $ind => $fld)
+            {
+              if(in_array($fld->input_id,$table_config_list))
+              {
             ?>
             <div class = "col-md-4">  
           <label class=""><input type="checkbox" class="dchoose-col"  value = "<?php echo $fld->input_id; ?>"  <?php echo (in_array($fld->input_id, $dacolarr)) ? "checked" : ""; ?>>   <?php echo ucwords($fld->input_label); ?></label>  &nbsp;
           </div>
             <?php   
-              
-            }?>
+              }
+            }
+            ?>
              </div>
           <?php } ?>
                 
