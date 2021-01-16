@@ -23,7 +23,7 @@
 
         <div class="form-group col-sm-6">
             <label>Task Date <i class="text-danger">*</i></label>
-            <input class="form-control form-date" type='date' name="task_date">
+            <input class="form-control form-date" type='text' name="task_date">
         </div>
 
         <div class="form-group col-sm-6">
@@ -82,3 +82,6 @@
         </div>
     </div>
 </form>
+<script>
+    $('.form-date').datepicker({ dateFormat: 'yy-mm-dd' });
+</script>
