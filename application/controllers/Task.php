@@ -316,6 +316,9 @@ class Task extends CI_Controller {
        $this->form_validation->set_rules('task_remark','Task Remark','required|trim');
 
        if ($this->form_validation->run()){
+           $this->db->where('comp_id',$this->session->companey_id);
+           $this->db->where('Enquery_id',$related_to);
+           $enq_row  =    $this->db->get('enquiry')->row_array();
            $ins_arr = array(
                'comp_id'        =>  $this->session->companey_id,
                'subject'        =>  $subject,
@@ -324,6 +327,8 @@ class Task extends CI_Controller {
                'task_time'      =>  $task_time,
                'query_id'       =>  $related_to,
                'task_status'    =>  $task_status,
+               'mobile'         =>  $enq_row['phone']??0,
+               'email'          =>  $enq_row['email']??'',
                'task_remark'    =>  $task_remark,
                'create_by'      =>  $this->session->user_id
            );

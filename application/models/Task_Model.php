@@ -161,6 +161,7 @@ public function __construct()
         $this->db->select("*,tbl_admin.s_display_name as user_name,");       
         $this->db->from('query_response');              
         $this->db->join('tbl_admin', 'tbl_admin.pk_i_admin_id=query_response.create_by', 'left');
+        
 		$this->db->join('enquiry', 'enquiry.Enquery_id=query_response.query_id', 'left');
         $where = '';
         // if($user_role==3 || $user_role==2){
