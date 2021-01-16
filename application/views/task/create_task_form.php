@@ -85,4 +85,26 @@
 </form>
 <script>
     $('.form-date').datepicker({ dateFormat: 'yy-mm-dd' });
+    $('#set_reminder_btn').on('click', function(e) {
+        e.preventDefault();
+        var uid = "<?=$this->session->user_id?>";
+        var rem_date = $("input[name='task_date']").val();
+        var rem_time = $("input[name='task_time']").val();
+        type = $("select[name='task_type]").val();
+        if(type == 1){
+            task_type = 'Task';
+        }else if(type == 2){
+            task_type = 'Follow Up';
+        }else if(type == 3){
+            task_type = 'Appointment';
+        }else{
+            task_type = 'Task';
+        }
+        var reminder_txt = task_type+' -> '+$("#task_subject").val()+'<br>'+$("#task_description").val();
+        var enq_id = $("#task_related_to").val();;
+        id = writeUserData(uid, reminder_txt, enq_id, rem_date, rem_time);  
+        $("input[name='task_notification_id']").val(id);      
+        alert(id);
+        //$("#set_reminder").submit();
+    });
 </script>
