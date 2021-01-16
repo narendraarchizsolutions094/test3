@@ -1862,13 +1862,13 @@ public function view_editable_aggrement()
             }
            
             if($colsall || in_array(2,$cols))
-                $sub[] = $row->company??'NA';
+                $sub[] = trim($res->company)??'NA';
 
             if($colsall || in_array(3,$cols))
-                $sub[] = $row->designation??'NA';
+                $sub[] = trim($res->designation)??'NA';
             
             if($colsall || in_array(4,$cols))
-                $sub[] = $res->cc_name??'NA';
+                $sub[] = trim($res->c_name)??'NA';
 
             if($colsall || in_array(5,$cols))
                 $sub[] = trim($res->contact_number)?$res->contact_number:'NA';
