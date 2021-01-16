@@ -1,4 +1,4 @@
-<form action="<?=base_url().'task/save_task'?>" class="form-inner" enctype="multipart/form-data" method="post">
+<form id='set_reminder' action="<?=base_url().'task/save_task'?>" class="form-inner" enctype="multipart/form-data" method="post">
     <input name='task_notification_id' type='hidden'/>
     <div class="">
         <div class="form-group col-sm-6">
@@ -79,7 +79,7 @@
                 placeholder='Start typing the details about the task...'></textarea>
         </div>
         <div class="form-group text-center">
-            <input type="submit" name="create" class="btn btn-primary" value="Create">
+            <input type="submit" name="create" class="btn btn-primary" id='set_reminder_btn' value="Create">
         </div>
     </div>
 </form>
