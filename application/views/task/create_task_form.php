@@ -104,7 +104,7 @@
         var enq_id = $("#task_related_to").val();;
         id = writeUserData(uid, reminder_txt, enq_id, rem_date, rem_time);  
         $("input[name='task_notification_id']").val(id);      
-        alert(id);
-        //$("#set_reminder").submit();
+        //alert(id);
+        $("#set_reminder").submit();
     });
 </script>
