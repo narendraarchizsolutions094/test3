@@ -1218,7 +1218,7 @@ class Enquiry extends CI_Controller
                 $html .= '<li>
                    <div class="cbp_tmicon cbp_tmicon-phone" style="background:#cb4335;"></div>
                    <div class="cbp_tmlabel"  style="background:#95a5a6;">
-                    <span style="font-weight:900;font-size:15px;">' . ucfirst($comments->comment_msg) . '</span></br>';
+                    <span style="font-weight:900;font-size:13px;">' . ucfirst($comments->comment_msg) . '</span></br>';
                 if ($comments->comment_msg == 'Stage Updated') {
                     $html .=  '<span style="font-weight:900;font-size:12px;"> ' . ucfirst($comments->lead_stage_name) . '</span>';
                     if(trim($comments->description))
@@ -1226,18 +1226,22 @@ class Enquiry extends CI_Controller
                     <span style="font-weight:900;font-size:10px;">' . ucfirst($comments->description) . '</span>';
                      if(trim($comments->remark))
                     $html.='</br>
-                    <span style="font-weight:900;font-size:10px;"><big>Remarks:</big> ' . ucfirst($comments->remark) . '</span>';
+                    <span style="font-size:10px;">Remarks: <strong> ' . ucfirst($comments->remark) . '</strong></span>';
 
                 }
-                $html .= '<p>' . date("j-M-Y h:i:s a", strtotime($comments->ddate)) . '<br>
-                    Updated By : <strong>' . ucfirst($comments->comment_created_by . ' ' . $comments->lastname) . '</strong></p>
+                $html .= '<div style="font-size:11px; margin-top:5px;">
+                    Updated By : <strong>' . ucfirst($comments->comment_created_by . ' ' . $comments->lastname) . '</strong>
+                        <div align="right" style="margin-top:8px;">
+                        <span class="fa fa-clock-o"></span> ' . date("j-M-Y h:i:s a", strtotime($comments->ddate)) . '
+                        </div>
+                    </div>
                   </div>
                 </li>';
             } else if ($comments->comment_msg == 'Enquiry moved') {
                 $html .= '    <li>
                   <div class="cbp_tmicon cbp_tmicon-phone"  style="background:#148f77;"></div>
                   <div class="cbp_tmlabel"  style="background:#95a5a6;">
-                    <span style="font-weight:900;font-size:15px;">' . ucfirst($comments->comment_msg) . '</span></br>';
+                    <span style="font-weight:900;font-size:13px;">' . ucfirst($comments->comment_msg) . '</span></br>';
                 if ($comments->comment_msg == 'Stage Updated') {
                     $html .= '<span style="font-weight:900;font-size:12px;">' . ucfirst($comments->lead_stage_name) . ' </span>
                     </br>
@@ -1245,15 +1249,19 @@ class Enquiry extends CI_Controller
                     </br>
                     <span style="font-weight:900;font-size:10px;">' . ucfirst($comments->remark) . ' </span>';
                 }
-                $html . '<p>' . date("j-M-Y h:i:s a", strtotime($comments->ddate)) . ' <br>
-                      Updated By : <strong>' . ucfirst($comments->comment_created_by . ' ' . $comments->lastname) . ' </strong></p>
+                $html . '<div style="font-size:11px; margin-top:5px">
+                        Updated By : <strong>' . ucfirst($comments->comment_created_by . ' ' . $comments->lastname) . '</strong>
+                        <div align="right" style="margin-top:8px;">
+                        <span class="fa fa-clock-o"></span> ' . date("j-M-Y h:i:s a", strtotime($comments->ddate)) . '
+                        </div>
+                    </div>
                   </div>
                 </li>';
             } else if ($comments->comment_msg == 'Move to leads') {
                 $html .= '<li>
                   <div class="cbp_tmicon cbp_tmicon-phone"  style="background:#2980b9;"></div>
                   <div class="cbp_tmlabel"  style="background:#95a5a6;">
-                  <span style="font-weight:900;font-size:15px;">' . ucfirst($comments->comment_msg) . ' </span></br>';
+                  <span style="font-weight:900;font-size:13px;">' . ucfirst($comments->comment_msg) . ' </span></br>';
                 if ($comments->comment_msg == 'Stage Updated') {
                     $html .= '<span style="font-weight:900;font-size:12px;">' . ucfirst($comments->lead_stage_name) . ' </span>
                     </br>
@@ -1261,15 +1269,19 @@ class Enquiry extends CI_Controller
                     </br>
                     <span style="font-weight:900;font-size:10px;">' . ucfirst($comments->remark) . ' </span>';
                 }
-                $html .= '<p>' . date("j-M-Y h:i:s a", strtotime($comments->ddate)) . ' <br>
-                    Updated By1 : <strong>' . ucfirst($comments->comment_created_by . ' ' . $comments->lastname) . ' </strong></p>
+                $html .= '<div style="font-size:11px; margin-top:5px">
+                    Updated By : <strong>' . ucfirst($comments->comment_created_by . ' ' . $comments->lastname) . '</strong>
+                        <div align="right" style="margin-top:8px;">
+                        <span class="fa fa-clock-o"></span> ' . date("j-M-Y h:i:s a", strtotime($comments->ddate)) . '
+                        </div>
+                    </div>
                   </div>
                 </li>';
             } else if ($comments->comment_msg == 'Enquiry Created') {
                 $html .= '   <li>
                   <div class="cbp_tmicon cbp_tmicon-phone"  style="background:#d68910;"></div>
                   <div class="cbp_tmlabel"  style="background:#95a5a6;">
-                    <span style="font-weight:900;font-size:15px;">' . ucfirst($comments->comment_msg) . ' </span></br>';
+                    <span style="font-weight:900;font-size:13px;">' . ucfirst($comments->comment_msg) . ' </span></br>';
                 if ($comments->comment_msg == 'Stage Updated') {
                     $html .= '<span style="font-weight:900;font-size:12px;">' . ucfirst($comments->lead_stage_name) . ' </span>
                     </br>
@@ -1277,15 +1289,19 @@ class Enquiry extends CI_Controller
                     </br>
                     <span style="font-weight:900;font-size:10px;">' . ucfirst($comments->remark) . ' </span>';
                 }
-                $html .= '<p>' . date("j-M-Y h:i:s a", strtotime($comments->ddate)) . ' <br>
-                    Updated By : <strong>' . ucfirst($comments->comment_created_by . ' ' . $comments->lastname) . ' </strong></p>
+                $html .= '<div style="font-size:11px; margin-top:5px">
+                    Updated By : <strong>' . ucfirst($comments->comment_created_by . ' ' . $comments->lastname) . '</strong>
+                        <div align="right" style="margin-top:8px;">
+                        <span class="fa fa-clock-o"></span> ' . date("j-M-Y h:i:s a", strtotime($comments->ddate)) . '
+                        </div>
+                    </div>
                   </div>
                 </li>';
             } else if ($comments->comment_msg == 'Enquiry dropped' || $comments->comment_msg == 'Lead dropped' || $comments->comment_msg == 'Client dropped') {
                 $html .= '<li>
                   <div class="cbp_tmicon cbp_tmicon-phone"  style="background:#d68910;"></div>
                   <div class="cbp_tmlabel"  style="background:#95a5a6;">
-                    <span style="font-weight:900;font-size:15px;">' . ucfirst($comments->comment_msg) . ' </span></br>
+                    <span style="font-weight:900;font-size:13px;">' . ucfirst($comments->comment_msg) . ' </span></br>
                     
                     <span style="font-size:12px;">Reason:- </span><span style="font-size:11px;">';
                 if (!empty($comments->drop_status)) {
@@ -1304,15 +1320,19 @@ class Enquiry extends CI_Controller
                     </br>
                     <span style="font-weight:900;font-size:10px;">' . ucfirst($comments->remark) . ' </span>';
                 }
-                $html .= '<p>' . date("j-M-Y h:i:s a", strtotime($comments->ddate)) . ' <br>
-                    Updated By : <strong>' . ucfirst($comments->comment_created_by . ' ' . $comments->lastname) . ' </strong></p>
+                $html .= '<div style="font-size:11px; margin-top:5px">
+                    Updated By : <strong>' . ucfirst($comments->comment_created_by . ' ' . $comments->lastname) . '</strong>
+                        <div align="right" style="margin-top:8px;">
+                        <span class="fa fa-clock-o"></span> ' . date("j-M-Y h:i:s a", strtotime($comments->ddate)) . '
+                        </div>
+                    </div>
                   </div>
                 </li>';
             } else {
                      $html .= '  <li>
                     <div class="cbp_tmicon cbp_tmicon-phone"  style=""></div>
                     <div class="cbp_tmlabel"  onclick="getTimelinestatus('.$comments->comm_id.');"  style="background:#95a5a6;" data-toggle="modal" data-target="#timelineshow_d">
-                    <span style="font-weight:900;font-size:15px;">' . ucfirst($comments->comment_msg) . ' </span></br>
+                    <span style="font-weight:900;font-size:13px;">' . ucfirst($comments->comment_msg) . ' </span></br>
                     <span style="font-weight:900;font-size:10px;">' . ucfirst($comments->remark) . '</span>';
                 if ($comments->comment_msg == 'Stage Updated') {
                     $html .= '<span style="font-weight:900;font-size:12px;">' . ucfirst($comments->lead_stage_name) . ' </span>
@@ -1335,8 +1355,12 @@ class Enquiry extends CI_Controller
                   </div>
                 </li>';
                 } else {
-                    $html .= '<p>' . date("j-M-Y h:i:s a", strtotime($comments->ddate)) . ' <br>
-                      Updated By : <strong>' . ucfirst($comments->comment_created_by . ' ' . $comments->lastname) . ' </strong></p>
+                    $html .= '<div style="font-size:11px; margin-top:5px;">
+                    Updated By : <strong>' . ucfirst($comments->comment_created_by . ' ' . $comments->lastname) . '</strong>
+                        <div align="right" style="margin-top:8px;">
+                        <span class="fa fa-clock-o"></span> ' . date("j-M-Y h:i:s a", strtotime($comments->ddate)) . '
+                        </div>
+                    </div>
                   </div>
                 </li>';
                 }

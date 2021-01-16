@@ -1822,46 +1822,57 @@ class Enquiry_model extends CI_Model {
         }
         $this->db->where($where);
 
-        //print_r($_POST['filters']); exit();
         if(!empty($_POST['filters']))
         {
+            foreach ($_POST['filters'] as $key => $value)
+            {
+                if($value==''){
+                  unset($_POST['filters'][$key]);
+                  if(!count($_POST['filters']))
+                    unset($_POST['filters']);
+                }
 
+            }
+        }
+        //print_r($_POST);exit();
+        if(!empty($_POST['filters']))
+        {
             $match_list = array('date_from','date_to','phone');
 
             $this->db->group_start();
             foreach ($_POST['filters'] as $key => $value)
             {
-              if(in_array($key,$match_list) || $this->db->field_exists($key, 'enquiry'))
-              {
-                  if(in_array($key, $match_list))
+                  if(in_array($key,$match_list) || $this->db->field_exists($key, 'enquiry'))
                   {
-                      $fld = 'created_date';
-                      if($type=='2')
-                        $fld = 'lead_created_date';
-                      else if($type=='3')
-                        $fld = 'client_created_date';
+                      if(in_array($key, $match_list))
+                      {
+                          $fld = 'created_date';
+                          if($type=='2')
+                            $fld = 'lead_created_date';
+                          else if($type=='3')
+                            $fld = 'client_created_date';
 
-                      if($key=='date_from')
-                        $this->db->where($fld.'>=',$value);
+                          if($key=='date_from')
+                            $this->db->where($fld.'>=',$value);
 
-                      if($key=='date_to')
-                        $this->db->where($fld.'<=',$value);
+                          if($key=='date_to')
+                            $this->db->where($fld.'<=',$value);
 
-                      if($key=='phone')
-                        $this->db->where('phone LIKE "%'.$value.'%" OR other_phone LIKE "%'.$value.'%"');
+                          if($key=='phone')
+                            $this->db->where('phone LIKE "%'.$value.'%" OR other_phone LIKE "%'.$value.'%"');
+                      }
+                      else
+                      {
+                        if(is_int($value))
+                          $this->db->where($key,$value);
+                        else
+                          $this->db->where($key.' LIKE "%'.$value.'%"');
+                      } 
                   }
                   else
                   {
-                    if(is_int($value))
-                      $this->db->where($key,$value);
-                    else
-                      $this->db->where($key.' LIKE "%'.$value.'%"');
-                  } 
-              }
-              else
-              {
-                $this->db->where('1=1');
-              }
+                    $this->db->where('1=1');
+                  }
             }
             $this->db->group_end();
         }

@@ -142,7 +142,7 @@ class Client_Model extends CI_Model
         else 
             $this->db->where(' enquiry.product_id IN ('.$process.') ');
 
-        $this->db->select('count(enquiry_id) as num, company , GROUP_CONCAT(enquiry_id) as enq_ids,GROUP_CONCAT(status) as enq_status,GROUP_CONCAT(CONCAT(name_prefix,\' \',name,\' \',lastname)) as enq_names ');
+        $this->db->select('count(enquiry_id) as num, company , GROUP_CONCAT(enquiry_id) as enq_ids,GROUP_CONCAT(status) as enq_status,GROUP_CONCAT(CONCAT(COALESCE(name_prefix,""),\' \',COALESCE(name,""),\' \',COALESCE(lastname,""))) as enq_names ');
         $this->db->from('enquiry');
         $this->db->where('enquiry.company IS NOT NULL and CHAR_LENGTH(REPLACE(`enquiry`.company, " ", ""))>0');
 

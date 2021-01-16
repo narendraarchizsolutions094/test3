@@ -125,7 +125,7 @@
                     
 
                     <div class="form-group">
-                       <input type="date" name="c_date" id='disposition_c_date' class="form-control" placeholder=""  >
+                       <input type="text" name="c_date" id='disposition_c_date' class="form-control form-date" placeholder=""  >
                     </div>
                     <div class="form-group">
                         <input type="time" name="c_time" id='disposition_c_time' class="form-control" placeholder=""  >
@@ -134,6 +134,17 @@
                     <div class="form-group">
                       <textarea class="form-control" name="conversation"></textarea>
                     </div>
+
+
+                  <div style="display:none;">                 
+                    <input type="text" value="<?php if(!empty($ticket->phone)){echo $ticket->phone;} ?>" name="mobile">
+                 </div>
+                 
+                 <div style="display:none;">                 
+                    <input type="text" value="<?php if(!empty($ticket->email)){echo $ticket->email;} ?>" name="email">
+                 </div>
+
+
                     <div class="form-group">                           
                        <select class="form-control" id="" name="ticket_status">
                            <option value='0'>---Select Status---</option>
