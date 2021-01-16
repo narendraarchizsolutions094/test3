@@ -224,7 +224,12 @@ class Ticket_datatable_model extends CI_Model{
             $sel_string[] = " tbl_ticket_subject.subject_title";    
         }
         
-        $followup = empty($this->session->ticket_filters_sess['followup'])?0:1;
+        $followup = 0;
+        if(!empty($_SESSION['ticket_filters_sess']))
+        {
+            if(isset($_SESSION['ticket_filters_sess']['followup']) && $_SESSION['ticket_filters_sess']['followup']=='1')
+              $followup = 1;
+        }
 
         if($followup)
         {
