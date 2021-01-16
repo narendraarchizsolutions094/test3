@@ -271,6 +271,7 @@ class Task extends CI_Controller {
                 <td>'. $task->subject. '</td>
                 <td>'. $task->subject. '</td>                
                 <td>'. $task_type. '</td>
+                <td>'. $task->task_remark. '</td>                
                 <td><a href="'.$url.'">' . $name . '</a></td>
                 <td>'.$task->user_name.'</td>
                 <td>' . $p. '</td>
