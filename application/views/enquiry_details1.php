@@ -2067,20 +2067,7 @@ $panel_menu = $this->db->select("tbl_user_role.user_permissions")
    </div>
 </div>
 <!-- edit -->
-<script>
-   $(document).ready(function(){
-    $('#booking_type').on('change', function() {
-      if ( this.value == '1')
-      {
-        $("#ftl").show();
-        $("#sundry").hide();
-      }  else {
-        $("#sundry").show();
-        $("#ftl").hide();
-      }
-    });
-});
-</script>
+
                <script>
                   
 function editComInfo(id)
@@ -2107,8 +2094,6 @@ function update_info_status(id,status)
             }
         });
 }
-
-
 $('#delivery_branch').on('change', function() {
 
             var delivery_branch = $("select[name='delivery_branch[]']").val()??[];

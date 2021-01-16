@@ -3242,11 +3242,10 @@ echo  $details1;
              
             }
               $insert=$this->db->where(array('comp_id'=>$comp_id,'id'=>$infoid))->update('commercial_info',$data);
-
-
             if($insert){
             $this->session->set_flashdata('message', 'Commercial information Updated successfully');
-            redirect($url);
+            // redirect($url);
+            redirect($this->agent->referrer()); //updateclient
             }else{
             $this->session->set_flashdata('error', 'Error while submiting data ');
             redirect($url);
@@ -3591,7 +3590,7 @@ echo  $details1;
             if(user_access('1002'))
             {
                 $part2.= "
-            <a class='btn btn-xs btn-primary fa fa-edit' href='".base_url('enquiry/editinfo/' . $value->id)."'></a>";
+                <a  class='btn btn-xs  btn-primary' data-toggle='modal'  data-target='#editComInfo' onclick='editComInfo(".$value->id.");' ><i class='fa fa-edit'></i></a>";
             }
             
             if(user_access('1001'))

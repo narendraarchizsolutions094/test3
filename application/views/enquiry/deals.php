@@ -243,6 +243,47 @@ $('input[name="filter_checkbox"]').click(function(){
 
 </div>
 
+<div id="editComInfo" class="modal fade" role="dialog">
+   <div class="modal-dialog modal-lg">
+      <!-- Modal content-->
+      <div class="modal-content">
+         <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Update </h4>
+         </div>
+      <form class="form-inner" action="<?=  base_url('enquiry/insertCommercialInfo/') ?>" method="POST">
+         <div class="modal-body" >
+         <div  id="editcomInfoData">
+           
+         </div>
+         </div>
+         <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <input type="submit" name="edit" class="btn btn-primary" value="Updatte">
+         </div>
+         </form> 
+
+      </div>
+   </div>
+</div>
+<!-- edit -->
+
+               <script>
+                  
+function editComInfo(id)
+{
+     $.ajax({
+            type: 'POST',
+            url: '<?php echo base_url();?>enquiry/editinfo/'+id,
+            data: {id:id,},
+            success:function(data){
+               //  Swal.fire('Status Updated');
+            $("#editcomInfoData").html(data);
+
+            }
+        });
+} 
+</script>
 <script type="text/javascript">
 var c = getCookie('deals_allowcols');
 //alert(c);

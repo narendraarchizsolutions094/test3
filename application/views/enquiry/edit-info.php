@@ -138,8 +138,6 @@
        <script>
    function delivery_branch_data()
 {
-   
-
 var delivery_branch = $("select[name='delivery_branch_update']").val()??[];
 var booking_branch = $("select[name='booking_branch_update']").val();
      $.ajax({
@@ -152,15 +150,11 @@ var booking_branch = $("select[name='booking_branch_update']").val();
           $("#rate_update").val(obj.rate);
       }
       });
-
 }
 
 $('#potential_tonnage_update').on('change', function() {
                 var discount = $("#discount_update").val();
                 var rate = $("#rate_update").val();
-               //  alert(discount);
-
-               //  var rate = document.getElementById('rate_update').value; 
 
                 var potential_tonnage = document.getElementById('potential_tonnage_update').value;    
                 var weightinKg= potential_tonnage*1000;       
@@ -186,7 +180,6 @@ $('#potential_tonnage_update').on('change', function() {
                     });
 
                     $('#infotype_update').on('change', function() {
-                       alert('test');
             var infotype = $("select[name='type_update']").val();
             if(infotype==1){
                $("#textdisplay_old").html('Booking Branch');
