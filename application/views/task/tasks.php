@@ -214,6 +214,7 @@
     var table  = $('#content_tabss').DataTable( {         
         "processing": true,
         /*"scrollX": true,*/
+        'searching': false,
         "scrollY": 800,
         "dom": "<'row'<'col-sm-4'l><'col-sm-4 text-center'B><'col-sm-4'f>>tp",         
         "buttons": [  
