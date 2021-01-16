@@ -306,6 +306,9 @@ class Task extends CI_Controller {
        $related_to = $this->input->post('related_to',true);
        $task_status = $this->input->post('task_status',true);
        $task_remark = $this->input->post('task_remark',true);
+       
+       $task_date = date("d-m-Y", strtotime($task_date));
+       $task_time = date("H:i:s", strtotime($task_time));
 
        $this->form_validation->set_rules('subject','Subject','required|trim');
        $this->form_validation->set_rules('task_type','Task Type','required|trim');
