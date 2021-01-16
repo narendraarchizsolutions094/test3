@@ -46,6 +46,9 @@
     </button>
 <?php }?>
    </div>
+<?php
+if(user_access(310)){
+?>
 <div class="col-md-12 text-center">    
 <br>
   <select class='btn btn-sm btn-default text-center' id='for_filter'>
@@ -57,6 +60,9 @@
     </option>
   </select>
 </div>
+<?php
+}
+?>
 <div class="col-md-12">
    <br>
    <div class="col-md-4"></div>   
